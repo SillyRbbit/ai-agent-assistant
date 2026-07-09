@@ -1,0 +1,85 @@
+# Code review guide
+
+Review changes for correctness, security, maintainability, and evidence. Report concrete findings before general commentary.
+
+## Review order
+
+1. User-visible correctness and regressions.
+2. Security and trust-boundary violations.
+3. Data loss, privacy, and logging risks.
+4. Error handling, cancellation, and failure states.
+5. Test coverage and verification gaps.
+6. Portability and architecture boundaries.
+7. Documentation drift.
+8. Style and naming issues that affect maintainability.
+
+## Required checks
+
+### TypeScript and React
+
+- Strict typing remains enabled.
+- External or IPC data is narrowed from `unknown`.
+- Components do not bypass typed infrastructure clients.
+- Async state handles loading, success, failure, and cancellation.
+- Tests cover meaningful state transitions and user interaction.
+
+### Rust and Tauri
+
+- Production code contains no `unwrap`, `expect`, `panic!`, `todo!`, or `unimplemented!`.
+- Errors preserve useful context without exposing secrets.
+- Tauri commands are narrow and explicitly registered.
+- New capabilities are least-privilege and justified.
+- Platform-specific behavior does not leak into portable domain logic.
+- Mutations are not silently retried after an unknown result.
+
+### Agent and tool behavior
+
+- Model output is not used as authorization.
+- Tool names and arguments are strictly validated.
+- Policy is deterministic.
+- Approval state is bound to exact normalized arguments.
+- Audit records are complete but redacted.
+- Untrusted content cannot override user or system authority.
+
+### Persistence
+
+- Migrations are versioned and tested.
+- Foreign keys and transactions are used correctly.
+- Sensitive credentials are not stored in SQLite.
+- Schema changes have rollback or compatibility reasoning.
+
+## Verification evidence
+
+A review should name the commands that ran and their outcomes. Missing platform checks must be identified explicitly.
+
+Expected repository checks:
+
+```bash
+npm run format:check
+npm run lint
+npm run typecheck
+npm run test
+npm run build
+npm run tauri -- build --no-bundle
+```
+
+## Finding format
+
+Use this structure for each substantive issue:
+
+```text
+[Severity] Short title
+Location: path:line
+Why it matters: concrete failure or risk
+Evidence: code path, reproduction, or missing invariant
+Recommended fix: smallest safe correction
+```
+
+Severity guide:
+
+- **Critical** — credential exposure, unauthorized execution, destructive action, or release-blocking compromise.
+- **High** — likely security boundary bypass, data corruption, or major user-visible failure.
+- **Medium** — real defect with bounded impact or missing failure handling.
+- **Low** — maintainability or documentation issue that can cause future defects.
+
+Do not report speculative findings without showing the affected path or invariant.

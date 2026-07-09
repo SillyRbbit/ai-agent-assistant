@@ -1,0 +1,31 @@
+[package]
+name = "ai-agent-assistant"
+version = "0.1.0"
+description = "Secure local core for AI Agent Assistant"
+authors = ["AI Agent Assistant contributors"]
+edition = "2021"
+rust-version = "1.88"
+publish = false
+
+[lib]
+name = "ai_agent_assistant_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "=2.6.3", features = [] }
+
+[dependencies]
+serde = { version = "=1.0.228", features = ["derive"] }
+tauri = { version = "=2.11.3", features = [] }
+thiserror = "=2.0.18"
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+dbg_macro = "deny"
+expect_used = "deny"
+panic = "deny"
+todo = "deny"
+unimplemented = "deny"
+unwrap_used = "deny"

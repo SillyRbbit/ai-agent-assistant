@@ -1,0 +1,63 @@
+{
+  "name": "ai-agent-assistant",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Local-first AI executive assistant desktop application.",
+  "type": "module",
+  "engines": {
+    "node": "^22.12.0 || ^24.0.0 || >=26.0.0 <27",
+    "npm": ">=10 <12"
+  },
+  "packageManager": "npm@11.16.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run typecheck && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "typecheck": "tsc -b --pretty false",
+    "lint": "npm run lint:frontend && npm run lint:rust",
+    "lint:frontend": "eslint . --max-warnings=0",
+    "lint:rust": "cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings",
+    "format": "prettier --write . && cargo fmt --manifest-path src-tauri/Cargo.toml",
+    "format:check": "prettier --check . && cargo fmt --manifest-path src-tauri/Cargo.toml -- --check",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:unit": "vitest run && cargo test --manifest-path src-tauri/Cargo.toml --lib --locked",
+    "test:unit:watch": "vitest",
+    "test:integration": "cargo test --manifest-path src-tauri/Cargo.toml --test smoke --locked",
+    "check": "npm run format:check && npm run lint && npm run test && npm run build",
+    "verify": "npm run check && npm run tauri -- build --no-bundle"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "2.11.1",
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.4",
+    "@tauri-apps/cli": "2.11.2",
+    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/react": "16.3.2",
+    "@types/node": "22.19.15",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "4.7.0",
+    "eslint": "9.39.4",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-react-refresh": "0.5.3",
+    "globals": "16.5.0",
+    "jsdom": "26.1.0",
+    "prettier": "3.8.4",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.61.1",
+    "vite": "7.3.5",
+    "vitest": "3.2.6"
+  },
+  "overrides": {
+    "esbuild": "0.28.1"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "fsevents@2.3.3": true
+  }
+}
