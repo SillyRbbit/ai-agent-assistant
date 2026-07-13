@@ -1,43 +1,18 @@
 # Changelog
 
-All notable repository changes are documented here.
+All notable repository changes are documented here. This project follows a small-increment development process; entries describe verified repository changes rather than planned features.
 
-This project follows a small-increment development process. Entries describe verified repository changes rather than planned features.
-
-## Phase 2 Increment 2A — 2026-07-09
+## Unreleased
 
 ### Added
 
-- Platform-neutral Rust `AgentProvider` interface and deterministic mock implementation.
-- Platform-neutral Rust `ToolRegistry` interface and deterministic in-memory implementation.
-- Platform-neutral Rust `PolicyEngine` interface and deterministic policy implementation.
-- Platform-neutral Rust `ApprovalManager` interface and deterministic in-memory implementation.
-- Platform-neutral Rust `AuditLogger` interface, in-memory logger, no-op logger, and simple secret-like token redaction.
-- Platform-neutral Rust `MemoryStore` interface and deterministic in-memory implementation.
-- Platform-neutral Rust `PlatformAdapter` interface and deterministic mock implementation.
-- Shared `RiskClass` enum compatible with the product policy.
-- Shared `PermissionKind` placeholder for future permission modeling.
-- Focused Rust tests covering representative success, failure, deterministic ordering, unknown tools, denied high-risk/prohibited actions, approval state, audit ordering, memory rejection, and platform capability placeholders.
-- Increment documentation at `docs/increments/02a-core-interfaces.md`.
-
-### Verified
-
-- Rust formatting check passed after applying `cargo fmt`.
-- Clippy passed with warnings denied.
-- Rust tests passed with 25 unit tests and 1 integration test.
-- TypeScript check passed.
-- Vite production build passed.
-- Native Tauri development app launched successfully.
-
-### Security
-
-- No API keys, model networking, backend gateway calls, SQLite, macOS permissions, new Tauri commands, Accessibility, ScreenCaptureKit, Apple Events, shell execution, OAuth, file tools, calendar tools, contact tools, reminders, notifications, or clipboard tools were added.
-- Existing UI behavior and `get_app_info` IPC behavior were preserved.
-
-## Phase 2 Increment 1.2 — 2026-06-18
-
-### Added
-
+- Phase 2 Increment 2B-0 storage decision record at `docs/increments/02b-0-sqlite-storage-decision.md`.
+- SQLite dependency and migration-skeleton acceptance criteria for Increment 2B-1.
+- Phase 2 Increment 2A source implementation for platform-neutral Rust core interfaces.
+- Deterministic mock or no-op implementations for `AgentProvider`, `ToolRegistry`, `PolicyEngine`, `ApprovalManager`, `AuditLogger`, `MemoryStore`, and `PlatformAdapter`.
+- Shared `RiskClass` and `PermissionKind` placeholders for future tool policy work.
+- Focused Rust unit tests for interface success, failure, deterministic ordering, secret-like rejection, and high-risk denial behavior.
+- Increment record at `docs/increments/02a-core-interfaces.md`.
 - Persistent repository instructions in `AGENTS.md`.
 - Working-session handoff and status files.
 - Prioritized Phase 2 next-step plan.
@@ -51,11 +26,17 @@ This project follows a small-increment development process. Entries describe ver
 
 ### Changed
 
+- Marked Increment 2A as verified complete based on target-Mac verification.
+- Resolved the SQLite crate and encryption open decision for the first storage implementation.
+- Updated `NEXT_STEPS.md` so Increment 2B-1 is the next ready implementation increment.
 - Expanded `README.md` with project-memory and assistant-workflow navigation.
 
 ### Security
 
+- Selected SQLCipher-capable SQLite support for the first storage implementation while keeping database keys out of SQLite and repository configuration.
+- Preserved Phase 2 prohibited boundaries during Increment 2B-0: no runtime behavior, dependencies, Tauri commands, UI behavior, model networking, macOS permissions, shell execution, OAuth, or API-key storage were added.
 - Documented the product's non-negotiable authorization, credential, permission, and logging boundaries.
+- Preserved Phase 2 prohibited boundaries while adding Increment 2A: no SQLite, model networking, new Tauri commands, macOS permissions, shell execution, OAuth, or API-key storage were added.
 
 ## 0.1.0 — 2026-06-18
 

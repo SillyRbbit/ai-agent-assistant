@@ -4,9 +4,15 @@ Use an execution plan for work that spans multiple modules, introduces a depende
 
 ## Active plan
 
-No implementation plan is active. The next ready work is Phase 2 Increment 2A in `NEXT_STEPS.md`.
+No implementation plan is active.
 
-Before implementation, create a plan under `docs/plans/` from `docs/templates/INCREMENT_TEMPLATE.md` if the work is expected to touch more than one architectural layer.
+The next ready work is Phase 2 Increment 2B-1 in `NEXT_STEPS.md`. It introduces a native SQLite dependency and multiple storage modules, so the next session should create or update an implementation plan before editing source files.
+
+Recommended plan path:
+
+```text
+docs/plans/02b-1-sqlite-migration-skeleton.md
+```
 
 ## Plan rules
 
@@ -38,4 +44,4 @@ Keep plans current while working. Mark completed steps, record deviations, and c
 
 | Plan | Status | Owner | Last updated |
 | ---- | ------ | ----- | ------------ |
-| None | —      | —     | 2026-06-18   |
+| None | —      | —     | 2026-07-13   |

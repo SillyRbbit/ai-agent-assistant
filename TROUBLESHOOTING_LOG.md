@@ -159,6 +159,118 @@ setopt interactivecomments
 ' >> "$HOME/.zshrc"
 ```
 
+## TS-005 — Cargo unavailable in artifact-generation environment
+
+Date: 2026-07-09
+Status: Open for artifact host; expected to be resolved on target Mac
+
+### Symptom
+
+The required Increment 2A Rust verification commands failed in the artifact-generation environment with:
+
+```text
+bash: line 1: cargo: command not found
+```
+
+Affected commands:
+
+```bash
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+cargo test --manifest-path src-tauri/Cargo.toml --all-targets --locked
+```
+
+### Cause
+
+The artifact-generation host had Node.js and npm available but did not have Cargo, Rustup, or Rust installed on `PATH`.
+
+### Resolution
+
+Run the Rust checks on the target Mac where Rust 1.90.0 is available, or install/activate Rustup before verification:
+
+```bash
+export PATH="$(brew --prefix rustup)/bin:$PATH"
+rustup default 1.90.0
+which cargo
+cargo --version
+```
+
+### Verify
+
+```bash
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+cargo test --manifest-path src-tauri/Cargo.toml --all-targets --locked
+```
+
+Expected: all three commands pass before Increment 2A is marked complete.
+
+## TS-006 — tsc command not found after applying source ZIP
+
+Date: 2026-07-13
+Status: Resolved
+
+### Symptom
+
+```text
+> ai-agent-assistant@0.1.0 typecheck
+> tsc -b --pretty false
+
+sh: tsc: command not found
+```
+
+### Cause
+
+The repository's locked npm dependencies had not been installed in the local checkout after applying the source ZIP. `tsc` is provided by the local `typescript` dev dependency under `node_modules/.bin`.
+
+### Resolution
+
+From the repository root, run:
+
+```bash
+npm ci
+```
+
+Then rerun:
+
+```bash
+npm run typecheck
+npm run build
+```
+
+Expected: `tsc` is found through npm's local package-bin path and both commands pass.
+
+## TS-007 — cargo fmt --check prints diffs after applying Increment 2A ZIP
+
+Date: 2026-07-13
+Status: Resolved
+
+### Symptom
+
+`cargo fmt --check` prints diffs in the new Increment 2A Rust modules, including files under:
+
+```text
+src-tauri/src/audit/logger.rs
+src-tauri/src/memory/store.rs
+src-tauri/src/platform/adapter.rs
+src-tauri/src/policy/engine.rs
+```
+
+### Cause
+
+The Increment 2A source compiled and tested after formatting, but the applied ZIP contained Rust files that needed standard `rustfmt` formatting on the target Mac.
+
+### Resolution
+
+Run:
+
+```bash
+cargo fmt --manifest-path src-tauri/Cargo.toml
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+```
+
+Expected: the first command applies formatting and the second command passes without diff output.
+
 ## Quick diagnostic snapshot
 
 Run this before troubleshooting an install or build failure:
@@ -187,64 +299,3 @@ Redact usernames, access tokens, private paths, and personal data before sharing
 ## New entry template
 
 Copy `docs/templates/TROUBLESHOOTING_ENTRY_TEMPLATE.md` and append the completed entry below this section. Include the exact symptom, environment, root cause, smallest fix, verification command, and any prevention step.
-
-
-## TS-2026-07-09-001 — Increment 2A verified-docs patch did not apply
-
-Status: Resolved
-
-Symptoms:
-
-```text
-error: patch failed: CHANGELOG.md:6
-error: CHANGELOG.md: patch does not apply
-error: patch failed: HANDOFF.md:4
-error: HANDOFF.md: patch does not apply
-error: docs/increments/02a-core-interfaces.md: No such file or directory
-```
-
-Cause: The documentation patch was generated against a different documentation state than the local working tree. The Rust source changes were present and verified separately, but the documentation contexts did not match.
-
-Resolution: Do not use the stale patch. Replace the affected project-memory documents with the verified Increment 2A documentation state and create `docs/increments/02a-core-interfaces.md` directly.
-
-Verification: Run `npm run format:check` after the documentation sync and inspect `git diff` before committing.
-
-## TS-2026-07-09-002 — `cargo fmt --check` reported formatting diffs
-
-Status: Resolved
-
-Symptoms: `cargo fmt --manifest-path src-tauri/Cargo.toml -- --check` reported diffs in Rust files such as `audit/logger.rs`, `memory/store.rs`, `platform/adapter.rs`, and `policy/engine.rs`.
-
-Cause: The Increment 2A Rust files were functionally correct but not formatted exactly as rustfmt expected on the local toolchain.
-
-Resolution:
-
-```bash
-cargo fmt --manifest-path src-tauri/Cargo.toml
-cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
-```
-
-Verification: Formatting check passed after applying rustfmt.
-
-## TS-2026-07-09-003 — `tsc: command not found`
-
-Status: Resolved
-
-Symptoms:
-
-```text
-npm run typecheck
-sh: tsc: command not found
-```
-
-Cause: Local npm dependencies were missing after applying repository files.
-
-Resolution:
-
-```bash
-npm ci
-npm run typecheck
-npm run build
-```
-
-Verification: TypeScript check and Vite build passed after installing dependencies.

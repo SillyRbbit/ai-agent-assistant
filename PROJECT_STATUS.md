@@ -1,91 +1,116 @@
 # Project status
 
-Last updated: 2026-07-09
+Last updated: 2026-07-13
 
-## Overall status
+## Current milestone
 
-Phase 2 is active.
+Phase 2 — local desktop shell and trusted local-core foundation.
 
-The repository now contains:
+## Current increment status
 
-- Smallest runnable Tauri 2, React, TypeScript, Vite, and Rust application.
-- Node.js 26.3.0 and npm 11.16.0 compatibility with strict engine enforcement.
-- Repository operating system for assistant-driven development.
-- Platform-neutral Rust core interfaces and deterministic mocks from Increment 2A.
+- Increment 1: smallest runnable Tauri application — **complete**.
+- Increment 1.1: Node.js 26/npm 11 compatibility — **complete**.
+- Increment 1.2: repository workflow and handoff system — **complete**.
+- Increment 2A: platform-neutral Rust interfaces and deterministic mocks — **verified complete on target Mac**.
+- Increment 2B-0: SQLite storage dependency and design decision — **complete**.
+- Next ready increment: Increment 2B-1 — SQLite dependency and migration skeleton.
 
-## Verified complete
+## Confirmed working behavior
 
-### Increment 1 — smallest runnable application
+- Tauri 2 application launches on the target Mac.
+- React renders in the main native window.
+- The WebView invokes the typed Rust `get_app_info` command.
+- The Rust core returns typed app metadata.
+- Strict TypeScript typechecking passes.
+- Vite production build passes.
+- Rust formatting, Clippy, unit tests, and integration tests passed for Increment 2A on the target Mac.
 
-- Tauri 2 application shell.
-- React frontend.
-- Strict TypeScript configuration.
-- Vite build.
-- Typed Rust `get_app_info` IPC command.
-- Rust typed startup errors.
-- Formatting, linting, frontend tests, Rust tests, and build commands.
+## Implemented Rust core foundations
 
-### Increment 1.1 — Node 26 compatibility
+- `AgentProvider` interface and deterministic `MockAgentProvider`.
+- `ToolRegistry` interface and deterministic `InMemoryToolRegistry`.
+- `PolicyEngine` interface and deterministic `DeterministicPolicyEngine`.
+- `ApprovalManager` interface and deterministic `InMemoryApprovalManager`.
+- `AuditLogger` interface with in-memory and no-op implementations.
+- `MemoryStore` interface and deterministic `InMemoryMemoryStore`.
+- `PlatformAdapter` interface and deterministic `MockPlatformAdapter`.
+- Shared `RiskClass` and `PermissionKind` placeholders.
 
-- Project accepts Node.js 26.3.0 and npm 11.16.0.
-- Strict engine enforcement remains enabled.
+## Storage decision status
 
-### Increment 1.2 — repository working system
+The SQLite approach has been selected but not implemented.
 
-- Persistent project memory files.
-- Handoff, status, next-step, decision, changelog, and troubleshooting documents.
-- Assistant usage guide.
-- Workflow runbooks.
-- Prompt library.
-- Repository-scoped skills.
+Accepted decision:
 
-### Increment 2A — platform-neutral core interfaces
+- Use `rusqlite` with the bundled SQLCipher feature set in Increment 2B-1.
+- Use `tempfile` as a dev dependency for isolated migration tests.
+- Add only a minimal migration foundation first.
+- Do not persist product data in 2B-1.
 
-Verified locally on macOS.
+## Not implemented yet
 
-Implemented:
+- SQLite dependency and migration code.
+- Menu-bar entry and hide/show lifecycle.
+- Sidebar navigation and application pages.
+- Mock streaming assistant wired to the UI.
+- Tool activity card.
+- Approval dialog.
+- Settings page.
+- Permission Center shell.
+- Gateway or model networking.
+- Keychain integration.
+- Production persistence repositories.
 
-- AgentProvider
-- ToolRegistry
-- PolicyEngine
-- ApprovalManager
-- AuditLogger
-- MemoryStore
-- PlatformAdapter
-- RiskClass
-- PermissionKind
+## Intentionally prohibited or deferred
 
-Verification reported passing:
+- Production model credentials.
+- API-key storage.
+- OAuth.
+- Accessibility.
+- Screen capture.
+- Apple Events.
+- Unrestricted shell execution.
+- Broad filesystem access.
+- Calendar, contacts, reminders, notifications, or clipboard tools.
+- Autonomous external or destructive actions.
 
-- Cargo formatting check.
-- Cargo Clippy with warnings denied.
-- Cargo tests with 25 unit tests and 1 integration test passing.
-- TypeScript check.
-- Vite production build.
-- Native Tauri development launch.
+## Development health
 
-## Current security boundary
+Target Mac environment confirmed by the user:
 
-The product still has no:
+```text
+Node.js: 26.3.0
+npm: 11.16.0
+Rust: 1.90.0-aarch64-apple-darwin
+Platform: Apple Silicon macOS
+```
 
-- API keys
-- OpenAI integration
-- Backend gateway calls
-- SQLite database
-- New Tauri commands beyond existing app-info IPC
-- Accessibility permission
-- Screen-capture permission
-- Apple Events integration
-- Shell command execution
-- OAuth
-- Calendar, contact, reminder, notification, clipboard, or file tools
+The public GitHub repository may lag behind the local verified working tree unless local changes have been committed and pushed. Before each new implementation session, confirm:
 
-## Current architecture boundary
+```bash
+git status --short --branch
+git log -1 --oneline
+```
 
-The frontend remains unchanged and cannot call core interfaces directly.
+## Known risks
 
-The new Rust interfaces are compiled into the trusted Rust crate but are not yet wired to the UI, persistence, real OS adapters, or real model providers.
+- Adding SQLCipher may introduce native build complexity on macOS; Increment 2B-1 must be verified on the target Mac before it is considered complete.
+- SQLite key management is not implemented yet; database keys must not be generated or stored until a dedicated secret-store boundary exists.
+- Combining database implementation with UI or Tauri IPC work would make failures harder to isolate.
+- Documentation can drift unless the end-session workflow is followed.
 
-## Next status gate
+## Next milestone gate
 
-Before starting persistence work, complete Increment 2B-0: SQLite dependency and storage-design decision.
+Increment 2B-1 is complete only when the SQLite dependency, storage error type, connection configuration, migration runner, initial `schema_migrations` and `app_metadata` tables, idempotency tests, rollback tests, Rust checks, and npm checks all pass without adding product data persistence or new capabilities.
+
+## Project memory map
+
+- Current handoff: `HANDOFF.md`
+- Priorities: `NEXT_STEPS.md`
+- Decisions: `DECISIONS.md`
+- Changes: `CHANGELOG.md`
+- Troubleshooting history: `TROUBLESHOOTING_LOG.md`
+- Product brief: `docs/product/PRODUCT_BRIEF.md`
+- Architecture baseline: `docs/product/ARCHITECTURE_BASELINE.md`
+- Increment 2A record: `docs/increments/02a-core-interfaces.md`
+- Increment 2B-0 record: `docs/increments/02b-0-sqlite-storage-decision.md`

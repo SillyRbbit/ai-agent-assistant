@@ -1,30 +1,32 @@
-# Phase 2 Increment 2A — Platform-neutral core interfaces
-
-Status: Verified complete  
-Verified on: 2026-07-09  
-Platform: macOS on Apple Silicon  
-Scope: Architecture-only Rust core contracts and deterministic mocks
+# Increment 2A — core interfaces and deterministic mocks
 
 ## Goal
 
-Add platform-neutral Rust interfaces and deterministic mock or no-op implementations for:
+Establish platform-neutral Rust contracts for the trusted local core before adding SQLite, menu-bar behavior, model networking, macOS permissions, or new Tauri commands.
 
-- AgentProvider
-- ToolRegistry
-- PolicyEngine
-- ApprovalManager
-- AuditLogger
-- MemoryStore
-- PlatformAdapter
+## Status
 
-This increment creates trusted local-core contracts for later work without adding real model access, backend gateway calls, SQLite, OS automation, privileged permissions, file access, calendar access, contacts, reminders, notifications, clipboard tools, shell execution, or new Tauri commands.
+Status: **Verified complete**
 
-## Files created or changed
+Verification was completed on the target Apple Silicon Mac after applying formatting and installing the locked npm dependencies.
 
-Rust source:
+## Scope
+
+Added architecture-only interfaces and deterministic in-memory or no-op implementations for:
+
+- `AgentProvider`
+- `ToolRegistry`
+- `PolicyEngine`
+- `ApprovalManager`
+- `AuditLogger`
+- `MemoryStore`
+- `PlatformAdapter`
+
+This increment preserves the existing React UI and the existing `get_app_info` IPC behavior.
+
+## Files added
 
 ```text
-src-tauri/src/lib.rs
 src-tauri/src/agent/mod.rs
 src-tauri/src/agent/provider.rs
 src-tauri/src/agent/types.rs
@@ -48,9 +50,10 @@ src-tauri/src/platform/adapter.rs
 src-tauri/src/platform/types.rs
 ```
 
-Project memory and increment documentation:
+## Files changed
 
 ```text
+src-tauri/src/lib.rs
 CHANGELOG.md
 DECISIONS.md
 HANDOFF.md
@@ -64,137 +67,116 @@ docs/increments/02a-core-interfaces.md
 
 ### AgentProvider
 
-- Accepts an agent request.
-- Returns assistant text, tool-call requests, or a structured error.
-- Includes deterministic mock responses keyed by request content.
-- Rejects invalid empty requests.
+- Accepts an `AgentRequest` containing a run id, user message, and available tool names.
+- Returns assistant text or tool-call proposals.
+- Includes a deterministic `MockAgentProvider` with keyed responses and explicit forced-error support.
 
 ### ToolRegistry
 
-- Registers tool definitions.
+- Registers `ToolDefinition` values.
 - Looks up tools by name.
 - Rejects unknown tools.
-- Exposes metadata for name, description, risk class, required permission, and schema placeholder.
 - Lists tools in deterministic name order.
+- Exposes name, description, risk class, permission, input schema placeholder, and output schema placeholder.
 
 ### PolicyEngine
 
-- Evaluates proposed actions using deterministic rules.
-- Supports allow, require approval, and deny decisions.
-- Denies missing required permissions before risk evaluation.
-- Denies prohibited autonomy.
-- Requires approval for personal-data modification and high-impact risk classes.
+- Accepts a `PolicyAction` and returns `PolicyDecision`.
+- Allows information-only and read-only actions when required permissions are granted.
+- Requires approval for reversible local actions and personal-data modifications.
+- Denies external/high-impact and prohibited-autonomy actions.
+- Denies missing permissions before risk evaluation.
 
 ### ApprovalManager
 
-- Creates approval requests.
-- Records approve and reject decisions.
+- Creates approval requests with deterministic IDs.
 - Lists pending approvals in deterministic order.
+- Records approve and reject decisions.
 - Rejects unknown or already decided approvals.
 
 ### AuditLogger
 
-- Records audit events in deterministic order.
-- Provides a no-op logger for future tests that need validation without persistence.
-- Redacts simple secret-like key/value tokens.
-- Rejects invalid empty event data.
+- Records audit events in deterministic sequence order.
+- Provides a no-op implementation for tests or disabled persistence.
+- Redacts simple secret-like tokens from audit details.
+- Rejects invalid empty event types.
 
 ### MemoryStore
 
-- Stores, lists, updates, and deletes memory records.
-- Separates session, working, and preference memory.
-- Rejects simple secret-like content by default.
-- Returns records in deterministic order.
+- Creates, lists, updates, and deletes memory records.
+- Separates `Session`, `Working`, and `Preference` memory types.
+- Rejects secret-like content before storage.
+- Lists records deterministically.
 
 ### PlatformAdapter
 
-- Exposes platform-neutral metadata.
-- Exposes placeholder capability status for future adapters.
+- Returns platform-neutral metadata.
+- Reports placeholder capability status.
+- Lists capability reports deterministically.
 - Does not call macOS APIs.
-- Returns deterministic capability reports.
 
-## Shared policy placeholders
+## Verification commands and results
 
-Risk classes added:
+Run on the target Mac:
 
-```text
-InformationOnly
-ReadOnlyDeviceAccess
-ReversibleLocalAction
-PersonalDataModification
-ExternalOrHighImpactAction
-ProhibitedAutonomy
-```
+```bash
+export PATH="$(brew --prefix rustup)/bin:$PATH"
+rustup default 1.90.0
 
-Permission placeholders added:
-
-```text
-None
-Calendar
-Reminders
-Contacts
-Notifications
-Files
-Accessibility
-ScreenRecording
-Automation
-Microphone
-```
-
-## Verification results
-
-The following checks were reported passing locally after applying formatting and installing npm dependencies:
-
-```text
+cargo fmt --manifest-path src-tauri/Cargo.toml
 cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
-cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
-cargo test --manifest-path src-tauri/Cargo.toml --all-targets --locked
+
+cargo clippy --manifest-path src-tauri/Cargo.toml \
+  --all-targets \
+  --all-features \
+  --locked \
+  -- -D warnings
+
+cargo test --manifest-path src-tauri/Cargo.toml \
+  --all-targets \
+  --locked
+
+npm ci
 npm run typecheck
 npm run build
 npm run tauri -- dev
 ```
 
-Rust tests reported:
+Actual results reported from the target Mac:
 
-```text
-25 Rust unit tests passed
-1 Rust integration test passed
-0 Rust tests failed
-```
+- `cargo fmt` applied standard Rust formatting.
+- `cargo fmt --check` passed after formatting.
+- `cargo clippy --all-targets --all-features --locked -- -D warnings` passed.
+- `cargo test --all-targets --locked` passed with 25 Rust unit tests and 1 integration test.
+- `npm ci` installed the local TypeScript toolchain.
+- `npm run typecheck` passed.
+- `npm run build` passed.
+- `npm run tauri -- dev` launched the app.
 
-Frontend verification reported:
+## Security review
 
-```text
-TypeScript check passed
-Vite production build passed
-Native app launched successfully
-```
+No new privileged behavior was added:
 
-## Security notes
+- No SQLite database.
+- No model networking.
+- No backend gateway calls.
+- No API keys or API-key configuration.
+- No OAuth.
+- No new Tauri command.
+- No macOS permission prompt.
+- No Accessibility API.
+- No ScreenCaptureKit.
+- No Apple Events.
+- No shell execution.
+- No filesystem, calendar, contacts, reminders, notifications, or clipboard tools.
 
-This increment intentionally does not add:
+## Exit criteria
 
-- API keys
-- OpenAI or other model networking
-- Backend gateway calls
-- SQLite
-- macOS permissions
-- New Tauri commands
-- Accessibility
-- ScreenCaptureKit
-- Apple Events
-- Shell execution
-- OAuth
-- File tools
-- Calendar tools
-- Contact tools
-- Reminder tools
-- Notification tools
-- Clipboard tools
-- Unrestricted command execution
-
-The existing UI and `get_app_info` IPC behavior are preserved.
-
-## Follow-up
-
-Stop after Increment 2A. The next recommended increment is Increment 2B-0: choose and document the SQLite dependency and migration approach before implementing persistence.
+- All seven required interfaces compile.
+- Each interface has a deterministic mock, no-op, or in-memory implementation.
+- Focused tests cover representative success and failure behavior.
+- High-risk and prohibited actions are not silently allowed.
+- Unknown tools are rejected.
+- Existing UI behavior is preserved.
+- Existing `get_app_info` IPC behavior is preserved.
+- Required Rust and npm verification passed on the target Mac.

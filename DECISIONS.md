@@ -102,30 +102,52 @@ Rationale: smaller changes make compile failures, security regressions, and plat
 
 Consequences:
 
-- The next increment is interfaces and mocks only.
-- A broader request must be decomposed before implementation.
+- Work proceeds only on the first ready increment in `NEXT_STEPS.md` unless a blocker requires a smaller troubleshooting increment.
+- Broader requests must be decomposed before implementation.
 
-## Open decisions
+## D-008 — Keep Increment 2A interfaces inside the existing Tauri Rust crate
 
-| ID    | Topic                                                            | Required before            |
-| ----- | ---------------------------------------------------------------- | -------------------------- |
-| O-001 | SQLite crate and encryption approach                             | Increment 2B               |
-| O-002 | Workspace split between one Tauri crate and multiple Rust crates | Increment 2A or 2B         |
-| O-003 | macOS minimum deployment target confirmation on target Mac       | Native release preparation |
-| O-004 | State-management library versus React reducer/context            | Increment 2D               |
-| O-005 | Menu-bar icon assets and close behavior                          | Increment 2C               |
-
-
-## DEC-2026-07-09-001 — Keep Increment 2A core contracts platform-neutral
-
+Date: 2026-07-09
 Status: Accepted
 
-Context: Phase 2 Increment 2A needed trusted local-core contracts before adding real model access, persistence, or platform integrations.
+Decision: implement the initial platform-neutral core interfaces as Rust modules under `src-tauri/src/` rather than splitting the repository into multiple Rust crates during Increment 2A.
 
-Decision: Define the first `AgentProvider`, `ToolRegistry`, `PolicyEngine`, `ApprovalManager`, `AuditLogger`, `MemoryStore`, and `PlatformAdapter` contracts inside the Rust crate with deterministic in-memory or no-op implementations. Keep them independent of macOS APIs, Tauri commands, SQLite, and model networking.
+Rationale: the increment is architecture-only and should prove contracts, deterministic mocks, and tests without introducing workspace movement, dependency changes, or additional build complexity.
 
 Consequences:
 
-- Later increments can wire the contracts into application state without changing the security boundary.
-- Tests can validate policy, approval, audit, memory, tool-registry, and platform behavior without network or OS permissions.
-- Real providers, real platform adapters, and persistence must be added in later increments behind these boundaries.
+- The current `get_app_info` IPC command and Tauri crate layout remain unchanged.
+- Later increments may still split portable domain modules into workspace crates after the interfaces stabilize.
+- Open decision O-002 remains partially answered for 2A but should be revisited before larger persistence or platform-adapter work.
+
+## D-009 — Use rusqlite with bundled SQLCipher for the first storage implementation
+
+Date: 2026-07-13
+Status: Accepted
+
+Decision: when SQLite is implemented in Increment 2B-1, use `rusqlite` with an exact version and the bundled SQLCipher feature set unless target-Mac verification exposes a blocker:
+
+```toml
+rusqlite = { version = "=0.40.1", features = ["bundled-sqlcipher-vendored-openssl"] }
+```
+
+Use `tempfile = "=3.23.0"` as a dev dependency for isolated temporary-database tests.
+
+Rationale: `rusqlite` gives the trusted local Rust core explicit synchronous connection, transaction, prepared-statement, and PRAGMA control without adding an async runtime or compile-time database macro workflow. SQLCipher support should be present from the first database implementation to avoid migrating user data from plaintext storage later.
+
+Consequences:
+
+- Increment 2B-1 must verify the native SQLCipher build on the target Mac.
+- Database keys must remain outside SQLite and outside repository configuration.
+- Production Keychain integration remains a later increment behind a secret-store boundary.
+- If SQLCipher blocks local builds, record a superseding decision before falling back to non-encrypted SQLite.
+- Open decision O-001 is resolved by this decision.
+
+## Open decisions
+
+| ID    | Topic                                                            | Required before                     |
+| ----- | ---------------------------------------------------------------- | ----------------------------------- |
+| O-002 | Workspace split between one Tauri crate and multiple Rust crates | Revisit before later modularization |
+| O-003 | macOS minimum deployment target confirmation on target Mac       | Native release preparation          |
+| O-004 | State-management library versus React reducer/context            | Increment 2D                        |
+| O-005 | Menu-bar icon assets and close behavior                          | Increment 2C                        |
