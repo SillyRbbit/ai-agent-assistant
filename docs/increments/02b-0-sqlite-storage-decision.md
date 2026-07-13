@@ -10,6 +10,8 @@ This is a documentation and architecture-decision increment. It prepares Increme
 
 Status: **Complete**
 
+Compatibility note: the architectural choice of `rusqlite` with bundled SQLCipher remains accepted, but the provisional 0.40.1 version shown below was superseded by D-011 after target-Mac verification. The verified implementation uses `rusqlite 0.37.0` with `libsqlite3-sys 0.35.0` on Rust 1.90.0.
+
 ## Scope
 
 This increment documents:

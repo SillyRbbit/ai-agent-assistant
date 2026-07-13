@@ -6,7 +6,7 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Phase 2 completion strategy
 
-Phase 2 is completed through small, independently verifiable increments rather than one broad implementation.
+Phase 2 is completed through small, independently verifiable increments. Increment labels after 2C were re-sequenced when the project owner explicitly prioritized storage startup before menu-bar behavior.
 
 ### Increment 2A — core interfaces and deterministic mocks
 
@@ -22,68 +22,80 @@ Record: `docs/increments/02b-0-sqlite-storage-decision.md`.
 
 ### Increment 2B-1 — SQLite dependency and migration skeleton
 
+Status: **Verified complete**
+
+Verified outcome:
+
+- `rusqlite 0.37.0` with bundled SQLCipher and vendored OpenSSL,
+- `libsqlite3-sys 0.35.0`,
+- test-only `tempfile 3.23.0`,
+- private raw connection ownership,
+- verified foreign keys, busy timeout, and WAL,
+- immutable checksummed migrations,
+- `schema_migrations` and `app_metadata` only,
+- target-Mac Rust checks, frontend checks, and native launch passed.
+
+Records:
+
+- `docs/increments/02b-1-sqlite-migration-skeleton.md`
+- `docs/increments/02b-1a-rust-190-compatibility-repair.md`
+
+### Increment 2C — storage startup integration
+
 Status: **Implementation complete; target-Mac verification pending**
+
+Goal: initialize the SQLite foundation during application startup through one safe Rust abstraction while using only typed `app_metadata` and persisting no user data.
 
 Implemented:
 
-- exact `rusqlite = "=0.40.1"` declaration with `bundled-sqlcipher-vendored-openssl`,
-- `tempfile = "=3.23.0"` as a dev dependency,
-- typed storage configuration and errors,
-- in-memory and file-backed connections,
-- verified foreign keys, busy timeout, and file-backed WAL,
-- versioned checksummed migrations,
-- `schema_migrations` and `app_metadata` only,
-- migration idempotency, rollback, ordering, connection, and integration tests,
-- private raw SQLite connection with no generic SQL API.
+- managed `Storage` abstraction,
+- typed `app_initialized` metadata,
+- fail-closed metadata validation,
+- startup migration and marker bootstrap,
+- debug-only file-backed development database,
+- release-mode in-memory database,
+- Tauri setup-hook integration,
+- focused unit and integration tests,
+- no new Tauri command, UI, permission, or capability.
 
 Remaining completion gate:
 
 ```bash
-cargo check --manifest-path src-tauri/Cargo.toml
-
+cargo fmt --manifest-path src-tauri/Cargo.toml
 cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
-
-cargo clippy --manifest-path src-tauri/Cargo.toml \
-  --all-targets \
-  --all-features \
-  --locked \
-  -- -D warnings
-
-cargo test --manifest-path src-tauri/Cargo.toml \
-  --all-targets \
-  --locked
-
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+cargo test --manifest-path src-tauri/Cargo.toml --all-targets --locked
 npm run typecheck
 npm run build
 npm run tauri -- dev
 ```
 
-The first unlocked `cargo check` updates the lockfile once. Review that diff before running the locked checks.
+Launch twice and confirm the second launch applies no migrations and recognizes prior initialization.
 
-Record: `docs/increments/02b-1-sqlite-migration-skeleton.md`.
+Record: `docs/increments/02c-storage-startup.md`.
 
-Plan: `docs/plans/02b-1-sqlite-migration-skeleton.md`.
+Plan: `docs/plans/02c-storage-startup.md`.
 
-### Increment 2C — macOS menu-bar and window lifecycle
+### Increment 2D — macOS menu-bar and window lifecycle
 
-Status: **Blocked by 2B-1 target-Mac verification**
+Status: **Blocked by Increment 2C verification**
 
-Goal: add a menu-bar entry without privileged APIs.
+Goal: add an unprivileged menu-bar entry and explicit window lifecycle.
 
 Planned work:
 
 - Show or focus the main window.
-- Create a new request action.
-- Open the task placeholder.
+- Route a new-request action.
+- Route a task-placeholder action.
 - Quit the application.
 - Define behavior when the main window closes.
-- Add unit-testable command routing around Tauri-specific code.
+- Add unit-testable routing around Tauri-specific code.
 
 Do not add a global shortcut in the same increment.
 
-### Increment 2D — React application shell
+### Increment 2E — React application shell
 
-Status: **Blocked by 2C or explicit reprioritization**
+Status: **Blocked by Increment 2D**
 
 Goal: implement the basic navigation and page shell.
 
@@ -91,14 +103,14 @@ Planned work:
 
 - Sidebar entries for Conversations, Tasks, Memory, Activity, Integrations, Permissions, and Settings.
 - Conversation pane and input composer.
-- Empty/loading/error states.
+- Empty, loading, and error states.
 - Settings page shell.
 - Permission Center shell with no OS permission requests.
 - Component and state-reducer tests.
 
-### Increment 2E — mocked agent streaming and activity
+### Increment 2F — mocked agent streaming and activity
 
-Status: **Blocked by 2D**
+Status: **Blocked by Increment 2E**
 
 Goal: prove the end-to-end local run-event model using a deterministic mock provider.
 
@@ -114,16 +126,16 @@ Planned work:
 
 No network access or production API key is allowed.
 
-### Increment 2F — Phase 2 integration and native verification
+### Increment 2G — Phase 2 integration and native verification
 
-Status: **Blocked by 2B through 2E**
+Status: **Blocked by Increments 2C through 2F**
 
 Goal: integrate the Phase 2 shell and verify it on macOS.
 
 Planned work:
 
 - Connect the menu-bar entry to the window shell.
-- Persist only the minimal local application state approved for Phase 2.
+- Persist only the minimal local application state separately approved for Phase 2.
 - Run the complete verification suite.
 - Build the native application without bundling.
 - Perform a manual macOS smoke test.
@@ -142,7 +154,7 @@ Planned work:
 
 ## Explicitly not next
 
-Do not add any of the following while 2B-1 verification is pending:
+Do not add any of the following before Increment 2C verification completes:
 
 - Product-data persistence.
 - SQLCipher production key handling.
@@ -154,4 +166,5 @@ Do not add any of the following while 2B-1 verification is pending:
 - Production gateway calls.
 - API-key storage.
 - OAuth.
-- Calendar, contacts, reminders, or notifications permissions.
+- Calendar, contacts, reminders, or notification permissions.
+- Global shortcut.

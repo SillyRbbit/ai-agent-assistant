@@ -4,13 +4,21 @@ Use an execution plan for work that spans multiple modules, introduces a depende
 
 ## Active plan
 
-Phase 2 Increment 2B-1 is active until target-Mac verification passes.
+Phase 2 Increment 2C is active until target-Mac verification passes.
+
+```text
+docs/plans/02c-storage-startup.md
+```
+
+Source implementation, focused tests, static security scanning, and project-memory synchronization are complete. Remaining steps are target-Mac Rust verification, frontend verification, two native launches, complete diff review, and final handoff closure.
+
+## Completed plans
 
 ```text
 docs/plans/02b-1-sqlite-migration-skeleton.md
 ```
 
-Implementation and focused storage-harness verification are complete. The remaining plan steps are target-Mac lockfile resolution, full Tauri-crate verification, and native application launch.
+Increment 2B-1 and its Rust 1.90 compatibility repair were verified on the target Mac before Increment 2C began.
 
 ## Plan rules
 
@@ -38,8 +46,9 @@ Keep plans current while working. Mark completed steps, record deviations, and c
 - **Complete** — acceptance criteria and verification are complete.
 - **Superseded** — replaced by another plan; retain the link to the replacement.
 
-## Active-plan index
+## Plan index
 
-| Plan                                     | Status | Owner              | Last updated |
-| ---------------------------------------- | ------ | ------------------ | ------------ |
-| Increment 2B-1 SQLite migration skeleton | Active | Project maintainer | 2026-07-13   |
+| Plan                                     | Status   | Owner              | Last updated |
+| ---------------------------------------- | -------- | ------------------ | ------------ |
+| Increment 2B-1 SQLite migration skeleton | Complete | Project maintainer | 2026-07-13   |
+| Increment 2C storage startup integration | Active   | Project maintainer | 2026-07-13   |

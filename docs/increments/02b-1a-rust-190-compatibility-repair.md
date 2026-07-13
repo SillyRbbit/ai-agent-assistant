@@ -8,7 +8,7 @@ This repair restores the platform-neutral Increment 2A Rust modules when they ar
 
 ## Status
 
-Status: **Implementation prepared; target-Mac verification pending**
+Status: **Verified complete on target Mac**
 
 ## Failures addressed
 
@@ -89,4 +89,4 @@ npm run build
 npm run tauri -- dev
 ```
 
-Do not mark Increment 2B-1 complete until all commands pass and the existing application window launches without a permission prompt.
+The project owner confirmed all commands passed and the existing application window launched without a permission prompt. The resolved dependency tree is `rusqlite 0.37.0` with `libsqlite3-sys 0.35.0`.

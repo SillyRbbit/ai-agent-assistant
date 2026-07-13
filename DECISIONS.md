@@ -123,7 +123,7 @@ Consequences:
 ## D-009 — Use rusqlite with bundled SQLCipher for the first storage implementation
 
 Date: 2026-07-13
-Status: Accepted
+Status: Superseded by D-011
 
 Decision: when SQLite is implemented in Increment 2B-1, use `rusqlite` with an exact version and the bundled SQLCipher feature set unless target-Mac verification exposes a blocker:
 
@@ -161,11 +161,53 @@ Consequences:
 - SQLCipher support is compiled in, but key application remains deferred until a dedicated secret-store boundary exists.
 - No product data may use a file-backed database before key management is implemented and reviewed.
 
+## D-011 — Pin rusqlite 0.37.0 for Rust 1.90 compatibility
+
+Date: 2026-07-13
+Status: Accepted
+
+Decision: retain bundled SQLCipher and vendored OpenSSL support while pinning the first storage implementation to:
+
+```toml
+rusqlite = { version = "=0.37.0", features = ["bundled-sqlcipher-vendored-openssl"] }
+```
+
+This resolves to `libsqlite3-sys 0.35.0` on the verified target-Mac lockfile.
+
+Rationale: the originally selected `rusqlite 0.40.1` resolved to `libsqlite3-sys 0.38.1`, whose build script used a standard-library feature unavailable on the repository's pinned Rust 1.90.0 toolchain. The 0.37.0 dependency line preserves the required encryption build features and passed target-Mac formatting, Clippy, tests, and native launch.
+
+Consequences:
+
+- D-009's exact 0.40.1 version is superseded, but its choice of `rusqlite`, bundled SQLCipher, vendored OpenSSL, and external key management remains in force.
+- Rust 1.90.0 remains pinned.
+- `Cargo.lock` must retain `rusqlite 0.37.0` and `libsqlite3-sys 0.35.0` until a dedicated dependency/toolchain increment changes them.
+- Dependency upgrades require target-Mac native verification.
+
+## D-012 — Bootstrap storage at Tauri startup without persisting user data
+
+Date: 2026-07-13
+Status: Accepted
+
+Decision: initialize the storage foundation from Tauri's setup hook and register one managed `Storage` value. Debug builds use an application-local file-backed database containing only migration history and `app_initialized=true`; release builds use an in-memory database until reviewed Keychain-backed key management exists.
+
+Application metadata is a closed typed contract rather than arbitrary key/value strings. The only current key is `AppInitialized`, and the only current value type is Boolean.
+
+Rationale: startup integration proves the database lifecycle, migration ordering, state ownership, and typed read/write boundary before product repositories are introduced. Keeping release storage ephemeral prevents accidental plaintext user-data persistence before an encryption-key boundary exists.
+
+Consequences:
+
+- The raw `rusqlite::Connection` remains private to the storage module.
+- Tauri startup fails with a typed error if storage cannot initialize or managed state is already registered.
+- Corrupt metadata values and negative timestamps fail closed.
+- Startup logs contain no database path or metadata value.
+- No conversation, task, memory, audit, approval, tool-call, credential, or personal data may be stored yet.
+- The previously planned menu-bar increment is re-labeled Increment 2D; React shell, mocked streaming, and integration increments move to 2E, 2F, and 2G.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |
 | ----- | ---------------------------------------------------------------- | ----------------------------------- |
 | O-002 | Workspace split between one Tauri crate and multiple Rust crates | Revisit before later modularization |
 | O-003 | macOS minimum deployment target confirmation on target Mac       | Native release preparation          |
-| O-004 | State-management library versus React reducer/context            | Increment 2D                        |
-| O-005 | Menu-bar icon assets and close behavior                          | Increment 2C                        |
+| O-004 | State-management library versus React reducer/context            | Increment 2E                        |
+| O-005 | Menu-bar icon assets and close behavior                          | Increment 2D                        |

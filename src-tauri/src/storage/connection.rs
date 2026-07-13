@@ -111,6 +111,10 @@ impl DatabaseConnection {
         list_applied_migrations(&self.connection)
     }
 
+    pub(super) const fn raw(&self) -> &Connection {
+        &self.connection
+    }
+
     #[cfg(test)]
     pub(crate) fn raw_mut(&mut self) -> &mut Connection {
         &mut self.connection

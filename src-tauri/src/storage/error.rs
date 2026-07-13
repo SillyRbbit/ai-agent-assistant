@@ -33,6 +33,28 @@ pub enum StorageError {
     ForeignKeysDisabled,
     #[error("SQLite WAL journal mode was requested but SQLite reported `{actual}`")]
     WalModeUnavailable { actual: String },
+    #[error("the SQLite connection lock is poisoned")]
+    ConnectionLockPoisoned,
+    #[error("stored metadata for `{key}` has an invalid value")]
+    InvalidMetadataValue { key: &'static str },
+    #[error("metadata timestamps must not be negative")]
+    InvalidMetadataTimestamp,
+    #[error("failed to read application metadata for `{key}`: {source}")]
+    ReadMetadata {
+        key: &'static str,
+        #[source]
+        source: rusqlite::Error,
+    },
+    #[error("failed to write application metadata for `{key}`: {source}")]
+    WriteMetadata {
+        key: &'static str,
+        #[source]
+        source: rusqlite::Error,
+    },
+    #[error("metadata write for `{key}` changed {actual} rows instead of exactly one")]
+    MetadataWriteCount { key: &'static str, actual: usize },
+    #[error("metadata write verification failed for `{key}`")]
+    MetadataWriteVerificationFailed { key: &'static str },
     #[error("migration versions must be positive and strictly increasing")]
     InvalidMigrationOrder,
     #[error("database contains an unknown applied migration version: {version}")]

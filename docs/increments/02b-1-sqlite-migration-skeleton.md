@@ -2,7 +2,7 @@
 
 Last updated: 2026-07-13
 
-Status: **Implementation complete; target-Mac verification pending**
+Status: **Verified complete on target Mac**
 
 ## Goal
 
@@ -13,7 +13,7 @@ Add a minimal, platform-neutral SQLite foundation to the trusted Rust core witho
 ### Dependencies
 
 ```toml
-rusqlite = { version = "=0.40.1", features = ["bundled-sqlcipher-vendored-openssl"] }
+rusqlite = { version = "=0.37.0", features = ["bundled-sqlcipher-vendored-openssl"] }
 
 [dev-dependencies]
 tempfile = "=3.23.0"
@@ -204,9 +204,9 @@ Expected Rust test count after full integration is the existing Increment 2A sui
 
 ## Completion gate
 
-Do not mark Increment 2B-1 complete and do not start Increment 2C until:
+Increment 2B-1 was marked complete after:
 
-- the target-Mac lockfile is resolved and committed,
-- all required locked Rust checks pass,
-- TypeScript and Vite checks pass,
-- the Tauri application launches with unchanged behavior.
+- the target-Mac lockfile resolved to `rusqlite 0.37.0` and `libsqlite3-sys 0.35.0`,
+- all required locked Rust checks passed,
+- TypeScript and Vite checks passed,
+- the Tauri application launched with unchanged behavior and no permission prompt.

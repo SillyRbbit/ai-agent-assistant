@@ -1,11 +1,11 @@
-use std::{
-    collections::BTreeMap,
-    time::{SystemTime, UNIX_EPOCH},
-};
+use std::collections::BTreeMap;
 
 use rusqlite::{params, Connection, Transaction, TransactionBehavior};
 
-use super::error::{StorageError, StorageResult};
+use super::{
+    error::{StorageError, StorageResult},
+    timestamp::current_unix_time_ms,
+};
 
 const CREATE_SCHEMA_MIGRATIONS_SQL: &str = r#"
 CREATE TABLE schema_migrations (
@@ -257,11 +257,6 @@ fn migration_table_exists(connection: &Connection) -> StorageResult<bool> {
     connection
         .table_exists(None, "schema_migrations")
         .map_err(|source| StorageError::InspectMigrations { source })
-}
-
-fn current_unix_time_ms() -> StorageResult<i64> {
-    let duration = SystemTime::now().duration_since(UNIX_EPOCH)?;
-    i64::try_from(duration.as_millis()).map_err(|_| StorageError::TimestampOutOfRange)
 }
 
 #[cfg(test)]

@@ -274,7 +274,7 @@ Expected: the first command applies formatting and the second command passes wit
 ## TS-008 — Full Increment 2B-1 native verification unavailable on artifact host
 
 Date: 2026-07-13
-Status: Open until target-Mac verification completes
+Status: Resolved on target Mac; artifact-host limitation remains
 
 ### Symptom
 
@@ -317,6 +317,53 @@ npm run tauri -- dev
 - Keep native dependency changes in isolated increments.
 - Do not mark the increment complete based only on the storage harness.
 - Do not remove SQLCipher features to make an unrelated host pass; record a superseding decision if the target Mac exposes a real blocker.
+
+## TS-009 — libsqlite3-sys 0.38.1 fails on pinned Rust 1.90
+
+Date: 2026-07-13
+Status: Resolved
+
+### Symptom
+
+The first Increment 2B-1 dependency selection failed while compiling `libsqlite3-sys 0.38.1`:
+
+```text
+error[E0658]: use of unstable library feature `cfg_select`
+```
+
+The same checkout could also report missing `agent`, `approvals`, `audit`, `memory`, `platform`, `policy`, and `tools` modules when an overlay was applied to a public baseline that did not contain Increment 2A.
+
+### Cause
+
+- `rusqlite 0.40.1` resolved to a `libsqlite3-sys` build script requiring a newer Rust standard-library feature than the repository's pinned Rust 1.90.0 provides.
+- The original storage overlay assumed the verified Increment 2A module tree already existed locally.
+
+### Resolution
+
+- Restore the complete Increment 2A module tree.
+- Pin `rusqlite` to 0.37.0 with the same bundled SQLCipher and vendored OpenSSL feature.
+- Regenerate the lockfile with Cargo.
+
+Verified dependency tree:
+
+```text
+rusqlite v0.37.0
+libsqlite3-sys v0.35.0
+```
+
+### Verify
+
+```bash
+cargo tree --manifest-path src-tauri/Cargo.toml | grep -E 'rusqlite|libsqlite3-sys'
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+cargo test --manifest-path src-tauri/Cargo.toml --all-targets --locked
+npm run typecheck
+npm run build
+npm run tauri -- dev
+```
+
+The project owner confirmed all checks and the native launch passed on the target Mac.
 
 ## Quick diagnostic snapshot
 

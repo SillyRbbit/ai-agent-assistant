@@ -2,7 +2,7 @@
 
 Last updated: 2026-07-13
 
-Status: **Active — implementation complete; target-Mac verification pending**
+Status: **Complete — verified on target Mac**
 
 ## Goal and user-visible outcome
 
@@ -37,7 +37,7 @@ The only user-visible outcome should be that the existing application continues 
 ## Existing behavior and constraints
 
 - Increment 2A core interfaces are verified on the target Mac.
-- Increment 2B-0 selected `rusqlite = "=0.40.1"` with `bundled-sqlcipher-vendored-openssl` and `tempfile = "=3.23.0"` for tests.
+- Increment 2B-0 selected `rusqlite` with bundled SQLCipher and vendored OpenSSL. Target-Mac verification superseded the original 0.40.1 pin with `rusqlite = "=0.37.0"`; `tempfile = "=3.23.0"` remains test-only.
 - The current UI and typed `get_app_info` IPC command must remain unchanged.
 - Production Rust paths must use typed errors and may not use `unwrap`, `expect`, `panic!`, `todo!`, `unimplemented!`, or `unreachable!`.
 - No database key or sensitive product data may be stored in this increment.
@@ -78,9 +78,9 @@ The target Mac must regenerate or update `src-tauri/Cargo.lock` once after apply
 - [x] Add unit and public-API integration tests.
 - [x] Run a standalone storage harness through Rust check, Clippy with warnings denied, and tests.
 - [x] Review the implementation for prohibited APIs and generic SQL exposure.
-- [ ] Resolve the lockfile and run the required full-project Rust checks on the target Mac.
-- [ ] Launch the Tauri application on the target Mac and confirm unchanged behavior.
-- [ ] Mark the plan and increment complete only after those target-Mac checks pass.
+- [x] Resolve the lockfile and run the required full-project Rust checks on the target Mac.
+- [x] Launch the Tauri application on the target Mac and confirm unchanged behavior.
+- [x] Mark the plan and increment complete after the target-Mac checks passed.
 
 ## Security and privacy considerations
 
