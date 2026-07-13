@@ -2,7 +2,7 @@ use std::io;
 
 use thiserror::Error;
 
-use crate::storage::StorageError;
+use crate::{menu_bar::MenuBarError, storage::StorageError};
 
 #[derive(Debug, Error)]
 pub enum AppError {
@@ -10,6 +10,8 @@ pub enum AppError {
     Tauri(#[from] tauri::Error),
     #[error("storage initialization failed: {0}")]
     Storage(#[from] StorageError),
+    #[error("menu-bar initialization or routing failed: {0}")]
+    MenuBar(#[from] MenuBarError),
     #[error("failed to resolve the application-local storage directory: {source}")]
     ResolveStorageDirectory {
         #[source]

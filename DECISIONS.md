@@ -203,6 +203,26 @@ Consequences:
 - No conversation, task, memory, audit, approval, tool-call, credential, or personal data may be stored yet.
 - The previously planned menu-bar increment is re-labeled Increment 2D; React shell, mocked streaming, and integration increments move to 2E, 2F, and 2G.
 
+## D-013 — Use a fixed macOS menu-bar contract and hide only the main window
+
+Date: 2026-07-13
+Status: Accepted
+
+Decision: enable Tauri's built-in `tray-icon` feature only for the macOS target and create one menu-bar entry with four fixed actions: open the main window, route a new request, route a tasks placeholder, and quit. New-request and tasks actions emit the closed-enum `assistant-menu-route` event only after the existing `main` window is shown and focused. Unknown menu identifiers are ignored.
+
+Closing the `main` window prevents destruction and hides that window. Future non-main windows retain normal close behavior. A macOS `RunEvent::Reopen` restores the main window only when no application window is visible. The app keeps its regular activation policy and Dock icon in this increment.
+
+Rationale: the menu bar needs a deterministic, least-privilege lifecycle contract before the React shell and global shortcut are introduced. Fixed IDs and closed route values prevent arbitrary model or content-driven actions. Keeping the Dock avoids an invisible-app failure mode while close-to-hide is first validated.
+
+Consequences:
+
+- `get_app_info` remains the only custom Tauri command.
+- The backend may emit only `NewRequest` or `TasksPlaceholder` route values.
+- React does not consume those route events until Increment 2E.
+- Dedicated production tray artwork and accessory-only activation remain deferred.
+- Increment 2D requires native macOS verification of tray, close, menu/Dock reopen, and quit behavior.
+- Open decision O-005 is resolved for the MVP scaffold; artwork may be revisited later.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |
@@ -210,4 +230,3 @@ Consequences:
 | O-002 | Workspace split between one Tauri crate and multiple Rust crates | Revisit before later modularization |
 | O-003 | macOS minimum deployment target confirmation on target Mac       | Native release preparation          |
 | O-004 | State-management library versus React reducer/context            | Increment 2E                        |
-| O-005 | Menu-bar icon assets and close behavior                          | Increment 2D                        |

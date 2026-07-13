@@ -23,7 +23,7 @@
     "test": "npm run test:unit && npm run test:integration",
     "test:unit": "vitest run && cargo test --manifest-path src-tauri/Cargo.toml --lib --locked",
     "test:unit:watch": "vitest",
-    "test:integration": "cargo test --manifest-path src-tauri/Cargo.toml --test smoke --locked",
+    "test:integration": "cargo test --manifest-path src-tauri/Cargo.toml --tests --locked",
     "check": "npm run format:check && npm run lint && npm run test && npm run build",
     "verify": "npm run check && npm run tauri -- build --no-bundle"
   },

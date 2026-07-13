@@ -6,56 +6,56 @@ Last updated: 2026-07-13
 
 Phase 2 — repository setup, working Tauri shell, and trusted local-core foundation.
 
-Current increment: **Increment 2C — storage startup integration**.
+Current increment: **Increment 2D — macOS menu-bar and window lifecycle**.
 
 Status: **Implementation complete; target-Mac verification pending**.
 
 ## Verified baseline
 
-The project owner verified Increment 2B-1 and the Rust 1.90 compatibility repair on the Apple Silicon target Mac before Increment 2C began:
+The project owner verified Increment 2C on the Apple Silicon target Mac before Increment 2D began:
 
-- `rusqlite v0.37.0` resolves to `libsqlite3-sys v0.35.0`.
 - `cargo fmt --check` passed.
 - Clippy passed for all targets and all features with warnings denied.
-- All Rust tests passed.
+- 41 Rust unit tests passed.
+- 3 Rust integration tests passed.
 - `npm run typecheck` passed.
 - `npm run build` passed.
-- `npm run tauri -- dev` launched the existing application successfully.
-- The UI and `get_app_info` behavior remained unchanged.
+- The Tauri application launched successfully.
+- A later launch reported `applied_migrations=0`, `already_applied_migrations=2`, and `previously_initialized=true`.
+- The UI, `get_app_info`, storage startup, CSP, capabilities, and permission footprint remained intact.
 
-## Increment 2C implementation
+Increment 2C is verified complete.
 
-Increment 2C now:
+## Increment 2D implementation
 
-- adds a `Storage` abstraction that owns the private `DatabaseConnection` behind a mutex,
-- exposes typed metadata operations only for `AppMetadataKey::AppInitialized`,
-- validates metadata values and timestamps on reads and writes,
-- applies migrations before metadata access,
-- writes `app_initialized=true` only on first initialization,
-- preserves the original marker on later starts,
-- initializes storage from the Tauri setup hook,
-- registers `Storage` as managed Rust state,
-- uses an application-local development database in debug builds,
-- uses an in-memory database in release builds until reviewed Keychain-backed key management exists,
-- logs only storage mode, migration counts, and prior-initialization state,
+Increment 2D now:
+
+- enables Tauri's built-in `tray-icon` feature only for macOS,
+- creates one menu-bar entry using the existing bundled application icon as a temporary template icon,
+- adds fixed actions for opening the main window, starting a new request, opening a tasks placeholder, and quitting,
+- shows the application, then unminimizes, shows, and focuses the existing `main` window,
+- emits the closed-enum `assistant-menu-route` event for new-request and tasks-placeholder intents,
+- ignores unknown menu identifiers without side effects,
+- hides the main window instead of destroying it when its close control is used,
+- restores the main window on a macOS reopen/Dock event when no application window is visible,
+- leaves future non-main windows on the normal close path,
+- keeps Tauri-specific operations behind deterministic routing contracts,
 - adds focused unit and integration tests.
 
-No new Tauri command, IPC surface, capability, plugin, UI behavior, permission, key, network call, or product-data table was added.
+The current React UI does not consume the route event yet. Selecting New Request or Tasks still shows and focuses the current main window. React routing is deferred to Increment 2E.
 
-## Files changed in Increment 2C
+## Files changed in Increment 2D
 
 ```text
-src-tauri/src/error.rs
+package.json
+src-tauri/Cargo.toml
 src-tauri/src/lib.rs
-src-tauri/src/startup.rs
-src-tauri/src/storage/connection.rs
-src-tauri/src/storage/error.rs
-src-tauri/src/storage/metadata.rs
-src-tauri/src/storage/migrations.rs
-src-tauri/src/storage/mod.rs
-src-tauri/src/storage/store.rs
-src-tauri/src/storage/timestamp.rs
-src-tauri/tests/startup_storage_smoke.rs
+src-tauri/src/error.rs
+src-tauri/src/menu_bar/mod.rs
+src-tauri/src/menu_bar/action.rs
+src-tauri/src/menu_bar/controller.rs
+src-tauri/src/menu_bar/tauri_adapter.rs
+src-tauri/tests/menu_bar_routing.rs
 CHANGELOG.md
 DECISIONS.md
 HANDOFF.md
@@ -63,12 +63,10 @@ NEXT_STEPS.md
 PLANS.md
 PROJECT_STATUS.md
 TROUBLESHOOTING_LOG.md
-docs/increments/02b-0-sqlite-storage-decision.md
-docs/increments/02b-1-sqlite-migration-skeleton.md
-docs/increments/02b-1a-rust-190-compatibility-repair.md
 docs/increments/02c-storage-startup.md
-docs/plans/02b-1-sqlite-migration-skeleton.md
+docs/increments/02d-menu-bar-window-lifecycle.md
 docs/plans/02c-storage-startup.md
+docs/plans/02d-menu-bar-window-lifecycle.md
 ```
 
 ## Verification completed in the artifact workspace
@@ -79,66 +77,60 @@ Before implementation:
 npm ci: passed
 npm run typecheck: passed
 npm run build: passed
+Vitest: 2 passed, 0 failed
+Cargo baseline: not run because Cargo is unavailable on the artifact host
 ```
 
 After implementation:
 
 ```text
-npx prettier --check .: passed
-npm run lint:frontend: passed
-npm run typecheck: passed
-npx vitest run: 2 passed, 0 failed
-npm run build: passed
-npm audit --audit-level=low: 0 vulnerabilities
-Static prohibited-API and panic-style scan: passed
+Prettier: passed
+ESLint: passed with zero warnings
+Strict TypeScript: passed
+Vitest: 2 passed, 0 failed
+Vite production build: passed
+npm audit: 0 vulnerabilities
+Tauri invoke-handler scan: only get_app_info remains registered
+Capability and CSP diff: no changes
+Cargo.lock and package-lock diff: no changes
+Prohibited panic-style production scan: passed
+Git whitespace check: passed
 ```
 
-Cargo, rustfmt, Clippy, Rust tests, and a native Tauri launch could not run in the artifact workspace because the Rust toolchain is unavailable there. Do not infer target-Mac success from frontend checks.
+Rust formatting, Clippy, Rust tests, and native macOS lifecycle behavior were not run in the artifact workspace because Cargo and a macOS runtime are unavailable there. They remain the target-Mac completion gate.
 
 ## Required target-Mac verification
 
-Apply the Increment 2C overlay, then run from:
-
-```text
-/Users/hdang/Desktop/Projects/ai-agent-assistant
-```
-
-Commands:
+From `/Users/hdang/Desktop/Projects/ai-agent-assistant`, run:
 
 ```bash
 export PATH="$(brew --prefix rustup)/bin:$PATH"
 rustup default 1.90.0
 
 cargo fmt --manifest-path src-tauri/Cargo.toml
-
 cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
-
-cargo clippy --manifest-path src-tauri/Cargo.toml \
-  --all-targets \
-  --all-features \
-  --locked \
-  -- -D warnings
-
-cargo test --manifest-path src-tauri/Cargo.toml \
-  --all-targets \
-  --locked
-
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+cargo test --manifest-path src-tauri/Cargo.toml --all-targets --locked
 npm run typecheck
 npm run build
 npm run tauri -- dev
 ```
 
-Launch the application twice. Expected behavior:
+Manual macOS checks:
 
-- the existing main window opens both times,
-- `Rust core connected` appears,
-- `get_app_info` remains functional,
-- no macOS permission prompt appears,
-- the first debug launch applies migrations and creates the bootstrap marker,
-- the second debug launch reports prior initialization and applies no migrations,
-- the UI remains unchanged.
+1. Confirm the existing main window opens and `Rust core connected` remains visible.
+2. Confirm a menu-bar icon appears.
+3. Choose **Open AI Agent Assistant** and verify the main window is shown and focused.
+4. Choose **New Request** and verify the main window is shown and focused without an error.
+5. Choose **Tasks (Coming Soon)** and verify the main window is shown and focused without an error.
+6. Close the main window with its red close control and verify the process and menu-bar entry remain active.
+7. Reopen the main window from the menu bar.
+8. Hide the main window again, click the Dock icon, and verify the window is restored.
+9. Choose **Quit AI Agent Assistant** and verify the process exits.
+10. Confirm no macOS permission prompt appears.
+11. Confirm storage startup remains idempotent and `get_app_info` still works.
 
-Stop the development server with `Control-C`, then review:
+Then review:
 
 ```bash
 git status --short --branch
@@ -147,37 +139,27 @@ git diff --stat
 git diff
 ```
 
-## Security boundaries to preserve
+## Security boundaries preserved
 
-- Do not persist conversations, tasks, memories, audit data, approvals, tool calls, or other user data yet.
-- Do not add a production database key until a dedicated Keychain-backed design is reviewed.
-- Do not expose raw SQLite access or arbitrary SQL.
-- Do not add API keys, OAuth, model networking, or gateway calls.
-- Do not add Accessibility, ScreenCaptureKit, Apple Events, microphone, shell execution, or broad filesystem access.
-- Do not add new Tauri commands, capabilities, or plugins in this increment.
+- No new Tauri command or WebView-invokable capability.
+- No capability or CSP changes.
+- No global shortcut.
+- No API keys, OAuth, model networking, or gateway calls.
+- No database schema or product-data persistence changes.
+- No Accessibility, ScreenCaptureKit, Apple Events, microphone, shell, or broad filesystem access.
+- Unknown menu identifiers are ignored.
+- Route events carry only a closed enum, not arbitrary content.
 
 ## Next ready work after verification
 
-After Increment 2C is verified and committed, the next ready increment is **Increment 2D — macOS menu-bar and window lifecycle**.
+After Increment 2D is verified and committed, the next ready increment is **Increment 2E — React application shell**.
 
-It must remain unprivileged and should add only:
-
-- a menu-bar entry,
-- show/focus main window,
-- new-request routing,
-- task-placeholder routing,
-- quit,
-- explicit main-window close behavior,
-- unit-testable routing around Tauri-specific code.
-
-Do not add the global shortcut, React application shell, model streaming, permissions, or platform automation in the same increment.
+Do not begin Increment 2E until the target-Mac menu-bar, close, Dock/menu reopen, quit, Rust, frontend, and native checks pass.
 
 ## Exact resume prompt
-
-After all Increment 2C target-Mac checks pass, use:
 
 ```text
 Use $session-end.
 
-Mark Phase 2 Increment 2C verified complete using the actual target-Mac command results. Update HANDOFF.md, PROJECT_STATUS.md, NEXT_STEPS.md, CHANGELOG.md, PLANS.md, TROUBLESHOOTING_LOG.md if needed, docs/increments/02c-storage-startup.md, and docs/plans/02c-storage-startup.md. Then identify Increment 2D — macOS menu-bar and window lifecycle — as the next ready increment, but do not implement it.
+Mark Phase 2 Increment 2D verified complete using the actual target-Mac command and manual smoke-test results. Update HANDOFF.md, PROJECT_STATUS.md, NEXT_STEPS.md, CHANGELOG.md, PLANS.md, TROUBLESHOOTING_LOG.md if needed, docs/increments/02d-menu-bar-window-lifecycle.md, and docs/plans/02d-menu-bar-window-lifecycle.md. Identify Increment 2E — React application shell — as the next ready increment, but do not implement it.
 ```

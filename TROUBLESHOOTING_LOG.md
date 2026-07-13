@@ -393,3 +393,33 @@ Redact usernames, access tokens, private paths, and personal data before sharing
 ## New entry template
 
 Copy `docs/templates/TROUBLESHOOTING_ENTRY_TEMPLATE.md` and append the completed entry below this section. Include the exact symptom, environment, root cause, smallest fix, verification command, and any prevention step.
+
+## TS-010 — Public repository lags the verified local checkout
+
+Date: 2026-07-13
+Status: Open operational condition
+
+### Symptom
+
+The public GitHub page still reports one commit and describes the original runnable shell, while the project owner's local checkout contains verified Increments 2A through 2C.
+
+### Cause
+
+The verified local changes have not all been pushed to the public branch, or the public page has not caught up with the local working state.
+
+### Safe handling
+
+- Treat the project owner's verified local checkout and current project-memory files as the implementation baseline.
+- Apply overlays only to `/Users/hdang/Desktop/Projects/ai-agent-assistant` after confirming `git status`.
+- Do not reconstruct a later increment solely from the public branch.
+- Commit and push verified checkpoints before relying on GitHub as the source of truth.
+
+### Verify
+
+```bash
+git status --short --branch
+git log -5 --oneline --decorate
+git remote -v
+```
+
+Do not publish secrets, local databases, credentials, certificates, or environment files when synchronizing the public repository.

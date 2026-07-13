@@ -2,7 +2,7 @@
 
 Last updated: 2026-07-13
 
-Status: **Implementation complete; target-Mac verification pending**
+Status: **Verified complete on target Mac**
 
 ## Goal
 
@@ -143,7 +143,7 @@ Git diff whitespace check: passed
 Rust formatting, Clippy, tests, and native launch: not run because Cargo is unavailable on the artifact host
 ```
 
-Target-Mac Rust and native checks remain mandatory.
+Target-Mac Rust and native checks passed on 2026-07-13.
 
 ## Required target-Mac verification
 
@@ -179,11 +179,11 @@ Expected native behavior:
 
 ## Completion gate
 
-Do not mark Increment 2C complete or start Increment 2D until:
+Increment 2C completion evidence:
 
-- all required locked Rust checks pass on the target Mac,
-- TypeScript and Vite checks pass,
-- the native development application launches twice successfully,
-- the second launch reports prior initialization without reapplying migrations,
-- the complete diff has been reviewed,
-- project-memory documents are updated with the actual target-Mac results.
+- `cargo fmt --check` passed.
+- Clippy passed with warnings denied.
+- 41 Rust unit tests and 3 integration tests passed.
+- TypeScript and Vite passed.
+- The native app launched successfully.
+- A later launch reported zero newly applied migrations, two existing migrations, and prior initialization.

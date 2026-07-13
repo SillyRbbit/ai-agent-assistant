@@ -15,127 +15,87 @@ Phase 2 — local desktop shell and trusted local-core foundation.
 - Increment 2B-0: SQLite storage dependency and design decision — **complete**.
 - Increment 2B-1: SQLite dependency and migration skeleton — **verified complete on target Mac**.
 - Increment 2B-1A: Rust 1.90 SQLite compatibility repair — **verified complete on target Mac**.
-- Increment 2C: storage startup integration — **implementation complete; target-Mac verification pending**.
-- Increment 2D remains blocked until Increment 2C is verified.
+- Increment 2C: storage startup integration — **verified complete on target Mac**.
+- Increment 2D: macOS menu-bar and window lifecycle — **implementation complete; target-Mac verification pending**.
+- Increment 2E remains blocked until Increment 2D is verified.
 
 ## Confirmed working baseline
 
-Before Increment 2C:
+Before Increment 2D:
 
 - Tauri 2 launches on the target Mac.
 - React renders in the native main window.
 - The WebView invokes the typed Rust `get_app_info` command.
-- Rust returns typed application metadata.
-- Strict TypeScript typechecking passes.
-- The Vite production build passes.
-- Rust formatting, Clippy with warnings denied, and all Rust tests pass.
-- `rusqlite 0.37.0` and `libsqlite3-sys 0.35.0` compile with Rust 1.90.0.
-- The native application launches without a permission prompt.
+- Rust formatting and Clippy with warnings denied pass.
+- 41 Rust unit tests and 3 Rust integration tests pass.
+- TypeScript and the Vite production build pass.
+- Storage startup is idempotent and recognizes the persisted bootstrap marker.
+- No permission prompt appears.
 
-## Implemented trusted-core foundations
+## Implemented foundations
 
-- `AgentProvider` and deterministic `MockAgentProvider`.
-- `ToolRegistry` and deterministic `InMemoryToolRegistry`.
-- `PolicyEngine` and deterministic `DeterministicPolicyEngine`.
-- `ApprovalManager` and deterministic `InMemoryApprovalManager`.
-- `AuditLogger` with in-memory and no-op implementations.
-- `MemoryStore` and deterministic `InMemoryMemoryStore`.
-- `PlatformAdapter` and deterministic `MockPlatformAdapter`.
-- Shared `RiskClass` and `PermissionKind` placeholders.
-
-## Implemented storage foundation
-
-- SQLCipher-capable `rusqlite 0.37.0` dependency compatible with Rust 1.90.
-- Test-only `tempfile 3.23.0` dependency.
-- Typed storage configuration and errors.
-- In-memory and file-backed connections.
-- Bounded and verified busy timeout.
-- Verified foreign-key enforcement.
-- Verified file-backed WAL mode.
-- Private raw SQLite connection ownership.
-- Immutable, checksummed, transactional migrations.
+- Platform-neutral trusted-core interfaces with deterministic mocks.
+- Shared risk and permission placeholder types.
+- SQLCipher-capable SQLite connection and immutable migration skeleton.
 - `schema_migrations` and `app_metadata` only.
-- Migration, connection, rollback, idempotency, and integration tests.
+- Managed `Storage` initialized from Tauri startup.
+- Typed `app_initialized` metadata.
+- Debug-only development database and release-mode in-memory storage.
 
-## Increment 2C implementation state
+## Increment 2D implementation state
 
-- `Storage` safely owns the database connection behind a mutex.
-- Application metadata is restricted to a closed typed key/value contract.
-- Corrupt values and negative timestamps fail closed.
-- Migrations run before metadata access.
-- `app_initialized=true` is created once and not rewritten on later launches.
-- Tauri startup initializes storage through the setup hook.
-- Initialized storage is registered as managed Rust state.
-- Debug builds use an application-local development database.
-- Release builds use in-memory storage pending Keychain-backed key management.
-- Startup logging omits paths and metadata values.
-- Existing UI and `get_app_info` IPC behavior are unchanged in source.
+- Tauri's built-in `tray-icon` feature is enabled only on macOS.
+- The existing application icon is used as a temporary template menu-bar icon.
+- Fixed actions: open main window, new request, tasks placeholder, and quit.
+- Main-window activation shows the application, unminimizes, shows, and focuses the existing window.
+- New-request and tasks actions emit a closed-enum `assistant-menu-route` event.
+- Unknown menu IDs have no effect.
+- Closing the main window hides it and keeps the process running.
+- A macOS reopen/Dock event restores the window when no application window is visible.
+- Future non-main windows retain normal close behavior.
+- React does not consume route events yet.
 
-## Increment 2C verification state
+## Test coverage added
 
-Artifact workspace:
+- Stable menu IDs and labels.
+- New-request and tasks routing order.
+- Quit without show or route.
+- Unknown menu ID rejection without side effects.
+- Failure short-circuiting.
+- Main-window close-to-hide policy.
+- Reopen policy for visible and hidden states.
+- Public routing contract across all actions.
+
+## Explicit non-goals
+
+- React navigation or UI changes.
+- Global shortcut.
+- Accessory-only activation policy or Dock hiding.
+- Dedicated production tray artwork.
+- New Tauri commands, plugins, capabilities, or CSP rules.
+- API keys, OAuth, model or gateway networking.
+- Database schema or product-data persistence.
+- Accessibility, screen capture, Apple Events, microphone, shell, or broad filesystem access.
+
+## Artifact-workspace verification
 
 ```text
-Baseline npm ci: passed
-Baseline npm run typecheck: passed
-Baseline npm run build: passed
-Post-change Prettier: passed
-Post-change frontend lint: passed
-Post-change strict TypeScript: passed
-Post-change Vitest: 2 passed, 0 failed
-Post-change Vite build: passed
-Post-change npm audit: 0 vulnerabilities
-Rust and native checks: not run because Cargo is unavailable on the artifact host
+Prettier: passed
+ESLint: passed with zero warnings
+Strict TypeScript: passed
+Vitest: 2 passed, 0 failed
+Vite build: passed
+npm audit: 0 vulnerabilities
+Tauri invoke-handler scan: only get_app_info remains registered
+Capability and CSP diff: no changes
+Cargo.lock and package-lock diff: no changes
+Prohibited production-code scan: passed
+Cargo/rustfmt/Clippy/native checks: unavailable on artifact host
 ```
 
-Remaining target-Mac gate:
+## Completion gate
 
-- run rustfmt,
-- run Clippy for all targets/features with warnings denied,
-- run all Rust tests with the lockfile,
-- run TypeScript and Vite checks,
-- launch the application twice,
-- confirm idempotent storage startup and unchanged UI/IPC,
-- review the complete diff.
-
-## Not implemented yet
-
-- Product-data repositories or persistence.
-- SQLCipher production key retrieval and Keychain integration.
-- Menu-bar entry and hide/show lifecycle.
-- Global shortcut.
-- Sidebar navigation and application pages.
-- Mock streaming assistant wired to the UI.
-- Tool activity card.
-- Approval dialog.
-- Settings page.
-- Permission Center shell.
-- Gateway or model networking.
-
-## Intentionally prohibited or deferred
-
-- Production model credentials or API-key storage.
-- OAuth.
-- Accessibility.
-- Screen capture.
-- Apple Events.
-- Unrestricted shell execution.
-- Broad filesystem access.
-- Calendar, contacts, reminders, notifications, or clipboard tools.
-- Autonomous external or destructive actions.
-
-## Known risks
-
-- The debug database is intentionally unkeyed and must contain only migration metadata and the harmless initialization marker.
-- Release storage remains ephemeral until key management is implemented.
-- Migration definitions are immutable; corrections require new versions.
-- A poisoned connection mutex fails closed and prevents storage use.
-- Public GitHub state may lag the local checkout until changes are committed and pushed.
-- Increment 2C Rust compilation and native startup remain unverified until the target-Mac commands run.
-
-## Next milestone gate
-
-Increment 2C is complete only when all required target-Mac checks pass and two consecutive debug launches prove migrations are idempotent while the existing UI and IPC behavior remain unchanged.
+Do not mark Increment 2D complete or begin Increment 2E until all locked Rust checks, frontend checks, native menu-bar/window behavior checks, and the complete diff review pass on the target Mac.
 
 ## Project memory map
 
@@ -145,11 +105,5 @@ Increment 2C is complete only when all required target-Mac checks pass and two c
 - Changes: `CHANGELOG.md`
 - Plans: `PLANS.md`
 - Troubleshooting history: `TROUBLESHOOTING_LOG.md`
-- Product brief: `docs/product/PRODUCT_BRIEF.md`
-- Architecture baseline: `docs/product/ARCHITECTURE_BASELINE.md`
-- Increment 2A: `docs/increments/02a-core-interfaces.md`
-- Increment 2B-0: `docs/increments/02b-0-sqlite-storage-decision.md`
-- Increment 2B-1: `docs/increments/02b-1-sqlite-migration-skeleton.md`
-- Increment 2B-1A: `docs/increments/02b-1a-rust-190-compatibility-repair.md`
-- Increment 2C: `docs/increments/02c-storage-startup.md`
-- Active plan: `docs/plans/02c-storage-startup.md`
+- Increment 2D: `docs/increments/02d-menu-bar-window-lifecycle.md`
+- Active plan: `docs/plans/02d-menu-bar-window-lifecycle.md`

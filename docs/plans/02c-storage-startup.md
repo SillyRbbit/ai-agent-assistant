@@ -2,7 +2,7 @@
 
 Last updated: 2026-07-13
 
-Status: **Active — implementation complete; target-Mac verification pending**
+Status: **Complete**
 
 ## Goal and user-visible outcome
 
@@ -72,10 +72,10 @@ docs/plans/02c-storage-startup.md
 - [x] Add focused storage-startup tests, including managed-state trait bounds and log-redaction assertions.
 - [x] Scan new production code for prohibited panic-style calls and privileged APIs.
 - [x] Update project documentation for the re-sequenced Increment 2C.
-- [ ] Run Rust formatting, Clippy, and all Rust tests on the target Mac.
-- [ ] Run post-change TypeScript and Vite checks on the target Mac.
-- [ ] Launch the application twice and confirm idempotent startup.
-- [ ] Review the complete diff and mark the increment verified.
+- [x] Run Rust formatting, Clippy, and all Rust tests on the target Mac.
+- [x] Run post-change TypeScript and Vite checks on the target Mac.
+- [x] Launch the application twice and confirm idempotent startup.
+- [x] Review the complete diff and mark the increment verified.
 
 ## Security and privacy considerations
 
