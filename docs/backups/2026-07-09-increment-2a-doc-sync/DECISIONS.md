@@ -114,18 +114,3 @@ Consequences:
 | O-003 | macOS minimum deployment target confirmation on target Mac       | Native release preparation |
 | O-004 | State-management library versus React reducer/context            | Increment 2D               |
 | O-005 | Menu-bar icon assets and close behavior                          | Increment 2C               |
-
-
-## DEC-2026-07-09-001 — Keep Increment 2A core contracts platform-neutral
-
-Status: Accepted
-
-Context: Phase 2 Increment 2A needed trusted local-core contracts before adding real model access, persistence, or platform integrations.
-
-Decision: Define the first `AgentProvider`, `ToolRegistry`, `PolicyEngine`, `ApprovalManager`, `AuditLogger`, `MemoryStore`, and `PlatformAdapter` contracts inside the Rust crate with deterministic in-memory or no-op implementations. Keep them independent of macOS APIs, Tauri commands, SQLite, and model networking.
-
-Consequences:
-
-- Later increments can wire the contracts into application state without changing the security boundary.
-- Tests can validate policy, approval, audit, memory, tool-registry, and platform behavior without network or OS permissions.
-- Real providers, real platform adapters, and persistence must be added in later increments behind these boundaries.
