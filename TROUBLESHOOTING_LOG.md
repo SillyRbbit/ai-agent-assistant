@@ -271,6 +271,53 @@ cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
 
 Expected: the first command applies formatting and the second command passes without diff output.
 
+## TS-008 — Full Increment 2B-1 native verification unavailable on artifact host
+
+Date: 2026-07-13
+Status: Open until target-Mac verification completes
+
+### Symptom
+
+The storage-only Rust crate compiles, passes Clippy, and passes its focused tests, but the artifact-generation host cannot complete the full Tauri crate's native dependency build or produce target-Mac verification evidence.
+
+### Cause
+
+The artifact host is not the Apple Silicon macOS target and does not provide the complete native desktop dependency environment required by the Tauri crate. The bundled SQLCipher/OpenSSL feature must also be confirmed with the repository's pinned Rust toolchain on the target Mac.
+
+### Safe resolution
+
+Apply the Increment 2B-1 source overlay on the target Mac, then run one unlocked check to resolve the new exact dependencies and update the lockfile:
+
+```bash
+export PATH="$(brew --prefix rustup)/bin:$PATH"
+rustup default 1.90.0
+cargo check --manifest-path src-tauri/Cargo.toml
+```
+
+Review the lockfile:
+
+```bash
+git diff -- src-tauri/Cargo.lock
+```
+
+Then run the required locked verification:
+
+```bash
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+cargo test --manifest-path src-tauri/Cargo.toml --all-targets --locked
+npm run typecheck
+npm run build
+npm run tauri -- dev
+```
+
+### Prevention
+
+- Commit the target-Mac-generated lockfile with the increment.
+- Keep native dependency changes in isolated increments.
+- Do not mark the increment complete based only on the storage harness.
+- Do not remove SQLCipher features to make an unrelated host pass; record a superseding decision if the target Mac exposes a real blocker.
+
 ## Quick diagnostic snapshot
 
 Run this before troubleshooting an install or build failure:

@@ -143,6 +143,24 @@ Consequences:
 - If SQLCipher blocks local builds, record a superseding decision before falling back to non-encrypted SQLite.
 - Open decision O-001 is resolved by this decision.
 
+## D-010 — Keep the SQLite connection private and migrations immutable
+
+Date: 2026-07-13
+Status: Accepted
+
+Decision: `DatabaseConnection` owns the raw `rusqlite::Connection` privately and exposes only narrow connection-settings, migration, and applied-migration methods. Migration definitions are static source code with positive increasing versions, fixed names, fixed checksums, and one immediate transaction per pending migration. Migration 1 bootstraps `schema_migrations`; migration 2 creates `app_metadata`.
+
+Rationale: a generic SQL execution surface would bypass future repository, policy, audit, and redaction boundaries. Immutable migration metadata detects accidental or malicious history drift, while per-migration transactions provide deterministic rollback behavior.
+
+Consequences:
+
+- Callers cannot submit arbitrary SQL through the public storage API.
+- Unknown applied migration versions fail closed.
+- A changed migration name or checksum fails closed.
+- Released migrations must never be edited; corrections require a new version.
+- SQLCipher support is compiled in, but key application remains deferred until a dedicated secret-store boundary exists.
+- No product data may use a file-backed database before key management is implemented and reviewed.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

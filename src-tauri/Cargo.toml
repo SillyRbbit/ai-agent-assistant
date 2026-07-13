@@ -15,6 +15,7 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tauri-build = { version = "=2.6.3", features = [] }
 
 [dependencies]
+rusqlite = { version = "=0.37.0", features = ["bundled-sqlcipher-vendored-openssl"] }
 serde = { version = "=1.0.228", features = ["derive"] }
 tauri = { version = "=2.11.3", features = [] }
 thiserror = "=2.0.18"
@@ -29,3 +30,6 @@ panic = "deny"
 todo = "deny"
 unimplemented = "deny"
 unwrap_used = "deny"
+
+[dev-dependencies]
+tempfile = "=3.23.0"

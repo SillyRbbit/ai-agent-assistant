@@ -6,32 +6,11 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Phase 2 completion strategy
 
-Phase 2 will be completed through small, independently verifiable increments rather than one broad implementation.
+Phase 2 is completed through small, independently verifiable increments rather than one broad implementation.
 
 ### Increment 2A — core interfaces and deterministic mocks
 
 Status: **Verified complete**
-
-Goal: establish platform-neutral contracts before adding persistence or UI behavior.
-
-Completed source implementation for:
-
-- `AgentProvider`
-- `ToolRegistry`
-- `PolicyEngine`
-- `ApprovalManager`
-- `AuditLogger`
-- `MemoryStore`
-- `PlatformAdapter`
-
-Verified on the target Mac:
-
-- Rust formatting passed after applying `cargo fmt`.
-- Clippy passed with warnings denied.
-- Rust tests passed with 25 unit tests and 1 integration test.
-- TypeScript typecheck passed.
-- Vite production build passed.
-- The Tauri application launched.
 
 Record: `docs/increments/02a-core-interfaces.md`.
 
@@ -39,54 +18,29 @@ Record: `docs/increments/02a-core-interfaces.md`.
 
 Status: **Complete**
 
-Goal: decide the SQLite crate, encryption approach, storage module boundary, migration scope, and 2B-1 acceptance criteria before adding native database dependencies.
-
-Completed:
-
-- Selected `rusqlite` for the first storage access layer.
-- Selected the bundled SQLCipher feature set for first implementation verification.
-- Selected `tempfile` for isolated migration tests.
-- Defined first storage module layout.
-- Defined initial migration schema for `schema_migrations` and `app_metadata` only.
-- Defined security boundaries for 2B-1.
-
 Record: `docs/increments/02b-0-sqlite-storage-decision.md`.
 
 ### Increment 2B-1 — SQLite dependency and migration skeleton
 
-Status: **Ready**
+Status: **Implementation complete; target-Mac verification pending**
 
-Goal: add the local database foundation without yet persisting conversations, messages, tasks, memories, audit records, tool calls, approvals, permissions, file scopes, or agent runs.
+Implemented:
 
-Planned work:
+- exact `rusqlite = "=0.40.1"` declaration with `bundled-sqlcipher-vendored-openssl`,
+- `tempfile = "=3.23.0"` as a dev dependency,
+- typed storage configuration and errors,
+- in-memory and file-backed connections,
+- verified foreign keys, busy timeout, and file-backed WAL,
+- versioned checksummed migrations,
+- `schema_migrations` and `app_metadata` only,
+- migration idempotency, rollback, ordering, connection, and integration tests,
+- private raw SQLite connection with no generic SQL API.
 
-- Add `rusqlite = "=0.40.1"` with the documented SQLCipher bundled feature set.
-- Add `tempfile = "=3.23.0"` as a dev dependency only.
-- Add storage modules under `src-tauri/src/storage/`.
-- Add typed `StorageError` and `StorageResult`.
-- Add storage configuration for in-memory and file-backed database modes.
-- Apply and verify connection settings including foreign keys and WAL where supported.
-- Add versioned migration infrastructure.
-- Create `schema_migrations` and `app_metadata` only.
-- Add temporary-database tests for opening, migration, idempotency, and rollback.
-- Wire the storage module into the Rust crate so it compiles.
-
-Do not add:
-
-- Tauri commands.
-- UI behavior.
-- model networking.
-- backend gateway calls.
-- Keychain integration.
-- API keys.
-- OAuth.
-- production database key generation.
-- conversations, messages, tasks, memories, audit records, approvals, tool calls, permissions, or file-scope persistence.
-- macOS permissions.
-
-Required verification:
+Remaining completion gate:
 
 ```bash
+cargo check --manifest-path src-tauri/Cargo.toml
+
 cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
 
 cargo clippy --manifest-path src-tauri/Cargo.toml \
@@ -101,11 +55,18 @@ cargo test --manifest-path src-tauri/Cargo.toml \
 
 npm run typecheck
 npm run build
+npm run tauri -- dev
 ```
+
+The first unlocked `cargo check` updates the lockfile once. Review that diff before running the locked checks.
+
+Record: `docs/increments/02b-1-sqlite-migration-skeleton.md`.
+
+Plan: `docs/plans/02b-1-sqlite-migration-skeleton.md`.
 
 ### Increment 2C — macOS menu-bar and window lifecycle
 
-Status: **Blocked by 2B-1 or explicit reprioritization**
+Status: **Blocked by 2B-1 target-Mac verification**
 
 Goal: add a menu-bar entry without privileged APIs.
 
@@ -122,7 +83,7 @@ Do not add a global shortcut in the same increment.
 
 ### Increment 2D — React application shell
 
-Status: **Blocked by 2B-1 or explicit reprioritization**
+Status: **Blocked by 2C or explicit reprioritization**
 
 Goal: implement the basic navigation and page shell.
 
@@ -181,8 +142,10 @@ Planned work:
 
 ## Explicitly not next
 
-Do not add any of the following during the next increment:
+Do not add any of the following while 2B-1 verification is pending:
 
+- Product-data persistence.
+- SQLCipher production key handling.
 - Accessibility.
 - ScreenCaptureKit.
 - Apple Events.

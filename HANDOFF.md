@@ -6,148 +6,175 @@ Last updated: 2026-07-13
 
 Phase 2 — repository setup, working Tauri shell, and trusted local-core foundation.
 
-Current increment: Increment 2B-0 — SQLite storage dependency and design decision.
+Current increment: Increment 2B-1 — SQLite dependency and migration skeleton.
 
-Status: **Complete**.
+Status: **Implementation complete; target-Mac verification pending**.
 
 ## Last completed work
 
-- Created the smallest runnable Tauri 2, React, TypeScript, Vite, and Rust application.
-- Added Node.js 26.3.0 and npm 11.16.0 compatibility while retaining strict engine enforcement.
-- Resolved local macOS Rust toolchain discovery by adding Homebrew `rustup` to `PATH`.
-- Confirmed the application launches and runs on Henry's Apple Silicon MacBook Pro.
-- Added persistent repository memory, session workflows, prompt files, Codex skills, troubleshooting records, and next-step planning documents.
-- Added and verified Phase 2 Increment 2A core Rust interfaces and deterministic mock or no-op implementations.
-- Completed Phase 2 Increment 2B-0 by selecting and documenting the SQLite dependency and storage-design approach for the next implementation increment.
+- Preserved the existing Tauri 2, React, strict TypeScript, Vite, and Rust application behavior.
+- Preserved the typed `get_app_info` IPC command and current UI.
+- Added exact `rusqlite` and test-only `tempfile` dependency declarations selected in D-009.
+- Added a platform-neutral storage module with typed configuration, errors, connection settings, and migrations.
+- Added verified foreign-key, busy-timeout, and file-backed WAL configuration.
+- Added immutable, checksummed, transactional migrations for `schema_migrations` and `app_metadata` only.
+- Added focused storage unit tests and a public-API integration test.
+- Kept the raw SQLite connection private and exposed no generic SQL execution API.
+- Added the Increment 2B-1 execution plan and increment record.
 
 ## Working branch and repository state
 
-The artifact-generation workspace used for this update is an extracted source tree initialized only to create a patch. The user's real local checkout should be considered the source of truth.
-
-Before applying future changes, run in the local checkout:
+The user's local checkout remains the source of truth. Before applying or committing this increment, run:
 
 ```bash
+cd /Users/hdang/Desktop/Projects/ai-agent-assistant
 git status --short --branch
 git branch --show-current
 git log -1 --oneline
 ```
 
-The public repository link provided by the user is:
+The public repository is:
 
 ```text
 https://github.com/SillyRbbit/ai-agent-assistant.git
 ```
 
-The public repository may lag behind the local verified Increment 2A/2B-0 state unless the local changes have been committed and pushed.
+At artifact-generation time the public `main` page still showed one commit, so it did not contain the user's verified local Increment 2A and 2B-0 state. Apply the Increment 2B-1 overlay to the local verified checkout rather than replacing the repository from GitHub.
 
 ## Confirmed target Mac environment
 
 ```text
-Platform: macOS on Apple Silicon
+Platform: Apple Silicon macOS
 Node.js: 26.3.0
 npm: 11.16.0
 Rust toolchain: 1.90.0-aarch64-apple-darwin
 Package manager: npm
 ```
 
-Homebrew `rustup` must be present on `PATH`:
+Activate Homebrew Rustup when necessary:
 
 ```bash
 export PATH="$(brew --prefix rustup)/bin:$PATH"
+rustup default 1.90.0
 ```
 
-## Increment 2A verification results from the target Mac
+## Increment 2B-1 source status
+
+Implemented:
+
+- `DatabaseConfig` and `DatabaseLocation`.
+- bounded default and maximum busy timeouts.
+- `StorageError` and `StorageResult`.
+- `DatabaseConnection` with private raw connection ownership.
+- verified foreign-key enforcement.
+- verified file-backed WAL mode.
+- verified busy timeout.
+- deterministic migration catalog.
+- migration metadata drift and unknown-version rejection.
+- per-migration immediate transactions and explicit rollback handling.
+- `schema_migrations` and `app_metadata` as `STRICT` tables.
+- unit and integration tests.
+
+Not implemented:
+
+- production database key generation or Keychain retrieval,
+- product-data repositories,
+- Tauri IPC for storage,
+- UI persistence,
+- any privileged OS integration.
+
+## Verification performed in the artifact workspace
 
 Passed:
 
+```text
+Baseline npm ci
+Baseline npm run typecheck
+Baseline npm run build
+Storage-only cargo check
+Storage-only cargo clippy with -D warnings
+Storage-only cargo test: 8 passed, 0 failed
+```
+
+The storage harness used the same `rusqlite` SQLCipher feature set as the application crate. It is supporting evidence only, not a substitute for the target-Mac Tauri build.
+
+Pending on the target Mac:
+
+```text
+Cargo.lock dependency resolution
+Full Tauri-crate rustfmt check
+Full Tauri-crate Clippy
+Full Tauri-crate tests
+TypeScript and Vite recheck after applying
+Native Tauri launch
+```
+
+## Required target-Mac commands
+
+From `/Users/hdang/Desktop/Projects/ai-agent-assistant`:
+
 ```bash
+export PATH="$(brew --prefix rustup)/bin:$PATH"
+rustup default 1.90.0
+
+cargo check --manifest-path src-tauri/Cargo.toml
+
+git diff -- src-tauri/Cargo.lock
+
 cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
-cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
-cargo test --manifest-path src-tauri/Cargo.toml --all-targets --locked
+
+cargo clippy --manifest-path src-tauri/Cargo.toml \
+  --all-targets \
+  --all-features \
+  --locked \
+  -- -D warnings
+
+cargo test --manifest-path src-tauri/Cargo.toml \
+  --all-targets \
+  --locked
+
 npm run typecheck
 npm run build
 npm run tauri -- dev
 ```
 
-Notes:
+The first unlocked `cargo check` resolves the new exact dependencies and updates `src-tauri/Cargo.lock`. Review that lockfile diff. All subsequent Rust commands must use `--locked` where shown.
 
-- `cargo fmt` had to be run once after applying the Increment 2A ZIP.
-- `npm ci` had to be run once to restore local `node_modules` and make `tsc` available.
-- Rust tests passed with 25 unit tests and 1 integration test.
-- The app launched successfully after verification.
+## Application status expected after verification
 
-## Increment 2B-0 verification results
-
-This increment changes documentation only and does not alter runtime behavior, Rust source, TypeScript source, dependencies, Tauri capabilities, or CSP.
-
-Verification performed in the artifact workspace:
-
-```text
-npm ci: passed
-npx prettier --write on changed Markdown: passed
-npx prettier --check .: passed
-npm run typecheck: passed
-npm run build: passed
-```
-
-`npm run format:check` was not completed in the artifact workspace because that script also invokes `cargo fmt`, and Cargo is unavailable there. No Rust source or Cargo manifest changed in 2B-0; run `npm run format:check` on the target Mac before committing if a single combined formatting check is desired.
-
-## Application status
-
-### Working
+Unchanged user-visible behavior:
 
 - Native main window.
 - React rendering.
-- Typed `get_app_info` Tauri IPC command.
+- Typed `get_app_info` IPC command.
 - Rust core connection indicator.
-- Strict TypeScript compilation.
-- Vite production build.
-- Increment 2A Rust unit and integration tests.
 
-### Implemented core foundations
+New internal-only behavior:
 
-- `AgentProvider` interface and deterministic `MockAgentProvider`.
-- `ToolRegistry` interface and deterministic `InMemoryToolRegistry`.
-- `PolicyEngine` interface and deterministic `DeterministicPolicyEngine`.
-- `ApprovalManager` interface and deterministic `InMemoryApprovalManager`.
-- `AuditLogger` interface with in-memory and no-op implementations.
-- `MemoryStore` interface and deterministic `InMemoryMemoryStore`.
-- `PlatformAdapter` interface and deterministic `MockPlatformAdapter`.
-- Shared `RiskClass` and `PermissionKind` placeholders.
+- storage configuration and connection foundation,
+- migration catalog and runner,
+- initial bootstrap tables,
+- focused storage tests.
 
-### Decided but not implemented
-
-- SQLite access layer will use `rusqlite = "=0.40.1"` with `bundled-sqlcipher-vendored-openssl` unless target-Mac verification reveals a blocker.
-- Storage tests will use `tempfile = "=3.23.0"` as a dev dependency.
-- Increment 2B-1 will create only `schema_migrations` and `app_metadata`.
-
-### Not implemented yet
-
-- SQLite dependency and migrations.
-- Menu-bar entry and hide/show lifecycle.
-- Sidebar navigation and application pages.
-- Mock streaming assistant wired to the UI.
-- Tool activity card.
-- Approval dialog.
-- Settings page.
-- Permission Center shell.
-- Keychain integration.
-
-### Intentionally prohibited or deferred
-
-- Production model credentials.
-- API-key storage.
-- OAuth.
-- Accessibility.
-- Screen capture.
-- Apple Events.
-- Unrestricted shell execution.
-- Broad filesystem access.
-- Autonomous external or destructive actions.
-
-## Files changed in Increment 2B-0
+## Files added in Increment 2B-1
 
 ```text
+src-tauri/src/storage/mod.rs
+src-tauri/src/storage/config.rs
+src-tauri/src/storage/connection.rs
+src-tauri/src/storage/error.rs
+src-tauri/src/storage/migrations.rs
+src-tauri/tests/storage_smoke.rs
+docs/increments/02b-1-sqlite-migration-skeleton.md
+docs/plans/02b-1-sqlite-migration-skeleton.md
+```
+
+## Files changed in Increment 2B-1
+
+```text
+src-tauri/Cargo.toml
+src-tauri/Cargo.lock
+src-tauri/src/lib.rs
 CHANGELOG.md
 DECISIONS.md
 HANDOFF.md
@@ -155,50 +182,14 @@ NEXT_STEPS.md
 PLANS.md
 PROJECT_STATUS.md
 TROUBLESHOOTING_LOG.md
-docs/increments/02a-core-interfaces.md
-docs/increments/02b-0-sqlite-storage-decision.md
 ```
 
-## Next ready increment
+## Next action
 
-Increment 2B-1 — SQLite dependency and migration skeleton.
+Apply the Increment 2B-1 overlay, resolve the lockfile, and run the target-Mac verification commands above. Do not commit or begin Increment 2C until the diff has been reviewed and every required check has passed.
 
-Use this prompt:
+After all checks pass, use this prompt:
 
 ```text
-Use $verified-increment.
-
-Implement only Phase 2 Increment 2B-1 from NEXT_STEPS.md for AI Agent Assistant.
-
-Goal: add the SQLite dependency and minimal migration skeleton without persisting product data or changing the UI.
-
-Before changing files, read AGENTS.md, HANDOFF.md, PROJECT_STATUS.md, NEXT_STEPS.md, DECISIONS.md, TROUBLESHOOTING_LOG.md, SECURITY.md, CODE_REVIEW.md, docs/increments/02a-core-interfaces.md, and docs/increments/02b-0-sqlite-storage-decision.md. Inspect Git status, branch, and toolchain. Confirm whether the working tree is clean. Run the smallest baseline check needed to confirm the app still builds. State the exact files you will create or change before editing.
-
-Implementation scope:
-- Add rusqlite exactly as documented in DECISIONS.md.
-- Add tempfile as a dev dependency only.
-- Add src-tauri/src/storage/mod.rs, error.rs, config.rs, connection.rs, and migrations.rs.
-- Add typed StorageError and StorageResult.
-- Support in-memory and temporary file-backed database configuration.
-- Apply and verify PRAGMA foreign_keys = ON for every connection.
-- Apply WAL mode for file-backed databases where supported.
-- Add a migration runner.
-- Create schema_migrations and app_metadata only.
-- Add tests for opening, connection settings, migration idempotency, deterministic migration listing, and rollback on failure.
-- Wire the storage module into src-tauri/src/lib.rs.
-
-Do not add Tauri commands, UI behavior, production database key generation, Keychain integration, API keys, OAuth, model networking, macOS permissions, product data persistence, shell execution, Accessibility, ScreenCaptureKit, Apple Events, file tools, calendar tools, contacts, reminders, notifications, or clipboard tools.
-
-Run and report:
-- cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
-- cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
-- cargo test --manifest-path src-tauri/Cargo.toml --all-targets --locked
-- npm run typecheck
-- npm run build
-
-Update HANDOFF.md, PROJECT_STATUS.md, NEXT_STEPS.md, CHANGELOG.md, DECISIONS.md if needed, TROUBLESHOOTING_LOG.md if anything fails, and docs/increments/02b-1-sqlite-migration-skeleton.md with actual results. Stop after Increment 2B-1.
+Use $session-end. Mark Phase 2 Increment 2B-1 verified complete using the actual target-Mac command results. Update HANDOFF.md, PROJECT_STATUS.md, NEXT_STEPS.md, CHANGELOG.md, PLANS.md, TROUBLESHOOTING_LOG.md if needed, and docs/increments/02b-1-sqlite-migration-skeleton.md. Then identify Increment 2C as the next ready increment, but do not implement it.
 ```
-
-## Do not start next without confirmation
-
-Do not start Increment 2B-1 until the current 2B-0 patch has been applied, reviewed, and committed or explicitly accepted by the user.

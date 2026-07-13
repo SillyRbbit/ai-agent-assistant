@@ -4,6 +4,15 @@ All notable repository changes are documented here. This project follows a small
 
 ## Unreleased
 
+### Pending target-Mac verification
+
+- Phase 2 Increment 2B-1 source implementation for SQLite configuration, typed storage errors, private connection ownership, and versioned migrations.
+- Exact SQLCipher-capable `rusqlite` dependency and test-only `tempfile` dependency declarations.
+- Initial `STRICT` migrations for `schema_migrations` and `app_metadata` only.
+- Focused storage tests for connection settings, ordering, idempotency, rollback, and public API behavior.
+- Fail-closed migration metadata validation and no generic SQL execution API.
+- Full Tauri-crate checks, Apple Silicon SQLCipher build, updated lockfile, and native launch remain required before these entries move into the verified sections below.
+
 ### Added
 
 - Phase 2 Increment 2B-0 storage decision record at `docs/increments/02b-0-sqlite-storage-decision.md`.

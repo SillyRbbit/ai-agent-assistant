@@ -4,15 +4,13 @@ Use an execution plan for work that spans multiple modules, introduces a depende
 
 ## Active plan
 
-No implementation plan is active.
-
-The next ready work is Phase 2 Increment 2B-1 in `NEXT_STEPS.md`. It introduces a native SQLite dependency and multiple storage modules, so the next session should create or update an implementation plan before editing source files.
-
-Recommended plan path:
+Phase 2 Increment 2B-1 is active until target-Mac verification passes.
 
 ```text
 docs/plans/02b-1-sqlite-migration-skeleton.md
 ```
+
+Implementation and focused storage-harness verification are complete. The remaining plan steps are target-Mac lockfile resolution, full Tauri-crate verification, and native application launch.
 
 ## Plan rules
 
@@ -35,13 +33,13 @@ Keep plans current while working. Mark completed steps, record deviations, and c
 
 - **Draft** — still being designed.
 - **Ready** — enough information exists to implement.
-- **Active** — implementation is in progress.
+- **Active** — implementation is in progress or verification remains.
 - **Blocked** — a missing decision, dependency, environment issue, or failing prerequisite prevents progress.
 - **Complete** — acceptance criteria and verification are complete.
 - **Superseded** — replaced by another plan; retain the link to the replacement.
 
 ## Active-plan index
 
-| Plan | Status | Owner | Last updated |
-| ---- | ------ | ----- | ------------ |
-| None | —      | —     | 2026-07-13   |
+| Plan                                     | Status | Owner              | Last updated |
+| ---------------------------------------- | ------ | ------------------ | ------------ |
+| Increment 2B-1 SQLite migration skeleton | Active | Project maintainer | 2026-07-13   |
