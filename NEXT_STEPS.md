@@ -20,32 +20,40 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 3C — simulated tool result: **Verified complete**.
 - Phase 3 completion gap analysis: **Complete**.
 - Increment 3D — bounded mock-loop completion: **Verified complete**.
+- Phase 4 gateway and Responses security-boundary planning: **Complete**.
+- Increment 4A — deterministic gateway protocol contract: **Verified complete**.
 
-## Phase 4 planning — gateway and Responses security boundary
+## Phase 4 Increment 4B planning - exact local tool-schema validation
 
-Status: **Ready**
+Status: **Ready - documentation only**
 
 Goal:
 
-- Perform a documentation-only reconciliation of Phase 4 provider and gateway requirements against the verified Phase 3 architecture.
-- Define credential ownership, authenticated gateway responsibilities, strict Responses event and function-call validation, cancellation, timeout, limit, error-redaction, and audit boundaries before implementation.
-- Determine the smallest independently verified Phase 4 increment and its prerequisite decisions.
-- Preserve the rule that the gateway cannot execute local tools and the WebView/model cannot authorize or execute operating-system actions.
-- Produce one exact plan, file list, risk analysis, verification gate, and rollback strategy for project-owner approval.
+- Reconcile the placeholder `ToolSchema`, current tool registry, `ToolCallProposal`, policy boundary, and verified `UntrustedFunctionCall` with the product and security requirements.
+- Define the smallest transport-free increment that gives trusted Rust an exact locally owned per-tool schema and validates normalized arguments before any proposal or policy conversion.
+- Produce one exact implementation plan with files, dependency decision, typed errors, adversarial tests, risks, non-goals, verification, rollback, and an explicit project-owner approval gate.
 
-Required planning output:
+Planning inputs:
 
-- A gap analysis grounded in product, architecture, security, decision, and actual repository state.
-- Explicit trust-boundary diagrams or data-flow descriptions for app, gateway, provider, model output, tools, approval, audit, and credentials.
-- A recommendation for one smallest Phase 4 increment or a prerequisite decision-only increment.
-- Exact acceptance criteria, non-goals, files, risks, verification commands, and approval gate.
-- No runtime implementation before project-owner approval.
+```text
+src-tauri/src/agent/gateway_protocol.rs
+src-tauri/src/agent/types.rs
+src-tauri/src/tools/registry.rs
+src-tauri/src/policy/engine.rs
+docs/plans/04a-gateway-protocol-contract.md
+```
 
 Explicitly excluded:
 
-- Production provider calls, gateway deployment, network access, API keys, credentials, OAuth, or cloud-account setup.
-- Real tool execution, new approvals, privileged automation, or operating-system integrations.
-- New Rust or WebView IPC commands, dependencies, capabilities, CSP changes, packaging, persistence, or permissions.
-- Context collection, attachments, voice, or unrelated product work.
+- Runtime or dependency edits during planning.
+- Gateway networking, OpenAI calls, credentials, Keychain, identity, deployment, provider continuation, and tool-result submission.
+- Policy authorization, approval UI, executor wiring, Tauri/WebView IPC, persistence, capabilities, CSP, packaging, or operating-system permissions.
+- Generic or caller-defined schemas, provider-selected authority, broad tool-registry refactors, and any real tool execution.
 
-Do not edit runtime code during this planning task.
+Planning completion gate:
+
+- Inspect clean merged `main`, repository memory, current Rust contracts/tests, and exact dependency state.
+- Recommend only one smallest independently verified increment and update planning documentation only.
+- Run the smallest relevant documentation/baseline checks, review the complete diff, and wait for project-owner approval.
+
+Do not start Increment 4B implementation or any live gateway work during this planning task.

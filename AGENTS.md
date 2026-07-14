@@ -20,7 +20,7 @@ When the task is a security-sensitive change, also read `SECURITY.md` and `CODE_
 
 ## Current phase
 
-Phase 3 is verified complete on the target Mac. The next Ready task is documentation-only Phase 4 gateway and Responses security-boundary planning. Do not add provider calls, credentials, network access, new IPC, dependencies, sensitive persistence, real tool execution, or privileged operating-system integrations before the exact Phase 4 plan is approved.
+Phase 3 and Phase 4 Increment 4A are verified complete on the target Mac. The next Ready task is documentation-only planning for exact local tool-schema validation. Do not add provider calls, credentials, network access, new IPC, sensitive persistence, real tool execution, or privileged operating-system integrations before a later exact plan is approved. The verified gateway-protocol contract remains transport-free and its normalized function calls remain non-actionable.
 
 ## Non-negotiable product boundaries
 

@@ -4,7 +4,7 @@ Last updated: 2026-07-14
 
 ## Current milestone
 
-Phase 3 — **verified complete**. Documentation-only Phase 4 gateway and Responses security-boundary planning is next.
+Phase 3 and Phase 4 Increment 4A - **verified complete**. The next Ready task is documentation-only Increment 4B planning for exact local tool-schema validation.
 
 ## Increment status
 
@@ -24,6 +24,7 @@ Phase 3 — **verified complete**. Documentation-only Phase 4 gateway and Respon
 - Increment 3B: mock context provenance — **verified complete on target Mac**.
 - Increment 3C: simulated tool result — **verified complete on target Mac**.
 - Increment 3D: bounded mock-loop completion — **verified complete on target Mac**.
+- Increment 4A: deterministic gateway protocol contract - **verified complete on target Mac**.
 
 ## Verified baseline through Increment 2E
 
@@ -99,7 +100,36 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Perform documentation-only Phase 4 gateway and Responses security-boundary planning. Do not add provider calls, credentials, network access, dependencies, IPC, native capabilities, or runtime code before the exact plan is approved.
+On clean merged `main`, plan only the smallest Increment 4B exact local tool-schema validation contract. Reconcile the placeholder `ToolSchema`, tool registry, `ToolCallProposal`, policy boundary, and verified `UntrustedFunctionCall`; update planning documentation only and wait for project-owner approval before runtime or dependency changes.
+
+## Phase 4 planning result
+
+- The current synchronous Rust provider has no stream, gateway authentication, protocol version, event sequence, cancellation, deadline, correlation, redacted-error, or provider audit boundary.
+- Production OpenAI credentials belong only to an authenticated gateway's server-side secret storage. A future gateway access token belongs to trusted Rust and platform secret storage, never the WebView or SQLite.
+- The gateway selects exact server-owned tool contracts, forces foreground `stream: true`, `store: false`, `background: false`, and no parallel tool calls, and normalizes recognized OpenAI Responses events without gaining local tool authority.
+- The upstream adapter may ignore additive fields on recognized events for documented API compatibility; unknown event types and malformed required fields fail. The normalized product protocol rejects unknown fields and variants.
+- Function calls remain untrusted through strict provider generation and independent gateway/Rust validation. No call becomes actionable until exact local per-tool schema, policy, approval, and executor gates exist.
+- Foreground cancellation propagates transport abort and rejects late events; it does not claim confirmed provider-side cancellation.
+- Initial limits are two model turns, one non-parallel function call, one retry, three gateway requests, bounded request/event/argument/output/event-count sizes, and explicit connection/idle/turn/run deadlines.
+- Gateway operational telemetry and local trusted audit are separate and exclude credentials and raw content by default.
+- D-021 records the durable boundary. O-006 defers identity-provider and deployment selection until before live networking.
+- O-007 defers provider retention-mode selection and user disclosure until before live provider traffic; `store: false` alone is not treated as zero retention.
+- Increment 4A adds only a transport-free Rust normalized-protocol module, an exact direct `serde_json 1.0.150` dependency already present transitively, its module export/lock update, and inline fixture tests.
+- Planning baseline passed `npm run typecheck`, 124 frontend tests, and 50 Rust library tests on clean merged main at `f56cab2`.
+- Planning changed no runtime, dependency, lockfile, Rust, IPC, Tauri, capability, CSP, persistence, credential, network, packaging, or permission file.
+
+## Increment 4A capability and evidence
+
+- Protocol version `1` and conservative model-turn, function-call, retry, gateway-request, byte, output, event-count, and deadline constants are frozen in portable Rust.
+- Normalized frames are bounded before decoding and validated against a closed envelope/event union, exact expected IDs, contiguous sequence, one start, text-or-one-call output, one terminal event, and no late frames.
+- Local cancellation is idempotent and terminal without claiming confirmed provider cancellation.
+- Completed calls validate opaque identity, exact allowed name and tool-contract version, and bounded duplicate-free JSON-object arguments, but remain private-field `UntrustedFunctionCall` data with no proposal, policy, approval, IPC, or executor conversion.
+- Closed typed failures and errors structurally exclude provider messages, frames, output, arguments, headers, URLs, and credentials.
+- Focused protocol tests: 17 passed.
+- `npm run verify`: 124 frontend tests, 67 Rust library tests, six Rust integration tests, TypeScript, Vite production builds, and Tauri release no-bundle build passed.
+- `npm audit --audit-level=low`: zero vulnerabilities. `git diff --check`, code review, and security review passed with no findings.
+- No native manual interaction gate was required because the module is not wired to Tauri.
+- No network, gateway, credential, IPC, WebView, provider, tool execution, persistence, capability, CSP, packaging, or permission path was added.
 
 ## Phase 3D planning result
 

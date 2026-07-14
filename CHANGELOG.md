@@ -6,6 +6,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Phase 4 Increment 4A transport-free Rust gateway protocol with closed normalized events, typed redacted failures, conservative limits, sequence/state validation, and idempotent local cancellation.
+- Explicitly non-actionable function-call values with allowed-name and tool-contract checks plus bounded, duplicate-free JSON-object argument validation.
+- Seventeen focused gateway-protocol tests, bringing the Rust library suite to 67 tests.
+- Documentation-only Phase 4 gateway and Responses security-boundary analysis grounded in the verified repository and current official OpenAI documentation.
+- A proposed Increment 4A plan for a transport-free, versioned Rust gateway protocol and deterministic fixture validator.
+- Explicit credential ownership, gateway responsibilities, dual event/function validation, cancellation, conservative limits, error-redaction, and audit-boundary contracts.
 - Phase 3 Increment 3D fixed final answers bound to exact simulated results, runs, and conversations.
 - A frozen conservative mock-loop contract covering model turns, tool calls, retries, assistant output, and unavailable network, tool-timeout, file, and search capabilities.
 - Focused limit, output, identity, ordering, privacy, retry-cap, one-tool-call, empty-session, and restoration coverage, bringing the frontend suite to 124 tests.
@@ -49,6 +55,11 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Added the exact direct `serde_json 1.0.150` dependency already present in the lockfile and exported the portable gateway-protocol module without wiring it to Tauri or the existing provider.
+- Marked Increment 4A verified complete after focused checks, the full repository gate, dependency audit, diff checks, code review, and security review passed.
+- Made documentation-only planning for exact local tool-schema validation the next Ready task.
+- Made Increment 4A deterministic gateway protocol planning the approval-blocked next task after Phase 4 planning completed.
+- Defined foreground `store: false` Responses streaming and transport-abort cancellation so background response storage and provider-side cancellation are not implied.
 - Replaced the generic approve outcome message with one distinct deterministic final answer rendered immediately after its matching simulated result.
 - Limited an initial failed run to one fresh Retry and removed retry eligibility after failure of retry attempt `1`.
 - Advanced Increment 3D to verification pending after focused checks, the full automated gate, dependency audit, code review, security review, and native development launch passed.
@@ -87,6 +98,16 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Security
 
+- Normalized gateway frames are bounded before decoding and fail closed on unknown fields/variants, malformed identity, sequence/state violations, mixed or excess output, late events, and invalid terminal behavior.
+- Parsed function calls remain private-field untrusted protocol data with no `ToolCallProposal`, policy, approval, IPC, or executor conversion path.
+- Increment 4A adds no network client, gateway deployment, credential, WebView IPC, persistence, capability, CSP, packaging, operating-system permission, or user-visible behavior.
+- Production OpenAI credentials are assigned exclusively to gateway server-side secret storage; future gateway tokens remain in trusted Rust and platform secret storage and never enter the WebView or SQLite.
+- The gateway must select exact strict function contracts, normalize recognized provider events, reject unknown event types, and return only a versioned closed product protocol without local execution authority.
+- Normalized function calls remain non-actionable until independent Rust name, contract-version, duplicate-free JSON, exact schema, policy, approval, and executor validation succeeds.
+- Provider failures cross the boundary only as closed codes and opaque correlation metadata; gateway operational telemetry and local trusted audit remain separate and exclude raw content and credentials.
+- Foreground cancellation is a local terminal transition followed by transport abort, not a gateway cancellation frame or confirmed provider-side cancellation.
+- `store: false` is explicitly not treated as zero retention; provider retention mode and user disclosure must be approved before live traffic, and gateway operational metadata defaults to a maximum seven-day retention.
+- Phase 4 planning changed documentation only and added no runtime, dependency, lockfile, Rust, IPC, Tauri, capability, CSP, persistence, credential, network, packaging, or permission path.
 - Increment 3D final-answer construction accepts validated IDs only, uses fixed copy, and fails closed on result, run, conversation, proposal, tool-call-limit, output-limit, stale-event, and retry-limit mismatches.
 - Increment 3D changes no dependency, lockfile, Rust, IPC, Tauri, SQLite, capability, CSP, credential, network, packaging, or operating-system permission file.
 - The Phase 3D plan keeps final answers fixed, ID-only, volatile, and explicitly mock-generated; provider calls, result payloads, real tools, trusted output, persistence, networking, native changes, and permissions remain excluded.

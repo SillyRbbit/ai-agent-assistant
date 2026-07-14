@@ -362,9 +362,39 @@ Consequences:
 - Production provider continuation, real execution, configurable limits, arbitrary payloads, persistence, and trusted audit evidence remain later reviewed work.
 - No Rust, IPC, Tauri, SQLite, dependency, capability, CSP, credential, network, packaging, or operating-system permission change is introduced.
 
+## D-021 — Normalize the Responses boundary through a credential-owning gateway
+
+Date: 2026-07-14
+Status: Accepted; Increment 4A contract implemented and verified
+
+Decision: production OpenAI credentials exist only in server-side secret storage owned by an authenticated product gateway. A future desktop gateway access token is audience-bound, has a maximum 15-minute lifetime, and is held in trusted Rust memory. Any refresh or session credential is read only through the platform secret-store abstraction and stored in macOS Keychain rather than the WebView or SQLite.
+
+The desktop sends a closed product request containing a protocol version, opaque run/correlation identity, bounded user-selected content, a server-recognized tool-set identifier, and fixed limits. The gateway authenticates and authorizes the principal, enforces request/rate/model/tool-set policy, selects exact server-side strict function definitions, injects the OpenAI credential, forces foreground `store: false` streaming with `background: false` and no parallel tool calls, and normalizes recognized OpenAI Responses events. It never executes, approves, or authorizes a local tool.
+
+The upstream adapter validates recognized event types, required fields, sequence, and bounds while ignoring additive fields on recognized events for documented API compatibility. Unknown event types and invalid required fields fail the run. The normalized gateway-to-Rust protocol is versioned and closed, rejects unknown fields, requires contiguous sequence numbers and one terminal event, and returns only bounded text, completed function-call proposals, terminal state, or closed redacted errors.
+
+Function calls are untrusted at both boundaries. OpenAI strict mode must be enabled with all object properties required and `additionalProperties: false`, but trusted Rust still independently validates call identity, registered tool name, tool-contract version, duplicate-free JSON object arguments, the exact local per-tool schema, locally derived risk and permission, policy, approval, and execution eligibility. No provider or gateway field grants authority.
+
+The initial contract retains two model turns, one non-parallel function call, one retry only when the gateway proves the request was not forwarded or returns an explicit pre-start rate limit, three gateway requests, bounded request/event/argument/output sizes, and explicit connection, idle, turn, and run deadlines. Cancellation first transitions Rust to a terminal local state, aborts foreground transport in both hops, and rejects late events; it expects no acknowledgment on the aborted stream and does not claim confirmed provider-side cancellation. Provider errors become closed redacted codes and opaque correlation IDs. Gateway operational telemetry and the local trusted audit are separate and exclude raw prompts, output, arguments, results, errors, and credentials. Gateway operational metadata has a default maximum seven-day retention.
+
+`store: false` minimizes Responses application-state storage but does not remove default provider abuse-monitoring retention. The OpenAI project retention mode and user disclosure remain O-007 and must be resolved before live provider traffic.
+
+Rationale: OpenAI requires server-side credential handling, Responses streaming is a typed but evolving external protocol, and the official cancel endpoint is limited to background responses. A product-owned normalized protocol prevents provider event drift, credentials, raw errors, or provider-selected tool metadata from crossing directly into the trusted desktop core while preserving local policy and execution authority.
+
+Consequences:
+
+- Increment 4A must establish and fixture-test the normalized Rust protocol before networking exists.
+- The existing synchronous `AgentProvider` and placeholder `ToolSchema` are insufficient for live Responses integration and remain unchanged in Increment 4A.
+- Increment 4A may classify a function call as untrusted protocol data but cannot convert it into an executable `ToolCallProposal`; exact per-tool schema validation is a later prerequisite.
+- Live gateway transport, authentication, Keychain integration, model selection, provider continuation, and deployment require later approved increments.
+- The gateway identity provider and deployment platform remain open decision O-006 and do not block the transport-free protocol contract.
+- Provider retention configuration and user disclosure remain open decision O-007 and do not block the transport-free protocol contract.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |
 | ----- | ---------------------------------------------------------------- | ----------------------------------- |
 | O-002 | Workspace split between one Tauri crate and multiple Rust crates | Revisit before later modularization |
 | O-003 | macOS minimum deployment target confirmation on target Mac       | Native release preparation          |
+| O-006 | Gateway identity provider and deployment platform                | Before live gateway networking      |
+| O-007 | Provider retention mode and user disclosure                      | Before live provider traffic        |

@@ -4,13 +4,7 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-There is no Active plan. **Increment 3D — bounded mock-loop completion** is Complete.
-
-Most recently completed plan:
-
-```text
-docs/plans/03d-bounded-mock-loop-completion.md
-```
+None. Increment 4A is complete. The next Ready task is documentation-only Increment 4B planning; no Increment 4B execution plan exists yet.
 
 ## Completed plans
 
@@ -25,6 +19,7 @@ docs/plans/03a-in-memory-conversation-sessions.md
 docs/plans/03b-mock-context-provenance.md
 docs/plans/03c-simulated-tool-result.md
 docs/plans/03d-bounded-mock-loop-completion.md
+docs/plans/04a-gateway-protocol-contract.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -67,6 +62,7 @@ A plan must contain:
 | Increment 3B mock context provenance         | Complete | Project maintainer | 2026-07-13   |
 | Increment 3C simulated tool result           | Complete | Project maintainer | 2026-07-13   |
 | Increment 3D bounded mock-loop completion    | Complete | Project maintainer | 2026-07-14   |
+| Increment 4A gateway protocol contract       | Complete | Project maintainer | 2026-07-14   |
 
 ## Phase 2 Increment 2E — complete
 
@@ -121,3 +117,15 @@ Implementation, automated verification, native development launch, and project-o
 The project owner confirmed exact result/final ordering and run identity, request-content exclusion, no final answer after Reject/Edit/Stop, per-conversation restoration, supported layouts, existing context and Activity behavior, native routing, Settings diagnostics, lifecycle behavior, storage startup, and absence of permission prompts all pass. Increment 3D and Phase 3 are verified complete.
 
 The next Ready task is documentation-only Phase 4 gateway and Responses security-boundary planning. No provider or runtime implementation may begin before the exact plan is approved.
+
+## Phase 4 gateway and Responses planning - complete
+
+The product, architecture, security policy, accepted decisions, official OpenAI documentation, and actual Rust/provider boundaries were reconciled. Decision D-021 assigns production OpenAI credentials to server-side gateway secret storage, keeps future gateway tokens in trusted Rust and platform secret storage, and requires a versioned normalized gateway protocol with dual validation, foreground `store: false` streaming, transport-abort cancellation, conservative limits, closed redacted errors, and separate gateway operational and local trusted audit records.
+
+Increment 4A was approved and implemented as the smallest Phase 4 increment: one transport-free portable Rust gateway-protocol module, one exact already-locked parsing dependency, and deterministic inline tests. Focused checks, `npm run verify`, dependency audit, diff checks, code review, and security review pass. It adds no network client, gateway server, credential, IPC, tool execution, persistence, capability, CSP, packaging, or permission path.
+
+## Phase 4 Increment 4A gateway protocol contract - complete
+
+The versioned normalized event contract, transactional stream validator, conservative limits, local cancellation, closed redacted failures, and explicitly non-actionable function-call values are implemented. Seventeen focused tests cover accepted text/function streams and malformed, oversized, mismatched, out-of-order, duplicate, late, mixed, over-limit, duplicate-key, unknown-tool/contract, and error-redaction cases. The full gate passes with 124 frontend tests, 67 Rust library tests, six Rust integration tests, and production frontend/Tauri builds.
+
+The next Ready task is documentation-only Increment 4B planning for exact local per-tool schema validation. It must not add transport, credentials, IPC, policy authorization, approval, or execution.
