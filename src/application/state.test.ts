@@ -38,6 +38,7 @@ describe("applicationReducer", () => {
     expect(INITIAL_APPLICATION_STATE.activeConversationId).toBe("conversation-1");
     expect(INITIAL_APPLICATION_STATE.conversations).toEqual([
       {
+        contextProvenance: [],
         id: "conversation-1",
         messages: [],
         title: "New conversation",
@@ -120,6 +121,20 @@ describe("applicationReducer", () => {
     expect(conversation.messages).toMatchObject([
       { content: "Prepare the board update", role: "user", status: "complete" },
       { content: "", role: "assistant", status: "streaming" },
+    ]);
+    expect(conversation.contextProvenance).toEqual([
+      expect.objectContaining({
+        conversationId: "conversation-1",
+        id: "mock-run-1-context",
+        runId: "mock-run-1",
+      }),
+    ]);
+    expect(conversation.contextProvenance[0]?.sources).toMatchObject([
+      { id: "current-request", status: "used" },
+      { id: "earlier-conversation-messages", status: "not-used" },
+      { id: "saved-memory", status: "not-used" },
+      { id: "device-data", status: "not-used" },
+      { id: "external-services", status: "not-used" },
     ]);
     expect(state.nextRunOrdinal).toBe(2);
     expect(state.activityEvents).toMatchObject([{ kind: "run-started", runId: "mock-run-1" }]);
@@ -221,6 +236,10 @@ describe("applicationReducer", () => {
     expect(
       activeConversation(retried).messages.filter((message) => message.role === "user"),
     ).toHaveLength(1);
+    expect(activeConversation(retried).contextProvenance).toMatchObject([
+      { conversationId: "conversation-1", runId: "mock-run-1" },
+      { conversationId: "conversation-1", runId: "mock-run-2" },
+    ]);
     expect(retried.retryableRun).toBeNull();
   });
 
@@ -287,6 +306,7 @@ describe("applicationReducer", () => {
     expect(created.activeConversationId).toBe("conversation-2");
     expect(created.conversations).toHaveLength(2);
     expect(activeConversation(created)).toMatchObject({
+      contextProvenance: [],
       messages: [],
       title: "New conversation",
       toolActivities: [],

@@ -4,14 +4,12 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-There is no Active plan. **Increment 3A — in-memory conversation sessions** is Complete.
-
-Implementation, automated release verification, native launch, and project-owner manual acceptance are complete.
+There is no Active plan. **Increment 3B — mock context provenance** is Complete.
 
 Most recently completed plan:
 
 ```text
-docs/plans/03a-in-memory-conversation-sessions.md
+docs/plans/03b-mock-context-provenance.md
 ```
 
 ## Completed plans
@@ -24,6 +22,7 @@ docs/plans/02e-react-application-shell.md
 docs/plans/02f-mocked-assistant-interaction-shell.md
 docs/plans/02g-integration-hardening.md
 docs/plans/03a-in-memory-conversation-sessions.md
+docs/plans/03b-mock-context-provenance.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -63,6 +62,7 @@ A plan must contain:
 | Increment 2F mocked interaction shell        | Complete | Project maintainer | 2026-07-13   |
 | Increment 2G integration hardening           | Complete | Project maintainer | 2026-07-13   |
 | Increment 3A in-memory conversation sessions | Complete | Project maintainer | 2026-07-13   |
+| Increment 3B mock context provenance         | Complete | Project maintainer | 2026-07-13   |
 
 ## Phase 2 Increment 2E — complete
 
@@ -92,6 +92,12 @@ The typed driver, bounded failure and Retry, redacted in-memory Activity feed, a
 
 The product brief and architecture baseline were reconciled with the completed Phase 2 mock loop. The smallest missing capability was volatile conversation identity and history. Increment 3A was approved, implemented, and passed automated verification, native launch, and project-owner manual acceptance.
 
-## Phase 3B planning — ready
+## Phase 3B planning — complete
 
-Reconcile the remaining context-provenance, tool-result, and mocked-loop requirements with the verified implementation through Increment 3A. Do not implement features until a dedicated plan and exact file set are approved.
+The remaining product requirements were reconciled with the verified implementation through Increment 3A. Mock context provenance is the smallest next capability because the product requires visible information-use disclosure and conversation identity now provides the required ownership boundary.
+
+The approved implementation limits the increment to fixed-copy, volatile WebView presentation tied to exact run and conversation IDs. It excludes real context collection, context controls, trusted provenance, persistence, tool results, networking, dependencies, native capability changes, and permissions. Automated verification, native launch, and project-owner native interaction and layout checks pass.
+
+## Phase 3C planning — ready
+
+Reconcile the remaining tool-result and mocked-loop requirements with the verified implementation through Increment 3B. Do not implement features until a dedicated plan and exact file set are approved.

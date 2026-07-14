@@ -4,7 +4,7 @@ Last updated: 2026-07-13
 
 ## Current milestone
 
-Phase 3 — **Increment 3A verified complete**. Phase 3B gap analysis and increment planning are next.
+Phase 3 — **Increment 3B verified complete**. Phase 3C gap analysis and increment planning are next.
 
 ## Increment status
 
@@ -21,6 +21,7 @@ Phase 3 — **Increment 3A verified complete**. Phase 3B gap analysis and increm
 - Increment 2F: mocked assistant interaction shell — **verified complete on target Mac**.
 - Increment 2G: integration hardening — **verified complete on target Mac**.
 - Increment 3A: in-memory conversation sessions — **verified complete on target Mac**.
+- Increment 3B: mock context provenance — **verified complete on target Mac**.
 
 ## Verified baseline through Increment 2E
 
@@ -96,7 +97,29 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Perform documentation-only Phase 3B gap analysis and define the next bounded increment without changing runtime code.
+Perform documentation-only Phase 3C gap analysis and define the next bounded increment without changing runtime code.
+
+## Phase 3B planning result
+
+- The verified application has no run-bound disclosure of what information the deterministic mock used.
+- The product brief requires users to see what information the agent used, and D-017 identifies conversation identity as the prerequisite.
+- The proposed increment adds one fixed-copy provenance record per run, tied to exact run and conversation IDs and stored only in volatile session state.
+- The current request is the only source marked used; prior messages, saved memory, device data, and external services are explicitly not used.
+- Request text and personal content remain excluded from provenance and Activity.
+- Real context selection or collection, trusted provenance, persistence, tool results, networking, dependencies, native capability changes, and permissions remain out of scope.
+- Planning baseline passed with TypeScript type checking, 83 frontend tests, and 50 Rust library tests.
+
+## Increment 3B capability and evidence
+
+- Fixed-copy `MockContextProvenance` records bind each run to its volatile conversation.
+- Current request is marked used; prior messages, saved memory, device data, and external services are marked not used.
+- Provenance constructors accept identifiers only, and the UI states that the disclosure is frontend mock data rather than trusted audit evidence.
+- Submit and Retry append one fresh record; conversation selection restores only the owning records.
+- Focused tests pass: 4 files, 66 tests.
+- `npm run verify` passes with 92 frontend tests, 50 Rust library tests, 6 Rust integration tests, Vite builds, and the Tauri release no-bundle build.
+- `npm audit --audit-level=low` reports zero vulnerabilities.
+- Native Tauri development launch passes with idempotent storage startup and two migrations already applied.
+- Project-owner native interaction, per-conversation restoration, minimum-window layout, and existing native regression checks passed.
 
 ## Phase 3 planning result
 
