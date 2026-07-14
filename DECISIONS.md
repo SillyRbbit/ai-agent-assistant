@@ -260,6 +260,24 @@ Consequences:
 - Production provider events, trusted approval transactions, tool execution, audit persistence, and error recovery remain later reviewed increments.
 - No dependency, IPC, Tauri capability, CSP, Rust source, SQLite schema, or permission change is introduced.
 
+## D-016 — Model Phase 2 run failures and activity as closed volatile frontend events
+
+Date: 2026-07-13
+Status: Accepted
+
+Decision: Increment 2G places the deterministic browser timer implementation behind a typed `MockRunDriver` with a closed chunk/completed/failed event union and an idempotent cancellation handle. Accepted lifecycle transitions append fixed-copy Activity events containing only an internal activity ID, a validated mock run ID, an event kind, and presentation metadata. Retry reuses the failed request in memory but does not append a duplicate user message.
+
+Rationale: this hardens cancellation, bounded failures, Retry, and transparent lifecycle presentation without exposing a generic event channel, rendering raw errors, persisting sensitive content, or implying that WebView activity is a trusted audit record.
+
+Consequences:
+
+- Stop, completion, failure, Retry, and unmount all terminate the previous driver handle through React effect cleanup.
+- Late chunk, completion, and failure events fail closed unless they match the active streaming run.
+- Activity copy cannot contain request text, tool arguments, tool results, or provider error details.
+- The Activity page is a volatile Phase 2 scaffold, not the trusted Rust audit log required in a later phase.
+- Reloading clears messages, Retry state, and all Activity events.
+- No Rust, Tauri, IPC, capability, CSP, SQLite, dependency, credential, network, or permission boundary changes.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

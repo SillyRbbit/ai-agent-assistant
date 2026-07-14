@@ -16,9 +16,11 @@ interface ConversationWorkspaceProps {
   readonly messages: readonly ConversationMessage[];
   readonly onApprovalDecision: (decision: MockApprovalDecision) => void;
   readonly onComposerDraftChange: (value: string) => void;
+  readonly onRetry: () => void;
   readonly onStop: () => void;
   readonly onSubmit: () => void;
   readonly runStatus: AssistantRunStatus;
+  readonly retryableMessageId: string | null;
   readonly toolActivities: readonly ToolActivity[];
 }
 
@@ -28,9 +30,11 @@ export function ConversationWorkspace({
   messages,
   onApprovalDecision,
   onComposerDraftChange,
+  onRetry,
   onStop,
   onSubmit,
   runStatus,
+  retryableMessageId,
   toolActivities,
 }: ConversationWorkspaceProps) {
   const isBusy = runStatus !== "idle";
@@ -62,6 +66,16 @@ export function ConversationWorkspace({
                   <span>{message.role === "user" ? "You" : "Assistant"}</span>
                   <p>{message.content || "Preparing mock response…"}</p>
                   {message.status === "stopped" ? <small>Stopped</small> : null}
+                  {message.status === "failed" ? (
+                    <div className="conversation-message__failure">
+                      <small>Failed</small>
+                      {message.id === retryableMessageId ? (
+                        <button onClick={onRetry} type="button">
+                          Retry
+                        </button>
+                      ) : null}
+                    </div>
+                  ) : null}
                 </article>
               ))}
               {toolActivities.map((activity) => (

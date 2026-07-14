@@ -6,6 +6,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Verified Phase 2 Increment 2G typed mock-run driver with explicit idempotent cancellation.
+- Bounded mock failure presentation and deterministic Retry without duplicating the user message.
+- Redacted in-memory Activity feed for accepted run, Stop, failure, approval-request, and approval-decision events.
+- Focused privacy, stale-event, driver, cancellation, failure, Retry, and Activity tests.
 - Verified Phase 2 Increment 2F deterministic in-memory assistant interaction shell.
 - Fixed mock assistant streaming, Stop behavior, conversation messages, and tool activity presentation.
 - Mock-only approval preview with deterministic approve, reject, and edit decisions that execute no tool.
@@ -29,6 +33,11 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Replaced direct timer ownership in the React hook with an injectable closed mock-run driver.
+- Replaced the Activity placeholder with a volatile session feed containing fixed summaries and opaque run IDs only.
+- Hardened late chunk, completion, and failure handling against inactive or mismatched runs.
+- Marked Phase 2 verified complete after automated, native-launch, manual interaction, lifecycle, diagnostics, storage, and no-permission-prompt checks passed.
+- Made Phase 3 gap analysis and increment planning the next Ready task.
 - Enabled the conversation composer for non-empty local mock requests and kept all resulting state volatile.
 - Updated Activity copy to distinguish current-conversation mock activity from future persisted audit history.
 - Recorded successful full repository verification, native launch, streaming, Stop, approval-decision, layout, lifecycle, storage, and no-permission-prompt checks for Increment 2F.
@@ -46,6 +55,9 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Security
 
+- Increment 2G Activity records exclude request text, tool arguments, tool results, and underlying error details.
+- Driver failures map to one bounded user-facing reason; startup exceptions are not rendered or logged.
+- Increment 2G adds no Rust, IPC, Tauri, capability, CSP, dependency, persistence, credential, network, or OS permission change.
 - Increment 2F adds no model network, credential, dependency, Rust, IPC, Tauri command, capability, CSP, persistence, or operating-system permission change.
 - Mock approval decisions remain inside untrusted WebView memory, are labeled as non-executing, and cannot authorize or invoke a local action.
 - Mock timer events are bound to an active run identifier; stale events and decisions outside the valid state fail closed.

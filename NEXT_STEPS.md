@@ -14,33 +14,34 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 2D — macOS menu-bar and window lifecycle: **Verified complete**.
 - Increment 2E — React application shell: **Verified complete**.
 - Increment 2F — mocked assistant interaction shell: **Verified complete**.
+- Increment 2G — integration hardening: **Verified complete**.
 
-## Increment 2G — integration hardening
+## Phase 3 — gap analysis and increment planning
 
 Status: **Ready**
 
 Goal:
 
-- Complete bounded cancellation and error-state hardening.
-- Add a deterministic local audit-view scaffold without sensitive persistence.
-- Complete release-verification hardening appropriate to Phase 2.
-- Preserve the verified React, Rust, SQLite, menu-bar, lifecycle, IPC, CSP, capability, and permission boundaries.
+- Compare the Phase 3 product requirements with the verified Phase 2 implementation.
+- Identify the smallest missing conversation-UI or mocked-loop capability.
+- Define one bounded first Phase 3 increment with explicit acceptance criteria, non-goals, risks, exact files, and verification commands.
+- Preserve every verified security, IPC, storage, capability, CSP, lifecycle, and permission boundary.
 
-Required planning gate before implementation:
+Required planning output:
 
-- Define exact acceptance criteria for cancellation, errors, audit presentation, and release evidence.
-- Keep the increment small enough to verify independently; split it if the plan spans unrelated trust boundaries.
-- State the exact file list and wait for approval before editing.
+- A written gap analysis grounded in `docs/product/PRODUCT_BRIEF.md` and actual code.
+- One dedicated Phase 3 plan document.
+- An exact proposed file list and verification gate.
+- Project-owner approval before implementation.
 
-Explicitly excluded:
+Explicitly excluded from planning implementation:
 
-- Production OpenAI or gateway access.
+- Production model or gateway access.
 - API keys, credentials, OAuth, or cloud accounts.
-- Real tool execution or trusted WebView authorization.
-- New operating-system permissions or privileged platform APIs.
-- Sensitive SQLite persistence.
+- Real tools, privileged automation, or trusted WebView authorization.
+- Sensitive persistence or new operating-system permissions.
 
-Do not broaden the increment beyond the approved plan.
+Do not edit runtime code during the planning task.
 
 ## Out of scope for the remaining Phase 2 increments
 

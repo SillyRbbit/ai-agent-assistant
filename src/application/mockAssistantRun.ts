@@ -1,5 +1,5 @@
 export type ConversationMessageRole = "assistant" | "user";
-export type ConversationMessageStatus = "complete" | "stopped" | "streaming";
+export type ConversationMessageStatus = "complete" | "failed" | "stopped" | "streaming";
 
 export interface ConversationMessage {
   readonly content: string;

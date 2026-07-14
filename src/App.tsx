@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import { ApplicationStateProvider } from "./application/ApplicationStateProvider";
 import { NAVIGATION_ITEMS, type AppRoute } from "./application/navigation";
+import { browserMockRunDriver, type MockRunDriver } from "./application/mockRunDriver";
 import { useMockAssistantRun } from "./application/useMockAssistantRun";
 import { useCoreConnection, type AppInfoLoader } from "./application/useCoreConnection";
 import {
@@ -10,6 +11,7 @@ import {
 } from "./application/useMenuRouteSubscription";
 import { useApplicationDispatch, useApplicationState } from "./application/useApplicationState";
 import { ApplicationSidebar } from "./components/ApplicationSidebar";
+import { ActivityPage } from "./features/activity/ActivityPage";
 import { ConversationWorkspace } from "./features/conversations/ConversationWorkspace";
 import { PermissionCenter } from "./features/permissions/PermissionCenter";
 import { SettingsPage } from "./features/settings/SettingsPage";
@@ -24,6 +26,7 @@ import {
 export interface AppServices {
   readonly appInfoLoader: AppInfoLoader;
   readonly menuRouteSource: MenuRouteSource;
+  readonly mockRunDriver: MockRunDriver;
 }
 
 interface AppProps {
@@ -33,6 +36,7 @@ interface AppProps {
 const DEFAULT_APP_SERVICES: AppServices = {
   appInfoLoader: fetchAppInfo,
   menuRouteSource: tauriMenuRouteSource,
+  mockRunDriver: browserMockRunDriver,
 };
 
 export function App({ services = DEFAULT_APP_SERVICES }: AppProps) {
@@ -52,21 +56,11 @@ function ApplicationShell({ services }: ApplicationShellProps) {
   const dispatch = useApplicationDispatch();
   const coreConnection = useCoreConnection(services.appInfoLoader);
   const menuRouteStatus = useMenuRouteSubscription(services.menuRouteSource);
-  const mockRunActions = useMockAssistantRun(state.activeRun, dispatch);
+  const mockRunActions = useMockAssistantRun(state.activeRun, dispatch, services.mockRunDriver);
   const runStatus = state.activeRun?.status ?? "idle";
 
   const pages: Readonly<Record<AppRoute, ReactNode>> = {
-    activity: (
-      <PlaceholderPage
-        description="A transparent local history of runs, context, tools, approvals, and results."
-        emptyDescription="Mock activity stays with the current conversation until the reviewed audit model is introduced."
-        emptyTitle="No persisted activity"
-        eyebrow="Transparency"
-        headingId="activity-page-title"
-        icon="A"
-        title="Activity"
-      />
-    ),
+    activity: <ActivityPage events={state.activityEvents} />,
     conversations: (
       <ConversationWorkspace
         activeApproval={state.activeApproval}
@@ -76,9 +70,11 @@ function ApplicationShell({ services }: ApplicationShellProps) {
         onComposerDraftChange={(value) => {
           dispatch({ type: "composer-draft-changed", value });
         }}
+        onRetry={mockRunActions.retry}
         onStop={mockRunActions.stop}
         onSubmit={mockRunActions.submit}
         runStatus={runStatus}
+        retryableMessageId={state.retryableRun?.assistantMessageId ?? null}
         toolActivities={state.toolActivities}
       />
     ),
