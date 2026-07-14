@@ -4,9 +4,9 @@ Last updated: 2026-07-14
 
 ## Current state
 
-Phase 3 and Phase 4 Increments 4A and 4B are verified complete on the target Mac. Increment 4B was implemented on branch `phase4/increment-4b`, based on clean merged `main` at `e1db18b`.
+Phase 3 and Phase 4 Increments 4A and 4B are verified complete on the target Mac. Increment 4B was implemented on branch `phase4/increment-4b`, based on merged `main` at `e1db18b`.
 
-The working tree contains the approved planning, runtime, tests, durable decision, and closeout documentation. Nothing is staged, committed, or pushed for Increment 4B. `HEAD` remains `e1db18b` until the project owner explicitly requests Git publication.
+The project owner requested commit, push, and fast-forward merge after verification. Implementation commit `ce9fd40` and this publication-state closeout were pushed on `phase4/increment-4b` and fast-forward merged into `main`. The final `main` working tree is clean.
 
 Increment 4B remains transport-free and unreferenced by Tauri. It adds no provider call, proposal conversion, policy call, approval, audit, executor, runtime tool registration, IPC, persistence, UI, credential, network, capability, CSP, packaging, permission, or user-visible behavior.
 
@@ -117,7 +117,7 @@ Manual verification still pending:
 
 ## Exact next task
 
-After this branch is reviewed, committed, merged, and `main` is clean, perform documentation-only planning for Phase 4 Increment 4C: trusted proposal and policy-input binding. Reconcile the verified `SchemaValidatedFunctionCall` with legacy proposal/provider-response types, `ProposedAction`, deterministic policy, and the future approval/audit boundary. Recommend one smallest transport-free increment; do not implement it or begin live gateway work.
+On clean merged `main`, perform documentation-only planning for Phase 4 Increment 4C: trusted proposal and policy-input binding. Reconcile the verified `SchemaValidatedFunctionCall` with legacy proposal/provider-response types, `ProposedAction`, deterministic policy, and the future approval/audit boundary. Recommend one smallest transport-free increment; do not implement it or begin live gateway work.
 
 ## Ready-to-paste resume prompt
 

@@ -105,7 +105,7 @@ Remove the new schema and function-call-validation modules and exports, then res
 
 ## Approval gate
 
-The project owner approved the exact goal, two-contract catalog, 200-character title limit, file plan, no-dependency decision, validation semantics, verification gate, and rollback on 2026-07-14. No commit or push was requested or performed.
+The project owner approved the exact goal, two-contract catalog, 200-character title limit, file plan, no-dependency decision, validation semantics, verification gate, and rollback on 2026-07-14. After verification, implementation commit `ce9fd40` and the publication-state closeout were pushed and fast-forward merged into `main` at the project owner's request.
 
 ## Actual results
 
