@@ -210,6 +210,7 @@ describe("App", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(screen.queryByRole("article", { name: "Mock tool activity" })).not.toBeInTheDocument();
     expect(screen.queryByRole("article", { name: "Mock tool result" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("article", { name: "Mock final answer" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
 
     openSidebarRoute("Activity");
@@ -253,6 +254,16 @@ describe("App", () => {
     expect(provenance[0]).toHaveTextContent("mock-run-1");
     expect(provenance[1]).toHaveTextContent("mock-run-2");
     expect(screen.getByRole("button", { name: "Stop" })).toBeInTheDocument();
+
+    act(() => {
+      runHarness.emit({ reason: "mock-provider-unavailable", type: "failed" });
+    });
+
+    expect(
+      screen.getAllByText("The local mock run could not finish. No action was executed."),
+    ).toHaveLength(2);
+    expect(screen.queryByRole("button", { name: "Retry" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("article", { name: "Mock final answer" })).not.toBeInTheDocument();
   });
 
   it("bounds a driver startup exception without exposing its detail", () => {
@@ -281,7 +292,7 @@ describe("App", () => {
   });
 
   it.each([
-    ["Approve mock", "Mock approved", "Mock approval recorded"],
+    ["Approve mock", "Mock approved", null],
     ["Reject", "Rejected", "Mock action rejected"],
   ] as const)("records the %s decision without executing a tool", (button, status, outcome) => {
     vi.useFakeTimers();
@@ -294,15 +305,18 @@ describe("App", () => {
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(screen.getByText(status)).toBeInTheDocument();
-    expect(screen.getByText(new RegExp(outcome))).toBeInTheDocument();
     if (button === "Approve mock") {
       expect(screen.getByRole("article", { name: "Mock tool result" })).toBeInTheDocument();
+      expect(screen.getByRole("article", { name: "Mock final answer" })).toBeInTheDocument();
+      expect(screen.queryByText(/Mock approval recorded/)).not.toBeInTheDocument();
     } else {
+      expect(screen.getByText(new RegExp(outcome))).toBeInTheDocument();
       expect(screen.queryByRole("article", { name: "Mock tool result" })).not.toBeInTheDocument();
+      expect(screen.queryByRole("article", { name: "Mock final answer" })).not.toBeInTheDocument();
     }
   });
 
-  it("renders a fixed simulated result without copying request content", () => {
+  it("renders a fixed simulated result immediately before its fixed final answer", () => {
     vi.useFakeTimers();
     const harness = createMenuRouteHarness();
     render(<App services={createServices(harness.source)} />);
@@ -319,6 +333,15 @@ describe("App", () => {
     expect(result).toHaveTextContent("No local task was created and no data changed.");
     expect(result).toHaveTextContent("Frontend mock only. Not verified executor output.");
     expect(result).not.toHaveTextContent("Confidential board request");
+
+    const finalAnswer = screen.getByRole("article", { name: "Mock final answer" });
+    expect(finalAnswer).toHaveTextContent("Final answer");
+    expect(finalAnswer).toHaveTextContent(
+      "Mock run complete. The approved task action was simulated only; no local task was created and no data changed.",
+    );
+    expect(finalAnswer).toHaveTextContent("Deterministic frontend mock, turn 2, mock-run-1");
+    expect(finalAnswer).not.toHaveTextContent("Confidential board request");
+    expect(result.nextElementSibling).toBe(finalAnswer);
   });
 
   it("returns an edited mock action to the composer without execution", () => {
@@ -333,6 +356,7 @@ describe("App", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(screen.getByText("Edit requested")).toBeInTheDocument();
     expect(screen.queryByRole("article", { name: "Mock tool result" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("article", { name: "Mock final answer" })).not.toBeInTheDocument();
     expect(screen.getByLabelText("Assistant request")).toHaveValue(
       "Revise the local task for: Prepare the board update",
     );
@@ -387,6 +411,9 @@ describe("App", () => {
     expect(
       within(firstTranscript).queryByRole("article", { name: "Mock tool result" }),
     ).not.toBeInTheDocument();
+    expect(
+      within(firstTranscript).queryByRole("article", { name: "Mock final answer" }),
+    ).not.toBeInTheDocument();
     expect(within(firstTranscript).queryByText("Second board request")).not.toBeInTheDocument();
 
     openConversation("Second board request");
@@ -401,6 +428,9 @@ describe("App", () => {
     expect(
       within(secondTranscript).getByRole("article", { name: "Mock tool result" }),
     ).toHaveTextContent("mock-run-2");
+    expect(
+      within(secondTranscript).getByRole("article", { name: "Mock final answer" }),
+    ).toHaveTextContent("Deterministic frontend mock, turn 2, mock-run-2");
     expect(within(secondTranscript).queryByText("First board request")).not.toBeInTheDocument();
   });
 

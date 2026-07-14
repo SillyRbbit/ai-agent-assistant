@@ -39,6 +39,7 @@ describe("applicationReducer", () => {
     expect(INITIAL_APPLICATION_STATE.conversations).toEqual([
       {
         contextProvenance: [],
+        finalAnswers: [],
         id: "conversation-1",
         messages: [],
         title: "New conversation",
@@ -115,6 +116,7 @@ describe("applicationReducer", () => {
     expect(state.composerDraft).toBe("");
     expect(state.activeRun).toMatchObject({
       conversationId: "conversation-1",
+      retryAttempt: 0,
       script: { runId: "mock-run-1" },
       status: "streaming",
     });
@@ -212,6 +214,23 @@ describe("applicationReducer", () => {
     expect(completed.activityEvents.at(-1)?.kind).toBe("approval-requested");
   });
 
+  it("rejects a stream chunk that would exceed the mock output limit", () => {
+    const started = startMockRun();
+    const runId = started.activeRun?.script.runId;
+    if (runId === undefined) {
+      throw new Error("Expected the mock run to start.");
+    }
+
+    const oversized = applicationReducer(started, {
+      chunk: "x".repeat(513),
+      runId,
+      type: "mock-stream-chunk",
+    });
+
+    expect(oversized).toBe(started);
+    expect(activeConversation(oversized).messages[1]?.content).toBe("");
+  });
+
   it("records a bounded failure and retries without duplicating the user message", () => {
     const started = startMockRun("Sensitive request");
     const runId = started.activeRun?.script.runId;
@@ -227,13 +246,17 @@ describe("applicationReducer", () => {
     const retried = applicationReducer(failed, { type: "mock-run-retried" });
 
     expect(failed.activeRun).toBeNull();
-    expect(failed.retryableRun).toMatchObject({ assistantMessageId: "mock-run-1-assistant" });
+    expect(failed.retryableRun).toMatchObject({
+      assistantMessageId: "mock-run-1-assistant",
+      retryAttempt: 1,
+    });
     expect(activeConversation(failed).messages[1]).toMatchObject({
       content: "The local mock run could not finish. No action was executed.",
       status: "failed",
     });
     expect(failed.activityEvents.at(-1)?.kind).toBe("run-failed");
     expect(retried.activeRun?.script.runId).toBe("mock-run-2");
+    expect(retried.activeRun?.retryAttempt).toBe(1);
     expect(
       activeConversation(retried).messages.filter((message) => message.role === "user"),
     ).toHaveLength(1);
@@ -242,6 +265,38 @@ describe("applicationReducer", () => {
       { conversationId: "conversation-1", runId: "mock-run-2" },
     ]);
     expect(retried.retryableRun).toBeNull();
+  });
+
+  it("does not offer another retry after the retry attempt fails", () => {
+    const started = startMockRun("Retry once");
+    const firstRunId = started.activeRun?.script.runId;
+    if (firstRunId === undefined) {
+      throw new Error("Expected the initial mock run to start.");
+    }
+
+    const failed = applicationReducer(started, {
+      reason: "mock-provider-unavailable",
+      runId: firstRunId,
+      type: "mock-stream-failed",
+    });
+    const retried = applicationReducer(failed, { type: "mock-run-retried" });
+    const retryRunId = retried.activeRun?.script.runId;
+    if (retryRunId === undefined) {
+      throw new Error("Expected the retry mock run to start.");
+    }
+
+    const retryFailed = applicationReducer(retried, {
+      reason: "mock-provider-unavailable",
+      runId: retryRunId,
+      type: "mock-stream-failed",
+    });
+
+    expect(retryFailed.activeRun).toBeNull();
+    expect(retryFailed.retryableRun).toBeNull();
+    expect(applicationReducer(retryFailed, { type: "mock-run-retried" })).toBe(retryFailed);
+    expect(
+      activeConversation(retryFailed).messages.filter((message) => message.role === "user"),
+    ).toHaveLength(1);
   });
 
   it("stops only an active stream and rejects subsequent chunks", () => {
@@ -285,10 +340,8 @@ describe("applicationReducer", () => {
       expect(decided.activeRun).toBeNull();
       expect(decided.composerDraft).toBe(composerDraft);
       expect(activeConversation(decided).toolActivities[0]?.status).toBe(status);
-      expect(activeConversation(decided).messages.at(-1)?.content).toMatch(
-        /Nothing was executed|No local/,
-      );
       expect(activeConversation(decided).toolResults).toHaveLength(resultCount);
+      expect(activeConversation(decided).finalAnswers).toHaveLength(resultCount);
       if (decision === "approve") {
         expect(activeConversation(decided).toolResults[0]).toEqual({
           conversationId: "conversation-1",
@@ -300,9 +353,24 @@ describe("applicationReducer", () => {
           toolActivityId: "mock-run-1-tool",
           toolName: "create_local_task",
         });
+        expect(activeConversation(decided).finalAnswers[0]).toEqual({
+          content:
+            "Mock run complete. The approved task action was simulated only; no local task was created and no data changed.",
+          conversationId: "conversation-1",
+          id: "mock-run-1-final",
+          modelTurn: 2,
+          runId: "mock-run-1",
+          source: "deterministic-frontend-mock",
+          toolResultId: "mock-run-1-result",
+        });
+        expect(activeConversation(decided).messages.at(-1)?.id).toBe("mock-run-1-assistant");
         expect(
           applicationReducer(decided, { decision: "approve", type: "mock-approval-decided" }),
         ).toBe(decided);
+      } else {
+        expect(activeConversation(decided).messages.at(-1)?.content).toMatch(
+          /Nothing was executed|No local/,
+        );
       }
       expect(decided.activityEvents.at(-1)?.kind).toBe(
         decision === "approve"
@@ -349,6 +417,14 @@ describe("applicationReducer", () => {
         toolActivityId: "mock-run-2-tool",
       },
     ]);
+    expect(activeConversation(approved).finalAnswers).toMatchObject([
+      {
+        conversationId: "conversation-1",
+        id: "mock-run-2-final",
+        runId: "mock-run-2",
+        toolResultId: "mock-run-2-result",
+      },
+    ]);
     expect(
       activeConversation(approved).messages.filter((message) => message.role === "user"),
     ).toHaveLength(1);
@@ -382,6 +458,42 @@ describe("applicationReducer", () => {
       }),
     ).toBe(mismatched);
     expect(activeConversation(mismatched).toolResults).toEqual([]);
+    expect(activeConversation(mismatched).finalAnswers).toEqual([]);
+  });
+
+  it("rejects approval when the run already has its maximum tool call", () => {
+    const completed = completeMockRun();
+    const conversation = activeConversation(completed);
+    const withExistingResult: ApplicationState = {
+      ...completed,
+      conversations: completed.conversations.map((candidate) =>
+        candidate.id === conversation.id
+          ? {
+              ...candidate,
+              toolResults: [
+                {
+                  conversationId: "conversation-1",
+                  executed: false,
+                  id: "mock-run-1-result",
+                  runId: "mock-run-1",
+                  status: "simulated",
+                  summary: "No local task was created and no data changed.",
+                  toolActivityId: "mock-run-1-tool",
+                  toolName: "create_local_task",
+                },
+              ],
+            }
+          : candidate,
+      ),
+    };
+
+    expect(
+      applicationReducer(withExistingResult, {
+        decision: "approve",
+        type: "mock-approval-decided",
+      }),
+    ).toBe(withExistingResult);
+    expect(activeConversation(withExistingResult).finalAnswers).toEqual([]);
   });
 
   it("creates a second conversation and reuses it while it remains empty", () => {
@@ -397,6 +509,7 @@ describe("applicationReducer", () => {
     expect(created.conversations).toHaveLength(2);
     expect(activeConversation(created)).toMatchObject({
       contextProvenance: [],
+      finalAnswers: [],
       messages: [],
       title: "New conversation",
       toolActivities: [],
@@ -422,9 +535,9 @@ describe("applicationReducer", () => {
     });
 
     expect(firstSelected.activeConversationId).toBe("conversation-1");
-    expect(activeConversation(firstSelected).messages.at(-1)?.content).toMatch(
-      /Mock approval recorded/,
-    );
+    expect(activeConversation(firstSelected).finalAnswers).toMatchObject([
+      { runId: "mock-run-1", toolResultId: "mock-run-1-result" },
+    ]);
     expect(activeConversation(firstSelected).toolActivities[0]?.status).toBe("approved");
     expect(emptySelected.activeConversationId).toBe("conversation-2");
     expect(emptySelected.conversations).toHaveLength(2);

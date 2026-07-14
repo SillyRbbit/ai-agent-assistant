@@ -340,6 +340,28 @@ Consequences:
 - Real executor output, provider continuation, arbitrary result payloads, persistence, and audit evidence remain later reviewed work.
 - No Rust, IPC, Tauri, SQLite, dependency, capability, CSP, credential, network, packaging, or operating-system permission change is introduced.
 
+## D-020 — Complete the Phase 3 mock loop with fixed final answers and closed limits
+
+Date: 2026-07-13
+Status: Accepted
+
+Decision: Increment 3D defines one frozen frontend `MOCK_LOOP_LIMITS` contract: at most two consecutive mock model turns, one mock tool call per run, one retry attempt, 512 Unicode code points of assistant output per turn, and zero network requests, tool timeout milliseconds, file bytes, or search results.
+
+An accepted `Approve mock` decision constructs one fixed `MockFinalAnswer` from validated run, conversation, and simulated-result IDs only. The result and final answer are appended atomically to the owning volatile conversation and render as an adjacent pair. The final answer is synchronous deterministic frontend copy, identified as mock output and model turn 2; no result is returned to a provider. Initial runs use retry attempt 0, the only Retry uses attempt 1, and failure of attempt 1 creates no further retry eligibility.
+
+Rationale: Phase 3 requires a complete mocked loop and conservative limits, while production provider continuation and trusted tool execution begin in later phases. A fixed result-bound final answer and one closed limit contract prove post-result sequencing, attribution, bounded output, and bounded Retry without adding a provider, executor, network path, or native authority.
+
+Consequences:
+
+- Approve no longer appends the earlier generic approval outcome message; the distinct fixed final answer follows the simulated result instead.
+- Reject and Edit retain their fixed assistant outcomes, while Stop and failures create no final answer.
+- Output chunks exceeding the per-turn limit are rejected without mutating state.
+- A run with an existing simulated tool result cannot append another result or final answer.
+- Final answers remain volatile, contain no request or result payload, and restore only with their owning conversation.
+- Zero-valued file, search, network, and timeout limits represent unavailable Phase 3 capabilities, not dormant integrations.
+- Production provider continuation, real execution, configurable limits, arbitrary payloads, persistence, and trusted audit evidence remain later reviewed work.
+- No Rust, IPC, Tauri, SQLite, dependency, capability, CSP, credential, network, packaging, or operating-system permission change is introduced.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

@@ -1,6 +1,6 @@
 # Next steps
 
-Last updated: 2026-07-13
+Last updated: 2026-07-14
 
 This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must close before later feature work begins.
 
@@ -18,32 +18,34 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 3A — in-memory conversation sessions: **Verified complete**.
 - Increment 3B — mock context provenance: **Verified complete**.
 - Increment 3C — simulated tool result: **Verified complete**.
+- Phase 3 completion gap analysis: **Complete**.
+- Increment 3D — bounded mock-loop completion: **Verified complete**.
 
-## Phase 3 completion — gap analysis and planning
+## Phase 4 planning — gateway and Responses security boundary
 
 Status: **Ready**
 
 Goal:
 
-- Compare the remaining mocked-loop and conservative-limit requirements with the verified implementation through Increment 3C.
-- Determine whether post-result provider continuation, final-answer presentation, or explicit loop limits require one more Phase 3 increment.
-- If work remains, define one smallest bounded increment with explicit acceptance criteria, non-goals, risks, exact files, and verification commands.
-- If no work remains, document the evidence required to close Phase 3.
-- Preserve every verified security, cancellation, Retry, Activity, IPC, storage, lifecycle, capability, CSP, and permission boundary.
+- Perform a documentation-only reconciliation of Phase 4 provider and gateway requirements against the verified Phase 3 architecture.
+- Define credential ownership, authenticated gateway responsibilities, strict Responses event and function-call validation, cancellation, timeout, limit, error-redaction, and audit boundaries before implementation.
+- Determine the smallest independently verified Phase 4 increment and its prerequisite decisions.
+- Preserve the rule that the gateway cannot execute local tools and the WebView/model cannot authorize or execute operating-system actions.
+- Produce one exact plan, file list, risk analysis, verification gate, and rollback strategy for project-owner approval.
 
 Required planning output:
 
-- A written completion gap analysis grounded in product documents and actual code.
-- One dedicated plan if another increment is required, or a documented Phase 3 closure recommendation.
-- An exact file list and verification gate for any proposed work.
-- Project-owner approval before implementation or phase closure.
+- A gap analysis grounded in product, architecture, security, decision, and actual repository state.
+- Explicit trust-boundary diagrams or data-flow descriptions for app, gateway, provider, model output, tools, approval, audit, and credentials.
+- A recommendation for one smallest Phase 4 increment or a prerequisite decision-only increment.
+- Exact acceptance criteria, non-goals, files, risks, verification commands, and approval gate.
+- No runtime implementation before project-owner approval.
 
 Explicitly excluded:
 
-- Context source selection, real data collection, attachments, or voice.
-- Production model or gateway access, API keys, credentials, OAuth, or cloud accounts.
-- Trusted Rust provenance, audit persistence, real tools, or privileged automation.
-- Production provider continuation, arbitrary result schemas, dynamic external payloads, or additional real tools.
-- Rust, IPC, Tauri commands, dependencies, capabilities, CSP, packaging, or new operating-system permissions.
+- Production provider calls, gateway deployment, network access, API keys, credentials, OAuth, or cloud-account setup.
+- Real tool execution, new approvals, privileged automation, or operating-system integrations.
+- New Rust or WebView IPC commands, dependencies, capabilities, CSP changes, packaging, persistence, or permissions.
+- Context collection, attachments, voice, or unrelated product work.
 
-Do not edit runtime code during the planning task.
+Do not edit runtime code during this planning task.

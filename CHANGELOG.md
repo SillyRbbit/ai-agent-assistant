@@ -6,6 +6,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Phase 3 Increment 3D fixed final answers bound to exact simulated results, runs, and conversations.
+- A frozen conservative mock-loop contract covering model turns, tool calls, retries, assistant output, and unavailable network, tool-timeout, file, and search capabilities.
+- Focused limit, output, identity, ordering, privacy, retry-cap, one-tool-call, empty-session, and restoration coverage, bringing the frontend suite to 124 tests.
+- Documentation-only Phase 3 completion analysis and proposed Increment 3D plan for deterministic result-to-final sequencing and explicit mock-loop limits.
 - Phase 3 Increment 3C fixed simulated tool results bound to exact runs, conversations, and mock proposals.
 - Accessible approve-only result presentation with explicit `Simulated`, `No execution`, and fixed no-change labeling.
 - Focused result validation, proposal-binding, decision, Retry, privacy, empty-session, and restoration coverage, bringing the frontend suite to 104 tests.
@@ -45,6 +49,11 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Replaced the generic approve outcome message with one distinct deterministic final answer rendered immediately after its matching simulated result.
+- Limited an initial failed run to one fresh Retry and removed retry eligibility after failure of retry attempt `1`.
+- Advanced Increment 3D to verification pending after focused checks, the full automated gate, dependency audit, code review, security review, and native development launch passed.
+- Marked Increment 3D and Phase 3 verified complete after project-owner interaction, restoration, layout, lifecycle, storage, and no-permission-prompt checks passed.
+- Selected bounded mock-loop completion as the final Phase 3 gap and obtained project-owner approval for the exact file plan before implementation.
 - Stored simulated results with each volatile conversation and counted result-bearing sessions as non-empty.
 - Advanced Increment 3C to verification pending after the full automated gate and native development launch passed.
 - Marked Increment 3C verified complete after project-owner native result, decision, restoration, layout, and regression checks passed.
@@ -78,6 +87,9 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Security
 
+- Increment 3D final-answer construction accepts validated IDs only, uses fixed copy, and fails closed on result, run, conversation, proposal, tool-call-limit, output-limit, stale-event, and retry-limit mismatches.
+- Increment 3D changes no dependency, lockfile, Rust, IPC, Tauri, SQLite, capability, CSP, credential, network, packaging, or operating-system permission file.
+- The Phase 3D plan keeps final answers fixed, ID-only, volatile, and explicitly mock-generated; provider calls, result payloads, real tools, trusted output, persistence, networking, native changes, and permissions remain excluded.
 - Result construction accepts validated opaque IDs only, derives the exact proposal ID, uses fixed output fields, and fails closed if the proposal is missing or mismatched.
 - Reject, Edit, Stop, stale events, invalid decisions, and duplicate decisions cannot create results; `Approve mock` still executes nothing.
 - Increment 3C changes no dependency, lockfile, Rust, IPC, Tauri, SQLite, capability, CSP, credential, network, packaging, or operating-system permission file.

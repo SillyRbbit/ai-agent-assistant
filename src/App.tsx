@@ -70,6 +70,7 @@ function ApplicationShell({ services }: ApplicationShellProps) {
         composerDraft={state.composerDraft}
         contextProvenance={activeConversation?.contextProvenance ?? []}
         conversationTitle={activeConversation?.title ?? "Conversation unavailable"}
+        finalAnswers={activeConversation?.finalAnswers ?? []}
         messages={activeConversation?.messages ?? []}
         onApprovalDecision={mockRunActions.decideApproval}
         onComposerDraftChange={(value) => {

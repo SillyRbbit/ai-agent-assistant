@@ -20,6 +20,7 @@ describe("conversation sessions", () => {
   it("creates a deterministic empty conversation", () => {
     expect(createConversationSession(3)).toEqual({
       contextProvenance: [],
+      finalAnswers: [],
       id: "conversation-3",
       messages: [],
       title: EMPTY_CONVERSATION_TITLE,
@@ -48,7 +49,7 @@ describe("conversation sessions", () => {
     expect(title?.endsWith("…")).toBe(true);
   });
 
-  it("recognizes only sessions without provenance, messages, tool activity, or results as empty", () => {
+  it("recognizes only sessions without provenance, messages, tool activity, results, or final answers as empty", () => {
     const empty = createConversationSession(1);
     if (empty === null) {
       throw new Error("Expected a valid conversation session.");
@@ -95,11 +96,27 @@ describe("conversation sessions", () => {
         },
       ],
     };
+    const withFinalAnswer: ConversationSession = {
+      ...empty,
+      finalAnswers: [
+        {
+          content:
+            "Mock run complete. The approved task action was simulated only; no local task was created and no data changed.",
+          conversationId: "conversation-1",
+          id: "mock-run-1-final",
+          modelTurn: 2,
+          runId: "mock-run-1",
+          source: "deterministic-frontend-mock",
+          toolResultId: "mock-run-1-result",
+        },
+      ],
+    };
 
     expect(isConversationSessionEmpty(empty)).toBe(true);
     expect(isConversationSessionEmpty(withMessage)).toBe(false);
     expect(isConversationSessionEmpty(withActivity)).toBe(false);
     expect(isConversationSessionEmpty(withProvenance)).toBe(false);
     expect(isConversationSessionEmpty(withResult)).toBe(false);
+    expect(isConversationSessionEmpty(withFinalAnswer)).toBe(false);
   });
 });

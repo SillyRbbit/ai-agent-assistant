@@ -1,10 +1,10 @@
 # Project status
 
-Last updated: 2026-07-13
+Last updated: 2026-07-14
 
 ## Current milestone
 
-Phase 3 — **Increment 3C verified complete**. Phase 3 completion gap analysis and planning are next.
+Phase 3 — **verified complete**. Documentation-only Phase 4 gateway and Responses security-boundary planning is next.
 
 ## Increment status
 
@@ -23,6 +23,7 @@ Phase 3 — **Increment 3C verified complete**. Phase 3 completion gap analysis 
 - Increment 3A: in-memory conversation sessions — **verified complete on target Mac**.
 - Increment 3B: mock context provenance — **verified complete on target Mac**.
 - Increment 3C: simulated tool result — **verified complete on target Mac**.
+- Increment 3D: bounded mock-loop completion — **verified complete on target Mac**.
 
 ## Verified baseline through Increment 2E
 
@@ -98,7 +99,33 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Perform documentation-only Phase 3 completion gap analysis and determine whether one more bounded increment is required without changing runtime code.
+Perform documentation-only Phase 4 gateway and Responses security-boundary planning. Do not add provider calls, credentials, network access, dependencies, IPC, native capabilities, or runtime code before the exact plan is approved.
+
+## Phase 3D planning result
+
+- Phase 3 cannot close at Increment 3C because the verified loop has no distinct final answer after its simulated result.
+- The current generic approve outcome renders before the result and does not represent a post-result continuation.
+- The current one-proposal flow is bounded structurally, but the product's conservative loop limits are not represented as one closed contract.
+- Repeated injected failures can continue offering Retry without an explicit retry-attempt cap.
+- Increment 3D is limited to one fixed deterministic post-result answer, exact result/final identity and ordering, and explicit mock limits.
+- Planned limits are two consecutive model turns, one tool call, one retry, zero network requests, zero tool timeout, zero file bytes, zero search results, and 512 assistant-output characters per turn.
+- Production provider continuation, real execution, arbitrary payloads, generic timeline work, persistence, Rust, IPC, Tauri, dependencies, capabilities, CSP, and permissions remain excluded.
+- Planning baseline passed TypeScript type checking, 104 frontend tests, and 50 Rust library tests on clean `phase3/increment-3d` at `5c3f934`.
+
+## Increment 3D capability and evidence
+
+- A frozen mock-loop contract limits each run to two model turns, one tool call, one retry, 512 output code points per turn, and zero network, tool-timeout, file, and search capacity.
+- Approve appends one fixed final answer bound to the exact run, conversation, and simulated result; it renders immediately after that result.
+- Reject and Edit retain fixed outcomes; Stop, failure, stale events, invalid decisions, and duplicate decisions create no final answer.
+- Failure of retry attempt `1` creates no further Retry, and output over the fixed ceiling fails closed.
+- Focused tests pass: 4 files, 81 tests.
+- `npm run verify` passes with 124 frontend tests, 50 Rust library tests, 6 Rust integration tests, Vite builds, and the Tauri release no-bundle build.
+- `npm audit --audit-level=low` reports zero vulnerabilities.
+- Code review and security review pass with no findings.
+- Native Tauri development launch passes with idempotent storage startup and two migrations already applied.
+- No dependency, lockfile, Rust, IPC, Tauri, SQLite, capability, CSP, credential, network, packaging, or operating-system permission file changed.
+- The project owner confirmed result/final ordering and run identity, privacy, no final answer after Reject/Edit/Stop, per-conversation restoration, normal and minimum-window layout, existing context and Activity behavior, native routing, Settings diagnostics, lifecycle behavior, storage startup, and absence of permission prompts all pass.
+- Increment 3D and Phase 3 are verified complete on the target Mac.
 
 ## Phase 3C planning result
 

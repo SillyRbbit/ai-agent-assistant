@@ -16,6 +16,14 @@ import {
   type MockApprovalRequest,
   type MockRunScript,
 } from "./mockAssistantRun";
+import {
+  appendMockAssistantOutput,
+  canAppendMockToolCall,
+  createMockFinalAnswer,
+  isMockRunAttempt,
+  nextMockRetryAttempt,
+  type MockRunAttempt,
+} from "./mockLoop";
 import { mockRunFailureMessage, type MockRunFailureReason } from "./mockRunDriver";
 import { createMockToolResult } from "./mockToolResult";
 
@@ -23,6 +31,7 @@ export type AssistantRunStatus = "awaiting-approval" | "idle" | "streaming";
 
 export interface ActiveMockRun {
   readonly conversationId: string;
+  readonly retryAttempt: MockRunAttempt;
   readonly script: MockRunScript;
   readonly status: Exclude<AssistantRunStatus, "idle">;
 }
@@ -31,6 +40,7 @@ export interface RetryableMockRun {
   readonly assistantMessageId: string;
   readonly conversationId: string;
   readonly request: string;
+  readonly retryAttempt: MockRunAttempt;
 }
 
 export interface ApplicationState {
@@ -67,6 +77,7 @@ export type ApplicationAction =
 
 const INITIAL_CONVERSATION: ConversationSession = {
   contextProvenance: [],
+  finalAnswers: [],
   id: "conversation-1",
   messages: [],
   title: EMPTY_CONVERSATION_TITLE,
@@ -204,8 +215,9 @@ function startMockRun(
   state: ApplicationState,
   request: string,
   includeUserMessage: boolean,
+  retryAttempt: number,
 ): ApplicationState {
-  if (isConversationChangeBlocked(state)) {
+  if (isConversationChangeBlocked(state) || !isMockRunAttempt(retryAttempt)) {
     return state;
   }
 
@@ -261,6 +273,7 @@ function startMockRun(
     activeApproval: null,
     activeRun: {
       conversationId: activeConversation.id,
+      retryAttempt,
       script,
       status: "streaming",
     },
@@ -288,12 +301,12 @@ export function applicationReducer(
         ? state
         : { ...state, composerDraft: action.value };
     case "mock-run-submitted":
-      return startMockRun(state, state.composerDraft, true);
+      return startMockRun(state, state.composerDraft, true, 0);
     case "mock-run-retried": {
       const retryableRun = state.retryableRun;
       return retryableRun?.conversationId !== state.activeConversationId
         ? state
-        : startMockRun(state, retryableRun.request, false);
+        : startMockRun(state, retryableRun.request, false, retryableRun.retryAttempt);
     }
     case "mock-stream-chunk": {
       const activeRun = state.activeRun;
@@ -305,6 +318,21 @@ export function applicationReducer(
         return state;
       }
 
+      const activeConversation = state.conversations.find(
+        (conversation) => conversation.id === activeRun.conversationId,
+      );
+      const assistantMessage = activeConversation?.messages.find(
+        (message) => message.id === activeRun.script.assistantMessageId,
+      );
+      if (assistantMessage === undefined) {
+        return state;
+      }
+
+      const nextOutput = appendMockAssistantOutput(assistantMessage.content, action.chunk);
+      if (nextOutput === null) {
+        return state;
+      }
+
       const conversations = updateConversationById(
         state.conversations,
         activeRun.conversationId,
@@ -313,7 +341,7 @@ export function applicationReducer(
           messages: updateAssistantMessage(
             conversation.messages,
             activeRun.script.assistantMessageId,
-            (message) => ({ ...message, content: `${message.content}${action.chunk}` }),
+            (message) => ({ ...message, content: nextOutput }),
           ),
         }),
       );
@@ -385,17 +413,23 @@ export function applicationReducer(
         return state;
       }
 
+      const retryAttempt = nextMockRetryAttempt(activeRun.retryAttempt);
+
       return {
         ...state,
         ...appendActivity(state, activeRun.script.runId, "run-failed"),
         activeApproval: null,
         activeRun: null,
         conversations,
-        retryableRun: {
-          assistantMessageId: activeRun.script.assistantMessageId,
-          conversationId: activeRun.conversationId,
-          request: activeRun.script.userMessage.content,
-        },
+        retryableRun:
+          retryAttempt === null
+            ? null
+            : {
+                assistantMessageId: activeRun.script.assistantMessageId,
+                conversationId: activeRun.conversationId,
+                request: activeRun.script.userMessage.content,
+                retryAttempt,
+              },
       };
     }
     case "mock-run-stopped": {
@@ -451,12 +485,15 @@ export function applicationReducer(
           : action.decision === "reject"
             ? "rejected"
             : "edit-requested";
-      const outcome: ConversationMessage = {
-        content: approvalOutcomeMessage(action.decision),
-        id: `${activeRun.script.runId}-outcome`,
-        role: "assistant",
-        status: "complete",
-      };
+      const outcome: ConversationMessage | null =
+        action.decision === "approve"
+          ? null
+          : {
+              content: approvalOutcomeMessage(action.decision),
+              id: `${activeRun.script.runId}-outcome`,
+              role: "assistant",
+              status: "complete",
+            };
       const activityKind: ActivityEventKind =
         action.decision === "approve"
           ? "approval-approved"
@@ -467,17 +504,30 @@ export function applicationReducer(
         action.decision === "approve"
           ? createMockToolResult(activeRun.script.runId, activeRun.conversationId)
           : null;
-      const hasMatchingToolActivity = state.conversations.some(
-        (conversation) =>
-          conversation.id === activeRun.conversationId &&
-          conversation.toolActivities.some(
-            (activity) => activity.id === activeRun.script.toolActivity.id,
-          ),
+      const finalAnswer =
+        toolResult === null
+          ? null
+          : createMockFinalAnswer(activeRun.script.runId, activeRun.conversationId, toolResult.id);
+      const activeConversation = state.conversations.find(
+        (conversation) => conversation.id === activeRun.conversationId,
       );
+      const hasMatchingToolActivity = activeConversation?.toolActivities.some(
+        (activity) => activity.id === activeRun.script.toolActivity.id,
+      );
+      const existingToolCallCount =
+        activeConversation?.toolResults.filter((result) => result.runId === activeRun.script.runId)
+          .length ?? 0;
+      const hasExistingFinalAnswer =
+        activeConversation?.finalAnswers.some(
+          (answer) => answer.runId === activeRun.script.runId,
+        ) ?? false;
       if (
         action.decision === "approve" &&
         (toolResult?.toolActivityId !== activeRun.script.toolActivity.id ||
-          !hasMatchingToolActivity)
+          finalAnswer?.toolResultId !== toolResult.id ||
+          !hasMatchingToolActivity ||
+          !canAppendMockToolCall(existingToolCallCount) ||
+          hasExistingFinalAnswer)
       ) {
         return state;
       }
@@ -487,7 +537,11 @@ export function applicationReducer(
         activeRun.conversationId,
         (conversation) => ({
           ...conversation,
-          messages: [...conversation.messages, outcome],
+          finalAnswers:
+            finalAnswer === null
+              ? conversation.finalAnswers
+              : [...conversation.finalAnswers, finalAnswer],
+          messages: outcome === null ? conversation.messages : [...conversation.messages, outcome],
           toolActivities: conversation.toolActivities.map((activity) =>
             activity.id === activeRun.script.toolActivity.id
               ? { ...activity, status: activityStatus }

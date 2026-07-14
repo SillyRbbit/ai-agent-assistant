@@ -569,6 +569,19 @@ textarea:focus-visible {
   justify-self: start;
 }
 
+.conversation-final-answer {
+  width: min(620px, 88%);
+  max-width: 100%;
+  border-color: rgba(39, 132, 93, 0.28);
+  border-radius: 8px;
+}
+
+.conversation-final-answer small {
+  padding-top: 7px;
+  border-top: 1px solid var(--border);
+  line-height: 1.4;
+}
+
 .conversation-message > span,
 .conversation-message small {
   color: var(--text-subtle);

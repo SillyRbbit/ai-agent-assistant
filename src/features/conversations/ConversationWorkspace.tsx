@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 import type { MockContextProvenance } from "../../application/contextProvenance";
 import type {
   ConversationMessage,
@@ -6,11 +8,13 @@ import type {
   ToolActivity,
 } from "../../application/mockAssistantRun";
 import type { AssistantRunStatus } from "../../application/state";
+import type { MockFinalAnswer } from "../../application/mockLoop";
 import type { MockToolResult } from "../../application/mockToolResult";
 import { PageState } from "../../components/PageState";
 import { PageHeader } from "../shared/PageHeader";
 import { ApprovalDialog } from "./ApprovalDialog";
 import { ContextProvenanceCard } from "./ContextProvenanceCard";
+import { FinalAnswerMessage } from "./FinalAnswerMessage";
 import { ToolActivityCard } from "./ToolActivityCard";
 import { ToolResultCard } from "./ToolResultCard";
 
@@ -19,6 +23,7 @@ interface ConversationWorkspaceProps {
   readonly composerDraft: string;
   readonly contextProvenance: readonly MockContextProvenance[];
   readonly conversationTitle: string;
+  readonly finalAnswers: readonly MockFinalAnswer[];
   readonly messages: readonly ConversationMessage[];
   readonly onApprovalDecision: (decision: MockApprovalDecision) => void;
   readonly onComposerDraftChange: (value: string) => void;
@@ -36,6 +41,7 @@ export function ConversationWorkspace({
   composerDraft,
   contextProvenance,
   conversationTitle,
+  finalAnswers,
   messages,
   onApprovalDecision,
   onComposerDraftChange,
@@ -99,9 +105,21 @@ export function ConversationWorkspace({
               {toolActivities.map((activity) => (
                 <ToolActivityCard activity={activity} key={activity.id} />
               ))}
-              {toolResults.map((result) => (
-                <ToolResultCard key={result.id} result={result} />
-              ))}
+              {toolResults.map((result) => {
+                const finalAnswer = finalAnswers.find(
+                  (answer) =>
+                    answer.toolResultId === result.id &&
+                    answer.runId === result.runId &&
+                    answer.conversationId === result.conversationId,
+                );
+
+                return (
+                  <Fragment key={result.id}>
+                    <ToolResultCard result={result} />
+                    {finalAnswer === undefined ? null : <FinalAnswerMessage answer={finalAnswer} />}
+                  </Fragment>
+                );
+              })}
             </div>
           )}
         </div>

@@ -4,12 +4,12 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-There is no Active plan. **Increment 3C — simulated tool result** is Complete.
+There is no Active plan. **Increment 3D — bounded mock-loop completion** is Complete.
 
 Most recently completed plan:
 
 ```text
-docs/plans/03c-simulated-tool-result.md
+docs/plans/03d-bounded-mock-loop-completion.md
 ```
 
 ## Completed plans
@@ -24,6 +24,7 @@ docs/plans/02g-integration-hardening.md
 docs/plans/03a-in-memory-conversation-sessions.md
 docs/plans/03b-mock-context-provenance.md
 docs/plans/03c-simulated-tool-result.md
+docs/plans/03d-bounded-mock-loop-completion.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -65,6 +66,7 @@ A plan must contain:
 | Increment 3A in-memory conversation sessions | Complete | Project maintainer | 2026-07-13   |
 | Increment 3B mock context provenance         | Complete | Project maintainer | 2026-07-13   |
 | Increment 3C simulated tool result           | Complete | Project maintainer | 2026-07-13   |
+| Increment 3D bounded mock-loop completion    | Complete | Project maintainer | 2026-07-14   |
 
 ## Phase 2 Increment 2E — complete
 
@@ -106,6 +108,16 @@ The remaining tool-result and mocked-loop requirements were reconciled with the 
 
 The approved implementation limits the increment to fixed-copy volatile WebView presentation with `executed: false`. It excludes real execution, provider continuation, arbitrary payloads, trusted executor or audit claims, persistence, networking, dependencies, native capability changes, and permissions. Automated verification, native launch, and project-owner native interaction and layout checks pass.
 
-## Phase 3 completion planning — ready
+## Phase 3 completion planning — complete
 
-Reconcile the remaining post-result continuation, final-answer, and conservative-limit requirements with the verified implementation through Increment 3C. Determine whether one more bounded increment is required or Phase 3 can close. Do not implement features until the completion analysis and any exact file set are approved.
+The verified implementation through Increment 3C ends at a simulated result, renders no distinct final answer after that result, and does not expose one closed conservative limit contract. Phase 3 therefore needs one final bounded Increment 3D.
+
+The approved plan adds a synchronous fixed frontend mock continuation, exact adjacent result/final pairing, and explicit limits of two model turns, one tool call, one retry, zero network/tool timeout/file/search capacity, and 512 output characters per turn. Production provider continuation, real tools, arbitrary payloads, generic timeline work, persistence, native changes, and permissions remain excluded.
+
+Implementation, automated verification, native development launch, and project-owner manual acceptance pass with 124 frontend tests, 50 Rust library tests, 6 Rust integration tests, production frontend and Tauri builds, zero dependency vulnerabilities, and idempotent startup with two migrations already applied.
+
+## Phase 3D bounded mock-loop completion — complete
+
+The project owner confirmed exact result/final ordering and run identity, request-content exclusion, no final answer after Reject/Edit/Stop, per-conversation restoration, supported layouts, existing context and Activity behavior, native routing, Settings diagnostics, lifecycle behavior, storage startup, and absence of permission prompts all pass. Increment 3D and Phase 3 are verified complete.
+
+The next Ready task is documentation-only Phase 4 gateway and Responses security-boundary planning. No provider or runtime implementation may begin before the exact plan is approved.
