@@ -1,4 +1,11 @@
 import { createActivityEvent, type ActivityEvent, type ActivityEventKind } from "./activity";
+import {
+  createConversationSession,
+  conversationTitleForRequest,
+  EMPTY_CONVERSATION_TITLE,
+  isConversationSessionEmpty,
+  type ConversationSession,
+} from "./conversations";
 import { destinationForMenuRoute, type AppRoute, type AssistantMenuRoute } from "./navigation";
 import {
   approvalOutcomeMessage,
@@ -7,38 +14,42 @@ import {
   type MockApprovalDecision,
   type MockApprovalRequest,
   type MockRunScript,
-  type ToolActivity,
 } from "./mockAssistantRun";
 import { mockRunFailureMessage, type MockRunFailureReason } from "./mockRunDriver";
 
 export type AssistantRunStatus = "awaiting-approval" | "idle" | "streaming";
 
 export interface ActiveMockRun {
+  readonly conversationId: string;
   readonly script: MockRunScript;
   readonly status: Exclude<AssistantRunStatus, "idle">;
 }
 
 export interface RetryableMockRun {
   readonly assistantMessageId: string;
+  readonly conversationId: string;
   readonly request: string;
 }
 
 export interface ApplicationState {
   readonly activeApproval: MockApprovalRequest | null;
+  readonly activeConversationId: string;
   readonly activeRun: ActiveMockRun | null;
   readonly activeRoute: AppRoute;
   readonly activityEvents: readonly ActivityEvent[];
   readonly composerDraft: string;
-  readonly messages: readonly ConversationMessage[];
+  readonly conversations: readonly ConversationSession[];
   readonly nextActivityOrdinal: number;
+  readonly nextConversationOrdinal: number;
   readonly nextRunOrdinal: number;
   readonly retryableRun: RetryableMockRun | null;
-  readonly toolActivities: readonly ToolActivity[];
 }
 
 export type ApplicationAction =
   | { readonly route: AppRoute; readonly type: "navigate" }
   | { readonly route: AssistantMenuRoute; readonly type: "menu-route-received" }
+  | { readonly conversationId: string; readonly type: "conversation-selected" }
+  | { readonly type: "new-conversation-requested" }
   | { readonly type: "composer-draft-changed"; readonly value: string }
   | { readonly type: "mock-run-submitted" }
   | { readonly chunk: string; readonly runId: string; readonly type: "mock-stream-chunk" }
@@ -52,17 +63,25 @@ export type ApplicationAction =
   | { readonly type: "mock-run-retried" }
   | { readonly decision: MockApprovalDecision; readonly type: "mock-approval-decided" };
 
+const INITIAL_CONVERSATION: ConversationSession = {
+  id: "conversation-1",
+  messages: [],
+  title: EMPTY_CONVERSATION_TITLE,
+  toolActivities: [],
+};
+
 export const INITIAL_APPLICATION_STATE: ApplicationState = {
   activeApproval: null,
+  activeConversationId: INITIAL_CONVERSATION.id,
   activeRun: null,
   activeRoute: "conversations",
   activityEvents: [],
   composerDraft: "",
-  messages: [],
+  conversations: [INITIAL_CONVERSATION],
   nextActivityOrdinal: 1,
+  nextConversationOrdinal: 2,
   nextRunOrdinal: 1,
   retryableRun: null,
-  toolActivities: [],
 };
 
 function updateAssistantMessage(
@@ -71,6 +90,23 @@ function updateAssistantMessage(
   update: (message: ConversationMessage) => ConversationMessage,
 ): readonly ConversationMessage[] {
   return messages.map((message) => (message.id === assistantMessageId ? update(message) : message));
+}
+
+function updateConversationById(
+  conversations: readonly ConversationSession[],
+  conversationId: string,
+  update: (conversation: ConversationSession) => ConversationSession,
+): readonly ConversationSession[] | null {
+  const conversationIndex = conversations.findIndex(
+    (conversation) => conversation.id === conversationId,
+  );
+  if (conversationIndex === -1) {
+    return null;
+  }
+
+  return conversations.map((conversation, index) =>
+    index === conversationIndex ? update(conversation) : conversation,
+  );
 }
 
 function appendActivity(
@@ -92,12 +128,87 @@ function appendActivity(
   };
 }
 
+function isConversationChangeBlocked(state: ApplicationState): boolean {
+  return state.activeRun !== null || state.activeApproval !== null;
+}
+
+function createOrSelectEmptyConversation(state: ApplicationState): ApplicationState {
+  if (isConversationChangeBlocked(state)) {
+    return state;
+  }
+
+  const existingEmptyConversation = state.conversations.find(isConversationSessionEmpty);
+  if (existingEmptyConversation !== undefined) {
+    if (
+      state.activeConversationId === existingEmptyConversation.id &&
+      state.activeRoute === "conversations" &&
+      state.composerDraft.length === 0 &&
+      state.retryableRun === null
+    ) {
+      return state;
+    }
+
+    return {
+      ...state,
+      activeConversationId: existingEmptyConversation.id,
+      activeRoute: "conversations",
+      composerDraft: "",
+      retryableRun: null,
+    };
+  }
+
+  const conversation = createConversationSession(state.nextConversationOrdinal);
+  if (conversation === null) {
+    return state;
+  }
+
+  return {
+    ...state,
+    activeConversationId: conversation.id,
+    activeRoute: "conversations",
+    composerDraft: "",
+    conversations: [...state.conversations, conversation],
+    nextConversationOrdinal: state.nextConversationOrdinal + 1,
+    retryableRun: null,
+  };
+}
+
+function selectConversation(state: ApplicationState, conversationId: string): ApplicationState {
+  if (
+    isConversationChangeBlocked(state) ||
+    !state.conversations.some((conversation) => conversation.id === conversationId)
+  ) {
+    return state;
+  }
+
+  if (conversationId === state.activeConversationId) {
+    return state.activeRoute === "conversations"
+      ? state
+      : { ...state, activeRoute: "conversations" };
+  }
+
+  return {
+    ...state,
+    activeConversationId: conversationId,
+    activeRoute: "conversations",
+    composerDraft: "",
+    retryableRun: null,
+  };
+}
+
 function startMockRun(
   state: ApplicationState,
   request: string,
   includeUserMessage: boolean,
 ): ApplicationState {
-  if (state.activeRun !== null) {
+  if (isConversationChangeBlocked(state)) {
+    return state;
+  }
+
+  const activeConversation = state.conversations.find(
+    (conversation) => conversation.id === state.activeConversationId,
+  );
+  if (activeConversation === undefined) {
     return state;
   }
 
@@ -106,24 +217,46 @@ function startMockRun(
     return state;
   }
 
-  const messages = includeUserMessage ? [...state.messages, script.userMessage] : state.messages;
+  const messages = includeUserMessage
+    ? [...activeConversation.messages, script.userMessage]
+    : activeConversation.messages;
+  const title =
+    activeConversation.messages.length === 0
+      ? (conversationTitleForRequest(script.userMessage.content) ?? activeConversation.title)
+      : activeConversation.title;
+  const conversations = updateConversationById(
+    state.conversations,
+    activeConversation.id,
+    (conversation) => ({
+      ...conversation,
+      messages: [
+        ...messages,
+        {
+          content: "",
+          id: script.assistantMessageId,
+          role: "assistant",
+          status: "streaming",
+        },
+      ],
+      title,
+    }),
+  );
+  if (conversations === null) {
+    return state;
+  }
 
   return {
     ...state,
     ...appendActivity(state, script.runId, "run-started"),
     activeApproval: null,
-    activeRun: { script, status: "streaming" },
+    activeRun: {
+      conversationId: activeConversation.id,
+      script,
+      status: "streaming",
+    },
     activeRoute: "conversations",
     composerDraft: "",
-    messages: [
-      ...messages,
-      {
-        content: "",
-        id: script.assistantMessageId,
-        role: "assistant",
-        status: "streaming",
-      },
-    ],
+    conversations,
     nextRunOrdinal: state.nextRunOrdinal + 1,
     retryableRun: null,
   };
@@ -136,103 +269,169 @@ export function applicationReducer(
   switch (action.type) {
     case "navigate":
       return action.route === state.activeRoute ? state : { ...state, activeRoute: action.route };
+    case "conversation-selected":
+      return selectConversation(state, action.conversationId);
+    case "new-conversation-requested":
+      return createOrSelectEmptyConversation(state);
     case "composer-draft-changed":
       return action.value === state.composerDraft
         ? state
         : { ...state, composerDraft: action.value };
-    case "mock-run-submitted": {
+    case "mock-run-submitted":
       return startMockRun(state, state.composerDraft, true);
-    }
-    case "mock-run-retried":
-      return state.retryableRun === null
+    case "mock-run-retried": {
+      const retryableRun = state.retryableRun;
+      return retryableRun?.conversationId !== state.activeConversationId
         ? state
-        : startMockRun(state, state.retryableRun.request, false);
+        : startMockRun(state, retryableRun.request, false);
+    }
     case "mock-stream-chunk": {
+      const activeRun = state.activeRun;
       if (
-        state.activeRun?.status !== "streaming" ||
-        state.activeRun.script.runId !== action.runId
+        activeRun?.status !== "streaming" ||
+        activeRun.script.runId !== action.runId ||
+        activeRun.conversationId !== state.activeConversationId
       ) {
         return state;
       }
 
-      return {
-        ...state,
-        messages: updateAssistantMessage(
-          state.messages,
-          state.activeRun.script.assistantMessageId,
-          (message) => ({ ...message, content: `${message.content}${action.chunk}` }),
-        ),
-      };
+      const conversations = updateConversationById(
+        state.conversations,
+        activeRun.conversationId,
+        (conversation) => ({
+          ...conversation,
+          messages: updateAssistantMessage(
+            conversation.messages,
+            activeRun.script.assistantMessageId,
+            (message) => ({ ...message, content: `${message.content}${action.chunk}` }),
+          ),
+        }),
+      );
+
+      return conversations === null ? state : { ...state, conversations };
     }
     case "mock-stream-completed": {
+      const activeRun = state.activeRun;
       if (
-        state.activeRun?.status !== "streaming" ||
-        state.activeRun.script.runId !== action.runId
+        activeRun?.status !== "streaming" ||
+        activeRun.script.runId !== action.runId ||
+        activeRun.conversationId !== state.activeConversationId
       ) {
         return state;
       }
 
-      const { script } = state.activeRun;
+      const conversations = updateConversationById(
+        state.conversations,
+        activeRun.conversationId,
+        (conversation) => ({
+          ...conversation,
+          messages: updateAssistantMessage(
+            conversation.messages,
+            activeRun.script.assistantMessageId,
+            (message) => ({ ...message, status: "complete" }),
+          ),
+          toolActivities: [...conversation.toolActivities, activeRun.script.toolActivity],
+        }),
+      );
+      if (conversations === null) {
+        return state;
+      }
+
       return {
         ...state,
-        ...appendActivity(state, script.runId, "approval-requested"),
-        activeApproval: script.approval,
-        activeRun: { script, status: "awaiting-approval" },
-        messages: updateAssistantMessage(state.messages, script.assistantMessageId, (message) => ({
-          ...message,
-          status: "complete",
-        })),
-        toolActivities: [...state.toolActivities, script.toolActivity],
+        ...appendActivity(state, activeRun.script.runId, "approval-requested"),
+        activeApproval: activeRun.script.approval,
+        activeRun: { ...activeRun, status: "awaiting-approval" },
+        conversations,
       };
     }
     case "mock-stream-failed": {
+      const activeRun = state.activeRun;
       if (
-        state.activeRun?.status !== "streaming" ||
-        state.activeRun.script.runId !== action.runId
+        activeRun?.status !== "streaming" ||
+        activeRun.script.runId !== action.runId ||
+        activeRun.conversationId !== state.activeConversationId
       ) {
         return state;
       }
 
-      const { script } = state.activeRun;
+      const conversations = updateConversationById(
+        state.conversations,
+        activeRun.conversationId,
+        (conversation) => ({
+          ...conversation,
+          messages: updateAssistantMessage(
+            conversation.messages,
+            activeRun.script.assistantMessageId,
+            (message) => ({
+              ...message,
+              content: mockRunFailureMessage(action.reason),
+              status: "failed",
+            }),
+          ),
+        }),
+      );
+      if (conversations === null) {
+        return state;
+      }
+
       return {
         ...state,
-        ...appendActivity(state, script.runId, "run-failed"),
+        ...appendActivity(state, activeRun.script.runId, "run-failed"),
         activeApproval: null,
         activeRun: null,
-        messages: updateAssistantMessage(state.messages, script.assistantMessageId, (message) => ({
-          ...message,
-          content: mockRunFailureMessage(action.reason),
-          status: "failed",
-        })),
+        conversations,
         retryableRun: {
-          assistantMessageId: script.assistantMessageId,
-          request: script.userMessage.content,
+          assistantMessageId: activeRun.script.assistantMessageId,
+          conversationId: activeRun.conversationId,
+          request: activeRun.script.userMessage.content,
         },
       };
     }
     case "mock-run-stopped": {
-      if (state.activeRun?.status !== "streaming") {
+      const activeRun = state.activeRun;
+      if (
+        activeRun?.status !== "streaming" ||
+        activeRun.conversationId !== state.activeConversationId
+      ) {
+        return state;
+      }
+
+      const conversations = updateConversationById(
+        state.conversations,
+        activeRun.conversationId,
+        (conversation) => ({
+          ...conversation,
+          messages: updateAssistantMessage(
+            conversation.messages,
+            activeRun.script.assistantMessageId,
+            (message) => ({
+              ...message,
+              content: message.content.length === 0 ? "Mock response stopped." : message.content,
+              status: "stopped",
+            }),
+          ),
+        }),
+      );
+      if (conversations === null) {
         return state;
       }
 
       return {
         ...state,
-        ...appendActivity(state, state.activeRun.script.runId, "run-stopped"),
+        ...appendActivity(state, activeRun.script.runId, "run-stopped"),
         activeRun: null,
-        messages: updateAssistantMessage(
-          state.messages,
-          state.activeRun.script.assistantMessageId,
-          (message) => ({
-            ...message,
-            content: message.content.length === 0 ? "Mock response stopped." : message.content,
-            status: "stopped",
-          }),
-        ),
+        conversations,
         retryableRun: null,
       };
     }
     case "mock-approval-decided": {
-      if (state.activeRun?.status !== "awaiting-approval" || state.activeApproval === null) {
+      const activeRun = state.activeRun;
+      if (
+        activeRun?.status !== "awaiting-approval" ||
+        state.activeApproval === null ||
+        activeRun.conversationId !== state.activeConversationId
+      ) {
         return state;
       }
 
@@ -244,7 +443,7 @@ export function applicationReducer(
             : "edit-requested";
       const outcome: ConversationMessage = {
         content: approvalOutcomeMessage(action.decision),
-        id: `${state.activeRun.script.runId}-outcome`,
+        id: `${activeRun.script.runId}-outcome`,
         role: "assistant",
         status: "complete",
       };
@@ -254,33 +453,43 @@ export function applicationReducer(
           : action.decision === "reject"
             ? "approval-rejected"
             : "approval-edit-requested";
-      const runId = state.activeRun.script.runId;
+      const conversations = updateConversationById(
+        state.conversations,
+        activeRun.conversationId,
+        (conversation) => ({
+          ...conversation,
+          messages: [...conversation.messages, outcome],
+          toolActivities: conversation.toolActivities.map((activity) =>
+            activity.id === activeRun.script.toolActivity.id
+              ? { ...activity, status: activityStatus }
+              : activity,
+          ),
+        }),
+      );
+      if (conversations === null) {
+        return state;
+      }
 
       return {
         ...state,
-        ...appendActivity(state, runId, activityKind),
+        ...appendActivity(state, activeRun.script.runId, activityKind),
         activeApproval: null,
         activeRun: null,
         composerDraft:
           action.decision === "edit" ? state.activeApproval.editDraft : state.composerDraft,
-        messages: [...state.messages, outcome],
+        conversations,
         retryableRun: null,
-        toolActivities: state.toolActivities.map((activity) =>
-          activity.id === state.activeRun?.script.toolActivity.id
-            ? { ...activity, status: activityStatus }
-            : activity,
-        ),
       };
     }
     case "menu-route-received": {
       const activeRoute = destinationForMenuRoute(action.route);
 
       if (action.route === "new_request") {
-        return {
-          ...state,
-          activeRoute,
-          composerDraft: "",
-        };
+        return isConversationChangeBlocked(state)
+          ? state.activeRoute === activeRoute
+            ? state
+            : { ...state, activeRoute }
+          : createOrSelectEmptyConversation(state);
       }
 
       return activeRoute === state.activeRoute ? state : { ...state, activeRoute };

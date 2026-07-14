@@ -4,14 +4,14 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-There is no Active plan. **Increment 2G — integration hardening** is Complete.
+There is no Active plan. **Increment 3A — in-memory conversation sessions** is Complete.
 
-Implementation, automated release verification, native launch, and project-owner manual acceptance are complete. Phase 2 is verified complete.
+Implementation, automated release verification, native launch, and project-owner manual acceptance are complete.
 
 Most recently completed plan:
 
 ```text
-docs/plans/02g-integration-hardening.md
+docs/plans/03a-in-memory-conversation-sessions.md
 ```
 
 ## Completed plans
@@ -23,6 +23,7 @@ docs/plans/02d-menu-bar-window-lifecycle.md
 docs/plans/02e-react-application-shell.md
 docs/plans/02f-mocked-assistant-interaction-shell.md
 docs/plans/02g-integration-hardening.md
+docs/plans/03a-in-memory-conversation-sessions.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -53,14 +54,15 @@ A plan must contain:
 
 ## Plan index
 
-| Plan                                     | Status   | Owner              | Last updated |
-| ---------------------------------------- | -------- | ------------------ | ------------ |
-| Increment 2B-1 SQLite migration skeleton | Complete | Project maintainer | 2026-07-13   |
-| Increment 2C storage startup integration | Complete | Project maintainer | 2026-07-13   |
-| Increment 2D menu-bar/window lifecycle   | Complete | Project maintainer | 2026-07-13   |
-| Increment 2E React application shell     | Complete | Project maintainer | 2026-07-13   |
-| Increment 2F mocked interaction shell    | Complete | Project maintainer | 2026-07-13   |
-| Increment 2G integration hardening       | Complete | Project maintainer | 2026-07-13   |
+| Plan                                         | Status   | Owner              | Last updated |
+| -------------------------------------------- | -------- | ------------------ | ------------ |
+| Increment 2B-1 SQLite migration skeleton     | Complete | Project maintainer | 2026-07-13   |
+| Increment 2C storage startup integration     | Complete | Project maintainer | 2026-07-13   |
+| Increment 2D menu-bar/window lifecycle       | Complete | Project maintainer | 2026-07-13   |
+| Increment 2E React application shell         | Complete | Project maintainer | 2026-07-13   |
+| Increment 2F mocked interaction shell        | Complete | Project maintainer | 2026-07-13   |
+| Increment 2G integration hardening           | Complete | Project maintainer | 2026-07-13   |
+| Increment 3A in-memory conversation sessions | Complete | Project maintainer | 2026-07-13   |
 
 ## Phase 2 Increment 2E — complete
 
@@ -86,6 +88,10 @@ Goal: complete bounded cancellation, error-state, audit-view, and release-verifi
 
 The typed driver, bounded failure and Retry, redacted in-memory Activity feed, and focused tests are implemented. `npm run verify`, `npm audit --audit-level=low`, native launch, and project-owner manual acceptance all pass.
 
-## Phase 3 planning — ready
+## Phase 3 planning — complete
 
-Reconcile the Phase 3 product brief with the completed Phase 2 mock loop and define the first bounded Phase 3 increment. Do not implement features until a dedicated plan and exact file set are approved.
+The product brief and architecture baseline were reconciled with the completed Phase 2 mock loop. The smallest missing capability was volatile conversation identity and history. Increment 3A was approved, implemented, and passed automated verification, native launch, and project-owner manual acceptance.
+
+## Phase 3B planning — ready
+
+Reconcile the remaining context-provenance, tool-result, and mocked-loop requirements with the verified implementation through Increment 3A. Do not implement features until a dedicated plan and exact file set are approved.

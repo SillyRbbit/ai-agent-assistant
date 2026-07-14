@@ -20,7 +20,7 @@ When the task is a security-sensitive change, also read `SECURITY.md` and `CODE_
 
 ## Current phase
 
-The project is in Phase 2. The smallest Tauri 2 application runs on macOS and proves typed React-to-Rust IPC. The next implementation work must proceed in small, independently verified increments. Do not jump directly to production model access or privileged operating-system integrations.
+Phase 2 is verified complete on the target Mac. The project is entering Phase 3, which completes the conversation UI and mocked agent loop through small, independently verified increments. Do not jump directly to production model access, real tool execution, sensitive persistence, or privileged operating-system integrations.
 
 ## Non-negotiable product boundaries
 

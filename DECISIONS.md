@@ -278,6 +278,26 @@ Consequences:
 - Reloading clears messages, Retry state, and all Activity events.
 - No Rust, Tauri, IPC, capability, CSP, SQLite, dependency, credential, network, or permission boundary changes.
 
+## D-017 — Keep initial conversation history volatile and bind runs to conversation identity
+
+Date: 2026-07-13
+Status: Accepted
+
+Decision: Increment 3A represents conversation history as readonly React application-state sessions with deterministic `conversation-N` identifiers, a title capped at 48 Unicode code points including any ellipsis, messages, and mock tool activity. At most one empty session is retained. Active and retryable mock runs carry the exact conversation ID they belong to. Conversation creation and selection are rejected while streaming or awaiting approval.
+
+The native New Request route creates or selects the empty conversation only while idle. During an active run or approval it may focus Conversations but cannot create, switch, cancel, approve, or otherwise mutate the run.
+
+Rationale: conversation identity is the smallest missing Phase 3 UI capability and is required before later context provenance work. Keeping it volatile proves creation, history, selection, and restoration without persisting personal content before reviewed encrypted repositories and privacy controls exist. Binding run events to both run and conversation IDs prevents asynchronous output or Retry from crossing transcript boundaries.
+
+Consequences:
+
+- Reloading the WebView clears every conversation title, message, tool activity, and Retry state.
+- Conversation titles may contain normalized request text in the local UI but are never copied into Activity or logs.
+- Activity events and monotonic run/activity ordinals remain application-session scoped rather than conversation scoped.
+- Leaving a failed conversation clears its Retry eligibility.
+- Conversation deletion, rename, search, export, synchronization, per-conversation drafts, attachments, voice, and context controls remain later increments.
+- No Rust, IPC, Tauri, SQLite, dependency, capability, CSP, credential, network, packaging, or operating-system permission change is introduced.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

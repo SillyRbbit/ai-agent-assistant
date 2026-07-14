@@ -58,6 +58,9 @@ function ApplicationShell({ services }: ApplicationShellProps) {
   const menuRouteStatus = useMenuRouteSubscription(services.menuRouteSource);
   const mockRunActions = useMockAssistantRun(state.activeRun, dispatch, services.mockRunDriver);
   const runStatus = state.activeRun?.status ?? "idle";
+  const activeConversation = state.conversations.find(
+    (conversation) => conversation.id === state.activeConversationId,
+  );
 
   const pages: Readonly<Record<AppRoute, ReactNode>> = {
     activity: <ActivityPage events={state.activityEvents} />,
@@ -65,7 +68,8 @@ function ApplicationShell({ services }: ApplicationShellProps) {
       <ConversationWorkspace
         activeApproval={state.activeApproval}
         composerDraft={state.composerDraft}
-        messages={state.messages}
+        conversationTitle={activeConversation?.title ?? "Conversation unavailable"}
+        messages={activeConversation?.messages ?? []}
         onApprovalDecision={mockRunActions.decideApproval}
         onComposerDraftChange={(value) => {
           dispatch({ type: "composer-draft-changed", value });
@@ -74,8 +78,12 @@ function ApplicationShell({ services }: ApplicationShellProps) {
         onStop={mockRunActions.stop}
         onSubmit={mockRunActions.submit}
         runStatus={runStatus}
-        retryableMessageId={state.retryableRun?.assistantMessageId ?? null}
-        toolActivities={state.toolActivities}
+        retryableMessageId={
+          state.retryableRun?.conversationId === state.activeConversationId
+            ? state.retryableRun.assistantMessageId
+            : null
+        }
+        toolActivities={activeConversation?.toolActivities ?? []}
       />
     ),
     integrations: (
@@ -110,9 +118,18 @@ function ApplicationShell({ services }: ApplicationShellProps) {
   return (
     <div className="application-shell">
       <ApplicationSidebar
+        activeConversationId={state.activeConversationId}
         activeRoute={state.activeRoute}
+        conversationNavigationDisabled={state.activeRun !== null || state.activeApproval !== null}
+        conversations={state.conversations}
         onNavigate={(route) => {
           dispatch({ route, type: "navigate" });
+        }}
+        onNewConversation={() => {
+          dispatch({ type: "new-conversation-requested" });
+        }}
+        onSelectConversation={(conversationId) => {
+          dispatch({ conversationId, type: "conversation-selected" });
         }}
       />
 

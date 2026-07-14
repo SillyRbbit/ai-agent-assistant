@@ -102,6 +102,14 @@ function openSidebarRoute(label: string): void {
   fireEvent.click(screen.getByRole("button", { name: label }));
 }
 
+function openConversation(title: string): void {
+  fireEvent.click(screen.getByRole("button", { name: `Open conversation: ${title}` }));
+}
+
+function startNewConversation(): void {
+  fireEvent.click(screen.getByRole("button", { name: "Start new conversation" }));
+}
+
 function submitMockRequest(request = "Prepare the board update"): void {
   fireEvent.change(screen.getByLabelText("Assistant request"), {
     target: { value: request },
@@ -125,7 +133,11 @@ describe("App", () => {
     render(<App services={createServices(harness.source)} />);
 
     expect(screen.getByRole("heading", { level: 1, name: "Conversations" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "No conversations yet" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "No messages yet" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Start new conversation" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Open conversation: New conversation" }),
+    ).toHaveAttribute("aria-current", "page");
     expect(screen.getByLabelText("Assistant request")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
   });
@@ -147,7 +159,10 @@ describe("App", () => {
 
     submitMockRequest();
 
-    expect(screen.getByText("Prepare the board update")).toBeInTheDocument();
+    const transcript = screen.getByRole("region", {
+      name: "Conversation transcript: Prepare the board update",
+    });
+    expect(within(transcript).getByText("Prepare the board update")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Stop" })).toBeInTheDocument();
     finishMockStream();
 
@@ -207,7 +222,10 @@ describe("App", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Retry" }));
 
-    expect(screen.getAllByText("Sensitive board request")).toHaveLength(1);
+    const transcript = screen.getByRole("region", {
+      name: "Conversation transcript: Sensitive board request",
+    });
+    expect(within(transcript).getAllByText("Sensitive board request")).toHaveLength(1);
     expect(screen.getByRole("button", { name: "Stop" })).toBeInTheDocument();
   });
 
@@ -287,6 +305,84 @@ describe("App", () => {
     expect(within(activity).queryByText("Confidential board request")).not.toBeInTheDocument();
   });
 
+  it("lists conversations newest-first and restores their messages and tool activity", () => {
+    vi.useFakeTimers();
+    const harness = createMenuRouteHarness();
+    render(<App services={createServices(harness.source)} />);
+
+    submitMockRequest("First board request");
+    finishMockStream();
+    fireEvent.click(screen.getByRole("button", { name: "Reject" }));
+    startNewConversation();
+    submitMockRequest("Second board request");
+    finishMockStream();
+    fireEvent.click(screen.getByRole("button", { name: "Approve mock" }));
+
+    const history = screen.getByRole("list", { name: "Conversation history" });
+    const conversationButtons = within(history).getAllByRole("button");
+    expect(conversationButtons).toHaveLength(2);
+    expect(conversationButtons[0]).toHaveAccessibleName("Open conversation: Second board request");
+    expect(conversationButtons[1]).toHaveAccessibleName("Open conversation: First board request");
+
+    openConversation("First board request");
+    const firstTranscript = screen.getByRole("region", {
+      name: "Conversation transcript: First board request",
+    });
+    expect(within(firstTranscript).getByText("First board request")).toBeInTheDocument();
+    expect(within(firstTranscript).getByText("Rejected")).toBeInTheDocument();
+    expect(within(firstTranscript).queryByText("Second board request")).not.toBeInTheDocument();
+
+    openConversation("Second board request");
+    const secondTranscript = screen.getByRole("region", {
+      name: "Conversation transcript: Second board request",
+    });
+    expect(within(secondTranscript).getByText("Second board request")).toBeInTheDocument();
+    expect(within(secondTranscript).getByText("Mock approved")).toBeInTheDocument();
+    expect(within(secondTranscript).queryByText("First board request")).not.toBeInTheDocument();
+  });
+
+  it("reuses an existing empty conversation instead of adding another", () => {
+    vi.useFakeTimers();
+    const harness = createMenuRouteHarness();
+    render(<App services={createServices(harness.source)} />);
+
+    submitMockRequest("Completed request");
+    finishMockStream();
+    fireEvent.click(screen.getByRole("button", { name: "Reject" }));
+    startNewConversation();
+    openConversation("Completed request");
+    startNewConversation();
+
+    const history = screen.getByRole("list", { name: "Conversation history" });
+    expect(within(history).getAllByRole("button")).toHaveLength(2);
+    expect(
+      within(history).getByRole("button", { name: "Open conversation: New conversation" }),
+    ).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("heading", { name: "No messages yet" })).toBeInTheDocument();
+  });
+
+  it("disables conversation creation and selection during streaming and approval", () => {
+    vi.useFakeTimers();
+    const harness = createMenuRouteHarness();
+    render(<App services={createServices(harness.source)} />);
+    submitMockRequest();
+
+    const newConversation = screen.getByRole("button", { name: "Start new conversation" });
+    const currentConversation = screen.getByRole("button", {
+      name: "Open conversation: Prepare the board update",
+    });
+    expect(newConversation).toBeDisabled();
+    expect(currentConversation).toBeDisabled();
+
+    finishMockStream();
+    expect(newConversation).toBeDisabled();
+    expect(currentConversation).toBeDisabled();
+
+    fireEvent.click(screen.getByRole("button", { name: "Reject" }));
+    expect(newConversation).toBeEnabled();
+    expect(currentConversation).toBeEnabled();
+  });
+
   it("opens every page shell from the sidebar", () => {
     const harness = createMenuRouteHarness();
     render(<App services={createServices(harness.source)} />);
@@ -325,6 +421,35 @@ describe("App", () => {
 
     expect(screen.getByRole("heading", { level: 1, name: "Conversations" })).toBeInTheDocument();
     expect(screen.getByLabelText("Assistant request")).toHaveValue("");
+  });
+
+  it("creates a new idle conversation from the native new-request route", async () => {
+    vi.useFakeTimers();
+    const harness = createMenuRouteHarness();
+    render(<App services={createServices(harness.source)} />);
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(harness.hasListener()).toBe(true);
+
+    submitMockRequest("Native route request");
+    finishMockStream();
+    fireEvent.click(screen.getByRole("button", { name: "Reject" }));
+    openSidebarRoute("Settings");
+
+    act(() => {
+      harness.emit("new_request");
+    });
+
+    const history = screen.getByRole("list", { name: "Conversation history" });
+    expect(within(history).getAllByRole("button")).toHaveLength(2);
+    expect(
+      within(history).getByRole("button", { name: "Open conversation: Native route request" }),
+    ).toBeInTheDocument();
+    expect(
+      within(history).getByRole("button", { name: "Open conversation: New conversation" }),
+    ).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("heading", { name: "No messages yet" })).toBeInTheDocument();
   });
 
   it("routes a tasks-placeholder menu event to Tasks", async () => {

@@ -13,6 +13,7 @@ import { ToolActivityCard } from "./ToolActivityCard";
 interface ConversationWorkspaceProps {
   readonly activeApproval: MockApprovalRequest | null;
   readonly composerDraft: string;
+  readonly conversationTitle: string;
   readonly messages: readonly ConversationMessage[];
   readonly onApprovalDecision: (decision: MockApprovalDecision) => void;
   readonly onComposerDraftChange: (value: string) => void;
@@ -27,6 +28,7 @@ interface ConversationWorkspaceProps {
 export function ConversationWorkspace({
   activeApproval,
   composerDraft,
+  conversationTitle,
   messages,
   onApprovalDecision,
   onComposerDraftChange,
@@ -49,12 +51,17 @@ export function ConversationWorkspace({
       />
 
       <div className="conversation-workspace">
-        <div aria-live="polite" className="conversation-transcript">
+        <div
+          aria-label={`Conversation transcript: ${conversationTitle}`}
+          aria-live="polite"
+          className="conversation-transcript"
+          role="region"
+        >
           {messages.length === 0 ? (
             <PageState
-              description="Use the composer below to start a deterministic mock run. Messages remain in memory only."
+              description="Use the composer below to start a deterministic mock run. This conversation remains in memory only."
               icon="C"
-              title="No conversations yet"
+              title="No messages yet"
             />
           ) : (
             <div className="conversation-timeline">

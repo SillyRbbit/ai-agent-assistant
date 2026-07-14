@@ -6,6 +6,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Phase 3 Increment 3A volatile conversation sessions with deterministic IDs, bounded titles, and per-session messages and mock tool activity.
+- Accessible New conversation and newest-first conversation-history controls in the application sidebar.
+- Focused conversation-model, reducer, native-route, busy-state, restoration, and interaction coverage, bringing the frontend suite to 83 tests.
+- Documentation-only Phase 3 gap analysis and proposed Increment 3A plan for volatile in-memory conversation sessions.
 - Verified Phase 2 Increment 2G typed mock-run driver with explicit idempotent cancellation.
 - Bounded mock failure presentation and deterministic Retry without duplicating the user message.
 - Redacted in-memory Activity feed for accepted run, Stop, failure, approval-request, and approval-decision events.
@@ -33,6 +37,9 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Bound active and retryable mock runs to exact conversation IDs so asynchronous events cannot mutate another selected transcript.
+- Made native New Request create or select an empty conversation while idle and only focus the active conversation while a run or approval is pending.
+- Marked Increment 3A verified complete after full automated verification, native launch, and project-owner manual acceptance passed.
 - Replaced direct timer ownership in the React hook with an injectable closed mock-run driver.
 - Replaced the Activity placeholder with a volatile session feed containing fixed summaries and opaque run IDs only.
 - Hardened late chunk, completion, and failure handling against inactive or mismatched runs.
@@ -55,6 +62,9 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Security
 
+- Increment 3A keeps all conversation titles, messages, and mock tool activity in volatile WebView memory and copies none of that content into Activity.
+- Conversation creation and selection fail closed during streaming or pending approval; Retry eligibility is cleared when leaving the failed conversation.
+- Increment 3A adds no Rust, IPC, Tauri command, capability, CSP, dependency, lockfile, persistence, credential, network, packaging, or operating-system permission change.
 - Increment 2G Activity records exclude request text, tool arguments, tool results, and underlying error details.
 - Driver failures map to one bounded user-facing reason; startup exceptions are not rendered or logged.
 - Increment 2G adds no Rust, IPC, Tauri, capability, CSP, dependency, persistence, credential, network, or OS permission change.

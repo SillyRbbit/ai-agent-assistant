@@ -2,7 +2,7 @@
 
 Last updated: 2026-07-13
 
-This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must be closed before later feature work begins.
+This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must close before later feature work begins.
 
 ## Completed increments
 
@@ -15,22 +15,23 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 2E — React application shell: **Verified complete**.
 - Increment 2F — mocked assistant interaction shell: **Verified complete**.
 - Increment 2G — integration hardening: **Verified complete**.
+- Increment 3A — in-memory conversation sessions: **Verified complete**.
 
-## Phase 3 — gap analysis and increment planning
+## Phase 3B — gap analysis and increment planning
 
 Status: **Ready**
 
 Goal:
 
-- Compare the Phase 3 product requirements with the verified Phase 2 implementation.
-- Identify the smallest missing conversation-UI or mocked-loop capability.
-- Define one bounded first Phase 3 increment with explicit acceptance criteria, non-goals, risks, exact files, and verification commands.
-- Preserve every verified security, IPC, storage, capability, CSP, lifecycle, and permission boundary.
+- Compare the remaining Phase 3 conversation-UI and mocked-loop requirements with the verified implementation through Increment 3A.
+- Identify the smallest missing context-provenance, tool-result, or mocked-loop capability.
+- Define one bounded Phase 3B increment with explicit acceptance criteria, non-goals, risks, exact files, and verification commands.
+- Preserve every verified security, cancellation, Retry, Activity, IPC, storage, lifecycle, capability, CSP, and permission boundary.
 
 Required planning output:
 
-- A written gap analysis grounded in `docs/product/PRODUCT_BRIEF.md` and actual code.
-- One dedicated Phase 3 plan document.
+- A written gap analysis grounded in `docs/product/PRODUCT_BRIEF.md`, `docs/product/ARCHITECTURE_BASELINE.md`, and actual code.
+- One dedicated Phase 3B plan document.
 - An exact proposed file list and verification gate.
 - Project-owner approval before implementation.
 
@@ -38,17 +39,8 @@ Explicitly excluded from planning implementation:
 
 - Production model or gateway access.
 - API keys, credentials, OAuth, or cloud accounts.
-- Real tools, privileged automation, or trusted WebView authorization.
-- Sensitive persistence or new operating-system permissions.
+- Real tools, trusted WebView authorization, or privileged automation.
+- Attachments, voice, sensitive persistence, or new operating-system permissions.
+- Rust, IPC, Tauri command, dependency, capability, CSP, or packaging changes unless a later approved plan explicitly justifies them.
 
 Do not edit runtime code during the planning task.
-
-## Out of scope for the remaining Phase 2 increments
-
-- Production OpenAI access or stored API keys.
-- OAuth or gateway authentication.
-- Accessibility, screen capture, Apple Events, microphone, or shell execution.
-- Broad filesystem access.
-- Calendar, contacts, reminders, notifications, or clipboard tools.
-- Real tool execution or trusted WebView authorization.
-- Autonomous external or destructive actions.

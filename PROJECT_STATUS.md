@@ -4,7 +4,7 @@ Last updated: 2026-07-13
 
 ## Current milestone
 
-Phase 2 — **verified complete**. Phase 3 gap analysis and increment planning are next.
+Phase 3 — **Increment 3A verified complete**. Phase 3B gap analysis and increment planning are next.
 
 ## Increment status
 
@@ -20,6 +20,7 @@ Phase 2 — **verified complete**. Phase 3 gap analysis and increment planning a
 - Increment 2E: React application shell — **verified complete on target Mac**.
 - Increment 2F: mocked assistant interaction shell — **verified complete on target Mac**.
 - Increment 2G: integration hardening — **verified complete on target Mac**.
+- Increment 3A: in-memory conversation sessions — **verified complete on target Mac**.
 
 ## Verified baseline through Increment 2E
 
@@ -95,4 +96,15 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Perform Phase 3 gap analysis and define the first bounded Phase 3 increment without changing runtime code.
+Perform documentation-only Phase 3B gap analysis and define the next bounded increment without changing runtime code.
+
+## Phase 3 planning result
+
+- The current mock loop already covers messages, streaming, Stop, mock tool activity, mock approval decisions, bounded failure, Retry, stale-event rejection, and redacted Activity presentation.
+- The current transcript has no conversation identity or history, and New Request clears only the draft.
+- Increment 3A adds volatile conversation sessions, bounded titles, newest-first history, New conversation, and idle selection without persistence or trust-boundary expansion.
+- Active and retryable runs are bound to conversation IDs; session changes fail closed while streaming or awaiting approval.
+- `npm run verify` passed with 83 frontend tests, 50 Rust library tests, 6 Rust integration tests, Vite production build, and Tauri release no-bundle build.
+- The dependency audit reports zero vulnerabilities, and native launch passed with idempotent storage startup.
+- No dependency, lockfile, Rust, Tauri, IPC, SQLite, capability, CSP, credential, network, packaging, or permission file changed.
+- The project owner confirmed conversation layout, creation, restoration, empty-session reuse, busy-state guards, native New Request behavior, existing mock interactions, Activity redaction, lifecycle, diagnostics, storage, and no-permission-prompt behavior all passed.
