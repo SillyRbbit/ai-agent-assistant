@@ -79,8 +79,8 @@ mod tests {
     use std::{cell::RefCell, error::Error, fmt};
 
     use super::{
-        app_reopen_policy, dispatch_menu_id, window_close_policy, AppReopenPolicy,
-        DispatchOutcome, MenuBarRuntime, WindowClosePolicy,
+        app_reopen_policy, dispatch_menu_id, window_close_policy, AppReopenPolicy, DispatchOutcome,
+        MenuBarRuntime, WindowClosePolicy,
     };
     use crate::menu_bar::{MenuBarAction, MenuBarRoute, MAIN_WINDOW_LABEL};
 
@@ -164,8 +164,7 @@ mod tests {
     }
 
     #[test]
-    fn routes_tasks_placeholder_after_showing_the_main_window(
-    ) -> Result<(), MockRuntimeError> {
+    fn routes_tasks_placeholder_after_showing_the_main_window() -> Result<(), MockRuntimeError> {
         let runtime = RecordingRuntime::default();
 
         let outcome = dispatch_menu_id(&runtime, MenuBarAction::TasksPlaceholder.menu_id())?;
@@ -237,14 +236,8 @@ mod tests {
 
     #[test]
     fn reopens_the_main_window_only_when_no_window_is_visible() {
-        assert_eq!(
-            app_reopen_policy(false),
-            AppReopenPolicy::ShowMainWindow
-        );
-        assert_eq!(
-            app_reopen_policy(true),
-            AppReopenPolicy::KeepCurrentState
-        );
+        assert_eq!(app_reopen_policy(false), AppReopenPolicy::ShowMainWindow);
+        assert_eq!(app_reopen_policy(true), AppReopenPolicy::KeepCurrentState);
     }
 
     #[test]

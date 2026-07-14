@@ -7,9 +7,9 @@ mod macos {
     };
 
     use super::super::{
-        app_reopen_policy, dispatch_menu_id, window_close_policy, AppReopenPolicy,
-        DispatchOutcome, MenuBarAction, MenuBarError, MenuBarRoute, MenuBarRouteEvent,
-        MenuBarRuntime, WindowClosePolicy, MAIN_WINDOW_LABEL, MENU_ROUTE_EVENT,
+        app_reopen_policy, dispatch_menu_id, window_close_policy, AppReopenPolicy, DispatchOutcome,
+        MenuBarAction, MenuBarError, MenuBarRoute, MenuBarRouteEvent, MenuBarRuntime,
+        WindowClosePolicy, MAIN_WINDOW_LABEL, MENU_ROUTE_EVENT,
     };
 
     const TRAY_ICON_ID: &str = "ai-agent-assistant-menu-bar";
@@ -75,10 +75,7 @@ mod macos {
         }
     }
 
-    pub(crate) fn handle_window_event<R: Runtime>(
-        window: &Window<R>,
-        event: &WindowEvent,
-    ) {
+    pub(crate) fn handle_window_event<R: Runtime>(window: &Window<R>, event: &WindowEvent) {
         if !matches!(event, WindowEvent::CloseRequested { .. }) {
             return;
         }
@@ -105,14 +102,8 @@ mod macos {
         app: &App<R>,
         action: MenuBarAction,
     ) -> Result<MenuItem<R>, MenuBarError> {
-        MenuItem::with_id(
-            app,
-            action.menu_id(),
-            action.label(),
-            true,
-            None::<&str>,
-        )
-        .map_err(|source| MenuBarError::tauri("create menu item", source))
+        MenuItem::with_id(app, action.menu_id(), action.label(), true, None::<&str>)
+            .map_err(|source| MenuBarError::tauri("create menu item", source))
     }
 
     fn handle_menu_event<R: Runtime>(app: &AppHandle<R>, event: tauri::menu::MenuEvent) {

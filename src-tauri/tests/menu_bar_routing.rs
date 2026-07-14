@@ -89,12 +89,6 @@ fn public_close_policy_hides_only_the_main_window() {
 
 #[test]
 fn public_reopen_policy_restores_the_main_window_only_when_needed() {
-    assert_eq!(
-        app_reopen_policy(false),
-        AppReopenPolicy::ShowMainWindow
-    );
-    assert_eq!(
-        app_reopen_policy(true),
-        AppReopenPolicy::KeepCurrentState
-    );
+    assert_eq!(app_reopen_policy(false), AppReopenPolicy::ShowMainWindow);
+    assert_eq!(app_reopen_policy(true), AppReopenPolicy::KeepCurrentState);
 }

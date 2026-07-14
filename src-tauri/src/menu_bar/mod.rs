@@ -38,9 +38,7 @@ impl MenuBarError {
     }
 }
 
-pub(crate) fn initialize_tauri_app<R: Runtime>(
-    app: &mut App<R>,
-) -> Result<(), Box<dyn Error>> {
+pub(crate) fn initialize_tauri_app<R: Runtime>(app: &mut App<R>) -> Result<(), Box<dyn Error>> {
     tauri_adapter::install(app)
         .map_err(AppError::from)
         .map_err(|error| Box::new(error) as Box<dyn Error>)
