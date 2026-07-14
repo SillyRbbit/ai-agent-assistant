@@ -79,8 +79,10 @@ impl GatewayFailure {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Eq, PartialEq)]
 pub struct UntrustedFunctionCall {
+    run_id: String,
+    gateway_request_id: String,
     call_id: String,
     name: String,
     tool_contract_version: u16,
@@ -88,6 +90,16 @@ pub struct UntrustedFunctionCall {
 }
 
 impl UntrustedFunctionCall {
+    #[must_use]
+    pub fn run_id(&self) -> &str {
+        &self.run_id
+    }
+
+    #[must_use]
+    pub fn gateway_request_id(&self) -> &str {
+        &self.gateway_request_id
+    }
+
     #[must_use]
     pub fn call_id(&self) -> &str {
         &self.call_id
@@ -109,13 +121,53 @@ impl UntrustedFunctionCall {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+impl fmt::Debug for UntrustedFunctionCall {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("UntrustedFunctionCall")
+            .field("run_id", &self.run_id)
+            .field("gateway_request_id", &self.gateway_request_id)
+            .field("call_id", &self.call_id)
+            .field("name", &self.name)
+            .field("tool_contract_version", &self.tool_contract_version)
+            .field("arguments_json", &"[REDACTED]")
+            .finish()
+    }
+}
+
+#[derive(Eq, PartialEq)]
 pub enum ValidatedGatewayEvent {
     ResponseStarted { provider_response_id: String },
     OutputTextDelta { delta: String },
     FunctionCallCompleted { call: UntrustedFunctionCall },
     ResponseCompleted,
     ResponseFailed { failure: GatewayFailure },
+}
+
+impl fmt::Debug for ValidatedGatewayEvent {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::ResponseStarted {
+                provider_response_id,
+            } => formatter
+                .debug_struct("ResponseStarted")
+                .field("provider_response_id", provider_response_id)
+                .finish(),
+            Self::OutputTextDelta { .. } => formatter
+                .debug_struct("OutputTextDelta")
+                .field("delta", &"[REDACTED]")
+                .finish(),
+            Self::FunctionCallCompleted { call } => formatter
+                .debug_struct("FunctionCallCompleted")
+                .field("call", call)
+                .finish(),
+            Self::ResponseCompleted => formatter.write_str("ResponseCompleted"),
+            Self::ResponseFailed { failure } => formatter
+                .debug_struct("ResponseFailed")
+                .field("failure", failure)
+                .finish(),
+        }
+    }
 }
 
 #[derive(Debug, Error, Eq, PartialEq)]
@@ -459,6 +511,8 @@ impl GatewayStreamValidator {
         self.function_call_count += 1;
         Ok(ValidatedGatewayEvent::FunctionCallCompleted {
             call: UntrustedFunctionCall {
+                run_id: self.expected_run_id.clone(),
+                gateway_request_id: self.expected_gateway_request_id.clone(),
                 call_id,
                 name,
                 tool_contract_version,
@@ -512,7 +566,7 @@ impl GatewayStreamValidator {
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
 struct WireGatewayEnvelope {
     protocol_version: u16,
@@ -522,7 +576,7 @@ struct WireGatewayEnvelope {
     event: WireGatewayEvent,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 #[serde(tag = "type", rename_all = "snake_case", deny_unknown_fields)]
 enum WireGatewayEvent {
     ResponseStarted {
@@ -688,8 +742,8 @@ mod tests {
 
     use super::{
         GatewayFailureCode, GatewayProtocolError, GatewayProtocolResult, GatewayStreamStatus,
-        GatewayStreamValidator, UntrustedFunctionCall, ValidatedGatewayEvent, AGENT_RUN_DEADLINE,
-        GATEWAY_CONNECT_TIMEOUT, GATEWAY_PROTOCOL_VERSION, GATEWAY_STREAM_IDLE_TIMEOUT,
+        GatewayStreamValidator, ValidatedGatewayEvent, AGENT_RUN_DEADLINE, GATEWAY_CONNECT_TIMEOUT,
+        GATEWAY_PROTOCOL_VERSION, GATEWAY_STREAM_IDLE_TIMEOUT,
         MAX_ASSISTANT_OUTPUT_CHARACTERS_PER_TURN, MAX_FUNCTION_ARGUMENT_BYTES,
         MAX_FUNCTION_CALLS_PER_RUN, MAX_GATEWAY_EVENTS_PER_TURN, MAX_GATEWAY_EVENT_BYTES,
         MAX_GATEWAY_REQUESTS_PER_RUN, MAX_GATEWAY_REQUEST_BYTES, MAX_MODEL_TURNS_PER_RUN,
@@ -847,22 +901,16 @@ mod tests {
             r#"{"title":"Review plan"}"#,
         )?;
 
-        let expected_call = UntrustedFunctionCall {
-            call_id: "call-1".to_owned(),
-            name: TOOL_NAME.to_owned(),
-            tool_contract_version: TOOL_CONTRACT_VERSION,
-            arguments_json: r#"{"title":"Review plan"}"#.to_owned(),
+        let accepted = validator.accept_frame(frame(1, &event).as_bytes())?;
+        let ValidatedGatewayEvent::FunctionCallCompleted { call } = accepted else {
+            return Err(GatewayProtocolError::MalformedEvent.into());
         };
-        assert_eq!(
-            validator.accept_frame(frame(1, &event).as_bytes()),
-            Ok(ValidatedGatewayEvent::FunctionCallCompleted {
-                call: expected_call.clone(),
-            })
-        );
-        assert_eq!(expected_call.call_id(), "call-1");
-        assert_eq!(expected_call.name(), TOOL_NAME);
-        assert_eq!(expected_call.tool_contract_version(), TOOL_CONTRACT_VERSION);
-        assert_eq!(expected_call.arguments_json(), r#"{"title":"Review plan"}"#);
+        assert_eq!(call.run_id(), RUN_ID);
+        assert_eq!(call.gateway_request_id(), GATEWAY_REQUEST_ID);
+        assert_eq!(call.call_id(), "call-1");
+        assert_eq!(call.name(), TOOL_NAME);
+        assert_eq!(call.tool_contract_version(), TOOL_CONTRACT_VERSION);
+        assert_eq!(call.arguments_json(), r#"{"title":"Review plan"}"#);
         assert_eq!(validator.function_call_count(), 1);
         assert_eq!(
             validator.accept_frame(frame(2, r#"{"type":"response_completed"}"#).as_bytes()),
@@ -1298,6 +1346,49 @@ mod tests {
         );
         assert_eq!(validator.status(), GatewayStreamStatus::Streaming);
         assert_eq!(validator.event_count(), 1);
+        Ok(())
+    }
+
+    #[test]
+    fn event_debug_redacts_output_and_function_arguments() -> Result<(), Box<dyn Error>> {
+        let output_sentinel = "private-model-output";
+        let mut text_validator = validator()?;
+        start(&mut text_validator)?;
+        let output_event = text_validator.accept_frame(
+            frame(
+                1,
+                &format!(r#"{{"type":"output_text_delta","delta":"{output_sentinel}"}}"#),
+            )
+            .as_bytes(),
+        )?;
+        let output_debug = format!("{output_event:?}");
+
+        assert!(!output_debug.contains(output_sentinel));
+        assert!(output_debug.contains("[REDACTED]"));
+
+        let argument_sentinel = "private-task-title";
+        let raw_arguments = format!(r#"{{"title":"{argument_sentinel}"}}"#);
+        let mut function_validator = validator()?;
+        start(&mut function_validator)?;
+        let function = function_event(
+            "call-private-1",
+            TOOL_NAME,
+            TOOL_CONTRACT_VERSION,
+            &raw_arguments,
+        )?;
+        let function_event = function_validator.accept_frame(frame(1, &function).as_bytes())?;
+        let function_debug = format!("{function_event:?}");
+
+        assert!(!function_debug.contains(argument_sentinel));
+        assert!(!function_debug.contains(&raw_arguments));
+        assert!(function_debug.contains("[REDACTED]"));
+
+        let ValidatedGatewayEvent::FunctionCallCompleted { call } = function_event else {
+            return Err(GatewayProtocolError::MalformedEvent.into());
+        };
+        let call_debug = format!("{call:?}");
+        assert!(!call_debug.contains(argument_sentinel));
+        assert!(!call_debug.contains(&raw_arguments));
         Ok(())
     }
 

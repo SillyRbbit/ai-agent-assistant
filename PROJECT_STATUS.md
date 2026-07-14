@@ -4,7 +4,7 @@ Last updated: 2026-07-14
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A, 4B, and 4C - **verified complete**. The next Ready task is documentation-only Increment 4D planning for exact trusted approval binding.
+Phase 3 and Phase 4 Increments 4A through 4D - **verified complete**. Documentation-only Increment 4E planning for a trusted approval-decision source is the next Ready task.
 
 ## Increment status
 
@@ -27,6 +27,7 @@ Phase 3 and Phase 4 Increments 4A, 4B, and 4C - **verified complete**. The next 
 - Increment 4A: deterministic gateway protocol contract - **verified complete on target Mac**.
 - Increment 4B: exact local tool-schema validation - **verified complete on target Mac**.
 - Increment 4C: trusted policy-input binding - **verified complete on target Mac**.
+- Increment 4D: exact approval binding - **verified complete on target Mac**.
 
 ## Verified baseline through Increment 2E
 
@@ -102,7 +103,7 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-On clean merged `main`, plan only the smallest Increment 4D exact trusted approval-binding boundary. Reconcile the verified input-retaining policy decision with generic approval and audit scaffolds; update planning documentation only and wait for project-owner approval before runtime or dependency changes.
+Plan only Increment 4E's trusted approval-decision source. Reconcile native and WebView trust boundaries, exact choice binding, user-presence and optional-authentication claims, cancellation, expiry, replay, error redaction, and future audit handoff; recommend one exact runtime increment and wait for project-owner approval before implementation.
 
 ## Phase 4 planning result
 
@@ -175,6 +176,35 @@ On clean merged `main`, plan only the smallest Increment 4D exact trusted approv
 - No native interaction gate was required because the modules remain transport-free and unreferenced by Tauri.
 - No dependency, lockfile, approval, audit, executor, network, credential, IPC, persistence, Tauri, capability, CSP, packaging, permission, or user-visible path was added.
 - D-023 records the durable ownership and conservative-evidence policy boundary.
+
+## Increment 4D planning result
+
+- At planning start, accepted gateway frames verified run and gateway-request IDs, but those identities were dropped before schema validation and policy.
+- The previous approval scaffold accepted detached caller-authored tool names, action hashes, and previews; its records were clonable, never expired, lacked cancellation and replay binding, and had no production caller.
+- The generic audit scaffold remains detached because arbitrary string details cannot safely represent exact approval evidence or raw personal content.
+- The proposed increment carries validator-owned run/request/call identity through `SchemaValidatedFunctionCall` and the existing input-retaining `PolicyDecision`.
+- Approval creation consumes only an exact `RequireApproval` decision. A borrowed closed preview is derived from the same retained `create_local_task@1` typed arguments and local metadata.
+- The proposed manager allows one pending approval and 1,024 subjects per lifetime, owns a relative 120-second monotonic deadline, and consumes approve, reject, cancel, or expiry exactly once while rejecting duplicate subject identities without eviction. Future orchestration must cancel approval when its run terminates.
+- Request, preview, and resolution values remain non-cloneable, non-serializable, and debug-redacted; approved resolution has no audit, dispatch, executor, IPC, persistence, or provider-continuation conversion.
+- The plan removes the existing `action_hash` and adds no digest or new dependency. Exact in-process ownership is the canonical binding; approval IDs and any future digest remain non-authorizing correlation data.
+- Planning baseline passed TypeScript, 17 gateway-protocol tests, six function-call validation tests, four policy tests, three approval tests, four audit tests, and two public policy-binding tests on clean merged `main` at `55626b6`.
+- Planning changed documentation only. The project owner approved the exact plan and five-file runtime/test list; the verified implementation evidence follows.
+
+## Increment 4D capability and evidence
+
+- Accepted function calls retain validator-owned run and gateway-request IDs through local schema validation, policy, approval request, borrowed preview, and terminal resolution.
+- Content-bearing gateway calls and events are non-cloneable and use custom debug output that redacts raw arguments and output-text deltas.
+- The approval manager consumes only one owned `RequireApproval` decision, derives the exact closed `create_local_task@1` preview from retained typed arguments, and rejects information-only or unsupported subjects.
+- Caller-authored tool names, action hashes, preview strings, policy outcomes, creation times, deadlines, and detached records are removed from the approval boundary. No digest or dependency was added.
+- One manager permits one pending request and at most 1,024 distinct lifetime subjects, owns a relative 120-second monotonic deadline, and makes approve, reject, cancel, and expiry one-time terminal outcomes with non-evicting replay tombstones.
+- Request views, previews, and resolutions are non-cloneable, non-serializable, and debug-redacted. Resolution exposes no consuming path to policy input, audit, dispatch, IPC, or execution.
+- `Approved` proves only that the local transport-free manager processed a closed choice while the exact subject was pending and unexpired. It does not prove a user gesture, user presence, local authentication, run liveness, or execution eligibility.
+- Focused final checks passed: 18 gateway-protocol tests, six function-call validation tests, four policy tests, six approval tests, two policy-input integration tests, and two approval-binding integration tests.
+- `npm run verify` passed with 124 frontend tests, 82 Rust library tests, ten Rust integration tests, TypeScript, production frontend builds, and the Tauri release no-bundle build.
+- `npm audit --audit-level=low` reported zero vulnerabilities after a sandboxed DNS failure was retried with network access. rustfmt, Clippy with warnings denied, diff checks, code review, and security review passed.
+- No native interaction gate was required because these modules remain transport-free and unreferenced by Tauri or the UI.
+- No provider, network, credential, audit, executor, IPC, persistence, Tauri, frontend, manifest, lockfile, capability, CSP, packaging, permission, or user-visible path was added.
+- D-024 records the exact ownership, lifecycle, no-digest, and non-authorizing approval boundary.
 
 ## Phase 3D planning result
 

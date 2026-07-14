@@ -4,7 +4,7 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-None. Increment 4C is verified complete. The next Ready task is documentation-only Increment 4D exact trusted approval-binding planning; no Increment 4D execution plan exists yet.
+None. Increment 4D is complete. Documentation-only Increment 4E planning is next; no execution plan exists yet.
 
 ## Completed plans
 
@@ -22,6 +22,7 @@ docs/plans/03d-bounded-mock-loop-completion.md
 docs/plans/04a-gateway-protocol-contract.md
 docs/plans/04b-local-tool-schema-validation.md
 docs/plans/04c-trusted-policy-input-binding.md
+docs/plans/04d-exact-approval-binding.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -67,6 +68,7 @@ A plan must contain:
 | Increment 4A gateway protocol contract       | Complete | Project maintainer | 2026-07-14   |
 | Increment 4B local tool-schema validation    | Complete | Project maintainer | 2026-07-14   |
 | Increment 4C trusted policy-input binding    | Complete | Project maintainer | 2026-07-14   |
+| Increment 4D exact approval binding          | Complete | Project maintainer | 2026-07-14   |
 
 ## Phase 2 Increment 2E — complete
 
@@ -148,4 +150,18 @@ The approved plan defined canonical input as the ownership-bound typed `SchemaVa
 
 The project owner approved the exact plan. Implementation removed the raw proposal/provider-response bypass and caller-supplied policy context, introduced ownership-bound policy input and input-retaining closed decisions, and made unsupported evidence paths fail closed. Four policy unit tests and two public gateway-to-policy integration tests prove the rule table, exact retained metadata and arguments, and debug redaction.
 
-Focused checks, `npm run verify`, dependency audit, diff checks, code review, and security review pass. No dependency, approval, audit, executor, transport, IPC, persistence, permission, or user-visible path was added. The next Ready task is documentation-only Increment 4D planning for exact trusted approval binding.
+Focused checks, `npm run verify`, dependency audit, diff checks, code review, and security review pass. No dependency, approval, audit, executor, transport, IPC, persistence, permission, or user-visible path was added. Documentation-only Increment 4D planning is now complete as recorded below.
+
+## Phase 4 Increment 4D exact approval binding - complete
+
+The verified policy decision was reconciled with the detached approval and audit scaffolds. The smallest coherent increment first retains validator-owned run and gateway-request IDs through local schema validation and policy, then replaces arbitrary approval strings with an ownership-consuming transport-free manager.
+
+The proposed manager accepts only one exact `RequireApproval` decision, derives a borrowed closed `create_local_task@1` preview from the retained typed arguments, permits one pending request and 1,024 subjects per manager lifetime, uses a relative manager-owned 120-second monotonic deadline, and consumes approve, reject, cancel, or expiry once. Duplicate run/request/call subjects fail closed without tombstone eviction, Edit requires a fresh validated call, and future orchestration must cancel approval when its run terminates.
+
+The plan removes caller-supplied `action_hash` and adds no digest or dependency because direct in-process ownership is the stronger binding. Request, view, and resolution values remain non-cloneable, non-serializable, debug-redacted, and disconnected from audit, dispatch, execution, IPC, persistence, UI, and provider continuation.
+
+Planning baseline checks passed on clean merged `main` at `55626b6`. The project owner approved the exact plan and five-file runtime/test list before implementation.
+
+The implementation retains validator-owned run/request/call identity, removes raw content cloning and debug output, and replaces the detached approval scaffold with one ownership-consuming manager. The manager derives the exact borrowed `create_local_task@1` preview, enforces one pending request, a 1,024-subject lifetime cap, relative 120-second monotonic expiry, explicit cancellation, and non-evicting terminal replay prevention. It adds no digest, dependency, serialization, audit, dispatch, executor, IPC, persistence, network, credential, capability, or permission path.
+
+Focused Rust checks, rustfmt, Clippy with warnings denied, `npm run verify`, dependency audit, diff checks, code review, and security review pass. The full gate contains 124 frontend tests, 82 Rust library tests, and ten Rust integration tests plus production frontend and Tauri no-bundle builds. No native interaction gate applies because the modules remain transport-free and unreferenced by Tauri. D-024 records the durable approval boundary. Documentation-only Increment 4E planning for a trusted approval-decision source is next.

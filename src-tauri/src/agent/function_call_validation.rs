@@ -16,6 +16,8 @@ pub type FunctionCallValidationResult<T> = Result<T, FunctionCallValidationError
 /// approval before dispatch.
 #[derive(Eq, PartialEq)]
 pub struct SchemaValidatedFunctionCall {
+    run_id: String,
+    gateway_request_id: String,
     call_id: String,
     tool_name: String,
     tool_contract_version: u16,
@@ -25,6 +27,16 @@ pub struct SchemaValidatedFunctionCall {
 }
 
 impl SchemaValidatedFunctionCall {
+    #[must_use]
+    pub fn run_id(&self) -> &str {
+        &self.run_id
+    }
+
+    #[must_use]
+    pub fn gateway_request_id(&self) -> &str {
+        &self.gateway_request_id
+    }
+
     #[must_use]
     pub fn call_id(&self) -> &str {
         &self.call_id
@@ -60,6 +72,8 @@ impl fmt::Debug for SchemaValidatedFunctionCall {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         formatter
             .debug_struct("SchemaValidatedFunctionCall")
+            .field("run_id", &self.run_id)
+            .field("gateway_request_id", &self.gateway_request_id)
             .field("call_id", &self.call_id)
             .field("tool_name", &self.tool_name)
             .field("tool_contract_version", &self.tool_contract_version)
@@ -106,6 +120,8 @@ pub fn validate_function_call(
         .validate_arguments(call.arguments_json())
         .map_err(|reason| FunctionCallValidationError::InvalidArguments { reason })?;
     let validated = SchemaValidatedFunctionCall {
+        run_id: call.run_id().to_owned(),
+        gateway_request_id: call.gateway_request_id().to_owned(),
         call_id: call.call_id().to_owned(),
         tool_name: definition.name().to_owned(),
         tool_contract_version: expected_version,
@@ -209,6 +225,8 @@ mod tests {
     fn validates_a_local_task_with_locally_derived_metadata() -> Result<(), Box<dyn Error>> {
         let validated = validate("create_local_task", 1, r#"{"title":"Review plan"}"#)?;
 
+        assert_eq!(validated.run_id(), RUN_ID);
+        assert_eq!(validated.gateway_request_id(), GATEWAY_REQUEST_ID);
         assert_eq!(validated.call_id(), "call-schema-validation-1");
         assert_eq!(validated.tool_name(), "create_local_task");
         assert_eq!(validated.tool_contract_version(), 1);
@@ -226,6 +244,8 @@ mod tests {
     fn validates_the_no_argument_datetime_contract() -> Result<(), Box<dyn Error>> {
         let validated = validate("get_current_datetime", 1, "{}")?;
 
+        assert_eq!(validated.run_id(), RUN_ID);
+        assert_eq!(validated.gateway_request_id(), GATEWAY_REQUEST_ID);
         assert_eq!(validated.risk_class(), RiskClass::InformationOnly);
         assert_eq!(validated.required_permission(), PermissionKind::None);
         assert!(matches!(

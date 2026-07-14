@@ -433,6 +433,30 @@ Consequences:
 - Existing generic approval and audit scaffolds are not production-ready and remain unchanged.
 - Existing Rust types are sufficient; no dependency, manifest, or lockfile change is introduced.
 
+## D-024 — Bind approval state to one exact policy decision
+
+Date: 2026-07-14
+Status: Accepted; Increment 4D implemented and verified
+
+Decision: retain validator-owned run and gateway-request IDs on normalized function calls and carry them through `SchemaValidatedFunctionCall`, `PolicyInput`, and `PolicyDecision`. Replace detached approval tool names, action hashes, and preview strings with an `ApprovalManager` that consumes one exact `PolicyOutcome::RequireApproval` decision. Derive the `create_local_task@1` preview as a borrowed typed projection of that retained decision; no caller can resupply identity, arguments, classification, preview, policy outcome, creation time, or deadline.
+
+Approval state is volatile and bounded per manager instance: one request may be pending, at most 1,024 distinct subjects may enter one manager lifetime, and each request has a manager-owned monotonic 120-second lifetime from creation. Approve, reject, cancel, and expiry consume the subject once. Run/request/call tombstones are never evicted to admit more work. Future orchestration must own one authoritative manager and explicitly cancel pending approval when the run terminates or reaches its absolute deadline; the relative approval lifetime is not run-liveness evidence.
+
+Remove caller-supplied `action_hash` and add no digest or dependency. Same-process ownership of the non-cloneable typed decision is the canonical binding. Approval IDs and any future digest are correlation data, not authentication or execution authority. Content-bearing gateway events, requests, previews, and resolutions are non-cloneable and use redacted or unavailable debug output for model text and arguments.
+
+An `Approved` disposition proves only that the transport-free manager processed a closed Rust choice while the exact subject was pending and unexpired. It does not prove a user gesture, user presence, or local authentication. `ApprovalResolution` exposes no consuming conversion to policy input, audit, dispatch, or execution. A separately approved trusted interaction source, absolute run-state check, typed audit adapter, and executor capability remain prerequisites for any action.
+
+Rationale: direct ownership makes preview/action substitution impossible inside the current process and is stronger than comparing caller-supplied strings or hashes. Fixed limits, monotonic expiry, cancellation, and non-evicting replay state fail closed without persistence or networking. Deferring user-interaction proof, audit, and execution avoids granting authority before their trust boundaries exist.
+
+Consequences:
+
+- Accepted calls retain exact run, gateway-request, and call identity through terminal approval state.
+- Only `create_local_task@1` has a registered preview; information-only policy results and unsupported subjects cannot enter approval.
+- Preview content is available through a borrowed typed accessor but omitted from debug output, errors, and the generic audit scaffold.
+- One-time and replay guarantees apply to one manager instance; no production manager or trusted approval source is wired yet.
+- The generic audit scaffold, Tauri, WebView, provider, storage, dispatch, and executor remain disconnected.
+- No dependency, manifest, lockfile, capability, CSP, packaging, or permission change is introduced.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

@@ -20,7 +20,7 @@ When the task is a security-sensitive change, also read `SECURITY.md` and `CODE_
 
 ## Current phase
 
-Phase 3 and Phase 4 Increments 4A, 4B, and 4C are verified complete on the target Mac. The next Ready task is documentation-only planning for exact trusted approval binding. Do not connect policy decisions to approval, audit, dispatch, execution, provider calls, credentials, network access, new IPC, sensitive persistence, or privileged operating-system integrations before a later exact plan is approved. The verified gateway, schema-validation, and policy-input modules remain transport-free; schema validity and policy allowance remain non-authorizing.
+Phase 3 and Phase 4 Increments 4A through 4D are verified complete on the target Mac. The next Ready work is documentation-only Increment 4E planning for a trusted approval-decision source. Do not connect WebView or native choices to approval, audit, dispatch, execution, provider calls, credentials, network access, sensitive persistence, or privileged operating-system integrations before an exact plan is approved. The verified gateway, schema-validation, policy-input, and approval modules remain transport-free; schema validity, policy allowance, approval previews, approval IDs, locally approved dispositions, and any future digest remain non-authorizing. Increment 4D `Approved` state is not proof of a user gesture, user presence, or local authentication.
 
 ## Non-negotiable product boundaries
 

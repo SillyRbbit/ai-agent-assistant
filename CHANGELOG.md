@@ -6,6 +6,11 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Phase 4 Increment 4D exact approval binding from validator-owned run/request/call identity through one terminal approval resolution.
+- Closed borrowed `create_local_task@1` approval previews, one-pending state, a 1,024-subject manager-lifetime cap, relative 120-second monotonic expiry, explicit cancellation, and non-evicting replay prevention.
+- Exact gateway-to-approval integration coverage and adversarial lifecycle, expiry-boundary, capacity, replay, overflow, and redaction tests, bringing the Rust suite to 82 library and ten integration tests.
+- Documentation-only Phase 4 Increment 4D plan for exact run/request/call-bound approval ownership.
+- Proposed closed borrowed `create_local_task@1` approval preview, one-pending limit, 1,024-subject lifetime cap, relative 120-second monotonic expiry, cancellation, rejection, one-time consumption, and non-evicting replay prevention.
 - Phase 4 Increment 4C ownership-consuming `PolicyInput` and input-retaining `PolicyDecision`, sourced only from one `SchemaValidatedFunctionCall`.
 - Closed policy reasons with derived outcomes plus four conservative rule-table tests and two public gateway-to-policy boundary tests.
 - Documentation-only Phase 4 Increment 4C plan for removing the unused raw Rust proposal bypass and binding deterministic policy input to one owned `SchemaValidatedFunctionCall`.
@@ -64,6 +69,13 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Carried validator-owned run and gateway-request IDs through schema validation and policy without adding a public identity constructor.
+- Replaced detached approval tool names, `action_hash`, preview strings, clonable records, and caller-owned times with one manager-owned exact `RequireApproval` decision and typed borrowed view.
+- Removed cloning and raw derived debug output from content-bearing gateway events, approval requests, previews, and resolutions.
+- Marked Increment 4D verified complete after focused checks, the full repository gate, dependency audit, diff checks, code review, and security review passed.
+- Made documentation-only Increment 4E planning for a trusted approval-decision source the next Ready task.
+- Made project-owner approval of the exact Increment 4D plan and five-file runtime/test list the next gate; implementation remains blocked.
+- Proposed removal of caller-authored approval tool names, action hashes, preview strings, and clonable detached records without adding a digest or dependency.
 - Removed `ToolCallProposal`, the unused provider tool-call response variant, caller-supplied `PolicyContext`, independently constructed `ProposedAction`, arbitrary policy reason strings, and fallible policy evaluation.
 - Made information-only/no-permission calls allowable as non-authorizing data, reversible and personal-data calls approval-required, and permission-bearing, read-only-without-scope, external/high-impact, and prohibited calls denied.
 - Marked Increment 4C verified complete after focused checks, the full repository gate, dependency audit, diff checks, code review, and security review passed.
@@ -118,6 +130,14 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Security
 
+- Increment 4D binds approval state to one owned policy decision and derives preview content from the same typed subject; callers cannot resupply identity, arguments, classification, preview, outcome, creation time, deadline, or resolution subject.
+- Approve, reject, cancel, and expiry consume the subject once per manager instance; stale, duplicate, unsupported, ineligible, over-capacity, and overflow paths fail closed through typed redacted errors.
+- An `Approved` disposition remains local transport-free state, not proof of a user gesture, user presence, local authentication, active run, dispatch eligibility, or execution authority.
+- Increment 4D adds no audit, dispatch, executor, IPC, persistence, provider, network, credential, Tauri, frontend, dependency, lockfile, capability, CSP, packaging, permission, or user-visible path.
+- Increment 4D planning binds approval to one owned `RequireApproval` policy decision with validator-owned run/request/call identity and a preview borrowed from the same typed arguments.
+- The plan makes approve, reject, cancel, and expiry one-time terminal outcomes, rejects duplicate subjects, and exposes no audit, dispatch, executor, IPC, persistence, or provider-continuation conversion.
+- The plan removes untrusted `action_hash` rather than treating a digest or approval ID as authority; it adds no dependency and keeps exact task content out of debug, errors, and generic audit strings.
+- Increment 4D planning changes documentation only and adds no runtime, dependency, lockfile, credential, network, Tauri, capability, CSP, packaging, permission, or user-visible path.
 - Policy action metadata can now enter production policy types only through ownership of a locally schema-validated call; no constructor accepts caller-supplied identity, version, arguments, risk, permission, intent, grant state, or scope.
 - `PolicyDecision` retains the exact evaluated input, derives outcome from a closed reason, redacts argument content from debug output, and exposes no approval, audit, dispatch, or executor conversion.
 - Increment 4C adds no dependency, lockfile, credential, network, IPC, persistence, Tauri, capability, CSP, packaging, permission, or user-visible path.
