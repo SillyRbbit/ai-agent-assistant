@@ -4,9 +4,9 @@ Last updated: 2026-07-14
 
 ## Current state
 
-Phase 3 and Phase 4 Increments 4A, 4B, and 4C are verified complete on the target Mac. The project owner approved the exact Increment 4C trusted policy-input plan, and implementation passed every required automated, code-review, and security-review gate.
+Phase 3 and Phase 4 Increments 4A, 4B, and 4C are verified complete on the target Mac. Increment 4C was implemented on branch `phase4/increment-4c`, based on merged `main` at `9fa095e`.
 
-Work is on branch `phase4/increment-4c`, created from clean merged `main` at `9fa095e`; `origin/main` was also `9fa095e` at branch creation. The working tree contains only the approved planning, five runtime/test, and closeout files listed below. Nothing is staged, committed, pushed, or merged for Increment 4C.
+The project owner requested commit, push, and fast-forward merge after verification. Implementation commit `7ec2969` and this publication-state closeout were pushed on `phase4/increment-4c` and fast-forward merged into `main`. The final `main` working tree is clean.
 
 The implementation remains portable and unreferenced by Tauri. It adds no approval, audit, executor, provider continuation, network, credential, IPC, persistence, dependency, lockfile, capability, CSP, packaging, permission, or user-visible path.
 
@@ -129,7 +129,7 @@ Manual verification still pending:
 
 ## Exact next task
 
-After Increment 4C is committed, pushed, and merged, start documentation-only Phase 4 Increment 4D planning on clean merged `main`. Reconcile the verified input-retaining policy decision with generic approval and audit scaffolds, and recommend one smallest exact approval-binding increment. Do not implement it or begin live gateway work.
+On clean merged `main`, start documentation-only Phase 4 Increment 4D planning. Reconcile the verified input-retaining policy decision with generic approval and audit scaffolds, and recommend one smallest exact approval-binding increment. Do not implement it or begin live gateway work.
 
 ## Ready-to-paste resume prompt
 

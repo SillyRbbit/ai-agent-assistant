@@ -115,7 +115,7 @@ Remove the new integration test and restore the prior raw proposal, provider too
 
 ## Approval gate
 
-The project owner approved the exact plan on 2026-07-14. Implementation stayed within the approved runtime, test, and closeout file lists. Nothing is committed or pushed.
+The project owner approved the exact plan on 2026-07-14. Implementation stayed within the approved runtime, test, and closeout file lists. After verification, implementation commit `7ec2969` and the publication-state closeout were pushed and fast-forward merged into `main` at the project owner's request.
 
 ## Actual results
 

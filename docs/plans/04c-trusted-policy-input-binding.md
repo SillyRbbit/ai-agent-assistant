@@ -298,4 +298,4 @@ The first sandboxed dependency audit could not resolve `registry.npmjs.org`; the
 
 ## Approval gate
 
-The project owner approved the exact goal, raw-proposal and caller-context removal, canonical typed-input definition, conservative evidence boundary, closed reason/outcome model, input-retaining decision, exact files, no-dependency decision, tests, non-goals, verification gate, and rollback. Increment 4C is implemented and verified; do not start Increment 4D from this plan.
+The project owner approved the exact goal, raw-proposal and caller-context removal, canonical typed-input definition, conservative evidence boundary, closed reason/outcome model, input-retaining decision, exact files, no-dependency decision, tests, non-goals, verification gate, and rollback. Increment 4C is implemented and verified. After verification, implementation commit `7ec2969` and the publication-state closeout were pushed and fast-forward merged into `main` at the project owner's request; do not start Increment 4D from this plan.
