@@ -242,6 +242,24 @@ Consequences:
 - Persisted application state remains prohibited until a later reviewed increment adds explicit repositories and privacy controls.
 - Revisit the state architecture only if future run-event volume or cross-window synchronization produces a measured need.
 
+## D-015 — Keep Increment 2F mock interaction entirely in frontend memory
+
+Date: 2026-07-13
+Status: Accepted
+
+Decision: implement Increment 2F as a closed deterministic frontend run script managed by the existing React reducer and a timer-owning hook. Conversation messages, tool activity, approval previews, and decisions remain volatile. Approval controls are explicitly mock-only and never cross IPC or invoke the existing Rust approval or tool interfaces.
+
+Rationale: Increment 2F proves user-visible streaming, cancellation, activity, and approval state transitions without creating a generic WebView executor, adding a Tauri command, or implying that WebView state is trusted authorization. Run identifiers bind scheduled events to the active run so late events fail closed after Stop or completion.
+
+Consequences:
+
+- Reloading the WebView clears every Increment 2F message, activity item, and decision.
+- Approve records a mock outcome only; it does not create a task or call Rust.
+- Reject records a mock rejection only.
+- Edit returns a deterministic draft to the composer and executes nothing.
+- Production provider events, trusted approval transactions, tool execution, audit persistence, and error recovery remain later reviewed increments.
+- No dependency, IPC, Tauri capability, CSP, Rust source, SQLite schema, or permission change is introduced.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

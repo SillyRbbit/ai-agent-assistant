@@ -6,9 +6,13 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
-- Phase 2 Increment 2E React application shell, pending target-Mac verification.
+- Verified Phase 2 Increment 2F deterministic in-memory assistant interaction shell.
+- Fixed mock assistant streaming, Stop behavior, conversation messages, and tool activity presentation.
+- Mock-only approval preview with deterministic approve, reject, and edit decisions that execute no tool.
+- Focused script, reducer, cancellation, and interaction tests, bringing the frontend suite to 47 tests.
+- Verified Phase 2 Increment 2E React application shell.
 - Reducer-and-context navigation for Conversations, Tasks, Memory, Activity, Integrations, Permissions, and Settings.
-- Conversation workspace with a controlled, non-functional in-memory composer.
+- Conversation workspace with a controlled in-memory composer.
 - Settings diagnostics, Permission Center placeholders, and reusable empty, loading, and error presentations.
 - Strict frontend listener for the closed `assistant-menu-route` native event.
 - Thirty focused frontend tests across reducer, event parsing, navigation, diagnostics, Settings, and Permissions.
@@ -25,10 +29,14 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Enabled the conversation composer for non-empty local mock requests and kept all resulting state volatile.
+- Updated Activity copy to distinguish current-conversation mock activity from future persisted audit history.
+- Recorded successful full repository verification, native launch, streaming, Stop, approval-decision, layout, lifecycle, storage, and no-permission-prompt checks for Increment 2F.
+- Made Increment 2G integration hardening the next Ready increment.
 - Replaced the proof-of-connection page with the platform-neutral React shell while retaining `get_app_info` diagnostics.
 - Resolved O-004 with React reducer plus context and no new state-management dependency.
 - Routed menu-bar New Request to Conversations with a cleared draft and Tasks to the Tasks page.
-- Marked Increment 2E implementation complete with target-Mac verification still pending.
+- Marked Increment 2E verified complete after its target-Mac gate passed.
 - Marked Increment 2C verified complete based on target-Mac results: 41 Rust unit tests, 3 Rust integration tests, TypeScript, Vite, and native launch passed.
 - Marked Increment 2D verified complete based on target-Mac Rust, frontend, native launch, menu-action, close, reopen, Dock, quit, storage, and permission checks.
 - Updated `npm run test:integration` to execute every Rust integration-test target rather than only the original smoke test.
@@ -38,6 +46,9 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Security
 
+- Increment 2F adds no model network, credential, dependency, Rust, IPC, Tauri command, capability, CSP, persistence, or operating-system permission change.
+- Mock approval decisions remain inside untrusted WebView memory, are labeled as non-executing, and cannot authorize or invoke a local action.
+- Mock timer events are bound to an active run identifier; stale events and decisions outside the valid state fail closed.
 - Added no Rust, SQLite, Tauri command, capability, CSP, dependency, persistence, credential, networking, or operating-system permission change in Increment 2E.
 - Native event payloads enter as `unknown` and are ignored unless they exactly match one closed route object.
 - Permission Center is status-only and contains no control that can request operating-system access.

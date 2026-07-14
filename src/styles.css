@@ -452,9 +452,127 @@ textarea:focus-visible {
   display: grid;
   min-height: 0;
   place-items: center;
+  overflow-y: auto;
   padding: 28px;
   background:
     radial-gradient(circle at 50% 45%, rgba(77, 98, 187, 0.07), transparent 36%), transparent;
+}
+
+.conversation-timeline {
+  display: grid;
+  width: min(760px, 100%);
+  align-self: start;
+  gap: 14px;
+  margin: auto;
+}
+
+.conversation-message {
+  display: grid;
+  max-width: min(620px, 88%);
+  gap: 6px;
+  padding: 13px 15px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-strong);
+}
+
+.conversation-message--user {
+  justify-self: end;
+  border-color: rgba(77, 98, 187, 0.25);
+  background: var(--accent-soft);
+}
+
+.conversation-message--assistant {
+  justify-self: start;
+}
+
+.conversation-message > span,
+.conversation-message small {
+  color: var(--text-subtle);
+  font-size: 10px;
+  font-weight: 720;
+}
+
+.conversation-message p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.tool-activity-card {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 13px;
+  padding: 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: 14px;
+  background: var(--surface-muted);
+}
+
+.tool-activity-card__icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid rgba(77, 98, 187, 0.22);
+  border-radius: 10px;
+  color: var(--accent-strong);
+  background: var(--accent-soft);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.tool-activity-card__copy {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.tool-activity-card__copy > span {
+  color: var(--text-subtle);
+  font-size: 10px;
+  font-weight: 720;
+}
+
+.tool-activity-card__copy strong {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.tool-activity-card__copy p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.tool-activity-status {
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-muted);
+  background: var(--surface-strong);
+  font-size: 10px;
+  font-weight: 720;
+  white-space: nowrap;
+}
+
+.tool-activity-status--approved {
+  border-color: rgba(39, 132, 93, 0.24);
+  color: var(--success);
+}
+
+.tool-activity-status--rejected {
+  border-color: rgba(184, 71, 71, 0.24);
+  color: var(--danger);
+}
+
+.tool-activity-status--edit-requested {
+  border-color: rgba(181, 124, 36, 0.24);
+  color: var(--warning);
 }
 
 .composer-shell {
@@ -512,12 +630,130 @@ textarea:focus-visible {
   cursor: not-allowed;
 }
 
+.composer-shell .composer-shell__stop {
+  color: #ffffff;
+  background: var(--danger);
+}
+
+.composer-shell textarea:disabled {
+  color: var(--text-muted);
+  background: var(--surface-muted);
+  cursor: not-allowed;
+}
+
 .composer-shell__footer {
   display: flex;
   justify-content: space-between;
   gap: 18px;
   color: var(--text-subtle);
   font-size: 10px;
+}
+
+.approval-backdrop {
+  position: fixed;
+  z-index: 10;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(10, 15, 27, 0.48);
+  backdrop-filter: blur(8px);
+}
+
+.approval-dialog {
+  display: grid;
+  width: min(560px, 100%);
+  max-height: calc(100vh - 48px);
+  gap: 18px;
+  overflow-y: auto;
+  padding: 24px;
+  border: 1px solid var(--border-strong);
+  border-radius: 18px;
+  background: var(--surface-strong);
+  box-shadow: 0 28px 80px rgba(10, 15, 27, 0.3);
+}
+
+.approval-dialog__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.approval-dialog__header h2 {
+  margin: 6px 0 0;
+  font-size: 20px;
+}
+
+.approval-dialog__mock-label {
+  flex: 0 0 auto;
+  padding: 5px 8px;
+  border: 1px solid rgba(184, 71, 71, 0.22);
+  border-radius: 999px;
+  color: var(--danger);
+  background: rgba(184, 71, 71, 0.08);
+  font-size: 10px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.approval-dialog__description {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.approval-preview {
+  display: grid;
+  margin: 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.approval-preview div {
+  display: grid;
+  grid-template-columns: 116px minmax(0, 1fr);
+  gap: 14px;
+  padding: 11px 0;
+  border-top: 1px solid var(--border);
+}
+
+.approval-preview dt {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.approval-preview dd {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 680;
+  overflow-wrap: anywhere;
+}
+
+.approval-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+}
+
+.approval-button {
+  min-height: 38px;
+  padding: 9px 13px;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 720;
+}
+
+.approval-button--secondary {
+  background: var(--surface-muted);
+}
+
+.approval-button--primary {
+  border-color: var(--accent);
+  color: #ffffff;
+  background: var(--accent);
 }
 
 .settings-grid {
@@ -723,6 +959,15 @@ textarea:focus-visible {
 
   .diagnostic-grid {
     grid-template-columns: 1fr;
+  }
+
+  .tool-activity-card {
+    grid-template-columns: 34px minmax(0, 1fr);
+  }
+
+  .tool-activity-status {
+    grid-column: 2;
+    justify-self: start;
   }
 }
 

@@ -4,14 +4,14 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-**Increment 2E — React application shell** is Active.
+There is no Active plan. **Increment 2F — mocked assistant interaction shell** is Complete.
 
-Implementation and artifact-host frontend verification are complete. Target-Mac combined checks and native/manual acceptance remain pending. Increment 2F is blocked until the 2E plan reaches Complete.
+Implementation, full repository verification, native launch, and project-owner manual acceptance are complete. Increment 2G is Ready and requires its own bounded plan before implementation.
 
-Active plan:
+Most recently completed plan:
 
 ```text
-docs/plans/02e-react-application-shell.md
+docs/plans/02f-mocked-assistant-interaction-shell.md
 ```
 
 ## Completed plans
@@ -20,6 +20,7 @@ docs/plans/02e-react-application-shell.md
 docs/plans/02b-1-sqlite-migration-skeleton.md
 docs/plans/02c-storage-startup.md
 docs/plans/02d-menu-bar-window-lifecycle.md
+docs/plans/02e-react-application-shell.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -55,13 +56,14 @@ A plan must contain:
 | Increment 2B-1 SQLite migration skeleton | Complete | Project maintainer | 2026-07-13   |
 | Increment 2C storage startup integration | Complete | Project maintainer | 2026-07-13   |
 | Increment 2D menu-bar/window lifecycle   | Complete | Project maintainer | 2026-07-13   |
-| Increment 2E React application shell     | Active   | Project maintainer | 2026-07-13   |
+| Increment 2E React application shell     | Complete | Project maintainer | 2026-07-13   |
+| Increment 2F mocked interaction shell    | Complete | Project maintainer | 2026-07-13   |
 
 ## Phase 2 Increment 2E — complete
 
 Verified on 2026-07-13. The React application shell, closed menu-route handling, Settings diagnostics, and Permission Center placeholders passed all required automated and manual checks.
 
-## Phase 2 Increment 2F — ready
+## Phase 2 Increment 2F — complete
 
 Goal: add a deterministic, mocked assistant interaction flow to the verified application shell.
 
@@ -72,3 +74,9 @@ Planned boundaries:
 - Tool activity card presentation.
 - Trusted mock approval dialog.
 - No network, API key, real tool execution, new Tauri command, OS permission, or persistence expansion.
+
+Implementation and `npm run verify` pass on the target Mac. Native Tauri launch passes with idempotent storage startup. The project owner confirmed streaming, Stop, approve/reject/edit, small-window, lifecycle, and no-permission-prompt checks passed.
+
+## Phase 2 Increment 2G — ready
+
+Goal: complete bounded cancellation, error-state, audit-view, and release-verification hardening without production model access or privileged automation. Create and approve a dedicated plan before editing.

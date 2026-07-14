@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import { ApplicationStateProvider } from "./application/ApplicationStateProvider";
 import { NAVIGATION_ITEMS, type AppRoute } from "./application/navigation";
+import { useMockAssistantRun } from "./application/useMockAssistantRun";
 import { useCoreConnection, type AppInfoLoader } from "./application/useCoreConnection";
 import {
   useMenuRouteSubscription,
@@ -51,13 +52,15 @@ function ApplicationShell({ services }: ApplicationShellProps) {
   const dispatch = useApplicationDispatch();
   const coreConnection = useCoreConnection(services.appInfoLoader);
   const menuRouteStatus = useMenuRouteSubscription(services.menuRouteSource);
+  const mockRunActions = useMockAssistantRun(state.activeRun, dispatch);
+  const runStatus = state.activeRun?.status ?? "idle";
 
   const pages: Readonly<Record<AppRoute, ReactNode>> = {
     activity: (
       <PlaceholderPage
         description="A transparent local history of runs, context, tools, approvals, and results."
-        emptyDescription="Activity appears after the mocked run-event model is introduced."
-        emptyTitle="No activity recorded"
+        emptyDescription="Mock activity stays with the current conversation until the reviewed audit model is introduced."
+        emptyTitle="No persisted activity"
         eyebrow="Transparency"
         headingId="activity-page-title"
         icon="A"
@@ -66,10 +69,17 @@ function ApplicationShell({ services }: ApplicationShellProps) {
     ),
     conversations: (
       <ConversationWorkspace
+        activeApproval={state.activeApproval}
         composerDraft={state.composerDraft}
+        messages={state.messages}
+        onApprovalDecision={mockRunActions.decideApproval}
         onComposerDraftChange={(value) => {
           dispatch({ type: "composer-draft-changed", value });
         }}
+        onStop={mockRunActions.stop}
+        onSubmit={mockRunActions.submit}
+        runStatus={runStatus}
+        toolActivities={state.toolActivities}
       />
     ),
     integrations: (

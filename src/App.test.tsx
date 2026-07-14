@@ -1,8 +1,9 @@
 import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { App, type AppServices } from "./App";
 import { APP_ROUTES, NAVIGATION_ITEMS, type AssistantMenuRoute } from "./application/navigation";
+import { MOCK_STREAM_INTERVAL_MS } from "./application/mockAssistantRun";
 import type { AppInfo } from "./infrastructure/tauri/app-info-client";
 import type {
   AssistantMenuRouteListener,
@@ -64,8 +65,25 @@ function openSidebarRoute(label: string): void {
   fireEvent.click(screen.getByRole("button", { name: label }));
 }
 
+function submitMockRequest(request = "Prepare the board update"): void {
+  fireEvent.change(screen.getByLabelText("Assistant request"), {
+    target: { value: request },
+  });
+  fireEvent.click(screen.getByRole("button", { name: "Send" }));
+}
+
+function finishMockStream(): void {
+  act(() => {
+    vi.advanceTimersByTime(MOCK_STREAM_INTERVAL_MS * 4);
+  });
+}
+
+afterEach(() => {
+  vi.useRealTimers();
+});
+
 describe("App", () => {
-  it("renders the conversation workspace, empty state, and non-functional composer", () => {
+  it("renders the conversation workspace and requires a non-empty request", () => {
     const harness = createMenuRouteHarness();
     render(<App services={createServices(harness.source)} />);
 
@@ -73,6 +91,78 @@ describe("App", () => {
     expect(screen.getByRole("heading", { name: "No conversations yet" })).toBeInTheDocument();
     expect(screen.getByLabelText("Assistant request")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
+  });
+
+  it("streams deterministic assistant text and presents mock tool approval", () => {
+    vi.useFakeTimers();
+    const harness = createMenuRouteHarness();
+    render(<App services={createServices(harness.source)} />);
+
+    submitMockRequest();
+
+    expect(screen.getByText("Prepare the board update")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Stop" })).toBeInTheDocument();
+    finishMockStream();
+
+    expect(screen.getByRole("dialog", { name: "Create a mock local task" })).toBeInTheDocument();
+    expect(screen.getByRole("article", { name: "Mock tool activity" })).toHaveTextContent(
+      "create_local_task",
+    );
+    expect(screen.getByText("No execution")).toBeInTheDocument();
+  });
+
+  it("stops streaming and cancels the remaining mock run events", () => {
+    vi.useFakeTimers();
+    const harness = createMenuRouteHarness();
+    render(<App services={createServices(harness.source)} />);
+
+    submitMockRequest();
+    act(() => {
+      vi.advanceTimersByTime(MOCK_STREAM_INTERVAL_MS);
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Stop" }));
+    act(() => {
+      vi.runAllTimers();
+    });
+
+    expect(screen.getByText("Stopped")).toBeInTheDocument();
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(screen.queryByRole("article", { name: "Mock tool activity" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
+  });
+
+  it.each([
+    ["Approve mock", "Mock approved", "Mock approval recorded"],
+    ["Reject", "Rejected", "Mock action rejected"],
+  ] as const)("records the %s decision without executing a tool", (button, status, outcome) => {
+    vi.useFakeTimers();
+    const harness = createMenuRouteHarness();
+    render(<App services={createServices(harness.source)} />);
+    submitMockRequest();
+    finishMockStream();
+
+    fireEvent.click(screen.getByRole("button", { name: button }));
+
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(screen.getByText(status)).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(outcome))).toBeInTheDocument();
+  });
+
+  it("returns an edited mock action to the composer without execution", () => {
+    vi.useFakeTimers();
+    const harness = createMenuRouteHarness();
+    render(<App services={createServices(harness.source)} />);
+    submitMockRequest();
+    finishMockStream();
+
+    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(screen.getByText("Edit requested")).toBeInTheDocument();
+    expect(screen.getByLabelText("Assistant request")).toHaveValue(
+      "Revise the local task for: Prepare the board update",
+    );
+    expect(screen.getByText(/Nothing was executed/)).toBeInTheDocument();
   });
 
   it("opens every page shell from the sidebar", () => {
