@@ -423,3 +423,52 @@ git remote -v
 ```
 
 Do not publish secrets, local databases, credentials, certificates, or environment files when synchronizing the public repository.
+
+## TS-011 — Custom menu actions are not in the standard macOS application menu
+
+Date: 2026-07-13
+Status: Resolved
+
+### Symptom
+
+The application launched and the standard macOS application-name menu showed About, Services, Hide, and Quit, but **New Request** and **Tasks (Coming Soon)** did not appear there.
+
+### Cause
+
+Increment 2D creates a separate macOS status-item menu on the right side of the system menu bar. The standard application-name menu on the left is managed separately by macOS and is not the custom Tauri tray menu.
+
+### Resolution
+
+Click the AI Agent Assistant status icon on the right side of the macOS menu bar. Its fixed menu contains:
+
+```text
+Open AI Agent Assistant
+New Request
+Tasks (Coming Soon)
+Quit AI Agent Assistant
+```
+
+When testing New Request or Tasks before Increment 2E, hide the main window first. Selecting either item should show and focus the existing window; the React page does not change yet because frontend route handling is intentionally deferred.
+
+### Verify
+
+```bash
+grep -nE 'New Request|Tasks \(Coming Soon\)' src-tauri/src/menu_bar/action.rs
+grep -nE 'new_request|tasks_placeholder' src-tauri/src/menu_bar/tauri_adapter.rs
+npm run tauri -- dev
+```
+
+Then:
+
+1. Close the main window.
+2. Click the right-side AI Agent Assistant status icon.
+3. Select New Request and confirm the window reappears.
+4. Repeat with Tasks (Coming Soon).
+
+The project owner confirmed both actions appeared and worked.
+
+### Prevention
+
+- Refer to the custom control as the **menu-bar status item** or **right-side menu-bar icon**.
+- Do not direct testers to the standard application-name menu.
+- Increment 2E should make the route result visible by navigating to Conversations or Tasks.

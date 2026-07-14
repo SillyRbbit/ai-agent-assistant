@@ -2,7 +2,7 @@
 
 Last updated: 2026-07-13
 
-Status: **Implementation complete; target-Mac verification pending**
+Status: **Verified complete on the target Mac**
 
 ## Goal
 
@@ -149,12 +149,11 @@ Prohibited production-code scan: passed
 Git whitespace check: passed
 ```
 
-Cargo and a native macOS runtime are unavailable in the artifact workspace, so Rust compilation and lifecycle behavior remain pending.
+## Target-Mac verification
 
-## Required target-Mac verification
+The project owner confirmed these commands passed on the Apple Silicon target Mac:
 
 ```bash
-cargo fmt --manifest-path src-tauri/Cargo.toml
 cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
 cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
 cargo test --manifest-path src-tauri/Cargo.toml --all-targets --locked
@@ -163,20 +162,36 @@ npm run build
 npm run tauri -- dev
 ```
 
-Manual checks:
+Verified results:
 
-- menu-bar icon appears,
-- Open shows and focuses the main window,
-- New Request shows/focuses without error,
-- Tasks shows/focuses without error,
-- closing the main window hides it without exiting,
-- menu action reopens the hidden window,
-- Dock click reopens it when hidden,
-- Quit exits,
-- UI and `get_app_info` remain correct,
-- storage remains idempotent,
-- no permission prompt appears.
+- Rust formatting passed.
+- Clippy passed for all targets and features with warnings denied.
+- All Rust unit and integration tests passed.
+- Strict TypeScript typechecking passed.
+- The Vite production build passed.
+- The native Tauri application launched successfully.
+
+## Manual macOS lifecycle verification
+
+The project owner confirmed:
+
+- the menu-bar icon appeared,
+- Open AI Agent Assistant showed and focused the main window,
+- New Request showed and focused the main window without an error,
+- Tasks (Coming Soon) showed and focused the main window without an error,
+- closing the main window hid it without terminating the application,
+- a menu-bar action reopened the hidden window,
+- the Dock icon reopened the hidden window,
+- Quit AI Agent Assistant terminated the process,
+- storage startup remained idempotent,
+- `get_app_info` remained functional,
+- the existing React UI remained unchanged,
+- no macOS permission prompt appeared.
+
+The custom actions appear under the right-side macOS status-item icon, not in the standard application-name menu on the left side of the menu bar.
 
 ## Completion gate
 
-Do not mark Increment 2D complete or begin Increment 2E until all target-Mac checks, manual lifecycle checks, and complete diff review pass.
+Satisfied. Increment 2D is verified complete.
+
+The next Ready increment is **Increment 2E — React application shell**. Increment 2E may consume the existing closed route event, but it must preserve the verified native lifecycle and security boundaries.

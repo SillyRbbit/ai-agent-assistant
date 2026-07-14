@@ -2,7 +2,7 @@
 
 Last updated: 2026-07-13
 
-Status: **Active — implementation complete; target-Mac verification pending**
+Status: **Complete — verified on the target Mac**
 
 ## Goal and user-visible outcome
 
@@ -29,7 +29,7 @@ Add a macOS menu-bar entry that can show/focus the existing main window, route n
 - Database changes or user-data persistence.
 - Model, credential, permission, or automation features.
 
-## Files expected to change
+## Files changed
 
 ```text
 package.json
@@ -66,23 +66,25 @@ docs/plans/02d-menu-bar-window-lifecycle.md
 - [x] Add Rust unit and integration tests.
 - [x] Update project-memory and increment documentation.
 - [x] Run Prettier, ESLint, TypeScript, Vitest, Vite, audit, and static security checks.
-- [ ] Run rustfmt, Clippy, and all Rust tests on the target Mac.
-- [ ] Run target-Mac TypeScript and Vite checks.
-- [ ] Perform the full manual menu-bar/window lifecycle smoke test.
-- [ ] Review the complete diff and mark the increment verified.
+- [x] Run rustfmt, Clippy, and all Rust tests on the target Mac.
+- [x] Run target-Mac TypeScript and Vite checks.
+- [x] Perform the full manual menu-bar/window lifecycle smoke test.
+- [x] Review the verified behavior and mark the increment complete.
 
 ## Risks and mitigations
 
-- **Invisible app after close:** retain the Dock, add a fixed Open action, and handle macOS reopen.
-- **Untrusted routing:** use a closed enum and ignore unknown IDs.
-- **Tauri callback failure:** report typed, sanitized errors; never panic in project code.
-- **Scope creep:** defer frontend listeners and global shortcuts.
-- **Cross-platform build:** enable tray only on macOS and provide a no-op adapter elsewhere.
+- **Invisible app after close:** retained the Dock, added a fixed Open action, and handled macOS reopen.
+- **Untrusted routing:** used a closed enum and ignored unknown IDs.
+- **Tauri callback failure:** returned typed, sanitized errors and avoided panics in project code.
+- **Scope creep:** deferred frontend listeners and global shortcuts.
+- **Cross-platform build:** enabled tray only on macOS and provided a no-op adapter elsewhere.
+- **Menu discovery confusion:** documented that custom actions appear under the right-side macOS status-item icon, not the standard application-name menu.
 
-## Verification commands
+## Verification commands and results
+
+The project owner confirmed these commands passed on the target Mac:
 
 ```bash
-cargo fmt --manifest-path src-tauri/Cargo.toml
 cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
 cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
 cargo test --manifest-path src-tauri/Cargo.toml --all-targets --locked
@@ -91,19 +93,51 @@ npm run build
 npm run tauri -- dev
 ```
 
+Results:
+
+- Rust formatting passed.
+- Clippy passed with warnings denied.
+- All Rust unit and integration tests passed.
+- TypeScript typechecking passed.
+- The Vite production build passed.
+- The native Tauri application launched successfully.
+
+## Manual smoke-test results
+
+- [x] The menu-bar icon appeared.
+- [x] Open showed and focused the main window.
+- [x] New Request showed and focused the main window without an error.
+- [x] Tasks (Coming Soon) showed and focused the main window without an error.
+- [x] Closing the main window hid it without terminating the process.
+- [x] A menu-bar action reopened the hidden window.
+- [x] The Dock icon reopened the hidden window.
+- [x] Quit terminated the process.
+- [x] The existing React UI remained unchanged.
+- [x] `get_app_info` remained functional.
+- [x] Storage startup remained idempotent.
+- [x] No macOS permission prompt appeared.
+
 ## Rollback strategy
 
+If a future regression requires rollback:
+
 - Remove `menu_bar` from `src-tauri/src/lib.rs`.
-- Restore the Tauri dependency feature declaration.
+- Restore the prior Tauri dependency feature declaration.
 - Remove the menu-bar module and routing integration test.
 - Restore normal main-window close behavior by removing the global window callback.
 - Do not alter storage, migrations, CSP, capabilities, or frontend files.
 
 ## Exit criteria
 
-- All locked Rust and frontend checks pass.
-- Tray icon and fixed actions work on macOS.
-- Close hides; menu/Dock reopen; quit exits.
-- Existing UI, storage startup, and `get_app_info` remain functional.
-- No permission prompt or authority expansion occurs.
-- Documentation contains actual verification results.
+All exit criteria passed:
+
+- all locked Rust and frontend checks passed,
+- the tray icon and fixed actions worked on macOS,
+- close hid, menu/Dock reopened, and Quit exited,
+- the existing UI, storage startup, and `get_app_info` remained functional,
+- no permission prompt or authority expansion occurred,
+- project-memory and increment documents record the actual verification result.
+
+## Next step
+
+Increment 2E — React application shell — is Ready. It may consume the existing route event but must preserve the verified native lifecycle, command surface, storage behavior, CSP, capabilities, and permission footprint.
