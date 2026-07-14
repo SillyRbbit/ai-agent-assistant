@@ -4,7 +4,9 @@ Last updated: 2026-07-14
 
 ## Current state
 
-Phase 3 Increment 3D and Phase 3 are verified complete on `phase3/increment-3d`. Focused checks, the complete automated gate, dependency audit, code review, security review, native development launch, and project-owner manual acceptance all pass.
+Phase 3 Increment 3D and Phase 3 are verified complete and merged into `main` at `948f8ff` (`Complete bounded mock loop`). `main`, `origin/main`, `phase3/increment-3d`, and `origin/phase3/increment-3d` all point to that commit. The implementation gate, dependency audit, code review, security review, native development launch, project-owner manual acceptance, and the session-end verification rerun on merged `main` all pass.
+
+The working tree contains only the uncommitted session-end updates to `AGENTS.md` and `HANDOFF.md`; no files are staged. No Phase 4 implementation or planning document was started.
 
 ## Increment 3D result
 
@@ -20,7 +22,7 @@ Phase 3 Increment 3D and Phase 3 are verified complete on `phase3/increment-3d`.
 
 ## Verification
 
-Automated evidence:
+Increment and session-end evidence:
 
 ```text
 targeted Vitest: 4 files, 81 tests passed
@@ -38,9 +40,38 @@ code review: passed with no findings
 security review: passed with no findings
 native Tauri development launch: passed
 storage startup: idempotent, 0 migrations applied and 2 already applied
+session-end npm run verify on merged main: passed
+session-end npm audit --audit-level=low: 0 vulnerabilities
 ```
 
 The project owner confirmed result/final ordering and run identity, request-content exclusion, no final answer after Reject/Edit/Stop, per-conversation restoration, normal and minimum-window layout, existing context and Activity behavior, native routing, Settings diagnostics, lifecycle behavior, storage startup, and absence of permission prompts all pass.
+
+## Session-end check classification
+
+Passed:
+
+- `npm run verify` on merged `main`: formatting, ESLint, Clippy, 124 frontend tests, 50 Rust library tests, 6 Rust integration tests, TypeScript, Vite production build, and Tauri release no-bundle build passed.
+- `npm audit --audit-level=low`: zero vulnerabilities.
+- `npm run format:check` after session-end documentation edits: passed.
+- `git diff --check` after session-end documentation edits: passed.
+- `git diff --check 5c3f934..948f8ff`: passed.
+- Complete commit diff review: no accidental scope expansion, binary files, secrets, personal data, local logs, databases, generated build output, or unrelated files.
+- Secret-pattern scan at `948f8ff`: no matches.
+- Tracked-artifact scan for `dist`, `src-tauri/target`, databases, SQLite files, and logs: no matches.
+
+Failed:
+
+- None.
+
+Not run during session end:
+
+- `npm run tauri -- dev` was not rerun because native launch and storage startup had already passed on the same commit and the project owner completed the required native checks. The earlier dev process was stopped, and port 1420 has no listener.
+- Project-owner manual checks were not repeated; the completed acceptance evidence remains valid for `948f8ff`.
+
+Manual verification still pending:
+
+- None for Increment 3D or Phase 3.
+- Phase 4 has not started and therefore has no implementation acceptance gate yet.
 
 ## Security boundaries
 
@@ -81,6 +112,42 @@ src/styles.css
 
 No file outside the approved plan changed. `TROUBLESHOOTING_LOG.md` remains unchanged because no setup, build, test, or runtime defect was found.
 
+## Session-end Git and review record
+
+Commands and results:
+
+```text
+git status --short --branch: clean main...origin/main before session-end documentation edits
+git diff --stat: no output before session-end documentation edits
+git diff --cached --stat: no output; no staged changes
+git log --oneline --decorate -5: HEAD and origin/main at 948f8ff
+lsof -nP -iTCP:1420 -sTCP:LISTEN: no listener
+npm run verify: passed
+npm audit --audit-level=low: 0 vulnerabilities
+npm run format:check after session-end documentation edits: passed
+git diff --check after session-end documentation edits: passed
+git diff --stat 5c3f934..948f8ff: 19 approved files, 1007 insertions, 108 deletions
+git diff --name-status 5c3f934..948f8ff: only approved Increment 3D files
+git diff 5c3f934..948f8ff: complete diff reviewed
+git diff --check 5c3f934..948f8ff: passed
+git grep secret-pattern scan at 948f8ff: no matches
+git ls-files artifact scan: no tracked build output, databases, SQLite files, or logs
+```
+
+Scope and security review:
+
+- No new dependency, lockfile, Rust, Tauri, IPC, capability, CSP, SQLite, credential, network, packaging, or permission file changed.
+- No secret, personal content, request payload, result payload, arbitrary external content, or raw error was added to final-answer or Activity state.
+- The WebView and model gain no authorization or execution path.
+- No blocker is active. Open decisions O-002 and O-003 remain unchanged and do not block documentation-only Phase 4 planning.
+
+Session-end files changed but intentionally not committed or pushed:
+
+```text
+AGENTS.md
+HANDOFF.md
+```
+
 ## Next task
 
 Perform documentation-only Phase 4 gateway and Responses security-boundary planning from verified Phase 3. Do not change runtime code or add provider, credential, network, IPC, dependency, native-capability, persistence, or permission behavior before project-owner approval of an exact plan.
@@ -90,5 +157,5 @@ Perform documentation-only Phase 4 gateway and Responses security-boundary plann
 ```text
 Use $session-start.
 
-Start documentation-only Phase 4 planning from HANDOFF.md after the verified Increment 3D branch is merged. Reconcile the gateway and Responses requirements in the product, architecture, security, decisions, and actual repository state. Define credential ownership, gateway responsibilities, strict event and function-call validation, cancellation, limits, error redaction, and audit boundaries. Recommend one smallest independently verified Phase 4 increment with exact files, risks, non-goals, verification, and rollback. Update planning documentation only, then wait for project-owner approval. Do not commit or push unless explicitly asked.
+Start documentation-only Phase 4 planning from HANDOFF.md on merged main. Reconcile the gateway and Responses requirements in the product, architecture, security, decisions, and actual repository state. Define credential ownership, gateway responsibilities, strict event and function-call validation, cancellation, limits, error redaction, and audit boundaries. Recommend one smallest independently verified Phase 4 increment with exact files, risks, non-goals, verification, and rollback. Update planning documentation only, then wait for project-owner approval. Do not commit or push unless explicitly asked.
 ```
