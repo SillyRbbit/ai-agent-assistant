@@ -4,6 +4,12 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { App, type AppServices } from "./App";
 import { APP_ROUTES, NAVIGATION_ITEMS, type AssistantMenuRoute } from "./application/navigation";
 import { MOCK_STREAM_INTERVAL_MS } from "./application/mockAssistantRun";
+import {
+  browserMockRunDriver,
+  type MockRunDriver,
+  type MockRunEvent,
+  type MockRunEventListener,
+} from "./application/mockRunDriver";
 import type { AppInfo } from "./infrastructure/tauri/app-info-client";
 import type {
   AssistantMenuRouteListener,
@@ -57,8 +63,39 @@ function createMenuRouteHarness(): MenuRouteHarness {
 function createServices(
   menuRouteSource: MenuRouteSource,
   appInfoLoader: () => Promise<AppInfo> = () => Promise.resolve(CONNECTED_APP_INFO),
+  mockRunDriver: MockRunDriver = browserMockRunDriver,
 ): AppServices {
-  return { appInfoLoader, menuRouteSource };
+  return { appInfoLoader, menuRouteSource, mockRunDriver };
+}
+
+interface MockRunDriverHarness {
+  readonly cancel: ReturnType<typeof vi.fn>;
+  readonly driver: MockRunDriver;
+  readonly emit: (event: MockRunEvent) => void;
+}
+
+function createMockRunDriverHarness(): MockRunDriverHarness {
+  let listener: MockRunEventListener | undefined;
+  const cancel = vi.fn(() => {
+    listener = undefined;
+  });
+
+  return {
+    cancel,
+    driver: {
+      start(_script, nextListener) {
+        listener = nextListener;
+        return { cancel };
+      },
+    },
+    emit(event) {
+      if (listener === undefined) {
+        throw new Error("The mock run listener was not installed.");
+      }
+
+      listener(event);
+    },
+  };
 }
 
 function openSidebarRoute(label: string): void {
@@ -91,6 +128,16 @@ describe("App", () => {
     expect(screen.getByRole("heading", { name: "No conversations yet" })).toBeInTheDocument();
     expect(screen.getByLabelText("Assistant request")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
+  });
+
+  it("renders an empty current-session Activity view", () => {
+    const harness = createMenuRouteHarness();
+    render(<App services={createServices(harness.source)} />);
+
+    openSidebarRoute("Activity");
+
+    expect(screen.getByRole("heading", { name: "No session activity" })).toBeInTheDocument();
+    expect(screen.queryByRole("list", { name: "Run activity" })).not.toBeInTheDocument();
   });
 
   it("streams deterministic assistant text and presents mock tool approval", () => {
@@ -129,6 +176,64 @@ describe("App", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(screen.queryByRole("article", { name: "Mock tool activity" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
+
+    openSidebarRoute("Activity");
+    expect(screen.getByText("Mock run stopped")).toBeInTheDocument();
+  });
+
+  it("shows a bounded failure and retries without duplicating the user message", () => {
+    const menuHarness = createMenuRouteHarness();
+    const runHarness = createMockRunDriverHarness();
+    render(
+      <App
+        services={createServices(
+          menuHarness.source,
+          () => Promise.resolve(CONNECTED_APP_INFO),
+          runHarness.driver,
+        )}
+      />,
+    );
+    submitMockRequest("Sensitive board request");
+
+    act(() => {
+      runHarness.emit({ reason: "mock-provider-unavailable", type: "failed" });
+    });
+
+    expect(
+      screen.getByText("The local mock run could not finish. No action was executed."),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Retry" })).toBeInTheDocument();
+    expect(runHarness.cancel).toHaveBeenCalledOnce();
+
+    fireEvent.click(screen.getByRole("button", { name: "Retry" }));
+
+    expect(screen.getAllByText("Sensitive board request")).toHaveLength(1);
+    expect(screen.getByRole("button", { name: "Stop" })).toBeInTheDocument();
+  });
+
+  it("bounds a driver startup exception without exposing its detail", () => {
+    const menuHarness = createMenuRouteHarness();
+    const driver: MockRunDriver = {
+      start() {
+        throw new Error("sensitive provider detail");
+      },
+    };
+    render(
+      <App
+        services={createServices(
+          menuHarness.source,
+          () => Promise.resolve(CONNECTED_APP_INFO),
+          driver,
+        )}
+      />,
+    );
+
+    submitMockRequest();
+
+    expect(
+      screen.getByText("The local mock run could not finish. No action was executed."),
+    ).toBeInTheDocument();
+    expect(screen.queryByText("sensitive provider detail")).not.toBeInTheDocument();
   });
 
   it.each([
@@ -163,6 +268,23 @@ describe("App", () => {
       "Revise the local task for: Prepare the board update",
     );
     expect(screen.getByText(/Nothing was executed/)).toBeInTheDocument();
+  });
+
+  it("renders redacted current-session activity without request content", () => {
+    vi.useFakeTimers();
+    const harness = createMenuRouteHarness();
+    render(<App services={createServices(harness.source)} />);
+    submitMockRequest("Confidential board request");
+    finishMockStream();
+    fireEvent.click(screen.getByRole("button", { name: "Reject" }));
+
+    openSidebarRoute("Activity");
+
+    const activity = screen.getByRole("list", { name: "Run activity" });
+    expect(within(activity).getByText("Mock run started")).toBeInTheDocument();
+    expect(within(activity).getByText("Mock approval requested")).toBeInTheDocument();
+    expect(within(activity).getByText("Mock action rejected")).toBeInTheDocument();
+    expect(within(activity).queryByText("Confidential board request")).not.toBeInTheDocument();
   });
 
   it("opens every page shell from the sidebar", () => {
@@ -298,5 +420,24 @@ describe("App", () => {
     view.unmount();
 
     expect(harness.unlisten).toHaveBeenCalledOnce();
+  });
+
+  it("cancels the active mock driver when the shell unmounts", () => {
+    const menuHarness = createMenuRouteHarness();
+    const runHarness = createMockRunDriverHarness();
+    const view = render(
+      <App
+        services={createServices(
+          menuHarness.source,
+          () => Promise.resolve(CONNECTED_APP_INFO),
+          runHarness.driver,
+        )}
+      />,
+    );
+    submitMockRequest();
+
+    view.unmount();
+
+    expect(runHarness.cancel).toHaveBeenCalledOnce();
   });
 });

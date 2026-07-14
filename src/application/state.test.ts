@@ -70,15 +70,7 @@ describe("applicationReducer", () => {
         route: "new_request",
         type: "menu-route-received",
       }),
-    ).toEqual({
-      activeRoute: "conversations",
-      composerDraft: "",
-      messages: [],
-      nextRunOrdinal: 1,
-      toolActivities: [],
-      activeApproval: null,
-      activeRun: null,
-    });
+    ).toEqual({ ...state, activeRoute: "conversations", composerDraft: "" });
   });
 
   it("routes the tasks placeholder to the tasks page", () => {
@@ -103,6 +95,7 @@ describe("applicationReducer", () => {
       { content: "", role: "assistant", status: "streaming" },
     ]);
     expect(state.nextRunOrdinal).toBe(2);
+    expect(state.activityEvents).toMatchObject([{ kind: "run-started", runId: "mock-run-1" }]);
   });
 
   it("ignores blank submissions, duplicate submissions, and stale stream events", () => {
@@ -117,6 +110,19 @@ describe("applicationReducer", () => {
         chunk: "stale",
         runId: "another-run",
         type: "mock-stream-chunk",
+      }),
+    ).toBe(started);
+    expect(
+      applicationReducer(started, {
+        reason: "mock-provider-unavailable",
+        runId: "another-run",
+        type: "mock-stream-failed",
+      }),
+    ).toBe(started);
+    expect(
+      applicationReducer(started, {
+        runId: "another-run",
+        type: "mock-stream-completed",
       }),
     ).toBe(started);
   });
@@ -145,6 +151,33 @@ describe("applicationReducer", () => {
     expect(completed.toolActivities).toMatchObject([
       { status: "waiting", toolName: "create_local_task" },
     ]);
+    expect(completed.activityEvents.at(-1)?.kind).toBe("approval-requested");
+  });
+
+  it("records a bounded failure and retries without duplicating the user message", () => {
+    const started = startMockRun("Sensitive request");
+    const runId = started.activeRun?.script.runId;
+    if (runId === undefined) {
+      throw new Error("Expected the mock run to start.");
+    }
+
+    const failed = applicationReducer(started, {
+      reason: "mock-provider-unavailable",
+      runId,
+      type: "mock-stream-failed",
+    });
+    const retried = applicationReducer(failed, { type: "mock-run-retried" });
+
+    expect(failed.activeRun).toBeNull();
+    expect(failed.retryableRun).toMatchObject({ assistantMessageId: "mock-run-1-assistant" });
+    expect(failed.messages[1]).toMatchObject({
+      content: "The local mock run could not finish. No action was executed.",
+      status: "failed",
+    });
+    expect(failed.activityEvents.at(-1)?.kind).toBe("run-failed");
+    expect(retried.activeRun?.script.runId).toBe("mock-run-2");
+    expect(retried.messages.filter((message) => message.role === "user")).toHaveLength(1);
+    expect(retried.retryableRun).toBeNull();
   });
 
   it("stops only an active stream and rejects subsequent chunks", () => {
@@ -161,6 +194,7 @@ describe("applicationReducer", () => {
       content: "Mock response stopped.",
       status: "stopped",
     });
+    expect(stopped.activityEvents.at(-1)?.kind).toBe("run-stopped");
     expect(
       applicationReducer(stopped, {
         chunk: "late chunk",
@@ -186,5 +220,12 @@ describe("applicationReducer", () => {
     expect(decided.composerDraft).toBe(composerDraft);
     expect(decided.toolActivities[0]?.status).toBe(status);
     expect(decided.messages.at(-1)?.content).toMatch(/Nothing was executed|No local/);
+    expect(decided.activityEvents.at(-1)?.kind).toBe(
+      decision === "approve"
+        ? "approval-approved"
+        : decision === "reject"
+          ? "approval-rejected"
+          : "approval-edit-requested",
+    );
   });
 });

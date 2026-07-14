@@ -1,3 +1,4 @@
+import { createActivityEvent, type ActivityEvent, type ActivityEventKind } from "./activity";
 import { destinationForMenuRoute, type AppRoute, type AssistantMenuRoute } from "./navigation";
 import {
   approvalOutcomeMessage,
@@ -8,6 +9,7 @@ import {
   type MockRunScript,
   type ToolActivity,
 } from "./mockAssistantRun";
+import { mockRunFailureMessage, type MockRunFailureReason } from "./mockRunDriver";
 
 export type AssistantRunStatus = "awaiting-approval" | "idle" | "streaming";
 
@@ -16,13 +18,21 @@ export interface ActiveMockRun {
   readonly status: Exclude<AssistantRunStatus, "idle">;
 }
 
+export interface RetryableMockRun {
+  readonly assistantMessageId: string;
+  readonly request: string;
+}
+
 export interface ApplicationState {
   readonly activeApproval: MockApprovalRequest | null;
   readonly activeRun: ActiveMockRun | null;
   readonly activeRoute: AppRoute;
+  readonly activityEvents: readonly ActivityEvent[];
   readonly composerDraft: string;
   readonly messages: readonly ConversationMessage[];
+  readonly nextActivityOrdinal: number;
   readonly nextRunOrdinal: number;
+  readonly retryableRun: RetryableMockRun | null;
   readonly toolActivities: readonly ToolActivity[];
 }
 
@@ -33,16 +43,25 @@ export type ApplicationAction =
   | { readonly type: "mock-run-submitted" }
   | { readonly chunk: string; readonly runId: string; readonly type: "mock-stream-chunk" }
   | { readonly runId: string; readonly type: "mock-stream-completed" }
+  | {
+      readonly reason: MockRunFailureReason;
+      readonly runId: string;
+      readonly type: "mock-stream-failed";
+    }
   | { readonly type: "mock-run-stopped" }
+  | { readonly type: "mock-run-retried" }
   | { readonly decision: MockApprovalDecision; readonly type: "mock-approval-decided" };
 
 export const INITIAL_APPLICATION_STATE: ApplicationState = {
   activeApproval: null,
   activeRun: null,
   activeRoute: "conversations",
+  activityEvents: [],
   composerDraft: "",
   messages: [],
+  nextActivityOrdinal: 1,
   nextRunOrdinal: 1,
+  retryableRun: null,
   toolActivities: [],
 };
 
@@ -52,6 +71,62 @@ function updateAssistantMessage(
   update: (message: ConversationMessage) => ConversationMessage,
 ): readonly ConversationMessage[] {
   return messages.map((message) => (message.id === assistantMessageId ? update(message) : message));
+}
+
+function appendActivity(
+  state: ApplicationState,
+  runId: string,
+  kind: ActivityEventKind,
+): Pick<ApplicationState, "activityEvents" | "nextActivityOrdinal"> {
+  const event = createActivityEvent(state.nextActivityOrdinal, runId, kind);
+  if (event === null) {
+    return {
+      activityEvents: state.activityEvents,
+      nextActivityOrdinal: state.nextActivityOrdinal,
+    };
+  }
+
+  return {
+    activityEvents: [...state.activityEvents, event],
+    nextActivityOrdinal: state.nextActivityOrdinal + 1,
+  };
+}
+
+function startMockRun(
+  state: ApplicationState,
+  request: string,
+  includeUserMessage: boolean,
+): ApplicationState {
+  if (state.activeRun !== null) {
+    return state;
+  }
+
+  const script = createMockRunScript(state.nextRunOrdinal, request);
+  if (script === null) {
+    return state;
+  }
+
+  const messages = includeUserMessage ? [...state.messages, script.userMessage] : state.messages;
+
+  return {
+    ...state,
+    ...appendActivity(state, script.runId, "run-started"),
+    activeApproval: null,
+    activeRun: { script, status: "streaming" },
+    activeRoute: "conversations",
+    composerDraft: "",
+    messages: [
+      ...messages,
+      {
+        content: "",
+        id: script.assistantMessageId,
+        role: "assistant",
+        status: "streaming",
+      },
+    ],
+    nextRunOrdinal: state.nextRunOrdinal + 1,
+    retryableRun: null,
+  };
 }
 
 export function applicationReducer(
@@ -66,34 +141,12 @@ export function applicationReducer(
         ? state
         : { ...state, composerDraft: action.value };
     case "mock-run-submitted": {
-      if (state.activeRun !== null) {
-        return state;
-      }
-
-      const script = createMockRunScript(state.nextRunOrdinal, state.composerDraft);
-      if (script === null) {
-        return state;
-      }
-
-      return {
-        ...state,
-        activeApproval: null,
-        activeRun: { script, status: "streaming" },
-        activeRoute: "conversations",
-        composerDraft: "",
-        messages: [
-          ...state.messages,
-          script.userMessage,
-          {
-            content: "",
-            id: script.assistantMessageId,
-            role: "assistant",
-            status: "streaming",
-          },
-        ],
-        nextRunOrdinal: state.nextRunOrdinal + 1,
-      };
+      return startMockRun(state, state.composerDraft, true);
     }
+    case "mock-run-retried":
+      return state.retryableRun === null
+        ? state
+        : startMockRun(state, state.retryableRun.request, false);
     case "mock-stream-chunk": {
       if (
         state.activeRun?.status !== "streaming" ||
@@ -122,6 +175,7 @@ export function applicationReducer(
       const { script } = state.activeRun;
       return {
         ...state,
+        ...appendActivity(state, script.runId, "approval-requested"),
         activeApproval: script.approval,
         activeRun: { script, status: "awaiting-approval" },
         messages: updateAssistantMessage(state.messages, script.assistantMessageId, (message) => ({
@@ -131,6 +185,31 @@ export function applicationReducer(
         toolActivities: [...state.toolActivities, script.toolActivity],
       };
     }
+    case "mock-stream-failed": {
+      if (
+        state.activeRun?.status !== "streaming" ||
+        state.activeRun.script.runId !== action.runId
+      ) {
+        return state;
+      }
+
+      const { script } = state.activeRun;
+      return {
+        ...state,
+        ...appendActivity(state, script.runId, "run-failed"),
+        activeApproval: null,
+        activeRun: null,
+        messages: updateAssistantMessage(state.messages, script.assistantMessageId, (message) => ({
+          ...message,
+          content: mockRunFailureMessage(action.reason),
+          status: "failed",
+        })),
+        retryableRun: {
+          assistantMessageId: script.assistantMessageId,
+          request: script.userMessage.content,
+        },
+      };
+    }
     case "mock-run-stopped": {
       if (state.activeRun?.status !== "streaming") {
         return state;
@@ -138,6 +217,7 @@ export function applicationReducer(
 
       return {
         ...state,
+        ...appendActivity(state, state.activeRun.script.runId, "run-stopped"),
         activeRun: null,
         messages: updateAssistantMessage(
           state.messages,
@@ -148,6 +228,7 @@ export function applicationReducer(
             status: "stopped",
           }),
         ),
+        retryableRun: null,
       };
     }
     case "mock-approval-decided": {
@@ -167,14 +248,23 @@ export function applicationReducer(
         role: "assistant",
         status: "complete",
       };
+      const activityKind: ActivityEventKind =
+        action.decision === "approve"
+          ? "approval-approved"
+          : action.decision === "reject"
+            ? "approval-rejected"
+            : "approval-edit-requested";
+      const runId = state.activeRun.script.runId;
 
       return {
         ...state,
+        ...appendActivity(state, runId, activityKind),
         activeApproval: null,
         activeRun: null,
         composerDraft:
           action.decision === "edit" ? state.activeApproval.editDraft : state.composerDraft,
         messages: [...state.messages, outcome],
+        retryableRun: null,
         toolActivities: state.toolActivities.map((activity) =>
           activity.id === state.activeRun?.script.toolActivity.id
             ? { ...activity, status: activityStatus }
