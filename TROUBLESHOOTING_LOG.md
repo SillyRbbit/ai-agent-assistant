@@ -401,7 +401,7 @@ Status: Open operational condition
 
 ### Symptom
 
-The public GitHub page still reports one commit and describes the original runnable shell, while the project owner's local checkout contains verified Increments 2A through 2C.
+The public GitHub page still reports one commit and describes the original runnable shell, while the project owner's local checkout contains verified Increments 2A through 2D.
 
 ### Cause
 
@@ -424,22 +424,14 @@ git remote -v
 
 Do not publish secrets, local databases, credentials, certificates, or environment files when synchronizing the public repository.
 
-## TS-011 — Custom menu actions are not in the standard macOS application menu
+## TS-011 — Increment 2D actions are not visible in the standard macOS application menu
 
 Date: 2026-07-13
 Status: Resolved
 
 ### Symptom
 
-The application launched and the standard macOS application-name menu showed About, Services, Hide, and Quit, but **New Request** and **Tasks (Coming Soon)** did not appear there.
-
-### Cause
-
-Increment 2D creates a separate macOS status-item menu on the right side of the system menu bar. The standard application-name menu on the left is managed separately by macOS and is not the custom Tauri tray menu.
-
-### Resolution
-
-Click the AI Agent Assistant status icon on the right side of the macOS menu bar. Its fixed menu contains:
+The application launches and the left-side **AI Agent Assistant** application menu contains standard macOS items such as About, Services, Hide, and Quit, but does not show:
 
 ```text
 Open AI Agent Assistant
@@ -448,27 +440,70 @@ Tasks (Coming Soon)
 Quit AI Agent Assistant
 ```
 
-When testing New Request or Tasks before Increment 2E, hide the main window first. Selecting either item should show and focus the existing window; the React page does not change yet because frontend route handling is intentionally deferred.
+The source still shows that the New Request and Tasks menu items are constructed.
+
+### Cause
+
+The standard application-name menu on the left side of the macOS menu bar is separate from the custom Tauri status-item menu. Increment 2D installs the custom menu under the AI Agent Assistant status icon on the right side of the menu bar, near system status items.
+
+### Resolution
+
+Click the AI Agent Assistant status icon on the right side of the macOS menu bar. Its menu contains the four fixed Increment 2D actions.
+
+### Verify
+
+1. Hide the main window with its red close control.
+2. Open the right-side AI Agent Assistant status-item menu.
+3. Select **New Request** and confirm the window returns and receives focus.
+4. Hide the window again.
+5. Select **Tasks (Coming Soon)** and confirm the window returns and receives focus.
+
+The project owner confirmed both actions worked without an error.
+
+### Prevention
+
+Manual test instructions should consistently use the term **menu-bar status item** and distinguish it from the standard macOS application menu.
+
+## TS-012 — React component tests retain prior rendered shells
+
+Date: 2026-07-13
+Status: Resolved
+
+### Symptom
+
+When multiple Increment 2E component tests run in one Vitest process, role and text queries can find elements from an earlier render, producing ambiguous-match failures even though each test passes by itself.
+
+### Cause
+
+The test environment was not explicitly cleaning React Testing Library's rendered DOM after every test. Depending on test-runner integration alone made cleanup behavior implicit.
+
+### Resolution
+
+Add an explicit test-only cleanup hook in `src/test/setup.ts`:
+
+```ts
+import { cleanup } from "@testing-library/react";
+import { afterEach } from "vitest";
+
+afterEach(() => {
+  cleanup();
+});
+```
 
 ### Verify
 
 ```bash
-grep -nE 'New Request|Tasks \(Coming Soon\)' src-tauri/src/menu_bar/action.rs
-grep -nE 'new_request|tasks_placeholder' src-tauri/src/menu_bar/tauri_adapter.rs
-npm run tauri -- dev
+npx vitest run
 ```
 
-Then:
+Expected:
 
-1. Close the main window.
-2. Click the right-side AI Agent Assistant status icon.
-3. Select New Request and confirm the window reappears.
-4. Repeat with Tasks (Coming Soon).
-
-The project owner confirmed both actions appeared and worked.
+```text
+3 test files passed
+30 tests passed
+0 failed
+```
 
 ### Prevention
 
-- Refer to the custom control as the **menu-bar status item** or **right-side menu-bar icon**.
-- Do not direct testers to the standard application-name menu.
-- Increment 2E should make the route result visible by navigating to Conversations or Tasks.
+Keep global DOM-test cleanup explicit in the shared Vitest setup and avoid relying on test order or prior component unmount behavior.

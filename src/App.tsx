@@ -1,111 +1,145 @@
-import { useEffect, useState } from "react";
+import type { ReactNode } from "react";
 
-import { fetchAppInfo, type AppInfo } from "./infrastructure/tauri/app-info-client";
+import { ApplicationStateProvider } from "./application/ApplicationStateProvider";
+import { NAVIGATION_ITEMS, type AppRoute } from "./application/navigation";
+import { useCoreConnection, type AppInfoLoader } from "./application/useCoreConnection";
+import {
+  useMenuRouteSubscription,
+  type MenuRouteConnectionStatus,
+} from "./application/useMenuRouteSubscription";
+import { useApplicationDispatch, useApplicationState } from "./application/useApplicationState";
+import { ApplicationSidebar } from "./components/ApplicationSidebar";
+import { ConversationWorkspace } from "./features/conversations/ConversationWorkspace";
+import { PermissionCenter } from "./features/permissions/PermissionCenter";
+import { SettingsPage } from "./features/settings/SettingsPage";
+import { PlaceholderPage } from "./features/shared/PlaceholderPage";
+import { TasksPage } from "./features/tasks/TasksPage";
+import { fetchAppInfo } from "./infrastructure/tauri/app-info-client";
+import {
+  tauriMenuRouteSource,
+  type MenuRouteSource,
+} from "./infrastructure/tauri/menu-route-client";
 
-type CoreConnection =
-  | { readonly status: "checking" }
-  | { readonly info: AppInfo; readonly status: "ready" }
-  | { readonly message: string; readonly status: "error" };
-
-function getErrorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : String(error);
+export interface AppServices {
+  readonly appInfoLoader: AppInfoLoader;
+  readonly menuRouteSource: MenuRouteSource;
 }
 
-export function App() {
-  const [connection, setConnection] = useState<CoreConnection>({ status: "checking" });
+interface AppProps {
+  readonly services?: AppServices;
+}
 
-  useEffect(() => {
-    let isMounted = true;
+const DEFAULT_APP_SERVICES: AppServices = {
+  appInfoLoader: fetchAppInfo,
+  menuRouteSource: tauriMenuRouteSource,
+};
 
-    const connectToCore = async () => {
-      try {
-        const info = await fetchAppInfo();
+export function App({ services = DEFAULT_APP_SERVICES }: AppProps) {
+  return (
+    <ApplicationStateProvider>
+      <ApplicationShell services={services} />
+    </ApplicationStateProvider>
+  );
+}
 
-        if (isMounted) {
-          setConnection({ info, status: "ready" });
-        }
-      } catch (error: unknown) {
-        if (isMounted) {
-          setConnection({ message: getErrorMessage(error), status: "error" });
-        }
-      }
-    };
+interface ApplicationShellProps {
+  readonly services: AppServices;
+}
 
-    void connectToCore();
+function ApplicationShell({ services }: ApplicationShellProps) {
+  const state = useApplicationState();
+  const dispatch = useApplicationDispatch();
+  const coreConnection = useCoreConnection(services.appInfoLoader);
+  const menuRouteStatus = useMenuRouteSubscription(services.menuRouteSource);
 
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  const pages: Readonly<Record<AppRoute, ReactNode>> = {
+    activity: (
+      <PlaceholderPage
+        description="A transparent local history of runs, context, tools, approvals, and results."
+        emptyDescription="Activity appears after the mocked run-event model is introduced."
+        emptyTitle="No activity recorded"
+        eyebrow="Transparency"
+        headingId="activity-page-title"
+        icon="A"
+        title="Activity"
+      />
+    ),
+    conversations: (
+      <ConversationWorkspace
+        composerDraft={state.composerDraft}
+        onComposerDraftChange={(value) => {
+          dispatch({ type: "composer-draft-changed", value });
+        }}
+      />
+    ),
+    integrations: (
+      <PlaceholderPage
+        description="Explicitly connected services will be managed from this page."
+        emptyDescription="No account, OAuth token, API key, or cloud service is configured."
+        emptyTitle="No integrations connected"
+        eyebrow="Connections"
+        headingId="integrations-page-title"
+        icon="I"
+        title="Integrations"
+      />
+    ),
+    memory: (
+      <PlaceholderPage
+        description="User-controlled session, working, and preference memory will appear here."
+        emptyDescription="Nothing is stored until memory controls and persistence are reviewed."
+        emptyTitle="No saved memory"
+        eyebrow="Context"
+        headingId="memory-page-title"
+        icon="M"
+        title="Memory"
+      />
+    ),
+    permissions: <PermissionCenter />,
+    settings: <SettingsPage coreConnection={coreConnection} menuRouteStatus={menuRouteStatus} />,
+    tasks: <TasksPage />,
+  };
+
+  const activeLabel = NAVIGATION_ITEMS.find((item) => item.route === state.activeRoute)?.label;
 
   return (
-    <main className="app-shell">
-      <header className="app-header">
-        <div className="brand-mark" aria-hidden="true">
-          A
+    <div className="application-shell">
+      <ApplicationSidebar
+        activeRoute={state.activeRoute}
+        onNavigate={(route) => {
+          dispatch({ route, type: "navigate" });
+        }}
+      />
+
+      <main className="application-main" id="main-content" tabIndex={-1}>
+        <div className="application-toolbar">
+          <p className="application-toolbar__location">{activeLabel ?? "Workspace"}</p>
+          <CoreStatus connectionStatus={coreConnection.status} menuRouteStatus={menuRouteStatus} />
         </div>
-        <div>
-          <p className="eyebrow">AI Agent Assistant</p>
-          <h1>Secure desktop shell</h1>
-        </div>
-      </header>
+        <div className="application-content">{pages[state.activeRoute]}</div>
+      </main>
+    </div>
+  );
+}
 
-      <section className="status-card" aria-labelledby="status-heading">
-        <div>
-          <p className="increment-label">Phase 2 · Increment 1</p>
-          <h2 id="status-heading">Smallest runnable application</h2>
-          <p className="status-copy">
-            React is rendered inside a Tauri 2 window and communicates with a typed Rust command. No
-            API key, shell plugin, privileged macOS permission, or persistent data store is present
-            in this increment.
-          </p>
-        </div>
+interface CoreStatusProps {
+  readonly connectionStatus: "checking" | "error" | "ready";
+  readonly menuRouteStatus: MenuRouteConnectionStatus;
+}
 
-        <div className="connection-panel" aria-live="polite">
-          {connection.status === "checking" ? (
-            <p className="connection-state connection-state--checking">Connecting to Rust core…</p>
-          ) : null}
+function CoreStatus({ connectionStatus, menuRouteStatus }: CoreStatusProps) {
+  const hasError = connectionStatus === "error" || menuRouteStatus === "error";
+  const isReady = connectionStatus === "ready" && menuRouteStatus === "ready";
+  const label = hasError
+    ? "Diagnostics need attention"
+    : isReady
+      ? "Local core ready"
+      : "Connecting";
+  const state = hasError ? "error" : isReady ? "ready" : "checking";
 
-          {connection.status === "ready" ? (
-            <>
-              <p className="connection-state connection-state--ready">Rust core connected</p>
-              <dl className="app-metadata">
-                <div>
-                  <dt>Application</dt>
-                  <dd>{connection.info.name}</dd>
-                </div>
-                <div>
-                  <dt>Version</dt>
-                  <dd>{connection.info.version}</dd>
-                </div>
-                <div>
-                  <dt>Target</dt>
-                  <dd>
-                    {connection.info.target} · {connection.info.architecture}
-                  </dd>
-                </div>
-                <div>
-                  <dt>Build</dt>
-                  <dd>{connection.info.environment}</dd>
-                </div>
-              </dl>
-            </>
-          ) : null}
-
-          {connection.status === "error" ? (
-            <>
-              <p className="connection-state connection-state--error">Rust core unavailable</p>
-              <p className="error-detail">{connection.message}</p>
-            </>
-          ) : null}
-        </div>
-      </section>
-
-      <footer className="app-footer">
-        <span>Local-first foundation</span>
-        <span aria-hidden="true">•</span>
-        <span>No credentials stored</span>
-      </footer>
-    </main>
+  return (
+    <p className={`application-toolbar__status application-toolbar__status--${state}`}>
+      <span aria-hidden="true" />
+      {label}
+    </p>
   );
 }
