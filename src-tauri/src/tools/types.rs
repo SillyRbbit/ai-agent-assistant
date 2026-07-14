@@ -70,28 +70,3 @@ impl ToolDefinition {
         self.schema
     }
 }
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct ToolCallProposal {
-    pub tool_name: String,
-    pub arguments_json: String,
-    pub risk_class: RiskClass,
-    pub required_permission: PermissionKind,
-}
-
-impl ToolCallProposal {
-    #[must_use]
-    pub fn new(
-        tool_name: impl Into<String>,
-        arguments_json: impl Into<String>,
-        risk_class: RiskClass,
-        required_permission: PermissionKind,
-    ) -> Self {
-        Self {
-            tool_name: tool_name.into(),
-            arguments_json: arguments_json.into(),
-            risk_class,
-            required_permission,
-        }
-    }
-}

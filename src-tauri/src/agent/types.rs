@@ -1,5 +1,3 @@
-use crate::tools::types::ToolCallProposal;
-
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct AgentRequest {
     pub run_id: String,
@@ -25,7 +23,6 @@ impl AgentRequest {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum AgentProviderResponse {
     AssistantText { content: String },
-    ToolCalls { calls: Vec<ToolCallProposal> },
 }
 
 impl AgentProviderResponse {
@@ -34,10 +31,5 @@ impl AgentProviderResponse {
         Self::AssistantText {
             content: content.into(),
         }
-    }
-
-    #[must_use]
-    pub fn tool_calls(calls: Vec<ToolCallProposal>) -> Self {
-        Self::ToolCalls { calls }
     }
 }

@@ -6,6 +6,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Phase 4 Increment 4C ownership-consuming `PolicyInput` and input-retaining `PolicyDecision`, sourced only from one `SchemaValidatedFunctionCall`.
+- Closed policy reasons with derived outcomes plus four conservative rule-table tests and two public gateway-to-policy boundary tests.
+- Documentation-only Phase 4 Increment 4C plan for removing the unused raw Rust proposal bypass and binding deterministic policy input to one owned `SchemaValidatedFunctionCall`.
+- A proposed canonical typed policy boundary with no caller-supplied context, conservative handling of missing trusted evidence, closed reasons, derived outcomes, exact input retention, redacted debug output, and no approval or execution authority.
 - Phase 4 Increment 4B closed Rust schema catalog for exact `get_current_datetime@1` and `create_local_task@1` input contracts.
 - Ownership-consuming gateway-to-local function-call validation with typed arguments, locally derived risk and permission, and explicitly non-authorizing output.
 - Fifteen focused schema, registry, boundary, and redaction tests, bringing the Rust library suite to 79 tests.
@@ -60,6 +64,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Removed `ToolCallProposal`, the unused provider tool-call response variant, caller-supplied `PolicyContext`, independently constructed `ProposedAction`, arbitrary policy reason strings, and fallible policy evaluation.
+- Made information-only/no-permission calls allowable as non-authorizing data, reversible and personal-data calls approval-required, and permission-bearing, read-only-without-scope, external/high-impact, and prohibited calls denied.
+- Marked Increment 4C verified complete after focused checks, the full repository gate, dependency audit, diff checks, code review, and security review passed.
+- Made documentation-only planning for exact trusted approval binding the next Ready task.
+- Made project-owner approval of the exact Increment 4C trusted policy-input plan the next gate; runtime implementation remains blocked.
+- Proposed removal of `ToolCallProposal`, the unused provider tool-call response variant, caller-supplied `PolicyContext`, independently constructed `ProposedAction`, arbitrary reason strings, and fallible policy evaluation only within the approved future increment.
 - Replaced arbitrary placeholder schema and independently supplied tool-definition metadata with schema-derived private definitions.
 - Marked Increment 4B verified complete after focused checks, the full repository gate, dependency audit, diff checks, code review, and security review passed.
 - Made documentation-only planning for trusted proposal and policy-input binding the next Ready task.
@@ -108,6 +118,13 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Security
 
+- Policy action metadata can now enter production policy types only through ownership of a locally schema-validated call; no constructor accepts caller-supplied identity, version, arguments, risk, permission, intent, grant state, or scope.
+- `PolicyDecision` retains the exact evaluated input, derives outcome from a closed reason, redacts argument content from debug output, and exposes no approval, audit, dispatch, or executor conversion.
+- Increment 4C adds no dependency, lockfile, credential, network, IPC, persistence, Tauri, capability, CSP, packaging, permission, or user-visible path.
+- Increment 4C planning makes locally schema-validated identity, version, typed arguments, risk, and permission the proposed sole source of policy action metadata; model or caller values cannot override them.
+- The plan removes unbound intent and permission booleans: permission-bearing and read-only calls deny, while reversible actions require approval until exact call-bound evidence exists.
+- The plan keeps policy allowance non-authorizing, retains the exact evaluated input, and leaves generic approval, audit, dispatch, executor, IPC, persistence, and network scaffolds disconnected.
+- Increment 4C planning changes documentation only and adds no runtime, dependency, lockfile, credential, provider, Tauri, capability, CSP, packaging, permission, or user-visible path.
 - Exact local schema validation now rejects unknown tools, contract mismatches, missing or additional fields, wrong types, malformed values, non-canonical titles, control characters, and title-limit violations before any proposal or policy conversion.
 - Successful schema validation discards raw JSON, exposes content only through private typed arguments, redacts debug output, and derives classification only from the local catalog.
 - Increment 4B adds no proposal conversion, authorization, policy call, approval, audit, executor, runtime tool registration, network, credential, IPC, persistence, capability, CSP, permission, dependency, or user-visible path.

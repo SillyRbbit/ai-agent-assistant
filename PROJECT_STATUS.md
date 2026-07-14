@@ -4,7 +4,7 @@ Last updated: 2026-07-14
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A and 4B - **verified complete**. The next Ready task is documentation-only Increment 4C planning for trusted proposal and policy-input binding.
+Phase 3 and Phase 4 Increments 4A, 4B, and 4C - **verified complete**. The next Ready task is documentation-only Increment 4D planning for exact trusted approval binding.
 
 ## Increment status
 
@@ -26,6 +26,7 @@ Phase 3 and Phase 4 Increments 4A and 4B - **verified complete**. The next Ready
 - Increment 3D: bounded mock-loop completion — **verified complete on target Mac**.
 - Increment 4A: deterministic gateway protocol contract - **verified complete on target Mac**.
 - Increment 4B: exact local tool-schema validation - **verified complete on target Mac**.
+- Increment 4C: trusted policy-input binding - **verified complete on target Mac**.
 
 ## Verified baseline through Increment 2E
 
@@ -101,7 +102,7 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-On clean merged `main`, plan only the smallest Increment 4C trusted proposal and policy-input boundary. Reconcile the verified schema-valid call with legacy proposal, provider-response, policy, approval, and audit types; update planning documentation only and wait for project-owner approval before runtime or dependency changes.
+On clean merged `main`, plan only the smallest Increment 4D exact trusted approval-binding boundary. Reconcile the verified input-retaining policy decision with generic approval and audit scaffolds; update planning documentation only and wait for project-owner approval before runtime or dependency changes.
 
 ## Phase 4 planning result
 
@@ -147,6 +148,33 @@ On clean merged `main`, plan only the smallest Increment 4C trusted proposal and
 - `npm audit --audit-level=low` reported zero vulnerabilities; diff checks, code review, and security review passed with no findings.
 - No native interaction gate was required because the modules remain transport-free and unreferenced by Tauri.
 - No dependency, network, credential, provider, proposal conversion, policy call, approval, audit, executor, IPC, persistence, capability, CSP, packaging, permission, or user-visible path was added.
+
+## Increment 4C planning result
+
+- The unused `ToolCallProposal` and provider tool-call response variant can carry caller-supplied raw JSON and classification around the verified schema boundary, although repository search found no production caller.
+- `ProposedAction` independently accepts tool identity, risk, permission, and public context fields, while `PolicyDecision` drops the evaluated action and accepts arbitrary reason text.
+- The proposed increment removes those raw construction paths and makes one owned `SchemaValidatedFunctionCall` the sole source of policy identity, contract version, typed arguments, risk, and permission.
+- `PolicyContext` is removed rather than relabeled: its booleans cannot prove same-call intent, permission, resource scope, provenance, or freshness.
+- Permission-bearing and read-only calls deny, while reversible actions require approval until a later increment defines exact call-bound trusted evidence.
+- A closed `PolicyReason` derives one `PolicyOutcome`, and `PolicyDecision` retains the exact consumed input without clone, serialization, raw debug, approval, audit, dispatch, or executor conversion.
+- Canonical means ownership-bound structured typed input in Increment 4C. Canonical bytes, hashes, previews, intent/permission/scope evidence, expiry, one-time consumption, and run binding are deferred to later approved increments.
+- The exact runtime plan creates one public boundary integration-test file and changes only four existing Rust type/policy files. It adds no dependency and changes no manifest or lockfile.
+- Planning baseline passed TypeScript and focused provider, function-call validation, policy, approval, and audit tests on clean merged `main` at `9fa095e`.
+- Planning changed documentation only and added no Rust, dependency, lockfile, provider, approval, audit, executor, IPC, persistence, network, credential, capability, CSP, packaging, permission, or user-visible path.
+- Project-owner approval was received; the verified implementation evidence follows.
+
+## Increment 4C capability and evidence
+
+- The raw `ToolCallProposal`, unused provider tool-call response variant, caller-supplied `PolicyContext`, and independently constructed `ProposedAction` are removed.
+- `PolicyInput` can be constructed only by consuming one `SchemaValidatedFunctionCall`; private policy values retain exact call ID, local name/version, typed arguments, risk, and required permission.
+- `PolicyDecision` owns the exact evaluated input, derives its outcome from one closed `PolicyReason`, and redacts argument content from debug output.
+- Prohibited and external/high-impact classes deny first; remaining permission-bearing and read-only classes deny; reversible and personal-data classes require approval; only information-only/no-permission calls allow as non-authorizing data.
+- Focused tests passed: three mock-provider, six function-call validation, four policy rule-table, and two public policy-input binding tests.
+- `npm run verify` passed with 124 frontend tests, 78 Rust library tests, eight Rust integration tests, TypeScript, production frontend builds, and the Tauri release no-bundle build.
+- `npm audit --audit-level=low` reported zero vulnerabilities; diff checks, code review, and security review passed with no findings.
+- No native interaction gate was required because the modules remain transport-free and unreferenced by Tauri.
+- No dependency, lockfile, approval, audit, executor, network, credential, IPC, persistence, Tauri, capability, CSP, packaging, permission, or user-visible path was added.
+- D-023 records the durable ownership and conservative-evidence policy boundary.
 
 ## Phase 3D planning result
 

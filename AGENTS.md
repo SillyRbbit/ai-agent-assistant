@@ -20,7 +20,7 @@ When the task is a security-sensitive change, also read `SECURITY.md` and `CODE_
 
 ## Current phase
 
-Phase 3 and Phase 4 Increments 4A and 4B are verified complete on the target Mac. The next Ready task is documentation-only planning for the trusted proposal and policy-input boundary. Do not add provider calls, credentials, network access, new IPC, sensitive persistence, real tool execution, or privileged operating-system integrations before a later exact plan is approved. The verified gateway protocol and local schema validator remain transport-free, and schema-valid function calls remain non-authorizing.
+Phase 3 and Phase 4 Increments 4A, 4B, and 4C are verified complete on the target Mac. The next Ready task is documentation-only planning for exact trusted approval binding. Do not connect policy decisions to approval, audit, dispatch, execution, provider calls, credentials, network access, new IPC, sensitive persistence, or privileged operating-system integrations before a later exact plan is approved. The verified gateway, schema-validation, and policy-input modules remain transport-free; schema validity and policy allowance remain non-authorizing.
 
 ## Non-negotiable product boundaries
 

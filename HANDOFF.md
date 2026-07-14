@@ -4,28 +4,40 @@ Last updated: 2026-07-14
 
 ## Current state
 
-Phase 3 and Phase 4 Increments 4A and 4B are verified complete on the target Mac. Increment 4B was implemented on branch `phase4/increment-4b`, based on merged `main` at `e1db18b`.
+Phase 3 and Phase 4 Increments 4A, 4B, and 4C are verified complete on the target Mac. The project owner approved the exact Increment 4C trusted policy-input plan, and implementation passed every required automated, code-review, and security-review gate.
 
-The project owner requested commit, push, and fast-forward merge after verification. Implementation commit `ce9fd40` and this publication-state closeout were pushed on `phase4/increment-4b` and fast-forward merged into `main`. The final `main` working tree is clean.
+Work is on branch `phase4/increment-4c`, created from clean merged `main` at `9fa095e`; `origin/main` was also `9fa095e` at branch creation. The working tree contains only the approved planning, five runtime/test, and closeout files listed below. Nothing is staged, committed, pushed, or merged for Increment 4C.
 
-Increment 4B remains transport-free and unreferenced by Tauri. It adds no provider call, proposal conversion, policy call, approval, audit, executor, runtime tool registration, IPC, persistence, UI, credential, network, capability, CSP, packaging, permission, or user-visible behavior.
+The implementation remains portable and unreferenced by Tauri. It adds no approval, audit, executor, provider continuation, network, credential, IPC, persistence, dependency, lockfile, capability, CSP, packaging, permission, or user-visible path.
 
 ## Completed work
 
-- Replaced arbitrary `ToolSchema` documents with exactly `GetCurrentDatetimeV1` and `CreateLocalTaskV1`.
-- Bound each schema's exact name, description, version, strict input schema, risk class, permission, and typed argument parser in trusted Rust.
-- Made `ToolDefinition` fields private and construction schema-derived.
-- Preserved deterministic registry lookup/list ordering and duplicate/unknown rejection using the two real definitions.
-- Added `validate_function_call`, which consumes an Increment 4A `UntrustedFunctionCall`, independently checks local identity/version/schema, and drops raw JSON after parsing.
-- Added private typed `SchemaValidatedFunctionCall` output with locally derived classification and explicit non-authorizing semantics.
-- Added closed redacted errors and custom debug output that omit task titles and raw arguments.
-- Added five schema tests, four registry tests, and six gateway-to-local boundary tests.
-- Recorded D-022 for local schema ownership, the 200-character title ceiling, trusted classification, and the no-dependency decision.
-- Completed code review and security review with no findings.
+- Removed `ToolCallProposal` and the unused `AgentProviderResponse::ToolCalls`/`tool_calls` raw proposal path.
+- Removed caller-supplied `PolicyContext` and independently constructed `ProposedAction` rather than trusting unbound intent or permission booleans.
+- Added private `PolicyInput`, constructible only by consuming one `SchemaValidatedFunctionCall`.
+- Added closed `PolicyReason` values with exactly derived `PolicyOutcome` values.
+- Made `PolicyDecision` private and ownership-retaining so it cannot drop or swap the exact evaluated call.
+- Removed the obsolete empty-name policy error and made evaluation total over already-validated input.
+- Preserved strongest hard-deny reasons, denied other permission-bearing and read-only actions without exact evidence, required approval for reversible and personal-data actions, and allowed only information-only/no-permission calls as non-authorizing data.
+- Added custom redacted debug output; policy input and decisions do not derive `Clone` or serialization.
+- Added four complete rule-table unit tests and two public gateway-to-schema-to-policy integration tests.
+- Confirmed exact call ID, local name/version, typed arguments, risk, and required permission survive policy evaluation while task content and raw JSON stay out of debug output.
+- Recorded D-023 for the ownership-bound policy input, conservative evidence boundary, and no-dependency decision.
+- Completed code review and security review with no remaining findings.
 
 ## Exact files changed
 
-Approved planning and repository memory:
+Approved runtime and focused test files:
+
+```text
+src-tauri/src/tools/types.rs
+src-tauri/src/agent/types.rs
+src-tauri/src/policy/types.rs
+src-tauri/src/policy/engine.rs
+src-tauri/tests/policy_input_binding.rs
+```
+
+Approved planning and closeout files:
 
 ```text
 AGENTS.md
@@ -35,94 +47,94 @@ HANDOFF.md
 NEXT_STEPS.md
 PLANS.md
 PROJECT_STATUS.md
-docs/increments/04a-gateway-protocol-contract.md
-docs/increments/04b-local-tool-schema-validation.md
-docs/plans/04b-local-tool-schema-validation.md
+docs/increments/04c-trusted-policy-input-binding.md
+docs/plans/04c-trusted-policy-input-binding.md
 ```
 
-The Increment 4A record contains the project-owner-approved planning correction that its commit was pushed and merged before this branch was created.
-
-Approved runtime and focused tests:
-
-```text
-src-tauri/src/agent/function_call_validation.rs
-src-tauri/src/agent/mod.rs
-src-tauri/src/tools/mod.rs
-src-tauri/src/tools/registry.rs
-src-tauri/src/tools/schema.rs
-src-tauri/src/tools/types.rs
-```
-
-No manifest, lockfile, generated file, database, build output, secret, gateway protocol, provider, policy, approval, audit, storage, Tauri configuration, frontend, capability, CSP, packaging, or permission file is present in the diff.
+No manifest, lockfile, generated file, database, build output, secret, gateway protocol, schema, function-call validator, provider implementation, approval, audit, executor, storage, Tauri configuration, frontend, capability, CSP, packaging, or permission file is present in the diff.
 
 ## Verification classification
 
-Passed baseline before implementation:
+Passed before implementation:
 
 ```text
 npm run typecheck
-cargo test --manifest-path src-tauri/Cargo.toml --lib --locked tools::
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::function_call_validation
+  6 passed; 0 failed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::provider
   3 passed; 0 failed
-cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::gateway_protocol
-  17 passed; 0 failed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked policy::
+  5 passed; 0 failed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked approvals::
+  3 passed; 0 failed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked audit::
+  4 passed; 0 failed
 ```
 
 Passed on the final runtime state:
 
 ```text
 cargo fmt --manifest-path src-tauri/Cargo.toml
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
 cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
-cargo test --manifest-path src-tauri/Cargo.toml --lib --locked tools::schema
-  5 passed; 0 failed
-cargo test --manifest-path src-tauri/Cargo.toml --lib --locked tools::registry
-  4 passed; 0 failed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::provider
+  3 passed; 0 failed
 cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::function_call_validation
   6 passed; 0 failed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked policy::
+  4 passed; 0 failed
+cargo test --manifest-path src-tauri/Cargo.toml --test policy_input_binding --locked
+  2 passed; 0 failed
 npm run verify
   Prettier and rustfmt passed
   ESLint and Clippy passed
   frontend: 10 files, 124 tests passed
-  Rust library: 79 passed
-  Rust integration: 6 passed
-  TypeScript and Vite production builds passed
+  Rust library: 78 passed
+  Rust integration: 8 passed
+  TypeScript and both Vite production builds passed
   Tauri release build --no-bundle passed
+npm run format:check after closeout documentation
+  Prettier and rustfmt passed
 npm audit --audit-level=low
   0 vulnerabilities
+legacy-symbol and scope searches
 git diff --check
 code review
 security review
 ```
 
-Failed during development, then corrected:
+Failed during the session, then corrected:
 
-- The first focused schema run reported four passes and one failure because Serde empty-struct decoding did not enforce the planned object-only no-argument contract. The validator now parses structured JSON and explicitly requires an empty object; every final focused and full test passes.
+- The first planning-only `npm run format:check` reported Prettier differences in the new plan. The repository formatter corrected it, and every later complete formatting check passed.
 - The first sandboxed `npm audit --audit-level=low` could not resolve `registry.npmjs.org`. The approved network retry completed and reported zero vulnerabilities.
 
 Checks not run:
 
-- Native interaction testing, because the new portable modules remain unreferenced by Tauri and change no UI or platform behavior.
+- Native interaction testing, because the changed portable modules remain unreferenced by Tauri and change no UI or target-platform behavior.
 
 Manual verification still pending:
 
-- None for Increment 4B.
+- None for Increment 4C.
 
 ## Remaining boundaries and risks
 
-- `SchemaValidatedFunctionCall` proves only local identity, version, argument schema, and locally owned classification. It does not represent policy allowance, approval, audit, dispatch eligibility, or execution authority.
-- Legacy `ToolCallProposal::new`, `AgentProviderResponse::tool_calls`, and `ProposedAction::new` can still accept independently supplied raw values. No production caller connects them to Increment 4B, but they must be restricted or replaced before orchestration.
-- Canonical argument representation and exact policy/approval binding remain undefined.
+- `PolicyOutcome::Allow` is non-authorizing policy data. No approval, dispatch, or executor conversion exists.
+- Permission-bearing and read-only actions remain denied until exact call-bound permission, resource-scope, provenance, and freshness evidence is designed and approved.
+- Reversible and personal-data actions remain approval-required; no trusted approval binding exists yet.
+- The generic approval and audit scaffolds accept detached caller-supplied strings and must not enter orchestration before exact preview, digest, run/call binding, expiry, one-time consumption, rejection, and redaction contracts exist.
+- The typed policy input is not stable canonical bytes or an approval digest.
 - Gateway transport, authentication, Keychain storage, provider adaptation, continuation, tool results, execution, and durable audit require separately approved increments.
 - O-006 still blocks live gateway networking until gateway identity and deployment are selected.
 - O-007 still blocks live provider traffic until provider retention mode and user disclosure are approved.
 
 ## Exact next task
 
-On clean merged `main`, perform documentation-only planning for Phase 4 Increment 4C: trusted proposal and policy-input binding. Reconcile the verified `SchemaValidatedFunctionCall` with legacy proposal/provider-response types, `ProposedAction`, deterministic policy, and the future approval/audit boundary. Recommend one smallest transport-free increment; do not implement it or begin live gateway work.
+After Increment 4C is committed, pushed, and merged, start documentation-only Phase 4 Increment 4D planning on clean merged `main`. Reconcile the verified input-retaining policy decision with generic approval and audit scaffolds, and recommend one smallest exact approval-binding increment. Do not implement it or begin live gateway work.
 
 ## Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Start documentation-only Phase 4 Increment 4C planning from HANDOFF.md on clean merged main. Reconcile SchemaValidatedFunctionCall, ToolCallProposal, AgentProviderResponse, ProposedAction, PolicyEngine, approvals, audit, the product architecture, security rules, accepted decisions, and actual Rust tests. Recommend one smallest transport-free increment that makes a locally schema-validated call the only source of canonical policy input without granting approval or execution authority. Define exact files, canonical identity and argument binding, typed errors, adversarial tests, risks, non-goals, dependency decision, verification, and rollback. Update planning documentation only, then wait for project-owner approval. Do not add networking, credentials, IPC, persistence, provider continuation, approval issuance, audit storage, execution, capabilities, CSP, packaging, or permissions. Do not commit or push unless explicitly asked.
+Start documentation-only Phase 4 Increment 4D planning from HANDOFF.md on clean merged main. Reconcile the verified SchemaValidatedFunctionCall, PolicyInput, PolicyDecision, PolicyReason outcomes, generic approval types and manager, audit scaffolds, run/call identity, typed tool arguments, product architecture, security rules, accepted decisions, and actual Rust tests. Recommend one smallest transport-free increment that binds an approval preview and one-time decision to the exact eligible policy input without granting dispatch or execution authority. Define canonical preview and digest representation, run/call binding, expiry, rejection, replay prevention, typed redacted errors, adversarial tests, exact files, dependency decision, risks, non-goals, verification, and rollback. Update planning documentation only, then wait for project-owner approval. Do not add approval UI, IPC, persistence, audit storage, execution, networking, credentials, capabilities, CSP, packaging, or permissions. Do not commit or push unless explicitly asked.
 ```

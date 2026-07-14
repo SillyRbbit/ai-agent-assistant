@@ -1,81 +1,113 @@
-use crate::tools::types::{PermissionKind, RiskClass};
+use std::fmt;
 
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct PolicyContext {
-    pub explicit_user_intent: bool,
-    pub permission_granted: bool,
+use crate::agent::function_call_validation::SchemaValidatedFunctionCall;
+
+/// A locally schema-validated call entering deterministic policy evaluation.
+///
+/// This value carries no approval, dispatch, or execution authority.
+#[derive(Eq, PartialEq)]
+pub struct PolicyInput {
+    validated_call: SchemaValidatedFunctionCall,
 }
 
-impl PolicyContext {
+impl PolicyInput {
     #[must_use]
-    pub fn new(explicit_user_intent: bool, permission_granted: bool) -> Self {
-        Self {
-            explicit_user_intent,
-            permission_granted,
-        }
+    pub fn from_validated_call(validated_call: SchemaValidatedFunctionCall) -> Self {
+        Self { validated_call }
+    }
+
+    #[must_use]
+    pub fn validated_call(&self) -> &SchemaValidatedFunctionCall {
+        &self.validated_call
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct ProposedAction {
-    pub tool_name: String,
-    pub risk_class: RiskClass,
-    pub required_permission: PermissionKind,
-    pub context: PolicyContext,
-}
-
-impl ProposedAction {
-    #[must_use]
-    pub fn new(
-        tool_name: impl Into<String>,
-        risk_class: RiskClass,
-        required_permission: PermissionKind,
-        context: PolicyContext,
-    ) -> Self {
-        Self {
-            tool_name: tool_name.into(),
-            risk_class,
-            required_permission,
-            context,
-        }
+impl fmt::Debug for PolicyInput {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("PolicyInput")
+            .field("validated_call", &self.validated_call)
+            .finish()
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum PolicyOutcome {
     Allow,
     RequireApproval,
     Deny,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum PolicyReason {
+    InformationOnly,
+    RequiredPermissionEvidenceUnavailable,
+    ReadOnlyScopeEvidenceUnavailable,
+    ReversibleRequiresApproval,
+    PersonalDataRequiresApproval,
+    ExternalOrHighImpactNotRegistered,
+    ProhibitedAutonomy,
+}
+
+impl PolicyReason {
+    #[must_use]
+    pub fn outcome(self) -> PolicyOutcome {
+        match self {
+            Self::InformationOnly => PolicyOutcome::Allow,
+            Self::ReversibleRequiresApproval | Self::PersonalDataRequiresApproval => {
+                PolicyOutcome::RequireApproval
+            }
+            Self::RequiredPermissionEvidenceUnavailable
+            | Self::ReadOnlyScopeEvidenceUnavailable
+            | Self::ExternalOrHighImpactNotRegistered
+            | Self::ProhibitedAutonomy => PolicyOutcome::Deny,
+        }
+    }
+}
+
+/// A deterministic policy result retaining the exact input that was evaluated.
+///
+/// Even an `Allow` outcome is non-authorizing data. This type cannot create an
+/// approval request or dispatch a tool.
+#[derive(Eq, PartialEq)]
 pub struct PolicyDecision {
-    pub outcome: PolicyOutcome,
-    pub reason: String,
+    input: PolicyInput,
+    reason: PolicyReason,
 }
 
 impl PolicyDecision {
-    #[must_use]
-    pub fn allow(reason: impl Into<String>) -> Self {
-        Self {
-            outcome: PolicyOutcome::Allow,
-            reason: reason.into(),
-        }
+    pub(super) fn from_reason(input: PolicyInput, reason: PolicyReason) -> Self {
+        Self { input, reason }
     }
 
     #[must_use]
-    pub fn require_approval(reason: impl Into<String>) -> Self {
-        Self {
-            outcome: PolicyOutcome::RequireApproval,
-            reason: reason.into(),
-        }
+    pub fn outcome(&self) -> PolicyOutcome {
+        self.reason.outcome()
     }
 
     #[must_use]
-    pub fn deny(reason: impl Into<String>) -> Self {
-        Self {
-            outcome: PolicyOutcome::Deny,
-            reason: reason.into(),
-        }
+    pub fn reason(&self) -> PolicyReason {
+        self.reason
+    }
+
+    #[must_use]
+    pub fn input(&self) -> &PolicyInput {
+        &self.input
+    }
+
+    #[must_use]
+    pub fn validated_call(&self) -> &SchemaValidatedFunctionCall {
+        self.input.validated_call()
+    }
+}
+
+impl fmt::Debug for PolicyDecision {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("PolicyDecision")
+            .field("outcome", &self.outcome())
+            .field("reason", &self.reason)
+            .field("input", &self.input)
+            .finish()
     }
 }

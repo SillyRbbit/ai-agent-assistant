@@ -4,7 +4,7 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-None. Increment 4B is verified complete. The next Ready task is documentation-only Increment 4C planning; no Increment 4C execution plan exists yet.
+None. Increment 4C is verified complete. The next Ready task is documentation-only Increment 4D exact trusted approval-binding planning; no Increment 4D execution plan exists yet.
 
 ## Completed plans
 
@@ -21,6 +21,7 @@ docs/plans/03c-simulated-tool-result.md
 docs/plans/03d-bounded-mock-loop-completion.md
 docs/plans/04a-gateway-protocol-contract.md
 docs/plans/04b-local-tool-schema-validation.md
+docs/plans/04c-trusted-policy-input-binding.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -65,6 +66,7 @@ A plan must contain:
 | Increment 3D bounded mock-loop completion    | Complete | Project maintainer | 2026-07-14   |
 | Increment 4A gateway protocol contract       | Complete | Project maintainer | 2026-07-14   |
 | Increment 4B local tool-schema validation    | Complete | Project maintainer | 2026-07-14   |
+| Increment 4C trusted policy-input binding    | Complete | Project maintainer | 2026-07-14   |
 
 ## Phase 2 Increment 2E — complete
 
@@ -136,4 +138,14 @@ The next task was documentation-only Increment 4B planning for exact local per-t
 
 The placeholder schema was replaced with exact `get_current_datetime@1` and `create_local_task@1` contracts. Tool definitions now derive identity, version, risk, permission, description, and schema from the closed local catalog. An ownership-consuming validator independently checks normalized gateway calls and returns private typed, redacted, non-authorizing data with no raw JSON.
 
-Focused tests, the full repository gate, dependency audit, diff checks, code review, and security review pass. No dependency, proposal, policy, approval, audit, executor, transport, IPC, persistence, permission, or user-visible path was added. The next Ready task is documentation-only Increment 4C planning for trusted proposal and policy-input binding.
+Focused tests, the full repository gate, dependency audit, diff checks, code review, and security review pass. No dependency, proposal, policy, approval, audit, executor, transport, IPC, persistence, permission, or user-visible path was added. The next task was documentation-only Increment 4C planning for trusted proposal and policy-input binding.
+
+## Phase 4 Increment 4C trusted policy-input binding - complete
+
+The verified 4A/4B boundaries were reconciled with the unused raw proposal/provider-response path, independently constructed policy actions, caller-supplied policy context, generic approval and audit scaffolds, accepted security rules, and actual repository callers. The smallest coherent increment removes the bypasses and lets policy consume one exact locally schema-validated call without caller-supplied state.
+
+The approved plan defined canonical input as the ownership-bound typed `SchemaValidatedFunctionCall`, not serialized bytes or a digest. Because no current type binds intent, permission, scope, and freshness to the exact call, permission-bearing and read-only actions deny and reversible actions require approval. It defined closed policy reasons with derived outcomes and a decision that retains the exact evaluated input while granting no approval or execution authority. Trusted evidence, approval binding, hashes, previews, expiry, one-time consumption, audit, dispatch, provider continuation, networking, credentials, IPC, persistence, and UI remain later work.
+
+The project owner approved the exact plan. Implementation removed the raw proposal/provider-response bypass and caller-supplied policy context, introduced ownership-bound policy input and input-retaining closed decisions, and made unsupported evidence paths fail closed. Four policy unit tests and two public gateway-to-policy integration tests prove the rule table, exact retained metadata and arguments, and debug redaction.
+
+Focused checks, `npm run verify`, dependency audit, diff checks, code review, and security review pass. No dependency, approval, audit, executor, transport, IPC, persistence, permission, or user-visible path was added. The next Ready task is documentation-only Increment 4D planning for exact trusted approval binding.

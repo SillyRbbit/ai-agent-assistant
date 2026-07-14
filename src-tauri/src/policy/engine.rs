@@ -1,18 +1,8 @@
-use thiserror::Error;
-
-use super::types::{PolicyDecision, ProposedAction};
+use super::types::{PolicyDecision, PolicyInput, PolicyReason};
 use crate::tools::types::{PermissionKind, RiskClass};
 
-pub type PolicyResult<T> = Result<T, PolicyError>;
-
 pub trait PolicyEngine {
-    fn evaluate(&self, action: ProposedAction) -> PolicyResult<PolicyDecision>;
-}
-
-#[derive(Debug, Error, Eq, PartialEq)]
-pub enum PolicyError {
-    #[error("proposed action tool name must not be empty")]
-    EmptyToolName,
+    fn evaluate(&self, input: PolicyInput) -> PolicyDecision;
 }
 
 #[derive(Clone, Copy, Debug, Default)]
@@ -26,124 +16,131 @@ impl DeterministicPolicyEngine {
 }
 
 impl PolicyEngine for DeterministicPolicyEngine {
-    fn evaluate(&self, action: ProposedAction) -> PolicyResult<PolicyDecision> {
-        if action.tool_name.trim().is_empty() {
-            return Err(PolicyError::EmptyToolName);
+    fn evaluate(&self, input: PolicyInput) -> PolicyDecision {
+        let call = input.validated_call();
+        let reason = classify(call.risk_class(), call.required_permission());
+
+        PolicyDecision::from_reason(input, reason)
+    }
+}
+
+fn classify(risk_class: RiskClass, required_permission: PermissionKind) -> PolicyReason {
+    match risk_class {
+        RiskClass::ProhibitedAutonomy => PolicyReason::ProhibitedAutonomy,
+        RiskClass::ExternalOrHighImpactAction => PolicyReason::ExternalOrHighImpactNotRegistered,
+        _ if required_permission != PermissionKind::None => {
+            PolicyReason::RequiredPermissionEvidenceUnavailable
         }
-
-        if action.required_permission != PermissionKind::None && !action.context.permission_granted
-        {
-            return Ok(PolicyDecision::deny(
-                "required permission is not currently granted",
-            ));
-        }
-
-        let decision = match action.risk_class {
-            RiskClass::InformationOnly => PolicyDecision::allow("information-only action"),
-            RiskClass::ReadOnlyDeviceAccess => {
-                PolicyDecision::allow("read-only action with required scope")
-            }
-            RiskClass::ReversibleLocalAction if action.context.explicit_user_intent => {
-                PolicyDecision::allow("reversible action with explicit user intent")
-            }
-            RiskClass::ReversibleLocalAction => PolicyDecision::require_approval(
-                "reversible action lacks narrow deterministic intent",
-            ),
-            RiskClass::PersonalDataModification => PolicyDecision::require_approval(
-                "personal-data modification always requires approval",
-            ),
-            RiskClass::ExternalOrHighImpactAction => PolicyDecision::deny(
-                "external or high-impact actions are not registered in the MVP",
-            ),
-            RiskClass::ProhibitedAutonomy => {
-                PolicyDecision::deny("prohibited autonomy is always denied")
-            }
-        };
-
-        Ok(decision)
+        RiskClass::InformationOnly => PolicyReason::InformationOnly,
+        RiskClass::ReadOnlyDeviceAccess => PolicyReason::ReadOnlyScopeEvidenceUnavailable,
+        RiskClass::ReversibleLocalAction => PolicyReason::ReversibleRequiresApproval,
+        RiskClass::PersonalDataModification => PolicyReason::PersonalDataRequiresApproval,
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{DeterministicPolicyEngine, PolicyEngine, PolicyError};
-    use crate::policy::types::{PolicyContext, PolicyOutcome, ProposedAction};
+    use super::classify;
+    use crate::policy::types::{PolicyOutcome, PolicyReason};
     use crate::tools::types::{PermissionKind, RiskClass};
 
-    fn action(risk_class: RiskClass, context: PolicyContext) -> ProposedAction {
-        ProposedAction::new("example_tool", risk_class, PermissionKind::None, context)
+    #[test]
+    fn derives_one_outcome_from_each_closed_reason() {
+        let cases = [
+            (PolicyReason::InformationOnly, PolicyOutcome::Allow),
+            (
+                PolicyReason::RequiredPermissionEvidenceUnavailable,
+                PolicyOutcome::Deny,
+            ),
+            (
+                PolicyReason::ReadOnlyScopeEvidenceUnavailable,
+                PolicyOutcome::Deny,
+            ),
+            (
+                PolicyReason::ReversibleRequiresApproval,
+                PolicyOutcome::RequireApproval,
+            ),
+            (
+                PolicyReason::PersonalDataRequiresApproval,
+                PolicyOutcome::RequireApproval,
+            ),
+            (
+                PolicyReason::ExternalOrHighImpactNotRegistered,
+                PolicyOutcome::Deny,
+            ),
+            (PolicyReason::ProhibitedAutonomy, PolicyOutcome::Deny),
+        ];
+
+        for (reason, expected) in cases {
+            assert_eq!(reason.outcome(), expected);
+        }
     }
 
     #[test]
-    fn allows_information_only_actions() {
-        let engine = DeterministicPolicyEngine::new();
-        let decision = engine.evaluate(action(
-            RiskClass::InformationOnly,
-            PolicyContext::new(false, true),
-        ));
+    fn classifies_every_risk_conservatively_without_permission_evidence() {
+        let cases = [
+            (RiskClass::InformationOnly, PolicyReason::InformationOnly),
+            (
+                RiskClass::ReadOnlyDeviceAccess,
+                PolicyReason::ReadOnlyScopeEvidenceUnavailable,
+            ),
+            (
+                RiskClass::ReversibleLocalAction,
+                PolicyReason::ReversibleRequiresApproval,
+            ),
+            (
+                RiskClass::PersonalDataModification,
+                PolicyReason::PersonalDataRequiresApproval,
+            ),
+            (
+                RiskClass::ExternalOrHighImpactAction,
+                PolicyReason::ExternalOrHighImpactNotRegistered,
+            ),
+            (
+                RiskClass::ProhibitedAutonomy,
+                PolicyReason::ProhibitedAutonomy,
+            ),
+        ];
 
-        assert!(matches!(
-            decision,
-            Ok(decision) if decision.outcome == PolicyOutcome::Allow
-        ));
+        for (risk_class, expected) in cases {
+            assert_eq!(classify(risk_class, PermissionKind::None), expected);
+        }
     }
 
     #[test]
-    fn requires_approval_for_personal_data_modification() {
-        let engine = DeterministicPolicyEngine::new();
-        let decision = engine.evaluate(action(
-            RiskClass::PersonalDataModification,
-            PolicyContext::new(true, true),
-        ));
-
-        assert!(matches!(
-            decision,
-            Ok(decision) if decision.outcome == PolicyOutcome::RequireApproval
-        ));
-    }
-
-    #[test]
-    fn denies_prohibited_autonomy() {
-        let engine = DeterministicPolicyEngine::new();
-        let decision = engine.evaluate(action(
-            RiskClass::ProhibitedAutonomy,
-            PolicyContext::new(true, true),
-        ));
-
-        assert!(matches!(
-            decision,
-            Ok(decision) if decision.outcome == PolicyOutcome::Deny
-        ));
-    }
-
-    #[test]
-    fn denies_missing_permission_before_risk_evaluation() {
-        let engine = DeterministicPolicyEngine::new();
-        let decision = engine.evaluate(ProposedAction::new(
-            "search_contacts",
-            RiskClass::ReadOnlyDeviceAccess,
+    fn denies_every_required_permission_without_call_bound_evidence() {
+        let permissions = [
+            PermissionKind::Calendar,
+            PermissionKind::Reminders,
             PermissionKind::Contacts,
-            PolicyContext::new(true, false),
-        ));
+            PermissionKind::Notifications,
+            PermissionKind::Files,
+            PermissionKind::Accessibility,
+            PermissionKind::ScreenRecording,
+            PermissionKind::Automation,
+            PermissionKind::Microphone,
+        ];
 
-        assert!(matches!(
-            decision,
-            Ok(decision) if decision.outcome == PolicyOutcome::Deny
-        ));
+        for permission in permissions {
+            assert_eq!(
+                classify(RiskClass::InformationOnly, permission),
+                PolicyReason::RequiredPermissionEvidenceUnavailable
+            );
+        }
     }
 
     #[test]
-    fn rejects_empty_tool_names() {
-        let engine = DeterministicPolicyEngine::new();
-
+    fn preserves_hard_denials_before_permission_classification() {
         assert_eq!(
-            engine.evaluate(ProposedAction::new(
-                " ",
-                RiskClass::InformationOnly,
-                PermissionKind::None,
-                PolicyContext::new(true, true),
-            )),
-            Err(PolicyError::EmptyToolName)
+            classify(
+                RiskClass::ExternalOrHighImpactAction,
+                PermissionKind::Contacts
+            ),
+            PolicyReason::ExternalOrHighImpactNotRegistered
+        );
+        assert_eq!(
+            classify(RiskClass::ProhibitedAutonomy, PermissionKind::Contacts),
+            PolicyReason::ProhibitedAutonomy
         );
     }
 }

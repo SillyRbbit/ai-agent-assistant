@@ -409,7 +409,29 @@ Consequences:
 - Content-bearing validated types do not derive `Clone`, `Serialize`, or raw-value `Debug`; task titles remain available only through a read-only typed accessor.
 - Unknown tools, contract mismatches, missing or additional properties, wrong types, malformed values, title bounds, surrounding whitespace, and control characters fail closed.
 - `ToolCallProposal`, `AgentProviderResponse`, `ProposedAction`, policy, approval, audit, executor, runtime registration, transport, IPC, persistence, and UI remain unchanged.
-- A later approved increment must remove or restrict legacy raw proposal constructors and define the only canonical conversion into deterministic policy input before orchestration is wired.
+- D-023 and Increment 4C resolve the legacy proposal gap by removing the raw constructors and defining the only canonical conversion into deterministic policy input.
+
+## D-023 — Bind deterministic policy to one owned schema-validated call
+
+Date: 2026-07-14
+Status: Accepted; Increment 4C implemented and verified
+
+Decision: remove `ToolCallProposal`, the unused `AgentProviderResponse::ToolCalls` path, `PolicyContext`, and `ProposedAction`. `PolicyInput` can be constructed only by consuming one `SchemaValidatedFunctionCall`, so exact call ID, local tool name, tool-contract version, closed typed arguments, risk class, and required permission remain one ownership-bound value through deterministic policy evaluation.
+
+`PolicyDecision` owns the exact `PolicyInput` it evaluated. Its outcome is derived from one closed `PolicyReason`; neither input nor decision derives `Clone`, serialization, or raw-value debug output. `PolicyOutcome::Allow` is non-authorizing data and has no conversion to approval, audit, dispatch, or execution.
+
+Caller-supplied `explicit_user_intent` and `permission_granted` booleans are removed rather than renamed as trusted state. Without exact call-bound intent, permission, resource-scope, provenance, and freshness evidence, policy is conservative: prohibited and external/high-impact classes deny first; any remaining permission-bearing call denies; read-only device access denies; reversible local and personal-data modifications require approval; only information-only calls with no required permission allow.
+
+Rationale: a public boolean cannot prove that user intent, a permission grant, resource scope, and observation time belong to the exact validated call. Removing that bypass and retaining the consumed typed call prevents caller or model metadata from becoming policy truth, while conservative outcomes avoid inventing trusted evidence before its source and binding are designed.
+
+Consequences:
+
+- `get_current_datetime@1` evaluates to non-authorizing `Allow` with `InformationOnly`.
+- `create_local_task@1` evaluates to `RequireApproval` with `ReversibleRequiresApproval`; no caller can bypass approval by setting an intent boolean.
+- Permission-bearing and read-only tools cannot allow until a later approved type binds exact permission and scope evidence to the call.
+- Approval requests, previews, canonical digests, run binding, expiry, one-time consumption, audit records, dispatch, and execution remain disconnected.
+- Existing generic approval and audit scaffolds are not production-ready and remain unchanged.
+- Existing Rust types are sufficient; no dependency, manifest, or lockfile change is introduced.
 
 ## Open decisions
 
