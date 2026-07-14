@@ -22,38 +22,42 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 3D — bounded mock-loop completion: **Verified complete**.
 - Phase 4 gateway and Responses security-boundary planning: **Complete**.
 - Increment 4A — deterministic gateway protocol contract: **Verified complete**.
+- Increment 4B — exact local tool-schema validation: **Verified complete**.
 
-## Phase 4 Increment 4B planning - exact local tool-schema validation
+## Phase 4 Increment 4C planning - trusted proposal and policy-input binding
 
 Status: **Ready - documentation only**
 
 Goal:
 
-- Reconcile the placeholder `ToolSchema`, current tool registry, `ToolCallProposal`, policy boundary, and verified `UntrustedFunctionCall` with the product and security requirements.
-- Define the smallest transport-free increment that gives trusted Rust an exact locally owned per-tool schema and validates normalized arguments before any proposal or policy conversion.
-- Produce one exact implementation plan with files, dependency decision, typed errors, adversarial tests, risks, non-goals, verification, rollback, and an explicit project-owner approval gate.
+- Reconcile `SchemaValidatedFunctionCall`, the legacy raw `ToolCallProposal`, `AgentProviderResponse`, `ProposedAction`, and `PolicyEngine` with the product, security, and actual Rust boundaries.
+- Define the smallest transport-free increment that makes one locally validated call the only source of canonical policy input without granting approval or execution authority.
+- Produce one exact plan covering canonical argument representation, identity/version/risk/permission binding, typed errors, tests, files, non-goals, risks, verification, and rollback.
 
 Planning inputs:
 
 ```text
-src-tauri/src/agent/gateway_protocol.rs
+src-tauri/src/agent/function_call_validation.rs
 src-tauri/src/agent/types.rs
-src-tauri/src/tools/registry.rs
+src-tauri/src/tools/types.rs
+src-tauri/src/policy/types.rs
 src-tauri/src/policy/engine.rs
-docs/plans/04a-gateway-protocol-contract.md
+src-tauri/src/approvals/
+src-tauri/src/audit/
+docs/plans/04b-local-tool-schema-validation.md
 ```
 
 Explicitly excluded:
 
 - Runtime or dependency edits during planning.
-- Gateway networking, OpenAI calls, credentials, Keychain, identity, deployment, provider continuation, and tool-result submission.
-- Policy authorization, approval UI, executor wiring, Tauri/WebView IPC, persistence, capabilities, CSP, packaging, or operating-system permissions.
-- Generic or caller-defined schemas, provider-selected authority, broad tool-registry refactors, and any real tool execution.
+- Approval issuance or consumption, audit persistence, executor wiring, tool implementations, and provider continuation.
+- Gateway networking, OpenAI calls, credentials, Keychain, identity, deployment, IPC, UI, persistence, capabilities, CSP, packaging, or operating-system permissions.
+- Treating schema validity or policy allowance as user approval or execution authorization.
 
 Planning completion gate:
 
-- Inspect clean merged `main`, repository memory, current Rust contracts/tests, and exact dependency state.
+- Inspect clean merged `main`, repository memory, the verified 4A/4B contracts, current policy/proposal/approval/audit types, and exact dependency state.
 - Recommend only one smallest independently verified increment and update planning documentation only.
-- Run the smallest relevant documentation/baseline checks, review the complete diff, and wait for project-owner approval.
+- Run the smallest relevant documentation and baseline checks, review the complete diff, and wait for project-owner approval.
 
-Do not start Increment 4B implementation or any live gateway work during this planning task.
+Do not implement Increment 4C or begin live gateway work during this planning task.

@@ -4,7 +4,7 @@ Last updated: 2026-07-14
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increment 4A - **verified complete**. The next Ready task is documentation-only Increment 4B planning for exact local tool-schema validation.
+Phase 3 and Phase 4 Increments 4A and 4B - **verified complete**. The next Ready task is documentation-only Increment 4C planning for trusted proposal and policy-input binding.
 
 ## Increment status
 
@@ -25,6 +25,7 @@ Phase 3 and Phase 4 Increment 4A - **verified complete**. The next Ready task is
 - Increment 3C: simulated tool result — **verified complete on target Mac**.
 - Increment 3D: bounded mock-loop completion — **verified complete on target Mac**.
 - Increment 4A: deterministic gateway protocol contract - **verified complete on target Mac**.
+- Increment 4B: exact local tool-schema validation - **verified complete on target Mac**.
 
 ## Verified baseline through Increment 2E
 
@@ -100,7 +101,7 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-On clean merged `main`, plan only the smallest Increment 4B exact local tool-schema validation contract. Reconcile the placeholder `ToolSchema`, tool registry, `ToolCallProposal`, policy boundary, and verified `UntrustedFunctionCall`; update planning documentation only and wait for project-owner approval before runtime or dependency changes.
+On clean merged `main`, plan only the smallest Increment 4C trusted proposal and policy-input boundary. Reconcile the verified schema-valid call with legacy proposal, provider-response, policy, approval, and audit types; update planning documentation only and wait for project-owner approval before runtime or dependency changes.
 
 ## Phase 4 planning result
 
@@ -130,6 +131,22 @@ On clean merged `main`, plan only the smallest Increment 4B exact local tool-sch
 - `npm audit --audit-level=low`: zero vulnerabilities. `git diff --check`, code review, and security review passed with no findings.
 - No native manual interaction gate was required because the module is not wired to Tauri.
 - No network, gateway, credential, IPC, WebView, provider, tool execution, persistence, capability, CSP, packaging, or permission path was added.
+
+## Increment 4B capability and evidence
+
+- The closed catalog contains only `get_current_datetime@1` with an exact empty object and `create_local_task@1` with one required canonical title capped at 200 Unicode scalar values.
+- Schema-backed private definitions derive exact name, description, version, risk, permission, and strict input schema locally.
+- `validate_function_call` consumes an Increment 4A `UntrustedFunctionCall`, independently checks local registry identity, contract version, exact shape, and title semantics, then drops the raw JSON.
+- Successful output has private typed arguments, locally derived classification, redacted debug output, and explicit non-authorizing semantics.
+- Missing/additional/wrong-type fields, malformed values, empty or non-canonical titles, overlength titles, controls, unknown tools, and version mismatches fail closed through typed redacted errors.
+- `ToolCallProposal`, provider response, policy, approval, audit, executor, runtime registration, gateway transport, IPC, persistence, and UI remain unchanged.
+- Existing direct `serde` and `serde_json` were sufficient; Cargo manifests and lockfiles are unchanged.
+- Planning baseline passed TypeScript, three tool-registry tests, and 17 gateway-protocol tests on clean merged `main` at `e1db18b`.
+- Focused final tests passed: five schema, four registry, and six gateway-to-local validation tests.
+- `npm run verify` passed with 124 frontend tests, 79 Rust library tests, six Rust integration tests, production frontend builds, and the Tauri release no-bundle build.
+- `npm audit --audit-level=low` reported zero vulnerabilities; diff checks, code review, and security review passed with no findings.
+- No native interaction gate was required because the modules remain transport-free and unreferenced by Tauri.
+- No dependency, network, credential, provider, proposal conversion, policy call, approval, audit, executor, IPC, persistence, capability, CSP, packaging, permission, or user-visible path was added.
 
 ## Phase 3D planning result
 

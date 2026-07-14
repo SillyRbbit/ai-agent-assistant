@@ -115,7 +115,7 @@ Delete the new module, remove its module export and direct dependency, and resto
 
 ## Approval gate
 
-The project owner approved the exact plan on 2026-07-14. No commit or push was requested or performed.
+The project owner approved the exact plan on 2026-07-14. After verification and closeout, commit `e1db18b` was pushed and fast-forward merged into `main` at the project owner's request.
 
 ## Actual implementation
 

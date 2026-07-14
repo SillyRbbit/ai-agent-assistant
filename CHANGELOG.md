@@ -6,6 +6,11 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Phase 4 Increment 4B closed Rust schema catalog for exact `get_current_datetime@1` and `create_local_task@1` input contracts.
+- Ownership-consuming gateway-to-local function-call validation with typed arguments, locally derived risk and permission, and explicitly non-authorizing output.
+- Fifteen focused schema, registry, boundary, and redaction tests, bringing the Rust library suite to 79 tests.
+- Documentation-only Phase 4 Increment 4B plan for closed local tool schemas and typed validation of normalized function calls before proposal or policy conversion.
+- Proposed exact version-1 input contracts for `get_current_datetime` and `create_local_task`, with locally derived identity, risk, permission, and redacted typed argument handling.
 - Phase 4 Increment 4A transport-free Rust gateway protocol with closed normalized events, typed redacted failures, conservative limits, sequence/state validation, and idempotent local cancellation.
 - Explicitly non-actionable function-call values with allowed-name and tool-contract checks plus bounded, duplicate-free JSON-object argument validation.
 - Seventeen focused gateway-protocol tests, bringing the Rust library suite to 67 tests.
@@ -55,6 +60,11 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Replaced arbitrary placeholder schema and independently supplied tool-definition metadata with schema-derived private definitions.
+- Marked Increment 4B verified complete after focused checks, the full repository gate, dependency audit, diff checks, code review, and security review passed.
+- Made documentation-only planning for trusted proposal and policy-input binding the next Ready task.
+- Made project-owner approval of the exact Increment 4B schema-validation plan the next gate after documentation-only planning completed.
+- Chose an existing-dependency design using `serde` and `serde_json`; the proposed implementation changes no Cargo manifest or lockfile.
 - Added the exact direct `serde_json 1.0.150` dependency already present in the lockfile and exported the portable gateway-protocol module without wiring it to Tauri or the existing provider.
 - Marked Increment 4A verified complete after focused checks, the full repository gate, dependency audit, diff checks, code review, and security review passed.
 - Made documentation-only planning for exact local tool-schema validation the next Ready task.
@@ -98,6 +108,11 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Security
 
+- Exact local schema validation now rejects unknown tools, contract mismatches, missing or additional fields, wrong types, malformed values, non-canonical titles, control characters, and title-limit violations before any proposal or policy conversion.
+- Successful schema validation discards raw JSON, exposes content only through private typed arguments, redacts debug output, and derives classification only from the local catalog.
+- Increment 4B adds no proposal conversion, authorization, policy call, approval, audit, executor, runtime tool registration, network, credential, IPC, persistence, capability, CSP, permission, dependency, or user-visible path.
+- The Increment 4B plan keeps schema-valid function calls non-authorizing, derives risk and permission only from closed local definitions, discards raw JSON after typed parsing, and prohibits proposal, policy, approval, audit, IPC, or executor conversion.
+- Increment 4B planning changes documentation only and adds no dependency, network, credential, provider, persistence, Tauri, capability, CSP, packaging, permission, or user-visible path.
 - Normalized gateway frames are bounded before decoding and fail closed on unknown fields/variants, malformed identity, sequence/state violations, mixed or excess output, late events, and invalid terminal behavior.
 - Parsed function calls remain private-field untrusted protocol data with no `ToolCallProposal`, policy, approval, IPC, or executor conversion path.
 - Increment 4A adds no network client, gateway deployment, credential, WebView IPC, persistence, capability, CSP, packaging, operating-system permission, or user-visible behavior.

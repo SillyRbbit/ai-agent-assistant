@@ -38,12 +38,12 @@ impl InMemoryToolRegistry {
 
 impl ToolRegistry for InMemoryToolRegistry {
     fn register(&mut self, definition: ToolDefinition) -> ToolRegistryResult<()> {
-        let name = definition.name.trim().to_owned();
+        let name = definition.name().trim().to_owned();
         if name.is_empty() {
             return Err(ToolRegistryError::EmptyName);
         }
 
-        if definition.description.trim().is_empty() {
+        if definition.description().trim().is_empty() {
             return Err(ToolRegistryError::EmptyDescription);
         }
 
@@ -70,27 +70,37 @@ impl ToolRegistry for InMemoryToolRegistry {
 #[cfg(test)]
 mod tests {
     use super::{InMemoryToolRegistry, ToolRegistry, ToolRegistryError};
-    use crate::tools::types::{PermissionKind, RiskClass, ToolDefinition, ToolSchema};
+    use crate::tools::types::{ToolDefinition, ToolSchema};
 
-    fn example_tool(name: &str) -> ToolDefinition {
-        ToolDefinition::new(
-            name,
-            "example deterministic tool",
-            RiskClass::InformationOnly,
-            PermissionKind::None,
-            ToolSchema::placeholder(1),
-        )
+    fn definition(schema: ToolSchema) -> ToolDefinition {
+        ToolDefinition::from_schema(schema)
     }
 
     #[test]
     fn registers_and_gets_a_tool() {
         let mut registry = InMemoryToolRegistry::new();
-        let result = registry.register(example_tool("get_current_datetime"));
+        let result = registry.register(definition(ToolSchema::GetCurrentDatetimeV1));
 
         assert_eq!(result, Ok(()));
         assert_eq!(
             registry.get("get_current_datetime"),
-            Ok(example_tool("get_current_datetime"))
+            Ok(definition(ToolSchema::GetCurrentDatetimeV1))
+        );
+    }
+
+    #[test]
+    fn rejects_duplicate_tools() {
+        let mut registry = InMemoryToolRegistry::new();
+        assert_eq!(
+            registry.register(definition(ToolSchema::GetCurrentDatetimeV1)),
+            Ok(())
+        );
+
+        assert_eq!(
+            registry.register(definition(ToolSchema::GetCurrentDatetimeV1)),
+            Err(ToolRegistryError::DuplicateTool(
+                "get_current_datetime".to_owned()
+            ))
         );
     }
 
@@ -108,11 +118,27 @@ mod tests {
     fn lists_tools_in_deterministic_name_order() {
         let mut registry = InMemoryToolRegistry::new();
 
-        assert_eq!(registry.register(example_tool("zeta")), Ok(()));
-        assert_eq!(registry.register(example_tool("alpha")), Ok(()));
+        assert_eq!(
+            registry.register(definition(ToolSchema::GetCurrentDatetimeV1)),
+            Ok(())
+        );
+        assert_eq!(
+            registry.register(definition(ToolSchema::CreateLocalTaskV1)),
+            Ok(())
+        );
 
-        let names: Vec<String> = registry.list().into_iter().map(|tool| tool.name).collect();
+        let names: Vec<String> = registry
+            .list()
+            .into_iter()
+            .map(|tool| tool.name().to_owned())
+            .collect();
 
-        assert_eq!(names, vec!["alpha".to_owned(), "zeta".to_owned()]);
+        assert_eq!(
+            names,
+            vec![
+                "create_local_task".to_owned(),
+                "get_current_datetime".to_owned()
+            ]
+        );
     }
 }

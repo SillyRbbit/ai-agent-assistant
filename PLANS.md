@@ -4,7 +4,7 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-None. Increment 4A is complete. The next Ready task is documentation-only Increment 4B planning; no Increment 4B execution plan exists yet.
+None. Increment 4B is verified complete. The next Ready task is documentation-only Increment 4C planning; no Increment 4C execution plan exists yet.
 
 ## Completed plans
 
@@ -20,6 +20,7 @@ docs/plans/03b-mock-context-provenance.md
 docs/plans/03c-simulated-tool-result.md
 docs/plans/03d-bounded-mock-loop-completion.md
 docs/plans/04a-gateway-protocol-contract.md
+docs/plans/04b-local-tool-schema-validation.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -63,6 +64,7 @@ A plan must contain:
 | Increment 3C simulated tool result           | Complete | Project maintainer | 2026-07-13   |
 | Increment 3D bounded mock-loop completion    | Complete | Project maintainer | 2026-07-14   |
 | Increment 4A gateway protocol contract       | Complete | Project maintainer | 2026-07-14   |
+| Increment 4B local tool-schema validation    | Complete | Project maintainer | 2026-07-14   |
 
 ## Phase 2 Increment 2E — complete
 
@@ -128,4 +130,10 @@ Increment 4A was approved and implemented as the smallest Phase 4 increment: one
 
 The versioned normalized event contract, transactional stream validator, conservative limits, local cancellation, closed redacted failures, and explicitly non-actionable function-call values are implemented. Seventeen focused tests cover accepted text/function streams and malformed, oversized, mismatched, out-of-order, duplicate, late, mixed, over-limit, duplicate-key, unknown-tool/contract, and error-redaction cases. The full gate passes with 124 frontend tests, 67 Rust library tests, six Rust integration tests, and production frontend/Tauri builds.
 
-The next Ready task is documentation-only Increment 4B planning for exact local per-tool schema validation. It must not add transport, credentials, IPC, policy authorization, approval, or execution.
+The next task was documentation-only Increment 4B planning for exact local per-tool schema validation. That plan was approved and implemented as recorded below.
+
+## Phase 4 Increment 4B local tool-schema validation - complete
+
+The placeholder schema was replaced with exact `get_current_datetime@1` and `create_local_task@1` contracts. Tool definitions now derive identity, version, risk, permission, description, and schema from the closed local catalog. An ownership-consuming validator independently checks normalized gateway calls and returns private typed, redacted, non-authorizing data with no raw JSON.
+
+Focused tests, the full repository gate, dependency audit, diff checks, code review, and security review pass. No dependency, proposal, policy, approval, audit, executor, transport, IPC, persistence, permission, or user-visible path was added. The next Ready task is documentation-only Increment 4C planning for trusted proposal and policy-input binding.

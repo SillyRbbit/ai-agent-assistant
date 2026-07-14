@@ -390,6 +390,27 @@ Consequences:
 - The gateway identity provider and deployment platform remain open decision O-006 and do not block the transport-free protocol contract.
 - Provider retention configuration and user disclosure remain open decision O-007 and do not block the transport-free protocol contract.
 
+## D-022 — Own exact tool input contracts and classification in trusted Rust
+
+Date: 2026-07-14
+Status: Accepted; Increment 4B implemented and verified
+
+Decision: trusted Rust owns a closed local `ToolSchema` catalog. Its first and only variants are `get_current_datetime@1`, which accepts exactly an empty JSON object and is classified `InformationOnly` with no permission, and `create_local_task@1`, which accepts exactly one required canonical `title` string of 1-200 Unicode scalar values with no control characters and is classified `ReversibleLocalAction` with no permission.
+
+Each `ToolDefinition` is constructed only from one schema variant, so name, description, version, risk, permission, schema document, and typed argument parser cannot be supplied independently. A normalized gateway function call remains untrusted until an ownership-consuming local validator finds its registered definition, independently matches the contract version, and parses its arguments through that exact schema. Successful output contains private typed arguments and locally derived metadata but grants no policy allowance, approval, audit status, dispatch eligibility, or execution authority.
+
+Existing direct `serde` and `serde_json` dependencies implement the two closed contracts. A general JSON Schema engine or promoted `schemars` dependency is not justified at this scale. Exact schema-value assertions and accepted/rejected fixtures mitigate schema/parser drift; a reviewed dependency decision is required if materially different schemas make this approach incomplete or repetitive.
+
+Rationale: provider strict mode and gateway object validation are defense in depth, not local authorization. Binding local identity, schema, risk, and permission in one closed catalog prevents model, gateway, or caller-supplied metadata from becoming trusted policy input. Consuming the normalized call and returning content-redacted non-serializable types prevents accidental raw-JSON retention or premature transport/persistence use.
+
+Consequences:
+
+- Raw argument JSON is discarded after successful typed parsing and omitted from all validation errors.
+- Content-bearing validated types do not derive `Clone`, `Serialize`, or raw-value `Debug`; task titles remain available only through a read-only typed accessor.
+- Unknown tools, contract mismatches, missing or additional properties, wrong types, malformed values, title bounds, surrounding whitespace, and control characters fail closed.
+- `ToolCallProposal`, `AgentProviderResponse`, `ProposedAction`, policy, approval, audit, executor, runtime registration, transport, IPC, persistence, and UI remain unchanged.
+- A later approved increment must remove or restrict legacy raw proposal constructors and define the only canonical conversion into deterministic policy input before orchestration is wired.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

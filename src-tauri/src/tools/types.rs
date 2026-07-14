@@ -1,3 +1,5 @@
+pub use super::schema::ToolSchema;
+
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub enum RiskClass {
     InformationOnly,
@@ -23,46 +25,49 @@ pub enum PermissionKind {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct ToolSchema {
-    pub version: u16,
-    pub document: String,
-}
-
-impl ToolSchema {
-    #[must_use]
-    pub fn placeholder(version: u16) -> Self {
-        Self {
-            version,
-            document: "{}".to_owned(),
-        }
-    }
-}
-
-#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ToolDefinition {
-    pub name: String,
-    pub description: String,
-    pub risk_class: RiskClass,
-    pub required_permission: PermissionKind,
-    pub schema: ToolSchema,
+    name: String,
+    description: String,
+    risk_class: RiskClass,
+    required_permission: PermissionKind,
+    schema: ToolSchema,
 }
 
 impl ToolDefinition {
     #[must_use]
-    pub fn new(
-        name: impl Into<String>,
-        description: impl Into<String>,
-        risk_class: RiskClass,
-        required_permission: PermissionKind,
-        schema: ToolSchema,
-    ) -> Self {
+    pub fn from_schema(schema: ToolSchema) -> Self {
         Self {
-            name: name.into(),
-            description: description.into(),
-            risk_class,
-            required_permission,
+            name: schema.name().to_owned(),
+            description: schema.description().to_owned(),
+            risk_class: schema.risk_class(),
+            required_permission: schema.required_permission(),
             schema,
         }
+    }
+
+    #[must_use]
+    pub fn name(&self) -> &str {
+        &self.name
+    }
+
+    #[must_use]
+    pub fn description(&self) -> &str {
+        &self.description
+    }
+
+    #[must_use]
+    pub fn risk_class(&self) -> RiskClass {
+        self.risk_class
+    }
+
+    #[must_use]
+    pub fn required_permission(&self) -> PermissionKind {
+        self.required_permission
+    }
+
+    #[must_use]
+    pub fn schema(&self) -> ToolSchema {
+        self.schema
     }
 }
 
