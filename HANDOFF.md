@@ -4,9 +4,11 @@ Last updated: 2026-07-14
 
 ## Current state
 
-Phase 3 and Phase 4 Increments 4A through 4D are verified complete on the target Mac. Increment 4D was implemented on branch `phase4/increment-4d`, based on clean merged `main` at `55626b6`.
+Phase 3 and Phase 4 Increments 4A through 4D are verified complete on the target Mac. Increment 4D was implemented on branch `phase4/increment-4d`, based on merged `main` at `55626b6`.
 
-The complete implementation and closeout diff is uncommitted and unpushed. No runtime approval source, UI, IPC, audit, dispatch, executor, persistence, provider, or network integration was added. Documentation-only Increment 4E planning for a trusted approval-decision source is the next Ready repository task after Increment 4D is reviewed and merged.
+The project owner requested commit, push, and fast-forward merge after verification. Implementation commit `1bf1f10` and this publication-state closeout were pushed on `phase4/increment-4d` and fast-forward merged into `main`. The final `main` working tree is clean.
+
+No runtime approval source, UI, IPC, audit, dispatch, executor, persistence, provider, or network integration was added. Documentation-only Increment 4E planning for a trusted approval-decision source is the next Ready repository task.
 
 ## Completed work
 
@@ -130,7 +132,7 @@ Manual verification still pending:
 
 ## Exact next task
 
-Review the uncommitted Increment 4D diff. Commit, push, and merge only after an explicit project-owner instruction. On clean merged `main`, perform documentation-only Increment 4E planning for the trusted approval-decision source; recommend one smallest independently verified runtime increment and wait for approval. Do not start runtime implementation or a later gateway increment during planning.
+On clean merged `main`, perform documentation-only Increment 4E planning for the trusted approval-decision source; recommend one smallest independently verified runtime increment and wait for approval. Do not start runtime implementation or a later gateway increment during planning.
 
 ## Ready-to-paste resume prompt
 

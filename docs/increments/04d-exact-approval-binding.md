@@ -184,4 +184,4 @@ Remove the new integration test, restore the prior gateway and validated-call id
 
 ## Approval gate
 
-The project owner approved the exact goal, identity propagation, canonical-preview/no-digest decision, relative 120-second expiry, one-pending and 1,024-subject limits, run-cancellation boundary, terminal and replay semantics, exact files, no-dependency decision, tests, non-goals, verification gate, and rollback before implementation. No scope expansion occurred.
+The project owner approved the exact goal, identity propagation, canonical-preview/no-digest decision, relative 120-second expiry, one-pending and 1,024-subject limits, run-cancellation boundary, terminal and replay semantics, exact files, no-dependency decision, tests, non-goals, verification gate, and rollback before implementation. No scope expansion occurred. After verification, implementation commit `1bf1f10` and the publication-state closeout were pushed and fast-forward merged into `main` at the project owner's request.
