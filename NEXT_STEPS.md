@@ -2,7 +2,7 @@
 
 Last updated: 2026-07-13
 
-This file is the ordered implementation queue. Work only on the first item marked **Ready** unless a blocking defect requires a smaller troubleshooting increment.
+This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must be closed before later feature work begins.
 
 ## Completed increments
 
@@ -13,74 +13,38 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 2C — storage startup integration: **Verified complete**.
 - Increment 2D — macOS menu-bar and window lifecycle: **Verified complete**.
 
-Increment 2D target-Mac result:
-
-- Rust formatting passed.
-- Clippy passed for all targets and features with warnings denied.
-- All Rust unit and integration tests passed.
-- TypeScript typechecking and the Vite production build passed.
-- The native application launched.
-- The menu-bar icon and all four fixed actions worked.
-- Closing hid the main window without terminating the process.
-- Menu-bar and Dock reopen behavior worked.
-- Quit terminated the process.
-- Storage remained idempotent.
-- `get_app_info` remained functional.
-- The React UI remained unchanged.
-- No permission prompt appeared.
-
-Record: `docs/increments/02d-menu-bar-window-lifecycle.md`.
-
-Plan: `docs/plans/02d-menu-bar-window-lifecycle.md`.
-
 ## Increment 2E — React application shell
 
-Status: **Ready**
+Status: **Implementation complete — target-Mac verification pending**
 
-Goal: replace the proof-of-connection page with the in-memory React application shell and safely consume the existing closed menu-route event.
+Goal: replace the proof-of-connection screen with a platform-neutral React application shell and consume the existing closed menu-route event.
 
-### Planned work
+Implemented:
 
-- Resolve O-004 before introducing shared frontend state. Prefer React reducer plus context unless another dependency is clearly necessary and documented.
-- Add a platform-neutral application-state model.
-- Add sidebar entries for:
-  - Conversations
-  - Tasks
-  - Memory
-  - Activity
-  - Integrations
-  - Permissions
-  - Settings
-- Add the conversation workspace.
-- Add a non-functional input composer shell.
-- Add empty, loading, and error presentation states.
-- Add a Settings page shell.
-- Add a Permission Center shell with placeholder permission rows and no OS permission requests.
-- Listen for the existing `assistant-menu-route` event.
-- Accept only `new_request` and `tasks_placeholder`.
-- Route `new_request` to Conversations.
-- Route `tasks_placeholder` to Tasks.
-- Ignore malformed or unknown event payloads safely.
-- Preserve the typed `get_app_info` wrapper and display connection diagnostics in an appropriate page.
-- Keep state local and in memory.
-- Add focused reducer, route-event, accessibility, and component tests.
+- React reducer plus context for local deterministic shell state.
+- Sidebar navigation for Conversations, Tasks, Memory, Activity, Integrations, Permissions, and Settings.
+- Conversation workspace and non-functional in-memory composer.
+- Empty, loading, and error presentation states.
+- Settings shell containing existing `get_app_info` diagnostics.
+- Permission Center shell with no operating-system request controls.
+- Strict `assistant-menu-route` listener.
+- Closed routing for `new_request` and `tasks_placeholder`.
+- Safe rejection of malformed, unknown, or extended payloads.
+- Focused reducer, event parser, subscription, page, diagnostics, Settings, and Permissions tests.
 
-### Constraints
+Artifact-host result:
 
-- Preserve the existing menu-bar, close, Dock reopen, and quit behavior.
-- Preserve SQLite startup and migrations.
-- Preserve `get_app_info` as the only custom Tauri command.
-- Preserve Tauri capabilities and CSP.
-- Do not add mocked assistant streaming, tool activity cards, or approval behavior yet.
-- Do not persist conversations, tasks, navigation state, settings, or permissions.
-- Do not add or change SQLite migrations.
-- Do not add a global shortcut.
-- Do not add API keys, OpenAI access, gateway calls, OAuth, or model networking.
-- Do not request Calendar, Reminders, Contacts, Notifications, Files, Accessibility, Screen Recording, Automation, or Microphone permissions.
-- Do not add shell execution, broad filesystem access, or platform automation.
-- Do not add a frontend dependency unless it is clearly necessary and recorded in `DECISIONS.md`.
+```text
+Prettier: passed
+ESLint: passed
+TypeScript: passed
+Vitest: 30 passed, 0 failed
+Vite build: passed
+npm audit: 0 vulnerabilities
+git diff --check: passed
+```
 
-### Required verification
+Required target-Mac verification:
 
 ```bash
 npm run format:check
@@ -94,28 +58,33 @@ cargo test --manifest-path src-tauri/Cargo.toml --all-targets --locked
 npm run tauri -- dev
 ```
 
-### Manual gate
+Manual gate:
 
-- The shell renders at the current minimum native-window size.
+- The shell remains usable at the configured minimum window size.
 - Every sidebar item opens the correct page shell.
-- The conversation workspace and composer appear.
-- Empty, loading, and error states render correctly.
-- Settings opens.
+- Conversation workspace and disabled composer render.
+- Settings shows Rust core diagnostics.
 - Permission Center opens without an OS prompt.
-- New Request from the menu bar opens Conversations.
-- Tasks (Coming Soon) from the menu bar opens Tasks.
-- Closing, menu-bar reopening, Dock reopening, and quitting continue to work.
-- Rust connection diagnostics remain available.
+- Menu-bar New Request opens Conversations and clears the draft.
+- Menu-bar Tasks opens Tasks.
+- Unknown native event payloads do not change the route.
+- Close-to-hide, menu-bar reopen, Dock reopen, and Quit still work.
 - Storage startup remains idempotent.
 - No permission prompt appears.
 
+Record: `docs/increments/02e-react-application-shell.md`.
+
+Plan: `docs/plans/02e-react-application-shell.md`.
+
+Do not mark Increment 2E complete until every required automated and manual check passes.
+
 ## Increment 2F — mocked agent streaming and activity
 
-Status: **Blocked by Increment 2E**
+Status: **Blocked by Increment 2E verification**
 
-Goal: prove the local run-event model with the deterministic mock provider.
+Goal: prove the local run-event model with the deterministic mock provider, then add mocked assistant text streaming, tool activity presentation, and approval presentation.
 
-Planned work includes mocked streaming, tool activity cards, and the approval dialog. It must not add production model access or privileged operating-system tools.
+The scope must still exclude production model access, API keys, gateway calls, privileged tools, and user-data persistence.
 
 ## Increment 2G — integration hardening
 
@@ -131,3 +100,32 @@ Goal: complete cancellation, error-state, audit-view, and release-verification h
 - Broad filesystem access.
 - Calendar, contacts, reminders, notifications, or clipboard tools.
 - Autonomous external or destructive actions.
+
+## Current authoritative queue — 2026-07-13
+
+### Increment 2E — React application shell
+
+Status: **Complete**
+
+All automated and manual target-Mac checks passed.
+
+### Increment 2F — mocked assistant interaction shell
+
+Status: **Ready**
+
+Goal:
+
+- Add deterministic in-memory assistant messages and mock streaming.
+- Add stop behavior.
+- Add tool activity presentation.
+- Add a trusted mock approval dialog and deterministic approve/reject/edit behavior.
+- Preserve the verified React, Rust, SQLite, menu-bar, lifecycle, IPC, CSP, capability, and permission boundaries.
+
+Explicitly excluded:
+
+- OpenAI, gateway, or other model networking.
+- API keys or credentials.
+- Real tool execution.
+- New Tauri commands.
+- SQLite persistence for conversations or approvals.
+- Accessibility, screen capture, Apple Events, shell execution, OAuth, or OS permission requests.

@@ -4,9 +4,15 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No execution plan is currently Active.
+**Increment 2E — React application shell** is Active.
 
-Phase 2 Increment 2D is verified complete. Increment 2E — React application shell — is the next Ready item in `NEXT_STEPS.md`. Create or activate its detailed plan only when the next implementation session begins.
+Implementation and artifact-host frontend verification are complete. Target-Mac combined checks and native/manual acceptance remain pending. Increment 2F is blocked until the 2E plan reaches Complete.
+
+Active plan:
+
+```text
+docs/plans/02e-react-application-shell.md
+```
 
 ## Completed plans
 
@@ -15,6 +21,8 @@ docs/plans/02b-1-sqlite-migration-skeleton.md
 docs/plans/02c-storage-startup.md
 docs/plans/02d-menu-bar-window-lifecycle.md
 ```
+
+Increments 2C and 2D were verified on the Apple Silicon target Mac.
 
 ## Plan rules
 
@@ -47,12 +55,20 @@ A plan must contain:
 | Increment 2B-1 SQLite migration skeleton | Complete | Project maintainer | 2026-07-13   |
 | Increment 2C storage startup integration | Complete | Project maintainer | 2026-07-13   |
 | Increment 2D menu-bar/window lifecycle   | Complete | Project maintainer | 2026-07-13   |
+| Increment 2E React application shell     | Active   | Project maintainer | 2026-07-13   |
 
-## Next planning action
+## Phase 2 Increment 2E — complete
 
-At the start of Increment 2E:
+Verified on 2026-07-13. The React application shell, closed menu-route handling, Settings diagnostics, and Permission Center placeholders passed all required automated and manual checks.
 
-1. Confirm Increment 2D is committed and the working tree is clean.
-2. Re-read the current security and UI constraints.
-3. Resolve O-004, preferring React reducer plus context unless another dependency is justified.
-4. Create or activate an Increment 2E execution plan before editing frontend behavior.
+## Phase 2 Increment 2F — ready
+
+Goal: add a deterministic, mocked assistant interaction flow to the verified application shell.
+
+Planned boundaries:
+
+- In-memory conversation messages only.
+- Deterministic mock streaming and stop behavior.
+- Tool activity card presentation.
+- Trusted mock approval dialog.
+- No network, API key, real tool execution, new Tauri command, OS permission, or persistence expansion.

@@ -4,7 +4,7 @@ Last updated: 2026-07-13
 
 ## Current milestone
 
-Phase 2 — local desktop shell and trusted local-core foundation.
+Phase 2 — local desktop shell, trusted local-core foundation, and frontend application shell.
 
 ## Increment status
 
@@ -17,133 +17,109 @@ Phase 2 — local desktop shell and trusted local-core foundation.
 - Increment 2B-1A: Rust 1.90 SQLite compatibility repair — **verified complete on target Mac**.
 - Increment 2C: storage startup integration — **verified complete on target Mac**.
 - Increment 2D: macOS menu-bar and window lifecycle — **verified complete on target Mac**.
-- Increment 2E: React application shell — **Ready**.
-- Increment 2F remains blocked by Increment 2E.
-- Increment 2G remains blocked by Increment 2F.
+- Increment 2E: React application shell — **implementation complete; target-Mac verification pending**.
+- Increment 2F: mocked agent streaming and activity — **blocked by Increment 2E**.
 
-## Confirmed working baseline
+## Confirmed verified baseline through Increment 2D
 
-The target-Mac baseline now includes:
-
-- Tauri 2 launches on Apple Silicon macOS.
+- Tauri 2 launches on the Apple Silicon target Mac.
 - React renders in the native main window.
 - The WebView invokes the typed Rust `get_app_info` command.
-- `get_app_info` remains the only custom Tauri command.
-- Rust formatting passes.
-- Clippy passes for all targets and features with warnings denied.
-- All Rust unit and integration tests pass.
-- Strict TypeScript typechecking passes.
-- The Vite production build passes.
-- SQLCipher-capable SQLite startup and immutable migrations work.
+- Rust formatting, Clippy, and all Rust tests pass.
+- TypeScript and the Vite production build pass.
 - Storage startup is idempotent and recognizes the persisted bootstrap marker.
-- The native menu-bar and main-window lifecycle work as designed.
+- The macOS menu-bar status icon and all four fixed actions work.
+- Closing the main window hides it without terminating the process.
+- Menu-bar and Dock actions restore the hidden main window.
 - No macOS permission prompt appears.
 
-## Implemented trusted-core foundations
+## Increment 2E implemented scope
 
-- Platform-neutral trusted-core interfaces with deterministic mocks.
-- Shared risk and permission placeholder types.
-- SQLCipher-capable SQLite connection and immutable migration skeleton.
-- `schema_migrations` and `app_metadata` only.
-- Managed `Storage` initialized from Tauri startup.
-- Typed `app_initialized` metadata.
-- Debug-only development database and release-mode in-memory storage.
-- No product-data persistence yet.
+- Platform-neutral reducer-and-context shell state.
+- Seven deterministic sidebar routes.
+- Conversation workspace and disabled in-memory composer.
+- Tasks, Memory, Activity, and Integrations page shells.
+- Settings shell with typed Rust diagnostics.
+- Permission Center shell with nine placeholder permission rows and no request controls.
+- Empty, loading, and error presentations.
+- Strict listener for `assistant-menu-route`.
+- Closed route mapping:
+  - `new_request` → Conversations and clear the draft.
+  - `tasks_placeholder` → Tasks.
+- Unknown, malformed, or extended event payloads are ignored.
+- Focused frontend test coverage.
 
-## Verified macOS menu-bar and window lifecycle
+## Increment 2E artifact-host verification
 
-- Tauri's built-in `tray-icon` feature is enabled only on macOS.
-- The existing application icon is used as a temporary template menu-bar icon.
-- The fixed menu contains Open, New Request, Tasks (Coming Soon), and Quit.
-- Open, New Request, and Tasks show and focus the existing `main` window.
-- New Request and Tasks emit a closed-enum `assistant-menu-route` event after activation.
-- Unknown menu IDs have no effect.
-- Closing the main window hides it and keeps the process running.
-- A menu-bar action restores the hidden main window.
-- A macOS reopen/Dock event restores the main window when no application window is visible.
-- Quit terminates the process.
-- Future non-main windows retain normal close behavior.
-- The current React UI does not consume route events yet.
-
-## Increment 2D verification
-
-Target-Mac commands confirmed passed:
+Passed:
 
 ```text
-cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+npm ci
+npx prettier --check .
+npm run lint:frontend
+npm run typecheck
+npx vitest run — 3 files, 30 tests
+npm run build
+npm audit --audit-level=low — 0 vulnerabilities
+git diff --check
+```
+
+Not available on the artifact host:
+
+```text
+cargo fmt
+cargo clippy
+cargo test
+native Tauri launch
+macOS menu-route and lifecycle smoke test
+```
+
+## Current completion gate
+
+Increment 2E remains open until the target Mac passes:
+
+```bash
+npm run format:check
+npm run lint
+npm run typecheck
+npm run test:unit
+npm run test:integration
+npm run build
 cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
 cargo test --manifest-path src-tauri/Cargo.toml --all-targets --locked
-npm run typecheck
-npm run build
 npm run tauri -- dev
 ```
 
-Manual lifecycle checks confirmed:
+The manual gate must confirm all sidebar destinations, Settings, Permissions without an OS prompt, New Request routing, Tasks routing, close/reopen/Dock/quit regressions, Rust diagnostics, and idempotent storage startup.
 
-- menu-bar icon appeared,
-- Open showed and focused the main window,
-- New Request showed and focused the main window without error,
-- Tasks showed and focused the main window without error,
-- close hid without terminating,
-- menu-bar and Dock restored the hidden window,
-- Quit exited,
-- storage remained idempotent,
-- `get_app_info` remained functional,
-- the React UI remained unchanged,
-- no permission prompt appeared.
+## Security posture
 
-## Test coverage through Increment 2D
+- The model remains outside the authorization boundary.
+- `get_app_info` remains the only custom Tauri command.
+- Increment 2E changes frontend source and project documentation only.
+- Capabilities, CSP, Tauri configuration, Rust source, storage migrations, dependency manifests, and lockfiles are unchanged.
+- No API key, model network, OAuth, OS permission, shell, platform automation, or user-data persistence was added.
+- Native event payloads are validated as `unknown` against a closed contract.
 
-- Agent-provider success and failure behavior.
-- Tool registration, ordering, and unknown-tool rejection.
-- Deterministic policy allow, approval, and deny decisions.
-- Approval, audit, memory, and platform-adapter behavior.
-- SQLite configuration, connection, migration, metadata, and startup behavior.
-- Stable menu IDs and labels.
-- New-request and tasks routing order.
-- Quit without show or route.
-- Unknown menu ID rejection without side effects.
-- Failure short-circuiting.
-- Main-window close-to-hide policy.
-- Reopen policy for visible and hidden states.
-- Public routing contract across all fixed actions.
+## Next scope
 
-## Next ready capability
+Increment 2F may begin only after Increment 2E is verified and checkpointed. It will introduce deterministic mocked streaming and activity presentation without production model access or privileged tools.
 
-Increment 2E will add the in-memory React application shell:
+## Phase 2 Increment 2E verification
 
-- sidebar navigation,
-- conversation workspace,
-- non-functional composer,
-- page shells,
-- empty/loading/error states,
-- Settings and Permission Center shells,
-- validated consumption of `assistant-menu-route`,
-- focused reducer and component tests.
+Increment 2E is verified complete on the target Mac as of 2026-07-13.
 
-The shell must preserve the existing Rust, storage, menu-bar, IPC, CSP, capability, and permission boundaries.
+Completed capabilities:
 
-## Explicit non-goals still in force
+- React reducer-and-context application state.
+- Sidebar navigation for Conversations, Tasks, Memory, Activity, Integrations, Permissions, and Settings.
+- Conversation workspace and non-functional composer shell.
+- Empty, loading, and error presentation states.
+- Settings diagnostics backed by the existing `get_app_info` command.
+- Permission Center placeholders with no OS permission requests.
+- Closed `assistant-menu-route` handling for `new_request` and `tasks_placeholder`.
+- Safe rejection of unknown or malformed route payloads.
 
-- Mock assistant streaming, tool activity, and approval UI until Increment 2F.
-- Production OpenAI access or stored API keys.
-- OAuth or gateway authentication.
-- Conversation, task, memory, audit, approval, or tool-call persistence.
-- New SQLite migrations during Increment 2E.
-- Global shortcut.
-- Accessory-only activation policy or Dock hiding.
-- Dedicated production tray artwork.
-- New Tauri commands, capabilities, or CSP rules.
-- Accessibility, screen capture, Apple Events, microphone, shell, or broad filesystem access.
-- Calendar, contacts, reminders, notifications, or clipboard tools.
+All required frontend, Rust, native-launch, lifecycle, storage-idempotence, and no-permission-prompt checks passed.
 
-## Project memory map
-
-- Current handoff: `HANDOFF.md`
-- Priorities: `NEXT_STEPS.md`
-- Decisions: `DECISIONS.md`
-- Changes: `CHANGELOG.md`
-- Plans: `PLANS.md`
-- Troubleshooting history: `TROUBLESHOOTING_LOG.md`
-- Completed Increment 2D record: `docs/increments/02d-menu-bar-window-lifecycle.md`
-- Completed Increment 2D plan: `docs/plans/02d-menu-bar-window-lifecycle.md`
+The next ready increment is Phase 2 Increment 2F.

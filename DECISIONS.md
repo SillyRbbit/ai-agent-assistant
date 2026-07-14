@@ -223,10 +223,28 @@ Consequences:
 - Increment 2D requires native macOS verification of tray, close, menu/Dock reopen, and quit behavior.
 - Open decision O-005 is resolved for the MVP scaffold; artwork may be revisited later.
 
+## D-014 — Use React reducer and context for application-shell state
+
+Date: 2026-07-13
+Status: Accepted
+
+Decision: use React's built-in `useReducer` and context for the Phase 2 application shell. Keep navigation and composer state local and in memory. Represent application routes and native menu routes as closed TypeScript unions, and narrow native event payloads from `unknown` before dispatching them.
+
+Rationale: the shell has a small deterministic state model and does not justify another runtime dependency. Reducer tests provide explicit transition coverage, split read/dispatch contexts preserve a narrow component boundary, and service injection keeps Tauri-dependent behavior testable without native or machine state.
+
+Consequences:
+
+- O-004 is resolved without adding a state-management or routing package.
+- The shell state is intentionally volatile and resets when the application reloads.
+- New Request clears only the in-memory composer draft and returns to Conversations.
+- Tasks placeholder routes only to the closed Tasks destination.
+- Unknown or extended native event payloads are ignored.
+- Persisted application state remains prohibited until a later reviewed increment adds explicit repositories and privacy controls.
+- Revisit the state architecture only if future run-event volume or cross-window synchronization produces a measured need.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |
 | ----- | ---------------------------------------------------------------- | ----------------------------------- |
 | O-002 | Workspace split between one Tauri crate and multiple Rust crates | Revisit before later modularization |
 | O-003 | macOS minimum deployment target confirmation on target Mac       | Native release preparation          |
-| O-004 | State-management library versus React reducer/context            | Increment 2E                        |
