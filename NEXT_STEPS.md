@@ -17,30 +17,33 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 2G — integration hardening: **Verified complete**.
 - Increment 3A — in-memory conversation sessions: **Verified complete**.
 - Increment 3B — mock context provenance: **Verified complete**.
+- Increment 3C — simulated tool result: **Verified complete**.
 
-## Phase 3C — gap analysis and increment planning
+## Phase 3 completion — gap analysis and planning
 
 Status: **Ready**
 
 Goal:
 
-- Compare the remaining Phase 3 tool-result and mocked-loop requirements with the verified implementation through Increment 3B.
-- Identify the smallest missing user-visible capability after conversation identity and mock context provenance.
-- Define one bounded Phase 3C increment with explicit acceptance criteria, non-goals, risks, exact files, and verification commands.
+- Compare the remaining mocked-loop and conservative-limit requirements with the verified implementation through Increment 3C.
+- Determine whether post-result provider continuation, final-answer presentation, or explicit loop limits require one more Phase 3 increment.
+- If work remains, define one smallest bounded increment with explicit acceptance criteria, non-goals, risks, exact files, and verification commands.
+- If no work remains, document the evidence required to close Phase 3.
 - Preserve every verified security, cancellation, Retry, Activity, IPC, storage, lifecycle, capability, CSP, and permission boundary.
 
 Required planning output:
 
-- A written gap analysis grounded in product documents and actual code.
-- One dedicated Phase 3C plan document.
-- An exact proposed file list and verification gate.
-- Project-owner approval before implementation.
+- A written completion gap analysis grounded in product documents and actual code.
+- One dedicated plan if another increment is required, or a documented Phase 3 closure recommendation.
+- An exact file list and verification gate for any proposed work.
+- Project-owner approval before implementation or phase closure.
 
 Explicitly excluded:
 
 - Context source selection, real data collection, attachments, or voice.
 - Production model or gateway access, API keys, credentials, OAuth, or cloud accounts.
 - Trusted Rust provenance, audit persistence, real tools, or privileged automation.
+- Production provider continuation, arbitrary result schemas, dynamic external payloads, or additional real tools.
 - Rust, IPC, Tauri commands, dependencies, capabilities, CSP, packaging, or new operating-system permissions.
 
 Do not edit runtime code during the planning task.

@@ -1,5 +1,6 @@
 import type { MockContextProvenance } from "./contextProvenance";
 import type { ConversationMessage, ToolActivity } from "./mockAssistantRun";
+import type { MockToolResult } from "./mockToolResult";
 
 export const EMPTY_CONVERSATION_TITLE = "New conversation";
 export const MAX_CONVERSATION_TITLE_LENGTH = 48;
@@ -10,6 +11,7 @@ export interface ConversationSession {
   readonly messages: readonly ConversationMessage[];
   readonly title: string;
   readonly toolActivities: readonly ToolActivity[];
+  readonly toolResults: readonly MockToolResult[];
 }
 
 export function createConversationSession(ordinal: number): ConversationSession | null {
@@ -23,6 +25,7 @@ export function createConversationSession(ordinal: number): ConversationSession 
     messages: [],
     title: EMPTY_CONVERSATION_TITLE,
     toolActivities: [],
+    toolResults: [],
   };
 }
 
@@ -47,6 +50,7 @@ export function isConversationSessionEmpty(conversation: ConversationSession): b
   return (
     conversation.contextProvenance.length === 0 &&
     conversation.messages.length === 0 &&
-    conversation.toolActivities.length === 0
+    conversation.toolActivities.length === 0 &&
+    conversation.toolResults.length === 0
   );
 }

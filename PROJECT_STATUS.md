@@ -4,7 +4,7 @@ Last updated: 2026-07-13
 
 ## Current milestone
 
-Phase 3 — **Increment 3B verified complete**. Phase 3C gap analysis and increment planning are next.
+Phase 3 — **Increment 3C verified complete**. Phase 3 completion gap analysis and planning are next.
 
 ## Increment status
 
@@ -22,6 +22,7 @@ Phase 3 — **Increment 3B verified complete**. Phase 3C gap analysis and increm
 - Increment 2G: integration hardening — **verified complete on target Mac**.
 - Increment 3A: in-memory conversation sessions — **verified complete on target Mac**.
 - Increment 3B: mock context provenance — **verified complete on target Mac**.
+- Increment 3C: simulated tool result — **verified complete on target Mac**.
 
 ## Verified baseline through Increment 2E
 
@@ -97,7 +98,30 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Perform documentation-only Phase 3C gap analysis and define the next bounded increment without changing runtime code.
+Perform documentation-only Phase 3 completion gap analysis and determine whether one more bounded increment is required without changing runtime code.
+
+## Phase 3C planning result
+
+- The product brief requires tool results in the conversation center pane.
+- The verified loop has a tool proposal, action preview, decision states, and fixed assistant outcomes but no distinct result model or view.
+- The proposed increment adds one approve-only fixed result tied to exact run and conversation IDs and the derived proposal ID.
+- The result encodes `executed: false`, `simulated`, and fixed no-change copy.
+- Reject, Edit, Stop, stale events, and invalid decisions produce no result.
+- Request text, arguments, preview content, errors, paths, and personal content remain excluded from result state and Activity.
+- Real execution, provider continuation, arbitrary result schemas, trusted executor output, persistence, networking, dependencies, native capability changes, and permissions remain out of scope.
+- Planning baseline passed with TypeScript type checking, 92 frontend tests, and 50 Rust library tests.
+
+## Increment 3C capability and evidence
+
+- Approve-only fixed results bind exact run, conversation, and derived proposal IDs.
+- Result fields are fixed to `create_local_task`, `simulated`, `executed: false`, and no-change summary copy.
+- Missing or mismatched proposals fail closed; Reject, Edit, Stop, stale events, invalid decisions, and duplicate decisions create no result.
+- Result constructors accept identifiers only, and the UI identifies the card as frontend mock output rather than verified executor output.
+- Focused tests pass: 4 files, 70 tests.
+- `npm run verify` passes with 104 frontend tests, 50 Rust library tests, 6 Rust integration tests, Vite builds, and the Tauri release no-bundle build.
+- `npm audit --audit-level=low` reports zero vulnerabilities.
+- Native Tauri development launch passes with idempotent storage startup and two migrations already applied.
+- Project-owner approve/reject/edit/Stop behavior, result-content exclusion, per-conversation restoration, normal and minimum-window layout, and existing native regression checks passed.
 
 ## Phase 3B planning result
 

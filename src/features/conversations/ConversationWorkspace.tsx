@@ -6,11 +6,13 @@ import type {
   ToolActivity,
 } from "../../application/mockAssistantRun";
 import type { AssistantRunStatus } from "../../application/state";
+import type { MockToolResult } from "../../application/mockToolResult";
 import { PageState } from "../../components/PageState";
 import { PageHeader } from "../shared/PageHeader";
 import { ApprovalDialog } from "./ApprovalDialog";
 import { ContextProvenanceCard } from "./ContextProvenanceCard";
 import { ToolActivityCard } from "./ToolActivityCard";
+import { ToolResultCard } from "./ToolResultCard";
 
 interface ConversationWorkspaceProps {
   readonly activeApproval: MockApprovalRequest | null;
@@ -26,6 +28,7 @@ interface ConversationWorkspaceProps {
   readonly runStatus: AssistantRunStatus;
   readonly retryableMessageId: string | null;
   readonly toolActivities: readonly ToolActivity[];
+  readonly toolResults: readonly MockToolResult[];
 }
 
 export function ConversationWorkspace({
@@ -42,6 +45,7 @@ export function ConversationWorkspace({
   runStatus,
   retryableMessageId,
   toolActivities,
+  toolResults,
 }: ConversationWorkspaceProps) {
   const isBusy = runStatus !== "idle";
 
@@ -94,6 +98,9 @@ export function ConversationWorkspace({
               ))}
               {toolActivities.map((activity) => (
                 <ToolActivityCard activity={activity} key={activity.id} />
+              ))}
+              {toolResults.map((result) => (
+                <ToolResultCard key={result.id} result={result} />
               ))}
             </div>
           )}

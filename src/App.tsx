@@ -85,6 +85,7 @@ function ApplicationShell({ services }: ApplicationShellProps) {
             : null
         }
         toolActivities={activeConversation?.toolActivities ?? []}
+        toolResults={activeConversation?.toolResults ?? []}
       />
     ),
     integrations: (

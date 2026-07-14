@@ -4,12 +4,12 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-There is no Active plan. **Increment 3B — mock context provenance** is Complete.
+There is no Active plan. **Increment 3C — simulated tool result** is Complete.
 
 Most recently completed plan:
 
 ```text
-docs/plans/03b-mock-context-provenance.md
+docs/plans/03c-simulated-tool-result.md
 ```
 
 ## Completed plans
@@ -23,6 +23,7 @@ docs/plans/02f-mocked-assistant-interaction-shell.md
 docs/plans/02g-integration-hardening.md
 docs/plans/03a-in-memory-conversation-sessions.md
 docs/plans/03b-mock-context-provenance.md
+docs/plans/03c-simulated-tool-result.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -63,6 +64,7 @@ A plan must contain:
 | Increment 2G integration hardening           | Complete | Project maintainer | 2026-07-13   |
 | Increment 3A in-memory conversation sessions | Complete | Project maintainer | 2026-07-13   |
 | Increment 3B mock context provenance         | Complete | Project maintainer | 2026-07-13   |
+| Increment 3C simulated tool result           | Complete | Project maintainer | 2026-07-13   |
 
 ## Phase 2 Increment 2E — complete
 
@@ -98,6 +100,12 @@ The remaining product requirements were reconciled with the verified implementat
 
 The approved implementation limits the increment to fixed-copy, volatile WebView presentation tied to exact run and conversation IDs. It excludes real context collection, context controls, trusted provenance, persistence, tool results, networking, dependencies, native capability changes, and permissions. Automated verification, native launch, and project-owner native interaction and layout checks pass.
 
-## Phase 3C planning — ready
+## Phase 3C planning — complete
 
-Reconcile the remaining tool-result and mocked-loop requirements with the verified implementation through Increment 3B. Do not implement features until a dedicated plan and exact file set are approved.
+The remaining tool-result and mocked-loop requirements were reconciled with the verified implementation through Increment 3B. Approve-only simulated tool-result presentation is the smallest next capability because the product requires a distinct result view and the current loop already has exact run, conversation, proposal, and decision boundaries.
+
+The approved implementation limits the increment to fixed-copy volatile WebView presentation with `executed: false`. It excludes real execution, provider continuation, arbitrary payloads, trusted executor or audit claims, persistence, networking, dependencies, native capability changes, and permissions. Automated verification, native launch, and project-owner native interaction and layout checks pass.
+
+## Phase 3 completion planning — ready
+
+Reconcile the remaining post-result continuation, final-answer, and conservative-limit requirements with the verified implementation through Increment 3C. Determine whether one more bounded increment is required or Phase 3 can close. Do not implement features until the completion analysis and any exact file set are approved.

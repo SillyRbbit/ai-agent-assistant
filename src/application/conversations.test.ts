@@ -24,6 +24,7 @@ describe("conversation sessions", () => {
       messages: [],
       title: EMPTY_CONVERSATION_TITLE,
       toolActivities: [],
+      toolResults: [],
     });
   });
 
@@ -47,7 +48,7 @@ describe("conversation sessions", () => {
     expect(title?.endsWith("…")).toBe(true);
   });
 
-  it("recognizes only sessions without provenance, messages, or tool activity as empty", () => {
+  it("recognizes only sessions without provenance, messages, tool activity, or results as empty", () => {
     const empty = createConversationSession(1);
     if (empty === null) {
       throw new Error("Expected a valid conversation session.");
@@ -79,10 +80,26 @@ describe("conversation sessions", () => {
         },
       ],
     };
+    const withResult: ConversationSession = {
+      ...empty,
+      toolResults: [
+        {
+          conversationId: "conversation-1",
+          executed: false,
+          id: "mock-run-1-result",
+          runId: "mock-run-1",
+          status: "simulated",
+          summary: "No local task was created and no data changed.",
+          toolActivityId: "mock-run-1-tool",
+          toolName: "create_local_task",
+        },
+      ],
+    };
 
     expect(isConversationSessionEmpty(empty)).toBe(true);
     expect(isConversationSessionEmpty(withMessage)).toBe(false);
     expect(isConversationSessionEmpty(withActivity)).toBe(false);
     expect(isConversationSessionEmpty(withProvenance)).toBe(false);
+    expect(isConversationSessionEmpty(withResult)).toBe(false);
   });
 });

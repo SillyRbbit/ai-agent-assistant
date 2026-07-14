@@ -17,6 +17,7 @@ import {
   type MockRunScript,
 } from "./mockAssistantRun";
 import { mockRunFailureMessage, type MockRunFailureReason } from "./mockRunDriver";
+import { createMockToolResult } from "./mockToolResult";
 
 export type AssistantRunStatus = "awaiting-approval" | "idle" | "streaming";
 
@@ -70,6 +71,7 @@ const INITIAL_CONVERSATION: ConversationSession = {
   messages: [],
   title: EMPTY_CONVERSATION_TITLE,
   toolActivities: [],
+  toolResults: [],
 };
 
 export const INITIAL_APPLICATION_STATE: ApplicationState = {
@@ -461,6 +463,25 @@ export function applicationReducer(
           : action.decision === "reject"
             ? "approval-rejected"
             : "approval-edit-requested";
+      const toolResult =
+        action.decision === "approve"
+          ? createMockToolResult(activeRun.script.runId, activeRun.conversationId)
+          : null;
+      const hasMatchingToolActivity = state.conversations.some(
+        (conversation) =>
+          conversation.id === activeRun.conversationId &&
+          conversation.toolActivities.some(
+            (activity) => activity.id === activeRun.script.toolActivity.id,
+          ),
+      );
+      if (
+        action.decision === "approve" &&
+        (toolResult?.toolActivityId !== activeRun.script.toolActivity.id ||
+          !hasMatchingToolActivity)
+      ) {
+        return state;
+      }
+
       const conversations = updateConversationById(
         state.conversations,
         activeRun.conversationId,
@@ -472,6 +493,10 @@ export function applicationReducer(
               ? { ...activity, status: activityStatus }
               : activity,
           ),
+          toolResults:
+            toolResult === null
+              ? conversation.toolResults
+              : [...conversation.toolResults, toolResult],
         }),
       );
       if (conversations === null) {

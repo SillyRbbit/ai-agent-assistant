@@ -6,6 +6,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Phase 3 Increment 3C fixed simulated tool results bound to exact runs, conversations, and mock proposals.
+- Accessible approve-only result presentation with explicit `Simulated`, `No execution`, and fixed no-change labeling.
+- Focused result validation, proposal-binding, decision, Retry, privacy, empty-session, and restoration coverage, bringing the frontend suite to 104 tests.
+- Documentation-only Phase 3C gap analysis and proposed plan for approve-only simulated tool-result presentation.
 - Phase 3 Increment 3B typed fixed-copy mock context provenance bound to exact run and conversation IDs.
 - Accessible per-run context disclosure showing the current request as used and all unaccessed source categories as not used.
 - Focused provenance validation, privacy, Retry, empty-session, and conversation-restoration coverage, bringing the frontend suite to 92 tests.
@@ -41,6 +45,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Stored simulated results with each volatile conversation and counted result-bearing sessions as non-empty.
+- Advanced Increment 3C to verification pending after the full automated gate and native development launch passed.
+- Marked Increment 3C verified complete after project-owner native result, decision, restoration, layout, and regression checks passed.
+- Selected simulated tool-result presentation as the smallest remaining Phase 3 gap; implementation remains blocked on project-owner approval of the exact file plan.
 - Stored mock provenance with each volatile conversation and counted provenance-bearing sessions as non-empty.
 - Advanced Increment 3B to verification pending after the full automated gate and native development launch passed.
 - Marked Increment 3B verified complete after project-owner native interaction, restoration, layout, and regression checks passed.
@@ -70,6 +78,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Security
 
+- Result construction accepts validated opaque IDs only, derives the exact proposal ID, uses fixed output fields, and fails closed if the proposal is missing or mismatched.
+- Reject, Edit, Stop, stale events, invalid decisions, and duplicate decisions cannot create results; `Approve mock` still executes nothing.
+- Increment 3C changes no dependency, lockfile, Rust, IPC, Tauri, SQLite, capability, CSP, credential, network, packaging, or operating-system permission file.
+- The Phase 3C plan limits results to fixed-copy volatile WebView presentation with `executed: false` and excludes request content, arbitrary payloads, real execution, trusted audit claims, persistence, networking, and native capability changes.
 - The provenance constructor accepts validated opaque IDs only, uses a closed fixed source list, and cannot receive request text or personal content.
 - The new disclosure is explicitly labeled as frontend mock data rather than trusted audit evidence and adds no authorization or execution path.
 - Increment 3B changes no dependency, lockfile, Rust, IPC, Tauri, SQLite, capability, CSP, credential, network, packaging, or operating-system permission file.

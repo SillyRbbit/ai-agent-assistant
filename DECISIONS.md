@@ -319,6 +319,27 @@ Consequences:
 - Context selection, real data collection, trusted Rust provenance, audit persistence, and tool-result modeling remain later reviewed work.
 - No Rust, IPC, Tauri, SQLite, dependency, capability, CSP, credential, network, packaging, or operating-system permission change is introduced.
 
+## D-019 — Represent Phase 3C tool results as approve-only fixed simulations
+
+Date: 2026-07-13
+Status: Accepted
+
+Decision: a valid `Approve mock` decision appends one readonly `MockToolResult` to the owning volatile conversation. The result is bound to validated `mock-run-N` and `conversation-N` identifiers, derives the exact `${runId}-tool` proposal ID, and supports only `create_local_task`, `status: simulated`, `executed: false`, and fixed no-change summary copy.
+
+Reject, Edit, Stop, stale events, invalid decisions, missing proposals, and mismatched proposals produce no result. The result constructor accepts identifiers only and cannot receive request text, arguments, preview content, errors, paths, or arbitrary tool output.
+
+Rationale: the Phase 3 center pane requires a distinct tool-result view, but trusted execution, provider continuation, arbitrary result schemas, and external content belong to later phases. A fixed approve-only simulation proves result attribution, restoration, privacy, and presentation while making the absence of execution explicit.
+
+Consequences:
+
+- `Approve mock` remains presentation-only and invokes no IPC or tool.
+- Result creation fails closed unless the exact conversation proposal exists and matches the derived proposal ID.
+- Duplicate decisions cannot append duplicate results because the awaiting-approval run is consumed once.
+- Results remain volatile and restore only with their owning conversation.
+- Result content is excluded from Activity and logs.
+- Real executor output, provider continuation, arbitrary result payloads, persistence, and audit evidence remain later reviewed work.
+- No Rust, IPC, Tauri, SQLite, dependency, capability, CSP, credential, network, packaging, or operating-system permission change is introduced.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

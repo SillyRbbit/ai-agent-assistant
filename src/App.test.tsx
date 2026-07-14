@@ -209,6 +209,7 @@ describe("App", () => {
     expect(screen.getByText("Stopped")).toBeInTheDocument();
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(screen.queryByRole("article", { name: "Mock tool activity" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("article", { name: "Mock tool result" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
 
     openSidebarRoute("Activity");
@@ -294,6 +295,30 @@ describe("App", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(screen.getByText(status)).toBeInTheDocument();
     expect(screen.getByText(new RegExp(outcome))).toBeInTheDocument();
+    if (button === "Approve mock") {
+      expect(screen.getByRole("article", { name: "Mock tool result" })).toBeInTheDocument();
+    } else {
+      expect(screen.queryByRole("article", { name: "Mock tool result" })).not.toBeInTheDocument();
+    }
+  });
+
+  it("renders a fixed simulated result without copying request content", () => {
+    vi.useFakeTimers();
+    const harness = createMenuRouteHarness();
+    render(<App services={createServices(harness.source)} />);
+    submitMockRequest("Confidential board request");
+    finishMockStream();
+
+    fireEvent.click(screen.getByRole("button", { name: "Approve mock" }));
+
+    const result = screen.getByRole("article", { name: "Mock tool result" });
+    expect(within(result).getByText("mock-run-1")).toBeInTheDocument();
+    expect(within(result).getByText("create_local_task")).toBeInTheDocument();
+    expect(within(result).getByText("Simulated")).toBeInTheDocument();
+    expect(within(result).getByText("No execution")).toBeInTheDocument();
+    expect(result).toHaveTextContent("No local task was created and no data changed.");
+    expect(result).toHaveTextContent("Frontend mock only. Not verified executor output.");
+    expect(result).not.toHaveTextContent("Confidential board request");
   });
 
   it("returns an edited mock action to the composer without execution", () => {
@@ -307,6 +332,7 @@ describe("App", () => {
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(screen.getByText("Edit requested")).toBeInTheDocument();
+    expect(screen.queryByRole("article", { name: "Mock tool result" })).not.toBeInTheDocument();
     expect(screen.getByLabelText("Assistant request")).toHaveValue(
       "Revise the local task for: Prepare the board update",
     );
@@ -358,6 +384,9 @@ describe("App", () => {
     expect(
       within(firstTranscript).getByRole("article", { name: "Mock context used" }),
     ).toHaveTextContent("mock-run-1");
+    expect(
+      within(firstTranscript).queryByRole("article", { name: "Mock tool result" }),
+    ).not.toBeInTheDocument();
     expect(within(firstTranscript).queryByText("Second board request")).not.toBeInTheDocument();
 
     openConversation("Second board request");
@@ -368,6 +397,9 @@ describe("App", () => {
     expect(within(secondTranscript).getByText("Mock approved")).toBeInTheDocument();
     expect(
       within(secondTranscript).getByRole("article", { name: "Mock context used" }),
+    ).toHaveTextContent("mock-run-2");
+    expect(
+      within(secondTranscript).getByRole("article", { name: "Mock tool result" }),
     ).toHaveTextContent("mock-run-2");
     expect(within(secondTranscript).queryByText("First board request")).not.toBeInTheDocument();
   });
