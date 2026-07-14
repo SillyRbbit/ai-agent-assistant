@@ -19,6 +19,7 @@ describe("conversation sessions", () => {
 
   it("creates a deterministic empty conversation", () => {
     expect(createConversationSession(3)).toEqual({
+      contextProvenance: [],
       id: "conversation-3",
       messages: [],
       title: EMPTY_CONVERSATION_TITLE,
@@ -46,7 +47,7 @@ describe("conversation sessions", () => {
     expect(title?.endsWith("…")).toBe(true);
   });
 
-  it("recognizes only sessions without messages or tool activity as empty", () => {
+  it("recognizes only sessions without provenance, messages, or tool activity as empty", () => {
     const empty = createConversationSession(1);
     if (empty === null) {
       throw new Error("Expected a valid conversation session.");
@@ -67,9 +68,21 @@ describe("conversation sessions", () => {
         },
       ],
     };
+    const withProvenance: ConversationSession = {
+      ...empty,
+      contextProvenance: [
+        {
+          conversationId: "conversation-1",
+          id: "mock-run-1-context",
+          runId: "mock-run-1",
+          sources: [{ id: "current-request", label: "Current request", status: "used" }],
+        },
+      ],
+    };
 
     expect(isConversationSessionEmpty(empty)).toBe(true);
     expect(isConversationSessionEmpty(withMessage)).toBe(false);
     expect(isConversationSessionEmpty(withActivity)).toBe(false);
+    expect(isConversationSessionEmpty(withProvenance)).toBe(false);
   });
 });

@@ -68,6 +68,7 @@ function ApplicationShell({ services }: ApplicationShellProps) {
       <ConversationWorkspace
         activeApproval={state.activeApproval}
         composerDraft={state.composerDraft}
+        contextProvenance={activeConversation?.contextProvenance ?? []}
         conversationTitle={activeConversation?.title ?? "Conversation unavailable"}
         messages={activeConversation?.messages ?? []}
         onApprovalDecision={mockRunActions.decideApproval}

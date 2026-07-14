@@ -1,9 +1,11 @@
+import type { MockContextProvenance } from "./contextProvenance";
 import type { ConversationMessage, ToolActivity } from "./mockAssistantRun";
 
 export const EMPTY_CONVERSATION_TITLE = "New conversation";
 export const MAX_CONVERSATION_TITLE_LENGTH = 48;
 
 export interface ConversationSession {
+  readonly contextProvenance: readonly MockContextProvenance[];
   readonly id: string;
   readonly messages: readonly ConversationMessage[];
   readonly title: string;
@@ -16,6 +18,7 @@ export function createConversationSession(ordinal: number): ConversationSession 
   }
 
   return {
+    contextProvenance: [],
     id: `conversation-${String(ordinal)}`,
     messages: [],
     title: EMPTY_CONVERSATION_TITLE,
@@ -41,5 +44,9 @@ export function conversationTitleForRequest(request: string): string | null {
 }
 
 export function isConversationSessionEmpty(conversation: ConversationSession): boolean {
-  return conversation.messages.length === 0 && conversation.toolActivities.length === 0;
+  return (
+    conversation.contextProvenance.length === 0 &&
+    conversation.messages.length === 0 &&
+    conversation.toolActivities.length === 0
+  );
 }

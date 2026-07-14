@@ -6,6 +6,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Phase 3 Increment 3B typed fixed-copy mock context provenance bound to exact run and conversation IDs.
+- Accessible per-run context disclosure showing the current request as used and all unaccessed source categories as not used.
+- Focused provenance validation, privacy, Retry, empty-session, and conversation-restoration coverage, bringing the frontend suite to 92 tests.
+- Documentation-only Phase 3B gap analysis and proposed plan for volatile mock context provenance disclosure.
 - Phase 3 Increment 3A volatile conversation sessions with deterministic IDs, bounded titles, and per-session messages and mock tool activity.
 - Accessible New conversation and newest-first conversation-history controls in the application sidebar.
 - Focused conversation-model, reducer, native-route, busy-state, restoration, and interaction coverage, bringing the frontend suite to 83 tests.
@@ -37,6 +41,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Stored mock provenance with each volatile conversation and counted provenance-bearing sessions as non-empty.
+- Advanced Increment 3B to verification pending after the full automated gate and native development launch passed.
+- Marked Increment 3B verified complete after project-owner native interaction, restoration, layout, and regression checks passed.
+- Selected mock context provenance as the smallest remaining Phase 3 gap; implementation remains blocked on project-owner approval of the exact file plan.
 - Bound active and retryable mock runs to exact conversation IDs so asynchronous events cannot mutate another selected transcript.
 - Made native New Request create or select an empty conversation while idle and only focus the active conversation while a run or approval is pending.
 - Marked Increment 3A verified complete after full automated verification, native launch, and project-owner manual acceptance passed.
@@ -62,6 +70,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Security
 
+- The provenance constructor accepts validated opaque IDs only, uses a closed fixed source list, and cannot receive request text or personal content.
+- The new disclosure is explicitly labeled as frontend mock data rather than trusted audit evidence and adds no authorization or execution path.
+- Increment 3B changes no dependency, lockfile, Rust, IPC, Tauri, SQLite, capability, CSP, credential, network, packaging, or operating-system permission file.
+- The Phase 3B plan limits provenance to volatile fixed-copy WebView presentation with opaque IDs and explicitly excludes request text, real context collection, trusted audit claims, persistence, networking, and native capability changes.
 - Increment 3A keeps all conversation titles, messages, and mock tool activity in volatile WebView memory and copies none of that content into Activity.
 - Conversation creation and selection fail closed during streaming or pending approval; Retry eligibility is cleared when leaving the failed conversation.
 - Increment 3A adds no Rust, IPC, Tauri command, capability, CSP, dependency, lockfile, persistence, credential, network, packaging, or operating-system permission change.

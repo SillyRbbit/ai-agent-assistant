@@ -173,6 +173,25 @@ describe("App", () => {
     expect(screen.getByText("No execution")).toBeInTheDocument();
   });
 
+  it("discloses fixed mock context without copying request content", () => {
+    const harness = createMenuRouteHarness();
+    render(<App services={createServices(harness.source)} />);
+
+    submitMockRequest("Confidential board request");
+
+    const provenance = screen.getByRole("article", { name: "Mock context used" });
+    expect(within(provenance).getByText("mock-run-1")).toBeInTheDocument();
+    expect(within(provenance).getByText("Current request")).toBeInTheDocument();
+    expect(within(provenance).getByText("Used")).toBeInTheDocument();
+    expect(within(provenance).getAllByText("Not used")).toHaveLength(4);
+    expect(within(provenance).getByText("Earlier conversation messages")).toBeInTheDocument();
+    expect(within(provenance).getByText("Saved memory")).toBeInTheDocument();
+    expect(within(provenance).getByText("Device data")).toBeInTheDocument();
+    expect(within(provenance).getByText("External services")).toBeInTheDocument();
+    expect(provenance).not.toHaveTextContent("Confidential board request");
+    expect(provenance).toHaveTextContent("Frontend mock only. Not trusted audit evidence.");
+  });
+
   it("stops streaming and cancels the remaining mock run events", () => {
     vi.useFakeTimers();
     const harness = createMenuRouteHarness();
@@ -226,6 +245,12 @@ describe("App", () => {
       name: "Conversation transcript: Sensitive board request",
     });
     expect(within(transcript).getAllByText("Sensitive board request")).toHaveLength(1);
+    const provenance = within(transcript).getAllByRole("article", {
+      name: "Mock context used",
+    });
+    expect(provenance).toHaveLength(2);
+    expect(provenance[0]).toHaveTextContent("mock-run-1");
+    expect(provenance[1]).toHaveTextContent("mock-run-2");
     expect(screen.getByRole("button", { name: "Stop" })).toBeInTheDocument();
   });
 
@@ -330,6 +355,9 @@ describe("App", () => {
     });
     expect(within(firstTranscript).getByText("First board request")).toBeInTheDocument();
     expect(within(firstTranscript).getByText("Rejected")).toBeInTheDocument();
+    expect(
+      within(firstTranscript).getByRole("article", { name: "Mock context used" }),
+    ).toHaveTextContent("mock-run-1");
     expect(within(firstTranscript).queryByText("Second board request")).not.toBeInTheDocument();
 
     openConversation("Second board request");
@@ -338,6 +366,9 @@ describe("App", () => {
     });
     expect(within(secondTranscript).getByText("Second board request")).toBeInTheDocument();
     expect(within(secondTranscript).getByText("Mock approved")).toBeInTheDocument();
+    expect(
+      within(secondTranscript).getByRole("article", { name: "Mock context used" }),
+    ).toHaveTextContent("mock-run-2");
     expect(within(secondTranscript).queryByText("First board request")).not.toBeInTheDocument();
   });
 

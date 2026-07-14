@@ -1,4 +1,5 @@
 import { createActivityEvent, type ActivityEvent, type ActivityEventKind } from "./activity";
+import { createMockContextProvenance } from "./contextProvenance";
 import {
   createConversationSession,
   conversationTitleForRequest,
@@ -64,6 +65,7 @@ export type ApplicationAction =
   | { readonly decision: MockApprovalDecision; readonly type: "mock-approval-decided" };
 
 const INITIAL_CONVERSATION: ConversationSession = {
+  contextProvenance: [],
   id: "conversation-1",
   messages: [],
   title: EMPTY_CONVERSATION_TITLE,
@@ -217,6 +219,11 @@ function startMockRun(
     return state;
   }
 
+  const contextProvenance = createMockContextProvenance(script.runId, activeConversation.id);
+  if (contextProvenance === null) {
+    return state;
+  }
+
   const messages = includeUserMessage
     ? [...activeConversation.messages, script.userMessage]
     : activeConversation.messages;
@@ -229,6 +236,7 @@ function startMockRun(
     activeConversation.id,
     (conversation) => ({
       ...conversation,
+      contextProvenance: [...conversation.contextProvenance, contextProvenance],
       messages: [
         ...messages,
         {

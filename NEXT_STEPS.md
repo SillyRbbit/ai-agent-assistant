@@ -16,31 +16,31 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 2F — mocked assistant interaction shell: **Verified complete**.
 - Increment 2G — integration hardening: **Verified complete**.
 - Increment 3A — in-memory conversation sessions: **Verified complete**.
+- Increment 3B — mock context provenance: **Verified complete**.
 
-## Phase 3B — gap analysis and increment planning
+## Phase 3C — gap analysis and increment planning
 
 Status: **Ready**
 
 Goal:
 
-- Compare the remaining Phase 3 conversation-UI and mocked-loop requirements with the verified implementation through Increment 3A.
-- Identify the smallest missing context-provenance, tool-result, or mocked-loop capability.
-- Define one bounded Phase 3B increment with explicit acceptance criteria, non-goals, risks, exact files, and verification commands.
+- Compare the remaining Phase 3 tool-result and mocked-loop requirements with the verified implementation through Increment 3B.
+- Identify the smallest missing user-visible capability after conversation identity and mock context provenance.
+- Define one bounded Phase 3C increment with explicit acceptance criteria, non-goals, risks, exact files, and verification commands.
 - Preserve every verified security, cancellation, Retry, Activity, IPC, storage, lifecycle, capability, CSP, and permission boundary.
 
 Required planning output:
 
-- A written gap analysis grounded in `docs/product/PRODUCT_BRIEF.md`, `docs/product/ARCHITECTURE_BASELINE.md`, and actual code.
-- One dedicated Phase 3B plan document.
+- A written gap analysis grounded in product documents and actual code.
+- One dedicated Phase 3C plan document.
 - An exact proposed file list and verification gate.
 - Project-owner approval before implementation.
 
-Explicitly excluded from planning implementation:
+Explicitly excluded:
 
-- Production model or gateway access.
-- API keys, credentials, OAuth, or cloud accounts.
-- Real tools, trusted WebView authorization, or privileged automation.
-- Attachments, voice, sensitive persistence, or new operating-system permissions.
-- Rust, IPC, Tauri command, dependency, capability, CSP, or packaging changes unless a later approved plan explicitly justifies them.
+- Context source selection, real data collection, attachments, or voice.
+- Production model or gateway access, API keys, credentials, OAuth, or cloud accounts.
+- Trusted Rust provenance, audit persistence, real tools, or privileged automation.
+- Rust, IPC, Tauri commands, dependencies, capabilities, CSP, packaging, or new operating-system permissions.
 
 Do not edit runtime code during the planning task.

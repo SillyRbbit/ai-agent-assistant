@@ -298,6 +298,27 @@ Consequences:
 - Conversation deletion, rename, search, export, synchronization, per-conversation drafts, attachments, voice, and context controls remain later increments.
 - No Rust, IPC, Tauri, SQLite, dependency, capability, CSP, credential, network, packaging, or operating-system permission change is introduced.
 
+## D-018 — Represent Phase 3B context provenance as fixed volatile mock data
+
+Date: 2026-07-13
+Status: Accepted
+
+Decision: each deterministic frontend run appends one readonly `MockContextProvenance` record to its owning volatile conversation. The record is bound to validated `mock-run-N` and `conversation-N` identifiers and contains a closed, fixed-copy source list. The current request is marked used; earlier conversation messages, saved memory, device data, and external services are marked not used.
+
+The provenance constructor accepts identifiers only and cannot receive request content. The conversation UI labels the record `Mock context used` and states that it is frontend-only, not trusted audit evidence.
+
+Rationale: the product requires users to see what information the assistant used, and D-017 now provides the conversation ownership boundary. Fixed frontend provenance proves disclosure, attribution, Retry, and restoration behavior without collecting real context or falsely extending trust to the WebView.
+
+Consequences:
+
+- Each submission and Retry gets one fresh provenance record tied to its run and conversation.
+- Request text, tool arguments, tool results, errors, paths, and personal content are excluded from provenance and Activity.
+- A provenance-bearing conversation is not treated as empty.
+- Reloading the WebView clears all provenance records.
+- Displayed provenance is untrusted presentation and grants no permission, approval, or execution authority.
+- Context selection, real data collection, trusted Rust provenance, audit persistence, and tool-result modeling remain later reviewed work.
+- No Rust, IPC, Tauri, SQLite, dependency, capability, CSP, credential, network, packaging, or operating-system permission change is introduced.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

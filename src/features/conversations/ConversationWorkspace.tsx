@@ -1,3 +1,4 @@
+import type { MockContextProvenance } from "../../application/contextProvenance";
 import type {
   ConversationMessage,
   MockApprovalDecision,
@@ -8,11 +9,13 @@ import type { AssistantRunStatus } from "../../application/state";
 import { PageState } from "../../components/PageState";
 import { PageHeader } from "../shared/PageHeader";
 import { ApprovalDialog } from "./ApprovalDialog";
+import { ContextProvenanceCard } from "./ContextProvenanceCard";
 import { ToolActivityCard } from "./ToolActivityCard";
 
 interface ConversationWorkspaceProps {
   readonly activeApproval: MockApprovalRequest | null;
   readonly composerDraft: string;
+  readonly contextProvenance: readonly MockContextProvenance[];
   readonly conversationTitle: string;
   readonly messages: readonly ConversationMessage[];
   readonly onApprovalDecision: (decision: MockApprovalDecision) => void;
@@ -28,6 +31,7 @@ interface ConversationWorkspaceProps {
 export function ConversationWorkspace({
   activeApproval,
   composerDraft,
+  contextProvenance,
   conversationTitle,
   messages,
   onApprovalDecision,
@@ -84,6 +88,9 @@ export function ConversationWorkspace({
                     </div>
                   ) : null}
                 </article>
+              ))}
+              {contextProvenance.map((provenance) => (
+                <ContextProvenanceCard key={provenance.id} provenance={provenance} />
               ))}
               {toolActivities.map((activity) => (
                 <ToolActivityCard activity={activity} key={activity.id} />

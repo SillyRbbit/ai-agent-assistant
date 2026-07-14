@@ -607,6 +607,83 @@ textarea:focus-visible {
   font-weight: 720;
 }
 
+.context-provenance-card {
+  display: grid;
+  width: 100%;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--surface-strong);
+}
+
+.context-provenance-card__header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.context-provenance-card__header > div {
+  display: grid;
+  gap: 3px;
+}
+
+.context-provenance-card__header span,
+.context-provenance-card > p {
+  color: var(--text-subtle);
+  font-size: 10px;
+}
+
+.context-provenance-card__header strong {
+  font-size: 12px;
+}
+
+.context-provenance-card__run {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  white-space: nowrap;
+}
+
+.context-provenance-card__sources {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+}
+
+.context-provenance-card__sources > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+}
+
+.context-provenance-card__sources dt,
+.context-provenance-card__sources dd {
+  margin: 0;
+  font-size: 11px;
+}
+
+.context-provenance-card__sources dt {
+  color: var(--text-muted);
+}
+
+.context-provenance-card__sources dd {
+  color: var(--text-subtle);
+  font-weight: 720;
+  white-space: nowrap;
+}
+
+.context-provenance-card__sources .context-provenance-card__status--used {
+  color: var(--success);
+}
+
+.context-provenance-card > p {
+  margin: 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  line-height: 1.45;
+}
+
 .tool-activity-card {
   display: grid;
   width: 100%;
