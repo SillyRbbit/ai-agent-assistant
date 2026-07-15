@@ -114,8 +114,8 @@ sync, and the mandatory gate. No transport, credential, continuation, policy,
 approval, audit persistence, runtime, IPC, execution, dependency, capability, or
 permission path was added.
 
-Increment 4Q terminally release initial function call is **Verified complete in
-the current uncommitted workspace**. `InitialGatewayTurn` privately retains a
+Increment 4Q terminally release initial function call is **Verified complete,
+published, and merged at `8598612`**. `InitialGatewayTurn` privately retains a
 schema-validated call after its non-terminal function frame returns `None`.
 Accepted terminal completion releases the exact call once; gateway failure and
 successful local cancellation discard it; transactional protocol errors retain
@@ -130,5 +130,15 @@ runtime, IPC, execution, dependency, capability, or permission path was added.
 
 No later implementation increment is Ready.
 
+Increment 4R bind terminal initial function call to policy is **Verified
+complete in the current uncommitted workspace**. Accepted terminal completion
+consumes the exact pending schema-valid call through the fixed deterministic
+engine and returns one retained `PolicyDecision`; failure and cancellation still
+discard the pending call without evaluation. Both exact tool outcomes, retained
+typed facts, redaction, lower-level contracts, Clippy, complete repository
+verification, npm audit, scope review, documentation sync, and the mandatory gate
+pass. No approval, audit, transport, runtime, dispatch, execution, dependency,
+capability, or permission path was added.
+
 Exact next task: wait for explicit project-owner direction to commit, push, and
-merge verified Increment 4Q. Do not start later planning or implementation.
+merge verified Increment 4R. Do not start later planning or implementation.

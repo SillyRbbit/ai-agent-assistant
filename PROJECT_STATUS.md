@@ -4,7 +4,7 @@ Last updated: 2026-07-15
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4P are **verified complete, published, and merged into `main`**. Increment 4P is merged at `8c1a2e0`. Increment 4Q terminally release initial function call is **verified complete in the current uncommitted workspace** with no production caller or user-visible behavior change. No later implementation increment is Ready.
+Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4Q are **verified complete, published, and merged into `main`**. Increment 4R bind terminal initial function call to policy is **verified complete in the current uncommitted workspace** with no production caller or user-visible behavior change. No later implementation increment is Ready.
 
 ## Increment status
 
@@ -40,7 +40,44 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
 - Increment 4N: bounded initial gateway request - **verified complete; published and merged**.
 - Increment 4O: bound initial gateway turn - **verified complete; published and merged**.
 - Increment 4P: schema-bound initial gateway events - **verified complete; published and merged**.
-- Increment 4Q: terminally release initial function call - **verified complete; uncommitted**.
+- Increment 4Q: terminally release initial function call - **verified complete; published and merged**.
+- Increment 4R: bind terminal initial function call to policy - **verified complete; uncommitted**.
+
+## Increment 4R capability and evidence
+
+- The bound turn privately retains one `SchemaValidatedFunctionCall` after its
+  non-terminal function frame returns `None`.
+- The exact source/test scope changes only
+  `src-tauri/src/agent/gateway_request.rs` and
+  `src-tauri/tests/gateway_request_contract.rs`.
+- Accepted terminal completion consumes the exact pending call through a
+  locally selected `DeterministicPolicyEngine` and returns one closed
+  `PolicyEvaluated` event. No caller can receive a standalone call or select the
+  policy engine on that path.
+- `get_current_datetime@1` remains `Allow` / `InformationOnly`, and
+  `create_local_task@1` remains `RequireApproval` /
+  `ReversibleRequiresApproval`. `Allow` remains non-authorizing.
+- Function-frame withholding, failure/cancellation discard, transactional
+  protocol errors, text behavior, local schema failure, status, limits, and
+  redaction remain unchanged.
+- Six request, 18 protocol, six function-validation, four policy, nine tool,
+  nine public request-contract, two policy-input, and two approval-binding tests
+  pass. Clippy, complete `npm run verify`, and npm audit also pass.
+- Exact-scope, conflict, secret, generated-output, architecture, code-health,
+  security, preserved-boundary, documentation, and mandatory gate reviews have
+  no blocking finding. No manual verification applies because no production
+  caller or user-visible behavior exists.
+- D-039 records terminal initial-turn policy ownership, fixed deterministic
+  engine selection, non-authorizing decisions, and public event API narrowing.
+- The consolidated result is `PASS WITH ADVISORIES`; the `04r` completion marker
+  is complete and valid for the current uncommitted workspace.
+- No policy-rule, approval, native interaction, audit, dispatch, execution,
+  tool-result, continuation, transport, gateway deployment, authentication,
+  credential, runtime, Tauri, frontend, SQLite, dependency, capability,
+  entitlement, or permission work is included.
+- Exact risks, rollback, verification, and closeout evidence are documented in
+  `docs/plans/04r-bind-terminal-initial-policy.md` and
+  `docs/reviews/2026-07-15-04r-post-increment-review.md`.
 
 ## Increment 4Q capability and evidence
 

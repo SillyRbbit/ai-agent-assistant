@@ -6,6 +6,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Increment 4R terminal policy binding inside `InitialGatewayTurn`, returning one retained non-authorizing `PolicyDecision` only after accepted terminal completion.
+- Public contract coverage for exact `Allow` and `RequireApproval` outcomes, retained typed call facts, terminal ordering, protocol-error retention, failure/cancellation discard, and redaction.
+- Documentation-only Increment 4R plan for consuming the terminal initial function call through the fixed deterministic policy engine before it leaves the bound turn.
+- Exact two-file future source/test scope, policy-decision event contract, risks, non-goals, verification, closeout scope, and rollback for terminal initial policy binding.
 - Increment 4Q private pending-call ownership inside `InitialGatewayTurn`, with terminal release and failure/cancellation discard behavior.
 - Public contract coverage for both local tools, transactional protocol-error retention, exact terminal release, terminal discard paths, text behavior, schema failure, state, and redaction.
 - Documentation-only Increment 4Q plan for withholding a schema-validated initial function call until terminal response completion and discarding it on failure or cancellation.
@@ -110,6 +114,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Completed Increment 4R within its exact two-file source/test scope: the terminal standalone-call event is replaced by a fixed deterministic policy-decision event, while lower-level validation, policy rules, approval, audit, transport, runtime, and execution boundaries remain unchanged.
+- Made explicit project-owner direction to commit, push, and merge verified Increment 4R the next gate; no later implementation increment is Ready.
+- Reconciled project memory with Increment 4Q commit `8598612`, now pushed and fast-forward merged into synchronized `main`; its `04q` completion marker was complete and valid before 4R planning edits.
+- Made project-owner approval of the exact Increment 4R plan the next gate; no source, policy-rule, approval, transport, continuation, runtime, IPC, persistence, dispatch, or execution work has started.
 - Completed Increment 4Q within its exact two-file source/test scope: accepted function frames now return `None`, and only accepted terminal completion releases the exact `SchemaValidatedFunctionCall`.
 - Preserved lower-level protocol, schema-validation, registry, policy, approval, audit, transport, runtime, dependency, Tauri, persistence, capability, and permission boundaries; no user-visible behavior changed.
 - Reconciled project memory with Increment 4P commit `8c1a2e0`, now pushed and fast-forward merged into synchronized `main`; its `04p` completion marker was complete and valid before 4Q planning edits.

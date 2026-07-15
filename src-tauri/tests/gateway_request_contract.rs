@@ -9,6 +9,7 @@ use ai_agent_assistant_lib::agent::gateway_request::{
     InitialGatewayEvent, InitialGatewayTurn, InitialGatewayTurnError, INITIAL_GATEWAY_TOOL_SET_ID,
     INITIAL_GATEWAY_TOOL_SET_VERSION,
 };
+use ai_agent_assistant_lib::policy::types::{PolicyOutcome, PolicyReason};
 use ai_agent_assistant_lib::tools::schema::{ToolArgumentValidationError, ValidatedToolArguments};
 use ai_agent_assistant_lib::tools::types::{PermissionKind, RiskClass};
 use serde_json::{json, Value};
@@ -153,10 +154,21 @@ fn accepts_each_exact_local_tool_contract() -> Result<(), Box<dyn Error>> {
 
         let event = turn
             .accept_frame(&completion_frame(2))?
-            .ok_or("terminal completion must release the validated call")?;
+            .ok_or("terminal completion must return the policy decision")?;
         let debug = format!("{event:?}");
         match event {
-            InitialGatewayEvent::FunctionCallCompleted { call } => {
+            InitialGatewayEvent::PolicyEvaluated { decision } => {
+                let (expected_outcome, expected_reason) = match name {
+                    "get_current_datetime" => (PolicyOutcome::Allow, PolicyReason::InformationOnly),
+                    "create_local_task" => (
+                        PolicyOutcome::RequireApproval,
+                        PolicyReason::ReversibleRequiresApproval,
+                    ),
+                    _ => return Err("unexpected local tool".into()),
+                };
+                assert_eq!(decision.outcome(), expected_outcome);
+                assert_eq!(decision.reason(), expected_reason);
+                let call = decision.validated_call();
                 assert_eq!(call.run_id(), RUN_ID);
                 assert_eq!(call.gateway_request_id(), GATEWAY_REQUEST_ID);
                 assert_eq!(call.call_id(), "call-public-1");
@@ -187,7 +199,7 @@ fn accepts_each_exact_local_tool_contract() -> Result<(), Box<dyn Error>> {
                     _ => return Err("unexpected local tool".into()),
                 }
             }
-            _ => return Err("expected a schema-validated function call".into()),
+            _ => return Err("expected a terminal policy decision".into()),
         }
         assert_eq!(turn.status(), GatewayStreamStatus::Completed);
         assert!(matches!(
@@ -247,12 +259,14 @@ fn protocol_errors_retain_the_pending_call_until_correct_completion() -> Result<
 
     let event = turn
         .accept_frame(&completion_frame(2))?
-        .ok_or("correct completion must release the retained call")?;
+        .ok_or("correct completion must evaluate the retained call")?;
     assert!(matches!(
         event,
-        InitialGatewayEvent::FunctionCallCompleted { call }
-            if matches!(
-                call.arguments(),
+        InitialGatewayEvent::PolicyEvaluated { decision }
+            if decision.outcome() == PolicyOutcome::RequireApproval
+            && decision.reason() == PolicyReason::ReversibleRequiresApproval
+            && matches!(
+                decision.validated_call().arguments(),
                 ValidatedToolArguments::CreateLocalTask(arguments)
                     if arguments.title() == argument_sentinel
             )

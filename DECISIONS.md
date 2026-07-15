@@ -940,6 +940,51 @@ Consequences:
   runtime coordinator, policy, approval, audit persistence, dispatch, executor,
   capability, entitlement, or operating-system permission is added.
 
+## D-039 - Bind terminal initial calls to one deterministic policy decision
+
+Date: 2026-07-15
+Status: Accepted; Increment 4R implemented and verified
+
+Decision: after the bound validator accepts terminal `response_completed`,
+`InitialGatewayTurn` consumes its exact private `SchemaValidatedFunctionCall`
+through `PolicyInput::from_validated_call` and a locally selected
+`DeterministicPolicyEngine::new()`. It returns only
+`InitialGatewayEvent::PolicyEvaluated { decision }`; the previous terminal
+standalone-call event is removed from this bound path. The decision retains the
+exact owned call and exposes it only through borrowed accessors.
+
+Policy evaluation cannot occur at the non-terminal function frame or after
+gateway failure, local schema failure, or cancellation. The fixed existing rules
+remain unchanged: `get_current_datetime@1` is `Allow` / `InformationOnly`, and
+`create_local_task@1` is `RequireApproval` /
+`ReversibleRequiresApproval`. Even `Allow` is non-authorizing data and grants no
+approval, audit, dispatch, execution, permission, run-liveness, or user-intent
+evidence.
+
+Rationale: Increment 4Q closed terminal ordering but still allowed a future
+initial transport caller to receive the schema-valid call and delay, replace, or
+omit canonical policy evaluation. Keeping the fixed policy transition inside the
+existing bound turn closes that choice without adding a coordinator, policy
+injection point, approval path, or runtime.
+
+Consequences:
+
+- The request module has a bounded dependency on existing policy types while the
+  policy decision retains an agent-owned call; the ownership graph remains
+  non-recursive.
+- The public initial event API narrows. The crate is unpublished and its only
+  repository caller is migrated, but a theoretical unsupported external
+  consumer must adopt the decision event.
+- Lower-level validators and policy constructors remain public for focused
+  fixtures. Future initial transport must own `InitialGatewayTurn` and must not
+  reconstruct a detached validation-to-policy path.
+- O-006 and O-007 remain unresolved and continue to block authenticated gateway
+  transport and live provider traffic.
+- No dependency, manifest, lockfile, Tauri command/event/plugin, WebView path,
+  SQLite path, credential, Keychain, provider SDK, network client, continuation,
+  runtime coordinator, approval, audit persistence, dispatch, executor,
+  capability, entitlement, or operating-system permission is added.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

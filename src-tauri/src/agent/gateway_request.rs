@@ -15,6 +15,8 @@ use super::gateway_protocol::{
     MAX_GATEWAY_REQUESTS_PER_RUN, MAX_GATEWAY_REQUEST_BYTES, MAX_MODEL_TURNS_PER_RUN,
     MAX_RETRY_AFTER_MS, MAX_RETRY_ATTEMPTS_PER_RUN, PROVIDER_TURN_DEADLINE,
 };
+use crate::policy::engine::{DeterministicPolicyEngine, PolicyEngine};
+use crate::policy::types::{PolicyDecision, PolicyInput};
 use crate::tools::registry::{InMemoryToolRegistry, ToolRegistry};
 use crate::tools::schema::ToolSchema;
 use crate::tools::types::ToolDefinition;
@@ -137,7 +139,11 @@ impl InitialGatewayTurn {
             }
             ValidatedGatewayEvent::ResponseCompleted => {
                 Ok(Some(match self.pending_function_call.take() {
-                    Some(call) => InitialGatewayEvent::FunctionCallCompleted { call },
+                    Some(call) => {
+                        let input = PolicyInput::from_validated_call(call);
+                        let decision = DeterministicPolicyEngine::new().evaluate(input);
+                        InitialGatewayEvent::PolicyEvaluated { decision }
+                    }
                     None => InitialGatewayEvent::ResponseCompleted,
                 }))
             }
@@ -183,7 +189,7 @@ pub enum InitialGatewayTurnError {
 pub enum InitialGatewayEvent {
     ResponseStarted { provider_response_id: String },
     OutputTextDelta { delta: String },
-    FunctionCallCompleted { call: SchemaValidatedFunctionCall },
+    PolicyEvaluated { decision: PolicyDecision },
     ResponseCompleted,
     ResponseFailed { failure: GatewayFailure },
 }
@@ -201,9 +207,9 @@ impl fmt::Debug for InitialGatewayEvent {
                 .debug_struct("OutputTextDelta")
                 .field("delta", &"[REDACTED]")
                 .finish(),
-            Self::FunctionCallCompleted { call } => formatter
-                .debug_struct("FunctionCallCompleted")
-                .field("call", call)
+            Self::PolicyEvaluated { decision } => formatter
+                .debug_struct("PolicyEvaluated")
+                .field("decision", decision)
                 .finish(),
             Self::ResponseCompleted => formatter.write_str("ResponseCompleted"),
             Self::ResponseFailed { failure } => formatter

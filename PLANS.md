@@ -4,7 +4,7 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No implementation plan is active. Increment 4Q is verified complete in the
+No implementation plan is active. Increment 4R is verified complete in the
 current uncommitted workspace, and no later implementation increment is Ready.
 
 ## Completed plans
@@ -34,6 +34,7 @@ docs/plans/04n-bounded-initial-gateway-request.md
 docs/plans/04o-bound-initial-gateway-turn.md
 docs/plans/04p-schema-bound-initial-gateway-events.md
 docs/plans/04q-terminally-release-initial-function-call.md
+docs/plans/04r-bind-terminal-initial-policy.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -93,6 +94,30 @@ A plan must contain:
 | Increment 4O bound initial gateway turn        | Complete | Project maintainer | 2026-07-15   |
 | Increment 4P schema-bound initial events       | Complete | Project maintainer | 2026-07-15   |
 | Increment 4Q terminal initial function release | Complete | Project maintainer | 2026-07-15   |
+| Increment 4R terminal initial policy binding   | Complete | Project maintainer | 2026-07-15   |
+
+## Phase 4 Increment 4R bind terminal initial function call to policy - complete
+
+Goal: prevent the verified bound initial turn from releasing a standalone
+schema-validated call before the canonical deterministic policy step.
+
+The exact source/test plan changes only `agent/gateway_request.rs` and the public
+`gateway_request_contract` integration test. On accepted terminal completion,
+the turn consumes the exact pending call through `PolicyInput` and the fixed
+`DeterministicPolicyEngine`, then returns one retained non-authorizing
+`PolicyDecision`. No caller on the bound path can receive a standalone call or
+select or omit policy evaluation.
+
+No policy-rule, approval, audit, transport, gateway service, authentication,
+credentials, continuation, retries, deadlines, runtime coordinator, dispatch,
+execution, Tauri, frontend, SQLite, dependency, capability, entitlement, or
+permission path is included. The verified implementation preserves all 56
+focused request, protocol, function-validation, policy, tool, public-contract,
+policy-input, and approval-binding tests. Clippy, complete `npm run verify`, npm
+audit, exact-scope, code, security, documentation, and mandatory gate reviews
+pass. D-039 records terminal policy ownership, fixed engine selection,
+non-authority, and the public event narrowing. No later implementation increment
+is Ready.
 
 ## Phase 4 Increment 4Q terminally release initial function call - complete
 
@@ -122,7 +147,9 @@ function-validation, nine tool, nine public contract, and two policy-binding
 tests pass, along with Clippy with warnings denied, complete `npm run verify`, npm
 audit, exact-scope, code, security, documentation, and mandatory gate reviews.
 D-038 records terminal ownership, discard behavior, and the public optional-event
-API narrowing. No later implementation increment is Ready.
+API narrowing. Commit `8598612` is pushed on `codex/phase4-increment-4q`,
+fast-forward merged into synchronized `main`, and retained a valid `04q` marker
+before 4R planning edits.
 
 ## Phase 4 Increment 4P schema-bound initial gateway events - complete
 
