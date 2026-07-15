@@ -1,12 +1,16 @@
 use std::error::Error;
 
+use ai_agent_assistant_lib::agent::function_call_validation::FunctionCallValidationError;
 use ai_agent_assistant_lib::agent::gateway_protocol::{
-    GatewayProtocolError, GatewayStreamStatus, ValidatedGatewayEvent, GATEWAY_PROTOCOL_VERSION,
+    GatewayFailureCode, GatewayProtocolError, GatewayStreamStatus, GATEWAY_PROTOCOL_VERSION,
     MAX_GATEWAY_REQUEST_BYTES,
 };
 use ai_agent_assistant_lib::agent::gateway_request::{
-    InitialGatewayTurn, INITIAL_GATEWAY_TOOL_SET_ID, INITIAL_GATEWAY_TOOL_SET_VERSION,
+    InitialGatewayEvent, InitialGatewayTurn, InitialGatewayTurnError, INITIAL_GATEWAY_TOOL_SET_ID,
+    INITIAL_GATEWAY_TOOL_SET_VERSION,
 };
+use ai_agent_assistant_lib::tools::schema::{ToolArgumentValidationError, ValidatedToolArguments};
+use ai_agent_assistant_lib::tools::types::{PermissionKind, RiskClass};
 use serde_json::{json, Value};
 
 const RUN_ID: &str = "run-public-request-1";
@@ -95,16 +99,20 @@ fn binds_response_identity_to_the_request() -> Result<(), Box<dyn Error>> {
 
     assert!(matches!(
         turn.accept_frame(&start_frame("run-other", GATEWAY_REQUEST_ID)),
-        Err(GatewayProtocolError::RunIdMismatch)
+        Err(InitialGatewayTurnError::Protocol(
+            GatewayProtocolError::RunIdMismatch
+        ))
     ));
     assert!(matches!(
         turn.accept_frame(&start_frame(RUN_ID, "gateway-request-other")),
-        Err(GatewayProtocolError::GatewayRequestIdMismatch)
+        Err(InitialGatewayTurnError::Protocol(
+            GatewayProtocolError::GatewayRequestIdMismatch
+        ))
     ));
     assert_eq!(turn.status(), GatewayStreamStatus::AwaitingStart);
     assert!(matches!(
         turn.accept_frame(&start_frame(RUN_ID, GATEWAY_REQUEST_ID))?,
-        ValidatedGatewayEvent::ResponseStarted { .. }
+        InitialGatewayEvent::ResponseStarted { .. }
     ));
     assert_eq!(turn.status(), GatewayStreamStatus::Streaming);
     Ok(())
@@ -122,15 +130,40 @@ fn accepts_each_exact_local_tool_contract() -> Result<(), Box<dyn Error>> {
             INITIAL_GATEWAY_TOOL_SET_VERSION,
             arguments_json,
         ))?;
+        let debug = format!("{event:?}");
         match event {
-            ValidatedGatewayEvent::FunctionCallCompleted { call } => {
-                assert_eq!(call.name(), name);
+            InitialGatewayEvent::FunctionCallCompleted { call } => {
+                assert_eq!(call.run_id(), RUN_ID);
+                assert_eq!(call.gateway_request_id(), GATEWAY_REQUEST_ID);
+                assert_eq!(call.call_id(), "call-public-1");
+                assert_eq!(call.tool_name(), name);
                 assert_eq!(
                     call.tool_contract_version(),
                     INITIAL_GATEWAY_TOOL_SET_VERSION
                 );
+                assert_eq!(call.required_permission(), PermissionKind::None);
+                match name {
+                    "get_current_datetime" => {
+                        assert_eq!(call.risk_class(), RiskClass::InformationOnly);
+                        assert!(matches!(
+                            call.arguments(),
+                            ValidatedToolArguments::GetCurrentDatetime
+                        ));
+                    }
+                    "create_local_task" => {
+                        assert_eq!(call.risk_class(), RiskClass::ReversibleLocalAction);
+                        assert!(matches!(
+                            call.arguments(),
+                            ValidatedToolArguments::CreateLocalTask(arguments)
+                                if arguments.title() == "Plan tomorrow"
+                        ));
+                        assert!(!debug.contains("Plan tomorrow"));
+                        assert!(debug.contains("[REDACTED]"));
+                    }
+                    _ => return Err("unexpected local tool".into()),
+                }
             }
-            _ => return Err("expected a validated function call".into()),
+            _ => return Err("expected a schema-validated function call".into()),
         }
     }
     Ok(())
@@ -145,7 +178,9 @@ fn rejects_unknown_tools_and_contract_versions() -> Result<(), Box<dyn Error>> {
             INITIAL_GATEWAY_TOOL_SET_VERSION,
             "{}",
         )),
-        Err(GatewayProtocolError::UnknownFunctionName)
+        Err(InitialGatewayTurnError::Protocol(
+            GatewayProtocolError::UnknownFunctionName
+        ))
     ));
 
     let mut wrong_version_turn = started_turn()?;
@@ -155,11 +190,114 @@ fn rejects_unknown_tools_and_contract_versions() -> Result<(), Box<dyn Error>> {
             INITIAL_GATEWAY_TOOL_SET_VERSION + 1,
             "{}",
         )),
-        Err(GatewayProtocolError::ToolContractVersionMismatch {
-            expected: INITIAL_GATEWAY_TOOL_SET_VERSION,
-            actual,
-        }) if actual == INITIAL_GATEWAY_TOOL_SET_VERSION + 1
+        Err(InitialGatewayTurnError::Protocol(
+            GatewayProtocolError::ToolContractVersionMismatch {
+                expected: INITIAL_GATEWAY_TOOL_SET_VERSION,
+                actual,
+            }
+        )) if actual == INITIAL_GATEWAY_TOOL_SET_VERSION + 1
     ));
+    Ok(())
+}
+
+#[test]
+fn local_schema_rejection_is_typed_redacted_and_terminal() -> Result<(), Box<dyn Error>> {
+    let invalid_cases = [
+        (
+            "get_current_datetime",
+            r#"{"timezone":"UTC"}"#,
+            ToolArgumentValidationError::InvalidShape,
+        ),
+        (
+            "create_local_task",
+            r#"{"title":" Plan tomorrow"}"#,
+            ToolArgumentValidationError::NonCanonicalTitle,
+        ),
+    ];
+
+    for (name, arguments_json, expected_reason) in invalid_cases {
+        let mut turn = started_turn()?;
+        let error = turn
+            .accept_frame(&function_call_frame(
+                name,
+                INITIAL_GATEWAY_TOOL_SET_VERSION,
+                arguments_json,
+            ))
+            .err()
+            .ok_or("local schema rejection was expected")?;
+
+        assert!(matches!(
+            error,
+            InitialGatewayTurnError::FunctionCallValidation(
+                FunctionCallValidationError::InvalidArguments { reason }
+            ) if reason == expected_reason
+        ));
+        assert!(!format!("{error:?} {error}").contains(arguments_json));
+        assert_eq!(turn.status(), GatewayStreamStatus::Failed);
+        assert!(!turn.cancel());
+        assert!(matches!(
+            turn.accept_frame(&frame(
+                RUN_ID,
+                GATEWAY_REQUEST_ID,
+                2,
+                json!({ "type": "response_completed" }),
+            )),
+            Err(InitialGatewayTurnError::Protocol(
+                GatewayProtocolError::StreamAlreadyTerminal {
+                    status: GatewayStreamStatus::Failed,
+                }
+            ))
+        ));
+    }
+    Ok(())
+}
+
+#[test]
+fn preserves_text_completion_and_closed_gateway_failure() -> Result<(), Box<dyn Error>> {
+    let output_sentinel = "private-output-delta-sentinel";
+    let mut text_turn = started_turn()?;
+    let output = text_turn.accept_frame(&frame(
+        RUN_ID,
+        GATEWAY_REQUEST_ID,
+        1,
+        json!({ "type": "output_text_delta", "delta": output_sentinel }),
+    ))?;
+    assert!(matches!(
+        &output,
+        InitialGatewayEvent::OutputTextDelta { delta } if delta == output_sentinel
+    ));
+    assert!(!format!("{output:?}").contains(output_sentinel));
+    assert!(matches!(
+        text_turn.accept_frame(&frame(
+            RUN_ID,
+            GATEWAY_REQUEST_ID,
+            2,
+            json!({ "type": "response_completed" }),
+        ))?,
+        InitialGatewayEvent::ResponseCompleted
+    ));
+    assert_eq!(text_turn.status(), GatewayStreamStatus::Completed);
+
+    let mut failed_turn = started_turn()?;
+    match failed_turn.accept_frame(&frame(
+        RUN_ID,
+        GATEWAY_REQUEST_ID,
+        1,
+        json!({
+            "type": "response_failed",
+            "code": "provider_unavailable",
+            "retryable": true,
+            "retry_after_ms": 250,
+        }),
+    ))? {
+        InitialGatewayEvent::ResponseFailed { failure } => {
+            assert_eq!(failure.code(), GatewayFailureCode::ProviderUnavailable);
+            assert!(failure.retryable());
+            assert_eq!(failure.retry_after_ms(), Some(250));
+        }
+        _ => return Err("expected a closed gateway failure".into()),
+    }
+    assert_eq!(failed_turn.status(), GatewayStreamStatus::Failed);
     Ok(())
 }
 
@@ -172,9 +310,11 @@ fn cancellation_is_local_idempotent_and_terminal() -> Result<(), Box<dyn Error>>
     assert_eq!(turn.status(), GatewayStreamStatus::Cancelled);
     assert!(matches!(
         turn.accept_frame(&start_frame(RUN_ID, GATEWAY_REQUEST_ID)),
-        Err(GatewayProtocolError::StreamAlreadyTerminal {
-            status: GatewayStreamStatus::Cancelled,
-        })
+        Err(InitialGatewayTurnError::Protocol(
+            GatewayProtocolError::StreamAlreadyTerminal {
+                status: GatewayStreamStatus::Cancelled,
+            }
+        ))
     ));
     Ok(())
 }
@@ -192,5 +332,23 @@ fn public_debug_and_errors_redact_selected_content() -> Result<(), Box<dyn Error
     let error_text = format!("{error:?}");
     assert!(error.is_some());
     assert!(!error_text.contains(sentinel));
+
+    let argument_sentinel = "private-invalid-task-title";
+    let mut schema_turn = started_turn()?;
+    let invalid_arguments = json!({ "title": format!(" {argument_sentinel}") }).to_string();
+    let error = schema_turn
+        .accept_frame(&function_call_frame(
+            "create_local_task",
+            INITIAL_GATEWAY_TOOL_SET_VERSION,
+            &invalid_arguments,
+        ))
+        .err()
+        .ok_or("local schema rejection was expected")?;
+    let error_text = format!("{error:?} {error}");
+    let turn_debug = format!("{schema_turn:?}");
+    assert!(!error_text.contains(argument_sentinel));
+    assert!(!error_text.contains(&invalid_arguments));
+    assert!(!turn_debug.contains(argument_sentinel));
+    assert!(turn_debug.contains("Failed"));
     Ok(())
 }

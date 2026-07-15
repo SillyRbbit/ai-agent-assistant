@@ -4,7 +4,7 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No implementation plan is active. Increment 4O is verified complete in the
+No implementation plan is active. Increment 4P is verified complete in the
 current uncommitted workspace, and no later increment is Ready.
 
 ## Completed plans
@@ -32,6 +32,7 @@ docs/plans/04l-remove-legacy-memory-scaffold.md
 docs/plans/04m-remove-legacy-platform-scaffold.md
 docs/plans/04n-bounded-initial-gateway-request.md
 docs/plans/04o-bound-initial-gateway-turn.md
+docs/plans/04p-schema-bound-initial-gateway-events.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -89,6 +90,39 @@ A plan must contain:
 | Increment 4M remove legacy platform scaffold  | Complete | Project maintainer | 2026-07-15   |
 | Increment 4N bounded initial gateway request  | Complete | Project maintainer | 2026-07-15   |
 | Increment 4O bound initial gateway turn       | Complete | Project maintainer | 2026-07-15   |
+| Increment 4P schema-bound initial events      | Complete | Project maintainer | 2026-07-15   |
+
+## Phase 4 Increment 4P schema-bound initial gateway events - complete
+
+Goal: make the verified bound initial turn own exact local function-call schema
+validation so a future trusted caller cannot receive raw normalized argument JSON
+or select a separate registry before policy.
+
+The exact source/test plan changes only `agent/gateway_request.rs` and the public
+`gateway_request_contract` integration test. The turn constructs one private
+registry from the same fixed two-schema catalog, converts normalized events into
+a closed `InitialGatewayEvent`, returns only schema-validated calls, and reports
+local schema rejection through a typed content-free error plus terminal failed
+wrapper state. Lower-level protocol, registry, validator, policy, approval, and
+audit APIs remain unchanged.
+
+No transport, gateway service, authentication, credentials, Keychain, provider
+parameters, continuation, retries, deadlines, runtime coordinator, policy,
+approval, audit writes or persistence, dispatch, execution, Tauri, frontend,
+SQLite, dependency, capability, entitlement, or permission path is included.
+Focused request, protocol, function-validation, tool, public-contract, and policy
+baselines pass on clean synchronized `main` at `87be00e`; the `04o` marker was
+complete and valid before planning edits.
+
+The verified implementation keeps one exact private registry inside the bound
+turn, exhaustively converts normalized events, returns only locally
+schema-validated function calls, and terminally closes after local schema
+rejection. Six request, 18 protocol, six function-validation, nine tool, eight
+public contract, and two policy-binding tests pass, along with Clippy with
+warnings denied, complete `npm run verify`, npm audit, exact-scope, code,
+security, documentation, and mandatory gate reviews. D-037 records schema
+ownership, terminal failure, and public event/error narrowing. The implementation
+remains uncommitted, and no later increment is Ready.
 
 ## Phase 4 Increment 4O bound initial gateway turn - complete
 
@@ -119,8 +153,9 @@ validator. Six preserved request tests and six public turn-contract tests pass,
 along with 18 protocol tests, nine tool tests, Clippy with warnings denied,
 complete `npm run verify`, npm audit, exact-scope, code, security, documentation,
 and mandatory gate reviews. D-036 records the bound-turn and public API narrowing
-decision. The implementation remains uncommitted, and no later increment is
-Ready.
+decision. Commit `87be00e` is pushed on `codex/phase4-increment-4o`, fast-forward
+merged into synchronized `main`, and retained a valid `04o` marker before 4P
+planning edits.
 
 ## Phase 4 Increment 4N bounded initial gateway request - complete
 

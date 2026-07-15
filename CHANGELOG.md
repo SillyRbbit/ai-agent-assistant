@@ -6,6 +6,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Increment 4P closed `InitialGatewayEvent` and typed `InitialGatewayTurnError` contracts for schema-bound initial gateway events.
+- A private exact local registry owned by `InitialGatewayTurn`, exhaustive normalized-event conversion, terminal local-schema failure, and public tests for typed arguments, classification, failures, cancellation, and redaction.
+- Documentation-only Increment 4P plan for schema-bound initial gateway events that prevent raw normalized function calls or caller-selected registries from leaving the bound turn.
+- Exact two-file future source/test scope, typed event/error contract, terminal local-schema failure, risks, non-goals, verification, closeout scope, and rollback for initial-turn schema ownership.
 - Documentation-only Increment 4O plan for one transport-free initial gateway turn that binds request bytes, correlation identities, exact local tool names/version, response validation, and cancellation.
 - Exact two-file future source/test scope, public API narrowing, risks, non-goals, verification, closeout scope, and rollback for the bound initial gateway turn.
 - Increment 4O non-cloneable `InitialGatewayTurn` that owns the closed initial request and response validator, derives exact correlation and local tool-contract configuration once, and exposes only bounded request/stream operations.
@@ -102,6 +106,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Completed Increment 4P within its exact two-file source/test scope: valid initial-turn function calls now leave the bound turn only as `SchemaValidatedFunctionCall`, while local schema rejection closes the wrapper terminally.
+- Preserved lower-level protocol, registry, function-validation, policy, approval, audit, transport, dependency, Tauri, persistence, capability, and permission boundaries; no user-visible behavior changed.
+- Reconciled project memory with Increment 4O commit `87be00e`, now pushed and fast-forward merged into synchronized `main`; its `04o` completion marker was complete and valid before 4P planning edits.
+- Made project-owner approval of the exact Increment 4P plan the next gate; no source, transport, authentication, credential, continuation, policy, runtime, IPC, persistence, or execution work has started.
 - Reconciled project memory with Increment 4N commit `d7c4b69`, now pushed and fast-forward merged into synchronized `main`; its `04n` completion marker was complete and valid before 4O planning edits.
 - Made project-owner approval of the exact Increment 4O plan the next gate; no source, transport, authentication, credential, continuation, runtime, IPC, persistence, or execution work has started.
 - Completed Increment 4O within its exact two-file source/test scope with no dependency, transport, credential, continuation, coordinator, Tauri, persistence, policy, approval, audit, dispatch, execution, capability, or permission expansion.

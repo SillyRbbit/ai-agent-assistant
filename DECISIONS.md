@@ -831,6 +831,62 @@ Consequences:
   runtime coordinator, policy, approval, audit persistence, dispatch, executor,
   capability, entitlement, or operating-system permission is added.
 
+## D-037 - Bind initial gateway events to exact local schema validation
+
+Date: 2026-07-15
+Status: Accepted; Increment 4P implemented and verified
+
+Decision: `InitialGatewayTurn` owns one private `InMemoryToolRegistry` populated
+from the same exact fixed `ToolSchema` array that supplies the response
+validator's allowed function names and common contract version. Registry
+registration, version agreement, and validator construction share one fixed
+content-free configuration failure. No initial-turn caller can provide, replace,
+or mutate the registry.
+
+The bound turn exhaustively converts each normalized `ValidatedGatewayEvent` into
+one closed non-cloneable `InitialGatewayEvent`. Non-function events retain their
+verified data contracts. A completed function call is immediately consumed by
+`validate_function_call`; only a `SchemaValidatedFunctionCall` with locally
+derived typed arguments, risk, and permission may leave the turn. Raw normalized
+argument JSON and a caller-selected registry cannot cross this bound-turn
+boundary.
+
+Protocol errors and local function-validation errors remain distinct through one
+typed `InitialGatewayTurnError`. Protocol rejection preserves the verified
+transactional validator behavior. Local schema rejection sets private wrapper
+terminal state, reports `GatewayStreamStatus::Failed`, rejects every later frame
+as already terminal, and makes cancellation a no-op. This local state does not
+claim a gateway/provider failure or transport abort. Event debug output redacts
+assistant text and function arguments.
+
+Rationale: Increment 4O bound request and response-protocol configuration, but a
+future caller could still receive raw normalized arguments and independently
+select or omit local schema validation before policy. Owning the exact registry
+and typed conversion in the same turn closes that gap without introducing a
+runtime coordinator or changing the lower-level independently verified protocol,
+registry, function-validation, or policy APIs.
+
+Consequences:
+
+- Replacing the bound turn's `ValidatedGatewayEvent` and bare protocol-error
+  surface with `InitialGatewayEvent` and `InitialGatewayTurnError` intentionally
+  narrows the public Rust API. The crate is not published and the only repository
+  caller is migrated; a theoretical unsupported external consumer would need to
+  adopt the new closed types.
+- `GatewayStreamValidator`, `ValidatedGatewayEvent`, `UntrustedFunctionCall`,
+  `ToolRegistry`, and `validate_function_call` remain public for focused tests and
+  independently verified downstream boundaries. Future initial transport code
+  must use `InitialGatewayTurn` rather than reconstructing those steps.
+- A schema-valid call remains non-authorizing. It must still pass deterministic
+  policy, exact approval where required, trusted audit, dispatch, and execution
+  boundaries.
+- O-006 and O-007 remain unresolved and continue to block authenticated gateway
+  transport and live provider traffic.
+- No dependency, manifest, lockfile, Tauri command/event/plugin, WebView path,
+  SQLite path, credential, Keychain, provider SDK, network client, continuation,
+  runtime coordinator, policy, approval, audit persistence, dispatch, executor,
+  capability, entitlement, or operating-system permission is added.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

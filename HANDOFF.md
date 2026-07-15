@@ -4,7 +4,7 @@ Last updated: 2026-07-15
 
 ## Current state
 
-Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4N are verified, published, and merged into clean synchronized `main` at `d7c4b69`.
+Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4O are verified, published, and merged into clean synchronized `main` at `87be00e`.
 
 Reconstructed Increment 4I was committed as `99f9279` with message `Remove generic audit scaffold`, pushed on `codex/phase4-increment-4i`, fast-forward merged into `main`, and pushed. The corrected `04i` completion marker remains valid after the deletion commit. The original pre-fingerprint implementation commit remains preserved exactly at `cf9d701` on local `codex/phase4-increment-4i-pre-fingerprint-fix`; no remote ref contains it.
 
@@ -26,12 +26,155 @@ message `Add bounded initial gateway request`, pushed on
 `04n` marker was complete and valid after commit and merge and immediately before
 the current planning edits.
 
-Increment 4O bound initial gateway turn is verified complete in the current
-uncommitted workspace. Its exact two-file source/test implementation binds request
-bytes and response validation to the same correlation IDs and exact local tool
-catalog. No transport, credential, continuation, runtime coordinator, IPC,
-persistence, dispatch, or execution path was added. No later implementation
-increment is Ready.
+Increment 4O bound initial gateway turn was committed as `87be00e` with message
+`Bind initial gateway turn`, pushed on `codex/phase4-increment-4o`, fast-forward
+merged into `main`, and pushed. The `04o` marker was complete and valid after
+commit and merge and immediately before the current planning edits.
+
+Increment 4P schema-bound initial gateway events is verified complete in the
+current uncommitted workspace. Its exact two-file source/test implementation makes
+the bound turn own exact local schema validation and prevents raw normalized
+calls or caller-selected registries from leaving that path. No transport,
+credential, continuation, policy, runtime, IPC, persistence, or execution path
+was added. No later implementation increment is Ready.
+
+## Increment 4P completion state
+
+### Goal
+
+Make `InitialGatewayTurn` own one private exact local registry and return only
+closed initial events whose function-call variant contains a
+`SchemaValidatedFunctionCall`. Local schema rejection becomes a typed,
+content-free, terminal wrapper failure before any future policy caller can see the
+call.
+
+### Exact source and test scope
+
+```text
+src-tauri/src/agent/gateway_request.rs
+src-tauri/tests/gateway_request_contract.rs
+```
+
+The implementation constructs the registry from the same two fixed `ToolSchema`
+variants already used for the request/validator contract, converts normalized
+events exhaustively, and adds private failed state for local schema rejection.
+`gateway_protocol.rs`, `function_call_validation.rs`, `tools/`, policy,
+approvals, audit, module exports, and manifests remain unchanged. Lower-level
+protocol and registry APIs remain available for their existing tests.
+
+### Implemented behavior
+
+- `InitialGatewayTurn` owns an exact private `InMemoryToolRegistry` built from the
+  same fixed schema array that configures allowed response names/version.
+- `accept_frame` returns only closed `InitialGatewayEvent` values and consumes a
+  normalized function call through `validate_function_call` before returning it.
+- Valid function events contain one non-cloneable `SchemaValidatedFunctionCall`
+  with locally derived typed arguments, risk, and permission.
+- `InitialGatewayTurnError` keeps protocol and local schema failures distinct and
+  content-free.
+- Local schema rejection makes wrapper status `Failed`, rejects late frames as
+  already terminal, and makes cancellation a no-op. It does not claim a gateway
+  failure or transport abort.
+- Event debug output redacts assistant output and function arguments. No event or
+  validated call gains serialization, cloning, policy, approval, audit, dispatch,
+  or execution authority.
+
+### Verification evidence
+
+Passed in the current workspace:
+
+```text
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+  passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::gateway_request::
+  6 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::gateway_protocol::
+  18 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::function_call_validation::
+  6 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked tools::
+  9 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test gateway_request_contract --locked
+  8 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test policy_input_binding --locked
+  2 passed
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+  passed
+npm run verify
+  passed: 17 hook, 124 frontend, 92 Rust library, 19 Rust integration tests,
+  lint, typecheck, builds, and Tauri release no-bundle
+npm audit --audit-level=low
+  passed with 0 vulnerabilities on the approved network-enabled rerun
+git diff --check
+  passed
+```
+
+The first sandboxed gate-begin command could not write ignored state; the approved
+elevated retry succeeded before source edits. The first rustfmt check found only
+test import wrapping and passed after `cargo fmt`. The first public contract
+compile found two identity assertions still matching bare protocol errors; both
+were migrated to `InitialGatewayTurnError`, and the rerun passed. The first
+sandboxed npm audit could not reach the registry or write npm logs; the approved
+network-enabled rerun passed. No required check remains failed or not run.
+
+No manual verification is required because 4P has no production caller,
+user-visible behavior, Tauri route, native API, networking, credential,
+persistence, or operating-system interaction.
+
+### Exact files changed
+
+```text
+AGENTS.md
+CHANGELOG.md
+DECISIONS.md
+HANDOFF.md
+NEXT_STEPS.md
+PLANS.md
+PROJECT_STATUS.md
+docs/increments/04p-schema-bound-initial-gateway-events.md
+docs/plans/04p-schema-bound-initial-gateway-events.md
+docs/plans/README.md
+docs/reviews/2026-07-15-04p-post-increment-review.md
+src-tauri/src/agent/gateway_request.rs
+src-tauri/tests/gateway_request_contract.rs
+```
+
+No security, product, workflow, troubleshooting, dependency, manifest, lockfile,
+Tauri, frontend, storage, capability, entitlement, or permission file changed.
+
+### Risks and non-goals
+
+The wrapper must convert protocol events exhaustively so future variant drift is
+a compile failure. Its private registry and validator catalog must derive from
+the same schemas. Because protocol validation accepts a function frame before
+local schema parsing, wrapper-owned terminal failed state must override status and
+reject every later operation. Public event/error API narrowing could affect a
+theoretical unsupported external consumer. Output and typed arguments remain
+content-bearing and require redacted debug behavior.
+
+HTTP/TLS, gateway deployment, authentication, credentials, Keychain, provider
+parameters, live traffic, retries, deadlines, transport abort, continuation,
+tool-result return, context selection, runtime coordination, policy, approval,
+native prompts, audit writes or persistence, dispatch, execution, Tauri, WebView,
+SQLite, dependencies, capabilities, entitlements, and permissions are excluded.
+
+### Review result and rollback
+
+The consolidated result is `PASS WITH ADVISORIES`. No Critical or High blocking
+finding remains. The advisories are the intentional event/error API narrowing for
+a theoretical unsupported external Rust consumer and the intentionally public
+lower-level raw protocol/registry APIs. Future initial transport code must use
+the bound turn. D-037 records the durable trust-boundary decision.
+
+Before commit, restore the two source/test files to `87be00e` and revert only the
+declared 4P documentation. After commit, revert one 4P commit. No migration, data,
+dependency, credential, compatibility identifier, or remote resource requires
+rollback.
+
+### Exact next task
+
+Wait for explicit project-owner direction to commit, push, and merge verified
+Increment 4P. Do not start later planning or implementation.
 
 ## Increment 4O completion state
 
@@ -174,10 +317,10 @@ declared 4O documentation. After commit, revert one 4O commit. No migration, dat
 dependency, credential, compatibility identifier, or remote resource requires
 rollback.
 
-### Exact next task
+### Publication state
 
-Wait for explicit project-owner direction to commit, push, and merge verified
-Increment 4O. Do not start later planning or implementation.
+Commit `87be00e` is pushed on `codex/phase4-increment-4o`, fast-forward merged
+into synchronized `main`, and retained a valid marker before 4P planning edits.
 
 ## Increment 4N completion state
 
@@ -1484,12 +1627,12 @@ The project owner confirmed the fixed window title, exact trusted-fields-first/t
 ## Exact next task
 
 Wait for explicit project-owner direction to commit, push, and merge verified
-Increment 4O. Do not start later planning or implementation.
+Increment 4P. Do not start later planning or implementation.
 
 ## Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Resume from HANDOFF.md on verified, uncommitted Increment 4O. Confirm the `04o` completion marker remains complete and valid, then wait for explicit project-owner direction to commit, push, and fast-forward merge Increment 4O. Do not start later planning or implementation.
+Resume from HANDOFF.md on verified, uncommitted Increment 4P. Confirm the `04p` completion marker remains complete and valid, then wait for explicit project-owner direction to commit, push, and fast-forward merge Increment 4P. Do not start later planning or implementation.
 ```

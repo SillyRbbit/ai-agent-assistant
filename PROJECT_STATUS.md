@@ -4,7 +4,7 @@ Last updated: 2026-07-15
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4N are **verified complete, published, and merged into `main`**. Increment 4N is merged at `d7c4b69`. Increment 4O bound initial gateway turn is **verified complete in the current uncommitted workspace** with no user-visible behavior change. No later implementation increment is Ready.
+Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4O are **verified complete, published, and merged into `main`**. Increment 4O is merged at `87be00e`. Increment 4P schema-bound initial gateway events is **verified complete in the current uncommitted workspace** with no user-visible behavior change. No later implementation increment is Ready.
 
 ## Increment status
 
@@ -38,7 +38,44 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
 - Increment 4L: remove legacy memory scaffold - **verified complete; published and merged**.
 - Increment 4M: remove legacy platform scaffold - **verified complete; published and merged**.
 - Increment 4N: bounded initial gateway request - **verified complete; published and merged**.
-- Increment 4O: bound initial gateway turn - **verified complete; uncommitted**.
+- Increment 4O: bound initial gateway turn - **verified complete; published and merged**.
+- Increment 4P: schema-bound initial gateway events - **verified complete in the current uncommitted workspace**.
+
+## Increment 4P capability and evidence
+
+- `InitialGatewayTurn` now owns one private exact `InMemoryToolRegistry` built
+  from the same fixed two-schema catalog used to configure response validation.
+- Its closed `InitialGatewayEvent` exhaustively mirrors normalized initial events
+  but exposes function calls only as `SchemaValidatedFunctionCall`; no raw
+  `UntrustedFunctionCall` leaves the bound turn.
+- `InitialGatewayTurnError` distinguishes typed protocol rejection from typed
+  local function-call validation rejection without retaining untrusted content.
+- Local schema rejection sets private terminal state, reports `Failed`, rejects
+  every late frame as already terminal, and makes later cancellation a no-op
+  without claiming gateway/provider failure or transport abort.
+- The exact source/test scope changes only
+  `src-tauri/src/agent/gateway_request.rs` and
+  `src-tauri/tests/gateway_request_contract.rs`.
+- Lower-level protocol, registry, function-validation, policy, approval, and
+  audit APIs remain unchanged and independently testable.
+- Six request tests, 18 protocol tests, six function-validation tests, nine tool
+  tests, eight public request-contract tests, and two policy-binding tests pass.
+- Complete `npm run verify` passes with 17 hook, 124 frontend, 92 Rust library,
+  and 19 Rust integration tests plus lint, typecheck, builds, and Tauri release
+  no-bundle. Clippy passes with warnings denied, and the network-enabled npm audit
+  reports zero vulnerabilities.
+- Exact-scope, conflict, secret, generated-output, complete-diff, architecture,
+  code-health, security, preserved-boundary, and documentation reviews have no
+  blocking finding. No manual verification applies because no production caller
+  or user-visible behavior exists.
+- D-037 records exact registry ownership, terminal local-schema failure, and the
+  intentional public event/error API narrowing. The result is `PASS WITH
+ADVISORIES` for that theoretical unsupported external consumer and the
+  intentionally public lower-level raw protocol boundary.
+- No HTTP, gateway deployment, authentication, credentials, provider parameters,
+  continuation, retries, deadlines, coordinator, policy, approval, audit writes
+  or persistence, dispatch, execution, Tauri, frontend, SQLite, dependency,
+  capability, entitlement, or permission work is included.
 
 ## Increment 4O capability and evidence
 

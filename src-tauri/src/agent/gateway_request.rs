@@ -3,16 +3,21 @@ use std::fmt;
 use serde::Serialize;
 use thiserror::Error;
 
-use super::gateway_protocol::{
-    is_valid_opaque_id, GatewayProtocolResult, GatewayStreamStatus, GatewayStreamValidator,
-    ValidatedGatewayEvent, AGENT_RUN_DEADLINE, GATEWAY_CONNECT_TIMEOUT, GATEWAY_PROTOCOL_VERSION,
-    GATEWAY_STREAM_IDLE_TIMEOUT, MAX_ASSISTANT_OUTPUT_CHARACTERS_PER_TURN,
-    MAX_FUNCTION_ARGUMENT_BYTES, MAX_FUNCTION_CALLS_PER_RUN, MAX_GATEWAY_EVENTS_PER_TURN,
-    MAX_GATEWAY_EVENT_BYTES, MAX_GATEWAY_REQUESTS_PER_RUN, MAX_GATEWAY_REQUEST_BYTES,
-    MAX_MODEL_TURNS_PER_RUN, MAX_RETRY_AFTER_MS, MAX_RETRY_ATTEMPTS_PER_RUN,
-    PROVIDER_TURN_DEADLINE,
+use super::function_call_validation::{
+    validate_function_call, FunctionCallValidationError, SchemaValidatedFunctionCall,
 };
+use super::gateway_protocol::{
+    is_valid_opaque_id, GatewayFailure, GatewayProtocolError, GatewayStreamStatus,
+    GatewayStreamValidator, ValidatedGatewayEvent, AGENT_RUN_DEADLINE, GATEWAY_CONNECT_TIMEOUT,
+    GATEWAY_PROTOCOL_VERSION, GATEWAY_STREAM_IDLE_TIMEOUT,
+    MAX_ASSISTANT_OUTPUT_CHARACTERS_PER_TURN, MAX_FUNCTION_ARGUMENT_BYTES,
+    MAX_FUNCTION_CALLS_PER_RUN, MAX_GATEWAY_EVENTS_PER_TURN, MAX_GATEWAY_EVENT_BYTES,
+    MAX_GATEWAY_REQUESTS_PER_RUN, MAX_GATEWAY_REQUEST_BYTES, MAX_MODEL_TURNS_PER_RUN,
+    MAX_RETRY_AFTER_MS, MAX_RETRY_ATTEMPTS_PER_RUN, PROVIDER_TURN_DEADLINE,
+};
+use crate::tools::registry::{InMemoryToolRegistry, ToolRegistry};
 use crate::tools::schema::ToolSchema;
+use crate::tools::types::ToolDefinition;
 
 pub const INITIAL_GATEWAY_TOOL_SET_ID: &str = "cortexa_desktop_mvp";
 pub const INITIAL_GATEWAY_TOOL_SET_VERSION: u16 = 1;
@@ -22,6 +27,8 @@ pub type GatewayRequestResult<T> = Result<T, GatewayRequestError>;
 pub struct InitialGatewayTurn {
     request: InitialGatewayRequest,
     validator: GatewayStreamValidator,
+    registry: InMemoryToolRegistry,
+    local_schema_failed: bool,
 }
 
 impl InitialGatewayTurn {
@@ -51,15 +58,27 @@ impl InitialGatewayTurn {
             return Err(GatewayRequestError::ValidatorConfigurationFailed);
         }
 
+        let mut registry = InMemoryToolRegistry::new();
+        for schema in schemas.iter().copied() {
+            registry
+                .register(ToolDefinition::from_schema(schema))
+                .map_err(|_| GatewayRequestError::ValidatorConfigurationFailed)?;
+        }
+
         let validator = GatewayStreamValidator::new(
             run_id,
             gateway_request_id,
-            schemas.into_iter().map(|schema| schema.name().to_owned()),
+            schemas.iter().map(|schema| schema.name().to_owned()),
             expected_tool_contract_version,
         )
         .map_err(|_| GatewayRequestError::ValidatorConfigurationFailed)?;
 
-        Ok(Self { request, validator })
+        Ok(Self {
+            request,
+            validator,
+            registry,
+            local_schema_failed: false,
+        })
     }
 
     #[must_use]
@@ -69,16 +88,55 @@ impl InitialGatewayTurn {
 
     #[must_use]
     pub fn status(&self) -> GatewayStreamStatus {
-        self.validator.status()
+        if self.local_schema_failed {
+            GatewayStreamStatus::Failed
+        } else {
+            self.validator.status()
+        }
     }
 
-    pub fn accept_frame(&mut self, frame: &[u8]) -> GatewayProtocolResult<ValidatedGatewayEvent> {
-        self.validator.accept_frame(frame)
+    pub fn accept_frame(&mut self, frame: &[u8]) -> InitialGatewayTurnResult<InitialGatewayEvent> {
+        if self.local_schema_failed {
+            return Err(InitialGatewayTurnError::Protocol(
+                GatewayProtocolError::StreamAlreadyTerminal {
+                    status: GatewayStreamStatus::Failed,
+                },
+            ));
+        }
+
+        let event = self
+            .validator
+            .accept_frame(frame)
+            .map_err(InitialGatewayTurnError::Protocol)?;
+
+        match event {
+            ValidatedGatewayEvent::ResponseStarted {
+                provider_response_id,
+            } => Ok(InitialGatewayEvent::ResponseStarted {
+                provider_response_id,
+            }),
+            ValidatedGatewayEvent::OutputTextDelta { delta } => {
+                Ok(InitialGatewayEvent::OutputTextDelta { delta })
+            }
+            ValidatedGatewayEvent::FunctionCallCompleted { call } => {
+                match validate_function_call(call, &self.registry) {
+                    Ok(call) => Ok(InitialGatewayEvent::FunctionCallCompleted { call }),
+                    Err(error) => {
+                        self.local_schema_failed = true;
+                        Err(InitialGatewayTurnError::FunctionCallValidation(error))
+                    }
+                }
+            }
+            ValidatedGatewayEvent::ResponseCompleted => Ok(InitialGatewayEvent::ResponseCompleted),
+            ValidatedGatewayEvent::ResponseFailed { failure } => {
+                Ok(InitialGatewayEvent::ResponseFailed { failure })
+            }
+        }
     }
 
     #[must_use]
     pub fn cancel(&mut self) -> bool {
-        self.validator.cancel()
+        !self.local_schema_failed && self.validator.cancel()
     }
 }
 
@@ -88,8 +146,53 @@ impl fmt::Debug for InitialGatewayTurn {
             .debug_struct("InitialGatewayTurn")
             .field("request_body", &"[REDACTED]")
             .field("request_body_bytes", &self.request.as_bytes().len())
-            .field("status", &self.validator.status())
+            .field("status", &self.status())
             .finish()
+    }
+}
+
+pub type InitialGatewayTurnResult<T> = Result<T, InitialGatewayTurnError>;
+
+#[derive(Debug, Error, Eq, PartialEq)]
+pub enum InitialGatewayTurnError {
+    #[error("initial gateway protocol validation failed: {0}")]
+    Protocol(GatewayProtocolError),
+    #[error("initial gateway function call failed local schema validation: {0}")]
+    FunctionCallValidation(FunctionCallValidationError),
+}
+
+#[derive(Eq, PartialEq)]
+pub enum InitialGatewayEvent {
+    ResponseStarted { provider_response_id: String },
+    OutputTextDelta { delta: String },
+    FunctionCallCompleted { call: SchemaValidatedFunctionCall },
+    ResponseCompleted,
+    ResponseFailed { failure: GatewayFailure },
+}
+
+impl fmt::Debug for InitialGatewayEvent {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::ResponseStarted {
+                provider_response_id,
+            } => formatter
+                .debug_struct("ResponseStarted")
+                .field("provider_response_id", provider_response_id)
+                .finish(),
+            Self::OutputTextDelta { .. } => formatter
+                .debug_struct("OutputTextDelta")
+                .field("delta", &"[REDACTED]")
+                .finish(),
+            Self::FunctionCallCompleted { call } => formatter
+                .debug_struct("FunctionCallCompleted")
+                .field("call", call)
+                .finish(),
+            Self::ResponseCompleted => formatter.write_str("ResponseCompleted"),
+            Self::ResponseFailed { failure } => formatter
+                .debug_struct("ResponseFailed")
+                .field("failure", failure)
+                .finish(),
+        }
     }
 }
 
