@@ -127,3 +127,21 @@ A task is done only when:
 - Reusable Codex skills: `.agents/skills/`
 - Templates: `docs/templates/`
 - Product source of truth: `docs/product/`
+
+## Mandatory post-increment gate
+
+Before ending any implementation increment, Codex must run
+`$post-increment-gate`.
+
+The increment may be marked complete only when:
+
+- All required automated checks passed.
+- All required manual checks were confirmed by the user.
+- The complete diff was reviewed.
+- No Critical or High blocking issue remains.
+- Project-memory documents were synchronized.
+- A post-increment review report exists.
+- The report result is PASS or PASS WITH ADVISORIES.
+
+Codex must not begin the next increment automatically.
+Codex must not commit or push unless explicitly requested.
