@@ -4,8 +4,8 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No implementation plan is active. Increment 4P is verified complete in the
-current uncommitted workspace, and no later increment is Ready.
+No implementation plan is active. Increment 4Q is verified complete in the
+current uncommitted workspace, and no later implementation increment is Ready.
 
 ## Completed plans
 
@@ -33,6 +33,7 @@ docs/plans/04m-remove-legacy-platform-scaffold.md
 docs/plans/04n-bounded-initial-gateway-request.md
 docs/plans/04o-bound-initial-gateway-turn.md
 docs/plans/04p-schema-bound-initial-gateway-events.md
+docs/plans/04q-terminally-release-initial-function-call.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -63,34 +64,65 @@ A plan must contain:
 
 ## Plan index
 
-| Plan                                          | Status   | Owner              | Last updated |
-| --------------------------------------------- | -------- | ------------------ | ------------ |
-| Increment 2B-1 SQLite migration skeleton      | Complete | Project maintainer | 2026-07-13   |
-| Increment 2C storage startup integration      | Complete | Project maintainer | 2026-07-13   |
-| Increment 2D menu-bar/window lifecycle        | Complete | Project maintainer | 2026-07-13   |
-| Increment 2E React application shell          | Complete | Project maintainer | 2026-07-13   |
-| Increment 2F mocked interaction shell         | Complete | Project maintainer | 2026-07-13   |
-| Increment 2G integration hardening            | Complete | Project maintainer | 2026-07-13   |
-| Increment 3A in-memory conversation sessions  | Complete | Project maintainer | 2026-07-13   |
-| Increment 3B mock context provenance          | Complete | Project maintainer | 2026-07-13   |
-| Increment 3C simulated tool result            | Complete | Project maintainer | 2026-07-13   |
-| Increment 3D bounded mock-loop completion     | Complete | Project maintainer | 2026-07-14   |
-| Increment 4A gateway protocol contract        | Complete | Project maintainer | 2026-07-14   |
-| Increment 4B local tool-schema validation     | Complete | Project maintainer | 2026-07-14   |
-| Increment 4C trusted policy-input binding     | Complete | Project maintainer | 2026-07-14   |
-| Increment 4D exact approval binding           | Complete | Project maintainer | 2026-07-14   |
-| Increment 4E trusted approval decision source | Complete | Project maintainer | 2026-07-14   |
-| Increment 4F Cortexa product display rename   | Complete | Project maintainer | 2026-07-14   |
-| Workflow Increment 4G post-increment gate     | Complete | Project maintainer | 2026-07-14   |
-| Increment 4H typed approval-audit adapter     | Complete | Project maintainer | 2026-07-15   |
-| Increment 4I remove generic audit scaffold    | Complete | Project maintainer | 2026-07-15   |
-| Workflow Increment 4J deletion fingerprint    | Complete | Project maintainer | 2026-07-15   |
-| Increment 4K remove legacy provider scaffold  | Complete | Project maintainer | 2026-07-15   |
-| Increment 4L remove legacy memory scaffold    | Complete | Project maintainer | 2026-07-15   |
-| Increment 4M remove legacy platform scaffold  | Complete | Project maintainer | 2026-07-15   |
-| Increment 4N bounded initial gateway request  | Complete | Project maintainer | 2026-07-15   |
-| Increment 4O bound initial gateway turn       | Complete | Project maintainer | 2026-07-15   |
-| Increment 4P schema-bound initial events      | Complete | Project maintainer | 2026-07-15   |
+| Plan                                           | Status   | Owner              | Last updated |
+| ---------------------------------------------- | -------- | ------------------ | ------------ |
+| Increment 2B-1 SQLite migration skeleton       | Complete | Project maintainer | 2026-07-13   |
+| Increment 2C storage startup integration       | Complete | Project maintainer | 2026-07-13   |
+| Increment 2D menu-bar/window lifecycle         | Complete | Project maintainer | 2026-07-13   |
+| Increment 2E React application shell           | Complete | Project maintainer | 2026-07-13   |
+| Increment 2F mocked interaction shell          | Complete | Project maintainer | 2026-07-13   |
+| Increment 2G integration hardening             | Complete | Project maintainer | 2026-07-13   |
+| Increment 3A in-memory conversation sessions   | Complete | Project maintainer | 2026-07-13   |
+| Increment 3B mock context provenance           | Complete | Project maintainer | 2026-07-13   |
+| Increment 3C simulated tool result             | Complete | Project maintainer | 2026-07-13   |
+| Increment 3D bounded mock-loop completion      | Complete | Project maintainer | 2026-07-14   |
+| Increment 4A gateway protocol contract         | Complete | Project maintainer | 2026-07-14   |
+| Increment 4B local tool-schema validation      | Complete | Project maintainer | 2026-07-14   |
+| Increment 4C trusted policy-input binding      | Complete | Project maintainer | 2026-07-14   |
+| Increment 4D exact approval binding            | Complete | Project maintainer | 2026-07-14   |
+| Increment 4E trusted approval decision source  | Complete | Project maintainer | 2026-07-14   |
+| Increment 4F Cortexa product display rename    | Complete | Project maintainer | 2026-07-14   |
+| Workflow Increment 4G post-increment gate      | Complete | Project maintainer | 2026-07-14   |
+| Increment 4H typed approval-audit adapter      | Complete | Project maintainer | 2026-07-15   |
+| Increment 4I remove generic audit scaffold     | Complete | Project maintainer | 2026-07-15   |
+| Workflow Increment 4J deletion fingerprint     | Complete | Project maintainer | 2026-07-15   |
+| Increment 4K remove legacy provider scaffold   | Complete | Project maintainer | 2026-07-15   |
+| Increment 4L remove legacy memory scaffold     | Complete | Project maintainer | 2026-07-15   |
+| Increment 4M remove legacy platform scaffold   | Complete | Project maintainer | 2026-07-15   |
+| Increment 4N bounded initial gateway request   | Complete | Project maintainer | 2026-07-15   |
+| Increment 4O bound initial gateway turn        | Complete | Project maintainer | 2026-07-15   |
+| Increment 4P schema-bound initial events       | Complete | Project maintainer | 2026-07-15   |
+| Increment 4Q terminal initial function release | Complete | Project maintainer | 2026-07-15   |
+
+## Phase 4 Increment 4Q terminally release initial function call - complete
+
+Goal: prevent the verified bound turn from releasing a schema-validated function
+call before the normalized response reaches required terminal completion.
+
+The exact source/test plan changes only `agent/gateway_request.rs` and the public
+`gateway_request_contract` integration test. The turn retains one private bounded
+pending call, returns `None` for the accepted non-terminal function frame,
+releases the exact typed call only from terminal response completion, and discards
+it on gateway failure or cancellation. Protocol errors remain transactional.
+
+No policy, approval, audit, transport, gateway service, authentication,
+credentials, continuation, retries, deadlines, runtime coordinator, dispatch,
+execution, Tauri, frontend, SQLite, dependency, capability, entitlement, or
+permission path is included. Focused request, protocol, function-validation,
+tool, public-contract, and policy baselines pass on clean synchronized `main` at
+`8c1a2e0`; the `04p` marker was complete and valid before planning edits.
+
+The verified implementation adds one private pending-call slot and narrows frame
+acceptance to optional closed events. Both exact local function calls remain
+private while status is `Streaming`, transactional protocol errors retain the
+pending call for the correct terminal frame, terminal completion releases it
+exactly once, and failure or cancellation discards it. Text completion and local
+schema-failure behavior remain unchanged. Six request, 18 protocol, six
+function-validation, nine tool, nine public contract, and two policy-binding
+tests pass, along with Clippy with warnings denied, complete `npm run verify`, npm
+audit, exact-scope, code, security, documentation, and mandatory gate reviews.
+D-038 records terminal ownership, discard behavior, and the public optional-event
+API narrowing. No later implementation increment is Ready.
 
 ## Phase 4 Increment 4P schema-bound initial gateway events - complete
 
@@ -121,8 +153,9 @@ rejection. Six request, 18 protocol, six function-validation, nine tool, eight
 public contract, and two policy-binding tests pass, along with Clippy with
 warnings denied, complete `npm run verify`, npm audit, exact-scope, code,
 security, documentation, and mandatory gate reviews. D-037 records schema
-ownership, terminal failure, and public event/error narrowing. The implementation
-remains uncommitted, and no later increment is Ready.
+ownership, terminal failure, and public event/error narrowing. Commit `8c1a2e0`
+is pushed on `codex/phase4-increment-4p`, fast-forward merged into synchronized
+`main`, and retained a valid `04p` marker before 4Q planning edits.
 
 ## Phase 4 Increment 4O bound initial gateway turn - complete
 
@@ -223,8 +256,7 @@ capability, or permission. Thirteen storage unit tests, both public storage smok
 tests, Clippy, complete `npm run verify`, npm audit, stale-symbol, exact-scope,
 security, code-health, documentation, and mandatory gate reviews pass. D-033
 preserves the future bounded, opt-in, provenance-aware, encrypted memory
-requirement. The implementation remains uncommitted and no later increment is
-Ready.
+requirement. Commit `ecd49be` is published and merged into synchronized `main`.
 
 ## Phase 4 Increment 4K remove legacy provider scaffold - complete
 

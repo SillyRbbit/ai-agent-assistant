@@ -55,9 +55,23 @@ fn function_call_frame(name: &str, version: u16, arguments_json: &str) -> Vec<u8
     )
 }
 
+fn completion_frame(sequence: u32) -> Vec<u8> {
+    frame(
+        RUN_ID,
+        GATEWAY_REQUEST_ID,
+        sequence,
+        json!({ "type": "response_completed" }),
+    )
+}
+
 fn started_turn() -> Result<InitialGatewayTurn, Box<dyn Error>> {
     let mut turn = InitialGatewayTurn::new(RUN_ID, GATEWAY_REQUEST_ID, "Plan my day")?;
-    turn.accept_frame(&start_frame(RUN_ID, GATEWAY_REQUEST_ID))?;
+    if !matches!(
+        turn.accept_frame(&start_frame(RUN_ID, GATEWAY_REQUEST_ID))?,
+        Some(InitialGatewayEvent::ResponseStarted { .. })
+    ) {
+        return Err("expected response start".into());
+    }
     Ok(turn)
 }
 
@@ -112,7 +126,7 @@ fn binds_response_identity_to_the_request() -> Result<(), Box<dyn Error>> {
     assert_eq!(turn.status(), GatewayStreamStatus::AwaitingStart);
     assert!(matches!(
         turn.accept_frame(&start_frame(RUN_ID, GATEWAY_REQUEST_ID))?,
-        InitialGatewayEvent::ResponseStarted { .. }
+        Some(InitialGatewayEvent::ResponseStarted { .. })
     ));
     assert_eq!(turn.status(), GatewayStreamStatus::Streaming);
     Ok(())
@@ -125,11 +139,21 @@ fn accepts_each_exact_local_tool_contract() -> Result<(), Box<dyn Error>> {
         ("create_local_task", r#"{"title":"Plan tomorrow"}"#),
     ] {
         let mut turn = started_turn()?;
-        let event = turn.accept_frame(&function_call_frame(
-            name,
-            INITIAL_GATEWAY_TOOL_SET_VERSION,
-            arguments_json,
-        ))?;
+        assert!(turn
+            .accept_frame(&function_call_frame(
+                name,
+                INITIAL_GATEWAY_TOOL_SET_VERSION,
+                arguments_json,
+            ))?
+            .is_none());
+        assert_eq!(turn.status(), GatewayStreamStatus::Streaming);
+        let pending_debug = format!("{turn:?}");
+        assert!(!pending_debug.contains(arguments_json));
+        assert!(!pending_debug.contains("Plan tomorrow"));
+
+        let event = turn
+            .accept_frame(&completion_frame(2))?
+            .ok_or("terminal completion must release the validated call")?;
         let debug = format!("{event:?}");
         match event {
             InitialGatewayEvent::FunctionCallCompleted { call } => {
@@ -165,7 +189,75 @@ fn accepts_each_exact_local_tool_contract() -> Result<(), Box<dyn Error>> {
             }
             _ => return Err("expected a schema-validated function call".into()),
         }
+        assert_eq!(turn.status(), GatewayStreamStatus::Completed);
+        assert!(matches!(
+            turn.accept_frame(&completion_frame(3)),
+            Err(InitialGatewayTurnError::Protocol(
+                GatewayProtocolError::StreamAlreadyTerminal {
+                    status: GatewayStreamStatus::Completed,
+                }
+            ))
+        ));
     }
+    Ok(())
+}
+
+#[test]
+fn protocol_errors_retain_the_pending_call_until_correct_completion() -> Result<(), Box<dyn Error>>
+{
+    let argument_sentinel = "private-pending-task-title";
+    let arguments_json = json!({ "title": argument_sentinel }).to_string();
+    let mut turn = started_turn()?;
+
+    assert!(turn
+        .accept_frame(&function_call_frame(
+            "create_local_task",
+            INITIAL_GATEWAY_TOOL_SET_VERSION,
+            &arguments_json,
+        ))?
+        .is_none());
+    assert!(matches!(
+        turn.accept_frame(b"{"),
+        Err(InitialGatewayTurnError::Protocol(
+            GatewayProtocolError::MalformedEvent
+        ))
+    ));
+    assert!(matches!(
+        turn.accept_frame(&frame(
+            RUN_ID,
+            "gateway-request-other",
+            2,
+            json!({ "type": "response_completed" }),
+        )),
+        Err(InitialGatewayTurnError::Protocol(
+            GatewayProtocolError::GatewayRequestIdMismatch
+        ))
+    ));
+    assert!(matches!(
+        turn.accept_frame(&completion_frame(3)),
+        Err(InitialGatewayTurnError::Protocol(
+            GatewayProtocolError::InvalidSequence {
+                expected: 2,
+                actual: 3,
+            }
+        ))
+    ));
+    assert_eq!(turn.status(), GatewayStreamStatus::Streaming);
+    assert!(!format!("{turn:?}").contains(argument_sentinel));
+
+    let event = turn
+        .accept_frame(&completion_frame(2))?
+        .ok_or("correct completion must release the retained call")?;
+    assert!(matches!(
+        event,
+        InitialGatewayEvent::FunctionCallCompleted { call }
+            if matches!(
+                call.arguments(),
+                ValidatedToolArguments::CreateLocalTask(arguments)
+                    if arguments.title() == argument_sentinel
+            )
+    ));
+    assert_eq!(turn.status(), GatewayStreamStatus::Completed);
     Ok(())
 }
 
@@ -256,12 +348,14 @@ fn local_schema_rejection_is_typed_redacted_and_terminal() -> Result<(), Box<dyn
 fn preserves_text_completion_and_closed_gateway_failure() -> Result<(), Box<dyn Error>> {
     let output_sentinel = "private-output-delta-sentinel";
     let mut text_turn = started_turn()?;
-    let output = text_turn.accept_frame(&frame(
-        RUN_ID,
-        GATEWAY_REQUEST_ID,
-        1,
-        json!({ "type": "output_text_delta", "delta": output_sentinel }),
-    ))?;
+    let output = text_turn
+        .accept_frame(&frame(
+            RUN_ID,
+            GATEWAY_REQUEST_ID,
+            1,
+            json!({ "type": "output_text_delta", "delta": output_sentinel }),
+        ))?
+        .ok_or("text delta must remain caller-visible")?;
     assert!(matches!(
         &output,
         InitialGatewayEvent::OutputTextDelta { delta } if delta == output_sentinel
@@ -274,15 +368,22 @@ fn preserves_text_completion_and_closed_gateway_failure() -> Result<(), Box<dyn 
             2,
             json!({ "type": "response_completed" }),
         ))?,
-        InitialGatewayEvent::ResponseCompleted
+        Some(InitialGatewayEvent::ResponseCompleted)
     ));
     assert_eq!(text_turn.status(), GatewayStreamStatus::Completed);
 
     let mut failed_turn = started_turn()?;
+    assert!(failed_turn
+        .accept_frame(&function_call_frame(
+            "create_local_task",
+            INITIAL_GATEWAY_TOOL_SET_VERSION,
+            r#"{"title":"Discard this pending task"}"#,
+        ))?
+        .is_none());
     match failed_turn.accept_frame(&frame(
         RUN_ID,
         GATEWAY_REQUEST_ID,
-        1,
+        2,
         json!({
             "type": "response_failed",
             "code": "provider_unavailable",
@@ -290,7 +391,7 @@ fn preserves_text_completion_and_closed_gateway_failure() -> Result<(), Box<dyn 
             "retry_after_ms": 250,
         }),
     ))? {
-        InitialGatewayEvent::ResponseFailed { failure } => {
+        Some(InitialGatewayEvent::ResponseFailed { failure }) => {
             assert_eq!(failure.code(), GatewayFailureCode::ProviderUnavailable);
             assert!(failure.retryable());
             assert_eq!(failure.retry_after_ms(), Some(250));
@@ -298,18 +399,36 @@ fn preserves_text_completion_and_closed_gateway_failure() -> Result<(), Box<dyn 
         _ => return Err("expected a closed gateway failure".into()),
     }
     assert_eq!(failed_turn.status(), GatewayStreamStatus::Failed);
+    assert!(matches!(
+        failed_turn.accept_frame(&completion_frame(3)),
+        Err(InitialGatewayTurnError::Protocol(
+            GatewayProtocolError::StreamAlreadyTerminal {
+                status: GatewayStreamStatus::Failed,
+            }
+        ))
+    ));
     Ok(())
 }
 
 #[test]
 fn cancellation_is_local_idempotent_and_terminal() -> Result<(), Box<dyn Error>> {
-    let mut turn = InitialGatewayTurn::new(RUN_ID, GATEWAY_REQUEST_ID, "Plan my day")?;
+    let argument_sentinel = "private-cancelled-task-title";
+    let arguments_json = json!({ "title": argument_sentinel }).to_string();
+    let mut turn = started_turn()?;
 
+    assert!(turn
+        .accept_frame(&function_call_frame(
+            "create_local_task",
+            INITIAL_GATEWAY_TOOL_SET_VERSION,
+            &arguments_json,
+        ))?
+        .is_none());
+    assert!(!format!("{turn:?}").contains(argument_sentinel));
     assert!(turn.cancel());
     assert!(!turn.cancel());
     assert_eq!(turn.status(), GatewayStreamStatus::Cancelled);
     assert!(matches!(
-        turn.accept_frame(&start_frame(RUN_ID, GATEWAY_REQUEST_ID)),
+        turn.accept_frame(&completion_frame(2)),
         Err(InitialGatewayTurnError::Protocol(
             GatewayProtocolError::StreamAlreadyTerminal {
                 status: GatewayStreamStatus::Cancelled,

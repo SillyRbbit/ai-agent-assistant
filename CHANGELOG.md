@@ -6,6 +6,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Increment 4Q private pending-call ownership inside `InitialGatewayTurn`, with terminal release and failure/cancellation discard behavior.
+- Public contract coverage for both local tools, transactional protocol-error retention, exact terminal release, terminal discard paths, text behavior, schema failure, state, and redaction.
+- Documentation-only Increment 4Q plan for withholding a schema-validated initial function call until terminal response completion and discarding it on failure or cancellation.
+- Exact two-file future source/test scope, optional-event contract, pending-call lifecycle, risks, non-goals, verification, closeout scope, and rollback for terminal function-call release.
 - Increment 4P closed `InitialGatewayEvent` and typed `InitialGatewayTurnError` contracts for schema-bound initial gateway events.
 - A private exact local registry owned by `InitialGatewayTurn`, exhaustive normalized-event conversion, terminal local-schema failure, and public tests for typed arguments, classification, failures, cancellation, and redaction.
 - Documentation-only Increment 4P plan for schema-bound initial gateway events that prevent raw normalized function calls or caller-selected registries from leaving the bound turn.
@@ -106,6 +110,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Completed Increment 4Q within its exact two-file source/test scope: accepted function frames now return `None`, and only accepted terminal completion releases the exact `SchemaValidatedFunctionCall`.
+- Preserved lower-level protocol, schema-validation, registry, policy, approval, audit, transport, runtime, dependency, Tauri, persistence, capability, and permission boundaries; no user-visible behavior changed.
+- Reconciled project memory with Increment 4P commit `8c1a2e0`, now pushed and fast-forward merged into synchronized `main`; its `04p` completion marker was complete and valid before 4Q planning edits.
+- Made project-owner approval of the exact Increment 4Q plan the next gate; no source, policy, approval, transport, continuation, runtime, IPC, persistence, or execution work has started.
 - Completed Increment 4P within its exact two-file source/test scope: valid initial-turn function calls now leave the bound turn only as `SchemaValidatedFunctionCall`, while local schema rejection closes the wrapper terminally.
 - Preserved lower-level protocol, registry, function-validation, policy, approval, audit, transport, dependency, Tauri, persistence, capability, and permission boundaries; no user-visible behavior changed.
 - Reconciled project memory with Increment 4O commit `87be00e`, now pushed and fast-forward merged into synchronized `main`; its `04o` completion marker was complete and valid before 4P planning edits.

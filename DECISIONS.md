@@ -887,6 +887,59 @@ Consequences:
   runtime coordinator, policy, approval, audit persistence, dispatch, executor,
   capability, entitlement, or operating-system permission is added.
 
+## D-038 - Release an initial function call only after terminal completion
+
+Date: 2026-07-15
+Status: Accepted; Increment 4Q implemented and verified
+
+Decision: `InitialGatewayTurn` privately retains the one bounded
+`SchemaValidatedFunctionCall` accepted from a normalized non-terminal function
+frame. `accept_frame` returns `Ok(None)` for that frame and may release the exact
+owned call only after the same bound validator accepts terminal
+`response_completed`. Terminal completion after text retains the existing closed
+`ResponseCompleted` event.
+
+An accepted `response_failed` event and successful local cancellation eagerly
+discard any pending call before returning. Local schema failure never populates
+the pending slot and retains Increment 4P's terminal wrapper behavior. A protocol
+error remains transactional: it neither releases nor discards a previously
+buffered call, so the correct contiguous terminal frame can still complete the
+same response.
+
+`None` means only that one schema-valid function call was accepted and withheld
+pending terminal completion. Terminal release proves response completion plus
+local schema validity; neither condition grants policy allowance, approval,
+audit authority, dispatch eligibility, or execution authority.
+
+Rationale: Increment 4P prevented raw normalized arguments and caller-selected
+registries from leaving the bound turn, but it released a typed call while stream
+status remained `Streaming`. A later gateway failure, local cancellation, or
+missing terminal event could therefore follow after a future caller had already
+started policy or approval. Private retention closes that ordering gap without a
+runtime coordinator or changes to the independently verified protocol, schema,
+registry, policy, approval, or audit APIs.
+
+Consequences:
+
+- `InitialGatewayTurn::accept_frame` now returns
+  `InitialGatewayTurnResult<Option<InitialGatewayEvent>>`. The crate is not
+  published and its only repository caller is migrated, but a theoretical
+  unsupported external consumer must handle `None` and continue frame intake.
+- Bounded typed arguments remain ephemeral for the additional interval between
+  function-frame acceptance and terminal completion and remain absent from
+  debug, errors, logs, audit, persistence, and IPC.
+- Failure and cancellation cannot later release the discarded call because the
+  owned validator is terminal and rejects late frames.
+- Lower-level protocol and registry APIs remain public for focused fixtures and
+  independently verified boundaries. Future initial transport code must own
+  `InitialGatewayTurn` and must not reconstruct early-release behavior.
+- O-006 and O-007 remain unresolved and continue to block authenticated gateway
+  transport and live provider traffic.
+- No dependency, manifest, lockfile, Tauri command/event/plugin, WebView path,
+  SQLite path, credential, Keychain, provider SDK, network client, continuation,
+  runtime coordinator, policy, approval, audit persistence, dispatch, executor,
+  capability, entitlement, or operating-system permission is added.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

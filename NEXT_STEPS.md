@@ -37,6 +37,7 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 4N - bounded initial gateway request: **Verified complete**.
 - Increment 4O - bound initial gateway turn: **Verified complete**.
 - Increment 4P - schema-bound initial gateway events: **Verified complete**.
+- Increment 4Q - terminally release initial function call: **Verified complete**.
 
 ## Queue status
 
@@ -100,8 +101,8 @@ documentation sync, and the mandatory gate pass. No transport, credential,
 continuation, coordinator, IPC, persistence, dispatch, execution, dependency,
 capability, or permission path was added.
 
-Increment 4P schema-bound initial gateway events is **Verified complete in the
-current uncommitted workspace**. `InitialGatewayTurn` now owns one private exact
+Increment 4P schema-bound initial gateway events is **Verified complete,
+published, and merged at `8c1a2e0`**. `InitialGatewayTurn` owns one private exact
 registry built from the same fixed schema catalog as response validation and
 returns only closed `InitialGatewayEvent` values. Function events contain a
 `SchemaValidatedFunctionCall`; local schema rejection returns a typed redacted
@@ -113,9 +114,21 @@ sync, and the mandatory gate. No transport, credential, continuation, policy,
 approval, audit persistence, runtime, IPC, execution, dependency, capability, or
 permission path was added.
 
+Increment 4Q terminally release initial function call is **Verified complete in
+the current uncommitted workspace**. `InitialGatewayTurn` privately retains a
+schema-validated call after its non-terminal function frame returns `None`.
+Accepted terminal completion releases the exact call once; gateway failure and
+successful local cancellation discard it; transactional protocol errors retain
+it for the correct terminal frame. Six request, 18 protocol, six
+function-validation, nine tool, nine public contract, and two policy-binding
+tests pass with Clippy, complete repository verification, npm audit, exact-scope
+review, code/security review, documentation sync, and the mandatory gate. No
+transport, credential, continuation, policy, approval, audit persistence,
+runtime, IPC, execution, dependency, capability, or permission path was added.
+
 ## Ready
 
 No later implementation increment is Ready.
 
 Exact next task: wait for explicit project-owner direction to commit, push, and
-merge verified Increment 4P. Do not start later planning or implementation.
+merge verified Increment 4Q. Do not start later planning or implementation.

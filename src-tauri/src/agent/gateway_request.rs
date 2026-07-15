@@ -28,6 +28,7 @@ pub struct InitialGatewayTurn {
     request: InitialGatewayRequest,
     validator: GatewayStreamValidator,
     registry: InMemoryToolRegistry,
+    pending_function_call: Option<SchemaValidatedFunctionCall>,
     local_schema_failed: bool,
 }
 
@@ -77,6 +78,7 @@ impl InitialGatewayTurn {
             request,
             validator,
             registry,
+            pending_function_call: None,
             local_schema_failed: false,
         })
     }
@@ -95,7 +97,10 @@ impl InitialGatewayTurn {
         }
     }
 
-    pub fn accept_frame(&mut self, frame: &[u8]) -> InitialGatewayTurnResult<InitialGatewayEvent> {
+    pub fn accept_frame(
+        &mut self,
+        frame: &[u8],
+    ) -> InitialGatewayTurnResult<Option<InitialGatewayEvent>> {
         if self.local_schema_failed {
             return Err(InitialGatewayTurnError::Protocol(
                 GatewayProtocolError::StreamAlreadyTerminal {
@@ -112,31 +117,44 @@ impl InitialGatewayTurn {
         match event {
             ValidatedGatewayEvent::ResponseStarted {
                 provider_response_id,
-            } => Ok(InitialGatewayEvent::ResponseStarted {
+            } => Ok(Some(InitialGatewayEvent::ResponseStarted {
                 provider_response_id,
-            }),
+            })),
             ValidatedGatewayEvent::OutputTextDelta { delta } => {
-                Ok(InitialGatewayEvent::OutputTextDelta { delta })
+                Ok(Some(InitialGatewayEvent::OutputTextDelta { delta }))
             }
             ValidatedGatewayEvent::FunctionCallCompleted { call } => {
                 match validate_function_call(call, &self.registry) {
-                    Ok(call) => Ok(InitialGatewayEvent::FunctionCallCompleted { call }),
+                    Ok(call) => {
+                        self.pending_function_call = Some(call);
+                        Ok(None)
+                    }
                     Err(error) => {
                         self.local_schema_failed = true;
                         Err(InitialGatewayTurnError::FunctionCallValidation(error))
                     }
                 }
             }
-            ValidatedGatewayEvent::ResponseCompleted => Ok(InitialGatewayEvent::ResponseCompleted),
+            ValidatedGatewayEvent::ResponseCompleted => {
+                Ok(Some(match self.pending_function_call.take() {
+                    Some(call) => InitialGatewayEvent::FunctionCallCompleted { call },
+                    None => InitialGatewayEvent::ResponseCompleted,
+                }))
+            }
             ValidatedGatewayEvent::ResponseFailed { failure } => {
-                Ok(InitialGatewayEvent::ResponseFailed { failure })
+                self.pending_function_call.take();
+                Ok(Some(InitialGatewayEvent::ResponseFailed { failure }))
             }
         }
     }
 
     #[must_use]
     pub fn cancel(&mut self) -> bool {
-        !self.local_schema_failed && self.validator.cancel()
+        let cancelled = !self.local_schema_failed && self.validator.cancel();
+        if cancelled {
+            self.pending_function_call.take();
+        }
+        cancelled
     }
 }
 

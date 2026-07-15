@@ -4,7 +4,7 @@ Last updated: 2026-07-15
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4O are **verified complete, published, and merged into `main`**. Increment 4O is merged at `87be00e`. Increment 4P schema-bound initial gateway events is **verified complete in the current uncommitted workspace** with no user-visible behavior change. No later implementation increment is Ready.
+Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4P are **verified complete, published, and merged into `main`**. Increment 4P is merged at `8c1a2e0`. Increment 4Q terminally release initial function call is **verified complete in the current uncommitted workspace** with no production caller or user-visible behavior change. No later implementation increment is Ready.
 
 ## Increment status
 
@@ -39,7 +39,47 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
 - Increment 4M: remove legacy platform scaffold - **verified complete; published and merged**.
 - Increment 4N: bounded initial gateway request - **verified complete; published and merged**.
 - Increment 4O: bound initial gateway turn - **verified complete; published and merged**.
-- Increment 4P: schema-bound initial gateway events - **verified complete in the current uncommitted workspace**.
+- Increment 4P: schema-bound initial gateway events - **verified complete; published and merged**.
+- Increment 4Q: terminally release initial function call - **verified complete; uncommitted**.
+
+## Increment 4Q capability and evidence
+
+- `InitialGatewayTurn` now owns one private optional
+  `SchemaValidatedFunctionCall` pending slot that is absent from debug output and
+  inaccessible to callers.
+- The exact source/test scope changes only
+  `src-tauri/src/agent/gateway_request.rs` and
+  `src-tauri/tests/gateway_request_contract.rs`.
+- A valid non-terminal function frame returns `None` while status remains
+  `Streaming`; accepted terminal completion takes and releases the exact typed
+  call once.
+- Gateway failure and successful local cancellation discard the pending call and
+  make late release impossible. Transactional malformed, identity-mismatched,
+  and out-of-sequence frames retain it privately for the correct contiguous
+  terminal frame.
+- Text events remain caller-visible and text terminal completion retains the
+  closed `ResponseCompleted` event. Local schema rejection remains typed,
+  redacted, and terminal without populating the pending slot.
+- Lower-level protocol, registry, function-validation, policy, approval, and
+  audit APIs remain unchanged and independently testable.
+- Six request tests, 18 protocol tests, six function-validation tests, nine tool
+  tests, nine public request-contract tests, and two policy-binding tests pass.
+- Complete `npm run verify` passes with 17 hook, 124 frontend, 92 Rust library,
+  and 20 Rust integration tests plus lint, typecheck, builds, and Tauri release
+  no-bundle. Clippy passes with warnings denied, and the network-enabled npm audit
+  reports zero vulnerabilities.
+- Exact-scope, conflict, secret, generated-output, complete-diff, architecture,
+  code-health, security, preserved-boundary, and documentation reviews have no
+  blocking finding. No manual verification applies because no production caller
+  or user-visible behavior exists.
+- D-038 records terminal pending-call ownership, failure/cancellation discard,
+  protocol-error retention, and the intentional optional-event API narrowing.
+- The consolidated result is `PASS WITH ADVISORIES`; the `04q` completion marker
+  is complete and valid for the current uncommitted workspace.
+- No networking, gateway deployment, authentication, credentials, provider
+  parameters, continuation, retries, deadlines, coordinator, policy, approval,
+  audit writes or persistence, dispatch, execution, Tauri, frontend, SQLite,
+  dependency, capability, entitlement, or permission work is included.
 
 ## Increment 4P capability and evidence
 
