@@ -4,7 +4,7 @@ Last updated: 2026-07-15
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4L are **verified complete, published, and merged into `main`**. Increment 4L is merged at `ecd49be`. Increment 4M remove legacy platform scaffold is **verified complete in the current uncommitted workspace** with no user-visible behavior change. No later implementation increment is Ready.
+Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4M are **verified complete, published, and merged into `main`**. Increment 4M is merged at `1f03d1e`. Increment 4N bounded initial gateway request is **verified complete in the current uncommitted workspace** with no user-visible behavior change. No later implementation increment is Ready.
 
 ## Increment status
 
@@ -36,7 +36,40 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
 - Repository Workflow Increment 4J: deletion-stable post-increment fingerprint - **verified complete**.
 - Increment 4K: remove legacy provider scaffold - **verified complete**.
 - Increment 4L: remove legacy memory scaffold - **verified complete; published and merged**.
-- Increment 4M: remove legacy platform scaffold - **verified complete; uncommitted**.
+- Increment 4M: remove legacy platform scaffold - **verified complete; published and merged**.
+- Increment 4N: bounded initial gateway request - **verified complete; uncommitted**.
+
+## Increment 4N capability and evidence
+
+- The verified gateway response protocol defines normalized inbound events and
+  conservative constants but no outbound desktop-to-gateway request envelope.
+- D-021 requires a closed request with protocol version, opaque run/request
+  identity, bounded user-selected content, a fixed server-recognized tool-set,
+  and fixed limits before authenticated transport is considered.
+- The implementation is an initial-turn-only transport-free Rust request value,
+  not HTTP, authentication, credentials, continuation, or orchestration.
+- Exact source/test scope is `agent/gateway_request.rs`, sibling-only opaque-ID
+  validator visibility in `gateway_protocol.rs`, one `agent/mod.rs` export, and
+  `tests/gateway_request_contract.rs`.
+- The request is non-cloneable, debug-redacted, serialized through private closed
+  wire types, and checked against the 64 KiB limit after JSON escaping.
+- The fixed tool-set identity is gateway correlation/authorization input only;
+  it grants no local policy, approval, audit, dispatch, or execution authority.
+- O-006 and O-007 still block live traffic. Networking, gateway deployment,
+  credentials, Keychain, provider SDKs/parameters, model selection, continuation,
+  retry/cancellation orchestration, context selection, runtime coordination,
+  Tauri, frontend, SQLite, dependencies, capabilities, and permissions remain
+  excluded.
+- Six focused request tests, 18 preserved gateway tests, nine tool tests, and one
+  public-boundary integration test pass. Clippy passes with warnings denied.
+- Complete `npm run verify` passes with 17 hook, 124 frontend, 92 Rust library,
+  and 12 Rust integration tests plus lint, typecheck, frontend builds, and Tauri
+  release no-bundle. The network-enabled npm audit reports zero vulnerabilities.
+- Exact source, closeout, conflict, secret, generated-output, architecture,
+  code-health, security, and complete-diff reviews have no blocking finding. No
+  manual interaction gate applies because no production caller exists.
+- D-035 records the fixed closed request boundary. O-006 and O-007 still block
+  authenticated gateway transport and live provider traffic.
 
 ## Increment 4M capability and evidence
 

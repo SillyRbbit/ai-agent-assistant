@@ -4,7 +4,7 @@ Last updated: 2026-07-15
 
 ## Current state
 
-Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4L are verified, published, and merged into clean synchronized `main` at `ecd49be`.
+Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4M are verified, published, and merged into clean synchronized `main` at `1f03d1e`.
 
 Reconstructed Increment 4I was committed as `99f9279` with message `Remove generic audit scaffold`, pushed on `codex/phase4-increment-4i`, fast-forward merged into `main`, and pushed. The corrected `04i` completion marker remains valid after the deletion commit. The original pre-fingerprint implementation commit remains preserved exactly at `cf9d701` on local `codex/phase4-increment-4i-pre-fingerprint-fix`; no remote ref contains it.
 
@@ -15,9 +15,145 @@ message `Remove legacy memory scaffold`, pushed on
 `codex/phase4-increment-4l`, fast-forward merged into `main`, and pushed. The
 `04l` completion marker remains valid after the tracked deletions were committed.
 
-Increment 4M remove legacy platform scaffold is verified complete in the current
-uncommitted workspace. It removes exactly the three disconnected Rust platform
-files and one crate-root export. No later implementation increment is Ready.
+Increment 4M remove legacy platform scaffold was committed as `1f03d1e` with
+message `Remove legacy platform scaffold`, pushed on
+`codex/phase4-increment-4m`, fast-forward merged into `main`, and pushed. The
+`04m` marker remains complete and valid after the deletion commit.
+
+Increment 4N bounded initial gateway request is verified complete in the current
+uncommitted workspace. It adds exactly one transport-free request module, one
+public-boundary integration test, sibling-only opaque-ID validator visibility,
+and one module export. No later implementation increment is Ready.
+
+## Increment 4N completion state
+
+### Goal
+
+Add one transport-free Rust contract for the first desktop-to-gateway request,
+carrying only fixed protocol identity, opaque run/request identity, one bounded
+user-selected text value, one fixed tool-set identity, and existing conservative
+limits.
+
+### Exact source and test scope
+
+```text
+src-tauri/src/agent/gateway_request.rs
+src-tauri/src/agent/gateway_protocol.rs
+src-tauri/src/agent/mod.rs
+src-tauri/tests/gateway_request_contract.rs
+```
+
+The protocol file changes only to expose its opaque-ID validator to the sibling
+request module. The module index gains only the new export.
+
+### Exact files changed
+
+```text
+AGENTS.md
+CHANGELOG.md
+DECISIONS.md
+HANDOFF.md
+NEXT_STEPS.md
+PLANS.md
+PROJECT_STATUS.md
+docs/increments/04n-bounded-initial-gateway-request.md
+docs/plans/04n-bounded-initial-gateway-request.md
+docs/plans/README.md
+docs/reviews/2026-07-15-04n-post-increment-review.md
+src-tauri/src/agent/gateway_protocol.rs
+src-tauri/src/agent/gateway_request.rs
+src-tauri/src/agent/mod.rs
+src-tauri/tests/gateway_request_contract.rs
+```
+
+No security, product, workflow, troubleshooting, dependency, manifest, lockfile,
+Tauri, frontend, storage, capability, entitlement, or permission file changed.
+
+### Baseline evidence
+
+Passed on clean synchronized `main` at `1f03d1e` before planning edits:
+
+```text
+python3 .codex/hooks/post_increment_gate.py status
+  Increment 04m complete, valid: true, PASS WITH ADVISORIES
+npm run typecheck
+  passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::gateway_protocol::
+  18 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked tools::
+  9 passed
+```
+
+Toolchains are Node.js `v26.3.0`, npm `11.16.0`, Cargo and rustc `1.90.0`,
+rustfmt `1.8.0-stable`, and Clippy `0.1.90` on arm64 macOS `26.5.2` with Xcode
+Command Line Tools at `/Library/Developer/CommandLineTools`.
+
+### Final verification
+
+Passed:
+
+```text
+python3 .codex/hooks/post_increment_gate.py begin --increment 04n
+  active before source edits on the approved elevated retry
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+  passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::gateway_request::
+  6 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::gateway_protocol::
+  18 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked tools::
+  9 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test gateway_request_contract --locked
+  1 passed
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+  passed
+npm run verify
+  hook tests: 17 passed
+  frontend tests: 124 passed
+  Rust library tests: 92 passed
+  Rust integration tests: 12 passed
+  formatting, lint, typecheck, Vite builds, and Tauri release no-bundle passed
+npm audit --audit-level=low
+  network-enabled retry passed with 0 vulnerabilities
+git diff --check
+  passed
+```
+
+Failed and resolved:
+
+- The first 04n begin attempt could not write ignored gate state in the sandbox;
+  the approved elevated retry succeeded before source edits.
+- The first focused compile found a test-only `assert_eq!` requirement for
+  `PartialEq`; the assertion was changed to match the typed error without
+  weakening the opaque request value.
+- The next compile rejected a computed expression in a Rust pattern; the test
+  now binds numeric values and checks them in a guard.
+- The first Clippy run rejected test-only `expect_err`; the test now returns a
+  result and extracts the error without panic-style shortcuts.
+- The first sandboxed npm audit could not resolve the registry or write npm logs;
+  the approved network-enabled retry passed with zero vulnerabilities.
+
+No manual verification is required. No production caller, Tauri registration,
+IPC, frontend, network, credential, native framework, persistence, permission,
+or operating-system behavior changed.
+
+### Risks and non-goals
+
+Selected content must remain confined to request bytes and absent from debug,
+errors, logs, and audit. Final size must be checked after JSON escaping. Request
+and response IDs reuse one validator. The fixed tool-set identity remains
+non-authorizing and must be reconciled with a future deployed gateway.
+
+Networking, gateway deployment, authentication, credentials, Keychain, provider
+SDKs or parameters, model selection, live traffic, continuation, tool results,
+retries, cancellation orchestration, context selection, runtime coordination,
+policy, approval, audit persistence, dispatch, execution, Tauri, frontend,
+SQLite, dependencies, capabilities, entitlements, and permissions are excluded.
+
+### Exact next task
+
+Wait for explicit project-owner direction to commit, push, and merge verified
+Increment 4N. Do not start later planning or implementation.
 
 ## Increment 4M completion state
 
@@ -175,8 +311,7 @@ excluded.
 
 ### Exact next task
 
-Wait for explicit project-owner direction to commit, push, and merge verified
-Increment 4M. Do not start later planning or implementation.
+Increment 4M is published and merged at `1f03d1e`; no publication work remains.
 
 ## Increment 4L completion state
 
@@ -328,8 +463,7 @@ capabilities, and permissions are explicitly excluded.
 
 ### Exact next task
 
-Wait for explicit project-owner direction to commit, push, and merge verified
-Increment 4M. Do not start later planning or implementation.
+Increment 4L is published and merged at `ecd49be`; no publication work remains.
 
 ## Increment 4K completion state
 
@@ -1196,12 +1330,12 @@ The project owner confirmed the fixed window title, exact trusted-fields-first/t
 ## Exact next task
 
 Wait for explicit project-owner direction to commit, push, and merge verified
-Increment 4M. Do not start later planning or implementation.
+Increment 4N. Do not start later planning or implementation.
 
 ## Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Resume from HANDOFF.md on verified, uncommitted Increment 4M. Confirm the `04m` completion marker remains complete and valid, then wait for explicit project-owner direction to commit, push, and fast-forward merge Increment 4M. Do not start later planning or implementation.
+Resume from HANDOFF.md on verified, uncommitted Increment 4N. Confirm the `04n` completion marker remains complete and valid, then wait for explicit project-owner direction to commit, push, and fast-forward merge Increment 4N. Do not start later planning or implementation.
 ```

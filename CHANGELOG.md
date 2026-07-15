@@ -6,6 +6,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Documentation-only Increment 4N plan for one closed, transport-free, byte-bounded initial desktop-to-gateway request contract.
+- Exact four-file future source/test scope, fixed request fields and limits, content-redaction rules, risks, non-goals, verification, closeout scope, and rollback for the initial gateway request.
+- Increment 4N non-cloneable initial gateway request with private closed wire serialization, fixed `cortexa_desktop_mvp@1` tool-set identity, existing conservative limits, shared opaque-ID validation, and post-escaping 64 KiB enforcement.
+- Six focused request tests and one public-boundary integration test covering exact fields, deterministic serialization, non-ASCII content, identity and size failures, redaction, and forbidden provider/credential/authority fields.
 - Documentation-only Increment 4M plan to remove the disconnected caller-authored generic Rust platform capability scaffold while preserving future capability-specific adapter requirements.
 - Exact four-file source scope, caller-absence and stale-symbol checks, focused app-info and Permission Center regression coverage, risks, non-goals, verification, closeout scope, and rollback for the legacy platform removal.
 - Documentation-only Increment 4L plan to remove the disconnected unbounded arbitrary-content Rust memory scaffold while preserving the future user-controlled encrypted memory requirement.
@@ -94,6 +98,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Reconciled project memory with Increment 4M commit `1f03d1e`, now pushed and fast-forward merged into synchronized `main`; its deletion-stable 04m marker remains valid.
+- Made project-owner approval of the exact Increment 4N plan the next gate; no source, transport, authentication, credential, provider, continuation, runtime, IPC, persistence, or execution work has started.
+- Completed Increment 4N within its exact four-file source/test scope with no dependency, transport, credential, provider, runtime, Tauri, persistence, policy, approval, audit, dispatch, execution, capability, or permission expansion.
+- Marked Increment 4N verified complete after focused tests, Clippy, complete repository verification, dependency audit, exact-scope and trust-boundary review, documentation synchronization, and the mandatory post-increment gate passed.
 - Removed the disconnected generic Rust `platform` module and its crate-root export while preserving typed app-info, the fixed Permission Center, and future capability-specific adapter requirements.
 - Marked Increment 4M verified complete after focused app-info and Permission Center checks, Clippy, complete repository verification, dependency audit, stale-symbol and exact-scope review, documentation synchronization, and the mandatory post-increment gate passed.
 - Reconciled project memory with Increment 4L commit `ecd49be`, now pushed and fast-forward merged into synchronized `main`; its deletion-stable `04l` marker remains valid.

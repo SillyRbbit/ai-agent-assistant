@@ -600,7 +600,7 @@ enum WireGatewayEvent {
     },
 }
 
-fn is_valid_opaque_id(value: &str) -> bool {
+pub(super) fn is_valid_opaque_id(value: &str) -> bool {
     !value.is_empty()
         && value.len() <= MAX_OPAQUE_ID_BYTES
         && value.bytes().all(|byte| byte.is_ascii_graphic())

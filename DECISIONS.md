@@ -721,6 +721,62 @@ Consequences:
   capability configuration, entitlement, dependency, or operating-system
   permission is added.
 
+## D-035 - Construct one closed bounded initial gateway request
+
+Date: 2026-07-15
+Status: Accepted; Increment 4N implemented and verified
+
+Decision: trusted Rust constructs the first desktop-to-gateway request as one
+non-cloneable `InitialGatewayRequest`. Its only caller inputs are an opaque run
+ID, an opaque gateway-request ID, and one owned user-selected text value. The
+closed JSON representation fixes protocol version 1, request kind
+`initial_user_turn`, model turn 1, retry attempt 0, tool set
+`cortexa_desktop_mvp@1`, and every request, loop, event, function-call,
+argument, output, retry, and deadline limit already defined by D-021 and the
+verified gateway protocol.
+
+The constructor reuses the normalized response protocol's opaque-ID predicate,
+rejects blank or source-oversized content, and enforces the 64 KiB request limit
+again after JSON escaping. Private wire structs own serialization. The public
+value exposes only borrowed bytes, does not implement `Clone`, `Serialize`, or
+`Deserialize`, and redacts the body from `Debug`. Closed errors expose fixed
+reasons and numeric sizes only.
+
+The desktop request does not contain a gateway URL, provider/model selection,
+authorization value, credential, principal identity, OpenAI parameter, tool
+definition, schema, hosted tool, MCP server, shell tool, local permission,
+policy, approval, audit, dispatch, or execution field. The fixed tool-set value
+is gateway contract input, not local authority. A future gateway remains
+responsible for authenticating and authorizing the desktop principal, selecting
+the exact strict server-side tool definitions, and forcing foreground Responses
+streaming with `store: false`, `background: false`, and parallel calls disabled.
+
+Rationale: D-021 requires a closed outbound product request before authenticated
+transport, while the repository previously defined only the normalized inbound
+event contract. A transport-free initial-turn envelope independently verifies
+identity, privacy, schema closure, and byte limits without prematurely selecting
+a gateway platform, identity provider, credential store, HTTP client, model,
+continuation contract, or runtime coordinator.
+
+Consequences:
+
+- Selected user content is intentionally present in request bytes but absent
+  from debug output, errors, logs, audit, persistence, and all current runtime
+  paths.
+- Request and normalized response identities use one shared predicate and cannot
+  drift independently inside the agent module.
+- The first request cannot be repurposed for continuation or retry because turn
+  and attempt fields are fixed and no general wire constructor is public.
+- The fixed tool-set ID requires exact agreement with a later deployed gateway
+  before live use; it grants no policy, approval, dispatch, or execution
+  authority.
+- O-006 and O-007 remain unresolved and continue to block authenticated gateway
+  transport and live provider traffic.
+- No dependency, manifest, lockfile, Tauri command/event/plugin, WebView path,
+  SQLite path, credential, Keychain, provider SDK, network client, runtime
+  coordinator, policy, approval, audit persistence, dispatch, executor,
+  capability, entitlement, or operating-system permission is added.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

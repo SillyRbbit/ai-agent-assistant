@@ -4,7 +4,7 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No implementation plan is active. Increment 4M is verified complete in the
+No implementation plan is active. Increment 4N is verified complete in the
 current uncommitted workspace, and no later increment is Ready.
 
 ## Completed plans
@@ -30,6 +30,7 @@ docs/plans/04j-post-increment-deletion-fingerprint.md
 docs/plans/04k-remove-legacy-provider-scaffold.md
 docs/plans/04l-remove-legacy-memory-scaffold.md
 docs/plans/04m-remove-legacy-platform-scaffold.md
+docs/plans/04n-bounded-initial-gateway-request.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -85,6 +86,30 @@ A plan must contain:
 | Increment 4K remove legacy provider scaffold  | Complete | Project maintainer | 2026-07-15   |
 | Increment 4L remove legacy memory scaffold    | Complete | Project maintainer | 2026-07-15   |
 | Increment 4M remove legacy platform scaffold  | Complete | Project maintainer | 2026-07-15   |
+| Increment 4N bounded initial gateway request  | Complete | Project maintainer | 2026-07-15   |
+
+## Phase 4 Increment 4N bounded initial gateway request - complete
+
+Goal: create one non-cloneable, transport-free Rust request value for the first
+desktop-to-gateway turn. It validates existing opaque identity rules, preserves
+one exact user-selected text value only in serialized bytes, fixes the tool-set
+identity and all conservative limits, and enforces the 64 KiB bound after JSON
+escaping.
+
+The future source/test scope creates `agent/gateway_request.rs` and one public
+integration test, changes `gateway_protocol.rs` only to share opaque-ID
+validation with its sibling module, and adds one module export. It adds no HTTP,
+gateway service, authentication, credentials, Keychain, provider SDK, model or
+provider parameters, continuation, context selector, runtime coordinator, IPC,
+UI, persistence, policy, approval, audit, dispatch, executor, dependency,
+capability, or permission path.
+
+The implementation passes six focused request tests, 18 preserved gateway
+protocol tests, nine tool-catalog tests, one public-boundary integration test,
+Clippy with warnings denied, complete `npm run verify`, npm audit, exact-scope,
+secret, generated-output, code, security, documentation, and mandatory gate
+reviews. D-035 records the request boundary. The implementation remains
+uncommitted, and no later increment is Ready.
 
 ## Phase 4 Increment 4M remove legacy platform scaffold - complete
 
@@ -106,8 +131,9 @@ app-info unit test, public metadata smoke test, focused Permission Center test,
 Clippy, complete `npm run verify`, npm audit, stale-symbol, exact-scope, security,
 code-health, documentation, and mandatory gate reviews pass. D-034 preserves the
 future capability-specific adapter and authoritative permission-evidence
-requirements. The implementation remains uncommitted and no later increment is
-Ready.
+requirements. Commit `1f03d1e` is pushed on
+`codex/phase4-increment-4m`, fast-forward merged into synchronized `main`, and
+retains a valid 04m marker.
 
 ## Phase 4 Increment 4L remove legacy memory scaffold - complete
 

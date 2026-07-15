@@ -34,6 +34,7 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 4K - remove legacy provider scaffold: **Verified complete**.
 - Increment 4L - remove legacy memory scaffold: **Verified complete**.
 - Increment 4M - remove legacy platform scaffold: **Verified complete**.
+- Increment 4N - bounded initial gateway request: **Verified complete**.
 
 ## Queue status
 
@@ -64,8 +65,8 @@ permission was added. Its consolidated result is `PASS WITH ADVISORIES`; the
 advisory is the theoretical unsupported external consumer of the removed public
 module.
 
-Increment 4M remove legacy platform scaffold is **Verified complete in the
-current uncommitted workspace**. It deletes only the three legacy platform files
+Increment 4M remove legacy platform scaffold is **Verified complete, published,
+and merged at `1f03d1e`**. It deletes only the three legacy platform files
 and their single crate-root export. Typed app-info and the fixed Permission Center
 remain unchanged; focused and complete checks pass, and no replacement adapter,
 OS query, native framework, permission request, Keychain, LocalAuthentication,
@@ -74,9 +75,20 @@ consolidated result is `PASS WITH ADVISORIES`; advisories are the intentionally
 deferred future platform design and theoretical unsupported external consumer of
 the removed public module.
 
+Increment 4N bounded initial gateway request is **Verified complete in the
+current uncommitted workspace**. It adds one non-cloneable transport-free request
+value with closed private serialization, fixed initial-turn and tool-set fields,
+all existing conservative limits, shared opaque-ID validation, redacted debug and
+errors, and final 64 KiB enforcement after escaping. Six focused tests, one
+public-boundary integration test, Clippy, complete repository verification, npm
+audit, exact-scope review, code review, security review, documentation sync, and
+the mandatory gate pass. No transport, credential, provider, continuation,
+runtime, IPC, persistence, policy, approval, audit, dispatch, execution,
+dependency, capability, or permission path was added.
+
 ## Ready
 
 No later implementation increment is Ready.
 
 Exact next task: wait for explicit project-owner direction to commit, push, and
-merge verified Increment 4M. Do not start later planning or implementation.
+merge verified Increment 4N. Do not start later planning or implementation.
