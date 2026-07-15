@@ -13,7 +13,7 @@ mod macos {
     };
 
     const TRAY_ICON_ID: &str = "ai-agent-assistant-menu-bar";
-    const TOOLTIP: &str = "AI Agent Assistant";
+    const TOOLTIP: &str = "Cortexa";
 
     pub(crate) fn install<R: Runtime>(app: &mut App<R>) -> Result<(), MenuBarError> {
         let show_main_window = menu_item(app, MenuBarAction::ShowMainWindow)?;
@@ -71,7 +71,7 @@ mod macos {
 
         let runtime = TauriMenuBarRuntime::new(app);
         if let Err(error) = runtime.show_main_window() {
-            eprintln!("AI Agent Assistant could not reopen the main window: {error}");
+            eprintln!("Cortexa could not reopen the main window: {error}");
         }
     }
 
@@ -87,7 +87,7 @@ mod macos {
         if let WindowEvent::CloseRequested { api, .. } = event {
             api.prevent_close();
             if let Err(error) = hide_main_window(window) {
-                eprintln!("AI Agent Assistant could not hide the main window: {error}");
+                eprintln!("Cortexa could not hide the main window: {error}");
             }
         }
     }
@@ -111,7 +111,7 @@ mod macos {
         match dispatch_menu_id(&runtime, event.id().as_ref()) {
             Ok(DispatchOutcome::Handled(_)) | Ok(DispatchOutcome::IgnoredUnknownMenuItem) => {}
             Err(error) => {
-                eprintln!("AI Agent Assistant menu-bar action failed: {error}");
+                eprintln!("Cortexa menu-bar action failed: {error}");
             }
         }
     }

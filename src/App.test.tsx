@@ -19,7 +19,7 @@ import type {
 const CONNECTED_APP_INFO: AppInfo = {
   architecture: "aarch64",
   environment: "development",
-  name: "AI Agent Assistant",
+  name: "Cortexa",
   secureCore: true,
   target: "macos",
   version: "0.1.0",
@@ -132,6 +132,7 @@ describe("App", () => {
     const harness = createMenuRouteHarness();
     render(<App services={createServices(harness.source)} />);
 
+    expect(screen.getByText("Cortexa")).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 1, name: "Conversations" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "No messages yet" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Start new conversation" })).toBeInTheDocument();
@@ -566,6 +567,7 @@ describe("App", () => {
     openSidebarRoute("Settings");
 
     expect(await screen.findByText("Rust core connected")).toBeInTheDocument();
+    expect(screen.getAllByText("Cortexa")).toHaveLength(2);
     expect(screen.getByText("get_app_info")).toBeInTheDocument();
     expect(screen.getByText("macos · aarch64")).toBeInTheDocument();
     expect(await screen.findByText("Listener active")).toBeInTheDocument();

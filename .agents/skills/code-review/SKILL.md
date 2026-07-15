@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Review AI Agent Assistant changes for concrete correctness, security, privacy, testing, portability, and documentation defects without automatically rewriting the code.
+description: Review Cortexa changes for concrete correctness, security, privacy, testing, portability, and documentation defects without automatically rewriting the code.
 ---
 
 # Code review

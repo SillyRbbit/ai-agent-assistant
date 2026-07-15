@@ -1,8 +1,8 @@
 [package]
 name = "ai-agent-assistant"
 version = "0.1.0"
-description = "Secure local core for AI Agent Assistant"
-authors = ["AI Agent Assistant contributors"]
+description = "Secure local core for Cortexa"
+authors = ["Cortexa contributors"]
 edition = "2021"
 rust-version = "1.88"
 publish = false

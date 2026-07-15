@@ -1,6 +1,6 @@
 ---
 name: troubleshoot
-description: Diagnose AI Agent Assistant installation, build, test, Tauri, Rust, TypeScript, or macOS runtime failures using one evidence-based hypothesis at a time.
+description: Diagnose Cortexa installation, build, test, Tauri, Rust, TypeScript, or macOS runtime failures using one evidence-based hypothesis at a time.
 ---
 
 # Troubleshoot

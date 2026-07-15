@@ -109,7 +109,7 @@ Acceptance criteria and the follow-on sequence are in `NEXT_STEPS.md`.
 Copy and paste `prompts/resume-work.md`, or use this compact prompt:
 
 ```text
-Resume AI Agent Assistant from the repository state. Read AGENTS.md, HANDOFF.md, PROJECT_STATUS.md, NEXT_STEPS.md, DECISIONS.md, TROUBLESHOOTING_LOG.md, SECURITY.md, and the relevant increment documents before changing files. Confirm the actual Git status and toolchain. Then implement only Phase 2 Increment 2A: platform-neutral interfaces and deterministic mocks for AgentProvider, ToolRegistry, PolicyEngine, ApprovalManager, AuditLogger, MemoryStore, and PlatformAdapter. Preserve current UI behavior, add focused Rust tests, use typed errors with no unwrap or panic in production paths, run the relevant checks, and update all handoff documents with actual results.
+Resume Cortexa from the repository state. Read AGENTS.md, HANDOFF.md, PROJECT_STATUS.md, NEXT_STEPS.md, DECISIONS.md, TROUBLESHOOTING_LOG.md, SECURITY.md, and the relevant increment documents before changing files. Confirm the actual Git status and toolchain. Then implement only Phase 2 Increment 2A: platform-neutral interfaces and deterministic mocks for AgentProvider, ToolRegistry, PolicyEngine, ApprovalManager, AuditLogger, MemoryStore, and PlatformAdapter. Preserve current UI behavior, add focused Rust tests, use typed errors with no unwrap or panic in production paths, run the relevant checks, and update all handoff documents with actual results.
 ```
 
 ## Files added or changed in the latest documentation increment

@@ -479,6 +479,42 @@ Consequences:
 - The source remains disconnected from the shipping Tauri application, WebView, LocalAuthentication, audit, persistence, dispatch, executor, provider continuation, gateway networking, and credentials.
 - Any production integration must still add exact run-state, typed audit, dispatch, executor, and, when policy requires it, exact-subject device-owner-authentication gates.
 
+## D-026 - Use Cortexa as the display name while preserving compatibility identifiers
+
+Date: 2026-07-14
+Status: Accepted; Increment 4F implemented and verified
+
+Decision: rename the assistant's former human-facing product name to `Cortexa`. Product-facing UI, window and native menu metadata, Settings application metadata, native approval copy, diagnostics, repository documentation, prompts, and local skill descriptions use `Cortexa`.
+
+Retain the existing compatibility identifiers: repository and directory name `ai-agent-assistant`, npm and Cargo package name `ai-agent-assistant`, Rust library crate `ai_agent_assistant_lib`, executable target, bundle identifier `com.aiagentassistant.desktop`, tray ID `ai-agent-assistant-menu-bar`, `assistant-menu-route` event, `get_app_info` command, database and storage identifiers, paths, and code-domain uses of `assistant`. Tauri `productName` and window title are display metadata and therefore change to `Cortexa`; they do not authorize a package, executable, or bundle-ID rename.
+
+Rationale: the project owner requested a product identity change while explicitly preserving installed-data, build, source, protocol, and repository compatibility. Separating display copy from technical identifiers avoids unnecessary migrations, broken imports, changed artifact contracts, or event/IPC regressions.
+
+Consequences:
+
+- Exact former product-name text must not remain in tracked product or documentation content.
+- Historical documentation is normalized to the current product name, while literal compatibility commands and paths remain unchanged.
+- Future identifier renames require separate explicit approval, migration analysis, and rollback planning.
+- No dependency, permission, capability, storage, gateway, approval-authority, audit, execution, or security-boundary change is implied.
+
+## D-027 - Defer the post-increment skill after the 4F owner closeout
+
+Date: 2026-07-14
+Status: Accepted; one-time Increment 4F closeout exception
+
+Decision: the project owner explicitly confirms Increment 4F complete and directs commit, push, and merge before the referenced `$post-increment-gate` skill exists. The 4F automated, target-Mac manual, complete-diff, scope, compatibility, secret, code-review, security-review, and documentation gates passed. No post-increment skill was run and no PASS or PASS WITH ADVISORIES report is claimed.
+
+This is a one-time sequencing exception for Increment 4F only. The project owner will create the missing skill on the next clean branch. The mandatory rule in `AGENTS.md` remains unchanged for later implementation increments.
+
+Rationale: the product rename is fully implemented and verified, while adding a new repository skill would expand the approved rename scope and mix workflow infrastructure into the product-name commit. Closing 4F transparently and creating the skill from merged clean `main` keeps both changes independently reviewable.
+
+Consequences:
+
+- Increment 4F may be marked complete without claiming that the absent gate ran.
+- The 4F increment record must preserve the exact skipped-gate evidence and project-owner direction.
+- The next branch is limited to creating and validating the missing skill before another implementation increment starts.
+- This exception cannot be reused for a later increment.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

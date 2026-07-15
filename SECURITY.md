@@ -2,7 +2,7 @@
 
 ## Security model
 
-AI Agent Assistant treats the model as an untrusted planner. The trusted Rust core validates requests, applies deterministic policy, obtains approval where required, executes only registered tools, and records redacted audit events.
+Cortexa treats the model as an untrusted planner. The trusted Rust core validates requests, applies deterministic policy, obtains approval where required, executes only registered tools, and records redacted audit events.
 
 ## Non-negotiable invariants
 

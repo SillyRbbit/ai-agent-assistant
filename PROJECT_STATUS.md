@@ -4,7 +4,7 @@ Last updated: 2026-07-14
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A through 4E - **verified complete on the target Mac**. No later increment is Ready.
+Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Increment 4F publication is pending. No later implementation increment is Ready.
 
 ## Increment status
 
@@ -29,6 +29,20 @@ Phase 3 and Phase 4 Increments 4A through 4E - **verified complete on the target
 - Increment 4C: trusted policy-input binding - **verified complete on target Mac**.
 - Increment 4D: exact approval binding - **verified complete on target Mac**.
 - Increment 4E: trusted approval-decision source - **verified complete on target Mac**.
+- Increment 4F: Cortexa product display rename - **verified complete by project-owner direction**.
+
+## Increment 4F current evidence
+
+- The pre-edit working tree was clean on `main` at `8e174a7`, ahead of `origin/main` by one repository-workflow commit.
+- `npm run build` passed before rename edits.
+- All 37 tracked exact former product-name occurrences were reviewed and replaced with `Cortexa`.
+- Tauri product/window metadata, typed Rust app information, native dialog title, menu labels/tooltip, fixed startup diagnostics, sidebar branding, tests, prompts, skills, and documentation now use `Cortexa`.
+- Settings requires no direct component change because it renders the typed Rust `AppInfo.name`; focused React coverage now expects `Cortexa` there.
+- Repository/package/crate/executable/bundle-ID/database/storage/event/command identifiers remain intentionally unchanged under D-026.
+- Every requested automated command passed after one targeted Prettier correction. Focused checks passed with 25 React app, one app-info, nine menu-bar, 16 approval, and one smoke test; complete checks passed with 124 frontend, 92 Rust library, and ten Rust integration tests.
+- The target-Mac app launch and project-owner window, application-menu, status-item menu, sidebar, Settings, regression, and no-permission-prompt checks passed.
+- Exact 43-file scope, former-name absence, compatibility, Cargo target metadata, secret, generated-output, complete-diff, code-review, and security-review checks passed.
+- The referenced `$post-increment-gate` skill and report workflow are not present in `.agents/skills`, so that gate did not run and no result is claimed. The project owner explicitly confirmed 4F complete and deferred skill creation to the next clean branch. D-027 records the one-time sequencing exception.
 
 ## Verified baseline through Increment 2E
 
@@ -104,7 +118,7 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Select and approve the exact scope of the next documentation-only planning task. Do not start another increment before that approval.
+Commit and publish Increment 4F, fast-forward merge it into `main`, and leave merged `main` clean. The next clean branch is reserved for creating and validating the absent `$post-increment-gate` skill before another implementation increment starts.
 
 ## Phase 4 planning result
 
@@ -230,7 +244,7 @@ Select and approve the exact scope of the next documentation-only planning task.
 
 - `ApprovalChoice` and the public raw-choice manager path are removed. One non-cloneable manager-issued `ApprovalPresentation` is now the only input to the macOS source, and one sealed non-cloneable `TrustedApprovalSourceOutcome` is the only source-backed manager-resolution input.
 - A private pointer-identical manager marker plus exact approval/run/gateway-request/function-call identity and manager-retained issuance state prevent cross-manager or cross-subject substitution. Issuance does not extend the 120-second TTL, and one-pending, 1,024-subject, cancellation, expiry, and non-evicting replay behavior remain intact.
-- The macOS-only source uses fixed `AI Agent Assistant approval` title and Reject-first Approve/Reject/Edit buttons. It displays trusted facts before the final affected-title row, rejects the exact planned presentation-format set, allows ordinary non-ASCII text, and caps the complete message at 1,024 Unicode scalar values.
+- The macOS-only source uses fixed `Cortexa approval` title and Reject-first Approve/Reject/Edit buttons. It displays trusted facts before the final affected-title row, rejects the exact planned presentation-format set, allows ordinary non-ASCII text, and caps the complete message at 1,024 Unicode scalar values.
 - Approve and Reject map directly. Edit, native no-decision, source failure, run termination, and expiry are closed terminal outcomes. Only recognized buttons carry button evidence; all source outcomes record `NotEvaluated` authentication and grant no actor-identity, run-liveness, dispatch, or execution authority.
 - Exact macOS-target `rfd = "=0.17.2"` is added with default features disabled. Source, MIT license, resolved target feature and duplicate trees, lockfile, AppKit/native `unsafe` boundary, and compatibility were reviewed. The lockfile diff adds only `rfd`; the application exposes no raw handle, file-dialog API, dependency object, Tauri plugin, WebView route, or application `unsafe`.
 - The standalone main-thread example exercises the public gateway -> schema -> policy -> approval -> native source -> resolution path, prints only bounded approval identity and a fixed terminal label, and performs no action or persistence.

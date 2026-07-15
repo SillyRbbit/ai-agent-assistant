@@ -431,29 +431,29 @@ Status: Resolved
 
 ### Symptom
 
-The application launches and the left-side **AI Agent Assistant** application menu contains standard macOS items such as About, Services, Hide, and Quit, but does not show:
+The application launches and the left-side **Cortexa** application menu contains standard macOS items such as About, Services, Hide, and Quit, but does not show:
 
 ```text
-Open AI Agent Assistant
+Open Cortexa
 New Request
 Tasks (Coming Soon)
-Quit AI Agent Assistant
+Quit Cortexa
 ```
 
 The source still shows that the New Request and Tasks menu items are constructed.
 
 ### Cause
 
-The standard application-name menu on the left side of the macOS menu bar is separate from the custom Tauri status-item menu. Increment 2D installs the custom menu under the AI Agent Assistant status icon on the right side of the menu bar, near system status items.
+The standard application-name menu on the left side of the macOS menu bar is separate from the custom Tauri status-item menu. Increment 2D installs the custom menu under the Cortexa status icon on the right side of the menu bar, near system status items.
 
 ### Resolution
 
-Click the AI Agent Assistant status icon on the right side of the macOS menu bar. Its menu contains the four fixed Increment 2D actions.
+Click the Cortexa status icon on the right side of the macOS menu bar. Its menu contains the four fixed Increment 2D actions.
 
 ### Verify
 
 1. Hide the main window with its red close control.
-2. Open the right-side AI Agent Assistant status-item menu.
+2. Open the right-side Cortexa status-item menu.
 3. Select **New Request** and confirm the window returns and receives focus.
 4. Hide the window again.
 5. Select **Tasks (Coming Soon)** and confirm the window returns and receives focus.
@@ -507,3 +507,41 @@ Expected:
 ### Prevention
 
 Keep global DOM-test cleanup explicit in the shared Vitest setup and avoid relying on test order or prior component unmount behavior.
+
+## TS-013 - Tauri development launch reports port 1420 already in use
+
+Date: 2026-07-14
+Status: Resolved
+
+### Symptom
+
+`npm run tauri -- dev` exits before launching the native application because Vite reports that port 1420 is already in use.
+
+### Cause
+
+A stale standalone `npm run dev` process for this repository still owns the fixed Vite listener. Starting Tauri launches a second `beforeDevCommand`, which cannot bind the same port.
+
+### Resolution
+
+Identify the listener and its parent before stopping anything:
+
+```bash
+lsof -nP -iTCP:1420 -sTCP:LISTEN
+ps -p <listener-pid> -o pid=,ppid=,lstart=,command=
+ps -p <parent-pid> -o pid=,ppid=,lstart=,command=
+```
+
+If the output proves the listener is the stale Vite child of this repository's standalone `npm run dev`, stop that parent process. Confirm the port is free, then rerun the exact Tauri command.
+
+### Verify
+
+```bash
+lsof -nP -iTCP:1420 -sTCP:LISTEN
+npm run tauri -- dev
+```
+
+Expected: the first command has no listener before launch; Vite starts on port 1420, Cargo launches the unchanged `target/debug/ai-agent-assistant` executable, and the native application opens.
+
+### Prevention
+
+Stop standalone Vite sessions when their work ends. Before a native manual gate, identify an existing fixed-port listener instead of starting overlapping dev servers or terminating an unrelated process.

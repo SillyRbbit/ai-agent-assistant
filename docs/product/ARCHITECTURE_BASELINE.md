@@ -2,7 +2,7 @@
 
 ## Product shape
 
-AI Agent Assistant is a standalone desktop executive assistant. The initial target is macOS, with portable domain logic intended for Windows, Linux, and iOS where platform capabilities permit.
+Cortexa is a standalone desktop executive assistant. The initial target is macOS, with portable domain logic intended for Windows, Linux, and iOS where platform capabilities permit.
 
 ## Layer model
 

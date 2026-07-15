@@ -26,10 +26,10 @@ export function ApplicationSidebar({
     <aside className="application-sidebar">
       <div className="application-brand">
         <div className="application-brand__mark" aria-hidden="true">
-          A
+          C
         </div>
         <div className="application-brand__copy">
-          <strong>AI Agent Assistant</strong>
+          <strong>Cortexa</strong>
           <span>Private workspace</span>
         </div>
       </div>

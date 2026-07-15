@@ -1,7 +1,7 @@
 # Start work
 
 ```text
-You are starting a working session in the AI Agent Assistant repository.
+You are starting a working session in the Cortexa repository.
 
 Before changing files:
 1. Read AGENTS.md, HANDOFF.md, PROJECT_STATUS.md, NEXT_STEPS.md, DECISIONS.md, TROUBLESHOOTING_LOG.md, SECURITY.md, and the relevant docs under docs/product and docs/increments.

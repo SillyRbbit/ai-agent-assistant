@@ -26,12 +26,12 @@ Increment 2C was verified on the target Mac before this work began:
 The macOS menu-bar menu contains:
 
 ```text
-Open AI Agent Assistant
+Open Cortexa
 —
 New Request
 Tasks (Coming Soon)
 —
-Quit AI Agent Assistant
+Quit Cortexa
 ```
 
 Each item has a private fixed identifier. Unknown identifiers are ignored.
@@ -176,13 +176,13 @@ Verified results:
 The project owner confirmed:
 
 - the menu-bar icon appeared,
-- Open AI Agent Assistant showed and focused the main window,
+- Open Cortexa showed and focused the main window,
 - New Request showed and focused the main window without an error,
 - Tasks (Coming Soon) showed and focused the main window without an error,
 - closing the main window hid it without terminating the application,
 - a menu-bar action reopened the hidden window,
 - the Dock icon reopened the hidden window,
-- Quit AI Agent Assistant terminated the process,
+- Quit Cortexa terminated the process,
 - storage startup remained idempotent,
 - `get_app_info` remained functional,
 - the existing React UI remained unchanged,

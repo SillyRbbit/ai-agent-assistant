@@ -145,7 +145,7 @@ If that command reports that the folder is not a repository:
 ```bash
 git init
 git add .
-git commit -m "chore: establish AI Agent Assistant scaffold"
+git commit -m "chore: establish Cortexa scaffold"
 ```
 
 Do not run `git init` inside an existing checkout or nested repository.

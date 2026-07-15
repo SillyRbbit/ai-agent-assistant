@@ -1,6 +1,6 @@
 ---
 name: resume-session
-description: Resume AI Agent Assistant work from HANDOFF.md, reconcile it with the actual repository, and continue only the recorded next task.
+description: Resume Cortexa work from HANDOFF.md, reconcile it with the actual repository, and continue only the recorded next task.
 ---
 
 # Resume session

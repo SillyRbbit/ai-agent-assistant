@@ -1,4 +1,4 @@
-# AI Agent Assistant repository instructions
+# Cortexa repository instructions
 
 ## Purpose
 

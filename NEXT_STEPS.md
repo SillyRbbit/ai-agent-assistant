@@ -26,9 +26,10 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 4C — trusted policy-input binding: **Verified complete**.
 - Increment 4D — exact approval binding: **Verified complete**.
 - Increment 4E — trusted approval-decision source: **Verified complete**.
+- Increment 4F - Cortexa product display rename: **Verified complete by project-owner direction**.
 
 ## Queue status
 
-No increment is currently marked **Ready**. Increment 4E is verified complete under D-025's scoped reviewed baseline exception. The exception adds no advisory ignore and must be revisited if the affected `quick-xml` APIs become reachable, the `plist -> Tauri` dependency path changes, or separate dependency remediation is approved.
+No later implementation increment is currently marked **Ready**. Increment 4F implements only the product display-name rename and preserves repository, package, crate, executable, bundle-ID, database, storage, event, and command identifiers. Its automated, native manual, code/security/scope review, and documentation gates pass. The absent post-increment skill did not run; D-027 records the project owner's one-time completion exception and defers skill creation to the next clean branch.
 
-Exact next task: the project owner selects and approves the exact scope of the next documentation-only planning task. Do not start another increment before that approval.
+Exact next task: publish and fast-forward merge Increment 4F. From merged clean `main`, the project owner creates and validates the absent `$post-increment-gate` skill on a new branch before another implementation increment starts.

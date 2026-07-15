@@ -1,6 +1,6 @@
 ---
 name: security-review
-description: Review AI Agent Assistant changes that affect tools, IPC, permissions, approvals, storage, model data, platform adapters, or other trust boundaries.
+description: Review Cortexa changes that affect tools, IPC, permissions, approvals, storage, model data, platform adapters, or other trust boundaries.
 ---
 
 # Security review

@@ -1,6 +1,6 @@
 ---
 name: session-start
-description: Start and orient an AI Agent Assistant coding session by reading repository memory, checking Git and toolchain state, and defining one verified goal before editing.
+description: Start and orient a Cortexa coding session by reading repository memory, checking Git and toolchain state, and defining one verified goal before editing.
 ---
 
 # Session start

@@ -1,7 +1,7 @@
 # End-of-session handoff
 
 ```text
-Close this AI Agent Assistant working session using docs/workflows/END_SESSION.md.
+Close this Cortexa working session using docs/workflows/END_SESSION.md.
 
 Inspect all changes and run the appropriate final verification commands. Review the diff against AGENTS.md, SECURITY.md, CODE_REVIEW.md, and the active increment acceptance criteria.
 

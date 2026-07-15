@@ -20,7 +20,7 @@ pub fn current_app_info() -> AppInfo {
         } else {
             "production"
         },
-        name: "AI Agent Assistant",
+        name: "Cortexa",
         secure_core: true,
         target: std::env::consts::OS,
         version: env!("CARGO_PKG_VERSION"),
@@ -40,7 +40,7 @@ mod tests {
     fn reports_expected_application_identity() {
         let info = current_app_info();
 
-        assert_eq!(info.name, "AI Agent Assistant");
+        assert_eq!(info.name, "Cortexa");
         assert!(!info.version.is_empty());
         assert!(info.secure_core);
     }

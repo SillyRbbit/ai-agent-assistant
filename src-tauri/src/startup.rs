@@ -72,7 +72,7 @@ fn startup_summary(initialization: &StorageInitialization) -> String {
     };
 
     format!(
-        "AI Agent Assistant storage initialized: mode={mode}, applied_migrations={}, already_applied_migrations={}, previously_initialized={}",
+        "Cortexa storage initialized: mode={mode}, applied_migrations={}, already_applied_migrations={}, previously_initialized={}",
         storage.startup_migration_report().applied_versions.len(),
         storage
             .startup_migration_report()

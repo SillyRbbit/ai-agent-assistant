@@ -1,7 +1,7 @@
 # Resume work
 
 ```text
-Resume AI Agent Assistant from the repository state rather than prior chat history.
+Resume Cortexa from the repository state rather than prior chat history.
 
 Read AGENTS.md, HANDOFF.md, PROJECT_STATUS.md, NEXT_STEPS.md, DECISIONS.md, TROUBLESHOOTING_LOG.md, SECURITY.md, and the relevant increment or plan documents. Compare the handoff with the actual Git status, diff, branch, and toolchain. Re-run the smallest check that proves the recorded baseline.
 

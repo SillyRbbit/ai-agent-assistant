@@ -1,6 +1,6 @@
 ---
 name: session-end
-description: End an AI Agent Assistant coding session by running final checks, reviewing changes, updating all repository memory, and writing an exact resume prompt.
+description: End a Cortexa coding session by running final checks, reviewing changes, updating all repository memory, and writing an exact resume prompt.
 ---
 
 # Session end

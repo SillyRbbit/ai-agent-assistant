@@ -4,7 +4,7 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-None. Increment 4E is verified complete. No later plan is Ready.
+None. Increment 4F is verified complete by project-owner direction under D-027 and pending publication. No later implementation plan is Ready.
 
 ## Completed plans
 
@@ -71,6 +71,13 @@ A plan must contain:
 | Increment 4C trusted policy-input binding     | Complete | Project maintainer | 2026-07-14   |
 | Increment 4D exact approval binding           | Complete | Project maintainer | 2026-07-14   |
 | Increment 4E trusted approval decision source | Complete | Project maintainer | 2026-07-14   |
+| Increment 4F Cortexa product display rename   | Complete | Project maintainer | 2026-07-14   |
+
+## Phase 4 Increment 4F product display rename - complete
+
+Goal: rename only the human-facing product name to `Cortexa` while preserving repository, package, crate, executable, bundle-ID, database, storage, event, command, and other compatibility identifiers.
+
+The reviewed implementation updates the Tauri/window/menu/native-dialog metadata, typed Settings app name, sidebar brand, fixed diagnostics, focused tests, repository skills and prompts, and all tracked exact former-name documentation. It adds no dependency, behavior, trust-boundary, persistence, capability, permission, network, credential, or execution change. The full requested automated gate, project-owner target-Mac confirmation, complete diff/code/security review, and synchronized project memory pass. The absent post-increment skill did not run and has no claimed result; D-027 records the project owner's one-time completion exception and defers skill creation to the next clean branch.
 
 ## Phase 2 Increment 2E — complete
 

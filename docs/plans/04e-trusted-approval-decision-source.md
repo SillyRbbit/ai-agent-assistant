@@ -87,7 +87,7 @@ The manager must keep the original policy decision and deadline. Issuing a prese
 
 ## Native source and outcome
 
-Add a macOS-gated `MacOsNativeApprovalDecisionSource` in `src-tauri/src/approvals/decision_source.rs`. It consumes one `ApprovalPresentation`, derives all copy locally, and displays one synchronous native message dialog through direct `rfd` use. The module export, dependency import, native implementation, and interactive example body are all `cfg(target_os = "macos")`; the example has a fixed non-interactive non-macOS fallback so all-target builds remain portable. The window title is fixed to `AI Agent Assistant approval`; untrusted content cannot alter it. The source is called only from the standalone example on the process main thread in this increment. Shipping-app scheduling and modality remain future orchestration work.
+Add a macOS-gated `MacOsNativeApprovalDecisionSource` in `src-tauri/src/approvals/decision_source.rs`. It consumes one `ApprovalPresentation`, derives all copy locally, and displays one synchronous native message dialog through direct `rfd` use. The module export, dependency import, native implementation, and interactive example body are all `cfg(target_os = "macos")`; the example has a fixed non-interactive non-macOS fallback so all-target builds remain portable. The window title is fixed to `Cortexa approval`; untrusted content cannot alter it. The source is called only from the standalone example on the process main thread in this increment. Shipping-app scheduling and modality remain future orchestration work.
 
 The dialog must show these trusted facts first:
 

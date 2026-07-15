@@ -175,7 +175,7 @@ Target-Mac manual gate:
 cargo run --manifest-path src-tauri/Cargo.toml --example native_approval_dialog --locked
 ```
 
-The project owner must confirm the native prompt uses the fixed `AI Agent Assistant approval` title, shows the exact task title last after every fixed preview field, exposes exactly Approve/Reject/Edit buttons, maps each button correctly when the example is rerun, makes Return/default activation reject, maps any available Escape/window-close result to `NativeNoDecision` rather than user intent or approval, renders no raw content after resolution, requests no operating-system permission, and performs no action. The complete diff must also pass code review, security review, exact temporary RustSec audit, dependency/scope/secret/generated-output checks, and documentation synchronization.
+The project owner must confirm the native prompt uses the fixed `Cortexa approval` title, shows the exact task title last after every fixed preview field, exposes exactly Approve/Reject/Edit buttons, maps each button correctly when the example is rerun, makes Return/default activation reject, maps any available Escape/window-close result to `NativeNoDecision` rather than user intent or approval, renders no raw content after resolution, requests no operating-system permission, and performs no action. The complete diff must also pass code review, security review, exact temporary RustSec audit, dependency/scope/secret/generated-output checks, and documentation synchronization.
 
 ## Verification result
 

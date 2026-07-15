@@ -37,10 +37,10 @@ impl MenuBarAction {
     #[must_use]
     pub const fn label(self) -> &'static str {
         match self {
-            Self::ShowMainWindow => "Open AI Agent Assistant",
+            Self::ShowMainWindow => "Open Cortexa",
             Self::NewRequest => "New Request",
             Self::TasksPlaceholder => "Tasks (Coming Soon)",
-            Self::Quit => "Quit AI Agent Assistant",
+            Self::Quit => "Quit Cortexa",
         }
     }
 
@@ -85,10 +85,10 @@ mod tests {
         assert_eq!(
             action_contract,
             vec![
-                ("menu-bar-show-main-window", "Open AI Agent Assistant"),
+                ("menu-bar-show-main-window", "Open Cortexa"),
                 ("menu-bar-new-request", "New Request"),
                 ("menu-bar-tasks-placeholder", "Tasks (Coming Soon)"),
-                ("menu-bar-quit", "Quit AI Agent Assistant"),
+                ("menu-bar-quit", "Quit Cortexa"),
             ]
         );
     }

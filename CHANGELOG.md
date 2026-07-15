@@ -6,6 +6,7 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Increment 4F display-name-only rename plan, record, and D-026 compatibility boundary for the `Cortexa` product name.
 - Phase 4 Increment 4E manager-issued one-shot approval presentation and sealed exact-subject Rust-owned macOS native source outcome.
 - Typed Edit/no-decision/source-failure cancellation, explicit `NotEvaluated` authentication evidence, and a non-executing target-Mac manual harness.
 - Private pointer-identical manager-instance binding that rejects cross-manager source-outcome substitution even when public IDs collide.
@@ -68,7 +69,7 @@ All notable repository changes are documented here. Entries distinguish verified
 - Typed `app_initialized` metadata bootstrap with idempotent migrations.
 - Verified Phase 2 Increment 2D macOS menu-bar and window lifecycle.
 - macOS-only Tauri `tray-icon` support using the existing bundled icon as a temporary template icon.
-- Fixed menu actions for Open AI Agent Assistant, New Request, Tasks (Coming Soon), and Quit AI Agent Assistant.
+- Fixed menu actions for Open Cortexa, New Request, Tasks (Coming Soon), and Quit Cortexa.
 - Main-window close-to-hide behavior and macOS Dock/reopen restoration.
 - Closed-enum `assistant-menu-route` backend event for later React-shell integration.
 - Platform-neutral menu action and lifecycle policy contracts.
@@ -77,6 +78,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Renamed the assistant's product-facing UI, window and menu metadata, Settings application value, native approval title, diagnostics, prompts, skills, and documentation to `Cortexa`.
+- Preserved the `ai-agent-assistant` npm/Cargo/repository/executable names, `ai_agent_assistant_lib`, `com.aiagentassistant.desktop`, storage identifiers, IPC/event names, and other compatibility-sensitive code identifiers.
+- Advanced Increment 4F to verification pending after the pre-edit `npm run build` baseline passed and every tracked exact former-name occurrence was reviewed and updated.
+- Passed every requested Increment 4F automated command with 124 frontend, 92 Rust library, and ten Rust integration tests; passed target-Mac window/menu/Settings/regression checks and complete scope, compatibility, code, and security review.
+- Kept Increment 4F verification pending because the mandatory `$post-increment-gate` skill/report workflow referenced by `AGENTS.md` is absent; no later increment started.
+- Marked Increment 4F verified complete by explicit project-owner direction under D-027. The absent post-increment skill did not run and no result is claimed; skill creation is deferred to the next clean branch before later implementation work.
 - Advanced Increment 4E to verification pending after focused Rust checks, the complete repository gate, JavaScript dependency audit, dependency review, code review, and security review passed.
 - Passed the target-Mac native-dialog gate: Approve, Reject, Edit, Return/default, fixed title/content order, terminal redaction, no action or persistence, and no permission prompt were confirmed; Escape had no effect and no window-close control was available. Kept Increment 4E open only for exact `cargo-audit 0.22.2` disposition; no ignore or dependency upgrade was added.
 - Marked Increment 4E verified complete after the project owner accepted D-025's scoped reviewed baseline exception for two pre-existing `quick-xml 0.39.4` RustSec advisories. The failed scanner result remains recorded; no advisory ignore or dependency remediation change was added.

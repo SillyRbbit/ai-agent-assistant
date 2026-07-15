@@ -1,6 +1,6 @@
 ---
 name: documentation-sync
-description: Synchronize AI Agent Assistant handoff, status, decisions, next steps, changelog, troubleshooting, plans, and increment docs with actual code and test evidence.
+description: Synchronize Cortexa handoff, status, decisions, next steps, changelog, troubleshooting, plans, and increment docs with actual code and test evidence.
 ---
 
 # Documentation sync

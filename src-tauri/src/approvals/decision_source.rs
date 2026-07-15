@@ -12,7 +12,7 @@ use super::types::{
     ApprovalSchedule, ApprovalSourceFailure, ApprovalTarget,
 };
 
-pub const NATIVE_APPROVAL_DIALOG_TITLE: &str = "AI Agent Assistant approval";
+pub const NATIVE_APPROVAL_DIALOG_TITLE: &str = "Cortexa approval";
 pub const MAX_NATIVE_APPROVAL_MESSAGE_CHARACTERS: usize = 1_024;
 
 const REJECT_BUTTON: &str = "Reject";
@@ -492,7 +492,7 @@ mod tests {
 
     #[test]
     fn fixes_title_button_order_and_preview_layout() -> Result<(), Box<dyn Error>> {
-        assert_eq!(NATIVE_APPROVAL_DIALOG_TITLE, "AI Agent Assistant approval");
+        assert_eq!(NATIVE_APPROVAL_DIALOG_TITLE, "Cortexa approval");
         let MessageButtons::YesNoCancelCustom(first, second, third) = native_message_buttons()
         else {
             return Err(io::Error::other("native button configuration changed").into());

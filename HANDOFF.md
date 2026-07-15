@@ -4,7 +4,136 @@ Last updated: 2026-07-14
 
 ## Current state
 
-Phase 3 and Phase 4 Increments 4A through 4E are verified complete on the target Mac. Increment 4E is complete within the approved eight-file runtime/test scope on branch `phase4/increment-4e`, based on merged `main` at `1cf190f`.
+Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Increment 4F - Cortexa product display rename is complete by explicit project-owner direction on `phase4/increment-4f`, based on local commit `8e174a7`. Commit, push, and fast-forward merge remain pending.
+
+Increment 4F pre-edit evidence:
+
+- the working tree was clean after committing the existing `AGENTS.md` change as `8e174a7`;
+- all 37 tracked files containing the exact former product phrase were reviewed;
+- compatibility identifiers containing `ai-agent-assistant`, `ai_agent_assistant_lib`, `com.aiagentassistant.desktop`, or code-domain `assistant` uses were classified and preserved; and
+- `npm run build` passed before rename edits.
+
+Increment 4F implementation now changes only human-facing product copy and associated tests/documentation. Tauri product/window metadata, Rust app metadata, native dialog title, menu actions/tooltip, sidebar branding, Settings application value, diagnostics, prompts, skills, and documentation use `Cortexa`. D-026 records that repository, package, crate, executable, bundle-ID, database, storage, IPC, command, event, path, and code identifiers remain unchanged.
+
+Every requested automated command, native target-Mac verification, complete diff/code/security/scope review, and documentation synchronization pass. No matching `$post-increment-gate` skill or report workflow exists under `.agents/skills`, so that gate did not run and no result is claimed. The project owner explicitly confirmed 4F complete and deferred skill creation to the next clean branch. D-027 records this one-time sequencing exception; the mandatory rule remains unchanged for later implementation increments.
+
+## Increment 4F exact files
+
+See `docs/plans/04f-cortexa-product-display-rename.md` for the declared 43-file list. The implementation has not expanded beyond that list.
+
+## Increment 4F verification classification
+
+### Passed
+
+```text
+npm run build
+  pre-edit baseline passed
+npx vitest run src/App.test.tsx
+  25 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked app_info::tests
+  1 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked menu_bar::
+  9 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked approvals::
+  16 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test smoke --locked
+  1 passed
+npm run format:check
+  passed after the targeted correction below
+npm run lint
+  passed
+npm run typecheck
+  passed
+npm run test:unit
+  124 frontend and 92 Rust library tests passed
+npm run test:integration
+  92 Rust library and 10 Rust integration tests passed
+npm run build
+  post-edit build passed
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+  passed
+cargo test --manifest-path src-tauri/Cargo.toml --all-targets --locked
+  92 library and 10 integration tests passed; example target compiled
+npm run tauri -- dev
+  passed on retry; native application launched
+```
+
+Also passed:
+
+- exact all-filesystem former-name search with no matches;
+- exact 43-file scope comparison with no missing or unexpected path;
+- preserved npm/Cargo package, binary, library crate, bundle ID, tray ID, event, command, storage, database, and path identifiers;
+- `cargo metadata --manifest-path src-tauri/Cargo.toml --no-deps --format-version 1`, confirming binary `ai-agent-assistant` and library `ai_agent_assistant_lib`;
+- no manifest/lockfile/capability/icon drift outside `src-tauri/Cargo.toml` display metadata;
+- secret-pattern, generated-output, database, build-output, and `git diff --check` scans;
+- complete tracked and untracked diff review;
+- code review with no correctness, portability, test, or documentation finding; and
+- security review with no trust-boundary, permission, credential, persistence, IPC, or execution finding.
+
+### Failed and resolved
+
+- The first `npm run format:check` found only `index.html` Prettier layout drift. `npx prettier --write index.html` fixed it, and the exact required check passed on rerun.
+- The first `npm run tauri -- dev` failed because port 1420 was occupied by a stale standalone project Vite process. `lsof` and `ps` identified its `npm run dev` parent; `kill 12592` stopped it, the port-free check passed, and the exact launch command succeeded. TS-013 records the diagnosis.
+- `pgrep -af "vite|tauri dev|ai-agent-assistant"` could not access the process list in this environment. The narrower approved `ps -p` checks supplied the required evidence.
+
+### Check not run and explicitly deferred
+
+- `$post-increment-gate` could not run because no matching skill or report workflow exists under `.agents/skills`. The project owner explicitly confirmed 4F complete and deferred skill creation to the next clean branch under D-027. No gate result is claimed.
+
+### Manual verification
+
+The retry launched unchanged executable `target/debug/ai-agent-assistant` and logged the fixed `Cortexa` startup prefix. The project owner confirmed the window title, standard application menu, right-side `Open Cortexa` and `Quit Cortexa` menu actions, `C` sidebar mark, sidebar name, Settings application value, generic composer placeholder, existing navigation/mock interaction, and absence of an operating-system permission prompt all passed. The fixed `Cortexa approval` title is covered by the passing approval test subset; the standalone dialog example was not manually rerun because it was outside the requested manual gate.
+
+## Increment 4F command record
+
+Repository state and the separately authorized workflow commit:
+
+```bash
+git status --short --branch
+git diff -- AGENTS.md
+git diff --cached --stat
+git add AGENTS.md
+git diff --cached --check
+git commit -m "Add mandatory post-increment gate"
+git show --stat --oneline --decorate --no-renames HEAD
+```
+
+Preflight and review used `git grep`, `rg`, `rg --files`, `sed`, `git diff`, `git status`, and `git ls-files --others --exclude-standard` to read every required document, inventory the former name, inspect source/configuration/tests, verify the exact file list, review all diffs, and classify preserved identifiers. Their material outcomes are recorded above and in `docs/increments/04f-cortexa-product-display-rename.md`.
+
+Implementation and verification commands:
+
+```bash
+npm run build
+npx vitest run src/App.test.tsx
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked app_info::tests
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked menu_bar::
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked approvals::
+cargo test --manifest-path src-tauri/Cargo.toml --test smoke --locked
+npm run format:check
+npx prettier --write index.html
+npm run format:check
+npm run lint
+npm run typecheck
+npm run test:unit
+npm run test:integration
+npm run build
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+cargo test --manifest-path src-tauri/Cargo.toml --all-targets --locked
+cargo metadata --manifest-path src-tauri/Cargo.toml --no-deps --format-version 1
+git diff --check
+npm run tauri -- dev
+lsof -nP -iTCP:1420 -sTCP:LISTEN
+pgrep -af "vite|tauri dev|ai-agent-assistant"
+ps -p 12621 -o pid=,ppid=,lstart=,command=
+ps -p 12592 -o pid=,ppid=,lstart=,command=
+kill 12592
+lsof -nP -iTCP:1420 -sTCP:LISTEN
+npm run tauri -- dev
+```
+
+## Increment 4E publication baseline
+
+Increment 4E is complete within its approved eight-file runtime/test scope and was merged into `main` before Increment 4F.
 
 Increment 4E completion evidence:
 
@@ -15,7 +144,7 @@ Increment 4E completion evidence:
 
 Implementation commit `b0a3036` was pushed on `phase4/increment-4e`, fast-forward merged into `main`, and pushed to `origin/main` at the project owner's request. This documentation-only publication-state closeout records that merged state. D-025 is accepted, no advisory ignore or dependency remediation change was added, and no later increment has started.
 
-## Completed implementation
+## Increment 4E completed implementation
 
 - Removed public `ApprovalChoice` and the raw `ApprovalManager::decide` path.
 - Added one owned, non-cloneable, non-serializable, redacted `ApprovalPresentation` issued only once by the pending manager.
@@ -24,7 +153,7 @@ Implementation commit `b0a3036` was pushed on `phase4/increment-4e`, fast-forwar
 - Preserved one pending approval, 1,024 lifetime subjects, a 120-second monotonic TTL, no TTL extension on presentation, cancellation/expiry precedence, and non-evicting replay rejection.
 - Added closed `RunTerminated`, `EditRequested`, `NativeNoDecision`, and `SourceFailed` cancellation reasons.
 - Added precise native-dialog source, optional recognized-button, `NotEvaluated` authentication, and optional fixed source-failure evidence without title, actor-identity, run-liveness, audit, dispatch, or execution claims.
-- Added a macOS-only direct `rfd` adapter with fixed `AI Agent Assistant approval` title and exact Reject/Approve/Edit custom-button order. Reject is first/default.
+- Added a macOS-only direct `rfd` adapter with fixed `Cortexa approval` title and exact Reject/Approve/Edit custom-button order. Reject is first/default.
 - Mapped only recognized custom results to Approve, Reject, or Edit. `Cancel` is `NativeNoDecision`; every unexpected result is a fixed `SourceFailed(UnexpectedDialogResult)`.
 - Rendered every trusted preview fact before the final affected-title row, rejected the exact approved presentation-format set, allowed ordinary non-ASCII text, and capped the complete message at 1,024 Unicode scalar values.
 - Added a standalone main-thread example using the public gateway -> schema -> policy -> approval -> native source -> manager-resolution path. It performs no action or persistence and prints only bounded approval identity plus a fixed terminal label.
@@ -81,7 +210,7 @@ docs/plans/04e-trusted-approval-decision-source.md
 
 D-025 records the exact native-source boundary and the project-owner-approved scoped RustSec baseline exception. `TROUBLESHOOTING_LOG.md` remains unchanged because it was outside the approved closeout file list and no repository defect was diagnosed.
 
-## Verification classification
+## Increment 4E verification classification
 
 ### Passed
 
@@ -167,7 +296,7 @@ Owner results are now recorded: Approve -> `approved`, Reject -> `rejected`, Edi
 
 The project owner confirmed the fixed window title, exact trusted-fields-first/title-last content, post-resolution terminal redaction, no action or persistence, no shipping-app change, and no operating-system permission prompt all passed.
 
-## Residual risks
+## Increment 4E residual risks
 
 - The visible native prompt cannot be programmatically closed after manager cancellation. Manager state invalidates the subject immediately and rejects every late outcome, but stale visible UI remains possible. Production orchestration is excluded.
 - Native interaction proves only that this Rust-owned source returned a recognized button. It does not establish who interacted, LocalAuthentication, device-owner presence, active-run state, dispatch eligibility, or execution authority.
@@ -177,14 +306,12 @@ The project owner confirmed the fixed window title, exact trusted-fields-first/t
 
 ## Exact next task
 
-No increment is Ready. The project owner must select and approve the exact scope of the next documentation-only planning task before work begins.
-
-Do not edit runtime files or start a later increment without an approved plan.
+Commit and push `phase4/increment-4f`, fast-forward merge it into `main`, push `main`, and record the publication state. Do not start another product increment. The next clean branch is reserved for the project owner to create and validate the missing `$post-increment-gate` skill.
 
 ## Ready-to-paste resume prompt
 
 ```text
 Use $documentation-sync.
 
-Start from HANDOFF.md on merged `main`. Re-read the required repository, security, decision, increment, and plan documents and reconcile them with clean Git state. Increment 4E is verified complete and published under D-025's scoped reviewed RustSec baseline exception; do not rerun its native gate or change its runtime files unless evidence changes. Recommend one smallest documentation-only next planning task, state exact files and verification, and wait for project-owner approval. Do not start runtime implementation, commit, or push unless explicitly asked.
+Start from HANDOFF.md on merged clean `main`. Increment 4F is verified complete and published under D-027's one-time project-owner sequencing exception: the missing `$post-increment-gate` skill did not run and no result was claimed. Create and validate that missing skill on a new clean branch before starting another implementation increment. Do not change the completed Cortexa rename or compatibility identifiers. Do not commit or push unless explicitly asked.
 ```

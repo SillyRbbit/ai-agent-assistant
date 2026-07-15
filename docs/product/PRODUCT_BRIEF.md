@@ -1,4 +1,4 @@
-# AI Agent Assistant product brief
+# Cortexa product brief
 
 Source of truth: product-owner requirements supplied at project inception. Editorial formatting has been added; requirement meaning is unchanged. Where this brief is ambiguous, accepted entries in `DECISIONS.md` and `ARCHITECTURE_BASELINE.md` govern implementation.
 

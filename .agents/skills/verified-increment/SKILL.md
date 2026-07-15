@@ -1,6 +1,6 @@
 ---
 name: verified-increment
-description: Implement one small, bounded AI Agent Assistant increment with explicit non-goals, typed errors, focused tests, security review, and complete handoff updates.
+description: Implement one small, bounded Cortexa increment with explicit non-goals, typed errors, focused tests, security review, and complete handoff updates.
 ---
 
 # Verified increment

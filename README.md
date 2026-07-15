@@ -1,4 +1,4 @@
-# AI Agent Assistant
+# Cortexa
 
 Phase 2: a local-first Tauri 2 desktop application for a secure personal executive assistant.
 
@@ -59,7 +59,7 @@ npm ci
 npm run tauri -- dev
 ```
 
-Expected result: a native window titled **AI Agent Assistant** opens and displays **Rust core connected** with application and platform information.
+Expected result: a native window titled **Cortexa** opens and displays **Rust core connected** with application and platform information.
 
 ## Verification
 
