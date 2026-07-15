@@ -15,8 +15,11 @@ use super::gateway_protocol::{
     MAX_GATEWAY_REQUESTS_PER_RUN, MAX_GATEWAY_REQUEST_BYTES, MAX_MODEL_TURNS_PER_RUN,
     MAX_RETRY_AFTER_MS, MAX_RETRY_ATTEMPTS_PER_RUN, PROVIDER_TURN_DEADLINE,
 };
+use crate::approvals::manager::{
+    ApprovalError, ApprovalManager, ApprovalPresentation, InMemoryApprovalManager,
+};
 use crate::policy::engine::{DeterministicPolicyEngine, PolicyEngine};
-use crate::policy::types::{PolicyDecision, PolicyInput};
+use crate::policy::types::{PolicyDecision, PolicyInput, PolicyOutcome};
 use crate::tools::registry::{InMemoryToolRegistry, ToolRegistry};
 use crate::tools::schema::ToolSchema;
 use crate::tools::types::ToolDefinition;
@@ -30,6 +33,7 @@ pub struct InitialGatewayTurn {
     request: InitialGatewayRequest,
     validator: GatewayStreamValidator,
     registry: InMemoryToolRegistry,
+    approval_manager: InMemoryApprovalManager,
     pending_function_call: Option<SchemaValidatedFunctionCall>,
     local_schema_failed: bool,
 }
@@ -80,6 +84,7 @@ impl InitialGatewayTurn {
             request,
             validator,
             registry,
+            approval_manager: InMemoryApprovalManager::new(),
             pending_function_call: None,
             local_schema_failed: false,
         })
@@ -142,7 +147,22 @@ impl InitialGatewayTurn {
                     Some(call) => {
                         let input = PolicyInput::from_validated_call(call);
                         let decision = DeterministicPolicyEngine::new().evaluate(input);
-                        InitialGatewayEvent::PolicyEvaluated { decision }
+                        match decision.outcome() {
+                            PolicyOutcome::RequireApproval => {
+                                let id = self
+                                    .approval_manager
+                                    .create_request(decision)
+                                    .map_err(InitialGatewayTurnError::Approval)?;
+                                let presentation = self
+                                    .approval_manager
+                                    .issue_presentation(id)
+                                    .map_err(InitialGatewayTurnError::Approval)?;
+                                InitialGatewayEvent::ApprovalPresentationReady { presentation }
+                            }
+                            PolicyOutcome::Allow | PolicyOutcome::Deny => {
+                                InitialGatewayEvent::PolicyEvaluated { decision }
+                            }
+                        }
                     }
                     None => InitialGatewayEvent::ResponseCompleted,
                 }))
@@ -183,13 +203,15 @@ pub enum InitialGatewayTurnError {
     Protocol(GatewayProtocolError),
     #[error("initial gateway function call failed local schema validation: {0}")]
     FunctionCallValidation(FunctionCallValidationError),
+    #[error("initial gateway approval binding failed: {0}")]
+    Approval(ApprovalError),
 }
 
-#[derive(Eq, PartialEq)]
 pub enum InitialGatewayEvent {
     ResponseStarted { provider_response_id: String },
     OutputTextDelta { delta: String },
     PolicyEvaluated { decision: PolicyDecision },
+    ApprovalPresentationReady { presentation: ApprovalPresentation },
     ResponseCompleted,
     ResponseFailed { failure: GatewayFailure },
 }
@@ -210,6 +232,10 @@ impl fmt::Debug for InitialGatewayEvent {
             Self::PolicyEvaluated { decision } => formatter
                 .debug_struct("PolicyEvaluated")
                 .field("decision", decision)
+                .finish(),
+            Self::ApprovalPresentationReady { presentation } => formatter
+                .debug_struct("ApprovalPresentationReady")
+                .field("presentation", presentation)
                 .finish(),
             Self::ResponseCompleted => formatter.write_str("ResponseCompleted"),
             Self::ResponseFailed { failure } => formatter

@@ -9,6 +9,10 @@ use ai_agent_assistant_lib::agent::gateway_request::{
     InitialGatewayEvent, InitialGatewayTurn, InitialGatewayTurnError, INITIAL_GATEWAY_TOOL_SET_ID,
     INITIAL_GATEWAY_TOOL_SET_VERSION,
 };
+use ai_agent_assistant_lib::approvals::types::{
+    ApprovalAction, ApprovalRecipients, ApprovalReversibility, ApprovalRisk, ApprovalSchedule,
+    ApprovalTarget,
+};
 use ai_agent_assistant_lib::policy::types::{PolicyOutcome, PolicyReason};
 use ai_agent_assistant_lib::tools::schema::{ToolArgumentValidationError, ValidatedToolArguments};
 use ai_agent_assistant_lib::tools::types::{PermissionKind, RiskClass};
@@ -154,20 +158,12 @@ fn accepts_each_exact_local_tool_contract() -> Result<(), Box<dyn Error>> {
 
         let event = turn
             .accept_frame(&completion_frame(2))?
-            .ok_or("terminal completion must return the policy decision")?;
+            .ok_or("terminal completion must return a closed outcome")?;
         let debug = format!("{event:?}");
-        match event {
-            InitialGatewayEvent::PolicyEvaluated { decision } => {
-                let (expected_outcome, expected_reason) = match name {
-                    "get_current_datetime" => (PolicyOutcome::Allow, PolicyReason::InformationOnly),
-                    "create_local_task" => (
-                        PolicyOutcome::RequireApproval,
-                        PolicyReason::ReversibleRequiresApproval,
-                    ),
-                    _ => return Err("unexpected local tool".into()),
-                };
-                assert_eq!(decision.outcome(), expected_outcome);
-                assert_eq!(decision.reason(), expected_reason);
+        match (name, event) {
+            ("get_current_datetime", InitialGatewayEvent::PolicyEvaluated { decision }) => {
+                assert_eq!(decision.outcome(), PolicyOutcome::Allow);
+                assert_eq!(decision.reason(), PolicyReason::InformationOnly);
                 let call = decision.validated_call();
                 assert_eq!(call.run_id(), RUN_ID);
                 assert_eq!(call.gateway_request_id(), GATEWAY_REQUEST_ID);
@@ -178,28 +174,54 @@ fn accepts_each_exact_local_tool_contract() -> Result<(), Box<dyn Error>> {
                     INITIAL_GATEWAY_TOOL_SET_VERSION
                 );
                 assert_eq!(call.required_permission(), PermissionKind::None);
-                match name {
-                    "get_current_datetime" => {
-                        assert_eq!(call.risk_class(), RiskClass::InformationOnly);
-                        assert!(matches!(
-                            call.arguments(),
-                            ValidatedToolArguments::GetCurrentDatetime
-                        ));
-                    }
-                    "create_local_task" => {
-                        assert_eq!(call.risk_class(), RiskClass::ReversibleLocalAction);
-                        assert!(matches!(
-                            call.arguments(),
-                            ValidatedToolArguments::CreateLocalTask(arguments)
-                                if arguments.title() == "Plan tomorrow"
-                        ));
-                        assert!(!debug.contains("Plan tomorrow"));
-                        assert!(debug.contains("[REDACTED]"));
-                    }
-                    _ => return Err("unexpected local tool".into()),
-                }
+                assert_eq!(call.risk_class(), RiskClass::InformationOnly);
+                assert!(matches!(
+                    call.arguments(),
+                    ValidatedToolArguments::GetCurrentDatetime
+                ));
             }
-            _ => return Err("expected a terminal policy decision".into()),
+            (
+                "create_local_task",
+                InitialGatewayEvent::ApprovalPresentationReady { presentation },
+            ) => {
+                assert_eq!(presentation.id().value(), 1);
+                assert_eq!(presentation.run_id(), RUN_ID);
+                assert_eq!(presentation.gateway_request_id(), GATEWAY_REQUEST_ID);
+                assert_eq!(presentation.call_id(), "call-public-1");
+                assert_eq!(presentation.tool_name(), name);
+                assert_eq!(
+                    presentation.tool_contract_version(),
+                    INITIAL_GATEWAY_TOOL_SET_VERSION
+                );
+                assert_eq!(
+                    presentation.policy_outcome(),
+                    PolicyOutcome::RequireApproval
+                );
+                assert_eq!(
+                    presentation.policy_reason(),
+                    PolicyReason::ReversibleRequiresApproval
+                );
+                assert_eq!(presentation.risk_class(), RiskClass::ReversibleLocalAction);
+                assert_eq!(presentation.required_permission(), PermissionKind::None);
+
+                let preview = presentation.preview();
+                assert_eq!(preview.action(), ApprovalAction::CreateLocalTask);
+                assert_eq!(preview.target(), ApprovalTarget::LocalTaskList);
+                assert_eq!(preview.affected_data().value(), "Plan tomorrow");
+                assert_eq!(preview.schedule(), ApprovalSchedule::NotScheduled);
+                assert_eq!(preview.recipients(), ApprovalRecipients::None);
+                assert_eq!(preview.reversibility(), ApprovalReversibility::Reversible);
+                assert_eq!(preview.required_permission(), PermissionKind::None);
+                assert_eq!(preview.risk_class(), RiskClass::ReversibleLocalAction);
+                assert_eq!(preview.risk(), ApprovalRisk::CreatesLocalTask);
+
+                assert!(!debug.contains("Plan tomorrow"));
+                assert!(!debug.contains(RUN_ID));
+                assert!(!debug.contains(GATEWAY_REQUEST_ID));
+                assert!(!debug.contains("call-public-1"));
+                assert!(debug.contains("[REDACTED]"));
+            }
+            _ => return Err("terminal event did not match the local tool contract".into()),
         }
         assert_eq!(turn.status(), GatewayStreamStatus::Completed);
         assert!(matches!(
@@ -259,18 +281,25 @@ fn protocol_errors_retain_the_pending_call_until_correct_completion() -> Result<
 
     let event = turn
         .accept_frame(&completion_frame(2))?
-        .ok_or("correct completion must evaluate the retained call")?;
-    assert!(matches!(
-        event,
-        InitialGatewayEvent::PolicyEvaluated { decision }
-            if decision.outcome() == PolicyOutcome::RequireApproval
-            && decision.reason() == PolicyReason::ReversibleRequiresApproval
-            && matches!(
-                decision.validated_call().arguments(),
-                ValidatedToolArguments::CreateLocalTask(arguments)
-                    if arguments.title() == argument_sentinel
-            )
-    ));
+        .ok_or("correct completion must present the retained call")?;
+    match event {
+        InitialGatewayEvent::ApprovalPresentationReady { presentation } => {
+            assert_eq!(
+                presentation.policy_outcome(),
+                PolicyOutcome::RequireApproval
+            );
+            assert_eq!(
+                presentation.policy_reason(),
+                PolicyReason::ReversibleRequiresApproval
+            );
+            assert_eq!(
+                presentation.preview().affected_data().value(),
+                argument_sentinel
+            );
+            assert!(!format!("{presentation:?}").contains(argument_sentinel));
+        }
+        _ => return Err("correct completion did not produce an approval presentation".into()),
+    }
     assert_eq!(turn.status(), GatewayStreamStatus::Completed);
     Ok(())
 }

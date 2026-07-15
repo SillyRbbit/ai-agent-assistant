@@ -4,7 +4,7 @@ Last updated: 2026-07-15
 
 ## Current state
 
-Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4Q are verified, published, and merged into clean synchronized `main` at `8598612`.
+Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4R are verified, published, and merged into clean synchronized `main` at `5e58edb`.
 
 Reconstructed Increment 4I was committed as `99f9279` with message `Remove generic audit scaffold`, pushed on `codex/phase4-increment-4i`, fast-forward merged into `main`, and pushed. The corrected `04i` completion marker remains valid after the deletion commit. The original pre-fingerprint implementation commit remains preserved exactly at `cf9d701` on local `codex/phase4-increment-4i-pre-fingerprint-fix`; no remote ref contains it.
 
@@ -43,12 +43,147 @@ with message `Release initial function call terminally`, pushed on
 `04q` marker was complete and valid after commit and merge and immediately before
 the current planning edits.
 
-Increment 4R bind terminal initial function call to policy is verified complete
-in the current uncommitted workspace. Its exact two-file source/test change makes
-the bound turn consume the terminal schema-valid call through the fixed
-deterministic policy engine and return only the retained non-authorizing
-decision. No policy-rule, approval, transport, continuation, runtime, IPC,
-persistence, dispatch, or execution path was added.
+Increment 4R bind terminal initial function call to policy was committed as
+`5e58edb` with message `Bind terminal initial policy`, pushed on
+`codex/phase4-increment-4r`, fast-forward merged into `main`, and pushed. The
+`04r` marker was complete and valid after commit and merge and immediately
+before the current planning edits.
+
+Increment 4S bind terminal initial approval presentation is verified complete
+with uncommitted changes and a valid `04s` completion marker. Its exact two-file
+source/test implementation makes the bound turn consume terminal
+`RequireApproval` through the existing exact approval manager and return one
+owned non-authorizing presentation. No approval-manager source, native-source,
+audit, transport, runtime, IPC, persistence, dispatch, or execution path was
+added. No later increment is Ready.
+
+## Increment 4S completion state
+
+### Goal
+
+Prevent a future initial-turn caller from receiving a terminal
+`RequireApproval` decision and choosing, replacing, or omitting the verified
+approval-manager request and presentation transition.
+
+### Exact source and test scope
+
+```text
+src-tauri/src/agent/gateway_request.rs
+src-tauri/tests/gateway_request_contract.rs
+```
+
+On accepted terminal completion, the turn routes only
+`RequireApproval` through one private `InMemoryApprovalManager`, creates one exact
+request, issues one owned `ApprovalPresentation`, and returns one closed
+`ApprovalPresentationReady` event. `Allow` and `Deny` remain non-authorizing
+`PolicyEvaluated` events. Approval-manager, native-source, audit, policy,
+lower-level gateway/schema/registry, module exports, and manifests remain
+unchanged.
+
+### Verification
+
+Passed in the current uncommitted workspace based on synchronized `main` at
+`5e58edbb5e4774a6b91aaf97779143bda15336b6`:
+
+```text
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+  passed after applying rustfmt's three test-only line wraps
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::gateway_request::
+  6 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::gateway_protocol::
+  18 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::function_call_validation::
+  6 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked policy::engine::
+  4 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked tools::
+  9 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked approvals::
+  17 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test gateway_request_contract --locked
+  9 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test approval_binding --locked
+  2 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test approval_audit_binding --locked
+  1 passed
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+  passed
+npm run verify
+  passed: 17 hook, 124 frontend, 92 Rust library, and 20 Rust integration tests,
+  lint, typecheck, Vite builds, and Tauri release no-bundle
+npm audit --audit-level=low
+  passed on the approved network-enabled retry: found 0 vulnerabilities
+git diff --check
+  passed
+python3 .codex/hooks/post_increment_gate.py status
+  Increment 04s complete, valid: true, PASS WITH ADVISORIES
+```
+
+The first post-edit formatting check found three rustfmt line-wrap differences
+in the approved test path; `cargo fmt` corrected them and the required rerun
+passed. The first sandboxed npm audit could not resolve the registry or write
+npm logs; the approved network-enabled retry passed with zero vulnerabilities.
+No manual verification is required because there is no production caller,
+native interaction, user-visible behavior, network, credential, persistence,
+capability, permission, dispatch, or operating-system action.
+
+### Exact files changed
+
+```text
+AGENTS.md
+CHANGELOG.md
+DECISIONS.md
+HANDOFF.md
+NEXT_STEPS.md
+PLANS.md
+PROJECT_STATUS.md
+docs/increments/04s-bind-terminal-initial-approval-presentation.md
+docs/plans/04s-bind-terminal-initial-approval-presentation.md
+docs/plans/README.md
+docs/reviews/2026-07-15-04s-post-increment-review.md
+src-tauri/src/agent/gateway_request.rs
+src-tauri/tests/gateway_request_contract.rs
+```
+
+No security, product, workflow, troubleshooting, dependency, manifest,
+lockfile, Tauri, frontend, storage, capability, entitlement, or permission file
+changed. Source/test work is limited to the approved two paths; all other paths
+are declared planning and closeout documentation.
+
+### Risks and non-goals
+
+The agent request module owns an approval manager, deepening trusted
+assembly coupling while keeping a non-recursive ownership graph. The public
+event stops deriving equality because the presentation is intentionally
+owned and non-comparable. The private manager cannot yet receive a trusted
+source outcome after the presentation leaves, and its 120-second TTL begins at
+request creation. These limitations keep the proposed path disconnected and
+non-executable but require later bounded orchestration.
+
+Approval-manager changes, native interaction, source resolution,
+LocalAuthentication, audit, durable approval persistence, run-liveness,
+dispatch, execution, tool results, continuation, HTTP/TLS, gateway deployment,
+authentication, credentials, Keychain, provider parameters, live traffic,
+runtime coordination, Tauri, WebView, SQLite, dependencies, capabilities,
+entitlements, and permissions are excluded.
+
+### Review, rollback, and blockers
+
+The complete diff, exact scope, secrets, generated output, code health,
+architecture, security, and documentation reviews found no blocking issue. The
+result is `PASS WITH ADVISORIES`; D-040 records the durable decision. The
+advisories are bounded agent-to-approval coupling and the deliberately
+incomplete private-manager resolution path. There are no blockers.
+
+Before commit, restore the two source/test files to `5e58edb` and revert only the
+declared 4S documentation. After commit, revert one 4S commit. No migration,
+data, dependency, credential, compatibility identifier, or remote resource
+requires rollback.
+
+### Exact next task
+
+Wait for explicit project-owner direction to commit, push, and merge Increment
+4S. Do not start a later increment; none is Ready.
 
 ## Increment 4R completion state
 
@@ -167,10 +302,10 @@ declared 4R documentation. After commit, revert one 4R commit. No migration,
 data, dependency, credential, compatibility identifier, or remote resource
 requires rollback.
 
-### Exact next task
+### Publication state
 
-Wait for explicit project-owner direction to commit, push, and merge verified
-Increment 4R. Do not start later planning or implementation.
+Commit `5e58edb` is pushed on `codex/phase4-increment-4r`, fast-forward merged
+into synchronized `main`, and retains a valid marker before 4S planning edits.
 
 ## Increment 4Q completion state
 
@@ -1879,12 +2014,10 @@ The project owner confirmed the fixed window title, exact trusted-fields-first/t
 ## Exact next task
 
 Wait for explicit project-owner direction to commit, push, and merge verified
-Increment 4R. Do not start later planning or implementation.
+Increment 4S. Do not start a later increment; none is Ready.
 
 ## Ready-to-paste resume prompt
 
 ```text
-Use $session-start.
-
-Resume from HANDOFF.md on verified, uncommitted Increment 4R. Confirm the `04r` completion marker remains complete and valid, then wait for explicit project-owner direction to commit, push, and fast-forward merge Increment 4R. Do not start later planning or implementation.
+Commit, push, and merge Increment 4S only. Create codex/phase4-increment-4s from the current verified uncommitted state. Use commit message "Bind terminal initial approval presentation". Immediately confirm the 04s marker remains valid after the commit, push the branch, fast-forward merge it into updated main, push main, and verify clean synchronized main plus the valid marker. Do not start another increment.
 ```

@@ -131,7 +131,7 @@ runtime, IPC, execution, dependency, capability, or permission path was added.
 No later implementation increment is Ready.
 
 Increment 4R bind terminal initial function call to policy is **Verified
-complete in the current uncommitted workspace**. Accepted terminal completion
+complete, published, and merged at `5e58edb`**. Accepted terminal completion
 consumes the exact pending schema-valid call through the fixed deterministic
 engine and returns one retained `PolicyDecision`; failure and cancellation still
 discard the pending call without evaluation. Both exact tool outcomes, retained
@@ -140,5 +140,36 @@ verification, npm audit, scope review, documentation sync, and the mandatory gat
 pass. No approval, audit, transport, runtime, dispatch, execution, dependency,
 capability, or permission path was added.
 
-Exact next task: wait for explicit project-owner direction to commit, push, and
-merge verified Increment 4R. Do not start later planning or implementation.
+### Increment 4S - bind terminal initial approval presentation
+
+**Status:** Verified complete with uncommitted changes.
+
+The bound initial turn now consumes terminal `RequireApproval` through its
+private fixed approval manager and returns one owned non-authorizing
+`ApprovalPresentation`. `Allow` and `Deny` remain closed non-authorizing policy
+events.
+
+**Exact source/test scope:**
+
+```text
+src-tauri/src/agent/gateway_request.rs
+src-tauri/tests/gateway_request_contract.rs
+```
+
+Accepted terminal completion creates one manager-owned approval request and
+issues one exact presentation for `create_local_task@1`. The information-only
+tool remains a non-authorizing `PolicyEvaluated` event. No trusted interaction,
+approval disposition, audit, run-liveness, dispatch, or execution authority was
+added.
+
+No approval-manager, native-source, audit, policy-rule, transport, credential,
+runtime, Tauri, frontend, SQLite, dependency, capability, entitlement, or
+permission work is included.
+
+Focused and complete verification, dependency audit, exact-scope, code,
+security, documentation, and mandatory gate reviews pass. D-040 records the
+durable boundary. No manual check is required.
+
+No later increment is Ready. Exact next task: wait for explicit project-owner
+direction to commit, push, and merge Increment 4S. Do not start later planning
+or implementation automatically.

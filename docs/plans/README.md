@@ -10,6 +10,6 @@ YYYY-MM-DD-short-kebab-case-title.md
 
 Create a plan from `docs/templates/INCREMENT_TEMPLATE.md`. Link active plans from `PLANS.md` and the current `HANDOFF.md`.
 
-Increment 4R bind terminal initial function call to policy is verified complete in the current uncommitted workspace under [`04r-bind-terminal-initial-policy.md`](04r-bind-terminal-initial-policy.md). Its exact two-file source/test scope consumes the terminal schema-valid call through the fixed deterministic policy engine without approval, transport, continuation, orchestration, dispatch, or execution authority. No later implementation increment is Ready. Increment 4Q is verified complete, published, and merged under [`04q-terminally-release-initial-function-call.md`](04q-terminally-release-initial-function-call.md).
+Increment 4S bind terminal initial approval presentation is verified complete with uncommitted changes under [`04s-bind-terminal-initial-approval-presentation.md`](04s-bind-terminal-initial-approval-presentation.md). Its exact two-file source/test scope consumes terminal `RequireApproval` through the existing exact approval manager without native interaction, approval resolution, audit, transport, orchestration, dispatch, or execution authority. Increment 4R is verified complete, published, and merged under [`04r-bind-terminal-initial-policy.md`](04r-bind-terminal-initial-policy.md). No later increment is Ready.
 
 Do not use a plan to hide unbounded scope. Each plan should still describe one coherent increment with explicit non-goals and verification.

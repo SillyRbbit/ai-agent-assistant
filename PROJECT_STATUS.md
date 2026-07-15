@@ -4,7 +4,7 @@ Last updated: 2026-07-15
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4Q are **verified complete, published, and merged into `main`**. Increment 4R bind terminal initial function call to policy is **verified complete in the current uncommitted workspace** with no production caller or user-visible behavior change. No later implementation increment is Ready.
+Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4R are **verified complete, published, and merged into `main`**. Increment 4R is merged at `5e58edb`. Increment 4S bind terminal initial approval presentation is **verified complete with uncommitted changes** and a valid `04s` completion marker. No later increment is Ready, and no user-visible behavior, native interaction, approval resolution, audit write, transport, runtime, IPC, persistence, dispatch, or execution path was added.
 
 ## Increment status
 
@@ -41,7 +41,44 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
 - Increment 4O: bound initial gateway turn - **verified complete; published and merged**.
 - Increment 4P: schema-bound initial gateway events - **verified complete; published and merged**.
 - Increment 4Q: terminally release initial function call - **verified complete; published and merged**.
-- Increment 4R: bind terminal initial function call to policy - **verified complete; uncommitted**.
+- Increment 4R: bind terminal initial function call to policy - **verified complete; published and merged**.
+- Increment 4S: bind terminal initial approval presentation - **verified complete with uncommitted changes**.
+
+## Increment 4S capability and evidence
+
+- The bound turn now consumes terminal `RequireApproval` through one private
+  `InMemoryApprovalManager`, creates one exact request, and issues one owned
+  `ApprovalPresentation`; the approval-required decision cannot leave for a
+  caller-selected transition.
+- The manager retains the decision and enforces eligibility, replay, capacity,
+  presentation issuance, and the 120-second TTL.
+- No production coordinator exists. The public gateway-request contract remains
+  the only `InitialGatewayTurn` caller.
+- The exact source/test scope changes only
+  `src-tauri/src/agent/gateway_request.rs` and
+  `src-tauri/tests/gateway_request_contract.rs`.
+- Accepted terminal `RequireApproval` creates and issues one exact
+  manager-owned presentation. `Allow` and `Deny` remain non-authorizing policy
+  events and cannot enter approval.
+- The presentation carries no approval disposition, trusted interaction,
+  authentication, audit receipt, run-liveness, dispatch, or execution authority.
+- Six request, 18 protocol, six function-validation, four policy, nine tool, 17
+  approval, nine public gateway-request contract, two approval-binding, and one
+  approval-audit-binding tests pass. Strict Clippy, complete `npm run verify`,
+  and npm audit pass.
+- Exact-scope, conflict, secret, generated-output, code, security,
+  documentation, and mandatory gate reviews pass with no blocking finding. No
+  manual verification is required.
+- D-040 records terminal approval-manager ownership, exact presentation
+  issuance, non-authority, typed failure behavior, and event API narrowing.
+- The consolidated result is `PASS WITH ADVISORIES`; the `04s` marker is
+  complete and valid for the current uncommitted workspace.
+- No approval-manager, native-source, audit, policy-rule, transport, gateway,
+  authentication, credential, runtime, Tauri, frontend, SQLite, dependency,
+  capability, entitlement, or permission work is included.
+- Exact risks, rollback, verification, and closeout evidence are documented in
+  `docs/plans/04s-bind-terminal-initial-approval-presentation.md` and
+  `docs/reviews/2026-07-15-04s-post-increment-review.md`.
 
 ## Increment 4R capability and evidence
 
@@ -70,7 +107,8 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
 - D-039 records terminal initial-turn policy ownership, fixed deterministic
   engine selection, non-authorizing decisions, and public event API narrowing.
 - The consolidated result is `PASS WITH ADVISORIES`; the `04r` completion marker
-  is complete and valid for the current uncommitted workspace.
+  remains complete and valid after commit and merge and immediately before 4S
+  planning edits.
 - No policy-rule, approval, native interaction, audit, dispatch, execution,
   tool-result, continuation, transport, gateway deployment, authentication,
   credential, runtime, Tauri, frontend, SQLite, dependency, capability,

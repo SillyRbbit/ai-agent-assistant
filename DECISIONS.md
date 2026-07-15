@@ -985,6 +985,56 @@ Consequences:
   runtime coordinator, approval, audit persistence, dispatch, executor,
   capability, entitlement, or operating-system permission is added.
 
+## D-040 - Bind terminal approval requirements to one exact presentation
+
+Date: 2026-07-15
+Status: Accepted; Increment 4S implemented and verified
+
+Decision: after the bound validator accepts terminal `response_completed` and
+the fixed deterministic policy engine derives `RequireApproval`,
+`InitialGatewayTurn` must pass the exact owned `PolicyDecision` directly to its
+private `InMemoryApprovalManager`, create one manager-owned request, and
+immediately issue one owned `ApprovalPresentation`. The bound path returns only
+`InitialGatewayEvent::ApprovalPresentationReady { presentation }` for that
+outcome; it cannot release the approval-required decision for a caller-selected
+transition. `Allow` and `Deny` continue to return non-authorizing
+`PolicyEvaluated` events.
+
+The presentation is proposal data only. It remains non-cloneable,
+non-serializable, and non-comparable, and carries no approval disposition,
+trusted interaction evidence, authentication evidence, audit receipt,
+run-liveness proof, dispatch eligibility, permission grant, or execution
+authority. Approval-manager failures cross the turn only through the existing
+closed `ApprovalError` in typed `InitialGatewayTurnError::Approval`; no fallback
+decision or presentation is emitted after terminal stream acceptance.
+
+Rationale: Increment 4R prevented callers from omitting deterministic policy,
+but still returned a terminal `RequireApproval` decision. A future caller could
+therefore delay, replace, or omit the verified request and presentation
+transition. Keeping the fixed manager transition inside the bound turn closes
+that choice without adding native interaction, source resolution, audit,
+dispatch, execution, or a new coordinator.
+
+Consequences:
+
+- `InitialGatewayTurn` owns one private approval manager whose 120-second TTL
+  starts when terminal completion creates the request.
+- The public initial event no longer implements `Eq` or `PartialEq` because it
+  may own an intentionally non-comparable presentation. The crate is
+  unpublished and its only repository caller is migrated.
+- The private manager cannot yet receive a trusted source outcome after the
+  presentation leaves the event. This deliberately incomplete path is
+  non-executable and requires a separately approved orchestration increment.
+- The request module's bounded dependency on approval and policy types remains
+  at the trusted assembly boundary; any new coordinator requires separate
+  architecture review.
+- O-006 and O-007 remain unresolved and continue to block authenticated gateway
+  transport and live provider traffic.
+- No dependency, manifest, lockfile, Tauri command/event/plugin, WebView path,
+  SQLite path, credential, Keychain, provider SDK, network client, native
+  interaction, audit write, dispatch, executor, capability, entitlement, or
+  operating-system permission is added.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

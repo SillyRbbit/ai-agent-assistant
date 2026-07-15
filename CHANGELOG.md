@@ -6,6 +6,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Increment 4S terminal approval-manager binding inside `InitialGatewayTurn`, returning one exact owned `ApprovalPresentation` for terminal `RequireApproval` while preserving non-authorizing policy events for `Allow` and `Deny`.
+- Public gateway-request contract coverage for exact presentation identity, classification, typed preview, manager-assigned ID, terminal ordering, protocol-error retention, failure/cancellation discard, and redacted event debug output.
+- Documentation-only Increment 4S plan for consuming terminal `RequireApproval` through the existing exact approval manager and issuing one owned non-authorizing presentation.
+- Exact two-file future source/test scope, approval-presentation event contract, risks, non-goals, verification, closeout scope, and rollback for terminal initial approval binding.
 - Increment 4R terminal policy binding inside `InitialGatewayTurn`, returning one retained non-authorizing `PolicyDecision` only after accepted terminal completion.
 - Public contract coverage for exact `Allow` and `RequireApproval` outcomes, retained typed call facts, terminal ordering, protocol-error retention, failure/cancellation discard, and redaction.
 - Documentation-only Increment 4R plan for consuming the terminal initial function call through the fixed deterministic policy engine before it leaves the bound turn.
@@ -114,6 +118,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Marked Increment 4S verified complete with `PASS WITH ADVISORIES`; its exact two-file source/test scope and declared closeout scope pass focused and complete verification with no manual gate required.
+- Made explicit project-owner direction to commit, push, and merge verified Increment 4S the next gate; no later increment is Ready.
+- Reconciled project memory with Increment 4R commit `5e58edb`, now pushed and fast-forward merged into synchronized `main`; its `04r` completion marker was complete and valid before 4S planning edits.
+- Made project-owner approval of the exact Increment 4S plan the next gate; no source, approval-manager, native-source, audit, transport, runtime, IPC, persistence, dispatch, or execution work has started.
 - Completed Increment 4R within its exact two-file source/test scope: the terminal standalone-call event is replaced by a fixed deterministic policy-decision event, while lower-level validation, policy rules, approval, audit, transport, runtime, and execution boundaries remain unchanged.
 - Made explicit project-owner direction to commit, push, and merge verified Increment 4R the next gate; no later implementation increment is Ready.
 - Reconciled project memory with Increment 4Q commit `8598612`, now pushed and fast-forward merged into synchronized `main`; its `04q` completion marker was complete and valid before 4R planning edits.

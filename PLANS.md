@@ -4,8 +4,8 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No implementation plan is active. Increment 4R is verified complete in the
-current uncommitted workspace, and no later implementation increment is Ready.
+None. Increment 4S is verified complete with uncommitted changes, and no later
+increment is Ready.
 
 ## Completed plans
 
@@ -35,6 +35,7 @@ docs/plans/04o-bound-initial-gateway-turn.md
 docs/plans/04p-schema-bound-initial-gateway-events.md
 docs/plans/04q-terminally-release-initial-function-call.md
 docs/plans/04r-bind-terminal-initial-policy.md
+docs/plans/04s-bind-terminal-initial-approval-presentation.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -95,6 +96,31 @@ A plan must contain:
 | Increment 4P schema-bound initial events       | Complete | Project maintainer | 2026-07-15   |
 | Increment 4Q terminal initial function release | Complete | Project maintainer | 2026-07-15   |
 | Increment 4R terminal initial policy binding   | Complete | Project maintainer | 2026-07-15   |
+| Increment 4S terminal approval presentation    | Complete | Project maintainer | 2026-07-15   |
+
+## Phase 4 Increment 4S bind terminal initial approval presentation - complete
+
+Goal: prevent a future initial-turn caller from receiving a terminal
+`RequireApproval` decision and choosing, replacing, or omitting the verified
+approval-manager transition.
+
+The exact source/test implementation changes only `agent/gateway_request.rs` and the public
+`gateway_request_contract` integration test. On accepted terminal completion,
+the turn routes `RequireApproval` through its private fixed
+`InMemoryApprovalManager`, creates one exact request, issues one owned
+`ApprovalPresentation`, and returns that non-authorizing presentation event.
+`Allow` and `Deny` remain non-authorizing policy events.
+
+No approval-manager source, native-source, audit, transport, gateway service,
+authentication, credentials, continuation, retries, deadlines, runtime
+coordinator, dispatch, execution, Tauri, frontend, SQLite, dependency,
+capability, entitlement, or permission path is included. The 72 focused request,
+protocol, function-validation, policy, tool, approval, public-contract,
+approval-binding, and approval-audit tests pass, as do strict Clippy, complete
+repository verification, and npm audit. Exact-scope, code, security,
+documentation, and mandatory gate reviews pass with `PASS WITH ADVISORIES` and
+no manual gate. D-040 records the durable boundary. The `04s` completion marker
+is valid for the current uncommitted workspace; no later increment is Ready.
 
 ## Phase 4 Increment 4R bind terminal initial function call to policy - complete
 
@@ -116,8 +142,9 @@ focused request, protocol, function-validation, policy, tool, public-contract,
 policy-input, and approval-binding tests. Clippy, complete `npm run verify`, npm
 audit, exact-scope, code, security, documentation, and mandatory gate reviews
 pass. D-039 records terminal policy ownership, fixed engine selection,
-non-authority, and the public event narrowing. No later implementation increment
-is Ready.
+non-authority, and the public event narrowing. Commit `5e58edb` is pushed on
+`codex/phase4-increment-4r`, fast-forward merged into synchronized `main`, and
+retains a valid `04r` marker before 4S planning edits.
 
 ## Phase 4 Increment 4Q terminally release initial function call - complete
 
