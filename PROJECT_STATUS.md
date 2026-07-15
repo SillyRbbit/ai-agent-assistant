@@ -104,7 +104,7 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Review and publish the completed Increment 4E branch only when explicitly requested. Do not start another increment until the project owner selects and approves its exact planning scope.
+Select and approve the exact scope of the next documentation-only planning task. Do not start another increment before that approval.
 
 ## Phase 4 planning result
 

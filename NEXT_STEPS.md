@@ -31,4 +31,4 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 No increment is currently marked **Ready**. Increment 4E is verified complete under D-025's scoped reviewed baseline exception. The exception adds no advisory ignore and must be revisited if the affected `quick-xml` APIs become reachable, the `plist -> Tauri` dependency path changes, or separate dependency remediation is approved.
 
-Exact next task: review and publish the completed Increment 4E branch only when the project owner explicitly requests commit and push. Do not start another increment until the project owner selects and approves its exact planning scope.
+Exact next task: the project owner selects and approves the exact scope of the next documentation-only planning task. Do not start another increment before that approval.

@@ -13,7 +13,7 @@ Increment 4E completion evidence:
 - exact temporary RustSec scanning ran and its two pre-existing `quick-xml 0.39.4` findings have the scoped D-025 baseline disposition; and
 - the project-owner native-dialog interaction matrix passed.
 
-The changes are uncommitted and unpushed. D-025 is accepted, no advisory ignore or dependency remediation change was added, and no later increment has started.
+Implementation commit `b0a3036` was pushed on `phase4/increment-4e`, fast-forward merged into `main`, and pushed to `origin/main` at the project owner's request. This documentation-only publication-state closeout records that merged state. D-025 is accepted, no advisory ignore or dependency remediation change was added, and no later increment has started.
 
 ## Completed implementation
 
@@ -177,14 +177,14 @@ The project owner confirmed the fixed window title, exact trusted-fields-first/t
 
 ## Exact next task
 
-Review and publish the completed Increment 4E branch only when the project owner explicitly requests commit and push. Do not start another increment until the project owner selects and approves its exact planning scope.
+No increment is Ready. The project owner must select and approve the exact scope of the next documentation-only planning task before work begins.
 
-Do not edit runtime files, start a later increment, commit, or push unless explicitly requested.
+Do not edit runtime files or start a later increment without an approved plan.
 
 ## Ready-to-paste resume prompt
 
 ```text
 Use $documentation-sync.
 
-Resume from HANDOFF.md on branch phase4/increment-4e. Re-read the required repository, security, decision, increment, and plan documents and reconcile them with Git. Increment 4E is verified complete under D-025's scoped reviewed RustSec baseline exception; do not rerun the native gate or change runtime files unless evidence changes. Review the complete uncommitted diff and final status, then commit and push only if the project owner explicitly requests it. Do not start another increment until its exact planning scope is selected and approved.
+Start from HANDOFF.md on merged `main`. Re-read the required repository, security, decision, increment, and plan documents and reconcile them with clean Git state. Increment 4E is verified complete and published under D-025's scoped reviewed RustSec baseline exception; do not rerun its native gate or change its runtime files unless evidence changes. Recommend one smallest documentation-only next planning task, state exact files and verification, and wait for project-owner approval. Do not start runtime implementation, commit, or push unless explicitly asked.
 ```

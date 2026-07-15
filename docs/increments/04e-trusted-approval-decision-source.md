@@ -219,4 +219,4 @@ Remove the native source and manual example, restore the raw transport-free choi
 
 ## Completion result
 
-Implementation, focused and complete automated verification, dependency review, code review, security review, documentation synchronization, and the target-Mac manual gate are complete within the approved scope. D-025 records the exact native-source boundary and the project-owner-approved scoped RustSec baseline exception. Increment 4E is verified complete. No later increment was started, and commit or push still requires an explicit request.
+Implementation, focused and complete automated verification, dependency review, code review, security review, documentation synchronization, and the target-Mac manual gate are complete within the approved scope. D-025 records the exact native-source boundary and the project-owner-approved scoped RustSec baseline exception. Increment 4E implementation commit `b0a3036` was pushed, fast-forward merged into `main`, and published. No later increment was started.

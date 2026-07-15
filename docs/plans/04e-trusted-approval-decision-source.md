@@ -456,4 +456,4 @@ Delete the new source and manual example, restore the Increment 4D manager/type 
 
 ## Completion result
 
-The target-Mac interaction gate passes, and D-025 records the project-owner-approved scoped disposition for the reviewed baseline RustSec findings. Every Increment 4E completion gate is closed with the scanner's nonzero result explicitly preserved. This plan is Complete. No later increment was started, and commit or push still requires an explicit request.
+The target-Mac interaction gate passes, and D-025 records the project-owner-approved scoped disposition for the reviewed baseline RustSec findings. Every Increment 4E completion gate is closed with the scanner's nonzero result explicitly preserved. This plan is Complete. Implementation commit `b0a3036` was pushed, fast-forward merged into `main`, and published. No later increment was started.
