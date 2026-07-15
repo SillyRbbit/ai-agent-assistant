@@ -4,7 +4,7 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-None. Repository Workflow Increment 4G is verified complete under [`docs/plans/04g-post-increment-gate.md`](docs/plans/04g-post-increment-gate.md). No later product implementation plan is Ready.
+None. Increment 4H typed approval-audit adapter is verified complete under [`docs/plans/04h-typed-approval-audit-adapter.md`](docs/plans/04h-typed-approval-audit-adapter.md). No later product implementation plan is Ready.
 
 ## Completed plans
 
@@ -73,6 +73,15 @@ A plan must contain:
 | Increment 4E trusted approval decision source | Complete | Project maintainer | 2026-07-14   |
 | Increment 4F Cortexa product display rename   | Complete | Project maintainer | 2026-07-14   |
 | Workflow Increment 4G post-increment gate     | Complete | Project maintainer | 2026-07-14   |
+| Increment 4H typed approval-audit adapter     | Complete | Project maintainer | 2026-07-15   |
+
+## Phase 4 Increment 4H typed approval-audit adapter - complete
+
+Goal: derive one closed, content-free approval-audit record from an exact terminal `ApprovalResolution` and retain it in a bounded deterministic in-memory adapter without creating persistence, orchestration, dispatch, or execution authority.
+
+The exact four-file runtime/test scope creates the dedicated adapter and public-boundary integration test, exports the module, and adds test-only assertions to the existing sealed native-source path. It revalidates exact current tool/policy facts and every terminal disposition/evidence combination, stores no task title or arbitrary string details, rejects invalid evidence, duplicates, capacity overflow, and sequence overflow before mutation, and returns only a non-authorizing sequence receipt.
+
+Six adapter tests, eleven native-source tests, one public-boundary integration test, Clippy, `npm run verify`, npm audit, complete diff review, architecture review, code-health review, security review, documentation synchronization, and the mandatory post-increment gate pass. The generic audit scaffold remains unchanged and disconnected. No dependency, lockfile, Tauri, frontend, SQLite, gateway, provider, approval-manager behavior, native-dialog behavior, executor, IPC, capability, CSP, packaging, or permission changed. D-029 records the non-durable and non-authorizing boundary.
 
 ## Repository Workflow Increment 4G post-increment gate - complete
 

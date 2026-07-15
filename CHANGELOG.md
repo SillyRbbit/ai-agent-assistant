@@ -6,6 +6,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Increment 4H closed typed in-memory approval-audit records, non-authorizing sequence receipts, fixed typed errors, and a 1,024-record no-eviction adapter.
+- Six focused adapter tests and one public gateway-to-audit integration test covering exact identity, metadata, redaction, expiry, run termination, invalid evidence, duplicates, capacity, and sequence overflow.
+- Documentation-only Increment 4H plan for a bounded typed approval-audit adapter derived from one exact terminal `ApprovalResolution`.
+- Proposed closed approval-audit record, complete terminal disposition/evidence validation matrix, 1,024-record in-memory limit, exact-subject duplicate rejection, checked sequencing, redacted debug/errors, and non-authorizing receipt.
 - Repository Workflow Increment 4G post-increment review skill, trusted project Stop hook, deterministic Python standard-library validator, structured report template, review directory, and ignored completion state.
 - Fifteen focused gate tests covering missing, failed, pending, passing, stale, conflicting, suspicious, malformed, symlink-escape, re-finalized, post-commit, and loop-guard behavior.
 - Increment 4F display-name-only rename plan, record, and D-026 compatibility boundary for the `Cortexa` product name.
@@ -80,6 +84,11 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Completed Increment 4H within its exact four-file runtime/test scope and retained the generic arbitrary-string audit scaffold as disconnected non-production code.
+- Extended native-source tests to pass every sealed button/no-decision/source-failure result through the adapter and reject extra or contradictory evidence before mutation, without changing production dialog behavior.
+- Marked Increment 4H verified complete after focused checks, `npm run verify`, npm audit, complete diff and trust-boundary review, documentation synchronization, and the mandatory post-increment gate passed.
+- During planning, made project-owner approval of the exact Increment 4H four-file runtime/test list and declared closeout scope the next gate; runtime implementation remained blocked until that approval.
+- Kept the arbitrary-string generic audit scaffold disconnected and proposed no persistence, coordinator, execution, IPC, UI, gateway, credential, capability, permission, manifest, or lockfile change.
 - Integrated hook tests into `npm run test` and `npm run verify`, and integrated the gate with verified-increment, code/security review, end-session, planning, and project-memory workflows.
 - Advanced Workflow Increment 4G to verification pending with no application behavior, dependency, network, permission, persistence, or compatibility-identifier change.
 - Passed 4G focused and complete repository verification plus exact scope, no-application-source, secret, generated-output, diff, code, and security review after correcting report/state parent-symlink escapes; normal `/hooks` trust and live Stop confirmation remain pending.
@@ -158,6 +167,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Security
 
+- Increment 4H records only bounded opaque identity and closed local facts, never calls the title-bearing preview accessor, and excludes arbitrary event strings, raw content, raw errors, credentials, user-actor claims, and authentication-success claims.
+- The adapter revalidates exact tool/policy and terminal evidence, rejects duplicate and bounded-storage failures without partial mutation, and exposes no policy, run-liveness, durable-audit, dispatch, executor, IPC, or tool-result conversion.
+- Increment 4H planning excludes the title-bearing approval preview and all raw arguments, prompts, results, errors, credentials, summaries, and details from the proposed record; the adapter may project only bounded opaque identity and closed local facts.
+- The proposed record assigns no user actor, preserves `NotEvaluated` authentication evidence, revalidates every disposition/evidence combination before mutation, and grants no run-liveness, durable-audit, dispatch, or execution authority.
 - The project hook requires normal Codex trust review, reads only bounded repository/report/state evidence, uses fixed Git inspection commands, rejects unsafe or suspicious changed paths, and treats its ignored marker as non-authorizing workflow state.
 - Emergency hook bypass is documented through `/hooks` or `codex --disable hooks`; a bypass must be recorded and cannot complete an increment until the full gate is rerun.
 - D-025 limits the RustSec exception to RUSTSEC-2026-0194 and RUSTSEC-2026-0195 on the reviewed pre-existing `plist 1.9.0 -> Tauri` path. It does not declare the advisories fixed or generally safe and requires re-review if affected APIs become reachable or the dependency path changes.

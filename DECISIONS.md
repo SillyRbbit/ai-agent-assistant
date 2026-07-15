@@ -536,6 +536,28 @@ Consequences:
 - A user can disable or modify the hook because it is not a security boundary. Such a bypass prevents completion rather than creating an unbypassable enforcement claim.
 - Increment 4G adds no dependency, product behavior, provider, gateway, IPC, Tauri capability, permission, persistence, approval, audit, or executor path.
 
+## D-029 - Record terminal approval evidence through one closed in-memory adapter
+
+Date: 2026-07-15
+Status: Accepted; Increment 4H implemented and verified
+
+Decision: add one dedicated `audit::approval` module whose bounded in-memory adapter borrows an exact manager-produced terminal `ApprovalResolution`. Before mutation it independently revalidates the current closed `create_local_task@1` tool/version, locally derived reversible-local risk and no-permission classification, `RequireApproval` outcome, `ReversibleRequiresApproval` reason, and the complete terminal disposition/interaction-evidence matrix.
+
+The adapter privately constructs one non-cloneable, non-serializable record containing only an assigned sequence, approval ID, bounded opaque run/request/call identity, closed local tool and policy facts, terminal disposition, and optional closed interaction evidence. It never calls the title-bearing preview accessor and has no title, raw arguments, prompt, model output, native-dialog message, OS/provider/gateway error, arbitrary summary, arbitrary details, credential, user actor, or authentication-success field. Custom debug output redacts exact identity; typed errors expose only fixed variants and the fixed capacity limit.
+
+One adapter instance retains at most 1,024 records, accepts one exact approval/run/request/call key once, performs checked contiguous sequence assignment, and never evicts. Failed validation, duplicate, capacity, or sequence checks do not mutate records or consume a sequence. These guarantees end with the adapter instance and make no durability, restart, transaction, or global-idempotency claim.
+
+An `ApprovalAuditReceipt` contains only the assigned sequence. A record or receipt proves neither current run liveness, device-owner identity, successful authentication, a durable audit write, dispatch eligibility, execution, nor a tool result, and exposes no conversion to those capabilities. The existing generic arbitrary-string audit scaffold remains unchanged, disconnected, and non-production. A future authoritative coordinator and durable repository must be separately approved and must treat required audit failure as fail-closed before execution.
+
+Rationale: terminal approval evidence already exists as one ownership-bound resolution, while routing it through arbitrary audit strings could duplicate personal content or fabricate authority. A closed projection preserves the evidence needed for later reviewed persistence without coupling approval to SQLite, IPC, UI, or an executor prematurely.
+
+Consequences:
+
+- Approved, rejected, Edit, native no-decision, each closed source failure, run termination, and expiry have exact accepted evidence shapes; missing, extra, or contradictory evidence fails before insertion.
+- `MacOsNativeDialog` and a recognized button remain local source evidence only. `NotEvaluated` remains an explicit absence of device-owner-authentication evidence, and no record assigns a user actor.
+- The adapter is transport-free and has no production caller. It does not make the generic audit logger suitable for production or satisfy durable local-audit requirements.
+- No dependency, manifest, lockfile, Tauri command/event, frontend, SQLite, gateway, provider, native-dialog behavior, capability, CSP, packaging, entitlement, or operating-system permission changes.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

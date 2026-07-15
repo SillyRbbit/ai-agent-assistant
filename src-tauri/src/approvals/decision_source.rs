@@ -371,10 +371,11 @@ mod tests {
     };
     use crate::approvals::types::{
         ApprovalAction, ApprovalAuthenticationEvidence, ApprovalCancellationReason,
-        ApprovalDisposition, ApprovalInteractionSource, ApprovalNativeButton, ApprovalRecipients,
-        ApprovalReversibility, ApprovalRisk, ApprovalSchedule, ApprovalSourceFailure,
-        ApprovalTarget,
+        ApprovalDisposition, ApprovalId, ApprovalInteractionEvidence, ApprovalInteractionSource,
+        ApprovalNativeButton, ApprovalRecipients, ApprovalResolution, ApprovalReversibility,
+        ApprovalRisk, ApprovalSchedule, ApprovalSourceFailure, ApprovalTarget,
     };
+    use crate::audit::approval::{ApprovalAuditError, InMemoryApprovalAuditAdapter};
     use crate::policy::engine::{DeterministicPolicyEngine, PolicyEngine};
     use crate::policy::types::{PolicyDecision, PolicyInput};
     use crate::tools::registry::{InMemoryToolRegistry, ToolRegistry, ToolRegistryResult};
@@ -644,7 +645,69 @@ mod tests {
                 ApprovalAuthenticationEvidence::NotEvaluated
             );
             assert_eq!(evidence.source_failure(), failure);
+
+            let mut audit = InMemoryApprovalAuditAdapter::new();
+            let receipt = audit.record(&resolution)?;
+            assert_eq!(receipt.sequence().value(), 1);
+            let [record] = audit.records() else {
+                return Err(io::Error::other("approval audit record missing").into());
+            };
+            assert_eq!(record.approval_id(), id);
+            assert_eq!(record.run_id(), run_id);
+            assert_eq!(record.gateway_request_id(), request_id);
+            assert_eq!(record.call_id(), call_id);
+            assert_eq!(record.disposition(), disposition);
+            assert_eq!(record.interaction_evidence(), Some(evidence));
         }
+        Ok(())
+    }
+
+    #[test]
+    fn audit_adapter_rejects_extra_or_contradictory_native_evidence_before_mutation(
+    ) -> Result<(), Box<dyn Error>> {
+        let extra_evidence = ApprovalInteractionEvidence::recognized_button(
+            ApprovalInteractionSource::MacOsNativeDialog,
+            ApprovalNativeButton::Approve,
+            ApprovalAuthenticationEvidence::NotEvaluated,
+        );
+        let extra = ApprovalResolution::new(
+            ApprovalId::new(1),
+            ApprovalDisposition::Cancelled(ApprovalCancellationReason::RunTerminated),
+            local_task_decision(
+                "run-native-audit-extra-1",
+                "gateway-request-native-audit-extra-1",
+                "call-native-audit-extra-1",
+                "Extra evidence title",
+            )?,
+            Some(extra_evidence),
+        );
+        let contradictory_evidence = ApprovalInteractionEvidence::recognized_button(
+            ApprovalInteractionSource::MacOsNativeDialog,
+            ApprovalNativeButton::Approve,
+            ApprovalAuthenticationEvidence::NotEvaluated,
+        );
+        let contradictory = ApprovalResolution::new(
+            ApprovalId::new(2),
+            ApprovalDisposition::Rejected,
+            local_task_decision(
+                "run-native-audit-contradictory-1",
+                "gateway-request-native-audit-contradictory-1",
+                "call-native-audit-contradictory-1",
+                "Contradictory evidence title",
+            )?,
+            Some(contradictory_evidence),
+        );
+        let mut audit = InMemoryApprovalAuditAdapter::new();
+
+        assert_eq!(
+            audit.record(&extra),
+            Err(ApprovalAuditError::InconsistentInteractionEvidence)
+        );
+        assert_eq!(
+            audit.record(&contradictory),
+            Err(ApprovalAuditError::InconsistentInteractionEvidence)
+        );
+        assert!(audit.records().is_empty());
         Ok(())
     }
 
@@ -674,6 +737,12 @@ mod tests {
             evidence.source_failure(),
             Some(ApprovalSourceFailure::UnsafePresentationFormatting)
         );
+        let mut audit = InMemoryApprovalAuditAdapter::new();
+        let _receipt = audit.record(&resolution)?;
+        let [record] = audit.records() else {
+            return Err(io::Error::other("source-failure audit record missing").into());
+        };
+        assert_eq!(record.interaction_evidence(), Some(evidence));
         assert_eq!(
             manager.create_request(local_task_decision(
                 run_id,
@@ -722,6 +791,12 @@ mod tests {
             evidence.source_failure(),
             Some(ApprovalSourceFailure::MessageLimitExceeded)
         );
+        let mut audit = InMemoryApprovalAuditAdapter::new();
+        let _receipt = audit.record(&resolution)?;
+        let [record] = audit.records() else {
+            return Err(io::Error::other("message-limit audit record missing").into());
+        };
+        assert_eq!(record.interaction_evidence(), Some(evidence));
         assert_eq!(
             manager.cancel_for_run_termination(id),
             Err(ApprovalError::AlreadyConsumed(id.value()))

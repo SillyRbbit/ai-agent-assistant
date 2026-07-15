@@ -20,7 +20,7 @@ When the task is a security-sensitive change, also read `SECURITY.md` and `CODE_
 
 ## Current phase
 
-Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increment 4G is verified complete and adds post-increment review automation without changing application behavior. No later product implementation increment is Ready. The verified gateway, schema-validation, policy-input, and approval modules remain transport-free; schema validity, policy allowance, approval previews, approval IDs, native interaction results, locally approved dispositions, authentication evidence, workflow reports, and completion markers remain non-authorizing.
+Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increment 4G and Phase 4 Increment 4H are verified complete. Increment 4H adds only a transport-free bounded typed in-memory approval-audit adapter and focused tests; it adds no durable audit storage, production caller, runtime coordinator, dispatch, or executor. No later product implementation increment is Ready. The verified gateway, schema-validation, policy-input, approval, and typed approval-audit modules remain transport-free; schema validity, policy allowance, approval previews, approval IDs, native interaction results, locally approved dispositions, authentication evidence, in-memory audit records or receipts, workflow reports, and completion markers remain non-authorizing.
 
 ## Non-negotiable product boundaries
 

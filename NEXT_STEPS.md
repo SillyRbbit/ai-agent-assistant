@@ -1,6 +1,6 @@
 # Next steps
 
-Last updated: 2026-07-14
+Last updated: 2026-07-15
 
 This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must close before later feature work begins.
 
@@ -28,9 +28,12 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 4E — trusted approval-decision source: **Verified complete**.
 - Increment 4F - Cortexa product display rename: **Verified complete by project-owner direction**.
 - Repository Workflow Increment 4G - automated post-increment gate: **Verified complete**.
+- Increment 4H - typed approval-audit adapter: **Verified complete**.
 
 ## Queue status
 
-Repository Workflow Increment 4G is **Verified complete**. It adds only the repository-local post-increment skill, deterministic Stop-hook validator, focused tests, report assets, and workflow documentation required to replace D-027's one-time exception. Its consolidated result is `PASS WITH ADVISORIES`; the advisory is the documented project-hook trust/bypass boundary. No later product implementation increment is marked **Ready**.
+Repository Workflow Increment 4G is **Verified complete**. It adds only the repository-local post-increment skill, deterministic Stop-hook validator, focused tests, report assets, and workflow documentation required to replace D-027's one-time exception. Its consolidated result is `PASS WITH ADVISORIES`; the advisory is the documented project-hook trust/bypass boundary.
 
-Exact next task: the project owner selects and approves one bounded next plan. Do not infer or start another increment automatically.
+Increment 4H typed approval-audit adapter is **Verified complete**. It adds one bounded transport-free in-memory Rust adapter that derives a closed redacted record from an exact terminal `ApprovalResolution`, revalidates the complete disposition/evidence matrix, and returns only a non-authorizing sequence receipt. It adds no durable persistence, runtime coordinator, dispatch, execution, IPC, UI, or live networking. Its consolidated result is `PASS WITH ADVISORIES`; the advisory is the explicit non-durable boundary and the absence of an approved next increment.
+
+Exact next task: the project owner selects and approves one bounded next plan. No later product implementation item is marked **Ready**; do not infer or start another increment automatically.

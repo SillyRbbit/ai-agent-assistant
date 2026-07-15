@@ -1,10 +1,156 @@
 # Handoff
 
-Last updated: 2026-07-14
+Last updated: 2026-07-15
 
 ## Current state
 
-Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increment 4G is verified complete and published from `codex/post-increment-gate`, fast-forward merged into `main`, and pushed to `origin/main` by explicit project-owner direction. The implementation started from clean, synchronized `main` at `a4ab51f` and preserved its exact 24-file tracked plan.
+Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac, Repository Workflow Increment 4G is verified complete and published, and Increment 4H typed approval-audit adapter is verified complete on `codex/phase4-increment-4h`. Increment 4H started from clean merged `main` at `74692c1`, preserved its exact four-file runtime/test scope, and is not committed or pushed.
+
+Increment 4H adds a dedicated bounded in-memory adapter that borrows one terminal `ApprovalResolution`, revalidates exact current tool/policy and terminal interaction facts, and privately creates one content-free record. It never calls the title-bearing preview accessor, accepts no arbitrary event/summary/details strings, rejects invalid evidence and duplicate/bounded-storage failures before mutation, and returns only a non-authorizing sequence receipt.
+
+The adapter remains transport-free and has no production caller. The generic arbitrary-string audit scaffold remains unchanged and non-production. No dependency, lockfile, durable persistence, runtime coordinator, Tauri, frontend, IPC, gateway, credential, native-dialog production behavior, dispatch, executor, capability, CSP, packaging, entitlement, or permission changed.
+
+## Increment 4H completion state
+
+### Exact runtime/test scope
+
+Create:
+
+```text
+src-tauri/src/audit/approval.rs
+src-tauri/tests/approval_audit_binding.rs
+```
+
+Change:
+
+```text
+src-tauri/src/audit/mod.rs
+src-tauri/src/approvals/decision_source.rs
+```
+
+The `decision_source.rs` change is test-only. The exact closeout scope, validation matrix, risks, non-goals, verification, and rollback are in [`docs/plans/04h-typed-approval-audit-adapter.md`](docs/plans/04h-typed-approval-audit-adapter.md).
+
+### Exact files changed
+
+```text
+AGENTS.md
+CHANGELOG.md
+DECISIONS.md
+HANDOFF.md
+NEXT_STEPS.md
+PLANS.md
+PROJECT_STATUS.md
+docs/increments/04h-typed-approval-audit-adapter.md
+docs/plans/04h-typed-approval-audit-adapter.md
+docs/plans/README.md
+docs/reviews/2026-07-14-04h-post-increment-review.md
+src-tauri/src/approvals/decision_source.rs
+src-tauri/src/audit/approval.rs
+src-tauri/src/audit/mod.rs
+src-tauri/tests/approval_audit_binding.rs
+```
+
+`SECURITY.md`, `CODE_REVIEW.md`, `TROUBLESHOOTING_LOG.md`, product/architecture documents, manifests, lockfiles, Tauri configuration, capabilities, frontend, storage, gateway, provider, policy, approval manager, production native-dialog code, and executor files are unchanged.
+
+### Verification classification
+
+Passed:
+
+```text
+git status --short --branch
+  clean before planning on codex/phase4-increment-4h
+npm run typecheck
+  planning baseline passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked audit::
+  planning baseline: 4 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test approval_binding --locked
+  planning baseline: 2 passed
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+  passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked audit::approval::
+  6 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked approvals::decision_source::
+  11 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test approval_audit_binding --locked
+  1 passed
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+  passed
+npm run verify
+  hook tests: 15 passed
+  frontend tests: 124 passed
+  Rust library tests: 99 passed
+  Rust integration tests: 11 passed
+  formatting, ESLint, Clippy, typecheck, Vite builds, and Tauri release no-bundle build passed
+npm audit --audit-level=low
+  network-enabled retry passed with 0 vulnerabilities
+git diff --check
+  passed
+python3 .codex/hooks/post_increment_gate.py status
+  complete, valid: true, PASS WITH ADVISORIES after finalization
+```
+
+Failed and resolved:
+
+- The first planning `npm run format:check` found Prettier layout drift only in the two new Markdown files. The targeted `npx prettier --write docs/increments/04h-typed-approval-audit-adapter.md docs/plans/04h-typed-approval-audit-adapter.md` correction and exact rerun passed.
+- The first sandboxed `npm audit --audit-level=low` failed because the sandbox could not resolve `registry.npmjs.org` or write user-level npm logs. The approved network-enabled retry passed with zero vulnerabilities. This was an execution-environment restriction, not a repository defect.
+- The first finalization validated the report but could not write ignored state under the sandbox-protected `.codex` directory. The approved exact retry wrote the marker, and status reports `complete`, `valid: true`, and `PASS WITH ADVISORIES`.
+
+Current failed checks: none.
+
+Checks not run:
+
+- No native launch or dialog interaction matrix was required because production native-dialog and shipping application behavior are unchanged.
+- No Rust dependency audit was required because Cargo manifests and the lockfile are unchanged.
+
+Manual verification pending: none. Increment 4H has no user-visible or operating-system permission behavior.
+
+Material inspection commands:
+
+```bash
+git status --short --branch
+git rev-parse --short HEAD
+git log -5 --oneline --decorate
+python3 .codex/hooks/post_increment_gate.py status
+npm run typecheck
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked audit::
+cargo test --manifest-path src-tauri/Cargo.toml --test approval_binding --locked
+npm run format:check
+npx prettier --write docs/increments/04h-typed-approval-audit-adapter.md docs/plans/04h-typed-approval-audit-adapter.md
+npm run format:check
+cargo fmt --manifest-path src-tauri/Cargo.toml
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked audit::approval::
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked approvals::decision_source::
+cargo test --manifest-path src-tauri/Cargo.toml --test approval_audit_binding --locked
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+npm run verify
+npm audit --audit-level=low
+git diff --check
+rg -n "AuditEvent|AuditLogger|InMemoryAuditLogger|NoopAuditLogger|ApprovalResolution|interaction_evidence" src-tauri/src src-tauri/tests
+```
+
+`sed`, `rg`, `git diff`, and `git status` were also used to read required repository memory and skills, inspect approval/audit code and tests, review every changed path, and check scope, secrets, generated output, databases, conflicts, and documentation consistency. No commit or push command ran.
+
+### Review result and residual advisory
+
+- Architecture, code-health, and security review found no blocking issue. The dedicated module is cohesive, uses no dependency, and does not couple to IPC, persistence, UI, or execution.
+- The generic audit scaffold remains arbitrary-string, unbounded, disconnected, and non-production; 4H deliberately does not redesign it.
+- The in-memory adapter is not durable. Its duplicate and capacity guarantees end with the adapter instance, so a future durable repository and authoritative coordinator require separate approval before execution wiring.
+- A successful record or receipt remains non-authorizing and cannot replace exact run-liveness, durable audit, dispatch, or executor gates.
+
+### Exact next task
+
+Increment 4H is complete. Wait for the project owner to select and approve one bounded next plan. Do not infer or begin another increment, commit, push, or merge without explicit direction.
+
+Ready-to-paste resume prompt:
+
+```text
+Use $session-start.
+
+Resume from HANDOFF.md on uncommitted branch codex/phase4-increment-4h. Increment 4H typed approval-audit adapter is verified complete with a valid PASS WITH ADVISORIES post-increment marker. Reconcile the actual repository, then wait for the project owner to select and approve one bounded next plan. Do not infer or begin another increment, commit, push, or merge without explicit direction.
+```
+
+## Increment 4G publication state
 
 Increment 4G adds one trusted repository-local Stop hook, one Python standard-library validator, a consolidated review skill and report schema, focused tests integrated into `npm run verify`, and the corresponding review/security/session/project-memory contracts. It changes no application source or behavior and adds no dependency, network access, transcript parsing, database, credential, permission, Tauri, IPC, provider, gateway, approval, audit, or execution path.
 
@@ -370,12 +516,12 @@ The project owner confirmed the fixed window title, exact trusted-fields-first/t
 
 ## Exact next task
 
-No later product increment is Ready. The exact next task is project-owner selection and approval of one bounded plan; do not infer or start it automatically.
+Increment 4H is complete. Wait for the project owner to select and approve one bounded next plan; no later increment is Ready and none may be inferred or started automatically.
 
 ## Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Resume from HANDOFF.md on clean merged `main`. Repository Workflow Increment 4G is verified complete and published with a `PASS WITH ADVISORIES` report. Reconcile the actual repository, then wait for the project owner to select and approve one bounded next increment. Do not infer or begin product work, commit, or push without explicit direction.
+Resume from HANDOFF.md on uncommitted branch `codex/phase4-increment-4h`. Increment 4H typed approval-audit adapter is verified complete with a valid `PASS WITH ADVISORIES` post-increment marker. Reconcile the actual repository, then wait for the project owner to select and approve one bounded next plan. Do not infer or begin another increment, commit, push, or merge without explicit direction.
 ```

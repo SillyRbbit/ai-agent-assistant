@@ -1,10 +1,10 @@
 # Project status
 
-Last updated: 2026-07-14
+Last updated: 2026-07-15
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increment 4G is **verified complete, published, and merged into `main`**; it changes repository workflow only. No later product implementation increment is Ready.
+Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increment 4G is **verified complete, published, and merged into `main`**. Increment 4H typed approval-audit adapter is **verified complete** on `codex/phase4-increment-4h`; it is transport-free and changes no user-visible behavior. No later product implementation increment is Ready.
 
 ## Increment status
 
@@ -31,10 +31,26 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
 - Increment 4E: trusted approval-decision source - **verified complete on target Mac**.
 - Increment 4F: Cortexa product display rename - **verified complete by project-owner direction**.
 - Repository Workflow Increment 4G: automated post-increment gate - **verified complete**.
+- Increment 4H: typed approval-audit adapter - **verified complete**.
+
+## Increment 4H capability and evidence
+
+- The clean planning baseline is `codex/phase4-increment-4h` at merged `main` commit `74692c1`.
+- The generic audit scaffold accepts arbitrary event, summary, and details strings, applies only token-pattern redaction, is unbounded, and has no production caller.
+- `ApprovalResolution` already exposes the exact opaque identity, locally derived tool and policy facts, terminal disposition, and closed optional interaction evidence required for a content-free record. The planned adapter must never call its title-bearing `preview()` accessor.
+- The adapter is bounded to 1,024 in-memory records, one record per exact approval/run/request/call key, checked deterministic sequencing, no eviction, no arbitrary event strings, and no serialization or authority conversion.
+- Exact subject metadata and the complete Approved/Rejected/Edit/native-no-decision/source-failure/run-termination/expiry evidence matrix are revalidated before mutation. Missing, extra, contradictory, duplicate, over-capacity, and sequence-overflow states fail closed.
+- `ApprovalAuditRecord` never calls or stores the title-bearing preview. Its custom debug output redacts identity, and typed errors expose only fixed variants and the fixed capacity.
+- The exact runtime/test scope creates `src-tauri/src/audit/approval.rs` and `src-tauri/tests/approval_audit_binding.rs`, exports the module from `src-tauri/src/audit/mod.rs`, and changes only test coverage in `src-tauri/src/approvals/decision_source.rs`.
+- Focused checks pass with six adapter tests, eleven native-source tests, and one new public-boundary integration test.
+- `npm run verify` passes with 15 hook tests, 124 frontend tests, 99 Rust library tests, 11 Rust integration tests, lint, typecheck, Vite builds, and the Tauri release no-bundle build. The network-enabled npm audit retry reports zero vulnerabilities.
+- Complete scope, secret, generated-output, architecture, code-health, and security reviews have no blocking finding. No manual interaction gate applies because no production native-dialog or shipping-app behavior changed.
+- D-029 records the typed, redacted, bounded, non-durable, and non-authorizing adapter boundary. The generic audit scaffold remains disconnected and non-production.
+- Persistence, runtime orchestration, dispatch, execution, IPC, UI, gateway networking, credentials, capabilities, permissions, manifests, and lockfiles remain unchanged.
 
 ## Workflow Increment 4G current evidence
 
-- Clean, synchronized `main` at `a4ab51f` was the implementation baseline; the current branch is `codex/post-increment-gate`.
+- Clean, synchronized `main` at `a4ab51f` was the implementation baseline; the implementation branch was `codex/post-increment-gate`.
 - One repository-local Stop hook, Python standard-library validator, consolidated review skill, report schema/template, ignored state marker, and focused test suite are implemented.
 - The validator uses fixed Git argument arrays, bounded JSON/report input, safe repository-relative path checks, merge-conflict and suspicious-path rejection, exact changed-file evidence, report hashing, and a deterministic workspace-content fingerprint.
 - Fifteen focused hook tests pass, including missing/failed/pending/passing evidence, marker validity after commit, stale workspace rejection, report re-finalization, parent-symlink escapes, suspicious paths, merge conflicts, malformed input, and `stop_hook_active` loop prevention.
@@ -133,7 +149,7 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Wait for the project owner to select and approve one bounded next plan. No later product implementation increment is Ready.
+Wait for the project owner to select and approve one bounded next plan. No later increment is Ready.
 
 ## Phase 4 planning result
 
