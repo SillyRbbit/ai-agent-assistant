@@ -4,7 +4,7 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-None. Increment 4D is complete. Documentation-only Increment 4E planning is next; no execution plan exists yet.
+None. Increment 4E is verified complete. No later plan is Ready.
 
 ## Completed plans
 
@@ -23,6 +23,7 @@ docs/plans/04a-gateway-protocol-contract.md
 docs/plans/04b-local-tool-schema-validation.md
 docs/plans/04c-trusted-policy-input-binding.md
 docs/plans/04d-exact-approval-binding.md
+docs/plans/04e-trusted-approval-decision-source.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -53,22 +54,23 @@ A plan must contain:
 
 ## Plan index
 
-| Plan                                         | Status   | Owner              | Last updated |
-| -------------------------------------------- | -------- | ------------------ | ------------ |
-| Increment 2B-1 SQLite migration skeleton     | Complete | Project maintainer | 2026-07-13   |
-| Increment 2C storage startup integration     | Complete | Project maintainer | 2026-07-13   |
-| Increment 2D menu-bar/window lifecycle       | Complete | Project maintainer | 2026-07-13   |
-| Increment 2E React application shell         | Complete | Project maintainer | 2026-07-13   |
-| Increment 2F mocked interaction shell        | Complete | Project maintainer | 2026-07-13   |
-| Increment 2G integration hardening           | Complete | Project maintainer | 2026-07-13   |
-| Increment 3A in-memory conversation sessions | Complete | Project maintainer | 2026-07-13   |
-| Increment 3B mock context provenance         | Complete | Project maintainer | 2026-07-13   |
-| Increment 3C simulated tool result           | Complete | Project maintainer | 2026-07-13   |
-| Increment 3D bounded mock-loop completion    | Complete | Project maintainer | 2026-07-14   |
-| Increment 4A gateway protocol contract       | Complete | Project maintainer | 2026-07-14   |
-| Increment 4B local tool-schema validation    | Complete | Project maintainer | 2026-07-14   |
-| Increment 4C trusted policy-input binding    | Complete | Project maintainer | 2026-07-14   |
-| Increment 4D exact approval binding          | Complete | Project maintainer | 2026-07-14   |
+| Plan                                          | Status   | Owner              | Last updated |
+| --------------------------------------------- | -------- | ------------------ | ------------ |
+| Increment 2B-1 SQLite migration skeleton      | Complete | Project maintainer | 2026-07-13   |
+| Increment 2C storage startup integration      | Complete | Project maintainer | 2026-07-13   |
+| Increment 2D menu-bar/window lifecycle        | Complete | Project maintainer | 2026-07-13   |
+| Increment 2E React application shell          | Complete | Project maintainer | 2026-07-13   |
+| Increment 2F mocked interaction shell         | Complete | Project maintainer | 2026-07-13   |
+| Increment 2G integration hardening            | Complete | Project maintainer | 2026-07-13   |
+| Increment 3A in-memory conversation sessions  | Complete | Project maintainer | 2026-07-13   |
+| Increment 3B mock context provenance          | Complete | Project maintainer | 2026-07-13   |
+| Increment 3C simulated tool result            | Complete | Project maintainer | 2026-07-13   |
+| Increment 3D bounded mock-loop completion     | Complete | Project maintainer | 2026-07-14   |
+| Increment 4A gateway protocol contract        | Complete | Project maintainer | 2026-07-14   |
+| Increment 4B local tool-schema validation     | Complete | Project maintainer | 2026-07-14   |
+| Increment 4C trusted policy-input binding     | Complete | Project maintainer | 2026-07-14   |
+| Increment 4D exact approval binding           | Complete | Project maintainer | 2026-07-14   |
+| Increment 4E trusted approval decision source | Complete | Project maintainer | 2026-07-14   |
 
 ## Phase 2 Increment 2E — complete
 
@@ -164,4 +166,14 @@ Planning baseline checks passed on clean merged `main` at `55626b6`. The project
 
 The implementation retains validator-owned run/request/call identity, removes raw content cloning and debug output, and replaces the detached approval scaffold with one ownership-consuming manager. The manager derives the exact borrowed `create_local_task@1` preview, enforces one pending request, a 1,024-subject lifetime cap, relative 120-second monotonic expiry, explicit cancellation, and non-evicting terminal replay prevention. It adds no digest, dependency, serialization, audit, dispatch, executor, IPC, persistence, network, credential, capability, or permission path.
 
-Focused Rust checks, rustfmt, Clippy with warnings denied, `npm run verify`, dependency audit, diff checks, code review, and security review pass. The full gate contains 124 frontend tests, 82 Rust library tests, and ten Rust integration tests plus production frontend and Tauri no-bundle builds. No native interaction gate applies because the modules remain transport-free and unreferenced by Tauri. D-024 records the durable approval boundary. Documentation-only Increment 4E planning for a trusted approval-decision source is next.
+Focused Rust checks, rustfmt, Clippy with warnings denied, `npm run verify`, dependency audit, diff checks, code review, and security review pass. The full gate contains 124 frontend tests, 82 Rust library tests, and ten Rust integration tests plus production frontend and Tauri no-bundle builds. No native interaction gate applies because the modules remain transport-free and unreferenced by Tauri. D-024 records the durable approval boundary. Documentation-only Increment 4E planning followed and is recorded below.
+
+## Phase 4 Increment 4E trusted approval-decision source - complete
+
+The verified manager, product preview requirements, native/WebView trust boundary, security policy, optional LocalAuthentication requirement, and actual Tauri capabilities were reconciled. The untrusted WebView mock cannot become production approval authority, and LocalAuthentication could authenticate a device owner but would not bind or display the exact action preview. The project owner approved the exact plan and eight-file runtime/test scope.
+
+Implementation now issues one owned presentation from the authoritative manager and lets only a Rust-owned macOS native message-dialog source privately construct a sealed exact-subject outcome. A private `Arc` manager-instance marker moves through that handoff and is pointer-checked before approval/run/request/call identity, preventing cross-manager substitution without a digest or content retention. The manager rechecks one-shot issuance, cancellation, and monotonic expiry before terminal resolution. Edit, native no-decision, source failure, run cancellation, expiry, and replay fail closed. Only recognized Approve/Reject/Edit buttons carry native-button evidence; every source outcome records `NotEvaluated` authentication and grants no execution authority.
+
+The implementation adds exact macOS-target `rfd = "=0.17.2"` with default features disabled. Direct use registers no Tauri dialog plugin, invoke command, JavaScript API, capability, or application `unsafe`; the source remains disconnected from the shipping app, WebView, LocalAuthentication, audit, persistence, dispatch, execution, provider continuation, gateway networking, and credentials. Sixteen approval unit tests, two approval-binding integration tests, rustfmt, Clippy, `npm run verify`, `npm audit --audit-level=low`, dependency review, code review, and security review pass.
+
+The target-Mac owner interaction matrix passes: Approve, Reject, Edit, Return/default, fixed title/content order, terminal redaction, no action or persistence, and no permission prompt were confirmed; Escape had no effect and no window-close control was available. Exact `cargo-audit 0.22.2` exits nonzero on RUSTSEC-2026-0194 and RUSTSEC-2026-0195 in pre-existing `quick-xml 0.39.4`; 4E adds only `rfd`, and source review found the cited vulnerable APIs unused on the existing `plist -> Tauri` path. D-025 records the project owner's scoped reviewed baseline exception without an advisory ignore or dependency change. Increment 4E is verified complete, and no later increment is Ready.

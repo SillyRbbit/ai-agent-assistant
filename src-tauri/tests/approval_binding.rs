@@ -8,8 +8,8 @@ use ai_agent_assistant_lib::approvals::manager::{
     ApprovalError, ApprovalManager, InMemoryApprovalManager,
 };
 use ai_agent_assistant_lib::approvals::types::{
-    ApprovalAction, ApprovalChoice, ApprovalDisposition, ApprovalRecipients, ApprovalReversibility,
-    ApprovalRisk, ApprovalSchedule, ApprovalTarget,
+    ApprovalAction, ApprovalCancellationReason, ApprovalDisposition, ApprovalRecipients,
+    ApprovalReversibility, ApprovalRisk, ApprovalSchedule, ApprovalTarget,
 };
 use ai_agent_assistant_lib::policy::engine::{DeterministicPolicyEngine, PolicyEngine};
 use ai_agent_assistant_lib::policy::types::{PolicyDecision, PolicyInput, PolicyOutcome};
@@ -90,7 +90,8 @@ fn local_task_decision(title: &str) -> Result<PolicyDecision, Box<dyn Error>> {
 }
 
 #[test]
-fn exact_policy_subject_reaches_one_terminal_approval() -> Result<(), Box<dyn Error>> {
+fn exact_policy_subject_reaches_one_owned_presentation_and_run_cancellation(
+) -> Result<(), Box<dyn Error>> {
     let title = "Review exact approval binding";
     let mut manager = InMemoryApprovalManager::new();
     let id = manager.create_request(local_task_decision(title)?)?;
@@ -117,9 +118,28 @@ fn exact_policy_subject_reaches_one_terminal_approval() -> Result<(), Box<dyn Er
     assert_eq!(preview.reversibility(), ApprovalReversibility::Reversible);
     assert_eq!(preview.risk(), ApprovalRisk::CreatesLocalTask);
 
-    let resolution = manager.decide(id, ApprovalChoice::Approve)?;
+    let presentation = manager.issue_presentation(id)?;
+    assert_eq!(presentation.id(), id);
+    assert_eq!(presentation.run_id(), RUN_ID);
+    assert_eq!(presentation.gateway_request_id(), GATEWAY_REQUEST_ID);
+    assert_eq!(presentation.call_id(), CALL_ID);
+    assert_eq!(presentation.tool_name(), "create_local_task");
+    assert_eq!(presentation.tool_contract_version(), TOOL_CONTRACT_VERSION);
+    assert_eq!(
+        presentation.policy_outcome(),
+        PolicyOutcome::RequireApproval
+    );
+    assert_eq!(presentation.risk_class(), RiskClass::ReversibleLocalAction);
+    assert_eq!(presentation.required_permission(), PermissionKind::None);
+    assert_eq!(presentation.preview().affected_data().value(), title);
+
+    let resolution = manager.cancel_for_run_termination(id)?;
     assert_eq!(resolution.id(), id);
-    assert_eq!(resolution.disposition(), ApprovalDisposition::Approved);
+    assert_eq!(
+        resolution.disposition(),
+        ApprovalDisposition::Cancelled(ApprovalCancellationReason::RunTerminated)
+    );
+    assert_eq!(resolution.interaction_evidence(), None);
     assert_eq!(resolution.run_id(), RUN_ID);
     assert_eq!(resolution.gateway_request_id(), GATEWAY_REQUEST_ID);
     assert_eq!(resolution.call_id(), CALL_ID);
@@ -129,7 +149,7 @@ fn exact_policy_subject_reaches_one_terminal_approval() -> Result<(), Box<dyn Er
     assert_eq!(resolved_preview.affected_data().value(), title);
 
     assert_eq!(
-        manager.decide(id, ApprovalChoice::Approve),
+        manager.cancel_for_run_termination(id),
         Err(ApprovalError::AlreadyConsumed(id.value()))
     );
     assert_eq!(

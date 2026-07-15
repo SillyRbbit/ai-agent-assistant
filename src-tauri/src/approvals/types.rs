@@ -1,6 +1,8 @@
 use std::fmt;
 use std::time::Duration;
 
+use thiserror::Error;
+
 use crate::policy::types::{PolicyDecision, PolicyOutcome, PolicyReason};
 use crate::tools::schema::ValidatedToolArguments;
 use crate::tools::types::{PermissionKind, RiskClass};
@@ -20,17 +22,114 @@ impl ApprovalId {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub enum ApprovalChoice {
-    Approve,
-    Reject,
-}
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ApprovalDisposition {
     Approved,
     Rejected,
-    Cancelled,
+    Cancelled(ApprovalCancellationReason),
     Expired,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum ApprovalCancellationReason {
+    RunTerminated,
+    EditRequested,
+    NativeNoDecision,
+    SourceFailed,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum ApprovalInteractionSource {
+    MacOsNativeDialog,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum ApprovalNativeButton {
+    Approve,
+    Reject,
+    Edit,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum ApprovalAuthenticationEvidence {
+    NotEvaluated,
+}
+
+#[derive(Clone, Copy, Debug, Error, Eq, PartialEq)]
+pub enum ApprovalSourceFailure {
+    #[error("approval presentation contains unsafe formatting")]
+    UnsafePresentationFormatting,
+    #[error("approval presentation exceeds the message limit")]
+    MessageLimitExceeded,
+    #[error("native approval dialog returned an unexpected result")]
+    UnexpectedDialogResult,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct ApprovalInteractionEvidence {
+    source: ApprovalInteractionSource,
+    native_button: Option<ApprovalNativeButton>,
+    authentication: ApprovalAuthenticationEvidence,
+    source_failure: Option<ApprovalSourceFailure>,
+}
+
+impl ApprovalInteractionEvidence {
+    pub(super) fn recognized_button(
+        source: ApprovalInteractionSource,
+        native_button: ApprovalNativeButton,
+        authentication: ApprovalAuthenticationEvidence,
+    ) -> Self {
+        Self {
+            source,
+            native_button: Some(native_button),
+            authentication,
+            source_failure: None,
+        }
+    }
+
+    pub(super) fn no_decision(
+        source: ApprovalInteractionSource,
+        authentication: ApprovalAuthenticationEvidence,
+    ) -> Self {
+        Self {
+            source,
+            native_button: None,
+            authentication,
+            source_failure: None,
+        }
+    }
+
+    pub(super) fn source_failed(
+        source: ApprovalInteractionSource,
+        authentication: ApprovalAuthenticationEvidence,
+        failure: ApprovalSourceFailure,
+    ) -> Self {
+        Self {
+            source,
+            native_button: None,
+            authentication,
+            source_failure: Some(failure),
+        }
+    }
+
+    #[must_use]
+    pub fn source(self) -> ApprovalInteractionSource {
+        self.source
+    }
+
+    #[must_use]
+    pub fn native_button(self) -> Option<ApprovalNativeButton> {
+        self.native_button
+    }
+
+    #[must_use]
+    pub fn authentication(self) -> ApprovalAuthenticationEvidence {
+        self.authentication
+    }
+
+    #[must_use]
+    pub fn source_failure(self) -> Option<ApprovalSourceFailure> {
+        self.source_failure
+    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -253,7 +352,9 @@ impl fmt::Debug for ApprovalRequestView<'_> {
         formatter
             .debug_struct("ApprovalRequestView")
             .field("id", &self.id)
-            .field("decision", &self.decision)
+            .field("identity", &"[REDACTED]")
+            .field("policy_outcome", &self.policy_outcome())
+            .field("policy_reason", &self.policy_reason())
             .field("preview", &self.preview)
             .field("remaining", &self.remaining)
             .finish()
@@ -265,6 +366,7 @@ pub struct ApprovalResolution {
     id: ApprovalId,
     disposition: ApprovalDisposition,
     decision: PolicyDecision,
+    interaction_evidence: Option<ApprovalInteractionEvidence>,
 }
 
 impl ApprovalResolution {
@@ -272,11 +374,13 @@ impl ApprovalResolution {
         id: ApprovalId,
         disposition: ApprovalDisposition,
         decision: PolicyDecision,
+        interaction_evidence: Option<ApprovalInteractionEvidence>,
     ) -> Self {
         Self {
             id,
             disposition,
             decision,
+            interaction_evidence,
         }
     }
 
@@ -288,6 +392,11 @@ impl ApprovalResolution {
     #[must_use]
     pub fn disposition(&self) -> ApprovalDisposition {
         self.disposition
+    }
+
+    #[must_use]
+    pub fn interaction_evidence(&self) -> Option<ApprovalInteractionEvidence> {
+        self.interaction_evidence
     }
 
     #[must_use]
@@ -347,7 +456,11 @@ impl fmt::Debug for ApprovalResolution {
             .debug_struct("ApprovalResolution")
             .field("id", &self.id)
             .field("disposition", &self.disposition)
-            .field("decision", &self.decision)
+            .field("identity", &"[REDACTED]")
+            .field("policy_outcome", &self.policy_outcome())
+            .field("policy_reason", &self.policy_reason())
+            .field("content", &"[REDACTED]")
+            .field("interaction_evidence", &self.interaction_evidence)
             .finish()
     }
 }

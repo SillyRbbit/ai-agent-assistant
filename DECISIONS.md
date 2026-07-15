@@ -457,6 +457,28 @@ Consequences:
 - The generic audit scaffold, Tauri, WebView, provider, storage, dispatch, and executor remain disconnected.
 - No dependency, manifest, lockfile, capability, CSP, packaging, or permission change is introduced.
 
+## D-025 — Use one Rust-owned native approval source with a scoped RustSec baseline exception
+
+Date: 2026-07-14
+Status: Accepted; Increment 4E implemented and verified
+
+Decision: replace public raw approval choices with one manager-issued, owned, one-shot `ApprovalPresentation` and one sealed `TrustedApprovalSourceOutcome` constructed only by a Rust-owned macOS native message-dialog source. A private pointer-identical manager marker and exact approval/run/gateway-request/function-call identity bind the source outcome to the authoritative pending subject. The manager also rechecks one-shot issuance, cancellation, and monotonic expiry before terminal resolution.
+
+Use exact macOS-target `rfd = "=0.17.2"` with default features disabled. The adapter exposes only the synchronous message-dialog path, passes no raw parent handle, wraps no file dialog, registers no Tauri plugin or WebView command, and leaves application `unsafe` forbidden. Reject is the first/default button. Approve and Reject map directly; Edit, native no-decision, source failure, run termination, and expiry are closed terminal outcomes. Every source outcome records `NotEvaluated` authentication and grants no actor-identity, user-presence, run-liveness, audit, dispatch, or execution authority.
+
+Accept a scoped Increment 4E baseline exception for RUSTSEC-2026-0194 and RUSTSEC-2026-0195 in pre-existing `quick-xml 0.39.4`. The Increment 4E lockfile diff adds only `rfd`; `quick-xml` is already reached through `plist 1.9.0 -> Tauri`. Source review found that path uses plain `quick_xml::Reader`, not `NsReader`, and does not iterate attributes, so the cited duplicate-attribute and namespace-declaration APIs appear unreachable through the reviewed path. This exception does not declare the advisories fixed or `quick-xml` generally safe, and it adds no advisory ignore. Re-review is mandatory if the affected APIs become reachable, the dependency path changes, or dependency remediation is separately approved.
+
+Rationale: a trusted native interaction source closes the raw-choice gap without granting authority to the WebView or adding production orchestration. Exact target scoping and a sealed ownership handoff minimize the new native dependency boundary. The two RustSec findings predate Increment 4E, are unrelated to the added `rfd` package, and were reviewed against the actual existing call path; blocking this bounded source increment would not remove the baseline exposure.
+
+Consequences:
+
+- Increment 4E may close even though the exact `cargo-audit 0.22.2` command exits nonzero; the command result remains recorded as failed with an approved reviewed baseline exception.
+- No `cargo-audit` ignore, Tauri/plist/quick-xml upgrade, or dependency override is added.
+- The native dialog may remain visibly stale after manager cancellation because `rfd` cannot programmatically close it; manager state still rejects every late outcome, and live orchestration remains excluded.
+- The project-owner target-Mac gate confirms Approve, Reject, Edit, Return/default, fixed title/content order, terminal redaction, no action or persistence, and no permission prompt. Escape has no effect and no window-close control is available.
+- The source remains disconnected from the shipping Tauri application, WebView, LocalAuthentication, audit, persistence, dispatch, executor, provider continuation, gateway networking, and credentials.
+- Any production integration must still add exact run-state, typed audit, dispatch, executor, and, when policy requires it, exact-subject device-owner-authentication gates.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

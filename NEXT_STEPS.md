@@ -25,43 +25,10 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 4B — exact local tool-schema validation: **Verified complete**.
 - Increment 4C — trusted policy-input binding: **Verified complete**.
 - Increment 4D — exact approval binding: **Verified complete**.
+- Increment 4E — trusted approval-decision source: **Verified complete**.
 
-## Phase 4 Increment 4E - trusted approval-decision source planning
+## Queue status
 
-Status: **Ready - documentation only**
+No increment is currently marked **Ready**. Increment 4E is verified complete under D-025's scoped reviewed baseline exception. The exception adds no advisory ignore and must be revisited if the affected `quick-xml` APIs become reachable, the `plist -> Tauri` dependency path changes, or separate dependency remediation is approved.
 
-Goal:
-
-- Reconcile the transport-free Increment 4D approval manager with the product approval experience, Tauri/WebView trust boundary, macOS-native interaction options, optional LocalAuthentication, security policy, and actual repository capabilities.
-- Define the smallest non-executing source of trusted approval choices, including exact approval-ID and run/request/call binding, user-presence claims, expiry and cancellation, edit invalidation, replay handling, closed errors, and the boundary to future structured audit.
-- Preserve the rule that neither a WebView message nor an Increment 4D `Approved` disposition is proof of a user gesture, user presence, local authentication, or execution authority.
-
-Planning inputs:
-
-```text
-src-tauri/src/approvals/types.rs
-src-tauri/src/approvals/manager.rs
-src-tauri/src/lib.rs
-src-tauri/capabilities/default.json
-src/infrastructure/tauri/
-docs/product/
-docs/workflows/
-SECURITY.md
-CODE_REVIEW.md
-docs/plans/04d-exact-approval-binding.md
-```
-
-Explicitly excluded:
-
-- Runtime implementation, native dialogs, WebView decision handling, new Tauri commands or events, LocalAuthentication calls, operating-system permission requests, and capability or CSP changes during planning.
-- Audit persistence, dispatch, executor wiring, tool implementation, provider continuation, gateway networking, credentials, Keychain, identity, deployment, and sensitive storage.
-- Enabling denied policy classes, generic approval of arbitrary tools, multiple pending approvals, or treating an approval ID, preview, local disposition, local-authentication result, or future digest as execution authority.
-
-Planning completion gate:
-
-- Document which process and UI surface owns the trusted choice and why untrusted WebView content cannot assert it.
-- Define exact typed inputs, outputs, cancellation, expiry, replay, user-presence and optional-authentication semantics, redaction, audit handoff, limits, errors, and fail-closed behavior.
-- Recommend one smallest independently verified runtime increment with exact files, risks, non-goals, automated checks, any target-Mac manual gate, and rollback.
-- Update planning documentation only, run documentation verification and reviews, then wait for project-owner approval.
-
-No Increment 4E execution plan exists yet. Do not implement a trusted decision source, connect approval to execution, or begin live gateway work during this planning task.
+Exact next task: review and publish the completed Increment 4E branch only when the project owner explicitly requests commit and push. Do not start another increment until the project owner selects and approves its exact planning scope.

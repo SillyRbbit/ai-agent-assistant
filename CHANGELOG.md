@@ -6,6 +6,14 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Phase 4 Increment 4E manager-issued one-shot approval presentation and sealed exact-subject Rust-owned macOS native source outcome.
+- Typed Edit/no-decision/source-failure cancellation, explicit `NotEvaluated` authentication evidence, and a non-executing target-Mac manual harness.
+- Private pointer-identical manager-instance binding that rejects cross-manager source-outcome substitution even when public IDs collide.
+- Fixed-field-first native preview construction with exact zero-width/default-ignorable/line/bidirectional-format rejection and a 1,024-Unicode-scalar complete-message limit.
+- Fail-closed native button ordering with Reject as the first/default button and closed mapping for every `rfd` message-dialog result.
+- Exact macOS-target `rfd = "=0.17.2"` dependency with default features disabled, no Tauri dialog plugin or WebView permission, and reviewed source, MIT license, target feature tree, duplicate graph, lockfile, and native boundary.
+- Sixteen approval unit tests and two approval-binding integration tests covering one-shot issuance, cross-manager collision, identity mismatch, all native results, cancellation/expiry/replay precedence, Edit invalidation, presentation safety, message limits, source failure, and redaction.
+- Documentation-only Phase 4 Increment 4E plan for a Rust-owned macOS native approval-decision source.
 - Phase 4 Increment 4D exact approval binding from validator-owned run/request/call identity through one terminal approval resolution.
 - Closed borrowed `create_local_task@1` approval previews, one-pending state, a 1,024-subject manager-lifetime cap, relative 120-second monotonic expiry, explicit cancellation, and non-evicting replay prevention.
 - Exact gateway-to-approval integration coverage and adversarial lifecycle, expiry-boundary, capacity, replay, overflow, and redaction tests, bringing the Rust suite to 82 library and ten integration tests.
@@ -69,11 +77,15 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Advanced Increment 4E to verification pending after focused Rust checks, the complete repository gate, JavaScript dependency audit, dependency review, code review, and security review passed.
+- Passed the target-Mac native-dialog gate: Approve, Reject, Edit, Return/default, fixed title/content order, terminal redaction, no action or persistence, and no permission prompt were confirmed; Escape had no effect and no window-close control was available. Kept Increment 4E open only for exact `cargo-audit 0.22.2` disposition; no ignore or dependency upgrade was added.
+- Marked Increment 4E verified complete after the project owner accepted D-025's scoped reviewed baseline exception for two pre-existing `quick-xml 0.39.4` RustSec advisories. The failed scanner result remains recorded; no advisory ignore or dependency remediation change was added.
+- Deferred LocalAuthentication to a separately approved higher-risk policy adapter because the current reversible local-task subject requires no operating-system permission or device-owner-authentication claim.
 - Carried validator-owned run and gateway-request IDs through schema validation and policy without adding a public identity constructor.
 - Replaced detached approval tool names, `action_hash`, preview strings, clonable records, and caller-owned times with one manager-owned exact `RequireApproval` decision and typed borrowed view.
 - Removed cloning and raw derived debug output from content-bearing gateway events, approval requests, previews, and resolutions.
 - Marked Increment 4D verified complete after focused checks, the full repository gate, dependency audit, diff checks, code review, and security review passed.
-- Made documentation-only Increment 4E planning for a trusted approval-decision source the next Ready task.
+- Advanced from verified Increment 4D into documentation-only Increment 4E trusted approval-decision-source planning.
 - Made project-owner approval of the exact Increment 4D plan and five-file runtime/test list the next gate; implementation remains blocked.
 - Proposed removal of caller-authored approval tool names, action hashes, preview strings, and clonable detached records without adding a digest or dependency.
 - Removed `ToolCallProposal`, the unused provider tool-call response variant, caller-supplied `PolicyContext`, independently constructed `ProposedAction`, arbitrary policy reason strings, and fallible policy evaluation.
@@ -130,6 +142,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Security
 
+- D-025 limits the RustSec exception to RUSTSEC-2026-0194 and RUSTSEC-2026-0195 on the reviewed pre-existing `plist 1.9.0 -> Tauri` path. It does not declare the advisories fixed or generally safe and requires re-review if affected APIs become reachable or the dependency path changes.
+- Increment 4E keeps production choices outside the untrusted WebView: only the Rust-owned macOS source can consume a manager-issued presentation and privately construct a sealed source outcome.
+- The manager rechecks a private pointer-identical manager marker, approval/run/request/call identity, one-shot issuance state, cancellation, and monotonic expiry before a terminal outcome; Edit, native no-decision, source failure, late results, mismatches, and replay fail closed.
+- The native preview places trusted facts before final untrusted title content, rejects the planned presentation-format set, and excludes title and OS/dependency error content from outcomes, errors, debug output, logs, audit, persistence, and terminal output.
+- Every native result records `NotEvaluated` authentication evidence and grants no audit, dispatch, execution, provider, persistence, run-liveness, actor-identity, biometric, or device-owner-authentication claim.
+- Increment 4E adds no shipping Tauri wiring, frontend, capability, CSP, LocalAuthentication, permission, audit, executor, persistence, provider, network, or credential path. The target-specific dialog dependency exposes no file-dialog or raw-handle API through the application.
 - Increment 4D binds approval state to one owned policy decision and derives preview content from the same typed subject; callers cannot resupply identity, arguments, classification, preview, outcome, creation time, deadline, or resolution subject.
 - Approve, reject, cancel, and expiry consume the subject once per manager instance; stale, duplicate, unsupported, ineligible, over-capacity, and overflow paths fail closed through typed redacted errors.
 - An `Approved` disposition remains local transport-free state, not proof of a user gesture, user presence, local authentication, active run, dispatch eligibility, or execution authority.

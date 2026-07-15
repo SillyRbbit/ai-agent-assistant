@@ -1,14 +1,20 @@
 use std::collections::BTreeSet;
 use std::fmt;
+use std::sync::Arc;
 use std::time::{Duration, Instant};
 
 use thiserror::Error;
 
+#[cfg(target_os = "macos")]
+use super::decision_source::{TrustedApprovalSourceOutcome, TrustedSourceDecision};
 use super::types::{
-    ApprovalChoice, ApprovalDisposition, ApprovalId, ApprovalPreview, ApprovalRequestView,
-    ApprovalResolution,
+    ApprovalAction, ApprovalCancellationReason, ApprovalDisposition, ApprovalId,
+    ApprovalInteractionEvidence, ApprovalInteractionSource, ApprovalPreview, ApprovalRecipients,
+    ApprovalRequestView, ApprovalResolution, ApprovalReversibility, ApprovalRisk, ApprovalSchedule,
+    ApprovalTarget,
 };
-use crate::policy::types::{PolicyDecision, PolicyOutcome};
+use crate::policy::types::{PolicyDecision, PolicyOutcome, PolicyReason};
+use crate::tools::types::{PermissionKind, RiskClass};
 
 pub const APPROVAL_TTL: Duration = Duration::from_secs(120);
 pub const MAX_PENDING_APPROVALS: usize = 1;
@@ -19,12 +25,13 @@ pub type ApprovalResult<T> = Result<T, ApprovalError>;
 pub trait ApprovalManager {
     fn create_request(&mut self, decision: PolicyDecision) -> ApprovalResult<ApprovalId>;
     fn pending(&self) -> ApprovalResult<Option<ApprovalRequestView<'_>>>;
-    fn decide(
+    fn issue_presentation(&mut self, id: ApprovalId) -> ApprovalResult<ApprovalPresentation>;
+    #[cfg(target_os = "macos")]
+    fn resolve_source_outcome(
         &mut self,
-        id: ApprovalId,
-        choice: ApprovalChoice,
+        outcome: TrustedApprovalSourceOutcome,
     ) -> ApprovalResult<ApprovalResolution>;
-    fn cancel(&mut self, id: ApprovalId) -> ApprovalResult<ApprovalResolution>;
+    fn cancel_for_run_termination(&mut self, id: ApprovalId) -> ApprovalResult<ApprovalResolution>;
     fn expire_due(&mut self) -> Option<ApprovalResolution>;
 }
 
@@ -48,6 +55,180 @@ pub enum ApprovalError {
     IdSpaceExhausted,
     #[error("approval deadline could not be calculated")]
     DeadlineOverflow,
+    #[error("approval presentation has already been issued: {0}")]
+    PresentationAlreadyIssued(u64),
+    #[error("approval presentation is unavailable or expired: {0}")]
+    PresentationUnavailableOrExpired(u64),
+    #[error("approval source outcome belongs to another manager")]
+    ManagerInstanceMismatch,
+    #[error("approval source kind does not match the registered source")]
+    SourceKindMismatch,
+    #[error("approval source outcome identity does not match the pending subject")]
+    SourceOutcomeIdentityMismatch,
+}
+
+pub(super) struct ApprovalManagerInstanceMarker {
+    _owned: u8,
+}
+
+impl ApprovalManagerInstanceMarker {
+    fn new() -> Self {
+        Self { _owned: 0 }
+    }
+}
+
+pub struct ApprovalPresentation {
+    id: ApprovalId,
+    manager_instance: Arc<ApprovalManagerInstanceMarker>,
+    run_id: String,
+    gateway_request_id: String,
+    call_id: String,
+    tool_name: String,
+    tool_contract_version: u16,
+    policy_outcome: PolicyOutcome,
+    policy_reason: PolicyReason,
+    risk_class: RiskClass,
+    required_permission: PermissionKind,
+    action: ApprovalAction,
+    target: ApprovalTarget,
+    schedule: ApprovalSchedule,
+    recipients: ApprovalRecipients,
+    reversibility: ApprovalReversibility,
+    risk: ApprovalRisk,
+    title: String,
+    remaining: Duration,
+}
+
+impl ApprovalPresentation {
+    #[must_use]
+    pub fn id(&self) -> ApprovalId {
+        self.id
+    }
+
+    #[must_use]
+    pub fn run_id(&self) -> &str {
+        &self.run_id
+    }
+
+    #[must_use]
+    pub fn gateway_request_id(&self) -> &str {
+        &self.gateway_request_id
+    }
+
+    #[must_use]
+    pub fn call_id(&self) -> &str {
+        &self.call_id
+    }
+
+    #[must_use]
+    pub fn tool_name(&self) -> &str {
+        &self.tool_name
+    }
+
+    #[must_use]
+    pub fn tool_contract_version(&self) -> u16 {
+        self.tool_contract_version
+    }
+
+    #[must_use]
+    pub fn policy_outcome(&self) -> PolicyOutcome {
+        self.policy_outcome
+    }
+
+    #[must_use]
+    pub fn policy_reason(&self) -> PolicyReason {
+        self.policy_reason
+    }
+
+    #[must_use]
+    pub fn risk_class(&self) -> RiskClass {
+        self.risk_class
+    }
+
+    #[must_use]
+    pub fn required_permission(&self) -> PermissionKind {
+        self.required_permission
+    }
+
+    #[must_use]
+    pub fn preview(&self) -> ApprovalPreview<'_> {
+        ApprovalPreview::CreateLocalTask { title: &self.title }
+    }
+
+    #[must_use]
+    pub fn remaining(&self) -> Duration {
+        self.remaining
+    }
+
+    pub(super) fn into_source_parts(self) -> ApprovalPresentationParts {
+        ApprovalPresentationParts {
+            id: self.id,
+            manager_instance: self.manager_instance,
+            run_id: self.run_id,
+            gateway_request_id: self.gateway_request_id,
+            call_id: self.call_id,
+            tool_name: self.tool_name,
+            tool_contract_version: self.tool_contract_version,
+            policy_outcome: self.policy_outcome,
+            policy_reason: self.policy_reason,
+            risk_class: self.risk_class,
+            required_permission: self.required_permission,
+            action: self.action,
+            target: self.target,
+            schedule: self.schedule,
+            recipients: self.recipients,
+            reversibility: self.reversibility,
+            risk: self.risk,
+            title: self.title,
+            remaining: self.remaining,
+        }
+    }
+}
+
+impl fmt::Debug for ApprovalPresentation {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("ApprovalPresentation")
+            .field("id", &self.id)
+            .field("identity", &"[REDACTED]")
+            .field("tool_name", &self.tool_name)
+            .field("tool_contract_version", &self.tool_contract_version)
+            .field("policy_outcome", &self.policy_outcome)
+            .field("policy_reason", &self.policy_reason)
+            .field("risk_class", &self.risk_class)
+            .field("required_permission", &self.required_permission)
+            .field("action", &self.action)
+            .field("target", &self.target)
+            .field("schedule", &self.schedule)
+            .field("recipients", &self.recipients)
+            .field("reversibility", &self.reversibility)
+            .field("risk", &self.risk)
+            .field("title", &"[REDACTED]")
+            .field("remaining", &self.remaining)
+            .finish()
+    }
+}
+
+pub(super) struct ApprovalPresentationParts {
+    pub(super) id: ApprovalId,
+    pub(super) manager_instance: Arc<ApprovalManagerInstanceMarker>,
+    pub(super) run_id: String,
+    pub(super) gateway_request_id: String,
+    pub(super) call_id: String,
+    pub(super) tool_name: String,
+    pub(super) tool_contract_version: u16,
+    pub(super) policy_outcome: PolicyOutcome,
+    pub(super) policy_reason: PolicyReason,
+    pub(super) risk_class: RiskClass,
+    pub(super) required_permission: PermissionKind,
+    pub(super) action: ApprovalAction,
+    pub(super) target: ApprovalTarget,
+    pub(super) schedule: ApprovalSchedule,
+    pub(super) recipients: ApprovalRecipients,
+    pub(super) reversibility: ApprovalReversibility,
+    pub(super) risk: ApprovalRisk,
+    pub(super) title: String,
+    pub(super) remaining: Duration,
 }
 
 trait ApprovalClock: fmt::Debug {
@@ -90,6 +271,7 @@ struct PendingApproval {
     subject: ApprovalSubjectKey,
     decision: PolicyDecision,
     deadline: Instant,
+    presentation_issued: bool,
 }
 
 pub struct InMemoryApprovalManager {
@@ -97,6 +279,7 @@ pub struct InMemoryApprovalManager {
     pending: Option<PendingApproval>,
     consumed_subjects: BTreeSet<ApprovalSubjectKey>,
     clock: Box<dyn ApprovalClock>,
+    manager_instance: Arc<ApprovalManagerInstanceMarker>,
 }
 
 impl InMemoryApprovalManager {
@@ -111,15 +294,17 @@ impl InMemoryApprovalManager {
             pending: None,
             consumed_subjects: BTreeSet::new(),
             clock: Box::new(clock),
+            manager_instance: Arc::new(ApprovalManagerInstanceMarker::new()),
         }
     }
 
-    fn resolve(
+    fn resolve_by_id(
         &mut self,
         id: ApprovalId,
         requested_disposition: ApprovalDisposition,
+        interaction_evidence: Option<ApprovalInteractionEvidence>,
     ) -> ApprovalResult<ApprovalResolution> {
-        let disposition = {
+        let (disposition, interaction_evidence) = {
             let Some(pending) = self.pending.as_ref() else {
                 return Err(self.error_for_missing_id(id));
             };
@@ -128,9 +313,9 @@ impl InMemoryApprovalManager {
             }
 
             if self.clock.now() >= pending.deadline {
-                ApprovalDisposition::Expired
+                (ApprovalDisposition::Expired, None)
             } else {
-                requested_disposition
+                (requested_disposition, interaction_evidence)
             }
         };
 
@@ -142,6 +327,7 @@ impl InMemoryApprovalManager {
             pending.id,
             disposition,
             pending.decision,
+            interaction_evidence,
         ))
     }
 
@@ -214,6 +400,7 @@ impl ApprovalManager for InMemoryApprovalManager {
             subject,
             decision,
             deadline,
+            presentation_issued: false,
         });
         Ok(id)
     }
@@ -236,20 +423,131 @@ impl ApprovalManager for InMemoryApprovalManager {
         .ok_or(ApprovalError::UnsupportedApprovalSubject)
     }
 
-    fn decide(
-        &mut self,
-        id: ApprovalId,
-        choice: ApprovalChoice,
-    ) -> ApprovalResult<ApprovalResolution> {
-        let disposition = match choice {
-            ApprovalChoice::Approve => ApprovalDisposition::Approved,
-            ApprovalChoice::Reject => ApprovalDisposition::Rejected,
+    fn issue_presentation(&mut self, id: ApprovalId) -> ApprovalResult<ApprovalPresentation> {
+        let now = self.clock.now();
+        let Some(pending) = self.pending.as_ref() else {
+            return Err(self.error_for_missing_id(id));
         };
-        self.resolve(id, disposition)
+        if pending.id != id {
+            return Err(self.error_for_missing_id(id));
+        }
+        if now >= pending.deadline {
+            let Some(expired) = self.pending.take() else {
+                return Err(self.error_for_missing_id(id));
+            };
+            self.consumed_subjects.insert(expired.subject);
+            return Err(ApprovalError::PresentationUnavailableOrExpired(id.value()));
+        }
+        if pending.presentation_issued {
+            return Err(ApprovalError::PresentationAlreadyIssued(id.value()));
+        }
+
+        let preview = ApprovalPreview::from_policy_decision(&pending.decision)
+            .ok_or(ApprovalError::UnsupportedApprovalSubject)?;
+        let call = pending.decision.validated_call();
+        let presentation = ApprovalPresentation {
+            id,
+            manager_instance: Arc::clone(&self.manager_instance),
+            run_id: call.run_id().to_owned(),
+            gateway_request_id: call.gateway_request_id().to_owned(),
+            call_id: call.call_id().to_owned(),
+            tool_name: call.tool_name().to_owned(),
+            tool_contract_version: call.tool_contract_version(),
+            policy_outcome: pending.decision.outcome(),
+            policy_reason: pending.decision.reason(),
+            risk_class: call.risk_class(),
+            required_permission: call.required_permission(),
+            action: preview.action(),
+            target: preview.target(),
+            schedule: preview.schedule(),
+            recipients: preview.recipients(),
+            reversibility: preview.reversibility(),
+            risk: preview.risk(),
+            title: preview.affected_data().value().to_owned(),
+            remaining: pending.deadline.saturating_duration_since(now),
+        };
+
+        let Some(pending) = self.pending.as_mut() else {
+            return Err(self.error_for_missing_id(id));
+        };
+        pending.presentation_issued = true;
+        Ok(presentation)
     }
 
-    fn cancel(&mut self, id: ApprovalId) -> ApprovalResult<ApprovalResolution> {
-        self.resolve(id, ApprovalDisposition::Cancelled)
+    #[cfg(target_os = "macos")]
+    fn resolve_source_outcome(
+        &mut self,
+        outcome: TrustedApprovalSourceOutcome,
+    ) -> ApprovalResult<ApprovalResolution> {
+        let outcome = outcome.into_parts();
+        let Some(pending) = self.pending.as_ref() else {
+            return Err(self.error_for_missing_id(outcome.id));
+        };
+
+        if !Arc::ptr_eq(&self.manager_instance, &outcome.manager_instance) {
+            return Err(ApprovalError::ManagerInstanceMismatch);
+        }
+        if outcome.source != ApprovalInteractionSource::MacOsNativeDialog {
+            return Err(ApprovalError::SourceKindMismatch);
+        }
+        if pending.id != outcome.id
+            || pending.subject.run_id != outcome.run_id
+            || pending.subject.gateway_request_id != outcome.gateway_request_id
+            || pending.subject.call_id != outcome.call_id
+        {
+            return Err(ApprovalError::SourceOutcomeIdentityMismatch);
+        }
+        if !pending.presentation_issued {
+            return Err(ApprovalError::PresentationUnavailableOrExpired(
+                outcome.id.value(),
+            ));
+        }
+
+        if self.clock.now() >= pending.deadline {
+            return self.resolve_by_id(outcome.id, ApprovalDisposition::Expired, None);
+        }
+
+        let (disposition, evidence) = match outcome.decision {
+            TrustedSourceDecision::RecognizedButton(button) => {
+                let disposition = match button {
+                    super::types::ApprovalNativeButton::Approve => ApprovalDisposition::Approved,
+                    super::types::ApprovalNativeButton::Reject => ApprovalDisposition::Rejected,
+                    super::types::ApprovalNativeButton::Edit => {
+                        ApprovalDisposition::Cancelled(ApprovalCancellationReason::EditRequested)
+                    }
+                };
+                (
+                    disposition,
+                    ApprovalInteractionEvidence::recognized_button(
+                        outcome.source,
+                        button,
+                        outcome.authentication,
+                    ),
+                )
+            }
+            TrustedSourceDecision::NativeNoDecision => (
+                ApprovalDisposition::Cancelled(ApprovalCancellationReason::NativeNoDecision),
+                ApprovalInteractionEvidence::no_decision(outcome.source, outcome.authentication),
+            ),
+            TrustedSourceDecision::SourceFailed(failure) => (
+                ApprovalDisposition::Cancelled(ApprovalCancellationReason::SourceFailed),
+                ApprovalInteractionEvidence::source_failed(
+                    outcome.source,
+                    outcome.authentication,
+                    failure,
+                ),
+            ),
+        };
+
+        self.resolve_by_id(outcome.id, disposition, Some(evidence))
+    }
+
+    fn cancel_for_run_termination(&mut self, id: ApprovalId) -> ApprovalResult<ApprovalResolution> {
+        self.resolve_by_id(
+            id,
+            ApprovalDisposition::Cancelled(ApprovalCancellationReason::RunTerminated),
+            None,
+        )
     }
 
     fn expire_due(&mut self) -> Option<ApprovalResolution> {
@@ -268,6 +566,7 @@ impl ApprovalManager for InMemoryApprovalManager {
             pending.id,
             ApprovalDisposition::Expired,
             pending.decision,
+            None,
         ))
     }
 }
@@ -281,6 +580,9 @@ mod tests {
 
     use serde_json::json;
 
+    #[cfg(target_os = "macos")]
+    use rfd::MessageDialogResult;
+
     use super::{
         ApprovalClock, ApprovalError, ApprovalManager, ApprovalSubjectKey, InMemoryApprovalManager,
         APPROVAL_TTL, MAX_APPROVAL_SUBJECTS_PER_MANAGER, MAX_PENDING_APPROVALS,
@@ -290,9 +592,12 @@ mod tests {
         GatewayProtocolError, GatewayStreamValidator, ValidatedGatewayEvent,
         GATEWAY_PROTOCOL_VERSION,
     };
+    #[cfg(target_os = "macos")]
+    use crate::approvals::decision_source::test_outcome_from_dialog_result;
     use crate::approvals::types::{
-        ApprovalAction, ApprovalChoice, ApprovalDisposition, ApprovalId, ApprovalPreview,
-        ApprovalRecipients, ApprovalReversibility, ApprovalRisk, ApprovalSchedule, ApprovalTarget,
+        ApprovalAction, ApprovalCancellationReason, ApprovalDisposition, ApprovalId,
+        ApprovalPreview, ApprovalRecipients, ApprovalReversibility, ApprovalRisk, ApprovalSchedule,
+        ApprovalTarget,
     };
     use crate::policy::engine::{DeterministicPolicyEngine, PolicyEngine};
     use crate::policy::types::{PolicyDecision, PolicyInput, PolicyOutcome, PolicyReason};
@@ -469,6 +774,37 @@ mod tests {
         assert_eq!(preview.risk_class(), RiskClass::ReversibleLocalAction);
         assert_eq!(preview.risk(), ApprovalRisk::CreatesLocalTask);
 
+        let presentation = manager.issue_presentation(id)?;
+        assert_eq!(presentation.id(), id);
+        assert_eq!(presentation.run_id(), "run-approval-create-1");
+        assert_eq!(
+            presentation.gateway_request_id(),
+            "gateway-request-approval-create-1"
+        );
+        assert_eq!(presentation.call_id(), "call-approval-create-1");
+        assert_eq!(presentation.tool_name(), "create_local_task");
+        assert_eq!(presentation.tool_contract_version(), TOOL_CONTRACT_VERSION);
+        assert_eq!(
+            presentation.policy_outcome(),
+            PolicyOutcome::RequireApproval
+        );
+        assert_eq!(
+            presentation.policy_reason(),
+            PolicyReason::ReversibleRequiresApproval
+        );
+        assert_eq!(presentation.risk_class(), RiskClass::ReversibleLocalAction);
+        assert_eq!(presentation.required_permission(), PermissionKind::None);
+        assert_eq!(
+            presentation.preview().affected_data().value(),
+            "Review approval plan"
+        );
+        assert!(presentation.remaining() <= APPROVAL_TTL);
+        assert!(presentation.remaining() > Duration::ZERO);
+        assert_eq!(
+            manager.issue_presentation(id).err(),
+            Some(ApprovalError::PresentationAlreadyIssued(id.value()))
+        );
+
         assert_eq!(
             manager.create_request(local_task_decision(
                 "run-approval-create-1",
@@ -491,40 +827,45 @@ mod tests {
     }
 
     #[test]
-    fn consumes_approve_reject_and_cancel_once() -> Result<(), Box<dyn Error>> {
+    fn consumes_run_termination_once() -> Result<(), Box<dyn Error>> {
         let mut manager = InMemoryApprovalManager::new();
-        let approved_id = manager.create_request(local_task_decision(
+        let cancelled_id = manager.create_request(local_task_decision(
             "run-approval-resolve-1",
             "gateway-request-approval-resolve-1",
             "call-approval-resolve-1",
-            "Approved task",
+            "Cancelled task",
         )?)?;
-        let approved = manager.decide(approved_id, ApprovalChoice::Approve)?;
+        let _presentation = manager.issue_presentation(cancelled_id)?;
+        let cancelled = manager.cancel_for_run_termination(cancelled_id)?;
 
-        assert_eq!(approved.disposition(), ApprovalDisposition::Approved);
-        assert_eq!(approved.id(), approved_id);
-        assert_eq!(approved.run_id(), "run-approval-resolve-1");
         assert_eq!(
-            approved.gateway_request_id(),
+            cancelled.disposition(),
+            ApprovalDisposition::Cancelled(ApprovalCancellationReason::RunTerminated)
+        );
+        assert_eq!(cancelled.interaction_evidence(), None);
+        assert_eq!(cancelled.id(), cancelled_id);
+        assert_eq!(cancelled.run_id(), "run-approval-resolve-1");
+        assert_eq!(
+            cancelled.gateway_request_id(),
             "gateway-request-approval-resolve-1"
         );
-        assert_eq!(approved.call_id(), "call-approval-resolve-1");
-        assert_eq!(approved.tool_name(), "create_local_task");
-        assert_eq!(approved.tool_contract_version(), TOOL_CONTRACT_VERSION);
-        assert_eq!(approved.risk_class(), RiskClass::ReversibleLocalAction);
-        assert_eq!(approved.required_permission(), PermissionKind::None);
-        assert_eq!(approved.policy_outcome(), PolicyOutcome::RequireApproval);
+        assert_eq!(cancelled.call_id(), "call-approval-resolve-1");
+        assert_eq!(cancelled.tool_name(), "create_local_task");
+        assert_eq!(cancelled.tool_contract_version(), TOOL_CONTRACT_VERSION);
+        assert_eq!(cancelled.risk_class(), RiskClass::ReversibleLocalAction);
+        assert_eq!(cancelled.required_permission(), PermissionKind::None);
+        assert_eq!(cancelled.policy_outcome(), PolicyOutcome::RequireApproval);
         assert_eq!(
-            approved.policy_reason(),
+            cancelled.policy_reason(),
             PolicyReason::ReversibleRequiresApproval
         );
-        let Some(preview) = approved.preview() else {
+        let Some(preview) = cancelled.preview() else {
             return Err(ApprovalError::UnsupportedApprovalSubject.into());
         };
-        assert_eq!(preview.affected_data().value(), "Approved task");
+        assert_eq!(preview.affected_data().value(), "Cancelled task");
         assert_eq!(
-            manager.decide(approved_id, ApprovalChoice::Reject),
-            Err(ApprovalError::AlreadyConsumed(approved_id.value()))
+            manager.cancel_for_run_termination(cancelled_id),
+            Err(ApprovalError::AlreadyConsumed(cancelled_id.value()))
         );
         assert_eq!(
             manager.create_request(local_task_decision(
@@ -536,49 +877,20 @@ mod tests {
             Err(ApprovalError::DuplicateSubject)
         );
 
-        let rejected_id = manager.create_request(local_task_decision(
+        let unpresented_id = manager.create_request(local_task_decision(
             "run-approval-resolve-2",
             "gateway-request-approval-resolve-2",
             "call-approval-resolve-2",
-            "Rejected task",
+            "Unpresented cancelled task",
         )?)?;
         assert_eq!(
             manager
-                .decide(rejected_id, ApprovalChoice::Reject)?
+                .cancel_for_run_termination(unpresented_id)?
                 .disposition(),
-            ApprovalDisposition::Rejected
+            ApprovalDisposition::Cancelled(ApprovalCancellationReason::RunTerminated)
         );
         assert_eq!(
-            manager.create_request(local_task_decision(
-                "run-approval-resolve-2",
-                "gateway-request-approval-resolve-2",
-                "call-approval-resolve-2",
-                "Changed rejected task",
-            )?),
-            Err(ApprovalError::DuplicateSubject)
-        );
-
-        let cancelled_id = manager.create_request(local_task_decision(
-            "run-approval-resolve-3",
-            "gateway-request-approval-resolve-3",
-            "call-approval-resolve-3",
-            "Cancelled task",
-        )?)?;
-        assert_eq!(
-            manager.cancel(cancelled_id)?.disposition(),
-            ApprovalDisposition::Cancelled
-        );
-        assert_eq!(
-            manager.create_request(local_task_decision(
-                "run-approval-resolve-3",
-                "gateway-request-approval-resolve-3",
-                "call-approval-resolve-3",
-                "Changed cancelled task",
-            )?),
-            Err(ApprovalError::DuplicateSubject)
-        );
-        assert_eq!(
-            manager.cancel(ApprovalId::new(404)),
+            manager.cancel_for_run_termination(ApprovalId::new(404)),
             Err(ApprovalError::NotFound(404))
         );
         Ok(())
@@ -597,8 +909,10 @@ mod tests {
         assert!(before_clock.advance(APPROVAL_TTL.saturating_sub(Duration::from_nanos(1))));
         assert!(before_manager.pending()?.is_some());
         assert_eq!(
-            before_manager.cancel(before_id)?.disposition(),
-            ApprovalDisposition::Cancelled
+            before_manager
+                .cancel_for_run_termination(before_id)?
+                .disposition(),
+            ApprovalDisposition::Cancelled(ApprovalCancellationReason::RunTerminated)
         );
 
         let exact_clock = TestClock::new();
@@ -609,16 +923,29 @@ mod tests {
             "call-approval-exact-1",
             "Exact deadline",
         )?)?;
+        #[cfg(target_os = "macos")]
+        let exact_outcome = test_outcome_from_dialog_result(
+            exact_manager.issue_presentation(exact_id)?,
+            MessageDialogResult::Custom("Approve".to_owned()),
+        );
         assert!(exact_clock.advance(APPROVAL_TTL));
         assert!(exact_manager.pending()?.is_none());
+        #[cfg(target_os = "macos")]
         assert_eq!(
             exact_manager
-                .decide(exact_id, ApprovalChoice::Approve)?
+                .resolve_source_outcome(exact_outcome)?
+                .disposition(),
+            ApprovalDisposition::Expired
+        );
+        #[cfg(not(target_os = "macos"))]
+        assert_eq!(
+            exact_manager
+                .cancel_for_run_termination(exact_id)?
                 .disposition(),
             ApprovalDisposition::Expired
         );
         assert_eq!(
-            exact_manager.decide(exact_id, ApprovalChoice::Approve),
+            exact_manager.cancel_for_run_termination(exact_id),
             Err(ApprovalError::AlreadyConsumed(exact_id.value()))
         );
         assert_eq!(
@@ -655,6 +982,32 @@ mod tests {
                 "gateway-request-approval-after-1",
                 "call-approval-after-1",
                 "Changed expired task",
+            )?),
+            Err(ApprovalError::DuplicateSubject)
+        );
+
+        let issuance_clock = TestClock::new();
+        let mut issuance_manager = InMemoryApprovalManager::with_clock(issuance_clock.clone());
+        let issuance_id = issuance_manager.create_request(local_task_decision(
+            "run-approval-issuance-expired-1",
+            "gateway-request-approval-issuance-expired-1",
+            "call-approval-issuance-expired-1",
+            "Expired before presentation",
+        )?)?;
+        assert!(issuance_clock.advance(APPROVAL_TTL));
+        assert_eq!(
+            issuance_manager.issue_presentation(issuance_id).err(),
+            Some(ApprovalError::PresentationUnavailableOrExpired(
+                issuance_id.value()
+            ))
+        );
+        assert!(issuance_manager.pending()?.is_none());
+        assert_eq!(
+            issuance_manager.create_request(local_task_decision(
+                "run-approval-issuance-expired-1",
+                "gateway-request-approval-issuance-expired-1",
+                "call-approval-issuance-expired-1",
+                "Changed expired presentation",
             )?),
             Err(ApprovalError::DuplicateSubject)
         );
@@ -750,11 +1103,25 @@ mod tests {
         for output in [&manager_debug, &view_debug, &preview_debug, &affected_debug] {
             assert!(!output.contains(sentinel));
             assert!(!output.contains(&raw_arguments));
+            assert!(!output.contains("run-approval-redaction-1"));
+            assert!(!output.contains("gateway-request-approval-redaction-1"));
+            assert!(!output.contains("call-approval-redaction-1"));
         }
 
-        let resolution = manager.decide(id, ApprovalChoice::Approve)?;
+        let presentation = manager.issue_presentation(id)?;
+        let presentation_debug = format!("{presentation:?}");
+        for private_value in [
+            sentinel,
+            "run-approval-redaction-1",
+            "gateway-request-approval-redaction-1",
+            "call-approval-redaction-1",
+        ] {
+            assert!(!presentation_debug.contains(private_value));
+        }
+
+        let resolution = manager.cancel_for_run_termination(id)?;
         let resolution_debug = format!("{resolution:?}");
-        let replay_error = manager.decide(id, ApprovalChoice::Approve).err();
+        let replay_error = manager.cancel_for_run_termination(id).err();
         let Some(replay_error) = replay_error else {
             return Err(ApprovalError::AlreadyConsumed(id.value()).into());
         };

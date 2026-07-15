@@ -4,7 +4,7 @@ Last updated: 2026-07-14
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A through 4D - **verified complete**. Documentation-only Increment 4E planning for a trusted approval-decision source is the next Ready task.
+Phase 3 and Phase 4 Increments 4A through 4E - **verified complete on the target Mac**. No later increment is Ready.
 
 ## Increment status
 
@@ -28,6 +28,7 @@ Phase 3 and Phase 4 Increments 4A through 4D - **verified complete**. Documentat
 - Increment 4B: exact local tool-schema validation - **verified complete on target Mac**.
 - Increment 4C: trusted policy-input binding - **verified complete on target Mac**.
 - Increment 4D: exact approval binding - **verified complete on target Mac**.
+- Increment 4E: trusted approval-decision source - **verified complete on target Mac**.
 
 ## Verified baseline through Increment 2E
 
@@ -103,7 +104,7 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Plan only Increment 4E's trusted approval-decision source. Reconcile native and WebView trust boundaries, exact choice binding, user-presence and optional-authentication claims, cancellation, expiry, replay, error redaction, and future audit handoff; recommend one exact runtime increment and wait for project-owner approval before implementation.
+Review and publish the completed Increment 4E branch only when explicitly requested. Do not start another increment until the project owner selects and approves its exact planning scope.
 
 ## Phase 4 planning result
 
@@ -205,6 +206,40 @@ Plan only Increment 4E's trusted approval-decision source. Reconcile native and 
 - No native interaction gate was required because these modules remain transport-free and unreferenced by Tauri or the UI.
 - No provider, network, credential, audit, executor, IPC, persistence, Tauri, frontend, manifest, lockfile, capability, CSP, packaging, permission, or user-visible path was added.
 - D-024 records the exact ownership, lifecycle, no-digest, and non-authorizing approval boundary.
+
+## Increment 4E planning result
+
+- The Increment 4D manager has no production caller and still accepts a raw public `ApprovalChoice`; this cannot prove a trusted interaction source.
+- The React approval dialog remains mock-only untrusted WebView state. `get_app_info` is still the only custom Tauri command, and `core:default` is still the only capability permission.
+- The smallest coherent source is one Rust-owned macOS native message dialog consuming a manager-issued, non-cloneable, owned presentation. No WebView input or Tauri dialog plugin is added.
+- The presentation carries a private in-memory manager-instance marker, exact approval/run/request/call identity, closed local preview facts, and one bounded transient application-owned title clone. The marker moves into the sealed outcome and is pointer-checked before public IDs, preventing cross-manager substitution without a digest, randomness, dependency, or content. The source message and native renderer may briefly hold additional bounded transient title copies; no title survives in the source outcome or enters logs, errors, debug output, audit, or persistence.
+- The native message is capped at 1,024 Unicode scalar values, places all trusted fixed facts before the final untrusted title row, and rejects the plan's exact closed zero-width/default-ignorable/line/bidirectional presentation set while allowing ordinary non-ASCII text.
+- Reject is the proposed first/default native button; Return, Escape, close, no-decision, and failure paths must not approve.
+- The sealed native source outcome carries exact identity, a closed Approve/Reject/Edit/NativeNoDecision/SourceFailed result, source kind, and `NotEvaluated` authentication evidence. The manager rechecks identity, pending state, one-shot issuance, cancellation, and monotonic expiry before resolution.
+- Approve maps to `Approved`; Reject maps to `Rejected`; Edit, native no-decision, and source failure map to typed terminal cancellation. The dependency's `Cancel` result makes no user-intent claim. Edit requires a fresh gateway call, schema validation, policy decision, approval ID, and presentation.
+- Run cancellation and expiry consume the subject while a prompt is outstanding, and every late or replayed source outcome fails closed. The proposed dialog library cannot programmatically close a stale visible prompt, so live orchestration remains out of scope and that UX risk must be revisited before integration.
+- LocalAuthentication is deferred. The current `create_local_task@1` subject is reversible and requires no permission; native interaction does not claim actor identity, biometric, device-owner authentication, run liveness, or execution eligibility.
+- A future typed audit adapter may receive opaque identity, source, authentication evidence, an optional recognized button, source-failure code, cancellation reason, and disposition fields, but not the raw title. Increment 4E makes no audit call.
+- The proposed exact macOS-target dependency is `rfd = "=0.17.2"` with default features disabled. Direct use avoids registering Tauri dialog invoke commands or WebView permissions; file-dialog APIs remain unused and unexposed.
+- `cargo-audit` is not installed or configured. The implementation gate uses exact version 0.22.2 from temporary storage with network approval and cannot complete without a clean reviewed RustSec lockfile result.
+- The exact runtime list creates two files and changes six files. It does not include `lib.rs`, frontend, Tauri configuration, capability, CSP, policy, schema, registry, audit, executor, provider, gateway, or storage files.
+- Planning baseline passed TypeScript, six approval library tests, two approval-binding integration tests, three platform tests, nine menu-bar tests, and three menu-bar-routing integration tests on clean merged `main` at `1cf190f`.
+- Planning changed documentation only and added no runtime, dependency, lockfile, Tauri, frontend, permission, audit, execution, persistence, provider, network, or credential path.
+
+## Increment 4E capability and evidence
+
+- `ApprovalChoice` and the public raw-choice manager path are removed. One non-cloneable manager-issued `ApprovalPresentation` is now the only input to the macOS source, and one sealed non-cloneable `TrustedApprovalSourceOutcome` is the only source-backed manager-resolution input.
+- A private pointer-identical manager marker plus exact approval/run/gateway-request/function-call identity and manager-retained issuance state prevent cross-manager or cross-subject substitution. Issuance does not extend the 120-second TTL, and one-pending, 1,024-subject, cancellation, expiry, and non-evicting replay behavior remain intact.
+- The macOS-only source uses fixed `AI Agent Assistant approval` title and Reject-first Approve/Reject/Edit buttons. It displays trusted facts before the final affected-title row, rejects the exact planned presentation-format set, allows ordinary non-ASCII text, and caps the complete message at 1,024 Unicode scalar values.
+- Approve and Reject map directly. Edit, native no-decision, source failure, run termination, and expiry are closed terminal outcomes. Only recognized buttons carry button evidence; all source outcomes record `NotEvaluated` authentication and grant no actor-identity, run-liveness, dispatch, or execution authority.
+- Exact macOS-target `rfd = "=0.17.2"` is added with default features disabled. Source, MIT license, resolved target feature and duplicate trees, lockfile, AppKit/native `unsafe` boundary, and compatibility were reviewed. The lockfile diff adds only `rfd`; the application exposes no raw handle, file-dialog API, dependency object, Tauri plugin, WebView route, or application `unsafe`.
+- The standalone main-thread example exercises the public gateway -> schema -> policy -> approval -> native source -> resolution path, prints only bounded approval identity and a fixed terminal label, and performs no action or persistence.
+- Focused approval checks pass: 16 library tests and two approval-binding integration tests. rustfmt, Clippy with warnings denied, and `npm run verify` pass with 124 frontend tests, 92 Rust library tests, ten Rust integration tests, TypeScript, Vite production builds, and the Tauri release no-bundle build.
+- `npm audit --audit-level=low` reports zero vulnerabilities after the sandboxed DNS failure was retried with network access. Dependency/scope review, stale-symbol search, code review, and security review found no 4E runtime boundary defect.
+- Exact temporary `cargo-audit 0.22.2` ran and exited nonzero on RUSTSEC-2026-0194 and RUSTSEC-2026-0195 in pre-existing `quick-xml 0.39.4`. The path is existing `plist 1.9.0 -> Tauri`; source review found plain `quick_xml::Reader`, not `NsReader`, and no attribute iteration on that path. D-025 records the project owner's scoped reviewed baseline exception. No advisory ignore or dependency upgrade was added.
+- The target-Mac manual gate passes. Approve -> `approved`, Reject -> `rejected`, Edit -> `cancelled: edit requested`, and Return/default -> `rejected`; Escape had no effect and no window-close control was available. The project owner confirmed fixed title/content order, post-resolution terminal redaction, no action or persistence, and no permission prompt.
+- No shipping Tauri wiring, frontend, capability, CSP, LocalAuthentication, audit, storage, dispatch, executor, tool implementation, provider continuation, network, credential, identity, or permission path was added.
+- D-025 records the native-source boundary, exact dependency, no-authentication claim, stale-visible-dialog limitation, and scoped RustSec baseline exception. Increment 4E is verified complete.
 
 ## Phase 3D planning result
 
