@@ -4,7 +4,7 @@ Last updated: 2026-07-15
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increment 4G is **verified complete, published, and merged into `main`**. Increment 4H typed approval-audit adapter is **verified complete** on `codex/phase4-increment-4h`; it is transport-free and changes no user-visible behavior. No later product implementation increment is Ready.
+Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increment 4G and Increment 4H are **verified complete, published, and merged into `main`**. Repository Workflow Increment 4J is **verified complete** on `codex/repository-workflow-increment-4j`; it changes only completion-fingerprint handling and tests. Increment 4I remains preserved, unpushed, and unmerged at `cf9d701` and requires reconstruction after 4J is merged. No later product implementation increment is Ready.
 
 ## Increment status
 
@@ -32,6 +32,20 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
 - Increment 4F: Cortexa product display rename - **verified complete by project-owner direction**.
 - Repository Workflow Increment 4G: automated post-increment gate - **verified complete**.
 - Increment 4H: typed approval-audit adapter - **verified complete**.
+- Repository Workflow Increment 4J: deletion-stable post-increment fingerprint - **verified complete**.
+
+## Repository Workflow Increment 4J capability and evidence
+
+- The clean synchronized baseline is `main` at `e3af5a4`; the implementation branch is `codex/repository-workflow-increment-4j`.
+- `codex/phase4-increment-4i` remains exactly at `cf9d701`, unpushed and unmerged. Its pre-fix marker became invalid only after its reviewed tracked deletions were committed.
+- The corrected fingerprint omits paths absent from the current workspace while preserving path, executable-bit, type, regular-file content, symlink-target, path-safety, and fail-closed I/O handling for existing paths.
+- Exact changed-file and report-inventory validation remains unchanged, so reviewed deletions must still be recorded before finalization.
+- The positive regression proves a reviewed tracked deletion remains valid after commit. The negative regression proves deleting a tracked file after finalization invalidates the marker.
+- Focused Python and npm hook checks pass with 17 tests; the pre-edit baseline passed with 15 tests.
+- D-031 records existing-content snapshot semantics and rejects legacy-marker fallback or silent migration.
+- No application source, dependency, hook configuration, skill, Tauri, IPC, storage, provider, gateway, approval, audit, dispatch, executor, capability, or permission changed.
+- Complete repository verification passes with 17 hook, 124 frontend, 99 Rust library, and 11 Rust integration tests plus Clippy, builds, and Tauri release no-bundle. The dependency audit reports zero vulnerabilities.
+- Exact scope, secret, generated-output, complete-diff, code, and security reviews pass. The consolidated result is `PASS WITH ADVISORIES`; the advisory blocks 4I reconstruction until 4J is separately committed and merged.
 
 ## Increment 4H capability and evidence
 

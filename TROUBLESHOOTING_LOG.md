@@ -545,3 +545,38 @@ Expected: the first command has no listener before launch; Vite starts on port 1
 ### Prevention
 
 Stop standalone Vite sessions when their work ends. Before a native manual gate, identify an existing fixed-port listener instead of starting overlapping dev servers or terminating an unrelated process.
+
+## TS-014 - Completion marker becomes invalid after committing tracked deletions
+
+Date: 2026-07-15
+Status: Resolved by Repository Workflow Increment 4J; affected pre-fix increments require reconstruction
+
+### Symptom
+
+A post-increment marker is valid immediately after finalization, but `python3 .codex/hooks/post_increment_gate.py status` reports `valid: false` after committing a change set that deletes tracked files. Re-finalization on the clean committed branch fails with `report file inventory does not match the complete Git change set`.
+
+### Cause
+
+Before commit, `git ls-files --cached` still includes each deleted tracked path. The old fingerprint hashed that path plus a `missing` token. After commit, Git no longer lists the deleted path, so it contributes nothing and the fingerprint changes even though the reviewed working-tree content did not.
+
+The original post-commit regression created or modified files only and did not exercise a tracked deletion.
+
+### Resolution
+
+Fingerprint only repository paths that exist in the current working-tree snapshot. Keep exact deletion evidence in the independent `changed_paths` and report-inventory validation. Add regressions proving both reviewed deletion-commit stability and invalidation when a tracked file is deleted after finalization.
+
+Do not migrate or reinterpret pre-fix markers. Preserve and reconstruct an affected increment on corrected `main`, rerun its required verification and gate, and confirm its marker remains valid after commit before publication.
+
+### Verify
+
+```bash
+python3 .codex/hooks/tests/test_post_increment_gate.py -v
+npm run test:hooks
+python3 .codex/hooks/post_increment_gate.py status
+```
+
+Expected: all 17 focused tests pass. The reviewed deletion fixture remains valid after commit, while the post-finalization deletion fixture requests continuation.
+
+### Prevention
+
+Any future fingerprint or changed-file implementation must test additions, modifications, deletions, pre-commit state, post-commit state, and an unreviewed change after finalization. Keep report inventory and workspace-content fingerprint responsibilities distinct.

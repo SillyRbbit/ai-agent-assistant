@@ -4,11 +4,96 @@ Last updated: 2026-07-15
 
 ## Current state
 
-Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac, Repository Workflow Increment 4G is verified complete and published, and Increment 4H typed approval-audit adapter is verified complete on `codex/phase4-increment-4h`. Increment 4H started from clean merged `main` at `74692c1`, preserved its exact four-file runtime/test scope, and is not committed or pushed.
+Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increment 4G and Increment 4H are verified, published, and merged into `main` at `e3af5a4`.
 
-Increment 4H adds a dedicated bounded in-memory adapter that borrows one terminal `ApprovalResolution`, revalidates exact current tool/policy and terminal interaction facts, and privately creates one content-free record. It never calls the title-bearing preview accessor, accepts no arbitrary event/summary/details strings, rejects invalid evidence and duplicate/bounded-storage failures before mutation, and returns only a non-authorizing sequence receipt.
+Repository Workflow Increment 4J is verified complete on `codex/repository-workflow-increment-4j`, created from clean synchronized `main` at `e3af5a4`. It corrects only post-increment workspace fingerprint handling for reviewed tracked deletions and adds two focused regressions. Application behavior is unchanged. The branch is uncommitted and unpushed.
 
-The adapter remains transport-free and has no production caller. The generic arbitrary-string audit scaffold remains unchanged and non-production. No dependency, lockfile, durable persistence, runtime coordinator, Tauri, frontend, IPC, gateway, credential, native-dialog production behavior, dispatch, executor, capability, CSP, packaging, entitlement, or permission changed.
+The original Increment 4I implementation commit remains preserved at `cf9d701` on `codex/phase4-increment-4i`, unpushed and unmerged. Its valid pre-commit marker became invalid after its reviewed tracked deletions were committed. Do not publish that branch. After 4J is separately committed and merged, reconstruct 4I from corrected `main`, apply its changes without committing, rerun its complete gate, and require a valid post-commit marker.
+
+## Repository Workflow Increment 4J state
+
+### Exact source/test scope
+
+```text
+.codex/hooks/post_increment_gate.py
+.codex/hooks/tests/test_post_increment_gate.py
+```
+
+The fingerprint now hashes a repository path only after `lstat` confirms it exists. An already reviewed deletion therefore contributes no content before or after commit. A file present at finalization remains hashed, so deleting it afterward invalidates the marker.
+
+### Exact documentation scope
+
+```text
+AGENTS.md
+CHANGELOG.md
+DECISIONS.md
+HANDOFF.md
+NEXT_STEPS.md
+PLANS.md
+PROJECT_STATUS.md
+SECURITY.md
+TROUBLESHOOTING_LOG.md
+docs/increments/04j-post-increment-deletion-fingerprint.md
+docs/plans/04j-post-increment-deletion-fingerprint.md
+docs/plans/README.md
+docs/reviews/2026-07-15-04j-post-increment-review.md
+```
+
+No hook configuration, skill, application source, dependency, manifest, lockfile, Tauri, IPC, storage, gateway, approval, audit, dispatch, executor, capability, or permission file changes.
+
+### Verification classification
+
+Passed:
+
+```text
+npm run test:hooks
+  baseline: 15 passed
+PYTHONDONTWRITEBYTECODE=1 python3 .codex/hooks/tests/test_post_increment_gate.py -v
+  implementation: 17 passed
+npm run test:hooks
+  implementation: 17 passed
+PYTHONPYCACHEPREFIX=/private/tmp/cortexa-4j-pycache python3 -m py_compile .codex/hooks/post_increment_gate.py .codex/hooks/tests/test_post_increment_gate.py
+  passed
+npm run format:check
+  passed
+npm run verify
+  hook tests: 17 passed
+  frontend tests: 124 passed
+  Rust library tests: 99 passed
+  Rust integration tests: 11 passed
+  formatting, ESLint, Clippy, typecheck, builds, and Tauri release no-bundle passed
+npm audit --audit-level=low
+  network-enabled retry passed with 0 vulnerabilities
+git diff --check
+  passed
+python3 .codex/hooks/post_increment_gate.py status
+  complete, valid: true, PASS WITH ADVISORIES after finalization
+```
+
+Failed and resolved:
+
+- The first direct unittest command used `.codex/hooks/tests/test_post_increment_gate.py` as a module name and failed with `ValueError: Empty module name` before discovery. Running the file directly passed all 17 tests.
+- The first format check found layout-only drift in the two new 4J documents and `PLANS.md`. Targeted Prettier formatting and the exact rerun passed.
+- The first sandboxed npm audit could not resolve the registry or write user-level npm logs. The approved network-enabled retry passed with zero vulnerabilities.
+
+Checks not run:
+
+- No native application launch or UI interaction was required because 4J changes no application behavior.
+- No RustSec audit was required because Cargo manifests and the lockfile are unchanged.
+
+Manual verification pending: none. The exact hook diff, fixed Git-command boundary, 15-file scope, 4I branch ref, and absence of a remote containing `cf9d701` were reviewed and passed.
+
+Architecture, code-health, and security review found no blocking issue. One edge case found during review was resolved before closeout: deletion of the last tracked file can remove its containing directory, so path validation now checks the nearest existing ancestor before omitting the absent path. The strengthened positive and negative fixtures cover that case.
+
+### Exact next task
+
+Wait for explicit project-owner direction to commit, push, and merge 4J only. Do not reconstruct 4I or begin a later increment.
+
+Ready-to-paste continuation prompt:
+
+```text
+Commit, push, and merge Repository Workflow Increment 4J only. Use a concise workflow-fix commit message, push `codex/repository-workflow-increment-4j`, fast-forward merge it into updated `main`, push `main`, and verify clean synchronized `main` plus the valid 4J marker. Preserve `codex/phase4-increment-4i` at `cf9d701`; do not reconstruct or publish 4I yet.
+```
 
 ## Increment 4H completion state
 
@@ -516,12 +601,12 @@ The project owner confirmed the fixed window title, exact trusted-fields-first/t
 
 ## Exact next task
 
-Increment 4H is complete. Wait for the project owner to select and approve one bounded next plan; no later increment is Ready and none may be inferred or started automatically.
+Wait for explicit project-owner direction to commit, push, and merge Repository Workflow Increment 4J only. Do not reconstruct Increment 4I or infer a later increment.
 
 ## Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Resume from HANDOFF.md on uncommitted branch `codex/phase4-increment-4h`. Increment 4H typed approval-audit adapter is verified complete with a valid `PASS WITH ADVISORIES` post-increment marker. Reconcile the actual repository, then wait for the project owner to select and approve one bounded next plan. Do not infer or begin another increment, commit, push, or merge without explicit direction.
+Resume from HANDOFF.md on verified, uncommitted `codex/repository-workflow-increment-4j`. Preserve `codex/phase4-increment-4i` at `cf9d701` untouched, unpushed, and unmerged. Wait for explicit direction to commit, push, and merge 4J only. Do not reconstruct 4I or begin a later increment.
 ```

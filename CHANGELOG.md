@@ -6,6 +6,8 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Two repository-hook regressions proving that reviewed tracked deletions remain valid after commit and unreviewed post-finalization deletions invalidate completion evidence.
+- Repository Workflow Increment 4J plan, record, troubleshooting entry, security boundary, and deterministic existing-content fingerprint decision.
 - Increment 4H closed typed in-memory approval-audit records, non-authorizing sequence receipts, fixed typed errors, and a 1,024-record no-eviction adapter.
 - Six focused adapter tests and one public gateway-to-audit integration test covering exact identity, metadata, redaction, expiry, run termination, invalid evidence, duplicates, capacity, and sequence overflow.
 - Documentation-only Increment 4H plan for a bounded typed approval-audit adapter derived from one exact terminal `ApprovalResolution`.
@@ -84,6 +86,9 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Corrected the post-increment workspace fingerprint to omit paths absent from the working tree, keeping reviewed deletion evidence stable across commit without relaxing exact changed-file reporting or stale-workspace rejection.
+- Marked Repository Workflow Increment 4J verified complete after 17 focused hook tests, complete repository verification, dependency audit, exact-scope review, security review, documentation synchronization, and the mandatory gate passed.
+- Preserved unpushed, unmerged Increment 4I at `cf9d701`; it must be reconstructed and revalidated after 4J is merged rather than publishing its invalid pre-fix marker.
 - Completed Increment 4H within its exact four-file runtime/test scope and retained the generic arbitrary-string audit scaffold as disconnected non-production code.
 - Extended native-source tests to pass every sealed button/no-decision/source-failure result through the adapter and reject extra or contradictory evidence before mutation, without changing production dialog behavior.
 - Marked Increment 4H verified complete after focused checks, `npm run verify`, npm audit, complete diff and trust-boundary review, documentation synchronization, and the mandatory post-increment gate passed.

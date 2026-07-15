@@ -558,6 +558,26 @@ Consequences:
 - The adapter is transport-free and has no production caller. It does not make the generic audit logger suitable for production or satisfy durable local-audit requirements.
 - No dependency, manifest, lockfile, Tauri command/event, frontend, SQLite, gateway, provider, native-dialog behavior, capability, CSP, packaging, entitlement, or operating-system permission changes.
 
+## D-031 - Fingerprint existing repository content across deletion commits
+
+Date: 2026-07-15
+Status: Accepted; Repository Workflow Increment 4J implemented and verified
+
+Decision: the post-increment workspace fingerprint includes only repository paths that exist in the current working-tree snapshot. For every existing path it retains the repository-relative path, executable bits, file type, regular-file content hash, or symlink-target hash. A path reported by `git ls-files --cached` but absent from the working tree contributes no fingerprint entry.
+
+`changed_paths` remains the separate authoritative inventory of staged, unstaged, and untracked increment changes. A reviewed deletion must therefore appear in the report before finalization even though the absent path contributes no current content to the fingerprint. A file that exists at finalization is fingerprinted, so deleting it afterward still invalidates the completion marker.
+
+No legacy-fingerprint compatibility fallback, state-schema migration, report-inventory relaxation, or Git-commit identity is added. Completion evidence created by the defective deletion fingerprint must be reconstructed and revalidated on the corrected workflow baseline. D-030 is reserved by the preserved, unmerged Increment 4I branch; 4J uses D-031 to avoid a later decision-number collision.
+
+Rationale: before commit, Git's cached path list retains a staged deletion and the original algorithm hashed its path plus a `missing` token. After commit, that path leaves the cached list and contributes nothing, invalidating otherwise unchanged reviewed content. Fingerprinting the current existing-content snapshot makes pre-commit and post-commit deletion states equal while preserving stale-content detection.
+
+Consequences:
+
+- Positive and negative tracked-deletion regressions are mandatory: a reviewed deletion survives commit, while a deletion after finalization invalidates the marker.
+- Metadata and content read failures for existing paths still fail closed; path safety, report hashing, exact changed-file validation, suspicious-path checks, and Stop-loop behavior are unchanged.
+- Pre-fix deletion markers remain invalid. Increment 4I stays unpushed and unmerged until it is reconstructed from corrected `main` and passes a fresh gate.
+- The hook remains a trusted, operator-controlled workflow guardrail and gains no security, authorization, audit, or execution authority.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

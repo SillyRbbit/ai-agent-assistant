@@ -30,8 +30,12 @@ class PostIncrementGateTests(unittest.TestCase):
             ".codex/state/\n__pycache__/\n*.py[cod]\n", encoding="utf-8"
         )
         (self.root / "README.md").write_text("fixture repository\n", encoding="utf-8")
+        (self.root / "tracked").mkdir()
+        (self.root / "tracked/deleted.txt").write_text(
+            "tracked deletion fixture\n", encoding="utf-8"
+        )
         (self.root / "docs/reviews").mkdir(parents=True)
-        self._git("add", ".gitignore", "README.md")
+        self._git("add", ".gitignore", "README.md", "tracked/deleted.txt")
         self._git("commit", "--quiet", "-m", "Create fixture")
         gate.begin_gate(self.root, "04g")
 
@@ -207,6 +211,20 @@ class PostIncrementGateTests(unittest.TestCase):
 
         self.assertFalse(gate.evaluate_stop_payload(self._stop_payload()).should_continue)
 
+    def test_completion_marker_remains_valid_after_commit_with_tracked_deletion(
+        self,
+    ) -> None:
+        (self.root / "tracked/deleted.txt").unlink()
+        (self.root / "tracked").rmdir()
+        report = self._write_report()
+        gate.finalize_gate(self.root, "04g", report)
+
+        self._git("add", "--all")
+        self._git("commit", "--quiet", "-m", "Complete deletion fixture")
+
+        self.assertTrue(gate.redacted_status(self.root)["valid"])
+        self.assertFalse(gate.evaluate_stop_payload(self._stop_payload()).should_continue)
+
     def test_completed_increment_can_be_refinalized_after_report_correction(self) -> None:
         report = self._write_report()
         gate.finalize_gate(self.root, "04g", report)
@@ -226,6 +244,18 @@ class PostIncrementGateTests(unittest.TestCase):
         gate.finalize_gate(self.root, "04g", report)
         (self.root / "change.txt").write_text("changed after review\n", encoding="utf-8")
 
+        self.assertTrue(gate.evaluate_stop_payload(self._stop_payload()).should_continue)
+
+    def test_tracked_deletion_after_finalization_invalidates_completion_marker(
+        self,
+    ) -> None:
+        report = self._write_report()
+        gate.finalize_gate(self.root, "04g", report)
+
+        (self.root / "tracked/deleted.txt").unlink()
+        (self.root / "tracked").rmdir()
+
+        self.assertFalse(gate.redacted_status(self.root)["valid"])
         self.assertTrue(gate.evaluate_stop_payload(self._stop_payload()).should_continue)
 
     def test_stop_hook_active_prevents_continuation_loop(self) -> None:

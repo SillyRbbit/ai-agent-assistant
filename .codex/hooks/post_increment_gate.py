@@ -223,11 +223,18 @@ def validate_relative_path(relative_path: str) -> None:
 def _workspace_path(root: Path, relative_path: str) -> Path:
     validate_relative_path(relative_path)
     path = root / relative_path
-    try:
-        parent = path.parent.resolve(strict=True)
-        parent.relative_to(root)
-    except (OSError, ValueError) as error:
-        raise GateError("repository path escapes the workspace") from error
+    candidate_parent = path.parent
+    while True:
+        try:
+            parent = candidate_parent.resolve(strict=True)
+            parent.relative_to(root)
+            break
+        except FileNotFoundError:
+            if candidate_parent == root:
+                raise GateError("repository path escapes the workspace")
+            candidate_parent = candidate_parent.parent
+        except (OSError, ValueError) as error:
+            raise GateError("repository path escapes the workspace") from error
     return path
 
 
@@ -255,20 +262,20 @@ def workspace_fingerprint(root: Path) -> str:
     )
     digest = hashlib.sha256()
     for relative_path in sorted(set(repository_paths)):
-        encoded_path = relative_path.encode("utf-8")
-        digest.update(len(encoded_path).to_bytes(8, "big"))
-        digest.update(encoded_path)
         path = _workspace_path(root, relative_path)
         try:
             file_status = path.lstat()
         except FileNotFoundError:
-            digest.update(b"missing")
+            # Tracked deletions remain cached until commit but are absent afterward.
             continue
         except OSError as error:
             raise GateError(
                 "repository file metadata could not be read", ExitCode.IO_ERROR
             ) from error
 
+        encoded_path = relative_path.encode("utf-8")
+        digest.update(len(encoded_path).to_bytes(8, "big"))
+        digest.update(encoded_path)
         digest.update((file_status.st_mode & 0o111).to_bytes(2, "big"))
         if stat.S_ISLNK(file_status.st_mode):
             try:

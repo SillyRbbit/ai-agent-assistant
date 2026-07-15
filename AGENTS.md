@@ -20,7 +20,7 @@ When the task is a security-sensitive change, also read `SECURITY.md` and `CODE_
 
 ## Current phase
 
-Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increment 4G and Phase 4 Increment 4H are verified complete. Increment 4H adds only a transport-free bounded typed in-memory approval-audit adapter and focused tests; it adds no durable audit storage, production caller, runtime coordinator, dispatch, or executor. No later product implementation increment is Ready. The verified gateway, schema-validation, policy-input, approval, and typed approval-audit modules remain transport-free; schema validity, policy allowance, approval previews, approval IDs, native interaction results, locally approved dispositions, authentication evidence, in-memory audit records or receipts, workflow reports, and completion markers remain non-authorizing.
+Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increment 4H are verified complete. Increment 4J changes only repository-workflow fingerprint handling and tests; it changes no application behavior. Increment 4I remains preserved on an unpushed, unmerged branch and must be reconstructed after 4J is merged because its pre-fix marker became invalid after committing reviewed deletions. No later product implementation increment is Ready. The verified gateway, schema-validation, policy-input, approval, and typed approval-audit modules remain transport-free; schema validity, policy allowance, approval previews, approval IDs, native interaction results, locally approved dispositions, authentication evidence, in-memory audit records or receipts, workflow reports, and completion markers remain non-authorizing.
 
 ## Non-negotiable product boundaries
 
@@ -150,6 +150,8 @@ The increment may be marked complete only when:
 - `python3 .codex/hooks/post_increment_gate.py status` reports the expected increment as complete and valid.
 
 The hook and ignored marker are workflow guardrails, not a security boundary. Project hooks require normal Codex trust review. An emergency hook bypass must be recorded and cannot be used to mark an increment complete; rerun the full gate before completion.
+
+The workspace fingerprint represents existing repository content. A path absent from the working tree contributes no fingerprint entry, so a reviewed tracked deletion is stable across commit. `changed_paths` and the report inventory must still record that deletion before finalization. Deleting a file that existed at finalization changes the fingerprint and invalidates the marker.
 
 Codex must not begin the next increment automatically.
 Codex must not commit or push unless explicitly requested.

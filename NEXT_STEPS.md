@@ -29,6 +29,7 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 4F - Cortexa product display rename: **Verified complete by project-owner direction**.
 - Repository Workflow Increment 4G - automated post-increment gate: **Verified complete**.
 - Increment 4H - typed approval-audit adapter: **Verified complete**.
+- Repository Workflow Increment 4J - deletion-stable post-increment fingerprint: **Verified complete**.
 
 ## Queue status
 
@@ -36,4 +37,6 @@ Repository Workflow Increment 4G is **Verified complete**. It adds only the repo
 
 Increment 4H typed approval-audit adapter is **Verified complete**. It adds one bounded transport-free in-memory Rust adapter that derives a closed redacted record from an exact terminal `ApprovalResolution`, revalidates the complete disposition/evidence matrix, and returns only a non-authorizing sequence receipt. It adds no durable persistence, runtime coordinator, dispatch, execution, IPC, UI, or live networking. Its consolidated result is `PASS WITH ADVISORIES`; the advisory is the explicit non-durable boundary and the absence of an approved next increment.
 
-Exact next task: the project owner selects and approves one bounded next plan. No later product implementation item is marked **Ready**; do not infer or start another increment automatically.
+Repository Workflow Increment 4J is **Verified complete**. It corrects only the deterministic completion fingerprint for reviewed tracked deletions and adds positive and negative regression coverage. Its consolidated result is `PASS WITH ADVISORIES`; the advisory blocks 4I reconstruction until 4J is separately committed and merged. Increment 4I remains preserved at `cf9d701`, unpushed and unmerged; its pre-fix completion marker is invalid and it must not be published.
+
+Exact next task: after explicit project-owner direction, commit, push, and merge 4J only. Then reconstruct and revalidate Increment 4I on corrected `main` under a separately approved recovery step. No later product implementation item is marked **Ready**; do not infer or start another increment automatically.
