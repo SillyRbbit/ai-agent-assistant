@@ -32,6 +32,7 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 4I - remove generic audit scaffold: **Verified complete**.
 - Repository Workflow Increment 4J - deletion-stable post-increment fingerprint: **Verified complete**.
 - Increment 4K - remove legacy provider scaffold: **Verified complete**.
+- Increment 4L - remove legacy memory scaffold: **Verified complete**.
 
 ## Queue status
 
@@ -50,6 +51,21 @@ unchanged; focused and complete checks pass, and no replacement provider,
 transport, networking, credential, coordinator, dispatch, executor, persistence,
 IPC, UI, dependency, capability, or permission was added.
 
+Increment 4K is published and merged at `5415444`; its completion marker remains
+valid for that committed content.
+
+Increment 4L remove legacy memory scaffold is **Verified complete in the current
+uncommitted workspace**. It deletes only the three legacy memory files and their
+single crate-root export. The verified storage module is unchanged; focused and
+complete checks pass, and no replacement memory, persistence, migration,
+encryption, Keychain, context selection, IPC, UI, dependency, capability, or
+permission was added. Its consolidated result is `PASS WITH ADVISORIES`; the
+advisory is the theoretical unsupported external consumer of the removed public
+module.
+
+## Ready
+
+No later implementation increment is Ready.
+
 Exact next task: wait for explicit project-owner direction to commit, push, and
-merge Increment 4K. No later product implementation item is marked **Ready**; do
-not infer or start another increment automatically.
+merge verified Increment 4L. Do not start later planning or implementation.

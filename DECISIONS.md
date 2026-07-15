@@ -641,6 +641,45 @@ Consequences:
   executor, capability, CSP, packaging, entitlement, or operating-system
   permission is added.
 
+## D-033 - Remove the legacy memory scaffold
+
+Date: 2026-07-15
+Status: Accepted; Increment 4L implemented and verified
+
+Decision: delete the public Rust `memory` module, including its arbitrary-content
+input, update, and record types; unbounded in-memory store; six-marker
+secret-like substring check; and embedded tests. Do not restore that interface as
+the basis for product memory.
+
+Future session, working, or long-term memory requires a separately approved
+bounded repository contract with explicit user opt-in, authoritative provenance,
+creation time, optional expiration, visibility, edit, delete, export, retention,
+sensitive-data classification, encryption, and reviewed key ownership. Schema
+validity or marker-list filtering alone cannot authorize or establish safe
+retention.
+
+Rationale: repository search found no caller outside the legacy module and its
+three embedded tests. The scaffold retains and clones unbounded arbitrary strings
+without the control, lifecycle, provenance, and encryption properties required by
+the product brief. Repairing it would prematurely decide Phase 8 storage, consent,
+Keychain, migration, retention, export, UI, and context-selection boundaries.
+Deletion is the smallest change that prevents accidental adoption while leaving
+the independent verified SQLite bootstrap module unchanged.
+
+Consequences:
+
+- Current Rust source exposes no product memory repository or secret-detector
+  boundary.
+- The three legacy memory unit tests are removed with the unused implementation;
+  the 13 storage unit tests and both public storage smoke tests remain unchanged
+  and passing.
+- The product requirement for user-controlled memory remains. Later work must
+  start from this decision and the product brief rather than the deleted Phase 2
+  mock API.
+- No replacement type, repository, migration, persistence, encryption, Keychain,
+  context selection, Tauri command, WebView path, dependency, capability,
+  entitlement, or operating-system permission is added.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

@@ -4,7 +4,7 @@ Last updated: 2026-07-15
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H and 4I are **verified complete, published, and merged into `main`**. Increment 4K remove legacy provider scaffold is **verified complete** within its exact source and closeout scopes and changes no user-visible behavior; it is not yet committed or published. No later product implementation increment is Ready.
+Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4K are **verified complete, published, and merged into `main`**. Increment 4K is merged at `5415444`. Increment 4L remove legacy memory scaffold is **verified complete in the current uncommitted workspace** with no user-visible behavior change. No later implementation increment is Ready.
 
 ## Increment status
 
@@ -35,6 +35,46 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
 - Increment 4I: remove generic audit scaffold - **verified complete after reconstruction**.
 - Repository Workflow Increment 4J: deletion-stable post-increment fingerprint - **verified complete**.
 - Increment 4K: remove legacy provider scaffold - **verified complete**.
+- Increment 4L: remove legacy memory scaffold - **verified complete; uncommitted**.
+
+## Increment 4L capability and evidence
+
+- The legacy Rust memory module exposes public clonable records containing
+  arbitrary title, content, and source strings and retains them in an unbounded
+  in-memory map.
+- Its six-marker substring check is not a complete sensitive-data policy. The
+  types omit required opt-in, creation time, optional expiration, visibility,
+  export, encryption, retention, and authoritative provenance semantics.
+- Repository search finds no caller outside the memory module and its three
+  embedded tests. Historical Increment 2A records remain unchanged.
+- The verified SQLite bootstrap storage module is independent, has 13 passing
+  focused tests, and intentionally persists no user memory before reviewed
+  encryption and repository contracts exist.
+- The implementation deletes `src-tauri/src/memory/mod.rs`,
+  `src-tauri/src/memory/store.rs`, and `src-tauri/src/memory/types.rs`, then
+  removes only `pub mod memory;` from `src-tauri/src/lib.rs`.
+- No replacement memory types, repository, migration, encryption, Keychain,
+  context selection, persistence, IPC, UI, dependency, capability, or permission
+  is included.
+- Planning baseline on clean synchronized `main` at `5415444` passed typecheck,
+  three legacy memory tests, 13 storage tests, and both public storage smoke
+  tests. The `04k` marker was complete and valid before documentation edits.
+- Focused implementation verification passes with rustfmt, 13 storage unit tests,
+  both public storage smoke tests, Clippy with warnings denied, and the required
+  no-match legacy-symbol scan.
+- Complete `npm run verify` passes with 17 hook, 124 frontend, 89 Rust library,
+  and 11 Rust integration tests plus lint, typecheck, Vite builds, and Tauri
+  release no-bundle. The network-enabled npm audit reports zero vulnerabilities.
+- Exact source, closeout, conflict, secret, generated-output, architecture,
+  code-health, security, and complete-diff reviews have no blocking finding. No
+  manual interaction gate applies because no production or user-visible path
+  changed.
+- D-033 preserves future bounded, opt-in, provenance-aware, encrypted,
+  user-controlled memory and prohibits restoration of the deleted arbitrary-content
+  API as a convenience boundary.
+- The consolidated result is `PASS WITH ADVISORIES`; the advisory is the
+  theoretical unsupported external consumer of the removed public scaffold. It
+  blocks neither completion nor later bounded planning.
 
 ## Increment 4K capability and evidence
 
@@ -215,7 +255,8 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Wait for explicit project-owner direction to commit, push, and merge Increment 4K. Do not start later work.
+Wait for explicit project-owner direction to commit, push, and merge verified
+Increment 4L. Do not start later planning or implementation.
 
 ## Phase 4 planning result
 

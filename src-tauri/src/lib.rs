@@ -3,7 +3,6 @@ mod app_info;
 pub mod approvals;
 pub mod audit;
 mod error;
-pub mod memory;
 pub mod menu_bar;
 pub mod platform;
 pub mod policy;

@@ -4,7 +4,8 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-None. Increment 4K is verified complete under [`docs/plans/04k-remove-legacy-provider-scaffold.md`](docs/plans/04k-remove-legacy-provider-scaffold.md). It preserves the exact three-file source and declared closeout scopes and is not yet committed or published. No later product implementation plan is Ready.
+No implementation plan is active. Increment 4L is verified complete in the
+current uncommitted workspace, and no later increment is Ready.
 
 ## Completed plans
 
@@ -27,6 +28,7 @@ docs/plans/04e-trusted-approval-decision-source.md
 docs/plans/04i-remove-generic-audit-scaffold.md
 docs/plans/04j-post-increment-deletion-fingerprint.md
 docs/plans/04k-remove-legacy-provider-scaffold.md
+docs/plans/04l-remove-legacy-memory-scaffold.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -80,6 +82,28 @@ A plan must contain:
 | Increment 4I remove generic audit scaffold    | Complete | Project maintainer | 2026-07-15   |
 | Workflow Increment 4J deletion fingerprint    | Complete | Project maintainer | 2026-07-15   |
 | Increment 4K remove legacy provider scaffold  | Complete | Project maintainer | 2026-07-15   |
+| Increment 4L remove legacy memory scaffold    | Complete | Project maintainer | 2026-07-15   |
+
+## Phase 4 Increment 4L remove legacy memory scaffold - complete
+
+Goal: delete the unused public `MemoryStore`, arbitrary-content input/update/record
+types, unbounded in-memory map, and six-marker secret-like check before future
+memory or persistence work can mistake them for the approved trusted boundary.
+
+Repository search finds no caller outside the three memory files and their three
+embedded tests. The exact source plan deletes the complete
+`src-tauri/src/memory/` module and removes only `pub mod memory;` from
+`src-tauri/src/lib.rs`. The 13-test typed SQLite bootstrap storage boundary
+remains unchanged.
+
+The verified implementation adds no replacement memory, repository, migration,
+encryption, Keychain, context collection, persistence, IPC, UI, dependency,
+capability, or permission. Thirteen storage unit tests, both public storage smoke
+tests, Clippy, complete `npm run verify`, npm audit, stale-symbol, exact-scope,
+security, code-health, documentation, and mandatory gate reviews pass. D-033
+preserves the future bounded, opt-in, provenance-aware, encrypted memory
+requirement. The implementation remains uncommitted and no later increment is
+Ready.
 
 ## Phase 4 Increment 4K remove legacy provider scaffold - complete
 
@@ -93,13 +117,17 @@ and `src-tauri/src/agent/types.rs` and removes only their exports from
 `src-tauri/src/agent/mod.rs`. The 18-test normalized gateway protocol and exact
 function-call validator remain unchanged.
 
-The implementation adds no replacement provider, gateway request contract, HTTPS
+The published implementation adds no replacement provider, gateway request contract, HTTPS
 transport, credentials, Keychain, runtime coordinator, dispatch, executor,
 persistence, IPC, UI, dependency, capability, or permission. Eighteen gateway,
 six function-validation, and two public gateway-to-policy tests pass. Clippy,
 complete `npm run verify`, npm audit, exact-scope, secret, generated-output,
 architecture, code-health, security, documentation, and mandatory gate reviews
 pass. D-032 records the future closed provider-transport boundary.
+
+Commit `5415444` is pushed on `codex/phase4-increment-4k`, fast-forward merged
+into synchronized `main`, and retains a valid `04k` marker after the tracked
+deletions were committed.
 
 ## Phase 4 Increment 4I remove generic audit scaffold - complete
 

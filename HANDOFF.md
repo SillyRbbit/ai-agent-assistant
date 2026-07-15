@@ -4,11 +4,168 @@ Last updated: 2026-07-15
 
 ## Current state
 
-Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H and 4I are verified, published, and merged into clean synchronized `main` at `99f9279`.
+Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4K are verified, published, and merged into clean synchronized `main` at `5415444`.
 
 Reconstructed Increment 4I was committed as `99f9279` with message `Remove generic audit scaffold`, pushed on `codex/phase4-increment-4i`, fast-forward merged into `main`, and pushed. The corrected `04i` completion marker remains valid after the deletion commit. The original pre-fingerprint implementation commit remains preserved exactly at `cf9d701` on local `codex/phase4-increment-4i-pre-fingerprint-fix`; no remote ref contains it.
 
-Increment 4K remove legacy provider scaffold is verified complete within its exact three-source-file and declared closeout scopes on uncommitted `main`. It deletes only the disconnected synchronous arbitrary-string provider modules and their two exports. The verified normalized gateway protocol and exact function-call validator remain unchanged. No replacement provider, transport, network, credential, coordinator, dispatch, executor, persistence, IPC, UI, dependency, capability, or permission was added.
+Increment 4K remove legacy provider scaffold was committed as `5415444` with message `Remove legacy provider scaffold`, pushed on `codex/phase4-increment-4k`, fast-forward merged into `main`, and pushed. The `04k` completion marker remains valid after the tracked deletions were committed.
+
+Increment 4L remove legacy memory scaffold is verified complete in the current
+uncommitted workspace. It removes exactly the three disconnected Rust memory
+files and one crate-root export. No later implementation increment is Ready.
+
+## Increment 4L completion state
+
+### Goal
+
+Delete the disconnected Rust `memory` module before future product memory,
+context, or persistence work can adopt its unbounded arbitrary-content records or
+short marker-list secret check as a trusted boundary.
+
+### Actual repository evidence
+
+- Public clonable records carry arbitrary title, content, and source strings and
+  omit required opt-in, creation time, optional expiration, visibility, export,
+  encryption, retention, and authoritative provenance semantics.
+- `InMemoryMemoryStore` retains unbounded content and clones it across create,
+  list, update, and delete operations.
+- `contains_secret_like_content` checks only six lowercased substrings and cannot
+  establish that personal content is safe to retain.
+- Repository search finds no caller outside the memory module and its three
+  embedded tests.
+- The independent SQLite bootstrap storage boundary remains unchanged and stores
+  no user memory before reviewed encryption and repository contracts exist.
+
+### Exact source scope
+
+Delete:
+
+```text
+src-tauri/src/memory/mod.rs
+src-tauri/src/memory/store.rs
+src-tauri/src/memory/types.rs
+```
+
+Change:
+
+```text
+src-tauri/src/lib.rs
+```
+
+The `lib.rs` edit removes only `pub mod memory;`. Every other crate export and all
+storage source remain unchanged.
+
+### Exact files changed
+
+```text
+AGENTS.md
+CHANGELOG.md
+DECISIONS.md
+HANDOFF.md
+NEXT_STEPS.md
+PLANS.md
+PROJECT_STATUS.md
+docs/increments/04l-remove-legacy-memory-scaffold.md
+docs/plans/04l-remove-legacy-memory-scaffold.md
+docs/plans/README.md
+docs/reviews/2026-07-15-04l-post-increment-review.md
+src-tauri/src/lib.rs
+src-tauri/src/memory/mod.rs
+src-tauri/src/memory/store.rs
+src-tauri/src/memory/types.rs
+```
+
+No test, security, troubleshooting, dependency, lockfile, Tauri, frontend,
+storage, gateway, policy, approval, audit, coordinator, dispatch, executor, IPC,
+capability, CSP, packaging, or permission file changed. D-033 and the review
+report are the only closeout additions beyond the approved planning and source
+paths.
+
+### Planning baseline
+
+Passed on clean synchronized `main` at `5415444` before documentation edits:
+
+```text
+python3 .codex/hooks/post_increment_gate.py status
+  Increment 04k complete, valid: true, PASS WITH ADVISORIES
+npm run typecheck
+  passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked memory::
+  3 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked storage::
+  13 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test startup_storage_smoke --locked
+  1 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test storage_smoke --locked
+  1 passed
+rg -n "MemoryStore|InMemoryMemoryStore|MemoryResult|MemoryError|MemoryId|MemoryType|MemoryRecordInput|MemoryRecordUpdate|MemoryRecord|contains_secret_like_content" src-tauri/src src-tauri/tests -g '!**/memory/**'
+  no callers outside the proposed deleted module; required exit status 1
+npm run format:check
+  passed after planning edits
+git diff --check
+  passed after planning edits
+```
+
+Toolchains are Node.js `v26.3.0`, npm `11.16.0`, Cargo and rustc `1.90.0`,
+rustfmt `1.8.0-stable`, and Clippy `0.1.90` on arm64 macOS `26.5.2` with Xcode
+Command Line Tools at `/Library/Developer/CommandLineTools`.
+
+The merged `04k` marker was valid before planning. The nine documentation changes
+correctly made its workspace fingerprint stale. After project-owner approval,
+the first sandboxed `04l` begin command could not write ignored state; the
+approved elevated retry succeeded before source edits and made `04l` active.
+
+### Final verification
+
+Passed:
+
+```text
+python3 .codex/hooks/post_increment_gate.py begin --increment 04l
+  passed on the approved state-write retry before source edits
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+  passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked storage::
+  13 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test startup_storage_smoke --locked
+  1 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test storage_smoke --locked
+  1 passed
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+  passed
+rg -n "MemoryStore|InMemoryMemoryStore|MemoryResult|MemoryError|MemoryId|MemoryType|MemoryRecordInput|MemoryRecordUpdate|MemoryRecord|contains_secret_like_content|pub mod memory" src-tauri/src src-tauri/tests
+  no matches; required exit status 1
+npm run verify
+  hook tests: 17 passed
+  frontend tests: 124 passed
+  Rust library tests: 89 passed
+  Rust integration tests: 11 passed
+  formatting, ESLint, Clippy, typecheck, Vite builds, and Tauri release no-bundle passed
+npm audit --audit-level=low
+  network-enabled retry passed with 0 vulnerabilities
+git diff --check
+  passed
+```
+
+No manual verification is required. The implementation changes no production
+caller, frontend, Tauri registration, IPC, persistence, network, or operating-system
+interaction.
+
+### Risks and non-goals
+
+The bounded risks are unsupported external use of the public scaffold, confusion
+between deleting the mock and preserving the product memory requirement, an
+over-broad crate-root edit, premature memory redesign, and the intentional
+removal of three embedded tests. Rollback restores exactly three files and one
+export from `5415444`.
+
+Replacement memory design, context selection, migrations, encryption, Keychain,
+SQLite repositories, persistence, retention, export, UI, IPC, dependencies,
+capabilities, and permissions are explicitly excluded.
+
+### Exact next task
+
+Wait for explicit project-owner direction to commit, push, and merge verified
+Increment 4L. Do not start later planning or implementation.
 
 ## Increment 4K completion state
 
@@ -184,8 +341,7 @@ explicitly excluded.
 
 ### Exact next task
 
-Wait for explicit project-owner direction to commit, push, and merge Increment
-4K. Do not start later work.
+Increment 4K is published and merged at `5415444`; no publication work remains.
 
 ## Increment 4I completion and publication state
 
@@ -875,13 +1031,13 @@ The project owner confirmed the fixed window title, exact trusted-fields-first/t
 
 ## Exact next task
 
-Wait for explicit project-owner direction to commit, push, and merge Increment 4K.
-Do not start later work.
+Wait for explicit project-owner direction to commit, push, and merge verified
+Increment 4L. Do not start later planning or implementation.
 
 ## Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Resume from HANDOFF.md on verified, uncommitted Increment 4K. Confirm the 04k marker remains complete and valid, then wait for explicit project-owner direction to commit, push, and fast-forward merge Increment 4K. Do not start later work.
+Resume from HANDOFF.md on verified, uncommitted Increment 4L. Confirm the `04l` completion marker remains complete and valid, then wait for explicit project-owner direction to commit, push, and fast-forward merge Increment 4L. Do not start later planning or implementation.
 ```

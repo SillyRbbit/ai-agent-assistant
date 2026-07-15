@@ -6,6 +6,8 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Documentation-only Increment 4L plan to remove the disconnected unbounded arbitrary-content Rust memory scaffold while preserving the future user-controlled encrypted memory requirement.
+- Exact four-file source scope, caller-absence and stale-symbol checks, focused storage regression coverage, risks, non-goals, verification, closeout scope, and rollback for the legacy memory removal.
 - Documentation-only Increment 4K plan to remove the disconnected synchronous arbitrary-string provider scaffold while preserving the verified normalized gateway protocol and function-call validator.
 - Exact three-file source scope, caller-absence and stale-symbol checks, focused gateway regression coverage, risks, non-goals, verification, closeout scope, and rollback for the legacy provider removal.
 - Documentation-only Increment 4I plan to remove the unused public arbitrary-string audit scaffold before any production coordinator or persistence path can adopt it.
@@ -90,6 +92,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Removed the disconnected Rust `memory` module and its crate-root export while preserving the verified SQLite bootstrap storage boundary and future product memory requirement.
+- Marked Increment 4L verified complete after focused storage checks, Clippy, complete repository verification, dependency audit, stale-symbol and exact-scope review, documentation synchronization, and the mandatory post-increment gate passed.
+- Reconciled project memory with Increment 4K commit `5415444`, now pushed and fast-forward merged into synchronized `main`; its deletion-stable `04k` marker remains valid.
+- Made Increment 4L project-owner approval the next gate; no source implementation, replacement memory design, migration, encryption, persistence, context collection, IPC, or UI work has started.
 - Removed the unused synchronous `agent::provider` and `agent::types` arbitrary-string scaffold and their exports while preserving the verified normalized gateway protocol and exact local function-call validator unchanged.
 - Marked Increment 4K verified complete after focused gateway and validation checks, Clippy, complete repository verification, dependency audit, exact-scope and trust-boundary review, documentation synchronization, and the mandatory post-increment gate passed.
 - Reconciled project memory with reconstructed Increment 4I commit `99f9279`, now pushed and fast-forward merged into synchronized `main`; its corrected `04i` marker remains valid and the pre-fingerprint backup remains at `cf9d701`.
