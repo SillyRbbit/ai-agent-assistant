@@ -4,7 +4,7 @@ Last updated: 2026-07-15
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4K are **verified complete, published, and merged into `main`**. Increment 4K is merged at `5415444`. Increment 4L remove legacy memory scaffold is **verified complete in the current uncommitted workspace** with no user-visible behavior change. No later implementation increment is Ready.
+Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4L are **verified complete, published, and merged into `main`**. Increment 4L is merged at `ecd49be`. Increment 4M remove legacy platform scaffold is **verified complete in the current uncommitted workspace** with no user-visible behavior change. No later implementation increment is Ready.
 
 ## Increment status
 
@@ -35,7 +35,49 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
 - Increment 4I: remove generic audit scaffold - **verified complete after reconstruction**.
 - Repository Workflow Increment 4J: deletion-stable post-increment fingerprint - **verified complete**.
 - Increment 4K: remove legacy provider scaffold - **verified complete**.
-- Increment 4L: remove legacy memory scaffold - **verified complete; uncommitted**.
+- Increment 4L: remove legacy memory scaffold - **verified complete; published and merged**.
+- Increment 4M: remove legacy platform scaffold - **verified complete; uncommitted**.
+
+## Increment 4M capability and evidence
+
+- The legacy Rust platform module exposes arbitrary-string metadata and a public
+  mock builder that can assign `Available`, `Disabled`, or `Unavailable` to broad
+  capabilities without authoritative operating-system evidence.
+- Its status has no resource scope, provenance, observation time, freshness,
+  requestability, user-initiation evidence, dependent feature, last-use time, or
+  capability-specific failure semantics.
+- Repository search finds no caller outside the platform module and its three
+  embedded tests. The only external reference is `pub mod platform;` in
+  `src-tauri/src/lib.rs`.
+- The typed app-info API, public metadata smoke test, and fixed frontend Permission
+  Center are independent and pass focused baseline checks.
+- The implementation deletes `src-tauri/src/platform/adapter.rs`,
+  `src-tauri/src/platform/mod.rs`, and `src-tauri/src/platform/types.rs`, then
+  removes only `pub mod platform;` from `src-tauri/src/lib.rs`.
+- No replacement adapter, OS query, native framework, permission request,
+  Keychain, LocalAuthentication, resource scope, IPC, UI, dependency, Tauri
+  capability, entitlement, or operating-system permission is included.
+- Planning baseline on clean synchronized `main` at `ecd49be` passed typecheck,
+  three legacy platform tests, the app-info unit test, public metadata smoke test,
+  and focused Permission Center test. The `04l` marker was complete and valid
+  before documentation edits.
+- Focused implementation verification passes with rustfmt, the app-info unit test,
+  public metadata smoke test, focused Permission Center test, Clippy with warnings
+  denied, and the required no-match legacy-symbol scan.
+- Complete `npm run verify` passes with 17 hook, 124 frontend, 86 Rust library,
+  and 11 Rust integration tests plus lint, typecheck, Vite builds, and Tauri
+  release no-bundle. The network-enabled npm audit reports zero vulnerabilities.
+- Exact source, closeout, conflict, secret, generated-output, architecture,
+  code-health, security, and complete-diff reviews have no blocking finding. No
+  manual interaction gate applies because no production or user-visible path
+  changed.
+- D-034 preserves future capability-specific adapters and authoritative, scoped,
+  fresh permission evidence while prohibiting restoration of caller-authored
+  generic status as an authority boundary.
+- The consolidated result is `PASS WITH ADVISORIES`; advisories are the
+  intentionally deferred future platform design and theoretical unsupported
+  external consumer of the removed public scaffold. They block neither completion
+  nor later bounded planning.
 
 ## Increment 4L capability and evidence
 
@@ -256,7 +298,7 @@ Native launch passed with idempotent storage startup. The project owner confirme
 ## Next action
 
 Wait for explicit project-owner direction to commit, push, and merge verified
-Increment 4L. Do not start later planning or implementation.
+Increment 4M. Do not start later planning or implementation.
 
 ## Phase 4 planning result
 

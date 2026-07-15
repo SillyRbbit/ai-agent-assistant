@@ -4,7 +4,6 @@ pub mod approvals;
 pub mod audit;
 mod error;
 pub mod menu_bar;
-pub mod platform;
 pub mod policy;
 mod startup;
 pub mod storage;

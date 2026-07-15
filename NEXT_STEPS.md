@@ -33,6 +33,7 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Repository Workflow Increment 4J - deletion-stable post-increment fingerprint: **Verified complete**.
 - Increment 4K - remove legacy provider scaffold: **Verified complete**.
 - Increment 4L - remove legacy memory scaffold: **Verified complete**.
+- Increment 4M - remove legacy platform scaffold: **Verified complete**.
 
 ## Queue status
 
@@ -54,8 +55,8 @@ IPC, UI, dependency, capability, or permission was added.
 Increment 4K is published and merged at `5415444`; its completion marker remains
 valid for that committed content.
 
-Increment 4L remove legacy memory scaffold is **Verified complete in the current
-uncommitted workspace**. It deletes only the three legacy memory files and their
+Increment 4L remove legacy memory scaffold is **Verified complete, published,
+and merged at `ecd49be`**. It deletes only the three legacy memory files and their
 single crate-root export. The verified storage module is unchanged; focused and
 complete checks pass, and no replacement memory, persistence, migration,
 encryption, Keychain, context selection, IPC, UI, dependency, capability, or
@@ -63,9 +64,19 @@ permission was added. Its consolidated result is `PASS WITH ADVISORIES`; the
 advisory is the theoretical unsupported external consumer of the removed public
 module.
 
+Increment 4M remove legacy platform scaffold is **Verified complete in the
+current uncommitted workspace**. It deletes only the three legacy platform files
+and their single crate-root export. Typed app-info and the fixed Permission Center
+remain unchanged; focused and complete checks pass, and no replacement adapter,
+OS query, native framework, permission request, Keychain, LocalAuthentication,
+IPC, UI, dependency, Tauri capability, entitlement, or permission was added. Its
+consolidated result is `PASS WITH ADVISORIES`; advisories are the intentionally
+deferred future platform design and theoretical unsupported external consumer of
+the removed public module.
+
 ## Ready
 
 No later implementation increment is Ready.
 
 Exact next task: wait for explicit project-owner direction to commit, push, and
-merge verified Increment 4L. Do not start later planning or implementation.
+merge verified Increment 4M. Do not start later planning or implementation.

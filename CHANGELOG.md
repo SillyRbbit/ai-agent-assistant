@@ -6,6 +6,8 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Documentation-only Increment 4M plan to remove the disconnected caller-authored generic Rust platform capability scaffold while preserving future capability-specific adapter requirements.
+- Exact four-file source scope, caller-absence and stale-symbol checks, focused app-info and Permission Center regression coverage, risks, non-goals, verification, closeout scope, and rollback for the legacy platform removal.
 - Documentation-only Increment 4L plan to remove the disconnected unbounded arbitrary-content Rust memory scaffold while preserving the future user-controlled encrypted memory requirement.
 - Exact four-file source scope, caller-absence and stale-symbol checks, focused storage regression coverage, risks, non-goals, verification, closeout scope, and rollback for the legacy memory removal.
 - Documentation-only Increment 4K plan to remove the disconnected synchronous arbitrary-string provider scaffold while preserving the verified normalized gateway protocol and function-call validator.
@@ -92,6 +94,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Removed the disconnected generic Rust `platform` module and its crate-root export while preserving typed app-info, the fixed Permission Center, and future capability-specific adapter requirements.
+- Marked Increment 4M verified complete after focused app-info and Permission Center checks, Clippy, complete repository verification, dependency audit, stale-symbol and exact-scope review, documentation synchronization, and the mandatory post-increment gate passed.
+- Reconciled project memory with Increment 4L commit `ecd49be`, now pushed and fast-forward merged into synchronized `main`; its deletion-stable `04l` marker remains valid.
+- Made Increment 4M project-owner approval the next gate; no source implementation, replacement platform adapter, OS query, permission request, native framework, Keychain, LocalAuthentication, IPC, or UI work has started.
 - Removed the disconnected Rust `memory` module and its crate-root export while preserving the verified SQLite bootstrap storage boundary and future product memory requirement.
 - Marked Increment 4L verified complete after focused storage checks, Clippy, complete repository verification, dependency audit, stale-symbol and exact-scope review, documentation synchronization, and the mandatory post-increment gate passed.
 - Reconciled project memory with Increment 4K commit `5415444`, now pushed and fast-forward merged into synchronized `main`; its deletion-stable `04k` marker remains valid.

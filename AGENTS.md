@@ -20,7 +20,7 @@ When the task is a security-sensitive change, also read `SECURITY.md` and `CODE_
 
 ## Current phase
 
-Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4K are verified complete, published, and merged. Increment 4L remove legacy memory scaffold is verified complete in the current uncommitted workspace; it deletes only the disconnected Rust memory module and its crate export without adding replacement memory, persistence, migrations, encryption, Keychain, context collection, IPC, UI, or permissions. No later implementation increment is Ready. The verified gateway, schema-validation, policy-input, approval, typed approval-audit, and SQLite bootstrap modules remain transport-free and non-authorizing; no current Rust memory repository is approved.
+Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4L are verified complete, published, and merged. Increment 4M remove legacy platform scaffold is verified complete in the current uncommitted workspace; it deletes only the disconnected generic Rust platform module and its crate export without adding replacement adapters, native frameworks, Keychain, LocalAuthentication, permission queries, IPC, UI, capabilities, or entitlements. No later implementation increment is Ready. The verified app-info, Permission Center, gateway, schema-validation, policy-input, approval, typed approval-audit, and SQLite bootstrap boundaries remain unchanged; caller-authored capability status is not permission evidence.
 
 ## Non-negotiable product boundaries
 

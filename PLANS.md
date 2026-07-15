@@ -4,7 +4,7 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No implementation plan is active. Increment 4L is verified complete in the
+No implementation plan is active. Increment 4M is verified complete in the
 current uncommitted workspace, and no later increment is Ready.
 
 ## Completed plans
@@ -29,6 +29,7 @@ docs/plans/04i-remove-generic-audit-scaffold.md
 docs/plans/04j-post-increment-deletion-fingerprint.md
 docs/plans/04k-remove-legacy-provider-scaffold.md
 docs/plans/04l-remove-legacy-memory-scaffold.md
+docs/plans/04m-remove-legacy-platform-scaffold.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -83,6 +84,30 @@ A plan must contain:
 | Workflow Increment 4J deletion fingerprint    | Complete | Project maintainer | 2026-07-15   |
 | Increment 4K remove legacy provider scaffold  | Complete | Project maintainer | 2026-07-15   |
 | Increment 4L remove legacy memory scaffold    | Complete | Project maintainer | 2026-07-15   |
+| Increment 4M remove legacy platform scaffold  | Complete | Project maintainer | 2026-07-15   |
+
+## Phase 4 Increment 4M remove legacy platform scaffold - complete
+
+Goal: delete the unused public generic `PlatformAdapter`, arbitrary-string
+metadata, caller-authored capability status map, and broad capability/report types
+before future permissions or native integration work can mistake them for
+authoritative operating-system evidence.
+
+Repository search finds no caller outside the three platform files and their
+three embedded tests. The exact source plan deletes the complete
+`src-tauri/src/platform/` module and removes only `pub mod platform;` from
+`src-tauri/src/lib.rs`. The independent app-info IPC and fixed frontend Permission
+Center remain unchanged.
+
+The verified implementation adds no replacement adapter, native framework,
+permission query/request, Keychain, LocalAuthentication, frontend state, IPC,
+dependency, Tauri capability, entitlement, or operating-system permission. The
+app-info unit test, public metadata smoke test, focused Permission Center test,
+Clippy, complete `npm run verify`, npm audit, stale-symbol, exact-scope, security,
+code-health, documentation, and mandatory gate reviews pass. D-034 preserves the
+future capability-specific adapter and authoritative permission-evidence
+requirements. The implementation remains uncommitted and no later increment is
+Ready.
 
 ## Phase 4 Increment 4L remove legacy memory scaffold - complete
 

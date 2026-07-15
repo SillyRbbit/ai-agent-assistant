@@ -680,6 +680,47 @@ Consequences:
   context selection, Tauri command, WebView path, dependency, capability,
   entitlement, or operating-system permission is added.
 
+## D-034 - Remove the legacy generic platform scaffold
+
+Date: 2026-07-15
+Status: Accepted; Increment 4M implemented and verified
+
+Decision: delete the public Rust `platform` module, including arbitrary-string
+platform metadata, the generic capability enum and report, caller-authored
+capability status, mock adapter, and embedded tests. Do not restore a generic
+capability map as permission, support, availability, or execution evidence.
+
+Future OS integration requires separately approved capability-specific adapters.
+Any permission-bearing contract must derive authoritative, resource-scoped,
+provenance-aware, fresh evidence from the relevant trusted operating-system
+boundary and preserve user initiation, requestability, denial/restriction, and
+capability-specific failure semantics where applicable. A public constructor or
+generic `Available` value cannot establish permission or policy allowance.
+
+Rationale: repository search found no caller outside the legacy module and its
+three embedded tests. The mock predates live app-info and the fixed Permission
+Center, makes no native query, and can fabricate broad capability status without
+scope or observation evidence. Repairing it would prematurely decide Phase 6 and
+Phase 7 native frameworks, permission flows, selected resources, Keychain,
+LocalAuthentication, IPC, UI, and lifecycle ownership. Deletion is the smallest
+change that removes misleading authority-shaped state while preserving the
+product's platform-adapter requirements.
+
+Consequences:
+
+- Current Rust source exposes no generic platform capability or permission-status
+  API.
+- The three legacy platform unit tests are removed with the unused implementation;
+  app-info, public metadata smoke, and Permission Center coverage remain unchanged
+  and passing.
+- The product requirement for capability-specific platform adapters and a
+  user-controlled Permission Center remains. Later work starts from the product
+  brief, architecture baseline, security policy, and this decision.
+- No replacement adapter, native framework, OS query, permission request,
+  Keychain, LocalAuthentication, Tauri command/event/plugin, frontend state,
+  capability configuration, entitlement, dependency, or operating-system
+  permission is added.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

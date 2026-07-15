@@ -4,15 +4,179 @@ Last updated: 2026-07-15
 
 ## Current state
 
-Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4K are verified, published, and merged into clean synchronized `main` at `5415444`.
+Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4L are verified, published, and merged into clean synchronized `main` at `ecd49be`.
 
 Reconstructed Increment 4I was committed as `99f9279` with message `Remove generic audit scaffold`, pushed on `codex/phase4-increment-4i`, fast-forward merged into `main`, and pushed. The corrected `04i` completion marker remains valid after the deletion commit. The original pre-fingerprint implementation commit remains preserved exactly at `cf9d701` on local `codex/phase4-increment-4i-pre-fingerprint-fix`; no remote ref contains it.
 
 Increment 4K remove legacy provider scaffold was committed as `5415444` with message `Remove legacy provider scaffold`, pushed on `codex/phase4-increment-4k`, fast-forward merged into `main`, and pushed. The `04k` completion marker remains valid after the tracked deletions were committed.
 
-Increment 4L remove legacy memory scaffold is verified complete in the current
-uncommitted workspace. It removes exactly the three disconnected Rust memory
+Increment 4L remove legacy memory scaffold was committed as `ecd49be` with
+message `Remove legacy memory scaffold`, pushed on
+`codex/phase4-increment-4l`, fast-forward merged into `main`, and pushed. The
+`04l` completion marker remains valid after the tracked deletions were committed.
+
+Increment 4M remove legacy platform scaffold is verified complete in the current
+uncommitted workspace. It removes exactly the three disconnected Rust platform
 files and one crate-root export. No later implementation increment is Ready.
+
+## Increment 4M completion state
+
+### Goal
+
+Delete the disconnected generic Rust `platform` module before future native
+integration or permission work can treat caller-authored capability status as
+authoritative operating-system evidence.
+
+### Actual repository evidence
+
+- `PlatformMetadata` accepts arbitrary OS, architecture, and family strings even
+  though the live `AppInfo` boundary independently derives target metadata.
+- `MockPlatformAdapter::with_capability` can label a broad capability `Available`
+  without an OS query, resource scope, provenance, observation time, freshness,
+  requestability, user initiation, dependent feature, or last-use evidence.
+- The generic enum combines ordinary and privileged capabilities while omitting
+  distinct future Keychain, LocalAuthentication, selected-resource, and
+  capability-specific failure boundaries.
+- Repository search finds no caller outside the platform module and its three
+  embedded tests. The only external reference is its crate-root export.
+- The fixed frontend Permission Center and typed app-info IPC path are independent
+  and pass focused baseline checks.
+
+### Exact source scope
+
+Delete:
+
+```text
+src-tauri/src/platform/adapter.rs
+src-tauri/src/platform/mod.rs
+src-tauri/src/platform/types.rs
+```
+
+Change:
+
+```text
+src-tauri/src/lib.rs
+```
+
+The `lib.rs` edit removes only `pub mod platform;`. Every other crate export,
+app-info path, Permission Center file, and Tauri configuration remains unchanged.
+
+### Exact files changed
+
+```text
+AGENTS.md
+CHANGELOG.md
+DECISIONS.md
+HANDOFF.md
+NEXT_STEPS.md
+PLANS.md
+PROJECT_STATUS.md
+docs/increments/04m-remove-legacy-platform-scaffold.md
+docs/plans/04m-remove-legacy-platform-scaffold.md
+docs/plans/README.md
+docs/reviews/2026-07-15-04m-post-increment-review.md
+src-tauri/src/lib.rs
+src-tauri/src/platform/adapter.rs
+src-tauri/src/platform/mod.rs
+src-tauri/src/platform/types.rs
+```
+
+No test, security, product, troubleshooting, dependency, lockfile, Tauri,
+frontend, app-info, Permission Center, storage, gateway, policy, approval, audit,
+IPC, capability configuration, CSP, packaging, entitlement, or permission file
+changed. D-034 and the review report are the only closeout additions beyond the
+approved planning and source paths.
+
+### Planning baseline
+
+Passed on clean synchronized `main` at `ecd49be` before documentation edits:
+
+```text
+python3 .codex/hooks/post_increment_gate.py status
+  Increment 04l complete, valid: true, PASS WITH ADVISORIES
+npm run typecheck
+  passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked platform::
+  3 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked app_info::
+  1 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test smoke --locked
+  1 passed
+npx vitest run src/App.test.tsx -t "renders the Permission Center without a permission request control"
+  1 passed; 24 skipped
+rg -n "PlatformAdapter|MockPlatformAdapter|PlatformResult|PlatformError|PlatformMetadata|PlatformCapability|CapabilityStatus|CapabilityReport" src-tauri/src src-tauri/tests -g '!src-tauri/src/platform/**'
+  no callers outside the proposed deleted module; required exit status 1
+rg -n "pub mod platform" src-tauri/src/lib.rs
+  one expected crate-root export
+```
+
+Toolchains are Node.js `v26.3.0`, npm `11.16.0`, Cargo and rustc `1.90.0`,
+rustfmt `1.8.0-stable`, and Clippy `0.1.90` on arm64 macOS `26.5.2` with Xcode
+Command Line Tools at `/Library/Developer/CommandLineTools`.
+
+The merged `04l` marker was valid before planning. The nine documentation changes
+correctly made its workspace fingerprint stale. After project-owner approval,
+mandatory `04m` gate state began before source edits.
+
+### Final verification
+
+Passed:
+
+```text
+python3 .codex/hooks/post_increment_gate.py begin --increment 04m
+  passed before source edits
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+  passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked app_info::
+  1 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test smoke --locked
+  1 passed
+npx vitest run src/App.test.tsx -t "renders the Permission Center without a permission request control"
+  1 passed; 24 skipped
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+  passed
+rg -n "PlatformAdapter|MockPlatformAdapter|PlatformResult|PlatformError|PlatformMetadata|PlatformCapability|CapabilityStatus|CapabilityReport|pub mod platform" src-tauri/src src-tauri/tests
+  no matches; required exit status 1
+npm run verify
+  hook tests: 17 passed
+  frontend tests: 124 passed
+  Rust library tests: 86 passed
+  Rust integration tests: 11 passed
+  formatting, ESLint, Clippy, typecheck, Vite builds, and Tauri release no-bundle passed
+npm audit --audit-level=low
+  network-enabled retry passed with 0 vulnerabilities
+git diff --check
+  passed
+```
+
+Failed and resolved:
+
+- The first sandboxed npm audit could not resolve the registry or write user-level
+  npm logs. The approved network-enabled retry passed with zero vulnerabilities
+  and changed no repository file.
+
+No manual verification is required. The implementation changes no production
+caller, frontend, Tauri registration, IPC, native framework, permission request,
+secret store, local authentication, network, or operating-system interaction.
+
+### Risks and non-goals
+
+The bounded risks are unsupported external use of the public scaffold, confusion
+between deleting the mock and preserving capability-specific adapter
+requirements, an over-broad crate-root edit, accidental app-info or Permission
+Center changes, premature native integration design, and the intentional removal
+of three embedded tests. Rollback restores exactly three files and one export
+from `ecd49be`.
+
+Replacement adapters, OS queries, native frameworks, permission requests,
+Keychain, LocalAuthentication, resource scopes, onboarding, UI, IPC,
+dependencies, Tauri capabilities, entitlements, and permissions are explicitly
+excluded.
+
+### Exact next task
+
+Wait for explicit project-owner direction to commit, push, and merge verified
+Increment 4M. Do not start later planning or implementation.
 
 ## Increment 4L completion state
 
@@ -165,7 +329,7 @@ capabilities, and permissions are explicitly excluded.
 ### Exact next task
 
 Wait for explicit project-owner direction to commit, push, and merge verified
-Increment 4L. Do not start later planning or implementation.
+Increment 4M. Do not start later planning or implementation.
 
 ## Increment 4K completion state
 
@@ -1032,12 +1196,12 @@ The project owner confirmed the fixed window title, exact trusted-fields-first/t
 ## Exact next task
 
 Wait for explicit project-owner direction to commit, push, and merge verified
-Increment 4L. Do not start later planning or implementation.
+Increment 4M. Do not start later planning or implementation.
 
 ## Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Resume from HANDOFF.md on verified, uncommitted Increment 4L. Confirm the `04l` completion marker remains complete and valid, then wait for explicit project-owner direction to commit, push, and fast-forward merge Increment 4L. Do not start later planning or implementation.
+Resume from HANDOFF.md on verified, uncommitted Increment 4M. Confirm the `04m` completion marker remains complete and valid, then wait for explicit project-owner direction to commit, push, and fast-forward merge Increment 4M. Do not start later planning or implementation.
 ```
