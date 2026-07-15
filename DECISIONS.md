@@ -597,6 +597,50 @@ Consequences:
 - Pre-fix deletion markers remain invalid. Increment 4I stays unpushed and unmerged until it is reconstructed from corrected `main` and passes a fresh gate.
 - The hook remains a trusted, operator-controlled workflow guardrail and gains no security, authorization, audit, or execution authority.
 
+## D-032 - Remove the legacy synchronous provider scaffold
+
+Date: 2026-07-15
+Status: Accepted; Increment 4K implemented and verified
+
+Decision: delete the public `agent::provider` and `agent::types` modules,
+including the synchronous `AgentProvider::complete` trait, caller-authored
+`AgentRequest`, arbitrary-string `AgentProviderResponse`, arbitrary mock failure
+strings, deterministic mock implementation, and their embedded tests. Export only
+the verified `agent::gateway_protocol` and `agent::function_call_validation`
+modules from the current `agent` namespace.
+
+A future provider transport requires a separately approved closed, bounded
+request contract and must produce only validated normalized gateway events under
+D-021. It must preserve explicit stream cancellation, deadlines, retries, size
+and event limits, closed redacted failures, credential isolation, and independent
+local function-call validation. Do not restore the deleted synchronous
+arbitrary-string interface as a convenience abstraction.
+
+Rationale: repository search found no caller outside the legacy modules and their
+three embedded tests. The interface predates the verified Phase 4 gateway
+protocol and cannot represent its streaming sequence, cancellation, limits,
+correlation, or redacted-error boundary. Adapting it now would prematurely couple
+unapproved gateway request construction, authentication, transport, and runtime
+orchestration. Deletion is the smallest change that removes the misleading
+bypass-shaped surface while preserving every verified boundary.
+
+Consequences:
+
+- Current Rust agent source exposes only the normalized gateway protocol and
+  exact local function-call validator.
+- The three legacy provider unit tests are removed with the unused implementation;
+  existing gateway, function-validation, and public gateway-to-policy coverage
+  remains unchanged and passing.
+- The cross-platform product requirement for a provider abstraction remains. Its
+  exact transport contract must be designed later from D-021 rather than from the
+  removed Phase 2 mock API.
+- O-006 and O-007 remain unresolved and continue to block live gateway networking
+  and provider traffic.
+- No replacement provider, dependency, manifest, lockfile, Tauri command, WebView,
+  SQLite, credential, Keychain, gateway deployment, coordinator, dispatch,
+  executor, capability, CSP, packaging, entitlement, or operating-system
+  permission is added.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

@@ -6,6 +6,8 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Documentation-only Increment 4K plan to remove the disconnected synchronous arbitrary-string provider scaffold while preserving the verified normalized gateway protocol and function-call validator.
+- Exact three-file source scope, caller-absence and stale-symbol checks, focused gateway regression coverage, risks, non-goals, verification, closeout scope, and rollback for the legacy provider removal.
 - Documentation-only Increment 4I plan to remove the unused public arbitrary-string audit scaffold before any production coordinator or persistence path can adopt it.
 - Exact three-file source scope, stale-symbol checks, focused regression coverage, risks, non-goals, verification, and rollback for the audit-surface removal.
 - Two repository-hook regressions proving that reviewed tracked deletions remain valid after commit and unreviewed post-finalization deletions invalidate completion evidence.
@@ -88,8 +90,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Removed the unused synchronous `agent::provider` and `agent::types` arbitrary-string scaffold and their exports while preserving the verified normalized gateway protocol and exact local function-call validator unchanged.
+- Marked Increment 4K verified complete after focused gateway and validation checks, Clippy, complete repository verification, dependency audit, exact-scope and trust-boundary review, documentation synchronization, and the mandatory post-increment gate passed.
+- Reconciled project memory with reconstructed Increment 4I commit `99f9279`, now pushed and fast-forward merged into synchronized `main`; its corrected `04i` marker remains valid and the pre-fingerprint backup remains at `cf9d701`.
+- Made Increment 4K project-owner approval the next gate; no source implementation, replacement provider, networking, credential, coordinator, dispatch, executor, persistence, IPC, or UI work has started.
 - Removed the unused public `audit::logger` and `audit::types` arbitrary-string scaffold while preserving the verified typed `audit::approval` boundary unchanged.
-- Reconstructed Increment 4I without committing on corrected 4J `main`; focused and complete verification, npm audit, exact-scope and security review, documentation reconciliation, and the mandatory post-increment gate pass.
+- Reconstructed Increment 4I on corrected 4J `main` by applying the preserved change without creating a second pre-verification commit; focused and complete verification, npm audit, exact-scope and security review, documentation reconciliation, and the mandatory post-increment gate passed before publication.
 - Corrected the post-increment workspace fingerprint to omit paths absent from the working tree, keeping reviewed deletion evidence stable across commit without relaxing exact changed-file reporting or stale-workspace rejection.
 - Marked Repository Workflow Increment 4J verified complete after 17 focused hook tests, complete repository verification, dependency audit, exact-scope review, security review, documentation synchronization, and the mandatory gate passed.
 - Preserved the unpushed pre-fix Increment 4I commit at `cf9d701`; after 4J merged, it was renamed to the backup branch and reconstructed on corrected `main` rather than publishing its invalid marker.

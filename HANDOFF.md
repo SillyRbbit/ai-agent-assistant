@@ -4,13 +4,190 @@ Last updated: 2026-07-15
 
 ## Current state
 
-Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Increment 4H are verified, published, and merged into `main` at `a2b9803`.
+Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H and 4I are verified, published, and merged into clean synchronized `main` at `99f9279`.
 
-Increment 4I remove generic audit scaffold is verified complete after reconstruction on uncommitted, unpushed `codex/phase4-increment-4i`. The fresh branch starts from corrected, synchronized 4J `main` at `a2b9803`. The original pre-fix implementation commit is preserved exactly at `cf9d701` on `codex/phase4-increment-4i-pre-fingerprint-fix` and remains unpushed.
+Reconstructed Increment 4I was committed as `99f9279` with message `Remove generic audit scaffold`, pushed on `codex/phase4-increment-4i`, fast-forward merged into `main`, and pushed. The corrected `04i` completion marker remains valid after the deletion commit. The original pre-fingerprint implementation commit remains preserved exactly at `cf9d701` on local `codex/phase4-increment-4i-pre-fingerprint-fix`; no remote ref contains it.
 
-The old change was applied with `git cherry-pick --no-commit cf9d701`. It deletes only the unused public `audit::logger` and `audit::types` modules and removes their exports from `audit::mod`. The typed adapter remains unchanged. No replacement audit API, dependency, persistence, caller, coordinator, dispatch, executor, IPC, UI, network, credential, capability, or permission was added.
+Increment 4K remove legacy provider scaffold is verified complete within its exact three-source-file and declared closeout scopes on uncommitted `main`. It deletes only the disconnected synchronous arbitrary-string provider modules and their two exports. The verified normalized gateway protocol and exact function-call validator remain unchanged. No replacement provider, transport, network, credential, coordinator, dispatch, executor, persistence, IPC, UI, dependency, capability, or permission was added.
 
-## Increment 4I reconstruction state
+## Increment 4K completion state
+
+### Goal
+
+Delete the disconnected synchronous `agent::provider` and `agent::types`
+arbitrary-string scaffold before future gateway transport work can adopt it as the
+production provider boundary.
+
+### Actual repository evidence
+
+- `AgentProvider::complete` accepts public arbitrary-string request values and
+  returns arbitrary assistant text or arbitrary mock failure strings.
+- Repository search finds no caller outside `agent/provider.rs`,
+  `agent/types.rs`, and the three embedded provider tests.
+- `agent::gateway_protocol` is independent and retains the verified closed,
+  bounded, sequence-checked normalized event and cancellation contract.
+- Exact local function-call validation, policy, approval, and typed approval audit
+  do not depend on the legacy provider scaffold.
+- O-006 and O-007 continue to block live gateway networking and provider traffic
+  choices; 4K does not resolve or implement either one.
+
+### Exact source scope
+
+Delete:
+
+```text
+src-tauri/src/agent/provider.rs
+src-tauri/src/agent/types.rs
+```
+
+Change:
+
+```text
+src-tauri/src/agent/mod.rs
+```
+
+The `mod.rs` edit removes only the two deleted exports. It preserves
+`function_call_validation` and `gateway_protocol` unchanged.
+
+### Exact files changed
+
+```text
+AGENTS.md
+CHANGELOG.md
+DECISIONS.md
+HANDOFF.md
+NEXT_STEPS.md
+PLANS.md
+PROJECT_STATUS.md
+docs/increments/04k-remove-legacy-provider-scaffold.md
+docs/plans/04k-remove-legacy-provider-scaffold.md
+docs/plans/README.md
+docs/reviews/2026-07-15-04k-post-increment-review.md
+src-tauri/src/agent/mod.rs
+src-tauri/src/agent/provider.rs
+src-tauri/src/agent/types.rs
+```
+
+No test, security, troubleshooting, dependency, lockfile, Tauri, frontend,
+storage, gateway protocol, function validator, policy, approval, audit,
+coordinator, dispatch, executor, IPC, capability, CSP, packaging, or permission
+file changed. D-032 and the review report are the only implementation-closeout
+additions beyond the approved planning and source paths.
+
+### Planning baseline
+
+Passed on clean synchronized `main` at `99f9279` before documentation edits:
+
+```text
+python3 .codex/hooks/post_increment_gate.py status
+  Increment 04i complete, valid: true, PASS WITH ADVISORIES
+npm run typecheck
+  passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::provider::
+  3 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::gateway_protocol::
+  18 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::function_call_validation::
+  6 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test policy_input_binding --locked
+  2 passed
+npm run format:check
+  passed after planning edits
+git diff --check
+  passed after planning edits
+rg -n "AgentProvider|MockAgentProvider|AgentProviderResponse|AgentRequest" src-tauri/src src-tauri/tests -g '!**/agent/provider.rs' -g '!**/agent/types.rs'
+  no matches outside the proposed deleted files; required exit status 1
+```
+
+Toolchains are Node.js `v26.3.0`, npm `11.16.0`, Cargo and rustc `1.90.0`,
+rustfmt `1.8.0-stable`, and Clippy `0.1.90` on arm64 macOS `26.5.2` with Xcode
+Command Line Tools at `/Library/Developer/CommandLineTools`.
+
+The merged `04i` marker was valid before planning. The nine documentation changes
+correctly made its workspace fingerprint stale. After project-owner approval, the
+first sandboxed `begin` command could not write ignored state; the approved exact
+retry succeeded and made `04k` active before source edits.
+
+The first caller-absence scan used non-path-aware exclusion globs and therefore
+printed the definitions in the two files it intended to exclude. The corrected
+path-aware command above returned no matches. This was command syntax, not a
+repository defect.
+
+### Final verification
+
+Passed:
+
+```text
+python3 .codex/hooks/post_increment_gate.py begin --increment 04k
+  passed on the approved state-write retry before source edits
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+  passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::gateway_protocol::
+  18 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::function_call_validation::
+  6 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test policy_input_binding --locked
+  2 passed
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+  passed
+rg -n "AgentProvider|MockAgentProvider|AgentProviderResult|AgentProviderError|AgentRequest|AgentProviderResponse" src-tauri/src src-tauri/tests
+  no matches; required exit status 1
+npm run verify
+  hook tests: 17 passed
+  frontend tests: 124 passed
+  Rust library tests: 92 passed
+  Rust integration tests: 11 passed
+  formatting, ESLint, Clippy, typecheck, Vite builds, and Tauri release no-bundle passed
+npm audit --audit-level=low
+  network-enabled retry passed with 0 vulnerabilities
+git diff --diff-filter=U --name-only
+  passed with no conflicts
+high-confidence secret-material scan
+  passed with no matches
+preserved-boundary git diff check
+  passed; gateway, validation, tools, policy, approval, audit, storage, manifests, workflow, security, review, and troubleshooting files are unchanged
+git diff --check
+  passed
+```
+
+Failed and resolved:
+
+- The first sandboxed 04k begin command could not write ignored state under the
+  protected `.codex` directory. The approved exact retry succeeded before any
+  source edit.
+- The first sandboxed npm audit could not resolve the registry or write user-level
+  npm logs. The approved network-enabled retry passed with zero vulnerabilities.
+- The planning caller-absence scan initially used ineffective exclusion globs;
+  the corrected path-aware baseline and final post-deletion scan both returned no
+  unexpected caller.
+
+Checks not run:
+
+- No native launch or manual interaction was required because the deleted
+  scaffold had no production caller, Tauri registration, IPC path, UI,
+  persistence, network transport, or operating-system behavior.
+- No RustSec audit was required because manifests and lockfiles are unchanged.
+
+Manual verification pending: none.
+
+### Risks and non-goals
+
+The bounded risks are unsupported external use of the public scaffold, an
+over-broad module edit, pressure to design replacement transport prematurely, and
+the intentional removal of three embedded tests. Rollback restores exactly two
+files and two exports from `99f9279`.
+
+Replacement provider design, request construction, HTTPS, gateway deployment,
+credentials, Keychain, runtime orchestration, dispatch, execution, persistence,
+provider continuation, IPC, UI, dependencies, capabilities, and permissions are
+explicitly excluded.
+
+### Exact next task
+
+Wait for explicit project-owner direction to commit, push, and merge Increment
+4K. Do not start later work.
+
+## Increment 4I completion and publication state
 
 ### Exact source scope
 
@@ -101,9 +278,11 @@ Checks not run:
 
 Manual verification pending: none. Complete scope, conflict, secret, generated-output, code, architecture, and security reviews passed. All merged 4J implementation/evidence files and `audit::approval` remain byte-for-byte unchanged.
 
-### Exact next task
+### Publication result
 
-Wait for explicit project-owner direction to commit, push, and merge reconstructed Increment 4I. Do not start later work.
+Commit `99f9279` is published on `codex/phase4-increment-4i` and fast-forward
+merged into synchronized `main`. The corrected marker remains complete and valid.
+No further 4I publication work remains.
 
 ## Repository Workflow Increment 4J state
 
@@ -696,12 +875,13 @@ The project owner confirmed the fixed window title, exact trusted-fields-first/t
 
 ## Exact next task
 
-Wait for explicit project-owner direction to commit, push, and merge reconstructed Increment 4I. Do not infer a later increment.
+Wait for explicit project-owner direction to commit, push, and merge Increment 4K.
+Do not start later work.
 
 ## Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Resume from HANDOFF.md on verified, uncommitted `codex/phase4-increment-4i`. Preserve `codex/phase4-increment-4i-pre-fingerprint-fix` at `cf9d701`. Wait for explicit direction to commit, push, and fast-forward merge reconstructed 4I into updated `main`, then verify the corrected 04i marker remains valid after the deletion commit. Do not begin later work.
+Resume from HANDOFF.md on verified, uncommitted Increment 4K. Confirm the 04k marker remains complete and valid, then wait for explicit project-owner direction to commit, push, and fast-forward merge Increment 4K. Do not start later work.
 ```

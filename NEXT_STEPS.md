@@ -31,6 +31,7 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 4H - typed approval-audit adapter: **Verified complete**.
 - Increment 4I - remove generic audit scaffold: **Verified complete**.
 - Repository Workflow Increment 4J - deletion-stable post-increment fingerprint: **Verified complete**.
+- Increment 4K - remove legacy provider scaffold: **Verified complete**.
 
 ## Queue status
 
@@ -42,4 +43,13 @@ Repository Workflow Increment 4J is **Verified complete, published, and merged**
 
 Increment 4I remove generic audit scaffold is **Verified complete after reconstruction**. It deletes only the unused `audit::logger` and `audit::types` modules and removes their exports, preserving the typed `audit::approval` adapter unchanged. The corrected 4J gate remains intact, the stale-symbol scan has no matches, focused and complete checks pass, and no replacement abstraction, persistence, coordinator, dispatch, executor, IPC, UI, networking, dependency, migration, or permission was added.
 
-Exact next task: wait for explicit project-owner direction to commit, push, and merge reconstructed 4I. No later product implementation item is marked **Ready**; do not infer or start another increment automatically.
+Increment 4K remove legacy provider scaffold is **Verified complete**. It deletes
+only `agent::provider` and `agent::types` and removes their two exports. The
+verified normalized gateway protocol and exact function-call validator remain
+unchanged; focused and complete checks pass, and no replacement provider,
+transport, networking, credential, coordinator, dispatch, executor, persistence,
+IPC, UI, dependency, capability, or permission was added.
+
+Exact next task: wait for explicit project-owner direction to commit, push, and
+merge Increment 4K. No later product implementation item is marked **Ready**; do
+not infer or start another increment automatically.

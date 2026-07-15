@@ -4,7 +4,7 @@ Last updated: 2026-07-15
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Increment 4H are **verified complete, published, and merged into `main`**. Increment 4I remove generic audit scaffold is **verified complete after reconstruction** on corrected 4J `main`; it changes no user-visible behavior. No later product implementation increment is Ready.
+Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H and 4I are **verified complete, published, and merged into `main`**. Increment 4K remove legacy provider scaffold is **verified complete** within its exact source and closeout scopes and changes no user-visible behavior; it is not yet committed or published. No later product implementation increment is Ready.
 
 ## Increment status
 
@@ -34,13 +34,53 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
 - Increment 4H: typed approval-audit adapter - **verified complete**.
 - Increment 4I: remove generic audit scaffold - **verified complete after reconstruction**.
 - Repository Workflow Increment 4J: deletion-stable post-increment fingerprint - **verified complete**.
+- Increment 4K: remove legacy provider scaffold - **verified complete**.
+
+## Increment 4K capability and evidence
+
+- The legacy `agent::provider` module exposes a synchronous `complete` trait,
+  arbitrary-string request fields, arbitrary assistant text, and arbitrary mock
+  failure strings. `agent::types` exists only for that scaffold.
+- Repository search finds no caller outside those two files and their three
+  embedded unit tests. Historical backup documentation is not executable code.
+- The verified `agent::gateway_protocol` and
+  `agent::function_call_validation` modules are independent and remain the only
+  approved normalized provider-event and exact local call-validation boundaries.
+- The implementation deletes `src-tauri/src/agent/provider.rs` and
+  `src-tauri/src/agent/types.rs` and removes only their exports from
+  `src-tauri/src/agent/mod.rs`.
+- No replacement provider, request contract, transport, networking, credential,
+  Keychain, coordinator, dispatch, executor, persistence, IPC, UI, dependency,
+  capability, or permission is included.
+- Planning baseline on clean synchronized `main` at `99f9279` passed typecheck,
+  three legacy provider tests, 18 normalized gateway-protocol tests, six exact
+  function-call validation tests, and two public gateway-to-policy tests. The
+  corrected `04i` marker was complete and valid before documentation edits.
+- Focused implementation checks pass with 18 gateway-protocol tests, six exact
+  function-call validation tests, two public gateway-to-policy tests, rustfmt,
+  Clippy with warnings denied, and the required no-match stale-symbol scan.
+- Complete `npm run verify` passes with 17 hook, 124 frontend, 92 Rust library,
+  and 11 Rust integration tests plus lint, typecheck, Vite builds, and Tauri
+  release no-bundle. The network-enabled npm audit retry reports zero
+  vulnerabilities.
+- Exact source, closeout, conflict, secret, generated-output, architecture,
+  code-health, security, and complete-diff reviews have no blocking finding. No
+  manual interaction gate applies because no production or user-visible path
+  changed.
+- D-032 records that future provider transport requires separately approved
+  closed bounded request and normalized event contracts rather than restoration
+  of the deleted synchronous arbitrary-string API.
+- The consolidated result is `PASS WITH ADVISORIES`; the advisory is the
+  theoretical unsupported external consumer of the removed public scaffold. It
+  blocks neither completion nor later bounded planning.
 
 ## Increment 4I capability and evidence
 
 - `src-tauri/src/audit/logger.rs` and `src-tauri/src/audit/types.rs` are deleted, and `audit::mod` exports only the verified typed `approval` module.
 - Repository search found no production or integration caller before deletion, and the final stale-symbol scan returns no matches in current Rust source or tests.
 - The typed approval adapter is unchanged. Six typed-adapter tests, eleven native-source tests, and one public approval-audit integration test pass.
-- The original implementation commit remains preserved at `cf9d701` on `codex/phase4-increment-4i-pre-fingerprint-fix`; the fresh `codex/phase4-increment-4i` branch starts from merged 4J commit `a2b9803` and applies the old change without committing.
+- The reconstructed implementation is committed as `99f9279`, pushed on `codex/phase4-increment-4i`, fast-forward merged into `main`, and synchronized with `origin/main`.
+- The original implementation commit remains preserved at `cf9d701` on local `codex/phase4-increment-4i-pre-fingerprint-fix`; no remote ref contains that pre-fingerprint commit.
 - D-030 records that future trusted audit event families require separately approved closed typed contracts rather than restoration of an arbitrary-string API.
 - No replacement audit abstraction, dependency, lockfile, migration, persistence, coordinator, dispatch, executor, IPC, UI, networking, credential, capability, or permission changed.
 - Complete `npm run verify` passes with 17 hook, 124 frontend, 95 Rust library, and 11 Rust integration tests plus lint, typecheck, builds, and Tauri release no-bundle. Npm audit reports zero vulnerabilities.
@@ -175,7 +215,7 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Wait for the project owner to select and approve one bounded next plan. No later increment is Ready.
+Wait for explicit project-owner direction to commit, push, and merge Increment 4K. Do not start later work.
 
 ## Phase 4 planning result
 

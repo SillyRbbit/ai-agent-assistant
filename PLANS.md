@@ -4,7 +4,7 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-None. Increment 4I is verified complete after reconstruction under [`docs/plans/04i-remove-generic-audit-scaffold.md`](docs/plans/04i-remove-generic-audit-scaffold.md). It preserves the original exact source and closeout scope on corrected 4J `main`. No later product implementation plan is Ready.
+None. Increment 4K is verified complete under [`docs/plans/04k-remove-legacy-provider-scaffold.md`](docs/plans/04k-remove-legacy-provider-scaffold.md). It preserves the exact three-file source and declared closeout scopes and is not yet committed or published. No later product implementation plan is Ready.
 
 ## Completed plans
 
@@ -26,6 +26,7 @@ docs/plans/04d-exact-approval-binding.md
 docs/plans/04e-trusted-approval-decision-source.md
 docs/plans/04i-remove-generic-audit-scaffold.md
 docs/plans/04j-post-increment-deletion-fingerprint.md
+docs/plans/04k-remove-legacy-provider-scaffold.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -78,12 +79,33 @@ A plan must contain:
 | Increment 4H typed approval-audit adapter     | Complete | Project maintainer | 2026-07-15   |
 | Increment 4I remove generic audit scaffold    | Complete | Project maintainer | 2026-07-15   |
 | Workflow Increment 4J deletion fingerprint    | Complete | Project maintainer | 2026-07-15   |
+| Increment 4K remove legacy provider scaffold  | Complete | Project maintainer | 2026-07-15   |
+
+## Phase 4 Increment 4K remove legacy provider scaffold - complete
+
+Goal: delete the unused synchronous `AgentProvider`, arbitrary-string request,
+assistant-response, and mock-error scaffold before a future gateway transport can
+mistake it for the approved production provider boundary.
+
+Repository search finds no caller outside the two legacy files and their three
+embedded tests. The exact source plan deletes `src-tauri/src/agent/provider.rs`
+and `src-tauri/src/agent/types.rs` and removes only their exports from
+`src-tauri/src/agent/mod.rs`. The 18-test normalized gateway protocol and exact
+function-call validator remain unchanged.
+
+The implementation adds no replacement provider, gateway request contract, HTTPS
+transport, credentials, Keychain, runtime coordinator, dispatch, executor,
+persistence, IPC, UI, dependency, capability, or permission. Eighteen gateway,
+six function-validation, and two public gateway-to-policy tests pass. Clippy,
+complete `npm run verify`, npm audit, exact-scope, secret, generated-output,
+architecture, code-health, security, documentation, and mandatory gate reviews
+pass. D-032 records the future closed provider-transport boundary.
 
 ## Phase 4 Increment 4I remove generic audit scaffold - complete
 
 Goal: delete the unused public caller-authored `AuditEventInput`, `AuditLogger`, in-memory/no-op logger, arbitrary summary/details records, and token-pattern redactor before a future coordinator can mistake them for the trusted local audit boundary.
 
-The reconstructed source change deletes only `src-tauri/src/audit/logger.rs` and `src-tauri/src/audit/types.rs` and removes their two exports from `src-tauri/src/audit/mod.rs`. The verified typed `audit::approval` module remains unchanged. The original `cf9d701` commit is preserved on `codex/phase4-increment-4i-pre-fingerprint-fix`; the fresh branch starts from corrected 4J `main` and applies the old change without committing.
+The reconstructed source change deletes only `src-tauri/src/audit/logger.rs` and `src-tauri/src/audit/types.rs` and removes their two exports from `src-tauri/src/audit/mod.rs`. The verified typed `audit::approval` module remains unchanged. Reconstructed commit `99f9279` is pushed and fast-forward merged into synchronized `main`; the corrected marker remains valid for that committed content. The original `cf9d701` commit is preserved locally on `codex/phase4-increment-4i-pre-fingerprint-fix` and no remote ref contains it.
 
 The increment adds no replacement audit abstraction, durable repository, storage migration, coordinator, dispatch, executor, provider continuation, IPC, UI, networking, credential, dependency, capability, or permission. Six typed-adapter tests, eleven native-source tests, one public approval-audit integration test, Clippy, `npm run verify`, npm audit, stale-symbol, scope, diff, code, security, documentation, and corrected post-increment reviews pass.
 
