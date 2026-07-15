@@ -145,4 +145,4 @@ Increment 4F is verified complete by explicit project-owner direction. Every req
 
 ## Exact next task
 
-Commit and publish Increment 4F, fast-forward merge it into `main`, and leave merged `main` clean. The next clean branch is reserved for the project owner to create and validate the missing `$post-increment-gate` skill before another implementation increment starts.
+Implementation commit `972a874` is pushed on `phase4/increment-4f`, fast-forward merged into `main`, and pushed to `origin/main`. From clean merged `main`, the project owner creates and validates the missing `$post-increment-gate` skill on a new branch before another implementation increment starts.

@@ -4,7 +4,7 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-None. Increment 4F is verified complete by project-owner direction under D-027 and pending publication. No later implementation plan is Ready.
+None. Increment 4F is verified complete by project-owner direction under D-027 and published as implementation commit `972a874`. No later implementation plan is Ready.
 
 ## Completed plans
 

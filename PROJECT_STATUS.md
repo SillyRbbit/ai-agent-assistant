@@ -4,7 +4,7 @@ Last updated: 2026-07-14
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Increment 4F publication is pending. No later implementation increment is Ready.
+Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Increment 4F implementation commit `972a874` is published on its feature branch and merged `main`. No later implementation increment is Ready.
 
 ## Increment status
 
@@ -43,6 +43,7 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
 - The target-Mac app launch and project-owner window, application-menu, status-item menu, sidebar, Settings, regression, and no-permission-prompt checks passed.
 - Exact 43-file scope, former-name absence, compatibility, Cargo target metadata, secret, generated-output, complete-diff, code-review, and security-review checks passed.
 - The referenced `$post-increment-gate` skill and report workflow are not present in `.agents/skills`, so that gate did not run and no result is claimed. The project owner explicitly confirmed 4F complete and deferred skill creation to the next clean branch. D-027 records the one-time sequencing exception.
+- Implementation commit `972a874` was pushed on `phase4/increment-4f`, fast-forward merged into `main`, and pushed to `origin/main`.
 
 ## Verified baseline through Increment 2E
 
@@ -118,7 +119,7 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Commit and publish Increment 4F, fast-forward merge it into `main`, and leave merged `main` clean. The next clean branch is reserved for creating and validating the absent `$post-increment-gate` skill before another implementation increment starts.
+From clean merged `main`, create and validate the absent `$post-increment-gate` skill on a new branch before another implementation increment starts.
 
 ## Phase 4 planning result
 

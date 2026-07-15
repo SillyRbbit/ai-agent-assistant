@@ -4,7 +4,7 @@ Last updated: 2026-07-14
 
 ## Current state
 
-Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Increment 4F - Cortexa product display rename is complete by explicit project-owner direction on `phase4/increment-4f`, based on local commit `8e174a7`. Commit, push, and fast-forward merge remain pending.
+Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Increment 4F - Cortexa product display rename is complete by explicit project-owner direction. Implementation commit `972a874` was pushed on `phase4/increment-4f`, fast-forward merged into `main`, and pushed to `origin/main`.
 
 Increment 4F pre-edit evidence:
 
@@ -130,6 +130,20 @@ kill 12592
 lsof -nP -iTCP:1420 -sTCP:LISTEN
 npm run tauri -- dev
 ```
+
+Publication commands:
+
+```bash
+git add -A
+git diff --cached --check
+git commit -m "Rename product display name to Cortexa"
+git push -u origin phase4/increment-4f
+git switch main
+git merge --ff-only phase4/increment-4f
+git push origin main
+```
+
+Result: implementation commit `972a874` is published on the feature branch and merged `main`.
 
 ## Increment 4E publication baseline
 
@@ -306,7 +320,7 @@ The project owner confirmed the fixed window title, exact trusted-fields-first/t
 
 ## Exact next task
 
-Commit and push `phase4/increment-4f`, fast-forward merge it into `main`, push `main`, and record the publication state. Do not start another product increment. The next clean branch is reserved for the project owner to create and validate the missing `$post-increment-gate` skill.
+From clean merged `main`, create and validate the missing `$post-increment-gate` skill on a new branch. Do not start another product increment or change the completed Cortexa rename and compatibility identifiers.
 
 ## Ready-to-paste resume prompt
 

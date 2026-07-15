@@ -32,4 +32,4 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 No later implementation increment is currently marked **Ready**. Increment 4F implements only the product display-name rename and preserves repository, package, crate, executable, bundle-ID, database, storage, event, and command identifiers. Its automated, native manual, code/security/scope review, and documentation gates pass. The absent post-increment skill did not run; D-027 records the project owner's one-time completion exception and defers skill creation to the next clean branch.
 
-Exact next task: publish and fast-forward merge Increment 4F. From merged clean `main`, the project owner creates and validates the absent `$post-increment-gate` skill on a new branch before another implementation increment starts.
+Exact next task: from merged clean `main`, the project owner creates and validates the absent `$post-increment-gate` skill on a new branch before another implementation increment starts. Increment 4F implementation commit `972a874` is already published and merged.
