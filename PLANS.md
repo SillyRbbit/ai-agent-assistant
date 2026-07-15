@@ -4,7 +4,7 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No implementation plan is active. Increment 4N is verified complete in the
+No implementation plan is active. Increment 4O is verified complete in the
 current uncommitted workspace, and no later increment is Ready.
 
 ## Completed plans
@@ -31,6 +31,7 @@ docs/plans/04k-remove-legacy-provider-scaffold.md
 docs/plans/04l-remove-legacy-memory-scaffold.md
 docs/plans/04m-remove-legacy-platform-scaffold.md
 docs/plans/04n-bounded-initial-gateway-request.md
+docs/plans/04o-bound-initial-gateway-turn.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -87,6 +88,39 @@ A plan must contain:
 | Increment 4L remove legacy memory scaffold    | Complete | Project maintainer | 2026-07-15   |
 | Increment 4M remove legacy platform scaffold  | Complete | Project maintainer | 2026-07-15   |
 | Increment 4N bounded initial gateway request  | Complete | Project maintainer | 2026-07-15   |
+| Increment 4O bound initial gateway turn       | Complete | Project maintainer | 2026-07-15   |
+
+## Phase 4 Increment 4O bound initial gateway turn - complete
+
+Goal: bind the verified initial request bytes and response validator into one
+non-cloneable, transport-free Rust turn so a future trusted caller cannot
+independently choose request/response correlation IDs, allowed function names,
+or tool-contract version.
+
+The exact source/test plan changes only `agent/gateway_request.rs` and the public
+`gateway_request_contract` integration test. `InitialGatewayTurn` derives the
+response validator from the same IDs used for request serialization and from the
+exact `ToolSchema` catalog. It exposes only borrowed request bytes, stream status,
+frame acceptance, and local cancellation. Raw initial-request construction
+becomes private; the lower-level public stream validator remains unchanged.
+
+No transport, gateway service, authentication, credentials, Keychain, provider
+parameters, continuation, retries, deadlines, runtime coordinator, policy,
+approval, audit persistence, dispatch, execution, Tauri, frontend, SQLite,
+dependency, capability, entitlement, or permission path is included. Focused
+request, protocol, tool, and public-contract baselines pass on clean synchronized
+`main` at `d7c4b69`; the `04n` marker was complete and valid before planning
+edits.
+
+The verified implementation keeps request serialization private, derives the
+exact two local function names and common version from `ToolSchema`, and delegates
+status, normalized frame acceptance, and local terminal cancellation to the owned
+validator. Six preserved request tests and six public turn-contract tests pass,
+along with 18 protocol tests, nine tool tests, Clippy with warnings denied,
+complete `npm run verify`, npm audit, exact-scope, code, security, documentation,
+and mandatory gate reviews. D-036 records the bound-turn and public API narrowing
+decision. The implementation remains uncommitted, and no later increment is
+Ready.
 
 ## Phase 4 Increment 4N bounded initial gateway request - complete
 
@@ -108,8 +142,9 @@ The implementation passes six focused request tests, 18 preserved gateway
 protocol tests, nine tool-catalog tests, one public-boundary integration test,
 Clippy with warnings denied, complete `npm run verify`, npm audit, exact-scope,
 secret, generated-output, code, security, documentation, and mandatory gate
-reviews. D-035 records the request boundary. The implementation remains
-uncommitted, and no later increment is Ready.
+reviews. D-035 records the request boundary. Commit `d7c4b69` is pushed on
+`codex/phase4-increment-4n`, fast-forward merged into synchronized `main`, and
+retained a valid `04n` marker before 4O planning edits.
 
 ## Phase 4 Increment 4M remove legacy platform scaffold - complete
 

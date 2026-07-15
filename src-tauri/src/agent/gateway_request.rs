@@ -4,25 +4,101 @@ use serde::Serialize;
 use thiserror::Error;
 
 use super::gateway_protocol::{
-    is_valid_opaque_id, AGENT_RUN_DEADLINE, GATEWAY_CONNECT_TIMEOUT, GATEWAY_PROTOCOL_VERSION,
+    is_valid_opaque_id, GatewayProtocolResult, GatewayStreamStatus, GatewayStreamValidator,
+    ValidatedGatewayEvent, AGENT_RUN_DEADLINE, GATEWAY_CONNECT_TIMEOUT, GATEWAY_PROTOCOL_VERSION,
     GATEWAY_STREAM_IDLE_TIMEOUT, MAX_ASSISTANT_OUTPUT_CHARACTERS_PER_TURN,
     MAX_FUNCTION_ARGUMENT_BYTES, MAX_FUNCTION_CALLS_PER_RUN, MAX_GATEWAY_EVENTS_PER_TURN,
     MAX_GATEWAY_EVENT_BYTES, MAX_GATEWAY_REQUESTS_PER_RUN, MAX_GATEWAY_REQUEST_BYTES,
     MAX_MODEL_TURNS_PER_RUN, MAX_RETRY_AFTER_MS, MAX_RETRY_ATTEMPTS_PER_RUN,
     PROVIDER_TURN_DEADLINE,
 };
+use crate::tools::schema::ToolSchema;
 
 pub const INITIAL_GATEWAY_TOOL_SET_ID: &str = "cortexa_desktop_mvp";
 pub const INITIAL_GATEWAY_TOOL_SET_VERSION: u16 = 1;
 
 pub type GatewayRequestResult<T> = Result<T, GatewayRequestError>;
 
-pub struct InitialGatewayRequest {
+pub struct InitialGatewayTurn {
+    request: InitialGatewayRequest,
+    validator: GatewayStreamValidator,
+}
+
+impl InitialGatewayTurn {
+    pub fn new(
+        run_id: impl Into<String>,
+        gateway_request_id: impl Into<String>,
+        selected_content: impl Into<String>,
+    ) -> GatewayRequestResult<Self> {
+        let run_id = run_id.into();
+        let gateway_request_id = gateway_request_id.into();
+        let request = InitialGatewayRequest::new(
+            run_id.clone(),
+            gateway_request_id.clone(),
+            selected_content,
+        )?;
+
+        let schemas = [
+            ToolSchema::GetCurrentDatetimeV1,
+            ToolSchema::CreateLocalTaskV1,
+        ];
+        let expected_tool_contract_version = schemas[0].version();
+        if expected_tool_contract_version != INITIAL_GATEWAY_TOOL_SET_VERSION
+            || schemas
+                .iter()
+                .any(|schema| schema.version() != expected_tool_contract_version)
+        {
+            return Err(GatewayRequestError::ValidatorConfigurationFailed);
+        }
+
+        let validator = GatewayStreamValidator::new(
+            run_id,
+            gateway_request_id,
+            schemas.into_iter().map(|schema| schema.name().to_owned()),
+            expected_tool_contract_version,
+        )
+        .map_err(|_| GatewayRequestError::ValidatorConfigurationFailed)?;
+
+        Ok(Self { request, validator })
+    }
+
+    #[must_use]
+    pub fn request_bytes(&self) -> &[u8] {
+        self.request.as_bytes()
+    }
+
+    #[must_use]
+    pub fn status(&self) -> GatewayStreamStatus {
+        self.validator.status()
+    }
+
+    pub fn accept_frame(&mut self, frame: &[u8]) -> GatewayProtocolResult<ValidatedGatewayEvent> {
+        self.validator.accept_frame(frame)
+    }
+
+    #[must_use]
+    pub fn cancel(&mut self) -> bool {
+        self.validator.cancel()
+    }
+}
+
+impl fmt::Debug for InitialGatewayTurn {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("InitialGatewayTurn")
+            .field("request_body", &"[REDACTED]")
+            .field("request_body_bytes", &self.request.as_bytes().len())
+            .field("status", &self.validator.status())
+            .finish()
+    }
+}
+
+struct InitialGatewayRequest {
     body: Vec<u8>,
 }
 
 impl InitialGatewayRequest {
-    pub fn new(
+    fn new(
         run_id: impl Into<String>,
         gateway_request_id: impl Into<String>,
         selected_content: impl Into<String>,
@@ -78,7 +154,7 @@ impl InitialGatewayRequest {
     }
 
     #[must_use]
-    pub fn as_bytes(&self) -> &[u8] {
+    fn as_bytes(&self) -> &[u8] {
         &self.body
     }
 }
@@ -113,6 +189,8 @@ pub enum GatewayRequestError {
     },
     #[error("gateway request serialization failed")]
     SerializationFailed,
+    #[error("gateway response validator configuration failed")]
+    ValidatorConfigurationFailed,
 }
 
 #[derive(Serialize)]

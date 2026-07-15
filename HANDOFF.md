@@ -4,7 +4,7 @@ Last updated: 2026-07-15
 
 ## Current state
 
-Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4M are verified, published, and merged into clean synchronized `main` at `1f03d1e`.
+Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4N are verified, published, and merged into clean synchronized `main` at `d7c4b69`.
 
 Reconstructed Increment 4I was committed as `99f9279` with message `Remove generic audit scaffold`, pushed on `codex/phase4-increment-4i`, fast-forward merged into `main`, and pushed. The corrected `04i` completion marker remains valid after the deletion commit. The original pre-fingerprint implementation commit remains preserved exactly at `cf9d701` on local `codex/phase4-increment-4i-pre-fingerprint-fix`; no remote ref contains it.
 
@@ -20,10 +20,164 @@ message `Remove legacy platform scaffold`, pushed on
 `codex/phase4-increment-4m`, fast-forward merged into `main`, and pushed. The
 `04m` marker remains complete and valid after the deletion commit.
 
-Increment 4N bounded initial gateway request is verified complete in the current
-uncommitted workspace. It adds exactly one transport-free request module, one
-public-boundary integration test, sibling-only opaque-ID validator visibility,
-and one module export. No later implementation increment is Ready.
+Increment 4N bounded initial gateway request was committed as `d7c4b69` with
+message `Add bounded initial gateway request`, pushed on
+`codex/phase4-increment-4n`, fast-forward merged into `main`, and pushed. The
+`04n` marker was complete and valid after commit and merge and immediately before
+the current planning edits.
+
+Increment 4O bound initial gateway turn is verified complete in the current
+uncommitted workspace. Its exact two-file source/test implementation binds request
+bytes and response validation to the same correlation IDs and exact local tool
+catalog. No transport, credential, continuation, runtime coordinator, IPC,
+persistence, dispatch, or execution path was added. No later implementation
+increment is Ready.
+
+## Increment 4O completion state
+
+### Goal
+
+Add one transport-free `InitialGatewayTurn` that owns both the verified initial
+request bytes and one correctly derived `GatewayStreamValidator`, preventing a
+future trusted caller from independently configuring response correlation IDs,
+allowed function names, or tool-contract version.
+
+### Exact source and test scope
+
+```text
+src-tauri/src/agent/gateway_request.rs
+src-tauri/tests/gateway_request_contract.rs
+```
+
+The implementation makes raw `InitialGatewayRequest` construction private,
+derives the validator from the same IDs and exact two-entry `ToolSchema` catalog,
+and exposes only borrowed request bytes, status, frame acceptance, and local
+cancellation. `gateway_protocol.rs`, `tools/schema.rs`, and module exports remain
+unchanged. The lower-level public validator constructor remains available for
+protocol fixtures and existing tests.
+
+### Reconciled baseline
+
+Passed on clean synchronized `main` at
+`d7c4b69b36f83dfd1fd680b8bbe9ac9fc9aa3c5f` before documentation edits:
+
+```text
+python3 .codex/hooks/post_increment_gate.py status
+  Increment 04n complete, valid: true, PASS WITH ADVISORIES
+npm run typecheck
+  passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::gateway_request::
+  6 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::gateway_protocol::
+  18 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked tools::
+  9 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test gateway_request_contract --locked
+  1 passed
+```
+
+The bound-turn symbol scan returned no matches, confirming no existing wrapper.
+Toolchains are Node.js `v26.3.0`, npm `11.16.0`, Cargo and rustc `1.90.0`,
+rustfmt `1.8.0-stable`, and Clippy `0.1.90` on arm64 macOS `26.5.2` with Xcode
+Command Line Tools at `/Library/Developer/CommandLineTools`.
+
+### Exact files changed
+
+```text
+AGENTS.md
+CHANGELOG.md
+DECISIONS.md
+HANDOFF.md
+NEXT_STEPS.md
+PLANS.md
+PROJECT_STATUS.md
+docs/increments/04o-bound-initial-gateway-turn.md
+docs/plans/04o-bound-initial-gateway-turn.md
+docs/plans/README.md
+docs/reviews/2026-07-15-04o-post-increment-review.md
+src-tauri/src/agent/gateway_request.rs
+src-tauri/tests/gateway_request_contract.rs
+```
+
+No security, product, workflow, troubleshooting, dependency, manifest, lockfile,
+Tauri, frontend, storage, capability, entitlement, or permission file changed.
+
+### Risks and non-goals
+
+The wrapper remains narrower than a coordinator. Public initial-request API
+narrowing could affect a theoretical unsupported external consumer. Fixed
+tool-set and local catalog agreement is derived and tested, and content-bearing
+request bytes remain absent from debug, errors, logs, persistence, and audit. The
+lower-level validator remains independently constructible for protocol tests, so
+future initial transport code must use the bound turn.
+
+HTTP/TLS, gateway deployment, authentication, credentials, Keychain, provider
+parameters, live traffic, retries, deadlines, transport abort, continuation,
+tool-result return, context selection, runtime coordination, policy, approval,
+audit persistence, dispatch, execution, Tauri, WebView, SQLite, dependencies,
+capabilities, entitlements, and permissions are excluded.
+
+### Final verification
+
+Passed:
+
+```text
+python3 .codex/hooks/post_increment_gate.py begin --increment 04o
+  active before source edits on the approved elevated retry
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+  passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::gateway_request::
+  6 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::gateway_protocol::
+  18 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked tools::
+  9 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test gateway_request_contract --locked
+  6 passed
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+  passed
+npm run verify
+  17 hook, 124 frontend, 92 Rust library, and 17 Rust integration tests passed
+  lint, typecheck, Vite builds, and Tauri release no-bundle passed
+npm audit --audit-level=low
+  network-enabled retry passed with 0 vulnerabilities
+git diff --check
+  passed
+```
+
+Failed and resolved:
+
+- The first sandboxed 04o begin could not write ignored gate state; the approved
+  elevated retry succeeded before source edits.
+- The first sandboxed npm audit could not resolve the registry or write npm logs;
+  the approved network-enabled retry passed with zero vulnerabilities.
+- Code-health review found a test helper mapping a request-construction error to
+  an unrelated protocol error; the helper now preserves the original typed error
+  before final verification.
+- The first gate finalization rejected the report's unsupported `Compatibility`
+  finding category before writing a marker; the advisory now uses the allowed
+  `Code health` category, and refinalization passed.
+
+No manual verification is required because no production caller, Tauri route,
+WebView behavior, network, credential, native API, persistence, permission, or
+operating-system behavior changed.
+
+Code review and security review found no blocking issue. The consolidated result
+is `PASS WITH ADVISORIES`: the public request API narrowing could affect a
+theoretical unsupported external consumer, and the lower-level validator remains
+public intentionally for protocol fixtures. Neither advisory blocks completion.
+
+### Rollback
+
+Before commit, restore the two source/test files to `d7c4b69` and revert only the
+declared 4O documentation. After commit, revert one 4O commit. No migration, data,
+dependency, credential, compatibility identifier, or remote resource requires
+rollback.
+
+### Exact next task
+
+Wait for explicit project-owner direction to commit, push, and merge verified
+Increment 4O. Do not start later planning or implementation.
 
 ## Increment 4N completion state
 
@@ -150,10 +304,10 @@ retries, cancellation orchestration, context selection, runtime coordination,
 policy, approval, audit persistence, dispatch, execution, Tauri, frontend,
 SQLite, dependencies, capabilities, entitlements, and permissions are excluded.
 
-### Exact next task
+### Publication state
 
-Wait for explicit project-owner direction to commit, push, and merge verified
-Increment 4N. Do not start later planning or implementation.
+Commit `d7c4b69` is pushed on `codex/phase4-increment-4n`, fast-forward merged
+into synchronized `main`, and retained a valid marker before 4O planning edits.
 
 ## Increment 4M completion state
 
@@ -1330,12 +1484,12 @@ The project owner confirmed the fixed window title, exact trusted-fields-first/t
 ## Exact next task
 
 Wait for explicit project-owner direction to commit, push, and merge verified
-Increment 4N. Do not start later planning or implementation.
+Increment 4O. Do not start later planning or implementation.
 
 ## Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Resume from HANDOFF.md on verified, uncommitted Increment 4N. Confirm the `04n` completion marker remains complete and valid, then wait for explicit project-owner direction to commit, push, and fast-forward merge Increment 4N. Do not start later planning or implementation.
+Resume from HANDOFF.md on verified, uncommitted Increment 4O. Confirm the `04o` completion marker remains complete and valid, then wait for explicit project-owner direction to commit, push, and fast-forward merge Increment 4O. Do not start later planning or implementation.
 ```

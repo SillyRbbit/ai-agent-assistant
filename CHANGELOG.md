@@ -6,6 +6,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Documentation-only Increment 4O plan for one transport-free initial gateway turn that binds request bytes, correlation identities, exact local tool names/version, response validation, and cancellation.
+- Exact two-file future source/test scope, public API narrowing, risks, non-goals, verification, closeout scope, and rollback for the bound initial gateway turn.
+- Increment 4O non-cloneable `InitialGatewayTurn` that owns the closed initial request and response validator, derives exact correlation and local tool-contract configuration once, and exposes only bounded request/stream operations.
+- Six public bound-turn contract tests covering exact request bytes, matching and mismatched identities, both allowed tools, unknown tools, version mismatch, cancellation, and content redaction.
 - Documentation-only Increment 4N plan for one closed, transport-free, byte-bounded initial desktop-to-gateway request contract.
 - Exact four-file future source/test scope, fixed request fields and limits, content-redaction rules, risks, non-goals, verification, closeout scope, and rollback for the initial gateway request.
 - Increment 4N non-cloneable initial gateway request with private closed wire serialization, fixed `cortexa_desktop_mvp@1` tool-set identity, existing conservative limits, shared opaque-ID validation, and post-escaping 64 KiB enforcement.
@@ -98,6 +102,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Reconciled project memory with Increment 4N commit `d7c4b69`, now pushed and fast-forward merged into synchronized `main`; its `04n` completion marker was complete and valid before 4O planning edits.
+- Made project-owner approval of the exact Increment 4O plan the next gate; no source, transport, authentication, credential, continuation, runtime, IPC, persistence, or execution work has started.
+- Completed Increment 4O within its exact two-file source/test scope with no dependency, transport, credential, continuation, coordinator, Tauri, persistence, policy, approval, audit, dispatch, execution, capability, or permission expansion.
+- Marked Increment 4O verified complete after focused tests, Clippy, complete repository verification, dependency audit, exact-scope and trust-boundary review, documentation synchronization, and the mandatory post-increment gate passed.
 - Reconciled project memory with Increment 4M commit `1f03d1e`, now pushed and fast-forward merged into synchronized `main`; its deletion-stable 04m marker remains valid.
 - Made project-owner approval of the exact Increment 4N plan the next gate; no source, transport, authentication, credential, provider, continuation, runtime, IPC, persistence, or execution work has started.
 - Completed Increment 4N within its exact four-file source/test scope with no dependency, transport, credential, provider, runtime, Tauri, persistence, policy, approval, audit, dispatch, execution, capability, or permission expansion.

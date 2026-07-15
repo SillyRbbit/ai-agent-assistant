@@ -777,6 +777,60 @@ Consequences:
   coordinator, policy, approval, audit persistence, dispatch, executor,
   capability, entitlement, or operating-system permission is added.
 
+## D-036 - Bind initial request construction to response validation
+
+Date: 2026-07-15
+Status: Accepted; Increment 4O implemented and verified
+
+Decision: trusted Rust constructs the initial desktop-to-gateway exchange as one
+non-cloneable `InitialGatewayTurn`. The turn privately owns both the D-035 closed
+request bytes and one `GatewayStreamValidator` configured from the same opaque
+run ID and gateway-request ID. It derives its allowed response function names
+only from `ToolSchema::GetCurrentDatetimeV1` and
+`ToolSchema::CreateLocalTaskV1`, requires their common version to equal the fixed
+`cortexa_desktop_mvp@1` request tool-set version, and fails closed with a fixed
+content-free error if internal validator configuration cannot be established.
+
+The public initial-turn surface exposes only borrowed request bytes, stream
+status, normalized frame acceptance, and local terminal cancellation. The raw
+`InitialGatewayRequest` type, constructor, and byte accessor are private to
+`gateway_request.rs`; no caller can separately construct initial request bytes.
+The lower-level `GatewayStreamValidator::new` remains public for protocol
+fixtures and independently verified downstream boundaries, but future initial
+transport code must use `InitialGatewayTurn` and must not reconstruct a detached
+validator.
+
+Rationale: D-035 closed outbound serialization, but request and response
+correlation plus allowed tool configuration still entered through two separate
+public constructors. A future trusted transport could therefore pair a valid
+request with a validator configured for different IDs, names, or version. Binding
+the two values before transport closes that local configuration gap without
+prematurely introducing networking, credentials, continuation, deadlines,
+retries, or runtime orchestration.
+
+Consequences:
+
+- One initial-turn constructor is the source of both outbound correlation and
+  inbound validation expectations.
+- Selected text remains present only in borrowed request bytes and absent from
+  debug output, errors, logs, audit, persistence, and all current runtime paths.
+- Exact local tool names/version are derived from trusted Rust catalog values,
+  not from the model, WebView, gateway event, or a future transport caller.
+- Local cancellation only terminally closes validation state; no network abort
+  or runtime scheduler exists.
+- Making `InitialGatewayRequest` private narrows the Rust public API. The crate is
+  not published and repository callers are migrated, but an unsupported external
+  consumer would need to adopt `InitialGatewayTurn`.
+- A normalized or schema-valid function call remains non-authorizing and must
+  still pass local schema, policy, approval, audit, dispatch, and execution
+  boundaries where applicable.
+- O-006 and O-007 remain unresolved and continue to block authenticated gateway
+  transport and live provider traffic.
+- No dependency, manifest, lockfile, Tauri command/event/plugin, WebView path,
+  SQLite path, credential, Keychain, provider SDK, network client, continuation,
+  runtime coordinator, policy, approval, audit persistence, dispatch, executor,
+  capability, entitlement, or operating-system permission is added.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

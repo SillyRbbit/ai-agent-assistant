@@ -4,7 +4,7 @@ Last updated: 2026-07-15
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4M are **verified complete, published, and merged into `main`**. Increment 4M is merged at `1f03d1e`. Increment 4N bounded initial gateway request is **verified complete in the current uncommitted workspace** with no user-visible behavior change. No later implementation increment is Ready.
+Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4N are **verified complete, published, and merged into `main`**. Increment 4N is merged at `d7c4b69`. Increment 4O bound initial gateway turn is **verified complete in the current uncommitted workspace** with no user-visible behavior change. No later implementation increment is Ready.
 
 ## Increment status
 
@@ -37,7 +37,47 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
 - Increment 4K: remove legacy provider scaffold - **verified complete**.
 - Increment 4L: remove legacy memory scaffold - **verified complete; published and merged**.
 - Increment 4M: remove legacy platform scaffold - **verified complete; published and merged**.
-- Increment 4N: bounded initial gateway request - **verified complete; uncommitted**.
+- Increment 4N: bounded initial gateway request - **verified complete; published and merged**.
+- Increment 4O: bound initial gateway turn - **verified complete; uncommitted**.
+
+## Increment 4O capability and evidence
+
+- The verified initial request and gateway stream validator currently accept the
+  same correlation and tool-contract concerns through separate public
+  constructors.
+- No production caller exists, but a future caller could pair valid request bytes
+  with a validator configured for different run/request IDs, function names, or
+  tool-contract version.
+- Repository search found no existing bound-turn abstraction. The implementation
+  adds the smallest local wrapper inside `agent/gateway_request.rs`.
+- The exact source/test scope changes only
+  `src-tauri/src/agent/gateway_request.rs` and
+  `src-tauri/tests/gateway_request_contract.rs`.
+- `InitialGatewayTurn` derives request bytes and validator state from the same IDs
+  and exact `ToolSchema` catalog, exposing only borrowed request bytes, status,
+  frame acceptance, and local cancellation.
+- Raw initial-request construction is private. The existing lower-level
+  public `GatewayStreamValidator::new` remains available for protocol fixtures
+  and existing downstream tests.
+- Six preserved request tests, 18 protocol tests, nine tool tests, and six public
+  bound-turn contract tests pass. Clippy passes with warnings denied.
+- Complete `npm run verify` passes with 17 hook, 124 frontend, 92 Rust library,
+  and 17 Rust integration tests plus lint, typecheck, Vite builds, and Tauri
+  release no-bundle. The network-enabled npm audit reports zero vulnerabilities.
+- Exact source, closeout, conflict, secret, generated-output, architecture,
+  code-health, security, and complete-diff reviews have no blocking finding. No
+  manual interaction gate applies because no production caller exists.
+- No HTTP, gateway deployment, authentication, credentials, provider parameters,
+  continuation, retries, deadlines, coordinator, policy, approval, audit
+  persistence, dispatch, execution, Tauri, frontend, SQLite, dependency,
+  capability, entitlement, or permission work is included.
+- D-036 records the bound initial-turn and public API narrowing decision. The
+  lower-level validator remains public for protocol fixtures, and future initial
+  transport code must use the bound turn.
+- The consolidated result is `PASS WITH ADVISORIES`; advisories are the
+  theoretical unsupported external consumer of the narrowed request API and the
+  intentionally public lower-level validator boundary. They block neither 4O
+  completion nor separately approved later planning.
 
 ## Increment 4N capability and evidence
 

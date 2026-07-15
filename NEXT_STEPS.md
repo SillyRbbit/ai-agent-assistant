@@ -35,6 +35,7 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 4L - remove legacy memory scaffold: **Verified complete**.
 - Increment 4M - remove legacy platform scaffold: **Verified complete**.
 - Increment 4N - bounded initial gateway request: **Verified complete**.
+- Increment 4O - bound initial gateway turn: **Verified complete**.
 
 ## Queue status
 
@@ -75,8 +76,8 @@ consolidated result is `PASS WITH ADVISORIES`; advisories are the intentionally
 deferred future platform design and theoretical unsupported external consumer of
 the removed public module.
 
-Increment 4N bounded initial gateway request is **Verified complete in the
-current uncommitted workspace**. It adds one non-cloneable transport-free request
+Increment 4N bounded initial gateway request is **Verified complete, published,
+and merged at `d7c4b69`**. It adds one non-cloneable transport-free request
 value with closed private serialization, fixed initial-turn and tool-set fields,
 all existing conservative limits, shared opaque-ID validation, redacted debug and
 errors, and final 64 KiB enforcement after escaping. Six focused tests, one
@@ -86,9 +87,21 @@ the mandatory gate pass. No transport, credential, provider, continuation,
 runtime, IPC, persistence, policy, approval, audit, dispatch, execution,
 dependency, capability, or permission path was added.
 
+Increment 4O bound initial gateway turn is **Verified complete in the current
+uncommitted workspace**. It adds one non-cloneable transport-free turn that owns
+the closed request bytes and response validator, derives both correlation IDs and
+the exact two local tool names/version from trusted construction, and exposes only
+borrowed request bytes, status, frame acceptance, and local cancellation. Raw
+initial-request construction is private; the lower-level validator remains public
+for protocol fixtures. Six preserved request tests, six public contract tests,
+Clippy, complete repository verification, npm audit, code/security review,
+documentation sync, and the mandatory gate pass. No transport, credential,
+continuation, coordinator, IPC, persistence, dispatch, execution, dependency,
+capability, or permission path was added.
+
 ## Ready
 
 No later implementation increment is Ready.
 
 Exact next task: wait for explicit project-owner direction to commit, push, and
-merge verified Increment 4N. Do not start later planning or implementation.
+merge verified Increment 4O. Do not start later planning or implementation.
