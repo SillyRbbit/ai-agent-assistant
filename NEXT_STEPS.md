@@ -29,6 +29,7 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 4F - Cortexa product display rename: **Verified complete by project-owner direction**.
 - Repository Workflow Increment 4G - automated post-increment gate: **Verified complete**.
 - Increment 4H - typed approval-audit adapter: **Verified complete**.
+- Increment 4I - remove generic audit scaffold: **Verified complete**.
 - Repository Workflow Increment 4J - deletion-stable post-increment fingerprint: **Verified complete**.
 
 ## Queue status
@@ -37,6 +38,8 @@ Repository Workflow Increment 4G is **Verified complete**. It adds only the repo
 
 Increment 4H typed approval-audit adapter is **Verified complete**. It adds one bounded transport-free in-memory Rust adapter that derives a closed redacted record from an exact terminal `ApprovalResolution`, revalidates the complete disposition/evidence matrix, and returns only a non-authorizing sequence receipt. It adds no durable persistence, runtime coordinator, dispatch, execution, IPC, UI, or live networking. Its consolidated result is `PASS WITH ADVISORIES`; the advisory is the explicit non-durable boundary and the absence of an approved next increment.
 
-Repository Workflow Increment 4J is **Verified complete**. It corrects only the deterministic completion fingerprint for reviewed tracked deletions and adds positive and negative regression coverage. Its consolidated result is `PASS WITH ADVISORIES`; the advisory blocks 4I reconstruction until 4J is separately committed and merged. Increment 4I remains preserved at `cf9d701`, unpushed and unmerged; its pre-fix completion marker is invalid and it must not be published.
+Repository Workflow Increment 4J is **Verified complete, published, and merged**. It corrects only the deterministic completion fingerprint for reviewed tracked deletions and adds positive and negative regression coverage. Its publication prerequisite for 4I reconstruction is satisfied.
 
-Exact next task: after explicit project-owner direction, commit, push, and merge 4J only. Then reconstruct and revalidate Increment 4I on corrected `main` under a separately approved recovery step. No later product implementation item is marked **Ready**; do not infer or start another increment automatically.
+Increment 4I remove generic audit scaffold is **Verified complete after reconstruction**. It deletes only the unused `audit::logger` and `audit::types` modules and removes their exports, preserving the typed `audit::approval` adapter unchanged. The corrected 4J gate remains intact, the stale-symbol scan has no matches, focused and complete checks pass, and no replacement abstraction, persistence, coordinator, dispatch, executor, IPC, UI, networking, dependency, migration, or permission was added.
+
+Exact next task: wait for explicit project-owner direction to commit, push, and merge reconstructed 4I. No later product implementation item is marked **Ready**; do not infer or start another increment automatically.

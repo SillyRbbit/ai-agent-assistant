@@ -558,6 +558,25 @@ Consequences:
 - The adapter is transport-free and has no production caller. It does not make the generic audit logger suitable for production or satisfy durable local-audit requirements.
 - No dependency, manifest, lockfile, Tauri command/event, frontend, SQLite, gateway, provider, native-dialog behavior, capability, CSP, packaging, entitlement, or operating-system permission changes.
 
+## D-030 - Remove the unused arbitrary-string audit scaffold
+
+Date: 2026-07-15
+Status: Accepted; Increment 4I reconstructed and verified
+
+Decision: delete the public `audit::logger` and `audit::types` modules, including caller-authored event type, summary, and details strings, clonable generic records, in-memory/no-op loggers, and token-pattern redaction. Preserve the separately verified `audit::approval` module unchanged and export only that typed audit boundary.
+
+Future trusted audit event families for run lifecycle, proposals, policy, execution, cancellation, results, or final outcomes require separately approved closed typed inputs derived from authoritative values. Do not restore a generic arbitrary-string audit API as a convenience layer.
+
+Rationale: repository search found no production or integration caller of the generic scaffold; its only executable references were its own four embedded unit tests. Its open strings and limited redactor could be mistaken for a production-safe structured audit boundary and create a bypass around the exact typed evidence introduced by D-029. Deletion is smaller and safer than designing unsupported persistence, retention, coordinator, execution, and result semantics prematurely.
+
+Consequences:
+
+- Current Rust audit source exposes only the closed typed approval-audit module.
+- The four generic-scaffold unit tests are removed with the unused implementation; existing typed approval-audit unit, native-source, and integration coverage remains unchanged and passing.
+- Historical decisions and completed plans that describe the scaffold at their original checkpoints remain intact.
+- A future durable repository, authoritative coordinator, retention policy, Activity-history surface, or additional event family requires a separate approved increment.
+- No dependency, manifest, lockfile, migration, SQLite, Tauri, frontend, IPC, provider, gateway, credential, approval authority, dispatch, executor, capability, CSP, packaging, entitlement, or operating-system permission changes.
+
 ## D-031 - Fingerprint existing repository content across deletion commits
 
 Date: 2026-07-15

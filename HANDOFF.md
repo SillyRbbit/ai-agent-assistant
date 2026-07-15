@@ -4,11 +4,106 @@ Last updated: 2026-07-15
 
 ## Current state
 
-Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increment 4G and Increment 4H are verified, published, and merged into `main` at `e3af5a4`.
+Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Increment 4H are verified, published, and merged into `main` at `a2b9803`.
 
-Repository Workflow Increment 4J is verified complete on `codex/repository-workflow-increment-4j`, created from clean synchronized `main` at `e3af5a4`. It corrects only post-increment workspace fingerprint handling for reviewed tracked deletions and adds two focused regressions. Application behavior is unchanged. The branch is uncommitted and unpushed.
+Increment 4I remove generic audit scaffold is verified complete after reconstruction on uncommitted, unpushed `codex/phase4-increment-4i`. The fresh branch starts from corrected, synchronized 4J `main` at `a2b9803`. The original pre-fix implementation commit is preserved exactly at `cf9d701` on `codex/phase4-increment-4i-pre-fingerprint-fix` and remains unpushed.
 
-The original Increment 4I implementation commit remains preserved at `cf9d701` on `codex/phase4-increment-4i`, unpushed and unmerged. Its valid pre-commit marker became invalid after its reviewed tracked deletions were committed. Do not publish that branch. After 4J is separately committed and merged, reconstruct 4I from corrected `main`, apply its changes without committing, rerun its complete gate, and require a valid post-commit marker.
+The old change was applied with `git cherry-pick --no-commit cf9d701`. It deletes only the unused public `audit::logger` and `audit::types` modules and removes their exports from `audit::mod`. The typed adapter remains unchanged. No replacement audit API, dependency, persistence, caller, coordinator, dispatch, executor, IPC, UI, network, credential, capability, or permission was added.
+
+## Increment 4I reconstruction state
+
+### Exact source scope
+
+Deleted:
+
+```text
+src-tauri/src/audit/logger.rs
+src-tauri/src/audit/types.rs
+```
+
+Changed:
+
+```text
+src-tauri/src/audit/mod.rs
+```
+
+The `mod.rs` change removes only the two deleted module exports and preserves `pub mod approval;`. No test file changed.
+
+### Exact files changed
+
+```text
+AGENTS.md
+CHANGELOG.md
+DECISIONS.md
+HANDOFF.md
+NEXT_STEPS.md
+PLANS.md
+PROJECT_STATUS.md
+docs/increments/04i-remove-generic-audit-scaffold.md
+docs/plans/04i-remove-generic-audit-scaffold.md
+docs/plans/README.md
+docs/reviews/2026-07-15-04i-post-increment-review.md
+src-tauri/src/audit/logger.rs
+src-tauri/src/audit/mod.rs
+src-tauri/src/audit/types.rs
+```
+
+Merged 4J hook, test, security, troubleshooting, plan, increment, and report files remain unchanged. Manifests, lockfiles, Tauri configuration, frontend, storage, gateway, provider, policy, approval, typed approval-audit implementation, coordinator, dispatch, executor, packaging, and permission files are unchanged.
+
+### Verification classification
+
+Passed:
+
+```text
+npm run test:hooks
+  corrected-main baseline: 17 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked audit::
+  corrected-main baseline: 10 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test approval_audit_binding --locked
+  corrected-main baseline: 1 passed
+python3 .codex/hooks/post_increment_gate.py begin --increment 04i
+  passed; active increment 04i before applying changes
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+  passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked audit::approval::
+  6 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked approvals::decision_source::
+  11 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test approval_audit_binding --locked
+  1 passed
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+  passed
+rg -n "AuditEventInput|AuditEvent|AuditLogger|InMemoryAuditLogger|NoopAuditLogger|redact_secret_like_content" src-tauri/src src-tauri/tests
+  no matches; required exit status 1
+npm run verify
+  hook tests: 17 passed
+  frontend tests: 124 passed
+  Rust library tests: 95 passed
+  Rust integration tests: 11 passed
+  formatting, ESLint, Clippy, typecheck, builds, and Tauri release no-bundle passed
+npm audit --audit-level=low
+  network-enabled retry passed with 0 vulnerabilities
+git diff --check
+  passed
+python3 .codex/hooks/post_increment_gate.py status
+  complete, valid: true, PASS WITH ADVISORIES after finalization
+```
+
+Failed and resolved:
+
+- The non-committing cherry-pick produced expected content conflicts only in the eight shared closeout documents. They were reconciled from corrected 4J `main` while retaining the original exact 4I scope and D-030.
+- The first sandboxed npm audit could not resolve the registry or write user-level npm logs. The approved network-enabled retry passed with zero vulnerabilities.
+
+Checks not run:
+
+- No native application or UI interaction was required because the removed scaffold had no production caller or user-visible path.
+- No RustSec audit was required because manifests and lockfiles are unchanged.
+
+Manual verification pending: none. Complete scope, conflict, secret, generated-output, code, architecture, and security reviews passed. All merged 4J implementation/evidence files and `audit::approval` remain byte-for-byte unchanged.
+
+### Exact next task
+
+Wait for explicit project-owner direction to commit, push, and merge reconstructed Increment 4I. Do not start later work.
 
 ## Repository Workflow Increment 4J state
 
@@ -87,9 +182,9 @@ Architecture, code-health, and security review found no blocking issue. One edge
 
 ### Exact next task
 
-Wait for explicit project-owner direction to commit, push, and merge 4J only. Do not reconstruct 4I or begin a later increment.
+Repository Workflow Increment 4J was committed as `a2b9803`, pushed, fast-forward merged into `main`, and its marker remained valid. Its publication prerequisite is satisfied; the current task is the bounded 4I reconstruction above.
 
-Ready-to-paste continuation prompt:
+Historical publication prompt:
 
 ```text
 Commit, push, and merge Repository Workflow Increment 4J only. Use a concise workflow-fix commit message, push `codex/repository-workflow-increment-4j`, fast-forward merge it into updated `main`, push `main`, and verify clean synchronized `main` plus the valid 4J marker. Preserve `codex/phase4-increment-4i` at `cf9d701`; do not reconstruct or publish 4I yet.
@@ -601,12 +696,12 @@ The project owner confirmed the fixed window title, exact trusted-fields-first/t
 
 ## Exact next task
 
-Wait for explicit project-owner direction to commit, push, and merge Repository Workflow Increment 4J only. Do not reconstruct Increment 4I or infer a later increment.
+Wait for explicit project-owner direction to commit, push, and merge reconstructed Increment 4I. Do not infer a later increment.
 
 ## Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Resume from HANDOFF.md on verified, uncommitted `codex/repository-workflow-increment-4j`. Preserve `codex/phase4-increment-4i` at `cf9d701` untouched, unpushed, and unmerged. Wait for explicit direction to commit, push, and merge 4J only. Do not reconstruct 4I or begin a later increment.
+Resume from HANDOFF.md on verified, uncommitted `codex/phase4-increment-4i`. Preserve `codex/phase4-increment-4i-pre-fingerprint-fix` at `cf9d701`. Wait for explicit direction to commit, push, and fast-forward merge reconstructed 4I into updated `main`, then verify the corrected 04i marker remains valid after the deletion commit. Do not begin later work.
 ```

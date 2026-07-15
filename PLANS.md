@@ -4,7 +4,7 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-None. Repository Workflow Increment 4J is verified complete under [`docs/plans/04j-post-increment-deletion-fingerprint.md`](docs/plans/04j-post-increment-deletion-fingerprint.md). Increment 4I reconstruction remains blocked until 4J is separately committed and merged. No later product implementation plan is Ready.
+None. Increment 4I is verified complete after reconstruction under [`docs/plans/04i-remove-generic-audit-scaffold.md`](docs/plans/04i-remove-generic-audit-scaffold.md). It preserves the original exact source and closeout scope on corrected 4J `main`. No later product implementation plan is Ready.
 
 ## Completed plans
 
@@ -24,6 +24,7 @@ docs/plans/04b-local-tool-schema-validation.md
 docs/plans/04c-trusted-policy-input-binding.md
 docs/plans/04d-exact-approval-binding.md
 docs/plans/04e-trusted-approval-decision-source.md
+docs/plans/04i-remove-generic-audit-scaffold.md
 docs/plans/04j-post-increment-deletion-fingerprint.md
 ```
 
@@ -75,7 +76,16 @@ A plan must contain:
 | Increment 4F Cortexa product display rename   | Complete | Project maintainer | 2026-07-14   |
 | Workflow Increment 4G post-increment gate     | Complete | Project maintainer | 2026-07-14   |
 | Increment 4H typed approval-audit adapter     | Complete | Project maintainer | 2026-07-15   |
+| Increment 4I remove generic audit scaffold    | Complete | Project maintainer | 2026-07-15   |
 | Workflow Increment 4J deletion fingerprint    | Complete | Project maintainer | 2026-07-15   |
+
+## Phase 4 Increment 4I remove generic audit scaffold - complete
+
+Goal: delete the unused public caller-authored `AuditEventInput`, `AuditLogger`, in-memory/no-op logger, arbitrary summary/details records, and token-pattern redactor before a future coordinator can mistake them for the trusted local audit boundary.
+
+The reconstructed source change deletes only `src-tauri/src/audit/logger.rs` and `src-tauri/src/audit/types.rs` and removes their two exports from `src-tauri/src/audit/mod.rs`. The verified typed `audit::approval` module remains unchanged. The original `cf9d701` commit is preserved on `codex/phase4-increment-4i-pre-fingerprint-fix`; the fresh branch starts from corrected 4J `main` and applies the old change without committing.
+
+The increment adds no replacement audit abstraction, durable repository, storage migration, coordinator, dispatch, executor, provider continuation, IPC, UI, networking, credential, dependency, capability, or permission. Six typed-adapter tests, eleven native-source tests, one public approval-audit integration test, Clippy, `npm run verify`, npm audit, stale-symbol, scope, diff, code, security, documentation, and corrected post-increment reviews pass.
 
 ## Repository Workflow Increment 4J post-increment deletion fingerprint - complete
 
@@ -83,7 +93,7 @@ Goal: make one valid post-increment completion marker survive committing reviewe
 
 The exact two-file implementation moves path hashing after successful metadata lookup and adds positive and negative deletion regressions. Exact changed-file report inventory, path safety, content and metadata hashing, report hashes, suspicious-path checks, Stop behavior, and state schema remain unchanged. Thirteen declared documentation files record the boundary and evidence. No application source, dependency, hook configuration, skill, Tauri, IPC, storage, provider, gateway, approval, audit, dispatch, executor, capability, or permission changes.
 
-The 4I branch remains preserved at `cf9d701`, unpushed and unmerged. It must be reconstructed from corrected `main` after 4J is separately merged; 4J adds no legacy-marker migration or compatibility fallback.
+The original 4I commit remains preserved at `cf9d701` under `codex/phase4-increment-4i-pre-fingerprint-fix`. 4J is published and merged, so 4I reconstruction proceeds on the corrected baseline without a legacy-marker migration or compatibility fallback.
 
 Seventeen focused hook tests, complete `npm run verify`, npm audit, exact scope, secret, generated-output, code, security, and complete-diff reviews pass. The consolidated result is `PASS WITH ADVISORIES`; the advisory is the required publication ordering before 4I reconstruction.
 

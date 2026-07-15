@@ -4,7 +4,7 @@ Last updated: 2026-07-15
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increment 4G and Increment 4H are **verified complete, published, and merged into `main`**. Repository Workflow Increment 4J is **verified complete** on `codex/repository-workflow-increment-4j`; it changes only completion-fingerprint handling and tests. Increment 4I remains preserved, unpushed, and unmerged at `cf9d701` and requires reconstruction after 4J is merged. No later product implementation increment is Ready.
+Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Increment 4H are **verified complete, published, and merged into `main`**. Increment 4I remove generic audit scaffold is **verified complete after reconstruction** on corrected 4J `main`; it changes no user-visible behavior. No later product implementation increment is Ready.
 
 ## Increment status
 
@@ -32,12 +32,24 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
 - Increment 4F: Cortexa product display rename - **verified complete by project-owner direction**.
 - Repository Workflow Increment 4G: automated post-increment gate - **verified complete**.
 - Increment 4H: typed approval-audit adapter - **verified complete**.
+- Increment 4I: remove generic audit scaffold - **verified complete after reconstruction**.
 - Repository Workflow Increment 4J: deletion-stable post-increment fingerprint - **verified complete**.
+
+## Increment 4I capability and evidence
+
+- `src-tauri/src/audit/logger.rs` and `src-tauri/src/audit/types.rs` are deleted, and `audit::mod` exports only the verified typed `approval` module.
+- Repository search found no production or integration caller before deletion, and the final stale-symbol scan returns no matches in current Rust source or tests.
+- The typed approval adapter is unchanged. Six typed-adapter tests, eleven native-source tests, and one public approval-audit integration test pass.
+- The original implementation commit remains preserved at `cf9d701` on `codex/phase4-increment-4i-pre-fingerprint-fix`; the fresh `codex/phase4-increment-4i` branch starts from merged 4J commit `a2b9803` and applies the old change without committing.
+- D-030 records that future trusted audit event families require separately approved closed typed contracts rather than restoration of an arbitrary-string API.
+- No replacement audit abstraction, dependency, lockfile, migration, persistence, coordinator, dispatch, executor, IPC, UI, networking, credential, capability, or permission changed.
+- Complete `npm run verify` passes with 17 hook, 124 frontend, 95 Rust library, and 11 Rust integration tests plus lint, typecheck, builds, and Tauri release no-bundle. Npm audit reports zero vulnerabilities.
+- Complete scope, diff, architecture, code-health, security, secret, generated-output, and conflict reviews have no blocking finding. The corrected 04i marker is complete and valid.
 
 ## Repository Workflow Increment 4J capability and evidence
 
 - The clean synchronized baseline is `main` at `e3af5a4`; the implementation branch is `codex/repository-workflow-increment-4j`.
-- `codex/phase4-increment-4i` remains exactly at `cf9d701`, unpushed and unmerged. Its pre-fix marker became invalid only after its reviewed tracked deletions were committed.
+- The pre-fix 4I commit remains preserved exactly at `cf9d701` on `codex/phase4-increment-4i-pre-fingerprint-fix`. Its marker became invalid only after its reviewed tracked deletions were committed, motivating 4J.
 - The corrected fingerprint omits paths absent from the current workspace while preserving path, executable-bit, type, regular-file content, symlink-target, path-safety, and fail-closed I/O handling for existing paths.
 - Exact changed-file and report-inventory validation remains unchanged, so reviewed deletions must still be recorded before finalization.
 - The positive regression proves a reviewed tracked deletion remains valid after commit. The negative regression proves deleting a tracked file after finalization invalidates the marker.
@@ -45,7 +57,7 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
 - D-031 records existing-content snapshot semantics and rejects legacy-marker fallback or silent migration.
 - No application source, dependency, hook configuration, skill, Tauri, IPC, storage, provider, gateway, approval, audit, dispatch, executor, capability, or permission changed.
 - Complete repository verification passes with 17 hook, 124 frontend, 99 Rust library, and 11 Rust integration tests plus Clippy, builds, and Tauri release no-bundle. The dependency audit reports zero vulnerabilities.
-- Exact scope, secret, generated-output, complete-diff, code, and security reviews pass. The consolidated result is `PASS WITH ADVISORIES`; the advisory blocks 4I reconstruction until 4J is separately committed and merged.
+- Exact scope, secret, generated-output, complete-diff, code, and security reviews pass. The consolidated result is `PASS WITH ADVISORIES`; 4J is now published and merged, satisfying the prerequisite for fresh 4I reconstruction.
 
 ## Increment 4H capability and evidence
 
