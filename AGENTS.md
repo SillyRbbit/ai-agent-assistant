@@ -20,7 +20,7 @@ When the task is a security-sensitive change, also read `SECURITY.md` and `CODE_
 
 ## Current phase
 
-Phase 3 and Phase 4 Increments 4A through 4E are verified complete on the target Mac. Increment 4E adds one Rust-owned macOS native decision source and manager-issued one-shot presentation while remaining disconnected from the shipping application. D-025 accepts the exact target-specific dependency and a scoped, reviewed baseline exception for two pre-existing `quick-xml` RustSec advisories; it adds no advisory ignore and must be revisited if the affected APIs or dependency path change. No later increment is Ready. Do not start runtime or planning work until the project owner selects and approves the next bounded increment. The verified gateway, schema-validation, policy-input, and approval modules remain transport-free; schema validity, policy allowance, approval previews, approval IDs, native interaction results, locally approved dispositions, authentication evidence, and any future digest remain non-authorizing.
+Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increment 4G is verified complete and adds post-increment review automation without changing application behavior. No later product implementation increment is Ready. The verified gateway, schema-validation, policy-input, and approval modules remain transport-free; schema validity, policy allowance, approval previews, approval IDs, native interaction results, locally approved dispositions, authentication evidence, workflow reports, and completion markers remain non-authorizing.
 
 ## Non-negotiable product boundaries
 
@@ -130,8 +130,13 @@ A task is done only when:
 
 ## Mandatory post-increment gate
 
-Before ending any implementation increment, Codex must run
-`$post-increment-gate`.
+After approval and before editing an implementation increment, Codex must run:
+
+```bash
+python3 .codex/hooks/post_increment_gate.py begin --increment <increment>
+```
+
+Before ending that increment, Codex must run `$post-increment-gate` and finalize its report. The repository-local Stop hook requests one continuation when an active increment lacks valid completion evidence. It must honor `stop_hook_active` to avoid an infinite continuation loop.
 
 The increment may be marked complete only when:
 
@@ -142,6 +147,9 @@ The increment may be marked complete only when:
 - Project-memory documents were synchronized.
 - A post-increment review report exists.
 - The report result is PASS or PASS WITH ADVISORIES.
+- `python3 .codex/hooks/post_increment_gate.py status` reports the expected increment as complete and valid.
+
+The hook and ignored marker are workflow guardrails, not a security boundary. Project hooks require normal Codex trust review. An emergency hook bypass must be recorded and cannot be used to mark an increment complete; rerun the full gate before completion.
 
 Codex must not begin the next increment automatically.
 Codex must not commit or push unless explicitly requested.

@@ -66,6 +66,16 @@ Before adding a production dependency:
 - Use opaque references rather than arbitrary paths where possible.
 - Reject symlink escapes and unsupported executable content when file tooling is implemented.
 
+## Repository hook boundary
+
+- Repository-local hooks execute code with the developer's Codex session permissions and require review and trust through `/hooks` before use.
+- `.codex/hooks/post_increment_gate.py` may read repository metadata, changed files, its bounded structured report, and ignored gate state. It must not parse the unstable transcript, inspect model or personal content, access the network, execute arbitrary report content, or modify product source.
+- Hook input is untrusted JSON. Validate event type, booleans, repository root, bounded size, report schema, and every path before use. Reject absolute paths, traversal, symlink escapes, merge conflicts, stale fingerprints, and suspicious changed paths.
+- The script may invoke only fixed Git inspection commands. It must not use report content to construct shell commands.
+- `.codex/state/post_increment_gate.json` contains no secrets and is ignored. Its completion marker is not approval, authorization, trusted audit evidence, or proof that commands ran; the report and actual command output remain the evidence.
+- `stop_hook_active` must suppress a repeated continuation request. This loop guard does not waive the mandatory completion criteria.
+- In an emergency, disable the hook through `/hooks` or start a session with `codex --disable hooks`. Record the bypass and rerun the complete gate before marking an increment complete. Do not routinely bypass hook trust.
+
 ## Reporting a security concern
 
 Do not place secrets, personal files, tokens, or exploitable details in a public issue. Record a sanitized summary in the project handoff and notify the repository owner through a private channel.

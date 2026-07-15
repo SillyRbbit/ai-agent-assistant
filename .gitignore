@@ -17,6 +17,11 @@ src-tauri/target/
 *.log
 npm-debug.log*
 
+# Python and repository-local Codex state
+__pycache__/
+*.py[cod]
+.codex/state/
+
 # Editors and operating systems
 .DS_Store
 .idea/

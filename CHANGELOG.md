@@ -6,6 +6,8 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Repository Workflow Increment 4G post-increment review skill, trusted project Stop hook, deterministic Python standard-library validator, structured report template, review directory, and ignored completion state.
+- Fifteen focused gate tests covering missing, failed, pending, passing, stale, conflicting, suspicious, malformed, symlink-escape, re-finalized, post-commit, and loop-guard behavior.
 - Increment 4F display-name-only rename plan, record, and D-026 compatibility boundary for the `Cortexa` product name.
 - Phase 4 Increment 4E manager-issued one-shot approval presentation and sealed exact-subject Rust-owned macOS native source outcome.
 - Typed Edit/no-decision/source-failure cancellation, explicit `NotEvaluated` authentication evidence, and a non-executing target-Mac manual harness.
@@ -78,6 +80,11 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Integrated hook tests into `npm run test` and `npm run verify`, and integrated the gate with verified-increment, code/security review, end-session, planning, and project-memory workflows.
+- Advanced Workflow Increment 4G to verification pending with no application behavior, dependency, network, permission, persistence, or compatibility-identifier change.
+- Passed 4G focused and complete repository verification plus exact scope, no-application-source, secret, generated-output, diff, code, and security review after correcting report/state parent-symlink escapes; normal `/hooks` trust and live Stop confirmation remain pending.
+- Marked Workflow Increment 4G verified complete after the project owner passed normal `/hooks` trust and live active-state Stop confirmation; the consolidated result is `PASS WITH ADVISORIES` and no later product increment is Ready.
+- Published Workflow Increment 4G from `codex/post-increment-gate`, fast-forward merged it into `main`, and pushed merged `main` at the project owner's request.
 - Renamed the assistant's product-facing UI, window and menu metadata, Settings application value, native approval title, diagnostics, prompts, skills, and documentation to `Cortexa`.
 - Preserved the `ai-agent-assistant` npm/Cargo/repository/executable names, `ai_agent_assistant_lib`, `com.aiagentassistant.desktop`, storage identifiers, IPC/event names, and other compatibility-sensitive code identifiers.
 - Advanced Increment 4F to verification pending after the pre-edit `npm run build` baseline passed and every tracked exact former-name occurrence was reviewed and updated.
@@ -151,6 +158,8 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Security
 
+- The project hook requires normal Codex trust review, reads only bounded repository/report/state evidence, uses fixed Git inspection commands, rejects unsafe or suspicious changed paths, and treats its ignored marker as non-authorizing workflow state.
+- Emergency hook bypass is documented through `/hooks` or `codex --disable hooks`; a bypass must be recorded and cannot complete an increment until the full gate is rerun.
 - D-025 limits the RustSec exception to RUSTSEC-2026-0194 and RUSTSEC-2026-0195 on the reviewed pre-existing `plist 1.9.0 -> Tauri` path. It does not declare the advisories fixed or generally safe and requires re-review if affected APIs become reachable or the dependency path changes.
 - Increment 4E keeps production choices outside the untrusted WebView: only the Rust-owned macOS source can consume a manager-issued presentation and privately construct a sealed source outcome.
 - The manager rechecks a private pointer-identical manager marker, approval/run/request/call identity, one-shot issuance state, cancellation, and monotonic expiry before a terminal outcome; Edit, native no-decision, source failure, late results, mismatches, and replay fail closed.

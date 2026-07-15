@@ -63,6 +63,10 @@ npm run build
 npm run tauri -- build --no-bundle
 ```
 
+Before completing an implementation increment, run `$post-increment-gate`. The consolidated report must inventory the complete change set, classify every required automated and manual check, record architecture/security/code-health/debt/readiness findings, and finish with exactly `PASS`, `PASS WITH ADVISORIES`, or `FAIL`.
+
+Critical or High findings that block completion, failed required checks, merge conflicts, and pending required manual checks require `FAIL`. Do not automatically fix advisories or reorder the roadmap during the review.
+
 ## Finding format
 
 Use this structure for each substantive issue:
@@ -81,5 +85,6 @@ Severity guide:
 - **High** — likely security boundary bypass, data corruption, or major user-visible failure.
 - **Medium** — real defect with bounded impact or missing failure handling.
 - **Low** — maintainability or documentation issue that can cause future defects.
+- **Advisory** — non-blocking improvement or explicitly accepted residual risk.
 
 Do not report speculative findings without showing the affected path or invariant.

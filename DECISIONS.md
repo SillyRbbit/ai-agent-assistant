@@ -515,6 +515,27 @@ Consequences:
 - The next branch is limited to creating and validating the missing skill before another implementation increment starts.
 - This exception cannot be reused for a later increment.
 
+## D-028 - Use a trusted repository Stop hook with deterministic local evidence
+
+Date: 2026-07-14
+Status: Accepted; Workflow Increment 4G implemented and verified
+
+Decision: every approved implementation increment records one ignored active state before edits and completes through one consolidated repository report. A repository-local Codex Stop hook invokes a Python standard-library validator. When state or evidence is missing, active, malformed, conflicting, suspicious, or stale, the hook requests exactly `Run $post-increment-gate for the active increment before ending the session.` A continuation turn with `stop_hook_active: true` emits no second request.
+
+The validator accepts only a bounded report with a closed JSON manifest, exact changed-file inventory, required report sections, explicit verification/manual statuses, structured findings, and a computed `PASS` or `PASS WITH ADVISORIES` result. Required non-passing checks, pending required manual checks, and completion-blocking Critical or High findings fail. A completion marker is written atomically only after validation and is bound to the report hash and deterministic workspace-content fingerprint. Re-finalization of the same completed increment is allowed so a corrected report can replace stale evidence; the complete report and current workspace must validate again.
+
+The hook executes no report content, makes no network request, reads no transcript or model content, and may run only fixed Git inspection commands. It does not modify product source, fix findings, commit, push, reorder the roadmap, grant approval, authorize execution, or create trusted audit evidence. Project-local hooks require normal `/hooks` trust review. Emergency use of `/hooks` disablement or `codex --disable hooks` must be recorded and cannot satisfy completion until the full gate is rerun.
+
+Rationale: a local deterministic gate makes required verification, engineering review, documentation synchronization, and changed-file evidence harder to omit while preserving Codex's explicit project-trust model. Binding the marker to content rather than Git metadata keeps valid evidence stable across staging and commit while invalidating any subsequent workspace change.
+
+Consequences:
+
+- `$verified-increment` must begin gate state after approval and before editing; `$post-increment-gate` must run before completion.
+- The complete report is tracked engineering evidence; ignored state contains no secret and is disposable local workflow state.
+- A clean repository with no state may stop normally; a dirty repository with no state requests the gate so retroactive omission is visible.
+- A user can disable or modify the hook because it is not a security boundary. Such a bypass prevents completion rather than creating an unbypassable enforcement claim.
+- Increment 4G adds no dependency, product behavior, provider, gateway, IPC, Tauri capability, permission, persistence, approval, audit, or executor path.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

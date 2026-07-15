@@ -4,18 +4,68 @@ Last updated: 2026-07-14
 
 ## Current state
 
-Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Increment 4F - Cortexa product display rename is complete by explicit project-owner direction. Implementation commit `972a874` was pushed on `phase4/increment-4f`, fast-forward merged into `main`, and pushed to `origin/main`.
+Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increment 4G is verified complete and published from `codex/post-increment-gate`, fast-forward merged into `main`, and pushed to `origin/main` by explicit project-owner direction. The implementation started from clean, synchronized `main` at `a4ab51f` and preserved its exact 24-file tracked plan.
 
-Increment 4F pre-edit evidence:
+Increment 4G adds one trusted repository-local Stop hook, one Python standard-library validator, a consolidated review skill and report schema, focused tests integrated into `npm run verify`, and the corresponding review/security/session/project-memory contracts. It changes no application source or behavior and adds no dependency, network access, transcript parsing, database, credential, permission, Tauri, IPC, provider, gateway, approval, audit, or execution path.
 
-- the working tree was clean after committing the existing `AGENTS.md` change as `8e174a7`;
-- all 37 tracked files containing the exact former product phrase were reviewed;
-- compatibility identifiers containing `ai-agent-assistant`, `ai_agent_assistant_lib`, `com.aiagentassistant.desktop`, or code-domain `assistant` uses were classified and preserved; and
-- `npm run build` passed before rename edits.
+Fifteen focused tests, complete repository verification, and complete diff/security/scope review pass. Direct active-state evaluation emits the exact required continuation prompt, and `stop_hook_active: true` emits no repeated continuation. The project owner passed normal `/hooks` trust and live Stop confirmation. [`docs/reviews/2026-07-14-04g-post-increment-review.md`](docs/reviews/2026-07-14-04g-post-increment-review.md) records `PASS WITH ADVISORIES`; the advisory is the documented operator-controlled project-trust boundary. The ignored completion marker is complete and valid.
 
-Increment 4F implementation now changes only human-facing product copy and associated tests/documentation. Tauri product/window metadata, Rust app metadata, native dialog title, menu actions/tooltip, sidebar branding, Settings application value, diagnostics, prompts, skills, and documentation use `Cortexa`. D-026 records that repository, package, crate, executable, bundle-ID, database, storage, IPC, command, event, path, and code identifiers remain unchanged.
+## Increment 4G verification classification
 
-Every requested automated command, native target-Mac verification, complete diff/code/security/scope review, and documentation synchronization pass. No matching `$post-increment-gate` skill or report workflow exists under `.agents/skills`, so that gate did not run and no result is claimed. The project owner explicitly confirmed 4F complete and deferred skill creation to the next clean branch. D-027 records this one-time sequencing exception; the mandatory rule remains unchanged for later implementation increments.
+### Passed
+
+```text
+Python 3.12.1 availability
+Codex CLI 0.144.2 hook capability inspection
+python3 -m json.tool .codex/hooks.json
+python3 -m py_compile .codex/hooks/post_increment_gate.py .codex/hooks/tests/test_post_increment_gate.py
+python3 -m unittest discover -s .codex/hooks/tests -p 'test_*.py' -v
+  15 passed
+npm run test:hooks
+  15 passed
+npm run verify
+  hook: 15 passed
+  frontend: 124 passed
+  Rust library: 92 passed
+  Rust integration: 10 passed
+  formatting, ESLint, Clippy with warnings denied, typecheck, Vite build, and Tauri release no-bundle build passed
+python3 .codex/hooks/post_increment_gate.py status
+  active before finalization; complete and valid after finalization
+direct active-state Stop evaluation
+  exact continuation prompt emitted
+direct stop_hook_active evaluation
+  no continuation output
+```
+
+### Failed and resolved
+
+- The first direct unittest run failed because its dynamically loaded Python module was not registered in `sys.modules`; the test harness now registers it and the exact command passes with 15 tests.
+- The first sandboxed `py_compile` attempt could not create ignored `__pycache__` output under the protected `.codex` tree. The exact approved retry passed; no tracked generated output remains.
+- `codex doctor` reported pre-existing user-level state-database, shell-path, and restricted-network diagnostics. These are outside repository state and did not invalidate hook feature/schema inspection or repository verification.
+- Security review found that symlinked `docs/reviews` or `.codex/state` parent directories could resolve outside the Git root. Both reads now require their resolved path to remain inside the root, and two focused regressions pass.
+- The first high-confidence secret-scan wrapper used zsh's read-only `status` variable and failed before producing evidence. The corrected wrapper uses `rg_status` and passed with no key material found.
+- The first finalization attempt passed report validation but could not write the ignored state under the sandbox-protected `.codex` tree. The approved exact retry outside that restriction completed the marker; status reports `complete`, `valid: true`, and `PASS WITH ADVISORIES`.
+
+Also passed:
+
+- exact 24-file tracked/untracked scope review;
+- no application-source change check;
+- high-confidence secret-material scan;
+- ignored generated-state/cache and non-ignored generated/build/database/environment/certificate/log review;
+- `git diff --check` and complete diff review; and
+- code and security review with the parent-symlink issue resolved and no remaining blocking finding.
+
+### Checks not run
+
+- None of the required automated checks.
+
+### Manual verification passed
+
+- The project owner opened `/hooks`, reviewed and normally trusted the exact project hook, and confirmed the live active-state continuation behavior.
+
+## Increment 4F publication baseline
+
+Increment 4F - Cortexa product display rename is complete by explicit project-owner direction. Implementation commit `972a874` was pushed on `phase4/increment-4f`, fast-forward merged into `main`, and pushed to `origin/main`. D-026 preserves every compatibility identifier, and D-027 records the one-time skipped-gate sequencing exception that Increment 4G replaces for future work.
 
 ## Increment 4F exact files
 
@@ -320,12 +370,12 @@ The project owner confirmed the fixed window title, exact trusted-fields-first/t
 
 ## Exact next task
 
-From clean merged `main`, create and validate the missing `$post-increment-gate` skill on a new branch. Do not start another product increment or change the completed Cortexa rename and compatibility identifiers.
+No later product increment is Ready. The exact next task is project-owner selection and approval of one bounded plan; do not infer or start it automatically.
 
 ## Ready-to-paste resume prompt
 
 ```text
-Use $documentation-sync.
+Use $session-start.
 
-Start from HANDOFF.md on merged clean `main`. Increment 4F is verified complete and published under D-027's one-time project-owner sequencing exception: the missing `$post-increment-gate` skill did not run and no result was claimed. Create and validate that missing skill on a new clean branch before starting another implementation increment. Do not change the completed Cortexa rename or compatibility identifiers. Do not commit or push unless explicitly asked.
+Resume from HANDOFF.md on clean merged `main`. Repository Workflow Increment 4G is verified complete and published with a `PASS WITH ADVISORIES` report. Reconcile the actual repository, then wait for the project owner to select and approve one bounded next increment. Do not infer or begin product work, commit, or push without explicit direction.
 ```

@@ -4,7 +4,7 @@ Last updated: 2026-07-14
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Increment 4F implementation commit `972a874` is published on its feature branch and merged `main`. No later implementation increment is Ready.
+Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increment 4G is **verified complete, published, and merged into `main`**; it changes repository workflow only. No later product implementation increment is Ready.
 
 ## Increment status
 
@@ -30,6 +30,20 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
 - Increment 4D: exact approval binding - **verified complete on target Mac**.
 - Increment 4E: trusted approval-decision source - **verified complete on target Mac**.
 - Increment 4F: Cortexa product display rename - **verified complete by project-owner direction**.
+- Repository Workflow Increment 4G: automated post-increment gate - **verified complete**.
+
+## Workflow Increment 4G current evidence
+
+- Clean, synchronized `main` at `a4ab51f` was the implementation baseline; the current branch is `codex/post-increment-gate`.
+- One repository-local Stop hook, Python standard-library validator, consolidated review skill, report schema/template, ignored state marker, and focused test suite are implemented.
+- The validator uses fixed Git argument arrays, bounded JSON/report input, safe repository-relative path checks, merge-conflict and suspicious-path rejection, exact changed-file evidence, report hashing, and a deterministic workspace-content fingerprint.
+- Fifteen focused hook tests pass, including missing/failed/pending/passing evidence, marker validity after commit, stale workspace rejection, report re-finalization, parent-symlink escapes, suspicious paths, merge conflicts, malformed input, and `stop_hook_active` loop prevention.
+- Direct active-state Stop evaluation emits the exact required continuation prompt; the loop-guard case emits no continuation output.
+- No application source, dependency, lockfile, Tauri, Rust, frontend, database, capability, permission, provider, gateway, approval, audit, or execution path changed.
+- Full post-documentation `npm run verify` passes with 15 hook, 124 frontend, 92 Rust library, and ten Rust integration tests plus formatting, ESLint, Clippy, typecheck, frontend build, and Tauri release no-bundle build.
+- Exact 24-file scope, no-application-source, secret, generated-output, complete-diff, code, and security reviews pass after the parent-symlink escape correction.
+- The project owner passed normal `/hooks` trust and live active-state Stop confirmation.
+- The consolidated report result is `PASS WITH ADVISORIES`; the advisory is the documented operator-controlled hook trust/bypass boundary. The deterministic completion marker is complete and valid.
 
 ## Increment 4F current evidence
 
@@ -119,7 +133,7 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-From clean merged `main`, create and validate the absent `$post-increment-gate` skill on a new branch before another implementation increment starts.
+Wait for the project owner to select and approve one bounded next plan. No later product implementation increment is Ready.
 
 ## Phase 4 planning result
 

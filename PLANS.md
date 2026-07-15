@@ -4,7 +4,7 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-None. Increment 4F is verified complete by project-owner direction under D-027 and published as implementation commit `972a874`. No later implementation plan is Ready.
+None. Repository Workflow Increment 4G is verified complete under [`docs/plans/04g-post-increment-gate.md`](docs/plans/04g-post-increment-gate.md). No later product implementation plan is Ready.
 
 ## Completed plans
 
@@ -72,6 +72,13 @@ A plan must contain:
 | Increment 4D exact approval binding           | Complete | Project maintainer | 2026-07-14   |
 | Increment 4E trusted approval decision source | Complete | Project maintainer | 2026-07-14   |
 | Increment 4F Cortexa product display rename   | Complete | Project maintainer | 2026-07-14   |
+| Workflow Increment 4G post-increment gate     | Complete | Project maintainer | 2026-07-14   |
+
+## Repository Workflow Increment 4G post-increment gate - complete
+
+Goal: add a trusted repository-local Stop hook, deterministic Python validator, consolidated review skill/report, and documentation synchronization gate without changing application behavior.
+
+The approved 24-file tracked scope adds no external dependency, network access, transcript parsing, product source, Tauri, Rust, IPC, persistence, capability, permission, approval, audit, or execution path. Fifteen focused hook tests and complete `npm run verify` pass. Exact scope, secret, generated-output, code, and security reviews pass after resolving parent-symlink escapes. The project owner passed normal hook trust and live Stop confirmation; the consolidated result is `PASS WITH ADVISORIES` and the marker is valid.
 
 ## Phase 4 Increment 4F product display rename - complete
 

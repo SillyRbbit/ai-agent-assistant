@@ -27,9 +27,10 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 4D — exact approval binding: **Verified complete**.
 - Increment 4E — trusted approval-decision source: **Verified complete**.
 - Increment 4F - Cortexa product display rename: **Verified complete by project-owner direction**.
+- Repository Workflow Increment 4G - automated post-increment gate: **Verified complete**.
 
 ## Queue status
 
-No later implementation increment is currently marked **Ready**. Increment 4F implements only the product display-name rename and preserves repository, package, crate, executable, bundle-ID, database, storage, event, and command identifiers. Its automated, native manual, code/security/scope review, and documentation gates pass. The absent post-increment skill did not run; D-027 records the project owner's one-time completion exception and defers skill creation to the next clean branch.
+Repository Workflow Increment 4G is **Verified complete**. It adds only the repository-local post-increment skill, deterministic Stop-hook validator, focused tests, report assets, and workflow documentation required to replace D-027's one-time exception. Its consolidated result is `PASS WITH ADVISORIES`; the advisory is the documented project-hook trust/bypass boundary. No later product implementation increment is marked **Ready**.
 
-Exact next task: from merged clean `main`, the project owner creates and validates the absent `$post-increment-gate` skill on a new branch before another implementation increment starts. Increment 4F implementation commit `972a874` is already published and merged.
+Exact next task: the project owner selects and approves one bounded next plan. Do not infer or start another increment automatically.
