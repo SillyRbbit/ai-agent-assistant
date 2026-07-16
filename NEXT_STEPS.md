@@ -47,37 +47,43 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Meta Increment 3 - Codex automation and post-increment quality gates:
   **Verified complete; squash-merged at `ad9042c`**.
 - Meta Increment 5 - repository health and GitHub hygiene:
-  **Verified complete; uncommitted and unpublished**.
+  **Verified complete; published and squash-merged at `6b149fa`**.
+- Meta Increment 6 - Product Readiness Audit:
+  **Documentation-only audit complete; result NOT READY (57/100)**.
 
 ## Queue status
 
-### Meta Increment 6 - verified application icon rollout
+### No implementation increment selected
 
-**Status:** Ready; requires separate project-owner approval before
-implementation and verified Meta Increment 5 publication.
+The `$readiness-review` audit does not reorder or approve the implementation
+queue. No item is marked Ready. Increment 4V remains Proposed with no `04v` gate
+state or source edit; the audit identifies it as the smallest remediation for
+the project owner to consider, not as a selected queue item.
 
-**Goal:** Generate the complete production Tauri icon family from the approved
-square `assets/branding/app-icon-source.png`, replace only the existing 16 icon
-files, and verify every format, build reference, package surface, and target-Mac
-appearance.
+**Goal:** Prevent a future initial-turn caller from receiving a successful
+native or run-termination approval resolution unless the turn's private typed
+in-memory audit adapter has validated and recorded that exact manager-owned
+resolution first.
 
-The unchanged exact source list, risks, non-goals, verification, manual
-target-Mac matrix, and rollback are frozen in
-`docs/plans/meta-06-verified-application-icon-rollout.md`. It requires separate
-project-owner approval. Do not implement it or Increment 4V automatically.
+Its exact two-file source/test scope, risks, non-goals, verification, and
+rollback remain frozen in
+`docs/plans/04v-bind-initial-terminal-approval-audit.md`. The merged 4U
+prerequisite is satisfied. Explicit owner selection and approval are still
+required before gate state or implementation.
 
-The project-owner Meta Increment 4 executive-document request was stopped before
-gate state or repository edits and has no completion evidence. D-048 records the
-subsequent Meta Increment 5 selection and Meta Increment 6 icon-plan number.
+### Deferred application-icon rollout
 
-Meta Increment 5 repository health and GitHub hygiene is **Verified complete**.
-It adds read-only, SHA-pinned CI, documentation, and security workflows;
-review-only dependency proposals; structured contribution and issue paths; an
-explicit no-license-selected record; reusable local health checks; and release
-and GitHub governance guidance. Application source, dependencies, lockfiles,
-Tauri configuration, permissions, CSP, and SQLite schema are unchanged. The
-exact implementation and closeout scope is frozen in
-`docs/plans/meta-05-repository-health.md`.
+**Status:** Deferred. The historical plan at
+`docs/plans/meta-06-verified-application-icon-rollout.md` retains its exact
+16-icon scope and verification requirements, but D-049 supersedes its live Meta
+6 number. Renumber and reconcile that plan in a later, separately approved
+planning change before any icon edit.
+
+The project-owner Meta Increment 4 executive-document request remains stopped
+with no gate or completion evidence. Meta Increment 5 is published at `6b149fa`.
+The Meta Increment 6 readiness audit is recorded at
+`docs/reviews/2026-07-16-product-readiness-audit.md`. Do not implement 4V, the
+icon rollout, or another increment automatically.
 
 Repository Workflow Increment 4G is **Verified complete**. It adds only the repository-local post-increment skill, deterministic Stop-hook validator, focused tests, report assets, and workflow documentation required to replace D-027's one-time exception. Its consolidated result is `PASS WITH ADVISORIES`; the advisory is the documented project-hook trust/bypass boundary.
 
@@ -203,9 +209,10 @@ production caller is introduced. D-042 records the durable boundary. Roll back
 the two source/test files and only the declared closeout documentation before
 commit, or revert one bounded 4U commit afterward.
 
-No 4U, Meta 2, Meta 3, or Meta 5 implementation task remains. Meta Increment 6
-is the first Ready item and requires separate project-owner approval after Meta
-5 publication is reconciled. Do not start it or Increment 4V automatically.
+No 4U, Meta 2, Meta 3, Meta 5, or Meta 6 implementation task remains. The audit
+recommends Increment 4V as the smallest remediation, but it remains Proposed and
+requires explicit project-owner selection and approval. Do not start it or the
+deferred icon rollout automatically.
 
 ## Proposed after published 4U
 

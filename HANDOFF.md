@@ -8,11 +8,12 @@ Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,
 and merged on the target Mac. Meta Increment 1 branding and identity foundation
 is verified complete and squash-merged at `5edbf4d`. Meta Increment 2 is merged
 at `805efc1`, and Meta Increment 3 repository-local Codex automation is
-squash-merged at `ad9042c`. `main`, `origin/main`, and the approved Meta
-Increment 5 branch began at `ad9042c` with a clean working tree. The current
-branch is `codex/meta-repository-health-github-hygiene`. Meta Increment 5 is
-verified complete on its exact repository-governance scope with no application
-behavior change; it remains uncommitted and unpublished.
+squash-merged at `ad9042c`. Meta Increment 5 repository health and GitHub hygiene
+is verified complete, published, and squash-merged at `6b149fa`; its completion
+marker was valid on clean `6b149fa` immediately before the audit edits. Meta
+Increment 6 is the documentation-only Product Readiness Audit on synchronized
+`main`. Its evidence-based result is **NOT READY (57/100)**. The audit changes no
+application behavior and remains uncommitted and unpublished.
 
 Reconstructed Increment 4I was committed as `99f9279` with message `Remove generic audit scaffold`, pushed on `codex/phase4-increment-4i`, fast-forward merged into `main`, and pushed. The corrected `04i` completion marker remains valid after the deletion commit. The original pre-fingerprint implementation commit remains preserved exactly at `cf9d701` on local `codex/phase4-increment-4i-pre-fingerprint-fix`; no remote ref contains it.
 
@@ -90,14 +91,15 @@ Meta Increment 2 engineering operating system is verified complete under
 and repository governance only. Meta Increment 3 Codex automation and
 post-increment quality gates is verified complete and squash-merged at `ad9042c`
 under `docs/plans/meta-03-codex-automation.md`. Meta Increment 5 repository
-health and GitHub hygiene is verified complete under
+health and GitHub hygiene is published at `6b149fa` under
 `docs/plans/meta-05-repository-health.md`. The stopped Meta Increment 4
-executive-document request has no gate, edit, or completion evidence. The
-unchanged application-icon rollout is renumbered Meta Increment 6 under
-`docs/plans/meta-06-verified-application-icon-rollout.md` and is Ready for
-separate project-owner approval after Meta Increment 5 publication is
-reconciled. Increment 4V terminal approval audit remains Proposed and
-separately controlled; no `04v` gate or source edit exists.
+executive-document request has no gate, edit, or completion evidence. D-049
+assigns Meta Increment 6 to the Product Readiness Audit. The older application
+icon plan remains at `docs/plans/meta-06-verified-application-icon-rollout.md`
+as deferred historical evidence and requires later renumbering before use.
+Increment 4V terminal approval audit is the smallest audit-recommended
+remediation but remains Proposed and separately controlled; no `04v` gate or
+source edit exists.
 
 ## Increment 4U completion state
 
@@ -2946,4 +2948,110 @@ Increment 5. After publication, reconcile hosted checks and clean synchronized
 Use $resume-session.
 
 Resume from HANDOFF.md on branch codex/meta-repository-health-github-hygiene. Meta Increment 5 repository health and GitHub hygiene is verified complete with a valid PASS WITH ADVISORIES marker but remains uncommitted and unpublished. Confirm the exact 43-path scope and marker remain valid, then propose a Conventional Commit message, descriptive PR title, and PR description with Purpose, Files changed, Testing performed, Breaking changes, and Next increment. Wait for my approval before any Git publication command. Do not start Meta Increment 6 or Increment 4V.
+```
+
+## Meta Increment 6 Product Readiness Audit closeout
+
+### Completed
+
+- Reconciled clean synchronized `main` at `6b149fa` and confirmed the `meta-05`
+  completion marker was complete and valid with `PASS WITH ADVISORIES` before
+  audit edits. It now reports `valid: false` because the documentation fingerprint
+  changed, as expected for later work.
+- Audited root governance, product, architecture, security, testing, release,
+  branding, roadmap, plan, increment, review, project-memory, source, test,
+  dependency, migration, Tauri, React, Rust, CI, asset, and Git evidence.
+- Created `docs/reviews/2026-07-16-product-readiness-audit.md` with a **NOT
+  READY** result, 57/100 composite, all 16 requested category assessments, 18
+  classified findings, an ordered remediation backlog, and roadmap guidance.
+- Reconciled Meta Increment 5 publication at `6b149fa`. D-049 records the
+  owner's Meta 6 audit assignment and defers the older application-icon plan
+  until later renumbering and separate approval.
+- Identified Increment 4V as the smallest recommended remediation without
+  selecting, approving, beginning, or implementing it.
+
+### Exact files changed
+
+```text
+CHANGELOG.md
+DECISIONS.md
+HANDOFF.md
+NEXT_STEPS.md
+PLANS.md
+PROJECT_STATUS.md
+docs/reviews/2026-07-16-product-readiness-audit.md
+docs/reviews/2026-07-16-meta-06-post-increment-review.md
+```
+
+No application source, test, dependency, workflow, configuration, capability,
+CSP, permission, SQLite schema, icon, identifier, plan file, or runtime behavior
+changed.
+
+### Passed checks
+
+- Clean synchronized baseline and valid `meta-05` completion marker.
+- `npm run verify`: formatting, repository health, ESLint, strict Clippy, 28
+  hook tests, 16 repository-health tests, 124 frontend tests, 95 Rust library
+  tests, 21 Rust integration tests, typecheck, Vite builds, and Tauri release
+  no-bundle build.
+- `npm audit --audit-level=low`: zero vulnerabilities.
+- Pre-edit `python3 .codex/hooks/session_end_gate.py` repository inventory.
+- Direct npm/Rust dependency, Git, asset, source, test, migration, Tauri, IPC,
+  storage, release, and licensing inspections.
+- Final `npm run format:check`, `npm run docs:check`,
+  `npm run repository:check`, internal-link validation, and `git diff --check`.
+- Active-state `npm run verify`, npm audit, exact RustSec baseline gate, scope,
+  secret, generated-output, architecture, security, code-health, debt, readiness,
+  and consolidated `meta-06` post-increment review.
+
+### Failed checks and unresolved findings
+
+- Plain `cargo audit --version` failed because the subcommand is not globally
+  installed. The verified temporary `cargo-audit 0.22.2` binary ran instead.
+- Live Cargo audit exited 1 with the accepted unresolved D-025/D-046 baseline:
+  two `quick-xml 0.39.4` vulnerabilities and 18 warning advisories.
+- The first post-draft format and documentation checks found only mechanical
+  Prettier changes in the new audit. Formatting that file made both checks pass.
+- Product readiness remains blocked by the absent end-to-end production path,
+  audit binding, executor, gateway identity/retention decisions, durable data,
+  accessibility/non-functional evidence, and release/enterprise controls.
+
+### Checks not run and manual pending
+
+- No code-coverage, browser/native E2E, accessibility scanner, performance,
+  load, soak, recovery, backup/restore, corruption, or disaster-recovery test.
+- No bundled app/DMG, signing, notarization, installer, upgrade, uninstall,
+  update, rollback, SBOM, dependency-license, or penetration test.
+- Target-Mac native walkthrough, keyboard/VoiceOver/contrast review, real-run
+  approval cancellation behavior, and packaged-icon/release checks remain
+  pending.
+- The audit originally began under `$readiness-review`, so no implementation
+  gate existed before analysis. The repository Stop hook then explicitly
+  required `$post-increment-gate`; `meta-06` was begun at closeout and this late
+  sequencing is recorded as an Advisory rather than hidden.
+
+### Post-increment gate
+
+The consolidated report is
+`docs/reviews/2026-07-16-meta-06-post-increment-review.md`. Its result is `PASS
+WITH ADVISORIES`; next-increment readiness is `Blocked`. The advisories are the
+product-readiness blockers, unresolved accepted RustSec baseline, absent
+non-required native/non-functional evidence, and late gate initialization for
+this analysis-only increment. The marker is complete and valid for the final
+eight-file documentation workspace.
+
+### Exact next task
+
+Obtain explicit project-owner direction on the audit result. The smallest
+recommended product remediation is Increment 4V under
+`docs/plans/04v-bind-initial-terminal-approval-audit.md`; it remains Proposed and
+must not begin without separate selection and approval. The historical icon plan
+must be renumbered in a later planning change before implementation.
+
+### Ready-to-paste resume prompt
+
+```text
+Use $readiness-review.
+
+Start from HANDOFF.md on the current documentation-only Meta Increment 6 audit workspace. Review docs/reviews/2026-07-16-product-readiness-audit.md and reconcile its NOT READY result with docs/plans/04v-bind-initial-terminal-approval-audit.md. Confirm whether Increment 4V remains the smallest bounded remediation with exact files, risks, non-goals, verification, manual gates, and rollback. Do not begin a gate, edit source, implement, commit, push, merge, renumber the deferred icon plan, or start a later increment. Wait for project-owner direction.
 ```
