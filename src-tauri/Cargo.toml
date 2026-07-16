@@ -39,4 +39,4 @@ unimplemented = "deny"
 unwrap_used = "deny"
 
 [dev-dependencies]
-tempfile = "=3.23.0"
+tempfile = "=3.27.0"
