@@ -142,7 +142,7 @@ capability, or permission path was added.
 
 ### Increment 4S - bind terminal initial approval presentation
 
-**Status:** Verified complete with uncommitted changes.
+**Status:** Verified complete, published, and merged at `6d0bed4`.
 
 The bound initial turn now consumes terminal `RequireApproval` through its
 private fixed approval manager and returns one owned non-authorizing
@@ -170,6 +170,38 @@ Focused and complete verification, dependency audit, exact-scope, code,
 security, documentation, and mandatory gate reviews pass. D-040 records the
 durable boundary. No manual check is required.
 
-No later increment is Ready. Exact next task: wait for explicit project-owner
-direction to commit, push, and merge Increment 4S. Do not start later planning
-or implementation automatically.
+### Increment 4T - bind terminal initial approval resolution
+
+**Status:** Verified complete with uncommitted changes.
+
+The bound turn now returns one sealed trusted approval source outcome to the
+exact private manager that issued its presentation and exposes only the exact
+non-authorizing terminal resolution.
+
+**Exact source/test scope:**
+
+```text
+src-tauri/src/agent/gateway_request.rs
+src-tauri/src/approvals/decision_source.rs
+```
+
+On macOS, the turn consumes one existing sealed
+`TrustedApprovalSourceOutcome`, delegates directly to its private manager, and
+returns the existing exact `ApprovalResolution` or typed approval error. The
+native source's production behavior remains unchanged; only its existing
+synthetic result mapper gains crate-wide test visibility under `cfg(test)` so
+focused unit tests do not open a dialog.
+
+No native invocation, run cancellation, proactive expiry, audit, persistence,
+active-run validation, dispatch, execution, transport, credential, Tauri,
+frontend, SQLite, dependency, capability, entitlement, or permission work is
+included.
+
+Eight request, 17 approval, nine public gateway-request, two approval-binding,
+and one approval-audit test pass. Strict Clippy, complete `npm run verify`, npm
+audit, exact-scope, code, security, documentation, and mandatory gate reviews
+pass with no manual gate. D-041 records same-manager ownership and the
+non-authorizing resolution boundary.
+
+Exact next task: wait for explicit project-owner direction to commit, push, and
+merge Increment 4T. Do not start later planning or implementation automatically.

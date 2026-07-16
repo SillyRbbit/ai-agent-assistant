@@ -6,6 +6,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Increment 4T macOS-gated same-manager resolution binding inside `InitialGatewayTurn`, consuming one sealed `TrustedApprovalSourceOutcome` and returning the existing exact non-authorizing `ApprovalResolution` or typed approval error.
+- Focused gateway-request unit coverage for every closed native-result mapping, exact retained identity and preview facts, interaction evidence, cross-manager rejection without recipient mutation, and outcome/resolution redaction.
+- Documentation-only Increment 4T plan for returning one sealed trusted approval source outcome to the exact private manager that issued its presentation.
+- Exact two-file future source/test scope, same-manager resolution contract, test-only helper boundary, risks, non-goals, verification, closeout scope, and rollback for terminal initial approval resolution.
 - Increment 4S terminal approval-manager binding inside `InitialGatewayTurn`, returning one exact owned `ApprovalPresentation` for terminal `RequireApproval` while preserving non-authorizing policy events for `Allow` and `Deny`.
 - Public gateway-request contract coverage for exact presentation identity, classification, typed preview, manager-assigned ID, terminal ordering, protocol-error retention, failure/cancellation discard, and redacted event debug output.
 - Documentation-only Increment 4S plan for consuming terminal `RequireApproval` through the existing exact approval manager and issuing one owned non-authorizing presentation.
@@ -118,6 +122,8 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Changed
 
+- Reconciled project memory with Increment 4S commit `6d0bed4`, now pushed and fast-forward merged into clean synchronized `main`; its `04s` completion marker was valid before 4T planning edits.
+- Made project-owner approval of the exact Increment 4T plan the next gate; no source, native invocation, cancellation/expiry orchestration, audit, transport, runtime, IPC, persistence, dispatch, or execution work has started.
 - Marked Increment 4S verified complete with `PASS WITH ADVISORIES`; its exact two-file source/test scope and declared closeout scope pass focused and complete verification with no manual gate required.
 - Made explicit project-owner direction to commit, push, and merge verified Increment 4S the next gate; no later increment is Ready.
 - Reconciled project memory with Increment 4R commit `5e58edb`, now pushed and fast-forward merged into synchronized `main`; its `04r` completion marker was complete and valid before 4S planning edits.

@@ -207,7 +207,7 @@ fn native_message_buttons() -> MessageButtons {
 }
 
 #[cfg(test)]
-pub(super) fn test_outcome_from_dialog_result(
+pub(crate) fn test_outcome_from_dialog_result(
     presentation: ApprovalPresentation,
     result: MessageDialogResult,
 ) -> TrustedApprovalSourceOutcome {

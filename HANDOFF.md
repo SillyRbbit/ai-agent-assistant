@@ -4,7 +4,7 @@ Last updated: 2026-07-15
 
 ## Current state
 
-Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4R are verified, published, and merged into clean synchronized `main` at `5e58edb`.
+Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4S are verified, published, and merged into clean synchronized `main` at `6d0bed4`.
 
 Reconstructed Increment 4I was committed as `99f9279` with message `Remove generic audit scaffold`, pushed on `codex/phase4-increment-4i`, fast-forward merged into `main`, and pushed. The corrected `04i` completion marker remains valid after the deletion commit. The original pre-fingerprint implementation commit remains preserved exactly at `cf9d701` on local `codex/phase4-increment-4i-pre-fingerprint-fix`; no remote ref contains it.
 
@@ -49,13 +49,138 @@ Increment 4R bind terminal initial function call to policy was committed as
 `04r` marker was complete and valid after commit and merge and immediately
 before the current planning edits.
 
-Increment 4S bind terminal initial approval presentation is verified complete
-with uncommitted changes and a valid `04s` completion marker. Its exact two-file
-source/test implementation makes the bound turn consume terminal
-`RequireApproval` through the existing exact approval manager and return one
-owned non-authorizing presentation. No approval-manager source, native-source,
-audit, transport, runtime, IPC, persistence, dispatch, or execution path was
-added. No later increment is Ready.
+Increment 4S bind terminal initial approval presentation was committed as
+`6d0bed4` with message `Bind terminal initial approval presentation`, pushed on
+`codex/phase4-increment-4s`, fast-forward merged into `main`, and pushed. The
+`04s` marker was complete and valid after commit and merge and immediately
+before the current planning edits.
+
+Increment 4T bind terminal initial approval resolution is verified complete with
+uncommitted changes on `main`. Its exact two-file source/test implementation
+returns one sealed trusted source outcome to the same private manager that
+issued its presentation and exposes only the exact non-authorizing resolution.
+The mandatory `04t` gate is complete and valid with `PASS WITH ADVISORIES`.
+
+## Increment 4T completion state
+
+### Goal
+
+Prevent a future initial-turn caller from obtaining the turn-issued
+presentation and sealed native source outcome without returning that outcome to
+the exact private manager that owns the pending approval.
+
+### Exact source and test scope
+
+```text
+src-tauri/src/agent/gateway_request.rs
+src-tauri/src/approvals/decision_source.rs
+```
+
+On macOS, the turn consumes one existing sealed
+`TrustedApprovalSourceOutcome`, delegates it directly to its private manager, and
+returns the exact owned non-authorizing `ApprovalResolution` or existing typed
+approval error. Production native-source behavior remains unchanged. Only the
+existing synthetic native-result helper widens under `cfg(test)` so crate unit
+tests can exercise the sealed path without opening a dialog.
+
+### Verification
+
+Passed in the current uncommitted workspace based on synchronized `main` at
+`6d0bed41b06f7f3f79bfd8ea44c3c47b3743ebd7`:
+
+```text
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+  passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::gateway_request::
+  8 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked approvals::
+  17 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test gateway_request_contract --locked
+  9 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test approval_binding --locked
+  2 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test approval_audit_binding --locked
+  1 passed
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+  passed
+npm run verify
+  passed: 17 hook, 124 frontend, 94 Rust library, and 20 Rust integration tests; lint, typecheck, frontend builds, and Tauri release no-bundle build passed
+npm audit --audit-level=low
+  passed: 0 vulnerabilities
+git diff --check
+  passed
+python3 .codex/hooks/post_increment_gate.py status
+  Increment 04t complete, valid: true, PASS WITH ADVISORIES
+```
+
+The initial Clippy run found two test-only `expect` calls. They were replaced by
+typed helper errors, and the focused suite plus required Clippy rerun passed.
+The first sandboxed npm audit could not resolve the registry or write npm logs;
+the approved network-enabled retry passed with zero vulnerabilities.
+The first sandboxed gate finalization validated the report but could not write
+the ignored `.codex` state; the approved state-write retry completed, and the
+final status is complete and valid.
+
+No manual verification is required because 4T invokes no native UI and adds no
+production caller, user-visible behavior, network, credential, persistence,
+capability, entitlement, permission, dispatch, or operating-system action.
+
+### Exact files changed
+
+```text
+AGENTS.md
+CHANGELOG.md
+DECISIONS.md
+HANDOFF.md
+NEXT_STEPS.md
+PLANS.md
+PROJECT_STATUS.md
+docs/increments/04t-bind-terminal-initial-approval-resolution.md
+docs/plans/04t-bind-terminal-initial-approval-resolution.md
+docs/plans/README.md
+docs/reviews/2026-07-15-04t-post-increment-review.md
+src-tauri/src/agent/gateway_request.rs
+src-tauri/src/approvals/decision_source.rs
+```
+
+The source/test change is limited to the approved two paths. The remaining 11
+paths are the declared planning, decision, closeout, and review documentation.
+No security, product, workflow, troubleshooting, dependency, manifest, lockfile,
+Tauri, frontend, storage, capability, entitlement, or permission file changed.
+
+### Risks and non-goals
+
+The request module gains a macOS-gated dependency on the sealed native source
+outcome and approval resolution. `Approved` could be mistaken for
+dispatch authority even though it remains non-authorizing and unaudited. The
+synthetic mapper gains crate-wide test-build visibility but remains absent
+from production builds. Run-termination cancellation, proactive expiry,
+stale-dialog handling, active-run validation, audit, and dispatch remain
+unresolved production blockers.
+
+Native dialog invocation or changes, source traits, coordinator/runtime work,
+cancellation/expiry orchestration, audit writes, persistence, dispatch,
+execution, tool results, continuation, transport, gateway deployment,
+authentication, credentials, Keychain, provider parameters, Tauri, WebView,
+SQLite, dependencies, capabilities, entitlements, and permissions are excluded.
+
+### Verification and rollback
+
+The complete diff, code, security, exact-scope, secret, generated-output, and
+documentation reviews pass with no Critical or High blocking finding. D-041
+records same-manager sealed-outcome ownership, non-authority, macOS gating, and
+test-only helper visibility. The consolidated review result is
+`PASS WITH ADVISORIES`.
+
+Before commit, restore the two source/test files to `6d0bed4` and revert only the
+declared 4T documentation. After commit, revert one 4T commit. No migration,
+data, dependency, credential, compatibility identifier, or remote resource
+requires rollback.
+
+### Exact next task
+
+Wait for explicit project-owner direction to commit, push, and merge Increment
+4T. Do not start a later increment; none is Ready.
 
 ## Increment 4S completion state
 
@@ -82,7 +207,7 @@ unchanged.
 
 ### Verification
 
-Passed in the current uncommitted workspace based on synchronized `main` at
+Passed before commit in the verified workspace based on synchronized `main` at
 `5e58edbb5e4774a6b91aaf97779143bda15336b6`:
 
 ```text
@@ -118,6 +243,10 @@ git diff --check
 python3 .codex/hooks/post_increment_gate.py status
   Increment 04s complete, valid: true, PASS WITH ADVISORIES
 ```
+
+Commit `6d0bed4` preserved the valid marker, was pushed on
+`codex/phase4-increment-4s`, and was fast-forward merged into synchronized
+`main`. The marker remained valid immediately before 4T planning edits.
 
 The first post-edit formatting check found three rustfmt line-wrap differences
 in the approved test path; `cargo fmt` corrected them and the required rerun
@@ -182,8 +311,8 @@ requires rollback.
 
 ### Exact next task
 
-Wait for explicit project-owner direction to commit, push, and merge Increment
-4S. Do not start a later increment; none is Ready.
+Increment 4S is committed, pushed, and merged. The current next task is the
+approval-blocked Increment 4T planning state recorded above.
 
 ## Increment 4R completion state
 
@@ -2014,10 +2143,10 @@ The project owner confirmed the fixed window title, exact trusted-fields-first/t
 ## Exact next task
 
 Wait for explicit project-owner direction to commit, push, and merge verified
-Increment 4S. Do not start a later increment; none is Ready.
+Increment 4T. Do not start a later increment; none is Ready.
 
 ## Ready-to-paste resume prompt
 
 ```text
-Commit, push, and merge Increment 4S only. Create codex/phase4-increment-4s from the current verified uncommitted state. Use commit message "Bind terminal initial approval presentation". Immediately confirm the 04s marker remains valid after the commit, push the branch, fast-forward merge it into updated main, push main, and verify clean synchronized main plus the valid marker. Do not start another increment.
+Commit, push, and merge Increment 4T only. Create codex/phase4-increment-4t from the current verified uncommitted state. Use commit message "Bind terminal initial approval resolution". Immediately confirm the 04t marker remains valid after the commit, push the branch, fast-forward merge it into updated main, push main, and verify clean synchronized main plus the valid marker. Do not start another increment.
 ```

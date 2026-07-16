@@ -4,8 +4,8 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-None. Increment 4S is verified complete with uncommitted changes, and no later
-increment is Ready.
+None. Increment 4T is verified complete with uncommitted changes, and no later
+implementation increment is Ready.
 
 ## Completed plans
 
@@ -36,6 +36,7 @@ docs/plans/04p-schema-bound-initial-gateway-events.md
 docs/plans/04q-terminally-release-initial-function-call.md
 docs/plans/04r-bind-terminal-initial-policy.md
 docs/plans/04s-bind-terminal-initial-approval-presentation.md
+docs/plans/04t-bind-terminal-initial-approval-resolution.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -97,6 +98,31 @@ A plan must contain:
 | Increment 4Q terminal initial function release | Complete | Project maintainer | 2026-07-15   |
 | Increment 4R terminal initial policy binding   | Complete | Project maintainer | 2026-07-15   |
 | Increment 4S terminal approval presentation    | Complete | Project maintainer | 2026-07-15   |
+| Increment 4T terminal approval resolution      | Complete | Project maintainer | 2026-07-15   |
+
+## Phase 4 Increment 4T bind terminal initial approval resolution - complete
+
+Goal: prevent a future initial-turn caller from obtaining the turn-issued
+presentation and sealed native source outcome without returning that outcome to
+the exact private manager that owns the pending subject.
+
+The exact source/test implementation changes only `agent/gateway_request.rs` and the
+existing test-only helper in `approvals/decision_source.rs`. On macOS, the turn
+consumes one sealed `TrustedApprovalSourceOutcome`, delegates it directly to
+its existing private manager, and returns the exact owned non-authorizing
+`ApprovalResolution` or existing typed approval error. Production native-source
+behavior remains unchanged, and tests synthesize closed native results without
+opening a dialog.
+
+No native invocation, approval-manager/type change, run cancellation, proactive
+expiry, audit, transport, gateway service, authentication, credentials,
+continuation, runtime coordinator, dispatch, execution, Tauri, frontend,
+SQLite, dependency, capability, entitlement, or permission path is included.
+Eight request, 17 approval, nine public-contract, two approval-binding, and one
+approval-audit tests pass, as do strict Clippy, complete repository verification,
+and npm audit. Exact-scope, code, security, documentation, and mandatory gate
+reviews pass with `PASS WITH ADVISORIES` and no manual gate. D-041 records the
+durable boundary. No later implementation increment is Ready.
 
 ## Phase 4 Increment 4S bind terminal initial approval presentation - complete
 
@@ -119,8 +145,9 @@ protocol, function-validation, policy, tool, approval, public-contract,
 approval-binding, and approval-audit tests pass, as do strict Clippy, complete
 repository verification, and npm audit. Exact-scope, code, security,
 documentation, and mandatory gate reviews pass with `PASS WITH ADVISORIES` and
-no manual gate. D-040 records the durable boundary. The `04s` completion marker
-is valid for the current uncommitted workspace; no later increment is Ready.
+no manual gate. D-040 records the durable boundary. Commit `6d0bed4` is pushed on
+`codex/phase4-increment-4s`, fast-forward merged into synchronized `main`, and
+retained a valid `04s` marker before 4T planning edits.
 
 ## Phase 4 Increment 4R bind terminal initial function call to policy - complete
 

@@ -18,6 +18,8 @@ use super::gateway_protocol::{
 use crate::approvals::manager::{
     ApprovalError, ApprovalManager, ApprovalPresentation, InMemoryApprovalManager,
 };
+#[cfg(target_os = "macos")]
+use crate::approvals::{decision_source::TrustedApprovalSourceOutcome, types::ApprovalResolution};
 use crate::policy::engine::{DeterministicPolicyEngine, PolicyEngine};
 use crate::policy::types::{PolicyDecision, PolicyInput, PolicyOutcome};
 use crate::tools::registry::{InMemoryToolRegistry, ToolRegistry};
@@ -172,6 +174,16 @@ impl InitialGatewayTurn {
                 Ok(Some(InitialGatewayEvent::ResponseFailed { failure }))
             }
         }
+    }
+
+    #[cfg(target_os = "macos")]
+    pub fn resolve_approval_source_outcome(
+        &mut self,
+        outcome: TrustedApprovalSourceOutcome,
+    ) -> InitialGatewayTurnResult<ApprovalResolution> {
+        self.approval_manager
+            .resolve_source_outcome(outcome)
+            .map_err(InitialGatewayTurnError::Approval)
     }
 
     #[must_use]
@@ -425,12 +437,19 @@ impl WireLimits {
 
 #[cfg(test)]
 mod tests {
+    #[cfg(target_os = "macos")]
+    use std::error::Error;
+
+    #[cfg(target_os = "macos")]
+    use rfd::MessageDialogResult;
     use serde_json::{json, Value};
 
     use super::{
         GatewayRequestError, InitialGatewayRequest, INITIAL_GATEWAY_TOOL_SET_ID,
         INITIAL_GATEWAY_TOOL_SET_VERSION,
     };
+    #[cfg(target_os = "macos")]
+    use super::{InitialGatewayEvent, InitialGatewayTurn, InitialGatewayTurnError};
     use crate::agent::gateway_protocol::{
         AGENT_RUN_DEADLINE, GATEWAY_CONNECT_TIMEOUT, GATEWAY_PROTOCOL_VERSION,
         GATEWAY_STREAM_IDLE_TIMEOUT, MAX_ASSISTANT_OUTPUT_CHARACTERS_PER_TURN,
@@ -439,9 +458,227 @@ mod tests {
         MAX_MODEL_TURNS_PER_RUN, MAX_RETRY_AFTER_MS, MAX_RETRY_ATTEMPTS_PER_RUN,
         PROVIDER_TURN_DEADLINE,
     };
+    #[cfg(target_os = "macos")]
+    use crate::approvals::decision_source::test_outcome_from_dialog_result;
+    #[cfg(target_os = "macos")]
+    use crate::approvals::manager::{ApprovalError, ApprovalPresentation};
+    #[cfg(target_os = "macos")]
+    use crate::approvals::types::{
+        ApprovalAction, ApprovalAuthenticationEvidence, ApprovalCancellationReason,
+        ApprovalDisposition, ApprovalInteractionSource, ApprovalNativeButton, ApprovalRecipients,
+        ApprovalResolution, ApprovalReversibility, ApprovalRisk, ApprovalSchedule,
+        ApprovalSourceFailure, ApprovalTarget,
+    };
+    #[cfg(target_os = "macos")]
+    use crate::policy::types::{PolicyOutcome, PolicyReason};
+    #[cfg(target_os = "macos")]
+    use crate::tools::types::{PermissionKind, RiskClass};
 
     const RUN_ID: &str = "run-initial-request-1";
     const GATEWAY_REQUEST_ID: &str = "gateway-request-initial-1";
+    #[cfg(target_os = "macos")]
+    const CALL_ID: &str = "call-initial-request-1";
+    #[cfg(target_os = "macos")]
+    const TASK_TITLE: &str = "Plan tomorrow";
+
+    #[cfg(target_os = "macos")]
+    fn frame(sequence: u32, event: Value) -> Vec<u8> {
+        json!({
+            "protocol_version": GATEWAY_PROTOCOL_VERSION,
+            "run_id": RUN_ID,
+            "gateway_request_id": GATEWAY_REQUEST_ID,
+            "sequence": sequence,
+            "event": event,
+        })
+        .to_string()
+        .into_bytes()
+    }
+
+    #[cfg(target_os = "macos")]
+    fn turn_with_approval_presentation(
+    ) -> Result<(InitialGatewayTurn, ApprovalPresentation), Box<dyn Error>> {
+        let mut turn = InitialGatewayTurn::new(RUN_ID, GATEWAY_REQUEST_ID, "Plan my day")?;
+        let started = frame(
+            0,
+            json!({
+                "type": "response_started",
+                "provider_response_id": "provider-response-initial-1",
+            }),
+        );
+        if !matches!(
+            turn.accept_frame(&started)?,
+            Some(InitialGatewayEvent::ResponseStarted { .. })
+        ) {
+            return Err("expected response start".into());
+        }
+
+        let function_call = frame(
+            1,
+            json!({
+                "type": "function_call_completed",
+                "call_id": CALL_ID,
+                "name": "create_local_task",
+                "tool_contract_version": INITIAL_GATEWAY_TOOL_SET_VERSION,
+                "arguments_json": format!(r#"{{"title":"{TASK_TITLE}"}}"#),
+            }),
+        );
+        if turn.accept_frame(&function_call)?.is_some() {
+            return Err("validated function call should remain pending".into());
+        }
+
+        let completed = frame(2, json!({ "type": "response_completed" }));
+        match turn.accept_frame(&completed)? {
+            Some(InitialGatewayEvent::ApprovalPresentationReady { presentation }) => {
+                Ok((turn, presentation))
+            }
+            _ => Err("expected terminal approval presentation".into()),
+        }
+    }
+
+    #[cfg(target_os = "macos")]
+    fn assert_exact_resolution(
+        resolution: &ApprovalResolution,
+        disposition: ApprovalDisposition,
+        native_button: Option<ApprovalNativeButton>,
+        source_failure: Option<ApprovalSourceFailure>,
+    ) -> Result<(), &'static str> {
+        assert_eq!(resolution.id().value(), 1);
+        assert_eq!(resolution.disposition(), disposition);
+        assert_eq!(resolution.run_id(), RUN_ID);
+        assert_eq!(resolution.gateway_request_id(), GATEWAY_REQUEST_ID);
+        assert_eq!(resolution.call_id(), CALL_ID);
+        assert_eq!(resolution.tool_name(), "create_local_task");
+        assert_eq!(
+            resolution.tool_contract_version(),
+            INITIAL_GATEWAY_TOOL_SET_VERSION
+        );
+        assert_eq!(resolution.risk_class(), RiskClass::ReversibleLocalAction);
+        assert_eq!(resolution.required_permission(), PermissionKind::None);
+        assert_eq!(resolution.policy_outcome(), PolicyOutcome::RequireApproval);
+        assert_eq!(
+            resolution.policy_reason(),
+            PolicyReason::ReversibleRequiresApproval
+        );
+
+        let preview = resolution
+            .preview()
+            .ok_or("approval resolution must retain its registered preview")?;
+        assert_eq!(preview.action(), ApprovalAction::CreateLocalTask);
+        assert_eq!(preview.target(), ApprovalTarget::LocalTaskList);
+        assert_eq!(preview.affected_data().value(), TASK_TITLE);
+        assert_eq!(preview.schedule(), ApprovalSchedule::NotScheduled);
+        assert_eq!(preview.recipients(), ApprovalRecipients::None);
+        assert_eq!(preview.reversibility(), ApprovalReversibility::Reversible);
+        assert_eq!(preview.required_permission(), PermissionKind::None);
+        assert_eq!(preview.risk_class(), RiskClass::ReversibleLocalAction);
+        assert_eq!(preview.risk(), ApprovalRisk::CreatesLocalTask);
+
+        let evidence = resolution
+            .interaction_evidence()
+            .ok_or("native outcome must retain interaction evidence")?;
+        assert_eq!(
+            evidence.source(),
+            ApprovalInteractionSource::MacOsNativeDialog
+        );
+        assert_eq!(evidence.native_button(), native_button);
+        assert_eq!(
+            evidence.authentication(),
+            ApprovalAuthenticationEvidence::NotEvaluated
+        );
+        assert_eq!(evidence.source_failure(), source_failure);
+        Ok(())
+    }
+
+    #[cfg(target_os = "macos")]
+    #[test]
+    fn resolves_each_closed_native_outcome_through_the_turn_owned_manager(
+    ) -> Result<(), Box<dyn Error>> {
+        let cases = [
+            (
+                MessageDialogResult::Custom("Approve".to_owned()),
+                ApprovalDisposition::Approved,
+                Some(ApprovalNativeButton::Approve),
+                None,
+            ),
+            (
+                MessageDialogResult::Custom("Reject".to_owned()),
+                ApprovalDisposition::Rejected,
+                Some(ApprovalNativeButton::Reject),
+                None,
+            ),
+            (
+                MessageDialogResult::Custom("Edit".to_owned()),
+                ApprovalDisposition::Cancelled(ApprovalCancellationReason::EditRequested),
+                Some(ApprovalNativeButton::Edit),
+                None,
+            ),
+            (
+                MessageDialogResult::Cancel,
+                ApprovalDisposition::Cancelled(ApprovalCancellationReason::NativeNoDecision),
+                None,
+                None,
+            ),
+            (
+                MessageDialogResult::Ok,
+                ApprovalDisposition::Cancelled(ApprovalCancellationReason::SourceFailed),
+                None,
+                Some(ApprovalSourceFailure::UnexpectedDialogResult),
+            ),
+        ];
+
+        for (dialog_result, disposition, native_button, source_failure) in cases {
+            let (mut turn, presentation) = turn_with_approval_presentation()?;
+            let outcome = test_outcome_from_dialog_result(presentation, dialog_result);
+            let outcome_debug = format!("{outcome:?}");
+            for sensitive in [RUN_ID, GATEWAY_REQUEST_ID, CALL_ID, TASK_TITLE] {
+                assert!(!outcome_debug.contains(sensitive));
+            }
+            assert!(outcome_debug.contains("[REDACTED]"));
+
+            let resolution = turn.resolve_approval_source_outcome(outcome)?;
+            assert_exact_resolution(&resolution, disposition, native_button, source_failure)?;
+
+            let resolution_debug = format!("{resolution:?}");
+            for sensitive in [RUN_ID, GATEWAY_REQUEST_ID, CALL_ID, TASK_TITLE] {
+                assert!(!resolution_debug.contains(sensitive));
+            }
+            assert!(resolution_debug.contains("[REDACTED]"));
+        }
+        Ok(())
+    }
+
+    #[cfg(target_os = "macos")]
+    #[test]
+    fn rejects_a_foreign_outcome_without_consuming_the_recipient_pending_subject(
+    ) -> Result<(), Box<dyn Error>> {
+        let (_foreign_turn, foreign_presentation) = turn_with_approval_presentation()?;
+        let foreign_outcome = test_outcome_from_dialog_result(
+            foreign_presentation,
+            MessageDialogResult::Custom("Approve".to_owned()),
+        );
+
+        let (mut recipient_turn, recipient_presentation) = turn_with_approval_presentation()?;
+        let recipient_outcome = test_outcome_from_dialog_result(
+            recipient_presentation,
+            MessageDialogResult::Custom("Reject".to_owned()),
+        );
+
+        assert!(matches!(
+            recipient_turn.resolve_approval_source_outcome(foreign_outcome),
+            Err(InitialGatewayTurnError::Approval(
+                ApprovalError::ManagerInstanceMismatch
+            ))
+        ));
+
+        let resolution = recipient_turn.resolve_approval_source_outcome(recipient_outcome)?;
+        assert_exact_resolution(
+            &resolution,
+            ApprovalDisposition::Rejected,
+            Some(ApprovalNativeButton::Reject),
+            None,
+        )?;
+        Ok(())
+    }
 
     #[test]
     fn serializes_the_exact_closed_initial_request() -> Result<(), GatewayRequestError> {

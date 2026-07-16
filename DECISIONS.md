@@ -1035,6 +1035,51 @@ Consequences:
   interaction, audit write, dispatch, executor, capability, entitlement, or
   operating-system permission is added.
 
+## D-041 - Return sealed approval outcomes only to the issuing turn manager
+
+Date: 2026-07-15
+Status: Accepted; Increment 4T implemented and verified
+
+Decision: on macOS, `InitialGatewayTurn` consumes one
+`TrustedApprovalSourceOutcome` and delegates it directly, without inspection or
+transformation, to `ApprovalManager::resolve_source_outcome` on the same private
+`InMemoryApprovalManager` that created and issued the presentation. The method
+returns only the manager-owned `ApprovalResolution` or the existing typed
+`InitialGatewayTurnError::Approval`.
+
+The resolution is interaction evidence only and remains non-authorizing. Even
+`ApprovalDisposition::Approved` grants no run-liveness, audit completion,
+permission, persistence, dispatch, execution, provider continuation, or tool
+result authority. Manager ownership, exact identity, source kind, presentation
+issuance, deadline, and one-time consumption remain exclusively enforced by the
+existing manager.
+
+The API is gated to macOS because the sealed source outcome is currently owned
+by the macOS native decision-source boundary. The existing synthetic dialog
+result mapper is `pub(crate)` only under `cfg(test)` so crate unit tests can
+exercise the sealed path without opening native UI; no production constructor,
+feature flag, IPC route, or integration-test bypass is added.
+
+Rationale: Increment 4S returned a manager-owned presentation while retaining
+the manager privately, so a future caller could not return the resulting sealed
+native outcome to that exact manager. A direct ownership-consuming delegation
+closes that gap while preserving all existing manager checks and avoiding a new
+coordinator or caller-authored approval metadata.
+
+Consequences:
+
+- `agent::gateway_request` gains a bounded macOS-gated dependency on the native
+  sealed outcome and approval resolution at the trusted assembly boundary.
+- A platform-neutral coordinator remains future work and requires separate
+  architecture review before orchestration expands.
+- Run-termination cancellation, proactive expiry, stale-dialog handling,
+  active-run validation, audit binding, dispatch, and execution remain absent.
+- O-006 and O-007 remain unresolved and continue to block authenticated gateway
+  transport and live provider traffic.
+- No dependency, manifest, lockfile, Tauri command/event/plugin, WebView path,
+  SQLite path, credential, Keychain, provider SDK, network client, native UI
+  invocation, capability, entitlement, or operating-system permission is added.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

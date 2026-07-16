@@ -4,7 +4,7 @@ Last updated: 2026-07-15
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4R are **verified complete, published, and merged into `main`**. Increment 4R is merged at `5e58edb`. Increment 4S bind terminal initial approval presentation is **verified complete with uncommitted changes** and a valid `04s` completion marker. No later increment is Ready, and no user-visible behavior, native interaction, approval resolution, audit write, transport, runtime, IPC, persistence, dispatch, or execution path was added.
+Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4S are **verified complete, published, and merged into `main`**. Increment 4S is merged at `6d0bed4`. Increment 4T bind terminal initial approval resolution is **verified complete with uncommitted changes** and a valid `04t` completion marker. No later implementation increment is Ready, and no user-visible behavior, native invocation, cancellation/expiry orchestration, audit write, transport, runtime, IPC, persistence, dispatch, or execution path was added.
 
 ## Increment status
 
@@ -42,7 +42,46 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
 - Increment 4P: schema-bound initial gateway events - **verified complete; published and merged**.
 - Increment 4Q: terminally release initial function call - **verified complete; published and merged**.
 - Increment 4R: bind terminal initial function call to policy - **verified complete; published and merged**.
-- Increment 4S: bind terminal initial approval presentation - **verified complete with uncommitted changes**.
+- Increment 4S: bind terminal initial approval presentation - **verified complete; published and merged**.
+- Increment 4T: bind terminal initial approval resolution - **verified complete with uncommitted changes**.
+
+## Increment 4T capability and evidence
+
+- The bound turn issues one exact owned presentation through its private
+  manager and exposes one macOS-gated method that consumes the
+  presentation-derived sealed source outcome through that same manager.
+- The existing native source and manager independently provide sealed outcome
+  construction, pointer-identical manager binding, exact identity and issuance
+  checks, monotonic expiry, closed result/evidence mapping, and replay
+  prevention.
+- No production coordinator exists. The public gateway-request contract remains
+  the only `InitialGatewayTurn` caller.
+- The exact source/test scope changes only
+  `src-tauri/src/agent/gateway_request.rs` and the existing test-only helper in
+  `src-tauri/src/approvals/decision_source.rs`.
+- On macOS, one sealed outcome delegates directly to the turn's same private
+  manager and return the existing exact non-authorizing resolution or typed
+  approval error.
+- Production native-source behavior remains unchanged. The synthetic result
+  helper is crate-visible only under `cfg(test)` so crate unit tests avoid
+  native UI.
+- Eight request, 17 approval, nine public gateway-request contract, two
+  approval-binding, and one approval-audit-binding tests pass. Strict Clippy,
+  complete `npm run verify`, and npm audit pass.
+- Exact-scope, conflict, secret, generated-output, code, security,
+  documentation, and mandatory gate reviews pass with no blocking finding. No
+  manual verification is required.
+- D-041 records same-manager sealed-outcome ownership, macOS gating, test-only
+  helper visibility, and the resolution's non-authorizing meaning.
+- The consolidated result is `PASS WITH ADVISORIES`; the `04t` completion
+  marker is complete and valid for the current uncommitted workspace.
+- No native invocation, approval-manager/type change, run cancellation,
+  proactive expiry, audit, transport, gateway, authentication, credential,
+  runtime, Tauri, frontend, SQLite, dependency, capability, entitlement, or
+  permission work is included.
+- Exact risks, rollback, verification, and closeout evidence are documented in
+  `docs/plans/04t-bind-terminal-initial-approval-resolution.md`;
+  the exact next task is explicit project-owner direction to publish 4T.
 
 ## Increment 4S capability and evidence
 
@@ -71,8 +110,9 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
   manual verification is required.
 - D-040 records terminal approval-manager ownership, exact presentation
   issuance, non-authority, typed failure behavior, and event API narrowing.
-- The consolidated result is `PASS WITH ADVISORIES`; the `04s` marker is
-  complete and valid for the current uncommitted workspace.
+- The consolidated result is `PASS WITH ADVISORIES`; commit `6d0bed4` is pushed
+  on `codex/phase4-increment-4s`, fast-forward merged into synchronized `main`,
+  and retained a valid `04s` marker before 4T planning edits.
 - No approval-manager, native-source, audit, policy-rule, transport, gateway,
   authentication, credential, runtime, Tauri, frontend, SQLite, dependency,
   capability, entitlement, or permission work is included.
