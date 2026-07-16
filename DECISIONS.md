@@ -1211,6 +1211,58 @@ Consequences:
 - No application source, behavior, dependency, identifier, configuration,
   capability, permission, database, icon, or release system changes.
 
+## D-045 - Modularize repository gates and renumber the icon rollout
+
+Date: 2026-07-15
+Status: Accepted; Meta Increment 3 implementation approved
+
+Decision: preserve the supported trusted-project `.codex/hooks.json` Stop
+definition and its existing `decision: block` continuation contract. Extract
+its bounded Git, path, JSON, conflict, and suspicious-path primitives into a
+standard-library-only shared module, and add a separate read-only session-end
+inventory. Evidence-based architecture, security, code-health,
+technical-debt, readiness, executive, release, quality, and post-increment
+workflows live in focused repository skills, prompts, and templates. They may
+report evidence and synchronize documentation, but they cannot run arbitrary
+report content, use the network, silently fix advisories, modify product source
+after verification, commit, push, merge, release, or begin later work.
+
+The project owner's explicit Meta Increment 3 automation request supersedes the
+queue number assigned to the still-unimplemented icon rollout by D-044. The
+icon rollout becomes Meta Increment 4 without changing its 16-icon scope,
+canonical source, risks, non-goals, target-Mac matrix, rollback, or separate
+approval requirement.
+
+Repository Git publication uses descriptive capability-based branches,
+Conventional Commits, descriptive pull-request titles, and descriptions with
+Purpose, Files changed, Testing performed, Breaking changes, and Next
+increment. Publication still requires explicit project-owner direction; after
+checks pass, the approved branch is pushed, reviewed through a pull request,
+and squash-merged.
+
+Rationale: the existing gate is verified and should be extended without
+inventing a second Stop contract or duplicating policy across large prompts.
+Small composable reviews make evidence easier to inspect while deterministic
+scripts keep path and state validation closed. Renumbering preserves the
+owner-selected automation work and the previously reviewed icon plan.
+
+Consequences:
+
+- `.codex/hooks.json` remains unchanged; repository hook trust and emergency
+  disable procedures remain explicit operator boundaries.
+- Hook scripts use only fixed Git argument arrays and Python standard-library
+  operations. Their reports and ignored marker are workflow evidence, not
+  authorization or product audit.
+- Failed required checks, pending mandatory manual checks, conflicts, stale
+  content, or blocking Critical/High findings cannot complete the gate.
+- Meta Increment 4 may become Ready only after Meta Increment 3 is verified
+  complete. It must not start automatically.
+- Historical Meta Increment 1 and 2 evidence retains the icon plan numbers that
+  were accurate at those checkpoints; D-044 and D-045 supersede only the live
+  queue number.
+- No product source, behavior, dependency, configuration, capability,
+  permission, database, icon, identifier, or release artifact changes.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

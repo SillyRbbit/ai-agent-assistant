@@ -44,13 +44,15 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 4U - bind initial approval run-termination: **Verified complete; published and merged at `61525bf`**.
 - Meta Increment 1 - branding and identity foundation: **Verified complete**.
 - Meta Increment 2 - engineering operating system: **Verified complete**.
+- Meta Increment 3 - Codex automation and post-increment quality gates:
+  **Verified complete; uncommitted and unpublished**.
 
 ## Queue status
 
-### Meta Increment 3 - verified application icon rollout
+### Meta Increment 4 - verified application icon rollout
 
 **Status:** Ready; requires separate project-owner approval before
-implementation.
+implementation and reconciliation of Meta Increment 3 publication.
 
 **Goal:** Generate the complete production Tauri icon family from the approved
 square `assets/branding/app-icon-source.png`, replace only the existing 16 icon
@@ -59,9 +61,8 @@ appearance.
 
 The unchanged exact source list, risks, non-goals, verification, manual
 target-Mac matrix, and rollback are frozen in
-`docs/plans/meta-03-verified-application-icon-rollout.md`. Do not implement Meta
-Increment 3 until the project owner separately approves that exact plan. Do not
-start Increment 4V automatically.
+`docs/plans/meta-04-verified-application-icon-rollout.md`. It requires separate
+project-owner approval. Do not implement it or Increment 4V automatically.
 
 Repository Workflow Increment 4G is **Verified complete**. It adds only the repository-local post-increment skill, deterministic Stop-hook validator, focused tests, report assets, and workflow documentation required to replace D-027's one-time exception. Its consolidated result is `PASS WITH ADVISORIES`; the advisory is the documented project-hook trust/bypass boundary.
 
@@ -187,8 +188,9 @@ production caller is introduced. D-042 records the durable boundary. Roll back
 the two source/test files and only the declared closeout documentation before
 commit, or revert one bounded 4U commit afterward.
 
-No 4U or Meta 2 task remains. Meta Increment 3 is the first Ready item and
-requires separate project-owner approval. Do not start Increment 4V.
+No 4U, Meta 2, or Meta 3 implementation task remains. Meta Increment 4 is the
+first Ready item and requires separate project-owner approval. Do not start it
+or Increment 4V automatically.
 
 ## Proposed after published 4U
 

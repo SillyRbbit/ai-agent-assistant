@@ -4,6 +4,13 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Verified Meta Increment 3 repository-local Codex automation with shared bounded
+  Git/path/JSON validation, a read-only session-end inventory, expanded hook
+  regressions, focused engineering-review skills, matching prompts, and review
+  templates.
+- D-045 preserves the supported Stop contract, records the project-owner Git
+  naming and squash-PR policy, and renumbers the unchanged application-icon
+  rollout to Meta Increment 4.
 - Documentation-only Meta Increment 2 engineering operating system with
   authoritative engineering, current architecture, normalized requirements,
   milestone roadmap, testing, security-review, and release guides.

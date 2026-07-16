@@ -11,9 +11,10 @@ Run this workflow only after the approved implementation is finished. Do not com
 
 1. Read `AGENTS.md`, `HANDOFF.md`, `PROJECT_STATUS.md`, `NEXT_STEPS.md`, `DECISIONS.md`, `TROUBLESHOOTING_LOG.md`, `SECURITY.md`, `CODE_REVIEW.md`, `PLANS.md`, the active increment and plan, and this skill.
 2. Run `python3 .codex/hooks/post_increment_gate.py status` and confirm the expected increment is active.
-3. Inspect the branch, working tree, staged files, untracked files, complete diff, and recent commits.
-4. Refuse completion when merge conflicts exist.
-5. Inspect every changed path for unrelated scope, generated files, build output, local databases, environment files, credentials, certificates, private keys, logs, or personal data.
+3. Run `python3 .codex/hooks/session_end_gate.py` and inspect its staged, unstaged, untracked, and conflict inventory.
+4. Inspect the branch, complete diff, and recent commits.
+5. Refuse completion when merge conflicts exist.
+6. Inspect every changed path for unrelated scope, generated files, build output, local databases, environment files, credentials, certificates, private keys, logs, or personal data.
 
 ## B. Required verification
 
@@ -23,27 +24,27 @@ Run this workflow only after the approved implementation is finished. Do not com
 4. Never claim success without the command's actual zero exit status or the project owner's explicit manual confirmation.
 5. Any failed or not-run required command, or any pending required manual check, makes the quality result `FAIL`.
 
-## C. Architecture advisory
+## C. Architecture review
 
-Review module boundaries, coupling, cohesion, architecture drift, missing abstractions, over-engineering, under-engineering, maintainability, scalability, performance, and dependency health.
+Apply `$architecture-review` to module boundaries, ownership, trust boundaries, coupling, cohesion, drift, abstractions, maintainability, portability, performance, and dependency health.
 
-## D. Security advisory
+## D. Security review
 
-Review Tauri IPC, capabilities, CSP, approval and policy boundaries, unsafe Rust, secrets, logging and audit exposure, SQLite safety, filesystem and operating-system access, network additions, and permission changes.
+Apply `$security-review` to Tauri IPC, hooks, capabilities, CSP, approval and policy boundaries, unsafe Rust, secrets, logging and audit exposure, SQLite safety, filesystem and operating-system access, network additions, and permission changes.
 
 ## E. Code-health review
 
-Review naming, folder organization, type safety, error handling, test quality, accessibility, dead code, documentation accuracy, complexity, and duplication.
+Apply `$code-review` to naming, folder organization, type safety, error handling, test quality, accessibility, dead code, documentation accuracy, complexity, and duplication.
 
 ## F. Technical-debt review
 
-For every finding record category, severity, summary, concrete risk, estimated effort, recommended milestone, whether it blocks completion, and whether it blocks the next increment. Use only `Critical`, `High`, `Medium`, `Low`, or `Advisory`.
+Apply `$technical-debt`. For every finding record category, severity, summary, concrete risk, estimated effort, recommended milestone, whether it blocks completion, and whether it blocks the next increment. Use only `Critical`, `High`, `Medium`, `Low`, or `Advisory`.
 
 Any Critical or High finding that blocks completion makes the quality result `FAIL`.
 
 ## G. Roadmap and readiness review
 
-Classify the next increment as exactly `Ready`, `Ready with advisories`, or `Blocked`. Do not reorder `NEXT_STEPS.md` unless the recommendation is recorded and approved.
+Apply `$readiness-review` and classify the next increment as exactly `Ready`, `Ready with advisories`, or `Blocked`. Do not reorder `NEXT_STEPS.md` unless the recommendation is recorded and approved.
 
 ## H. Documentation sync
 

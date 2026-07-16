@@ -84,8 +84,10 @@ production construction remains inaccessible and unchanged.
 
 Location: `.codex/hooks/tests/test_*.py`.
 
-Use Python `unittest` for hook JSON validation, path containment, fingerprint,
-deletion, conflict, loop-guard, and report behavior.
+Use Python `unittest` for shared Git-status classification, JSON validation,
+path containment, fingerprint, deletion, conflict, loop-guard, report, and
+session-end inventory behavior. Tests must use isolated temporary Git
+repositories and must prove the hook scripts do not modify application source.
 
 Command:
 
@@ -95,6 +97,11 @@ npm run test:hooks
 
 Repository hooks are developer workflow guardrails, not product security or
 authorization evidence.
+
+The focused hook suite covers missing reports, failed verification, pending
+mandatory manual checks, PASS, PASS WITH ADVISORIES, outside-repository path
+handling, merge conflicts, deletion-stable fingerprints, stale workspaces, and
+loop prevention.
 
 ### Security tests
 
@@ -232,7 +239,10 @@ Before ending implementation:
 3. Record passed, failed, not-run, and pending manual checks separately.
 4. Review the complete diff and confirm tests cover the changed contract.
 5. Synchronize documentation with actual results.
-6. Run `$post-increment-gate` and require the expected valid marker.
+6. Run `python3 .codex/hooks/session_end_gate.py` and resolve conflicts or
+   unexpected paths.
+7. Run `$quality-gate`, then `$post-increment-gate`, and require the expected
+   valid marker.
 
 Flaky, skipped, ignored, quarantined, or environment-blocked tests are not
 passes. Record the limitation and keep the increment incomplete unless its plan

@@ -38,29 +38,33 @@ Branch: branch-name
 
 State what changed, whether acceptance criteria are met, and the exact quality-gate result.
 
+## Scope and boundaries
+
+State the approved goal, non-goals, trust-boundary impact, and whether the exact changed-file inventory stayed within scope.
+
 ## Verification results
 
-Record every required command as exactly one of: `Passed`, `Failed`, `Not run`, or `Manual verification pending`. Do not infer success from an earlier run.
+Run `python3 .codex/hooks/session_end_gate.py` before review. Record every required automated and manual check as exactly one of: `Passed`, `Failed`, `Not run`, or `Manual verification pending`. Do not infer success from an earlier run.
 
 ## Architecture findings
 
-Review module boundaries, coupling, cohesion, drift, abstractions, complexity, maintainability, scalability, performance, and dependency health.
+Record the `$architecture-review` result for trust boundaries, ownership, coupling, cohesion, drift, abstractions, complexity, portability, maintainability, performance, and dependency health.
 
 ## Security findings
 
-Review IPC, capabilities, CSP, approval and policy boundaries, unsafe Rust, secrets, logs, audit data, SQLite, filesystem and operating-system access, networking, and permissions.
+Record the `$security-review` result for hooks, IPC, capabilities, CSP, approval and policy boundaries, unsafe Rust, secrets, logs, audit data, SQLite, filesystem and operating-system access, networking, credentials, and permissions.
 
 ## Code-health findings
 
-Review naming, organization, type safety, errors, tests, accessibility, dead code, documentation, complexity, and duplication.
+Record the `$code-review` result for naming, organization, type safety, errors, tests, accessibility, dead code, documentation, complexity, and duplication.
 
 ## Technical debt
 
-For each item, record severity, risk, effort, milestone, and whether it blocks completion or the next increment. Use `None` when no item exists.
+Record the `$technical-debt` result. For each item, include category, severity, risk, effort, milestone, and whether it blocks completion or the next increment. Use `None` when no item exists.
 
 ## Roadmap findings
 
-State whether the next increment is `Ready`, `Ready with advisories`, or `Blocked`. Do not reorder `NEXT_STEPS.md` without approval.
+Record the `$readiness-review` evidence. Do not reorder `NEXT_STEPS.md` without approval.
 
 ## Completion decision
 

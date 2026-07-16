@@ -10,7 +10,11 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-MODULE_PATH = Path(__file__).resolve().parents[1] / "post_increment_gate.py"
+HOOKS_DIRECTORY = Path(__file__).resolve().parents[1]
+if str(HOOKS_DIRECTORY) not in sys.path:
+    sys.path.insert(0, str(HOOKS_DIRECTORY))
+
+MODULE_PATH = HOOKS_DIRECTORY / "post_increment_gate.py"
 SPEC = importlib.util.spec_from_file_location("post_increment_gate", MODULE_PATH)
 if SPEC is None or SPEC.loader is None:
     raise RuntimeError("post-increment gate module could not be loaded")
@@ -164,6 +168,14 @@ class PostIncrementGateTests(unittest.TestCase):
 
         self.assertTrue(decision.should_continue)
 
+    def test_missing_report_prevents_completion(self) -> None:
+        with self.assertRaises(gate.GateError):
+            gate.finalize_gate(
+                self.root,
+                "04g",
+                "docs/reviews/2026-07-14-04g-post-increment-review.md",
+            )
+
     def test_failed_required_verification_prevents_completion(self) -> None:
         report = self._write_report(
             verification_status="Failed", quality_gate="FAIL", readiness="Blocked"
@@ -201,6 +213,23 @@ class PostIncrementGateTests(unittest.TestCase):
         state = gate.read_state(self.root)
         self.assertEqual(state["completion_marker"], gate.COMPLETION_MARKER)
         self.assertFalse(gate.evaluate_stop_payload(self._stop_payload()).should_continue)
+
+    def test_passing_report_with_advisories_writes_valid_completion_marker(
+        self,
+    ) -> None:
+        report = self._write_report(
+            quality_gate="PASS WITH ADVISORIES",
+            readiness="Ready with advisories",
+            findings=[
+                self._finding(severity="Advisory", blocks_completion=False)
+            ],
+        )
+
+        gate.finalize_gate(self.root, "04g", report)
+
+        state = gate.read_state(self.root)
+        self.assertEqual(state["quality_gate"], "PASS WITH ADVISORIES")
+        self.assertTrue(gate.redacted_status(self.root)["valid"])
 
     def test_completion_marker_remains_valid_after_commit(self) -> None:
         report = self._write_report()

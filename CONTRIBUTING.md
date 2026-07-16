@@ -50,7 +50,7 @@ Testing details and the change-to-test matrix are in `TESTING_GUIDE.md`.
 
 ## Commit guidance
 
-Prefer focused conventional commit messages:
+Use focused Conventional Commit messages that describe the capability:
 
 ```text
 feat: add platform-neutral agent interfaces
@@ -60,23 +60,26 @@ docs: add session handoff workflow
 chore: update locked toolchain metadata
 ```
 
-Do not combine unrelated refactors, dependency upgrades, and features in one commit.
+Do not combine unrelated refactors, dependency upgrades, and features in one
+commit. Generic subjects such as `update`, `changes`, `misc`, `temp`, and
+`final` are prohibited.
 
-Use one branch per increment. Start from clean synchronized `main` unless an
-approved reconstruction plan says otherwise. See `ENGINEERING_GUIDE.md` for
-branch, publication, and rollback rules.
+Use one descriptive capability-based branch per increment. Codex-created
+branches use the `codex/` prefix. Start from clean synchronized `main` unless
+an approved reconstruction plan says otherwise. After checks pass and the
+project owner explicitly approves publication, push the branch, create a pull
+request, and use a squash merge. See `ENGINEERING_GUIDE.md` for branch,
+publication, and rollback rules.
 
 ## Pull-request or change summary
 
-Include:
+Use a descriptive capability-based title. Include these sections:
 
-- Goal.
-- User-visible behavior.
-- Security impact.
-- Files and architectural layers changed.
-- Tests and commands run.
-- Known limitations.
-- Follow-up task.
+- Purpose.
+- Files changed.
+- Testing performed.
+- Breaking changes, including `None` when applicable.
+- Next increment.
 
 ## Generated and local files
 

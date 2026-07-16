@@ -236,7 +236,7 @@ material are required before sensitive persistence.
   window is visible.
 - The configured window is titled Cortexa and uses stable minimum dimensions.
 
-Production Tauri icons still use the previous icon family. Meta Increment 3 is
+Production Tauri icons still use the previous icon family. Meta Increment 4 is
 the separately gated Ready rollout from the canonical app-icon source.
 
 ## Current and future capability matrix

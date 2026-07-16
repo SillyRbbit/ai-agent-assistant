@@ -42,7 +42,7 @@ add a superseding decision or current-state update instead.
 | `src/`             | React presentation, volatile application state, and typed Tauri clients                        |
 | `src-tauri/src/`   | Trusted Rust core, Tauri startup, storage, menu lifecycle, and transport-free agent boundaries |
 | `src-tauri/tests/` | Public Rust integration and contract tests                                                     |
-| `.codex/hooks/`    | Repository workflow guardrails and their tests; not a product security boundary                |
+| `.codex/hooks/`    | Shared safe repository inspection, completion guardrails, and tests; not a product boundary    |
 | `.agents/skills/`  | Repository-scoped assistant procedures                                                         |
 | `assets/branding/` | Canonical Cortexa identity assets                                                              |
 | `docs/branding/`   | Brand and presentation standards                                                               |
@@ -147,14 +147,22 @@ boundaries.
 
 - Start from clean synchronized `main` unless an approved reconstruction plan
   says otherwise.
-- Use one branch per increment. Preferred names are
-  `codex/<phase>-increment-<id>` for product work and `meta/<topic>` for owner-
-  directed repository work.
+- Use one descriptive capability-based branch per increment. Codex-created
+  branches use the `codex/` prefix; names such as
+  `codex/feature/add-agent-memory-store`,
+  `codex/fix/srm-health-check-timeout`, or
+  `codex/meta-codex-automation-quality-gates` identify the work directly.
 - Do not mix unrelated changes or rewrite another contributor's work.
+- Use Conventional Commits whose subject explains the bounded capability and
+  reason. Do not use generic names such as `update`, `changes`, `misc`, `temp`,
+  or `final`.
+- Use descriptive pull-request titles. Every pull-request description includes
+  Purpose, Files changed, Testing performed, Breaking changes, and Next
+  increment.
 - Commit only after verification and explicit project-owner direction.
 - Push, open a pull request, merge, tag, or publish only when explicitly asked.
-- Prefer fast-forward integration for the established increment workflow unless
-  the owner selects a reviewed pull-request strategy.
+- After all checks pass and publication is explicitly approved, push the branch,
+  create the pull request, and merge it with a squash merge.
 
 ## Definition of Ready
 
@@ -183,12 +191,15 @@ project owner explicitly selects another bounded task.
    `python3 .codex/hooks/post_increment_gate.py begin --increment <id>`.
 7. Implement only the approved scope and run focused checks while working.
 8. Run complete relevant verification and any required manual checks.
-9. Review the complete diff using `CODE_REVIEW.md`, `SECURITY.md`, and the
-   applicable checklists.
-10. Synchronize project memory and write the increment and review records.
-11. Run `$post-increment-gate` and require a valid PASS or PASS WITH ADVISORIES
+9. Run `python3 .codex/hooks/session_end_gate.py` and resolve any conflict or
+   unexpected path.
+10. Run `$quality-gate` to compose architecture, security, code-health,
+    technical-debt, and roadmap-readiness review against the complete diff.
+11. Synchronize project memory and write the increment and review records only
+    after evidence is collected.
+12. Run `$post-increment-gate` and require a valid PASS or PASS WITH ADVISORIES
     marker.
-12. Stop. Do not begin the next increment, commit, or publish automatically.
+13. Stop. Do not begin the next increment, commit, or publish automatically.
 
 ## Code-review workflow
 
@@ -226,9 +237,10 @@ required memory in order, inspect Git and the toolchain, reconcile actual state,
 select one goal, and do not edit before scope approval.
 
 At session end, follow `.agents/skills/session-end/SKILL.md`: run final checks,
-review the complete diff, classify passed/failed/not-run/manual checks, update
-memory, record the exact next task and resume prompt, and leave no required
-process running. Do not mark incomplete work complete.
+inventory the repository with `.codex/hooks/session_end_gate.py`, review the
+complete diff, classify passed/failed/not-run/manual checks, update memory,
+record the exact next task and resume prompt, and leave no required process
+running. Do not mark incomplete work complete.
 
 ## Release process
 
