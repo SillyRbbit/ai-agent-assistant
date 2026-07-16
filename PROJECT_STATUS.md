@@ -12,12 +12,15 @@ Increment 2 began. Meta Increment 2 engineering operating system is **verified
 complete as documentation-only work**. Meta Increment 3 Codex automation and
 post-increment quality gates is **verified complete and squash-merged at
 `ad9042c`**. Meta Increment 5 repository health and GitHub hygiene is **verified
-complete but uncommitted and unpublished** on its repository-governance-only
-scope. The Meta Increment 4 executive-document request was stopped before gate
-state or edits and has no completion evidence. The unchanged application-icon
-rollout is renumbered Meta Increment 6 and is **Ready for separate project-owner
-approval after Meta 5 publication**. Increment 4V terminal approval audit
-remains **Proposed** and separately controlled with no gate or source edit.
+complete, published, and squash-merged at `6b149fa`**; its `meta-05` marker is
+complete and was valid on clean `6b149fa` immediately before audit edits. The
+Meta Increment 4 executive-document request was stopped before gate state or
+edits and has no completion evidence. Meta Increment 6 is
+this documentation-only Product Readiness Audit with an evidence-based result of
+**NOT READY (57/100)**. The older application-icon plan is deferred and requires
+a new live increment number before implementation. Increment 4V terminal
+approval audit is the smallest recommended remediation but remains **Proposed**
+and separately controlled with no gate or source edit.
 
 ## Increment status
 
@@ -67,9 +70,11 @@ remains **Proposed** and separately controlled with no gate or source edit.
 - Meta Increment 4: executive documentation request - **stopped before gate or
   repository edits; no completion evidence**.
 - Meta Increment 5: repository health and GitHub hygiene - **verified complete;
-  uncommitted and unpublished**.
-- Meta Increment 6: verified application icon rollout - **Ready after Meta 5
-  publication; separate approval required**.
+  published and squash-merged at `6b149fa`; marker valid on that clean baseline**.
+- Meta Increment 6: Product Readiness Audit - **documentation-only audit
+  complete; result NOT READY (57/100)**.
+- Verified application icon rollout - **deferred; historical Meta 6 plan
+  preserved, new live increment number and separate approval required**.
 
 ## Meta Increment 1 capability and evidence
 
@@ -169,6 +174,37 @@ remains **Proposed** and separately controlled with no gate or source edit.
 - Application source, dependencies, manifests, lockfiles, Tauri configuration,
   capabilities, CSP, permissions, SQLite schema, icons, and compatibility
   identifiers are unchanged.
+
+## Meta Increment 6 audit result
+
+- The evidence-based Product Readiness Audit is recorded at
+  `docs/reviews/2026-07-16-product-readiness-audit.md` with result **NOT READY**
+  and a composite maturity score of **57/100**.
+- The complete `npm run verify` quality gate passes: 124 frontend tests, 95 Rust
+  library tests, 21 Rust integration tests, 28 hook tests, 16 repository-health
+  tests, formatting, lint, strict Clippy, typecheck, frontend builds, and Tauri
+  release no-bundle build.
+- Current strengths are the local trust model, exact Rust contracts,
+  least-privilege Tauri boundary, deterministic negative-path coverage,
+  repository governance, and accurate current/mock/planned documentation.
+- Pilot and production blockers include the absent live end-to-end workflow,
+  unbound terminal approval audit, absent restricted executor, unresolved
+  gateway identity/retention decisions, non-durable product data, accessibility
+  and non-functional evidence gaps, unresolved Rust advisories, and absent
+  release/legal/enterprise controls.
+- Increment 4V is the smallest recommended remediation because it binds both
+  successful terminal approval paths to the existing typed in-memory audit
+  adapter within the already reviewed two-file scope. It remains Proposed until
+  separately selected and approved.
+- D-049 records the owner's Meta 6 audit assignment. The older 16-icon plan is
+  preserved as historical evidence but deferred until a later planning change
+  gives it a new live number and separate approval.
+- The repository Stop hook required a late `meta-06` gate start and consolidated
+  closeout report. Its result is `PASS WITH ADVISORIES`; next-increment readiness
+  remains `Blocked`. The timing is recorded as an advisory because the analysis
+  began under `$readiness-review`, which normally does not start a gate.
+- This audit changes documentation only and starts no source work, dependency
+  change, commit, push, merge, release, or later increment.
 
 ## Increment 4U capability and evidence
 
@@ -742,11 +778,11 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Obtain explicit project-owner direction before committing or publishing
-verified Meta Increment 5. Meta Increment 6 is Ready under
-`docs/plans/meta-06-verified-application-icon-rollout.md`, but it requires
-separate approval and must not start before Meta Increment 5 publication is
-reconciled. Do not start Meta 6 or Increment 4V automatically.
+Review the Meta Increment 6 Product Readiness Audit and choose the first
+remediation explicitly. Increment 4V terminal approval audit is the smallest
+recommended product increment, but it remains Proposed and has no gate or source
+edit. The deferred application-icon plan requires later renumbering and separate
+approval. Do not start either item automatically.
 
 ## Phase 4 planning result
 

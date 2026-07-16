@@ -1378,6 +1378,44 @@ Consequences:
   configuration, capability, permission, database, or compatibility identifier
   changes through this decision.
 
+## D-049 - Assign Meta Increment 6 to the product readiness audit
+
+Date: 2026-07-16
+Status: Accepted; project-owner queue direction
+
+Decision: the project owner's latest explicit direction assigns Meta Increment 6
+to the documentation-only Product Readiness Audit. The audit evaluates current
+source and verification evidence, records a `NOT READY` result, and creates no
+application behavior, dependency, configuration, permission, schema, icon, or
+release change.
+
+The previously Ready application-icon rollout remains unimplemented and
+preserves its exact reviewed 16-file source scope in
+`docs/plans/meta-06-verified-application-icon-rollout.md`. That filename and its
+historical content are retained as evidence during this audit. The icon work is
+deferred and must receive a new live increment number, reconciled plan links,
+separate approval, and its own gate before any icon edit begins.
+
+Rationale: the latest owner-assigned increment purpose supersedes the live queue
+number from D-048, but a readiness audit must not silently implement or rewrite
+the displaced remediation. Preserving the old plan while explicitly deferring
+it keeps the audit documentation-only and prevents either body of work from
+being represented as complete without evidence.
+
+Consequences:
+
+- Meta Increment 5 is reconciled as verified, published, and squash-merged at
+  `6b149fa`; its completion marker was complete and valid on that clean baseline.
+- Meta Increment 6 records an evidence-based product result of `NOT READY` with
+  a composite maturity score of 57/100.
+- Increment 4V terminal approval audit is the smallest recommended remediation,
+  but remains Proposed until separately selected and approved.
+- The application-icon rollout is not Ready under a current live number. It may
+  be renumbered only through a later planning decision; its existing source
+  scope and verification requirements remain unchanged.
+- No later increment, gate state, source edit, commit, push, merge, or release
+  starts through this decision.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |
