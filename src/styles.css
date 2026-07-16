@@ -90,18 +90,18 @@ textarea:focus-visible {
 }
 
 .application-brand__mark {
-  display: grid;
+  display: block;
   width: 38px;
-  height: 38px;
+  height: 46px;
   flex: 0 0 auto;
-  place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.72);
-  border-radius: 12px;
-  color: #ffffff;
-  background: linear-gradient(145deg, #2d3d7e, #6276d4);
-  box-shadow: 0 10px 24px rgba(45, 61, 126, 0.24);
-  font-size: 17px;
-  font-weight: 760;
+  filter: drop-shadow(0 8px 12px rgba(37, 43, 113, 0.18));
+}
+
+.application-brand__logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .application-brand__copy {

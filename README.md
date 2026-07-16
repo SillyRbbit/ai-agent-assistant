@@ -1,5 +1,7 @@
 # Cortexa
 
+<img src="assets/branding/logo-primary.png" alt="Cortexa logo" width="144" />
+
 Phase 2: a local-first Tauri 2 desktop application for a secure personal executive assistant.
 
 The current repository contains the smallest runnable macOS application plus a repository-based working system for continuing development safely across coding-assistant sessions.
@@ -110,6 +112,8 @@ Use $session-start for this repository. Read the required project-memory files, 
 
 - Product brief: `docs/product/PRODUCT_BRIEF.md`
 - Architecture baseline: `docs/product/ARCHITECTURE_BASELINE.md`
+- Brand guidelines: `docs/branding/BRAND_GUIDELINES.md`
+- Brand asset usage: `docs/branding/BRAND_USAGE.md`
 - Security rules: `SECURITY.md`
 - Code-review guide: `CODE_REVIEW.md`
 

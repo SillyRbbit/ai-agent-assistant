@@ -1,6 +1,6 @@
 # Increment 4V - bind initial terminal approval audit
 
-Status: Blocked; proposed follow-on requiring verified Increment 4U and project-owner approval
+Status: Blocked; merged 4U prerequisite satisfied, separate approval required
 Owner: Project maintainer
 Last updated: 2026-07-15
 
@@ -8,7 +8,7 @@ Last updated: 2026-07-15
 
 Require every successful approval resolution produced by
 `InitialGatewayTurn`--sealed native-source resolution or the run-termination
-resolution proposed by 4U--to be validated and recorded by the turn's private
+resolution implemented by 4U--to be validated and recorded by the turn's private
 typed in-memory approval-audit adapter before a caller receives it.
 
 ## User-visible outcome
@@ -54,8 +54,8 @@ operating-system action.
 
 - Increment 4T lets the turn return one sealed native source outcome to its
   private issuing manager and returns the exact non-authorizing resolution.
-- Increment 4U is proposed to add one no-argument run-termination path for the
-  turn's privately retained pending approval.
+- Increment 4U is published and merged at `61525bf` and adds one no-argument
+  run-termination path for the turn's privately retained pending approval.
 - The verified `InMemoryApprovalAuditAdapter` accepts all supported terminal
   resolution facts, including recognized native outcomes, run termination, and
   expiry; it returns only a non-authorizing sequence receipt.
@@ -103,8 +103,8 @@ non-authority.
 
 ## Implementation steps
 
-- [ ] Verify Increment 4U is merged with a valid completion marker.
-- [ ] Reconcile this plan against the exact merged 4U API.
+- [x] Verify Increment 4U is merged with a valid completion marker.
+- [x] Reconcile this plan against the exact merged 4U API.
 - [ ] Obtain separate project-owner approval for this exact 4V scope.
 - [ ] Run `python3 .codex/hooks/post_increment_gate.py begin --increment 04v`
       before source edits.
@@ -202,7 +202,7 @@ user-visible/manual gate.
 
 ## Acceptance criteria
 
-- [ ] Verified 4U is merged before the `04v` gate begins.
+- [x] Verified 4U is merged before the `04v` gate begins.
 - [ ] The exact `04v` gate begins before source edits.
 - [ ] Only the exact two source/test files change outside declared closeout
       documentation.
@@ -223,13 +223,15 @@ user-visible/manual gate.
 
 ## Actual results
 
-Planning only. Increment 4V is blocked on verified 4U and has no implementation
-or gate evidence.
+Planning only. The merged 4U prerequisite is satisfied and this plan is
+reconciled against commit `61525bf`. Increment 4V remains blocked on explicit
+queue selection and separate project-owner approval; it has no gate or source
+evidence.
 
 ## Documentation updates
 
 - [x] Proposed follow-on scope recorded during post-4T planning.
-- [ ] Reconcile against verified merged 4U before approval.
+- [x] Reconcile against verified merged 4U before approval.
 - [ ] `DECISIONS.md` updated during closeout if implementation confirms the
       planned durable boundary.
 - [ ] Post-increment review report created during closeout.

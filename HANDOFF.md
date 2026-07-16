@@ -4,7 +4,10 @@ Last updated: 2026-07-15
 
 ## Current state
 
-Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4T are verified, published, and merged into clean synchronized `main` at `244a1d8`.
+Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,
+and merged on the target Mac. Clean synchronized `main` and `origin/main`
+resolve to Increment 4U commit `61525bf` before the current Meta Increment 1
+working-tree changes.
 
 Reconstructed Increment 4I was committed as `99f9279` with message `Remove generic audit scaffold`, pushed on `codex/phase4-increment-4i`, fast-forward merged into `main`, and pushed. The corrected `04i` completion marker remains valid after the deletion commit. The original pre-fingerprint implementation commit remains preserved exactly at `cf9d701` on local `codex/phase4-increment-4i-pre-fingerprint-fix`; no remote ref contains it.
 
@@ -65,16 +68,23 @@ fingerprint `b65db2d20ca2d7a5d7032c835e5ea7e510ee8951dae0ac29218e1f0e5a4270d7`
 exactly. The live marker reports `valid: false` only because the current
 workspace contains later planning-only edits.
 
-Increment 4U bind initial approval run-termination is verified complete with
-uncommitted changes. The mandatory `04u` gate is complete and valid with
-`PASS WITH ADVISORIES`; project-owner publication direction is the exact next
-task.
+Increment 4U bind initial approval run-termination was committed as `61525bf`
+with message `Bind initial approval run termination`, pushed on
+`codex/phase4-increment-4u`, fast-forward merged into `main`, and pushed. The
+mandatory `04u` marker remained complete and valid after publication.
 
-Increment 4V bind initial terminal approval audit is Proposed as the second
-smallest bounded follow-on. It is blocked on 4U commit/push/merge,
-reconciliation against the published 4U API, and separate project-owner
-approval. No mandatory
-`04v` gate state or source/test edit exists.
+Meta Increment 1 branding and identity foundation is verified complete with
+uncommitted changes on `meta/branding-foundation`. It establishes canonical
+owner-supplied identity assets, complete brand guidance, the `$branding` skill,
+README/favicon references, and the official sidebar logo. Its `meta-01` marker
+is complete and valid. Product behavior, compatibility identifiers, Tauri
+production icons, dependencies, permissions, and trust boundaries are unchanged.
+
+Meta Increment 2 verified application icon rollout is the first Ready follow-on
+under `docs/plans/meta-02-verified-application-icon-rollout.md`. It requires
+separate project-owner approval and has no gate or icon edit. Increment 4V
+terminal approval audit remains Proposed and separately controlled; its merged
+4U prerequisite is satisfied, but no `04v` gate or source edit exists.
 
 ## Increment 4U completion state
 
@@ -2395,12 +2405,130 @@ operating-system action.
 - Increment 4V remains blocked on published merged 4U, plan reconciliation, and
   separate project-owner approval.
 
+## Meta Increment 1 session closeout
+
+### Completed
+
+- Began mandatory `meta-01` gate state before repository edits.
+- Preserved the owner source bytes as primary/light/dark logo assets and
+  created only proportional padded favicon and app-icon-source derivatives.
+- Replaced the sidebar letter placeholder, added the Vite favicon and README
+  logo, and retained stable accessible light/dark layout behavior.
+- Added six brand reference documents and the repository-local `$branding`
+  skill.
+- Recorded D-043, reconciled published 4U and unstarted 4V, and marked the
+  separately scoped Meta Increment 2 icon rollout Ready.
+- Kept all runtime, compatibility identifiers, Tauri production icons,
+  dependencies, capabilities, permissions, and trust boundaries unchanged.
+
+### Exact files changed
+
+Created:
+
+```text
+.agents/skills/branding/SKILL.md
+assets/branding/app-icon-source.png
+assets/branding/favicon.png
+assets/branding/logo-dark.png
+assets/branding/logo-light.png
+assets/branding/logo-primary.png
+docs/branding/BRAND_GUIDELINES.md
+docs/branding/BRAND_USAGE.md
+docs/branding/COLORS.md
+docs/branding/ICONOGRAPHY.md
+docs/branding/PRESENTATION_GUIDELINES.md
+docs/branding/TYPOGRAPHY.md
+docs/increments/meta-01-branding-foundation.md
+docs/plans/meta-01-branding-foundation.md
+docs/plans/meta-02-verified-application-icon-rollout.md
+docs/reviews/2026-07-15-meta-01-post-increment-review.md
+```
+
+Modified:
+
+```text
+AGENTS.md
+ASSISTANT_USAGE.md
+CHANGELOG.md
+DECISIONS.md
+HANDOFF.md
+NEXT_STEPS.md
+PLANS.md
+PROJECT_STATUS.md
+README.md
+docs/increments/04u-bind-initial-approval-run-termination.md
+docs/increments/04v-bind-initial-terminal-approval-audit.md
+docs/plans/04u-bind-initial-approval-run-termination.md
+docs/plans/04v-bind-initial-terminal-approval-audit.md
+docs/plans/README.md
+index.html
+src/App.test.tsx
+src/components/ApplicationSidebar.tsx
+src/styles.css
+```
+
+### Passed checks
+
+- The primary/light/dark SHA-256 values match the owner source exactly;
+  favicon is 64 x 64 and app-icon source is 512 x 512.
+- Official skill validation passes with temporary pinned `PyYAML 6.0.2`
+  outside the repository.
+- Focused `src/App.test.tsx`: 25 passed.
+- `npm run verify`: formatting, lint, typecheck, 17 hook tests, 124 frontend
+  tests, 95 Rust library tests, 21 Rust integration tests, both Vite builds,
+  and the Tauri release no-bundle build passed.
+- `npm audit --audit-level=low`: zero vulnerabilities.
+- `npm run tauri -- dev`: Vite and the native application launched; storage
+  startup was idempotent with two migrations already applied.
+- Explicit light, dark, and compact render inspection loaded the correct 360 x
+  434 asset into a 38 x 46 box with a 12 px text gap, no overlap, no horizontal
+  overflow, and a valid favicon URL.
+- Exact scope, image references, build output, placeholder scan, conflict,
+  secret, compatibility, Tauri-icon/config, manifest/lockfile, complete diff,
+  code, security, and documentation reviews passed.
+- The mandatory `meta-01` post-increment report passes and its completion marker
+  is complete and valid.
+
+### Failed checks
+
+No required check remains failed. Initial attempts exposed environment-only
+conditions: sandboxed gate begin could not write ignored state, the standalone
+skill validator lacked PyYAML, formatting found four approved files, and the
+first Tauri dev launch found a stale repository Vite listener on port 1420.
+Approved/restricted retries, targeted formatting, a temporary validator
+dependency, and the TS-013 stale-listener procedure resolved each condition.
+
+### Checks not run
+
+- No production Tauri icon generation or packaged icon-context matrix ran;
+  those are Meta Increment 2.
+- No repository dependency or Rust advisory remediation ran because manifests
+  and lockfiles are unchanged.
+- No external owner screenshot, deck, PDF, SVG, or montage was modified.
+
+### Manual and visual verification
+
+Generated logo, favicon, and app-icon-source images were visually inspected.
+Explicit light, dark, desktop, and compact screenshots show the full protected
+logo field, preserved proportions, readable adjacent product name, and no brand
+overlap. This review changes no packaged production icon, so Dock, Finder, and
+bundle-icon checks remain correctly deferred to Meta Increment 2.
+
+### Residual risks
+
+- The supplied source is an opaque raster, so its near-white field remains
+  visible on dark surfaces by design.
+- Fine circuit detail naturally reduces at compact and favicon sizes.
+- Tauri production icons still show the prior identity until separately
+  approved Meta Increment 2 is implemented and verified.
+
 ## Exact next task
 
-Commit, push, and merge Increment 4U only. Do not start Increment 4V.
+Obtain project-owner direction to commit and push Meta Increment 1. Do not start
+Meta Increment 2 or Increment 4V.
 
 ## Ready-to-paste resume prompt
 
 ```text
-Commit, push, and merge Increment 4U only. Create codex/phase4-increment-4u from the current verified uncommitted state. Use commit message "Bind initial approval run termination". Immediately confirm the 04u marker remains valid after the commit, push the branch, fast-forward merge it into updated main, push main, and verify clean synchronized main plus the valid marker. Do not start Increment 4V.
+Commit and push Meta Increment 1 only from meta/branding-foundation. Use commit message "Establish Cortexa branding foundation". Immediately confirm the meta-01 marker remains valid after the commit, then report branch synchronization and the exact next approval prompt. Do not merge, start Meta Increment 2, or start Increment 4V unless I explicitly ask.
 ```

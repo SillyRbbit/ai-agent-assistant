@@ -130,9 +130,19 @@ afterEach(() => {
 describe("App", () => {
   it("renders the conversation workspace and requires a non-empty request", () => {
     const harness = createMenuRouteHarness();
-    render(<App services={createServices(harness.source)} />);
+    const { container } = render(<App services={createServices(harness.source)} />);
 
     expect(screen.getByText("Cortexa")).toBeInTheDocument();
+    const brandMark = container.querySelector(".application-brand__mark");
+    expect(brandMark).not.toBeNull();
+    expect(brandMark).toHaveTextContent("");
+    expect(
+      brandMark?.querySelector('source[media="(prefers-color-scheme: dark)"]'),
+    ).toHaveAttribute("srcset", expect.stringContaining("logo-dark"));
+    expect(brandMark?.querySelector("img")).toHaveAttribute(
+      "src",
+      expect.stringContaining("logo-light"),
+    );
     expect(screen.getByRole("heading", { level: 1, name: "Conversations" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "No messages yet" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Start new conversation" })).toBeInTheDocument();

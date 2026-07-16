@@ -41,9 +41,30 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 4R - bind terminal initial function call to policy: **Verified complete**.
 - Increment 4S - bind terminal initial approval presentation: **Verified complete**.
 - Increment 4T - bind terminal initial approval resolution: **Verified complete**.
-- Increment 4U - bind initial approval run-termination: **Verified complete; publication pending**.
+- Increment 4U - bind initial approval run-termination: **Verified complete; published and merged at `61525bf`**.
+- Meta Increment 1 - branding and identity foundation: **Verified complete**.
 
 ## Queue status
+
+### Meta Increment 2 - verified application icon rollout
+
+**Status:** Ready; requires separate project-owner approval before
+implementation.
+
+**Goal:** Generate the complete production Tauri icon family from the approved
+square `assets/branding/app-icon-source.png`, replace only the existing 16 icon
+files, and verify every format, build reference, package surface, and target-Mac
+appearance.
+
+The exact source list, risks, non-goals, verification, manual target-Mac matrix,
+and rollback are frozen in
+`docs/plans/meta-02-verified-application-icon-rollout.md`. The plan excludes logo
+redesign, source-asset changes, Tauri config, manifests, lockfiles, identifiers,
+runtime behavior, dependencies, capabilities, entitlements, permissions,
+frontend changes, Increment 4V, and all product capability work.
+
+Do not implement Meta Increment 2 until the project owner separately approves
+that exact plan. Do not start Increment 4V automatically.
 
 Repository Workflow Increment 4G is **Verified complete**. It adds only the repository-local post-increment skill, deterministic Stop-hook validator, focused tests, report assets, and workflow documentation required to replace D-027's one-time exception. Its consolidated result is `PASS WITH ADVISORIES`; the advisory is the documented project-hook trust/bypass boundary.
 
@@ -130,12 +151,12 @@ review, code/security review, documentation sync, and the mandatory gate. No
 transport, credential, continuation, policy, approval, audit persistence,
 runtime, IPC, execution, dependency, capability, or permission path was added.
 
-## Publication pending
+## Published completion
 
 ### Increment 4U - bind initial approval run-termination
 
-**Status:** Verified complete with uncommitted changes and a valid `04u`
-completion marker; awaiting project-owner publication direction.
+**Status:** Verified complete, published, and merged at `61525bf`; the `04u`
+completion marker remained valid after commit, merge, and push.
 
 **Goal:** Let the bound turn terminally deny and consume its exact pending
 approval when a trusted future orchestrator reports run termination, without
@@ -169,16 +190,16 @@ production caller is introduced. D-042 records the durable boundary. Roll back
 the two source/test files and only the declared closeout documentation before
 commit, or revert one bounded 4U commit afterward.
 
-Exact next task: wait for project-owner direction to commit, push, and merge
-Increment 4U. Do not start Increment 4V.
+No 4U task remains. Meta Increment 2 is the first Ready item and requires
+separate project-owner approval. Do not start Increment 4V.
 
 ## Proposed after published 4U
 
 ### Increment 4V - bind initial terminal approval audit
 
-**Status:** Proposed; blocked on 4U commit/push/merge, reconciliation against the
-published 4U API, and separate project-owner approval. No `04v` gate state or
-source edit exists.
+**Status:** Proposed; the merged 4U prerequisite is satisfied and the plan is
+reconciled to `61525bf`, but explicit queue selection and separate project-owner
+approval are still required. No `04v` gate state or source edit exists.
 
 **Goal:** Prevent a future initial-turn caller from receiving a successful
 native or run-termination approval resolution unless the turn's private typed
@@ -211,9 +232,9 @@ Before commit, restore the two source/test files to the verified merged 4U
 commit and revert only declared 4V closeout documentation; after commit, revert
 one bounded 4V commit.
 
-Do not start 4V automatically. After verified merged 4U, reconcile the exact 4U
-API and obtain separate project-owner approval for
-`docs/plans/04v-bind-initial-terminal-approval-audit.md`.
+Do not start 4V automatically. Its exact reconciled plan remains at
+`docs/plans/04v-bind-initial-terminal-approval-audit.md` and requires separate
+project-owner direction after the Ready Meta 2 queue decision.
 
 Increment 4R bind terminal initial function call to policy is **Verified
 complete, published, and merged at `5e58edb`**. Accepted terminal completion

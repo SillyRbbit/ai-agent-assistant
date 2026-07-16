@@ -1,6 +1,6 @@
 # Increment 4U - bind initial approval run-termination
 
-Status: Verified complete; uncommitted and awaiting publication direction
+Status: Complete; published and merged at `61525bf`
 Owner: Project maintainer
 Last updated: 2026-07-15
 
@@ -237,8 +237,13 @@ verification applies. The consolidated result is `PASS WITH ADVISORIES` and the
 The proposed follow-on is Increment 4V, which would bind native and
 run-termination resolutions to the turn's private typed in-memory audit
 adapter. 4V is not part of this scope and must not start automatically; it
-requires verified merged 4U, plan reconciliation, and separate project-owner
-approval.
+requires explicit queue selection and separate project-owner approval.
+
+Commit `61525bf208553cb17f3dfe665d3f7b7d32d306c1` with message
+`Bind initial approval run termination` is pushed on
+`codex/phase4-increment-4u`, fast-forward merged into `main`, and synchronized
+with `origin/main`. The `04u` marker remained complete and valid after
+publication.
 
 ## Documentation updates
 

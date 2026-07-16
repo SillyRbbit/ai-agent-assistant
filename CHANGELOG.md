@@ -6,6 +6,24 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Meta Increment 1 canonical Cortexa identity assets under `assets/branding/`,
+  preserving the owner source exactly for primary/light/dark use and adding
+  proportionally padded favicon and future app-icon source derivatives.
+- Brand guidelines for logo use, safe spacing, minimum size, backgrounds,
+  prohibited treatments, color, contrast, typography, iconography,
+  presentations, and architecture diagrams.
+- Repository-local `$branding` skill for applying the official identity while
+  preserving compatibility IDs and separately gating Tauri icon replacement.
+- Documentation-only Meta Increment 2 Ready plan for generating and verifying
+  the complete production Tauri icon family on a separately approved branch.
+- Official logo use in the README and application sidebar plus a production
+  Vite favicon reference, with focused coverage replacing the letter
+  placeholder.
+- D-043 recording the owner raster as brand authority, exact derivative rules,
+  unchanged compatibility identifiers, and deferred production icon rollout.
+- Post-publication reconciliation recording Increment 4U as committed, pushed,
+  fast-forward merged, and synchronized at `61525bf`, with Increment 4V still
+  unstarted and separately controlled.
 - Increment 4U private pending-approval ownership inside `InitialGatewayTurn` plus one no-argument idempotent run-termination cancellation operation that delegates only to the existing private approval manager.
 - Focused request and public-contract coverage for exact run-termination facts, no interaction evidence, no-pending and repeated-call idempotence, typed-error retention, expiry precedence, successful native cleanup, and late-native-outcome rejection.
 - D-042 documenting private manager-issued ID ownership, manager-authoritative expiry and terminalization, run-termination non-authority, and retained stale-dialog/audit boundaries.
