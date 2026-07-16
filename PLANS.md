@@ -5,8 +5,9 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Active plan
 
 No implementation plan is active. Meta Increment 5 repository health and GitHub
-hygiene is verified complete but uncommitted and unpublished under
-`docs/plans/meta-05-repository-health.md`.
+hygiene is verified complete, published, and squash-merged at `6b149fa` under
+`docs/plans/meta-05-repository-health.md`; its completion marker was valid on
+clean `6b149fa` before these audit edits.
 
 Meta Increment 3 Codex automation and post-increment quality gates is verified
 complete and squash-merged at `ad9042c` under
@@ -16,13 +17,20 @@ Meta Increment 1 branding and identity foundation is verified complete and
 squash-merged at `5edbf4d` under
 `docs/plans/meta-01-branding-foundation.md`.
 
-Meta Increment 6 verified application icon rollout is Ready under
-`docs/plans/meta-06-verified-application-icon-rollout.md`. It requires separate
-project-owner approval and verified Meta Increment 5 publication before its gate
-or icon edits begin.
+Meta Increment 6 is the documentation-only Product Readiness Audit recorded at
+`docs/reviews/2026-07-16-product-readiness-audit.md`. Its result is **NOT READY
+(57/100)**. It starts no implementation plan. The repository Stop hook required
+late `meta-06` gate initialization and a consolidated closeout report; that
+workflow addition changes no product source or audit conclusion.
+
+The older application-icon plan remains unchanged at
+`docs/plans/meta-06-verified-application-icon-rollout.md` as historical evidence,
+but D-049 defers it until a later planning change assigns a new live number and
+separate approval. It is not an active or Ready plan under the current queue.
 
 The stopped Meta Increment 4 executive-document request created no gate state,
-plan, repository edit, or completion evidence. D-048 records the queue history.
+plan, repository edit, or completion evidence. D-048 and D-049 record the queue
+history.
 
 Increment 4V terminal approval audit remains Proposed under
 `docs/plans/04v-bind-initial-terminal-approval-audit.md`. Its merged 4U
@@ -134,7 +142,8 @@ A plan must contain:
 | Meta Increment 3 Codex automation              | Complete | Project maintainer | 2026-07-15   |
 | Meta Increment 4 executive documentation       | Stopped  | Project maintainer | 2026-07-16   |
 | Meta Increment 5 repository health             | Complete | Project maintainer | 2026-07-16   |
-| Meta Increment 6 application icon rollout      | Ready    | Project maintainer | 2026-07-16   |
+| Meta Increment 6 product readiness audit       | Complete | Project maintainer | 2026-07-16   |
+| Verified application icon rollout              | Deferred | Project maintainer | 2026-07-16   |
 
 ## Meta Increment 1 branding and identity foundation - complete
 
@@ -197,17 +206,29 @@ risks, non-goals, verification, and rollback are frozen in
 Rust audits, YAML and link validation, exact-scope review, documentation sync,
 and the mandatory `meta-05` gate pass. No product or native manual check applies.
 
-## Meta Increment 6 verified application icon rollout - Ready
+## Meta Increment 6 Product Readiness Audit - complete
 
-Goal: generate and verify all 16 existing Tauri production icon outputs from
-the approved square app-icon source. The exact future list, risks, non-goals,
-packaging and target-Mac checks, and rollback are frozen in
-`docs/plans/meta-06-verified-application-icon-rollout.md`.
+Goal: assess current product maturity from repository and verification evidence,
+score 16 readiness categories, classify findings, and order remediation without
+changing application behavior. The result is **NOT READY (57/100)** and the
+complete evidence, category assessments, findings, backlog, roadmap guidance,
+verification, command log, and rollback are recorded in
+`docs/reviews/2026-07-16-product-readiness-audit.md`.
 
-Meta 6 changes no source asset, Tauri config, compatibility identifier,
-manifest, lockfile, runtime, dependency, capability, entitlement, or permission.
-It requires verified Meta Increment 5 publication and separate project-owner
-approval and must not begin automatically.
+The audit recommends Increment 4V as the smallest bounded remediation but does
+not select or approve it. No source, test, dependency, workflow, configuration,
+capability, permission, database, icon, identifier, commit, push, merge, or later
+increment starts through this audit. The mandatory `meta-06` report records
+`PASS WITH ADVISORIES` and next-increment readiness `Blocked`.
+
+## Verified application icon rollout - deferred
+
+The exact historical 16-file plan remains at
+`docs/plans/meta-06-verified-application-icon-rollout.md`. D-049 supersedes only
+its live queue number. Before implementation, a later planning change must give
+it a new number, reconcile links and gate identity, and obtain separate owner
+approval. Its approved source asset, source scope, risks, non-goals, package and
+target-Mac checks, and rollback remain unchanged.
 
 ## Phase 4 Increment 4U bind initial approval run-termination - complete
 
