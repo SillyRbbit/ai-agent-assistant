@@ -4,10 +4,21 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No implementation plan is active. Meta Increment 5 repository health and GitHub
-hygiene is verified complete, published, and squash-merged at `6b149fa` under
+The Repository Dependency Baseline Compatibility Repair is verified complete
+with advisories under
+`docs/plans/repository-dependency-baseline-compatibility.md`; publication is
+pending. Its exact implementation scope is the two JavaScript and two Rust
+manifest/lock files. It restores valid clean installation and supported
+toolchain compatibility without changing application behavior.
+
+Meta Increment 7 PR #19 remains separate and unmerged. It must be rebased,
+reverified, and re-gated after this repair reaches synchronized `main`. No later
+implementation plan may begin during that recovery.
+
+Meta Increment 5 repository health and GitHub hygiene is verified complete,
+published, and squash-merged at `6b149fa` under
 `docs/plans/meta-05-repository-health.md`; its completion marker was valid on
-clean `6b149fa` before these audit edits.
+clean `6b149fa` before the audit edits.
 
 Meta Increment 3 Codex automation and post-increment quality gates is verified
 complete and squash-merged at `ad9042c` under
@@ -72,6 +83,7 @@ docs/plans/meta-01-branding-foundation.md
 docs/plans/meta-02-engineering-operating-system.md
 docs/plans/meta-03-codex-automation.md
 docs/plans/meta-05-repository-health.md
+docs/plans/repository-dependency-baseline-compatibility.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -143,6 +155,7 @@ A plan must contain:
 | Meta Increment 4 executive documentation       | Stopped  | Project maintainer | 2026-07-16   |
 | Meta Increment 5 repository health             | Complete | Project maintainer | 2026-07-16   |
 | Meta Increment 6 product readiness audit       | Complete | Project maintainer | 2026-07-16   |
+| Repository dependency baseline compatibility   | Complete | Project maintainer | 2026-07-16   |
 | Verified application icon rollout              | Deferred | Project maintainer | 2026-07-16   |
 
 ## Meta Increment 1 branding and identity foundation - complete

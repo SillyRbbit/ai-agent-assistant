@@ -4,6 +4,15 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Restored a valid, reproducible dependency baseline after overlapping
+  Dependabot merges removed the direct Vitest entry, produced duplicate npm
+  lock keys, selected Vite outside the React plugin peer range, and selected a
+  rusqlite transitive build script incompatible with supported Rust.
+- Reinstated one deduplicated `vite@7.3.5` graph, `vitest@3.2.6`, and
+  `rusqlite@0.37.0` while preserving other compatible dependency updates.
+  Clean installation, complete repository verification, npm audit, secret scan,
+  and the exact RustSec advisory-baseline gate pass without product behavior or
+  source changes.
 - Added the documentation-only Meta Increment 6 Product Readiness Audit with a
   source-backed `NOT READY` result, 57/100 composite score, 16 category
   assessments, 18 classified findings, an ordered remediation backlog, roadmap
