@@ -1416,6 +1416,110 @@ Consequences:
 - No later increment, gate state, source edit, commit, push, merge, or release
   starts through this decision.
 
+## D-050 - Assign the verified application-icon rollout to Meta Increment 7
+
+Date: 2026-07-16
+Status: Accepted; project-owner queue direction
+
+Decision: after publishing the Meta Increment 6 Product Readiness Audit at
+`5281fac`, assign the unchanged verified application-icon rollout the new live
+number Meta Increment 7. Rename its plan to
+`docs/plans/meta-07-verified-application-icon-rollout.md`, reconcile current
+queue and milestone references, and mark the plan Ready for separate
+implementation approval.
+
+The rollout retains the exact 16 existing `src-tauri/icons/` paths, canonical
+`assets/branding/app-icon-source.png`, brand constraints, risks, non-goals,
+package and target-Mac verification matrix, and rollback from its previously
+reviewed plan. This planning decision does not begin `meta-07` gate state,
+generate or replace an icon, change application behavior, or select Increment
+4V.
+
+Rationale: D-049 correctly displaced the icon plan when the owner assigned Meta
+Increment 6 to the readiness audit. That audit is now published and complete,
+while the bounded icon work remains unimplemented. A new live number and
+reconciled links remove the naming collision without rewriting historical plans,
+increment records, decisions, or dated reviews that accurately describe earlier
+checkpoints.
+
+Consequences:
+
+- Meta Increment 7 is the first Ready item in `NEXT_STEPS.md` and requires
+  explicit project-owner implementation approval before any gate or icon edit.
+- D-043 through D-049 remain historical authority for the brand source,
+  constraints, prior numbering, Meta 6 audit assignment, and deferred state at
+  those checkpoints.
+- Increment 4V remains Proposed as the audit's smallest recommended product
+  remediation and is not selected by this meta planning change.
+- No application source, icon, source asset, dependency, manifest, lockfile,
+  Tauri configuration, capability, permission, identifier, database, commit,
+  push, merge, or release changes through this decision.
+
+## D-051 - Keep raw Tauri development icon behavior as a documented exception
+
+Date: 2026-07-16
+Status: Accepted; project-owner-approved Meta Increment 7 baseline exception
+
+Decision: generate the exact existing 16 Tauri icon outputs from
+`assets/branding/app-icon-source.png` with the repository's installed Tauri CLI
+and require official Cortexa identity for debug-bundled and release-bundled
+`.app` artifacts. Do not expand Meta Increment 7 into runtime source,
+configuration, dependency, capability, or permission changes solely to replace
+the generic icon macOS assigns to the raw unbundled `npm run tauri -- dev`
+executable.
+
+Rationale: target-Mac AppKit inspection proves both debug and release app
+bundles register the generated Cortexa icon, preserve the configured Cortexa
+name, and present the same official mark under Aqua and Dark Aqua. The raw
+development command runs a bare executable rather than an application bundle,
+and macOS registers that process with its generic `exec` icon. Correcting that
+development-only presentation would require work outside the frozen 16-icon
+scope and is not evidence that the production bundle is wrong.
+
+Consequences:
+
+- Packaged icon acceptance requires D-052's exact/semantic generated-output
+  checks, embedded ICNS byte equality, successful debug and release `.app`
+  bundles, and target-Mac system icon inspection.
+- The raw unbundled development icon remains a visible non-blocking advisory and
+  must not be represented as Cortexa in verification evidence.
+- Default DMG creation is not waived as a release gate. Its Finder AppleScript
+  failure remains a separate release-readiness advisory even though the required
+  debug and release app bundles pass.
+- No runtime source, Tauri configuration, identifier, dependency, capability,
+  permission, or application behavior changes through this decision.
+
+## D-052 - Verify regenerated ICNS by decoded representations
+
+Date: 2026-07-16
+Status: Accepted; Meta Increment 7 verification rule
+
+Decision: compare the 15 non-ICNS Tauri icon outputs byte-for-byte with a fresh
+generation. Validate `icon.icns` by its complete representation inventory and
+decoded RGBA pixels because repeated runs of the pinned Tauri CLI can serialize
+equivalent ICNS content to different container bytes. Continue to require the
+reviewed repository `icon.icns` and each debug/release bundled resource to match
+byte-for-byte.
+
+Rationale: two fresh generations from the unchanged canonical source produced
+three distinct ICNS SHA-256 values when compared with the reviewed repository
+file, while all ten 1x/2x representations from 16 through 1024 pixels decoded
+pixel-identically. A raw regeneration comparison would therefore be flaky and
+would not measure visual identity. Decoded representation equality fails closed
+on any actual image change, while exact repository-to-bundle equality still
+proves packaging used the reviewed artifact.
+
+Consequences:
+
+- Future icon regeneration checks must parse ICNS structure and compare every
+  decoded representation, not accept a size list or visual sample alone.
+- Any missing representation, dimension mismatch, decode failure, or pixel
+  difference fails verification.
+- Debug and release app resources must remain byte-identical to the committed
+  repository ICNS.
+- This rule changes no canonical asset, icon output, source, configuration,
+  dependency, identifier, capability, permission, or product behavior.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

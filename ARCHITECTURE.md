@@ -236,8 +236,13 @@ material are required before sensitive persistence.
   window is visible.
 - The configured window is titled Cortexa and uses stable minimum dimensions.
 
-Production Tauri icons still use the previous icon family. Meta Increment 6 is
-the separately gated Ready rollout from the canonical app-icon source.
+Debug and release Tauri app bundles use the official Cortexa icon family from
+the canonical app-icon source. The raw unbundled `tauri dev` executable retains
+macOS's generic `exec` icon; D-051 records that approved development-only
+baseline exception. D-052 requires ICNS verification by decoded representation
+pixels because repeated Tauri CLI generation can produce byte-distinct but
+visually equivalent ICNS containers; bundled resources must still match the
+reviewed repository ICNS byte-for-byte.
 
 ## Current and future capability matrix
 

@@ -26,8 +26,9 @@ GitHub milestones are reporting views over accepted work. They do not replace
 | Phase 3 - bounded mock loop       | Completed                                                    |
 | Phase 4 - trusted boundaries      | Completed through 4U; 4V remains separately proposed         |
 | Meta 1-3 - repository foundation  | Completed through branding, operating model, and Codex gates |
-| Meta 5 - repository health        | Verified complete; uncommitted and unpublished               |
-| Meta 6 - application icon rollout | Ready only after Meta 5 closeout and separate owner approval |
+| Meta 5 - repository health        | Completed and squash-merged at `6b149fa`                     |
+| Meta 6 - product readiness audit  | Completed and squash-merged at `5281fac`; result `NOT READY` |
+| Meta 7 - application icon rollout | Verified on repaired `b298999`; publication is still pending |
 
 No GitHub milestone is claimed to exist remotely until an authenticated
 repository-administration check confirms it. Remote creation, due dates, branch

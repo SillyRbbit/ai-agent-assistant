@@ -16,9 +16,11 @@ Meta Increment 2 engineering operating system is verified complete under [`meta-
 
 Meta Increment 3 Codex automation and post-increment quality gates is verified complete and squash-merged at `ad9042c` under [`meta-03-codex-automation.md`](meta-03-codex-automation.md). It adds shared safe inspection and focused review workflows without changing product behavior.
 
-Meta Increment 5 repository health and GitHub hygiene is verified complete but uncommitted and unpublished under [`meta-05-repository-health.md`](meta-05-repository-health.md). It adds read-only repository quality automation and governance without changing product behavior.
+Meta Increment 5 repository health and GitHub hygiene is verified complete and squash-merged at `6b149fa` under [`meta-05-repository-health.md`](meta-05-repository-health.md). It adds read-only repository quality automation and governance without changing product behavior.
 
-Meta Increment 6 verified application icon rollout is Ready under [`meta-06-verified-application-icon-rollout.md`](meta-06-verified-application-icon-rollout.md). It requires verified Meta Increment 5 completion and separate project-owner approval before generating or replacing the exact existing Tauri icon family.
+Meta Increment 6 is the documentation-only Product Readiness Audit, squash-merged at `5281fac` with result `NOT READY (57/100)` and recorded under [`../reviews/2026-07-16-product-readiness-audit.md`](../reviews/2026-07-16-product-readiness-audit.md).
+
+Meta Increment 7 verified application icon rollout is verified complete with advisories on repaired `b298999` under [`meta-07-verified-application-icon-rollout.md`](meta-07-verified-application-icon-rollout.md). Exactly the existing 16 Tauri icon files derive from the canonical source; debug and release app bundles use Cortexa, with the approved raw `tauri dev` generic-icon advisory in D-051 and ICNS semantic-verification rule in D-052. Publication remains pending.
 
 Increment 4U bind initial approval run-termination is verified complete, published, and merged at `61525bf` under [`04u-bind-initial-approval-run-termination.md`](04u-bind-initial-approval-run-termination.md). Its exact two-file source/test scope lets the turn resolve only its privately retained pending approval through the existing manager. Native invocation or closure, proactive expiry, audit, runtime coordination, transport, dispatch, and execution remain excluded.
 
