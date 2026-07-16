@@ -26,7 +26,7 @@ verification record; this roadmap does not create new completion evidence.
 | Phase 2 - local application foundation                                | Completed            | Rust interfaces, SQLite bootstrap, macOS lifecycle, React shell, deterministic mock loop, integration hardening                                                  | None                                                                                         |
 | Phase 3 - bounded mock product loop                                   | Completed            | Conversations, context provenance, simulated results, bounded final answer                                                                                       | None                                                                                         |
 | Phase 4 - trusted proposal and approval boundaries                    | Completed through 4U | Closed gateway protocol and request, strict schemas, deterministic policy, exact approvals, native source boundary, cancellation, typed in-memory approval audit | Live transport, execution, and durable audit intentionally absent                            |
-| Increment 4V - terminal approval-audit binding                        | Ready                | Exact two-file plan exists; 4U prerequisite is merged and source scope is unchanged                                                                              | Clean documentation baseline and separate owner implementation approval                      |
+| Increment 4V - terminal approval-audit binding                        | Ready                | Exact two-file plan exists; 4U prerequisite is merged and source scope is unchanged                                                                              | Clean synchronized main containing ARB-022 remediation and separate owner approval           |
 | Phase 5 - end-to-end policy, approval, audit, and restricted dispatch | Future               | Some transport-free primitives were completed in Phase 4                                                                                                         | Approve coordinator, durable audit, dispatch, execution, and failure semantics incrementally |
 | Phase 6 - basic macOS tools                                           | Future               | Two strict schemas exist without implementations                                                                                                                 | Approve narrow adapters, permissions, tests, and rollback per tool                           |
 | Phase 7 - permissions and onboarding                                  | Future               | Status-only Permission Center exists                                                                                                                             | Approve request flows, disclosure, revocation, and onboarding                                |
@@ -55,6 +55,7 @@ but separately controlled and cannot be inferred from the completion of 4U.
 | Meta Increment 5 - repository health and GitHub hygiene | Completed and merged at `6b149fa` | Honest repository entry points, review-only automation, GitHub intake, health checks, and licensing status          | Local and hosted verification plus `meta-05` gate evidence passed                                                 |
 | Meta Increment 6 - product readiness audit              | Completed and merged at `5281fac` | Evidence-based readiness assessment and ordered remediation backlog                                                 | Documentation audit and valid `meta-06` gate evidence passed; result `NOT READY (57/100)`                         |
 | Meta Increment 7 - verified application icon rollout    | Completed and merged at `96ba6ae` | Exactly 16 existing Tauri icon files generated from the approved source; debug/release bundles verified             | Raw dev icon and default DMG remain documented advisories; no product capability gate is satisfied                |
+| Remediation ARB-022 - project-memory reconciliation     | Verified; commit pending          | PR #21 publication state and the live queue are reconciled without changing product source                          | Confirm clean synchronized `main` contains the remediation before beginning Increment 4V                          |
 
 Meta Increments 2, 3, 5, and 6 change documentation and repository governance
 only. They do not satisfy any product capability or release gate. Meta Increment
@@ -79,10 +80,10 @@ Release milestones additionally require `RELEASE_CHECKLIST.md` and
 
 ## Current queue
 
-1. Review and publish the advisory backlog plus this post-publication memory
-   reconciliation from a clean synchronized documentation baseline.
-2. Obtain separate project-owner approval for the exact Ready Increment 4V
-   plan.
+1. Confirm clean synchronized `main` contains the verified ARB-022 remediation;
+   if its resolving commit remains pending, publish only after separate
+   project-owner approval.
+2. Obtain separate project-owner approval for the exact Ready Increment 4V plan.
 3. Begin `04v` before either approved source/test file changes.
 
 Increment 4V is the only Ready product increment in this roadmap.

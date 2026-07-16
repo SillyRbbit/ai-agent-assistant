@@ -53,20 +53,23 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Meta Increment 7 - verified application icon rollout:
   **Verified complete with advisories; squash-merged through PR #19 at
   `96ba6ae`**.
+- Remediation ARB-022 - project-memory reconciliation:
+  **Verified complete in the current workspace; resolving commit pending until
+  committed**.
 
 ## Queue status
 
-### Close the advisory-review documentation baseline
+### Publish the verified ARB-022 remediation
 
-**Status:** Documentation-only review awaiting project-owner publication
-direction; not a product increment.
+**Status:** Documentation-only remediation verified in the current workspace;
+resolving commit pending until committed. Not a product increment.
 
-Fetched `main`, `origin/main`, and `HEAD` all resolve to `96ba6ae`. PR #19 is
-squash-merged and its hosted CI, documentation, and security checks passed. The
-`meta-07` marker was complete and valid on that clean commit before
-`docs/reviews/2026-07-16-advisory-remediation-backlog.md` changed the live
-workspace fingerprint. Review and publish the advisory backlog plus this
-project-memory reconciliation before any implementation gate begins.
+PR #21 squash-merged the advisory backlog and first post-Meta-7 memory
+reconciliation at `cc434d9`. This remediation closes the remaining ARB-022
+drift by removing that already-completed publication task from live project
+memory while preserving dated Meta 7 evidence. Its resolving commit remains
+pending until committed. Before any product implementation gate begins,
+confirm clean synchronized `main` contains this remediation.
 
 ### Increment 4V - bind initial terminal approval audit
 
@@ -77,9 +80,9 @@ The exact two-file plan remains
 `docs/plans/04v-bind-initial-terminal-approval-audit.md`. The merged 4U
 prerequisite is satisfied, the source/test scope has not changed since
 `61525bf`, and focused request, audit, approval-binding, and approval-audit
-contracts pass on current `main`. After this documentation-only review is
-published on clean synchronized `main`, obtain separate implementation approval
-and begin `04v` before either approved source/test file changes.
+contracts pass on the current baseline. Once clean synchronized `main` contains
+the verified ARB-022 remediation, obtain separate implementation approval and
+begin `04v` before either approved source/test file changes.
 
 Repository Workflow Increment 4G is **Verified complete**. It adds only the repository-local post-increment skill, deterministic Stop-hook validator, focused tests, report assets, and workflow documentation required to replace D-027's one-time exception. Its consolidated result is `PASS WITH ADVISORIES`; the advisory is the documented project-hook trust/bypass boundary.
 
@@ -251,8 +254,8 @@ one bounded 4V commit.
 
 Do not start 4V automatically. Its exact reconciled plan remains at
 `docs/plans/04v-bind-initial-terminal-approval-audit.md` and requires separate
-project-owner implementation approval after this documentation-only review is
-published on clean synchronized `main`.
+project-owner implementation approval after the verified ARB-022 remediation is
+present on clean synchronized `main`.
 
 Increment 4R bind terminal initial function call to policy is **Verified
 complete, published, and merged at `5e58edb`**. Accepted terminal completion

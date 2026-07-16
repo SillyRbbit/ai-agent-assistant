@@ -49,10 +49,14 @@ advisories and squash-merged through PR #19 at `96ba6ae`: exactly the existing
 app bundles use the official macOS icon, and the raw unbundled `tauri dev`
 executable retains the project-owner-approved generic `exec` baseline advisory.
 Its `meta-07` marker was complete and valid on clean `96ba6ae` before the later
-advisory-remediation report changed the workspace fingerprint. Increment 4V
-terminal approval audit is the first Ready product increment, remains unstarted,
-and still requires separate project-owner implementation approval and a clean
-documentation baseline before its `04v` gate begins. Current implementation
+advisory-remediation report changed the workspace fingerprint. The advisory
+backlog and first post-Meta-7 memory reconciliation are squash-merged through PR
+#21 at `cc434d9`. ARB-022's remaining live publication drift is resolved in the
+current documentation state; its remediation record preserves the resolving
+commit as pending until committed. Increment 4V terminal approval audit is the
+first Ready product increment, remains unstarted, and still requires separate
+project-owner implementation approval from clean synchronized `main` containing
+the ARB-022 remediation before its `04v` gate begins. Current implementation
 facts and future boundaries are authoritative in `ARCHITECTURE.md`.
 
 ## Non-negotiable product boundaries

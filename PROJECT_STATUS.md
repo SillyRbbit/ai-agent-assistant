@@ -25,8 +25,11 @@ complete with advisories and squash-merged through PR #19 at `96ba6ae`**; its
 original pre-repair branch remains preserved at `a1808e2`, and hosted CI,
 documentation, and security checks passed. Its marker was complete and valid on
 clean `96ba6ae` before the later advisory-remediation report changed the live
-workspace fingerprint. Increment 4V is Ready but remains unstarted with no gate
-or source edit.
+workspace fingerprint. The advisory backlog and first post-Meta-7 memory
+reconciliation were squash-merged through PR #21 at `cc434d9`. Remediation
+ARB-022 resolves the remaining live publication drift in the current workspace;
+its resolving commit remains pending until committed. Increment 4V is Ready but
+remains unstarted with no gate or source edit.
 
 ## Increment status
 
@@ -83,6 +86,8 @@ or source edit.
   with advisories; published and squash-merged at `b298999`**.
 - Meta Increment 7: verified application icon rollout - **verified complete with
   advisories; squash-merged through PR #19 at `96ba6ae`**.
+- Remediation ARB-022: project-memory reconciliation - **verified complete in
+  the current workspace; resolving commit pending until committed**.
 
 ## Repository dependency baseline compatibility evidence
 
@@ -218,10 +223,11 @@ or source edit.
   gateway identity/retention decisions, non-durable product data, accessibility
   and non-functional evidence gaps, unresolved Rust advisories, and absent
   release/legal/enterprise controls.
-- Increment 4V is the smallest recommended remediation because it binds both
-  successful terminal approval paths to the existing typed in-memory audit
-  adapter within the already reviewed two-file scope. It remains Proposed until
-  separately selected and approved.
+- Increment 4V is the smallest recommended product remediation because it binds
+  both successful terminal approval paths to the existing typed in-memory audit
+  adapter within the already reviewed two-file scope. The audit originally left
+  it Proposed; later planning marked it Ready, but it remains unstarted and
+  requires separate implementation approval.
 - D-049 records the owner's Meta 6 audit assignment. D-050 assigns the unchanged
   16-icon rollout its new live Meta Increment 7 number without implementing it.
 - The repository Stop hook required a late `meta-06` gate start and consolidated
@@ -256,6 +262,25 @@ or source edit.
   documentation, and security checks passed. The `meta-07` marker was complete
   and valid on that clean commit before the later advisory backlog changed the
   live workspace fingerprint.
+
+## Remediation ARB-022 capability and evidence
+
+- PR #21 squash-merged the advisory backlog and first post-Meta-7 project-memory
+  reconciliation at `cc434d9`.
+- Those live documents retained pre-publication instructions to publish their
+  own already-merged scope. The focused pre-edit scan reproduced that drift in
+  `HANDOFF.md`, `NEXT_STEPS.md`, `PROJECT_STATUS.md`, and `ROADMAP.md`.
+- The remediation changes exactly eight live documentation authorities and adds
+  its increment record and post-increment review. It removes the completed task,
+  records the actual merge, and preserves 4V as Ready but unstarted.
+- Product source, tests, dependencies, configuration, security boundaries,
+  4V plan/source/test/gate state, and dated Meta 7 evidence remain unchanged.
+- Focused stale-instruction and protected-path assertions, formatting,
+  documentation, repository, security, complete verification, diff review, and
+  the mandatory `remediation-arb-022` gate pass. No manual product check applies.
+- The resolving commit remains pending until committed. Clean synchronized
+  `main` must contain that remediation before any separately approved `04v` gate
+  begins.
 
 ## Increment 4U capability and evidence
 
@@ -304,7 +329,8 @@ or source edit.
 - No gate state or implementation change exists. The 4U prerequisite is
   satisfied, the plan is reconciled to `61525bf`, and the exact source/test
   paths have not changed since that commit. Meta 7 publication is complete; 4V
-  is Ready and still requires separate project-owner implementation approval.
+  is Ready and still requires separate project-owner implementation approval
+  from clean synchronized `main` containing the ARB-022 remediation.
 - Durable persistence, SQLite, native invocation or closure, proactive expiry,
   timers, runtime coordination, transport, credentials, dispatch, execution,
   Tauri, frontend, dependencies, capabilities, entitlements, and permissions
@@ -830,10 +856,10 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Review and publish the advisory backlog plus this post-Meta-7 project-memory
-reconciliation. Then obtain separate project-owner approval for the exact Ready
-Increment 4V plan and begin `04v` only from clean synchronized `main` before
-either approved source/test file changes. No `04v` gate or source edit exists.
+Review and publish only the verified ARB-022 documentation remediation. Confirm
+clean synchronized `main` contains it, then obtain separate project-owner
+approval for the exact Ready Increment 4V plan and begin `04v` before either
+approved source/test file changes. No `04v` gate or source edit exists.
 
 ## Phase 4 planning result
 

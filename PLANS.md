@@ -14,6 +14,13 @@ hosted CI, documentation, and security checks passed. The `meta-07` marker was
 complete and valid on clean `96ba6ae` before the later advisory report changed
 the live workspace fingerprint.
 
+The advisory backlog and first post-Meta-7 project-memory reconciliation were
+squash-merged through PR #21 at `cc434d9`. Remediation ARB-022 closes the
+remaining live publication drift as documentation-only work under
+`docs/increments/remediation-ARB-022-project-memory-reconciliation.md`. It is
+verified in the current workspace; its resolving commit remains pending until
+committed.
+
 Meta Increment 5 repository health and GitHub hygiene is verified complete,
 published, and squash-merged at `6b149fa` under
 `docs/plans/meta-05-repository-health.md`; its completion marker was valid on
@@ -49,8 +56,8 @@ Increment 4V terminal approval audit is Ready under
 `docs/plans/04v-bind-initial-terminal-approval-audit.md`. Its merged 4U
 prerequisite is satisfied, Meta 7 publication is complete, and its exact
 source/test scope remains unchanged since `61525bf`. It still requires a clean
-documentation baseline and separate project-owner implementation approval; no
-`04v` gate or source edit exists.
+synchronized `main` containing the ARB-022 remediation and separate
+project-owner implementation approval; no `04v` gate or source edit exists.
 
 ## Completed plans
 
@@ -162,6 +169,7 @@ A plan must contain:
 | Meta Increment 6 product readiness audit       | Complete | Project maintainer | 2026-07-16   |
 | Repository dependency baseline compatibility   | Complete | Project maintainer | 2026-07-16   |
 | Meta Increment 7 application icon rollout      | Complete | Project maintainer | 2026-07-16   |
+| ARB-022 memory reconciliation                  | Complete | Project maintainer | 2026-07-16   |
 
 ## Meta Increment 1 branding and identity foundation - complete
 
@@ -255,6 +263,25 @@ The verified scope was squash-merged through PR #19 at `96ba6ae` after all
 hosted checks passed. Its dated plan, increment record, and post-increment report
 remain unchanged as evidence of the verified pre-publication workspace.
 
+## Remediation ARB-022 project-memory reconciliation - complete
+
+Goal: remove stale live instructions to publish the advisory backlog and first
+post-Meta-7 memory reconciliation after that exact documentation scope was
+already squash-merged through PR #21 at `cc434d9`.
+
+The remediation changes exactly eight live documentation authorities and adds
+one increment record and one post-increment review. It records the actual merge,
+removes completed publication work from the current queue, and leaves Increment
+4V Ready but unstarted. Product source, tests, dependencies, configuration,
+security boundaries, 4V plan/source/test/gate state, and dated Meta 7 evidence
+are unchanged.
+
+Focused stale-instruction and protected-path assertions, formatting,
+documentation, repository, security, full verification, diff review, and the
+mandatory `remediation-arb-022` gate pass. No manual product check applies. The
+resolving commit remains pending until committed; after publication, confirm
+clean synchronized `main` contains the remediation before any `04v` gate begins.
+
 ## Phase 4 Increment 4U bind initial approval run-termination - complete
 
 Goal: let the bound initial turn terminally deny and consume the exact pending
@@ -302,7 +329,8 @@ scope and security review, documentation sync, and the mandatory `04v` gate are
 required. No manual check is planned. The 4U prerequisite is satisfied and the
 plan is reconciled to `61525bf`; Meta 7 publication is complete and 4V is the
 first Ready product increment. Separate project-owner implementation approval
-and a clean documentation baseline remain required before its gate begins.
+and clean synchronized `main` containing the ARB-022 remediation remain required
+before its gate begins.
 
 ## Phase 4 Increment 4T bind terminal initial approval resolution - complete
 

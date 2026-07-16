@@ -4,26 +4,31 @@
 - Repository baseline: `main` at `96ba6ae5b8f94559adb0493d718f2b628e9ea8d7`
 - Review type: read-only technical-debt and advisory reconciliation
 - Product name: Cortexa
+- Resolution update: ARB-022 resolved in the current documentation workspace
+  after PR #21 squash-merged the original backlog and first reconciliation at
+  `cc434d92cfcffd438136ea29c6345b71c1d54bb2`; resolving commit pending until
+  committed
 
 ## Conclusion
 
 The historical evidence contains 64 explicit source findings: 46 structured
-post-increment findings and 18 Product Readiness Audit findings. They normalize
-to 25 still-valid remediation records plus closed or superseded historical
-dispositions. No Critical finding exists. Eight High findings block live,
-pilot, release, or enterprise use. `ARB-001` is the only product-boundary
-blocker for the next increment; `ARB-022` is a separate repository-workflow
-prerequisite before that increment starts.
+post-increment findings and 18 Product Readiness Audit findings. The original
+review normalized them to 25 still-valid remediation records plus closed or
+superseded historical dispositions. The current backlog contains 24 unresolved
+records and one subsequently resolved record, ARB-022. No Critical finding
+exists. Eight High findings block live, pilot, release, or enterprise use.
+`ARB-001` is the only product-boundary blocker for the next increment.
 
 The smallest product remediation remains Increment 4V: bind both successful
 terminal approval paths to the existing typed in-memory approval-audit adapter.
-Before source work, `ARB-022` requires a documentation-only reconciliation
-because live project memory still says Meta Increment 7 is unpublished even
-though PR #19 was squash-merged at `96ba6ae` and the `meta-07` marker was valid
-on that clean baseline immediately before this report was created.
+ARB-022's documentation-only prerequisite is resolved in the current workspace:
+live memory now records PR #21 at `cc434d9`, removes the already-completed
+publication task, and preserves Increment 4V as Ready but unstarted.
 
-This review changes no source or existing documentation. This report is the
-only repository file created.
+The original read-only review changed no source or existing documentation and
+created only this report. The later ARB-022 resolution changes the exact ten
+documentation paths recorded in its increment and post-increment review; it
+does not rewrite dated Meta 7 evidence or change product source.
 
 ## Scope and method
 
@@ -56,6 +61,8 @@ Git state, hosted check evidence where available, and the valid Meta 7 marker.
   to one canonical backlog record.
 - **No longer relevant**: the original premise is not part of the current
   supported product or repository contract.
+- **Resolved**: a later bounded remediation closed the canonical backlog record
+  with current evidence while retaining its original history.
 
 ## Current verification evidence
 
@@ -74,7 +81,23 @@ Git state, hosted check evidence where available, and the valid Meta 7 marker.
 | `git status --short --branch` after builds                                 | Passed: generated outputs remain ignored and the tree stayed clean before this report.                                                                                                                                                          |
 | Gate status after creating this report                                     | Expected `valid: false`: this new non-ignored untracked report changes the workspace fingerprint; it does not invalidate the recorded clean-`96ba6ae` Meta 7 evidence.                                                                          |
 
-## Prioritized active backlog
+## ARB-022 resolution evidence
+
+- PR #21 squash-merged the original backlog and first post-Meta-7 memory
+  reconciliation at `cc434d9`.
+- The pre-edit current-state scan reproduced the remaining stale publication
+  instructions in `HANDOFF.md`, `NEXT_STEPS.md`, `PROJECT_STATUS.md`, and
+  `ROADMAP.md`.
+- The bounded remediation updates exactly eight live documentation authorities
+  and creates its increment record and post-increment review. Dated Meta 7
+  evidence and the 4V plan/source/test/gate state are unchanged.
+- The post-edit stale-instruction scan has no matches. Protected-path checks,
+  formatting, documentation, repository, security, full verification, diff
+  review, and the mandatory `remediation-arb-022` gate pass.
+- The resolving commit remains pending until committed. After publication,
+  clean synchronized `main` must contain the remediation before `04v` begins.
+
+## Prioritized unresolved backlog
 
 | Priority | ID      | Severity | Category             | Summary                                                                       | Blocks next product increment    |
 | -------: | ------- | -------- | -------------------- | ----------------------------------------------------------------------------- | -------------------------------- |
@@ -99,12 +122,11 @@ Git state, hosted check evidence where available, and the valid Meta 7 marker.
 |       19 | ARB-019 | Medium   | Accessibility        | Approval accessibility evidence is incomplete                                 | No                               |
 |       20 | ARB-020 | Medium   | Developer experience | Maintainer concentration and remote enforcement remain unresolved             | No                               |
 |       21 | ARB-021 | Medium   | Documentation        | Executive and pilot evidence package is absent                                | No                               |
-|       22 | ARB-022 | Low      | Documentation        | Live project memory incorrectly says Meta 7 is unpublished                    | Yes; workflow prerequisite       |
-|       23 | ARB-023 | Advisory | UX                   | Raw unbundled `tauri dev` uses the generic macOS executable icon              | No                               |
-|       24 | ARB-024 | Advisory | Technical debt       | The authoritative brand source remains an opaque raster                       | No                               |
-|       25 | ARB-025 | Advisory | Security             | Repository hooks remain operator-trusted and bypassable                       | No                               |
+|       22 | ARB-023 | Advisory | UX                   | Raw unbundled `tauri dev` uses the generic macOS executable icon              | No                               |
+|       23 | ARB-024 | Advisory | Technical debt       | The authoritative brand source remains an opaque raster                       | No                               |
+|       24 | ARB-025 | Advisory | Security             | Repository hooks remain operator-trusted and bypassable                       | No                               |
 
-## Active advisory records
+## Canonical advisory records
 
 ### ARB-001 - Bind terminal approval resolutions to audit
 
@@ -612,27 +634,29 @@ Git state, hosted check evidence where available, and the valid Meta 7 marker.
 
 - **Original increment or report:** Current recurrence of PRA-016 after Meta 7
   publication; not a rewrite of the dated Meta 7 review.
-- **Current status:** Still valid.
+- **Current status:** Resolved in the current documentation workspace; resolving
+  commit pending until committed.
 - **Severity / category:** Low / Documentation.
 - **Why it matters:** Repository rules select work from project memory, but live
-  documents still direct publication of already merged work and describe 4V as
-  blocked by that publication.
-- **Current evidence:** `AGENTS.md`, `HANDOFF.md`, `PROJECT_STATUS.md`,
-  `NEXT_STEPS.md`, `PLANS.md`, `ROADMAP.md`, and `docs/plans/README.md` say Meta
-  7 is uncommitted, unpublished, or publication-pending. Git proves PR #19 was
-  squash-merged at `96ba6ae`, `main == origin/main`, and the `meta-07` marker
-  was valid on that clean baseline immediately before this report.
+  documents directed publication of already merged work and described 4V as
+  blocked by that completed publication.
+- **Current evidence:** PR #21 squash-merged the original advisory backlog and
+  reconciliation at `cc434d9`, but four live authorities retained their
+  pre-publication instructions. This remediation records the merge and removes
+  those instructions. The focused stale scan has no post-edit matches, and the
+  exact protected product and historical paths are unchanged.
 - **Impact if ignored:** A future session can repeat publication or incorrectly
   refuse the next approved work.
-- **Recommended remediation / effort:** Perform one documentation-only
-  post-publication reconciliation. Preserve dated reports as historical
+- **Recommended remediation / effort:** Completed one documentation-only
+  post-publication reconciliation while preserving dated reports as historical
   evidence. Effort: Small.
-- **Dependencies:** This review and the verified Git/marker state.
+- **Dependencies:** The merged PR #21 state and the verified repository gate.
 - **Regression risks:** Bulk replacement could rewrite historical evidence or
-  falsely mark 4V implemented/approved.
-- **Blocks next product increment:** Yes as a workflow prerequisite, despite
-  Low product severity.
-- **Recommended milestone:** Immediate repository-memory closeout before 4V.
+  falsely mark 4V implemented or approved; exact protected-path checks passed.
+- **Blocks next product increment:** No after the remediation is present on clean
+  synchronized `main`. Separate owner approval for 4V still applies.
+- **Recommended milestone:** Resolved before 4V; publication of the resolving
+  commit remains pending.
 
 ### ARB-023 - Retain or separately remediate the raw development icon exception
 
@@ -898,11 +922,12 @@ Git state, hosted check evidence where available, and the valid Meta 7 marker.
 - **Original:** PRA-016.
 - **Status / severity / category:** Superseded / Low / Documentation.
 - **Why, evidence, and ignored impact:** Meta 6 fixed the earlier Meta 5 and
-  numbering conflict. A new post-Meta-7 publication drift now exists and is
-  recorded as ARB-022.
-- **Remediation / effort:** Follow ARB-022 / Small.
+  numbering conflict. A later post-Meta-7 publication drift was recorded as
+  ARB-022 and is now resolved in the current workspace.
+- **Remediation / effort:** Completed through ARB-022 / Small.
 - **Dependencies / regression / next block / milestone:** Preserve historical
-  evidence; blocks clean 4V start; immediate closeout.
+  evidence; no current block after the remediation reaches clean synchronized
+  `main`; immediate closeout.
 
 ### ARB-043 - Combined non-functional test gap
 
@@ -1014,7 +1039,7 @@ Git state, hosted check evidence where available, and the valid Meta 7 marker.
 | PRA-013        | Still valid      | ARB-020                                |
 | PRA-014        | Still valid      | ARB-021                                |
 | PRA-015        | Still valid      | ARB-008                                |
-| PRA-016        | Superseded       | ARB-042, then ARB-022                  |
+| PRA-016        | Already resolved | ARB-042, then resolved ARB-022         |
 | PRA-017        | Still valid      | ARB-014                                |
 | PRA-018        | Still valid      | ARB-007                                |
 
@@ -1032,7 +1057,7 @@ Git state, hosted check evidence where available, and the valid Meta 7 marker.
 | 4H durable audit architecture                                                            | Duplicate of ARB-005.                                                                           |
 | 4M capability-specific platform design                                                   | Superseded by exact executor/platform record ARB-003 via ARB-040.                               |
 | Meta 1 production icons                                                                  | Completed by Meta 7; ARB-027.                                                                   |
-| Meta 7 deferred audit-era numbering                                                      | Historical only; current publication drift is ARB-022.                                          |
+| Meta 7 deferred audit-era numbering                                                      | Historical only; later publication drift was resolved by ARB-022.                               |
 
 ## Counts
 
@@ -1047,9 +1072,10 @@ Historical source findings reviewed: **64**.
 | No longer relevant         |      8 |
 | **Total**                  | **64** |
 
-Superseded or duplicated source findings: **25**. After root-cause grouping and
-splitting over-broad findings, the authoritative active backlog contains **25
-still-valid remediation records**.
+Superseded or duplicated source findings: **25**. At the original review,
+root-cause grouping and splitting over-broad findings produced 25 still-valid
+remediation records. After the bounded ARB-022 resolution, the authoritative
+current backlog contains **24 unresolved records and 1 resolved record**.
 
 ## Top five advisories to remediate
 
@@ -1069,20 +1095,19 @@ still-valid remediation records**.
 **Product remediation:** Increment 4V, exactly as documented in
 `docs/plans/04v-bind-initial-terminal-approval-audit.md`.
 
-**Required workflow prerequisite:** close ARB-022 with a documentation-only
-post-Meta-7 publication reconciliation. That reconciliation must not rewrite the
-dated Meta 7 review, implement 4V, or combine product source with documentation
-repair.
+**Required workflow prerequisite:** ARB-022 is resolved in the current workspace
+without rewriting the dated Meta 7 review, implementing 4V, or combining product
+source with documentation repair. Publish the resolving documentation commit,
+then confirm clean synchronized `main` contains it before `04v` begins.
 
 ## Ready-to-paste Codex prompt
 
 ```text
-Use $session-start.
-
-Start from the current Cortexa repository state after the advisory remediation review. Confirm main and origin/main remain at Meta Increment 7 squash commit 96ba6ae and docs/reviews/2026-07-16-advisory-remediation-backlog.md is the only expected worktree change. Reconcile the recorded fact that the meta-07 marker was valid on clean 96ba6ae immediately before this report and now reports invalid only because the non-ignored report changes the workspace fingerprint. Review the report. Update only stale live project-memory documents that still describe Meta Increment 7 as unpublished, preserve dated historical evidence, and mark Increment 4V Ready only if its exact plan remains accurate. Then wait for project-owner approval before implementation. Do not edit product source, begin the 04v gate, commit, push, merge, or start another increment.
+Review the complete ARB-022 project-memory remediation. Confirm the exact ten-path documentation-only scope, preserved dated Meta 7 evidence, passing checks, valid remediation-arb-022 marker, resolving commit recorded as pending, and absence of product-source changes. Propose a descriptive branch name, Conventional Commit message, PR title, and PR description, then wait for my approval before creating the branch, committing, pushing, or merging. Do not begin the 04v gate.
 ```
 
-After that documentation-only prerequisite is reviewed and approved, use:
+After that documentation-only remediation is published on clean synchronized
+`main` and the owner separately approves implementation, use:
 
 ```text
 Use $verified-increment.
@@ -1090,10 +1115,14 @@ Use $verified-increment.
 Implement Increment 4V exactly as documented in docs/plans/04v-bind-initial-terminal-approval-audit.md. Begin mandatory 04v gate state before source edits. Preserve the exact two-file source/test scope and declared closeout scope. Do not expand scope, commit, push, merge, or start another increment.
 ```
 
-## Review boundary and rollback
+## Review and resolution boundary and rollback
 
-No remediation was started. No source, dependency, configuration, capability,
-permission, database, icon, or existing documentation file changed. To roll back
-this review before commit, delete only
-`docs/reviews/2026-07-16-advisory-remediation-backlog.md`. After commit, revert
-only the commit that adds this report.
+The original review started no remediation and changed no source, dependency,
+configuration, capability, permission, database, icon, or existing
+documentation file. It created only this report.
+
+The later ARB-022 resolution changes exactly the ten documentation paths in
+`docs/increments/remediation-ARB-022-project-memory-reconciliation.md`. Before
+commit, restore those paths to `cc434d9` and remove the two new files. After
+publication, revert only the bounded remediation commit. No migration, data,
+dependency, configuration, capability, permission, or product rollback applies.

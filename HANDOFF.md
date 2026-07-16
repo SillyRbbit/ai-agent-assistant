@@ -22,8 +22,11 @@ original local branch is preserved as
 `codex/meta-verified-application-icon-rollout-pre-dependency-repair` at
 `a1808e2`. The `meta-07` marker was complete and valid on clean `96ba6ae`
 immediately before the later advisory-remediation report changed the workspace
-fingerprint. Increment 4V is Ready but remains unstarted; no `04v` gate or
-source edit exists.
+fingerprint. The advisory backlog and first post-Meta-7 project-memory
+reconciliation were squash-merged through PR #21 at `cc434d9`. ARB-022 is
+resolved in the current documentation workspace; its resolving commit remains
+pending until committed. Increment 4V is Ready but remains unstarted; no `04v`
+gate or source edit exists.
 
 ## Repository dependency baseline compatibility repair
 
@@ -37,52 +40,50 @@ and the accepted RustSec baseline gate passed. Its consolidated result is
 Publication is complete at `b298999`; Meta 7 has now been reverified
 independently on that repaired baseline.
 
-## Advisory remediation review and memory reconciliation
+## ARB-022 project-memory remediation
 
 `docs/reviews/2026-07-16-advisory-remediation-backlog.md` is the authoritative
-review of 64 source advisories. It normalizes 25 still-active remediation
-records, identifies the five highest-priority root causes, and recommends
-Increment 4V as the first bounded product remediation. ARB-022 identifies stale
-post-publication project memory as the immediate workflow prerequisite.
+review of 64 source advisories. PR #21 squash-merged that report and the first
+post-Meta-7 memory reconciliation at
+`cc434d92cfcffd438136ea29c6345b71c1d54bb2`. Because those live documents were
+authored while publication was pending, the merge retained instructions to
+publish PR #21's already-published scope. ARB-022 is the resulting live-memory
+drift, not a defect in the dated Meta 7 evidence.
 
-After fetching origin, `HEAD`, `main`, and `origin/main` all resolve to
-`96ba6ae5b8f94559adb0493d718f2b628e9ea8d7`. The advisory backlog was the only
-worktree change before this reconciliation. PR #19 is merged, and its hosted CI,
-documentation, and security checks all succeeded. The completed `meta-07`
-marker now reports `valid: false` only because the non-ignored advisory backlog
-and this later documentation change the workspace fingerprint; do not
-re-finalize Meta 7 or add later files to its historical scope.
+This bounded remediation updates exactly the eight live documentation paths
+listed in its increment record and creates its increment and post-increment
+review. It records PR #21 as merged, removes the completed publication task from
+the current queue, and preserves Increment 4V as Ready but unstarted. It changes
+no product source, test, dependency, configuration, security boundary, gate
+implementation, 4V plan, or dated Meta 7 plan, increment, or report. The
+resolving commit is intentionally recorded as pending until committed.
+
+The completed historical `meta-07` marker still reports `valid: false` only
+because later non-ignored documentation changed the workspace fingerprint. Do
+not re-finalize Meta 7 or add later files to its historical scope.
 
 The exact 4V source/test paths have no commit after verified 4U at `61525bf`.
-Focused gateway-request, public request-contract, approval-audit,
-approval-binding, and approval-audit-binding tests pass on current `main`.
-Increment 4V therefore satisfies the Definition of Ready, but implementation
-still requires separate project-owner approval and a clean synchronized
-documentation baseline before `04v` begins.
+Increment 4V therefore remains Ready, but implementation still requires
+separate project-owner approval and clean synchronized `main` containing this
+remediation before `04v` begins.
 
-### Session-start verification
+### Remediation verification
 
-- `git fetch --prune origin` passed; `git rev-parse main origin/main HEAD`
-  returned `96ba6ae5b8f94559adb0493d718f2b628e9ea8d7` three times.
-- `gh pr view 19 --json number,title,state,mergedAt,mergeCommit,headRefName,baseRefName,url,statusCheckRollup`
-  confirmed PR #19 merged at `96ba6ae` and all three hosted checks completed
-  successfully.
-- Node `v26.3.0`, npm `11.16.0`, Cargo and Rust `1.90.0`, rustfmt
-  `1.8.0-stable`, and Clippy `0.1.90` are available on macOS `26.5.2` with the
-  Xcode command-line tools.
-- `cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::gateway_request::`
-  passed 9 tests; the public gateway request contract passed 10 tests; approval
-  audit, approval binding, and approval-audit binding passed 6, 2, and 1 tests.
-- `npm run format:check`, `npm run docs:check`, `npm run repository:check`, and
-  `git diff --check` passed. The untracked report has no whitespace error.
-- `git diff --exit-code 61525bf -- src-tauri/src/agent/gateway_request.rs src-tauri/tests/gateway_request_contract.rs`
-  passed, confirming the exact 4V source/test baseline is unchanged.
-- `python3 .codex/hooks/session_end_gate.py` reported no conflicts, no staged
-  paths, the 11 declared live-document changes, and the advisory backlog as the
-  only untracked path.
-- `python3 .codex/hooks/post_increment_gate.py status` reports stored increment
-  `meta-07`, result `PASS WITH ADVISORIES`, status `complete`, and expected live
-  `valid: false` after the later documentation changes.
+- Pre-edit `HEAD`, `main`, and `origin/main` all resolved to `cc434d9`, and the
+  working tree was clean.
+- The pre-edit stale-instruction scan reproduced ARB-022 in `HANDOFF.md`,
+  `NEXT_STEPS.md`, `PROJECT_STATUS.md`, and `ROADMAP.md`.
+- Baseline `npm run docs:check` and `npm run repository:check` passed.
+- `git log 61525bf..HEAD -- src-tauri/src/agent/gateway_request.rs src-tauri/tests/gateway_request_contract.rs`
+  returned no commits, confirming no later change to the exact 4V source/test
+  baseline.
+- The remediation's focused stale-instruction scan, protected-path assertions,
+  formatting, documentation, repository, security, complete verification,
+  diff, session-end inventory, and mandatory post-increment gate pass. The
+  consolidated result is `PASS` with no required manual check.
+- The first finalization attempt rejected duplicate command entries in the
+  report manifest. The report was corrected, final verification was rerun, and
+  the subsequent finalization passed; no required final check failed.
 
 ## Meta Increment 7 completion state
 
@@ -142,15 +143,16 @@ Before commit, restore only the 16 icon paths and declared closeout documents to
 There is no migration, data, dependency, identifier, credential, or remote
 resource rollback.
 
-Meta 7 publication is complete at `96ba6ae`. The exact next task is
-project-owner review and publication of the advisory backlog plus this
-post-publication memory reconciliation. Only after that documentation is on
-clean synchronized `main` may the owner separately approve Ready Increment 4V.
+Meta 7 publication is complete at `96ba6ae`, and PR #21 published the advisory
+backlog and first memory reconciliation at `cc434d9`. The exact next task is
+project-owner review and publication of this bounded ARB-022 remediation. Only
+after clean synchronized `main` contains that remediation may the owner
+separately approve Ready Increment 4V.
 
 ### Ready-to-paste next prompt
 
 ```text
-Review the advisory remediation backlog and post-Meta-7 project-memory reconciliation. Confirm the diff changes documentation only, preserves dated historical evidence, records PR #19 merged at 96ba6ae, and leaves Increment 4V Ready but unstarted. After my explicit approval, propose descriptive Git publication names and publish only this documentation scope. Do not begin the 04v gate or edit product source.
+Review the complete ARB-022 project-memory remediation. Confirm the exact ten-path documentation-only scope, preserved dated Meta 7 evidence, passing checks, valid remediation-arb-022 marker, resolving commit recorded as pending, and absence of product-source changes. Propose a descriptive branch name, Conventional Commit message, PR title, and PR description, then wait for my approval before creating the branch, committing, pushing, or merging. Do not begin the 04v gate.
 ```
 
 Reconstructed Increment 4I was committed as `99f9279` with message `Remove generic audit scaffold`, pushed on `codex/phase4-increment-4i`, fast-forward merged into `main`, and pushed. The corrected `04i` completion marker remains valid after the deletion commit. The original pre-fingerprint implementation commit remains preserved exactly at `cf9d701` on local `codex/phase4-increment-4i-pre-fingerprint-fix`; no remote ref contains it.
