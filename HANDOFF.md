@@ -7,8 +7,10 @@ Last updated: 2026-07-15
 Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,
 and merged on the target Mac. Meta Increment 1 branding and identity foundation
 is verified complete and squash-merged at `5edbf4d`. `main`, `origin/main`, and
-the current `meta/engineering-operating-system` branch began Meta Increment 2 at
-that commit with a clean working tree.
+the approved Meta Increment 3 automation branch began at `805efc1` with a clean
+working tree. The current branch is
+`codex/meta-codex-automation-quality-gates`. Meta Increment 3 is verified
+complete with a valid `PASS` marker but remains uncommitted and unpublished.
 
 Reconstructed Increment 4I was committed as `99f9279` with message `Remove generic audit scaffold`, pushed on `codex/phase4-increment-4i`, fast-forward merged into `main`, and pushed. The corrected `04i` completion marker remains valid after the deletion commit. The original pre-fingerprint implementation commit remains preserved exactly at `cf9d701` on local `codex/phase4-increment-4i-pre-fingerprint-fix`; no remote ref contains it.
 
@@ -83,11 +85,14 @@ and trust boundaries were unchanged.
 
 Meta Increment 2 engineering operating system is verified complete under
 `docs/plans/meta-02-engineering-operating-system.md`. It changes documentation
-and repository governance only. The unimplemented application-icon rollout is
-renumbered Meta Increment 3 under
-`docs/plans/meta-03-verified-application-icon-rollout.md` and is Ready for
-separate project-owner approval. Increment 4V terminal approval audit remains
-Proposed and separately controlled; no `04v` gate or source edit exists.
+and repository governance only. Meta Increment 3 Codex automation and
+post-increment quality gates is verified complete under
+`docs/plans/meta-03-codex-automation.md`. The unchanged application-icon
+rollout is renumbered Meta Increment 4 under
+`docs/plans/meta-04-verified-application-icon-rollout.md` and is Ready for
+separate project-owner approval after Meta Increment 3 publication is
+reconciled. Increment 4V terminal approval audit remains Proposed and
+separately controlled; no `04v` gate or source edit exists.
 
 ## Increment 4U completion state
 
@@ -2650,4 +2655,150 @@ start Increment 4V automatically.
 Use $session-start.
 
 Start from HANDOFF.md on clean synchronized main after Meta Increment 2. Reconcile the actual repository state and confirm the meta-02 completion marker remains valid. Review the Ready Meta Increment 3 plan in docs/plans/meta-03-verified-application-icon-rollout.md, confirm its exact 16-icon scope and target-Mac verification matrix, and wait for project-owner approval before editing. Do not implement Increment 4V, commit, push, or merge unless explicitly asked.
+```
+
+## Meta Increment 3 Codex automation closeout
+
+### Completed
+
+- Verified Codex CLI 0.144.2 reports stable enabled hooks and confirmed the
+  current trusted-project Stop-hook format through the official manual,
+  installed binary, and live repository behavior.
+- Preserved `.codex/hooks.json` exactly and extracted shared bounded Git, path,
+  JSON, conflict, suspicious-path, and I/O validation into `common.py`.
+- Added a read-only session-end JSON inventory with explicit exit codes.
+- Expanded the hook suite from 17 to 28 tests, covering all requested failure,
+  success, path, conflict, deletion, stale-state, source-immutability, and loop
+  cases.
+- Added six focused review skills, strengthened security and post-increment
+  skills, added seven matching prompts, and added readiness/security templates.
+- Recorded the descriptive branch, Conventional Commit, pull-request
+  description, and squash-merge policy while retaining explicit owner approval
+  for publication.
+- Recorded D-045 and renumbered the unchanged icon rollout to Ready Meta
+  Increment 4 without generating or replacing an icon.
+- Changed no product behavior, source, test, dependency, manifest, lockfile,
+  Tauri/React configuration, capability, CSP, permission, SQLite schema,
+  branding asset, production icon, or compatibility identifier.
+
+### Exact files changed
+
+```text
+.agents/skills/architecture-review/SKILL.md
+.agents/skills/executive-review/SKILL.md
+.agents/skills/post-increment-gate/SKILL.md
+.agents/skills/quality-gate/SKILL.md
+.agents/skills/readiness-review/SKILL.md
+.agents/skills/release-review/SKILL.md
+.agents/skills/security-review/SKILL.md
+.agents/skills/technical-debt/SKILL.md
+.codex/hooks/common.py
+.codex/hooks/post_increment_gate.py
+.codex/hooks/session_end_gate.py
+.codex/hooks/tests/test_common.py
+.codex/hooks/tests/test_post_increment_gate.py
+.codex/hooks/tests/test_session_end_gate.py
+AGENTS.md
+ARCHITECTURE.md
+ASSISTANT_USAGE.md
+CHANGELOG.md
+CODE_REVIEW.md
+CONTRIBUTING.md
+DECISIONS.md
+ENGINEERING_GUIDE.md
+HANDOFF.md
+NEXT_STEPS.md
+PLANS.md
+PROJECT_STATUS.md
+ROADMAP.md
+SECURITY.md
+TESTING_GUIDE.md
+docs/increments/meta-03-codex-automation.md
+docs/plans/README.md
+docs/plans/meta-03-codex-automation.md
+docs/plans/meta-03-verified-application-icon-rollout.md (deleted by rename)
+docs/plans/meta-04-verified-application-icon-rollout.md
+docs/reviews/.gitkeep
+docs/reviews/2026-07-15-meta-03-post-increment-review.md
+docs/reviews/README.md
+docs/templates/POST_INCREMENT_REVIEW_TEMPLATE.md
+docs/templates/READINESS_REVIEW_TEMPLATE.md
+docs/templates/SECURITY_REVIEW_TEMPLATE.md
+docs/workflows/END_SESSION.md
+prompts/README.md
+prompts/architecture-review.md
+prompts/executive-review.md
+prompts/post-increment-gate.md
+prompts/quality-gate.md
+prompts/readiness-review.md
+prompts/release-review.md
+prompts/security-review.md
+prompts/technical-debt-review.md
+```
+
+### Passed checks
+
+- `python3 -m json.tool .codex/hooks.json`.
+- Python compilation for all hook modules and tests with bytecode cache under
+  `/private/tmp`.
+- `npm run test:hooks`: 28 tests passed.
+- Official `quick_validate.py`: all eight changed or new skills valid using the
+  existing temporary pinned PyYAML 6.0.2 environment.
+- `python3 .codex/hooks/session_end_gate.py`: no conflicts; exact approved
+  staged/unstaged/untracked inventory.
+- Fence-aware Markdown link audit: 177 files passed.
+- Direct active-state Stop evaluation emitted the exact continuation object;
+  direct `stop_hook_active: true` evaluation emitted no continuation.
+- `npm run verify`: formatting, ESLint, strict Clippy, 28 hook tests, 124
+  frontend tests, 95 Rust library tests, 21 Rust integration tests, both Vite
+  builds, and Tauri release no-bundle build passed.
+- `git diff --check`, exact 50-path scope, protected-path, secret-pattern,
+  generated-output, complete diff, architecture, security, code-health,
+  technical-debt, and roadmap-readiness reviews passed.
+- The consolidated report is `PASS`; the `meta-03` marker is complete and valid.
+
+### Failed checks and resolved conditions
+
+No required check remains failed. The first post-refactor hook run found a
+missed `_decode_git_paths` alias import; restoring it produced 28 passing tests.
+The first final format check listed six approved Markdown files; targeted
+Prettier fixed them. Direct skill validation initially failed because the
+default Python environment lacks PyYAML; no repository dependency was added,
+and the existing pinned temporary PyYAML 6.0.2 environment validated every
+skill. A sandbox-only Python bytecode-cache denial was resolved by directing
+cache output to `/private/tmp`. A temporary pinned-package install attempt was
+not used after restricted networking failed and elevated installation was not
+approved.
+
+### Checks not run and manual verification
+
+- No application launch or native UI inspection was required because product
+  and native behavior are unchanged.
+- No dependency audit or Rust advisory scan was required because manifests and
+  lockfiles are unchanged.
+- No icon generation, package icon check, signing, notarization, or installer
+  validation ran; those remain Meta Increment 4 or release work.
+- The complete diff and architecture, security, code-health, debt, and readiness
+  matrix were reviewed manually and passed with no finding.
+
+### Risks and blockers
+
+No blocker remains. Repository hooks still require explicit operator trust and
+may be disabled for emergencies; that documented workflow boundary is not a
+product security control or completion bypass. Meta Increment 3 is not committed
+or published. Meta Increment 4 and Increment 4V have not started.
+
+### Exact next task
+
+Obtain explicit project-owner approval for the proposed Conventional Commit and
+pull-request names before committing, pushing, opening, or squash-merging Meta
+Increment 3. After publication, reconcile clean synchronized `main`. Do not
+start Meta Increment 4 or Increment 4V automatically.
+
+### Ready-to-paste resume prompt
+
+```text
+Use $resume-session.
+
+Resume from HANDOFF.md on branch codex/meta-codex-automation-quality-gates. Meta Increment 3 Codex automation and post-increment quality gates is verified complete with a valid PASS marker but is uncommitted and unpublished. Confirm the exact 50-path scope and marker remain valid, then propose a Conventional Commit message, descriptive PR title, and PR description with Purpose, Files changed, Testing performed, Breaking changes, and Next increment. Wait for my approval before any Git publication command. Do not start Meta Increment 4 or Increment 4V.
 ```

@@ -44,16 +44,16 @@ separately controlled and cannot be inferred from the completion of 4U.
 
 ## Meta and repository milestones
 
-| Meta milestone                                       | Status                            | Goal                                                                                                                | Acceptance gate                                                                                                   |
-| ---------------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| Meta Increment 1 - branding foundation               | Completed and merged at `5edbf4d` | Canonical Cortexa assets, guidance, skill, README/favicon/sidebar use                                               | Asset, visual, build, scope, and `meta-01` gate evidence passed                                                   |
-| Meta Increment 2 - engineering operating system      | Completed                         | Consolidate authoritative engineering, architecture, requirements, roadmap, testing, security, and release guidance | Documentation accuracy, links, formatting, complete repository verification, diff review, and `meta-02` gate pass |
-| Meta Increment 3 - verified application icon rollout | Ready                             | Replace only the 16 existing Tauri icon files from the approved source                                              | Separate owner approval, generation review, package build, and target-Mac visual matrix                           |
+| Meta milestone                                        | Status                            | Goal                                                                                                                | Acceptance gate                                                                                                   |
+| ----------------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Meta Increment 1 - branding foundation                | Completed and merged at `5edbf4d` | Canonical Cortexa assets, guidance, skill, README/favicon/sidebar use                                               | Asset, visual, build, scope, and `meta-01` gate evidence passed                                                   |
+| Meta Increment 2 - engineering operating system       | Completed                         | Consolidate authoritative engineering, architecture, requirements, roadmap, testing, security, and release guidance | Documentation accuracy, links, formatting, complete repository verification, diff review, and `meta-02` gate pass |
+| Meta Increment 3 - Codex automation and quality gates | Verified complete; unpublished    | Modular safe repository inspection and evidence-based review workflows                                              | Hook regressions, skill validation, complete verification, scope review, and valid `meta-03` marker passed        |
+| Meta Increment 4 - verified application icon rollout  | Ready                             | Replace only the 16 existing Tauri icon files from the approved source                                              | Reconciled Meta 3 publication, separate owner approval, generation review, package build, and target-Mac matrix   |
 
-Meta Increment 2 changes documentation and governance only. It does not satisfy
-any product capability or release gate. Meta Increment 3 is the first Ready
-item; it still requires separate project-owner approval and must not start
-automatically.
+Meta Increments 2 and 3 change documentation and repository governance only.
+They do not satisfy any product capability or release gate. Meta Increment 4 is
+the first Ready item and must not start automatically.
 
 ## Milestone acceptance gates
 
@@ -73,11 +73,12 @@ Release milestones additionally require `RELEASE_CHECKLIST.md` and
 
 ## Current queue
 
-1. Verify Meta Increment 2 publication from clean synchronized `main`.
-2. Request separate approval for Meta Increment 3 under
-   `docs/plans/meta-03-verified-application-icon-rollout.md`.
-3. Do not infer selection of Increment 4V or any product milestone from Meta
-   Increment 2 or 3.
+1. Obtain explicit project-owner direction before committing and publishing
+   verified Meta Increment 3.
+2. Reconcile clean synchronized `main`, then request separate approval for Meta
+   Increment 4 under `docs/plans/meta-04-verified-application-icon-rollout.md`.
+3. Do not infer selection of Increment 4V or any product milestone from Meta 3
+   or Meta 4 readiness.
 
 No later product increment is Ready in this roadmap.
 

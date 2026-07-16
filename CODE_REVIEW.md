@@ -68,9 +68,19 @@ npm run build
 npm run tauri -- build --no-bundle
 ```
 
-Before completing an implementation increment, run `$post-increment-gate`. The consolidated report must inventory the complete change set, classify every required automated and manual check, record architecture/security/code-health/debt/readiness findings, and finish with exactly `PASS`, `PASS WITH ADVISORIES`, or `FAIL`.
+Before completing an implementation increment, run
+`python3 .codex/hooks/session_end_gate.py`, then `$quality-gate`, then
+`$post-increment-gate`. The consolidated report must inventory the complete
+change set, classify every required automated and manual check, record
+architecture/security/code-health/debt/readiness findings, and finish with
+exactly `PASS`, `PASS WITH ADVISORIES`, or `FAIL`.
 
 Critical or High findings that block completion, failed required checks, merge conflicts, and pending required manual checks require `FAIL`. Do not automatically fix advisories or reorder the roadmap during the review.
+
+The component reviews may be invoked independently through
+`$architecture-review`, `$security-review`, `$code-review`,
+`$technical-debt`, and `$readiness-review`. `$quality-gate` composes their
+evidence; it does not replace the source authorities or prove that commands ran.
 
 For documentation-only changes, review factual consistency against source and
 tests, internal links and paths, authority and supersession, protected source

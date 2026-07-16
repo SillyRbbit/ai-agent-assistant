@@ -4,17 +4,18 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No implementation plan is active. Meta Increment 2 engineering operating system
-is verified complete under
-`docs/plans/meta-02-engineering-operating-system.md`.
+No implementation plan is active. Meta Increment 3 Codex automation and
+post-increment quality gates is verified complete but uncommitted and
+unpublished under `docs/plans/meta-03-codex-automation.md`.
 
 Meta Increment 1 branding and identity foundation is verified complete and
 squash-merged at `5edbf4d` under
 `docs/plans/meta-01-branding-foundation.md`.
 
-Meta Increment 3 verified application icon rollout is Ready under
-`docs/plans/meta-03-verified-application-icon-rollout.md`. It requires separate
-project-owner approval before its gate or icon edits begin.
+Meta Increment 4 verified application icon rollout is Ready under
+`docs/plans/meta-04-verified-application-icon-rollout.md`. It requires separate
+project-owner approval and reconciled Meta Increment 3 publication before its
+gate or icon edits begin.
 
 Increment 4V terminal approval audit remains Proposed under
 `docs/plans/04v-bind-initial-terminal-approval-audit.md`. Its merged 4U
@@ -54,6 +55,7 @@ docs/plans/04t-bind-terminal-initial-approval-resolution.md
 docs/plans/04u-bind-initial-approval-run-termination.md
 docs/plans/meta-01-branding-foundation.md
 docs/plans/meta-02-engineering-operating-system.md
+docs/plans/meta-03-codex-automation.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -120,7 +122,8 @@ A plan must contain:
 | Increment 4V terminal approval audit binding   | Blocked  | Project maintainer | 2026-07-15   |
 | Meta Increment 1 branding foundation           | Complete | Project maintainer | 2026-07-15   |
 | Meta Increment 2 engineering operating system  | Complete | Project maintainer | 2026-07-15   |
-| Meta Increment 3 application icon rollout      | Ready    | Project maintainer | 2026-07-15   |
+| Meta Increment 3 Codex automation              | Complete | Project maintainer | 2026-07-15   |
+| Meta Increment 4 application icon rollout      | Ready    | Project maintainer | 2026-07-15   |
 
 ## Meta Increment 1 branding and identity foundation - complete
 
@@ -154,17 +157,32 @@ protected-path review, exact-scope review, documentation sync, code review,
 security review, and the mandatory `meta-02` gate pass. No manual application
 check applies.
 
-## Meta Increment 3 verified application icon rollout - Ready
+## Meta Increment 3 Codex automation and post-increment quality gates - complete
+
+Goal: extend the existing verified repository-local post-increment system with
+shared safe inspection, deterministic session-end inventory, focused review
+skills, matching prompts, and reusable templates without changing product
+behavior or weakening explicit project-owner control.
+
+The existing supported Stop definition remains unchanged. Shared safe
+repository inspection, a read-only session-end inventory, 28 hook regressions,
+eight validated review skills, matching prompts, templates, complete repository
+verification, exact-scope review, documentation sync, and the mandatory
+`meta-03` gate pass. No product or native manual check applies. The increment
+cannot commit or publish without explicit project-owner direction and cannot
+start Meta Increment 4 or Increment 4V automatically.
+
+## Meta Increment 4 verified application icon rollout - Ready
 
 Goal: generate and verify all 16 existing Tauri production icon outputs from
 the approved square app-icon source. The exact future list, risks, non-goals,
 packaging and target-Mac checks, and rollback are frozen in
-`docs/plans/meta-03-verified-application-icon-rollout.md`.
+`docs/plans/meta-04-verified-application-icon-rollout.md`.
 
-Meta 3 changes no source asset, Tauri config, compatibility identifier,
+Meta 4 changes no source asset, Tauri config, compatibility identifier,
 manifest, lockfile, runtime, dependency, capability, entitlement, or permission.
-It is Ready, requires separate project-owner approval, and must not begin
-automatically.
+It requires reconciled Meta Increment 3 publication and separate project-owner
+approval and must not begin automatically.
 
 ## Phase 4 Increment 4U bind initial approval run-termination - complete
 

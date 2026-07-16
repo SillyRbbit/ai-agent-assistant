@@ -87,7 +87,16 @@ Apply the dependency and supply-chain sections of `SECURITY_CHECKLIST.md` and
 ## Repository hook boundary
 
 - Repository-local hooks execute code with the developer's Codex session permissions and require review and trust through `/hooks` before use.
-- `.codex/hooks/post_increment_gate.py` may read repository metadata, changed files, its bounded structured report, and ignored gate state. It must not parse the unstable transcript, inspect model or personal content, access the network, execute arbitrary report content, or modify product source.
+- `.codex/hooks/common.py` provides bounded repository, path, JSON, conflict,
+  and suspicious-path validation to the two hook scripts.
+- `.codex/hooks/post_increment_gate.py` may read repository metadata, changed
+  files, its bounded structured report, and ignored gate state.
+- `.codex/hooks/session_end_gate.py` may read only fixed Git status evidence and
+  emit a structured staged, unstaged, untracked, and conflicted-path inventory.
+  It is read-only and exits nonzero when conflicts exist.
+- The hook scripts must not parse the unstable transcript, inspect model or
+  personal content, access the network, execute arbitrary report content, or
+  modify product source.
 - Hook input is untrusted JSON. Validate event type, booleans, repository root, bounded size, report schema, and every path before use. Reject absolute paths, traversal, symlink escapes, merge conflicts, stale fingerprints, and suspicious changed paths. The workspace fingerprint covers only paths that exist in the current snapshot; reviewed deletions remain mandatory report-inventory entries but contribute no content before or after commit. Removing a path that existed at finalization must invalidate the marker.
 - The script may invoke only fixed Git inspection commands. It must not use report content to construct shell commands.
 - `.codex/state/post_increment_gate.json` contains no secrets and is ignored. Its completion marker is not approval, authorization, trusted audit evidence, or proof that commands ran; the report and actual command output remain the evidence.

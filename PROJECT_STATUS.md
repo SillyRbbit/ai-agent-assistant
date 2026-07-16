@@ -9,11 +9,12 @@ published, and merged into `main`**. Increment 4U is synchronized at `61525bf`.
 Meta Increment 1 branding and identity foundation is **verified complete and
 squash-merged at `5edbf4d`**; its `meta-01` marker was valid before Meta
 Increment 2 began. Meta Increment 2 engineering operating system is **verified
-complete as documentation-only work**. The application-icon rollout is
-renumbered Meta Increment 3 and is **Ready for separate project-owner
-approval**. Increment 4V
-terminal approval audit remains **Proposed** and separately controlled with no
-gate or source edit.
+complete as documentation-only work**. Meta Increment 3 Codex automation and
+post-increment quality gates is **verified complete but uncommitted and
+unpublished** on its approved repository-workflow scope. The unchanged
+application-icon rollout is renumbered Meta Increment 4 and is **Ready for
+separate project-owner approval**. Increment 4V terminal approval audit remains
+**Proposed** and separately controlled with no gate or source edit.
 
 ## Increment status
 
@@ -58,7 +59,9 @@ gate or source edit.
 - Meta Increment 1: branding and identity foundation - **verified complete;
   squash-merged at `5edbf4d`**.
 - Meta Increment 2: engineering operating system - **verified complete**.
-- Meta Increment 3: verified application icon rollout - **Ready; separate
+- Meta Increment 3: Codex automation and post-increment quality gates -
+  **verified complete; uncommitted and unpublished**.
+- Meta Increment 4: verified application icon rollout - **Ready; separate
   approval required**.
 
 ## Meta Increment 1 capability and evidence
@@ -102,6 +105,33 @@ gate or source edit.
   generated-output, code, security, and documentation reviews pass.
 - No manual application check applies because no product or rendered UI file
   changed. The mandatory `meta-02` report passes with no blocking finding.
+
+## Meta Increment 3 capability and evidence
+
+- Preserve the supported `.codex/hooks.json` Stop definition while extracting
+  shared bounded Git, path, JSON, conflict, and suspicious-path handling.
+- Add a read-only session-end repository inventory and deterministic tests for
+  staged, unstaged, untracked, conflicted, and outside-repository states.
+- Add architecture, security, code-health, technical-debt, readiness, quality,
+  executive, release, and post-increment review resources without duplicating
+  existing authority.
+- Record the project-owner branch, Conventional Commit, pull-request, and
+  squash-merge naming policy while preserving explicit publication approval.
+- D-045 renumbers the unchanged icon rollout to Meta Increment 4. No icon,
+  product source, runtime, dependency, configuration, capability, permission,
+  database, or compatibility identifier is in scope.
+- Codex CLI 0.144.2 reports stable enabled hooks. The current official manual,
+  installed binary, and live repository behavior confirm trusted-project
+  command Stop hooks, Git-root resolution, `/hooks` trust, no Stop matcher, and
+  the existing `decision: block` continuation contract.
+- The supported `.codex/hooks.json` definition is unchanged. Shared fixed-Git
+  validation and a read-only session-end inventory use the Python standard
+  library only and have no network, arbitrary-command, product-write, commit,
+  push, merge, release, or next-increment behavior.
+- All eight changed or new skills pass the official local validator. All 28
+  hook tests, complete `npm run verify`, Markdown links, formatting, exact
+  scope, protected paths, secret scan, diff review, and mandatory `meta-03`
+  gate pass. No manual application check applies.
 
 ## Increment 4U capability and evidence
 
@@ -675,10 +705,11 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Verify Meta Increment 2 publication from clean synchronized `main`. Then obtain
-separate project-owner approval for Meta Increment 3
-under `docs/plans/meta-03-verified-application-icon-rollout.md`. Do not start
-Meta 3 or Increment 4V automatically.
+Obtain explicit project-owner direction before committing or publishing
+verified Meta Increment 3. Meta Increment 4 is Ready under
+`docs/plans/meta-04-verified-application-icon-rollout.md`, but it requires
+separate approval and must not start before Meta Increment 3 publication is
+reconciled. Do not start Meta 4 or Increment 4V automatically.
 
 ## Phase 4 planning result
 

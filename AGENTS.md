@@ -35,12 +35,14 @@ published, and merged. Increment 4U is merged at `61525bf`. Meta Increment 1
 branding and identity foundation is verified complete, squash-merged at
 `5edbf4d`, and its `meta-01` marker was valid before Meta Increment 2 began.
 Meta Increment 2 engineering operating system is verified complete as a
-documentation-only increment. The application-icon rollout is renumbered Meta
-Increment 3 and is the first Ready follow-on, but it still requires separate
-project-owner approval and must not start automatically. Increment 4V terminal
-approval audit remains Proposed and separately controlled with no gate or
-source edit. Current implementation facts and future boundaries are
-authoritative in `ARCHITECTURE.md`.
+documentation-only increment. Meta Increment 3 repository-local Codex
+automation and quality gates is verified complete on its approved documentation
+and workflow-only scope but remains uncommitted and unpublished. The unchanged
+application-icon rollout is renumbered Meta Increment 4 and is the first Ready
+follow-on; it still requires separate project-owner approval and must not start
+automatically. Increment 4V terminal approval audit remains Proposed and
+separately controlled with no gate or source edit. Current implementation facts
+and future boundaries are authoritative in `ARCHITECTURE.md`.
 
 ## Non-negotiable product boundaries
 
@@ -70,6 +72,18 @@ Follow `ENGINEERING_GUIDE.md`. The rules below are the compact mandatory subset.
 - Use exact dependency versions unless a documented decision approves a range.
 - Do not add a production dependency without documenting why it is necessary in `DECISIONS.md`.
 - Never invent successful test results. Record commands and actual outcomes.
+
+### Git publication
+
+- Use descriptive capability-based branch names; Codex-created branches use the
+  `codex/` prefix.
+- Use Conventional Commits. Commit messages explain the bounded capability and
+  why it changed; generic names such as `update`, `changes`, `misc`, `temp`, and
+  `final` are prohibited.
+- Pull-request titles summarize the capability. Descriptions record Purpose,
+  Files changed, Testing performed, Breaking changes, and Next increment.
+- After all checks pass and only with explicit project-owner direction, push the
+  branch, open the pull request, and use a squash merge.
 
 ### TypeScript and React
 
@@ -160,7 +174,7 @@ release boundary are in `ENGINEERING_GUIDE.md`.
 - Reusable prompts: `prompts/`
 - Reusable Codex skills: `.agents/skills/`
 - Brand assets and standards: `assets/branding/` and `docs/branding/`
-- Templates: `docs/templates/`
+- Review templates and reports: `docs/templates/` and `docs/reviews/`
 - Inception product sources: `docs/product/`
 
 ## Mandatory post-increment gate
@@ -171,7 +185,12 @@ After approval and before editing an implementation increment, Codex must run:
 python3 .codex/hooks/post_increment_gate.py begin --increment <increment>
 ```
 
-Before ending that increment, Codex must run `$post-increment-gate` and finalize its report. The repository-local Stop hook requests one continuation when an active increment lacks valid completion evidence. It must honor `stop_hook_active` to avoid an infinite continuation loop.
+Before ending that increment, Codex must run
+`python3 .codex/hooks/session_end_gate.py`, apply `$quality-gate`, run
+`$post-increment-gate`, and finalize its report. The repository-local Stop hook
+requests one continuation when an active increment lacks valid completion
+evidence. It must honor `stop_hook_active` to avoid an infinite continuation
+loop.
 
 The increment may be marked complete only when:
 

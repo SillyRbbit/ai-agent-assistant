@@ -77,10 +77,16 @@ Repository-scoped skills are under `.agents/skills/`.
 | `$verified-increment`  | Implementing one small feature or refactor safely            |
 | `$troubleshoot`        | Diagnosing a build, test, install, or runtime failure        |
 | `$code-review`         | Reviewing a diff against project rules                       |
+| `$architecture-review` | Checking current boundaries and approved architecture        |
 | `$security-review`     | Reviewing trust boundaries, permissions, tools, or data flow |
-| `$documentation-sync`  | Updating repository memory after changes                     |
+| `$technical-debt`      | Recording concrete debt without silently expanding scope     |
+| `$readiness-review`    | Determining whether one bounded follow-on is Ready           |
+| `$quality-gate`        | Composing architecture, security, code, debt, and readiness  |
+| `$executive-review`    | Summarizing evidence and decisions for leadership            |
+| `$release-review`      | Reviewing release evidence without performing a release      |
+| `$documentation-sync`  | Updating repository memory after evidence is collected       |
 | `$branding`            | Applying Cortexa identity to product and presentation assets |
-| `$post-increment-gate` | Finalizing the required implementation review and marker     |
+| `$post-increment-gate` | Finalizing the consolidated report and deterministic marker  |
 | `$session-end`         | Closing a session with a complete handoff                    |
 
 In Codex, type `$` or use the skills menu to invoke a skill explicitly. If newly added skills are not visible, restart or reload the assistant from the repository root.
@@ -99,7 +105,9 @@ Recommended sequence:
 1. `prompts/start-work.md`
 2. `prompts/implement-next-increment.md`
 3. `prompts/review-change.md`
-4. `prompts/end-of-session-handoff.md`
+4. `prompts/quality-gate.md`
+5. `prompts/post-increment-gate.md`
+6. `prompts/end-of-session-handoff.md`
 
 For a failure, switch to `prompts/troubleshooting.md` before making broad changes.
 
@@ -114,6 +122,11 @@ Use $code-review. Review all uncommitted changes against AGENTS.md, SECURITY.md,
 Use `CODE_REVIEW.md` for finding severity, `SECURITY_CHECKLIST.md` for trust
 boundaries, and `TESTING_GUIDE.md` for required evidence. Release work also
 requires `RELEASE_CHECKLIST.md`.
+
+Before final documentation synchronization, use `$quality-gate` to combine the
+architecture, security, code-health, technical-debt, and readiness reviews. It
+reports findings; it does not silently fix advisories, reorder the roadmap, or
+authorize publication.
 
 Check locally:
 
