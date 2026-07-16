@@ -588,3 +588,57 @@ Expected: all 17 focused tests pass. The reviewed deletion fixture remains valid
 ### Prevention
 
 Any future fingerprint or changed-file implementation must test additions, modifications, deletions, pre-commit state, post-commit state, and an unreviewed change after finalization. Keep report inventory and workspace-content fingerprint responsibilities distinct.
+
+## TS-015 - Independently merged dependency updates break clean verification
+
+Date: 2026-07-16
+Status: Resolved in the verified dependency baseline repair; publication pending
+
+### Symptom
+
+Pull-request checks fail before product tests. Hosted `npm ci` reports a Vite
+peer conflict, local `npm ci` reports invalid `package.json`, and Rust Clippy
+fails in `libsqlite3-sys` with unstable `cfg_select` on Rust 1.90.
+
+### Cause
+
+Several Dependabot pull requests were based on overlapping older dependency
+states and merged independently. The resulting `main`:
+
+- removed the direct `vitest@3.2.6` manifest entry and left a trailing comma;
+- retained duplicate direct `typescript-eslint` and `vite` lockfile keys;
+- selected `vite@8.1.4` outside `@vitejs/plugin-react@4.7.0`'s peer range; and
+- selected `rusqlite@0.40.1`, whose `libsqlite3-sys@0.38.1` build script does
+  not compile on the repository's supported Rust toolchain.
+
+An initial lock regeneration also retained nested Vite `7.3.6` instances under
+Vitest, causing duplicate TypeScript plugin type identities against root Vite
+`7.3.5`.
+
+### Resolution
+
+Restore the previously verified exact direct versions `vite@7.3.5`,
+`vitest@3.2.6`, and `rusqlite@0.37.0`. Regenerate both lockfiles, run `npm
+dedupe`, and preserve all unrelated compatible updates already on `main`.
+
+### Verify
+
+```bash
+npm ci
+npm ls vite @vitejs/plugin-react vitest
+npm run typecheck
+cargo tree --manifest-path src-tauri/Cargo.toml -i rusqlite --locked
+npm run verify
+npm audit --audit-level=low
+```
+
+Expected: npm reports one deduplicated `vite@7.3.5`, Cargo reports exact
+`rusqlite@0.37.0`, and all repository checks pass.
+
+### Prevention
+
+Do not merge overlapping dependency proposals solely because their original
+branch checks passed. Refresh each proposal against current `main`, require a
+clean install and full check on the merge candidate, and group coupled major
+updates such as Vite/plugin/Vitest or rusqlite/toolchain changes into one
+reviewed compatibility increment.

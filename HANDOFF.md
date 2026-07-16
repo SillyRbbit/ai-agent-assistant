@@ -9,11 +9,67 @@ and merged on the target Mac. Meta Increment 1 branding and identity foundation
 is verified complete and squash-merged at `5edbf4d`. Meta Increment 2 is merged
 at `805efc1`, and Meta Increment 3 repository-local Codex automation is
 squash-merged at `ad9042c`. Meta Increment 5 repository health and GitHub hygiene
-is verified complete, published, and squash-merged at `6b149fa`; its completion
-marker was valid on clean `6b149fa` immediately before the audit edits. Meta
-Increment 6 is the documentation-only Product Readiness Audit on synchronized
-`main`. Its evidence-based result is **NOT READY (57/100)**. The audit changes no
-application behavior and remains uncommitted and unpublished.
+is verified complete, published, and squash-merged at `6b149fa`. Meta Increment
+6 is the documentation-only Product Readiness Audit, squash-merged at `5281fac`
+with result **NOT READY (57/100)**.
+
+Eight later Dependabot pull requests advanced `origin/main` to `4f23382` but
+left the JavaScript manifest/lock invalid and selected Vite and rusqlite versions
+outside the repository's verified plugin/toolchain compatibility. The current
+`codex/fix-dependency-baseline-compatibility` workspace contains the approved
+four-file repair and complete passing verification. It is uncommitted and
+unpublished.
+
+Meta Increment 7 remains isolated at local commit `a1808e2` and remote PR #19.
+Its icon implementation and `meta-07` marker were valid on the pre-Dependabot
+baseline, but the PR merge candidate inherited broken `main` dependencies and
+failed required checks before exercising the icon change. Meta 7 is not merged
+and must be rebased, fully reverified, and re-gated only after this dependency
+repair is published. No `04v` gate or source edit exists.
+
+## Repository dependency baseline compatibility repair
+
+### Exact implementation scope
+
+```text
+package.json
+package-lock.json
+src-tauri/Cargo.toml
+src-tauri/Cargo.lock
+```
+
+The repair restores valid JSON, direct `vitest@3.2.6`, one deduplicated
+`vite@7.3.5` graph compatible with `@vitejs/plugin-react@4.7.0`, and exact
+`rusqlite@0.37.0` compatible with the declared Rust 1.88 minimum and installed
+Rust 1.90. Other compatible dependency updates on `main` remain unchanged.
+
+### Verification and review
+
+`npm ci`, dependency-tree proofs, TypeScript, complete `npm run verify`, npm
+audit, secret scanning, and the exact accepted RustSec baseline gate pass.
+Complete verification includes 28 hook tests, 16 repository-health tests, 124
+frontend tests, 95 Rust library tests, 21 Rust integration tests, strict Clippy,
+Vite builds, and the Tauri release no-bundle build. No manual application check
+applies because only dependency metadata changes.
+
+The consolidated report is
+`docs/reviews/2026-07-16-repo-dependency-baseline-compatibility-post-increment-review.md`.
+The result is `PASS WITH ADVISORIES`; the advisories are the unchanged accepted
+RustSec baseline and the requirement to reverify Meta 7 on repaired `main`. No
+Critical or High blocking finding remains in this repair.
+
+### Exact next task
+
+Review the verified dependency-repair diff and naming, then commit, push, and
+squash-merge that repair only. After synchronized repaired `main`, rebase Meta 7
+PR #19, rerun its complete verification and gate, and update the PR only after
+its marker is valid. Do not begin 4V.
+
+### Ready-to-paste next prompt
+
+```text
+Review the verified repository dependency baseline compatibility repair. Show the descriptive codex/ branch name, Conventional Commit message, PR title, and PR description with Purpose, Files changed, Testing performed, Breaking changes, and Next increment. After my approval, commit, push, create the PR, squash merge it, and verify clean synchronized main plus the valid repo-dependency-baseline-compatibility marker. Do not update or merge Meta Increment 7 PR #19 in the same publication step, and do not begin Increment 4V.
+```
 
 Reconstructed Increment 4I was committed as `99f9279` with message `Remove generic audit scaffold`, pushed on `codex/phase4-increment-4i`, fast-forward merged into `main`, and pushed. The corrected `04i` completion marker remains valid after the deletion commit. The original pre-fingerprint implementation commit remains preserved exactly at `cf9d701` on local `codex/phase4-increment-4i-pre-fingerprint-fix`; no remote ref contains it.
 

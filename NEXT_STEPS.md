@@ -53,6 +53,26 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Queue status
 
+### Publish dependency baseline compatibility repair
+
+**Status:** Verified complete with advisories; uncommitted and unpublished.
+
+Eight Dependabot merges advanced `main` to `4f23382` while leaving an invalid
+JavaScript manifest/lock, an incompatible Vite/plugin graph, and a rusqlite
+transitive build script that fails on the supported Rust toolchain. The approved
+repair restores only the prior compatible Vite/Vitest and rusqlite dependency
+families across four implementation files. Clean installation, full repository
+verification, audits, and the mandatory gate pass.
+
+The exact next action is publication of
+`codex/fix-dependency-baseline-compatibility` under the approved Git naming and
+squash-PR workflow. Do not combine that PR with Meta Increment 7 or 4V.
+
+After the repair is merged and `main` is synchronized, rebase Meta Increment 7
+PR #19 onto repaired `main`. Rerun its complete icon verification and mandatory
+`meta-07` gate because its older completion fingerprint cannot authorize the new
+baseline. Update and merge PR #19 only after hosted checks and the marker pass.
+
 ### No implementation increment selected
 
 The `$readiness-review` audit does not reorder or approve the implementation

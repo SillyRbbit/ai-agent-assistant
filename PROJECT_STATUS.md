@@ -15,12 +15,16 @@ post-increment quality gates is **verified complete and squash-merged at
 complete, published, and squash-merged at `6b149fa`**; its `meta-05` marker is
 complete and was valid on clean `6b149fa` immediately before audit edits. The
 Meta Increment 4 executive-document request was stopped before gate state or
-edits and has no completion evidence. Meta Increment 6 is
-this documentation-only Product Readiness Audit with an evidence-based result of
-**NOT READY (57/100)**. The older application-icon plan is deferred and requires
-a new live increment number before implementation. Increment 4V terminal
-approval audit is the smallest recommended remediation but remains **Proposed**
-and separately controlled with no gate or source edit.
+edits and has no completion evidence. Meta Increment 6 is the documentation-only
+Product Readiness Audit, squash-merged at `5281fac` with result **NOT READY
+(57/100)**. Eight subsequent Dependabot merges advanced `main` to `4f23382` but
+broke clean npm installation and supported-Rust compilation. The Repository
+Dependency Baseline Compatibility Repair is **verified complete with advisories,
+uncommitted, and unpublished** on
+`codex/fix-dependency-baseline-compatibility`. Meta Increment 7 is verified only
+on its older baseline and remains open as PR #19; it is not merged and requires
+rebase, full reverification, and a new valid marker after this repair is
+published. Increment 4V remains unstarted with no gate or source edit.
 
 ## Increment status
 
@@ -73,8 +77,27 @@ and separately controlled with no gate or source edit.
   published and squash-merged at `6b149fa`; marker valid on that clean baseline**.
 - Meta Increment 6: Product Readiness Audit - **documentation-only audit
   complete; result NOT READY (57/100)**.
+- Repository dependency baseline compatibility repair - **verified complete
+  with advisories; uncommitted and unpublished**.
 - Verified application icon rollout - **deferred; historical Meta 6 plan
   preserved, new live increment number and separate approval required**.
+
+## Repository dependency baseline compatibility evidence
+
+- Exact implementation scope is `package.json`, `package-lock.json`,
+  `src-tauri/Cargo.toml`, and `src-tauri/Cargo.lock`.
+- The repair restores valid JSON, `vitest@3.2.6`, one deduplicated
+  `vite@7.3.5` graph compatible with the current React plugin, and
+  `rusqlite@0.37.0` compatible with supported Rust.
+- Later compatible updates to Tauri, tempfile, jsdom, TypeScript ESLint, and
+  GitHub Actions remain present.
+- Clean `npm ci`, TypeScript, strict Clippy, complete frontend/Rust tests, Vite
+  and Tauri builds, npm audit, secret scan, and the exact RustSec baseline gate
+  pass.
+- No application source, behavior, test, permission, capability, IPC, schema,
+  icon, identifier, or production dependency is added.
+- Publication of this repair is the only next action. Meta 7 PR #19 must then be
+  rebased and reverified separately; 4V must not start during recovery.
 
 ## Meta Increment 1 capability and evidence
 
