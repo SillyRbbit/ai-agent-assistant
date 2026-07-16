@@ -21,10 +21,12 @@ Product Readiness Audit, squash-merged at `5281fac` with result **NOT READY
 broke clean npm installation and supported-Rust compilation. The Repository
 Dependency Baseline Compatibility Repair is **verified complete, published, and
 squash-merged through PR #20 at `b298999`**. Meta Increment 7 is **verified
-complete with advisories on corrected `b298999`**; its original
-pre-repair branch remains preserved at `a1808e2`, remote PR #19 is untouched,
-and the reconstructed changes remain uncommitted and unpublished. Increment 4V
-remains unstarted with no gate or source edit.
+complete with advisories and squash-merged through PR #19 at `96ba6ae`**; its
+original pre-repair branch remains preserved at `a1808e2`, and hosted CI,
+documentation, and security checks passed. Its marker was complete and valid on
+clean `96ba6ae` before the later advisory-remediation report changed the live
+workspace fingerprint. Increment 4V is Ready but remains unstarted with no gate
+or source edit.
 
 ## Increment status
 
@@ -65,7 +67,7 @@ remains unstarted with no gate or source edit.
 - Increment 4S: bind terminal initial approval presentation - **verified complete; published and merged**.
 - Increment 4T: bind terminal initial approval resolution - **verified complete; published and merged**.
 - Increment 4U: bind initial approval run-termination - **verified complete; published and merged at `61525bf`**.
-- Increment 4V: bind initial terminal approval audit - **Proposed; merged 4U prerequisite satisfied, separate approval required**.
+- Increment 4V: bind initial terminal approval audit - **Ready; separate implementation approval required**.
 - Meta Increment 1: branding and identity foundation - **verified complete;
   squash-merged at `5edbf4d`**.
 - Meta Increment 2: engineering operating system - **verified complete**.
@@ -80,7 +82,7 @@ remains unstarted with no gate or source edit.
 - Repository dependency baseline compatibility repair - **verified complete
   with advisories; published and squash-merged at `b298999`**.
 - Meta Increment 7: verified application icon rollout - **verified complete with
-  advisories on repaired `b298999`; uncommitted and unpublished**.
+  advisories; squash-merged through PR #19 at `96ba6ae`**.
 
 ## Repository dependency baseline compatibility evidence
 
@@ -97,8 +99,8 @@ remains unstarted with no gate or source edit.
 - No application source, behavior, test, permission, capability, IPC, schema,
   icon, identifier, or production dependency is added.
 - Publication of this repair is complete. Meta 7 has been reconstructed and
-  reverified separately on `b298999`; PR #19 publication is next, and 4V must
-  not start during that publication.
+  reverified separately on `b298999`, then squash-merged through PR #19 at
+  `96ba6ae`. Increment 4V remains separately controlled.
 
 ## Meta Increment 1 capability and evidence
 
@@ -250,6 +252,10 @@ remains unstarted with no gate or source edit.
   `meta-07` reviews pass on repaired `b298999`. The default DMG bundling-script
   failure remains a release advisory; required debug and release app bundles
   pass.
+- PR #19 squash-merged the verified scope at `96ba6ae` after hosted CI,
+  documentation, and security checks passed. The `meta-07` marker was complete
+  and valid on that clean commit before the later advisory backlog changed the
+  live workspace fingerprint.
 
 ## Increment 4U capability and evidence
 
@@ -280,7 +286,7 @@ remains unstarted with no gate or source edit.
 - Exact risks, verification, rollback, and acceptance criteria are documented in
   `docs/plans/04u-bind-initial-approval-run-termination.md`.
 
-## Increment 4V proposed capability and evidence
+## Increment 4V Ready capability and evidence
 
 - The turn would own one private `InMemoryApprovalAuditAdapter` after verified
   4U establishes both native and run-termination resolution paths.
@@ -296,8 +302,9 @@ remains unstarted with no gate or source edit.
   return no resolution and must not leave stale pending turn ownership, but it
   cannot roll manager state back.
 - No gate state or implementation change exists. The 4U prerequisite is
-  satisfied and the plan is reconciled to `61525bf`; 4V still requires explicit
-  queue selection and separate project-owner approval.
+  satisfied, the plan is reconciled to `61525bf`, and the exact source/test
+  paths have not changed since that commit. Meta 7 publication is complete; 4V
+  is Ready and still requires separate project-owner implementation approval.
 - Durable persistence, SQLite, native invocation or closure, proactive expiry,
   timers, runtime coordination, transport, credentials, dispatch, execution,
   Tauri, frontend, dependencies, capabilities, entitlements, and permissions
@@ -823,9 +830,10 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Publish verified Meta Increment 7 using the approved Git naming workflow, then
-reconcile clean synchronized `main` and the valid marker. Only afterward begin
-the owner-requested Increment 4V gate; no `04v` source edit exists yet.
+Review and publish the advisory backlog plus this post-Meta-7 project-memory
+reconciliation. Then obtain separate project-owner approval for the exact Ready
+Increment 4V plan and begin `04v` only from clean synchronized `main` before
+either approved source/test file changes. No `04v` gate or source edit exists.
 
 ## Phase 4 planning result
 
