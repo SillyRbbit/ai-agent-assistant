@@ -5,9 +5,10 @@ Last updated: 2026-07-15
 ## Current state
 
 Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,
-and merged on the target Mac. Clean synchronized `main` and `origin/main`
-resolve to Increment 4U commit `61525bf` before the current Meta Increment 1
-working-tree changes.
+and merged on the target Mac. Meta Increment 1 branding and identity foundation
+is verified complete and squash-merged at `5edbf4d`. `main`, `origin/main`, and
+the current `meta/engineering-operating-system` branch began Meta Increment 2 at
+that commit with a clean working tree.
 
 Reconstructed Increment 4I was committed as `99f9279` with message `Remove generic audit scaffold`, pushed on `codex/phase4-increment-4i`, fast-forward merged into `main`, and pushed. The corrected `04i` completion marker remains valid after the deletion commit. The original pre-fingerprint implementation commit remains preserved exactly at `cf9d701` on local `codex/phase4-increment-4i-pre-fingerprint-fix`; no remote ref contains it.
 
@@ -73,18 +74,20 @@ with message `Bind initial approval run termination`, pushed on
 `codex/phase4-increment-4u`, fast-forward merged into `main`, and pushed. The
 mandatory `04u` marker remained complete and valid after publication.
 
-Meta Increment 1 branding and identity foundation is verified complete with
-uncommitted changes on `meta/branding-foundation`. It establishes canonical
-owner-supplied identity assets, complete brand guidance, the `$branding` skill,
-README/favicon references, and the official sidebar logo. Its `meta-01` marker
-is complete and valid. Product behavior, compatibility identifiers, Tauri
-production icons, dependencies, permissions, and trust boundaries are unchanged.
+Meta Increment 1 establishes canonical owner-supplied identity assets, complete
+brand guidance, the `$branding` skill, README/favicon references, and the
+official sidebar logo. Its `meta-01` marker was complete and valid immediately
+before the approved Meta Increment 2 gate began. Product behavior,
+compatibility identifiers, Tauri production icons, dependencies, permissions,
+and trust boundaries were unchanged.
 
-Meta Increment 2 verified application icon rollout is the first Ready follow-on
-under `docs/plans/meta-02-verified-application-icon-rollout.md`. It requires
-separate project-owner approval and has no gate or icon edit. Increment 4V
-terminal approval audit remains Proposed and separately controlled; its merged
-4U prerequisite is satisfied, but no `04v` gate or source edit exists.
+Meta Increment 2 engineering operating system is verified complete under
+`docs/plans/meta-02-engineering-operating-system.md`. It changes documentation
+and repository governance only. The unimplemented application-icon rollout is
+renumbered Meta Increment 3 under
+`docs/plans/meta-03-verified-application-icon-rollout.md` and is Ready for
+separate project-owner approval. Increment 4V terminal approval audit remains
+Proposed and separately controlled; no `04v` gate or source edit exists.
 
 ## Increment 4U completion state
 
@@ -2531,4 +2534,120 @@ Meta Increment 2 or Increment 4V.
 
 ```text
 Commit and push Meta Increment 1 only from meta/branding-foundation. Use commit message "Establish Cortexa branding foundation". Immediately confirm the meta-01 marker remains valid after the commit, then report branch synchronization and the exact next approval prompt. Do not merge, start Meta Increment 2, or start Increment 4V unless I explicitly ask.
+```
+
+## Meta Increment 2 engineering operating system closeout
+
+### Completed
+
+- Created authoritative engineering, current architecture, normalized product
+  requirements, milestone roadmap, testing, security-review, and release guides.
+- Defined documentation precedence and preserved inception sources and
+  historical evidence without treating them as current implementation proof.
+- Reconciled actual React, Tauri, Rust, SQLite, gateway, schema, policy,
+  approval, audit, memory, platform, menu/window, permission, and release state.
+- Reconciled Meta Increment 1 as squash-merged at `5edbf4d` and resolved TS-010.
+- Recorded D-044 and renumbered the unchanged unimplemented application-icon
+  rollout to Meta Increment 3.
+- Marked Meta Increment 3 Ready for separate project-owner approval without
+  implementing it or Increment 4V.
+- Preserved all application behavior, source, tests, dependencies, config,
+  capabilities, CSP, permissions, SQLite schema, branding assets, icons, and
+  compatibility identifiers.
+
+### Exact files changed
+
+```text
+AGENTS.md
+ARCHITECTURE.md
+ASSISTANT_USAGE.md
+CHANGELOG.md
+CODE_REVIEW.md
+CONTRIBUTING.md
+DECISIONS.md
+ENGINEERING_GUIDE.md
+HANDOFF.md
+NEXT_STEPS.md
+PLANS.md
+PRODUCT_REQUIREMENTS.md
+PROJECT_STATUS.md
+README.md
+RELEASE_CHECKLIST.md
+ROADMAP.md
+SECURITY.md
+SECURITY_CHECKLIST.md
+TESTING_GUIDE.md
+TROUBLESHOOTING_LOG.md
+docs/increments/meta-01-branding-foundation.md
+docs/increments/meta-02-engineering-operating-system.md
+docs/plans/README.md
+docs/plans/meta-02-engineering-operating-system.md
+docs/plans/meta-02-verified-application-icon-rollout.md (deleted by rename)
+docs/plans/meta-03-verified-application-icon-rollout.md
+docs/product/ARCHITECTURE_BASELINE.md
+docs/product/PRODUCT_BRIEF.md
+docs/reviews/2026-07-15-meta-02-post-increment-review.md
+```
+
+### Passed checks
+
+- Baseline `npm run format:check` passed before edits.
+- Mandatory `meta-02` gate state began before edits.
+- Final rendered Markdown link and local image audit passed.
+- Protected application, test, manifest, lockfile, Tauri, capability, CSP,
+  workflow-code, branding, schema, and permission paths are unchanged.
+- `npm run verify` passed: formatting, ESLint, strict Clippy, 17 hook tests, 124
+  frontend tests, 95 Rust library tests, 21 Rust integration tests, both Vite
+  builds, and the Tauri release no-bundle build.
+- Final formatting, exact-scope, merge-conflict, diff, secret,
+  generated-output, architecture, code-health, security, and documentation
+  reviews passed.
+- The consolidated report is `PASS WITH ADVISORIES`; the `meta-02` completion
+  marker is complete and valid.
+
+### Failed checks and resolved conditions
+
+No required check remains failed. The first sandboxed gate-begin attempt could
+not write ignored state; the approved retry succeeded before edits. The first
+post-edit format check identified five approved Markdown files and targeted
+Prettier fixed them. Closeout synchronization later identified three approved
+Markdown files and the targeted formatter fixed those too. The first link
+expression matched two examples inside a fenced code block; the fence-aware
+repository-wide audit passed. The first finalization rejected the report's
+non-enum finding category; changing it to the gate's closed `Technical debt`
+category corrected the report schema.
+
+### Checks not run and manual verification
+
+- No native application launch or UI inspection was required because no product
+  or rendered UI file changed.
+- No dependency audit or Rust advisory scan was required because manifests and
+  lockfiles are unchanged.
+- Icon generation, package icon checks, signing, notarization, and installer
+  validation remain Meta Increment 3 or later release work.
+- The complete documentation diff was manually reconciled against source and
+  current repository state; no project-owner application check applies.
+
+### Conflicts and advisories
+
+- Historical Meta Increment 1 review evidence names the icon plan Meta Increment 2. D-044 supersedes that number while preserving the checkpoint record.
+- `docs/product/PRODUCT_BRIEF.md` remains inception intent; current normalized
+  requirements live in `PRODUCT_REQUIREMENTS.md`.
+- `docs/product/ARCHITECTURE_BASELINE.md` remains the target baseline; current
+  implementation lives in `ARCHITECTURE.md`.
+- Signing, notarization, gateway identity, and provider retention remain
+  unresolved future gates, not current capability.
+
+### Exact next task
+
+Verify Meta Increment 2 is present on clean synchronized `main`, then obtain
+separate project-owner approval before implementing Meta Increment 3. Do not
+start Increment 4V automatically.
+
+### Ready-to-paste resume prompt
+
+```text
+Use $session-start.
+
+Start from HANDOFF.md on clean synchronized main after Meta Increment 2. Reconcile the actual repository state and confirm the meta-02 completion marker remains valid. Review the Ready Meta Increment 3 plan in docs/plans/meta-03-verified-application-icon-rollout.md, confirm its exact 16-icon scope and target-Mac verification matrix, and wait for project-owner approval before editing. Do not implement Increment 4V, commit, push, or merge unless explicitly asked.
 ```

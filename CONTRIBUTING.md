@@ -2,16 +2,21 @@
 
 ## Development workflow
 
-1. Read `AGENTS.md` and the current handoff files.
+1. Read `AGENTS.md`, `ENGINEERING_GUIDE.md`, and the current handoff files.
 2. Confirm the repository and toolchain state.
-3. Select one ready increment from `NEXT_STEPS.md`.
-4. Define acceptance criteria and verification commands.
-5. Implement the smallest coherent change.
-6. Run targeted checks during development.
-7. Run the full relevant checks before completion.
-8. Review the diff against `CODE_REVIEW.md` and `SECURITY.md`.
-9. Update project-memory and increment documents.
-10. Commit only reviewed files.
+3. Select only the first Ready increment from `NEXT_STEPS.md`, unless the
+   project owner explicitly selects another bounded task.
+4. Define exact files, acceptance criteria, risks, non-goals, verification, and
+   rollback, then wait for approval.
+5. Begin the mandatory repository gate before editing.
+6. Implement the smallest coherent approved change.
+7. Run targeted checks during development and the full relevant checks before
+   completion.
+8. Review the complete diff against `CODE_REVIEW.md`, `SECURITY.md`, and the
+   applicable checklists.
+9. Update project memory, the increment record, and the post-increment report.
+10. Require a valid completion marker, then stop. Commit or publish only when
+    explicitly directed.
 
 ## Setup
 
@@ -41,6 +46,8 @@ npm run tauri -- build --no-bundle
 
 Use `npm run verify` for the complete sequence.
 
+Testing details and the change-to-test matrix are in `TESTING_GUIDE.md`.
+
 ## Commit guidance
 
 Prefer focused conventional commit messages:
@@ -54,6 +61,10 @@ chore: update locked toolchain metadata
 ```
 
 Do not combine unrelated refactors, dependency upgrades, and features in one commit.
+
+Use one branch per increment. Start from clean synchronized `main` unless an
+approved reconstruction plan says otherwise. See `ENGINEERING_GUIDE.md` for
+branch, publication, and rollback rules.
 
 ## Pull-request or change summary
 
@@ -80,3 +91,11 @@ Do not commit:
 - secrets or personal test data
 
 Use synthetic fixtures only.
+
+## Architecture and release references
+
+- Current architecture: `ARCHITECTURE.md`
+- Product requirements: `PRODUCT_REQUIREMENTS.md`
+- Milestone roadmap: `ROADMAP.md`
+- Security checklist: `SECURITY_CHECKLIST.md`
+- Release checklist: `RELEASE_CHECKLIST.md`

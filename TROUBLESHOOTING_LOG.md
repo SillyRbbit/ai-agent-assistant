@@ -397,7 +397,7 @@ Copy `docs/templates/TROUBLESHOOTING_ENTRY_TEMPLATE.md` and append the completed
 ## TS-010 — Public repository lags the verified local checkout
 
 Date: 2026-07-13
-Status: Open operational condition
+Status: Resolved 2026-07-15
 
 ### Symptom
 
@@ -423,6 +423,14 @@ git remote -v
 ```
 
 Do not publish secrets, local databases, credentials, certificates, or environment files when synchronizing the public repository.
+
+### Resolution
+
+The verified product increments through 4U and Meta Increment 1 are now
+published and merged. At the Meta Increment 2 baseline, `main`, `origin/main`,
+and the working branch base all resolve to `5edbf4d`, and the working tree began
+clean. Continue to verify synchronization at session start; do not assume this
+historical condition remains resolved after future local work.
 
 ## TS-011 — Increment 2D actions are not visible in the standard macOS application menu
 

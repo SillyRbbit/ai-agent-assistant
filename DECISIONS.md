@@ -1165,6 +1165,52 @@ Consequences:
 - External decks and diagrams are reference material until separately updated
   from current repository facts and the canonical assets.
 
+## D-044 - Establish root engineering authorities and renumber the icon rollout
+
+Date: 2026-07-15
+Status: Accepted; Meta Increment 2 implementation approved
+
+Decision: the root documents `ENGINEERING_GUIDE.md`, `ARCHITECTURE.md`,
+`PRODUCT_REQUIREMENTS.md`, `ROADMAP.md`, `TESTING_GUIDE.md`,
+`SECURITY_CHECKLIST.md`, and `RELEASE_CHECKLIST.md` are the authoritative
+engineering operating references defined in the precedence order in
+`ENGINEERING_GUIDE.md`. The inception product brief and target architecture
+baseline remain preserved under `docs/product/`, while completed plans,
+increment records, reviews, decisions, changelog entries, and troubleshooting
+entries remain historical evidence. Current status comes from the root roadmap,
+project status, next steps, and active plan rather than old checkpoint wording.
+
+The project owner's explicit Meta Increment 2 engineering-operating-system
+request supersedes the queue number assigned to the unimplemented application-
+icon rollout by D-043. The icon rollout is renumbered Meta Increment 3 without
+changing its exact 16-icon scope, source asset, risks, non-goals, or separate
+approval requirement. D-043 remains authoritative for the logo and derivative
+rules; only its follow-on increment number is superseded.
+
+Rationale: the repository accumulated accurate but distributed guidance and
+then published Meta Increment 1 after its closeout documents were finalized.
+One explicit authority model prevents aspirational product text and historical
+checkpoint state from being mistaken for current code. Renumbering preserves
+the owner's selected Meta Increment 2 without discarding the already reviewed
+icon plan.
+
+Consequences:
+
+- New implementation plans must label current, mocked, planned, and prohibited
+  behavior and reconcile against `ARCHITECTURE.md`.
+- `PRODUCT_REQUIREMENTS.md` normalizes current requirements without deleting or
+  changing the inception brief's historical meaning.
+- `NEXT_STEPS.md` remains the ordered immediate queue; `ROADMAP.md` remains the
+  milestone view.
+- Historical Meta Increment 1 review evidence may still say the icon plan was
+  Meta Increment 2. That statement is a correct checkpoint and is explicitly
+  superseded by this decision rather than rewritten.
+- Meta Increment 3 may become Ready only after Meta Increment 2 is verified
+  complete. It still requires separate project-owner approval and must not
+  begin automatically.
+- No application source, behavior, dependency, identifier, configuration,
+  capability, permission, database, icon, or release system changes.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |
