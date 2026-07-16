@@ -4,6 +4,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Resolved ARB-022 in the reviewed documentation state by recording the advisory
+  backlog and post-Meta-7 reconciliation as squash-merged through PR #21 at
+  `cc434d9`, removing already-completed publication work from the live queue,
+  and preserving Increment 4V as Ready but unstarted. The resolving remediation
+  commit remains pending until committed; product source and dated historical
+  evidence are unchanged.
 - Added the evidence-based advisory remediation backlog covering 64 source
   findings, 25 normalized active remediations, historical dispositions, and the
   ordered recommendation to close project-memory drift before Increment 4V.
