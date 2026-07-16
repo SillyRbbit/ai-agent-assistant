@@ -1,6 +1,6 @@
 # Next steps
 
-Last updated: 2026-07-15
+Last updated: 2026-07-16
 
 This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must close before later feature work begins.
 
@@ -45,14 +45,16 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Meta Increment 1 - branding and identity foundation: **Verified complete**.
 - Meta Increment 2 - engineering operating system: **Verified complete**.
 - Meta Increment 3 - Codex automation and post-increment quality gates:
+  **Verified complete; squash-merged at `ad9042c`**.
+- Meta Increment 5 - repository health and GitHub hygiene:
   **Verified complete; uncommitted and unpublished**.
 
 ## Queue status
 
-### Meta Increment 4 - verified application icon rollout
+### Meta Increment 6 - verified application icon rollout
 
 **Status:** Ready; requires separate project-owner approval before
-implementation and reconciliation of Meta Increment 3 publication.
+implementation and verified Meta Increment 5 publication.
 
 **Goal:** Generate the complete production Tauri icon family from the approved
 square `assets/branding/app-icon-source.png`, replace only the existing 16 icon
@@ -61,8 +63,21 @@ appearance.
 
 The unchanged exact source list, risks, non-goals, verification, manual
 target-Mac matrix, and rollback are frozen in
-`docs/plans/meta-04-verified-application-icon-rollout.md`. It requires separate
+`docs/plans/meta-06-verified-application-icon-rollout.md`. It requires separate
 project-owner approval. Do not implement it or Increment 4V automatically.
+
+The project-owner Meta Increment 4 executive-document request was stopped before
+gate state or repository edits and has no completion evidence. D-048 records the
+subsequent Meta Increment 5 selection and Meta Increment 6 icon-plan number.
+
+Meta Increment 5 repository health and GitHub hygiene is **Verified complete**.
+It adds read-only, SHA-pinned CI, documentation, and security workflows;
+review-only dependency proposals; structured contribution and issue paths; an
+explicit no-license-selected record; reusable local health checks; and release
+and GitHub governance guidance. Application source, dependencies, lockfiles,
+Tauri configuration, permissions, CSP, and SQLite schema are unchanged. The
+exact implementation and closeout scope is frozen in
+`docs/plans/meta-05-repository-health.md`.
 
 Repository Workflow Increment 4G is **Verified complete**. It adds only the repository-local post-increment skill, deterministic Stop-hook validator, focused tests, report assets, and workflow documentation required to replace D-027's one-time exception. Its consolidated result is `PASS WITH ADVISORIES`; the advisory is the documented project-hook trust/bypass boundary.
 
@@ -188,9 +203,9 @@ production caller is introduced. D-042 records the durable boundary. Roll back
 the two source/test files and only the declared closeout documentation before
 commit, or revert one bounded 4U commit afterward.
 
-No 4U, Meta 2, or Meta 3 implementation task remains. Meta Increment 4 is the
-first Ready item and requires separate project-owner approval. Do not start it
-or Increment 4V automatically.
+No 4U, Meta 2, Meta 3, or Meta 5 implementation task remains. Meta Increment 6
+is the first Ready item and requires separate project-owner approval after Meta
+5 publication is reconciled. Do not start it or Increment 4V automatically.
 
 ## Proposed after published 4U
 

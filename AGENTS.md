@@ -36,13 +36,16 @@ branding and identity foundation is verified complete, squash-merged at
 `5edbf4d`, and its `meta-01` marker was valid before Meta Increment 2 began.
 Meta Increment 2 engineering operating system is verified complete as a
 documentation-only increment. Meta Increment 3 repository-local Codex
-automation and quality gates is verified complete on its approved documentation
-and workflow-only scope but remains uncommitted and unpublished. The unchanged
-application-icon rollout is renumbered Meta Increment 4 and is the first Ready
-follow-on; it still requires separate project-owner approval and must not start
-automatically. Increment 4V terminal approval audit remains Proposed and
-separately controlled with no gate or source edit. Current implementation facts
-and future boundaries are authoritative in `ARCHITECTURE.md`.
+automation and quality gates is verified complete and squash-merged at
+`ad9042c`. Meta Increment 5 repository health and GitHub hygiene is verified
+complete on its repository-governance-only scope. The stopped Meta Increment 4
+executive-document request has no gate, implementation, or completion evidence.
+The unchanged application-icon rollout is renumbered Meta Increment 6 and is the
+first Ready follow-on; it still requires separate project-owner approval and
+must not start automatically. Increment 4V terminal approval audit remains
+Proposed and separately controlled with no gate or source edit. Current
+implementation facts and future boundaries are authoritative in
+`ARCHITECTURE.md`.
 
 ## Non-negotiable product boundaries
 

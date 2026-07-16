@@ -1,0 +1,48 @@
+name: Security design review
+description: Request a review of a planned or implemented repository change. Do not report vulnerabilities here.
+title: "security: review "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This public issue form is for sanitized design review only. Do not disclose a vulnerability, exploit, credential, personal content, private path, or incident detail. Use the repository Security Policy for private reporting instructions.
+  - type: input
+    id: increment
+    attributes:
+      label: Increment or change
+      placeholder: Increment identifier, branch, or pull request
+    validations:
+      required: true
+  - type: textarea
+    id: boundary
+    attributes:
+      label: Boundary under review
+      description: Identify trusted and untrusted actors, data, permissions, credentials, persistence, network, or execution authority.
+    validations:
+      required: true
+  - type: textarea
+    id: invariants
+    attributes:
+      label: Invariants that must remain true
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Sanitized evidence
+      description: List relevant files, tests, and redacted command outcomes.
+    validations:
+      required: true
+  - type: textarea
+    id: residual_risk
+    attributes:
+      label: Residual risk and rollback
+    validations:
+      required: true
+  - type: checkboxes
+    id: disclosure
+    attributes:
+      label: Disclosure confirmation
+      options:
+        - label: This issue contains no vulnerability details, secrets, personal data, or active incident information.
+          required: true

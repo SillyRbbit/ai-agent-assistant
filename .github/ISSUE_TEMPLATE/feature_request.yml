@@ -1,0 +1,59 @@
+name: Feature request
+description: Propose one bounded Cortexa capability or repository improvement.
+title: "feat: "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Describe the user or operational problem without prescribing an unbounded solution.
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: What independently verifiable result should the user receive?
+    validations:
+      required: true
+  - type: dropdown
+    id: audience
+    attributes:
+      label: Primary audience
+      options:
+        - Executive or employee user
+        - IT or operations
+        - Security or privacy reviewer
+        - Maintainer or contributor
+    validations:
+      required: true
+  - type: textarea
+    id: boundaries
+    attributes:
+      label: Trust, data, and permission impact
+      description: Identify model, WebView, gateway, credential, storage, operating-system, or execution boundaries that may change.
+    validations:
+      required: true
+  - type: textarea
+    id: non_goals
+    attributes:
+      label: Explicit non-goals
+      description: State what this proposal must not add or imply.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance evidence
+      description: Describe automated, manual, security, and rollback evidence needed.
+    validations:
+      required: true
+  - type: checkboxes
+    id: product_boundary
+    attributes:
+      label: Product boundary confirmation
+      options:
+        - label: The proposal does not rely on direct model-to-device or generic WebView-to-device execution.
+          required: true
+        - label: Planned behavior will not be presented as currently implemented.
+          required: true

@@ -53,6 +53,20 @@ or requirement is not evidence that production behavior exists.
 - Sensitive credentials are not stored in SQLite.
 - Schema changes have rollback or compatibility reasoning.
 
+### GitHub and repository automation
+
+- Workflow triggers, permissions, credentials, action digests, runner selection,
+  timeouts, and commands are explicit and least-privilege.
+- Pull-request workflows receive no secrets and never use
+  `pull_request_target` for untrusted code.
+- No workflow commits, pushes, merges, publishes, deploys, signs, notarizes, or
+  auto-merges.
+- Dependabot changes remain review-only proposals.
+- Repository-health checks test accepted and rejected cases and do not expose a
+  matched secret value.
+- CODEOWNERS, labels, milestones, and badges are not mistaken for remote policy
+  enforcement.
+
 ## Verification evidence
 
 A review should name the commands that ran and their outcomes. Missing platform checks must be identified explicitly.
@@ -65,6 +79,8 @@ npm run lint
 npm run typecheck
 npm run test
 npm run build
+npm run docs:check
+npm run repository:check
 npm run tauri -- build --no-bundle
 ```
 

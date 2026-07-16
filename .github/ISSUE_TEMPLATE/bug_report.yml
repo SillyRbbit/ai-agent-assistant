@@ -1,0 +1,67 @@
+name: Bug report
+description: Report a reproducible Cortexa defect without sensitive data.
+title: "bug: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include credentials, personal content, private files, raw database content, or exploitable security details. Follow the Security Policy link for vulnerabilities.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What failed, and what user-visible impact did it have?
+      placeholder: A concise description of the defect.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Use synthetic data and provide the smallest deterministic sequence.
+      placeholder: |
+        1. Start Cortexa with ...
+        2. Select ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      placeholder: 0.1.0 or an abbreviated commit hash
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include macOS version, architecture, Node.js, npm, Rust, and reproduction surface where relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification attempted
+      description: List commands and actual outcomes. Redact private paths and content.
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety confirmation
+      options:
+        - label: I removed secrets, personal data, private paths, and raw sensitive content.
+          required: true
+        - label: This is not a vulnerability report or an active security incident.
+          required: true

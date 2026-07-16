@@ -1,7 +1,7 @@
 # Cortexa architecture
 
 Status: Authoritative current-state architecture
-Last updated: 2026-07-15
+Last updated: 2026-07-16
 
 ## Reading this document
 
@@ -236,7 +236,7 @@ material are required before sensitive persistence.
   window is visible.
 - The configured window is titled Cortexa and uses stable minimum dimensions.
 
-Production Tauri icons still use the previous icon family. Meta Increment 4 is
+Production Tauri icons still use the previous icon family. Meta Increment 6 is
 the separately gated Ready rollout from the canonical app-icon source.
 
 ## Current and future capability matrix

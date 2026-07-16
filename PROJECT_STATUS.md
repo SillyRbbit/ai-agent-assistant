@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-07-15
+Last updated: 2026-07-16
 
 ## Current milestone
 
@@ -10,11 +10,14 @@ Meta Increment 1 branding and identity foundation is **verified complete and
 squash-merged at `5edbf4d`**; its `meta-01` marker was valid before Meta
 Increment 2 began. Meta Increment 2 engineering operating system is **verified
 complete as documentation-only work**. Meta Increment 3 Codex automation and
-post-increment quality gates is **verified complete but uncommitted and
-unpublished** on its approved repository-workflow scope. The unchanged
-application-icon rollout is renumbered Meta Increment 4 and is **Ready for
-separate project-owner approval**. Increment 4V terminal approval audit remains
-**Proposed** and separately controlled with no gate or source edit.
+post-increment quality gates is **verified complete and squash-merged at
+`ad9042c`**. Meta Increment 5 repository health and GitHub hygiene is **verified
+complete but uncommitted and unpublished** on its repository-governance-only
+scope. The Meta Increment 4 executive-document request was stopped before gate
+state or edits and has no completion evidence. The unchanged application-icon
+rollout is renumbered Meta Increment 6 and is **Ready for separate project-owner
+approval after Meta 5 publication**. Increment 4V terminal approval audit
+remains **Proposed** and separately controlled with no gate or source edit.
 
 ## Increment status
 
@@ -60,9 +63,13 @@ separate project-owner approval**. Increment 4V terminal approval audit remains
   squash-merged at `5edbf4d`**.
 - Meta Increment 2: engineering operating system - **verified complete**.
 - Meta Increment 3: Codex automation and post-increment quality gates -
-  **verified complete; uncommitted and unpublished**.
-- Meta Increment 4: verified application icon rollout - **Ready; separate
-  approval required**.
+  **verified complete; squash-merged at `ad9042c`**.
+- Meta Increment 4: executive documentation request - **stopped before gate or
+  repository edits; no completion evidence**.
+- Meta Increment 5: repository health and GitHub hygiene - **verified complete;
+  uncommitted and unpublished**.
+- Meta Increment 6: verified application icon rollout - **Ready after Meta 5
+  publication; separate approval required**.
 
 ## Meta Increment 1 capability and evidence
 
@@ -132,6 +139,36 @@ separate project-owner approval**. Increment 4V terminal approval audit remains
   hook tests, complete `npm run verify`, Markdown links, formatting, exact
   scope, protected paths, secret scan, diff review, and mandatory `meta-03`
   gate pass. No manual application check applies.
+
+## Meta Increment 5 capability and evidence
+
+- The README accurately distinguishes current, mocked, planned, and prohibited
+  capability and links branded visuals, architecture, security, setup,
+  verification, roadmap, and contribution guidance.
+- Contribution, CODEOWNERS, pull-request, and issue paths require bounded,
+  sanitized, evidence-based work without representing repository files as
+  remote branch protection or authorization.
+- Dependabot proposes npm, Cargo, and GitHub Action updates for human review;
+  no repository workflow commits, pushes, merges, publishes, deploys, signs, or
+  auto-merges.
+- CI, documentation, and security workflows use only `contents: read`, SHA-pinned
+  official actions, disabled persisted checkout credentials, and no secret
+  context or `pull_request_target` trigger.
+- Standard-library health scripts check internal links, secret patterns,
+  generated output, licensing status, documented commands, and workflow safety.
+  Sixteen focused tests cover accepted and rejected states.
+- No license is selected. `docs/github/LICENSING.md` records that repository
+  visibility does not grant reuse, distribution, or contribution rights.
+- `cargo-audit 0.22.2` reports D-025's two accepted `quick-xml 0.39.4`
+  vulnerabilities and D-046's exact 18 warning identities. The gate passes only
+  that unchanged baseline; the findings remain unresolved advisories.
+- Complete `npm run verify`, npm audit, live RustSec audit, YAML syntax, links,
+  format, scope, secret, generated-output, architecture, security, code-health,
+  debt, readiness, and mandatory `meta-05` reviews pass. No product or native
+  manual check applies.
+- Application source, dependencies, manifests, lockfiles, Tauri configuration,
+  capabilities, CSP, permissions, SQLite schema, icons, and compatibility
+  identifiers are unchanged.
 
 ## Increment 4U capability and evidence
 
@@ -706,10 +743,10 @@ Native launch passed with idempotent storage startup. The project owner confirme
 ## Next action
 
 Obtain explicit project-owner direction before committing or publishing
-verified Meta Increment 3. Meta Increment 4 is Ready under
-`docs/plans/meta-04-verified-application-icon-rollout.md`, but it requires
-separate approval and must not start before Meta Increment 3 publication is
-reconciled. Do not start Meta 4 or Increment 4V automatically.
+verified Meta Increment 5. Meta Increment 6 is Ready under
+`docs/plans/meta-06-verified-application-icon-rollout.md`, but it requires
+separate approval and must not start before Meta Increment 5 publication is
+reconciled. Do not start Meta 6 or Increment 4V automatically.
 
 ## Phase 4 planning result
 

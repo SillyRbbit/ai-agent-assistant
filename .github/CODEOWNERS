@@ -1,0 +1,9 @@
+# Default ownership for every repository path.
+* @SillyRbbit
+
+# Security and automation changes always require the repository owner.
+/.github/ @SillyRbbit
+/.codex/ @SillyRbbit
+/SECURITY.md @SillyRbbit
+/SECURITY_CHECKLIST.md @SillyRbbit
+/src-tauri/ @SillyRbbit

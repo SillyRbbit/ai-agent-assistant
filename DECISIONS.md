@@ -1263,6 +1263,121 @@ Consequences:
 - No product source, behavior, dependency, configuration, capability,
   permission, database, icon, identifier, or release artifact changes.
 
+## D-046 - Use read-only GitHub automation and exact visible advisory baselines
+
+Date: 2026-07-16
+Status: Accepted; Meta Increment 5 implemented and verified
+
+Decision: GitHub quality automation receives only top-level `contents: read`,
+uses no repository secrets, disables persisted checkout credentials, excludes
+`pull_request_target`, and may only inspect, format-check, lint, test, build, and
+retrieve public advisory data. Official checkout and Node setup actions are
+pinned to immutable commit digests. Dependabot may create review branches for
+npm, Cargo, and GitHub Action proposals, but no repository workflow rebases,
+commits, pushes, merges, publishes, deploys, signs, notarizes, or auto-merges.
+
+Local repository-health scripts use only the Python standard library, fixed Git
+inspection arguments, bounded text reads, redacted finding output, and explicit
+exit codes. Rust advisory automation runs exact `cargo-audit 0.22.2` and accepts
+only the following unchanged lockfile identities:
+
+- D-025's vulnerabilities `RUSTSEC-2026-0194` and `RUSTSEC-2026-0195` in
+  `quick-xml 0.39.4`.
+- Warning `RUSTSEC-2024-0370` in `proc-macro-error 1.0.4`.
+- Warnings `RUSTSEC-2024-0411` through `RUSTSEC-2024-0420`, excluding numbers
+  not published in that range, in the exact GTK3-family packages and versions
+  encoded by `scripts/cargo_audit_gate.py`, plus `RUSTSEC-2024-0429` in
+  `glib 0.18.5`.
+- Warnings `RUSTSEC-2025-0075`, `RUSTSEC-2025-0080`, `RUSTSEC-2025-0081`,
+  `RUSTSEC-2025-0098`, and `RUSTSEC-2025-0100` in their exact `unic` 0.9.0
+  packages encoded by the gate.
+- Unsoundness warning `RUSTSEC-2026-0190` in `anyhow 1.0.102`.
+
+Any new or changed identity/version, partial baseline drift while findings
+remain, malformed report, inconsistent audit exit status, or audit tool failure
+fails the workflow. A clean report is accepted. Accepted findings stay visible
+as unresolved advisories and do not become an ignore list or a claim that the
+dependencies are fixed or generally safe.
+
+Rationale: read-only, reproducible checks provide useful pull-request evidence
+without granting untrusted code or dependency proposals write authority. The
+unchanged lockfile has pre-existing RustSec findings, including the D-025
+vulnerabilities, unmaintained transitive packages, and one `anyhow` unsoundness
+warning. An exact parser prevents silent baseline expansion while allowing the
+repository to detect new findings and schedule dependency remediation as its
+own reviewed increment.
+
+Consequences:
+
+- `anyhow 1.0.102` is active transitively through Tauri and Tauri utilities.
+  Project source has no direct `downcast_mut` or `.context(...)` reference, but
+  no complete transitive reachability claim is made; remediation remains debt.
+- The GTK3 and `unic` warning families remain tracked even when target-specific
+  dependencies are not active in the current macOS build.
+- Hosted workflow success, CODEOWNERS, badges, labels, and milestones are
+  coordination evidence, not branch-protection proof or security approval.
+- Advisory retrieval is the only planned workflow network use and receives no
+  repository secret context.
+- Meta Increment 5 changes no dependency, manifest, lockfile, application
+  source, Tauri boundary, permission, CSP, capability, or SQLite schema.
+
+## D-047 - Record that no repository license is selected
+
+Date: 2026-07-16
+Status: Accepted; Meta Increment 5 implemented and verified
+
+Decision: do not add a root `LICENSE` file or infer open-source,
+source-available, commercial, or contribution terms. Record the current
+no-license-selected state in `docs/github/LICENSING.md`. Repository visibility
+alone is not represented as permission to use, copy, modify, distribute,
+sublicense, or sell the software, and external code contributions require prior
+maintainer coordination.
+
+Rationale: selecting legal terms is a project-owner decision, not a mechanical
+repository-hygiene choice. An explicit decision record is more accurate than an
+invented license and allows health checks to distinguish an intentional legal
+boundary from a missing file.
+
+Consequences:
+
+- Public release and an open external contribution program remain blocked on a
+  separately approved license decision and legal review where appropriate.
+- The repository health check passes only because the explicit licensing record
+  exists; it does not describe the project as open source.
+- Future license adoption must add the authoritative text, reconcile README and
+  contribution guidance, and receive separate review.
+
+## D-048 - Select Meta Increment 5 and renumber the unchanged icon rollout
+
+Date: 2026-07-16
+Status: Accepted; project-owner queue direction
+
+Decision: reconcile Meta Increment 3 as squash-merged at `ad9042c` and select
+repository health and GitHub hygiene as Meta Increment 5. The project-owner
+Meta Increment 4 executive-document request was stopped before mandatory gate
+state, plan creation, or repository edits; it is neither completed work nor a
+Ready increment. Renumber the unchanged verified application-icon rollout from
+Meta Increment 4 to Meta Increment 6, preserving its exact 16-icon source scope,
+canonical asset, risks, non-goals, target-Mac matrix, rollback, and separate
+approval requirement.
+
+Rationale: repository history must not invent completion evidence for a stopped
+request, and the owner's explicit Meta Increment 5 scope must coexist with the
+previously reviewed but unimplemented icon plan. A recorded gap is more accurate
+than silently reusing Meta Increment 4 or rewriting historical checkpoints.
+
+Consequences:
+
+- Historical Meta Increment 1 through 3 records keep the icon-plan numbers that
+  were accurate at those checkpoints; D-044, D-045, and D-048 define the live
+  number progression.
+- Meta Increment 6 becomes Ready only after Meta Increment 5 is verified and
+  published, and still requires separate project-owner approval.
+- Increment 4V remains Proposed and is not selected by this meta queue change.
+- No executive document, icon, product source, runtime behavior, dependency,
+  configuration, capability, permission, database, or compatibility identifier
+  changes through this decision.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

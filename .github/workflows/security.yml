@@ -1,0 +1,52 @@
+name: Security
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "23 13 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: Dependency and secret audit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out reviewed source
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          persist-credentials: false
+
+      - name: Set up pinned Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Scan tracked content for secret patterns
+        run: npm run security:scan
+
+      - name: Audit JavaScript dependencies
+        run: npm audit --audit-level=low
+
+      - name: Install pinned Rust audit tool
+        run: cargo install cargo-audit --version 0.22.2 --locked --root "${RUNNER_TEMP}/cargo-audit"
+
+      - name: Audit Rust dependencies against the accepted baseline
+        shell: bash
+        run: |
+          set +e
+          PATH="${RUNNER_TEMP}/cargo-audit/bin:${PATH}" cargo audit --file src-tauri/Cargo.lock --json > "${RUNNER_TEMP}/cargo-audit.json"
+          audit_status=$?
+          set -e
+          python3 scripts/cargo_audit_gate.py "${RUNNER_TEMP}/cargo-audit.json" --cargo-audit-exit "${audit_status}"

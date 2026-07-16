@@ -1,0 +1,54 @@
+name: Documentation
+
+on:
+  pull_request:
+    paths:
+      - "**/*.md"
+      - ".github/**"
+      - ".gitignore"
+      - "assets/branding/**"
+      - "package.json"
+      - "scripts/repository_health.py"
+      - "scripts/tests/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "**/*.md"
+      - ".github/**"
+      - ".gitignore"
+      - "assets/branding/**"
+      - "package.json"
+      - "scripts/repository_health.py"
+      - "scripts/tests/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: documentation-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  documentation:
+    name: Documentation and repository policy
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out reviewed source
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          persist-credentials: false
+
+      - name: Set up pinned Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install locked documentation tools
+        run: npm ci --ignore-scripts
+
+      - name: Check Markdown, YAML, links, and repository policy
+        run: npm run docs:check && npm run repository:check
