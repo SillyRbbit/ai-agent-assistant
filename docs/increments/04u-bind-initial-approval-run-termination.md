@@ -1,6 +1,6 @@
 # Increment 4U - bind initial approval run-termination
 
-Status: Verified complete; uncommitted and awaiting publication direction
+Status: Verified complete; published and merged at `61525bf`
 Last updated: 2026-07-15
 
 ## Goal
@@ -113,9 +113,12 @@ or remote resource requires rollback.
 
 ## Exact next task
 
-Wait for explicit project-owner direction to commit, push, and merge Increment
-4U. Do not start Increment 4V.
+No 4U work remains. Commit `61525bf208553cb17f3dfe665d3f7b7d32d306c1`
+with message `Bind initial approval run termination` is pushed on
+`codex/phase4-increment-4u`, fast-forward merged into `main`, and synchronized
+with `origin/main`. The `04u` marker remained complete and valid after commit,
+merge, and push.
 
 Increment 4V terminal approval audit binding is only a proposed follow-on. Do
-not start it automatically; it remains blocked on verified merged 4U and
-separate project-owner approval.
+not start it automatically; the merged 4U prerequisite is satisfied, but 4V
+still requires explicit queue selection and separate project-owner approval.

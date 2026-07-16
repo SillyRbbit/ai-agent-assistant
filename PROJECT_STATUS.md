@@ -4,7 +4,7 @@ Last updated: 2026-07-15
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4T are **verified complete, published, and merged into `main`**. Increment 4U bind initial approval run-termination is **verified complete with uncommitted changes and a valid `04u` completion marker**; it awaits project-owner publication direction. Increment 4V bind initial terminal approval audit is **Proposed**, blocked on 4U publication/merge, plan reconciliation, and separate approval. No user-visible behavior, native invocation, cancellation timer, audit write, transport, runtime coordinator, IPC, persistence, dispatch, or execution path was added by 4U.
+Phase 3 and Phase 4 Increments 4A through 4U are **verified complete, published, and merged into `main`**. Increment 4U is synchronized at `61525bf` and retained a valid `04u` marker after publication. Meta Increment 1 branding and identity foundation is **verified complete with uncommitted changes and a valid `meta-01` marker** on `meta/branding-foundation`. Meta Increment 2 verified application-icon rollout is **Ready** for separate project-owner approval. Increment 4V terminal approval audit remains **Proposed** and separately controlled with no gate or source edit. Meta Increment 1 changes identity presentation and repository guidance only; product behavior and trust boundaries are unchanged.
 
 ## Increment status
 
@@ -44,8 +44,29 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
 - Increment 4R: bind terminal initial function call to policy - **verified complete; published and merged**.
 - Increment 4S: bind terminal initial approval presentation - **verified complete; published and merged**.
 - Increment 4T: bind terminal initial approval resolution - **verified complete; published and merged**.
-- Increment 4U: bind initial approval run-termination - **verified complete; uncommitted and awaiting publication direction**.
-- Increment 4V: bind initial terminal approval audit - **Proposed; blocked on published 4U, reconciliation, and separate approval**.
+- Increment 4U: bind initial approval run-termination - **verified complete; published and merged at `61525bf`**.
+- Increment 4V: bind initial terminal approval audit - **Proposed; merged 4U prerequisite satisfied, separate approval required**.
+- Meta Increment 1: branding and identity foundation - **verified complete; uncommitted**.
+- Meta Increment 2: verified application icon rollout - **Ready; separate approval required**.
+
+## Meta Increment 1 capability and evidence
+
+- Five canonical assets under `assets/branding/` preserve the owner logo or
+  derive only proportional padded favicon/app-icon-source canvases.
+- The README, Vite favicon, and sidebar use official assets; the sidebar keeps
+  a stable 38 x 46 box, source aspect ratio, adjacent text gap, and decorative
+  accessibility treatment in light and dark modes.
+- Six brand guides define logo, color, contrast, type, icon, presentation, and
+  architecture-diagram use. `$branding` makes those rules reusable by coding
+  assistants.
+- D-043 records the opaque raster authority, derivative rules, unchanged
+  compatibility IDs, and separately gated Tauri production icon rollout.
+- Focused tests, skill validation, asset hash/dimension checks, complete
+  `npm run verify`, npm audit, build-reference inspection, visual screenshots,
+  exact-scope review, and the mandatory gate pass.
+- No dependency, manifest, lockfile, Tauri icon/config, capability, permission,
+  runtime, storage, networking, IPC, approval, audit, dispatch, or execution
+  path changed.
 
 ## Increment 4U capability and evidence
 
@@ -91,9 +112,9 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
 - Manager terminalization precedes audit recording. A typed audit failure must
   return no resolution and must not leave stale pending turn ownership, but it
   cannot roll manager state back.
-- No gate state or implementation change exists. 4V cannot become Ready until
-  4U is committed, pushed, and merged, the plan is reconciled to the published
-  4U API, and the project owner separately approves it.
+- No gate state or implementation change exists. The 4U prerequisite is
+  satisfied and the plan is reconciled to `61525bf`; 4V still requires explicit
+  queue selection and separate project-owner approval.
 - Durable persistence, SQLite, native invocation or closure, proactive expiry,
   timers, runtime coordination, transport, credentials, dispatch, execution,
   Tauri, frontend, dependencies, capabilities, entitlements, and permissions
@@ -619,8 +640,9 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Wait for explicit project-owner direction to commit, push, and merge verified
-Increment 4M. Do not start later planning or implementation.
+Obtain separate project-owner approval for Meta Increment 2 under
+`docs/plans/meta-02-verified-application-icon-rollout.md`. Do not implement Meta
+2 or start Increment 4V automatically.
 
 ## Phase 4 planning result
 

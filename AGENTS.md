@@ -20,7 +20,7 @@ When the task is a security-sensitive change, also read `SECURITY.md` and `CODE_
 
 ## Current phase
 
-Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4T are verified complete, published, and merged. Increment 4U bind initial approval run-termination is verified complete with uncommitted changes and a valid `04u` completion marker; it awaits project-owner publication direction. The turn retains only its exact private manager-issued approval ID, exposes one no-argument idempotent run-termination deny/close transition, preserves manager expiry precedence and late-outcome rejection, and returns only a non-authorizing unaudited resolution. Increment 4V bind initial terminal approval audit remains Proposed and blocked on 4U publication/merge, plan reconciliation, and separate approval; no `04v` gate or source edit exists. The verified app-info, Permission Center, gateway request/response protocol, lower-level schema-validation, policy, native approval source, typed approval-audit, and SQLite bootstrap boundaries remain unchanged; request serialization, stream validation, terminal completion, schema validity, policy allowance, approval presentation, approval resolution, and audit receipts remain non-authorizing.
+Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published, and merged on the target Mac; Increment 4U is merged at `61525bf` and its `04u` marker remained valid after publication. Meta Increment 1 establishes the authoritative Cortexa identity assets, usage standards, repository-local branding skill, README/favicon references, and official sidebar mark. It is verified complete in the current uncommitted `meta/branding-foundation` working tree with a valid `meta-01` completion marker. Meta Increment 2 verified application-icon rollout is the first Ready follow-on and requires separate project-owner approval; current Tauri production icons remain unchanged. Increment 4V terminal approval audit remains Proposed and separately controlled with no gate or source edit. The verified app-info, Permission Center, gateway request/response protocol, schema-validation, policy, native approval source, typed approval-audit, SQLite bootstrap, and non-authorizing approval boundaries remain unchanged.
 
 ## Non-negotiable product boundaries
 
@@ -125,6 +125,7 @@ A task is done only when:
 - Session workflows: `docs/workflows/`
 - Reusable prompts: `prompts/`
 - Reusable Codex skills: `.agents/skills/`
+- Brand assets and standards: `assets/branding/` and `docs/branding/`
 - Templates: `docs/templates/`
 - Product source of truth: `docs/product/`
 

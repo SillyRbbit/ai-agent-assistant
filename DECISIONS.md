@@ -1123,6 +1123,48 @@ Consequences:
   SQLite path, credential, Keychain, provider SDK, network client, persistence,
   capability, entitlement, or operating-system permission is added.
 
+## D-043 - Adopt the owner-supplied opaque raster as the brand authority
+
+Date: 2026-07-15
+Status: Accepted; Meta Increment 1 implementation approved
+
+Decision: the owner-supplied 360 x 434 PNG with SHA-256
+`ecdcc56f3c9193dd7caf092778ef096c3f9af7047355e417bce7815301426ea7`
+is the authoritative Cortexa logo source. `logo-primary.png`,
+`logo-light.png`, and `logo-dark.png` preserve its exact bytes. The light and
+dark names are usage aliases, not recolored variants, because the source has a
+fully opaque near-white protected field. The 64 x 64 favicon is a proportional
+padded derivative, and the 512 x 512 app-icon source centers the unscaled source
+on the same field color.
+
+The logo must not be redrawn, traced, cropped, recolored, made transparent,
+rotated, distorted, or reconstructed from a screenshot or presentation export.
+The human-facing identity remains `Cortexa` under D-026. Repository, package,
+crate, executable, bundle, database, GitHub, IPC, event, command, and storage
+compatibility identifiers remain unchanged.
+
+Production files under `src-tauri/icons/` remain unchanged in Meta Increment 1.
+Their replacement requires separately approved Meta Increment 2, deterministic
+generation from `assets/branding/app-icon-source.png`, complete format and
+packaging verification, and target-Mac visual checks.
+
+Rationale: preserving the complete owner image is the only lossless treatment
+available from the supplied raster. Background extraction or separate dark
+recoloring would require inventing edge pixels and a new design. A canonical
+asset directory plus explicit usage rules prevents screenshots, stale decks,
+and placeholder graphics from becoming competing sources of identity.
+
+Consequences:
+
+- The near-white field remains visible on both light and dark backgrounds.
+- Raster use must respect native dimensions, aspect ratio, clear space, minimum
+  size, and documented accessibility constraints.
+- Favicon and app-icon-source padding is deterministic and introduces no logo
+  crop or recolor.
+- No font, icon, image-processing, runtime, or application dependency is added.
+- External decks and diagrams are reference material until separately updated
+  from current repository facts and the canonical assets.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

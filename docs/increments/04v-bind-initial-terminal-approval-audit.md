@@ -1,6 +1,6 @@
 # Increment 4V - bind initial terminal approval audit
 
-Status: Proposed; blocked on verified Increment 4U and project-owner approval
+Status: Proposed; merged 4U prerequisite satisfied, separate approval required
 Last updated: 2026-07-15
 
 ## Goal
@@ -13,7 +13,7 @@ approval-audit adapter.
 ## Why this is the next smallest follow-on
 
 Increment 4T returns one exact sealed native resolution through the issuing
-manager. Increment 4U is proposed to add the manager's existing run-termination
+manager. Merged Increment 4U adds the manager's existing run-termination
 resolution path. Both remain explicitly unaudited even though the verified
 `InMemoryApprovalAuditAdapter` already accepts every supported terminal
 disposition.
@@ -80,11 +80,11 @@ credential, compatibility identifier, or remote resource requires rollback.
   the stored valid `04t` marker.
 - The typed in-memory approval-audit adapter already accepts native outcomes,
   run termination, and expiry while rejecting inconsistent evidence.
-- Increment 4U is planning only and must be verified before 4V can become Ready.
+- Increment 4U is published and merged at `61525bf`; its technical prerequisite
+  is satisfied and this plan is reconciled against that exact API.
 - No `04v` gate state or implementation change exists.
 
 ## Exact next task
 
-Do not start 4V. Obtain approval and complete Increment 4U first, then reconcile
-the merged 4U API and seek separate project-owner approval for this exact 4V
-scope.
+Do not start 4V. It remains outside the Ready queue until the project owner
+explicitly selects this exact scope and grants separate implementation approval.

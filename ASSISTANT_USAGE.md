@@ -76,9 +76,15 @@ Repository-scoped skills are under `.agents/skills/`.
 | `$code-review`        | Reviewing a diff against project rules                       |
 | `$security-review`    | Reviewing trust boundaries, permissions, tools, or data flow |
 | `$documentation-sync` | Updating repository memory after changes                     |
+| `$branding`           | Applying Cortexa identity to product and presentation assets |
 | `$session-end`        | Closing a session with a complete handoff                    |
 
 In Codex, type `$` or use the skills menu to invoke a skill explicitly. If newly added skills are not visible, restart or reload the assistant from the repository root.
+
+For brand, logo, presentation, or architecture-diagram work, invoke `$branding`
+and follow `docs/branding/BRAND_GUIDELINES.md`. The files under
+`assets/branding/` are authoritative; do not redraw or recolor the logo or use
+an external presentation as the source of current product facts.
 
 ## 7. Use prompt files when skills are not available
 

@@ -4,15 +4,18 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No implementation plan is active. Increment 4U bind initial approval
-run-termination is verified complete with uncommitted changes and a valid `04u`
-marker; it awaits project-owner publication direction. Its completed plan is
-`docs/plans/04u-bind-initial-approval-run-termination.md`.
+No implementation plan is active. Meta Increment 1 branding and identity
+foundation is verified complete in the current uncommitted working tree under
+`docs/plans/meta-01-branding-foundation.md`.
 
-Increment 4V bind initial terminal approval audit is Proposed under
-`docs/plans/04v-bind-initial-terminal-approval-audit.md`. It is blocked on
-verified merged 4U and separate project-owner approval; no `04v` gate state or
-source edit has started.
+Meta Increment 2 verified application icon rollout is Ready under
+`docs/plans/meta-02-verified-application-icon-rollout.md` and requires separate
+project-owner approval before its gate or icon edits begin.
+
+Increment 4V terminal approval audit remains Proposed under
+`docs/plans/04v-bind-initial-terminal-approval-audit.md`. Its merged 4U
+prerequisite is satisfied, but it still requires explicit queue selection and
+separate project-owner approval; no `04v` gate or source edit exists.
 
 ## Completed plans
 
@@ -45,6 +48,7 @@ docs/plans/04r-bind-terminal-initial-policy.md
 docs/plans/04s-bind-terminal-initial-approval-presentation.md
 docs/plans/04t-bind-terminal-initial-approval-resolution.md
 docs/plans/04u-bind-initial-approval-run-termination.md
+docs/plans/meta-01-branding-foundation.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -109,6 +113,33 @@ A plan must contain:
 | Increment 4T terminal approval resolution      | Complete | Project maintainer | 2026-07-15   |
 | Increment 4U approval run termination          | Complete | Project maintainer | 2026-07-15   |
 | Increment 4V terminal approval audit binding   | Blocked  | Project maintainer | 2026-07-15   |
+| Meta Increment 1 branding foundation           | Complete | Project maintainer | 2026-07-15   |
+| Meta Increment 2 application icon rollout      | Ready    | Project maintainer | 2026-07-15   |
+
+## Meta Increment 1 branding and identity foundation - complete
+
+Goal: establish the owner-supplied Cortexa logo as the single authoritative
+identity source and apply it to placeholder brand surfaces without changing
+product behavior or compatibility identifiers.
+
+Five canonical assets, six brand guides, the `$branding` skill, README/favicon
+references, and the official sidebar mark are implemented. The primary, light,
+and dark files preserve source bytes; favicon and future app-icon source use
+proportional padding. Focused and complete checks, asset inspection, light/dark
+and compact visual review, dependency audit, exact-scope review, and the
+mandatory gate pass. Tauri production icons remain unchanged. D-043 records the
+durable boundary.
+
+## Meta Increment 2 verified application icon rollout - Ready
+
+Goal: generate and verify all 16 existing Tauri production icon outputs from
+the approved square app-icon source. The exact future list, risks, non-goals,
+packaging and target-Mac checks, and rollback are frozen in
+`docs/plans/meta-02-verified-application-icon-rollout.md`.
+
+Meta 2 changes no source asset, Tauri config, compatibility identifier,
+manifest, lockfile, runtime, dependency, capability, entitlement, or permission.
+It requires separate project-owner approval and must not begin automatically.
 
 ## Phase 4 Increment 4U bind initial approval run-termination - complete
 
@@ -130,10 +161,10 @@ audit, persistence, dispatch, execution, continuation, transport,
 authentication, credential, Tauri, frontend, SQLite, dependency, capability,
 entitlement, or permission path is included. Focused and complete verification,
 npm audit, scope and security review, documentation sync, and the mandatory
-`04u` gate pass. No manual check applies. The implementation is verified with a
-valid marker and remains uncommitted pending project-owner publication
-direction. Rollback restores the exact two source/test files and declared
-closeout docs before commit, or reverts one 4U commit after commit.
+`04u` gate pass. No manual check applies. The implementation is committed as
+`61525bf`, pushed on `codex/phase4-increment-4u`, fast-forward merged into
+synchronized `main`, and retains a valid marker. Rollback after publication
+reverts the bounded 4U commit.
 
 ## Phase 4 Increment 4V bind initial terminal approval audit - Proposed
 
@@ -154,9 +185,9 @@ expiry, timer, runtime coordinator, active-run validation, dispatch, execution,
 transport, credential, Tauri, frontend, dependency, capability, entitlement,
 or permission path is included. Focused and complete verification, npm audit,
 scope and security review, documentation sync, and the mandatory `04v` gate are
-required. No manual check is planned. 4V cannot become Ready until 4U is
-verified and merged and the project owner separately approves the reconciled
-4V plan.
+required. No manual check is planned. The 4U prerequisite is satisfied and the
+plan is reconciled to `61525bf`; 4V remains Blocked until the project owner
+explicitly selects and separately approves it.
 
 ## Phase 4 Increment 4T bind terminal initial approval resolution - complete
 

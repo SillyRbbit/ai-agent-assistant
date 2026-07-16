@@ -1,5 +1,7 @@
 import type { ConversationSession } from "../application/conversations";
 import { NAVIGATION_ITEMS, type AppRoute } from "../application/navigation";
+import brandLogoDark from "../../assets/branding/logo-dark.png";
+import brandLogoLight from "../../assets/branding/logo-light.png";
 
 interface ApplicationSidebarProps {
   readonly activeConversationId: string;
@@ -25,9 +27,16 @@ export function ApplicationSidebar({
   return (
     <aside className="application-sidebar">
       <div className="application-brand">
-        <div className="application-brand__mark" aria-hidden="true">
-          C
-        </div>
+        <picture className="application-brand__mark" aria-hidden="true">
+          <source media="(prefers-color-scheme: dark)" srcSet={brandLogoDark} />
+          <img
+            alt=""
+            className="application-brand__logo"
+            height="434"
+            src={brandLogoLight}
+            width="360"
+          />
+        </picture>
         <div className="application-brand__copy">
           <strong>Cortexa</strong>
           <span>Private workspace</span>
