@@ -16,14 +16,14 @@ Increment 6 is the documentation-only Product Readiness Audit on synchronized
 squash-merged at `5281fac`. The dependency compatibility repair is verified,
 published, and squash-merged through PR #20 at `b298999`.
 
-Meta Increment 7 is verified complete with advisories on fresh branch
-`codex/meta-verified-application-icon-rollout` from corrected `b298999`. The
+Meta Increment 7 is verified complete with advisories and squash-merged through
+PR #19 at `96ba6ae`; hosted CI, documentation, and security checks passed. The
 original local branch is preserved as
 `codex/meta-verified-application-icon-rollout-pre-dependency-repair` at
-`a1808e2`, and remote PR #19 remains untouched. Its approved icon and closeout
-changes remain uncommitted and unpublished; complete repaired-baseline
-verification and the mandatory `meta-07` report pass. No `04v` gate or source
-edit exists.
+`a1808e2`. The `meta-07` marker was complete and valid on clean `96ba6ae`
+immediately before the later advisory-remediation report changed the workspace
+fingerprint. Increment 4V is Ready but remains unstarted; no `04v` gate or
+source edit exists.
 
 ## Repository dependency baseline compatibility repair
 
@@ -36,6 +36,53 @@ and the accepted RustSec baseline gate passed. Its consolidated result is
 `docs/reviews/2026-07-16-repo-dependency-baseline-compatibility-post-increment-review.md`.
 Publication is complete at `b298999`; Meta 7 has now been reverified
 independently on that repaired baseline.
+
+## Advisory remediation review and memory reconciliation
+
+`docs/reviews/2026-07-16-advisory-remediation-backlog.md` is the authoritative
+review of 64 source advisories. It normalizes 25 still-active remediation
+records, identifies the five highest-priority root causes, and recommends
+Increment 4V as the first bounded product remediation. ARB-022 identifies stale
+post-publication project memory as the immediate workflow prerequisite.
+
+After fetching origin, `HEAD`, `main`, and `origin/main` all resolve to
+`96ba6ae5b8f94559adb0493d718f2b628e9ea8d7`. The advisory backlog was the only
+worktree change before this reconciliation. PR #19 is merged, and its hosted CI,
+documentation, and security checks all succeeded. The completed `meta-07`
+marker now reports `valid: false` only because the non-ignored advisory backlog
+and this later documentation change the workspace fingerprint; do not
+re-finalize Meta 7 or add later files to its historical scope.
+
+The exact 4V source/test paths have no commit after verified 4U at `61525bf`.
+Focused gateway-request, public request-contract, approval-audit,
+approval-binding, and approval-audit-binding tests pass on current `main`.
+Increment 4V therefore satisfies the Definition of Ready, but implementation
+still requires separate project-owner approval and a clean synchronized
+documentation baseline before `04v` begins.
+
+### Session-start verification
+
+- `git fetch --prune origin` passed; `git rev-parse main origin/main HEAD`
+  returned `96ba6ae5b8f94559adb0493d718f2b628e9ea8d7` three times.
+- `gh pr view 19 --json number,title,state,mergedAt,mergeCommit,headRefName,baseRefName,url,statusCheckRollup`
+  confirmed PR #19 merged at `96ba6ae` and all three hosted checks completed
+  successfully.
+- Node `v26.3.0`, npm `11.16.0`, Cargo and Rust `1.90.0`, rustfmt
+  `1.8.0-stable`, and Clippy `0.1.90` are available on macOS `26.5.2` with the
+  Xcode command-line tools.
+- `cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::gateway_request::`
+  passed 9 tests; the public gateway request contract passed 10 tests; approval
+  audit, approval binding, and approval-audit binding passed 6, 2, and 1 tests.
+- `npm run format:check`, `npm run docs:check`, `npm run repository:check`, and
+  `git diff --check` passed. The untracked report has no whitespace error.
+- `git diff --exit-code 61525bf -- src-tauri/src/agent/gateway_request.rs src-tauri/tests/gateway_request_contract.rs`
+  passed, confirming the exact 4V source/test baseline is unchanged.
+- `python3 .codex/hooks/session_end_gate.py` reported no conflicts, no staged
+  paths, the 11 declared live-document changes, and the advisory backlog as the
+  only untracked path.
+- `python3 .codex/hooks/post_increment_gate.py status` reports stored increment
+  `meta-07`, result `PASS WITH ADVISORIES`, status `complete`, and expected live
+  `valid: false` after the later documentation changes.
 
 ## Meta Increment 7 completion state
 
@@ -95,16 +142,15 @@ Before commit, restore only the 16 icon paths and declared closeout documents to
 There is no migration, data, dependency, identifier, credential, or remote
 resource rollback.
 
-The exact next task is review of the verified diff and proposed Git publication
-naming, followed only after separate project-owner approval by commit,
-force-update of PR #19's existing remote branch, hosted checks, squash merge,
-and clean synchronized-main marker confirmation. Do not begin 4V during Meta 7
-publication.
+Meta 7 publication is complete at `96ba6ae`. The exact next task is
+project-owner review and publication of the advisory backlog plus this
+post-publication memory reconciliation. Only after that documentation is on
+clean synchronized `main` may the owner separately approve Ready Increment 4V.
 
 ### Ready-to-paste next prompt
 
 ```text
-Review the verified Meta Increment 7 diff and valid marker on codex/meta-verified-application-icon-rollout. Preserve codex/meta-verified-application-icon-rollout-pre-dependency-repair at a1808e2. Show the Conventional Commit message and updated PR #19 title and description with Purpose, Files changed, Testing performed, Breaking changes, and Next increment. After my approval, commit, force-with-lease push the reconstructed branch to the existing PR #19 remote branch, wait for hosted checks, squash merge, and verify clean synchronized main plus the valid meta-07 marker. Do not begin Increment 4V during publication.
+Review the advisory remediation backlog and post-Meta-7 project-memory reconciliation. Confirm the diff changes documentation only, preserves dated historical evidence, records PR #19 merged at 96ba6ae, and leaves Increment 4V Ready but unstarted. After my explicit approval, propose descriptive Git publication names and publish only this documentation scope. Do not begin the 04v gate or edit product source.
 ```
 
 Reconstructed Increment 4I was committed as `99f9279` with message `Remove generic audit scaffold`, pushed on `codex/phase4-increment-4i`, fast-forward merged into `main`, and pushed. The corrected `04i` completion marker remains valid after the deletion commit. The original pre-fingerprint implementation commit remains preserved exactly at `cf9d701` on local `codex/phase4-increment-4i-pre-fingerprint-fix`; no remote ref contains it.
@@ -189,8 +235,9 @@ executive-document request has no gate, edit, or completion evidence. D-049
 assigns Meta Increment 6 to the Product Readiness Audit, D-050 records the Meta
 7 queue number, and D-051 records the verified icon-generation boundary plus
 the approved raw-development exception. Increment 4V terminal approval audit is
-the owner-requested follow-on but remains outside this workspace; no `04v` gate
-or source edit exists.
+the first Ready product follow-on but remains outside this documentation
+workspace pending separate implementation approval; no `04v` gate or source
+edit exists.
 
 ## Increment 4U completion state
 
@@ -260,7 +307,7 @@ typecheck, frontend builds, and the Tauri release no-bundle build. The required
 network-enabled npm audit reports zero vulnerabilities. D-042 records the
 durable boundary; no `04v` gate state exists.
 
-## Increment 4V proposed follow-on
+## Increment 4V Ready follow-on
 
 ### Goal
 
@@ -279,8 +326,9 @@ src-tauri/tests/gateway_request_contract.rs
 The turn would own one private `InMemoryApprovalAuditAdapter` and return only a
 closed non-cloneable value containing the exact `ApprovalResolution` and its
 non-authorizing sequence receipt. Both successful terminal paths would share
-one private manager-then-audit helper. 4V cannot become Ready until verified 4U
-is merged and this plan is reconciled and separately approved.
+one private manager-then-audit helper. Verified 4U is merged, the exact plan is
+reconciled, and Meta 7 publication is complete. Increment 4V is Ready;
+implementation remains separately approval-gated.
 
 ### Risks and non-goals
 

@@ -4,6 +4,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added the evidence-based advisory remediation backlog covering 64 source
+  findings, 25 normalized active remediations, historical dispositions, and the
+  ordered recommendation to close project-memory drift before Increment 4V.
+- Reconciled Meta Increment 7 as squash-merged through PR #19 at `96ba6ae` with
+  successful hosted CI, documentation, and security checks. Increment 4V is now
+  the first Ready product increment, still unstarted and separately controlled.
 - Reconstructed Meta Increment 7 on the repaired dependency baseline at
   `b298999`, reran the complete repository, artifact, bundle, audit, and
   target-Mac verification matrix, and preserved remote PR #19 untouched pending

@@ -1,8 +1,8 @@
 # Increment 4V - bind initial terminal approval audit
 
-Status: Blocked; merged 4U prerequisite satisfied, separate approval required
+Status: Ready; separate implementation approval required
 Owner: Project maintainer
-Last updated: 2026-07-15
+Last updated: 2026-07-16
 
 ## Goal
 
@@ -94,7 +94,7 @@ PROJECT_STATUS.md
 docs/increments/04v-bind-initial-terminal-approval-audit.md
 docs/plans/04v-bind-initial-terminal-approval-audit.md
 docs/plans/README.md
-docs/reviews/2026-07-15-04v-post-increment-review.md
+docs/reviews/2026-07-16-04v-post-increment-review.md
 ```
 
 `DECISIONS.md` is limited to the durable turn-owned audit ordering,
@@ -223,10 +223,11 @@ user-visible/manual gate.
 
 ## Actual results
 
-Planning only. The merged 4U prerequisite is satisfied and this plan is
-reconciled against commit `61525bf`. Increment 4V remains blocked on explicit
-queue selection and separate project-owner approval; it has no gate or source
-evidence.
+Planning only. The merged 4U prerequisite is satisfied, the exact source/test
+scope has not changed since `61525bf`, and the plan is selected as the first
+Ready product increment after Meta Increment 7 publication. Separate
+project-owner implementation approval is still required; no `04v` gate or
+source evidence exists.
 
 ## Documentation updates
 

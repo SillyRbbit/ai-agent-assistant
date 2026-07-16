@@ -26,7 +26,7 @@ verification record; this roadmap does not create new completion evidence.
 | Phase 2 - local application foundation                                | Completed            | Rust interfaces, SQLite bootstrap, macOS lifecycle, React shell, deterministic mock loop, integration hardening                                                  | None                                                                                         |
 | Phase 3 - bounded mock product loop                                   | Completed            | Conversations, context provenance, simulated results, bounded final answer                                                                                       | None                                                                                         |
 | Phase 4 - trusted proposal and approval boundaries                    | Completed through 4U | Closed gateway protocol and request, strict schemas, deterministic policy, exact approvals, native source boundary, cancellation, typed in-memory approval audit | Live transport, execution, and durable audit intentionally absent                            |
-| Increment 4V - terminal approval-audit binding                        | Proposed             | Exact two-file plan exists; 4U prerequisite is merged                                                                                                            | Queue selection and separate owner approval                                                  |
+| Increment 4V - terminal approval-audit binding                        | Ready                | Exact two-file plan exists; 4U prerequisite is merged and source scope is unchanged                                                                              | Clean documentation baseline and separate owner implementation approval                      |
 | Phase 5 - end-to-end policy, approval, audit, and restricted dispatch | Future               | Some transport-free primitives were completed in Phase 4                                                                                                         | Approve coordinator, durable audit, dispatch, execution, and failure semantics incrementally |
 | Phase 6 - basic macOS tools                                           | Future               | Two strict schemas exist without implementations                                                                                                                 | Approve narrow adapters, permissions, tests, and rollback per tool                           |
 | Phase 7 - permissions and onboarding                                  | Future               | Status-only Permission Center exists                                                                                                                             | Approve request flows, disclosure, revocation, and onboarding                                |
@@ -41,8 +41,8 @@ boundaries through Increment 4U are verified. It does not mean a live provider,
 gateway, coordinator, tool implementation, dispatch, execution, product audit,
 or user-facing native approval flow exists.
 
-O-006 and O-007 remain blockers for live gateway traffic. Increment 4V remains
-separately controlled and cannot be inferred from the completion of 4U.
+O-006 and O-007 remain blockers for live gateway traffic. Increment 4V is Ready
+but separately controlled and cannot be inferred from the completion of 4U.
 
 ## Meta and repository milestones
 
@@ -54,7 +54,7 @@ separately controlled and cannot be inferred from the completion of 4U.
 | Meta Increment 4 - executive documentation request      | Stopped                           | No gate, plan, or repository edit exists                                                                            | Requires a newly selected and separately approved future increment                                                |
 | Meta Increment 5 - repository health and GitHub hygiene | Completed and merged at `6b149fa` | Honest repository entry points, review-only automation, GitHub intake, health checks, and licensing status          | Local and hosted verification plus `meta-05` gate evidence passed                                                 |
 | Meta Increment 6 - product readiness audit              | Completed and merged at `5281fac` | Evidence-based readiness assessment and ordered remediation backlog                                                 | Documentation audit and valid `meta-06` gate evidence passed; result `NOT READY (57/100)`                         |
-| Meta Increment 7 - verified application icon rollout    | Verified; publication pending     | Exactly 16 existing Tauri icon files generated from the approved source; debug/release bundles verified             | Repaired-baseline checks and `meta-07` gate pass; raw dev icon and default DMG remain documented advisories       |
+| Meta Increment 7 - verified application icon rollout    | Completed and merged at `96ba6ae` | Exactly 16 existing Tauri icon files generated from the approved source; debug/release bundles verified             | Raw dev icon and default DMG remain documented advisories; no product capability gate is satisfied                |
 
 Meta Increments 2, 3, 5, and 6 change documentation and repository governance
 only. They do not satisfy any product capability or release gate. Meta Increment
@@ -79,13 +79,13 @@ Release milestones additionally require `RELEASE_CHECKLIST.md` and
 
 ## Current queue
 
-1. Publish verified Meta Increment 7 and confirm clean synchronized `main` plus
-   its valid marker.
-2. Reconcile the owner's deferred Increment 4V implementation request against
-   that clean baseline.
-3. Begin `04v` before source edits; do not mix it into Meta 7 publication.
+1. Review and publish the advisory backlog plus this post-publication memory
+   reconciliation from a clean synchronized documentation baseline.
+2. Obtain separate project-owner approval for the exact Ready Increment 4V
+   plan.
+3. Begin `04v` before either approved source/test file changes.
 
-No later product increment is Ready in this roadmap.
+Increment 4V is the only Ready product increment in this roadmap.
 
 ## Rollback and reprioritization
 

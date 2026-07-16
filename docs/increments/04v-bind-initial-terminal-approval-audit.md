@@ -1,7 +1,7 @@
 # Increment 4V - bind initial terminal approval audit
 
-Status: Proposed; merged 4U prerequisite satisfied, separate approval required
-Last updated: 2026-07-15
+Status: Ready; separate implementation approval required
+Last updated: 2026-07-16
 
 ## Goal
 
@@ -82,9 +82,15 @@ credential, compatibility identifier, or remote resource requires rollback.
   run termination, and expiry while rejecting inconsistent evidence.
 - Increment 4U is published and merged at `61525bf`; its technical prerequisite
   is satisfied and this plan is reconciled against that exact API.
+- Meta Increment 7 is squash-merged through PR #19 at `96ba6ae`, so its former
+  publication prerequisite no longer blocks this product increment.
+- The two exact source/test paths have no commit after `61525bf`; focused
+  request, audit, approval-binding, and approval-audit contracts pass on current
+  `main`.
 - No `04v` gate state or implementation change exists.
 
 ## Exact next task
 
-Do not start 4V. It remains outside the Ready queue until the project owner
-explicitly selects this exact scope and grants separate implementation approval.
+Wait for separate project-owner approval to implement this exact Ready scope.
+Begin the mandatory `04v` gate only from a clean synchronized documentation
+baseline and before either approved source/test file changes.

@@ -44,16 +44,16 @@ Meta Increment 6 is the documentation-only Product Readiness Audit, merged at
 `5281fac` with result `NOT READY (57/100)`. The dependency compatibility repair
 is verified, published, and squash-merged through PR #20 at `b298999`. Meta
 Increment 7 verified application icon rollout is verified complete with
-advisories on the repaired baseline under
-`docs/plans/meta-07-verified-application-icon-rollout.md`: exactly the existing
+advisories and squash-merged through PR #19 at `96ba6ae`: exactly the existing
 16 Tauri icon files derive from the canonical Cortexa source, debug and release
 app bundles use the official macOS icon, and the raw unbundled `tauri dev`
 executable retains the project-owner-approved generic `exec` baseline advisory.
-The reconstructed changes remain uncommitted and unpublished, remote PR #19 is
-untouched, and publication is the only next action. Increment 4V terminal
-approval audit remains unstarted with no `04v` gate or source edit. Current
-implementation facts and future boundaries are authoritative in
-`ARCHITECTURE.md`.
+Its `meta-07` marker was complete and valid on clean `96ba6ae` before the later
+advisory-remediation report changed the workspace fingerprint. Increment 4V
+terminal approval audit is the first Ready product increment, remains unstarted,
+and still requires separate project-owner implementation approval and a clean
+documentation baseline before its `04v` gate begins. Current implementation
+facts and future boundaries are authoritative in `ARCHITECTURE.md`.
 
 ## Non-negotiable product boundaries
 

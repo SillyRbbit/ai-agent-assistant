@@ -9,10 +9,10 @@ and squash-merged through PR #20 at `b298999` under
 `docs/plans/repository-dependency-baseline-compatibility.md`.
 
 Meta Increment 7 is verified complete with advisories on repaired `b298999`.
-Its reconstructed changes remain uncommitted and unpublished on
-`codex/meta-verified-application-icon-rollout`; remote PR #19 is untouched.
-Publication is the only next action, and no later implementation plan may begin
-during that publication.
+Its reconstructed scope was squash-merged through PR #19 at `96ba6ae` after
+hosted CI, documentation, and security checks passed. The `meta-07` marker was
+complete and valid on clean `96ba6ae` before the later advisory report changed
+the live workspace fingerprint.
 
 Meta Increment 5 repository health and GitHub hygiene is verified complete,
 published, and squash-merged at `6b149fa` under
@@ -45,10 +45,12 @@ The stopped Meta Increment 4 executive-document request created no gate state,
 plan, repository edit, or completion evidence. D-048 and D-049 record the queue
 history.
 
-Increment 4V terminal approval audit remains Proposed under
+Increment 4V terminal approval audit is Ready under
 `docs/plans/04v-bind-initial-terminal-approval-audit.md`. Its merged 4U
-prerequisite is satisfied, but it still requires explicit queue selection and
-separate project-owner approval; no `04v` gate or source edit exists.
+prerequisite is satisfied, Meta 7 publication is complete, and its exact
+source/test scope remains unchanged since `61525bf`. It still requires a clean
+documentation baseline and separate project-owner implementation approval; no
+`04v` gate or source edit exists.
 
 ## Completed plans
 
@@ -151,7 +153,7 @@ A plan must contain:
 | Increment 4S terminal approval presentation    | Complete | Project maintainer | 2026-07-15   |
 | Increment 4T terminal approval resolution      | Complete | Project maintainer | 2026-07-15   |
 | Increment 4U approval run termination          | Complete | Project maintainer | 2026-07-15   |
-| Increment 4V terminal approval audit binding   | Blocked  | Project maintainer | 2026-07-15   |
+| Increment 4V terminal approval audit binding   | Ready    | Project maintainer | 2026-07-16   |
 | Meta Increment 1 branding foundation           | Complete | Project maintainer | 2026-07-15   |
 | Meta Increment 2 engineering operating system  | Complete | Project maintainer | 2026-07-15   |
 | Meta Increment 3 Codex automation              | Complete | Project maintainer | 2026-07-15   |
@@ -249,6 +251,10 @@ decoded-pixel validation for byte-variable ICNS regeneration while retaining
 exact embedded-resource equality. Default DMG automation remains a release
 advisory; debug and release `.app` bundles pass.
 
+The verified scope was squash-merged through PR #19 at `96ba6ae` after all
+hosted checks passed. Its dated plan, increment record, and post-increment report
+remain unchanged as evidence of the verified pre-publication workspace.
+
 ## Phase 4 Increment 4U bind initial approval run-termination - complete
 
 Goal: let the bound initial turn terminally deny and consume the exact pending
@@ -274,7 +280,7 @@ npm audit, scope and security review, documentation sync, and the mandatory
 synchronized `main`, and retains a valid marker. Rollback after publication
 reverts the bounded 4U commit.
 
-## Phase 4 Increment 4V bind initial terminal approval audit - Proposed
+## Phase 4 Increment 4V bind initial terminal approval audit - Ready
 
 Goal: prevent a future initial-turn caller from receiving a successful native
 or run-termination approval resolution unless the turn's private typed
@@ -294,8 +300,9 @@ transport, credential, Tauri, frontend, dependency, capability, entitlement,
 or permission path is included. Focused and complete verification, npm audit,
 scope and security review, documentation sync, and the mandatory `04v` gate are
 required. No manual check is planned. The 4U prerequisite is satisfied and the
-plan is reconciled to `61525bf`; 4V remains Blocked until the project owner
-explicitly selects and separately approves it.
+plan is reconciled to `61525bf`; Meta 7 publication is complete and 4V is the
+first Ready product increment. Separate project-owner implementation approval
+and a clean documentation baseline remain required before its gate begins.
 
 ## Phase 4 Increment 4T bind terminal initial approval resolution - complete
 

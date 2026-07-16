@@ -184,8 +184,8 @@ yet bound to the initial turn, durable storage, IPC, or UI.
 
 **Current absence**: the generic audit scaffold was deleted in Increment 4I.
 There is no run, execution, durable, or product audit logger. Increment 4V is
-proposed, not Ready, and would only bind the existing in-memory approval audit
-to terminal resolution.
+Ready but unstarted and would only bind the existing in-memory approval audit to
+terminal resolution.
 
 ### Memory store
 
@@ -255,7 +255,7 @@ reviewed repository ICNS byte-for-byte.
 | Gateway request/protocol validation           | Current, transport-free       | Phase 4A and 4N-4P                          |
 | Function schema and policy binding            | Current, non-authorizing      | Phase 4B-4C and 4Q-4R                       |
 | Approval presentation/resolution/cancellation | Current, disconnected         | Phase 4D-4E and 4S-4U                       |
-| Approval audit adapter                        | Current, unbound              | Phase 4H; 4V proposed                       |
+| Approval audit adapter                        | Current, unbound              | Phase 4H; 4V Ready                          |
 | Live gateway and Responses transport          | Planned                       | Blocked by O-006 and O-007 plus future plan |
 | Restricted tool execution                     | Planned                       | No dispatcher or executor exists            |
 | Product memory and task persistence           | Planned                       | Phase 8 direction only                      |
