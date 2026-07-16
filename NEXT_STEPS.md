@@ -38,6 +38,10 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 4O - bound initial gateway turn: **Verified complete**.
 - Increment 4P - schema-bound initial gateway events: **Verified complete**.
 - Increment 4Q - terminally release initial function call: **Verified complete**.
+- Increment 4R - bind terminal initial function call to policy: **Verified complete**.
+- Increment 4S - bind terminal initial approval presentation: **Verified complete**.
+- Increment 4T - bind terminal initial approval resolution: **Verified complete**.
+- Increment 4U - bind initial approval run-termination: **Verified complete; publication pending**.
 
 ## Queue status
 
@@ -126,9 +130,90 @@ review, code/security review, documentation sync, and the mandatory gate. No
 transport, credential, continuation, policy, approval, audit persistence,
 runtime, IPC, execution, dependency, capability, or permission path was added.
 
-## Ready
+## Publication pending
 
-No later implementation increment is Ready.
+### Increment 4U - bind initial approval run-termination
+
+**Status:** Verified complete with uncommitted changes and a valid `04u`
+completion marker; awaiting project-owner publication direction.
+
+**Goal:** Let the bound turn terminally deny and consume its exact pending
+approval when a trusted future orchestrator reports run termination, without
+accepting a caller-selected approval ID, choice, native result, or evidence.
+
+**Exact source/test scope:**
+
+```text
+src-tauri/src/agent/gateway_request.rs
+src-tauri/tests/gateway_request_contract.rs
+```
+
+The turn now retains its exact private manager-assigned pending approval ID and
+exposes one narrow idempotent cancellation operation that delegates to the
+existing manager's `cancel_for_run_termination`. Successful resolution clears
+turn ownership and returns the existing non-authorizing `ApprovalResolution`.
+Successful native resolution also clears ownership; typed errors retain it.
+Expiry keeps precedence at or after the deadline, and every late native outcome
+remains rejected after cancellation.
+
+Native dialog invocation or closure, proactive expiry or timers, source traits,
+runtime coordination, active-run validation beyond the trusted cancellation
+call, audit, persistence, dispatch, execution, continuation, transport,
+authentication, credentials, Tauri, frontend, SQLite, dependencies,
+capabilities, entitlements, and permissions are non-goals.
+
+Focused request, approval, public contract, approval-binding, and approval-audit
+tests, strict Clippy, complete `npm run verify`, npm audit, diff review, and the
+mandatory `04u` gate pass. No manual gate applies because no native UI or
+production caller is introduced. D-042 records the durable boundary. Roll back
+the two source/test files and only the declared closeout documentation before
+commit, or revert one bounded 4U commit afterward.
+
+Exact next task: wait for project-owner direction to commit, push, and merge
+Increment 4U. Do not start Increment 4V.
+
+## Proposed after published 4U
+
+### Increment 4V - bind initial terminal approval audit
+
+**Status:** Proposed; blocked on 4U commit/push/merge, reconciliation against the
+published 4U API, and separate project-owner approval. No `04v` gate state or
+source edit exists.
+
+**Goal:** Prevent a future initial-turn caller from receiving a successful
+native or run-termination approval resolution unless the turn's private typed
+in-memory audit adapter has validated and recorded that exact manager-owned
+resolution first.
+
+**Exact future source/test scope:**
+
+```text
+src-tauri/src/agent/gateway_request.rs
+src-tauri/tests/gateway_request_contract.rs
+```
+
+The turn would own one private `InMemoryApprovalAuditAdapter` and return only a
+closed non-cloneable value containing the exact `ApprovalResolution` and its
+non-authorizing `ApprovalAuditReceipt`. Both successful terminal paths would use
+one private manager-then-audit helper. A typed audit failure would return no
+resolution and could not restore already-consumed manager state.
+
+Durable audit persistence, SQLite, native invocation or closure, proactive
+expiry, timers, source traits, runtime coordination, active-run validation,
+dispatch, execution, continuation, transport, authentication, credentials,
+Tauri, frontend, dependencies, capabilities, entitlements, and permissions are
+non-goals.
+
+Focused request, audit, approval, public-contract, approval-binding, and
+approval-audit tests, strict Clippy, complete `npm run verify`, npm audit, diff
+review, and the mandatory `04v` gate must pass. No manual gate is planned.
+Before commit, restore the two source/test files to the verified merged 4U
+commit and revert only declared 4V closeout documentation; after commit, revert
+one bounded 4V commit.
+
+Do not start 4V automatically. After verified merged 4U, reconcile the exact 4U
+API and obtain separate project-owner approval for
+`docs/plans/04v-bind-initial-terminal-approval-audit.md`.
 
 Increment 4R bind terminal initial function call to policy is **Verified
 complete, published, and merged at `5e58edb`**. Accepted terminal completion
@@ -172,7 +257,7 @@ durable boundary. No manual check is required.
 
 ### Increment 4T - bind terminal initial approval resolution
 
-**Status:** Verified complete with uncommitted changes.
+**Status:** Verified complete, published, and merged at `244a1d8`.
 
 The bound turn now returns one sealed trusted approval source outcome to the
 exact private manager that issued its presentation and exposes only the exact
@@ -203,5 +288,6 @@ audit, exact-scope, code, security, documentation, and mandatory gate reviews
 pass with no manual gate. D-041 records same-manager ownership and the
 non-authorizing resolution boundary.
 
-Exact next task: wait for explicit project-owner direction to commit, push, and
-merge Increment 4T. Do not start later planning or implementation automatically.
+Commit `244a1d8` is pushed on `codex/phase4-increment-4t`, fast-forward merged
+into synchronized `main`, and retained a valid `04t` marker immediately before
+4U planning edits.

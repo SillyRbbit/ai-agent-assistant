@@ -4,7 +4,7 @@ Last updated: 2026-07-15
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4S are **verified complete, published, and merged into `main`**. Increment 4S is merged at `6d0bed4`. Increment 4T bind terminal initial approval resolution is **verified complete with uncommitted changes** and a valid `04t` completion marker. No later implementation increment is Ready, and no user-visible behavior, native invocation, cancellation/expiry orchestration, audit write, transport, runtime, IPC, persistence, dispatch, or execution path was added.
+Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the target Mac**. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4T are **verified complete, published, and merged into `main`**. Increment 4U bind initial approval run-termination is **verified complete with uncommitted changes and a valid `04u` completion marker**; it awaits project-owner publication direction. Increment 4V bind initial terminal approval audit is **Proposed**, blocked on 4U publication/merge, plan reconciliation, and separate approval. No user-visible behavior, native invocation, cancellation timer, audit write, transport, runtime coordinator, IPC, persistence, dispatch, or execution path was added by 4U.
 
 ## Increment status
 
@@ -43,7 +43,63 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
 - Increment 4Q: terminally release initial function call - **verified complete; published and merged**.
 - Increment 4R: bind terminal initial function call to policy - **verified complete; published and merged**.
 - Increment 4S: bind terminal initial approval presentation - **verified complete; published and merged**.
-- Increment 4T: bind terminal initial approval resolution - **verified complete with uncommitted changes**.
+- Increment 4T: bind terminal initial approval resolution - **verified complete; published and merged**.
+- Increment 4U: bind initial approval run-termination - **verified complete; uncommitted and awaiting publication direction**.
+- Increment 4V: bind initial terminal approval audit - **Proposed; blocked on published 4U, reconciliation, and separate approval**.
+
+## Increment 4U capability and evidence
+
+- The bound turn retains only the exact private manager-assigned approval ID
+  after it issues a terminal presentation.
+- One narrow idempotent method resolves that retained subject through the
+  existing manager's `cancel_for_run_termination` operation; it accepts no
+  caller-selected ID, choice, native result, or interaction evidence.
+- Successful cancellation returns the existing exact non-authorizing
+  `ApprovalResolution` and clears turn ownership. A repeated call or a call
+  with no pending subject returns no resolution.
+- Manager expiry precedence, exact identity, replay prevention, tombstones, and
+  rejection of late native outcomes remain unchanged and authoritative.
+- The exact source/test scope is
+  `src-tauri/src/agent/gateway_request.rs` and
+  `src-tauri/tests/gateway_request_contract.rs`.
+- Focused request (9), approval (17), public contract (10), approval-binding
+  (2), and approval-audit-binding (1) tests pass. Strict Clippy, complete
+  `npm run verify`, npm audit, diff review, and the mandatory `04u` gate pass.
+- D-042 records private ID ownership, run-termination non-authority,
+  idempotence, expiry precedence, typed-error retention, and late-outcome
+  rejection. No manual gate applies.
+- Native dialog invocation or closure, proactive expiry, timers, source traits,
+  runtime coordination, active-run validation beyond a trusted cancellation
+  call, audit, persistence, dispatch, execution, continuation, transport,
+  authentication, credentials, Tauri, frontend, SQLite, dependency, capability,
+  entitlement, and permission work are excluded.
+- Exact risks, verification, rollback, and acceptance criteria are documented in
+  `docs/plans/04u-bind-initial-approval-run-termination.md`.
+
+## Increment 4V proposed capability and evidence
+
+- The turn would own one private `InMemoryApprovalAuditAdapter` after verified
+  4U establishes both native and run-termination resolution paths.
+- Both successful paths would route the exact manager-owned resolution through
+  one private audit helper before returning a closed resolution-plus-receipt
+  value.
+- The receipt would remain volatile, sequence-only, and non-authorizing. It
+  would provide no durable audit, run-liveness, dispatch, or execution authority.
+- The exact future source/test scope is
+  `src-tauri/src/agent/gateway_request.rs` and
+  `src-tauri/tests/gateway_request_contract.rs`.
+- Manager terminalization precedes audit recording. A typed audit failure must
+  return no resolution and must not leave stale pending turn ownership, but it
+  cannot roll manager state back.
+- No gate state or implementation change exists. 4V cannot become Ready until
+  4U is committed, pushed, and merged, the plan is reconciled to the published
+  4U API, and the project owner separately approves it.
+- Durable persistence, SQLite, native invocation or closure, proactive expiry,
+  timers, runtime coordination, transport, credentials, dispatch, execution,
+  Tauri, frontend, dependencies, capabilities, entitlements, and permissions
+  are excluded.
+- Exact risks, verification, rollback, and acceptance criteria are documented
+  in `docs/plans/04v-bind-initial-terminal-approval-audit.md`.
 
 ## Increment 4T capability and evidence
 
@@ -73,15 +129,16 @@ Phase 3 and Phase 4 Increments 4A through 4F are **verified complete on the targ
   manual verification is required.
 - D-041 records same-manager sealed-outcome ownership, macOS gating, test-only
   helper visibility, and the resolution's non-authorizing meaning.
-- The consolidated result is `PASS WITH ADVISORIES`; the `04t` completion
-  marker is complete and valid for the current uncommitted workspace.
+- The consolidated result is `PASS WITH ADVISORIES`; commit `244a1d8` is pushed
+  on `codex/phase4-increment-4t`, fast-forward merged into synchronized `main`,
+  and retained a valid `04t` marker immediately before 4U planning edits.
 - No native invocation, approval-manager/type change, run cancellation,
   proactive expiry, audit, transport, gateway, authentication, credential,
   runtime, Tauri, frontend, SQLite, dependency, capability, entitlement, or
   permission work is included.
 - Exact risks, rollback, verification, and closeout evidence are documented in
-  `docs/plans/04t-bind-terminal-initial-approval-resolution.md`;
-  the exact next task is explicit project-owner direction to publish 4T.
+  `docs/plans/04t-bind-terminal-initial-approval-resolution.md` and
+  `docs/reviews/2026-07-15-04t-post-increment-review.md`.
 
 ## Increment 4S capability and evidence
 

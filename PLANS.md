@@ -4,8 +4,15 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-None. Increment 4T is verified complete with uncommitted changes, and no later
-implementation increment is Ready.
+No implementation plan is active. Increment 4U bind initial approval
+run-termination is verified complete with uncommitted changes and a valid `04u`
+marker; it awaits project-owner publication direction. Its completed plan is
+`docs/plans/04u-bind-initial-approval-run-termination.md`.
+
+Increment 4V bind initial terminal approval audit is Proposed under
+`docs/plans/04v-bind-initial-terminal-approval-audit.md`. It is blocked on
+verified merged 4U and separate project-owner approval; no `04v` gate state or
+source edit has started.
 
 ## Completed plans
 
@@ -37,6 +44,7 @@ docs/plans/04q-terminally-release-initial-function-call.md
 docs/plans/04r-bind-terminal-initial-policy.md
 docs/plans/04s-bind-terminal-initial-approval-presentation.md
 docs/plans/04t-bind-terminal-initial-approval-resolution.md
+docs/plans/04u-bind-initial-approval-run-termination.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -99,6 +107,56 @@ A plan must contain:
 | Increment 4R terminal initial policy binding   | Complete | Project maintainer | 2026-07-15   |
 | Increment 4S terminal approval presentation    | Complete | Project maintainer | 2026-07-15   |
 | Increment 4T terminal approval resolution      | Complete | Project maintainer | 2026-07-15   |
+| Increment 4U approval run termination          | Complete | Project maintainer | 2026-07-15   |
+| Increment 4V terminal approval audit binding   | Blocked  | Project maintainer | 2026-07-15   |
+
+## Phase 4 Increment 4U bind initial approval run-termination - complete
+
+Goal: let the bound initial turn terminally deny and consume the exact pending
+approval it owns when a trusted future orchestrator reports run termination,
+without accepting a caller-selected approval ID, choice, native result, or
+interaction evidence.
+
+The exact future source/test plan changes only `agent/gateway_request.rs` and the
+public `gateway_request_contract` integration test. The turn privately retains
+the manager-assigned ID after presentation and offers one idempotent operation
+that delegates to the existing manager's `cancel_for_run_termination`. The
+existing non-authorizing resolution, expiry precedence, replay prevention,
+exact identity, and rejection of late native outcomes remain authoritative.
+
+No native dialog invocation or closure, proactive expiry, timer, source trait,
+runtime coordinator, active-run validation beyond a trusted cancellation call,
+audit, persistence, dispatch, execution, continuation, transport,
+authentication, credential, Tauri, frontend, SQLite, dependency, capability,
+entitlement, or permission path is included. Focused and complete verification,
+npm audit, scope and security review, documentation sync, and the mandatory
+`04u` gate pass. No manual check applies. The implementation is verified with a
+valid marker and remains uncommitted pending project-owner publication
+direction. Rollback restores the exact two source/test files and declared
+closeout docs before commit, or reverts one 4U commit after commit.
+
+## Phase 4 Increment 4V bind initial terminal approval audit - Proposed
+
+Goal: prevent a future initial-turn caller from receiving a successful native
+or run-termination approval resolution unless the turn's private typed
+in-memory audit adapter has validated and recorded that exact manager-owned
+resolution first.
+
+The exact future source/test plan changes only `agent/gateway_request.rs` and
+the public `gateway_request_contract` integration test. It adds one private
+turn-owned `InMemoryApprovalAuditAdapter`, one closed non-cloneable
+resolution-plus-receipt value, and one manager-success-to-audit-success helper
+used by both terminal paths. The receipt remains volatile, sequence-only, and
+non-authorizing.
+
+No durable audit persistence, SQLite, native invocation or closure, proactive
+expiry, timer, runtime coordinator, active-run validation, dispatch, execution,
+transport, credential, Tauri, frontend, dependency, capability, entitlement,
+or permission path is included. Focused and complete verification, npm audit,
+scope and security review, documentation sync, and the mandatory `04v` gate are
+required. No manual check is planned. 4V cannot become Ready until 4U is
+verified and merged and the project owner separately approves the reconciled
+4V plan.
 
 ## Phase 4 Increment 4T bind terminal initial approval resolution - complete
 
@@ -122,7 +180,9 @@ Eight request, 17 approval, nine public-contract, two approval-binding, and one
 approval-audit tests pass, as do strict Clippy, complete repository verification,
 and npm audit. Exact-scope, code, security, documentation, and mandatory gate
 reviews pass with `PASS WITH ADVISORIES` and no manual gate. D-041 records the
-durable boundary. No later implementation increment is Ready.
+durable boundary. Commit `244a1d8` is pushed, fast-forward merged into
+synchronized `main`, and retained a valid `04t` marker immediately before 4U
+planning edits.
 
 ## Phase 4 Increment 4S bind terminal initial approval presentation - complete
 

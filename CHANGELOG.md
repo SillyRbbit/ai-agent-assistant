@@ -6,6 +6,16 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ### Added
 
+- Increment 4U private pending-approval ownership inside `InitialGatewayTurn` plus one no-argument idempotent run-termination cancellation operation that delegates only to the existing private approval manager.
+- Focused request and public-contract coverage for exact run-termination facts, no interaction evidence, no-pending and repeated-call idempotence, typed-error retention, expiry precedence, successful native cleanup, and late-native-outcome rejection.
+- D-042 documenting private manager-issued ID ownership, manager-authoritative expiry and terminalization, run-termination non-authority, and retained stale-dialog/audit boundaries.
+- Documentation-only Increment 4V proposal for recording exact native and run-termination approval resolutions in the turn's private typed in-memory audit adapter before returning a closed resolution-plus-receipt value.
+- Exact two-file future source/test scope, manager-then-audit ordering, typed failure boundary, volatility and non-authority constraints, risks, non-goals, verification, closeout scope, and rollback for terminal approval audit binding.
+- Independent clean-commit fingerprint reproduction confirming `244a1d8` still matches the stored valid `04t` completion marker while the live planning workspace correctly reports a stale fingerprint.
+- Documentation-only Increment 4U plan for resolving the bound turn's exact pending approval as run-terminated through its private approval manager.
+- Exact two-file future source/test scope, private pending-ID lifecycle, idempotent cancellation contract, expiry precedence, late-outcome rejection, risks, non-goals, verification, closeout scope, and rollback for initial approval run termination.
+- Post-publication project-memory reconciliation recording Increment 4T as committed, pushed, fast-forward merged, and synchronized at `244a1d8` with a valid marker before 4U planning edits.
+
 - Increment 4T macOS-gated same-manager resolution binding inside `InitialGatewayTurn`, consuming one sealed `TrustedApprovalSourceOutcome` and returning the existing exact non-authorizing `ApprovalResolution` or typed approval error.
 - Focused gateway-request unit coverage for every closed native-result mapping, exact retained identity and preview facts, interaction evidence, cross-manager rejection without recipient mutation, and outcome/resolution redaction.
 - Documentation-only Increment 4T plan for returning one sealed trusted approval source outcome to the exact private manager that issued its presentation.

@@ -10,8 +10,8 @@ use ai_agent_assistant_lib::agent::gateway_request::{
     INITIAL_GATEWAY_TOOL_SET_VERSION,
 };
 use ai_agent_assistant_lib::approvals::types::{
-    ApprovalAction, ApprovalRecipients, ApprovalReversibility, ApprovalRisk, ApprovalSchedule,
-    ApprovalTarget,
+    ApprovalAction, ApprovalCancellationReason, ApprovalDisposition, ApprovalRecipients,
+    ApprovalReversibility, ApprovalRisk, ApprovalSchedule, ApprovalTarget,
 };
 use ai_agent_assistant_lib::policy::types::{PolicyOutcome, PolicyReason};
 use ai_agent_assistant_lib::tools::schema::{ToolArgumentValidationError, ValidatedToolArguments};
@@ -76,6 +76,28 @@ fn started_turn() -> Result<InitialGatewayTurn, Box<dyn Error>> {
         Some(InitialGatewayEvent::ResponseStarted { .. })
     ) {
         return Err("expected response start".into());
+    }
+    Ok(turn)
+}
+
+fn turn_with_pending_approval() -> Result<InitialGatewayTurn, Box<dyn Error>> {
+    let mut turn = started_turn()?;
+    if turn
+        .accept_frame(&function_call_frame(
+            "create_local_task",
+            INITIAL_GATEWAY_TOOL_SET_VERSION,
+            r#"{"title":"Plan tomorrow"}"#,
+        ))?
+        .is_some()
+    {
+        return Err("validated function call should remain pending".into());
+    }
+
+    if !matches!(
+        turn.accept_frame(&completion_frame(2))?,
+        Some(InitialGatewayEvent::ApprovalPresentationReady { .. })
+    ) {
+        return Err("expected terminal approval presentation".into());
     }
     Ok(turn)
 }
@@ -478,6 +500,59 @@ fn cancellation_is_local_idempotent_and_terminal() -> Result<(), Box<dyn Error>>
             }
         ))
     ));
+    Ok(())
+}
+
+#[test]
+fn run_termination_cancels_only_the_turn_owned_pending_approval() -> Result<(), Box<dyn Error>> {
+    let mut no_pending_turn = started_turn()?;
+    assert!(no_pending_turn
+        .cancel_pending_approval_for_run_termination()?
+        .is_none());
+
+    let mut turn = turn_with_pending_approval()?;
+    let resolution = turn
+        .cancel_pending_approval_for_run_termination()?
+        .ok_or("run termination must consume the pending approval")?;
+
+    assert_eq!(resolution.id().value(), 1);
+    assert_eq!(
+        resolution.disposition(),
+        ApprovalDisposition::Cancelled(ApprovalCancellationReason::RunTerminated)
+    );
+    assert!(resolution.interaction_evidence().is_none());
+    assert_eq!(resolution.run_id(), RUN_ID);
+    assert_eq!(resolution.gateway_request_id(), GATEWAY_REQUEST_ID);
+    assert_eq!(resolution.call_id(), "call-public-1");
+    assert_eq!(resolution.tool_name(), "create_local_task");
+    assert_eq!(
+        resolution.tool_contract_version(),
+        INITIAL_GATEWAY_TOOL_SET_VERSION
+    );
+    assert_eq!(resolution.risk_class(), RiskClass::ReversibleLocalAction);
+    assert_eq!(resolution.required_permission(), PermissionKind::None);
+    assert_eq!(resolution.policy_outcome(), PolicyOutcome::RequireApproval);
+    assert_eq!(
+        resolution.policy_reason(),
+        PolicyReason::ReversibleRequiresApproval
+    );
+
+    let preview = resolution
+        .preview()
+        .ok_or("run termination must retain the registered preview")?;
+    assert_eq!(preview.action(), ApprovalAction::CreateLocalTask);
+    assert_eq!(preview.target(), ApprovalTarget::LocalTaskList);
+    assert_eq!(preview.affected_data().value(), "Plan tomorrow");
+    assert_eq!(preview.schedule(), ApprovalSchedule::NotScheduled);
+    assert_eq!(preview.recipients(), ApprovalRecipients::None);
+    assert_eq!(preview.reversibility(), ApprovalReversibility::Reversible);
+    assert_eq!(preview.required_permission(), PermissionKind::None);
+    assert_eq!(preview.risk_class(), RiskClass::ReversibleLocalAction);
+    assert_eq!(preview.risk(), ApprovalRisk::CreatesLocalTask);
+
+    assert!(turn
+        .cancel_pending_approval_for_run_termination()?
+        .is_none());
     Ok(())
 }
 

@@ -1080,6 +1080,49 @@ Consequences:
   SQLite path, credential, Keychain, provider SDK, network client, native UI
   invocation, capability, entitlement, or operating-system permission is added.
 
+## D-042 - Retain and terminally cancel only the turn-owned approval subject
+
+Date: 2026-07-15
+Status: Accepted; Increment 4U implemented and verified
+
+Decision: after `InitialGatewayTurn` successfully issues one manager-owned
+`ApprovalPresentation`, it retains only that manager-assigned `ApprovalId` in a
+private optional field. The public
+`cancel_pending_approval_for_run_termination` operation accepts no approval ID,
+choice, native result, interaction evidence, or run-liveness claim. With no
+owned pending subject it returns `Ok(None)`; otherwise it delegates the exact
+private ID to the existing manager's `cancel_for_run_termination` operation and
+returns only the existing non-authorizing `ApprovalResolution`.
+
+The turn clears its retained ID only after the manager successfully terminalizes
+the subject. Manager expiry remains authoritative, so a call at or after the
+deadline returns `Expired` rather than rewriting the result as run-terminated.
+A successful sealed native resolution also clears the retained ID, while a
+typed native-resolution error leaves it intact so the same manager can still
+resolve or cancel the subject. Every late native outcome remains rejected after
+run termination.
+
+Rationale: Increment 4T bound native outcomes to the issuing private manager but
+left no turn-owned handle for a trusted future orchestrator to close a pending
+approval when its run terminates. Retaining only the manager-generated ID and
+exposing a no-argument deny/close transition adds that lifecycle boundary
+without allowing a caller to select a subject or fabricate approval evidence.
+
+Consequences:
+
+- Run termination can only deny or close the turn's exact pending subject; it
+  cannot approve, authenticate, grant permission, dispatch, execute, or continue
+  a provider response.
+- No-pending and repeated calls are idempotent and return no resolution.
+- The manager remains the source of truth for exact identity, deadline,
+  disposition, one-time consumption, tombstones, and replay rejection.
+- The run-termination resolution remains unaudited and non-authorizing.
+- A native dialog may remain visibly stale after manager cancellation; 4U adds
+  no native invocation, dismissal, timer, coordinator, or active-run registry.
+- No dependency, manifest, lockfile, Tauri command/event/plugin, WebView path,
+  SQLite path, credential, Keychain, provider SDK, network client, persistence,
+  capability, entitlement, or operating-system permission is added.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

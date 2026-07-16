@@ -15,11 +15,12 @@ use super::gateway_protocol::{
     MAX_GATEWAY_REQUESTS_PER_RUN, MAX_GATEWAY_REQUEST_BYTES, MAX_MODEL_TURNS_PER_RUN,
     MAX_RETRY_AFTER_MS, MAX_RETRY_ATTEMPTS_PER_RUN, PROVIDER_TURN_DEADLINE,
 };
+#[cfg(target_os = "macos")]
+use crate::approvals::decision_source::TrustedApprovalSourceOutcome;
 use crate::approvals::manager::{
     ApprovalError, ApprovalManager, ApprovalPresentation, InMemoryApprovalManager,
 };
-#[cfg(target_os = "macos")]
-use crate::approvals::{decision_source::TrustedApprovalSourceOutcome, types::ApprovalResolution};
+use crate::approvals::types::{ApprovalId, ApprovalResolution};
 use crate::policy::engine::{DeterministicPolicyEngine, PolicyEngine};
 use crate::policy::types::{PolicyDecision, PolicyInput, PolicyOutcome};
 use crate::tools::registry::{InMemoryToolRegistry, ToolRegistry};
@@ -36,6 +37,7 @@ pub struct InitialGatewayTurn {
     validator: GatewayStreamValidator,
     registry: InMemoryToolRegistry,
     approval_manager: InMemoryApprovalManager,
+    pending_approval_id: Option<ApprovalId>,
     pending_function_call: Option<SchemaValidatedFunctionCall>,
     local_schema_failed: bool,
 }
@@ -87,6 +89,7 @@ impl InitialGatewayTurn {
             validator,
             registry,
             approval_manager: InMemoryApprovalManager::new(),
+            pending_approval_id: None,
             pending_function_call: None,
             local_schema_failed: false,
         })
@@ -159,6 +162,7 @@ impl InitialGatewayTurn {
                                     .approval_manager
                                     .issue_presentation(id)
                                     .map_err(InitialGatewayTurnError::Approval)?;
+                                self.pending_approval_id = Some(id);
                                 InitialGatewayEvent::ApprovalPresentationReady { presentation }
                             }
                             PolicyOutcome::Allow | PolicyOutcome::Deny => {
@@ -181,9 +185,27 @@ impl InitialGatewayTurn {
         &mut self,
         outcome: TrustedApprovalSourceOutcome,
     ) -> InitialGatewayTurnResult<ApprovalResolution> {
-        self.approval_manager
+        let resolution = self
+            .approval_manager
             .resolve_source_outcome(outcome)
-            .map_err(InitialGatewayTurnError::Approval)
+            .map_err(InitialGatewayTurnError::Approval)?;
+        self.pending_approval_id.take();
+        Ok(resolution)
+    }
+
+    pub fn cancel_pending_approval_for_run_termination(
+        &mut self,
+    ) -> InitialGatewayTurnResult<Option<ApprovalResolution>> {
+        let Some(id) = self.pending_approval_id else {
+            return Ok(None);
+        };
+
+        let resolution = self
+            .approval_manager
+            .cancel_for_run_termination(id)
+            .map_err(InitialGatewayTurnError::Approval)?;
+        self.pending_approval_id.take();
+        Ok(Some(resolution))
     }
 
     #[must_use]
@@ -450,6 +472,8 @@ mod tests {
     };
     #[cfg(target_os = "macos")]
     use super::{InitialGatewayEvent, InitialGatewayTurn, InitialGatewayTurnError};
+    #[cfg(target_os = "macos")]
+    use crate::agent::gateway_protocol::GatewayStreamStatus;
     use crate::agent::gateway_protocol::{
         AGENT_RUN_DEADLINE, GATEWAY_CONNECT_TIMEOUT, GATEWAY_PROTOCOL_VERSION,
         GATEWAY_STREAM_IDLE_TIMEOUT, MAX_ASSISTANT_OUTPUT_CHARACTERS_PER_TURN,
@@ -677,6 +701,44 @@ mod tests {
             Some(ApprovalNativeButton::Reject),
             None,
         )?;
+        assert!(recipient_turn
+            .cancel_pending_approval_for_run_termination()?
+            .is_none());
+        Ok(())
+    }
+
+    #[cfg(target_os = "macos")]
+    #[test]
+    fn run_termination_consumes_the_subject_and_rejects_a_late_native_outcome(
+    ) -> Result<(), Box<dyn Error>> {
+        let (mut turn, presentation) = turn_with_approval_presentation()?;
+        let approval_id = presentation.id();
+        let late_outcome = test_outcome_from_dialog_result(
+            presentation,
+            MessageDialogResult::Custom("Approve".to_owned()),
+        );
+
+        let resolution = turn
+            .cancel_pending_approval_for_run_termination()?
+            .ok_or("run termination must consume the pending approval")?;
+        assert_eq!(resolution.id(), approval_id);
+        assert_eq!(
+            resolution.disposition(),
+            ApprovalDisposition::Cancelled(ApprovalCancellationReason::RunTerminated)
+        );
+        assert!(resolution.interaction_evidence().is_none());
+        assert_eq!(turn.status(), GatewayStreamStatus::Completed);
+
+        assert!(matches!(
+            turn.resolve_approval_source_outcome(late_outcome),
+            Err(InitialGatewayTurnError::Approval(
+                ApprovalError::AlreadyConsumed(actual)
+            )) if actual == approval_id.value()
+        ));
+        assert_eq!(turn.status(), GatewayStreamStatus::Completed);
+        assert!(turn
+            .cancel_pending_approval_for_run_termination()?
+            .is_none());
         Ok(())
     }
 

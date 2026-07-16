@@ -4,7 +4,7 @@ Last updated: 2026-07-15
 
 ## Current state
 
-Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4S are verified, published, and merged into clean synchronized `main` at `6d0bed4`.
+Phase 3 and Phase 4 Increments 4A through 4F are verified complete on the target Mac. Repository Workflow Increments 4G and 4J and Phase 4 Increments 4H through 4T are verified, published, and merged into clean synchronized `main` at `244a1d8`.
 
 Reconstructed Increment 4I was committed as `99f9279` with message `Remove generic audit scaffold`, pushed on `codex/phase4-increment-4i`, fast-forward merged into `main`, and pushed. The corrected `04i` completion marker remains valid after the deletion commit. The original pre-fingerprint implementation commit remains preserved exactly at `cf9d701` on local `codex/phase4-increment-4i-pre-fingerprint-fix`; no remote ref contains it.
 
@@ -55,11 +55,137 @@ Increment 4S bind terminal initial approval presentation was committed as
 `04s` marker was complete and valid after commit and merge and immediately
 before the current planning edits.
 
-Increment 4T bind terminal initial approval resolution is verified complete with
-uncommitted changes on `main`. Its exact two-file source/test implementation
-returns one sealed trusted source outcome to the same private manager that
-issued its presentation and exposes only the exact non-authorizing resolution.
-The mandatory `04t` gate is complete and valid with `PASS WITH ADVISORIES`.
+Increment 4T bind terminal initial approval resolution was committed as
+`244a1d8` with message `Bind terminal initial approval resolution`, pushed on
+`codex/phase4-increment-4t`, fast-forward merged into `main`, and pushed. Local
+`main`, `origin/main`, and the 4T branch all resolve to the same commit. The
+mandatory `04t` gate reported complete and valid with `PASS WITH ADVISORIES`.
+A clean archive of `244a1d8` independently reproduces the stored workspace
+fingerprint `b65db2d20ca2d7a5d7032c835e5ea7e510ee8951dae0ac29218e1f0e5a4270d7`
+exactly. The live marker reports `valid: false` only because the current
+workspace contains later planning-only edits.
+
+Increment 4U bind initial approval run-termination is verified complete with
+uncommitted changes. The mandatory `04u` gate is complete and valid with
+`PASS WITH ADVISORIES`; project-owner publication direction is the exact next
+task.
+
+Increment 4V bind initial terminal approval audit is Proposed as the second
+smallest bounded follow-on. It is blocked on 4U commit/push/merge,
+reconciliation against the published 4U API, and separate project-owner
+approval. No mandatory
+`04v` gate state or source/test edit exists.
+
+## Increment 4U completion state
+
+### Goal
+
+Let the bound initial turn terminally deny and consume its exact pending approval
+when a trusted future orchestrator reports run termination, without accepting a
+caller-selected approval ID, user choice, native interaction result, or evidence.
+
+### Exact source and test scope
+
+```text
+src-tauri/src/agent/gateway_request.rs
+src-tauri/tests/gateway_request_contract.rs
+```
+
+The turn retains its private manager-assigned pending approval ID after issuing
+a presentation and exposes one narrow idempotent run-termination method.
+That method delegates only to the existing manager's
+`cancel_for_run_termination`, returns the existing non-authorizing
+`ApprovalResolution`, and clears turn ownership only after successful terminal
+resolution. Successful native resolution also clears ownership, while typed
+errors retain it. Existing manager expiry precedence, replay prevention, exact
+identity, and late-native-outcome rejection remain authoritative.
+
+### Risks and non-goals
+
+The private ID can drift from manager state if lifecycle transitions are cleared
+too early. At or after the deadline, expiry must win over run termination. A late
+native outcome must remain rejected after cancellation, while a stale visible
+dialog may still remain open. The cancellation result is non-authorizing and
+unaudited.
+
+Native dialog invocation or closure, proactive expiry or timers, source traits,
+runtime coordination, active-run validation beyond the trusted cancellation
+call, audit, persistence, dispatch, execution, continuation, transport,
+authentication, credentials, Tauri, WebView, SQLite, dependencies,
+capabilities, entitlements, and permissions are excluded.
+
+### Verification and rollback
+
+Focused request, approval, public contract, approval-binding, and approval-audit
+tests pass: 9 gateway-request unit, 17 approval, 10 public request-contract, 2
+approval-binding, and 1 approval-audit-binding. Strict Clippy, complete
+`npm run verify`, npm audit, diff review, and the mandatory `04u` gate pass. No
+manual verification applies because 4U adds no native invocation, production
+caller, or user-visible behavior.
+
+Before commit, restore the two source/test files to `244a1d8` and revert only
+the declared 4U planning and closeout documentation. After commit, revert one 4U
+commit. No migration, data, dependency, credential, compatibility identifier,
+or remote resource requires rollback.
+
+### Completion baseline
+
+Before documentation edits, `main`, `origin/main`, and the 4T branch resolved to
+`244a1d88bd299c0b3439d89b6984f21d0e201b09`; the working tree was clean and the
+`04t` marker was complete and valid. Node `v26.3.0`, npm `11.16.0`, Cargo and
+Rust `1.90.0`, rustfmt `1.8.0-stable`, and Clippy `0.1.90` were available on
+arm64 macOS 26.5.2 with the Xcode command-line tools.
+
+The gate began before either source/test file changed. Node `v26.3.0`, npm
+`11.16.0`, Cargo and Rust `1.90.0`, rustfmt `1.8.0-stable`, and Clippy `0.1.90`
+remain available on macOS 26.5.2. Complete verification passes with 17 hook,
+124 frontend, 95 Rust library, and 21 Rust integration tests plus lint,
+typecheck, frontend builds, and the Tauri release no-bundle build. The required
+network-enabled npm audit reports zero vulnerabilities. D-042 records the
+durable boundary; no `04v` gate state exists.
+
+## Increment 4V proposed follow-on
+
+### Goal
+
+Prevent a future initial-turn caller from receiving a successful native or
+run-termination approval resolution unless that exact manager-owned resolution
+has first been validated and recorded by the turn's private typed in-memory
+approval-audit adapter.
+
+### Exact future source and test scope
+
+```text
+src-tauri/src/agent/gateway_request.rs
+src-tauri/tests/gateway_request_contract.rs
+```
+
+The turn would own one private `InMemoryApprovalAuditAdapter` and return only a
+closed non-cloneable value containing the exact `ApprovalResolution` and its
+non-authorizing sequence receipt. Both successful terminal paths would share
+one private manager-then-audit helper. 4V cannot become Ready until verified 4U
+is merged and this plan is reconciled and separately approved.
+
+### Risks and non-goals
+
+Manager terminalization precedes audit recording, so an unexpected typed audit
+failure cannot roll manager state back. It must return no resolution and leave
+no stale pending turn ownership. The adapter remains volatile and per-turn; its
+receipt grants no durable audit, run-liveness, dispatch, or execution authority.
+
+Durable persistence, SQLite, native invocation or closure, proactive expiry,
+timers, runtime coordination, active-run validation, transport, authentication,
+credentials, dispatch, execution, Tauri, frontend, dependencies, capabilities,
+entitlements, and permissions are excluded.
+
+### Planned verification and rollback
+
+Focused request, audit, approval, public-contract, approval-binding, and
+approval-audit tests will run before strict Clippy, complete `npm run verify`,
+npm audit, diff review, and the mandatory `04v` gate. No manual verification is
+planned. Before commit, restore the two source/test files to the verified merged
+4U commit and revert only declared 4V closeout documents; after commit, revert
+one bounded 4V commit.
 
 ## Increment 4T completion state
 
@@ -85,7 +211,7 @@ tests can exercise the sealed path without opening a dialog.
 
 ### Verification
 
-Passed in the current uncommitted workspace based on synchronized `main` at
+Passed before commit in the verified workspace based on synchronized `main` at
 `6d0bed41b06f7f3f79bfd8ea44c3c47b3743ebd7`:
 
 ```text
@@ -177,10 +303,11 @@ declared 4T documentation. After commit, revert one 4T commit. No migration,
 data, dependency, credential, compatibility identifier, or remote resource
 requires rollback.
 
-### Exact next task
+### Publication state
 
-Wait for explicit project-owner direction to commit, push, and merge Increment
-4T. Do not start a later increment; none is Ready.
+Commit `244a1d8` is pushed on `codex/phase4-increment-4t`, fast-forward merged
+into synchronized `main`, and retained a valid `04t` marker immediately before
+4U planning edits.
 
 ## Increment 4S completion state
 
@@ -2140,13 +2267,140 @@ The project owner confirmed the fixed window title, exact trusted-fields-first/t
 - The two pre-existing RustSec advisories remain present under D-025's scoped reviewed baseline exception and require re-review if reachability or the dependency path changes.
 - The target-platform manual gate is complete. Escape/close behavior is recorded above and did not create an approval path.
 
+## Increment 4U session closeout
+
+### Completed
+
+- Began mandatory `04u` gate state before either approved source/test file
+  changed.
+- Added private pending-approval ownership to `InitialGatewayTurn` without
+  widening the public presentation or lower-level manager contracts.
+- Added one no-argument idempotent run-termination operation that delegates the
+  exact retained ID to the existing manager and returns its exact
+  non-authorizing resolution.
+- Cleared turn ownership only after successful manager resolution, including
+  successful native resolution, while retaining it after typed errors.
+- Added focused coverage for exact cancellation facts, no evidence,
+  idempotence, typed-error retention, and rejection of late native outcomes.
+- Preserved expiry precedence through the existing approval-manager regression
+  suite.
+- Recorded the durable boundary in D-042, synchronized the declared 4U
+  closeout documents, and completed the mandatory gate with
+  `PASS WITH ADVISORIES`.
+- Did not start Increment 4V. Its plan and record predated the `04u` gate and
+  remain untouched baseline planning state.
+
+### Final Git state
+
+`main` and `origin/main` both remain at `244a1d8`. Nothing is staged or
+committed. The complete working-tree inventory is:
+
+```text
+AGENTS.md
+CHANGELOG.md
+DECISIONS.md
+HANDOFF.md
+NEXT_STEPS.md
+PLANS.md
+PROJECT_STATUS.md
+docs/increments/04u-bind-initial-approval-run-termination.md
+docs/increments/04v-bind-initial-terminal-approval-audit.md
+docs/plans/04u-bind-initial-approval-run-termination.md
+docs/plans/04v-bind-initial-terminal-approval-audit.md
+docs/plans/README.md
+docs/reviews/2026-07-15-04u-post-increment-review.md
+src-tauri/src/agent/gateway_request.rs
+src-tauri/tests/gateway_request_contract.rs
+```
+
+The source/test delta is limited to the approved two paths. Eleven paths are
+declared 4U planning and closeout documentation. The two 4V plan/record paths
+were already untracked before the `04u` gate began and were not edited during
+implementation; they remain in the full gate inventory because they are part
+of the working tree. No dependency, manifest, lockfile, capability,
+entitlement, permission, database, generated output, credential, certificate,
+private key, or personal-data file changed.
+
+### Passed checks
+
+```text
+python3 .codex/hooks/post_increment_gate.py begin --increment 04u
+  passed before source edits
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+  passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::gateway_request::
+  9 passed
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked approvals::
+  17 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test gateway_request_contract --locked
+  10 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test approval_binding --locked
+  2 passed
+cargo test --manifest-path src-tauri/Cargo.toml --test approval_audit_binding --locked
+  1 passed
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+  passed
+npm run verify
+  passed: formatting, lint, typecheck, 17 hook tests, 124 frontend tests,
+  95 Rust library tests, 21 Rust integration tests, frontend builds, and
+  Tauri release no-bundle build
+npm audit --audit-level=low
+  passed on the required network-enabled retry; 0 vulnerabilities
+npm run format:check
+  passed after closeout documentation
+git diff --check
+  passed after closeout documentation
+python3 .codex/hooks/post_increment_gate.py status
+  passed; increment 04u is complete and valid
+```
+
+The complete tracked and untracked diff was reviewed against `CODE_REVIEW.md`
+and `SECURITY.md`. Conflict, secret, exact-scope, preserved-boundary,
+generated-output, code, security, and documentation reviews found no blocking
+issue.
+
+### Failed checks
+
+No required check remains failed. The first sandboxed gate-begin and
+finalization attempts could not write ignored `.codex` state; the approved
+retries succeeded before source edits and after final review, respectively. The
+first sandboxed npm audit could not resolve the registry or write its log; the
+required network-enabled retry passed with zero vulnerabilities. These were
+environment failures, not repository findings.
+
+### Checks not run
+
+- No native application or interaction check was required because 4U invokes
+  no native UI and has no production caller.
+- No Rust dependency audit was required because manifests and lockfiles are
+  unchanged.
+- No packaged application build was run beyond the Tauri release no-bundle
+  build included in `npm run verify`.
+
+### Manual verification
+
+None required. Increment 4U adds no native invocation, production caller,
+user-visible behavior, network, credential, persistence, dispatch, or
+operating-system action.
+
+### Residual risks and advisories
+
+- A native prompt already visible at run termination may remain open; its late
+  outcome is rejected as already consumed.
+- The trusted cancellation call does not independently prove active-run state.
+- The returned resolution is volatile, unaudited, and non-authorizing. It grants
+  no permission, dispatch token, or execution authority.
+- Runtime coordination, proactive expiry, durable audit, persistence, dispatch,
+  and execution remain outside 4U.
+- Increment 4V remains blocked on published merged 4U, plan reconciliation, and
+  separate project-owner approval.
+
 ## Exact next task
 
-Wait for explicit project-owner direction to commit, push, and merge verified
-Increment 4T. Do not start a later increment; none is Ready.
+Commit, push, and merge Increment 4U only. Do not start Increment 4V.
 
 ## Ready-to-paste resume prompt
 
 ```text
-Commit, push, and merge Increment 4T only. Create codex/phase4-increment-4t from the current verified uncommitted state. Use commit message "Bind terminal initial approval resolution". Immediately confirm the 04t marker remains valid after the commit, push the branch, fast-forward merge it into updated main, push main, and verify clean synchronized main plus the valid marker. Do not start another increment.
+Commit, push, and merge Increment 4U only. Create codex/phase4-increment-4u from the current verified uncommitted state. Use commit message "Bind initial approval run termination". Immediately confirm the 04u marker remains valid after the commit, push the branch, fast-forward merge it into updated main, push main, and verify clean synchronized main plus the valid marker. Do not start Increment 4V.
 ```
