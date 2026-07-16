@@ -4,6 +4,23 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Verified Meta Increment 5 repository health and GitHub hygiene with an honest
+  branded README, explicit contribution and no-license boundaries, owner review
+  paths, structured issue and pull-request templates, review-only Dependabot
+  proposals, and read-only GitHub quality workflows.
+- Added standard-library repository checks for internal links, secret patterns,
+  generated output, licensing status, documented commands, and workflow safety,
+  plus an exact RustSec baseline parser and 16 focused regression tests.
+- Added GitHub label and milestone policy, a release-notes template, dependency
+  and security audit automation, and broader database/environment/log/backup
+  ignore coverage without changing application behavior or dependencies.
+- D-046 records least-privilege workflow and exact advisory-baseline behavior;
+  D-047 records that no repository license is selected; D-048 records Meta 5
+  queue selection, the stopped unimplemented Meta 4 request, and the unchanged
+  application-icon rollout renumbering to Ready Meta Increment 6.
+- Reconciled Meta Increment 3 as squash-merged at `ad9042c`. Remote labels,
+  milestones, branch protection, CODEOWNERS enforcement, and hosted workflow
+  runs remain unverified until publication and authenticated repository access.
 - Verified Meta Increment 3 repository-local Codex automation with shared bounded
   Git/path/JSON validation, a read-only session-end inventory, expanded hook
   regressions, focused engineering-review skills, matching prompts, and review

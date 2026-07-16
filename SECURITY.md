@@ -84,6 +84,31 @@ Apply the dependency and supply-chain sections of `SECURITY_CHECKLIST.md` and
 - Use opaque references rather than arbitrary paths where possible.
 - Reject symlink escapes and unsupported executable content when file tooling is implemented.
 
+## GitHub automation boundary
+
+- Pull-request code and dependency updates are untrusted. GitHub workflows run
+  with `contents: read`, receive no repository secret context, do not use
+  `pull_request_target`, and disable persisted checkout credentials.
+- Every external action reference is pinned to an immutable commit digest.
+  Dependabot proposes action updates for review; mutable action tags are not a
+  trust decision.
+- Workflows may inspect, compile, test, and retrieve public advisory data. They
+  must not commit, push, merge, publish, deploy, sign, notarize, or begin another
+  increment.
+- The security workflow runs the pinned JavaScript audit and Cargo audit. The
+  Cargo result fails on any finding outside D-025's exact two-vulnerability
+  `quick-xml 0.39.4` baseline and D-046's exact 18-warning lockfile baseline.
+  Accepted findings remain unresolved and visible; the gate does not declare
+  them fixed or generally safe.
+- The tracked secret-pattern scan is defense in depth, not proof that a
+  repository or artifact contains no secret. Release review still requires a
+  complete secret and artifact assessment.
+- CODEOWNERS, issue labels, milestones, badges, and workflow success are
+  repository coordination evidence, not authorization, branch-protection proof,
+  security approval, or release evidence.
+- Security design-review issues must contain sanitized material only.
+  Vulnerabilities and incidents follow the private reporting policy.
+
 ## Repository hook boundary
 
 - Repository-local hooks execute code with the developer's Codex session permissions and require review and trust through `/hooks` before use.

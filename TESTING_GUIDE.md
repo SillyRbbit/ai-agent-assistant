@@ -1,7 +1,7 @@
 # Cortexa testing guide
 
 Status: Authoritative testing standard
-Last updated: 2026-07-15
+Last updated: 2026-07-16
 
 ## Testing principles
 
@@ -103,6 +103,28 @@ mandatory manual checks, PASS, PASS WITH ADVISORIES, outside-repository path
 handling, merge conflicts, deletion-stable fingerprints, stale workspaces, and
 loop prevention.
 
+### Repository health tests
+
+Location: `scripts/tests/test_*.py`.
+
+The standard-library repository checks cover Markdown and image targets, secret
+pattern redaction, tracked generated output, licensing evidence, documented npm
+commands, immutable GitHub Action references, least-privilege workflow policy,
+and the exact accepted Cargo-audit baseline. Positive and negative fixtures use
+isolated temporary paths and synthetic values.
+
+Commands:
+
+```bash
+npm run test:repository
+npm run docs:check
+npm run repository:check
+npm run security:scan
+```
+
+These checks are read-only. A passing pattern scan or link audit is bounded
+evidence, not a security certification or proof of remote GitHub settings.
+
 ### Security tests
 
 Security-sensitive increments require focused tests for every affected
@@ -181,6 +203,11 @@ verification commands, not test fixtures. A future gateway integration suite
 must use a local deterministic server by default; separately approved sandbox
 tests must use non-production accounts and redacted evidence.
 
+The scheduled security workflow may retrieve npm and Rust advisory data. It
+contains no repository secrets and fails on any Rust advisory outside D-025's
+exact vulnerability baseline and D-046's exact warning baseline. Accepted
+findings remain reported remediation debt.
+
 ## Required commands
 
 During development, run the narrowest relevant command. Before completing an
@@ -193,6 +220,8 @@ npm run typecheck
 npm run test
 npm run build
 npm run tauri -- build --no-bundle
+npm run docs:check
+npm run repository:check
 ```
 
 The canonical combined command is:
@@ -206,6 +235,7 @@ Useful exact lower-level commands are:
 ```bash
 npx vitest run
 python3 -m unittest discover -s .codex/hooks/tests -p 'test_*.py' -v
+python3 -m unittest discover -s scripts/tests -p 'test_*.py' -v
 cargo test --manifest-path src-tauri/Cargo.toml --all-targets --locked
 cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
 cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
@@ -216,18 +246,19 @@ partial command for `npm run verify` while calling the result complete.
 
 ## Change-to-test matrix
 
-| Change                           | Minimum focused evidence before full verification                                           |
-| -------------------------------- | ------------------------------------------------------------------------------------------- |
-| Pure TypeScript model or reducer | Adjacent Vitest unit cases                                                                  |
-| React behavior                   | Testing Library interaction and accessibility cases                                         |
-| IPC client or event parser       | Unknown, valid, invalid, and failure tests                                                  |
-| Rust validation or state machine | Unit table plus public contract case                                                        |
-| Tauri command or event           | Rust boundary test and frontend narrowing test                                              |
-| SQLite or migration              | In-memory and file-backed success/failure integration tests                                 |
-| Policy or approval               | Exact identity, denial, replay, expiry, cancellation, and redaction cases                   |
-| Native macOS behavior            | Automated portable policy tests plus target-Mac manual evidence                             |
-| Documentation-only               | Markdown formatting, link/path audit, protected-path diff, and full repository verification |
-| Dependency change                | Focused behavior, full verification, audit, license, and lockfile review                    |
+| Change                           | Minimum focused evidence before full verification                                                  |
+| -------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Pure TypeScript model or reducer | Adjacent Vitest unit cases                                                                         |
+| React behavior                   | Testing Library interaction and accessibility cases                                                |
+| IPC client or event parser       | Unknown, valid, invalid, and failure tests                                                         |
+| Rust validation or state machine | Unit table plus public contract case                                                               |
+| Tauri command or event           | Rust boundary test and frontend narrowing test                                                     |
+| SQLite or migration              | In-memory and file-backed success/failure integration tests                                        |
+| Policy or approval               | Exact identity, denial, replay, expiry, cancellation, and redaction cases                          |
+| Native macOS behavior            | Automated portable policy tests plus target-Mac manual evidence                                    |
+| Documentation-only               | Markdown formatting, link/path audit, protected-path diff, and full repository verification        |
+| GitHub workflow or template      | YAML parse, immutable actions, permissions/triggers, no-secret/no-write policy, and command checks |
+| Dependency change                | Focused behavior, full verification, audit, license, and lockfile review                           |
 
 ## Completion gate
 

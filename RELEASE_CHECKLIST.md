@@ -56,6 +56,8 @@ development or no-bundle build is not a production release.
 - [ ] `npm run typecheck`
 - [ ] `npm run test`
 - [ ] `npm run build`
+- [ ] `npm run docs:check`
+- [ ] `npm run repository:check`
 - [ ] `npm run verify`
 - [ ] Any release-specific, migration, update, gateway, integration, or
       adversarial suites required by the included changes.
@@ -107,6 +109,9 @@ increment configures them. Their absence currently blocks production release.
 
 ## Release notes and support
 
+- [ ] Release notes start from
+      `docs/templates/RELEASE_NOTES_TEMPLATE.md` and identify the exact commit,
+      channel, evidence, and rollback.
 - [ ] Release notes identify user-visible changes, security impact, migrations,
       known limitations, blocked capabilities, and rollback instructions.
 - [ ] No mocked, planned, or unavailable feature is described as shipping.
@@ -141,6 +146,7 @@ data. If downgrade is unsafe, stop rollout and publish a forward repair plan.
 
 ## Completion record
 
-The release record must include exact files, commands, results, manual evidence,
-artifact hashes, signatures, notarization identifiers, open advisories, release
-notes, rollback decision, and the post-increment gate result.
+The release record must include exact files, commands, local and GitHub workflow
+results, manual evidence, artifact hashes, signatures, notarization identifiers,
+open advisories, release notes, rollback decision, and the post-increment gate
+result.

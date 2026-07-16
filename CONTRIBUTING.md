@@ -1,22 +1,34 @@
-# Contributing
+# Contributing to Cortexa
+
+## Contribution boundary
+
+Cortexa is pre-production and currently maintainer-controlled. Bug reports,
+feature proposals, and sanitized design-review requests are welcome through the
+repository issue forms. External code contributions require prior maintainer
+coordination while the repository has no selected open-source license. Read
+[the licensing decision record](docs/github/LICENSING.md) before submitting
+code or redistributing repository content.
+
+Never place credentials, personal content, private files, raw database content,
+private paths, or exploitable vulnerability details in an issue or pull request.
+Follow [SECURITY.md](SECURITY.md) for private reporting.
 
 ## Development workflow
 
-1. Read `AGENTS.md`, `ENGINEERING_GUIDE.md`, and the current handoff files.
-2. Confirm the repository and toolchain state.
-3. Select only the first Ready increment from `NEXT_STEPS.md`, unless the
-   project owner explicitly selects another bounded task.
-4. Define exact files, acceptance criteria, risks, non-goals, verification, and
-   rollback, then wait for approval.
-5. Begin the mandatory repository gate before editing.
-6. Implement the smallest coherent approved change.
-7. Run targeted checks during development and the full relevant checks before
-   completion.
-8. Review the complete diff against `CODE_REVIEW.md`, `SECURITY.md`, and the
-   applicable checklists.
-9. Update project memory, the increment record, and the post-increment report.
-10. Require a valid completion marker, then stop. Commit or publish only when
-    explicitly directed.
+1. Read `AGENTS.md`, `ENGINEERING_GUIDE.md`, and the current project-memory
+   files in their required order.
+2. Start from clean synchronized `main` and confirm the supported toolchain.
+3. Select only the first Ready increment from `NEXT_STEPS.md` unless the project
+   owner explicitly selects another bounded task.
+4. Declare exact files, acceptance criteria, risks, non-goals, verification,
+   and rollback, then wait for approval.
+5. Create one descriptive capability branch and begin the mandatory repository
+   gate before editing.
+6. Implement only the approved scope and run focused checks while working.
+7. Run complete verification, review the complete diff, and synchronize project
+   memory with actual evidence.
+8. Require a valid post-increment marker, then stop. Commit, push, pull-request,
+   merge, tag, or release only with explicit project-owner direction.
 
 ## Setup
 
@@ -25,15 +37,18 @@ npm ci
 npm run tauri -- dev
 ```
 
-The preferred toolchain is:
+Preferred toolchain:
 
 ```text
 Node.js 26.3.0
 npm 11.16.0
-Rust 1.90.0
+Rust 1.90.0 with Clippy and rustfmt
 ```
 
-## Checks
+## Required checks
+
+Use focused commands during development and the complete gate before claiming
+completion:
 
 ```bash
 npm run format:check
@@ -41,64 +56,71 @@ npm run lint
 npm run typecheck
 npm run test
 npm run build
-npm run tauri -- build --no-bundle
+npm run docs:check
+npm run repository:check
+npm run verify
 ```
 
-Use `npm run verify` for the complete sequence.
+Testing details and the change-to-test matrix are in
+[TESTING_GUIDE.md](TESTING_GUIDE.md).
 
-Testing details and the change-to-test matrix are in `TESTING_GUIDE.md`.
+## Branches and commits
 
-## Commit guidance
-
-Use focused Conventional Commit messages that describe the capability:
+Use one descriptive capability branch. Codex-created branches use the `codex/`
+prefix. Examples:
 
 ```text
-feat: add platform-neutral agent interfaces
-fix: expose Homebrew rustup on macOS setup path
-test: cover mock policy denial
-docs: add session handoff workflow
-chore: update locked toolchain metadata
+codex/feature/add-agent-memory-store
+codex/fix/srm-health-check-timeout
+codex/meta-repository-health-github-hygiene
 ```
 
-Do not combine unrelated refactors, dependency upgrades, and features in one
-commit. Generic subjects such as `update`, `changes`, `misc`, `temp`, and
-`final` are prohibited.
+Use Conventional Commits that explain the bounded capability:
 
-Use one descriptive capability-based branch per increment. Codex-created
-branches use the `codex/` prefix. Start from clean synchronized `main` unless
-an approved reconstruction plan says otherwise. After checks pass and the
-project owner explicitly approves publication, push the branch, create a pull
-request, and use a squash merge. See `ENGINEERING_GUIDE.md` for branch,
-publication, and rollback rules.
+```text
+feat(memory): implement a typed memory repository
+fix(gateway): reject a late terminal event
+docs(architecture): reconcile the current trust boundary
+chore(repository): add read-only quality workflows
+```
 
-## Pull-request or change summary
+Generic names such as `update`, `changes`, `misc`, `temp`, and `final` are
+prohibited. Dependency upgrades, refactors, and feature behavior remain separate
+unless they are inseparable from the approved goal.
 
-Use a descriptive capability-based title. Include these sections:
+## Pull requests
 
-- Purpose.
-- Files changed.
-- Testing performed.
-- Breaking changes, including `None` when applicable.
-- Next increment.
+Pull-request titles summarize the capability. The description must use the
+repository template and include:
+
+- Purpose
+- Files changed
+- Testing performed, separated into passed, failed, not run, and manual pending
+- Breaking changes, including `None`
+- Security and scope review
+- Next increment
+
+Pull requests do not bypass the increment gate. CODEOWNERS identifies required
+reviewers but does not prove branch protection or approval. Dependabot updates
+are review-only proposals; they are never auto-merged by repository workflows.
 
 ## Generated and local files
 
-Do not commit:
+Do not commit `node_modules/`, `dist/`, coverage, Rust targets, local databases,
+environment files, logs, backup files, secrets, certificates, or personal test
+data. Use synthetic bounded fixtures only. Run:
 
-- `node_modules/`
-- `dist/`
-- `coverage/`
-- `src-tauri/target/`
-- `.env` files
-- local logs
-- secrets or personal test data
+```bash
+npm run repository:check
+npm run security:scan
+```
 
-Use synthetic fixtures only.
+## Review references
 
-## Architecture and release references
-
-- Current architecture: `ARCHITECTURE.md`
-- Product requirements: `PRODUCT_REQUIREMENTS.md`
-- Milestone roadmap: `ROADMAP.md`
-- Security checklist: `SECURITY_CHECKLIST.md`
-- Release checklist: `RELEASE_CHECKLIST.md`
+- [Engineering guide](ENGINEERING_GUIDE.md)
+- [Current architecture](ARCHITECTURE.md)
+- [Code-review guide](CODE_REVIEW.md)
+- [Security checklist](SECURITY_CHECKLIST.md)
+- [Release checklist](RELEASE_CHECKLIST.md)
+- [GitHub label policy](docs/github/LABELS.md)
+- [GitHub milestone policy](docs/github/MILESTONES.md)

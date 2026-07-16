@@ -42,14 +42,17 @@ add a superseding decision or current-state update instead.
 | `src/`             | React presentation, volatile application state, and typed Tauri clients                        |
 | `src-tauri/src/`   | Trusted Rust core, Tauri startup, storage, menu lifecycle, and transport-free agent boundaries |
 | `src-tauri/tests/` | Public Rust integration and contract tests                                                     |
+| `.github/`         | Review ownership, issue/PR templates, dependency proposals, and read-only quality workflows    |
 | `.codex/hooks/`    | Shared safe repository inspection, completion guardrails, and tests; not a product boundary    |
 | `.agents/skills/`  | Repository-scoped assistant procedures                                                         |
+| `scripts/`         | Deterministic local verification and repository-health tooling                                 |
 | `assets/branding/` | Canonical Cortexa identity assets                                                              |
 | `docs/branding/`   | Brand and presentation standards                                                               |
 | `docs/product/`    | Inception requirements and target architecture sources                                         |
 | `docs/plans/`      | Proposed, ready, active, and completed bounded plans                                           |
 | `docs/increments/` | Increment completion and checkpoint records                                                    |
 | `docs/reviews/`    | Post-increment machine-readable and human-readable reviews                                     |
+| `docs/github/`     | Licensing status, label taxonomy, and milestone mapping                                        |
 | `docs/workflows/`  | Session and troubleshooting runbooks                                                           |
 | `prompts/`         | Copy-paste workflow prompts when skills are unavailable                                        |
 
@@ -83,6 +86,8 @@ boundaries.
 - Use domain types and structured parsers instead of ad hoc string protocols.
 - Keep APIs narrow and make invalid states difficult to represent.
 - Avoid unrelated refactors, generated output, and metadata churn.
+- Keep GitHub workflows read-only, secret-free, digest-pinned, and incapable of
+  committing, pushing, publishing, deploying, signing, or auto-merging.
 - Add comments only when they explain a non-obvious invariant or boundary.
 - Never claim a command passed unless its actual output was observed.
 
@@ -142,6 +147,9 @@ boundaries.
 - Do not weaken audits or ignore advisories without an explicit bounded decision.
 - Dependency upgrades are separate increments from feature work unless the
   dependency change is inseparable from the approved goal.
+- Dependabot may propose review branches for npm, Cargo, and GitHub Actions. A
+  proposal is not approval: no repository workflow auto-merges or writes it to
+  `main`.
 
 ## Git and branch strategy
 
@@ -163,6 +171,8 @@ boundaries.
 - Push, open a pull request, merge, tag, or publish only when explicitly asked.
 - After all checks pass and publication is explicitly approved, push the branch,
   create the pull request, and merge it with a squash merge.
+- CODEOWNERS and workflow results support review but do not prove remote branch
+  protection, required reviews, release approval, or increment completion.
 
 ## Definition of Ready
 
@@ -248,8 +258,9 @@ Releases are separate approved increments. They must follow
 `RELEASE_CHECKLIST.md`, resolve release-blocking open decisions, verify a clean
 tagged commit, audit dependencies and secrets, build release artifacts, and run
 target-platform installer, signing, notarization, launch, upgrade, and rollback
-checks. Current signing, notarization, and production distribution remain
-planned, not implemented.
+checks. Start release notes from
+`docs/templates/RELEASE_NOTES_TEMPLATE.md`. Current signing, notarization, and
+production distribution remain planned, not implemented.
 
 ## Documentation requirements
 
@@ -262,5 +273,7 @@ planned, not implemented.
 - Record exact commands and actual results, including checks not run.
 - Keep external decks, screenshots, and diagrams subordinate to repository facts
   and the canonical branding guidance.
+- Keep issue labels and milestones subordinate to `NEXT_STEPS.md`, `ROADMAP.md`,
+  approved plans, and verified completion evidence.
 - Use Mermaid for maintainable architecture flows and `$branding` for branded
   visual artifacts.

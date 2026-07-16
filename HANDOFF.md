@@ -1,16 +1,18 @@
 # Handoff
 
-Last updated: 2026-07-15
+Last updated: 2026-07-16
 
 ## Current state
 
 Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,
 and merged on the target Mac. Meta Increment 1 branding and identity foundation
-is verified complete and squash-merged at `5edbf4d`. `main`, `origin/main`, and
-the approved Meta Increment 3 automation branch began at `805efc1` with a clean
-working tree. The current branch is
-`codex/meta-codex-automation-quality-gates`. Meta Increment 3 is verified
-complete with a valid `PASS` marker but remains uncommitted and unpublished.
+is verified complete and squash-merged at `5edbf4d`. Meta Increment 2 is merged
+at `805efc1`, and Meta Increment 3 repository-local Codex automation is
+squash-merged at `ad9042c`. `main`, `origin/main`, and the approved Meta
+Increment 5 branch began at `ad9042c` with a clean working tree. The current
+branch is `codex/meta-repository-health-github-hygiene`. Meta Increment 5 is
+verified complete on its exact repository-governance scope with no application
+behavior change; it remains uncommitted and unpublished.
 
 Reconstructed Increment 4I was committed as `99f9279` with message `Remove generic audit scaffold`, pushed on `codex/phase4-increment-4i`, fast-forward merged into `main`, and pushed. The corrected `04i` completion marker remains valid after the deletion commit. The original pre-fingerprint implementation commit remains preserved exactly at `cf9d701` on local `codex/phase4-increment-4i-pre-fingerprint-fix`; no remote ref contains it.
 
@@ -86,11 +88,14 @@ and trust boundaries were unchanged.
 Meta Increment 2 engineering operating system is verified complete under
 `docs/plans/meta-02-engineering-operating-system.md`. It changes documentation
 and repository governance only. Meta Increment 3 Codex automation and
-post-increment quality gates is verified complete under
-`docs/plans/meta-03-codex-automation.md`. The unchanged application-icon
-rollout is renumbered Meta Increment 4 under
-`docs/plans/meta-04-verified-application-icon-rollout.md` and is Ready for
-separate project-owner approval after Meta Increment 3 publication is
+post-increment quality gates is verified complete and squash-merged at `ad9042c`
+under `docs/plans/meta-03-codex-automation.md`. Meta Increment 5 repository
+health and GitHub hygiene is verified complete under
+`docs/plans/meta-05-repository-health.md`. The stopped Meta Increment 4
+executive-document request has no gate, edit, or completion evidence. The
+unchanged application-icon rollout is renumbered Meta Increment 6 under
+`docs/plans/meta-06-verified-application-icon-rollout.md` and is Ready for
+separate project-owner approval after Meta Increment 5 publication is
 reconciled. Increment 4V terminal approval audit remains Proposed and
 separately controlled; no `04v` gate or source edit exists.
 
@@ -2801,4 +2806,144 @@ start Meta Increment 4 or Increment 4V automatically.
 Use $resume-session.
 
 Resume from HANDOFF.md on branch codex/meta-codex-automation-quality-gates. Meta Increment 3 Codex automation and post-increment quality gates is verified complete with a valid PASS marker but is uncommitted and unpublished. Confirm the exact 50-path scope and marker remain valid, then propose a Conventional Commit message, descriptive PR title, and PR description with Purpose, Files changed, Testing performed, Breaking changes, and Next increment. Wait for my approval before any Git publication command. Do not start Meta Increment 4 or Increment 4V.
+```
+
+## Meta Increment 5 repository health closeout
+
+### Completed
+
+- Reconciled Meta Increment 3 as squash-merged at `ad9042c` and began the
+  mandatory `meta-05` gate before repository edits.
+- Added an honest branded pre-production README, contribution rules, explicit
+  no-license-selected record, proposed label/milestone policy, and release-notes
+  template.
+- Added CODEOWNERS, bounded pull-request and issue intake, review-only Dependabot
+  proposals, and read-only CI, documentation, and security workflows.
+- Added standard-library repository-health and Cargo-audit baseline validators
+  with 16 positive and negative tests.
+- Recorded D-046 through D-048 for workflow/advisory boundaries, licensing, and
+  the Meta 5/6 queue reconciliation.
+- Preserved every application, dependency, manifest, lockfile, Tauri,
+  capability, CSP, permission, SQLite, icon, and compatibility boundary.
+- Marked the unchanged Meta Increment 6 application-icon plan Ready without
+  implementing it or Increment 4V.
+
+### Exact files changed
+
+```text
+.gitignore
+.github/CODEOWNERS
+.github/ISSUE_TEMPLATE/bug_report.yml
+.github/ISSUE_TEMPLATE/config.yml
+.github/ISSUE_TEMPLATE/feature_request.yml
+.github/ISSUE_TEMPLATE/security_review.yml
+.github/PULL_REQUEST_TEMPLATE.md
+.github/dependabot.yml
+.github/workflows/ci.yml
+.github/workflows/documentation.yml
+.github/workflows/security.yml
+AGENTS.md
+ARCHITECTURE.md
+CHANGELOG.md
+CODE_REVIEW.md
+CONTRIBUTING.md
+DECISIONS.md
+ENGINEERING_GUIDE.md
+HANDOFF.md
+NEXT_STEPS.md
+PLANS.md
+PROJECT_STATUS.md
+README.md
+RELEASE_CHECKLIST.md
+ROADMAP.md
+SECURITY.md
+SECURITY_CHECKLIST.md
+TESTING_GUIDE.md
+docs/github/LABELS.md
+docs/github/LICENSING.md
+docs/github/MILESTONES.md
+docs/increments/meta-05-repository-health.md
+docs/plans/README.md
+docs/plans/meta-04-verified-application-icon-rollout.md (deleted by rename)
+docs/plans/meta-05-repository-health.md
+docs/plans/meta-06-verified-application-icon-rollout.md
+docs/reviews/2026-07-16-meta-05-post-increment-review.md
+docs/templates/RELEASE_NOTES_TEMPLATE.md
+package.json
+scripts/cargo_audit_gate.py
+scripts/repository_health.py
+scripts/tests/test_cargo_audit_gate.py
+scripts/tests/test_repository_health.py
+```
+
+### Passed checks
+
+- Baseline formatting and clean synchronized `ad9042c` repository state.
+- YAML syntax validation for every `.github` YAML file and Python bytecode
+  compilation with cache output under `/private/tmp`.
+- `npm run test:repository`: 16 tests passed.
+- `npm run docs:check`, `npm run repository:check`, and
+  `npm run security:scan`.
+- `npm audit --audit-level=low`: zero vulnerabilities.
+- Pinned `cargo-audit 0.22.2` plus `scripts/cargo_audit_gate.py`: only D-025's
+  two exact vulnerabilities and D-046's 18 exact warnings were present.
+- `npm run verify`: formatting, repository checks, ESLint, strict Clippy, 28
+  hook tests, 16 repository-health tests, 124 frontend tests, 95 Rust library
+  tests, 21 Rust integration tests, both Vite builds, and the Tauri release
+  no-bundle build passed.
+- `git diff --check`, conflict, exact 43-path scope, protected-path, generated
+  output, secret-pattern, complete-diff, architecture, security, code-health,
+  technical-debt, and readiness reviews.
+
+### Failed checks and resolved conditions
+
+- The first documentation check found the expected stale Meta 4 icon-plan link;
+  updating the approved plan index and rename made the check pass.
+- `cargo audit` was not installed. A pinned temporary `cargo-audit 0.22.2`
+  install under `/private/tmp` succeeded without repository changes.
+- The first audit fetch could not write the sandboxed default advisory cache;
+  using a temporary Cargo home with approved public-network access succeeded.
+- The first exact audit-gate run exposed 18 pre-existing warning identities not
+  covered by D-025. D-046 and exact positive/negative parser coverage made those
+  findings visible, immutable baseline advisories; the final parser run passed.
+- The first npm audit could not reach the public registry in the sandbox; the
+  approved network-enabled rerun reported zero vulnerabilities.
+- Two exploratory all-target Cargo-tree probes could not download uncached
+  target crates under restricted networking. They were not required checks;
+  current-target `anyhow` dependency tracing passed.
+
+### Checks not run and manual verification
+
+- GitHub-hosted workflow runs, remote labels, milestones, branch protection,
+  repository rules, and CODEOWNERS enforcement are not run or verified before
+  publication. The local files do not claim those remote settings exist.
+- No application launch, native UI, icon, installer, signing, notarization, or
+  release check applies because product and visual assets are unchanged.
+- No product-owner manual application check applies. Complete diff, workflow,
+  security, and documentation review passed locally.
+
+### Advisories and risks
+
+- **Medium, existing:** D-025's two `quick-xml` vulnerabilities and 18
+  warning-class RustSec findings remain in the unchanged lockfile. The exact gate
+  prevents silent expansion; a separate dependency-remediation increment is
+  required before production release and does not block Meta 6.
+- **Advisory:** hosted runner behavior and remote enforcement remain unverified
+  until publication and authenticated repository inspection.
+- **Release boundary:** D-047 records that no license is selected; public release
+  and an open contribution program remain blocked on a separate owner decision.
+
+### Exact next task
+
+Obtain explicit project-owner approval for the proposed Conventional Commit,
+pull-request title, and description before committing or publishing Meta
+Increment 5. After publication, reconcile hosted checks and clean synchronized
+`main`. Do not start Meta Increment 6 or Increment 4V automatically.
+
+### Ready-to-paste resume prompt
+
+```text
+Use $resume-session.
+
+Resume from HANDOFF.md on branch codex/meta-repository-health-github-hygiene. Meta Increment 5 repository health and GitHub hygiene is verified complete with a valid PASS WITH ADVISORIES marker but remains uncommitted and unpublished. Confirm the exact 43-path scope and marker remain valid, then propose a Conventional Commit message, descriptive PR title, and PR description with Purpose, Files changed, Testing performed, Breaking changes, and Next increment. Wait for my approval before any Git publication command. Do not start Meta Increment 6 or Increment 4V.
 ```

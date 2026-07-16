@@ -1,7 +1,7 @@
 # Cortexa roadmap
 
 Status: Authoritative milestone roadmap
-Last updated: 2026-07-15
+Last updated: 2026-07-16
 
 ## Status model
 
@@ -10,6 +10,8 @@ Last updated: 2026-07-15
 - **Ready**: bounded plan is complete and awaits implementation approval.
 - **Proposed**: candidate plan exists but is not selected for the queue.
 - **Blocked**: a prerequisite, decision, or verification gate is unresolved.
+- **Stopped**: the owner halted the request before implementation; no completion
+  evidence exists.
 - **Future**: milestone direction only; no bounded Ready increment exists.
 
 `PROJECT_STATUS.md` contains detailed capability evidence. `NEXT_STEPS.md`
@@ -44,16 +46,19 @@ separately controlled and cannot be inferred from the completion of 4U.
 
 ## Meta and repository milestones
 
-| Meta milestone                                        | Status                            | Goal                                                                                                                | Acceptance gate                                                                                                   |
-| ----------------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| Meta Increment 1 - branding foundation                | Completed and merged at `5edbf4d` | Canonical Cortexa assets, guidance, skill, README/favicon/sidebar use                                               | Asset, visual, build, scope, and `meta-01` gate evidence passed                                                   |
-| Meta Increment 2 - engineering operating system       | Completed                         | Consolidate authoritative engineering, architecture, requirements, roadmap, testing, security, and release guidance | Documentation accuracy, links, formatting, complete repository verification, diff review, and `meta-02` gate pass |
-| Meta Increment 3 - Codex automation and quality gates | Verified complete; unpublished    | Modular safe repository inspection and evidence-based review workflows                                              | Hook regressions, skill validation, complete verification, scope review, and valid `meta-03` marker passed        |
-| Meta Increment 4 - verified application icon rollout  | Ready                             | Replace only the 16 existing Tauri icon files from the approved source                                              | Reconciled Meta 3 publication, separate owner approval, generation review, package build, and target-Mac matrix   |
+| Meta milestone                                          | Status                            | Goal                                                                                                                | Acceptance gate                                                                                                   |
+| ------------------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Meta Increment 1 - branding foundation                  | Completed and merged at `5edbf4d` | Canonical Cortexa assets, guidance, skill, README/favicon/sidebar use                                               | Asset, visual, build, scope, and `meta-01` gate evidence passed                                                   |
+| Meta Increment 2 - engineering operating system         | Completed                         | Consolidate authoritative engineering, architecture, requirements, roadmap, testing, security, and release guidance | Documentation accuracy, links, formatting, complete repository verification, diff review, and `meta-02` gate pass |
+| Meta Increment 3 - Codex automation and quality gates   | Completed and merged at `ad9042c` | Modular safe repository inspection and evidence-based review workflows                                              | Hook regressions, skill validation, complete verification, scope review, and valid `meta-03` marker passed        |
+| Meta Increment 4 - executive documentation request      | Stopped                           | No gate, plan, or repository edit exists                                                                            | Requires a newly selected and separately approved future increment                                                |
+| Meta Increment 5 - repository health and GitHub hygiene | Verified complete; unpublished    | Honest repository entry points, review-only automation, GitHub intake, health checks, and licensing status          | Local verification and `meta-05` gate passed; publication and hosted workflow runs remain separate                |
+| Meta Increment 6 - verified application icon rollout    | Ready                             | Replace only the 16 existing Tauri icon files from the approved source                                              | Verified Meta 5 publication, separate owner approval, generation review, package build, and target-Mac matrix     |
 
-Meta Increments 2 and 3 change documentation and repository governance only.
-They do not satisfy any product capability or release gate. Meta Increment 4 is
-the first Ready item and must not start automatically.
+Meta Increments 2, 3, and 5 change documentation and repository governance only.
+They do not satisfy any product capability or release gate. Meta Increment 4
+was stopped before implementation. Meta Increment 6 is the first Ready item and
+must not start automatically.
 
 ## Milestone acceptance gates
 
@@ -74,11 +79,11 @@ Release milestones additionally require `RELEASE_CHECKLIST.md` and
 ## Current queue
 
 1. Obtain explicit project-owner direction before committing and publishing
-   verified Meta Increment 3.
+   verified Meta Increment 5.
 2. Reconcile clean synchronized `main`, then request separate approval for Meta
-   Increment 4 under `docs/plans/meta-04-verified-application-icon-rollout.md`.
-3. Do not infer selection of Increment 4V or any product milestone from Meta 3
-   or Meta 4 readiness.
+   Increment 6 under `docs/plans/meta-06-verified-application-icon-rollout.md`.
+3. Do not infer selection of Increment 4V or any product milestone from Meta 5
+   or Meta 6 readiness.
 
 No later product increment is Ready in this roadmap.
 

@@ -1,7 +1,7 @@
 # Cortexa security checklist
 
 Status: Authoritative change and release security review checklist
-Last updated: 2026-07-15
+Last updated: 2026-07-16
 
 Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
@@ -139,6 +139,27 @@ production boundary exists.
       accepted decisions and bounded exposure.
 - [ ] Package install scripts and generated artifacts are reviewed.
 - [ ] No dependency is added merely to avoid a small, reviewable implementation.
+
+## GitHub workflow and repository automation
+
+- [ ] Workflow triggers use `pull_request`, scoped `push`, scheduled audit, or
+      explicit dispatch as intended; `pull_request_target` is absent.
+- [ ] Top-level workflow permissions are read-only and checkout credentials do
+      not persist.
+- [ ] Workflows receive no secret context and contain no commit, push, merge,
+      publish, deploy, signing, or auto-merge step.
+- [ ] External actions use immutable commit digests and are reviewed through
+      dependency proposals rather than mutable tags.
+- [ ] Pull-request code is treated as untrusted even when checks pass.
+- [ ] Dependabot proposals remain human-reviewed and cannot write or merge to
+      the default branch automatically.
+- [ ] Secret-pattern and advisory scans fail closed on new findings; accepted
+      baselines remain exact, documented, and independently reviewable.
+- [ ] Accepted advisories remain visible in review evidence and have a named
+      remediation owner or future increment; a passing baseline gate is not a
+      claim that the dependencies are fixed.
+- [ ] CODEOWNERS, labels, milestones, and badges are not represented as remote
+      enforcement unless authenticated repository settings prove it.
 
 ## Release security
 
