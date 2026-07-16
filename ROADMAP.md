@@ -52,13 +52,14 @@ separately controlled and cannot be inferred from the completion of 4U.
 | Meta Increment 2 - engineering operating system         | Completed                         | Consolidate authoritative engineering, architecture, requirements, roadmap, testing, security, and release guidance | Documentation accuracy, links, formatting, complete repository verification, diff review, and `meta-02` gate pass |
 | Meta Increment 3 - Codex automation and quality gates   | Completed and merged at `ad9042c` | Modular safe repository inspection and evidence-based review workflows                                              | Hook regressions, skill validation, complete verification, scope review, and valid `meta-03` marker passed        |
 | Meta Increment 4 - executive documentation request      | Stopped                           | No gate, plan, or repository edit exists                                                                            | Requires a newly selected and separately approved future increment                                                |
-| Meta Increment 5 - repository health and GitHub hygiene | Verified complete; unpublished    | Honest repository entry points, review-only automation, GitHub intake, health checks, and licensing status          | Local verification and `meta-05` gate passed; publication and hosted workflow runs remain separate                |
-| Meta Increment 6 - verified application icon rollout    | Ready                             | Replace only the 16 existing Tauri icon files from the approved source                                              | Verified Meta 5 publication, separate owner approval, generation review, package build, and target-Mac matrix     |
+| Meta Increment 5 - repository health and GitHub hygiene | Completed and merged at `6b149fa` | Honest repository entry points, review-only automation, GitHub intake, health checks, and licensing status          | Local and hosted verification plus `meta-05` gate evidence passed                                                 |
+| Meta Increment 6 - product readiness audit              | Completed and merged at `5281fac` | Evidence-based readiness assessment and ordered remediation backlog                                                 | Documentation audit and valid `meta-06` gate evidence passed; result `NOT READY (57/100)`                         |
+| Meta Increment 7 - verified application icon rollout    | Verified; publication pending     | Exactly 16 existing Tauri icon files generated from the approved source; debug/release bundles verified             | Repaired-baseline checks and `meta-07` gate pass; raw dev icon and default DMG remain documented advisories       |
 
-Meta Increments 2, 3, and 5 change documentation and repository governance only.
-They do not satisfy any product capability or release gate. Meta Increment 4
-was stopped before implementation. Meta Increment 6 is the first Ready item and
-must not start automatically.
+Meta Increments 2, 3, 5, and 6 change documentation and repository governance
+only. They do not satisfy any product capability or release gate. Meta Increment
+4 was stopped before implementation. Meta Increment 7 changes identity assets
+only and does not satisfy a product capability or release gate.
 
 ## Milestone acceptance gates
 
@@ -78,12 +79,11 @@ Release milestones additionally require `RELEASE_CHECKLIST.md` and
 
 ## Current queue
 
-1. Obtain explicit project-owner direction before committing and publishing
-   verified Meta Increment 5.
-2. Reconcile clean synchronized `main`, then request separate approval for Meta
-   Increment 6 under `docs/plans/meta-06-verified-application-icon-rollout.md`.
-3. Do not infer selection of Increment 4V or any product milestone from Meta 5
-   or Meta 6 readiness.
+1. Publish verified Meta Increment 7 and confirm clean synchronized `main` plus
+   its valid marker.
+2. Reconcile the owner's deferred Increment 4V implementation request against
+   that clean baseline.
+3. Begin `04v` before source edits; do not mix it into Meta 7 publication.
 
 No later product increment is Ready in this roadmap.
 

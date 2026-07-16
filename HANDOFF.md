@@ -9,66 +9,102 @@ and merged on the target Mac. Meta Increment 1 branding and identity foundation
 is verified complete and squash-merged at `5edbf4d`. Meta Increment 2 is merged
 at `805efc1`, and Meta Increment 3 repository-local Codex automation is
 squash-merged at `ad9042c`. Meta Increment 5 repository health and GitHub hygiene
-is verified complete, published, and squash-merged at `6b149fa`. Meta Increment
-6 is the documentation-only Product Readiness Audit, squash-merged at `5281fac`
-with result **NOT READY (57/100)**.
+is verified complete, published, and squash-merged at `6b149fa`; its completion
+marker was valid on clean `6b149fa` immediately before the audit edits. Meta
+Increment 6 is the documentation-only Product Readiness Audit on synchronized
+`main`. Its evidence-based result is **NOT READY (57/100)** and it is
+squash-merged at `5281fac`. The dependency compatibility repair is verified,
+published, and squash-merged through PR #20 at `b298999`.
 
-Eight later Dependabot pull requests advanced `origin/main` to `4f23382` but
-left the JavaScript manifest/lock invalid and selected Vite and rusqlite versions
-outside the repository's verified plugin/toolchain compatibility. The current
-`codex/fix-dependency-baseline-compatibility` workspace contains the approved
-four-file repair and complete passing verification. It is uncommitted and
-unpublished.
-
-Meta Increment 7 remains isolated at local commit `a1808e2` and remote PR #19.
-Its icon implementation and `meta-07` marker were valid on the pre-Dependabot
-baseline, but the PR merge candidate inherited broken `main` dependencies and
-failed required checks before exercising the icon change. Meta 7 is not merged
-and must be rebased, fully reverified, and re-gated only after this dependency
-repair is published. No `04v` gate or source edit exists.
+Meta Increment 7 is verified complete with advisories on fresh branch
+`codex/meta-verified-application-icon-rollout` from corrected `b298999`. The
+original local branch is preserved as
+`codex/meta-verified-application-icon-rollout-pre-dependency-repair` at
+`a1808e2`, and remote PR #19 remains untouched. Its approved icon and closeout
+changes remain uncommitted and unpublished; complete repaired-baseline
+verification and the mandatory `meta-07` report pass. No `04v` gate or source
+edit exists.
 
 ## Repository dependency baseline compatibility repair
 
-### Exact implementation scope
-
-```text
-package.json
-package-lock.json
-src-tauri/Cargo.toml
-src-tauri/Cargo.lock
-```
-
-The repair restores valid JSON, direct `vitest@3.2.6`, one deduplicated
-`vite@7.3.5` graph compatible with `@vitejs/plugin-react@4.7.0`, and exact
-`rusqlite@0.37.0` compatible with the declared Rust 1.88 minimum and installed
-Rust 1.90. Other compatible dependency updates on `main` remain unchanged.
-
-### Verification and review
-
-`npm ci`, dependency-tree proofs, TypeScript, complete `npm run verify`, npm
-audit, secret scanning, and the exact accepted RustSec baseline gate pass.
-Complete verification includes 28 hook tests, 16 repository-health tests, 124
-frontend tests, 95 Rust library tests, 21 Rust integration tests, strict Clippy,
-Vite builds, and the Tauri release no-bundle build. No manual application check
-applies because only dependency metadata changes.
-
-The consolidated report is
+The exact four-file repair restored valid JSON, direct `vitest@3.2.6`, one
+deduplicated `vite@7.3.5` graph compatible with the React plugin, and exact
+`rusqlite@0.37.0` while retaining later compatible updates. Clean installation,
+dependency proofs, complete repository verification, npm audit, secret scan,
+and the accepted RustSec baseline gate passed. Its consolidated result is
+`PASS WITH ADVISORIES` in
 `docs/reviews/2026-07-16-repo-dependency-baseline-compatibility-post-increment-review.md`.
-The result is `PASS WITH ADVISORIES`; the advisories are the unchanged accepted
-RustSec baseline and the requirement to reverify Meta 7 on repaired `main`. No
-Critical or High blocking finding remains in this repair.
+Publication is complete at `b298999`; Meta 7 has now been reverified
+independently on that repaired baseline.
 
-### Exact next task
+## Meta Increment 7 completion state
 
-Review the verified dependency-repair diff and naming, then commit, push, and
-squash-merge that repair only. After synchronized repaired `main`, rebase Meta 7
-PR #19, rerun its complete verification and gate, and update the PR only after
-its marker is valid. Do not begin 4V.
+### Goal and exact scope
+
+Generate the complete Tauri icon family from
+`assets/branding/app-icon-source.png`, replace only the existing 16 files under
+`src-tauri/icons/`, and verify package and native macOS presentation without
+changing application behavior, source, configuration, identifiers,
+dependencies, capabilities, permissions, or the canonical source asset.
+
+The source scope is exactly the 13 PNG outputs plus `icon.icns`, `icon.ico`, and
+`icon.png` listed in the active plan. Closeout changes remain limited to the
+declared project-memory, plan, increment, and review paths. No 4V source, test,
+or gate state is included.
+
+### Verification evidence
+
+- The canonical 512 x 512 source SHA-256 remains
+  `e31345045817f040c9fc664d4dc090a2002a1f6d0676c870df2c7e14885afaec`.
+- Tauri CLI generation ran twice in `/private/tmp`; 15 outputs compare
+  byte-for-byte. Repeated ICNS containers vary in bytes, but all ten decoded
+  representations from both generations are pixel-identical to the reviewed
+  repository ICNS. Every PNG has the planned dimensions and opaque protected
+  field. ICO contains 16, 24, 32, 48, 64, and 256 pixel representations; ICNS
+  contains the expected 1x/2x representations through 1024 pixels. `icon.png`
+  decodes pixel-identically to the canonical source. D-052 records the durable
+  semantic-verification rule.
+- `npm run verify` passed formatting, repository health, lint, strict Clippy,
+  28 hook tests, 16 repository-health tests, 124 frontend tests, 95 Rust library
+  tests, 21 Rust integration tests, typecheck, Vite builds, and the Tauri
+  release no-bundle build. `npm audit --audit-level=low` found zero
+  vulnerabilities.
+- Required release and debug `.app` bundle commands passed. Both bundle
+  `Info.plist` files select `icon.icns`, and both embedded resources match the
+  generated ICNS byte-for-byte. The configured bundle name and application menu
+  remain Cortexa.
+- Current target-Mac AppKit inspection passed for isolated debug and release
+  running applications under Aqua and Dark Aqua. LaunchServices required a
+  targeted debug-bundle registration refresh before returning the current
+  Finder icon; the final icon and prior owner-confirmed Finder presentation use
+  the unchanged reviewed ICNS. The raw unbundled `tauri dev` process retains
+  the previously approved generic `exec` exception without scope expansion.
+- The default all-bundles Tauri command built `Cortexa.app` but failed in the
+  DMG bundling script. Required app bundling passes; DMG creation remains an
+  explicit release-readiness advisory and is not represented as verified.
+
+### Risks, rollback, and next task
+
+The approved opaque raster retains its protected near-white field. Fine circuit
+detail naturally reduces at compact sizes. macOS icon caching can require a
+fresh bundle or process, so verification used newly built debug/release bundles
+and direct system icon queries. No Critical or High finding remains.
+
+Before commit, restore only the 16 icon paths and declared closeout documents to
+`b298999`. After publication, revert the single bounded Meta 7 squash commit.
+There is no migration, data, dependency, identifier, credential, or remote
+resource rollback.
+
+The exact next task is review of the verified diff and proposed Git publication
+naming, followed only after separate project-owner approval by commit,
+force-update of PR #19's existing remote branch, hosted checks, squash merge,
+and clean synchronized-main marker confirmation. Do not begin 4V during Meta 7
+publication.
 
 ### Ready-to-paste next prompt
 
 ```text
-Review the verified repository dependency baseline compatibility repair. Show the descriptive codex/ branch name, Conventional Commit message, PR title, and PR description with Purpose, Files changed, Testing performed, Breaking changes, and Next increment. After my approval, commit, push, create the PR, squash merge it, and verify clean synchronized main plus the valid repo-dependency-baseline-compatibility marker. Do not update or merge Meta Increment 7 PR #19 in the same publication step, and do not begin Increment 4V.
+Review the verified Meta Increment 7 diff and valid marker on codex/meta-verified-application-icon-rollout. Preserve codex/meta-verified-application-icon-rollout-pre-dependency-repair at a1808e2. Show the Conventional Commit message and updated PR #19 title and description with Purpose, Files changed, Testing performed, Breaking changes, and Next increment. After my approval, commit, force-with-lease push the reconstructed branch to the existing PR #19 remote branch, wait for hosted checks, squash merge, and verify clean synchronized main plus the valid meta-07 marker. Do not begin Increment 4V during publication.
 ```
 
 Reconstructed Increment 4I was committed as `99f9279` with message `Remove generic audit scaffold`, pushed on `codex/phase4-increment-4i`, fast-forward merged into `main`, and pushed. The corrected `04i` completion marker remains valid after the deletion commit. The original pre-fingerprint implementation commit remains preserved exactly at `cf9d701` on local `codex/phase4-increment-4i-pre-fingerprint-fix`; no remote ref contains it.
@@ -150,12 +186,11 @@ under `docs/plans/meta-03-codex-automation.md`. Meta Increment 5 repository
 health and GitHub hygiene is published at `6b149fa` under
 `docs/plans/meta-05-repository-health.md`. The stopped Meta Increment 4
 executive-document request has no gate, edit, or completion evidence. D-049
-assigns Meta Increment 6 to the Product Readiness Audit. The older application
-icon plan remains at `docs/plans/meta-06-verified-application-icon-rollout.md`
-as deferred historical evidence and requires later renumbering before use.
-Increment 4V terminal approval audit is the smallest audit-recommended
-remediation but remains Proposed and separately controlled; no `04v` gate or
-source edit exists.
+assigns Meta Increment 6 to the Product Readiness Audit, D-050 records the Meta
+7 queue number, and D-051 records the verified icon-generation boundary plus
+the approved raw-development exception. Increment 4V terminal approval audit is
+the owner-requested follow-on but remains outside this workspace; no `04v` gate
+or source edit exists.
 
 ## Increment 4U completion state
 
@@ -3110,4 +3145,85 @@ must be renumbered in a later planning change before implementation.
 Use $readiness-review.
 
 Start from HANDOFF.md on the current documentation-only Meta Increment 6 audit workspace. Review docs/reviews/2026-07-16-product-readiness-audit.md and reconcile its NOT READY result with docs/plans/04v-bind-initial-terminal-approval-audit.md. Confirm whether Increment 4V remains the smallest bounded remediation with exact files, risks, non-goals, verification, manual gates, and rollback. Do not begin a gate, edit source, implement, commit, push, merge, renumber the deferred icon plan, or start a later increment. Wait for project-owner direction.
+```
+
+## Meta Increment 7 application-icon planning reconciliation
+
+### Current state and outcome
+
+- Clean synchronized `main`, `origin/main`, and `HEAD` resolved to `5281fac`
+  before planning edits.
+- The `meta-06` completion marker reported complete and valid on that clean
+  baseline. Its result was `PASS WITH ADVISORIES`.
+- The unchanged 16-file application-icon rollout is now Ready as Meta Increment
+  7 under `docs/plans/meta-07-verified-application-icon-rollout.md`.
+- D-050 records only the new live number and queue selection. No icon, source
+  asset, product behavior, gate state, dependency, configuration, permission,
+  identifier, database, commit, push, merge, or 4V work changed.
+- The live `meta-06` marker now reports `valid: false` as expected because these
+  later planning files change its workspace fingerprint. Its validity on clean
+  `5281fac` remains recorded evidence; no `meta-07` gate state exists.
+
+### Exact files changed
+
+```text
+AGENTS.md
+ARCHITECTURE.md
+CHANGELOG.md
+DECISIONS.md
+HANDOFF.md
+NEXT_STEPS.md
+PLANS.md
+PROJECT_STATUS.md
+ROADMAP.md
+docs/github/MILESTONES.md
+docs/plans/README.md
+docs/plans/meta-06-verified-application-icon-rollout.md (renamed)
+docs/plans/meta-07-verified-application-icon-rollout.md (rename target)
+```
+
+### Commands and results
+
+- `git status --short --branch`, exact hash comparison, and recent-log
+  inspection: clean synchronized `main` at `5281fac` before edits.
+- `python3 .codex/hooks/post_increment_gate.py status`: pre-edit `meta-06`
+  complete and valid; post-edit complete and expected invalid due to the new
+  planning fingerprint.
+- Node `v26.3.0`, npm `11.16.0`, Cargo and Rust `1.90.0`, rustfmt
+  `1.8.0-stable`, and Clippy `0.1.90` confirmed on arm64 macOS 26.5.2 with
+  Xcode Command Line Tools.
+- Source and icon inspection: canonical 512 x 512 app-icon source hash remains
+  `e31345045817f040c9fc664d4dc090a2002a1f6d0676c870df2c7e14885afaec`; exactly
+  the planned 16 production icon files exist.
+- Baseline `npm run docs:check`: passed.
+- First post-edit `npm run docs:check`: formatting-only failure in
+  `docs/github/MILESTONES.md`, `PLANS.md`, and `ROADMAP.md`.
+- `npx prettier --write docs/github/MILESTONES.md PLANS.md ROADMAP.md`: applied
+  only mechanical Markdown formatting.
+- The first final-verification attempt found a formatting-only wrap in the new
+  `HANDOFF.md` section; `npx prettier --write HANDOFF.md` corrected it.
+- Final `npm run docs:check`: passed formatting and internal links.
+- `npm run repository:check`: passed all repository-health checks.
+- Targeted old-plan/live-number scan, plan-path existence checks, no-icon-change
+  assertion, and `git diff --check`: passed.
+- Renamed-plan comparison and complete diff review: exact 16-icon source scope,
+  risks, non-goals, verification matrix, and rollback intent are preserved; only
+  live numbering, prerequisites, gate identity, current baseline, and complete
+  closeout-document inventory changed.
+
+No required check remains failed. Full application verification and native icon
+checks were not run because this session changes planning documentation only.
+Target-Mac development, packaged, Dock, app/window switcher, menu/application,
+Finder, light-mode, and dark-mode checks remain mandatory during implementation.
+
+### Exact next task
+
+Obtain separate project-owner approval to implement Ready Meta Increment 7. Do
+not begin `meta-07`, generate or replace icons, implement Increment 4V, commit,
+push, merge, or start another increment before that approval.
+
+### Ready-to-paste approval prompt
+
+```text
+Approved. Implement Meta Increment 7 exactly as documented in docs/plans/meta-07-verified-application-icon-rollout.md. Begin mandatory meta-07 gate state before icon edits. Preserve the exact 16-file icon source scope and declared closeout scope. Do not expand scope, implement Increment 4V, commit, push, merge, or start another increment.
 ```

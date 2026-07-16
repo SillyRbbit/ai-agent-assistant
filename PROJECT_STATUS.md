@@ -17,14 +17,14 @@ complete and was valid on clean `6b149fa` immediately before audit edits. The
 Meta Increment 4 executive-document request was stopped before gate state or
 edits and has no completion evidence. Meta Increment 6 is the documentation-only
 Product Readiness Audit, squash-merged at `5281fac` with result **NOT READY
-(57/100)**. Eight subsequent Dependabot merges advanced `main` to `4f23382` but
+(57/100)**. Eight subsequent Dependabot merges advanced `main` to `4f23382` and
 broke clean npm installation and supported-Rust compilation. The Repository
-Dependency Baseline Compatibility Repair is **verified complete with advisories,
-uncommitted, and unpublished** on
-`codex/fix-dependency-baseline-compatibility`. Meta Increment 7 is verified only
-on its older baseline and remains open as PR #19; it is not merged and requires
-rebase, full reverification, and a new valid marker after this repair is
-published. Increment 4V remains unstarted with no gate or source edit.
+Dependency Baseline Compatibility Repair is **verified complete, published, and
+squash-merged through PR #20 at `b298999`**. Meta Increment 7 is **verified
+complete with advisories on corrected `b298999`**; its original
+pre-repair branch remains preserved at `a1808e2`, remote PR #19 is untouched,
+and the reconstructed changes remain uncommitted and unpublished. Increment 4V
+remains unstarted with no gate or source edit.
 
 ## Increment status
 
@@ -76,11 +76,11 @@ published. Increment 4V remains unstarted with no gate or source edit.
 - Meta Increment 5: repository health and GitHub hygiene - **verified complete;
   published and squash-merged at `6b149fa`; marker valid on that clean baseline**.
 - Meta Increment 6: Product Readiness Audit - **documentation-only audit
-  complete; result NOT READY (57/100)**.
+  complete and squash-merged at `5281fac`; result NOT READY (57/100)**.
 - Repository dependency baseline compatibility repair - **verified complete
-  with advisories; uncommitted and unpublished**.
-- Verified application icon rollout - **deferred; historical Meta 6 plan
-  preserved, new live increment number and separate approval required**.
+  with advisories; published and squash-merged at `b298999`**.
+- Meta Increment 7: verified application icon rollout - **verified complete with
+  advisories on repaired `b298999`; uncommitted and unpublished**.
 
 ## Repository dependency baseline compatibility evidence
 
@@ -96,8 +96,9 @@ published. Increment 4V remains unstarted with no gate or source edit.
   pass.
 - No application source, behavior, test, permission, capability, IPC, schema,
   icon, identifier, or production dependency is added.
-- Publication of this repair is the only next action. Meta 7 PR #19 must then be
-  rebased and reverified separately; 4V must not start during recovery.
+- Publication of this repair is complete. Meta 7 has been reconstructed and
+  reverified separately on `b298999`; PR #19 publication is next, and 4V must
+  not start during that publication.
 
 ## Meta Increment 1 capability and evidence
 
@@ -219,15 +220,36 @@ published. Increment 4V remains unstarted with no gate or source edit.
   successful terminal approval paths to the existing typed in-memory audit
   adapter within the already reviewed two-file scope. It remains Proposed until
   separately selected and approved.
-- D-049 records the owner's Meta 6 audit assignment. The older 16-icon plan is
-  preserved as historical evidence but deferred until a later planning change
-  gives it a new live number and separate approval.
+- D-049 records the owner's Meta 6 audit assignment. D-050 assigns the unchanged
+  16-icon rollout its new live Meta Increment 7 number without implementing it.
 - The repository Stop hook required a late `meta-06` gate start and consolidated
   closeout report. Its result is `PASS WITH ADVISORIES`; next-increment readiness
   remains `Blocked`. The timing is recorded as an advisory because the analysis
   began under `$readiness-review`, which normally does not start a gate.
 - This audit changes documentation only and starts no source work, dependency
   change, commit, push, merge, release, or later increment.
+
+## Meta Increment 7 capability and evidence
+
+- The exact 16 existing files under `src-tauri/icons/` derive from
+  `assets/branding/app-icon-source.png` with SHA-256
+  `e31345045817f040c9fc664d4dc090a2002a1f6d0676c870df2c7e14885afaec`.
+- PNG dimensions, opaque protected field, ICO sizes, and ICNS representations
+  pass inspection. Fifteen regenerated outputs are byte-identical; repeated
+  ICNS containers vary in bytes but all ten decoded representations are
+  pixel-identical to the reviewed repository ICNS. `icon.png` decodes to the
+  same 512 x 512 pixels as the canonical source. D-052 records that rule.
+- Release and debug `.app` bundles pass and embed the generated `icon.icns`
+  byte-for-byte. AppKit and Finder inspection show the official Cortexa icon in
+  Aqua and Dark Aqua, and both bundles retain the Cortexa menu/application name.
+- D-051 records the approved non-blocking exception: the raw unbundled
+  `npm run tauri -- dev` process is registered by macOS with the generic `exec`
+  icon. No source or configuration work was added to change that behavior.
+- Complete `npm run verify`, npm audit, exact-scope, secret, generated-output,
+  architecture, security, code-health, debt, readiness, and mandatory
+  `meta-07` reviews pass on repaired `b298999`. The default DMG bundling-script
+  failure remains a release advisory; required debug and release app bundles
+  pass.
 
 ## Increment 4U capability and evidence
 
@@ -801,11 +823,9 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Review the Meta Increment 6 Product Readiness Audit and choose the first
-remediation explicitly. Increment 4V terminal approval audit is the smallest
-recommended product increment, but it remains Proposed and has no gate or source
-edit. The deferred application-icon plan requires later renumbering and separate
-approval. Do not start either item automatically.
+Publish verified Meta Increment 7 using the approved Git naming workflow, then
+reconcile clean synchronized `main` and the valid marker. Only afterward begin
+the owner-requested Increment 4V gate; no `04v` source edit exists yet.
 
 ## Phase 4 planning result
 

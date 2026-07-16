@@ -1,6 +1,6 @@
-# Meta Increment 6 - verified application icon rollout
+# Meta Increment 7 - verified application icon rollout
 
-Status: Ready; requires verified Meta Increment 5 completion and separate project-owner approval
+Status: Verified complete with advisories; uncommitted and unpublished
 Owner: Project maintainer
 Last updated: 2026-07-16
 
@@ -36,10 +36,11 @@ src-tauri/icons/icon.ico
 src-tauri/icons/icon.png
 ```
 
-Closeout documentation is limited to `AGENTS.md`, `CHANGELOG.md`, `HANDOFF.md`,
-`NEXT_STEPS.md`, `PLANS.md`, `PROJECT_STATUS.md`, this plan, a new Meta 6
-increment record, `docs/plans/README.md`, and one dated review. Change
-`DECISIONS.md` only if implementation establishes a durable generation rule.
+Closeout documentation is limited to `AGENTS.md`, `ARCHITECTURE.md`,
+`CHANGELOG.md`, `HANDOFF.md`, `NEXT_STEPS.md`, `PLANS.md`, `PROJECT_STATUS.md`,
+`ROADMAP.md`, `docs/github/MILESTONES.md`, this plan, a new Meta 7 increment
+record, `docs/plans/README.md`, and one dated review. Change `DECISIONS.md` only
+if implementation establishes a durable generation rule.
 
 ## Explicit non-goals
 
@@ -52,9 +53,10 @@ increment record, `docs/plans/README.md`, and one dated review. Change
 
 ## Implementation outline
 
-1. Confirm clean synchronized `main`, a valid Meta 5 marker, and exact source
-   hash and dimensions.
-2. Begin mandatory `meta-06` gate state before icon edits.
+1. Confirm the baseline descends from published Meta 6 at `5281fac` and the
+   dependency compatibility repair at `b298999`, plus the exact source hash and
+   dimensions.
+2. Begin mandatory `meta-07` gate state before icon edits.
 3. Generate icons with the existing Tauri CLI in a controlled temporary path.
 4. Review every format and copy only the exact 16 approved outputs.
 5. Verify dimensions, PNG color/alpha, ICO/ICNS structure, references, and diff.
@@ -71,29 +73,34 @@ increment record, `docs/plans/README.md`, and one dated review. Change
 ## Verification
 
 Verify exact inventory, dimensions, formats, representative rendered sizes,
+decoded ICNS representation pixels per D-052, exact packaged-resource equality,
 `git diff --check`, `npm run verify`, `npm audit --audit-level=low`, and a
-bundled Tauri build. On the target Mac verify development and packaged icons in
-the Dock, app/window switcher, menu/application context, and Finder in light and
-dark appearances. The `meta-06` marker must finish complete and valid.
+bundled Tauri build. On the target Mac verify debug-bundled and packaged icons
+through macOS application, Dock/switcher, menu, and Finder icon APIs in light
+and dark appearances. D-051 records the project-owner-approved exception for
+the generic icon macOS assigns to the raw unbundled `tauri dev` executable. The
+`meta-07` marker must finish complete and valid.
 
 ## Rollback
 
-Before commit, restore only the 16 icon files from the verified Meta 5 baseline
-and revert declared closeout documentation. After commit, revert one bounded
-Meta 6 commit. No migration, data, dependency, identifier, or remote resource
-requires rollback.
+Before commit, restore only the 16 icon files from repaired `b298999` and revert
+declared closeout documentation. After commit, revert one bounded Meta 7 commit.
+No migration, data, dependency, identifier, or remote resource requires
+rollback.
 
 ## Acceptance criteria
 
-- [ ] Meta Increment 5 is verified complete and published as required by the
-      project owner before this increment begins.
-- [ ] Separate project-owner approval is recorded before implementation.
-- [ ] Only the exact icon and declared closeout scope changes.
-- [ ] Every output derives from the approved app-icon source.
-- [ ] Formats, sizes, builds, and target-Mac presentation checks pass.
-- [ ] No source asset, config, identifier, runtime, dependency, or permission
+- [x] Meta Increment 6 is verified complete and published at `5281fac`; its
+      marker validity on that clean baseline is recorded before this planning
+      change.
+- [x] Separate project-owner approval is recorded before implementation.
+- [x] Only the exact icon and declared closeout scope changes.
+- [x] Every output derives from the approved app-icon source.
+- [x] Formats, sizes, required app bundles, and target-Mac presentation checks
+      pass with D-051's approved raw-development-icon advisory.
+- [x] No source asset, config, identifier, runtime, dependency, or permission
       changes.
-- [ ] Complete diff and mandatory gate pass without a blocking finding.
+- [x] Complete diff and mandatory gate pass without a blocking finding.
 
 ## Renumbering record
 
@@ -105,4 +112,17 @@ automation and directed that this unchanged icon rollout become Meta Increment 4
 On 2026-07-16 the owner selected repository health and GitHub hygiene as Meta
 Increment 5 after stopping an unimplemented Meta Increment 4 executive-document
 request. The unchanged icon rollout therefore becomes Meta Increment 6. D-044,
-D-045, and D-048 record the renumberings. No icon or product behavior changed.
+D-045, and D-048 record those renumberings. Later that day, D-049 assigned Meta
+Increment 6 to the documentation-only Product Readiness Audit and deferred this
+unchanged plan. After that audit was published at `5281fac`, the owner selected
+the icon rollout as Meta Increment 7. D-050 records the new live number. No icon
+or product behavior changed through any renumbering.
+
+## Reconstruction record
+
+The first verified implementation commit `a1808e2` predated the dependency
+compatibility repair and produced a broken PR merge candidate through no icon
+change. The local branch is preserved as
+`codex/meta-verified-application-icon-rollout-pre-dependency-repair`. The same
+approved icon and closeout scope was reconstructed without commit on fresh
+`b298999`, then fully reverified and re-gated before remote PR #19 publication.

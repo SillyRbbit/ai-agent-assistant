@@ -4,6 +4,14 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Reconstructed Meta Increment 7 on the repaired dependency baseline at
+  `b298999`, reran the complete repository, artifact, bundle, audit, and
+  target-Mac verification matrix, and preserved remote PR #19 untouched pending
+  separately approved publication.
+- Recorded that repeated Tauri CLI ICNS generation is pixel-deterministic but
+  not container-byte deterministic. D-052 therefore requires decoded
+  representation equality for regeneration and exact byte equality between the
+  reviewed repository ICNS and each packaged app resource.
 - Restored a valid, reproducible dependency baseline after overlapping
   Dependabot merges removed the direct Vitest entry, produced duplicate npm
   lock keys, selected Vite outside the React plugin peer range, and selected a
@@ -13,6 +21,18 @@ All notable repository changes are documented here. Entries distinguish verified
   Clean installation, complete repository verification, npm audit, secret scan,
   and the exact RustSec advisory-baseline gate pass without product behavior or
   source changes.
+- Replaced exactly the 16 existing Tauri icon outputs with derivatives of the
+  canonical Cortexa app-icon source and verified PNG, ICO, ICNS, debug-bundle,
+  release-bundle, Finder, menu, and macOS application-icon presentation.
+- D-051 records the project-owner-approved advisory that raw unbundled
+  `npm run tauri -- dev` retains macOS's generic `exec` icon while debug and
+  release `.app` bundles use Cortexa. Default DMG creation also remains a
+  release-readiness advisory after its Finder AppleScript step failed; both app
+  bundle builds passed.
+- Reconciled the unchanged verified application-icon rollout as Ready Meta
+  Increment 7 after publication of the Meta Increment 6 readiness audit. D-050
+  records the new live number, preserved 16-icon scope and verification matrix,
+  separate implementation approval, and absence of any icon or product change.
 - Added the documentation-only Meta Increment 6 Product Readiness Audit with a
   source-backed `NOT READY` result, 57/100 composite score, 16 category
   assessments, 18 classified findings, an ordered remediation backlog, roadmap

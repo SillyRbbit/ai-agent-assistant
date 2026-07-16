@@ -50,10 +50,13 @@ This file is the ordered implementation queue. Work only on the first item marke
   **Verified complete; published and squash-merged at `6b149fa`**.
 - Meta Increment 6 - Product Readiness Audit:
   **Documentation-only audit complete; result NOT READY (57/100)**.
+- Meta Increment 7 - verified application icon rollout:
+  **Verified complete with advisories on repaired `b298999`; uncommitted and
+  unpublished**.
 
 ## Queue status
 
-### Publish dependency baseline compatibility repair
+### Publish Meta Increment 7
 
 **Status:** Verified complete with advisories; uncommitted and unpublished.
 
@@ -61,49 +64,29 @@ Eight Dependabot merges advanced `main` to `4f23382` while leaving an invalid
 JavaScript manifest/lock, an incompatible Vite/plugin graph, and a rusqlite
 transitive build script that fails on the supported Rust toolchain. The approved
 repair restores only the prior compatible Vite/Vitest and rusqlite dependency
-families across four implementation files. Clean installation, full repository
-verification, audits, and the mandatory gate pass.
+families across four implementation files. That repair is verified, published,
+and squash-merged through PR #20 at `b298999`.
 
-The exact next action is publication of
-`codex/fix-dependency-baseline-compatibility` under the approved Git naming and
-squash-PR workflow. Do not combine that PR with Meta Increment 7 or 4V.
+Meta Increment 7 was reconstructed on fresh branch
+`codex/meta-verified-application-icon-rollout` from corrected `b298999`. The
+original pre-repair branch remains preserved at commit `a1808e2`, and remote PR
+#19 is untouched. The complete icon verification matrix and mandatory `meta-07`
+gate pass on this repaired baseline. The exact next action is to review the Git
+publication naming, then update and squash-merge PR #19 only after separate
+project-owner approval.
 
-After the repair is merged and `main` is synchronized, rebase Meta Increment 7
-PR #19 onto repaired `main`. Rerun its complete icon verification and mandatory
-`meta-07` gate because its older completion fingerprint cannot authorize the new
-baseline. Update and merge PR #19 only after hosted checks and the marker pass.
+### Increment 4V - bind initial terminal approval audit
 
-### No implementation increment selected
+**Status:** Blocked only by Meta 7 publication. The owner requested
+implementation during active Meta Increment 7, so the request is deferred until
+Meta 7 is committed, published, and reconciled on clean synchronized `main`. No
+`04v` gate or source edit exists.
 
-The `$readiness-review` audit does not reorder or approve the implementation
-queue. No item is marked Ready. Increment 4V remains Proposed with no `04v` gate
-state or source edit; the audit identifies it as the smallest remediation for
-the project owner to consider, not as a selected queue item.
-
-**Goal:** Prevent a future initial-turn caller from receiving a successful
-native or run-termination approval resolution unless the turn's private typed
-in-memory audit adapter has validated and recorded that exact manager-owned
-resolution first.
-
-Its exact two-file source/test scope, risks, non-goals, verification, and
-rollback remain frozen in
-`docs/plans/04v-bind-initial-terminal-approval-audit.md`. The merged 4U
-prerequisite is satisfied. Explicit owner selection and approval are still
-required before gate state or implementation.
-
-### Deferred application-icon rollout
-
-**Status:** Deferred. The historical plan at
-`docs/plans/meta-06-verified-application-icon-rollout.md` retains its exact
-16-icon scope and verification requirements, but D-049 supersedes its live Meta
-6 number. Renumber and reconcile that plan in a later, separately approved
-planning change before any icon edit.
-
-The project-owner Meta Increment 4 executive-document request remains stopped
-with no gate or completion evidence. Meta Increment 5 is published at `6b149fa`.
-The Meta Increment 6 readiness audit is recorded at
-`docs/reviews/2026-07-16-product-readiness-audit.md`. Do not implement 4V, the
-icon rollout, or another increment automatically.
+The exact two-file plan remains
+`docs/plans/04v-bind-initial-terminal-approval-audit.md`. Do not begin its gate
+inside the Meta 7 workspace. After Meta 7 publication, reconcile the clean
+baseline, confirm the valid `meta-07` marker, then begin `04v` before either
+approved source/test file changes.
 
 Repository Workflow Increment 4G is **Verified complete**. It adds only the repository-local post-increment skill, deterministic Stop-hook validator, focused tests, report assets, and workflow documentation required to replace D-027's one-time exception. Its consolidated result is `PASS WITH ADVISORIES`; the advisory is the documented project-hook trust/bypass boundary.
 
@@ -229,10 +212,10 @@ production caller is introduced. D-042 records the durable boundary. Roll back
 the two source/test files and only the declared closeout documentation before
 commit, or revert one bounded 4U commit afterward.
 
-No 4U, Meta 2, Meta 3, Meta 5, or Meta 6 implementation task remains. The audit
-recommends Increment 4V as the smallest remediation, but it remains Proposed and
-requires explicit project-owner selection and approval. Do not start it or the
-deferred icon rollout automatically.
+No 4U, Meta 2, Meta 3, Meta 5, or Meta 6 implementation task remains. Meta
+Increment 7 is the first Ready item and requires separate implementation
+approval. The audit recommends Increment 4V as the smallest product remediation,
+but it remains Proposed. Do not start either increment automatically.
 
 ## Proposed after published 4U
 

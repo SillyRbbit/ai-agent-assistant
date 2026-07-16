@@ -4,16 +4,15 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-The Repository Dependency Baseline Compatibility Repair is verified complete
-with advisories under
-`docs/plans/repository-dependency-baseline-compatibility.md`; publication is
-pending. Its exact implementation scope is the two JavaScript and two Rust
-manifest/lock files. It restores valid clean installation and supported
-toolchain compatibility without changing application behavior.
+The Repository Dependency Baseline Compatibility Repair is verified, published,
+and squash-merged through PR #20 at `b298999` under
+`docs/plans/repository-dependency-baseline-compatibility.md`.
 
-Meta Increment 7 PR #19 remains separate and unmerged. It must be rebased,
-reverified, and re-gated after this repair reaches synchronized `main`. No later
-implementation plan may begin during that recovery.
+Meta Increment 7 is verified complete with advisories on repaired `b298999`.
+Its reconstructed changes remain uncommitted and unpublished on
+`codex/meta-verified-application-icon-rollout`; remote PR #19 is untouched.
+Publication is the only next action, and no later implementation plan may begin
+during that publication.
 
 Meta Increment 5 repository health and GitHub hygiene is verified complete,
 published, and squash-merged at `6b149fa` under
@@ -30,14 +29,17 @@ squash-merged at `5edbf4d` under
 
 Meta Increment 6 is the documentation-only Product Readiness Audit recorded at
 `docs/reviews/2026-07-16-product-readiness-audit.md`. Its result is **NOT READY
-(57/100)**. It starts no implementation plan. The repository Stop hook required
-late `meta-06` gate initialization and a consolidated closeout report; that
-workflow addition changes no product source or audit conclusion.
+(57/100)**, it is squash-merged at `5281fac`, and its completion marker was valid
+on that clean baseline before Meta 7 planning edits. It starts no implementation
+plan. The repository Stop hook required late
+`meta-06` gate initialization and a consolidated closeout report; that workflow
+addition changes no product source or audit conclusion.
 
-The older application-icon plan remains unchanged at
-`docs/plans/meta-06-verified-application-icon-rollout.md` as historical evidence,
-but D-049 defers it until a later planning change assigns a new live number and
-separate approval. It is not an active or Ready plan under the current queue.
+Meta Increment 7 verified application icon rollout is complete under
+`docs/plans/meta-07-verified-application-icon-rollout.md`. Exactly the existing
+16 Tauri icon files derive from the canonical source; debug and release app
+bundles use Cortexa, while D-051 preserves the approved raw `tauri dev` generic
+icon advisory without expanding source or configuration scope.
 
 The stopped Meta Increment 4 executive-document request created no gate state,
 plan, repository edit, or completion evidence. D-048 and D-049 record the queue
@@ -84,6 +86,7 @@ docs/plans/meta-02-engineering-operating-system.md
 docs/plans/meta-03-codex-automation.md
 docs/plans/meta-05-repository-health.md
 docs/plans/repository-dependency-baseline-compatibility.md
+docs/plans/meta-07-verified-application-icon-rollout.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -156,7 +159,7 @@ A plan must contain:
 | Meta Increment 5 repository health             | Complete | Project maintainer | 2026-07-16   |
 | Meta Increment 6 product readiness audit       | Complete | Project maintainer | 2026-07-16   |
 | Repository dependency baseline compatibility   | Complete | Project maintainer | 2026-07-16   |
-| Verified application icon rollout              | Deferred | Project maintainer | 2026-07-16   |
+| Meta Increment 7 application icon rollout      | Complete | Project maintainer | 2026-07-16   |
 
 ## Meta Increment 1 branding and identity foundation - complete
 
@@ -234,14 +237,17 @@ capability, permission, database, icon, identifier, commit, push, merge, or late
 increment starts through this audit. The mandatory `meta-06` report records
 `PASS WITH ADVISORIES` and next-increment readiness `Blocked`.
 
-## Verified application icon rollout - deferred
+## Meta Increment 7 verified application icon rollout - complete
 
-The exact historical 16-file plan remains at
-`docs/plans/meta-06-verified-application-icon-rollout.md`. D-049 supersedes only
-its live queue number. Before implementation, a later planning change must give
-it a new number, reconcile links and gate identity, and obtain separate owner
-approval. Its approved source asset, source scope, risks, non-goals, package and
-target-Mac checks, and rollback remain unchanged.
+The exact 16-file plan is
+`docs/plans/meta-07-verified-application-icon-rollout.md`. Every output derives
+from the canonical 512 x 512 Cortexa source; dimensions, PNG alpha/color,
+ICO/ICNS structure, embedded bundle resources, complete repaired-baseline
+verification, and target-Mac application-icon inspection pass. D-051 records
+the approved non-blocking raw `tauri dev` generic-icon exception. D-052 records
+decoded-pixel validation for byte-variable ICNS regeneration while retaining
+exact embedded-resource equality. Default DMG automation remains a release
+advisory; debug and release `.app` bundles pass.
 
 ## Phase 4 Increment 4U bind initial approval run-termination - complete
 
