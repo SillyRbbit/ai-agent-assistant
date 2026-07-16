@@ -4,6 +4,19 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Documentation-only Meta Increment 2 engineering operating system with
+  authoritative engineering, current architecture, normalized requirements,
+  milestone roadmap, testing, security-review, and release guides.
+- Explicit documentation precedence and current/mock/planned/prohibited status
+  labels grounded in the actual React, Tauri, Rust, SQLite, gateway, policy,
+  approval, audit, menu, and permission boundaries.
+- D-044 renumbers the unimplemented verified application-icon rollout to Meta
+  Increment 3 while preserving its exact source, non-goals, and separate
+  approval gate.
+- Reconciled Meta Increment 1 publication at `5edbf4d`, current repository
+  synchronization, README capability claims, and resolved TS-010 public-branch
+  lag condition.
+
 ### Added
 
 - Meta Increment 1 canonical Cortexa identity assets under `assets/branding/`,

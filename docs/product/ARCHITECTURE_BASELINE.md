@@ -1,5 +1,13 @@
 # Architecture baseline
 
+Status: Target architecture baseline preserved from product planning
+
+`../../ARCHITECTURE.md` is the authoritative current-state architecture. It
+labels each boundary as current, mocked, planned, or prohibited. This baseline
+describes intended ownership and sequencing; statements such as “the core owns”
+do not prove that a provider, coordinator, executor, product repository, memory
+store, platform adapter, or durable audit implementation exists.
+
 ## Product shape
 
 Cortexa is a standalone desktop executive assistant. The initial target is macOS, with portable domain logic intended for Windows, Linux, and iOS where platform capabilities permit.
@@ -14,9 +22,9 @@ The WebView renders conversations, navigation, settings, permission status, acti
 
 Only explicitly registered, typed commands cross into Rust. Capabilities are scoped per window. Generic shell, filesystem, database, tool-execution, and model-request commands are prohibited.
 
-### Rust application core
+### Target Rust application core
 
-The trusted core owns:
+The trusted core is intended to own:
 
 - Run lifecycle.
 - Context provenance.

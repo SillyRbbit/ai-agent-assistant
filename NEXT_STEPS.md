@@ -43,10 +43,11 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 4T - bind terminal initial approval resolution: **Verified complete**.
 - Increment 4U - bind initial approval run-termination: **Verified complete; published and merged at `61525bf`**.
 - Meta Increment 1 - branding and identity foundation: **Verified complete**.
+- Meta Increment 2 - engineering operating system: **Verified complete**.
 
 ## Queue status
 
-### Meta Increment 2 - verified application icon rollout
+### Meta Increment 3 - verified application icon rollout
 
 **Status:** Ready; requires separate project-owner approval before
 implementation.
@@ -56,15 +57,11 @@ square `assets/branding/app-icon-source.png`, replace only the existing 16 icon
 files, and verify every format, build reference, package surface, and target-Mac
 appearance.
 
-The exact source list, risks, non-goals, verification, manual target-Mac matrix,
-and rollback are frozen in
-`docs/plans/meta-02-verified-application-icon-rollout.md`. The plan excludes logo
-redesign, source-asset changes, Tauri config, manifests, lockfiles, identifiers,
-runtime behavior, dependencies, capabilities, entitlements, permissions,
-frontend changes, Increment 4V, and all product capability work.
-
-Do not implement Meta Increment 2 until the project owner separately approves
-that exact plan. Do not start Increment 4V automatically.
+The unchanged exact source list, risks, non-goals, verification, manual
+target-Mac matrix, and rollback are frozen in
+`docs/plans/meta-03-verified-application-icon-rollout.md`. Do not implement Meta
+Increment 3 until the project owner separately approves that exact plan. Do not
+start Increment 4V automatically.
 
 Repository Workflow Increment 4G is **Verified complete**. It adds only the repository-local post-increment skill, deterministic Stop-hook validator, focused tests, report assets, and workflow documentation required to replace D-027's one-time exception. Its consolidated result is `PASS WITH ADVISORIES`; the advisory is the documented project-hook trust/bypass boundary.
 
@@ -190,8 +187,8 @@ production caller is introduced. D-042 records the durable boundary. Roll back
 the two source/test files and only the declared closeout documentation before
 commit, or revert one bounded 4U commit afterward.
 
-No 4U task remains. Meta Increment 2 is the first Ready item and requires
-separate project-owner approval. Do not start Increment 4V.
+No 4U or Meta 2 task remains. Meta Increment 3 is the first Ready item and
+requires separate project-owner approval. Do not start Increment 4V.
 
 ## Proposed after published 4U
 
@@ -234,7 +231,7 @@ one bounded 4V commit.
 
 Do not start 4V automatically. Its exact reconciled plan remains at
 `docs/plans/04v-bind-initial-terminal-approval-audit.md` and requires separate
-project-owner direction after the Ready Meta 2 queue decision.
+project-owner direction after the active meta queue decision.
 
 Increment 4R bind terminal initial function call to policy is **Verified
 complete, published, and merged at `5e58edb`**. Accepted terminal completion

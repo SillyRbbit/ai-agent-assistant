@@ -1,8 +1,23 @@
 # Security policy and development guardrails
 
+Status: Authoritative security policy
+
+Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
+identifies which security boundaries are current, mocked, planned, or
+prohibited.
+
 ## Security model
 
-Cortexa treats the model as an untrusted planner. The trusted Rust core validates requests, applies deterministic policy, obtains approval where required, executes only registered tools, and records redacted audit events.
+Cortexa treats the model as an untrusted planner. The architecture requires the
+trusted Rust core to validate requests, apply deterministic policy, obtain exact
+approval where required, execute only registered tools, and record redacted
+audit events.
+
+The current repository implements transport-free validation, policy, approval,
+cancellation, and an unbound in-memory approval-audit adapter. It has no live
+provider transport, runtime coordinator, dispatcher, executor, product memory,
+or durable audit. Current non-authorizing values must not be mistaken for an
+end-to-end security path.
 
 ## Non-negotiable invariants
 
@@ -58,6 +73,9 @@ Before adding a production dependency:
 5. Pin the version and update lockfiles.
 6. Run the full relevant verification suite.
 
+Apply the dependency and supply-chain sections of `SECURITY_CHECKLIST.md` and
+`RELEASE_CHECKLIST.md` when those scopes apply.
+
 ## Data handling
 
 - Keep local data local unless the user explicitly sends it.
@@ -81,3 +99,7 @@ Before adding a production dependency:
 Do not place secrets, personal files, tokens, or exploitable details in a public issue. Record a sanitized summary in the project handoff and notify the repository owner through a private channel.
 
 A security fix is not complete until regression tests and the relevant threat-model documentation are updated.
+
+Production release additionally requires every applicable item in
+`RELEASE_CHECKLIST.md`, including signing, notarization, installer, secret,
+artifact, and rollback evidence.

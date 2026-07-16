@@ -2,6 +2,11 @@
 
 Review changes for correctness, security, maintainability, and evidence. Report concrete findings before general commentary.
 
+Use `ENGINEERING_GUIDE.md` for the operating model, `ARCHITECTURE.md` for actual
+module boundaries, `TESTING_GUIDE.md` for evidence, and
+`SECURITY_CHECKLIST.md` for security-sensitive changes. A planned architecture
+or requirement is not evidence that production behavior exists.
+
 ## Review order
 
 1. User-visible correctness and regressions.
@@ -66,6 +71,11 @@ npm run tauri -- build --no-bundle
 Before completing an implementation increment, run `$post-increment-gate`. The consolidated report must inventory the complete change set, classify every required automated and manual check, record architecture/security/code-health/debt/readiness findings, and finish with exactly `PASS`, `PASS WITH ADVISORIES`, or `FAIL`.
 
 Critical or High findings that block completion, failed required checks, merge conflicts, and pending required manual checks require `FAIL`. Do not automatically fix advisories or reorder the roadmap during the review.
+
+For documentation-only changes, review factual consistency against source and
+tests, internal links and paths, authority and supersession, protected source
+scope, and whether current, mocked, planned, and prohibited behavior are clearly
+distinguished.
 
 ## Finding format
 

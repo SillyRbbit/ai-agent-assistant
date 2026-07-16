@@ -1,6 +1,6 @@
 # Meta Increment 1 - branding and identity foundation
 
-Status: Verified complete; uncommitted
+Status: Verified complete; squash-merged at `5edbf4d`
 Last updated: 2026-07-15
 
 ## Goal
@@ -49,10 +49,12 @@ blocking finding. The consolidated result is `PASS WITH ADVISORIES`; the
 
 Residual advisories are the source's intentional opaque near-white field, fine
 detail at compact sizes, and continued prior Tauri production icons until Meta
-Increment 2. No required check remains failed and no later increment started.
+Increment 3. No required check remained failed at completion.
 
 ## Follow-on
 
-Meta Increment 2 is planning-only here. It will generate and verify the complete
-Tauri application-icon family from `assets/branding/app-icon-source.png` and
-requires separate project-owner approval before implementation.
+The increment was squash-merged into synchronized `main` at `5edbf4d` after its
+gate passed. D-044 later reassigned Meta Increment 2 to the engineering operating
+system and renumbered the unchanged future Tauri application-icon rollout to
+Meta Increment 3. The icon rollout still requires separate project-owner
+approval before implementation.

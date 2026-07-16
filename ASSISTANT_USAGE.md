@@ -13,6 +13,9 @@ pwd
 
 The root should contain `AGENTS.md`, `HANDOFF.md`, `package.json`, and `src-tauri/`.
 
+Read `ENGINEERING_GUIDE.md` for documentation authority, Definition of Ready,
+increment workflow, review, Definition of Done, and release boundaries.
+
 ## 2. Confirm the local application works
 
 For a fresh checkout:
@@ -67,17 +70,18 @@ Use $verified-increment. Implement only Phase 2 Increment 2A from NEXT_STEPS.md.
 
 Repository-scoped skills are under `.agents/skills/`.
 
-| Skill                 | Use it for                                                   |
-| --------------------- | ------------------------------------------------------------ |
-| `$session-start`      | Orienting at the beginning of a new thread                   |
-| `$resume-session`     | Continuing from `HANDOFF.md`                                 |
-| `$verified-increment` | Implementing one small feature or refactor safely            |
-| `$troubleshoot`       | Diagnosing a build, test, install, or runtime failure        |
-| `$code-review`        | Reviewing a diff against project rules                       |
-| `$security-review`    | Reviewing trust boundaries, permissions, tools, or data flow |
-| `$documentation-sync` | Updating repository memory after changes                     |
-| `$branding`           | Applying Cortexa identity to product and presentation assets |
-| `$session-end`        | Closing a session with a complete handoff                    |
+| Skill                  | Use it for                                                   |
+| ---------------------- | ------------------------------------------------------------ |
+| `$session-start`       | Orienting at the beginning of a new thread                   |
+| `$resume-session`      | Continuing from `HANDOFF.md`                                 |
+| `$verified-increment`  | Implementing one small feature or refactor safely            |
+| `$troubleshoot`        | Diagnosing a build, test, install, or runtime failure        |
+| `$code-review`         | Reviewing a diff against project rules                       |
+| `$security-review`     | Reviewing trust boundaries, permissions, tools, or data flow |
+| `$documentation-sync`  | Updating repository memory after changes                     |
+| `$branding`            | Applying Cortexa identity to product and presentation assets |
+| `$post-increment-gate` | Finalizing the required implementation review and marker     |
+| `$session-end`         | Closing a session with a complete handoff                    |
 
 In Codex, type `$` or use the skills menu to invoke a skill explicitly. If newly added skills are not visible, restart or reload the assistant from the repository root.
 
@@ -106,6 +110,10 @@ Ask for a diff-based review:
 ```text
 Use $code-review. Review all uncommitted changes against AGENTS.md, SECURITY.md, CODE_REVIEW.md, and the increment acceptance criteria. Report concrete defects first, then verification gaps, then documentation drift. Do not rewrite code unless I ask.
 ```
+
+Use `CODE_REVIEW.md` for finding severity, `SECURITY_CHECKLIST.md` for trust
+boundaries, and `TESTING_GUIDE.md` for required evidence. Release work also
+requires `RELEASE_CHECKLIST.md`.
 
 Check locally:
 

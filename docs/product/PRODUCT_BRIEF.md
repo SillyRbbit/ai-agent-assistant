@@ -1,6 +1,14 @@
 # Cortexa product brief
 
-Source of truth: product-owner requirements supplied at project inception. Editorial formatting has been added; requirement meaning is unchanged. Where this brief is ambiguous, accepted entries in `DECISIONS.md` and `ARCHITECTURE_BASELINE.md` govern implementation.
+Historical source: product-owner requirements supplied at project inception.
+Editorial formatting has been added; requirement meaning is unchanged.
+
+`../../PRODUCT_REQUIREMENTS.md` is the authoritative normalized current
+requirements document. Accepted entries in `../../DECISIONS.md` and security
+rules in `../../SECURITY.md` govern implementation when this aspirational brief
+is ambiguous. `../../ARCHITECTURE.md` distinguishes current, mocked, planned,
+and prohibited capability. This brief must not be used as evidence that a
+feature is implemented.
 
 ## Product Mission
 

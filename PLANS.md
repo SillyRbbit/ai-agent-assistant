@@ -4,12 +4,16 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No implementation plan is active. Meta Increment 1 branding and identity
-foundation is verified complete in the current uncommitted working tree under
+No implementation plan is active. Meta Increment 2 engineering operating system
+is verified complete under
+`docs/plans/meta-02-engineering-operating-system.md`.
+
+Meta Increment 1 branding and identity foundation is verified complete and
+squash-merged at `5edbf4d` under
 `docs/plans/meta-01-branding-foundation.md`.
 
-Meta Increment 2 verified application icon rollout is Ready under
-`docs/plans/meta-02-verified-application-icon-rollout.md` and requires separate
+Meta Increment 3 verified application icon rollout is Ready under
+`docs/plans/meta-03-verified-application-icon-rollout.md`. It requires separate
 project-owner approval before its gate or icon edits begin.
 
 Increment 4V terminal approval audit remains Proposed under
@@ -49,6 +53,7 @@ docs/plans/04s-bind-terminal-initial-approval-presentation.md
 docs/plans/04t-bind-terminal-initial-approval-resolution.md
 docs/plans/04u-bind-initial-approval-run-termination.md
 docs/plans/meta-01-branding-foundation.md
+docs/plans/meta-02-engineering-operating-system.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -114,7 +119,8 @@ A plan must contain:
 | Increment 4U approval run termination          | Complete | Project maintainer | 2026-07-15   |
 | Increment 4V terminal approval audit binding   | Blocked  | Project maintainer | 2026-07-15   |
 | Meta Increment 1 branding foundation           | Complete | Project maintainer | 2026-07-15   |
-| Meta Increment 2 application icon rollout      | Ready    | Project maintainer | 2026-07-15   |
+| Meta Increment 2 engineering operating system  | Complete | Project maintainer | 2026-07-15   |
+| Meta Increment 3 application icon rollout      | Ready    | Project maintainer | 2026-07-15   |
 
 ## Meta Increment 1 branding and identity foundation - complete
 
@@ -130,16 +136,35 @@ and compact visual review, dependency audit, exact-scope review, and the
 mandatory gate pass. Tauri production icons remain unchanged. D-043 records the
 durable boundary.
 
-## Meta Increment 2 verified application icon rollout - Ready
+## Meta Increment 2 engineering operating system - complete
+
+Goal: establish one authoritative engineering handbook, current architecture,
+normalized product requirements, roadmap, testing standard, security checklist,
+and release process without changing product behavior. The exact approved scope,
+conflicts, risks, verification, and rollback are frozen in
+`docs/plans/meta-02-engineering-operating-system.md`.
+
+The increment reconciles merged Meta Increment 1 at `5edbf4d`, documentation
+authority, current versus planned capability, and Meta 2/3 numbering. It changes
+no application source, tests, runtime, dependency, config, capability,
+permission, SQLite schema, branding asset, icon, or compatibility identifier.
+
+Rendered Markdown links, formatting, complete repository verification,
+protected-path review, exact-scope review, documentation sync, code review,
+security review, and the mandatory `meta-02` gate pass. No manual application
+check applies.
+
+## Meta Increment 3 verified application icon rollout - Ready
 
 Goal: generate and verify all 16 existing Tauri production icon outputs from
 the approved square app-icon source. The exact future list, risks, non-goals,
 packaging and target-Mac checks, and rollback are frozen in
-`docs/plans/meta-02-verified-application-icon-rollout.md`.
+`docs/plans/meta-03-verified-application-icon-rollout.md`.
 
-Meta 2 changes no source asset, Tauri config, compatibility identifier,
+Meta 3 changes no source asset, Tauri config, compatibility identifier,
 manifest, lockfile, runtime, dependency, capability, entitlement, or permission.
-It requires separate project-owner approval and must not begin automatically.
+It is Ready, requires separate project-owner approval, and must not begin
+automatically.
 
 ## Phase 4 Increment 4U bind initial approval run-termination - complete
 

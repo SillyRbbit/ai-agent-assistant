@@ -2,25 +2,45 @@
 
 ## Purpose
 
-This file contains durable instructions for any coding assistant working in this repository. Read it before modifying files. The product is a local-first, installable executive assistant whose model is an untrusted planner; deterministic Rust code remains responsible for validation, policy, approval, execution, and audit.
+This file contains durable mandatory instructions for any coding assistant
+working in this repository. Read it before modifying files. The complete
+engineering operating model is in `ENGINEERING_GUIDE.md`. The product is a
+local-first, installable executive assistant whose model is an untrusted
+planner; deterministic Rust code remains responsible for validation, policy,
+approval, execution, and audit.
 
 ## Required reading order
 
 Before starting a task, read these files in order:
 
 1. `AGENTS.md`
-2. `HANDOFF.md`
-3. `PROJECT_STATUS.md`
-4. `NEXT_STEPS.md`
-5. `DECISIONS.md`
-6. `TROUBLESHOOTING_LOG.md`
-7. The relevant document under `docs/product/`, `docs/workflows/`, or `docs/increments/`
+2. `ENGINEERING_GUIDE.md`
+3. `HANDOFF.md`
+4. `PROJECT_STATUS.md`
+5. `NEXT_STEPS.md`
+6. `ARCHITECTURE.md`
+7. `PRODUCT_REQUIREMENTS.md`
+8. `DECISIONS.md`
+9. `TROUBLESHOOTING_LOG.md`
+10. The relevant plan, increment, workflow, product, testing, release, or
+    branding document
 
-When the task is a security-sensitive change, also read `SECURITY.md` and `CODE_REVIEW.md`.
+When the task is security-sensitive, also read `SECURITY.md`,
+`SECURITY_CHECKLIST.md`, and `CODE_REVIEW.md`.
 
 ## Current phase
 
-Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published, and merged on the target Mac; Increment 4U is merged at `61525bf` and its `04u` marker remained valid after publication. Meta Increment 1 establishes the authoritative Cortexa identity assets, usage standards, repository-local branding skill, README/favicon references, and official sidebar mark. It is verified complete in the current uncommitted `meta/branding-foundation` working tree with a valid `meta-01` completion marker. Meta Increment 2 verified application-icon rollout is the first Ready follow-on and requires separate project-owner approval; current Tauri production icons remain unchanged. Increment 4V terminal approval audit remains Proposed and separately controlled with no gate or source edit. The verified app-info, Permission Center, gateway request/response protocol, schema-validation, policy, native approval source, typed approval-audit, SQLite bootstrap, and non-authorizing approval boundaries remain unchanged.
+Phase 3 and Phase 4 Increments 4A through 4U are verified complete,
+published, and merged. Increment 4U is merged at `61525bf`. Meta Increment 1
+branding and identity foundation is verified complete, squash-merged at
+`5edbf4d`, and its `meta-01` marker was valid before Meta Increment 2 began.
+Meta Increment 2 engineering operating system is verified complete as a
+documentation-only increment. The application-icon rollout is renumbered Meta
+Increment 3 and is the first Ready follow-on, but it still requires separate
+project-owner approval and must not start automatically. Increment 4V terminal
+approval audit remains Proposed and separately controlled with no gate or
+source edit. Current implementation facts and future boundaries are
+authoritative in `ARCHITECTURE.md`.
 
 ## Non-negotiable product boundaries
 
@@ -29,12 +49,16 @@ Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published, a
 - Never let the model or WebView directly execute an operating-system action.
 - Never add unrestricted shell execution or a generic `execute_action` tool.
 - Do not embed or store a production OpenAI API key in the application.
-- Do not add Accessibility, screen capture, Apple Events, microphone access, or broad filesystem access during Phase 2.
+- Do not add Accessibility, screen capture, Apple Events, microphone access, or
+  broad filesystem access during the current controlled MVP work without a
+  separately accepted threat model and increment.
 - Do not add autonomous email, messages, purchases, bookings, uploads, public posting, file deletion, or account-setting changes to the MVP.
 - Do not weaken Tauri capabilities, the Content Security Policy, engine checks, TypeScript strictness, Clippy rules, or approval policy to make a change easier.
 - Do not log secrets or unnecessary personal content.
 
 ## Engineering rules
+
+Follow `ENGINEERING_GUIDE.md`. The rules below are the compact mandatory subset.
 
 ### General
 
@@ -94,6 +118,8 @@ npm run verify
 
 On a machine without the Rust toolchain, clearly report which Rust checks could not run. Never describe a partial verification as complete.
 
+Testing details and the change-to-test matrix are in `TESTING_GUIDE.md`.
+
 ## Documentation and handoff rules
 
 At the end of every meaningful task:
@@ -119,15 +145,23 @@ A task is done only when:
 4. Documentation and handoff state match the repository.
 5. The final response distinguishes verified facts from unverified target-platform behavior.
 
+The complete Definition of Ready, Definition of Done, review workflow, and
+release boundary are in `ENGINEERING_GUIDE.md`.
+
 ## Repository workflow resources
 
 - Human and assistant usage: `ASSISTANT_USAGE.md`
+- Engineering operating model: `ENGINEERING_GUIDE.md`
+- Current architecture: `ARCHITECTURE.md`
+- Product requirements and roadmap: `PRODUCT_REQUIREMENTS.md` and `ROADMAP.md`
+- Testing and release standards: `TESTING_GUIDE.md` and `RELEASE_CHECKLIST.md`
+- Security policy and checklist: `SECURITY.md` and `SECURITY_CHECKLIST.md`
 - Session workflows: `docs/workflows/`
 - Reusable prompts: `prompts/`
 - Reusable Codex skills: `.agents/skills/`
 - Brand assets and standards: `assets/branding/` and `docs/branding/`
 - Templates: `docs/templates/`
-- Product source of truth: `docs/product/`
+- Inception product sources: `docs/product/`
 
 ## Mandatory post-increment gate
 

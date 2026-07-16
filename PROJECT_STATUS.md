@@ -4,7 +4,16 @@ Last updated: 2026-07-15
 
 ## Current milestone
 
-Phase 3 and Phase 4 Increments 4A through 4U are **verified complete, published, and merged into `main`**. Increment 4U is synchronized at `61525bf` and retained a valid `04u` marker after publication. Meta Increment 1 branding and identity foundation is **verified complete with uncommitted changes and a valid `meta-01` marker** on `meta/branding-foundation`. Meta Increment 2 verified application-icon rollout is **Ready** for separate project-owner approval. Increment 4V terminal approval audit remains **Proposed** and separately controlled with no gate or source edit. Meta Increment 1 changes identity presentation and repository guidance only; product behavior and trust boundaries are unchanged.
+Phase 3 and Phase 4 Increments 4A through 4U are **verified complete,
+published, and merged into `main`**. Increment 4U is synchronized at `61525bf`.
+Meta Increment 1 branding and identity foundation is **verified complete and
+squash-merged at `5edbf4d`**; its `meta-01` marker was valid before Meta
+Increment 2 began. Meta Increment 2 engineering operating system is **verified
+complete as documentation-only work**. The application-icon rollout is
+renumbered Meta Increment 3 and is **Ready for separate project-owner
+approval**. Increment 4V
+terminal approval audit remains **Proposed** and separately controlled with no
+gate or source edit.
 
 ## Increment status
 
@@ -46,8 +55,11 @@ Phase 3 and Phase 4 Increments 4A through 4U are **verified complete, published,
 - Increment 4T: bind terminal initial approval resolution - **verified complete; published and merged**.
 - Increment 4U: bind initial approval run-termination - **verified complete; published and merged at `61525bf`**.
 - Increment 4V: bind initial terminal approval audit - **Proposed; merged 4U prerequisite satisfied, separate approval required**.
-- Meta Increment 1: branding and identity foundation - **verified complete; uncommitted**.
-- Meta Increment 2: verified application icon rollout - **Ready; separate approval required**.
+- Meta Increment 1: branding and identity foundation - **verified complete;
+  squash-merged at `5edbf4d`**.
+- Meta Increment 2: engineering operating system - **verified complete**.
+- Meta Increment 3: verified application icon rollout - **Ready; separate
+  approval required**.
 
 ## Meta Increment 1 capability and evidence
 
@@ -67,6 +79,29 @@ Phase 3 and Phase 4 Increments 4A through 4U are **verified complete, published,
 - No dependency, manifest, lockfile, Tauri icon/config, capability, permission,
   runtime, storage, networking, IPC, approval, audit, dispatch, or execution
   path changed.
+
+## Meta Increment 2 capability and evidence
+
+- Seven root guides establish the engineering operating model, current
+  architecture, normalized product requirements, milestone roadmap, testing
+  standard, security checklist, and release checklist.
+- `ENGINEERING_GUIDE.md` defines authority, branch and increment workflow,
+  review, Definition of Ready, Definition of Done, session boundaries, and
+  documentation rules.
+- `ARCHITECTURE.md` reconciles actual React, Tauri, Rust, SQLite, gateway,
+  schema, policy, approval, audit, memory, adapter, and macOS lifecycle state
+  using Current, Mocked, Planned, and Prohibited labels.
+- D-044 preserves historical evidence while renumbering the unchanged,
+  unimplemented icon rollout to Meta Increment 3.
+- The exact documentation-only scope is frozen in
+  `docs/plans/meta-02-engineering-operating-system.md`.
+- No application source, tests, dependencies, config, capabilities, CSP,
+  permissions, SQLite schema, branding assets, icons, or identifiers may change.
+- Rendered Markdown links and local image references resolve. Complete
+  `npm run verify`, formatting, protected-path, scope, conflict, secret,
+  generated-output, code, security, and documentation reviews pass.
+- No manual application check applies because no product or rendered UI file
+  changed. The mandatory `meta-02` report passes with no blocking finding.
 
 ## Increment 4U capability and evidence
 
@@ -640,9 +675,10 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Obtain separate project-owner approval for Meta Increment 2 under
-`docs/plans/meta-02-verified-application-icon-rollout.md`. Do not implement Meta
-2 or start Increment 4V automatically.
+Verify Meta Increment 2 publication from clean synchronized `main`. Then obtain
+separate project-owner approval for Meta Increment 3
+under `docs/plans/meta-03-verified-application-icon-rollout.md`. Do not start
+Meta 3 or Increment 4V automatically.
 
 ## Phase 4 planning result
 
