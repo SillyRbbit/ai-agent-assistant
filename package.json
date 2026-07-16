@@ -54,9 +54,8 @@
     "jsdom": "29.1.1",
     "prettier": "3.8.4",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.61.1",
+    "typescript-eslint": "8.64.0",
     "vite": "8.1.4",
-    "vitest": "3.2.6"
   },
   "overrides": {
     "esbuild": "0.28.1"
