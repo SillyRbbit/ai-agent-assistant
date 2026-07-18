@@ -38,7 +38,8 @@ Ask the assistant to use the repository's start workflow:
 Use $session-start for this repository. Read the required project-memory files, inspect Git status and the toolchain, summarize the current state, and propose the smallest ready increment. Do not change files until you have identified the goal, affected files, and verification commands.
 ```
 
-If skills are unavailable, paste `prompts/start-work.md` instead.
+If skills are unavailable, paste
+`prompts/workflows/start-session.md` with `{{SESSION_MODE}}` set to `start`.
 
 ## 4. Resume an existing task
 
@@ -48,7 +49,8 @@ Use:
 Use $resume-session and continue from HANDOFF.md. Verify the repository instead of assuming the handoff is current. Work only on the exact next task unless you find a blocker.
 ```
 
-Or paste `prompts/resume-work.md`.
+Or paste `prompts/workflows/start-session.md` with `{{SESSION_MODE}}` set to
+`resume`.
 
 ## 5. Give a new task
 
@@ -98,18 +100,21 @@ an external presentation as the source of current product facts.
 
 ## 7. Use prompt files when skills are not available
 
-Reusable prompts live in `prompts/`. Open the appropriate file and paste its contents into the assistant.
+Reusable prompts are indexed by purpose in `prompts/README.md`. Open the
+appropriate increment, review, workflow, or authoring-template prompt, replace
+every documented placeholder, and paste its `Prompt` block into the assistant.
 
 Recommended sequence:
 
-1. `prompts/start-work.md`
-2. `prompts/implement-next-increment.md`
-3. `prompts/review-change.md`
-4. `prompts/quality-gate.md`
-5. `prompts/post-increment-gate.md`
-6. `prompts/end-of-session-handoff.md`
+1. `prompts/workflows/start-session.md`
+2. `prompts/increments/verified-increment.md`
+3. `prompts/reviews/code-review.md`
+4. `prompts/reviews/quality-gate.md`
+5. `prompts/workflows/end-session.md`
 
-For a failure, switch to `prompts/troubleshooting.md` before making broad changes.
+For a failure, switch to `prompts/increments/bug-fix.md` before making broad
+changes. Use `prompts/workflows/remediation.md` for advisory-backlog work rather
+than treating an advisory as an ordinary defect.
 
 ## 8. Review changes before accepting them
 
@@ -151,7 +156,7 @@ Use:
 Use $session-end. Run the appropriate final checks, update HANDOFF.md, PROJECT_STATUS.md, NEXT_STEPS.md, DECISIONS.md, CHANGELOG.md, TROUBLESHOOTING_LOG.md, and the increment record as needed. Include the exact next resume prompt and distinguish passed, failed, and not-run checks.
 ```
 
-Or paste `prompts/end-of-session-handoff.md`.
+Or paste `prompts/workflows/end-session.md`.
 
 Then stop active development processes and inspect Git status:
 

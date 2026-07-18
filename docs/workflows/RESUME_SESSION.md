@@ -4,6 +4,10 @@
 
 Continue safely from repository state without relying on chat history.
 
+Use `.agents/skills/resume-session/SKILL.md` when repository skills are
+available. Otherwise use `prompts/workflows/start-session.md` with
+`{{SESSION_MODE}}` set to `resume`.
+
 ## Procedure
 
 1. Read `HANDOFF.md` first, then follow the full reading order in `AGENTS.md`.

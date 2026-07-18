@@ -33,13 +33,19 @@ with a valid `04v` marker on open PR #23 but is not merged. Its hosted jobs did
 not start because of an account billing or spending-limit restriction.
 
 Repository self-hosted runner routing and its approved private-only portability
-correction are **verified complete with advisories** on open PR #24 at
-`1621a55`. Runner 21 is
-online with the exact `self-hosted`, `Linux`, `X64`, and `cortexa-ci` labels.
-The managed service now owns the sole session with the correct Rustup/Cargo
-PATH. CI, Documentation, and Security pass on the corrected commit. The
-consolidated result is `PASS WITH ADVISORIES`, and the completion marker is
-valid. PR #24 remains unmerged.
+correction are **verified complete with advisories and squash-merged through PR
+#24 at `eaf6c9f`**. Runner 21 is online with the exact `self-hosted`, `Linux`,
+`X64`, and `cortexa-ci` labels. The managed service owns the sole session with
+the correct Rustup/Cargo PATH. CI, Documentation, and Security passed on final
+branch commit `cfa976f`. The completion marker remained valid on clean merged
+`main` before Meta Increment 8 began.
+
+Meta Increment 8 Prompt Library Reorganization is **verified complete as
+documentation-only governance work** on
+`codex/meta-prompt-library-reorganization`. The exact 24-file library, metadata,
+placeholder, link, duplication, repository, application, and Tauri checks pass;
+the consolidated result is `PASS` and the completion marker is complete and
+valid. The increment is not committed or published.
 
 ## Increment status
 
@@ -97,11 +103,27 @@ valid. PR #24 remains unmerged.
   with advisories; published and squash-merged at `b298999`**.
 - Meta Increment 7: verified application icon rollout - **verified complete with
   advisories; squash-merged through PR #19 at `96ba6ae`**.
+- Meta Increment 8: Prompt Library Reorganization - **verified complete;
+  documentation and repository governance only; uncommitted and unpublished**.
 - Remediation ARB-022: project-memory reconciliation - **verified complete in
   PR #22 and squash-merged at `7c79e65`**.
-- Repository workflow: trusted self-hosted runner routing - **implemented and
-  verified complete with advisories on open PR #24 at `1621a55`; completion
-  marker valid**.
+- Repository workflow: trusted self-hosted runner routing - **verified complete
+  with advisories and squash-merged through PR #24 at `eaf6c9f`**.
+
+## Prompt library capability and evidence
+
+- `prompts/README.md` is the authoritative selection and contribution guide for
+  the repository's copy-and-paste prompt library.
+- The library contains exactly 24 files: the README plus six increment prompts,
+  eight review prompts, six workflow prompts, and three authoring templates.
+- All 23 prompt assets use the D-055 human-readable metadata contract; no
+  parser, dependency, skill, or hook was added.
+- Thirteen flat prompts retain file-move history, while the former resume and
+  standalone post-increment prompts are documented merges into start-session
+  and end-session workflows.
+- Exact-tree, metadata, placeholder, active-link, duplication, documentation,
+  repository, complete application, and Tauri no-bundle checks pass. The
+  complete diff contains no product-source or runtime change.
 
 ## Self-hosted runner capability and evidence
 
@@ -116,8 +138,9 @@ valid. PR #24 remains unmerged.
   added.
 - Repository-health regression tests accept only the exact selector and trust
   condition. The complete local `npm run verify` passes.
-- Security run `29629669283`, Documentation run `29629669305`, and CI run
-  `29629669300` pass on runner 21 for corrected commit `1621a55`.
+- Final Security run `29630372253`, Documentation run `29630372279`, and CI run
+  `29630372265` pass on runner 21 for branch commit `cfa976f`; PR #24 is
+  squash-merged at `eaf6c9f`.
 - The exact private-only correction passes focused tests, strict Clippy,
   complete target-Mac verification, and complete Linux verification. Linux
   results do not replace target-Mac native evidence.

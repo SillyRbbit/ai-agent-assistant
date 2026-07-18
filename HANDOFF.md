@@ -29,13 +29,86 @@ is verified on `codex/feature/bind-terminal-approval-audit` at `3440ce9` with a
 valid `04v` marker and open PR #23. Its three hosted checks failed before runner
 assignment because of the account billing or spending-limit state.
 
-Repository self-hosted runner routing is implemented and fully verified locally
-on `codex/repository/use-self-hosted-runner`. The separately approved two-file
-portability correction is committed and pushed at `1621a55` on open PR #24.
-The managed runner service owns the sole session with the correct Rustup/Cargo
-PATH. CI, Documentation, and Security pass on runner 21. The consolidated
-result is `PASS WITH ADVISORIES`, and the `repository-self-hosted-runner`
-completion marker is valid. PR #24 remains unmerged.
+Repository self-hosted runner routing is verified complete with advisories and
+squash-merged through PR #24 at `eaf6c9f`. The final branch commit was
+`cfa976f`; CI, Documentation, and Security passed on runner 21 before merge.
+The `repository-self-hosted-runner` marker remained valid on clean synchronized
+`main` immediately before the prompt-library gate began.
+
+Meta Increment 8 Prompt Library Reorganization is verified complete on
+`codex/meta-prompt-library-reorganization`. The mandatory
+`meta-prompt-library-reorganization` gate began before file moves, its
+consolidated result is `PASS`, and its completion marker is complete and valid.
+The exact documentation and repository-governance scope is uncommitted and
+unpublished. No product source, behavior, dependency, Tauri, storage,
+permission, skill, or hook changed.
+
+## Meta Increment 8 prompt library reorganization
+
+### Completed
+
+- Replaced the flat 15-prompt collection with the exact approved 24-file tree:
+  one authoritative README, six increment prompts, eight review prompts, six
+  workflow prompts, and three authoring templates.
+- Preserved useful content through 13 moves and two documented merges. The
+  former resume prompt is part of start-session, and the former standalone
+  post-increment prompt is part of end-session.
+- Standardized all 23 prompt assets with D-055 metadata and documented every
+  required remediation placeholder in `prompts/README.md`.
+- Repaired active links in governance, assistant usage, code review, and all
+  five human workflow documents. Dated historical references remain unchanged
+  as evidence.
+- Updated D-055, current project memory, the migration record, and the
+  consolidated review. The review's exact 59-path inventory includes all moved,
+  merged, created, updated, removed, and closeout paths.
+
+### Verification
+
+Passed:
+
+- Exact prompt tree: 24 expected files and no flat executable prompt.
+- Metadata and placeholders: all 23 prompt assets and all required remediation
+  placeholders passed.
+- Old-path classification: no active reference points to a moved or removed
+  prompt; remaining matches are historical evidence.
+- Substantive-duplication review: the highest pairwise similarity is `0.408`
+  and limited to intentionally related authoring templates.
+- `npm run docs:check` and `npm run repository:check`.
+- `npm run verify`: formatting, repository policy, ESLint, strict Clippy, 28
+  hook tests, 19 repository tests, 124 frontend tests, 95 Rust library tests,
+  21 Rust integration tests, type checking, production frontend builds, and
+  Tauri release no-bundle build.
+- Complete diff, protected-path, security-boundary, generated-output, secret,
+  database, link, and scope review.
+- Session-end inspection and the mandatory post-increment gate.
+
+Failed checks: none.
+
+Checks not run: hosted GitHub checks and target-Mac native UI testing. They are
+not completion requirements before publication for this documentation-only,
+runtime-neutral increment.
+
+Manual verification pending: none.
+
+### Risks and rollback
+
+Prompt metadata remains intentionally human-readable and process-enforced; the
+increment adds no parser or dependency. Before commit, rollback is restoration
+of the 59 changed paths from `HEAD`. After publication, revert only the bounded
+prompt-library squash commit. No product, dependency, Tauri, or database
+rollback is required.
+
+### Exact next task
+
+Review and publish Meta Increment 8 only after separate project-owner approval.
+Do not refresh PR #23, begin ARB-002, or start another increment in the same
+step.
+
+Ready-to-paste prompt:
+
+```text
+Review the complete Meta Increment 8 Prompt Library Reorganization. Confirm the exact 59-path documentation and repository-governance scope, final 24-file prompt tree, preserved dated historical evidence, passing complete verification, valid meta-prompt-library-reorganization marker, and absence of product-source, dependency, skill, or hook changes. Confirm the existing codex/meta-prompt-library-reorganization branch and propose a Conventional Commit message, PR title, and PR description, then wait for my approval before staging, committing, pushing, or merging. Do not refresh PR #23 or start another increment.
+```
 
 ## Repository self-hosted runner setup
 
@@ -139,16 +212,15 @@ Remote verification:
 - No target-Mac manual check was required because no product or native behavior
   changed.
 
-### Exact next task
+### Publication result
 
-Review the exact twelve-path final documentation closeout diff and valid
-`repository-self-hosted-runner` marker. Confirm commit `1621a55`, all three
-successful runner jobs, the `PASS WITH ADVISORIES` report, unchanged product and
-security boundaries, and no source change after verification. Propose a
-Conventional Commit for the closeout and wait for approval before committing,
-pushing, or merging PR #24. Do not alter or merge PR #23.
+The exact twelve-path closeout was committed as `cfa976f`. Documentation run
+`29630372279`, CI run `29630372265`, and Security run `29630372253` passed on
+that final branch commit. PR #24 was squash-merged as `eaf6c9f`, its remote
+branch was deleted, local `main` synchronized cleanly, and the completion marker
+remained valid. PR #23 stayed open and unchanged at `3440ce9`.
 
-### Ready-to-paste next prompt
+### Historical publication prompt
 
 ```text
 Review the exact twelve-path final PR #24 documentation closeout and valid repository-self-hosted-runner marker. Confirm the verified source commit 1621a55, passing CI run 29629669300, Documentation run 29629669305, Security run 29629669283, PASS WITH ADVISORIES report, preserved target-Mac and security boundaries, and absence of product-source changes after verification. Propose a Conventional Commit and final PR description update, then wait for my approval before committing, pushing, or merging. Do not modify or merge PR #23.
