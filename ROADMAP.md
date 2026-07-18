@@ -1,7 +1,7 @@
 # Cortexa roadmap
 
 Status: Authoritative milestone roadmap
-Last updated: 2026-07-16
+Last updated: 2026-07-18
 
 ## Status model
 
@@ -20,19 +20,19 @@ verification record; this roadmap does not create new completion evidence.
 
 ## Product milestones
 
-| Milestone                                                             | Status               | Verified scope                                                                                                                                                   | Remaining gate                                                                               |
-| --------------------------------------------------------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| Phase 1 - runnable foundation                                         | Completed            | Tauri/React shell, toolchain, repository workflow                                                                                                                | None                                                                                         |
-| Phase 2 - local application foundation                                | Completed            | Rust interfaces, SQLite bootstrap, macOS lifecycle, React shell, deterministic mock loop, integration hardening                                                  | None                                                                                         |
-| Phase 3 - bounded mock product loop                                   | Completed            | Conversations, context provenance, simulated results, bounded final answer                                                                                       | None                                                                                         |
-| Phase 4 - trusted proposal and approval boundaries                    | Completed through 4U | Closed gateway protocol and request, strict schemas, deterministic policy, exact approvals, native source boundary, cancellation, typed in-memory approval audit | Live transport, execution, and durable audit intentionally absent                            |
-| Increment 4V - terminal approval-audit binding                        | Ready                | Exact two-file plan exists; 4U prerequisite is merged and source scope is unchanged                                                                              | Clean synchronized main containing ARB-022 remediation and separate owner approval           |
-| Phase 5 - end-to-end policy, approval, audit, and restricted dispatch | Future               | Some transport-free primitives were completed in Phase 4                                                                                                         | Approve coordinator, durable audit, dispatch, execution, and failure semantics incrementally |
-| Phase 6 - basic macOS tools                                           | Future               | Two strict schemas exist without implementations                                                                                                                 | Approve narrow adapters, permissions, tests, and rollback per tool                           |
-| Phase 7 - permissions and onboarding                                  | Future               | Status-only Permission Center exists                                                                                                                             | Approve request flows, disclosure, revocation, and onboarding                                |
-| Phase 8 - memory and tasks                                            | Future               | Volatile mock conversations/tasks only; SQLite bootstrap exists                                                                                                  | Approve repositories, encryption, retention, review/delete, and user controls                |
-| Phase 9 - adversarial security validation                             | Future               | Per-increment security review exists                                                                                                                             | Complete threat model, abuse tests, red-team cases, and remediation                          |
-| Phase 10 - production release                                         | Future               | Development and no-bundle builds verified                                                                                                                        | Resolve O-003, signing, notarization, installer, update, support, and rollback               |
+| Milestone                                                             | Status                  | Verified scope                                                                                                                                                   | Remaining gate                                                                                                  |
+| --------------------------------------------------------------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Phase 1 - runnable foundation                                         | Completed               | Tauri/React shell, toolchain, repository workflow                                                                                                                | None                                                                                                            |
+| Phase 2 - local application foundation                                | Completed               | Rust interfaces, SQLite bootstrap, macOS lifecycle, React shell, deterministic mock loop, integration hardening                                                  | None                                                                                                            |
+| Phase 3 - bounded mock product loop                                   | Completed               | Conversations, context provenance, simulated results, bounded final answer                                                                                       | None                                                                                                            |
+| Phase 4 - trusted proposal and approval boundaries                    | Completed through 4U    | Closed gateway protocol and request, strict schemas, deterministic policy, exact approvals, native source boundary, cancellation, typed in-memory approval audit | Live transport, execution, and durable audit intentionally absent                                               |
+| Increment 4V - terminal approval-audit binding                        | Verified on open PR #23 | Exact two-file scope is verified at `3440ce9`; 4U and ARB-022 prerequisites are satisfied                                                                        | Refresh unchanged PR #23 against current `main`, rerun hosted checks, and obtain separate squash-merge approval |
+| Phase 5 - end-to-end policy, approval, audit, and restricted dispatch | Future                  | Some transport-free primitives were completed in Phase 4                                                                                                         | Approve coordinator, durable audit, dispatch, execution, and failure semantics incrementally                    |
+| Phase 6 - basic macOS tools                                           | Future                  | Two strict schemas exist without implementations                                                                                                                 | Approve narrow adapters, permissions, tests, and rollback per tool                                              |
+| Phase 7 - permissions and onboarding                                  | Future                  | Status-only Permission Center exists                                                                                                                             | Approve request flows, disclosure, revocation, and onboarding                                                   |
+| Phase 8 - memory and tasks                                            | Future                  | Volatile mock conversations/tasks only; SQLite bootstrap exists                                                                                                  | Approve repositories, encryption, retention, review/delete, and user controls                                   |
+| Phase 9 - adversarial security validation                             | Future                  | Per-increment security review exists                                                                                                                             | Complete threat model, abuse tests, red-team cases, and remediation                                             |
+| Phase 10 - production release                                         | Future                  | Development and no-bundle builds verified                                                                                                                        | Resolve O-003, signing, notarization, installer, update, support, and rollback                                  |
 
 ### Phase 4 acceptance boundary
 
@@ -41,8 +41,8 @@ boundaries through Increment 4U are verified. It does not mean a live provider,
 gateway, coordinator, tool implementation, dispatch, execution, product audit,
 or user-facing native approval flow exists.
 
-O-006 and O-007 remain blockers for live gateway traffic. Increment 4V is Ready
-but separately controlled and cannot be inferred from the completion of 4U.
+O-006 and O-007 remain blockers for live gateway traffic. Increment 4V is
+verified on open PR #23 but remains separately controlled and unpublished.
 
 ## Meta and repository milestones
 
@@ -55,7 +55,7 @@ but separately controlled and cannot be inferred from the completion of 4U.
 | Meta Increment 5 - repository health and GitHub hygiene | Completed and merged at `6b149fa` | Honest repository entry points, review-only automation, GitHub intake, health checks, and licensing status          | Local and hosted verification plus `meta-05` gate evidence passed                                                 |
 | Meta Increment 6 - product readiness audit              | Completed and merged at `5281fac` | Evidence-based readiness assessment and ordered remediation backlog                                                 | Documentation audit and valid `meta-06` gate evidence passed; result `NOT READY (57/100)`                         |
 | Meta Increment 7 - verified application icon rollout    | Completed and merged at `96ba6ae` | Exactly 16 existing Tauri icon files generated from the approved source; debug/release bundles verified             | Raw dev icon and default DMG remain documented advisories; no product capability gate is satisfied                |
-| Remediation ARB-022 - project-memory reconciliation     | Verified; commit pending          | PR #21 publication state and the live queue are reconciled without changing product source                          | Confirm clean synchronized `main` contains the remediation before beginning Increment 4V                          |
+| Remediation ARB-022 - project-memory reconciliation     | Completed and merged at `7c79e65` | PR #21 publication state and the live queue were reconciled without changing product source                         | Documentation checks and the `remediation-arb-022` gate passed; no remaining ARB-022 publication gate             |
 
 Meta Increments 2, 3, 5, and 6 change documentation and repository governance
 only. They do not satisfy any product capability or release gate. Meta Increment
@@ -80,13 +80,14 @@ Release milestones additionally require `RELEASE_CHECKLIST.md` and
 
 ## Current queue
 
-1. Confirm clean synchronized `main` contains the verified ARB-022 remediation;
-   if its resolving commit remains pending, publish only after separate
-   project-owner approval.
-2. Obtain separate project-owner approval for the exact Ready Increment 4V plan.
-3. Begin `04v` before either approved source/test file changes.
+1. Obtain separate project-owner approval to refresh unchanged open PR #23
+   against current `main` and rerun its required hosted checks.
+2. After those checks pass, obtain separate project-owner approval before
+   squash-merging PR #23.
+3. Do not begin ARB-002 or another remediation in the same step.
 
-Increment 4V is the only Ready product increment in this roadmap.
+Increment 4V is verified but unpublished. No later product or remediation
+increment is Ready.
 
 ## Rollback and reprioritization
 
