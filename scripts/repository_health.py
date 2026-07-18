@@ -25,6 +25,16 @@ ACTION_USE = re.compile(
 IMMUTABLE_ACTION = re.compile(r"^[^@\s]+@[0-9a-fA-F]{40}$")
 IMMUTABLE_CONTAINER = re.compile(r"^docker://[^@\s]+@sha256:[0-9a-fA-F]{64}$")
 WRITE_PERMISSION = re.compile(r"^\s*[a-z][a-z-]*:\s*write\s*$", re.MULTILINE)
+SELF_HOSTED_RUNNER_SELECTOR = "runs-on: [self-hosted, Linux, X64, cortexa-ci]"
+SELF_HOSTED_PUSH_BRANCHES = (
+    "- main",
+    '- "codex/**"',
+    '- "feature/**"',
+    '- "fix/**"',
+    '- "refactor/**"',
+    '- "meta/**"',
+    '- "phase*/**"',
+)
 
 SECRET_PATTERNS = (
     ("private-key", re.compile(r"-{5}BEGIN (?:EC |OPENSSH |RSA )?PRIVATE KEY-{5}")),
@@ -344,6 +354,30 @@ def workflow_findings(root: Path) -> tuple[Finding, ...]:
                 findings.append(Finding("workflows", relative_path, detail, text.count("\n", 0, offset) + 1))
         for match in WRITE_PERMISSION.finditer(text):
             findings.append(Finding("workflows", relative_path, "write workflow permission is prohibited", text.count("\n", 0, match.start()) + 1))
+        if "self-hosted" in text:
+            if SELF_HOSTED_RUNNER_SELECTOR not in text:
+                findings.append(
+                    Finding(
+                        "workflows",
+                        relative_path,
+                        "self-hosted job must require the exact repository runner labels",
+                    )
+                )
+            missing_branches = tuple(
+                branch for branch in SELF_HOSTED_PUSH_BRANCHES if branch not in text
+            )
+            if (
+                "pull_request:" in text
+                or "workflow_dispatch:" not in text
+                or missing_branches
+            ):
+                findings.append(
+                    Finding(
+                        "workflows",
+                        relative_path,
+                        "self-hosted workflow must exclude pull requests and restrict push branches",
+                    )
+                )
     return tuple(findings)
 
 

@@ -642,3 +642,52 @@ branch checks passed. Refresh each proposal against current `main`, require a
 clean install and full check on the merge candidate, and group coupled major
 updates such as Vite/plugin/Vitest or rusqlite/toolchain changes into one
 reviewed compatibility increment.
+
+## TS-016 - GitHub-hosted jobs fail before runner assignment
+
+Date: 2026-07-17
+Status: Self-hosted routing implemented locally; hosted execution pending
+
+### Symptom
+
+CI, Documentation, and Security checks complete as failures within seconds and
+show no checked-out source or command output. GitHub annotates each job that it
+was not started because account payments failed or the spending limit must be
+increased.
+
+### Cause
+
+The failure occurs before a runner is assigned and is not a repository test
+failure. All three workflows selected GitHub-hosted macOS or Ubuntu images. The
+registered repository runner was online but could not match those `runs-on`
+labels.
+
+### Resolution
+
+Register a dedicated Linux x64 runner, assign it the custom `cortexa-ci` label,
+and route the three read-only workflows through the exact four-label selector.
+Do not use `pull_request` on the persistent runner; restrict pushes to the
+documented maintainer-controlled branch families. Provision Tauri Linux
+prerequisites on the host rather than installing system packages with workflow
+`sudo`.
+
+### Verify
+
+```bash
+gh api repos/SillyRbbit/ai-agent-assistant/actions/runners
+npm run test:repository
+npm run docs:check
+npm run repository:check
+npm run verify
+```
+
+After publishing the workflow branch, confirm all three GitHub jobs name the
+intended runner and pass. Until that remote execution succeeds, this resolution
+remains verification pending.
+
+### Prevention
+
+Keep the runner-specific label, no-pull-request rule, and push allowlist covered
+by repository-health tests. Reapply the label after runner replacement, keep
+the service account unprivileged and credential-free, and preserve separate
+target-Mac verification for native behavior.

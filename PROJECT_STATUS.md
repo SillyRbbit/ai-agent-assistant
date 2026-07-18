@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-07-16
+Last updated: 2026-07-17
 
 ## Current milestone
 
@@ -27,9 +27,17 @@ documentation, and security checks passed. Its marker was complete and valid on
 clean `96ba6ae` before the later advisory-remediation report changed the live
 workspace fingerprint. The advisory backlog and first post-Meta-7 memory
 reconciliation were squash-merged through PR #21 at `cc434d9`. Remediation
-ARB-022 resolves the remaining live publication drift in the current workspace;
-its resolving commit remains pending until committed. Increment 4V is Ready but
-remains unstarted with no gate or source edit.
+ARB-022 resolves the remaining live publication drift and is squash-merged
+through PR #22 at `7c79e65`. Increment 4V / ARB-001 is verified at `3440ce9`
+with a valid `04v` marker on open PR #23 but is not merged. Its hosted jobs did
+not start because of an account billing or spending-limit restriction.
+
+Repository self-hosted runner routing is **implemented and fully verified
+locally; remote execution pending** on
+`codex/repository/use-self-hosted-runner`. Runner 21 is online with the exact
+`self-hosted`, `Linux`, `X64`, and `cortexa-ci` labels. Completion remains blocked
+until CI, Documentation, and Security pass on that runner after explicit
+publication approval.
 
 ## Increment status
 
@@ -70,7 +78,8 @@ remains unstarted with no gate or source edit.
 - Increment 4S: bind terminal initial approval presentation - **verified complete; published and merged**.
 - Increment 4T: bind terminal initial approval resolution - **verified complete; published and merged**.
 - Increment 4U: bind initial approval run-termination - **verified complete; published and merged at `61525bf`**.
-- Increment 4V: bind initial terminal approval audit - **Ready; separate implementation approval required**.
+- Increment 4V: bind initial terminal approval audit - **verified on open PR #23
+  at `3440ce9`; publication blocked on usable remote checks**.
 - Meta Increment 1: branding and identity foundation - **verified complete;
   squash-merged at `5edbf4d`**.
 - Meta Increment 2: engineering operating system - **verified complete**.
@@ -87,7 +96,25 @@ remains unstarted with no gate or source edit.
 - Meta Increment 7: verified application icon rollout - **verified complete with
   advisories; squash-merged through PR #19 at `96ba6ae`**.
 - Remediation ARB-022: project-memory reconciliation - **verified complete in
-  the current workspace; resolving commit pending until committed**.
+  PR #22 and squash-merged at `7c79e65`**.
+- Repository workflow: trusted self-hosted runner routing - **implemented and
+  locally verified; remote workflow execution pending**.
+
+## Self-hosted runner capability and evidence
+
+- The registered repository runner is online, idle, Linux x64, version
+  `2.335.1`, and has the repository-specific `cortexa-ci` label in addition to
+  GitHub's three default labels.
+- All three workflows select the exact four-label identity and prevent fork or
+  dependency-bot pull-request execution by omitting `pull_request` and allowing
+  pushes only to documented maintainer-controlled branch families.
+- Workflow permissions remain `contents: read`; no secrets, write operations,
+  publication steps, mutable actions, or persisted checkout credentials were
+  added.
+- Repository-health regression tests accept only the exact selector and trust
+  condition. The complete local `npm run verify` passes.
+- Remote runner execution is not yet evidence because the branch is unpushed.
+  Linux results will not replace target-Mac native evidence.
 
 ## Repository dependency baseline compatibility evidence
 
@@ -272,15 +299,17 @@ remains unstarted with no gate or source edit.
   `HANDOFF.md`, `NEXT_STEPS.md`, `PROJECT_STATUS.md`, and `ROADMAP.md`.
 - The remediation changes exactly eight live documentation authorities and adds
   its increment record and post-increment review. It removes the completed task,
-  records the actual merge, and preserves 4V as Ready but unstarted.
+  records the actual merge, and preserved 4V as Ready before its separately
+  approved implementation.
 - Product source, tests, dependencies, configuration, security boundaries,
-  4V plan/source/test/gate state, and dated Meta 7 evidence remain unchanged.
+  4V plan/source/test/gate state at that remediation checkpoint, and dated Meta
+  7 evidence remain unchanged.
 - Focused stale-instruction and protected-path assertions, formatting,
   documentation, repository, security, complete verification, diff review, and
   the mandatory `remediation-arb-022` gate pass. No manual product check applies.
-- The resolving commit remains pending until committed. Clean synchronized
-  `main` must contain that remediation before any separately approved `04v` gate
-  begins.
+- PR #22 squash-merged the resolving scope at `7c79e65`. Increment 4V was later
+  approved, verified, and opened as PR #23; the earlier remediation evidence is
+  preserved rather than rewritten.
 
 ## Increment 4U capability and evidence
 
@@ -311,26 +340,26 @@ remains unstarted with no gate or source edit.
 - Exact risks, verification, rollback, and acceptance criteria are documented in
   `docs/plans/04u-bind-initial-approval-run-termination.md`.
 
-## Increment 4V Ready capability and evidence
+## Increment 4V verified branch capability and evidence
 
-- The turn would own one private `InMemoryApprovalAuditAdapter` after verified
-  4U establishes both native and run-termination resolution paths.
-- Both successful paths would route the exact manager-owned resolution through
+- The open PR #23 implementation gives the turn one private
+  `InMemoryApprovalAuditAdapter` after verified 4U establishes both native and
+  run-termination resolution paths.
+- Both successful paths route the exact manager-owned resolution through
   one private audit helper before returning a closed resolution-plus-receipt
   value.
-- The receipt would remain volatile, sequence-only, and non-authorizing. It
-  would provide no durable audit, run-liveness, dispatch, or execution authority.
-- The exact future source/test scope is
+- The receipt remains volatile, sequence-only, and non-authorizing. It provides
+  no durable audit, run-liveness, dispatch, or execution authority.
+- The exact source/test scope is
   `src-tauri/src/agent/gateway_request.rs` and
   `src-tauri/tests/gateway_request_contract.rs`.
 - Manager terminalization precedes audit recording. A typed audit failure must
   return no resolution and must not leave stale pending turn ownership, but it
   cannot roll manager state back.
-- No gate state or implementation change exists. The 4U prerequisite is
-  satisfied, the plan is reconciled to `61525bf`, and the exact source/test
-  paths have not changed since that commit. Meta 7 publication is complete; 4V
-  is Ready and still requires separate project-owner implementation approval
-  from clean synchronized `main` containing the ARB-022 remediation.
+- Commit `3440ce9` on `codex/feature/bind-terminal-approval-audit` preserves the
+  reviewed 19-path implementation/closeout scope and a valid `04v` marker. PR
+  #23 is open and unmerged. Its hosted jobs failed before runner assignment;
+  they must be rerun after the self-hosted workflow increment is published.
 - Durable persistence, SQLite, native invocation or closure, proactive expiry,
   timers, runtime coordination, transport, credentials, dispatch, execution,
   Tauri, frontend, dependencies, capabilities, entitlements, and permissions
@@ -856,10 +885,11 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Review and publish only the verified ARB-022 documentation remediation. Confirm
-clean synchronized `main` contains it, then obtain separate project-owner
-approval for the exact Ready Increment 4V plan and begin `04v` before either
-approved source/test file changes. No `04v` gate or source edit exists.
+Review and publish only the trusted self-hosted runner routing increment. Confirm
+CI, Documentation, and Security execute successfully on runner 21, then finalize
+its report and marker. After that increment is merged, update open PR #23 onto
+the new `main` and rerun its existing verified 4V scope. Do not begin ARB-002 or
+another remediation.
 
 ## Phase 4 planning result
 

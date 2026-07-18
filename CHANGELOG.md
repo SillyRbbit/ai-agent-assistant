@@ -4,6 +4,19 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Routed the existing read-only CI, Documentation, and Security jobs to the
+  repository's dedicated Linux x64 runner through the exact custom-labeled
+  selector, with no pull-request trigger, a maintainer-controlled push-branch
+  allowlist, and fail-fast host prerequisite checks. Complete local verification
+  passes; remote runner execution remains pending until explicit publication
+  approval.
+- Added self-hosted runner operating guidance, security and testing boundaries,
+  and repository-health regressions that reject generic or unguarded
+  self-hosted selectors. No application source, dependency, Tauri boundary,
+  permission, schema, identifier, secret, or product behavior changed.
+- Reconciled ARB-022 as squash-merged through PR #22 at `7c79e65` and Increment
+  4V / ARB-001 as verified at `3440ce9` on open PR #23. Its failed hosted checks
+  did not start because of the account billing or spending-limit state.
 - Resolved ARB-022 in the reviewed documentation state by recording the advisory
   backlog and post-Meta-7 reconciliation as squash-merged through PR #21 at
   `cc434d9`, removing already-completed publication work from the live queue,

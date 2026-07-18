@@ -4,6 +4,12 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
+Repository Workflow Increment trusted self-hosted runner routing is active under
+`docs/plans/repository-self-hosted-runner.md`. The exact workflow, repository
+policy, regression-test, and operating-guide changes pass complete local
+verification. Commit, push, three successful runs on the registered runner, and
+final gate completion remain pending.
+
 The Repository Dependency Baseline Compatibility Repair is verified, published,
 and squash-merged through PR #20 at `b298999` under
 `docs/plans/repository-dependency-baseline-compatibility.md`.
@@ -18,8 +24,7 @@ The advisory backlog and first post-Meta-7 project-memory reconciliation were
 squash-merged through PR #21 at `cc434d9`. Remediation ARB-022 closes the
 remaining live publication drift as documentation-only work under
 `docs/increments/remediation-ARB-022-project-memory-reconciliation.md`. It is
-verified in the current workspace; its resolving commit remains pending until
-committed.
+verified and squash-merged through PR #22 at `7c79e65`.
 
 Meta Increment 5 repository health and GitHub hygiene is verified complete,
 published, and squash-merged at `6b149fa` under
@@ -52,12 +57,12 @@ The stopped Meta Increment 4 executive-document request created no gate state,
 plan, repository edit, or completion evidence. D-048 and D-049 record the queue
 history.
 
-Increment 4V terminal approval audit is Ready under
+Increment 4V terminal approval audit is verified on open PR #23 under
 `docs/plans/04v-bind-initial-terminal-approval-audit.md`. Its merged 4U
-prerequisite is satisfied, Meta 7 publication is complete, and its exact
-source/test scope remains unchanged since `61525bf`. It still requires a clean
-synchronized `main` containing the ARB-022 remediation and separate
-project-owner implementation approval; no `04v` gate or source edit exists.
+prerequisite and ARB-022 publication are satisfied. Commit `3440ce9` preserves
+the verified scope and valid `04v` marker. Publication is blocked until the
+self-hosted workflow increment provides usable remote checks; no later product
+or remediation increment may start.
 
 ## Completed plans
 
@@ -160,7 +165,7 @@ A plan must contain:
 | Increment 4S terminal approval presentation    | Complete | Project maintainer | 2026-07-15   |
 | Increment 4T terminal approval resolution      | Complete | Project maintainer | 2026-07-15   |
 | Increment 4U approval run termination          | Complete | Project maintainer | 2026-07-15   |
-| Increment 4V terminal approval audit binding   | Ready    | Project maintainer | 2026-07-16   |
+| Increment 4V terminal approval audit binding   | Active   | Project maintainer | 2026-07-17   |
 | Meta Increment 1 branding foundation           | Complete | Project maintainer | 2026-07-15   |
 | Meta Increment 2 engineering operating system  | Complete | Project maintainer | 2026-07-15   |
 | Meta Increment 3 Codex automation              | Complete | Project maintainer | 2026-07-15   |
@@ -170,6 +175,7 @@ A plan must contain:
 | Repository dependency baseline compatibility   | Complete | Project maintainer | 2026-07-16   |
 | Meta Increment 7 application icon rollout      | Complete | Project maintainer | 2026-07-16   |
 | ARB-022 memory reconciliation                  | Complete | Project maintainer | 2026-07-16   |
+| Repository self-hosted runner routing          | Active   | Project maintainer | 2026-07-17   |
 
 ## Meta Increment 1 branding and identity foundation - complete
 
@@ -271,16 +277,15 @@ already squash-merged through PR #21 at `cc434d9`.
 
 The remediation changes exactly eight live documentation authorities and adds
 one increment record and one post-increment review. It records the actual merge,
-removes completed publication work from the current queue, and leaves Increment
-4V Ready but unstarted. Product source, tests, dependencies, configuration,
-security boundaries, 4V plan/source/test/gate state, and dated Meta 7 evidence
-are unchanged.
+removes completed publication work from the current queue, and left Increment
+4V Ready at that checkpoint. Product source, tests, dependencies, configuration,
+security boundaries, 4V plan/source/test/gate state at that checkpoint, and
+dated Meta 7 evidence are unchanged.
 
 Focused stale-instruction and protected-path assertions, formatting,
 documentation, repository, security, full verification, diff review, and the
-mandatory `remediation-arb-022` gate pass. No manual product check applies. The
-resolving commit remains pending until committed; after publication, confirm
-clean synchronized `main` contains the remediation before any `04v` gate begins.
+mandatory `remediation-arb-022` gate pass. No manual product check applies. PR
+#22 squash-merged the resolving scope at `7c79e65`.
 
 ## Phase 4 Increment 4U bind initial approval run-termination - complete
 
@@ -307,14 +312,14 @@ npm audit, scope and security review, documentation sync, and the mandatory
 synchronized `main`, and retains a valid marker. Rollback after publication
 reverts the bounded 4U commit.
 
-## Phase 4 Increment 4V bind initial terminal approval audit - Ready
+## Phase 4 Increment 4V bind initial terminal approval audit - verified on PR
 
 Goal: prevent a future initial-turn caller from receiving a successful native
 or run-termination approval resolution unless the turn's private typed
 in-memory audit adapter has validated and recorded that exact manager-owned
 resolution first.
 
-The exact future source/test plan changes only `agent/gateway_request.rs` and
+The exact source/test implementation changes only `agent/gateway_request.rs` and
 the public `gateway_request_contract` integration test. It adds one private
 turn-owned `InMemoryApprovalAuditAdapter`, one closed non-cloneable
 resolution-plus-receipt value, and one manager-success-to-audit-success helper
@@ -325,12 +330,11 @@ No durable audit persistence, SQLite, native invocation or closure, proactive
 expiry, timer, runtime coordinator, active-run validation, dispatch, execution,
 transport, credential, Tauri, frontend, dependency, capability, entitlement,
 or permission path is included. Focused and complete verification, npm audit,
-scope and security review, documentation sync, and the mandatory `04v` gate are
-required. No manual check is planned. The 4U prerequisite is satisfied and the
-plan is reconciled to `61525bf`; Meta 7 publication is complete and 4V is the
-first Ready product increment. Separate project-owner implementation approval
-and clean synchronized `main` containing the ARB-022 remediation remain required
-before its gate begins.
+scope and security review, documentation sync, and the mandatory `04v` gate
+passed before commit. No manual check applies. Commit `3440ce9` and its valid
+marker remain on open PR #23. The hosted jobs failed before runner assignment;
+publication waits for this self-hosted workflow increment and fresh remote
+checks. No later product or remediation increment may start.
 
 ## Phase 4 Increment 4T bind terminal initial approval resolution - complete
 

@@ -151,6 +151,13 @@ production boundary exists.
 - [ ] External actions use immutable commit digests and are reviewed through
       dependency proposals rather than mutable tags.
 - [ ] Pull-request code is treated as untrusted even when checks pass.
+- [ ] Persistent self-hosted jobs require the repository-specific runner label
+      and do not use `pull_request`; pushes are limited to the documented
+      maintainer-controlled branch families.
+- [ ] The self-hosted machine is dedicated, unprivileged, credential-free, and
+      contains no unrelated sensitive data or trusted-service access.
+- [ ] Linux runner success is not substituted for required target-Mac native,
+      signing, notarization, installer, or release evidence.
 - [ ] Dependabot proposals remain human-reviewed and cannot write or merge to
       the default branch automatically.
 - [ ] Secret-pattern and advisory scans fail closed on new findings; accepted

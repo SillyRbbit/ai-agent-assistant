@@ -110,8 +110,10 @@ Location: `scripts/tests/test_*.py`.
 The standard-library repository checks cover Markdown and image targets, secret
 pattern redaction, tracked generated output, licensing evidence, documented npm
 commands, immutable GitHub Action references, least-privilege workflow policy,
-and the exact accepted Cargo-audit baseline. Positive and negative fixtures use
-isolated temporary paths and synthetic values.
+the exact repository-specific self-hosted selector, the no-pull-request trigger
+policy, the trusted push-branch allowlist, and the exact accepted Cargo-audit
+baseline. Positive and negative fixtures use isolated temporary paths and
+synthetic values.
 
 Commands:
 
@@ -124,6 +126,22 @@ npm run security:scan
 
 These checks are read-only. A passing pattern scan or link audit is bounded
 evidence, not a security certification or proof of remote GitHub settings.
+
+### Self-hosted workflow verification
+
+The repository runner is a persistent Linux x64 machine. Workflow changes must
+prove locally that YAML parses, action references remain immutable, permissions
+remain read-only, secrets and write operations remain absent, and repository
+health accepts only the exact `cortexa-ci` selector, no `pull_request` trigger,
+and the documented trusted push branches. After publication, inspect the GitHub
+run and confirm the intended runner executed CI, Documentation, and Security
+successfully.
+
+Fork and dependency-bot pull requests do not trigger this runner. A missing
+self-hosted check is not approval to merge; reproduce reviewed changes on a
+maintainer-controlled allowlisted branch. Linux verification never replaces
+the target-Mac checks declared for native behavior. Host setup and rollback are
+in `docs/github/SELF_HOSTED_RUNNER.md`.
 
 ### Security tests
 

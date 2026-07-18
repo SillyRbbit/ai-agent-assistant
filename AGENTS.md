@@ -52,12 +52,15 @@ Its `meta-07` marker was complete and valid on clean `96ba6ae` before the later
 advisory-remediation report changed the workspace fingerprint. The advisory
 backlog and first post-Meta-7 memory reconciliation are squash-merged through PR
 #21 at `cc434d9`. ARB-022's remaining live publication drift is resolved in the
-current documentation state; its remediation record preserves the resolving
-commit as pending until committed. Increment 4V terminal approval audit is the
-first Ready product increment, remains unstarted, and still requires separate
-project-owner implementation approval from clean synchronized `main` containing
-the ARB-022 remediation before its `04v` gate begins. Current implementation
-facts and future boundaries are authoritative in `ARCHITECTURE.md`.
+merged remediation at `7c79e65`. Increment 4V / ARB-001 is verified on
+`codex/feature/bind-terminal-approval-audit` at `3440ce9` with a valid `04v`
+marker and open PR #23; it is not merged. Its three hosted jobs failed before
+runner assignment because of an account billing or spending-limit restriction,
+not a repository test failure. Repository self-hosted runner routing is active
+on `codex/repository/use-self-hosted-runner`; remote workflow execution remains
+required before that workflow increment can complete. Do not begin another
+product or remediation increment. Current implementation facts and future
+boundaries are authoritative in `ARCHITECTURE.md`.
 
 ## Non-negotiable product boundaries
 

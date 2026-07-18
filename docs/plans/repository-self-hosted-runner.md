@@ -1,0 +1,170 @@
+# Repository Workflow Increment - trusted self-hosted runner routing
+
+Status: Verification pending
+Owner: Project maintainer
+Last updated: 2026-07-17
+
+## Goal
+
+Route the repository's existing read-only CI, Documentation, and Security jobs
+to the registered Linux x64 GitHub Actions runner without executing
+pull-request workflow definitions on the persistent machine or weakening
+checks.
+
+## User-visible outcome
+
+Trusted repository changes can run the existing verification workflows when
+GitHub-hosted jobs are unavailable. Product behavior is unchanged.
+
+## Scope
+
+- Add the repository-specific `cortexa-ci` label to the registered runner.
+- Select the exact four-label runner identity in the three existing workflows.
+- Remove `pull_request` triggers and limit pushes to documented
+  maintainer-controlled branch families.
+- Add fail-fast Linux, Rust, Python, and Tauri prerequisite checks.
+- Enforce the selector, no-pull-request rule, and push allowlist in
+  repository-health tests.
+- Document host setup, security boundaries, maintenance, verification, and
+  rollback.
+
+## Explicit non-goals
+
+- No application source, dependency, manifest, lockfile, IPC, CSP, capability,
+  permission, database, identifier, signing, notarization, deployment, or
+  publishing change.
+- No repository secret, production credential, artifact publication, automatic
+  commit, push, merge, or deployment.
+- No claim that Linux checks prove target-Mac native behavior.
+- No ephemeral-runner orchestration or organization runner-group change.
+- No modification, rebase, merge, or publication of Increment 4V / PR #23.
+
+## Existing behavior and constraints
+
+The registered runner is online, idle, Linux, x64, and initially exposed only
+GitHub's default `self-hosted`, `Linux`, and `X64` labels. Existing workflows
+select `macos-15` or `ubuntu-24.04`, so none can match it. PR #23's jobs failed
+before source checkout because GitHub-hosted execution was blocked by an account
+billing or spending-limit restriction.
+
+The repository treats pull-request code and dependency proposals as untrusted.
+The persistent runner is not an ephemeral security boundary and must remain
+read-only, secret-free, dedicated, and unavailable to untrusted PR sources.
+
+## Files expected to change
+
+Workflow and policy implementation:
+
+- `.github/workflows/ci.yml`
+- `.github/workflows/documentation.yml`
+- `.github/workflows/security.yml`
+- `scripts/repository_health.py`
+- `scripts/tests/test_repository_health.py`
+- `docs/github/SELF_HOSTED_RUNNER.md`
+- `SECURITY.md`
+- `SECURITY_CHECKLIST.md`
+- `TESTING_GUIDE.md`
+- `DECISIONS.md`
+- `TROUBLESHOOTING_LOG.md`
+
+Declared closeout scope:
+
+- `AGENTS.md`
+- `HANDOFF.md`
+- `PROJECT_STATUS.md`
+- `NEXT_STEPS.md`
+- `PLANS.md`
+- `CHANGELOG.md`
+- `docs/plans/README.md`
+- `docs/plans/repository-self-hosted-runner.md`
+- `docs/increments/repository-self-hosted-runner.md`
+- `docs/reviews/2026-07-17-repository-self-hosted-runner-post-increment-review.md`
+
+## Implementation steps
+
+- [x] Confirm clean synchronized `main`, create an isolated workflow branch,
+      and inspect the registered runner and existing workflow selectors.
+- [x] Begin mandatory `repository-self-hosted-runner` gate state.
+- [x] Assign the custom label and add exact routing, trusted trigger limits, and
+      prerequisite checks.
+- [x] Add focused positive and negative repository-policy tests.
+- [x] Document the persistent-runner boundary and operating procedure.
+- [x] Run complete local verification and review the exact diff.
+- [ ] With explicit publication approval, push the branch and confirm all three
+      jobs execute successfully on the intended runner.
+- [x] Create the consolidated report with the evidence-backed interim `FAIL`
+      result.
+- [ ] Update the report and finalize the completion marker only after remote
+      evidence passes.
+
+## Security and privacy considerations
+
+The runner host can be persistently compromised by code it executes. It must use
+a dedicated unprivileged account, contain no production credentials or personal
+data, and have no access to unrelated trusted services. Removing
+`pull_request` prevents fork-controlled workflow definitions from running, but
+the policy cannot protect the host from a trusted writer who can modify and push
+workflow code. No secrets enter any job.
+
+## Test plan
+
+- Positive fixture accepts the exact custom-label selector, no-pull-request
+  policy, and push allowlist.
+- Negative fixtures reject a generic self-hosted selector and any
+  pull-request-triggered exact selector.
+- Existing immutable-action, read-only permission, no-secret, no-write, link,
+  generated-output, and command checks remain green.
+- Complete repository verification passes locally.
+- Published CI, Documentation, and Security jobs execute on the registered
+  runner and pass.
+
+## Verification commands
+
+```bash
+npm run test:repository
+npm run docs:check
+npm run repository:check
+npm run verify
+git diff --check
+gh api repos/SillyRbbit/ai-agent-assistant/actions/runners
+gh pr checks <runner-setup-pr-number> --watch
+python3 .codex/hooks/session_end_gate.py
+python3 .codex/hooks/post_increment_gate.py status
+```
+
+## Rollback or failure strategy
+
+Restore the prior hosted `runs-on` values and remove the trust/preflight blocks.
+Remove `cortexa-ci` from runner 21 through the GitHub runner-label API. Keep the
+existing read-only/no-secret workflow policy. Rerun all local checks and hosted
+workflow checks before declaring rollback complete.
+
+## Acceptance criteria
+
+- [x] Runner 21 is online and has all four expected labels.
+- [x] All three workflows preserve read-only permissions, immutable actions,
+      non-persistent checkout credentials, and no secret context.
+- [x] Repository tests reject missing custom labels, pull-request triggers, and
+      incomplete push allowlists.
+- [x] Full local verification and complete diff review pass.
+- [ ] CI, Documentation, and Security execute successfully on the registered
+      runner after explicit publication approval.
+- [ ] The final gate report and marker are complete and valid.
+
+## Actual results
+
+Baseline repository-health tests, documentation checks, and complete repository
+health passed before edits. Focused post-edit repository-health tests pass 19 of 19. Workflow YAML parsing, documentation, repository health, secret scanning,
+diff checks, and complete `npm run verify` pass locally. Two intermediate
+formatting-only failures in this plan were corrected with Prettier before the
+final complete pass. The consolidated report correctly records `FAIL` while
+remote workflow execution remains pending, and the gate remains active.
+
+## Documentation updates
+
+- [x] `HANDOFF.md`
+- [x] `PROJECT_STATUS.md`
+- [x] `NEXT_STEPS.md`
+- [x] `DECISIONS.md`
+- [x] `CHANGELOG.md`
+- [x] `TROUBLESHOOTING_LOG.md`

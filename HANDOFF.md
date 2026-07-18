@@ -1,6 +1,6 @@
 # Handoff
 
-Last updated: 2026-07-16
+Last updated: 2026-07-17
 
 ## Current state
 
@@ -24,9 +24,92 @@ original local branch is preserved as
 immediately before the later advisory-remediation report changed the workspace
 fingerprint. The advisory backlog and first post-Meta-7 project-memory
 reconciliation were squash-merged through PR #21 at `cc434d9`. ARB-022 is
-resolved in the current documentation workspace; its resolving commit remains
-pending until committed. Increment 4V is Ready but remains unstarted; no `04v`
-gate or source edit exists.
+resolved and squash-merged through PR #22 at `7c79e65`. Increment 4V / ARB-001
+is verified on `codex/feature/bind-terminal-approval-audit` at `3440ce9` with a
+valid `04v` marker and open PR #23. Its three hosted checks failed before runner
+assignment because of the account billing or spending-limit state.
+
+Repository self-hosted runner routing is implemented and fully verified locally
+on `codex/repository/use-self-hosted-runner`. The branch is uncommitted and
+unpushed. Successful CI, Documentation, and Security execution on the registered
+runner remains mandatory before completion.
+
+## Repository self-hosted runner setup
+
+### Goal and implementation
+
+Route the existing read-only GitHub workflows to the registered repository
+runner without allowing pull-request workflow definitions to execute on the
+persistent host.
+
+- Runner 21 `henry-dang-HP-Elite-Slice` is online, idle, Linux x64, and now has
+  `self-hosted`, `Linux`, `X64`, and custom `cortexa-ci` labels.
+- CI, Documentation, and Security require the exact four-label selector.
+- The workflows have no `pull_request` trigger. Pushes are limited to `main`,
+  `codex/**`, `feature/**`, `fix/**`, `refactor/**`, `meta/**`, and `phase*/**`,
+  with schedule and explicit dispatch retained where applicable.
+- Workflows preserve top-level `contents: read`, immutable actions, no secrets,
+  non-persistent checkout credentials, and no write or publication step.
+- CI fails fast when Rustup, Cargo, Python, `pkg-config`, or the required Tauri
+  Linux package metadata is absent. Workflows do not run `sudo` or install
+  system packages.
+- `scripts/repository_health.py` and three new regression tests prevent silent
+  removal of the custom selector, no-pull-request rule, or branch allowlist.
+- `docs/github/SELF_HOSTED_RUNNER.md` defines host provisioning, trust,
+  maintenance, incident response, verification, and rollback.
+
+No application source, dependency, lockfile, Tauri command, capability, CSP,
+permission, SQLite schema, identifier, credential, deployment, or publication
+changed. Linux workflow evidence does not replace required target-Mac evidence.
+
+### Verification
+
+Passed:
+
+- Clean synchronized `main` at `7c79e65` before the isolated branch was created.
+- Baseline `npm run test:repository` (16 tests), `npm run docs:check`, and
+  `npm run repository:check`.
+- Mandatory `repository-self-hosted-runner` gate begin.
+- Runner API inspection before and after custom-label assignment.
+- Focused `npm run test:repository` (19 tests).
+- Ruby parse of all three changed workflow YAML files.
+- Post-edit `npm run docs:check` and `npm run repository:check`.
+- `npm run verify`, including formatting, repository policy, lint, strict
+  Clippy, 28 hook tests, 19 repository tests, 124 frontend tests, 95 Rust
+  library tests, 21 Rust integration tests, typecheck, Vite builds, and Tauri
+  release no-bundle build.
+
+Failed checks: none remain. The first post-edit documentation check and the
+first final `npm run verify` attempt each reported only a newly introduced
+Markdown wrap in the plan; formatting that one file made the complete rerun
+pass.
+
+Not run / manual pending:
+
+- The branch has not been committed or pushed because publication requires
+  explicit project-owner approval.
+- CI, Documentation, and Security have not yet executed on the registered
+  runner. This mandatory remote check makes the consolidated post-increment
+  report `FAIL` and blocks marker completion.
+- The consolidated review exists at
+  `docs/reviews/2026-07-17-repository-self-hosted-runner-post-increment-review.md`.
+  The `repository-self-hosted-runner` gate remains active and was not finalized.
+- No target-Mac manual check was required because no product or native behavior
+  changed.
+
+### Exact next task
+
+Review the complete bounded workflow diff and approve its publication names.
+After push, wait for all three self-hosted checks, resolve only host-prerequisite
+failures if any, update the consolidated report with the remote evidence, and
+finalize the gate only after they pass. Do not alter or merge PR #23 until this
+workflow increment is merged and its runner evidence is complete.
+
+### Ready-to-paste next prompt
+
+```text
+Review the complete repository self-hosted runner setup. Confirm the exact workflow, policy, test, plan, and closeout scope; passing local npm run verify; online runner 21 with the cortexa-ci label; preserved read-only/no-secret boundaries; and mandatory remote checks still pending. Propose a Conventional Commit message, PR title, and PR description, then wait for my approval before committing or pushing. Do not modify or merge PR #23.
+```
 
 ## Repository dependency baseline compatibility repair
 
@@ -40,7 +123,11 @@ and the accepted RustSec baseline gate passed. Its consolidated result is
 Publication is complete at `b298999`; Meta 7 has now been reverified
 independently on that repaired baseline.
 
-## ARB-022 project-memory remediation
+## Historical ARB-022 pre-publication closeout
+
+This section preserves the evidence recorded before PR #22 merged. The live
+state is the current-state and self-hosted-runner sections above: ARB-022 is
+merged at `7c79e65`, and Increment 4V is verified on open PR #23.
 
 `docs/reviews/2026-07-16-advisory-remediation-backlog.md` is the authoritative
 review of 64 source advisories. PR #21 squash-merged that report and the first
