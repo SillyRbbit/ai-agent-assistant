@@ -26,13 +26,16 @@ account could not start GitHub-hosted jobs.
 - Added fail-fast host prerequisite checks without workflow `sudo`.
 - Added repository-health enforcement and focused regression tests.
 - Added the authoritative host and trust-boundary guide.
+- After Linux CI exposed target-conditional dead code, target-gated only private
+  approval-source imports, presentation state/parts, conversion methods, and
+  evidence constructors whose sole consumer is the macOS decision source.
 
 ## Boundaries preserved
 
-No application source, behavior, dependency, lockfile, Tauri command,
-capability, CSP, permission, database, identifier, signing, deployment,
-publication, or secret changed. Linux workflow evidence does not replace native
-macOS evidence.
+No public approval contract, target-Mac behavior, dependency, lockfile, Tauri
+command, capability, CSP, permission, database, identifier, signing,
+deployment, publication, or secret changed. Linux workflow evidence does not
+replace native macOS evidence.
 
 ## Verification state
 
@@ -55,18 +58,31 @@ Passed after focused implementation:
   integration tests, typecheck, Vite builds, and the Tauri release no-bundle
   build passed.
 - `git diff --check` and complete changed-path review - passed with no product
-  source path.
+  behavior change.
+- Rust formatting passed after the approved correction.
+- Strict all-target Clippy with all features and warnings denied passed after
+  the approved correction.
+- All six existing focused approval-manager tests passed.
+- Final `npm run verify` - formatting, policy, lint, strict Clippy, 28 hook
+  tests, 19 repository tests, 124 frontend tests, 95 Rust library tests, 21
+  Rust integration tests, typecheck, Vite builds, and Tauri no-bundle build
+  passed with the two-file correction.
 
 Intermediate failures:
 
 - One post-edit documentation check and one later `npm run verify` attempt
   stopped only on Prettier wraps in the new plan. Formatting that file and
   rerunning produced the final passing results above.
+- The first post-correction documentation check reported only formatting in
+  `HANDOFF.md`, this increment record, and the consolidated report. Formatting
+  those exact files made the complete rerun pass.
 
 Still required:
 
-- CI, Documentation, and Security execution on the registered runner after
-  explicit commit/push approval.
+- Obtain separate approval to commit and push the exact two-file correction and
+  current closeout updates to PR #24.
+- Rerun CI successfully on the corrected branch. Documentation and Security
+  already pass on runner 21 but must pass again for the pushed commit.
 - Update the existing `FAIL` post-increment report with successful remote
   evidence and finalize a valid completion marker.
 

@@ -60,15 +60,17 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ### Publish and remotely verify trusted self-hosted runner routing
 
-**Status:** **Verification pending**; implementation and complete local checks
-pass, but commit, push, and remote execution require explicit project-owner
-approval.
+**Status:** **Verification pending** on PR #24 at `80bced4`. Documentation and
+Security pass on runner 21. CI passed runner preflight but exposed five strict
+Linux Clippy warnings in private macOS-only approval-source support.
 
-Publish `codex/repository/use-self-hosted-runner`, confirm CI, Documentation,
-and Security execute on runner 21 with the `cortexa-ci` label, and resolve only
-host-prerequisite failures within the bounded workflow increment. Finalize its
-report and marker only after all three jobs pass. Do not start another product
-or remediation increment.
+The separately approved correction is implemented locally in exactly
+`src-tauri/src/approvals/manager.rs` and
+`src-tauri/src/approvals/types.rs`. Existing focused coverage, strict Clippy,
+and complete `npm run verify` pass on the target Mac. Obtain separate commit and
+push approval, rerun all three required workflows on runner 21, and finalize the
+report and marker only after every required job passes. Do not start another
+product or remediation increment.
 
 ### Publish Increment 4V / ARB-001 after runner verification
 

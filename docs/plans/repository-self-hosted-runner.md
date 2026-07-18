@@ -27,12 +27,16 @@ GitHub-hosted jobs are unavailable. Product behavior is unchanged.
   repository-health tests.
 - Document host setup, security boundaries, maintenance, verification, and
   rollback.
+- Target-gate only private approval-source imports, presentation state/parts,
+  conversion methods, and evidence constructors whose sole consumer is the
+  macOS decision source after Linux strict Clippy exposed their non-macOS dead
+  code.
 
 ## Explicit non-goals
 
-- No application source, dependency, manifest, lockfile, IPC, CSP, capability,
-  permission, database, identifier, signing, notarization, deployment, or
-  publishing change.
+- No public approval contract, target-Mac behavior, dependency, manifest,
+  lockfile, IPC, CSP, capability, permission, database, identifier, signing,
+  notarization, deployment, or publishing change.
 - No repository secret, production credential, artifact publication, automatic
   commit, push, merge, or deployment.
 - No claim that Linux checks prove target-Mac native behavior.
@@ -66,6 +70,8 @@ Workflow and policy implementation:
 - `TESTING_GUIDE.md`
 - `DECISIONS.md`
 - `TROUBLESHOOTING_LOG.md`
+- `src-tauri/src/approvals/manager.rs`
+- `src-tauri/src/approvals/types.rs`
 
 Declared closeout scope:
 
@@ -90,8 +96,16 @@ Declared closeout scope:
 - [x] Add focused positive and negative repository-policy tests.
 - [x] Document the persistent-runner boundary and operating procedure.
 - [x] Run complete local verification and review the exact diff.
-- [ ] With explicit publication approval, push the branch and confirm all three
-      jobs execute successfully on the intended runner.
+- [x] With explicit publication approval, commit and push the branch and open
+      PR #24.
+- [x] Repair the runner service, remove its duplicate interactive listener, and
+      confirm Documentation and Security pass.
+- [x] Obtain separate approval for the exact two-file Linux strict-Clippy
+      portability correction and implement it without weakening checks.
+- [x] Pass focused approval-manager tests, strict Clippy, and complete local
+      target-Mac verification after the correction.
+- [ ] Commit and push the approved correction, then pass CI, Documentation, and
+      Security on runner 21.
 - [x] Create the consolidated report with the evidence-backed interim `FAIL`
       result.
 - [ ] Update the report and finalize the completion marker only after remote
@@ -115,6 +129,8 @@ workflow code. No secrets enter any job.
 - Existing immutable-action, read-only permission, no-secret, no-write, link,
   generated-output, and command checks remain green.
 - Complete repository verification passes locally.
+- Existing focused approval-manager tests preserve the target-Mac presentation
+  and resolution behavior.
 - Published CI, Documentation, and Security jobs execute on the registered
   runner and pass.
 
@@ -124,6 +140,9 @@ workflow code. No secrets enter any job.
 npm run test:repository
 npm run docs:check
 npm run repository:check
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+cargo test --manifest-path src-tauri/Cargo.toml --lib approvals::manager --locked
 npm run verify
 git diff --check
 gh api repos/SillyRbbit/ai-agent-assistant/actions/runners
@@ -147,6 +166,8 @@ workflow checks before declaring rollback complete.
 - [x] Repository tests reject missing custom labels, pull-request triggers, and
       incomplete push allowlists.
 - [x] Full local verification and complete diff review pass.
+- [x] The approved two-file correction target-gates only private macOS-source
+      support and passes focused plus complete local verification.
 - [ ] CI, Documentation, and Security execute successfully on the registered
       runner after explicit publication approval.
 - [ ] The final gate report and marker are complete and valid.
@@ -157,8 +178,18 @@ Baseline repository-health tests, documentation checks, and complete repository
 health passed before edits. Focused post-edit repository-health tests pass 19 of 19. Workflow YAML parsing, documentation, repository health, secret scanning,
 diff checks, and complete `npm run verify` pass locally. Two intermediate
 formatting-only failures in this plan were corrected with Prettier before the
-final complete pass. The consolidated report correctly records `FAIL` while
-remote workflow execution remains pending, and the gate remains active.
+final complete pass. Commit `80bced4` is pushed on PR #24. Documentation passed
+on runner 21; CI run `29624042629` and Security run `29624042656` both failed
+at `command -v rustup`. The consolidated report remains `FAIL`, and the gate
+remains active. After host repair, attempt 3 proves Documentation and Security
+pass. CI reaches strict Clippy and fails on five private approval-code items
+whose only consumer is the macOS-gated decision source. The original file plan
+was expanded by separate project-owner approval. The exact two-file correction
+is implemented locally; rustfmt, strict Clippy, six focused manager tests, and
+complete `npm run verify` pass. PR #24 still points to `80bced4`, so remote CI
+confirmation remains pending separate commit and push approval. The first
+post-correction documentation check reported only formatting in three closeout
+files; formatting those exact files made the rerun pass.
 
 ## Documentation updates
 

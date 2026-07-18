@@ -30,9 +30,14 @@ valid `04v` marker and open PR #23. Its three hosted checks failed before runner
 assignment because of the account billing or spending-limit state.
 
 Repository self-hosted runner routing is implemented and fully verified locally
-on `codex/repository/use-self-hosted-runner`. The branch is uncommitted and
-unpushed. Successful CI, Documentation, and Security execution on the registered
-runner remains mandatory before completion.
+on `codex/repository/use-self-hosted-runner`, committed at `80bced4`, pushed, and
+opened as PR #24. The managed runner service now owns the sole session with the
+correct Rustup/Cargo PATH. Documentation and Security pass. CI passes preflight
+and reaches strict Clippy, which exposed five Linux-only warnings in private
+macOS approval-source support. The separately approved two-file portability
+correction is now implemented locally and complete target-Mac verification
+passes. PR #24 still points to `80bced4`; remote Linux confirmation requires
+separate commit and push approval before the gate can complete.
 
 ## Repository self-hosted runner setup
 
@@ -58,9 +63,12 @@ persistent host.
 - `docs/github/SELF_HOSTED_RUNNER.md` defines host provisioning, trust,
   maintenance, incident response, verification, and rollback.
 
-No application source, dependency, lockfile, Tauri command, capability, CSP,
-permission, SQLite schema, identifier, credential, deployment, or publication
-changed. Linux workflow evidence does not replace required target-Mac evidence.
+Only private imports, presentation source state/parts, the source conversion,
+and evidence constructors used exclusively by the macOS decision source are
+target-gated. No public approval contract, target-Mac behavior, dependency,
+lockfile, Tauri command, capability, CSP, permission, SQLite schema, identifier,
+credential, deployment, or publication changed. Linux workflow evidence does
+not replace required target-Mac evidence.
 
 ### Verification
 
@@ -74,23 +82,56 @@ Passed:
 - Focused `npm run test:repository` (19 tests).
 - Ruby parse of all three changed workflow YAML files.
 - Post-edit `npm run docs:check` and `npm run repository:check`.
+- Rust formatting passed after the approved portability correction.
+- Strict all-target Clippy with all features and warnings denied passed after
+  the approved portability correction.
+- All six existing focused approval-manager tests passed.
 - `npm run verify`, including formatting, repository policy, lint, strict
   Clippy, 28 hook tests, 19 repository tests, 124 frontend tests, 95 Rust
   library tests, 21 Rust integration tests, typecheck, Vite builds, and Tauri
   release no-bundle build.
 
-Failed checks: none remain. The first post-edit documentation check and the
-first final `npm run verify` attempt each reported only a newly introduced
-Markdown wrap in the plan; formatting that one file made the complete rerun
-pass.
+Failed checks: none remain. Earlier checks reported only a Markdown wrap in the
+plan. The first post-correction documentation check likewise reported formatting
+in three edited closeout files. Formatting the reported files made every
+complete rerun pass.
 
-Not run / manual pending:
+Remote verification:
 
-- The branch has not been committed or pushed because publication requires
-  explicit project-owner approval.
-- CI, Documentation, and Security have not yet executed on the registered
-  runner. This mandatory remote check makes the consolidated post-increment
-  report `FAIL` and blocks marker completion.
+- Commit `80bced4` is pushed and PR #24 is open.
+- Documentation passed on runner 21 in 26 seconds.
+- CI run `29624042629` and Security run `29624042656` reached runner 21 but
+  failed in four and five seconds respectively. Both found `git` and `python3`,
+  then stopped because `command -v rustup` returned exit code 1.
+- Rustup `1.29.0`, Cargo, and default toolchain
+  `1.90.0-x86_64-unknown-linux-gnu` are now installed under
+  `/home/henry-dang/.cargo/bin`. The attempted `svc.sh stop/start` reported no
+  installed service unit; runner 21 remains online through the old interactive
+  listener and has not inherited the repaired PATH.
+- After the project owner reported service setup complete, CI attempt 2 job
+  `88038644524` and Security attempt 2 job `88038655825` still failed at
+  `command -v rustup`. The listener receiving jobs therefore still has the old
+  PATH or is a duplicate interactive process.
+- Host diagnostics confirmed the duplicate: interactive listener PID `7699`
+  remains beside service listener PID `36245`. The managed service is active,
+  its `.path` starts with `/home/henry-dang/.cargo/bin`, and its journal reports
+  that another session already exists. The old listener received the reruns.
+- The stale listener was stopped and the managed service restarted as the sole
+  listener. Attempt 3 passed runner preflight. Documentation and Security now
+  pass on runner 21.
+- CI attempt 3 job `88039053953` ran the complete repository command but failed
+  strict Linux Clippy on five existing target-conditional warnings in approval
+  code. The macOS-gated decision source is the only consumer of the affected
+  private import, presentation marker/parts, conversion method, and evidence
+  constructors.
+- The approved two-file correction now target-gates exactly those private items
+  in `src-tauri/src/approvals/manager.rs` and
+  `src-tauri/src/approvals/types.rs`. Focused checks and complete local
+  verification pass without weakening Clippy or changing target-Mac behavior.
+- The correction is uncommitted and unpublished. PR #24 therefore still tests
+  `80bced4`; its failed CI evidence keeps the consolidated report `FAIL` and
+  blocks marker completion until a separately approved push and successful
+  rerun.
 - The consolidated review exists at
   `docs/reviews/2026-07-17-repository-self-hosted-runner-post-increment-review.md`.
   The `repository-self-hosted-runner` gate remains active and was not finalized.
@@ -99,16 +140,18 @@ Not run / manual pending:
 
 ### Exact next task
 
-Review the complete bounded workflow diff and approve its publication names.
-After push, wait for all three self-hosted checks, resolve only host-prerequisite
-failures if any, update the consolidated report with the remote evidence, and
-finalize the gate only after they pass. Do not alter or merge PR #23 until this
-workflow increment is merged and its runner evidence is complete.
+Review the exact ten-path uncommitted diff: the approved two-file Rust
+portability correction plus the eight existing closeout documents. Confirm the
+private-only target gates, passing focused and complete local verification, and
+unchanged security and target-Mac boundaries. Then obtain separate approval to
+commit and push PR #24, wait for CI, Documentation, and Security, update the
+report, and finalize the marker only if every required job passes. Do not alter
+or merge PR #23.
 
 ### Ready-to-paste next prompt
 
 ```text
-Review the complete repository self-hosted runner setup. Confirm the exact workflow, policy, test, plan, and closeout scope; passing local npm run verify; online runner 21 with the cortexa-ci label; preserved read-only/no-secret boundaries; and mandatory remote checks still pending. Propose a Conventional Commit message, PR title, and PR description, then wait for my approval before committing or pushing. Do not modify or merge PR #23.
+Review the exact ten-path uncommitted PR #24 extension: src-tauri/src/approvals/manager.rs, src-tauri/src/approvals/types.rs, and the eight existing closeout documents. Confirm the private-only macOS target gates, passing focused and complete local verification, preserved target-Mac and security boundaries, interim FAIL report, and active unfinalized repository-self-hosted-runner gate. Propose the Conventional Commit and PR description update, then wait for my approval before committing or pushing. Do not modify or merge PR #23.
 ```
 
 ## Repository dependency baseline compatibility repair

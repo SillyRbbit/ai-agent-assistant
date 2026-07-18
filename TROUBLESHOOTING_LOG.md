@@ -646,7 +646,7 @@ reviewed compatibility increment.
 ## TS-016 - GitHub-hosted jobs fail before runner assignment
 
 Date: 2026-07-17
-Status: Self-hosted routing implemented locally; hosted execution pending
+Status: Runner routing and service path verified; corrected Linux CI pending
 
 ### Symptom
 
@@ -684,6 +684,51 @@ npm run verify
 After publishing the workflow branch, confirm all three GitHub jobs name the
 intended runner and pass. Until that remote execution succeeds, this resolution
 remains verification pending.
+
+### First self-hosted result
+
+PR #24 commit `80bced4` proved exact routing: Documentation passed on runner 21.
+CI run `29624042629` and Security run `29624042656` reached the same runner but
+failed at the prerequisite step after finding `git` and `python3` because
+`command -v rustup` returned exit code 1. Install or activate Rustup for the
+runner service account, refresh the runner-captured path so
+`$HOME/.cargo/bin` is visible, restart the service, and rerun the two failed
+jobs. This is a host prerequisite failure, not a repository test failure.
+
+The first repair installed Rustup `1.29.0`, Cargo, and default toolchain 1.90.0
+under `/home/henry-dang/.cargo/bin`. `svc.sh stop/start` then failed because the
+runner had never been installed as a `systemd` service; GitHub still reported it
+online through the earlier interactive listener. Stop that listener, run
+`./env.sh` after sourcing `$HOME/.cargo/env`, install the service for
+`henry-dang`, and start it before rerunning the failed jobs.
+
+CI and Security attempt 2 still failed at `command -v rustup` after the service
+setup was reported complete. Before another rerun, inspect `.service`,
+`svc.sh status`, `.path`, and all `Runner.Listener` or `runsvc.sh` processes.
+This distinguishes a captured-PATH defect from an old interactive listener that
+is still receiving jobs.
+
+The inspection found both stale interactive PID `7699` and managed service
+listener PID `36245`. The service was active and its `.path` correctly began
+with `/home/henry-dang/.cargo/bin`, while its journal repeatedly reported that a
+session for the runner already existed. Stop only the stale interactive
+listener, restart the service, and require one remaining listener with
+`--startuptype service` before rerunning workflows.
+
+Stopping the stale listener and restarting the service fixed runner routing and
+PATH inheritance. Attempt 3 passed all host prerequisites. Documentation and
+Security pass. CI then exposed a distinct repository portability issue: strict
+Linux Clippy rejects five private approval-source support items because their
+only consumer is the macOS-gated decision-source module. Do not suppress or
+weaken Clippy; handle that source correction only through separately approved
+scope.
+
+The project owner approved the exact two-file correction. Target-gating only
+the private import, presentation marker/parts and conversion, and native
+evidence constructors removes their non-macOS compile presence while preserving
+the complete macOS path. Focused approval-manager tests, strict Clippy, and
+`npm run verify` pass locally. Because the correction remains uncommitted, PR
+#24 still needs a successful Linux CI rerun before this incident is resolved.
 
 ### Prevention
 

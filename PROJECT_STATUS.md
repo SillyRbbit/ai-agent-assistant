@@ -32,12 +32,15 @@ through PR #22 at `7c79e65`. Increment 4V / ARB-001 is verified at `3440ce9`
 with a valid `04v` marker on open PR #23 but is not merged. Its hosted jobs did
 not start because of an account billing or spending-limit restriction.
 
-Repository self-hosted runner routing is **implemented and fully verified
-locally; remote execution pending** on
-`codex/repository/use-self-hosted-runner`. Runner 21 is online with the exact
-`self-hosted`, `Linux`, `X64`, and `cortexa-ci` labels. Completion remains blocked
-until CI, Documentation, and Security pass on that runner after explicit
-publication approval.
+Repository self-hosted runner routing and its approved private-only portability
+correction are **implemented and fully verified locally; publication and Linux
+CI confirmation pending** on PR #24 at `80bced4`. Runner 21 is
+online with the exact `self-hosted`, `Linux`, `X64`, and `cortexa-ci` labels.
+The managed service now owns the sole session with the correct Rustup/Cargo
+PATH. Documentation and Security pass. CI passed host preflight and exposed five
+strict-Clippy warnings in private macOS-only approval-source support; the exact
+two-file correction passes complete local target-Mac verification but remains
+uncommitted and untested by remote Linux CI.
 
 ## Increment status
 
@@ -98,7 +101,8 @@ publication approval.
 - Remediation ARB-022: project-memory reconciliation - **verified complete in
   PR #22 and squash-merged at `7c79e65`**.
 - Repository workflow: trusted self-hosted runner routing - **implemented and
-  locally verified; remote workflow execution pending**.
+  locally verified on PR #24; approved two-file portability correction awaits
+  publication and remote Linux confirmation**.
 
 ## Self-hosted runner capability and evidence
 
@@ -113,8 +117,12 @@ publication approval.
   added.
 - Repository-health regression tests accept only the exact selector and trust
   condition. The complete local `npm run verify` passes.
-- Remote runner execution is not yet evidence because the branch is unpushed.
-  Linux results will not replace target-Mac native evidence.
+- Documentation and Security pass on runner 21. CI passed host preflight and
+  exposed five target-conditional approval-code warnings because their only
+  consumer is macOS-gated. The exact private-only correction passes focused
+  tests, strict Clippy, and complete local verification; it still requires a
+  separately approved push and successful remote Linux rerun. Linux results
+  will not replace target-Mac native evidence.
 
 ## Repository dependency baseline compatibility evidence
 
