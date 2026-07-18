@@ -8,7 +8,7 @@
 - **Expected outputs:** Reproduction evidence, one root cause, focused regression coverage, and verified resolution.
 - **Related skills:** `$troubleshoot`, `$verified-increment`, `$code-review`.
 - **Related prompts:** [Refactor](refactor.md), [Technical-debt review](../reviews/technical-debt.md), [End session](../workflows/end-session.md).
-- **Last reviewed:** 2026-07-17
+- **Last reviewed:** 2026-07-18
 
 ## Prompt
 
@@ -26,5 +26,5 @@ Reproduce the narrowest failure and test one evidence-based hypothesis at a time
 
 Once the root cause is proven, state the exact fix, files, regression tests, risks, non-goals, verification, and rollback. Wait for project-owner approval before creating the branch, beginning the gate, or editing.
 
-Implement only the approved correction. Re-run the original failure, focused regression test, complete required verification, and the post-increment gate. Record a reusable diagnosis in TROUBLESHOOTING_LOG.md only when the issue can recur. Do not commit, push, merge, or begin another increment automatically.
+Implement only the approved correction. Re-run the original failure and focused regression test. Follow the Risk-Based Validation Policy in AGENTS.md and ENGINEERING_GUIDE.md: use focused checks during implementation, then run the complete required completion-gate verification for the selected tier once after the final relevant edit. Cross-cutting, security-sensitive, dependency, Tauri-configuration, and release work still requires npm run verify plus applicable manual checks. Run the post-increment gate. Record a reusable diagnosis in TROUBLESHOOTING_LOG.md only when the issue can recur. Do not commit, push, merge, or begin another increment automatically.
 ```

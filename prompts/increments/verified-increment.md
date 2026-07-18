@@ -8,7 +8,7 @@
 - **Expected outputs:** One approved implementation, focused tests, verified closeout evidence, synchronized project memory, and no automatic publication.
 - **Related skills:** `$verified-increment`, `$quality-gate`, `$post-increment-gate`.
 - **Related prompts:** [Feature implementation](feature-implementation.md), [Quality gate](../reviews/quality-gate.md), [End session](../workflows/end-session.md).
-- **Last reviewed:** 2026-07-17
+- **Last reviewed:** 2026-07-18
 
 ## Prompt
 
@@ -23,7 +23,7 @@ State the exact goal, non-goals, changed files, risks, verification, manual gate
 
 Preserve behavior outside scope. Add focused success and failure tests, use typed errors at production boundaries, and do not weaken security or quality controls. Stop and request approval before expanding any declared file or capability boundary.
 
-Run targeted checks and complete required verification. Review the complete diff for correctness, architecture, security, technical debt, and accidental files. Synchronize project memory only from observed evidence, create the required increment and review records, and finalize a valid post-increment marker.
+Follow the Risk-Based Validation Policy in AGENTS.md and ENGINEERING_GUIDE.md: run targeted checks during implementation, then run the complete required completion-gate verification for the selected tier once after the final relevant edit. Cross-cutting, security-sensitive, dependency, Tauri-configuration, and release work still requires npm run verify plus applicable manual checks. Review the complete diff for correctness, architecture, security, technical debt, and accidental files. Synchronize project memory only from observed evidence, create the required increment and review records, and finalize a valid post-increment marker.
 
 Do not commit, push, merge, publish, release, or start another increment unless separately instructed.
 ```

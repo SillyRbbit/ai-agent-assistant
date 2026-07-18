@@ -8,7 +8,7 @@
 - **Expected outputs:** One bounded structural change with contract-focused regression evidence and no behavior drift.
 - **Related skills:** `$architecture-review`, `$technical-debt`, `$verified-increment`.
 - **Related prompts:** [Feature implementation](feature-implementation.md), [Code review](../reviews/code-review.md), [Quality gate](../reviews/quality-gate.md).
-- **Last reviewed:** 2026-07-17
+- **Last reviewed:** 2026-07-18
 
 ## Prompt
 
@@ -26,5 +26,5 @@ State the structural root cause, exact edits, protected behavior, risks, regress
 
 Do not add features, dependencies, permissions, schema changes, public API changes, or speculative abstractions. Keep the refactor within {{FILE_SCOPE}} and stop before scope expansion.
 
-Run focused contract tests, complete required verification, architecture and code review, and the post-increment gate. Report any behavior change as a blocker rather than accepting it as refactor fallout. Do not commit, push, merge, or start another increment automatically.
+Run focused contract tests and architecture and code review. Follow the Risk-Based Validation Policy in AGENTS.md and ENGINEERING_GUIDE.md: use focused checks during implementation, then run the complete required completion-gate verification for the selected tier once after the final relevant edit. Cross-cutting, security-sensitive, dependency, Tauri-configuration, and release work still requires npm run verify plus applicable manual checks. Run the post-increment gate. Report any behavior change as a blocker rather than accepting it as refactor fallout. Do not commit, push, merge, or start another increment automatically.
 ```

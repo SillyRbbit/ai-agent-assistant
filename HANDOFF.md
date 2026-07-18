@@ -121,32 +121,84 @@ restoration of the 59 changed paths from `HEAD`. After publication, revert only
 the bounded prompt-library squash commit `d26b5e1`. No product, dependency,
 Tauri, or database rollback is required.
 
+### Publication status
+
+The eight-path post-Meta-8 project-memory closeout was published through PR #26
+and squash-merged at `e803db0`. Hosted CI, Documentation, and Security passed;
+clean synchronized `main` retained the valid completion marker.
+
+## Accepted risk-based validation policy
+
+`stash@{0}` at
+`b57fe0f7b361f59f57e4ef501e1e642c802cbd48` preserves one proposed
+`AGENTS.md` validation-policy draft. The project owner accepted the useful
+risk-based policy on 2026-07-18. D-056 and the synchronized guidance in
+`AGENTS.md`, `ENGINEERING_GUIDE.md`, and `TESTING_GUIDE.md` now require focused
+implementation checks, one stable change-class completion gate, and complete
+verification for cross-cutting work without unrelated source tests or builds
+for documentation-only changes.
+
+The stash remains intact and unapplied because it also contains stale wording
+that incorrectly marks Prompt Library Reorganization as active. Do not apply it
+wholesale or restore that historical active-state wording.
+
+### Current change state and verification
+
+The accepted repository-wide policy is an uncommitted 18-path documentation and
+repository-governance change on synchronized `main`. Six paths contain the core
+policy and project-memory update, 11 paths apply it to reusable prompts and
+templates, and one path is the consolidated mandatory gate report:
+
+- `AGENTS.md`
+- `CHANGELOG.md`
+- `DECISIONS.md`
+- `ENGINEERING_GUIDE.md`
+- `HANDOFF.md`
+- `TESTING_GUIDE.md`
+- `docs/reviews/2026-07-18-repository-risk-based-validation-policy-post-increment-review.md`
+- `prompts/README.md`
+- `prompts/increments/bug-fix.md`
+- `prompts/increments/feature-implementation.md`
+- `prompts/increments/refactor.md`
+- `prompts/increments/remediation-by-severity.md`
+- `prompts/increments/remediation-single-advisory.md`
+- `prompts/increments/verified-increment.md`
+- `prompts/templates/increment-template.md`
+- `prompts/templates/remediation-template.md`
+- `prompts/workflows/remediation.md`
+- `prompts/workflows/repository-health.md`
+
+Passed checks:
+
+- `git status --short --branch`
+- `git diff --check`
+- `npm run repository:check`
+- prompt-policy reference coverage across all reusable increment prompts,
+  increment-authoring templates, and coordinating workflows
+- completion-gate wording coverage across all six increment prompts
+- stale blanket-verification wording scan
+- protected-path diff across product source, dependencies, workflows, hooks,
+  skills, and scripts
+- `npm run docs:check` after repository formatting
+
+The first `npm run docs:check` found only Prettier formatting in
+`TESTING_GUIDE.md`. `npx prettier --write TESTING_GUIDE.md` corrected it, and
+the affected check then passed. Frontend tests, Rust tests, and application
+builds were not run because no executable source, tested example, generated
+artifact, dependency, workflow, hook, or configuration changed. No manual check
+applies.
+
 ### Exact next task
 
-Review and publish only this uncommitted eight-path post-Meta-8 project-memory
-closeout after separate project-owner approval. Do not apply the stash, refresh
-PR #23, begin ARB-002, or start another increment in the same step.
+Review and publish only the 18-path repository-wide risk-based validation policy
+after separate project-owner approval. Preserve `stash@{0}` unapplied, keep PR
+#23 unchanged, and do not combine workflow runner routing or product work.
 
 Ready-to-paste prompt:
 
 ```text
-Review the complete post-Meta-8 project-memory closeout. Confirm the exact eight-path documentation-only scope (seven approved live documents plus the mandatory dated gate report), PR #25 publication evidence, preserved 2026-07-17 historical report, passing complete verification, `PASS WITH ADVISORIES` result, valid re-finalized marker, unchanged PR #23 at `3440ce9`, intact unapplied stash `b57fe0f7b361f59f57e4ef501e1e642c802cbd48`, and absence of product-source changes. Propose a descriptive branch name, Conventional Commit message, PR title, and PR description, then wait for my approval before creating the branch, staging, committing, pushing, or merging. Do not apply the stash, refresh PR #23, or start another increment.
+Review the complete 18-path repository-wide risk-based validation policy change. Confirm D-056; the exact AGENTS.md Risk-Based Validation Policy; Documentation, Frontend, Backend, Cross-cutting, and Final increment gate tiers in ENGINEERING_GUIDE.md; the aligned TESTING_GUIDE.md matrix; policy references in all six reusable increment prompts, both increment-authoring templates, the prompt index, and the coordinating remediation and repository-health workflows; passing focused documentation and repository checks; PASS WITH ADVISORIES report; valid repository-risk-based-validation-policy marker; protected-path scope proof; intact unapplied stash b57fe0f7b361f59f57e4ef501e1e642c802cbd48; and absence of product, dependency, GitHub workflow, hook, skill, script, or runner changes. Propose a descriptive branch name, Conventional Commit message, PR title, and PR description, then wait for approval before creating the branch, staging, committing, pushing, or merging. Do not modify PR #23.
 ```
-
-## Deferred risk-based validation proposal
-
-`stash@{0}` at
-`b57fe0f7b361f59f57e4ef501e1e642c802cbd48` preserves one proposed
-`AGENTS.md` validation-policy change for separate governance review. The useful
-proposal favors focused checks during implementation, risk-based completion
-checks, and recording each check once with its final result. The same stash also
-contains stale wording that incorrectly marks Prompt Library Reorganization as
-active.
-
-The stash remains unapplied. The policy is not accepted repository guidance and
-must be reviewed separately against `AGENTS.md`, `ENGINEERING_GUIDE.md`,
-`TESTING_GUIDE.md`, and the mandatory gate workflow. Do not apply the stash
-wholesale or restore its stale Prompt Library active-state wording.
 
 ## Repository self-hosted runner setup
 

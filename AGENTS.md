@@ -138,28 +138,33 @@ Follow `ENGINEERING_GUIDE.md`. The rules below are the compact mandatory subset.
 - Do not store OAuth tokens, API keys, database keys, passwords, or authentication codes in SQLite.
 - Keep raw sensitive tool results out of audit records.
 
-## Verification expectations
+## Risk-Based Validation Policy
 
-Use the smallest relevant command during development and the full check before declaring an increment complete.
+Use risk-based validation. During implementation, run the smallest relevant
+check, batch related edits before expensive checks, and do not rerun a
+successful check unless relevant files changed or policy requires it. At the
+completion gate, run the required change-class verification once after the last
+relevant edit.
 
-```bash
-npm run format:check
-npm run lint
-npm run typecheck
-npm run test
-npm run build
-npm run tauri -- build --no-bundle
-```
+Documentation-only work requires status, diff, Markdown, link, path, and scope
+validation; it does not require frontend tests, Rust tests, or application
+builds unless executable tooling, generated artifacts, tested examples, or an
+approved plan requires them. Isolated frontend work requires frontend checks;
+isolated Rust work requires Rust checks.
 
-The complete repository check is:
+Cross-cutting IPC, storage, SQLite, policy, approval, security, dependency,
+Tauri configuration, and release work requires the complete repository check:
 
 ```bash
 npm run verify
 ```
 
-On a machine without the Rust toolchain, clearly report which Rust checks could not run. Never describe a partial verification as complete.
+On a machine without the required toolchain, clearly report which applicable
+checks could not run. Never describe an omitted, partial, or failed required
+check as complete.
 
-Testing details and the change-to-test matrix are in `TESTING_GUIDE.md`.
+The authoritative strategy is in `ENGINEERING_GUIDE.md`; exact commands and the
+change-to-test matrix are in `TESTING_GUIDE.md`.
 
 ## Documentation and handoff rules
 

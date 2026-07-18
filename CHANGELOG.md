@@ -4,6 +4,14 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Adopted risk-based repository validation: focused checks during
+  implementation, one stable change-class completion gate, complete
+  verification for cross-cutting work, and documentation-only validation
+  without unrelated frontend, Rust, or application-build checks. Synchronized
+  all six reusable increment prompts, both increment-authoring templates, the
+  prompt index, and coordinating remediation and repository-health workflows
+  without changing product, GitHub workflow, hook, skill, dependency, or runner
+  configuration.
 - Published Meta Increment 8 through PR #25 from verified source commit
   `2d3261a`; hosted CI, Documentation, and Security passed before the prompt
   library was squash-merged at `d26b5e1`. No product source, dependency, skill,

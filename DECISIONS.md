@@ -1613,6 +1613,43 @@ Consequences:
 - No skill, hook, application source, product behavior, dependency, Tauri
   boundary, persistence, capability, permission, CSP, or credential changes.
 
+## D-056 - Use risk-based validation and one stable completion gate
+
+Date: 2026-07-18
+Status: Accepted
+
+Decision: use the smallest affected verification during implementation, batch
+related edits before expensive checks, and avoid rerunning successful checks
+unless relevant content changed or policy requires a rerun. After the final
+relevant edit, run one completion-gate sequence selected by change class.
+
+Documentation-only work uses Git status, diff, Markdown, internal-link,
+referenced-path, and protected-scope validation without unrelated frontend or
+Rust tests and application builds. Isolated frontend and Rust changes use their
+respective checks. IPC, storage, SQLite, policy, approval, security, dependency,
+Tauri-configuration, release, and other cross-boundary changes require the
+complete `npm run verify` suite plus applicable manual evidence. An approved
+plan or stricter security or release policy may add checks.
+
+Rationale: repeatedly running the complete suite after unrelated intermediate
+edits adds latency without improving evidence. Focused feedback during
+implementation catches local regressions earlier, while one stable final gate
+preserves complete evidence where the change's risk and blast radius require
+it.
+
+Consequences:
+
+- Completion reports must classify every applicable check accurately and give
+  the risk-based reason for checks recorded as Not run.
+- A partial suite cannot be called complete when the change class or approved
+  plan requires `npm run verify`.
+- Relevant edits after a successful completion check invalidate that check and
+  require the affected verification to run again.
+- The mandatory post-increment gate, trust boundaries, strict compiler and
+  linter settings, and manual target-platform requirements remain unchanged.
+- The preserved stash containing an earlier draft is not applied because it
+  also contains stale Meta Increment 8 state.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

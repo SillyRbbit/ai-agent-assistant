@@ -1,7 +1,7 @@
 # Cortexa engineering guide
 
 Status: Authoritative engineering operating model
-Last updated: 2026-07-15
+Last updated: 2026-07-18
 
 ## Mission
 
@@ -190,6 +190,72 @@ An increment is Ready only when:
 Only the first Ready item in `NEXT_STEPS.md` may be implemented unless the
 project owner explicitly selects another bounded task.
 
+## Risk-Based Validation Policy
+
+Use risk-based validation instead of running the complete repository suite
+after every modification. An approved plan, accepted decision, or security and
+release policy may require additional checks, but may not silently weaken the
+minimum evidence below.
+
+### General rule
+
+- During implementation, run the smallest check that validates the current
+  change.
+- Batch related edits before running expensive checks.
+- Do not rerun a successful check unless relevant files changed afterward, a
+  dependent check failed, or repository policy explicitly requires a rerun.
+- Run the required completion-gate sequence once after the final relevant edit.
+- If a relevant file changes after a completion check, rerun only the affected
+  check unless the change crosses a boundary that requires the complete suite.
+
+### Documentation tier
+
+For Markdown, prompts, architecture documents, README content, plans, and other
+documentation-only changes, run:
+
+- `git status --short --branch`;
+- `git diff --check`;
+- Markdown formatting and validation;
+- internal-link and referenced-path validation; and
+- a protected-path diff proving source, dependency, workflow, hook, skill,
+  configuration, and generated-output boundaries remained unchanged when the
+  task claims documentation-only scope.
+
+Do not run frontend tests, Rust tests, or application builds solely because a
+documentation file changed. Run them only when the documentation task also
+changes executable tooling, generated artifacts, tested examples, or another
+repository policy explicitly requires them.
+
+### Frontend tier
+
+For React, TypeScript, CSS, and UI component changes, run formatting, ESLint,
+strict type checking, affected frontend tests, and a frontend build when the
+change can affect bundling or production output. Skip Rust tests when no Rust,
+IPC contract, Tauri configuration, or cross-boundary behavior changed.
+
+### Backend tier
+
+For isolated Rust changes, run `cargo fmt`, strict Clippy, and the affected Rust
+unit and integration tests. Skip frontend verification when no frontend, IPC
+contract, generated type, or user-facing cross-boundary behavior changed.
+
+### Cross-cutting tier
+
+Run the complete `npm run verify` suite for IPC, storage, SQLite, policy,
+approval, security, dependency, Tauri configuration, release, or other changes
+that cross trust, language, persistence, packaging, or platform boundaries. Add
+the increment's required manual and target-platform checks.
+
+### Final increment gate
+
+At completion, run the checks required by the applicable change class exactly
+once after implementation is stable. Record formatting, linting, type checking,
+tests, builds, and manual checks as Passed, Failed, Not run, or Manual pending,
+as applicable. A check omitted because it is outside the affected change class
+is `Not run`, with the risk-based reason recorded; it must not be represented as
+Passed. Do not rerun identical successful checks unless relevant content changed
+afterward.
+
 ## Increment workflow
 
 1. Use `$session-start` or `$resume-session` and reconcile memory with Git.
@@ -200,7 +266,7 @@ project owner explicitly selects another bounded task.
 6. Begin the mandatory gate with
    `python3 .codex/hooks/post_increment_gate.py begin --increment <id>`.
 7. Implement only the approved scope and run focused checks while working.
-8. Run complete relevant verification and any required manual checks.
+8. Run the risk-based completion verification and any required manual checks.
 9. Run `python3 .codex/hooks/session_end_gate.py` and resolve any conflict or
    unexpected path.
 10. Run `$quality-gate` to compose architecture, security, code-health,

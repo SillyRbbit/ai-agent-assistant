@@ -61,6 +61,21 @@ needs a named operational capability rather than a copy-and-paste instruction.
 Never leave an unresolved placeholder in an executed prompt. Paths are
 repository-relative unless the prompt explicitly requests an external path.
 
+## Risk-based validation
+
+Every reusable increment prompt follows the Risk-Based Validation Policy in
+[`AGENTS.md`](../AGENTS.md) and
+[`ENGINEERING_GUIDE.md`](../ENGINEERING_GUIDE.md). During implementation, run
+the smallest affected checks and batch related edits. After the final relevant
+edit, run the complete required completion-gate verification for the selected
+tier exactly once.
+
+Documentation, frontend, and backend tiers use their applicable checks.
+Cross-cutting, security-sensitive, dependency, Tauri-configuration, and release
+work still requires `npm run verify` plus applicable manual and target-platform
+evidence. A prompt may require stricter validation but must never weaken these
+boundaries.
+
 ## Placeholder conventions
 
 - Use uppercase snake case inside double braces, such as `{{BRANCH_NAME}}`.
@@ -100,8 +115,9 @@ required.
 5. Keep task-specific scope controls in the prompt itself.
 6. Add the prompt to this selection guide and update active references.
 7. Search for overlap with prompts, skills, workflows, and document templates.
-8. Run Markdown formatting, path/link checks, and complete repository
-   verification before acceptance.
+8. Run the documentation-tier formatting, path/link, and scope checks required
+   by the Risk-Based Validation Policy. Run broader verification only when the
+   prompt change also affects executable tooling or another policy requires it.
 
 Prompt changes are versioned through normal Git review. Update `Last reviewed`
 when behavior or authoritative references change, not for formatting-only edits.
