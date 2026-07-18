@@ -1,18 +1,15 @@
 name: Documentation
 
 on:
-  pull_request:
-    paths:
-      - "**/*.md"
-      - ".github/**"
-      - ".gitignore"
-      - "assets/branding/**"
-      - "package.json"
-      - "scripts/repository_health.py"
-      - "scripts/tests/**"
   push:
     branches:
       - main
+      - "codex/**"
+      - "feature/**"
+      - "fix/**"
+      - "refactor/**"
+      - "meta/**"
+      - "phase*/**"
     paths:
       - "**/*.md"
       - ".github/**"
@@ -33,9 +30,17 @@ concurrency:
 jobs:
   documentation:
     name: Documentation and repository policy
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, Linux, X64, cortexa-ci]
     timeout-minutes: 15
     steps:
+      - name: Verify self-hosted runner prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${RUNNER_OS}" = "Linux"
+          command -v git
+          command -v python3
+
       - name: Check out reviewed source
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:

@@ -73,6 +73,7 @@ pub struct ApprovalInteractionEvidence {
 }
 
 impl ApprovalInteractionEvidence {
+    #[cfg(target_os = "macos")]
     pub(super) fn recognized_button(
         source: ApprovalInteractionSource,
         native_button: ApprovalNativeButton,
@@ -86,6 +87,7 @@ impl ApprovalInteractionEvidence {
         }
     }
 
+    #[cfg(target_os = "macos")]
     pub(super) fn no_decision(
         source: ApprovalInteractionSource,
         authentication: ApprovalAuthenticationEvidence,
@@ -98,6 +100,7 @@ impl ApprovalInteractionEvidence {
         }
     }
 
+    #[cfg(target_os = "macos")]
     pub(super) fn source_failed(
         source: ApprovalInteractionSource,
         authentication: ApprovalAuthenticationEvidence,

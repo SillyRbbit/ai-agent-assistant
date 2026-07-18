@@ -1520,6 +1520,53 @@ Consequences:
 - This rule changes no canonical asset, icon output, source, configuration,
   dependency, identifier, capability, permission, or product behavior.
 
+## D-054 - Route trusted repository checks to a dedicated self-hosted runner
+
+Date: 2026-07-17
+Status: Accepted; implementation verified on open PR #24
+
+Decision: assign the repository-specific `cortexa-ci` custom label to the
+registered Linux x64 runner and require the exact
+`[self-hosted, Linux, X64, cortexa-ci]` selector in CI, Documentation, and
+Security. Preserve top-level `contents: read`, no secret context, immutable
+actions, non-persistent checkout credentials, and the prohibition on workflow
+writes or publication.
+
+Self-hosted workflows must not subscribe to `pull_request`. Eligible repository
+pushes are limited to `main`, `codex/**`, `feature/**`, `fix/**`, `refactor/**`,
+`meta/**`, and `phase*/**`; scheduled security checks and explicit dispatch
+remain eligible. Fork and dependency-bot PRs must be reviewed and reproduced on
+a maintainer-controlled allowlisted branch. The runner host is dedicated,
+unprivileged, and provisioned outside workflow execution; workflows perform
+fail-fast prerequisite checks and do not use `sudo`.
+
+D-053 is reserved by the separately reviewed open Increment 4V / ARB-001
+branch. This decision uses D-054 to prevent a publication-order collision.
+
+Rationale: the existing workflows name GitHub-hosted images and cannot match
+the registered runner. GitHub-hosted jobs are currently not starting because of
+an account billing or spending-limit restriction. Exact custom-label routing
+restores a usable verification path while the trigger allowlist, no-secret
+posture, and dedicated host limit persistent-runner exposure. An in-workflow
+PR-author condition is explicitly insufficient because the PR can modify its
+own workflow definition.
+
+Consequences:
+
+- The persistent runner remains a trust risk and is not equivalent to an
+  ephemeral clean virtual machine. A trusted writer can alter workflow code;
+  repository access and workflow review remain security controls.
+- Fork and dependency-bot pull requests receive no self-hosted checks and must
+  be reproduced on a maintainer-controlled allowlisted branch before merge.
+- Linux verification does not replace target-Mac native, signing, notarization,
+  installer, or release evidence.
+- Replacing or reregistering the runner requires reapplying `cortexa-ci`.
+- The separately approved portability correction target-gates only private
+  native decision-source support in `approvals::manager` and
+  `approvals::types`; public contracts and target-Mac behavior are unchanged.
+- No runtime behavior, dependency, Tauri boundary, capability, permission, CSP,
+  identifier, or SQLite schema changes.
+
 ## Open decisions
 
 | ID    | Topic                                                            | Required before                     |

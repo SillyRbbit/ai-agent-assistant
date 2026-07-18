@@ -1,6 +1,6 @@
 # Next steps
 
-Last updated: 2026-07-16
+Last updated: 2026-07-17
 
 This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must close before later feature work begins.
 
@@ -54,35 +54,30 @@ This file is the ordered implementation queue. Work only on the first item marke
   **Verified complete with advisories; squash-merged through PR #19 at
   `96ba6ae`**.
 - Remediation ARB-022 - project-memory reconciliation:
-  **Verified complete in the current workspace; resolving commit pending until
-  committed**.
+  **Verified complete and squash-merged through PR #22 at `7c79e65`**.
 
 ## Queue status
 
-### Publish the verified ARB-022 remediation
+### Publish verified trusted self-hosted runner routing
 
-**Status:** Documentation-only remediation verified in the current workspace;
-resolving commit pending until committed. Not a product increment.
+**Status:** **Verified complete with advisories** on open PR #24 at `1621a55`.
+CI, Documentation, and Security pass on runner 21, and the completion marker is
+valid.
 
-PR #21 squash-merged the advisory backlog and first post-Meta-7 memory
-reconciliation at `cc434d9`. This remediation closes the remaining ARB-022
-drift by removing that already-completed publication task from live project
-memory while preserving dated Meta 7 evidence. Its resolving commit remains
-pending until committed. Before any product implementation gate begins,
-confirm clean synchronized `main` contains this remediation.
+Review and publish only the final twelve-path documentation closeout, rerun the
+required workflows on the final commit, and seek separate squash-merge approval
+for PR #24. Do not start another product or remediation increment.
 
-### Increment 4V - bind initial terminal approval audit
+### Publish Increment 4V / ARB-001 after runner verification
 
-**Status:** **Ready**; separate project-owner implementation approval and a clean
-documentation baseline are required. No `04v` gate or source edit exists.
+**Status:** **Verified on open PR #23, not merged**. Its original hosted checks
+failed before runner assignment; the valid `04v` marker and commit `3440ce9`
+remain preserved.
 
-The exact two-file plan remains
-`docs/plans/04v-bind-initial-terminal-approval-audit.md`. The merged 4U
-prerequisite is satisfied, the source/test scope has not changed since
-`61525bf`, and focused request, audit, approval-binding, and approval-audit
-contracts pass on the current baseline. Once clean synchronized `main` contains
-the verified ARB-022 remediation, obtain separate implementation approval and
-begin `04v` before either approved source/test file changes.
+After the self-hosted workflow increment is merged, update PR #23 onto that
+clean `main` without changing its approved product scope, rerun its complete
+checks on the trusted runner, then seek separate squash-merge approval. Do not
+begin ARB-002 or another remediation.
 
 Repository Workflow Increment 4G is **Verified complete**. It adds only the repository-local post-increment skill, deterministic Stop-hook validator, focused tests, report assets, and workflow documentation required to replace D-027's one-time exception. Its consolidated result is `PASS WITH ADVISORIES`; the advisory is the documented project-hook trust/bypass boundary.
 
@@ -209,35 +204,34 @@ the two source/test files and only the declared closeout documentation before
 commit, or revert one bounded 4U commit afterward.
 
 No 4U, Meta 2, Meta 3, Meta 5, Meta 6, or Meta 7 implementation task remains.
-Increment 4V is the first Ready product item and requires separate
-implementation approval. Do not start it automatically.
+Increment 4V has since been approved and verified on open PR #23. Do not modify,
+merge, or replace that scope until the self-hosted workflow increment completes.
 
-## Ready after published 4U and Meta 7
+## Verified product publication pending
 
 ### Increment 4V - bind initial terminal approval audit
 
-**Status:** Ready; the merged 4U prerequisite is satisfied, the plan is
-reconciled to `61525bf`, and Meta 7 publication is complete. Separate
-project-owner implementation approval and a clean documentation baseline are
-still required. No `04v` gate state or source edit exists.
+**Status:** Verified at `3440ce9` on open PR #23 with a valid `04v` marker. The
+three hosted jobs failed before runner assignment, so the PR is not merged.
 
 **Goal:** Prevent a future initial-turn caller from receiving a successful
 native or run-termination approval resolution unless the turn's private typed
 in-memory audit adapter has validated and recorded that exact manager-owned
 resolution first.
 
-**Exact future source/test scope:**
+**Exact source/test scope:**
 
 ```text
 src-tauri/src/agent/gateway_request.rs
 src-tauri/tests/gateway_request_contract.rs
 ```
 
-The turn would own one private `InMemoryApprovalAuditAdapter` and return only a
-closed non-cloneable value containing the exact `ApprovalResolution` and its
-non-authorizing `ApprovalAuditReceipt`. Both successful terminal paths would use
-one private manager-then-audit helper. A typed audit failure would return no
-resolution and could not restore already-consumed manager state.
+The verified branch gives the turn one private `InMemoryApprovalAuditAdapter`
+and returns only a closed non-cloneable value containing the exact
+`ApprovalResolution` and its non-authorizing `ApprovalAuditReceipt`. Both
+successful terminal paths use one private manager-then-audit helper. A typed
+audit failure returns no resolution and could not restore already-consumed
+manager state.
 
 Durable audit persistence, SQLite, native invocation or closure, proactive
 expiry, timers, source traits, runtime coordination, active-run validation,
@@ -247,15 +241,15 @@ non-goals.
 
 Focused request, audit, approval, public-contract, approval-binding, and
 approval-audit tests, strict Clippy, complete `npm run verify`, npm audit, diff
-review, and the mandatory `04v` gate must pass. No manual gate is planned.
+review, and the mandatory `04v` gate passed. No manual gate applies.
 Before commit, restore the two source/test files to the verified merged 4U
 commit and revert only declared 4V closeout documentation; after commit, revert
 one bounded 4V commit.
 
-Do not start 4V automatically. Its exact reconciled plan remains at
-`docs/plans/04v-bind-initial-terminal-approval-audit.md` and requires separate
-project-owner implementation approval after the verified ARB-022 remediation is
-present on clean synchronized `main`.
+Its exact reconciled plan remains at
+`docs/plans/04v-bind-initial-terminal-approval-audit.md`. After the runner
+workflow is merged, update PR #23 onto current `main`, rerun its unchanged
+verified scope, and seek separate merge approval. Do not start ARB-002.
 
 Increment 4R bind terminal initial function call to policy is **Verified
 complete, published, and merged at `5e58edb`**. Accepted terminal completion

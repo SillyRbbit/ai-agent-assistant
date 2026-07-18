@@ -1,5 +1,6 @@
 use std::collections::BTreeSet;
 use std::fmt;
+#[cfg(target_os = "macos")]
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 
@@ -7,11 +8,12 @@ use thiserror::Error;
 
 #[cfg(target_os = "macos")]
 use super::decision_source::{TrustedApprovalSourceOutcome, TrustedSourceDecision};
+#[cfg(target_os = "macos")]
+use super::types::ApprovalInteractionSource;
 use super::types::{
     ApprovalAction, ApprovalCancellationReason, ApprovalDisposition, ApprovalId,
-    ApprovalInteractionEvidence, ApprovalInteractionSource, ApprovalPreview, ApprovalRecipients,
-    ApprovalRequestView, ApprovalResolution, ApprovalReversibility, ApprovalRisk, ApprovalSchedule,
-    ApprovalTarget,
+    ApprovalInteractionEvidence, ApprovalPreview, ApprovalRecipients, ApprovalRequestView,
+    ApprovalResolution, ApprovalReversibility, ApprovalRisk, ApprovalSchedule, ApprovalTarget,
 };
 use crate::policy::types::{PolicyDecision, PolicyOutcome, PolicyReason};
 use crate::tools::types::{PermissionKind, RiskClass};
@@ -67,10 +69,12 @@ pub enum ApprovalError {
     SourceOutcomeIdentityMismatch,
 }
 
+#[cfg(target_os = "macos")]
 pub(super) struct ApprovalManagerInstanceMarker {
     _owned: u8,
 }
 
+#[cfg(target_os = "macos")]
 impl ApprovalManagerInstanceMarker {
     fn new() -> Self {
         Self { _owned: 0 }
@@ -79,6 +83,7 @@ impl ApprovalManagerInstanceMarker {
 
 pub struct ApprovalPresentation {
     id: ApprovalId,
+    #[cfg(target_os = "macos")]
     manager_instance: Arc<ApprovalManagerInstanceMarker>,
     run_id: String,
     gateway_request_id: String,
@@ -160,6 +165,7 @@ impl ApprovalPresentation {
         self.remaining
     }
 
+    #[cfg(target_os = "macos")]
     pub(super) fn into_source_parts(self) -> ApprovalPresentationParts {
         ApprovalPresentationParts {
             id: self.id,
@@ -209,6 +215,7 @@ impl fmt::Debug for ApprovalPresentation {
     }
 }
 
+#[cfg(target_os = "macos")]
 pub(super) struct ApprovalPresentationParts {
     pub(super) id: ApprovalId,
     pub(super) manager_instance: Arc<ApprovalManagerInstanceMarker>,
@@ -279,6 +286,7 @@ pub struct InMemoryApprovalManager {
     pending: Option<PendingApproval>,
     consumed_subjects: BTreeSet<ApprovalSubjectKey>,
     clock: Box<dyn ApprovalClock>,
+    #[cfg(target_os = "macos")]
     manager_instance: Arc<ApprovalManagerInstanceMarker>,
 }
 
@@ -294,6 +302,7 @@ impl InMemoryApprovalManager {
             pending: None,
             consumed_subjects: BTreeSet::new(),
             clock: Box::new(clock),
+            #[cfg(target_os = "macos")]
             manager_instance: Arc::new(ApprovalManagerInstanceMarker::new()),
         }
     }
@@ -447,6 +456,7 @@ impl ApprovalManager for InMemoryApprovalManager {
         let call = pending.decision.validated_call();
         let presentation = ApprovalPresentation {
             id,
+            #[cfg(target_os = "macos")]
             manager_instance: Arc::clone(&self.manager_instance),
             run_id: call.run_id().to_owned(),
             gateway_request_id: call.gateway_request_id().to_owned(),

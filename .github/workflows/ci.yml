@@ -1,10 +1,15 @@
 name: CI
 
 on:
-  pull_request:
   push:
     branches:
       - main
+      - "codex/**"
+      - "feature/**"
+      - "fix/**"
+      - "refactor/**"
+      - "meta/**"
+      - "phase*/**"
   workflow_dispatch:
 
 permissions:
@@ -17,9 +22,23 @@ concurrency:
 jobs:
   verify:
     name: Full repository verification
-    runs-on: macos-15
+    runs-on: [self-hosted, Linux, X64, cortexa-ci]
     timeout-minutes: 45
     steps:
+      - name: Verify self-hosted runner prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${RUNNER_OS}" = "Linux"
+          command -v git
+          command -v python3
+          command -v rustup
+          command -v cargo
+          command -v pkg-config
+          pkg-config --exists webkit2gtk-4.1
+          pkg-config --exists javascriptcoregtk-4.1
+          pkg-config --exists gtk+-3.0
+
       - name: Check out reviewed source
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:

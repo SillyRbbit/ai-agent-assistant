@@ -89,6 +89,16 @@ Apply the dependency and supply-chain sections of `SECURITY_CHECKLIST.md` and
 - Pull-request code and dependency updates are untrusted. GitHub workflows run
   with `contents: read`, receive no repository secret context, do not use
   `pull_request_target`, and disable persisted checkout credentials.
+- The persistent repository runner is selected only by the exact
+  `[self-hosted, Linux, X64, cortexa-ci]` labels. Self-hosted workflows do not
+  subscribe to `pull_request`; they accept pushes only to the documented
+  maintainer-controlled branch families, plus schedule and explicit dispatch.
+  This trigger policy reduces exposure but cannot isolate the host from a
+  trusted writer who can modify and push a workflow. Keep the runner dedicated,
+  unprivileged, credential-free, and free of unrelated sensitive data.
+- A Linux self-hosted verification result does not prove native macOS menus,
+  windows, dialogs, icons, permissions, signing, notarization, or installer
+  behavior. Those checks remain target-Mac evidence.
 - Every external action reference is pinned to an immutable commit digest.
   Dependabot proposes action updates for review; mutable action tags are not a
   trust decision.
@@ -108,6 +118,10 @@ Apply the dependency and supply-chain sections of `SECURITY_CHECKLIST.md` and
   security approval, or release evidence.
 - Security design-review issues must contain sanitized material only.
   Vulnerabilities and incidents follow the private reporting policy.
+
+The authoritative runner labels, host prerequisites, trust policy, maintenance,
+incident response, and rollback are in
+`docs/github/SELF_HOSTED_RUNNER.md`.
 
 ## Repository hook boundary
 

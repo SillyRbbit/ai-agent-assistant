@@ -1,6 +1,6 @@
 # Handoff
 
-Last updated: 2026-07-16
+Last updated: 2026-07-17
 
 ## Current state
 
@@ -24,9 +24,135 @@ original local branch is preserved as
 immediately before the later advisory-remediation report changed the workspace
 fingerprint. The advisory backlog and first post-Meta-7 project-memory
 reconciliation were squash-merged through PR #21 at `cc434d9`. ARB-022 is
-resolved in the current documentation workspace; its resolving commit remains
-pending until committed. Increment 4V is Ready but remains unstarted; no `04v`
-gate or source edit exists.
+resolved and squash-merged through PR #22 at `7c79e65`. Increment 4V / ARB-001
+is verified on `codex/feature/bind-terminal-approval-audit` at `3440ce9` with a
+valid `04v` marker and open PR #23. Its three hosted checks failed before runner
+assignment because of the account billing or spending-limit state.
+
+Repository self-hosted runner routing is implemented and fully verified locally
+on `codex/repository/use-self-hosted-runner`. The separately approved two-file
+portability correction is committed and pushed at `1621a55` on open PR #24.
+The managed runner service owns the sole session with the correct Rustup/Cargo
+PATH. CI, Documentation, and Security pass on runner 21. The consolidated
+result is `PASS WITH ADVISORIES`, and the `repository-self-hosted-runner`
+completion marker is valid. PR #24 remains unmerged.
+
+## Repository self-hosted runner setup
+
+### Goal and implementation
+
+Route the existing read-only GitHub workflows to the registered repository
+runner without allowing pull-request workflow definitions to execute on the
+persistent host.
+
+- Runner 21 `henry-dang-HP-Elite-Slice` is online, idle, Linux x64, and now has
+  `self-hosted`, `Linux`, `X64`, and custom `cortexa-ci` labels.
+- CI, Documentation, and Security require the exact four-label selector.
+- The workflows have no `pull_request` trigger. Pushes are limited to `main`,
+  `codex/**`, `feature/**`, `fix/**`, `refactor/**`, `meta/**`, and `phase*/**`,
+  with schedule and explicit dispatch retained where applicable.
+- Workflows preserve top-level `contents: read`, immutable actions, no secrets,
+  non-persistent checkout credentials, and no write or publication step.
+- CI fails fast when Rustup, Cargo, Python, `pkg-config`, or the required Tauri
+  Linux package metadata is absent. Workflows do not run `sudo` or install
+  system packages.
+- `scripts/repository_health.py` and three new regression tests prevent silent
+  removal of the custom selector, no-pull-request rule, or branch allowlist.
+- `docs/github/SELF_HOSTED_RUNNER.md` defines host provisioning, trust,
+  maintenance, incident response, verification, and rollback.
+
+Only private imports, presentation source state/parts, the source conversion,
+and evidence constructors used exclusively by the macOS decision source are
+target-gated. No public approval contract, target-Mac behavior, dependency,
+lockfile, Tauri command, capability, CSP, permission, SQLite schema, identifier,
+credential, deployment, or publication changed. Linux workflow evidence does
+not replace required target-Mac evidence.
+
+### Verification
+
+Passed:
+
+- Clean synchronized `main` at `7c79e65` before the isolated branch was created.
+- Baseline `npm run test:repository` (16 tests), `npm run docs:check`, and
+  `npm run repository:check`.
+- Mandatory `repository-self-hosted-runner` gate begin.
+- Runner API inspection before and after custom-label assignment.
+- Focused `npm run test:repository` (19 tests).
+- Ruby parse of all three changed workflow YAML files.
+- Post-edit `npm run docs:check` and `npm run repository:check`.
+- Rust formatting passed after the approved portability correction.
+- Strict all-target Clippy with all features and warnings denied passed after
+  the approved portability correction.
+- All six existing focused approval-manager tests passed.
+- `npm run verify`, including formatting, repository policy, lint, strict
+  Clippy, 28 hook tests, 19 repository tests, 124 frontend tests, 95 Rust
+  library tests, 21 Rust integration tests, typecheck, Vite builds, and Tauri
+  release no-bundle build.
+
+Failed checks: none remain. Earlier checks reported only a Markdown wrap in the
+plan. The first post-correction documentation check likewise reported formatting
+in three edited closeout files. Formatting the reported files made every
+complete rerun pass.
+
+Remote verification:
+
+- Commit `80bced4` is pushed and PR #24 is open.
+- Documentation passed on runner 21 in 26 seconds.
+- CI run `29624042629` and Security run `29624042656` reached runner 21 but
+  failed in four and five seconds respectively. Both found `git` and `python3`,
+  then stopped because `command -v rustup` returned exit code 1.
+- Rustup `1.29.0`, Cargo, and default toolchain
+  `1.90.0-x86_64-unknown-linux-gnu` are now installed under
+  `/home/henry-dang/.cargo/bin`. The attempted `svc.sh stop/start` reported no
+  installed service unit; runner 21 remains online through the old interactive
+  listener and has not inherited the repaired PATH.
+- After the project owner reported service setup complete, CI attempt 2 job
+  `88038644524` and Security attempt 2 job `88038655825` still failed at
+  `command -v rustup`. The listener receiving jobs therefore still has the old
+  PATH or is a duplicate interactive process.
+- Host diagnostics confirmed the duplicate: interactive listener PID `7699`
+  remains beside service listener PID `36245`. The managed service is active,
+  its `.path` starts with `/home/henry-dang/.cargo/bin`, and its journal reports
+  that another session already exists. The old listener received the reruns.
+- The stale listener was stopped and the managed service restarted as the sole
+  listener. Attempt 3 passed runner preflight. Documentation and Security now
+  pass on runner 21.
+- CI attempt 3 job `88039053953` ran the complete repository command but failed
+  strict Linux Clippy on five existing target-conditional warnings in approval
+  code. The macOS-gated decision source is the only consumer of the affected
+  private import, presentation marker/parts, conversion method, and evidence
+  constructors.
+- The approved two-file correction now target-gates exactly those private items
+  in `src-tauri/src/approvals/manager.rs` and
+  `src-tauri/src/approvals/types.rs`. Focused checks and complete local
+  verification pass without weakening Clippy or changing target-Mac behavior.
+- The correction was committed as `1621a55` and pushed to PR #24.
+- Security run `29629669283` passed in 3 minutes 22 seconds, Documentation run
+  `29629669305` passed in 16 seconds, and CI run `29629669300` passed complete
+  Linux verification in 9 minutes 57 seconds on `1621a55`.
+- The consolidated result is `PASS WITH ADVISORIES`; the remaining advisory is
+  the documented persistent-runner isolation boundary. The completion marker
+  is complete and valid.
+- The consolidated review exists at
+  `docs/reviews/2026-07-17-repository-self-hosted-runner-post-increment-review.md`.
+  The `repository-self-hosted-runner` completion marker is complete and valid.
+- No target-Mac manual check was required because no product or native behavior
+  changed.
+
+### Exact next task
+
+Review the exact twelve-path final documentation closeout diff and valid
+`repository-self-hosted-runner` marker. Confirm commit `1621a55`, all three
+successful runner jobs, the `PASS WITH ADVISORIES` report, unchanged product and
+security boundaries, and no source change after verification. Propose a
+Conventional Commit for the closeout and wait for approval before committing,
+pushing, or merging PR #24. Do not alter or merge PR #23.
+
+### Ready-to-paste next prompt
+
+```text
+Review the exact twelve-path final PR #24 documentation closeout and valid repository-self-hosted-runner marker. Confirm the verified source commit 1621a55, passing CI run 29629669300, Documentation run 29629669305, Security run 29629669283, PASS WITH ADVISORIES report, preserved target-Mac and security boundaries, and absence of product-source changes after verification. Propose a Conventional Commit and final PR description update, then wait for my approval before committing, pushing, or merging. Do not modify or merge PR #23.
+```
 
 ## Repository dependency baseline compatibility repair
 
@@ -40,7 +166,11 @@ and the accepted RustSec baseline gate passed. Its consolidated result is
 Publication is complete at `b298999`; Meta 7 has now been reverified
 independently on that repaired baseline.
 
-## ARB-022 project-memory remediation
+## Historical ARB-022 pre-publication closeout
+
+This section preserves the evidence recorded before PR #22 merged. The live
+state is the current-state and self-hosted-runner sections above: ARB-022 is
+merged at `7c79e65`, and Increment 4V is verified on open PR #23.
 
 `docs/reviews/2026-07-16-advisory-remediation-backlog.md` is the authoritative
 review of 64 source advisories. PR #21 squash-merged that report and the first
