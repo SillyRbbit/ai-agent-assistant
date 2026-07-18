@@ -1,6 +1,6 @@
 # Next steps
 
-Last updated: 2026-07-17
+Last updated: 2026-07-18
 
 This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must close before later feature work begins.
 
@@ -59,32 +59,22 @@ This file is the ordered implementation queue. Work only on the first item marke
   **Verified complete with advisories and squash-merged through PR #24 at
   `eaf6c9f`**.
 - Meta Increment 8 - Prompt Library Reorganization:
-  **Verified complete; uncommitted and unpublished on
-  `codex/meta-prompt-library-reorganization`**.
+  **Verified complete; published through PR #25 and squash-merged at
+  `d26b5e1`**.
 
 ## Queue status
 
-### Publish Meta Increment 8 Prompt Library Reorganization
-
-**Status:** **Ready after separate project-owner approval**. The bounded
-documentation and repository-governance diff is verified, the consolidated
-result is `PASS`, and the completion marker is complete and valid on
-`codex/meta-prompt-library-reorganization`.
-
-Review the exact scope and proposed Conventional Commit and pull-request
-metadata before staging. After approval, commit, push, run hosted checks, and
-squash-merge without changing the verified scope.
-
 ### Publish Increment 4V / ARB-001 after runner verification
 
-**Status:** **Blocked only by Meta Increment 8 publication; verified on open PR
+**Status:** **Ready after separate project-owner approval; verified on open PR
 #23 and not merged**. Its original hosted checks failed before runner
-assignment; the valid `04v` marker and commit `3440ce9` remain preserved.
+assignment; the valid `04v` marker and commit `3440ce9` remain preserved and
+unchanged.
 
-After Meta Increment 8 is published, update PR #23 onto clean `main` without
-changing its approved product scope, rerun its complete checks on the trusted
-runner, then seek separate squash-merge approval. Do not begin ARB-002 or
-another remediation.
+Review PR #23 against clean `main` at `d26b5e1`, then update it without changing
+its approved product scope, rerun its complete checks on the trusted runner,
+and seek separate squash-merge approval. Do not begin ARB-002 or another
+remediation.
 
 Repository Workflow Increment 4G is **Verified complete**. It adds only the repository-local post-increment skill, deterministic Stop-hook validator, focused tests, report assets, and workflow documentation required to replace D-027's one-time exception. Its consolidated result is `PASS WITH ADVISORIES`; the advisory is the documented project-hook trust/bypass boundary.
 
@@ -211,8 +201,9 @@ the two source/test files and only the declared closeout documentation before
 commit, or revert one bounded 4U commit afterward.
 
 No 4U, Meta 2, Meta 3, Meta 5, Meta 6, or Meta 7 implementation task remains.
-Increment 4V has since been approved and verified on open PR #23. Do not modify,
-merge, or replace that scope until the self-hosted workflow increment completes.
+Increment 4V has since been approved and verified on open PR #23. The
+self-hosted workflow prerequisite and Meta Increment 8 publication are complete;
+do not modify, merge, or replace the verified scope without separate approval.
 
 ## Verified product publication pending
 
@@ -254,9 +245,9 @@ commit and revert only declared 4V closeout documentation; after commit, revert
 one bounded 4V commit.
 
 Its exact reconciled plan remains at
-`docs/plans/04v-bind-initial-terminal-approval-audit.md`. After the runner
-workflow is merged, update PR #23 onto current `main`, rerun its unchanged
-verified scope, and seek separate merge approval. Do not start ARB-002.
+`docs/plans/04v-bind-initial-terminal-approval-audit.md`. After separate
+approval, update PR #23 onto current `main`, rerun its unchanged verified scope
+on the trusted runner, and seek separate merge approval. Do not start ARB-002.
 
 Increment 4R bind terminal initial function call to policy is **Verified
 complete, published, and merged at `5e58edb`**. Accepted terminal completion

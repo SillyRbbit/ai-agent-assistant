@@ -1,8 +1,9 @@
 # Meta Increment 8 - Prompt Library Reorganization
 
-Status: Verified complete; uncommitted and unpublished
+Status: Verified complete; published and squash-merged at `d26b5e1`
 Owner: Project maintainer
 Date: 2026-07-17
+Published: 2026-07-18
 Gate ID: `meta-prompt-library-reorganization`
 
 ## Goal
@@ -145,9 +146,10 @@ network, release, commit, push, merge, or later increment is in scope.
 
 ## Rollback
 
-Before commit, restore the prompt and documentation paths from `HEAD`. After a
-future commit, revert only the bounded prompt-library commit. No runtime,
-database, dependency, capability, or migration rollback is required.
+Before publication, restore the prompt and documentation paths from `HEAD`.
+After publication, revert only the bounded prompt-library squash commit
+`d26b5e1`. No runtime, database, dependency, capability, or migration rollback
+is required.
 
 ## Actual results
 
@@ -176,7 +178,27 @@ database, dependency, capability, or migration rollback is required.
   increment.
 - The consolidated review result is `PASS`. The
   `meta-prompt-library-reorganization` completion marker is complete and valid.
-  Commit, push, merge, and the next increment were not started.
+  At gate finalization, commit, push, merge, and the next increment had not
+  started.
+
+## Publication results
+
+- The verified 59-path scope was committed as `2d3261a` and published through
+  PR #25 without expanding product, dependency, skill, or hook scope.
+- Documentation run `29644532933`, Security run `29644533035`, and CI run
+  `29644532971` passed on the source commit.
+- PR #25 was squash-merged into synchronized `main` as `d26b5e1` on
+  2026-07-18.
+- The `meta-prompt-library-reorganization` completion marker remained complete
+  and valid on clean `d26b5e1` immediately before the post-publication
+  project-memory sync.
+- The approved sync changed seven live documentation paths. The required Stop
+  closeout added only
+  `docs/reviews/2026-07-18-meta-prompt-library-reorganization-post-increment-review.md`.
+- Focused documentation checks and complete `npm run verify` passed again. The
+  re-finalized result is `PASS WITH ADVISORIES`, and the marker is complete and
+  valid. Its sole advisory is pre-existing stale `ROADMAP.md` wording outside
+  the approved scope.
 
 ## Remaining recommendations
 

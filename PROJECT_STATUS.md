@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-07-17
+Last updated: 2026-07-18
 
 ## Current milestone
 
@@ -40,12 +40,16 @@ the correct Rustup/Cargo PATH. CI, Documentation, and Security passed on final
 branch commit `cfa976f`. The completion marker remained valid on clean merged
 `main` before Meta Increment 8 began.
 
-Meta Increment 8 Prompt Library Reorganization is **verified complete as
-documentation-only governance work** on
-`codex/meta-prompt-library-reorganization`. The exact 24-file library, metadata,
-placeholder, link, duplication, repository, application, and Tauri checks pass;
-the consolidated result is `PASS` and the completion marker is complete and
-valid. The increment is not committed or published.
+Meta Increment 8 Prompt Library Reorganization is **verified complete,
+published through PR #25, and squash-merged at `d26b5e1`** from verified source
+commit `2d3261a`. The exact 24-file library, metadata, placeholder, link,
+duplication, repository, application, and Tauri checks pass; hosted CI,
+Documentation, and Security also passed. The consolidated result is `PASS`, and
+the completion marker was complete and valid on clean synchronized `d26b5e1`
+immediately before the post-publication project-memory sync. The required sync
+closeout is `PASS WITH ADVISORIES`, and the marker is re-finalized against that
+documentation-only state. Its sole advisory is pre-existing stale roadmap
+wording outside the approved scope.
 
 ## Increment status
 
@@ -87,7 +91,8 @@ valid. The increment is not committed or published.
 - Increment 4T: bind terminal initial approval resolution - **verified complete; published and merged**.
 - Increment 4U: bind initial approval run-termination - **verified complete; published and merged at `61525bf`**.
 - Increment 4V: bind initial terminal approval audit - **verified on open PR #23
-  at `3440ce9`; publication blocked on usable remote checks**.
+  at `3440ce9`; publication awaits a separately approved no-scope-change refresh
+  and fresh remote checks**.
 - Meta Increment 1: branding and identity foundation - **verified complete;
   squash-merged at `5edbf4d`**.
 - Meta Increment 2: engineering operating system - **verified complete**.
@@ -104,7 +109,8 @@ valid. The increment is not committed or published.
 - Meta Increment 7: verified application icon rollout - **verified complete with
   advisories; squash-merged through PR #19 at `96ba6ae`**.
 - Meta Increment 8: Prompt Library Reorganization - **verified complete;
-  documentation and repository governance only; uncommitted and unpublished**.
+  documentation and repository governance only; published through PR #25 and
+  squash-merged at `d26b5e1`**.
 - Remediation ARB-022: project-memory reconciliation - **verified complete in
   PR #22 and squash-merged at `7c79e65`**.
 - Repository workflow: trusted self-hosted runner routing - **verified complete

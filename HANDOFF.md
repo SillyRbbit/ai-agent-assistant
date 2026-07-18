@@ -1,6 +1,6 @@
 # Handoff
 
-Last updated: 2026-07-17
+Last updated: 2026-07-18
 
 ## Current state
 
@@ -35,13 +35,14 @@ squash-merged through PR #24 at `eaf6c9f`. The final branch commit was
 The `repository-self-hosted-runner` marker remained valid on clean synchronized
 `main` immediately before the prompt-library gate began.
 
-Meta Increment 8 Prompt Library Reorganization is verified complete on
-`codex/meta-prompt-library-reorganization`. The mandatory
-`meta-prompt-library-reorganization` gate began before file moves, its
-consolidated result is `PASS`, and its completion marker is complete and valid.
-The exact documentation and repository-governance scope is uncommitted and
-unpublished. No product source, behavior, dependency, Tauri, storage,
-permission, skill, or hook changed.
+Meta Increment 8 Prompt Library Reorganization is verified complete and
+published. Verified source commit `2d3261a` passed hosted CI, Documentation,
+and Security through PR #25, which was squash-merged into synchronized `main`
+at `d26b5e1`. The mandatory `meta-prompt-library-reorganization` gate began
+before file moves, its consolidated result is `PASS`, and its completion marker
+was complete and valid on clean `d26b5e1` immediately before this
+post-publication project-memory sync. No product source, behavior, dependency,
+Tauri, storage, permission, skill, or hook changed.
 
 ## Meta Increment 8 prompt library reorganization
 
@@ -61,6 +62,8 @@ permission, skill, or hook changed.
 - Updated D-055, current project memory, the migration record, and the
   consolidated review. The review's exact 59-path inventory includes all moved,
   merged, created, updated, removed, and closeout paths.
+- Committed the verified scope as `2d3261a`, passed all three hosted checks on
+  PR #25, and squash-merged the increment into `main` at `d26b5e1`.
 
 ### Verification
 
@@ -81,34 +84,69 @@ Passed:
 - Complete diff, protected-path, security-boundary, generated-output, secret,
   database, link, and scope review.
 - Session-end inspection and the mandatory post-increment gate.
+- Hosted Documentation run `29644532933`, Security run `29644533035`, and CI
+  run `29644532971` on source commit `2d3261a`.
 
 Failed checks: none.
 
-Checks not run: hosted GitHub checks and target-Mac native UI testing. They are
-not completion requirements before publication for this documentation-only,
-runtime-neutral increment.
+Checks not run: target-Mac native UI testing. It is not a completion requirement
+for this documentation-only, runtime-neutral increment.
 
 Manual verification pending: none.
+
+### Post-publication project-memory sync
+
+- Confirmed clean synchronized `main` at `d26b5e1`, PR #25 merged from
+  `2d3261a` with all three hosted checks passed, and PR #23 open and unchanged
+  at `3440ce9`.
+- Updated exactly seven approved live documents: `AGENTS.md`, `CHANGELOG.md`,
+  `HANDOFF.md`, `NEXT_STEPS.md`, `PLANS.md`, `PROJECT_STATUS.md`, and this
+  increment record. The Stop hook added only the mandatory dated closeout
+  report, making the complete change set eight documentation paths. No product
+  source, dependency, skill, hook, configuration, or PR branch changed.
+- `npm run docs:check`, `npm run repository:check`, and `npm run verify` passed
+  after the reconciliation.
+- The historical Meta Increment 8 marker was valid on clean `d26b5e1`. These
+  later approved documentation edits changed that workspace fingerprint. The
+  Stop hook required re-finalization of the existing increment without beginning
+  a new increment. The resulting report is `PASS WITH ADVISORIES`, and status is
+  complete and valid. The only advisory is pre-existing stale `ROADMAP.md`
+  wording outside the approved scope.
 
 ### Risks and rollback
 
 Prompt metadata remains intentionally human-readable and process-enforced; the
-increment adds no parser or dependency. Before commit, rollback is restoration
-of the 59 changed paths from `HEAD`. After publication, revert only the bounded
-prompt-library squash commit. No product, dependency, Tauri, or database
-rollback is required.
+increment adds no parser or dependency. The pre-publication rollback was
+restoration of the 59 changed paths from `HEAD`. After publication, revert only
+the bounded prompt-library squash commit `d26b5e1`. No product, dependency,
+Tauri, or database rollback is required.
 
 ### Exact next task
 
-Review and publish Meta Increment 8 only after separate project-owner approval.
-Do not refresh PR #23, begin ARB-002, or start another increment in the same
-step.
+Review and publish only this uncommitted eight-path post-Meta-8 project-memory
+closeout after separate project-owner approval. Do not apply the stash, refresh
+PR #23, begin ARB-002, or start another increment in the same step.
 
 Ready-to-paste prompt:
 
 ```text
-Review the complete Meta Increment 8 Prompt Library Reorganization. Confirm the exact 59-path documentation and repository-governance scope, final 24-file prompt tree, preserved dated historical evidence, passing complete verification, valid meta-prompt-library-reorganization marker, and absence of product-source, dependency, skill, or hook changes. Confirm the existing codex/meta-prompt-library-reorganization branch and propose a Conventional Commit message, PR title, and PR description, then wait for my approval before staging, committing, pushing, or merging. Do not refresh PR #23 or start another increment.
+Review the complete post-Meta-8 project-memory closeout. Confirm the exact eight-path documentation-only scope (seven approved live documents plus the mandatory dated gate report), PR #25 publication evidence, preserved 2026-07-17 historical report, passing complete verification, `PASS WITH ADVISORIES` result, valid re-finalized marker, unchanged PR #23 at `3440ce9`, intact unapplied stash `b57fe0f7b361f59f57e4ef501e1e642c802cbd48`, and absence of product-source changes. Propose a descriptive branch name, Conventional Commit message, PR title, and PR description, then wait for my approval before creating the branch, staging, committing, pushing, or merging. Do not apply the stash, refresh PR #23, or start another increment.
 ```
+
+## Deferred risk-based validation proposal
+
+`stash@{0}` at
+`b57fe0f7b361f59f57e4ef501e1e642c802cbd48` preserves one proposed
+`AGENTS.md` validation-policy change for separate governance review. The useful
+proposal favors focused checks during implementation, risk-based completion
+checks, and recording each check once with its final result. The same stash also
+contains stale wording that incorrectly marks Prompt Library Reorganization as
+active.
+
+The stash remains unapplied. The policy is not accepted repository guidance and
+must be reviewed separately against `AGENTS.md`, `ENGINEERING_GUIDE.md`,
+`TESTING_GUIDE.md`, and the mandatory gate workflow. Do not apply the stash
+wholesale or restore its stale Prompt Library active-state wording.
 
 ## Repository self-hosted runner setup
 

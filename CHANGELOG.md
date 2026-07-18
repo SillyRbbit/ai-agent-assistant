@@ -4,6 +4,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Published Meta Increment 8 through PR #25 from verified source commit
+  `2d3261a`; hosted CI, Documentation, and Security passed before the prompt
+  library was squash-merged at `d26b5e1`. No product source, dependency, skill,
+  hook, Tauri, storage, permission, or behavior changed. The post-publication
+  project-memory reconciliation passed complete verification and re-finalized
+  the existing gate with one non-blocking stale-roadmap advisory.
 - Reorganized the copy-paste prompt library into increment, review, workflow,
   and authoring-template categories with one selection guide and consistent
   human-readable metadata across 23 prompt assets.
