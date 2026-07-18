@@ -63,13 +63,12 @@ The stopped Meta Increment 4 executive-document request created no gate state,
 plan, repository edit, or completion evidence. D-048 and D-049 record the queue
 history.
 
-Increment 4V terminal approval audit is reconstructed without scope change under
-`docs/plans/04v-bind-initial-terminal-approval-audit.md`. Its merged 4U and
-ARB-022 prerequisites are satisfied. Original commit `3440ce9` remains
-preserved while the same 19-path scope passes complete local verification on
-current `main` at `d81b73a`. Publication awaits a valid reconstructed commit,
-fresh PR #23 hosted checks, and separate merge approval. No later product or
-remediation increment may start.
+Increment 4V terminal approval audit is verified complete and published under
+`docs/plans/04v-bind-initial-terminal-approval-audit.md`. Reconstructed source
+commit `ec919e9` passed hosted CI, Documentation, and Security before PR #23
+was squash-merged at `6e6f91d`. Original reviewed commit `3440ce9` remains
+preserved, and the `04v` marker remains complete and valid. No later product or
+remediation increment is Ready.
 
 ## Completed plans
 
@@ -172,7 +171,7 @@ A plan must contain:
 | Increment 4S terminal approval presentation    | Complete | Project maintainer | 2026-07-15   |
 | Increment 4T terminal approval resolution      | Complete | Project maintainer | 2026-07-15   |
 | Increment 4U approval run termination          | Complete | Project maintainer | 2026-07-15   |
-| Increment 4V terminal approval audit binding   | Active   | Project maintainer | 2026-07-17   |
+| Increment 4V terminal approval audit binding   | Complete | Project maintainer | 2026-07-18   |
 | Meta Increment 1 branding foundation           | Complete | Project maintainer | 2026-07-15   |
 | Meta Increment 2 engineering operating system  | Complete | Project maintainer | 2026-07-15   |
 | Meta Increment 3 Codex automation              | Complete | Project maintainer | 2026-07-15   |
@@ -320,7 +319,7 @@ npm audit, scope and security review, documentation sync, and the mandatory
 synchronized `main`, and retains a valid marker. Rollback after publication
 reverts the bounded 4U commit.
 
-## Phase 4 Increment 4V bind initial terminal approval audit - reconstructed
+## Phase 4 Increment 4V bind initial terminal approval audit - complete
 
 Goal: prevent a future initial-turn caller from receiving a successful native
 or run-termination approval resolution unless the turn's private typed
@@ -339,11 +338,11 @@ expiry, timer, runtime coordinator, active-run validation, dispatch, execution,
 transport, credential, Tauri, frontend, dependency, capability, entitlement,
 or permission path is included. Focused and complete verification, npm audit,
 scope and security review, documentation sync, and the mandatory `04v` gate
-pass before commit. No manual check applies. Original commit `3440ce9` remains
-preserved on `codex/feature/bind-terminal-approval-audit-pre-refresh`; the
-unchanged scope is reconstructed on current `main`. The reconstructed commit,
-PR #23 refresh, fresh hosted checks, and separate merge approval remain pending.
-No later product or remediation increment may start.
+passed before commit. No manual check applies. Original commit `3440ce9`
+remains preserved on
+`codex/feature/bind-terminal-approval-audit-pre-refresh`; reconstructed source
+commit `ec919e9` passed hosted CI, Documentation, and Security, and PR #23 was
+squash-merged at `6e6f91d`. No later product or remediation increment is Ready.
 
 ## Phase 4 Increment 4T bind terminal initial approval resolution - complete
 

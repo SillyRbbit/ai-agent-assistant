@@ -5,9 +5,9 @@
 - Review type: read-only technical-debt and advisory reconciliation
 - Product name: Cortexa
 - Resolution update: ARB-022 is squash-merged through PR #22 at `7c79e65`.
-  ARB-001 is reconstructed without scope change from preserved commit
-  `3440ce9` onto synchronized `main` at `d81b73a` and is locally verified;
-  resolving commit pending until committed.
+  ARB-001 is resolved and squash-merged through PR #23 at `6e6f91d` from
+  reconstructed source commit `ec919e9`; original reviewed commit `3440ce9`
+  remains preserved.
 
 ## Conclusion
 
@@ -120,7 +120,8 @@ ADVISORIES`, and the `04v` marker is complete and valid.
 - Durable audit, active-run coordination, native dialog lifecycle, dispatch,
   execution, provider continuation, transport, credentials, persistence, IPC,
   UI, dependencies, capabilities, and permissions remain outside Increment 4V.
-- The resolving commit remains pending until committed. The exact automated,
+- Reconstructed source commit `ec919e9` passed hosted CI, Documentation, and
+  Security before PR #23 was squash-merged at `6e6f91d`. The exact automated,
   review, and gate evidence is recorded in
   `docs/reviews/2026-07-16-04v-post-increment-review.md`.
 
@@ -158,8 +159,7 @@ ADVISORIES`, and the `04v` marker is complete and valid.
 
 - **Original increment or report:** `meta-06-F1`, PRA-002, `04u-F2`, and the
   proposed Increment 4V plan.
-- **Current status:** Resolved in the reconstructed and locally verified
-  Increment 4V workspace; resolving commit pending until committed.
+- **Current status:** Resolved and published through PR #23 at `6e6f91d`.
 - **Severity / category:** High / Security.
 - **Why it matters:** A successful native or run-termination resolution can
   leave `InitialGatewayTurn` before the existing typed audit adapter validates
@@ -1127,10 +1127,9 @@ gateway deployment, provider retention, and disclosure threat model required by
 ARB-002. No ARB-002 implementation increment is Ready. O-006 and O-007 require
 security and executive decisions before live transport can be scoped safely.
 
-The immediate repository task is review and publication of the verified
-Increment 4V / ARB-001 scope. Only after clean synchronized `main` contains that
-commit should a separately approved documentation-only ARB-002 planning
-increment begin.
+Increment 4V / ARB-001 is published on clean synchronized `main`. A
+documentation-only ARB-002 planning increment may begin only after separate
+project-owner, security-owner, and executive-owner approval.
 
 ## Ready-to-paste Codex prompt
 
@@ -1150,9 +1149,9 @@ The later ARB-022 resolution changed exactly the ten documentation paths in
 `docs/increments/remediation-ARB-022-project-memory-reconciliation.md` and was
 squash-merged at `7c79e65`.
 
-The ARB-001 resolution changes exactly the 19 paths recorded in
-`docs/increments/remediation-ARB-001-terminal-approval-audit.md`. Before commit,
-restore those paths to reconstruction baseline `d81b73a`. After publication,
-revert only the bounded Increment 4V commit. Preserve original commit `3440ce9`
-on the pre-refresh branch. No migration, data, dependency, credential,
-configuration, capability, permission, or remote-resource rollback applies.
+The ARB-001 resolution changed exactly the 19 paths recorded in
+`docs/increments/remediation-ARB-001-terminal-approval-audit.md` and was
+squash-merged through PR #23 at `6e6f91d`. Revert only that bounded squash
+commit. Preserve original commit `3440ce9` on the pre-refresh branch. No
+migration, data, dependency, credential, configuration, capability, permission,
+or remote-resource rollback applies.

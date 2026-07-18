@@ -4,6 +4,11 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Published Increment 4V / ARB-001 through PR #23 from reconstructed source
+  commit `ec919e9`; hosted CI, Documentation, and Security passed before the
+  exact 19-path remediation was squash-merged at `6e6f91d`. The `04v` marker
+  remains complete and valid, original reviewed commit `3440ce9` remains
+  preserved, and no later remediation was started.
 - Reconstructed the exact Increment 4V / ARB-001 19-path scope from preserved
   commit `3440ce9` onto synchronized `main` at `d81b73a`, retaining all later
   repository-governance changes while complete local verification passes.

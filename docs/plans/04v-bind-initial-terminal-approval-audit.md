@@ -1,6 +1,6 @@
 # Increment 4V - bind initial terminal approval audit
 
-Status: Complete; reconstructed and verified, resolving commit pending
+Status: Complete; published through PR #23 at `6e6f91d`
 Owner: Project maintainer
 Last updated: 2026-07-18
 
@@ -242,9 +242,10 @@ security, npm audit, conflict, whitespace, session-end, scope, and complete-diff
 checks pass. The sandboxed npm audit failed on DNS; the approved network retry
 found zero vulnerabilities. The original reviewed commit `3440ce9` remains
 preserved, and the same scope was reconstructed from synchronized `main` at
-`d81b73a`. No manual gate applies. The consolidated result is `PASS WITH
-ADVISORIES`, the `04v` marker is complete and valid, and the resolving commit
-remains pending until committed.
+`d81b73a` as source commit `ec919e9`. Hosted CI, Documentation, and Security
+passed before PR #23 was squash-merged at `6e6f91d`. No manual gate applies.
+The consolidated result is `PASS WITH ADVISORIES`, and the `04v` marker remains
+complete and valid.
 
 ## Documentation updates
 
@@ -253,5 +254,7 @@ remains pending until committed.
 - [x] `DECISIONS.md` updated during closeout because implementation confirms the
       planned durable boundary.
 - [x] Post-increment review report created during closeout.
+- [x] Reconstructed source passed hosted CI, Documentation, and Security.
+- [x] PR #23 squash-merged at `6e6f91d`.
 - [x] No troubleshooting update was needed; the sandboxed audit DNS failure was
       an expected environment restriction resolved by the approved retry.

@@ -1523,7 +1523,8 @@ Consequences:
 ## D-053 - Bind terminal approval success to one turn-owned typed audit record
 
 Date: 2026-07-16
-Status: Accepted; reconstructed and locally verified, publication pending
+Status: Accepted; verified implementation squash-merged through PR #23 at
+`6e6f91d`
 
 Decision: `InitialGatewayTurn` owns one private
 `InMemoryApprovalAuditAdapter`. After its private approval manager successfully
@@ -1587,8 +1588,9 @@ a maintainer-controlled allowlisted branch. The runner host is dedicated,
 unprivileged, and provisioned outside workflow execution; workflows perform
 fail-fast prerequisite checks and do not use `sudo`.
 
-D-053 is owned by the separately reviewed Increment 4V / ARB-001 branch. D-054
-was published first to prevent a decision-number collision.
+D-053 was published later through the separately reviewed Increment 4V /
+ARB-001 PR #23. D-054 was published first to prevent a decision-number
+collision.
 
 Rationale: the existing workflows name GitHub-hosted images and cannot match
 the registered runner. GitHub-hosted jobs are currently not starting because of

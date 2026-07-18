@@ -25,11 +25,11 @@ immediately before the later advisory-remediation report changed the workspace
 fingerprint. The advisory backlog and first post-Meta-7 project-memory
 reconciliation were squash-merged through PR #21 at `cc434d9`. ARB-022 is
 resolved and squash-merged through PR #22 at `7c79e65`. Increment 4V / ARB-001
-has been reconstructed without scope change from preserved commit `3440ce9`
-onto synchronized `main` at `d81b73a`. Complete focused and repository
-verification passes on `codex/feature/bind-terminal-approval-audit`. The
-reconstructed commit, force-with-lease refresh of open PR #23, hosted checks,
-and separate merge approval remain pending.
+is verified complete and published through PR #23. Reconstructed source commit
+`ec919e9` passed hosted CI, Documentation, and Security before squash merge at
+`6e6f91d`. The original reviewed commit remains preserved at `3440ce9` on
+`codex/feature/bind-terminal-approval-audit-pre-refresh`, and the `04v` marker
+remains complete and valid on clean synchronized `main`.
 
 Repository self-hosted runner routing is verified complete with advisories and
 squash-merged through PR #24 at `eaf6c9f`. The final branch commit was
@@ -46,7 +46,7 @@ was complete and valid on clean `d26b5e1` immediately before this
 post-publication project-memory sync. No product source, behavior, dependency,
 Tauri, storage, permission, skill, or hook changed.
 
-## Current Increment 4V / ARB-001 reconstruction
+## Increment 4V / ARB-001 publication
 
 ### Completed
 
@@ -61,6 +61,11 @@ Tauri, storage, permission, skill, or hook changed.
 - Preserved the exact 19-path approved scope. No dependency, lockfile, Tauri,
   SQLite, capability, permission, CSP, credential, network, IPC, frontend, or
   unrelated product source changed.
+- Committed the reconstructed scope as `ec919e9`, force-with-lease refreshed
+  PR #23 from expected head `3440ce9`, and passed hosted CI run `29662264502`,
+  Documentation run `29662264500`, and Security run `29662264501`.
+- Squash-merged PR #23 at `6e6f91d`, synchronized `main`, and confirmed the
+  `04v` marker remains complete and valid.
 
 ### Verification
 
@@ -87,10 +92,9 @@ Manual verification pending: none.
 
 ### Exact next task
 
-Finalize the `04v` report and valid marker, commit the exact 19-path scope,
-confirm the marker survives the commit, force-with-lease refresh PR #23, and
-require CI, Documentation, and Security to pass. Stop for separate merge
-approval. Do not begin ARB-002 or another remediation.
+Review and publish only the 14-path documentation-only 4V publication
+reconciliation after separate project-owner approval. Preserve dated 4V
+evidence and do not begin ARB-002 or another remediation.
 
 ## Meta Increment 8 prompt library reorganization
 
