@@ -61,20 +61,21 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Meta Increment 8 - Prompt Library Reorganization:
   **Verified complete; published through PR #25 and squash-merged at
   `d26b5e1`**.
+- Increment 4V / ARB-001 - terminal approval audit binding:
+  **Verified complete; published through PR #23 and squash-merged at
+  `6e6f91d`**.
 
 ## Queue status
 
-### Publish reconstructed Increment 4V / ARB-001
+### No later remediation is Ready
 
-**Status:** **Reconstructed without scope change and locally reverified; commit,
-PR refresh, hosted checks, and merge remain pending**. The original reviewed
-commit remains preserved at `3440ce9` on
-`codex/feature/bind-terminal-approval-audit-pre-refresh`.
+**Status:** Increment 4V / ARB-001 is published at `6e6f91d`; ARB-002 remains
+blocked on O-006 and O-007 plus project-owner, security-owner, and
+executive-owner threat-model decisions.
 
-Finalize the valid `04v` marker, commit the exact 19-path scope, refresh PR #23
-with force-with-lease, require CI, Documentation, and Security on the trusted
-runner, and seek separate squash-merge approval. Do not begin ARB-002 or another
-remediation.
+Do not begin ARB-002 automatically. Its next possible step is a separately
+approved documentation-only threat-model planning increment; live transport,
+credentials, and product implementation remain blocked.
 
 Repository Workflow Increment 4G is **Verified complete**. It adds only the repository-local post-increment skill, deterministic Stop-hook validator, focused tests, report assets, and workflow documentation required to replace D-027's one-time exception. Its consolidated result is `PASS WITH ADVISORIES`; the advisory is the documented project-hook trust/bypass boundary.
 
@@ -201,17 +202,18 @@ the two source/test files and only the declared closeout documentation before
 commit, or revert one bounded 4U commit afterward.
 
 No 4U, Meta 2, Meta 3, Meta 5, Meta 6, or Meta 7 implementation task remains.
-Increment 4V has since been approved and verified on open PR #23. The
-self-hosted workflow prerequisite and Meta Increment 8 publication are complete;
-do not modify, merge, or replace the verified scope without separate approval.
+Increment 4V has since been approved, verified, and squash-merged through PR #23
+at `6e6f91d`. The self-hosted workflow prerequisite and Meta Increment 8
+publication are complete; do not modify or replace the verified scope without a
+separate increment.
 
-## Verified product publication pending
+## Published product remediation
 
 ### Increment 4V - bind initial terminal approval audit
 
-**Status:** Reconstructed without scope change from preserved commit `3440ce9`
-onto synchronized `main` at `d81b73a`. Complete local verification passes; the
-reconstructed commit, PR #23 refresh, hosted checks, and merge remain pending.
+**Status:** Verified complete and squash-merged through PR #23 at `6e6f91d`
+from reconstructed source commit `ec919e9`. Hosted CI, Documentation, and
+Security passed, and the `04v` marker remains complete and valid.
 
 **Goal:** Prevent a future initial-turn caller from receiving a successful
 native or run-termination approval resolution unless the turn's private typed
@@ -240,15 +242,12 @@ non-goals.
 
 Focused request, audit, approval, public-contract, approval-binding, and
 approval-audit tests, strict Clippy, complete `npm run verify`, npm audit, diff
-review, and the mandatory `04v` gate passed. No manual gate applies.
-Before commit, restore the two source/test files to the verified merged 4U
-commit and revert only declared 4V closeout documentation; after commit, revert
-one bounded 4V commit.
+review, the mandatory `04v` gate, and all three hosted workflows passed. No
+manual gate applies. Rollback reverts only squash commit `6e6f91d`.
 
 Its exact reconciled plan remains at
-`docs/plans/04v-bind-initial-terminal-approval-audit.md`. Preserve the valid
-marker after commit, refresh PR #23 without scope change, require all trusted
-hosted checks, and seek separate merge approval. Do not start ARB-002.
+`docs/plans/04v-bind-initial-terminal-approval-audit.md`. Do not start ARB-002;
+no later product or remediation increment is Ready.
 
 Increment 4R bind terminal initial function call to policy is **Verified
 complete, published, and merged at `5e58edb`**. Accepted terminal completion

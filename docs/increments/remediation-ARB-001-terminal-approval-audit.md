@@ -2,11 +2,12 @@
 
 Date: 2026-07-16
 Reconstructed: 2026-07-18
-Status: Reconstructed and verified complete; resolving commit pending
-Branch: `codex/feature/bind-terminal-approval-audit`
+Status: Resolved and published through PR #23 at `6e6f91d`
+Branch: `main`
 Baseline: `d81b73a1633a35e3432a19434495d7b6b9db2431`
 Gate ID: `04v`
-Resolving commit: Pending until committed
+Resolving source commit: `ec919e9a17c6b877b21778e8b0323d6a1829d94e`
+Squash merge commit: `6e6f91d39ae6b09df3c37972ba600fc69220339d`
 
 ## Goal
 
@@ -137,6 +138,6 @@ rollback applies.
 
 ## Next task
 
-Commit and refresh PR #23 with only the verified 19-path scope, require all
-hosted checks, and stop for separate merge approval. Do not begin ARB-002 or any
-other remediation automatically.
+Review and publish only the documentation-only 4V publication reconciliation
+after separate project-owner approval. Do not begin ARB-002 or any other
+remediation automatically.

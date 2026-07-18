@@ -28,10 +28,10 @@ clean `96ba6ae` before the later advisory-remediation report changed the live
 workspace fingerprint. The advisory backlog and first post-Meta-7 memory
 reconciliation were squash-merged through PR #21 at `cc434d9`. Remediation
 ARB-022 resolves the remaining live publication drift and is squash-merged
-through PR #22 at `7c79e65`. Increment 4V / ARB-001 has been reconstructed
-without scope change from preserved commit `3440ce9` onto synchronized `main` at
-`d81b73a`. Complete local verification passes; the reconstructed commit, PR #23
-refresh, hosted checks, and merge remain pending.
+through PR #22 at `7c79e65`. Increment 4V / ARB-001 is **verified complete and
+squash-merged through PR #23 at `6e6f91d`** from reconstructed source commit
+`ec919e9`. Hosted CI, Documentation, and Security passed, and the `04v` marker
+remains complete and valid.
 
 Repository self-hosted runner routing and its approved private-only portability
 correction are **verified complete with advisories and squash-merged through PR
@@ -91,9 +91,8 @@ wording outside the approved scope.
 - Increment 4S: bind terminal initial approval presentation - **verified complete; published and merged**.
 - Increment 4T: bind terminal initial approval resolution - **verified complete; published and merged**.
 - Increment 4U: bind initial approval run-termination - **verified complete; published and merged at `61525bf`**.
-- Increment 4V: bind initial terminal approval audit - **reconstructed without
-  scope change on `d81b73a` and locally reverified; commit, PR #23 refresh,
-  hosted checks, and merge remain pending**.
+- Increment 4V: bind initial terminal approval audit - **verified complete;
+  published through PR #23 and squash-merged at `6e6f91d`**.
 - Meta Increment 1: branding and identity foundation - **verified complete;
   squash-merged at `5edbf4d`**.
 - Meta Increment 2: engineering operating system - **verified complete**.
@@ -376,9 +375,9 @@ wording outside the approved scope.
 - Exact risks, verification, rollback, and acceptance criteria are documented in
   `docs/plans/04u-bind-initial-approval-run-termination.md`.
 
-## Increment 4V verified branch capability and evidence
+## Increment 4V published capability and evidence
 
-- The open PR #23 implementation gives the turn one private
+- The published PR #23 implementation gives the turn one private
   `InMemoryApprovalAuditAdapter` after verified 4U establishes both native and
   run-termination resolution paths.
 - Both successful paths route the exact manager-owned resolution through
@@ -394,10 +393,9 @@ wording outside the approved scope.
   cannot roll manager state back.
 - Original commit `3440ce9` remains preserved on
   `codex/feature/bind-terminal-approval-audit-pre-refresh`. The same reviewed
-  19-path implementation/closeout scope is reconstructed on current `main`, and
-  focused plus complete local verification passes. PR #23 is open and unmerged;
-  its branch must be refreshed with force-with-lease and receive fresh hosted
-  checks before separate merge approval.
+  19-path implementation/closeout scope was reconstructed as `ec919e9`, passed
+  focused and complete local verification plus all three hosted workflows, and
+  was squash-merged through PR #23 at `6e6f91d`.
 - Durable persistence, SQLite, native invocation or closure, proactive expiry,
   timers, runtime coordination, transport, credentials, dispatch, execution,
   Tauri, frontend, dependencies, capabilities, entitlements, and permissions

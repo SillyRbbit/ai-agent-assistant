@@ -1,6 +1,6 @@
 # Increment 4V - bind initial terminal approval audit
 
-Status: Reconstructed and verified complete; resolving commit pending
+Status: Verified complete; published through PR #23 at `6e6f91d`
 Last updated: 2026-07-18
 
 ## Goal
@@ -100,10 +100,11 @@ credential, compatibility identifier, or remote resource requires rollback.
   retry found zero vulnerabilities.
 - No manual gate applies. The consolidated result is `PASS WITH ADVISORIES`,
   and the `04v` completion marker is complete and valid.
+- Reconstructed source commit `ec919e9` passed hosted CI, Documentation, and
+  Security before PR #23 was squash-merged at `6e6f91d`.
 
 ## Exact next task
 
-Commit and refresh PR #23 with only this reconstructed Increment 4V / ARB-001
-scope, require all hosted checks, and stop for separate merge approval. The
-resolving commit remains pending until committed. Do not begin ARB-002 or any
-other remediation automatically.
+Review and publish only the documentation-only 4V publication reconciliation
+after separate project-owner approval. Preserve dated evidence and do not begin
+ARB-002 or any other remediation automatically.
