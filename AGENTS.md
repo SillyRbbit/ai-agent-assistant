@@ -59,14 +59,17 @@ runner assignment because of an account billing or spending-limit restriction,
 not a repository test failure. Repository self-hosted runner routing is verified
 complete with advisories and squash-merged through PR #24 at `eaf6c9f`; CI,
 Documentation, and Security pass on runner 21. Its completion marker was valid
-on clean `eaf6c9f` immediately before the prompt-library gate began. The
-explicitly selected documentation-only Meta Increment 8 Prompt Library
-Reorganization is verified complete on
-`codex/meta-prompt-library-reorganization`; its consolidated result is `PASS`
-and its completion marker is complete and valid. It is not committed or
-published. Do not begin another product or remediation increment. Current
-implementation facts and future boundaries are authoritative in
-`ARCHITECTURE.md`.
+on clean `eaf6c9f` immediately before the prompt-library gate began. Meta
+Increment 8 Prompt Library Reorganization is verified complete, published
+through PR #25, and squash-merged at `d26b5e1` from verified source commit
+`2d3261a`; hosted CI, Documentation, and Security passed. Its consolidated
+result is `PASS`, and its completion marker was complete and valid on clean
+synchronized `d26b5e1` immediately before the post-publication project-memory
+sync. The required sync closeout result is `PASS WITH ADVISORIES`, and the
+marker is re-finalized against that documentation-only state; the advisory is
+pre-existing stale roadmap wording outside the approved scope. Do not begin
+another product or remediation increment. Current implementation facts and
+future boundaries are authoritative in `ARCHITECTURE.md`.
 
 ## Non-negotiable product boundaries
 

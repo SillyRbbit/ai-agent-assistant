@@ -5,11 +5,12 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Active plan
 
 No implementation plan is active. Meta Increment 8 Prompt Library
-Reorganization is verified complete and awaits separately approved publication
-under `docs/increments/meta-prompt-library-reorganization.md`. It reorganizes
-only the copy-paste prompt library, active guidance references, D-055, current
-project memory, and mandatory closeout evidence. Product source, behavior,
-dependencies, Tauri, storage, permissions, skills, and hooks remain excluded.
+Reorganization is verified complete under
+`docs/increments/meta-prompt-library-reorganization.md`, published through PR
+#25, and squash-merged at `d26b5e1`. It reorganizes only the copy-paste prompt
+library, active guidance references, D-055, current project memory, and
+mandatory closeout evidence. Product source, behavior, dependencies, Tauri,
+storage, permissions, skills, and hooks remain excluded.
 
 Repository Workflow Increment trusted self-hosted runner routing is verified
 complete with advisories under `docs/plans/repository-self-hosted-runner.md` and
@@ -66,9 +67,9 @@ Increment 4V terminal approval audit is verified on open PR #23 under
 `docs/plans/04v-bind-initial-terminal-approval-audit.md`. Its merged 4U
 prerequisite and ARB-022 publication are satisfied. Commit `3440ce9` preserves
 the verified scope and valid `04v` marker. The self-hosted workflow prerequisite
-is merged; publication waits for Meta Increment 8 to be published and for
-separate approval to refresh PR #23 without scope change. No later product or
-remediation increment may start.
+and Meta Increment 8 publication are complete; publication waits for separate
+approval to refresh PR #23 without scope change and rerun remote checks. No
+later product or remediation increment may start.
 
 ## Completed plans
 
@@ -340,8 +341,9 @@ or permission path is included. Focused and complete verification, npm audit,
 scope and security review, documentation sync, and the mandatory `04v` gate
 passed before commit. No manual check applies. Commit `3440ce9` and its valid
 marker remain on open PR #23. The hosted jobs failed before runner assignment;
-publication waits for this self-hosted workflow increment and fresh remote
-checks. No later product or remediation increment may start.
+the self-hosted workflow and Meta Increment 8 publication prerequisites are now
+complete, while a no-scope-change refresh and fresh remote checks still require
+separate approval. No later product or remediation increment may start.
 
 ## Phase 4 Increment 4T bind terminal initial approval resolution - complete
 
