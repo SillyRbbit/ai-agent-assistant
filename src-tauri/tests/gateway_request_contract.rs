@@ -504,16 +504,18 @@ fn cancellation_is_local_idempotent_and_terminal() -> Result<(), Box<dyn Error>>
 }
 
 #[test]
-fn run_termination_cancels_only_the_turn_owned_pending_approval() -> Result<(), Box<dyn Error>> {
+fn run_termination_returns_only_an_audited_turn_owned_resolution() -> Result<(), Box<dyn Error>> {
     let mut no_pending_turn = started_turn()?;
     assert!(no_pending_turn
         .cancel_pending_approval_for_run_termination()?
         .is_none());
 
     let mut turn = turn_with_pending_approval()?;
-    let resolution = turn
+    let audited = turn
         .cancel_pending_approval_for_run_termination()?
         .ok_or("run termination must consume the pending approval")?;
+    assert_eq!(audited.receipt().sequence().value(), 1);
+    let resolution = audited.resolution();
 
     assert_eq!(resolution.id().value(), 1);
     assert_eq!(
@@ -549,6 +551,12 @@ fn run_termination_cancels_only_the_turn_owned_pending_approval() -> Result<(), 
     assert_eq!(preview.required_permission(), PermissionKind::None);
     assert_eq!(preview.risk_class(), RiskClass::ReversibleLocalAction);
     assert_eq!(preview.risk(), ApprovalRisk::CreatesLocalTask);
+
+    let audited_debug = format!("{audited:?}");
+    for sensitive in [RUN_ID, GATEWAY_REQUEST_ID, "call-public-1", "Plan tomorrow"] {
+        assert!(!audited_debug.contains(sensitive));
+    }
+    assert!(audited_debug.contains("[REDACTED]"));
 
     assert!(turn
         .cancel_pending_approval_for_run_termination()?

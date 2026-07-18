@@ -63,13 +63,13 @@ The stopped Meta Increment 4 executive-document request created no gate state,
 plan, repository edit, or completion evidence. D-048 and D-049 record the queue
 history.
 
-Increment 4V terminal approval audit is verified on open PR #23 under
-`docs/plans/04v-bind-initial-terminal-approval-audit.md`. Its merged 4U
-prerequisite and ARB-022 publication are satisfied. Commit `3440ce9` preserves
-the verified scope and valid `04v` marker. The self-hosted workflow prerequisite
-and Meta Increment 8 publication are complete; publication waits for separate
-approval to refresh PR #23 without scope change and rerun remote checks. No
-later product or remediation increment may start.
+Increment 4V terminal approval audit is reconstructed without scope change under
+`docs/plans/04v-bind-initial-terminal-approval-audit.md`. Its merged 4U and
+ARB-022 prerequisites are satisfied. Original commit `3440ce9` remains
+preserved while the same 19-path scope passes complete local verification on
+current `main` at `d81b73a`. Publication awaits a valid reconstructed commit,
+fresh PR #23 hosted checks, and separate merge approval. No later product or
+remediation increment may start.
 
 ## Completed plans
 
@@ -320,7 +320,7 @@ npm audit, scope and security review, documentation sync, and the mandatory
 synchronized `main`, and retains a valid marker. Rollback after publication
 reverts the bounded 4U commit.
 
-## Phase 4 Increment 4V bind initial terminal approval audit - verified on PR
+## Phase 4 Increment 4V bind initial terminal approval audit - reconstructed
 
 Goal: prevent a future initial-turn caller from receiving a successful native
 or run-termination approval resolution unless the turn's private typed
@@ -339,11 +339,11 @@ expiry, timer, runtime coordinator, active-run validation, dispatch, execution,
 transport, credential, Tauri, frontend, dependency, capability, entitlement,
 or permission path is included. Focused and complete verification, npm audit,
 scope and security review, documentation sync, and the mandatory `04v` gate
-passed before commit. No manual check applies. Commit `3440ce9` and its valid
-marker remain on open PR #23. The hosted jobs failed before runner assignment;
-the self-hosted workflow and Meta Increment 8 publication prerequisites are now
-complete, while a no-scope-change refresh and fresh remote checks still require
-separate approval. No later product or remediation increment may start.
+pass before commit. No manual check applies. Original commit `3440ce9` remains
+preserved on `codex/feature/bind-terminal-approval-audit-pre-refresh`; the
+unchanged scope is reconstructed on current `main`. The reconstructed commit,
+PR #23 refresh, fresh hosted checks, and separate merge approval remain pending.
+No later product or remediation increment may start.
 
 ## Phase 4 Increment 4T bind terminal initial approval resolution - complete
 

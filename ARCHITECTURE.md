@@ -120,7 +120,10 @@ modules are intentionally transport-free where runtime coordination is absent.
   independently validates its local tool identity and arguments.
 - The turn binds terminal function validation, deterministic policy, exact
   approval presentation, native resolution on macOS, and run-termination denial
-  to one privately owned manager.
+  to one privately owned manager. Successful native and run-termination
+  resolutions are validated and recorded by the turn's private typed in-memory
+  approval-audit adapter before a closed resolution-plus-receipt value leaves
+  the turn.
 
 Every emitted value remains non-authorizing. There is no Tauri caller, live
 transport, provider adapter, runtime coordinator, continuation loop, dispatcher,
@@ -178,14 +181,17 @@ or dispatch authority exists.
 
 ### Audit logger
 
-**Current**: `audit::approval` is a typed, bounded, in-memory adapter that can
-derive a redacted approval record and return a sequence-only receipt. It is not
-yet bound to the initial turn, durable storage, IPC, or UI.
+**Current**: `audit::approval` is a typed, bounded, in-memory adapter that derives
+a redacted approval record and returns a sequence-only receipt. The initial turn
+owns one private adapter and exposes successful terminal approval resolutions
+only through a closed non-cloneable resolution-plus-receipt value. Manager
+terminalization precedes recording; a typed audit failure returns no resolution
+and cannot restore manager state.
 
 **Current absence**: the generic audit scaffold was deleted in Increment 4I.
-There is no run, execution, durable, or product audit logger. Increment 4V is
-Ready but unstarted and would only bind the existing in-memory approval audit to
-terminal resolution.
+There is no run, execution, durable, cross-run, IPC, UI, or product audit logger.
+The turn-owned adapter is volatile and sequence-local; neither its record nor its
+receipt authorizes dispatch, execution, or provider continuation.
 
 ### Memory store
 
@@ -255,7 +261,7 @@ reviewed repository ICNS byte-for-byte.
 | Gateway request/protocol validation           | Current, transport-free       | Phase 4A and 4N-4P                          |
 | Function schema and policy binding            | Current, non-authorizing      | Phase 4B-4C and 4Q-4R                       |
 | Approval presentation/resolution/cancellation | Current, disconnected         | Phase 4D-4E and 4S-4U                       |
-| Approval audit adapter                        | Current, unbound              | Phase 4H; 4V Ready                          |
+| Approval audit adapter                        | Current, bound and volatile   | Phase 4H and 4V                             |
 | Live gateway and Responses transport          | Planned                       | Blocked by O-006 and O-007 plus future plan |
 | Restricted tool execution                     | Planned                       | No dispatcher or executor exists            |
 | Product memory and task persistence           | Planned                       | Phase 8 direction only                      |

@@ -14,10 +14,12 @@ approval where required, execute only registered tools, and record redacted
 audit events.
 
 The current repository implements transport-free validation, policy, approval,
-cancellation, and an unbound in-memory approval-audit adapter. It has no live
-provider transport, runtime coordinator, dispatcher, executor, product memory,
-or durable audit. Current non-authorizing values must not be mistaken for an
-end-to-end security path.
+cancellation, and a turn-bound in-memory approval-audit adapter. A successful
+terminal native or run-termination resolution cannot leave the initial turn
+without one typed audit receipt. It has no live provider transport, runtime
+coordinator, dispatcher, executor, product memory, or durable audit. Current
+resolutions, records, and receipts are volatile and non-authorizing and must not
+be mistaken for an end-to-end security path.
 
 ## Non-negotiable invariants
 

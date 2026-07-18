@@ -4,26 +4,26 @@
 - Repository baseline: `main` at `96ba6ae5b8f94559adb0493d718f2b628e9ea8d7`
 - Review type: read-only technical-debt and advisory reconciliation
 - Product name: Cortexa
-- Resolution update: ARB-022 resolved in the current documentation workspace
-  after PR #21 squash-merged the original backlog and first reconciliation at
-  `cc434d92cfcffd438136ea29c6345b71c1d54bb2`; resolving commit pending until
-  committed
+- Resolution update: ARB-022 is squash-merged through PR #22 at `7c79e65`.
+  ARB-001 is reconstructed without scope change from preserved commit
+  `3440ce9` onto synchronized `main` at `d81b73a` and is locally verified;
+  resolving commit pending until committed.
 
 ## Conclusion
 
 The historical evidence contains 64 explicit source findings: 46 structured
 post-increment findings and 18 Product Readiness Audit findings. The original
 review normalized them to 25 still-valid remediation records plus closed or
-superseded historical dispositions. The current backlog contains 24 unresolved
-records and one subsequently resolved record, ARB-022. No Critical finding
-exists. Eight High findings block live, pilot, release, or enterprise use.
-`ARB-001` is the only product-boundary blocker for the next increment.
+superseded historical dispositions. The current backlog contains 23 unresolved
+records and two subsequently resolved records, ARB-022 and ARB-001. No Critical
+finding exists. Seven unresolved High findings block live, pilot, release, or
+enterprise use. No later product remediation is Ready.
 
-The smallest product remediation remains Increment 4V: bind both successful
-terminal approval paths to the existing typed in-memory approval-audit adapter.
-ARB-022's documentation-only prerequisite is resolved in the current workspace:
-live memory now records PR #21 at `cc434d9`, removes the already-completed
-publication task, and preserves Increment 4V as Ready but unstarted.
+Increment 4V resolves ARB-001 by binding both successful terminal approval paths
+to the existing typed in-memory approval-audit adapter. ARB-022's
+documentation-only prerequisite is published at `7c79e65`. ARB-002 is the next
+priority, but requires security and executive decisions and a separately
+approved threat-model planning increment before implementation can be Ready.
 
 The original read-only review changed no source or existing documentation and
 created only this report. The later ARB-022 resolution changes the exact ten
@@ -94,37 +94,63 @@ Git state, hosted check evidence where available, and the valid Meta 7 marker.
 - The post-edit stale-instruction scan has no matches. Protected-path checks,
   formatting, documentation, repository, security, full verification, diff
   review, and the mandatory `remediation-arb-022` gate pass.
-- The resolving commit remains pending until committed. After publication,
-  clean synchronized `main` must contain the remediation before `04v` begins.
+- PR #22 squash-merged the resolving remediation at `7c79e65`. Clean
+  synchronized `main` contained that prerequisite before the `04v` gate began.
+
+## ARB-001 resolution evidence
+
+- The original mandatory `04v` gate began on clean synchronized `main` at
+  `7c79e65`. For publication refresh, a new `04v` gate began on clean
+  synchronized `main` at `d81b73a` before the preserved change was applied
+  without commit.
+- `InitialGatewayTurn` now owns one private typed in-memory approval-audit
+  adapter. Native and run-termination success use the same private
+  manager-then-audit helper and return only a closed
+  `AuditedApprovalResolution` containing the exact manager-owned resolution and
+  its sequence-only receipt.
+- Focused tests prove exact record facts, receipt binding, native and
+  run-termination behavior, idempotence, late-outcome rejection, redaction, and
+  typed audit failure after manager terminalization without a returned
+  resolution or stale pending subject.
+- Strict Clippy, complete `npm run verify`, documentation, security, npm audit,
+  conflict, whitespace, exact-scope, complete-diff, session-end, and mandatory
+  gate checks pass. The sandboxed npm audit failed on DNS; the approved network
+  retry found zero vulnerabilities. The consolidated result is `PASS WITH
+ADVISORIES`, and the `04v` marker is complete and valid.
+- Durable audit, active-run coordination, native dialog lifecycle, dispatch,
+  execution, provider continuation, transport, credentials, persistence, IPC,
+  UI, dependencies, capabilities, and permissions remain outside Increment 4V.
+- The resolving commit remains pending until committed. The exact automated,
+  review, and gate evidence is recorded in
+  `docs/reviews/2026-07-16-04v-post-increment-review.md`.
 
 ## Prioritized unresolved backlog
 
 | Priority | ID      | Severity | Category             | Summary                                                                       | Blocks next product increment    |
 | -------: | ------- | -------- | -------------------- | ----------------------------------------------------------------------------- | -------------------------------- |
-|        1 | ARB-001 | High     | Security             | Terminal approval resolutions are not audit-bound                             | Yes                              |
-|        2 | ARB-002 | High     | Security             | Gateway identity, credentials, deployment, and retention remain unresolved    | No; blocks live traffic          |
-|        3 | ARB-003 | High     | Security             | No restricted executor or exact platform implementation exists                | No; blocks functional pilot      |
-|        4 | ARB-004 | High     | Architecture         | No production end-to-end assistant workflow exists                            | No; blocks pilot                 |
-|        5 | ARB-005 | High     | Reliability          | Durable audit and product-data lifecycle are absent                           | No; blocks durable pilot         |
-|        6 | ARB-006 | High     | Documentation        | No license is selected                                                        | No; blocks distribution          |
-|        7 | ARB-007 | High     | Reliability          | Release integrity and artifact lineage are absent                             | No; blocks release               |
-|        8 | ARB-008 | High     | Architecture         | Enterprise control-plane capabilities are absent                              | No; blocks enterprise deployment |
-|        9 | ARB-009 | Medium   | Security             | Two Rust vulnerabilities and 18 warnings remain accepted                      | No; blocks release acceptance    |
-|       10 | ARB-010 | Medium   | Reliability          | DMG creation fails                                                            | No; blocks installer readiness   |
-|       11 | ARB-011 | Medium   | UX                   | Native approval cannot be dismissed after run cancellation                    | No; blocks real-action UX        |
-|       12 | ARB-012 | Medium   | Security             | CSP retains inline script and style allowances                                | No; blocks release hardening     |
-|       13 | ARB-013 | Medium   | Reliability          | Coupled dependency proposals lack combined merge enforcement                  | No                               |
-|       14 | ARB-014 | Medium   | Reliability          | Product operational observability is absent                                   | No; blocks supported operation   |
-|       15 | ARB-015 | Medium   | Architecture         | Public lower-level APIs can bypass bound-turn ownership in future wiring      | No; blocks live transport review |
-|       16 | ARB-016 | Medium   | Architecture         | `gateway_request` accumulates policy, approval, lifecycle, and macOS coupling | No                               |
-|       17 | ARB-017 | Medium   | Testing              | End-to-end, recovery, fault, and installer tests are absent                   | No                               |
-|       18 | ARB-018 | Medium   | Performance          | Performance budgets and measurements are absent                               | No                               |
-|       19 | ARB-019 | Medium   | Accessibility        | Approval accessibility evidence is incomplete                                 | No                               |
-|       20 | ARB-020 | Medium   | Developer experience | Maintainer concentration and remote enforcement remain unresolved             | No                               |
-|       21 | ARB-021 | Medium   | Documentation        | Executive and pilot evidence package is absent                                | No                               |
-|       22 | ARB-023 | Advisory | UX                   | Raw unbundled `tauri dev` uses the generic macOS executable icon              | No                               |
-|       23 | ARB-024 | Advisory | Technical debt       | The authoritative brand source remains an opaque raster                       | No                               |
-|       24 | ARB-025 | Advisory | Security             | Repository hooks remain operator-trusted and bypassable                       | No                               |
+|        1 | ARB-002 | High     | Security             | Gateway identity, credentials, deployment, and retention remain unresolved    | No; blocks live traffic          |
+|        2 | ARB-003 | High     | Security             | No restricted executor or exact platform implementation exists                | No; blocks functional pilot      |
+|        3 | ARB-004 | High     | Architecture         | No production end-to-end assistant workflow exists                            | No; blocks pilot                 |
+|        4 | ARB-005 | High     | Reliability          | Durable audit and product-data lifecycle are absent                           | No; blocks durable pilot         |
+|        5 | ARB-006 | High     | Documentation        | No license is selected                                                        | No; blocks distribution          |
+|        6 | ARB-007 | High     | Reliability          | Release integrity and artifact lineage are absent                             | No; blocks release               |
+|        7 | ARB-008 | High     | Architecture         | Enterprise control-plane capabilities are absent                              | No; blocks enterprise deployment |
+|        8 | ARB-009 | Medium   | Security             | Two Rust vulnerabilities and 18 warnings remain accepted                      | No; blocks release acceptance    |
+|        9 | ARB-010 | Medium   | Reliability          | DMG creation fails                                                            | No; blocks installer readiness   |
+|       10 | ARB-011 | Medium   | UX                   | Native approval cannot be dismissed after run cancellation                    | No; blocks real-action UX        |
+|       11 | ARB-012 | Medium   | Security             | CSP retains inline script and style allowances                                | No; blocks release hardening     |
+|       12 | ARB-013 | Medium   | Reliability          | Coupled dependency proposals lack combined merge enforcement                  | No                               |
+|       13 | ARB-014 | Medium   | Reliability          | Product operational observability is absent                                   | No; blocks supported operation   |
+|       14 | ARB-015 | Medium   | Architecture         | Public lower-level APIs can bypass bound-turn ownership in future wiring      | No; blocks live transport review |
+|       15 | ARB-016 | Medium   | Architecture         | `gateway_request` accumulates policy, approval, lifecycle, and macOS coupling | No                               |
+|       16 | ARB-017 | Medium   | Testing              | End-to-end, recovery, fault, and installer tests are absent                   | No                               |
+|       17 | ARB-018 | Medium   | Performance          | Performance budgets and measurements are absent                               | No                               |
+|       18 | ARB-019 | Medium   | Accessibility        | Approval accessibility evidence is incomplete                                 | No                               |
+|       19 | ARB-020 | Medium   | Developer experience | Maintainer concentration and remote enforcement remain unresolved             | No                               |
+|       20 | ARB-021 | Medium   | Documentation        | Executive and pilot evidence package is absent                                | No                               |
+|       21 | ARB-023 | Advisory | UX                   | Raw unbundled `tauri dev` uses the generic macOS executable icon              | No                               |
+|       22 | ARB-024 | Advisory | Technical debt       | The authoritative brand source remains an opaque raster                       | No                               |
+|       23 | ARB-025 | Advisory | Security             | Repository hooks remain operator-trusted and bypassable                       | No                               |
 
 ## Canonical advisory records
 
@@ -132,28 +158,31 @@ Git state, hosted check evidence where available, and the valid Meta 7 marker.
 
 - **Original increment or report:** `meta-06-F1`, PRA-002, `04u-F2`, and the
   proposed Increment 4V plan.
-- **Current status:** Still valid.
+- **Current status:** Resolved in the reconstructed and locally verified
+  Increment 4V workspace; resolving commit pending until committed.
 - **Severity / category:** High / Security.
 - **Why it matters:** A successful native or run-termination resolution can
   leave `InitialGatewayTurn` before the existing typed audit adapter validates
   and records the exact manager-owned result.
-- **Current evidence:** `InitialGatewayTurn` owns an
-  `InMemoryApprovalManager` but no `InMemoryApprovalAuditAdapter`.
-  `resolve_approval_source_outcome` and
-  `cancel_pending_approval_for_run_termination` return
-  `ApprovalResolution` directly. The audit adapter exists separately under
-  `src-tauri/src/audit/approval.rs`.
+- **Current evidence:** `InitialGatewayTurn` owns one private
+  `InMemoryApprovalAuditAdapter`. Both terminal paths use one private
+  manager-then-audit helper and return only `AuditedApprovalResolution`, which
+  owns the exact manager resolution and sequence-only receipt. Focused tests
+  prove exact record binding, typed audit failure with no returned resolution or
+  stale pending subject, idempotence, late-outcome rejection, and redaction.
 - **Impact if ignored:** Future orchestration could expose an incomplete
   approval evidence chain or accidentally create a bypass around audit
   validation.
-- **Recommended remediation / effort:** Implement the exact two-file Increment
-  4V plan. Effort: Small.
-- **Dependencies:** Reconcile Meta 7 publication memory, obtain explicit owner
-  approval, and begin the mandatory `04v` gate before source edits.
+- **Recommended remediation / effort:** Completed through the exact two-file
+  Increment 4V implementation. Effort: Small.
+- **Dependencies:** ARB-022 was published at `7c79e65`, project-owner approval
+  was recorded, and the reconstructed mandatory `04v` gate began on
+  `d81b73a` before the preserved source edits were applied.
 - **Regression risks:** Manager state is already terminal before audit. Audit
   failure must return no resolution and must not restore or retain stale pending
   state; receipts must remain non-authorizing and redacted.
-- **Blocks next product increment:** Yes. It is the first product remediation.
+- **Blocks next product increment:** No. The audit-binding blocker is closed;
+  live traffic and execution remain blocked by separate advisories.
 - **Recommended milestone:** Phase 4 security closure.
 
 ### ARB-002 - Resolve live gateway identity, credential, deployment, and retention boundaries
@@ -865,8 +894,8 @@ Git state, hosted check evidence where available, and the valid Meta 7 marker.
   run/request/call identity, preview, expiry, one-time consumption, trusted
   source, and cancellation. D-024 rejects an unnecessary digest; serialization
   remains unnecessary for same-process authority.
-- **Remediation / effort:** Track only concrete residuals in ARB-001, ARB-002,
-  and ARB-005 / Medium.
+- **Remediation / effort:** Track only concrete residuals in ARB-002 and
+  ARB-005 / Medium. ARB-001 is resolved.
 - **Dependencies / regression / next block / milestone:** Do not add hashes as
   authority; no separate block; Phase 4.
 
@@ -912,10 +941,11 @@ Git state, hosted check evidence where available, and the valid Meta 7 marker.
 - **Status / severity / category:** Superseded / Advisory / Reliability.
 - **Why, evidence, and ignored impact:** 4U added terminal run cancellation.
   Remaining audit, durability, stale-dialog, coordination, and execution gaps
-  are more precisely ARB-001, ARB-005, ARB-011, ARB-003, and ARB-004.
+  were split into ARB-001, ARB-005, ARB-011, ARB-003, and ARB-004. Increment
+  4V resolves ARB-001; the other records remain current.
 - **Remediation / effort:** Use the split current records / Medium to Large.
-- **Dependencies / regression / next block / milestone:** 4U complete; ARB-001
-  blocks next product work; Phase 4 and pilot milestones.
+- **Dependencies / regression / next block / milestone:** 4U and 4V complete in
+  the verified workspace; remaining records govern later pilot work.
 
 ### ARB-042 - Meta 6 queue/publication drift
 
@@ -1025,7 +1055,7 @@ Git state, hosted check evidence where available, and the valid Meta 7 marker.
 | Source finding | Current status   | Canonical record                       |
 | -------------- | ---------------- | -------------------------------------- |
 | PRA-001        | Still valid      | ARB-004                                |
-| PRA-002        | Still valid      | ARB-001                                |
+| PRA-002        | Already resolved | ARB-001                                |
 | PRA-003        | Still valid      | ARB-003                                |
 | PRA-004        | Still valid      | ARB-002                                |
 | PRA-005        | Superseded       | ARB-006, ARB-007, and ARB-010          |
@@ -1065,8 +1095,8 @@ Historical source findings reviewed: **64**.
 
 | Current source disposition |  Count |
 | -------------------------- | -----: |
-| Still valid                |     24 |
-| Already resolved           |      7 |
+| Still valid                |     23 |
+| Already resolved           |      8 |
 | Superseded                 |      8 |
 | Duplicate                  |     17 |
 | No longer relevant         |      8 |
@@ -1074,45 +1104,40 @@ Historical source findings reviewed: **64**.
 
 Superseded or duplicated source findings: **25**. At the original review,
 root-cause grouping and splitting over-broad findings produced 25 still-valid
-remediation records. After the bounded ARB-022 resolution, the authoritative
-current backlog contains **24 unresolved records and 1 resolved record**.
+remediation records. After the bounded ARB-022 and ARB-001 resolutions, the
+authoritative current backlog contains **23 unresolved records and 2 resolved
+records**.
 
 ## Top five advisories to remediate
 
-1. **ARB-001:** bind terminal approval resolutions to typed audit through
-   Increment 4V.
-2. **ARB-002:** decide gateway identity, credentials, deployment, provider
+1. **ARB-002:** decide gateway identity, credentials, deployment, provider
    retention, and disclosure before live traffic.
-3. **ARB-003:** design one restricted executor and exact platform
+2. **ARB-003:** design one restricted executor and exact platform
    implementation.
-4. **ARB-004:** compose one controlled end-to-end workflow in separately
+3. **ARB-004:** compose one controlled end-to-end workflow in separately
    verified increments.
-5. **ARB-005:** define durable audit and product-data lifecycle, encryption,
+4. **ARB-005:** define durable audit and product-data lifecycle, encryption,
    retention, and recovery.
+5. **ARB-006:** select and record the repository license before distribution.
 
 ## First recommended remediation increment
 
-**Product remediation:** Increment 4V, exactly as documented in
-`docs/plans/04v-bind-initial-terminal-approval-audit.md`.
+**Planning remediation:** define the exact gateway identity, desktop credential,
+gateway deployment, provider retention, and disclosure threat model required by
+ARB-002. No ARB-002 implementation increment is Ready. O-006 and O-007 require
+security and executive decisions before live transport can be scoped safely.
 
-**Required workflow prerequisite:** ARB-022 is resolved in the current workspace
-without rewriting the dated Meta 7 review, implementing 4V, or combining product
-source with documentation repair. Publish the resolving documentation commit,
-then confirm clean synchronized `main` contains it before `04v` begins.
+The immediate repository task is review and publication of the verified
+Increment 4V / ARB-001 scope. Only after clean synchronized `main` contains that
+commit should a separately approved documentation-only ARB-002 planning
+increment begin.
 
 ## Ready-to-paste Codex prompt
 
 ```text
-Review the complete ARB-022 project-memory remediation. Confirm the exact ten-path documentation-only scope, preserved dated Meta 7 evidence, passing checks, valid remediation-arb-022 marker, resolving commit recorded as pending, and absence of product-source changes. Propose a descriptive branch name, Conventional Commit message, PR title, and PR description, then wait for my approval before creating the branch, committing, pushing, or merging. Do not begin the 04v gate.
-```
+Use $session-start.
 
-After that documentation-only remediation is published on clean synchronized
-`main` and the owner separately approves implementation, use:
-
-```text
-Use $verified-increment.
-
-Implement Increment 4V exactly as documented in docs/plans/04v-bind-initial-terminal-approval-audit.md. Begin mandatory 04v gate state before source edits. Preserve the exact two-file source/test scope and declared closeout scope. Do not expand scope, commit, push, merge, or start another increment.
+Start from clean synchronized main after the verified Increment 4V / ARB-001 remediation is published. Reconcile the actual repository and valid 04v completion marker. Plan only the smallest documentation-only ARB-002 threat-model increment needed to decide gateway identity, desktop credential ownership, gateway deployment, provider retention, and user disclosure under O-006 and O-007. State exact files, risks, non-goals, verification, decisions required, and rollback. Update planning documentation only, then wait for project-owner, security-owner, and executive-owner approval. Do not begin a product gate, implement transport, add credentials, commit, push, merge, or start another remediation.
 ```
 
 ## Review and resolution boundary and rollback
@@ -1121,8 +1146,13 @@ The original review started no remediation and changed no source, dependency,
 configuration, capability, permission, database, icon, or existing
 documentation file. It created only this report.
 
-The later ARB-022 resolution changes exactly the ten documentation paths in
-`docs/increments/remediation-ARB-022-project-memory-reconciliation.md`. Before
-commit, restore those paths to `cc434d9` and remove the two new files. After
-publication, revert only the bounded remediation commit. No migration, data,
-dependency, configuration, capability, permission, or product rollback applies.
+The later ARB-022 resolution changed exactly the ten documentation paths in
+`docs/increments/remediation-ARB-022-project-memory-reconciliation.md` and was
+squash-merged at `7c79e65`.
+
+The ARB-001 resolution changes exactly the 19 paths recorded in
+`docs/increments/remediation-ARB-001-terminal-approval-audit.md`. Before commit,
+restore those paths to reconstruction baseline `d81b73a`. After publication,
+revert only the bounded Increment 4V commit. Preserve original commit `3440ce9`
+on the pre-refresh branch. No migration, data, dependency, credential,
+configuration, capability, permission, or remote-resource rollback applies.

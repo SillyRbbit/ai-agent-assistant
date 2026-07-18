@@ -1,7 +1,7 @@
 # Increment 4V - bind initial terminal approval audit
 
-Status: Ready; separate implementation approval required
-Last updated: 2026-07-16
+Status: Reconstructed and verified complete; resolving commit pending
+Last updated: 2026-07-18
 
 ## Goal
 
@@ -10,30 +10,28 @@ run-termination approval resolution unless that exact manager-owned resolution
 has first been validated and recorded by the turn's private typed in-memory
 approval-audit adapter.
 
-## Why this is the next smallest follow-on
+## Implementation result
 
-Increment 4T returns one exact sealed native resolution through the issuing
-manager. Merged Increment 4U adds the manager's existing run-termination
-resolution path. Both remain explicitly unaudited even though the verified
-`InMemoryApprovalAuditAdapter` already accepts every supported terminal
-disposition.
+Increment 4T returned one exact sealed native resolution through the issuing
+manager. Merged Increment 4U added the manager's existing run-termination
+resolution path. Increment 4V now binds both paths to one private turn-owned
+`InMemoryApprovalAuditAdapter`.
 
-After 4U, one bounded turn-local change can route both successful resolution
-paths through one private audit helper and return only a closed resolution plus
-non-authorizing receipt. It requires no persistence, coordinator, transport,
-native invocation, dispatch, or execution.
+Both successful paths route the exact manager-owned resolution through one
+private helper and return only a closed non-cloneable resolution plus
+non-authorizing receipt. Manager success clears pending turn ownership before
+recording; a typed audit failure therefore returns no result and cannot leave a
+stale pending subject or roll back manager state.
 
-## Exact future source/test scope
+## Exact source/test scope
 
 ```text
 src-tauri/src/agent/gateway_request.rs
 src-tauri/tests/gateway_request_contract.rs
 ```
 
-The implementation will add one private `InMemoryApprovalAuditAdapter` to the
-turn and one closed non-cloneable audited-resolution value. Successful native
-and run-termination resolutions will be recorded before that value can leave
-the turn. The receipt remains sequence evidence only and grants no authority.
+No other source, test, dependency, manifest, lockfile, Tauri, SQLite,
+capability, entitlement, permission, or configuration path changes.
 
 ## Risks
 
@@ -84,13 +82,28 @@ credential, compatibility identifier, or remote resource requires rollback.
   is satisfied and this plan is reconciled against that exact API.
 - Meta Increment 7 is squash-merged through PR #19 at `96ba6ae`, so its former
   publication prerequisite no longer blocks this product increment.
-- The two exact source/test paths have no commit after `61525bf`; focused
-  request, audit, approval-binding, and approval-audit contracts pass on current
-  `main`.
-- No `04v` gate state or implementation change exists.
+- ARB-022 is squash-merged through PR #22 at `7c79e65`. The original reviewed
+  4V commit is preserved at `3440ce9`.
+- The active branch was recreated from clean synchronized `main` at `d81b73a`,
+  and a fresh mandatory `04v` gate began before the original change was applied
+  without commit.
+- The implementation changes exactly the two approved source/test paths.
+- Ten gateway-request unit tests, ten public gateway-request contract tests, six
+  audit tests, 17 approval tests, two approval-binding tests, one
+  approval-audit-binding test, Rust formatting, and strict Clippy pass.
+- Complete `npm run verify` passes 28 hook tests, 19 repository-health tests,
+  124 frontend tests, 96 Rust library tests, 21 Rust integration tests, lint,
+  typecheck, frontend builds, and the Tauri release no-bundle build.
+- Documentation, security, conflict, whitespace, exact-scope, session-end,
+  architecture, code-health, technical-debt, readiness, and complete-diff
+  reviews pass. The sandboxed npm audit failed on DNS; the approved network
+  retry found zero vulnerabilities.
+- No manual gate applies. The consolidated result is `PASS WITH ADVISORIES`,
+  and the `04v` completion marker is complete and valid.
 
 ## Exact next task
 
-Wait for separate project-owner approval to implement this exact Ready scope.
-Begin the mandatory `04v` gate only from a clean synchronized documentation
-baseline and before either approved source/test file changes.
+Commit and refresh PR #23 with only this reconstructed Increment 4V / ARB-001
+scope, require all hosted checks, and stop for separate merge approval. The
+resolving commit remains pending until committed. Do not begin ARB-002 or any
+other remediation automatically.

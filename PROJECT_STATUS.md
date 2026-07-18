@@ -28,9 +28,10 @@ clean `96ba6ae` before the later advisory-remediation report changed the live
 workspace fingerprint. The advisory backlog and first post-Meta-7 memory
 reconciliation were squash-merged through PR #21 at `cc434d9`. Remediation
 ARB-022 resolves the remaining live publication drift and is squash-merged
-through PR #22 at `7c79e65`. Increment 4V / ARB-001 is verified at `3440ce9`
-with a valid `04v` marker on open PR #23 but is not merged. Its hosted jobs did
-not start because of an account billing or spending-limit restriction.
+through PR #22 at `7c79e65`. Increment 4V / ARB-001 has been reconstructed
+without scope change from preserved commit `3440ce9` onto synchronized `main` at
+`d81b73a`. Complete local verification passes; the reconstructed commit, PR #23
+refresh, hosted checks, and merge remain pending.
 
 Repository self-hosted runner routing and its approved private-only portability
 correction are **verified complete with advisories and squash-merged through PR
@@ -90,9 +91,9 @@ wording outside the approved scope.
 - Increment 4S: bind terminal initial approval presentation - **verified complete; published and merged**.
 - Increment 4T: bind terminal initial approval resolution - **verified complete; published and merged**.
 - Increment 4U: bind initial approval run-termination - **verified complete; published and merged at `61525bf`**.
-- Increment 4V: bind initial terminal approval audit - **verified on open PR #23
-  at `3440ce9`; publication awaits a separately approved no-scope-change refresh
-  and fresh remote checks**.
+- Increment 4V: bind initial terminal approval audit - **reconstructed without
+  scope change on `d81b73a` and locally reverified; commit, PR #23 refresh,
+  hosted checks, and merge remain pending**.
 - Meta Increment 1: branding and identity foundation - **verified complete;
   squash-merged at `5edbf4d`**.
 - Meta Increment 2: engineering operating system - **verified complete**.
@@ -391,10 +392,12 @@ wording outside the approved scope.
 - Manager terminalization precedes audit recording. A typed audit failure must
   return no resolution and must not leave stale pending turn ownership, but it
   cannot roll manager state back.
-- Commit `3440ce9` on `codex/feature/bind-terminal-approval-audit` preserves the
-  reviewed 19-path implementation/closeout scope and a valid `04v` marker. PR
-  #23 is open and unmerged. Its hosted jobs failed before runner assignment;
-  they must be rerun after the self-hosted workflow increment is published.
+- Original commit `3440ce9` remains preserved on
+  `codex/feature/bind-terminal-approval-audit-pre-refresh`. The same reviewed
+  19-path implementation/closeout scope is reconstructed on current `main`, and
+  focused plus complete local verification passes. PR #23 is open and unmerged;
+  its branch must be refreshed with force-with-lease and receive fresh hosted
+  checks before separate merge approval.
 - Durable persistence, SQLite, native invocation or closure, proactive expiry,
   timers, runtime coordination, transport, credentials, dispatch, execution,
   Tauri, frontend, dependencies, capabilities, entitlements, and permissions

@@ -140,9 +140,9 @@ shipping dispatcher or executor.
 - **FR-036**: Gateway operational logs and local audit shall remain separate and
   follow approved retention and redaction rules.
 
-Only bootstrap metadata storage and an unbound in-memory approval-audit adapter
-are current. Product persistence, memory, task repositories, and durable audit
-are planned.
+Only bootstrap metadata storage and a turn-bound volatile in-memory
+approval-audit adapter are current. Product persistence, memory, task
+repositories, and durable audit are planned.
 
 ### Permissions and integrations
 
