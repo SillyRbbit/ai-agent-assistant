@@ -30,14 +30,12 @@ valid `04v` marker and open PR #23. Its three hosted checks failed before runner
 assignment because of the account billing or spending-limit state.
 
 Repository self-hosted runner routing is implemented and fully verified locally
-on `codex/repository/use-self-hosted-runner`, committed at `80bced4`, pushed, and
-opened as PR #24. The managed runner service now owns the sole session with the
-correct Rustup/Cargo PATH. Documentation and Security pass. CI passes preflight
-and reaches strict Clippy, which exposed five Linux-only warnings in private
-macOS approval-source support. The separately approved two-file portability
-correction is now implemented locally and complete target-Mac verification
-passes. PR #24 still points to `80bced4`; remote Linux confirmation requires
-separate commit and push approval before the gate can complete.
+on `codex/repository/use-self-hosted-runner`. The separately approved two-file
+portability correction is committed and pushed at `1621a55` on open PR #24.
+The managed runner service owns the sole session with the correct Rustup/Cargo
+PATH. CI, Documentation, and Security pass on runner 21. The consolidated
+result is `PASS WITH ADVISORIES`, and the `repository-self-hosted-runner`
+completion marker is valid. PR #24 remains unmerged.
 
 ## Repository self-hosted runner setup
 
@@ -128,30 +126,32 @@ Remote verification:
   in `src-tauri/src/approvals/manager.rs` and
   `src-tauri/src/approvals/types.rs`. Focused checks and complete local
   verification pass without weakening Clippy or changing target-Mac behavior.
-- The correction is uncommitted and unpublished. PR #24 therefore still tests
-  `80bced4`; its failed CI evidence keeps the consolidated report `FAIL` and
-  blocks marker completion until a separately approved push and successful
-  rerun.
+- The correction was committed as `1621a55` and pushed to PR #24.
+- Security run `29629669283` passed in 3 minutes 22 seconds, Documentation run
+  `29629669305` passed in 16 seconds, and CI run `29629669300` passed complete
+  Linux verification in 9 minutes 57 seconds on `1621a55`.
+- The consolidated result is `PASS WITH ADVISORIES`; the remaining advisory is
+  the documented persistent-runner isolation boundary. The completion marker
+  is complete and valid.
 - The consolidated review exists at
   `docs/reviews/2026-07-17-repository-self-hosted-runner-post-increment-review.md`.
-  The `repository-self-hosted-runner` gate remains active and was not finalized.
+  The `repository-self-hosted-runner` completion marker is complete and valid.
 - No target-Mac manual check was required because no product or native behavior
   changed.
 
 ### Exact next task
 
-Review the exact ten-path uncommitted diff: the approved two-file Rust
-portability correction plus the eight existing closeout documents. Confirm the
-private-only target gates, passing focused and complete local verification, and
-unchanged security and target-Mac boundaries. Then obtain separate approval to
-commit and push PR #24, wait for CI, Documentation, and Security, update the
-report, and finalize the marker only if every required job passes. Do not alter
-or merge PR #23.
+Review the exact twelve-path final documentation closeout diff and valid
+`repository-self-hosted-runner` marker. Confirm commit `1621a55`, all three
+successful runner jobs, the `PASS WITH ADVISORIES` report, unchanged product and
+security boundaries, and no source change after verification. Propose a
+Conventional Commit for the closeout and wait for approval before committing,
+pushing, or merging PR #24. Do not alter or merge PR #23.
 
 ### Ready-to-paste next prompt
 
 ```text
-Review the exact ten-path uncommitted PR #24 extension: src-tauri/src/approvals/manager.rs, src-tauri/src/approvals/types.rs, and the eight existing closeout documents. Confirm the private-only macOS target gates, passing focused and complete local verification, preserved target-Mac and security boundaries, interim FAIL report, and active unfinalized repository-self-hosted-runner gate. Propose the Conventional Commit and PR description update, then wait for my approval before committing or pushing. Do not modify or merge PR #23.
+Review the exact twelve-path final PR #24 documentation closeout and valid repository-self-hosted-runner marker. Confirm the verified source commit 1621a55, passing CI run 29629669300, Documentation run 29629669305, Security run 29629669283, PASS WITH ADVISORIES report, preserved target-Mac and security boundaries, and absence of product-source changes after verification. Propose a Conventional Commit and final PR description update, then wait for my approval before committing, pushing, or merging. Do not modify or merge PR #23.
 ```
 
 ## Repository dependency baseline compatibility repair

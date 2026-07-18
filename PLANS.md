@@ -4,15 +4,14 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-Repository Workflow Increment trusted self-hosted runner routing is active under
+Repository Workflow Increment trusted self-hosted runner routing is verified
+complete with advisories under
 `docs/plans/repository-self-hosted-runner.md`. The exact workflow, repository
 policy, regression-test, and operating-guide changes pass complete local
-verification and are pushed at `80bced4` on PR #24. Documentation passed on
-runner 21. After host repair, Security passes and CI reaches strict Clippy but
-finds five target-conditional approval-code warnings. The separately approved
-two-file portability correction is implemented and passes focused plus complete
-local target-Mac verification. Separate commit and push approval, successful
-remote CI, and final gate completion remain pending.
+verification. The separately approved two-file portability correction is pushed
+at `1621a55` on PR #24. CI, Documentation, and Security pass on runner 21, and
+the completion marker is valid. Final documentation publication and PR merge
+remain separately approval-gated.
 
 The Repository Dependency Baseline Compatibility Repair is verified, published,
 and squash-merged through PR #20 at `b298999` under

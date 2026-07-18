@@ -1,6 +1,6 @@
 # Repository Workflow Increment - trusted self-hosted runner routing
 
-Status: Verification pending
+Status: Verified complete with advisories
 Date: 2026-07-17
 Owner: Project maintainer
 
@@ -77,14 +77,16 @@ Intermediate failures:
   `HANDOFF.md`, this increment record, and the consolidated report. Formatting
   those exact files made the complete rerun pass.
 
-Still required:
+Remote verification:
 
-- Obtain separate approval to commit and push the exact two-file correction and
-  current closeout updates to PR #24.
-- Rerun CI successfully on the corrected branch. Documentation and Security
-  already pass on runner 21 but must pass again for the pushed commit.
-- Update the existing `FAIL` post-increment report with successful remote
-  evidence and finalize a valid completion marker.
+- Commit `1621a55` contains the exact two-file correction and reviewed closeout
+  state on open PR #24.
+- Security run `29629669283` passed in 3 minutes 22 seconds.
+- Documentation run `29629669305` passed in 16 seconds.
+- CI run `29629669300` passed complete Linux verification in 9 minutes 57
+  seconds.
+- The consolidated result is `PASS WITH ADVISORIES`; the persistent-runner
+  isolation advisory remains non-blocking, and the completion marker is valid.
 
 ## Rollback
 

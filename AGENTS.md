@@ -56,10 +56,11 @@ merged remediation at `7c79e65`. Increment 4V / ARB-001 is verified on
 `codex/feature/bind-terminal-approval-audit` at `3440ce9` with a valid `04v`
 marker and open PR #23; it is not merged. Its three hosted jobs failed before
 runner assignment because of an account billing or spending-limit restriction,
-not a repository test failure. Repository self-hosted runner routing is active
-on `codex/repository/use-self-hosted-runner`; remote workflow execution remains
-required before that workflow increment can complete. Do not begin another
-product or remediation increment. Current implementation facts and future
+not a repository test failure. Repository self-hosted runner routing is verified
+complete with advisories on open PR #24 at `1621a55`; CI, Documentation, and
+Security pass on runner 21. Its completion marker is valid, but the PR remains
+unmerged. Do not begin another product or remediation increment. Current
+implementation facts and future
 boundaries are authoritative in `ARCHITECTURE.md`.
 
 ## Non-negotiable product boundaries

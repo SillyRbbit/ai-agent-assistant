@@ -7,13 +7,14 @@ All notable repository changes are documented here. Entries distinguish verified
 - Routed the existing read-only CI, Documentation, and Security jobs to the
   repository's dedicated Linux x64 runner through the exact custom-labeled
   selector, with no pull-request trigger, a maintainer-controlled push-branch
-  allowlist, and fail-fast host prerequisite checks. Complete local verification
-  passes; remote runner execution remains pending until explicit publication
-  approval.
+  allowlist, and fail-fast host prerequisite checks. Complete local and remote
+  verification pass on PR #24 commit `1621a55`.
 - Added self-hosted runner operating guidance, security and testing boundaries,
   and repository-health regressions that reject generic or unguarded
-  self-hosted selectors. No application source, dependency, Tauri boundary,
-  permission, schema, identifier, secret, or product behavior changed.
+  self-hosted selectors. A separately approved two-file portability correction
+  compiles private native decision-source support only on macOS. No public API,
+  target-Mac behavior, dependency, Tauri boundary, permission, schema,
+  identifier, secret, or product behavior changed.
 - Reconciled ARB-022 as squash-merged through PR #22 at `7c79e65` and Increment
   4V / ARB-001 as verified at `3440ce9` on open PR #23. Its failed hosted checks
   did not start because of the account billing or spending-limit state.

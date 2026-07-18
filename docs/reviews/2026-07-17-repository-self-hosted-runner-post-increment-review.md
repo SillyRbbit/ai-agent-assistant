@@ -38,12 +38,17 @@
     "cargo test --manifest-path src-tauri/Cargo.toml --lib approvals::manager --locked",
     "rg -n \"ApprovalManagerInstanceMarker|into_source_parts|ApprovalPresentationParts|recognized_button|no_decision|source_failed|ApprovalInteractionSource\" src-tauri/src/approvals",
     "npx prettier --write HANDOFF.md docs/increments/repository-self-hosted-runner.md docs/reviews/2026-07-17-repository-self-hosted-runner-post-increment-review.md",
+    "git commit -m \"fix(approvals): gate macOS-only decision-source support\"",
+    "git push origin codex/repository/use-self-hosted-runner",
+    "gh pr edit 24 --repo SillyRbbit/ai-agent-assistant --body <approved updated body>",
+    "gh run view 29629669283 --repo SillyRbbit/ai-agent-assistant --json status,conclusion,createdAt,updatedAt,jobs",
+    "gh run view 29629669305 --repo SillyRbbit/ai-agent-assistant --json status,conclusion,createdAt,updatedAt,jobs",
+    "gh run view 29629669300 --repo SillyRbbit/ai-agent-assistant --json status,conclusion,createdAt,updatedAt,jobs",
+    "npx prettier --write TROUBLESHOOTING_LOG.md",
+    "python3 .codex/hooks/post_increment_gate.py finalize --increment repository-self-hosted-runner --report docs/reviews/2026-07-17-repository-self-hosted-runner-post-increment-review.md",
     "complete architecture, security, code-health, technical-debt, readiness, and diff review"
   ],
   "files_changed": [
-    ".github/workflows/ci.yml",
-    ".github/workflows/documentation.yml",
-    ".github/workflows/security.yml",
     "AGENTS.md",
     "CHANGELOG.md",
     "DECISIONS.md",
@@ -51,31 +56,13 @@
     "NEXT_STEPS.md",
     "PLANS.md",
     "PROJECT_STATUS.md",
-    "SECURITY.md",
-    "SECURITY_CHECKLIST.md",
-    "TESTING_GUIDE.md",
     "TROUBLESHOOTING_LOG.md",
-    "docs/github/SELF_HOSTED_RUNNER.md",
     "docs/increments/repository-self-hosted-runner.md",
     "docs/plans/README.md",
     "docs/plans/repository-self-hosted-runner.md",
-    "docs/reviews/2026-07-17-repository-self-hosted-runner-post-increment-review.md",
-    "scripts/repository_health.py",
-    "scripts/tests/test_repository_health.py",
-    "src-tauri/src/approvals/manager.rs",
-    "src-tauri/src/approvals/types.rs"
+    "docs/reviews/2026-07-17-repository-self-hosted-runner-post-increment-review.md"
   ],
   "findings": [
-    {
-      "blocks_completion": true,
-      "blocks_next_increment": true,
-      "category": "Testing",
-      "effort": "Small: publish the approved correction and rerun all required workflows",
-      "milestone": "Current self-hosted runner verification before PR #24 completion",
-      "risk": "PR #24 still points to the failing commit, so local target gating is not yet confirmed by Linux strict Clippy",
-      "severity": "Medium",
-      "summary": "Approved portability correction awaits remote Linux confirmation"
-    },
     {
       "blocks_completion": false,
       "blocks_next_increment": false,
@@ -90,17 +77,17 @@
   "increment_id": "repository-self-hosted-runner",
   "manual_verification": [
     {
-      "check": "Documentation executes on runner 21 for commit 80bced4 and passes",
+      "check": "Documentation executes on runner 21 for commit 1621a55 and passes",
       "required": true,
       "status": "Passed"
     },
     {
-      "check": "CI executes on runner 21 for commit 80bced4 and passes",
+      "check": "CI executes on runner 21 for commit 1621a55 and passes",
       "required": true,
-      "status": "Failed"
+      "status": "Passed"
     },
     {
-      "check": "Security executes on runner 21 for commit 80bced4 and passes",
+      "check": "Security executes on runner 21 for commit 1621a55 and passes",
       "required": true,
       "status": "Passed"
     },
@@ -115,8 +102,8 @@
       "status": "Not run"
     }
   ],
-  "next_increment_readiness": "Blocked",
-  "quality_gate": "FAIL",
+  "next_increment_readiness": "Ready with advisories",
+  "quality_gate": "PASS WITH ADVISORIES",
   "schema_version": 1,
   "verification": [
     {
@@ -167,7 +154,7 @@
     {
       "command": "gh pr checks 24 --repo SillyRbbit/ai-agent-assistant --watch --interval 10",
       "required": true,
-      "status": "Failed"
+      "status": "Passed"
     }
   ]
 }
@@ -187,14 +174,11 @@ pass. The separately approved two-file extension target-gates only private
 approval-source support whose sole consumer is macOS-only; no public approval
 contract or target-Mac behavior changed.
 
-Commit `80bced4` is pushed and PR #24 is open. Documentation and Security pass
-on runner 21, proving exact-label routing and the repaired managed service. CI
-passes the same host preflight and runs the complete repository command, but
-strict Linux Clippy exposes five target-conditional warnings in approval code.
-The exact private-only correction is implemented and fully verified locally,
-but it is uncommitted and PR #24 still points to `80bced4`. The quality-gate
-result remains `FAIL`; no completion marker may be written before remote CI
-passes on the corrected commit.
+Commit `1621a55` is pushed and PR #24 is open. Security, Documentation, and CI
+pass on runner 21, proving exact-label routing, the repaired managed service,
+and the Linux strict-Clippy portability correction. The quality-gate result is
+`PASS WITH ADVISORIES`; the remaining advisory is the documented isolation
+boundary of a persistent self-hosted runner.
 
 ## Scope and boundaries
 
@@ -236,11 +220,16 @@ Passed:
   `Linux`, `X64`, and `cortexa-ci` labels.
 - Documentation and repository policy passed on runner 21 in 26 seconds for
   commit `80bced4`.
-- Session-end inventory found no staged, untracked, or conflicted paths and
-  exactly ten unstaged paths: the two approved Rust files and eight existing
-  closeout documents.
+- Security run `29629669283` passed on runner 21 in 3 minutes 22 seconds for
+  corrected commit `1621a55`.
+- Documentation run `29629669305` passed on runner 21 in 16 seconds for
+  corrected commit `1621a55`.
+- CI run `29629669300` passed complete Linux verification on runner 21 in 9
+  minutes 57 seconds for corrected commit `1621a55`.
+- Final session-end inventory found no product-source change after verified
+  commit `1621a55` and only the declared documentation closeout paths.
 
-Failed:
+Historical failed attempts, resolved:
 
 - CI run `29624042629` failed in four seconds at
   `Verify self-hosted runner prerequisites`; `git` and `python3` were found,
@@ -277,21 +266,25 @@ Failed:
   `into_source_parts`, unconstructed `ApprovalPresentationParts`, and three
   unused private `ApprovalInteractionEvidence` constructors. All are consumed
   only through the macOS-gated decision source on the target Mac.
-- The exact correction now exists locally in the two approved Rust files, but
-  no later remote failure exists because the project owner has not yet approved
-  committing or pushing it. PR #24 therefore still reports the attempt 3
-  failure for `80bced4`.
+- Commit `1621a55` published the exact correction, and the subsequent CI run
+  passed. No required failure remains.
 
 No required local command remains failed. Two intermediate local checks stopped
 only on Prettier wrapping in the new plan and passed after formatting. The first
 post-correction documentation check similarly reported formatting in three
 edited closeout files; formatting those exact files made the rerun pass.
+The first final-closeout documentation check reported only wrapping in
+`TROUBLESHOOTING_LOG.md`; formatting that file made the rerun pass.
+The first marker-finalization attempt then rejected the report because its
+machine inventory listed the complete 23-path increment history rather than the
+12-path live closeout workspace. The manifest was aligned to the hook's
+staged, unstaged, and untracked inventory without changing that history below.
+The next attempts rejected a renamed required section heading and then its
+literal repetition in this prose; the required heading was restored once before
+the successful rerun.
 
-Not run / manual pending:
+Not run:
 
-- Required CI remains failed for the published branch pending separate approval
-  to commit and push the implemented two-file correction. Documentation and
-  Security pass on `80bced4` and must rerun for the corrected commit.
 - Native application inspection is not required for this repository-only
   change and was not run.
 
@@ -305,7 +298,7 @@ macOS-only decision-source ownership: its import, manager marker, presentation
 parts and conversion, and evidence constructors now compile only where their
 sole consumer exists. Target-Mac Clippy, focused tests, and the complete local
 gate pass. Linux CI is explicitly not represented as target-Mac native evidence
-and still must confirm the corrected branch.
+and independently confirms only the non-macOS compile and repository boundary.
 
 ## Security findings
 
@@ -328,8 +321,8 @@ has one positive and two negative regressions. The checks are standard-library
 only, deterministic, read-only, and emit no sensitive content. The two-file
 correction is private, typed, and covered by the existing focused manager tests;
 strict Clippy and complete target-Mac verification pass. CI completion remains
-blocked only until that correction is published and passes remotely. No
-application accessibility or UI path changed.
+confirmed by complete Linux verification on `1621a55`. No application
+accessibility or UI path changed.
 
 ## Technical debt
 
@@ -342,35 +335,36 @@ application accessibility or UI path changed.
 - Milestone: before untrusted pull-request execution or any sensitive runner
   infrastructure.
 - Blocks completion: No.
-- Blocks next increment: No after required remote checks pass.
+- Blocks next increment: No.
 
 ## Roadmap findings
 
-The runner workflow increment is not complete until the corrected final branch
-content executes successfully in all three workflows. Increment 4V / PR #23
-must remain untouched and unmerged until this workflow increment is verified
-and merged. No later product or remediation increment is Ready to start.
+The runner workflow increment is verified complete with advisories. PR #24
+closeout publication and merge remain the only next task. Increment 4V / PR #23
+must remain untouched and unmerged until PR #24 is merged. No later product or
+remediation increment may start automatically.
 
 ## Completion decision
 
-`FAIL`
+`PASS WITH ADVISORIES`
 
-Required CI failed on the currently published commit after runner-host
-prerequisites passed. The locally corrected files cannot satisfy remote
-verification until separately approved for commit and push. The report must not
-be finalized and the active gate must not be marked complete.
+All required local and remote checks passed. No Critical or High finding remains.
+The persistent self-hosted runner isolation advisory is documented and does not
+block completion.
 
 ## Next-increment readiness
 
-`Blocked`
+`Ready with advisories`
 
-The exact next task is project-owner review of the ten-path uncommitted diff:
-the approved Rust files plus the eight existing closeout documents. After
-separate commit and push approval, rerun CI, Documentation, and Security on
-runner 21. Only if all three pass may this report change to `PASS` or `PASS WITH
-ADVISORIES` and the gate be finalized. Do not modify PR #23.
+The exact next task is project-owner review and separately approved publication
+of the final documentation closeout, followed by successful checks on the final
+commit and separate squash-merge approval for PR #24. Do not modify PR #23.
 
 ## Exact files changed
+
+The machine manifest records the exact 12 live documentation closeout paths
+validated by the completion marker. Across both published commits and the
+uncommitted closeout, this increment changed the following 23 paths:
 
 ```text
 .github/workflows/ci.yml
@@ -402,6 +396,6 @@ src-tauri/src/approvals/types.rs
 
 The machine manifest records the bounded setup, verification, runner API, Git
 publication, remote inspection, focused Rust verification, complete local
-verification, review, and gate commands. All required local commands passed.
-The approved PR body is represented by its descriptive-body placeholder to keep
-the machine manifest bounded; PR #24 preserves the exact submitted text.
+and Linux verification, review, and gate commands. All required commands
+passed. Approved PR bodies are represented by descriptive-body placeholders to
+keep the machine manifest bounded; PR #24 preserves the exact submitted text.

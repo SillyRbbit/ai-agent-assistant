@@ -58,19 +58,15 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Queue status
 
-### Publish and remotely verify trusted self-hosted runner routing
+### Publish verified trusted self-hosted runner routing
 
-**Status:** **Verification pending** on PR #24 at `80bced4`. Documentation and
-Security pass on runner 21. CI passed runner preflight but exposed five strict
-Linux Clippy warnings in private macOS-only approval-source support.
+**Status:** **Verified complete with advisories** on open PR #24 at `1621a55`.
+CI, Documentation, and Security pass on runner 21, and the completion marker is
+valid.
 
-The separately approved correction is implemented locally in exactly
-`src-tauri/src/approvals/manager.rs` and
-`src-tauri/src/approvals/types.rs`. Existing focused coverage, strict Clippy,
-and complete `npm run verify` pass on the target Mac. Obtain separate commit and
-push approval, rerun all three required workflows on runner 21, and finalize the
-report and marker only after every required job passes. Do not start another
-product or remediation increment.
+Review and publish only the final twelve-path documentation closeout, rerun the
+required workflows on the final commit, and seek separate squash-merge approval
+for PR #24. Do not start another product or remediation increment.
 
 ### Publish Increment 4V / ARB-001 after runner verification
 

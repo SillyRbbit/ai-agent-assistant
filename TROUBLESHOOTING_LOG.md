@@ -646,7 +646,7 @@ reviewed compatibility increment.
 ## TS-016 - GitHub-hosted jobs fail before runner assignment
 
 Date: 2026-07-17
-Status: Runner routing and service path verified; corrected Linux CI pending
+Status: Resolved
 
 ### Symptom
 
@@ -727,8 +727,12 @@ The project owner approved the exact two-file correction. Target-gating only
 the private import, presentation marker/parts and conversion, and native
 evidence constructors removes their non-macOS compile presence while preserving
 the complete macOS path. Focused approval-manager tests, strict Clippy, and
-`npm run verify` pass locally. Because the correction remains uncommitted, PR
-#24 still needs a successful Linux CI rerun before this incident is resolved.
+`npm run verify` pass locally. At that checkpoint the correction remained
+uncommitted, so PR #24 still needed a successful Linux CI rerun.
+
+Commit `1621a55` published the correction. Security run `29629669283`,
+Documentation run `29629669305`, and CI run `29629669300` all passed on runner 21. The corrected CI completed full Linux verification in 9 minutes 57 seconds,
+resolving the runner-host and strict-Clippy portability incident.
 
 ### Prevention
 

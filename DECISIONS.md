@@ -1523,7 +1523,7 @@ Consequences:
 ## D-054 - Route trusted repository checks to a dedicated self-hosted runner
 
 Date: 2026-07-17
-Status: Accepted; repository workflow implementation, remote execution pending
+Status: Accepted; implementation verified on open PR #24
 
 Decision: assign the repository-specific `cortexa-ci` custom label to the
 registered Linux x64 runner and require the exact
@@ -1561,8 +1561,11 @@ Consequences:
 - Linux verification does not replace target-Mac native, signing, notarization,
   installer, or release evidence.
 - Replacing or reregistering the runner requires reapplying `cortexa-ci`.
-- No application source, runtime behavior, dependency, Tauri boundary,
-  capability, permission, CSP, identifier, or SQLite schema changes.
+- The separately approved portability correction target-gates only private
+  native decision-source support in `approvals::manager` and
+  `approvals::types`; public contracts and target-Mac behavior are unchanged.
+- No runtime behavior, dependency, Tauri boundary, capability, permission, CSP,
+  identifier, or SQLite schema changes.
 
 ## Open decisions
 

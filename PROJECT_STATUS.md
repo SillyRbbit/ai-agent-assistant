@@ -33,14 +33,13 @@ with a valid `04v` marker on open PR #23 but is not merged. Its hosted jobs did
 not start because of an account billing or spending-limit restriction.
 
 Repository self-hosted runner routing and its approved private-only portability
-correction are **implemented and fully verified locally; publication and Linux
-CI confirmation pending** on PR #24 at `80bced4`. Runner 21 is
+correction are **verified complete with advisories** on open PR #24 at
+`1621a55`. Runner 21 is
 online with the exact `self-hosted`, `Linux`, `X64`, and `cortexa-ci` labels.
 The managed service now owns the sole session with the correct Rustup/Cargo
-PATH. Documentation and Security pass. CI passed host preflight and exposed five
-strict-Clippy warnings in private macOS-only approval-source support; the exact
-two-file correction passes complete local target-Mac verification but remains
-uncommitted and untested by remote Linux CI.
+PATH. CI, Documentation, and Security pass on the corrected commit. The
+consolidated result is `PASS WITH ADVISORIES`, and the completion marker is
+valid. PR #24 remains unmerged.
 
 ## Increment status
 
@@ -101,8 +100,8 @@ uncommitted and untested by remote Linux CI.
 - Remediation ARB-022: project-memory reconciliation - **verified complete in
   PR #22 and squash-merged at `7c79e65`**.
 - Repository workflow: trusted self-hosted runner routing - **implemented and
-  locally verified on PR #24; approved two-file portability correction awaits
-  publication and remote Linux confirmation**.
+  verified complete with advisories on open PR #24 at `1621a55`; completion
+  marker valid**.
 
 ## Self-hosted runner capability and evidence
 
@@ -117,12 +116,11 @@ uncommitted and untested by remote Linux CI.
   added.
 - Repository-health regression tests accept only the exact selector and trust
   condition. The complete local `npm run verify` passes.
-- Documentation and Security pass on runner 21. CI passed host preflight and
-  exposed five target-conditional approval-code warnings because their only
-  consumer is macOS-gated. The exact private-only correction passes focused
-  tests, strict Clippy, and complete local verification; it still requires a
-  separately approved push and successful remote Linux rerun. Linux results
-  will not replace target-Mac native evidence.
+- Security run `29629669283`, Documentation run `29629669305`, and CI run
+  `29629669300` pass on runner 21 for corrected commit `1621a55`.
+- The exact private-only correction passes focused tests, strict Clippy,
+  complete target-Mac verification, and complete Linux verification. Linux
+  results do not replace target-Mac native evidence.
 
 ## Repository dependency baseline compatibility evidence
 

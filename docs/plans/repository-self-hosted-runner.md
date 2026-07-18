@@ -1,6 +1,6 @@
 # Repository Workflow Increment - trusted self-hosted runner routing
 
-Status: Verification pending
+Status: Verified complete with advisories; PR merge pending
 Owner: Project maintainer
 Last updated: 2026-07-17
 
@@ -104,11 +104,11 @@ Declared closeout scope:
       portability correction and implement it without weakening checks.
 - [x] Pass focused approval-manager tests, strict Clippy, and complete local
       target-Mac verification after the correction.
-- [ ] Commit and push the approved correction, then pass CI, Documentation, and
+- [x] Commit and push the approved correction, then pass CI, Documentation, and
       Security on runner 21.
 - [x] Create the consolidated report with the evidence-backed interim `FAIL`
       result.
-- [ ] Update the report and finalize the completion marker only after remote
+- [x] Update the report and finalize the completion marker only after remote
       evidence passes.
 
 ## Security and privacy considerations
@@ -168,9 +168,9 @@ workflow checks before declaring rollback complete.
 - [x] Full local verification and complete diff review pass.
 - [x] The approved two-file correction target-gates only private macOS-source
       support and passes focused plus complete local verification.
-- [ ] CI, Documentation, and Security execute successfully on the registered
+- [x] CI, Documentation, and Security execute successfully on the registered
       runner after explicit publication approval.
-- [ ] The final gate report and marker are complete and valid.
+- [x] The final gate report and marker are complete and valid.
 
 ## Actual results
 
@@ -186,10 +186,18 @@ pass. CI reaches strict Clippy and fails on five private approval-code items
 whose only consumer is the macOS-gated decision source. The original file plan
 was expanded by separate project-owner approval. The exact two-file correction
 is implemented locally; rustfmt, strict Clippy, six focused manager tests, and
-complete `npm run verify` pass. PR #24 still points to `80bced4`, so remote CI
-confirmation remains pending separate commit and push approval. The first
-post-correction documentation check reported only formatting in three closeout
-files; formatting those exact files made the rerun pass.
+complete `npm run verify` pass. At that checkpoint PR #24 still pointed to
+`80bced4`, so remote CI confirmation remained pending separate commit and push
+approval. The first post-correction documentation check reported only
+formatting in three closeout files; formatting those exact files made the rerun
+pass.
+
+The correction and reviewed interim closeout were committed as `1621a55` and
+pushed to PR #24. Security run `29629669283` passed in 3 minutes 22 seconds,
+Documentation run `29629669305` passed in 16 seconds, and CI run `29629669300`
+passed complete Linux verification in 9 minutes 57 seconds. The final result is
+`PASS WITH ADVISORIES`; the remaining persistent-runner isolation advisory is
+non-blocking, and the completion marker is valid.
 
 ## Documentation updates
 
