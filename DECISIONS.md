@@ -1520,6 +1520,52 @@ Consequences:
 - This rule changes no canonical asset, icon output, source, configuration,
   dependency, identifier, capability, permission, or product behavior.
 
+## D-053 - Bind terminal approval success to one turn-owned typed audit record
+
+Date: 2026-07-16
+Status: Accepted; reconstructed and locally verified, publication pending
+
+Decision: `InitialGatewayTurn` owns one private
+`InMemoryApprovalAuditAdapter`. After its private approval manager successfully
+terminalizes either a sealed native-source outcome or the turn-owned
+run-termination cancellation, the turn passes that exact owned
+`ApprovalResolution` by reference to the adapter. It does not reconstruct an
+identity, disposition, preview, interaction-evidence value, or policy fact.
+
+The public success value is one closed, non-cloneable
+`AuditedApprovalResolution` that owns the exact resolution and its
+`ApprovalAuditReceipt`. Callers receive only a shared resolution reference and a
+copy of the existing sequence-only receipt. No constructor, mutable accessor,
+serialization path, or conversion to dispatch or execution authority exists.
+
+Manager terminalization is authoritative and occurs before audit recording. The
+turn clears its retained pending approval ID immediately after manager success,
+including when the subsequent audit write returns a typed error. Audit failure
+returns no resolution or receipt and cannot roll back the consumed manager
+subject. Manager failure still leaves pending turn ownership intact.
+
+Rationale: Increment 4H provided a closed validator and record projection, while
+4T and 4U exposed two manager-owned terminal resolution paths. Keeping the exact
+resolution inside the trusted turn until record validation succeeds removes the
+future caller bypass without inventing persistence, a transaction, or execution
+authority.
+
+Consequences:
+
+- Native and run-termination success cannot return a standalone
+  `ApprovalResolution` from `InitialGatewayTurn`.
+- The adapter is process-local and turn-local. Sequence one is expected for the
+  current one-subject initial turn and is not a durable or global ordering claim.
+- A record or receipt proves neither user authentication, current run liveness,
+  durable storage, dispatch eligibility, execution, nor provider continuation.
+- Audit failure after manager success is fail-closed for the caller but is not a
+  transaction; a future durable coordinator must define stronger atomicity
+  before execution.
+- No lower-level manager, native source, audit adapter, policy, schema, gateway
+  protocol, dependency, manifest, lockfile, Tauri command, WebView, SQLite,
+  capability, entitlement, permission, network, credential, dispatch, or
+  executor contract changes.
+
 ## D-054 - Route trusted repository checks to a dedicated self-hosted runner
 
 Date: 2026-07-17
@@ -1541,8 +1587,8 @@ a maintainer-controlled allowlisted branch. The runner host is dedicated,
 unprivileged, and provisioned outside workflow execution; workflows perform
 fail-fast prerequisite checks and do not use `sudo`.
 
-D-053 is reserved by the separately reviewed open Increment 4V / ARB-001
-branch. This decision uses D-054 to prevent a publication-order collision.
+D-053 is owned by the separately reviewed Increment 4V / ARB-001 branch. D-054
+was published first to prevent a decision-number collision.
 
 Rationale: the existing workflows name GitHub-hosted images and cannot match
 the registered runner. GitHub-hosted jobs are currently not starting because of

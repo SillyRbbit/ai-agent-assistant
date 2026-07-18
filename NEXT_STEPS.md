@@ -64,16 +64,16 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Queue status
 
-### Publish Increment 4V / ARB-001 after runner verification
+### Publish reconstructed Increment 4V / ARB-001
 
-**Status:** **Ready after separate project-owner approval; verified on open PR
-#23 and not merged**. Its original hosted checks failed before runner
-assignment; the valid `04v` marker and commit `3440ce9` remain preserved and
-unchanged.
+**Status:** **Reconstructed without scope change and locally reverified; commit,
+PR refresh, hosted checks, and merge remain pending**. The original reviewed
+commit remains preserved at `3440ce9` on
+`codex/feature/bind-terminal-approval-audit-pre-refresh`.
 
-Review PR #23 against clean `main` at `d26b5e1`, then update it without changing
-its approved product scope, rerun its complete checks on the trusted runner,
-and seek separate squash-merge approval. Do not begin ARB-002 or another
+Finalize the valid `04v` marker, commit the exact 19-path scope, refresh PR #23
+with force-with-lease, require CI, Documentation, and Security on the trusted
+runner, and seek separate squash-merge approval. Do not begin ARB-002 or another
 remediation.
 
 Repository Workflow Increment 4G is **Verified complete**. It adds only the repository-local post-increment skill, deterministic Stop-hook validator, focused tests, report assets, and workflow documentation required to replace D-027's one-time exception. Its consolidated result is `PASS WITH ADVISORIES`; the advisory is the documented project-hook trust/bypass boundary.
@@ -209,8 +209,9 @@ do not modify, merge, or replace the verified scope without separate approval.
 
 ### Increment 4V - bind initial terminal approval audit
 
-**Status:** Verified at `3440ce9` on open PR #23 with a valid `04v` marker. The
-three hosted jobs failed before runner assignment, so the PR is not merged.
+**Status:** Reconstructed without scope change from preserved commit `3440ce9`
+onto synchronized `main` at `d81b73a`. Complete local verification passes; the
+reconstructed commit, PR #23 refresh, hosted checks, and merge remain pending.
 
 **Goal:** Prevent a future initial-turn caller from receiving a successful
 native or run-termination approval resolution unless the turn's private typed
@@ -245,9 +246,9 @@ commit and revert only declared 4V closeout documentation; after commit, revert
 one bounded 4V commit.
 
 Its exact reconciled plan remains at
-`docs/plans/04v-bind-initial-terminal-approval-audit.md`. After separate
-approval, update PR #23 onto current `main`, rerun its unchanged verified scope
-on the trusted runner, and seek separate merge approval. Do not start ARB-002.
+`docs/plans/04v-bind-initial-terminal-approval-audit.md`. Preserve the valid
+marker after commit, refresh PR #23 without scope change, require all trusted
+hosted checks, and seek separate merge approval. Do not start ARB-002.
 
 Increment 4R bind terminal initial function call to policy is **Verified
 complete, published, and merged at `5e58edb`**. Accepted terminal completion

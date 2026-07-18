@@ -25,9 +25,11 @@ immediately before the later advisory-remediation report changed the workspace
 fingerprint. The advisory backlog and first post-Meta-7 project-memory
 reconciliation were squash-merged through PR #21 at `cc434d9`. ARB-022 is
 resolved and squash-merged through PR #22 at `7c79e65`. Increment 4V / ARB-001
-is verified on `codex/feature/bind-terminal-approval-audit` at `3440ce9` with a
-valid `04v` marker and open PR #23. Its three hosted checks failed before runner
-assignment because of the account billing or spending-limit state.
+has been reconstructed without scope change from preserved commit `3440ce9`
+onto synchronized `main` at `d81b73a`. Complete focused and repository
+verification passes on `codex/feature/bind-terminal-approval-audit`. The
+reconstructed commit, force-with-lease refresh of open PR #23, hosted checks,
+and separate merge approval remain pending.
 
 Repository self-hosted runner routing is verified complete with advisories and
 squash-merged through PR #24 at `eaf6c9f`. The final branch commit was
@@ -43,6 +45,52 @@ before file moves, its consolidated result is `PASS`, and its completion marker
 was complete and valid on clean `d26b5e1` immediately before this
 post-publication project-memory sync. No product source, behavior, dependency,
 Tauri, storage, permission, skill, or hook changed.
+
+## Current Increment 4V / ARB-001 reconstruction
+
+### Completed
+
+- Preserved original reviewed commit `3440ce9` on
+  `codex/feature/bind-terminal-approval-audit-pre-refresh`.
+- Recreated `codex/feature/bind-terminal-approval-audit` from clean
+  synchronized `main` at `d81b73a` and began a fresh mandatory `04v` gate
+  before applying the old commit with `git cherry-pick --no-commit`.
+- Resolved exactly the nine predicted project-memory conflicts by preserving
+  later repository-governance state. The two approved source/test files remain
+  byte-identical to original commit `3440ce9`.
+- Preserved the exact 19-path approved scope. No dependency, lockfile, Tauri,
+  SQLite, capability, permission, CSP, credential, network, IPC, frontend, or
+  unrelated product source changed.
+
+### Verification
+
+Passed:
+
+- Rust formatting; ten gateway-request, six approval-audit, 17 approval, ten
+  public gateway-request contract, two approval-binding, and one
+  approval-audit-binding tests.
+- Strict Clippy for all targets and features with warnings denied.
+- `npm run verify`: formatting, repository policy, ESLint, 28 hook tests, 19
+  repository-health tests, 124 frontend tests, 96 Rust library tests, 21 Rust
+  integration tests, type checking, production frontend builds, and the Tauri
+  release no-bundle build.
+- `npm run security:scan` and the approved network-enabled
+  `npm audit --audit-level=low` retry with zero vulnerabilities.
+
+Failed required checks: none.
+
+Checks not run: native application launch and UI verification; neither is
+required because this increment adds no production caller, native invocation,
+frontend, Tauri configuration, dependency, asset, or user-visible behavior.
+
+Manual verification pending: none.
+
+### Exact next task
+
+Finalize the `04v` report and valid marker, commit the exact 19-path scope,
+confirm the marker survives the commit, force-with-lease refresh PR #23, and
+require CI, Documentation, and Security to pass. Stop for separate merge
+approval. Do not begin ARB-002 or another remediation.
 
 ## Meta Increment 8 prompt library reorganization
 

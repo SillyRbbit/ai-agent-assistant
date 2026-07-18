@@ -21,6 +21,9 @@ use crate::approvals::manager::{
     ApprovalError, ApprovalManager, ApprovalPresentation, InMemoryApprovalManager,
 };
 use crate::approvals::types::{ApprovalId, ApprovalResolution};
+use crate::audit::approval::{
+    ApprovalAuditError, ApprovalAuditReceipt, InMemoryApprovalAuditAdapter,
+};
 use crate::policy::engine::{DeterministicPolicyEngine, PolicyEngine};
 use crate::policy::types::{PolicyDecision, PolicyInput, PolicyOutcome};
 use crate::tools::registry::{InMemoryToolRegistry, ToolRegistry};
@@ -37,6 +40,7 @@ pub struct InitialGatewayTurn {
     validator: GatewayStreamValidator,
     registry: InMemoryToolRegistry,
     approval_manager: InMemoryApprovalManager,
+    approval_audit: InMemoryApprovalAuditAdapter,
     pending_approval_id: Option<ApprovalId>,
     pending_function_call: Option<SchemaValidatedFunctionCall>,
     local_schema_failed: bool,
@@ -89,6 +93,7 @@ impl InitialGatewayTurn {
             validator,
             registry,
             approval_manager: InMemoryApprovalManager::new(),
+            approval_audit: InMemoryApprovalAuditAdapter::new(),
             pending_approval_id: None,
             pending_function_call: None,
             local_schema_failed: false,
@@ -184,18 +189,18 @@ impl InitialGatewayTurn {
     pub fn resolve_approval_source_outcome(
         &mut self,
         outcome: TrustedApprovalSourceOutcome,
-    ) -> InitialGatewayTurnResult<ApprovalResolution> {
+    ) -> InitialGatewayTurnResult<AuditedApprovalResolution> {
         let resolution = self
             .approval_manager
             .resolve_source_outcome(outcome)
             .map_err(InitialGatewayTurnError::Approval)?;
         self.pending_approval_id.take();
-        Ok(resolution)
+        self.record_terminal_approval(resolution)
     }
 
     pub fn cancel_pending_approval_for_run_termination(
         &mut self,
-    ) -> InitialGatewayTurnResult<Option<ApprovalResolution>> {
+    ) -> InitialGatewayTurnResult<Option<AuditedApprovalResolution>> {
         let Some(id) = self.pending_approval_id else {
             return Ok(None);
         };
@@ -205,7 +210,21 @@ impl InitialGatewayTurn {
             .cancel_for_run_termination(id)
             .map_err(InitialGatewayTurnError::Approval)?;
         self.pending_approval_id.take();
-        Ok(Some(resolution))
+        self.record_terminal_approval(resolution).map(Some)
+    }
+
+    fn record_terminal_approval(
+        &mut self,
+        resolution: ApprovalResolution,
+    ) -> InitialGatewayTurnResult<AuditedApprovalResolution> {
+        let receipt = self
+            .approval_audit
+            .record(&resolution)
+            .map_err(InitialGatewayTurnError::ApprovalAudit)?;
+        Ok(AuditedApprovalResolution {
+            resolution,
+            receipt,
+        })
     }
 
     #[must_use]
@@ -231,6 +250,33 @@ impl fmt::Debug for InitialGatewayTurn {
 
 pub type InitialGatewayTurnResult<T> = Result<T, InitialGatewayTurnError>;
 
+pub struct AuditedApprovalResolution {
+    resolution: ApprovalResolution,
+    receipt: ApprovalAuditReceipt,
+}
+
+impl AuditedApprovalResolution {
+    #[must_use]
+    pub fn resolution(&self) -> &ApprovalResolution {
+        &self.resolution
+    }
+
+    #[must_use]
+    pub fn receipt(&self) -> ApprovalAuditReceipt {
+        self.receipt
+    }
+}
+
+impl fmt::Debug for AuditedApprovalResolution {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("AuditedApprovalResolution")
+            .field("resolution", &"[REDACTED]")
+            .field("receipt", &self.receipt)
+            .finish()
+    }
+}
+
 #[derive(Debug, Error, Eq, PartialEq)]
 pub enum InitialGatewayTurnError {
     #[error("initial gateway protocol validation failed: {0}")]
@@ -239,6 +285,8 @@ pub enum InitialGatewayTurnError {
     FunctionCallValidation(FunctionCallValidationError),
     #[error("initial gateway approval binding failed: {0}")]
     Approval(ApprovalError),
+    #[error("initial gateway approval audit failed: {0}")]
+    ApprovalAudit(ApprovalAuditError),
 }
 
 pub enum InitialGatewayEvent {
@@ -466,12 +514,14 @@ mod tests {
     use rfd::MessageDialogResult;
     use serde_json::{json, Value};
 
+    #[cfg(target_os = "macos")]
+    use super::{
+        AuditedApprovalResolution, InitialGatewayEvent, InitialGatewayTurn, InitialGatewayTurnError,
+    };
     use super::{
         GatewayRequestError, InitialGatewayRequest, INITIAL_GATEWAY_TOOL_SET_ID,
         INITIAL_GATEWAY_TOOL_SET_VERSION,
     };
-    #[cfg(target_os = "macos")]
-    use super::{InitialGatewayEvent, InitialGatewayTurn, InitialGatewayTurnError};
     #[cfg(target_os = "macos")]
     use crate::agent::gateway_protocol::GatewayStreamStatus;
     use crate::agent::gateway_protocol::{
@@ -493,6 +543,8 @@ mod tests {
         ApprovalResolution, ApprovalReversibility, ApprovalRisk, ApprovalSchedule,
         ApprovalSourceFailure, ApprovalTarget,
     };
+    #[cfg(target_os = "macos")]
+    use crate::audit::approval::ApprovalAuditError;
     #[cfg(target_os = "macos")]
     use crate::policy::types::{PolicyOutcome, PolicyReason};
     #[cfg(target_os = "macos")]
@@ -614,6 +666,43 @@ mod tests {
     }
 
     #[cfg(target_os = "macos")]
+    fn assert_exact_audit_binding(
+        turn: &InitialGatewayTurn,
+        audited: &AuditedApprovalResolution,
+    ) -> Result<(), &'static str> {
+        let resolution = audited.resolution();
+        let receipt = audited.receipt();
+        assert_eq!(receipt.sequence().value(), 1);
+
+        let [record] = turn.approval_audit.records() else {
+            return Err("expected one turn-owned approval audit record");
+        };
+        assert_eq!(record.sequence(), receipt.sequence());
+        assert_eq!(record.approval_id(), resolution.id());
+        assert_eq!(record.run_id(), resolution.run_id());
+        assert_eq!(record.gateway_request_id(), resolution.gateway_request_id());
+        assert_eq!(record.call_id(), resolution.call_id());
+        assert_eq!(record.tool_name(), resolution.tool_name());
+        assert_eq!(
+            record.tool_contract_version(),
+            resolution.tool_contract_version()
+        );
+        assert_eq!(record.risk_class(), resolution.risk_class());
+        assert_eq!(
+            record.required_permission(),
+            resolution.required_permission()
+        );
+        assert_eq!(record.policy_outcome(), resolution.policy_outcome());
+        assert_eq!(record.policy_reason(), resolution.policy_reason());
+        assert_eq!(record.disposition(), resolution.disposition());
+        assert_eq!(
+            record.interaction_evidence(),
+            resolution.interaction_evidence()
+        );
+        Ok(())
+    }
+
+    #[cfg(target_os = "macos")]
     #[test]
     fn resolves_each_closed_native_outcome_through_the_turn_owned_manager(
     ) -> Result<(), Box<dyn Error>> {
@@ -659,10 +748,16 @@ mod tests {
             }
             assert!(outcome_debug.contains("[REDACTED]"));
 
-            let resolution = turn.resolve_approval_source_outcome(outcome)?;
-            assert_exact_resolution(&resolution, disposition, native_button, source_failure)?;
+            let audited = turn.resolve_approval_source_outcome(outcome)?;
+            assert_exact_resolution(
+                audited.resolution(),
+                disposition,
+                native_button,
+                source_failure,
+            )?;
+            assert_exact_audit_binding(&turn, &audited)?;
 
-            let resolution_debug = format!("{resolution:?}");
+            let resolution_debug = format!("{audited:?}");
             for sensitive in [RUN_ID, GATEWAY_REQUEST_ID, CALL_ID, TASK_TITLE] {
                 assert!(!resolution_debug.contains(sensitive));
             }
@@ -694,13 +789,14 @@ mod tests {
             ))
         ));
 
-        let resolution = recipient_turn.resolve_approval_source_outcome(recipient_outcome)?;
+        let audited = recipient_turn.resolve_approval_source_outcome(recipient_outcome)?;
         assert_exact_resolution(
-            &resolution,
+            audited.resolution(),
             ApprovalDisposition::Rejected,
             Some(ApprovalNativeButton::Reject),
             None,
         )?;
+        assert_exact_audit_binding(&recipient_turn, &audited)?;
         assert!(recipient_turn
             .cancel_pending_approval_for_run_termination()?
             .is_none());
@@ -718,15 +814,17 @@ mod tests {
             MessageDialogResult::Custom("Approve".to_owned()),
         );
 
-        let resolution = turn
+        let audited = turn
             .cancel_pending_approval_for_run_termination()?
             .ok_or("run termination must consume the pending approval")?;
+        let resolution = audited.resolution();
         assert_eq!(resolution.id(), approval_id);
         assert_eq!(
             resolution.disposition(),
             ApprovalDisposition::Cancelled(ApprovalCancellationReason::RunTerminated)
         );
         assert!(resolution.interaction_evidence().is_none());
+        assert_exact_audit_binding(&turn, &audited)?;
         assert_eq!(turn.status(), GatewayStreamStatus::Completed);
 
         assert!(matches!(
@@ -739,6 +837,55 @@ mod tests {
         assert!(turn
             .cancel_pending_approval_for_run_termination()?
             .is_none());
+        Ok(())
+    }
+
+    #[cfg(target_os = "macos")]
+    #[test]
+    fn audit_failure_after_manager_success_returns_no_resolution_or_stale_pending_subject(
+    ) -> Result<(), Box<dyn Error>> {
+        let (mut seed_turn, _) = turn_with_approval_presentation()?;
+        let seed = seed_turn
+            .cancel_pending_approval_for_run_termination()?
+            .ok_or("seed turn must produce an audited resolution")?;
+
+        let (mut turn, presentation) = turn_with_approval_presentation()?;
+        let approval_id = presentation.id();
+        let late_outcome = test_outcome_from_dialog_result(
+            presentation,
+            MessageDialogResult::Custom("Approve".to_owned()),
+        );
+        assert_eq!(
+            turn.approval_audit
+                .record(seed.resolution())?
+                .sequence()
+                .value(),
+            1
+        );
+
+        let error = turn
+            .cancel_pending_approval_for_run_termination()
+            .err()
+            .ok_or("duplicate audit evidence must fail closed")?;
+        assert_eq!(
+            error,
+            InitialGatewayTurnError::ApprovalAudit(ApprovalAuditError::DuplicateResolution)
+        );
+        assert_eq!(turn.approval_audit.records().len(), 1);
+        assert!(turn
+            .cancel_pending_approval_for_run_termination()?
+            .is_none());
+        assert!(matches!(
+            turn.resolve_approval_source_outcome(late_outcome),
+            Err(InitialGatewayTurnError::Approval(
+                ApprovalError::AlreadyConsumed(actual)
+            )) if actual == approval_id.value()
+        ));
+
+        let error_debug = format!("{error:?} {error}");
+        for sensitive in [RUN_ID, GATEWAY_REQUEST_ID, CALL_ID, TASK_TITLE] {
+            assert!(!error_debug.contains(sensitive));
+        }
         Ok(())
     }
 

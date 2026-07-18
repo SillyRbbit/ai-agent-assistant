@@ -1,8 +1,8 @@
 # Increment 4V - bind initial terminal approval audit
 
-Status: Ready; separate implementation approval required
+Status: Complete; reconstructed and verified, resolving commit pending
 Owner: Project maintainer
-Last updated: 2026-07-16
+Last updated: 2026-07-18
 
 ## Goal
 
@@ -85,41 +85,50 @@ Declared planning and closeout scope:
 
 ```text
 AGENTS.md
+ARCHITECTURE.md
 CHANGELOG.md
 DECISIONS.md
 HANDOFF.md
 NEXT_STEPS.md
 PLANS.md
+PRODUCT_REQUIREMENTS.md
 PROJECT_STATUS.md
+ROADMAP.md
+SECURITY.md
 docs/increments/04v-bind-initial-terminal-approval-audit.md
+docs/increments/remediation-ARB-001-terminal-approval-audit.md
 docs/plans/04v-bind-initial-terminal-approval-audit.md
 docs/plans/README.md
+docs/reviews/2026-07-16-advisory-remediation-backlog.md
 docs/reviews/2026-07-16-04v-post-increment-review.md
 ```
 
 `DECISIONS.md` is limited to the durable turn-owned audit ordering,
 manager-terminalization failure boundary, volatility, and receipt
-non-authority.
+non-authority. The project owner approved the expanded direct closeout authority
+set before implementation so current architecture, product requirements,
+security, roadmap, and the ARB-001 backlog do not remain stale. Product
+source/test scope remains exactly two files.
 
 ## Implementation steps
 
 - [x] Verify Increment 4U is merged with a valid completion marker.
 - [x] Reconcile this plan against the exact merged 4U API.
-- [ ] Obtain separate project-owner approval for this exact 4V scope.
-- [ ] Run `python3 .codex/hooks/post_increment_gate.py begin --increment 04v`
+- [x] Obtain separate project-owner approval for this exact 4V scope.
+- [x] Run `python3 .codex/hooks/post_increment_gate.py begin --increment 04v`
       before source edits.
-- [ ] Add one private turn-owned typed in-memory audit adapter.
-- [ ] Add one closed audited-resolution value with read-only resolution and
+- [x] Add one private turn-owned typed in-memory audit adapter.
+- [x] Add one closed audited-resolution value with read-only resolution and
       receipt accessors and redacted debug output.
-- [ ] Centralize manager-success-to-audit-success conversion in one private
+- [x] Centralize manager-success-to-audit-success conversion in one private
       helper.
-- [ ] Route native and run-termination success paths through that helper.
-- [ ] Clear pending turn ownership after manager terminalization even if audit
+- [x] Route native and run-termination success paths through that helper.
+- [x] Clear pending turn ownership after manager terminalization even if audit
       recording returns a typed error.
-- [ ] Add focused tests for both paths, exact stored facts, receipt sequence,
+- [x] Add focused tests for both paths, exact stored facts, receipt sequence,
       impossible-to-bypass return types, audit failure behavior, and redaction.
-- [ ] Run the exact verification suite and review the complete diff.
-- [ ] Run `$post-increment-gate`, synchronize declared closeout documents, and
+- [x] Run the exact verification suite and review the complete diff.
+- [x] Run `$post-increment-gate`, synchronize declared closeout documents, and
       require a valid `04v` completion marker before completion.
 
 ## Security and privacy considerations
@@ -203,37 +212,46 @@ user-visible/manual gate.
 ## Acceptance criteria
 
 - [x] Verified 4U is merged before the `04v` gate begins.
-- [ ] The exact `04v` gate begins before source edits.
-- [ ] Only the exact two source/test files change outside declared closeout
+- [x] The exact `04v` gate begins before source edits.
+- [x] Only the exact two source/test files change outside declared closeout
       documentation.
-- [ ] The turn owns one private typed in-memory audit adapter.
-- [ ] Native and run-termination success paths return only one closed audited
+- [x] The turn owns one private typed in-memory audit adapter.
+- [x] Native and run-termination success paths return only one closed audited
       resolution value.
-- [ ] The exact manager-owned resolution is recorded without reconstruction.
-- [ ] The receipt remains sequence-only, volatile, and non-authorizing.
-- [ ] Audit failure returns no successful resolution and leaves no stale pending
+- [x] The exact manager-owned resolution is recorded without reconstruction.
+- [x] The receipt remains sequence-only, volatile, and non-authorizing.
+- [x] Audit failure returns no successful resolution and leaves no stale pending
       turn ownership.
-- [ ] Existing manager expiry, replay, identity, and late-outcome behavior is
+- [x] Existing manager expiry, replay, identity, and late-outcome behavior is
       unchanged.
-- [ ] All focused and complete automated checks pass.
-- [ ] The complete diff has no scope expansion, secret, generated output, or
+- [x] All focused and complete automated checks pass.
+- [x] The complete diff has no scope expansion, secret, generated output, or
       blocking code/security finding.
-- [ ] Project-memory documents and the review report match actual evidence.
-- [ ] The final `04v` completion marker is complete and valid.
+- [x] Project-memory documents and the review report match actual evidence.
+- [x] The final `04v` completion marker is complete and valid.
 
 ## Actual results
 
-Planning only. The merged 4U prerequisite is satisfied, the exact source/test
-scope has not changed since `61525bf`, and the plan is selected as the first
-Ready product increment after Meta Increment 7 publication. Separate
-project-owner implementation approval is still required; no `04v` gate or
-source evidence exists.
+Implementation and verification are complete within the exact two-file
+source/test scope. The turn owns one private typed adapter, both terminal success
+paths return only a closed audited value, and a typed post-manager audit failure
+returns no resolution or stale pending subject. Focused formatting,
+gateway-request, audit, approval, approval-binding, approval-audit-binding,
+public-contract, strict Clippy, complete `npm run verify`, documentation,
+security, npm audit, conflict, whitespace, session-end, scope, and complete-diff
+checks pass. The sandboxed npm audit failed on DNS; the approved network retry
+found zero vulnerabilities. The original reviewed commit `3440ce9` remains
+preserved, and the same scope was reconstructed from synchronized `main` at
+`d81b73a`. No manual gate applies. The consolidated result is `PASS WITH
+ADVISORIES`, the `04v` marker is complete and valid, and the resolving commit
+remains pending until committed.
 
 ## Documentation updates
 
 - [x] Proposed follow-on scope recorded during post-4T planning.
 - [x] Reconcile against verified merged 4U before approval.
-- [ ] `DECISIONS.md` updated during closeout if implementation confirms the
+- [x] `DECISIONS.md` updated during closeout because implementation confirms the
       planned durable boundary.
-- [ ] Post-increment review report created during closeout.
-- [ ] No troubleshooting update is planned unless a real issue is diagnosed.
+- [x] Post-increment review report created during closeout.
+- [x] No troubleshooting update was needed; the sandboxed audit DNS failure was
+      an expected environment restriction resolved by the approved retry.

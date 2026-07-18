@@ -52,11 +52,13 @@ Its `meta-07` marker was complete and valid on clean `96ba6ae` before the later
 advisory-remediation report changed the workspace fingerprint. The advisory
 backlog and first post-Meta-7 memory reconciliation are squash-merged through PR
 #21 at `cc434d9`. ARB-022's remaining live publication drift is resolved in the
-merged remediation at `7c79e65`. Increment 4V / ARB-001 is verified on
-`codex/feature/bind-terminal-approval-audit` at `3440ce9` with a valid `04v`
-marker and open PR #23; it is not merged. Its three hosted jobs failed before
-runner assignment because of an account billing or spending-limit restriction,
-not a repository test failure. Repository self-hosted runner routing is verified
+merged remediation at `7c79e65`. Increment 4V / ARB-001 has been reconstructed
+without scope change on current `main` at `d81b73a`; the exact 19-path scope and
+complete local verification pass on `codex/feature/bind-terminal-approval-audit`.
+The original reviewed commit remains preserved at `3440ce9` on
+`codex/feature/bind-terminal-approval-audit-pre-refresh`. PR #23 remains open and
+must receive fresh hosted checks and separate merge approval. Repository
+self-hosted runner routing is verified
 complete with advisories and squash-merged through PR #24 at `eaf6c9f`; CI,
 Documentation, and Security pass on runner 21. Its completion marker was valid
 on clean `eaf6c9f` immediately before the prompt-library gate began. Meta

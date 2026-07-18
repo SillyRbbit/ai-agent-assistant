@@ -4,6 +4,11 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Reconstructed the exact Increment 4V / ARB-001 19-path scope from preserved
+  commit `3440ce9` onto synchronized `main` at `d81b73a`, retaining all later
+  repository-governance changes while complete local verification passes.
+  Publication still requires a valid committed marker, refreshed PR #23 hosted
+  checks, and separate merge approval.
 - Adopted risk-based repository validation: focused checks during
   implementation, one stable change-class completion gate, complete
   verification for cross-cutting work, and documentation-only validation
