@@ -10,6 +10,8 @@ YYYY-MM-DD-short-kebab-case-title.md
 
 Create a plan from `docs/templates/INCREMENT_TEMPLATE.md`. Link active plans from `PLANS.md` and the current `HANDOFF.md`.
 
+Meta risk-based GitHub Actions validation is locally verified with publication and hosted execution pending under [`meta-risk-based-ci.md`](meta-risk-based-ci.md). It replaces blanket persistent-runner checks with two read-only GitHub-hosted workflows and preserves the complete local final increment gate without changing application behavior or dependencies.
+
 Meta Increment 1 branding and identity foundation is verified complete under [`meta-01-branding-foundation.md`](meta-01-branding-foundation.md). It establishes canonical logo assets, brand guidance, the repository-local `$branding` skill, README/favicon references, and the official sidebar mark without changing behavior, compatibility identifiers, dependencies, permissions, or production Tauri icons.
 
 Meta Increment 2 engineering operating system is verified complete under [`meta-02-engineering-operating-system.md`](meta-02-engineering-operating-system.md). It consolidates repository engineering guidance only and changes no product behavior.

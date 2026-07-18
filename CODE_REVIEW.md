@@ -59,6 +59,11 @@ or requirement is not evidence that production behavior exists.
   timeouts, and commands are explicit and least-privilege.
 - Pull-request workflows receive no secrets and never use
   `pull_request_target` for untrusted code.
+- Pull-request jobs use ephemeral hosted runners. Any future persistent runner
+  use requires a separately reviewed trust policy.
+- Path filters and change classification include every current source,
+  dependency, workflow, Tauri, IPC, storage, migration, permission, and
+  security-sensitive path. Unknown non-documentation paths fail closed.
 - No workflow commits, pushes, merges, publishes, deploys, signs, notarizes, or
   auto-merges.
 - Dependabot changes remain review-only proposals.
@@ -66,6 +71,8 @@ or requirement is not evidence that production behavior exists.
   matched secret value.
 - CODEOWNERS, labels, milestones, and badges are not mistaken for remote policy
   enforcement.
+- Conditional path-filtered workflows are required only when applicable; a
+  skipped workflow is not mistaken for a universal branch-protection check.
 
 ## Verification evidence
 

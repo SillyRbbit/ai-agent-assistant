@@ -58,6 +58,9 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Repository workflow - trusted self-hosted runner routing:
   **Verified complete with advisories and squash-merged through PR #24 at
   `eaf6c9f`**.
+- Repository workflow - risk-based GitHub-hosted validation:
+  **Verified complete locally with advisories; publication and actual hosted
+  execution pending**.
 - Meta Increment 8 - Prompt Library Reorganization:
   **Verified complete; published through PR #25 and squash-merged at
   `d26b5e1`**.
@@ -66,6 +69,17 @@ This file is the ordered implementation queue. Work only on the first item marke
   `6e6f91d`**.
 
 ## Queue status
+
+### Publish the verified risk-based CI increment
+
+**Status:** Exact 29-path implementation is locally verified with a valid
+`meta-risk-based-ci` marker; separate publication approval is required.
+
+Review the complete scope, generate descriptive Git names, and wait for owner
+approval before branch creation, staging, commit, push, pull request, or merge.
+After push, require applicable CI and Documentation jobs to pass on
+GitHub-hosted runners and reconcile the report/marker if hosted evidence is
+added. Do not combine ARB-002 or product work.
 
 ### No later remediation is Ready
 

@@ -1,14 +1,24 @@
 # Self-hosted GitHub Actions runner
 
-Status: Repository operating standard
+Status: Retired fallback; superseded by D-057
 
-This repository routes CI, documentation, and security workflows to one
-repository-scoped Linux x64 runner. The runner is a persistent build machine,
-not an isolated security boundary and not target-macOS evidence.
+Active CI and Documentation workflows use ephemeral GitHub-hosted
+`ubuntu-latest` runners. They do not select the repository-scoped Linux x64
+runner described below. The persistent runner remains registered only as a
+rollback option and is not an isolated security boundary or target-macOS
+evidence.
+
+Do not restore a self-hosted `runs-on` selector without a separate approved
+security and repository-governance increment. That review must account for
+untrusted pull-request code, host persistence, secrets, network reachability,
+branch protection, and cleanup between jobs. D-054 and the operating record
+below remain historical evidence; D-057 is the current routing decision.
+
+## Preserved fallback configuration
 
 ## Required labels
 
-Every repository workflow must request all four labels:
+The retired runner was registered with all four labels:
 
 ```yaml
 runs-on: [self-hosted, Linux, X64, cortexa-ci]
@@ -32,7 +42,7 @@ gh api --method POST \
   -f 'labels[]=cortexa-ci'
 ```
 
-## Trust policy
+## Historical trust policy
 
 The runner may execute only:
 
@@ -90,14 +100,14 @@ The workflows install the pinned Node.js version, the pinned Rust toolchain,
 locked npm dependencies, and the pinned Cargo audit tool. They do not mutate
 system packages or require `sudo`.
 
-## Verification
+## Fallback verification
 
 Before relying on the runner:
 
 1. Confirm the runner is `online`, idle, and has all four labels.
 2. Push the reviewed workflow branch only after local checks pass.
-3. Confirm CI, Documentation, and Security jobs name the intended runner and
-   complete successfully.
+3. Confirm only the separately approved fallback jobs name the intended runner
+   and complete successfully.
 4. Confirm fork and dependency-bot pull requests do not receive the runner.
 5. Continue to run native menus, windows, dialogs, icons, signing, notarization,
    and installer checks on a target Mac.
@@ -114,7 +124,7 @@ Before relying on the runner:
 - Prefer an ephemeral runner with a clean host lifecycle when the repository
   begins accepting untrusted pull requests.
 
-## Rollback
+## Return to hosted runners
 
 Restore the previous hosted `runs-on` values, remove the self-hosted trust
 conditions and preflight steps, and remove the `cortexa-ci` label:

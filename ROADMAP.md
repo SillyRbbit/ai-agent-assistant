@@ -57,11 +57,13 @@ not resolve those live-transport blockers.
 | Meta Increment 6 - product readiness audit              | Completed and merged at `5281fac` | Evidence-based readiness assessment and ordered remediation backlog                                                 | Documentation audit and valid `meta-06` gate evidence passed; result `NOT READY (57/100)`                         |
 | Meta Increment 7 - verified application icon rollout    | Completed and merged at `96ba6ae` | Exactly 16 existing Tauri icon files generated from the approved source; debug/release bundles verified             | Raw dev icon and default DMG remain documented advisories; no product capability gate is satisfied                |
 | Remediation ARB-022 - project-memory reconciliation     | Completed and merged at `7c79e65` | PR #21 publication state and the live queue were reconciled without changing product source                         | Documentation checks and the `remediation-arb-022` gate passed; no remaining ARB-022 publication gate             |
+| Repository risk-based GitHub Actions validation         | Verified locally                  | Two read-only hosted workflows, deterministic path classification, consolidated audits, and complete local checks   | Publish the exact scope and verify applicable GitHub-hosted jobs                                                  |
 
-Meta Increments 2, 3, 5, and 6 change documentation and repository governance
-only. They do not satisfy any product capability or release gate. Meta Increment
-4 was stopped before implementation. Meta Increment 7 changes identity assets
-only and does not satisfy a product capability or release gate.
+Meta Increments 2, 3, 5, and 6 and repository risk-based CI change documentation
+or repository governance only. They do not satisfy any product capability or
+release gate. Meta Increment 4 was stopped before implementation. Meta Increment
+7 changes identity assets only and does not satisfy a product capability or
+release gate.
 
 ## Milestone acceptance gates
 
@@ -81,10 +83,12 @@ Release milestones additionally require `RELEASE_CHECKLIST.md` and
 
 ## Current queue
 
-1. Do not begin ARB-002 automatically.
-2. Obtain project-owner, security-owner, and executive-owner approval before a
+1. Review and publish only the locally verified 29-path risk-based CI increment;
+   actual GitHub-hosted execution remains pending.
+2. Do not begin ARB-002 automatically.
+3. Obtain project-owner, security-owner, and executive-owner approval before a
    documentation-only ARB-002 threat-model planning increment.
-3. Do not implement live transport, credentials, or another remediation in the
+4. Do not implement live transport, credentials, or another remediation in the
    same step.
 
 Increment 4V is verified complete and published. No later product or

@@ -4,6 +4,19 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Replaced blanket persistent-runner validation with two read-only,
+  risk-based GitHub-hosted workflows. Documentation-only changes run focused
+  documentation and repository checks; application changes select frontend,
+  Rust, and dependency-audit jobs from a deterministic fail-closed classifier.
+- Consolidated the weekly JavaScript and Rust advisory checks into CI, added 16
+  classifier cases and expanded repository-health coverage to 37 tests, pinned
+  official actions by verified v7.0.0 commit SHA, and preserved the complete
+  local increment gate. Local verification and the mandatory marker pass; actual
+  GitHub-hosted execution remains pending publication.
+- Retired active self-hosted workflow routing under D-057 while preserving the
+  registered runner and D-054 operating record as rollback evidence. No product
+  source, dependency, lockfile, Tauri boundary, permission, CSP, or SQLite
+  behavior changed.
 - Published Increment 4V / ARB-001 through PR #23 from reconstructed source
   commit `ec919e9`; hosted CI, Documentation, and Security passed before the
   exact 19-path remediation was squash-merged at `6e6f91d`. The `04v` marker

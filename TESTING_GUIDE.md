@@ -109,9 +109,9 @@ Location: `scripts/tests/test_*.py`.
 
 The standard-library repository checks cover Markdown and image targets, secret
 pattern redaction, tracked generated output, licensing evidence, documented npm
-commands, immutable GitHub Action references, least-privilege workflow policy,
-the exact repository-specific self-hosted selector, the no-pull-request trigger
-policy, the trusted push-branch allowlist, and the exact accepted Cargo-audit
+commands, prompt metadata and placeholders, stale active prompt paths,
+immutable GitHub Action references, the exact two-workflow layout,
+least-privilege hosted workflow policy, and the exact accepted Cargo-audit
 baseline. Positive and negative fixtures use isolated temporary paths and
 synthetic values.
 
@@ -127,21 +127,32 @@ npm run security:scan
 These checks are read-only. A passing pattern scan or link audit is bounded
 evidence, not a security certification or proof of remote GitHub settings.
 
-### Self-hosted workflow verification
+### Risk-based GitHub workflow verification
 
-The repository runner is a persistent Linux x64 machine. Workflow changes must
-prove locally that YAML parses, action references remain immutable, permissions
-remain read-only, secrets and write operations remain absent, and repository
-health accepts only the exact `cortexa-ci` selector, no `pull_request` trigger,
-and the documented trusted push branches. After publication, inspect the GitHub
-run and confirm the intended runner executed CI, Documentation, and Security
-successfully.
+The active CI and Documentation workflows run untrusted pull-request code only
+on ephemeral `ubuntu-latest` runners. Workflow changes must prove locally that
+YAML parses, action references remain immutable, permissions remain read-only,
+secrets and write operations remain absent, concurrency cancellation is active,
+and repository health accepts only the exact two-workflow layout.
 
-Fork and dependency-bot pull requests do not trigger this runner. A missing
-self-hosted check is not approval to merge; reproduce reviewed changes on a
-maintainer-controlled allowlisted branch. Linux verification never replaces
-the target-Mac checks declared for native behavior. Host setup and rollback are
-in `docs/github/SELF_HOSTED_RUNNER.md`.
+`scripts/ci_change_scope.py` uses fixed Git comparisons and closed path classes.
+Its fixtures cover documentation-only, frontend-only, Rust-only, IPC/Tauri,
+security-sensitive Rust, dependency, CI-workflow, deletion, unknown-path,
+scheduled-audit, and manual-dispatch behavior. Unknown non-documentation paths
+run both application jobs instead of being silently skipped.
+
+After publication, inspect actual GitHub runs before claiming hosted execution
+passed. GitHub-hosted Linux verification never replaces target-Mac menus,
+windows, dialogs, permissions, signing, notarization, or installer evidence.
+The retired persistent-runner operating and rollback record remains in
+`docs/github/SELF_HOSTED_RUNNER.md`.
+
+Path-filtered workflows are conditional checks. GitHub may leave a skipped
+required workflow pending, so do not claim they are universal branch-protection
+requirements. Current remote protection is also unverified when the hosting
+plan prevents authenticated inspection. Reviewers must require every applicable
+job from the change-to-test matrix and use manual dispatch plus the local final
+gate for ambiguous or oversized changes.
 
 ### Security tests
 
@@ -221,7 +232,7 @@ verification commands, not test fixtures. A future gateway integration suite
 must use a local deterministic server by default; separately approved sandbox
 tests must use non-production accounts and redacted evidence.
 
-The scheduled security workflow may retrieve npm and Rust advisory data. It
+The scheduled CI dependency-audit job may retrieve npm and Rust advisory data. It
 contains no repository secrets and fails on any Rust advisory outside D-025's
 exact vulnerability baseline and D-046's exact warning baseline. Accepted
 findings remain reported remediation debt.
@@ -283,6 +294,31 @@ tested examples, or another explicit policy requires them.
 | Documentation-only               | Status, diff check, Markdown formatting, link/path audit, and protected-path scope proof           |
 | GitHub workflow or template      | YAML parse, immutable actions, permissions/triggers, no-secret/no-write policy, and command checks |
 | Dependency change                | Focused behavior, complete verification, audit, license, and lockfile review                       |
+
+## GitHub change-to-workflow matrix
+
+| Changed paths or event                                     | Documentation | Frontend      | Rust          | Dependency audit |
+| ---------------------------------------------------------- | ------------- | ------------- | ------------- | ---------------- |
+| Markdown, prompts, project memory, or governance only      | Yes           | No            | No            | No               |
+| React, TypeScript, CSS, brand assets, Vite, Vitest, ESLint | When mixed    | Yes           | No            | No               |
+| Rust tests, examples, or target-neutral isolated Rust      | When mixed    | No            | Yes           | No               |
+| Tauri, IPC, policy, approval, storage, migration, security | When mixed    | Yes           | Yes           | Yes              |
+| JavaScript, Rust, or action dependency metadata            | When mixed    | Yes           | Yes           | Yes              |
+| CI workflow or executable CI-validation script             | When mixed    | Yes           | Yes           | Yes              |
+| Documentation workflow                                     | Yes           | No            | No            | Yes              |
+| Repository governance validator or its tests               | Yes           | No            | No            | Yes              |
+| Repository hooks or hook tests                             | No            | No            | No            | Yes              |
+| Mixed documentation and application paths                  | Yes           | As classified | As classified | As classified    |
+| Weekly schedule                                            | No            | No            | No            | Yes              |
+| Manual CI dispatch                                         | No            | Yes           | Yes           | Yes              |
+| Manual Documentation dispatch                              | Yes           | No            | No            | No               |
+
+Both workflows use event-level path filters so documentation-only pull
+requests never start Application CI. Within Application CI,
+`scripts/ci_change_scope.py` decides which jobs run. The classifier treats an
+unknown non-documentation path as cross-cutting and runs both application jobs.
+When a new source or governance path is introduced, update event paths,
+classifier rules, fixtures, and this matrix together.
 
 ## Completion gate
 

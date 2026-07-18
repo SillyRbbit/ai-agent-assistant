@@ -64,6 +64,30 @@ npm run verify
 Testing details and the change-to-test matrix are in
 [TESTING_GUIDE.md](TESTING_GUIDE.md).
 
+## GitHub validation
+
+GitHub Actions supplements the local final increment gate with two read-only,
+risk-based workflows:
+
+- `ci.yml` classifies application, dependency, Tauri, IPC, storage, migration,
+  permission, security, and workflow changes and runs the affected frontend,
+  Rust, and dependency-audit jobs.
+- `documentation.yml` validates Markdown, prompts, project memory, and
+  repository governance without compiling or testing the application.
+
+Both workflows run on pull requests targeting `main`, pushes to `main`, and
+manual dispatch. CI also runs its dependency audit on the weekly schedule.
+Because GitHub can leave a path-filtered skipped workflow pending when it is
+configured as a required check, branch protection should require only checks
+applicable to the changed paths. Reviewers must verify the expected jobs from
+`TESTING_GUIDE.md`; use manual dispatch and the complete local gate when scope is
+ambiguous.
+
+When repository structure changes, update the workflow trigger paths,
+`scripts/ci_change_scope.py`, its fixtures, and the change-to-test matrix in the
+same reviewed increment. Unknown non-documentation paths deliberately run both
+application jobs.
+
 ## Branches and commits
 
 Use one descriptive capability branch. Codex-created branches use the `codex/`
