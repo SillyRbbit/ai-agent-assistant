@@ -4,14 +4,16 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
+No implementation plan is active. Meta Increment 8 Prompt Library
+Reorganization is verified complete and awaits separately approved publication
+under `docs/increments/meta-prompt-library-reorganization.md`. It reorganizes
+only the copy-paste prompt library, active guidance references, D-055, current
+project memory, and mandatory closeout evidence. Product source, behavior,
+dependencies, Tauri, storage, permissions, skills, and hooks remain excluded.
+
 Repository Workflow Increment trusted self-hosted runner routing is verified
-complete with advisories under
-`docs/plans/repository-self-hosted-runner.md`. The exact workflow, repository
-policy, regression-test, and operating-guide changes pass complete local
-verification. The separately approved two-file portability correction is pushed
-at `1621a55` on PR #24. CI, Documentation, and Security pass on runner 21, and
-the completion marker is valid. Final documentation publication and PR merge
-remain separately approval-gated.
+complete with advisories under `docs/plans/repository-self-hosted-runner.md` and
+squash-merged through PR #24 at `eaf6c9f`.
 
 The Repository Dependency Baseline Compatibility Repair is verified, published,
 and squash-merged through PR #20 at `b298999` under
@@ -63,9 +65,10 @@ history.
 Increment 4V terminal approval audit is verified on open PR #23 under
 `docs/plans/04v-bind-initial-terminal-approval-audit.md`. Its merged 4U
 prerequisite and ARB-022 publication are satisfied. Commit `3440ce9` preserves
-the verified scope and valid `04v` marker. Publication is blocked until the
-self-hosted workflow increment provides usable remote checks; no later product
-or remediation increment may start.
+the verified scope and valid `04v` marker. The self-hosted workflow prerequisite
+is merged; publication waits for Meta Increment 8 to be published and for
+separate approval to refresh PR #23 without scope change. No later product or
+remediation increment may start.
 
 ## Completed plans
 
@@ -177,8 +180,9 @@ A plan must contain:
 | Meta Increment 6 product readiness audit       | Complete | Project maintainer | 2026-07-16   |
 | Repository dependency baseline compatibility   | Complete | Project maintainer | 2026-07-16   |
 | Meta Increment 7 application icon rollout      | Complete | Project maintainer | 2026-07-16   |
+| Meta Increment 8 Prompt Library Reorganization | Complete | Project maintainer | 2026-07-17   |
 | ARB-022 memory reconciliation                  | Complete | Project maintainer | 2026-07-16   |
-| Repository self-hosted runner routing          | Active   | Project maintainer | 2026-07-17   |
+| Repository self-hosted runner routing          | Complete | Project maintainer | 2026-07-17   |
 
 ## Meta Increment 1 branding and identity foundation - complete
 

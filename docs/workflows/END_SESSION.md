@@ -4,6 +4,10 @@
 
 Leave the repository in a state that another assistant session can resume without access to the current conversation.
 
+Use `.agents/skills/session-end/SKILL.md` when repository skills are available.
+Otherwise use `prompts/workflows/end-session.md`, which incorporates the
+post-increment quality and marker closeout.
+
 ## Procedure
 
 1. Stop active development processes with `Control-C` where appropriate.

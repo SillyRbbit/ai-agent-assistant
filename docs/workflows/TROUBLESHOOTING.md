@@ -4,6 +4,10 @@
 
 Find the smallest verified cause and fix without introducing unrelated upgrades or weakening project controls.
 
+Use `.agents/skills/troubleshoot/SKILL.md` when repository skills are available.
+Otherwise use `prompts/increments/bug-fix.md`; use
+`prompts/workflows/remediation.md` instead for an advisory backlog.
+
 ## 1. Capture the failure exactly
 
 Record:

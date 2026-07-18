@@ -4,6 +4,10 @@
 
 Orient to the actual repository state before making changes.
 
+Use `.agents/skills/session-start/SKILL.md` when repository skills are
+available. Otherwise use `prompts/workflows/start-session.md` with
+`{{SESSION_MODE}}` set to `start`.
+
 ## Procedure
 
 1. Open the repository root.

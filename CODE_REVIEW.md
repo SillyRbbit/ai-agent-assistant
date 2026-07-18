@@ -98,6 +98,12 @@ The component reviews may be invoked independently through
 `$technical-debt`, and `$readiness-review`. `$quality-gate` composes their
 evidence; it does not replace the source authorities or prove that commands ran.
 
+When repository skills are unavailable, use the matching fallback under
+`prompts/reviews/`; `prompts/README.md` is the authoritative selection index.
+Review prompt changes for metadata completeness, placeholder clarity, active
+path validity, conceptual overlap, approval boundaries, and preservation of
+useful migrated content.
+
 For documentation-only changes, review factual consistency against source and
 tests, internal links and paths, authority and supersession, protected source
 scope, and whether current, mocked, planned, and prohibited behavior are clearly

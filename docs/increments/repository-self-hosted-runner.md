@@ -79,14 +79,24 @@ Intermediate failures:
 
 Remote verification:
 
-- Commit `1621a55` contains the exact two-file correction and reviewed closeout
-  state on open PR #24.
+- Commit `1621a55` contained the exact two-file correction and reviewed closeout
+  state on open PR #24 at the verification checkpoint.
 - Security run `29629669283` passed in 3 minutes 22 seconds.
 - Documentation run `29629669305` passed in 16 seconds.
 - CI run `29629669300` passed complete Linux verification in 9 minutes 57
   seconds.
 - The consolidated result is `PASS WITH ADVISORIES`; the persistent-runner
   isolation advisory remains non-blocking, and the completion marker is valid.
+
+Publication result:
+
+- The final documentation closeout was committed as `cfa976f`.
+- Documentation run `29630372279`, CI run `29630372265`, and Security run
+  `29630372253` passed on that final branch commit.
+- PR #24 was squash-merged as `eaf6c9f`, its remote branch was deleted, and
+  synchronized `main` was clean.
+- The marker remained complete and valid on merged `eaf6c9f` immediately before
+  the next increment gate began.
 
 ## Rollback
 

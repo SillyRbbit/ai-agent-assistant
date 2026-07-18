@@ -1,6 +1,7 @@
 # Repository Workflow Increment - trusted self-hosted runner routing
 
-Status: Verified complete with advisories; PR merge pending
+Status: Verified complete with advisories; squash-merged through PR #24 at
+`eaf6c9f`
 Owner: Project maintainer
 Last updated: 2026-07-17
 
@@ -198,6 +199,12 @@ Documentation run `29629669305` passed in 16 seconds, and CI run `29629669300`
 passed complete Linux verification in 9 minutes 57 seconds. The final result is
 `PASS WITH ADVISORIES`; the remaining persistent-runner isolation advisory is
 non-blocking, and the completion marker is valid.
+
+The final twelve-path documentation closeout was committed as `cfa976f`.
+Documentation run `29630372279`, CI run `29630372265`, and Security run
+`29630372253` passed on that commit. PR #24 was squash-merged as `eaf6c9f`, its
+remote branch was deleted, synchronized `main` was clean, and the marker
+remained valid before the next gate began.
 
 ## Documentation updates
 

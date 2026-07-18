@@ -54,7 +54,7 @@ add a superseding decision or current-state update instead.
 | `docs/reviews/`    | Post-increment machine-readable and human-readable reviews                                     |
 | `docs/github/`     | Licensing status, label taxonomy, and milestone mapping                                        |
 | `docs/workflows/`  | Session and troubleshooting runbooks                                                           |
-| `prompts/`         | Copy-paste workflow prompts when skills are unavailable                                        |
+| `prompts/`         | Categorized copy-paste increment, review, workflow, and authoring-template prompts             |
 
 Compatibility identifiers retain the historical `ai-agent-assistant` name.
 Human-facing product text uses `Cortexa`; see D-026.
@@ -268,6 +268,10 @@ production distribution remain planned, not implemented.
 - Append decisions, changelog entries, and troubleshooting history; do not erase
   them.
 - Use repository-relative links and verify every referenced path.
+- Keep active prompt references aligned with `prompts/README.md`; preserve old
+  paths only where they are dated migration or historical evidence.
+- Keep prompts, repository skills, human workflow runbooks, prompt templates,
+  and document templates conceptually distinct.
 - Separate implemented facts from mocked, planned, prohibited, and unverified
   behavior.
 - Record exact commands and actual results, including checks not run.

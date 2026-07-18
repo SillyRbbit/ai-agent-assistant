@@ -4,11 +4,22 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Reorganized the copy-paste prompt library into increment, review, workflow,
+  and authoring-template categories with one selection guide and consistent
+  human-readable metadata across 23 prompt assets.
+- Added bounded feature, bug-fix, refactor, severity-remediation,
+  single-advisory-remediation, release, repository-health, and prompt-authoring
+  instructions without changing repository skills, hooks, dependencies, or
+  product behavior.
+- Preserved useful flat-library content through 13 moves and two documented
+  merges, repaired active prompt references, and retained old paths only in
+  dated historical evidence.
 - Routed the existing read-only CI, Documentation, and Security jobs to the
   repository's dedicated Linux x64 runner through the exact custom-labeled
   selector, with no pull-request trigger, a maintainer-controlled push-branch
   allowlist, and fail-fast host prerequisite checks. Complete local and remote
-  verification pass on PR #24 commit `1621a55`.
+  verification passed on final branch commit `cfa976f`; PR #24 was
+  squash-merged at `eaf6c9f`.
 - Added self-hosted runner operating guidance, security and testing boundaries,
   and repository-health regressions that reject generic or unguarded
   self-hosted selectors. A separately approved two-file portability correction

@@ -57,11 +57,16 @@ merged remediation at `7c79e65`. Increment 4V / ARB-001 is verified on
 marker and open PR #23; it is not merged. Its three hosted jobs failed before
 runner assignment because of an account billing or spending-limit restriction,
 not a repository test failure. Repository self-hosted runner routing is verified
-complete with advisories on open PR #24 at `1621a55`; CI, Documentation, and
-Security pass on runner 21. Its completion marker is valid, but the PR remains
-unmerged. Do not begin another product or remediation increment. Current
-implementation facts and future
-boundaries are authoritative in `ARCHITECTURE.md`.
+complete with advisories and squash-merged through PR #24 at `eaf6c9f`; CI,
+Documentation, and Security pass on runner 21. Its completion marker was valid
+on clean `eaf6c9f` immediately before the prompt-library gate began. The
+explicitly selected documentation-only Meta Increment 8 Prompt Library
+Reorganization is verified complete on
+`codex/meta-prompt-library-reorganization`; its consolidated result is `PASS`
+and its completion marker is complete and valid. It is not committed or
+published. Do not begin another product or remediation increment. Current
+implementation facts and future boundaries are authoritative in
+`ARCHITECTURE.md`.
 
 ## Non-negotiable product boundaries
 
@@ -190,7 +195,7 @@ release boundary are in `ENGINEERING_GUIDE.md`.
 - Testing and release standards: `TESTING_GUIDE.md` and `RELEASE_CHECKLIST.md`
 - Security policy and checklist: `SECURITY.md` and `SECURITY_CHECKLIST.md`
 - Session workflows: `docs/workflows/`
-- Reusable prompts: `prompts/`
+- Categorized reusable prompts and selection guidance: `prompts/README.md`
 - Reusable Codex skills: `.agents/skills/`
 - Brand assets and standards: `assets/branding/` and `docs/branding/`
 - Review templates and reports: `docs/templates/` and `docs/reviews/`

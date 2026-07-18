@@ -1523,7 +1523,8 @@ Consequences:
 ## D-054 - Route trusted repository checks to a dedicated self-hosted runner
 
 Date: 2026-07-17
-Status: Accepted; implementation verified on open PR #24
+Status: Accepted; verified implementation squash-merged through PR #24 at
+`eaf6c9f`
 
 Decision: assign the repository-specific `cortexa-ci` custom label to the
 registered Linux x64 runner and require the exact
@@ -1566,6 +1567,51 @@ Consequences:
   `approvals::types`; public contracts and target-Mac behavior are unchanged.
 - No runtime behavior, dependency, Tauri boundary, capability, permission, CSP,
   identifier, or SQLite schema changes.
+
+## D-055 - Organize copy-paste prompts by responsibility
+
+Date: 2026-07-17
+Status: Accepted
+
+Decision: organize the repository prompt library under `prompts/increments/`,
+`prompts/reviews/`, `prompts/workflows/`, and `prompts/templates/`. Keep
+`.agents/skills/` as named Codex procedures, `docs/workflows/` as human-readable
+runbooks, and `docs/templates/` as repository artifact templates. The prompt
+library is a copy-and-paste fallback and does not override repository authority,
+grant approval, or prove verification.
+
+Every executable prompt and prompt-authoring template uses one human-readable
+Markdown metadata block containing title, category, purpose, use and non-use
+conditions, required inputs, expected outputs, related skills, related prompts,
+and last-reviewed date. No custom metadata parser or dependency is introduced.
+Shared project rules remain in `AGENTS.md`, `ENGINEERING_GUIDE.md`, `SECURITY.md`,
+and accepted decisions; prompts cross-reference those authorities and retain
+only task-specific restrictions.
+
+The former start and resume prompts are one start-session workflow with an
+explicit mode. The former end-session and post-increment prompts are one
+end-session workflow that still invokes the quality and post-increment skills.
+The troubleshooting prompt becomes the bounded bug-fix increment prompt. All
+other useful prompts move to their responsibility category. Historical plans,
+reviews, backups, and dated handoff evidence retain old paths; active references
+must use `prompts/README.md` and the categorized destinations.
+
+Rationale: the flat library mixed implementation authorization, non-mutating
+reviews, operating procedures, and authoring skeletons. Categorization and
+consistent metadata improve discovery and reduce duplicated instructions while
+preserving the authority and operational detail of existing skills and
+runbooks.
+
+Consequences:
+
+- Prompt additions must represent a distinct responsibility and use lowercase
+  kebab-case names.
+- Long shared rule blocks are replaced by references to authoritative files.
+- Old active prompt paths are invalid after migration; dated historical
+  references remain intentional evidence.
+- Prompt templates do not replace the document templates under `docs/templates/`.
+- No skill, hook, application source, product behavior, dependency, Tauri
+  boundary, persistence, capability, permission, CSP, or credential changes.
 
 ## Open decisions
 
