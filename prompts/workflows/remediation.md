@@ -8,7 +8,7 @@
 - **Expected outputs:** A validated selection, prerequisite analysis, chosen increment prompt, approval pause, and evidence-backed backlog closeout.
 - **Related skills:** `$technical-debt`, `$readiness-review`, `$verified-increment`.
 - **Related prompts:** [Single-advisory remediation](../increments/remediation-single-advisory.md), [Remediation by severity](../increments/remediation-by-severity.md), [Remediation template](../templates/remediation-template.md).
-- **Last reviewed:** 2026-07-17
+- **Last reviewed:** 2026-07-18
 
 ## Prompt
 
@@ -21,5 +21,5 @@ Classify each candidate as still valid, resolved, superseded, duplicate, or no l
 
 For a single advisory, prepare prompts/increments/remediation-single-advisory.md. For one severity, prepare prompts/increments/remediation-by-severity.md. Replace every placeholder and present the bounded increment, exact files, risks, non-goals, verification, and rollback. Wait for project-owner approval before implementation.
 
-After an approved increment, require focused regression evidence, complete verification, backlog dispositions, project-memory synchronization, and the post-increment gate. Stop before selecting or starting the next remediation automatically.
+After an approved increment, require focused regression evidence, backlog dispositions, project-memory synchronization, and the post-increment gate. Follow the Risk-Based Validation Policy in AGENTS.md and ENGINEERING_GUIDE.md: use focused checks during implementation, then run the complete required completion-gate verification for the selected tier once after the final relevant edit. Never reduce security-sensitive, dependency, Tauri-configuration, or release validation. Stop before selecting or starting the next remediation automatically.
 ```

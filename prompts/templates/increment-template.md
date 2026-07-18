@@ -8,7 +8,7 @@
 - **Expected outputs:** One metadata-complete increment prompt with explicit approval and publication boundaries.
 - **Related skills:** `$verified-increment`.
 - **Related prompts:** [Verified increment](../increments/verified-increment.md), [Feature implementation](../increments/feature-implementation.md), [Remediation template](remediation-template.md).
-- **Last reviewed:** 2026-07-17
+- **Last reviewed:** 2026-07-18
 
 ## Template
 
@@ -30,6 +30,6 @@
 \`\`\`text
 {{PROMPT_BODY}}
 
-Read the authoritative repository documents, inspect the baseline, state exact scope and verification, and wait for approval before editing. Do not commit, push, merge, publish, or begin another increment automatically.
+Read the authoritative repository documents, inspect the baseline, state exact scope and verification, and wait for approval before editing. Follow the Risk-Based Validation Policy in AGENTS.md and ENGINEERING_GUIDE.md: use focused checks during implementation, then run the complete required completion-gate verification for the selected tier once after the final relevant edit. Never reduce cross-cutting, security-sensitive, dependency, Tauri-configuration, or release validation. Do not commit, push, merge, publish, or begin another increment automatically.
 \`\`\`
 ```

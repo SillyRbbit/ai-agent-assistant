@@ -8,7 +8,7 @@
 - **Expected outputs:** A pre-edit remediation plan, approved bounded fixes and regression tests, and evidence-backed backlog dispositions.
 - **Related skills:** `$technical-debt`, `$readiness-review`, `$verified-increment`, `$security-review`.
 - **Related prompts:** [Single-advisory remediation](remediation-single-advisory.md), [Remediation workflow](../workflows/remediation.md), [Remediation template](../templates/remediation-template.md).
-- **Last reviewed:** 2026-07-17
+- **Last reviewed:** 2026-07-18
 
 ## Prompt
 
@@ -27,5 +27,5 @@ Present the exact remediation plan, files, risks, non-goals, tests, verification
 
 After approval, implement only the accepted group. Add focused regression tests and preserve unrelated behavior and security boundaries. Do not add unrelated feature work. Do not mark a finding resolved without source and verification evidence.
 
-At closeout, update {{BACKLOG_PATH}} with resolved, skipped, deferred, superseded, duplicate, and remaining findings; record exact evidence and keep the resolving commit pending until committed. Run complete required verification and the post-increment gate. Do not start another remediation, commit, push, or merge automatically.
+At closeout, update {{BACKLOG_PATH}} with resolved, skipped, deferred, superseded, duplicate, and remaining findings; record exact evidence and keep the resolving commit pending until committed. Follow the Risk-Based Validation Policy in AGENTS.md and ENGINEERING_GUIDE.md: use focused checks during implementation, then run the complete required completion-gate verification for the selected tier once after the final relevant edit. Cross-cutting, security-sensitive, dependency, Tauri-configuration, and release work still requires npm run verify plus applicable manual checks. Run the post-increment gate. Do not start another remediation, commit, push, or merge automatically.
 ```

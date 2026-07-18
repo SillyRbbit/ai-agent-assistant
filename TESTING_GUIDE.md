@@ -1,7 +1,7 @@
 # Cortexa testing guide
 
 Status: Authoritative testing standard
-Last updated: 2026-07-16
+Last updated: 2026-07-18
 
 ## Testing principles
 
@@ -228,8 +228,10 @@ findings remain reported remediation debt.
 
 ## Required commands
 
-During development, run the narrowest relevant command. Before completing an
-increment, run the complete relevant sequence:
+During implementation, run the narrowest relevant command and batch related
+edits before expensive checks. At completion, run the sequence required by the
+applicable change class once after the final relevant edit. The complete
+cross-cutting sequence is:
 
 ```bash
 npm run format:check
@@ -242,7 +244,8 @@ npm run docs:check
 npm run repository:check
 ```
 
-The canonical combined command is:
+The canonical combined command for cross-cutting, security-sensitive,
+dependency, Tauri-configuration, and release changes is:
 
 ```bash
 npm run verify
@@ -260,23 +263,26 @@ cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
 ```
 
 Use the package scripts when their coverage is equivalent. Do not substitute a
-partial command for `npm run verify` while calling the result complete.
+partial command for `npm run verify` when the change class or approved plan
+requires the complete suite. Do not run unrelated source tests or builds for a
+documentation-only change unless executable tooling, generated artifacts,
+tested examples, or another explicit policy requires them.
 
 ## Change-to-test matrix
 
-| Change                           | Minimum focused evidence before full verification                                                  |
+| Change                           | Minimum completion evidence                                                                        |
 | -------------------------------- | -------------------------------------------------------------------------------------------------- |
-| Pure TypeScript model or reducer | Adjacent Vitest unit cases                                                                         |
-| React behavior                   | Testing Library interaction and accessibility cases                                                |
-| IPC client or event parser       | Unknown, valid, invalid, and failure tests                                                         |
-| Rust validation or state machine | Unit table plus public contract case                                                               |
-| Tauri command or event           | Rust boundary test and frontend narrowing test                                                     |
-| SQLite or migration              | In-memory and file-backed success/failure integration tests                                        |
-| Policy or approval               | Exact identity, denial, replay, expiry, cancellation, and redaction cases                          |
-| Native macOS behavior            | Automated portable policy tests plus target-Mac manual evidence                                    |
-| Documentation-only               | Markdown formatting, link/path audit, protected-path diff, and full repository verification        |
+| Pure TypeScript model or reducer | Formatting, lint, typecheck, adjacent Vitest cases, and frontend build when output can change      |
+| React behavior                   | Formatting, lint, typecheck, Testing Library interaction/accessibility cases, and relevant build   |
+| IPC client or event parser       | Complete verification plus unknown, valid, invalid, and failure contract cases                     |
+| Rust validation or state machine | Rust formatting, strict Clippy, unit table, and affected public contract cases                     |
+| Tauri command or event           | Complete verification plus Rust boundary and frontend narrowing tests                              |
+| SQLite or migration              | Complete verification plus in-memory and file-backed success/failure integration tests             |
+| Policy or approval               | Complete verification plus identity, denial, replay, expiry, cancellation, and redaction cases     |
+| Native macOS behavior            | Affected automated checks plus target-Mac manual evidence                                          |
+| Documentation-only               | Status, diff check, Markdown formatting, link/path audit, and protected-path scope proof           |
 | GitHub workflow or template      | YAML parse, immutable actions, permissions/triggers, no-secret/no-write policy, and command checks |
-| Dependency change                | Focused behavior, full verification, audit, license, and lockfile review                           |
+| Dependency change                | Focused behavior, complete verification, audit, license, and lockfile review                       |
 
 ## Completion gate
 
@@ -285,12 +291,15 @@ Before ending implementation:
 1. Run every required automated command and manual check.
 2. Review failures and rerun only after the repository or environment issue is
    understood.
-3. Record passed, failed, not-run, and pending manual checks separately.
-4. Review the complete diff and confirm tests cover the changed contract.
-5. Synchronize documentation with actual results.
-6. Run `python3 .codex/hooks/session_end_gate.py` and resolve conflicts or
+3. Do not rerun an identical successful check unless relevant content changed
+   afterward or an explicit policy requires it.
+4. Record passed, failed, not-run, and pending manual checks separately. Record
+   the risk-based reason for checks that are not applicable.
+5. Review the complete diff and confirm tests cover the changed contract.
+6. Synchronize documentation with actual results.
+7. Run `python3 .codex/hooks/session_end_gate.py` and resolve conflicts or
    unexpected paths.
-7. Run `$quality-gate`, then `$post-increment-gate`, and require the expected
+8. Run `$quality-gate`, then `$post-increment-gate`, and require the expected
    valid marker.
 
 Flaky, skipped, ignored, quarantined, or environment-blocked tests are not
