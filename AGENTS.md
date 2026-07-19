@@ -72,12 +72,14 @@ pre-existing stale roadmap wording outside the approved scope. Do not begin
 another product or remediation increment. Current implementation facts and
 future boundaries are authoritative in `ARCHITECTURE.md`.
 
-Meta risk-based GitHub Actions validation is locally verified with a valid
-`meta-risk-based-ci` marker under `docs/plans/meta-risk-based-ci.md`; publication
-and actual GitHub-hosted execution remain pending. Its exact 29-path scope
-preserves the complete local final increment gate and changes no application
-behavior, dependency, Tauri configuration, permission, SQLite, or product
-boundary.
+Meta risk-based GitHub Actions validation is committed on PR #30 at `4fb7f31`.
+The first hosted attempt was rejected before runner allocation because the
+account Actions minute or spending limit was exhausted. D-058 now authorizes a
+bounded publication correction that keeps the two risk-based workflows but
+routes trusted pushes across the registered Linux and macOS `cortexa-ci`
+runners. Persistent runners must never receive `pull_request` or
+`pull_request_target` events. The correction changes no application behavior,
+dependency, Tauri configuration, permission, SQLite, or product boundary.
 
 ## Non-negotiable product boundaries
 

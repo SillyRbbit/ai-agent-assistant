@@ -91,11 +91,11 @@ Apply the dependency and supply-chain sections of `SECURITY_CHECKLIST.md` and
 - Pull-request code and dependency updates are untrusted. GitHub workflows run
   with `contents: read`, receive no repository secret context, do not use
   `pull_request_target`, and disable persisted checkout credentials.
-- Pull-request jobs use ephemeral GitHub-hosted `ubuntu-latest` runners. The
-  retired persistent runner is not selected by active workflows and remains a
-  documented rollback option only. Re-enabling it requires a separate security
-  decision and must not expose untrusted pull-request code to a persistent host.
-- A Linux hosted verification result does not prove native macOS menus,
+- Active persistent runners receive only reviewed branch pushes, scheduled
+  audit, and explicit dispatch. They never subscribe to `pull_request` or
+  `pull_request_target`; fork and dependency-bot changes must be reproduced on
+  a maintainer-controlled allowlisted branch before execution.
+- Linux or target-Mac Rust verification does not prove native macOS menus,
   windows, dialogs, icons, permissions, signing, notarization, or installer
   behavior. Those checks remain target-Mac evidence.
 - Every external action reference is pinned to an immutable commit digest.

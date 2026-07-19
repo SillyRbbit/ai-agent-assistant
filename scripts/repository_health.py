@@ -29,6 +29,16 @@ RUNNER_SELECTOR = re.compile(r"^\s*runs-on:\s*(?P<selector>.+?)\s*$", re.MULTILI
 PROMPT_PLACEHOLDER = re.compile(r"\{\{(?P<name>[A-Z][A-Z0-9_]*)\}\}")
 PROMPT_PATH_REFERENCE = re.compile(r"\bprompts/[A-Za-z0-9_./-]+\.md\b")
 EXPECTED_WORKFLOWS = frozenset({"ci.yml", "documentation.yml"})
+LINUX_RUNNER_SELECTOR = "[self-hosted, Linux, X64, cortexa-ci]"
+MACOS_RUNNER_SELECTOR = "[self-hosted, macOS, X64, cortexa-ci]"
+TRUSTED_WORKFLOW_BRANCHES = (
+    '- "codex/**"',
+    '- "feature/**"',
+    '- "fix/**"',
+    '- "refactor/**"',
+    '- "meta/**"',
+    '- "phase*/**"',
+)
 REQUIRED_PROMPT_METADATA = (
     "Category",
     "Purpose",
@@ -440,10 +450,15 @@ def workflow_findings(root: Path) -> tuple[Finding, ...]:
                 findings.append(Finding("workflows", relative_path, "action reference is not pinned to an immutable digest", line))
         prohibited = (
             ("pull_request_target:", "pull_request_target is prohibited"),
+            (
+                "pull_request:",
+                "persistent self-hosted workflows must not subscribe to pull_request",
+            ),
             ("persist-credentials: true", "checkout credentials must not persist"),
             ("${{ secrets.", "workflow must not require repository secrets"),
             ("git commit ", "workflow must not create commits"),
             ("git push", "workflow must not push"),
+            ("sudo ", "self-hosted workflows must not provision the runner with sudo"),
             ("npm publish", "workflow must not publish packages"),
             ("cargo publish", "workflow must not publish crates"),
             ("continue-on-error:", "mandatory workflow checks must not continue on error"),
@@ -456,21 +471,22 @@ def workflow_findings(root: Path) -> tuple[Finding, ...]:
             findings.append(Finding("workflows", relative_path, "write workflow permission is prohibited", text.count("\n", 0, match.start()) + 1))
         if "permissions:\n  contents: read" not in text:
             findings.append(Finding("workflows", relative_path, "top-level contents: read permission is required"))
-        if "self-hosted" in text:
-            findings.append(Finding("workflows", relative_path, "active workflows must use ephemeral GitHub-hosted runners"))
+        selectors = tuple(match.group("selector") for match in RUNNER_SELECTOR.finditer(text))
         for match in RUNNER_SELECTOR.finditer(text):
-            if match.group("selector") != "ubuntu-latest":
+            if match.group("selector") not in {
+                LINUX_RUNNER_SELECTOR,
+                MACOS_RUNNER_SELECTOR,
+            }:
                 findings.append(
                     Finding(
                         "workflows",
                         relative_path,
-                        "every active job must use ubuntu-latest",
+                        "runner selector is not an approved dedicated Cortexa runner",
                         text.count("\n", 0, match.start()) + 1,
                     )
                 )
 
         required_common = (
-            "pull_request:",
             "push:",
             "workflow_dispatch:",
             "paths:",
@@ -486,16 +502,27 @@ def workflow_findings(root: Path) -> tuple[Finding, ...]:
                     f"required trigger or concurrency policy is missing: {', '.join(missing_common)}",
                 )
             )
-        if "branches:\n      - main" not in text:
-            findings.append(Finding("workflows", relative_path, "pull-request and push branches must target main"))
+        required_branches = ("branches:\n      - main", *TRUSTED_WORKFLOW_BRANCHES)
+        missing_branches = tuple(value for value in required_branches if value not in text)
+        if missing_branches:
+            findings.append(
+                Finding(
+                    "workflows",
+                    relative_path,
+                    f"trusted push branch allowlist is incomplete: {', '.join(missing_branches)}",
+                )
+            )
 
         if path.name == "ci.yml":
             required_ci = (
                 "schedule:",
                 "scripts/ci_change_scope.py",
                 "Frontend validation",
-                "Rust validation",
+                "Linux Rust validation",
+                "Target-Mac Rust validation",
                 "Dependency and secret audit",
+                LINUX_RUNNER_SELECTOR,
+                MACOS_RUNNER_SELECTOR,
                 ".codex/hooks/tests",
                 "scripts/tests",
                 '"src/**"',
@@ -524,6 +551,7 @@ def workflow_findings(root: Path) -> tuple[Finding, ...]:
                 '".agents/**"',
                 "npm run docs:check",
                 "npm run repository:check",
+                LINUX_RUNNER_SELECTOR,
             )
             missing_documentation = tuple(
                 value for value in required_documentation if value not in text
@@ -534,6 +562,16 @@ def workflow_findings(root: Path) -> tuple[Finding, ...]:
                         "workflows",
                         relative_path,
                         f"documentation CI policy is incomplete: {', '.join(missing_documentation)}",
+                    )
+                )
+            if selectors and any(
+                selector != LINUX_RUNNER_SELECTOR for selector in selectors
+            ):
+                findings.append(
+                    Finding(
+                        "workflows",
+                        relative_path,
+                        "documentation jobs must use the dedicated Linux runner",
                     )
                 )
     return tuple(findings)

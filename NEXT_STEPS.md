@@ -58,9 +58,9 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Repository workflow - trusted self-hosted runner routing:
   **Verified complete with advisories and squash-merged through PR #24 at
   `eaf6c9f`**.
-- Repository workflow - risk-based GitHub-hosted validation:
-  **Verified complete locally with advisories; publication and actual hosted
-  execution pending**.
+- Repository workflow - risk-based GitHub Actions validation:
+  **Committed on PR #30; D-058 correction verified locally with advisories and
+  valid marker; publication pending**.
 - Meta Increment 8 - Prompt Library Reorganization:
   **Verified complete; published through PR #25 and squash-merged at
   `d26b5e1`**.
@@ -70,16 +70,19 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Queue status
 
-### Publish the verified risk-based CI increment
+### Review and publish the D-058 dual-runner correction
 
-**Status:** Exact 29-path implementation is locally verified with a valid
-`meta-risk-based-ci` marker; separate publication approval is required.
+**Status:** The original 29-path implementation is committed as `4fb7f31` on
+open PR #30. GitHub-hosted jobs failed before allocation because the account
+Actions limit was exhausted. The exact 22-path D-058 correction is uncommitted;
+automated local verification passes, the project owner confirmed both runner
+services satisfy the isolated, unprivileged host baseline, and the gate is
+`PASS WITH ADVISORIES` with a valid marker.
 
-Review the complete scope, generate descriptive Git names, and wait for owner
-approval before branch creation, staging, commit, push, pull request, or merge.
-After push, require applicable CI and Documentation jobs to pass on
-GitHub-hosted runners and reconcile the report/marker if hosted evidence is
-added. Do not combine ARB-002 or product work.
+Review the exact correction and wait for separate commit/push approval. After
+push, require Linux runner 21 and macOS runner 22 execution evidence and confirm
+no pull-request event received either persistent runner before merge. Do not
+combine ARB-002 or product work.
 
 ### No later remediation is Ready
 

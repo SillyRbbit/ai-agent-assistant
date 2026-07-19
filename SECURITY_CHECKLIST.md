@@ -151,8 +151,9 @@ production boundary exists.
 - [ ] External actions use immutable commit digests and are reviewed through
       dependency proposals rather than mutable tags.
 - [ ] Pull-request code is treated as untrusted even when checks pass.
-- [ ] Pull-request jobs use ephemeral hosted runners; active workflows do not
-      route untrusted changes to a persistent self-hosted machine.
+- [ ] Persistent self-hosted workflows have no `pull_request` or
+      `pull_request_target` trigger and accept only the trusted branch-push
+      allowlist, schedule, or explicit dispatch defined by D-058.
 - [ ] Path classification is deterministic, includes deletions, and fails
       closed by running both application jobs for unknown non-documentation
       paths.

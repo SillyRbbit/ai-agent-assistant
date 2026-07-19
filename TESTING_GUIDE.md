@@ -111,7 +111,7 @@ The standard-library repository checks cover Markdown and image targets, secret
 pattern redaction, tracked generated output, licensing evidence, documented npm
 commands, prompt metadata and placeholders, stale active prompt paths,
 immutable GitHub Action references, the exact two-workflow layout,
-least-privilege hosted workflow policy, and the exact accepted Cargo-audit
+least-privilege dual-runner workflow policy, and the exact accepted Cargo-audit
 baseline. Positive and negative fixtures use isolated temporary paths and
 synthetic values.
 
@@ -129,11 +129,13 @@ evidence, not a security certification or proof of remote GitHub settings.
 
 ### Risk-based GitHub workflow verification
 
-The active CI and Documentation workflows run untrusted pull-request code only
-on ephemeral `ubuntu-latest` runners. Workflow changes must prove locally that
-YAML parses, action references remain immutable, permissions remain read-only,
-secrets and write operations remain absent, concurrency cancellation is active,
-and repository health accepts only the exact two-workflow layout.
+The active CI and Documentation workflows use dedicated Linux and macOS
+`cortexa-ci` runners only for reviewed branch pushes, schedule, and explicit
+dispatch. They do not subscribe to `pull_request`. Workflow changes must prove
+locally that YAML parses, selectors and trusted branches are exact, action
+references remain immutable, permissions remain read-only, secrets and write
+operations remain absent, concurrency cancellation is active, and repository
+health accepts only the exact two-workflow layout.
 
 `scripts/ci_change_scope.py` uses fixed Git comparisons and closed path classes.
 Its fixtures cover documentation-only, frontend-only, Rust-only, IPC/Tauri,
@@ -141,10 +143,11 @@ security-sensitive Rust, dependency, CI-workflow, deletion, unknown-path,
 scheduled-audit, and manual-dispatch behavior. Unknown non-documentation paths
 run both application jobs instead of being silently skipped.
 
-After publication, inspect actual GitHub runs before claiming hosted execution
-passed. GitHub-hosted Linux verification never replaces target-Mac menus,
+After publication, inspect actual GitHub runs before claiming either registered
+runner passed. Linux Rust validation preserves portability; target-Mac Rust
+validation compiles and tests macOS-gated code but never replaces native menus,
 windows, dialogs, permissions, signing, notarization, or installer evidence.
-The retired persistent-runner operating and rollback record remains in
+The active trust policy and operating record are in
 `docs/github/SELF_HOSTED_RUNNER.md`.
 
 Path-filtered workflows are conditional checks. GitHub may leave a skipped

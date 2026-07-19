@@ -27,14 +27,15 @@ def write_valid_workflows(root: Path) -> None:
     workflow_root.mkdir(parents=True)
     shared = (
         "on:\n"
-        "  pull_request:\n"
-        "    branches:\n"
-        "      - main\n"
-        "    paths:\n"
-        '      - "src/**"\n'
         "  push:\n"
         "    branches:\n"
         "      - main\n"
+        '      - "codex/**"\n'
+        '      - "feature/**"\n'
+        '      - "fix/**"\n'
+        '      - "refactor/**"\n'
+        '      - "meta/**"\n'
+        '      - "phase*/**"\n'
         "    paths:\n"
         '      - "src/**"\n'
         "  workflow_dispatch:\n"
@@ -51,7 +52,7 @@ def write_valid_workflows(root: Path) -> None:
         + "jobs:\n"
         + "  classify:\n"
         + "    name: Classify change\n"
-        + "    runs-on: ubuntu-latest\n"
+        + "    runs-on: [self-hosted, Linux, X64, cortexa-ci]\n"
         + "    steps:\n"
         + "      - uses: actions/checkout@"
         + ("a" * 40)
@@ -60,9 +61,10 @@ def write_valid_workflows(root: Path) -> None:
         + "      - run: python3 scripts/ci_change_scope.py classify\n"
         + "      - run: python3 -m unittest discover -s scripts/tests -v\n"
         + "      - run: python3 -m unittest discover -s .codex/hooks/tests -v\n"
-        + "  frontend:\n    name: Frontend validation\n    runs-on: ubuntu-latest\n"
-        + "  rust:\n    name: Rust validation\n    runs-on: ubuntu-latest\n"
-        + "  audit:\n    name: Dependency and secret audit\n    runs-on: ubuntu-latest\n"
+        + "  frontend:\n    name: Frontend validation\n    runs-on: [self-hosted, Linux, X64, cortexa-ci]\n"
+        + "  rust:\n    name: Linux Rust validation\n    runs-on: [self-hosted, Linux, X64, cortexa-ci]\n"
+        + "  rust-macos:\n    name: Target-Mac Rust validation\n    runs-on: [self-hosted, macOS, X64, cortexa-ci]\n"
+        + "  audit:\n    name: Dependency and secret audit\n    runs-on: [self-hosted, Linux, X64, cortexa-ci]\n"
         + '  # "src-tauri/**" "assets/branding/**" "package-lock.json" ".prettierrc*" ".codex/**" ".github/workflows/ci.yml" ".github/workflows/documentation.yml"\n',
         encoding="utf-8",
     )
@@ -70,7 +72,7 @@ def write_valid_workflows(root: Path) -> None:
         shared.replace('      - "src/**"', '      - "**/*.md"')
         + "jobs:\n"
         + "  documentation:\n"
-        + "    runs-on: ubuntu-latest\n"
+        + "    runs-on: [self-hosted, Linux, X64, cortexa-ci]\n"
         + "    steps:\n"
         + '      - run: npm run docs:check && npm run repository:check # "prompts/**" ".agents/**" "LICENSE*"\n',
         encoding="utf-8",
@@ -203,7 +205,7 @@ class RepositoryHealthTests(unittest.TestCase):
 
             self.assertTrue(any("stale prompt path" in finding.detail for finding in findings))
 
-    def test_workflow_check_accepts_risk_based_hosted_workflows(self) -> None:
+    def test_workflow_check_accepts_risk_based_dual_runner_workflows(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             write_valid_workflows(root)
@@ -227,23 +229,30 @@ class RepositoryHealthTests(unittest.TestCase):
             self.assertIn("write workflow permission is prohibited", details)
             self.assertIn("action reference is not pinned to an immutable digest", details)
 
-    def test_workflow_check_rejects_self_hosted_runner_and_missing_pr_trigger(self) -> None:
+    def test_workflow_check_rejects_hosted_runner_and_pull_request_trigger(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             write_valid_workflows(root)
             path = root / ".github" / "workflows" / "ci.yml"
             path.write_text(
                 path.read_text(encoding="utf-8")
-                .replace("  pull_request:\n", "  review_event:\n", 1)
-                .replace("runs-on: ubuntu-latest", "runs-on: [self-hosted, Linux, X64]", 1),
+                .replace("  push:\n", "  pull_request:\n", 1)
+                .replace(
+                    "runs-on: [self-hosted, Linux, X64, cortexa-ci]",
+                    "runs-on: ubuntu-latest",
+                    1,
+                ),
                 encoding="utf-8",
             )
 
             details = {finding.detail for finding in health.workflow_findings(root)}
 
-            self.assertIn("active workflows must use ephemeral GitHub-hosted runners", details)
             self.assertTrue(
-                any("pull_request:" in detail for detail in details),
+                any("must not subscribe to pull_request" in detail for detail in details),
+            )
+            self.assertIn(
+                "runner selector is not an approved dedicated Cortexa runner",
+                details,
             )
 
     def test_workflow_check_rejects_unexpected_workflow(self) -> None:

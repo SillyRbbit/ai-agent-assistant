@@ -150,6 +150,29 @@ class ChangeScopeTests(unittest.TestCase):
 
             self.assertEqual(paths, ("README.md", "src/main.ts"))
 
+    def test_push_uses_before_and_head_range(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.run_git(root, "init", "-q")
+            self.run_git(root, "config", "user.email", "ci@example.invalid")
+            self.run_git(root, "config", "user.name", "CI fixture")
+            (root / "README.md").write_text("base\n", encoding="utf-8")
+            self.run_git(root, "add", "README.md")
+            self.run_git(root, "commit", "-qm", "base")
+            before = self.run_git(root, "rev-parse", "HEAD").stdout.strip()
+            (root / "src-tauri").mkdir()
+            (root / "src-tauri" / "Cargo.toml").write_text(
+                "[package]\nname = \"fixture\"\nversion = \"0.1.0\"\n",
+                encoding="utf-8",
+            )
+            self.run_git(root, "add", "src-tauri/Cargo.toml")
+            self.run_git(root, "commit", "-qm", "change")
+            head = self.run_git(root, "rev-parse", "HEAD").stdout.strip()
+
+            paths = scope.changed_paths(root, "push", before, head)
+
+            self.assertEqual(paths, ("src-tauri/Cargo.toml",))
+
     @staticmethod
     def run_git(root: Path, *arguments: str) -> subprocess.CompletedProcess[str]:
         return subprocess.run(

@@ -59,8 +59,10 @@ or requirement is not evidence that production behavior exists.
   timeouts, and commands are explicit and least-privilege.
 - Pull-request workflows receive no secrets and never use
   `pull_request_target` for untrusted code.
-- Pull-request jobs use ephemeral hosted runners. Any future persistent runner
-  use requires a separately reviewed trust policy.
+- Persistent self-hosted jobs never subscribe to `pull_request`; they run only
+  for the trusted branch-push allowlist, schedule, or explicit dispatch defined
+  by D-058. Fork and dependency-bot changes must be reproduced on a reviewed
+  maintainer-controlled branch before those runners execute them.
 - Path filters and change classification include every current source,
   dependency, workflow, Tauri, IPC, storage, migration, permission, and
   security-sensitive path. Unknown non-documentation paths fail closed.

@@ -1,52 +1,53 @@
 # Meta Increment - risk-based GitHub Actions validation
 
-Status: Verified complete locally with advisories; publication pending
+Status: Verified locally with advisories; publication pending
 Date: 2026-07-18
 Baseline: clean synchronized `main` at `1c03f66`
-Gate: `meta-risk-based-ci`
+Gate: `repository-dual-self-hosted-runner-routing`
 
 ## Goal
 
-Replace blanket persistent-runner verification with efficient risk-based
-GitHub-hosted validation while preserving the complete local increment gate,
-security-sensitive checks, and product behavior.
+Replace blanket verification with efficient risk-based validation across the
+registered Linux and macOS runners while preserving the complete local
+increment gate, security-sensitive checks, and product behavior.
 
 ## Completed implementation
 
 - Reduced the active workflow tree to `ci.yml` and `documentation.yml`.
-- Added pull-request, `main` push, and manual triggers with explicit paths,
-  read-only permissions, concurrency cancellation, immutable action SHAs,
-  disabled checkout credentials, bounded timeouts, and no secrets or write
-  steps.
+- Added trusted branch-push and manual triggers with explicit paths, read-only
+  permissions, concurrency cancellation, immutable action SHAs, disabled
+  checkout credentials, bounded timeouts, and no secrets or write steps. CI
+  retains its weekly audit schedule; neither workflow accepts pull-request
+  events.
 - Added a standard-library fixed-SHA classifier that handles pull-request merge
   bases, push ranges, tracked deletions, scheduled audit, manual full dispatch,
   unsafe paths, and fail-closed unknown non-documentation paths.
-- Split Application CI into classifier/policy, frontend, Rust, and
-  dependency-audit jobs. Documentation-only changes do not start it.
+- Split Application CI into classifier/policy, frontend, Linux Rust, target-Mac
+  Rust, and dependency-audit jobs. Documentation-only changes do not start it.
 - Consolidated the former weekly Security workflow into CI's audit job while
   preserving the exact accepted npm and Rust advisory policy.
 - Added focused frontend scripts without changing tool behavior, dependencies,
   or lockfiles.
 - Expanded repository health for prompt metadata/path checks and the exact
-  hosted two-workflow policy.
-- Recorded D-057 and synchronized active engineering, testing, security,
-  review, contribution, README, runner, prompt, plan, roadmap, and project-memory
-  guidance. D-054 remains dated historical and rollback evidence.
+  dual-runner two-workflow policy.
+- Preserved D-054 and D-057 as dated historical evidence and recorded D-058 for
+  active Linux/macOS routing after GitHub rejected both PR #30 hosted jobs
+  before allocation because the Actions minute or spending limit was exhausted.
 
 ## Change-to-workflow matrix
 
-| Change class                                                  | Documentation | Frontend      | Rust          | Audit         |
-| ------------------------------------------------------------- | ------------- | ------------- | ------------- | ------------- |
-| Markdown, prompt, or project memory only                      | Yes           | No            | No            | No            |
-| Frontend or application brand asset                           | When mixed    | Yes           | No            | No            |
-| Isolated target-neutral Rust test/example                     | When mixed    | No            | Yes           | No            |
-| Tauri, IPC, policy, approval, storage, migration, or security | When mixed    | Yes           | Yes           | Yes           |
-| Dependency or Application CI workflow                         | When mixed    | Yes           | Yes           | Yes           |
-| Documentation workflow or repository validator                | Yes           | No            | No            | Yes           |
-| Repository hook                                               | No            | No            | No            | Yes           |
-| Mixed documentation and source                                | Yes           | As classified | As classified | As classified |
-| Weekly schedule                                               | No            | No            | No            | Yes           |
-| Manual CI dispatch                                            | No            | Yes           | Yes           | Yes           |
+| Change class                                                  | Documentation | Frontend      | Linux Rust    | macOS Rust    | Audit         |
+| ------------------------------------------------------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
+| Markdown, prompt, or project memory only                      | Yes           | No            | No            | No            | No            |
+| Frontend or application brand asset                           | When mixed    | Yes           | No            | No            | No            |
+| Isolated target-neutral Rust test/example                     | When mixed    | No            | Yes           | Yes           | No            |
+| Tauri, IPC, policy, approval, storage, migration, or security | When mixed    | Yes           | Yes           | Yes           | Yes           |
+| Dependency or Application CI workflow                         | When mixed    | Yes           | Yes           | Yes           | Yes           |
+| Documentation workflow or repository validator                | Yes           | No            | No            | No            | Yes           |
+| Repository hook                                               | No            | No            | No            | No            | Yes           |
+| Mixed documentation and source                                | Yes           | As classified | As classified | As classified | As classified |
+| Weekly schedule                                               | No            | No            | No            | No            | Yes           |
+| Manual CI dispatch                                            | No            | Yes           | Yes           | Yes           | Yes           |
 
 ## Exact scope
 
@@ -88,13 +89,19 @@ No application source, test contract, dependency version, lockfile, Tauri
 configuration, command, capability, CSP, permission, SQLite migration, database,
 identifier, credential, or product behavior changed.
 
+The D-058 correction is bounded to 22 paths: the two workflows; repository
+health and its workflow-policy test; the push-range classifier test; and the 17
+authority, runner, plan, review, changelog, roadmap, and project-memory files
+needed to replace stale active D-057 wording. The classifier implementation,
+application source, dependencies, lockfiles, hooks, and skills remain unchanged.
+
 ## Verification evidence
 
 Passed:
 
 - Clean `npm ci` and `npm ci --ignore-scripts` installs.
 - Both workflow files parse as YAML.
-- Sixteen classifier cases and all 37 repository tests.
+- Seventeen classifier cases and all 38 repository tests.
 - All 28 repository hook tests.
 - `npm run docs:check`, `npm run repository:check`, and
   `npm run security:scan`.
@@ -114,20 +121,22 @@ Failed required checks: none. One unsupported local Ruby API invocation and one
 sandbox-denied npm audit attempt were resolved by a supported parser invocation
 and an approved network-enabled retry.
 
-Not run: Ubuntu package installation and actual GitHub-hosted jobs. The former
-is target-specific to the workflow image; the latter requires publication. No
+The first actual GitHub-hosted jobs were attempted on PR #30 and failed before
+allocation because the account Actions limit was exhausted; no repository step
+ran. Actual dual-runner execution remains pending publication of D-058. No
 native product manual check applies.
 
-Manual verification pending: inspect applicable CI and Documentation jobs after
-publication. This is non-blocking for local completion and remains an explicit
-advisory.
+Required manual verification passed: the project owner confirmed both runner
+services satisfy D-058's dedicated, unprivileged host baseline. Inspect
+applicable CI and Documentation jobs after publication; this is non-blocking
+for local completion and remains an explicit advisory.
 
 ## Review outcome
 
-- Architecture: no product or runtime boundary changed. Hosted/local
-  responsibilities and target-Mac limits are explicit.
-- Security: untrusted pull-request code moves from a persistent host to
-  ephemeral read-only runners. Fixed commands, validated SHAs/paths, no secrets,
+- Architecture: no product or runtime boundary changed. Linux, target-Mac, and
+  local responsibilities are explicit.
+- Security: persistent runners receive no pull-request event, secrets, writes,
+  or host provisioning. Fixed commands, validated SHAs/paths, exact selectors,
   and fail-closed classification preserve the automation boundary.
 - Code health: focused fixtures cover every declared classifier class; package
   script composition avoids duplicate frontend/Rust work.
@@ -136,23 +145,26 @@ advisory.
 - Readiness: no later product or remediation increment is Ready. ARB-002 remains
   blocked on O-006/O-007 and owner decisions.
 
-Result: `PASS WITH ADVISORIES` because hosted execution and remote enforcement
-are pending publication. The `meta-risk-based-ci` marker is complete and valid.
+Result: `PASS WITH ADVISORIES`. Automated local verification and the required
+project-owner host-isolation confirmation pass, no Critical or High blocking
+finding remains, and the `repository-dual-self-hosted-runner-routing` marker is
+complete and valid. Actual dual-runner execution remains pending publication.
 
 ## Risks and rollback
 
-The main risk is stale path ownership. D-057 requires path filters, classifier
-rules, fixtures, and the testing matrix to change together; unknown paths fail
-closed. Conditional path-filtered workflows are not represented as universal
-branch-protection checks.
+The main risks are persistent-host exposure and stale path ownership. D-058
+prohibits pull-request events and requires isolated unprivileged hosts. Its path
+filters, classifier rules, fixtures, and testing matrix must change together;
+unknown paths fail closed. Conditional path-filtered workflows are not
+represented as universal branch-protection checks.
 
-Before publication, restore the 29 paths from `1c03f66`. After publication,
-revert the bounded change, restore the three D-054 workflows and their policy,
-then rerun local and hosted validation. The registered self-hosted runner is not
-removed, so rollback needs no product, database, dependency, or host rebuild.
+Before committing D-058, restore its changed paths from `4fb7f31`. After
+publication, restore D-057's hosted selectors only when Actions availability is
+repaired, then rerun local and remote validation. Rollback needs no product,
+database, dependency, or host rebuild.
 
 ## Exact next task
 
-Review and publish only this exact 29-path increment after separate owner
-approval. After push, require applicable GitHub-hosted jobs and reconcile any
-new report evidence before merge. Do not begin ARB-002 or another increment.
+Complete and review only the D-058 dual-runner correction. After separate
+publication approval, require applicable Linux and target-Mac jobs and reconcile
+the report and marker before merge. Do not begin ARB-002 or another increment.

@@ -87,8 +87,9 @@ boundaries.
 - Keep APIs narrow and make invalid states difficult to represent.
 - Avoid unrelated refactors, generated output, and metadata churn.
 - Keep GitHub workflows read-only, secret-free, digest-pinned, and incapable of
-  committing, pushing, publishing, deploying, signing, or auto-merging. Run
-  untrusted pull-request code only on ephemeral GitHub-hosted runners.
+  committing, pushing, publishing, deploying, signing, or auto-merging. Never
+  route untrusted pull-request events to persistent self-hosted runners; D-058
+  limits them to reviewed branch pushes, schedule, and explicit dispatch.
 - Add comments only when they explain a non-obvious invariant or boundary.
 - Never claim a command passed unless its actual output was observed.
 
@@ -277,10 +278,13 @@ not replace the final local increment gate or target-platform evidence.
   policy or the approved increment class requires it, including when hosted
   path filtering skips unrelated jobs.
 
-Both workflows use ephemeral `ubuntu-latest`, immutable official action SHAs,
-top-level `contents: read`, non-persistent checkout credentials, no secret
-context, bounded timeouts, and concurrency cancellation. They do not upload or
-cache build output. Update both event path filters and classifier fixtures when
+Both workflows use exact repository-specific self-hosted selectors. Linux owns
+classification, documentation, frontend, Linux Rust, and dependency audits;
+the target-Mac runner adds macOS Rust validation for Rust-classified changes.
+Both preserve immutable official action SHAs, top-level `contents: read`,
+non-persistent checkout credentials, no secret context, bounded timeouts, and
+concurrency cancellation. They do not upload or cache build output. Update both
+event path filters and classifier fixtures when
 repository structure or trust-boundary ownership changes.
 
 GitHub path-filtered checks are conditional and must not be represented as

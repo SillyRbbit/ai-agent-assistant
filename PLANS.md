@@ -4,10 +4,12 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No implementation plan is active. Meta risk-based GitHub Actions validation is
-locally verified under `docs/plans/meta-risk-based-ci.md`; its exact 29-path
-scope and valid marker are uncommitted, and actual GitHub-hosted execution is
-pending publication. It changes no product behavior or dependency.
+The D-058 dual-self-hosted-runner publication correction is verified locally
+with advisories under `docs/plans/meta-risk-based-ci.md` on PR #30. The original
+29-path implementation is committed as `4fb7f31`; the exact 22-path correction
+is uncommitted with a valid marker and changes workflow routing and governance
+only, not product behavior or dependencies. Publication and actual dual-runner
+execution remain pending separate approval.
 
 Meta Increment 8 Prompt Library Reorganization is verified complete under
 `docs/increments/meta-prompt-library-reorganization.md`, published through PR

@@ -1,30 +1,15 @@
 name: Documentation
 
 on:
-  pull_request:
-    branches:
-      - main
-    paths:
-      - "**/*.md"
-      - "**/*.mdx"
-      - "docs/**"
-      - "prompts/**"
-      - ".agents/**"
-      - "assets/branding/**"
-      - ".github/**/*.yml"
-      - ".github/**/*.yaml"
-      - ".github/CODEOWNERS"
-      - ".gitignore"
-      - ".prettierignore"
-      - ".prettierrc*"
-      - "LICENSE*"
-      - "package.json"
-      - "package-lock.json"
-      - "scripts/repository_health.py"
-      - "scripts/tests/test_repository_health.py"
   push:
     branches:
       - main
+      - "codex/**"
+      - "feature/**"
+      - "fix/**"
+      - "refactor/**"
+      - "meta/**"
+      - "phase*/**"
     paths:
       - "**/*.md"
       - "**/*.mdx"
@@ -49,15 +34,23 @@ permissions:
   contents: read
 
 concurrency:
-  group: documentation-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: documentation-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   documentation:
     name: Documentation and repository policy
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64, cortexa-ci]
     timeout-minutes: 10
     steps:
+      - name: Verify Linux runner prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${RUNNER_OS}" = "Linux"
+          command -v git
+          command -v python3
+
       - name: Check out reviewed source and comparison history
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -75,9 +68,9 @@ jobs:
 
       - name: Check changed lines for whitespace errors
         env:
-          CI_BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          CI_BASE_SHA: ${{ github.event.before }}
           CI_EVENT_NAME: ${{ github.event_name }}
-          CI_HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          CI_HEAD_SHA: ${{ github.sha }}
         run: >-
           python3 scripts/ci_change_scope.py diff-check
           --event "${CI_EVENT_NAME}"

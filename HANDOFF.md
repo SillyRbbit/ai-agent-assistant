@@ -31,11 +31,11 @@ is verified complete and published through PR #23. Reconstructed source commit
 `codex/feature/bind-terminal-approval-audit-pre-refresh`, and the `04v` marker
 remains complete and valid on clean synchronized `main`.
 
-Repository self-hosted runner routing remains preserved as verified historical
-D-054 evidence squash-merged through PR #24 at `eaf6c9f`. The final branch
-commit was `cfa976f`; CI, Documentation, and Security passed on runner 21 before
-merge. D-057 now supersedes only active routing; the runner remains registered
-as rollback infrastructure.
+Repository self-hosted runner routing remains preserved as verified D-054
+history squash-merged through PR #24 at `eaf6c9f`. D-057's hosted design is now
+also historical after GitHub rejected both PR #30 jobs before allocation because
+the account Actions minute or spending limit was exhausted. D-058 authorizes
+risk-based routing across registered Linux runner 21 and macOS runner 22.
 
 Meta Increment 8 Prompt Library Reorganization is verified complete and
 published. Verified source commit `2d3261a` passed hosted CI, Documentation,
@@ -46,120 +46,59 @@ was complete and valid on clean `d26b5e1` immediately before this
 post-publication project-memory sync. No product source, behavior, dependency,
 Tauri, storage, permission, skill, or hook changed.
 
-Meta risk-based GitHub Actions validation is locally verified from synchronized
-`main` at `1c03f66`. Its result is `PASS WITH ADVISORIES`, the
-`meta-risk-based-ci` marker is complete and valid, and no commit, push, merge,
-or hosted run has occurred. The sole completion advisory is that actual
-GitHub-hosted execution and remote required-check behavior remain pending until
-separately approved publication.
+Meta risk-based GitHub Actions validation is committed as `4fb7f31` on open PR
+#30. Its original 29-path implementation passed complete local verification.
+The current uncommitted D-058 correction passes all automated local checks, and
+the project owner confirmed both runner services satisfy the required isolated,
+unprivileged host baseline. Its gate result is `PASS WITH ADVISORIES`, and the
+completion marker is complete and valid. No correction commit or push has
+occurred; actual dual-runner workflow execution remains pending publication.
 
 ## Meta risk-based GitHub Actions validation
 
-### Completed
+### D-058 correction
 
-- Replaced the three blanket persistent-runner workflows with exactly two
-  read-only workflows on ephemeral `ubuntu-latest`: Application CI and
-  Documentation.
-- Added a standard-library fixed-SHA classifier with 16 focused path/event
-  cases. Documentation-only changes skip Application CI; frontend, Rust,
-  cross-cutting, dependency, workflow, hook, and security-sensitive paths select
-  only their applicable jobs; unknown non-documentation paths fail closed.
-- Consolidated the weekly npm and Rust advisory gates into CI without changing
-  D-025/D-046's accepted baseline.
-- Expanded repository health to enforce the two-workflow layout, hosted runner
-  policy, immutable actions, prompt metadata and paths, required triggers,
-  concurrency, and fail-closed workflow content. The complete repository test
-  suite now contains 37 passing tests.
-- Added frontend-only package scripts without changing their underlying tools,
-  dependencies, lockfile, or complete `npm run verify` behavior.
-- Recorded D-057, retired active self-hosted selection while preserving D-054
-  history and fallback infrastructure, and aligned engineering, testing,
-  security, review, contribution, prompt, README, plan, roadmap, and project
-  memory guidance.
+- Exactly two workflows remain. Linux runner 21 owns classification,
+  documentation, frontend, Linux Rust, and dependency audits. macOS runner 22
+  adds target-Mac strict Clippy and all-target Rust tests.
+- Neither workflow subscribes to `pull_request` or `pull_request_target`.
+  Eligible pushes remain limited to `main`, `codex/**`, `feature/**`, `fix/**`,
+  `refactor/**`, `meta/**`, and `phase*/**`; CI retains schedule and explicit
+  dispatch.
+- Read-only permissions, immutable action SHAs, disabled checkout credentials,
+  no secrets, no `sudo`, fixed Git arguments, validated SHAs/paths, risk-based
+  classification, and the consolidated dependency audit remain intact.
+- A focused push-range classifier fixture raises the classifier suite to 17
+  cases and the repository suite to 38 tests.
+- No application source, dependency, lockfile, Tauri boundary, capability,
+  permission, CSP, SQLite, identifier, hook, skill, or product behavior changed.
 
-### Exact files changed
+### Verification state
 
-```text
-.github/workflows/ci.yml
-.github/workflows/documentation.yml
-.github/workflows/security.yml (deleted)
-AGENTS.md
-CHANGELOG.md
-CODE_REVIEW.md
-CONTRIBUTING.md
-DECISIONS.md
-ENGINEERING_GUIDE.md
-HANDOFF.md
-NEXT_STEPS.md
-PLANS.md
-PROJECT_STATUS.md
-README.md
-ROADMAP.md
-SECURITY.md
-SECURITY_CHECKLIST.md
-TESTING_GUIDE.md
-docs/github/SELF_HOSTED_RUNNER.md
-docs/increments/meta-risk-based-ci.md
-docs/plans/README.md
-docs/plans/meta-risk-based-ci.md
-docs/reviews/2026-07-18-meta-risk-based-ci-post-increment-review.md
-package.json
-prompts/increments/verified-increment.md
-scripts/ci_change_scope.py
-scripts/repository_health.py
-scripts/tests/test_ci_change_scope.py
-scripts/tests/test_repository_health.py
-```
+Passed: mandatory gate begin, workflow YAML, 17 classifier cases, 38 repository
+tests, 28 hook tests, repository policy, complete `npm run verify`, exact
+all-target Rust tests, documentation, secret, link, protected-path, diff,
+architecture, security, code-health, technical-debt, and readiness reviews.
 
-### Verification
+Failed: the original hosted PR jobs failed before runner allocation because of
+the GitHub Actions limit; this is the trigger for D-058, not a repository-step
+failure.
 
-Passed:
+Manual passed: the project owner confirmed both runner services use dedicated
+unprivileged accounts with no interactive `sudo`, personal files, SSH keys,
+production credentials, cloud metadata, or mounted sensitive data. Actual
+Linux/macOS jobs require approved publication and remain a non-blocking local
+advisory. npm and Cargo audits were not repeated because dependency manifests
+and lockfiles are unchanged and their exact passing `4fb7f31` evidence remains
+valid. No product manual check applies.
 
-- Clean `npm ci` and `npm ci --ignore-scripts` installs from the unchanged
-  lockfile.
-- Ruby parsing of both workflow YAML files and Python syntax validation.
-- Final `npm run verify`: formatting, repository policy, ESLint, strict Clippy,
-  28 hook tests, 37 repository tests, 124 frontend tests, 96 Rust library tests,
-  21 Rust integration tests, type checking, production frontend builds, and the
-  Tauri release no-bundle build.
-- Exact `cargo test --manifest-path src-tauri/Cargo.toml --all-targets --locked`.
-- `npm audit --audit-level=low`: zero vulnerabilities.
-- Pinned `cargo-audit 0.22.2` plus the exact RustSec baseline gate: only D-025's
-  two vulnerabilities and D-046's 18 warnings remain.
-- GitHub API verification that the two pinned action SHAs are signed and match
-  official `v7.0.0` tags.
-- Documentation, repository policy, secret, diff, protected-path, generated
-  output, scope, architecture, security, code-health, technical-debt, and
-  readiness reviews.
+### Exact next task
 
-Failed required checks: none. The first Ruby validator used an unsupported
-system-Ruby keyword, and the first sandboxed npm audit lacked DNS; supported
-Ruby parsing and the approved network-enabled audit retry passed.
-
-Checks not run: the Ubuntu package-install step and actual GitHub-hosted jobs
-cannot run on this Mac. No target-Mac product check applies because application
-source and behavior are unchanged.
-
-Manual verification pending: actual CI and Documentation trigger/job selection
-after publication. This is a non-blocking publication advisory, not claimed as
-passed local evidence.
-
-### Risks and next task
-
-Path ownership can drift as the repository grows. D-057 requires workflow
-filters, classifier rules, focused fixtures, and the testing matrix to change
-together. Path-filtered checks are conditional and are not represented as
-universal branch-protection enforcement. The local final increment gate remains
-mandatory.
-
-Review and publish only this exact 29-path change after separate project-owner
-approval. Do not begin ARB-002 or another product/remediation increment.
-
-Ready-to-paste prompt:
-
-```text
-Review the complete 29-path Meta risk-based GitHub Actions validation increment. Confirm exactly two active ubuntu-latest workflows, deterministic fixed-SHA path classification, 16 classifier cases, 37 repository tests, consolidated dependency audit, D-057, preserved D-054 history and registered fallback runner, passing complete local verification, PASS WITH ADVISORIES report, valid meta-risk-based-ci marker, unchanged application source and lockfiles, and GitHub-hosted execution pending publication. Propose a descriptive branch name, Conventional Commit message, PR title, and PR description, then wait for approval before creating a branch, staging, committing, pushing, or merging. Do not begin ARB-002 or another increment.
-```
+Review the exact 22-path dual-runner correction and wait for separate
+commit/push approval. After push, require Linux runner 21 and macOS runner 22
+execution evidence and confirm no pull-request event received either runner
+before merging PR #30. Do not begin ARB-002 or another product/remediation
+increment.
 
 ## Increment 4V / ARB-001 publication
 

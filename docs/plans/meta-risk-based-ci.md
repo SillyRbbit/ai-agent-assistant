@@ -1,13 +1,13 @@
 # Meta Increment - risk-based GitHub Actions validation
 
-Status: Complete locally; publication and GitHub-hosted execution pending
+Status: Dual-runner publication correction verified locally; publication pending
 
 ## Goal
 
-Replace blanket persistent-runner verification with two read-only,
-GitHub-hosted workflows that select documentation, frontend, Rust, and
-dependency-audit checks from the affected repository paths while preserving the
-complete local increment gate.
+Preserve two read-only risk-based workflows while routing trusted validation
+across the registered Linux and macOS `cortexa-ci` runners. Keep untrusted
+pull-request events off persistent hosts and preserve the complete local
+increment gate.
 
 ## Current baseline
 
@@ -19,6 +19,11 @@ complete local increment gate.
   Clippy and rustfmt.
 - `npm run test:repository`, `npm run docs:check`, and YAML parsing passed
   before implementation.
+- The first PR #30 hosted runs `29665772834` and `29665772844` failed before
+  runner allocation because the account Actions minute or spending limit was
+  exhausted. No workflow step executed.
+- GitHub runner inspection found Linux runner 21 and macOS runner 22 online,
+  idle, and carrying the exact `cortexa-ci` selectors.
 
 ## Exact implementation scope
 
@@ -58,38 +63,69 @@ ROADMAP.md
 advisory audit is preserved as the conditional `dependency-audit` job in
 `ci.yml`.
 
+The D-058 publication correction changes exactly 22 paths: 21 existing paths
+are modified and one dedicated D-058 report is added:
+
+```text
+.github/workflows/ci.yml
+.github/workflows/documentation.yml
+AGENTS.md
+CHANGELOG.md
+CODE_REVIEW.md
+DECISIONS.md
+ENGINEERING_GUIDE.md
+HANDOFF.md
+NEXT_STEPS.md
+PLANS.md
+PROJECT_STATUS.md
+ROADMAP.md
+SECURITY.md
+SECURITY_CHECKLIST.md
+TESTING_GUIDE.md
+docs/github/SELF_HOSTED_RUNNER.md
+docs/increments/meta-risk-based-ci.md
+docs/plans/meta-risk-based-ci.md
+docs/reviews/2026-07-18-repository-dual-self-hosted-runner-routing-post-increment-review.md
+scripts/repository_health.py
+scripts/tests/test_ci_change_scope.py
+scripts/tests/test_repository_health.py
+```
+
 ## Workflow behavior
 
-Application CI uses explicit pull-request and push path filters. One
+Application CI uses explicit trusted-push path filters. One
 standard-library classifier compares fixed Git SHAs and emits closed frontend,
 Rust, and audit booleans. Documentation-only paths produce no application job;
 unknown non-documentation paths fail closed to both application jobs.
 
-| Change class                                                  | GitHub-hosted jobs                               |
-| ------------------------------------------------------------- | ------------------------------------------------ |
-| Documentation only                                            | Documentation                                    |
-| Frontend or application brand asset                           | Classifier and frontend                          |
-| Rust tests or examples                                        | Classifier and Rust                              |
-| IPC, Tauri, policy, approval, storage, migration, or security | Classifier, frontend, Rust, and dependency audit |
-| Repository governance validator                               | Classifier, dependency audit, and Documentation  |
-| Documentation workflow                                        | Classifier, dependency audit, and Documentation  |
-| Repository hooks                                              | Classifier and dependency audit                  |
-| Dependency or CI workflow                                     | Classifier, frontend, Rust, and dependency audit |
-| Mixed source and documentation                                | Applicable application jobs and Documentation    |
-| Scheduled CI                                                  | Classifier and dependency audit                  |
-| Manual CI dispatch                                            | All application jobs                             |
+| Change class                                                  | Jobs and runner                                   |
+| ------------------------------------------------------------- | ------------------------------------------------- |
+| Documentation only                                            | Documentation on Linux                            |
+| Frontend or application brand asset                           | Classifier and frontend on Linux                  |
+| Rust tests or examples                                        | Classifier and Rust on Linux and macOS            |
+| IPC, Tauri, policy, approval, storage, migration, or security | Frontend, both Rust jobs, and audit as classified |
+| Repository governance validator                               | Classifier, audit, and Documentation on Linux     |
+| Documentation workflow                                        | Classifier, audit, and Documentation on Linux     |
+| Repository hooks                                              | Classifier and audit on Linux                     |
+| Dependency or CI workflow                                     | Frontend, both Rust jobs, and audit               |
+| Mixed source and documentation                                | Applicable application jobs and Documentation     |
+| Scheduled CI                                                  | Classifier and dependency audit on Linux          |
+| Manual CI dispatch                                            | All application jobs across both runners          |
 
-Both workflows use `ubuntu-latest`, top-level `contents: read`, immutable
-official action SHAs, non-persistent checkout credentials, bounded timeouts,
-and concurrency cancellation. No workflow receives secrets or writes,
-publishes, deploys, signs, notarizes, or caches build output.
+Linux jobs use `[self-hosted, Linux, X64, cortexa-ci]`; target-Mac Rust uses
+`[self-hosted, macOS, X64, cortexa-ci]`. Both workflows keep top-level
+`contents: read`, immutable official action SHAs, non-persistent checkout
+credentials, bounded timeouts, and concurrency cancellation. No workflow
+receives secrets or writes, publishes, deploys, signs, notarizes, uses `sudo`,
+or caches build output.
 
 ## Linux requirements
 
-The Rust job installs only the current Tauri Debian/Ubuntu build requirements:
-build tools, WebKitGTK 4.1, Ayatana AppIndicator, librsvg, OpenSSL, libxdo, and
-pkg-config. It runs formatting, strict Clippy, and all Rust targets. Frontend
-formatting, lint, type checking, tests, and production build remain separate.
+The Linux host is preprovisioned outside workflow execution with build tools,
+WebKitGTK 4.1, Ayatana AppIndicator, librsvg, OpenSSL, libxdo, and pkg-config.
+The workflow fails fast if required packages are absent and never invokes
+`sudo`. Linux runs formatting, strict Clippy, and all Rust targets; macOS runs
+strict Clippy and all Rust targets for target-gated native coverage.
 
 ## Non-goals
 
@@ -98,10 +134,13 @@ formatting, lint, type checking, tests, and production build remain separate.
 - No Tauri configuration, command, capability, CSP, permission, or SQLite
   change.
 - No deployment, publishing, signing, notarization, or artifact upload.
-- No macOS hosted job or claim of target-Mac native verification.
+- No native UI, signing, notarization, installer, or release claim from the
+  target-Mac Rust job.
 - No remote branch-protection, repository-secret, billing, or runner
   administration change.
-- No self-hosted-runner deregistration.
+- No runner registration, label, service, host package, or account change.
+- No modification to the classifier implementation; only one push-range
+  regression fixture is added for the active trigger mode.
 
 ## Risks and controls
 
@@ -113,12 +152,12 @@ formatting, lint, type checking, tests, and production build remain separate.
 - Path-filtered checks cannot be unconditional branch-protection requirements
   because skipped checks may remain pending. Applicable checks remain a merge
   review requirement; no unsupported remote enforcement claim is made.
-- GitHub-hosted billing or availability can prevent remote execution. Local
-  completion evidence remains required, and D-054's configured runner is kept
-  available as rollback infrastructure.
-- Pull-request code is untrusted. It runs only on ephemeral hosted runners with
-  read-only permissions, no secrets, immutable actions, and disabled checkout
-  credentials.
+- Persistent hosts retain state and are not security boundaries. Exact runner
+  selectors, dedicated unprivileged accounts, no secrets, no `sudo`, and host
+  maintenance reduce but do not remove that risk.
+- Pull-request code is untrusted and never receives either runner directly.
+  Reviewed changes must be reproduced on an allowlisted repository branch;
+  missing checks are not approval to merge.
 
 ## Verification
 
@@ -137,29 +176,33 @@ python3 .codex/hooks/session_end_gate.py
 python3 .codex/hooks/post_increment_gate.py status
 ```
 
-Run the pinned Rust advisory command locally where practical. GitHub-hosted
-execution remains pending until a separately approved publication step.
+Run the pinned Rust advisory command locally where practical. Actual Linux and
+macOS runner execution remains pending until a separately approved publication
+step.
 
 ## Manual verification
 
-No product or target-Mac manual check applies. After publication, confirm the
-two workflow trigger matrix and job selection on actual GitHub runs before
-treating hosted behavior as verified.
+The project owner confirmed both runner services satisfy D-058's dedicated,
+unprivileged host baseline. No product manual check applies. After publication,
+confirm trusted push selection, Linux job assignment to runner 21, target-Mac
+Rust assignment to runner 22, and absence of direct pull-request execution.
 
 ## Rollback
 
-Before commit, restore the declared paths from `1c03f66`. After publication,
-revert the bounded increment, restore the three D-054 workflows and repository
-policy, and rerun local and hosted checks. No product, dependency, database, or
-native rollback is required.
+Before the correction is committed, restore its declared paths from `4fb7f31`.
+After publication, revert D-058 to the D-057 hosted selectors only after Actions
+minutes or billing are available, then rerun local and remote checks. No
+product, dependency, database, or native rollback is required.
 
 ## Exit criteria
 
 - Exactly two active workflows implement the approved matrix.
 - Security audit coverage is preserved without a third workflow.
+- Persistent runners receive no pull-request trigger, secrets, writes, or
+  in-workflow host provisioning.
 - Focused classifier and repository-policy tests pass.
 - Complete local verification passes after the final executable edit.
 - Documentation and project memory match observed evidence.
 - The mandatory report is PASS or PASS WITH ADVISORIES and the
-  `meta-risk-based-ci` marker is valid.
+  `repository-dual-self-hosted-runner-routing` marker is valid.
 - No commit, push, merge, or later increment starts automatically.

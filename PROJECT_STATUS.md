@@ -34,16 +34,20 @@ squash-merged through PR #23 at `6e6f91d`** from reconstructed source commit
 remains complete and valid.
 
 Repository self-hosted runner routing and its approved private-only portability
-correction remain **verified historical D-054 evidence squash-merged through PR
-#24 at `eaf6c9f`**. Runner 21 remains registered as rollback infrastructure, but
-D-057 supersedes its active workflow selection.
+correction remain **verified D-054 history squash-merged through PR #24 at
+`eaf6c9f`**. D-057's hosted routing is also historical after GitHub rejected
+both PR #30 jobs before allocation because the Actions minute or spending limit
+was exhausted. D-058 now authorizes active risk-based routing across Linux
+runner 21 and macOS runner 22.
 
-Meta risk-based GitHub Actions validation is **verified complete locally with
-publication pending** on synchronized `main` at `1c03f66`. Exactly two
-read-only `ubuntu-latest` workflows, a deterministic classifier, 16 classifier
-cases, 37 repository tests, consolidated dependency audits, complete local
-verification, and the `meta-risk-based-ci` marker pass. Actual hosted execution
-and remote required-check behavior remain pending publication.
+Meta risk-based GitHub Actions validation is committed as `4fb7f31` on open PR
+#30. Its original 29-path scope passed complete local verification. The current
+D-058 correction keeps exactly two workflows, adds trusted dual-runner routing,
+17 classifier cases, and 38 repository tests. Automated local verification
+passes, and the project owner confirmed the required isolated, unprivileged
+host baseline. The gate is `PASS WITH ADVISORIES`, and its completion marker is
+complete and valid. Actual Linux/macOS workflow execution remains pending
+publication.
 
 Meta Increment 8 Prompt Library Reorganization is **verified complete,
 published through PR #25, and squash-merged at `d26b5e1`** from verified source
@@ -119,9 +123,9 @@ wording outside the approved scope.
   PR #22 and squash-merged at `7c79e65`**.
 - Repository workflow: trusted self-hosted runner routing - **verified complete
   with advisories and squash-merged through PR #24 at `eaf6c9f`**.
-- Repository workflow: risk-based GitHub-hosted validation - **verified complete
-  locally with advisories; exact 29-path publication and hosted execution
-  pending**.
+- Repository workflow: risk-based GitHub Actions validation - **committed on
+  open PR #30; D-058 correction verified locally with advisories and valid
+  marker; publication pending**.
 
 ## Prompt library capability and evidence
 
@@ -140,27 +144,28 @@ wording outside the approved scope.
 
 ## GitHub validation capability and evidence
 
-- Active CI and Documentation use ephemeral GitHub-hosted `ubuntu-latest`
-  runners with `contents: read`, immutable official action SHAs, disabled
-  checkout credential persistence, concurrency cancellation, bounded timeouts,
-  no secrets, and no repository-write or publication step.
+- Active CI and Documentation are being corrected under D-058 to use exact
+  Linux and macOS `cortexa-ci` selectors with `contents: read`, immutable
+  official action SHAs, disabled checkout credential persistence, concurrency
+  cancellation, bounded timeouts, no secrets, and no repository-write or
+  publication step.
 - Event filters prevent Markdown-only work from starting Application CI. A
   standard-library fixed-SHA classifier selects frontend, Rust, and audit jobs;
   unknown non-documentation paths fail closed.
-- Sixteen classifier cases cover documentation, frontend, application brand
+- Seventeen classifier cases cover documentation, frontend, application brand
   assets, Rust, IPC, security-sensitive Rust, dependencies, workflow and hook
-  governance, manual dispatch, schedule, deletion, and unsafe paths.
-- The former weekly Security workflow is consolidated into CI's audit job while
-  preserving the exact D-025/D-046 RustSec baseline. Repository health accepts
-  only the two active workflows and rejects mutable actions, write permission,
-  unexpected workflows, and self-hosted selectors.
-- Complete local verification, npm audit, exact cargo-audit gating, YAML
-  parsing, action-tag verification, diff review, and the mandatory marker pass.
-  Actual GitHub-hosted jobs are pending publication and are not claimed as
-  passed.
-- The D-054 runner remains registered but unselected as rollback
-  infrastructure. Its previous hosted evidence is preserved in dated records;
-  reuse requires a separate security decision.
+  governance, push ranges, manual dispatch, schedule, deletion, and unsafe
+  paths.
+- The former weekly Security workflow remains consolidated into CI's audit job
+  with the exact D-025/D-046 RustSec baseline. Repository health accepts only
+  the two active workflows, exact runner selectors, and trusted push allowlist;
+  it rejects pull-request triggers, mutable actions, write permission,
+  unexpected workflows, and unapproved selectors.
+- Automated D-058 local verification and required project-owner host-isolation
+  confirmation pass. The marker is complete and valid. Actual Linux/macOS jobs
+  remain pending publication and are not claimed as passed.
+- D-054 and D-057 remain preserved in dated records; returning to hosted
+  routing requires a separate security decision.
 
 ## Repository dependency baseline compatibility evidence
 
@@ -932,10 +937,10 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Review and publish only the exact 29-path risk-based GitHub-hosted validation
-increment. After publication, require actual CI and Documentation evidence and
-re-finalize any report change before merge. Do not begin ARB-002 or another
-product/remediation increment.
+Confirm both runner services satisfy D-058's isolated, unprivileged host
+baseline. Then finalize and review the correction before publication approval.
+After push, require actual Linux runner 21 and macOS runner 22 evidence before
+merge. Do not begin ARB-002 or another product/remediation increment.
 
 ## Phase 4 planning result
 
