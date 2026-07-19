@@ -4,13 +4,15 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No implementation plan is active. The approved documentation-only
-High-severity advisory disposition is recorded under
-`docs/plans/remediation-high-severity-advisory-disposition.md`. It identifies
-no `REMEDIATE NOW` item and authorizes no product work: ARB-002 remains
-decision-required, four findings remain blocked on future capabilities, two
-remain High with explicit deferred triggers, and ARB-044 remains superseded.
-No later product or remediation increment is Ready.
+No implementation plan is active. The documentation-only High-severity
+advisory disposition is verified complete with advisories under
+`docs/plans/remediation-high-severity-advisory-disposition.md`, published
+through PR #33, and squash-merged at `7bf1a5c` from source commit `26f68b4`.
+Branch and post-merge Documentation passed, and no publication action remains.
+It identifies no `REMEDIATE NOW` item and authorizes no product work: ARB-002
+remains decision-required, four findings remain blocked on future capabilities,
+two remain High with explicit deferred triggers, and ARB-044 remains
+superseded. No later product or remediation increment is Ready.
 
 The D-058 dual-self-hosted-runner correction
 is verified complete under `docs/plans/meta-risk-based-ci.md`, published through

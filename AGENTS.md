@@ -84,9 +84,13 @@ boundary. Its post-publication project-memory reconciliation was published
 through PR #31 and squash-merged at `74a8d2c`; no D-058 publication action
 remains. Ongoing host maintenance and path ownership remain advisories.
 
-The High-severity advisory disposition review is approved as documentation-only
-work under `docs/plans/remediation-high-severity-advisory-disposition.md`. It
-does not authorize product implementation. ARB-001 is resolved; ARB-002 remains
+The High-severity advisory disposition is verified complete with advisories,
+published through PR #33, and squash-merged at `7bf1a5c` from source commit
+`26f68b4`. Branch Documentation run `29676662232` and post-merge Documentation
+run `29676693814` passed. Its marker was complete and valid on clean merged
+`main` before the approved publication closeout and is re-finalized against the
+closeout state. No PR #33 publication action remains. The disposition does not
+authorize product implementation: ARB-001 is resolved; ARB-002 remains
 decision-required under O-006 and O-007; ARB-003, ARB-004, ARB-005, and ARB-008
 are blocked on future capabilities; ARB-006 and ARB-007 are deferred without a
 severity reduction until their explicit legal and release triggers; and

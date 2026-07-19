@@ -58,16 +58,18 @@ gate remains `PASS WITH ADVISORIES`. The exact 11-path post-publication
 project-memory reconciliation was published through PR #31 and squash-merged at
 `74a8d2c`; no D-058 publication action remains.
 
-The project owner approved an evidence-based High-severity disposition without
-feature implementation. D-059 records the secure-default and trigger-bound
-policy. ARB-001 is resolved; ARB-002 remains decision-required under O-006 and
-O-007; ARB-003, ARB-004, ARB-005, and ARB-008 are blocked on future
-capabilities; ARB-006 and ARB-007 remain High and deferred until their explicit
-legal and release triggers; and ARB-044 remains superseded. No
-`REMEDIATE NOW` item exists. This documentation-only increment selects no
-vendor, identity provider, license, credential owner, or release authority and
-implements no networking, execution, complete workflow, durable product data,
-enterprise controls, signing, or notarization.
+The evidence-based High-severity disposition is published through PR #33 and
+squash-merged at `7bf1a5c` from source commit `26f68b4`. Branch Documentation
+run `29676662232` and post-merge Documentation run `29676693814` passed. D-059
+records the secure-default and trigger-bound policy. ARB-001 is resolved;
+ARB-002 remains decision-required under O-006 and O-007; ARB-003, ARB-004,
+ARB-005, and ARB-008 are blocked on future capabilities; ARB-006 and ARB-007
+remain High and deferred until their explicit legal and release triggers; and
+ARB-044 remains superseded. No `REMEDIATE NOW` item exists. The disposition
+selects no vendor, identity provider, license, credential owner, or release
+authority and implements no networking, execution, complete workflow, durable
+product data, enterprise controls, signing, or notarization. No PR #33
+publication action remains.
 
 ### High-severity disposition verification
 
@@ -76,6 +78,11 @@ scan, whitespace, protected-path review, exact 12-path scope, complete diff,
 architecture, security, code-health, technical-debt, readiness, session-end,
 and mandatory post-increment gate checks. The consolidated result is
 `PASS WITH ADVISORIES`.
+
+Publication passed: source commit `26f68b4` passed branch Documentation run
+`29676662232`; PR #33 squash-merged at `7bf1a5c`; post-merge Documentation run
+`29676693814` passed. The existing marker is re-finalized against the
+documentation-only publication closeout.
 
 Failed and corrected: intermediate documentation checks reported only Prettier
 formatting in approved-scope files. The first marker-finalization attempt also
@@ -138,9 +145,10 @@ applicable evidence.
 
 ### Exact next task
 
-No D-058 action or immediate High-severity code remediation remains. No product
-or remediation increment is Ready. The next security prerequisite is explicit
-owner resolution of O-006 and O-007 before any live model-networking plan can
+No D-058 or PR #33 publication action and no immediate High-severity code
+remediation remain. No product or remediation increment is Ready. The next
+security prerequisite is explicit owner resolution of O-006 and O-007 before
+any live model-networking plan can
 become Ready. Legal and release owners must separately resolve O-008 and O-009
 before their distribution triggers. Do not begin ARB-002, any
 future-capability finding, live transport, credentials, execution, persistence,

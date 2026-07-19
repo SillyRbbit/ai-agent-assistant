@@ -62,15 +62,18 @@ closeout is `PASS WITH ADVISORIES`, and the marker is re-finalized against that
 documentation-only state. Its sole advisory is pre-existing stale roadmap
 wording outside the approved scope.
 
-The documentation-only High-severity advisory disposition is complete in the
-current workspace under D-059. Current source evidence produces no
-`REMEDIATE NOW` item: ARB-001 remains resolved; ARB-002 is decision-required;
-ARB-003, ARB-004, ARB-005, and ARB-008 are blocked on future capabilities;
-ARB-006 and ARB-007 remain High but are non-blocking until explicit legal and
-release triggers; and ARB-044 remains superseded. No vendor, identity provider,
-license, credential owner, release authority, live networking, executor,
-complete workflow, durable product data, enterprise control, signing, or
-notarization was selected or implemented.
+The documentation-only High-severity advisory disposition is verified complete
+with advisories under D-059, published through PR #33, and squash-merged at
+`7bf1a5c` from source commit `26f68b4`. Branch Documentation run `29676662232`
+and post-merge Documentation run `29676693814` passed. Current source evidence
+produces no `REMEDIATE NOW` item: ARB-001 remains resolved; ARB-002 is
+decision-required; ARB-003, ARB-004, ARB-005, and ARB-008 are blocked on future
+capabilities; ARB-006 and ARB-007 remain High but are non-blocking until
+explicit legal and release triggers; and ARB-044 remains superseded. No vendor,
+identity provider, license, credential owner, release authority, live
+networking, executor, complete workflow, durable product data, enterprise
+control, signing, or notarization was selected or implemented. No PR #33
+publication action remains.
 
 ## Increment status
 
@@ -138,8 +141,9 @@ notarization was selected or implemented.
 - Repository workflow: risk-based GitHub Actions validation - **verified
   complete with advisories; published through PR #30 and squash-merged at
   `1780d7f`; valid marker**.
-- High-severity advisory disposition - **documentation-only disposition
-  complete in the current workspace; no product implementation authorized**.
+- High-severity advisory disposition - **verified complete with advisories;
+  published through PR #33 and squash-merged at `7bf1a5c`; no product
+  implementation authorized**.
 
 ## Prompt library capability and evidence
 
