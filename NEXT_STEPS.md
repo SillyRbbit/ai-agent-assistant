@@ -71,6 +71,10 @@ This file is the ordered implementation queue. Work only on the first item marke
 - High-severity advisory disposition:
   **Verified complete with advisories; published through PR #33 and
   squash-merged at `7bf1a5c`; no immediate code remediation authorized**.
+- O-006/O-007 staged gateway identity and retention decisions:
+  **Provider-boundary documentation amendment verified complete with
+  advisories; uncommitted and unpublished; no product implementation
+  authorized**.
 
 ## Queue status
 
@@ -78,10 +82,14 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 **Status:** D-059 classifies all canonical High findings without lowering
 severity or representing deferred work as resolved. ARB-001 is resolved.
-ARB-002 is decision-required. ARB-003, ARB-004, ARB-005, and ARB-008 are
-blocked on future product capabilities. ARB-006 and ARB-007 are deferred and
-non-blocking only until their explicit legal and release triggers. ARB-044 is
-superseded.
+ARB-002 remains decision-required because O-006 still requires exact identity
+and AI-provider configurations. D-060 separates pluggable identity,
+Azure-first portable hosting, and future trusted AI-provider selection; D-061
+accepts O-007's product policy, but provider-specific ZDR evidence remains
+mandatory. ARB-003, ARB-004, ARB-005,
+and ARB-008 are blocked on future product capabilities. ARB-006 and ARB-007 are
+deferred and non-blocking only until their explicit legal and release triggers.
+ARB-044 is superseded.
 
 The D-058 implementation and its post-publication reconciliation are closed;
 no D-058 publication task remains in the queue.
@@ -89,11 +97,19 @@ no D-058 publication task remains in the queue.
 The High-severity disposition is published and closed; no PR #33 publication
 task remains in the queue.
 
+The O-006/O-007 provider-boundary amendment is verified complete with
+advisories and awaits only a separately approved publication review. Its exact
+18-path scope preserves the original report unchanged. It does not make ARB-002
+Ready.
+
 No `REMEDIATE NOW` finding exists, and no later remediation or product
-increment is Ready. Do not begin ARB-002 automatically. O-006 and O-007 require
-explicit project, security, privacy, and executive decisions before any live
-model networking. Do not add a provider client, gateway origin, credential,
-Keychain adapter, or external content path before both decisions close.
+increment is Ready. Do not begin ARB-002 automatically. Do not add a provider
+client, `AgentProvider`, gateway origin, cloud deployment, identity integration,
+credential, Keychain adapter, or external content path before O-006 closes,
+each AI provider's ZDR is verified, the required disclosure exists, and a
+separate implementation and threat model are approved. Container portability
+does not authorize AWS, Google Cloud, active-active multicloud, failover, or a
+three-cloud release.
 
 Do not implement ARB-003, ARB-004, ARB-005, or ARB-008 during advisory
 disposition work. Revisit ARB-006 before public distribution or external

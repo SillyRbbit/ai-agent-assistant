@@ -62,13 +62,16 @@ The evidence-based High-severity disposition is published through PR #33 and
 squash-merged at `7bf1a5c` from source commit `26f68b4`. Branch Documentation
 run `29676662232` and post-merge Documentation run `29676693814` passed. D-059
 records the secure-default and trigger-bound policy. ARB-001 is resolved;
-ARB-002 remains decision-required under O-006 and O-007; ARB-003, ARB-004,
-ARB-005, and ARB-008 are blocked on future capabilities; ARB-006 and ARB-007
-remain High and deferred until their explicit legal and release triggers; and
-ARB-044 remains superseded. No `REMEDIATE NOW` item exists. The disposition
-selects no vendor, identity provider, license, credential owner, or release
-authority and implements no networking, execution, complete workflow, durable
-product data, enterprise controls, signing, or notarization. No PR #33
+ARB-002 remains decision-required. D-060 now separates pluggable identity,
+Azure-first portable hosting, and future trusted AI-provider support, while
+O-006 remains open for exact identity and AI-provider configurations. D-061
+accepts O-007's data, logging, disclosure, privacy, and security policy, but
+provider-specific ZDR evidence remains pending. ARB-003, ARB-004, ARB-005,
+and ARB-008 are blocked on future capabilities; ARB-006 and ARB-007 remain High
+and deferred until their explicit legal and release triggers; and ARB-044
+remains superseded. No `REMEDIATE NOW` item exists. No networking, identity
+integration, execution, complete workflow, durable product data, enterprise
+controls, signing, or notarization is implemented or authorized. No PR #33
 publication action remains.
 
 ### High-severity disposition verification
@@ -94,6 +97,69 @@ Not run: frontend tests, Rust tests, application builds, native launch,
 networked dependency audit, and product manual testing because no executable,
 dependency, workflow, or product path changed. Manual verification pending:
 none.
+
+## O-006/O-007 staged gateway identity and retention decisions
+
+The original documentation-only increment was verified complete with
+advisories under
+`docs/plans/o006-o007-staged-gateway-identity-retention-decisions.md` on clean
+baseline `ef8083d`. Its mandatory gate began before edits. The exact scope is
+14 modified and three created documentation paths. Its approved
+provider-boundary amendment is verified complete with advisories under
+`o006-provider-boundary-amendment`, adds only a second closeout report, and
+expands the final scope to 18 documentation paths. Nothing is committed or
+published.
+
+Recorded direction:
+
+- Current: no deployed gateway, networking, integrated identity provider,
+  credential path, or external transmission.
+- Phase 1: consumer and prosumer individual accounts, personal workspaces,
+  simple onboarding, provider-neutral system-browser OAuth/OIDC with PKCE, and
+  a Cortexa-operated Azure gateway. Microsoft, Google, and Apple are candidates,
+  not selected providers.
+- Phase 2: organization accounts, team workspaces, Entra workforce SSO,
+  tenant-aware authorization, RBAC, group controls, administration, policy, and
+  audit. SAML, SCIM, and other enterprise providers remain demand-driven future
+  decisions.
+- D-061: provider-approved ZDR before real content, synthetic-only
+  pre-verification tests, explicitly submitted non-sensitive text as the
+  initial permitted class, prohibited sensitive categories, content-free
+  seven-day operational logs, and disclosure before transmission and in
+  Settings.
+- Cloud hosting: one primary Azure Container Apps deployment in Central US is
+  planned. Container portability preserves future AWS or Google Cloud options
+  without claiming deployment, active-active multicloud, failover, or a
+  three-cloud release.
+- AI model providers: a future trusted `AgentProvider` boundary may support
+  multiple individually approved providers. No implementation exists, desktop
+  credentials remain prohibited, and every provider requires separate O-007
+  evidence.
+
+O-006 remains open for exact identity and AI-provider configurations. O-007's
+policy is accepted, but operational provider-specific ZDR evidence is not
+present. ARB-002 remains High, unresolved, and unimplemented. No product source,
+dependency, Tauri, storage, permission, identity, cloud, network, gateway, or
+runtime path changes.
+
+### Decision-record verification
+
+The original decision record and amendment pass documentation formatting and
+local links, repository policy, secret scan, whitespace, exact protected-path
+review, targeted state and decision consistency, current `AgentProvider`
+absence, original-report preservation, complete scope and diff review,
+engineering reviews, session-end, and mandatory post-increment checks. The
+amendment result is `PASS WITH ADVISORIES`. The advisory remains the
+pre-existing High ARB-002 boundary, which blocks live networking and the next
+product increment but not this documentation-only record.
+
+Failed: none. Not run: frontend tests, Rust tests, application builds, native
+launch, Azure, AWS, Google Cloud, DNS, TLS, identity-provider, Keychain,
+`AgentProvider`, and provider ZDR
+operational checks because no executable, dependency, configuration, cloud, or
+product path changed. Manual verification pending: none; the project owner
+approved the decisions, the exact documentation scope, and the one-report gate
+expansion before editing.
 
 ## Meta risk-based GitHub Actions validation
 
@@ -146,21 +212,23 @@ applicable evidence.
 ### Exact next task
 
 No D-058 or PR #33 publication action and no immediate High-severity code
-remediation remain. No product or remediation increment is Ready. The next
-security prerequisite is explicit owner resolution of O-006 and O-007 before
-any live model-networking plan can
-become Ready. Legal and release owners must separately resolve O-008 and O-009
-before their distribution triggers. Do not begin ARB-002, any
-future-capability finding, live transport, credentials, execution, persistence,
-enterprise controls, licensing, signing, notarization, or another increment
-automatically.
+remediation remain. The exact 18-path O-006/O-007 provider-boundary amendment is
+verified complete with advisories, uncommitted, and unpublished. Its review for
+publication is the only next task. No product or remediation increment is
+Ready. O-006 identity and AI-provider configuration plus D-061 operational
+evidence still block any live model-networking plan. Legal and release owners
+must separately resolve O-008 and O-009 before their distribution triggers. Do
+not begin ARB-002, any future-capability finding, live transport, identity
+integration, cloud deployment, credentials, `AgentProvider`, AI-provider
+integration, execution, persistence, enterprise controls, licensing, signing,
+notarization, or another increment automatically.
 
 Ready-to-paste resume prompt:
 
 ```text
 Use $session-start.
 
-Start from the verified High-severity advisory disposition on clean synchronized main. Confirm the completion marker and reconcile current repository evidence. Verify that ARB-002 remains decision-required under O-006 and O-007, four High findings remain blocked on future capabilities, and ARB-006 and ARB-007 retain their explicit legal and release triggers. Recommend only the smallest owner-decision or unrelated safe planning step and wait for approval. Do not begin live networking, credentials, execution, persistence, enterprise controls, licensing, signing, notarization, commit, push, or merge.
+Review the complete 18-path O-006 provider-boundary amendment. Confirm D-060 separately defines pluggable identity providers, one-primary-cloud Azure-first portable hosting, and future trusted AI model-provider support; D-061 requires provider-specific evidence; no current AgentProvider exists; the original decision-record report is unchanged; ARB-002 remains High and unresolved; documentation-tier checks pass; and the o006-provider-boundary-amendment marker is valid. Propose a descriptive branch name, Conventional Commit message, PR title, and PR description, then wait for approval before staging, committing, pushing, or merging. Do not begin ARB-002 or any identity, cloud, gateway, networking, credential, AgentProvider, AI-provider, or enterprise implementation.
 ```
 
 ## Increment 4V / ARB-001 publication

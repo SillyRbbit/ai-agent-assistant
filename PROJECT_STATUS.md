@@ -69,11 +69,14 @@ and post-merge Documentation run `29676693814` passed. Current source evidence
 produces no `REMEDIATE NOW` item: ARB-001 remains resolved; ARB-002 is
 decision-required; ARB-003, ARB-004, ARB-005, and ARB-008 are blocked on future
 capabilities; ARB-006 and ARB-007 remain High but are non-blocking until
-explicit legal and release triggers; and ARB-044 remains superseded. No vendor,
-identity provider, license, credential owner, release authority, live
-networking, executor, complete workflow, durable product data, enterprise
-control, signing, or notarization was selected or implemented. No PR #33
-publication action remains.
+explicit legal and release triggers; and ARB-044 remains superseded. D-060 now
+separates pluggable identity-provider support, Azure-first portable hosting, and
+future trusted AI model-provider support, but O-006 remains open for exact
+identity and AI-provider configurations. D-061 accepts O-007's product policy
+while provider-specific ZDR evidence remains pending. No `AgentProvider`,
+identity integration, cloud deployment, live networking,
+executor, complete workflow, durable product data, enterprise control, signing,
+or notarization was implemented. No PR #33 publication action remains.
 
 ## Increment status
 
@@ -144,6 +147,10 @@ publication action remains.
 - High-severity advisory disposition - **verified complete with advisories;
   published through PR #33 and squash-merged at `7bf1a5c`; no product
   implementation authorized**.
+- O-006/O-007 staged gateway identity and retention decisions -
+  **provider-boundary documentation amendment verified complete with
+  advisories; uncommitted and unpublished; no product implementation
+  authorized**.
 
 ## Prompt library capability and evidence
 
@@ -685,11 +692,13 @@ ADVISORIES` for that theoretical unsupported external consumer and the
   wire types, and checked against the 64 KiB limit after JSON escaping.
 - The fixed tool-set identity is gateway correlation/authorization input only;
   it grants no local policy, approval, audit, dispatch, or execution authority.
-- O-006 and O-007 still block live traffic. Networking, gateway deployment,
-  credentials, Keychain, provider SDKs/parameters, model selection, continuation,
-  retry/cancellation orchestration, context selection, runtime coordination,
-  Tauri, frontend, SQLite, dependencies, capabilities, and permissions remain
-  excluded.
+- O-006 identity and AI-provider configurations and D-061's provider-specific
+  ZDR, disclosure, deployment, and security evidence still block live traffic.
+  Networking, gateway deployment,
+  credentials, Keychain, provider SDKs/parameters, model selection,
+  continuation, retry/cancellation orchestration, context selection, runtime
+  coordination, Tauri, frontend, SQLite, dependencies, capabilities, and
+  permissions remain excluded.
 - Six focused request tests, 18 preserved gateway tests, nine tool tests, and one
   public-boundary integration test pass. Clippy passes with warnings denied.
 - Complete `npm run verify` passes with 17 hook, 124 frontend, 92 Rust library,
@@ -698,7 +707,8 @@ ADVISORIES` for that theoretical unsupported external consumer and the
 - Exact source, closeout, conflict, secret, generated-output, architecture,
   code-health, security, and complete-diff reviews have no blocking finding. No
   manual interaction gate applies because no production caller exists.
-- D-035 records the fixed closed request boundary. O-006 and O-007 still block
+- D-035 records the fixed closed request boundary. O-006 identity and
+  AI-provider configurations and D-061's operational prerequisites still block
   authenticated gateway transport and live provider traffic.
 
 ## Increment 4M capability and evidence
@@ -958,14 +968,52 @@ git diff --check
 
 Native launch passed with idempotent storage startup. The project owner confirmed streaming, Stop, approval decisions, Activity empty and populated states, newest-first lifecycle events, Activity redaction, close/reopen/Dock/quit behavior, Settings diagnostics, and absence of permission prompts all passed.
 
+## Gateway identity and retention decision status
+
+- **Current:** no deployed gateway, networking, integrated identity provider,
+  gateway credential path, or external processing.
+- **Phase 1 target:** individual consumer and prosumer accounts, personal
+  workspaces, simple onboarding, provider-neutral system-browser OAuth/OIDC with
+  PKCE, and a Cortexa-operated Azure Container Apps gateway in Central US.
+  Microsoft, Google, and Apple remain candidate providers only.
+- **Phase 2 target:** organization accounts, team workspaces, Entra workforce
+  SSO, tenant-aware authorization, RBAC, group controls, centralized
+  administration, organization policy, and audit. SAML, SCIM, and other
+  enterprise identity providers remain demand-driven future scope.
+- **External data:** D-061 requires provider-approved ZDR before real user
+  content, synthetic-only pre-verification tests, explicitly submitted
+  non-sensitive text as the initial permitted class, prohibited sensitive
+  categories, content-free seven-day operational logs, and persistent
+  disclosure.
+
+Identity, hosting, and AI model-provider support are independent approval
+boundaries. Initial production targets one primary Azure cloud. AWS and Google
+Cloud deployment, active-active multicloud, failover, and three-cloud release
+requirements remain deferred. A future trusted `AgentProvider` abstraction may
+route only to separately approved AI providers; no implementation exists, no
+desktop provider credential is permitted, and every provider requires its own
+O-007 evidence.
+
+O-006 remains open for exact Phase 1 identity and AI-provider configurations.
+Provider-specific ZDR, disclosure, deployment, threat-model, and security
+evidence remain pending.
+ARB-002 therefore remains High, unresolved, and not Ready for implementation.
+The original documentation-only decision record passed its exact 17-path
+closeout and mandatory gate with `PASS WITH ADVISORIES`. The provider-boundary
+amendment also passes with advisories under its dedicated gate, preserves the
+original report unchanged, and expands only the closeout-report scope to 18
+documentation paths. It remains uncommitted and unpublished.
+
 ## Next action
 
 No product or remediation increment is Ready. ARB-002 remains decision-required
-under O-006 and O-007 and blocks live model networking. ARB-003, ARB-004,
-ARB-005, and ARB-008 remain blocked on future capability work. ARB-006 must be
-revisited before public distribution or external contributions; ARB-007 must
-be revisited before release-candidate or public-distribution work. Do not begin
-transport, credentials, execution, persistence, enterprise controls, license
+under the remaining O-006 identity and AI-provider configuration gates and
+blocks live model networking. ARB-003, ARB-004, ARB-005, and ARB-008 remain blocked on future
+capability work. ARB-006 must be revisited before public distribution or
+external contributions; ARB-007 must be revisited before release-candidate or
+public-distribution work. Review the verified documentation decision record for
+publication only when separately directed. Do not begin transport, identity
+integration, credentials, execution, persistence, enterprise controls, license
 selection, signing, notarization, or another remediation automatically.
 
 ## Phase 4 planning result
@@ -978,8 +1026,15 @@ selection, signing, notarization, or another remediation automatically.
 - Foreground cancellation propagates transport abort and rejects late events; it does not claim confirmed provider-side cancellation.
 - Initial limits are two model turns, one non-parallel function call, one retry, three gateway requests, bounded request/event/argument/output/event-count sizes, and explicit connection/idle/turn/run deadlines.
 - Gateway operational telemetry and local trusted audit are separate and exclude credentials and raw content by default.
-- D-021 records the durable boundary. O-006 defers identity-provider and deployment selection until before live networking.
-- O-007 defers provider retention-mode selection and user disclosure until before live provider traffic; `store: false` alone is not treated as zero retention.
+- D-021 records the durable gateway boundary. D-060 later selects the planned
+  operator, platform, region, inactive origin, pluggable identity boundary,
+  portable one-primary-cloud strategy, and future AI-provider boundary; O-006
+  still defers exact identity and AI-provider configurations until before
+  authentication or live networking.
+- D-061 later accepts the retention, data, logging, and disclosure policy;
+  each AI provider requires its own approved ZDR and exact operational evidence
+  before real user content. `store: false` alone is not treated as zero
+  retention.
 - Increment 4A adds only a transport-free Rust normalized-protocol module, an exact direct `serde_json 1.0.150` dependency already present transitively, its module export/lock update, and inline fixture tests.
 - Planning baseline passed `npm run typecheck`, 124 frontend tests, and 50 Rust library tests on clean merged main at `f56cab2`.
 - Planning changed no runtime, dependency, lockfile, Rust, IPC, Tauri, capability, CSP, persistence, credential, network, packaging, or permission file.

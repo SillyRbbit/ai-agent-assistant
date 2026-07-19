@@ -91,12 +91,22 @@ run `29676693814` passed. Its marker was complete and valid on clean merged
 `main` before the approved publication closeout and is re-finalized against the
 closeout state. No PR #33 publication action remains. The disposition does not
 authorize product implementation: ARB-001 is resolved; ARB-002 remains
-decision-required under O-006 and O-007; ARB-003, ARB-004, ARB-005, and ARB-008
-are blocked on future capabilities; ARB-006 and ARB-007 are deferred without a
-severity reduction until their explicit legal and release triggers; and
-ARB-044 remains superseded. No live model networking, executor, complete
+decision-required under O-006's exact identity and AI-provider configuration
+gates; D-060 separates pluggable identity, Azure-first portable hosting, and
+future trusted AI-provider selection, and D-061 accepts the data policy while
+provider-specific ZDR evidence remains pending. No `AgentProvider`
+implementation exists. ARB-003, ARB-004, ARB-005, and ARB-008 are blocked on future
+capabilities; ARB-006 and ARB-007 are deferred without a severity reduction
+until their explicit legal and release triggers; and ARB-044 remains
+superseded. No live model networking, identity integration, executor, complete
 workflow, durable product data, enterprise controls, license grant, signing, or
-notarization may begin from this disposition record.
+notarization may begin from these documentation records.
+
+The documentation-only O-006/O-007 provider-boundary amendment is verified
+complete with advisories under `o006-provider-boundary-amendment`, uncommitted,
+and unpublished. The original completion report remains unchanged. The
+amendment does not make ARB-002 or any identity, cloud, gateway, networking,
+credential, AI-provider, or enterprise implementation Ready.
 
 ## Non-negotiable product boundaries
 
@@ -105,6 +115,12 @@ notarization may begin from this disposition record.
 - Never let the model or WebView directly execute an operating-system action.
 - Never add unrestricted shell execution or a generic `execute_action` tool.
 - Do not embed or store a production OpenAI API key in the application.
+- Do not enable gateway networking or external transmission until O-006 selects
+  the exact identity and AI-provider configurations, D-061's provider-specific
+  ZDR and disclosure evidence passes, and a separate threat-modeled
+  implementation is approved.
+- Do not describe container portability as deployed AWS or Google Cloud support,
+  active-active multicloud, cloud failover, or a three-cloud release.
 - Do not add Accessibility, screen capture, Apple Events, microphone access, or
   broad filesystem access during the current controlled MVP work without a
   separately accepted threat model and increment.

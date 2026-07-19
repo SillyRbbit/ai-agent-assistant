@@ -60,11 +60,28 @@ production boundary exists.
 
 ## Gateway and provider boundary
 
-- [ ] O-006 and O-007 are resolved before live provider traffic.
+- [ ] O-006 selects the exact approved Phase 1 identity provider or providers,
+      issuer configuration, redirect handling, audience, and token-validation
+      boundary before authentication or live gateway traffic.
+- [ ] The gateway validates every trusted issuer, audience, signature,
+      expiration, applicable tenant, and authorization context against closed
+      server-owned configuration.
+- [ ] Cloud hosting approval remains separate from identity and AI provider
+      approval. Azure is the single initial planned primary cloud; AWS, Google
+      Cloud, active-active multicloud, and cloud failover remain unapproved.
+- [ ] Every AI model provider is separately approved for retention, ZDR, data
+      use, logging, region, and security. No provider inherits another
+      provider's approval, and desktop clients receive no provider credential.
+- [ ] D-061 provider-approved ZDR evidence is verified for the exact provider,
+      production organization, project, endpoint, model, and region before real
+      user content; pre-verification tests use only synthetic data.
+- [ ] External-processing disclosure exists before the first transmission and
+      remains visible in Settings.
 - [ ] The desktop uses one configured HTTPS gateway origin and cannot override
       model, tools, schemas, credentials, or arbitrary provider parameters.
-- [ ] The gateway authenticates and authorizes the principal and forces approved
-      limits and Responses settings.
+- [ ] The gateway authenticates and authorizes the principal, selects only an
+      approved AI provider under trusted policy, and forces approved limits and
+      provider settings.
 - [ ] Provider events are normalized upstream and independently validated by
       trusted Rust with closed versions, variants, fields, sequence, and sizes.
 - [ ] Cancellation is terminal and idempotent and rejects late events.
