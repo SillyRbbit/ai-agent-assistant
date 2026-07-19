@@ -140,28 +140,39 @@ D-060; approval of one does not approve another.
 Increment 4K. No HTTP client, provider SDK, gateway origin, model name,
 authentication, credential loader, or live Responses request exists.
 
-**Identity-provider boundary**: Phase 1 consumer and prosumer individual
-accounts may use Microsoft, Google, or Apple sign-in through a system browser
-and OAuth 2.0 Authorization Code Flow with PKCE behind a pluggable OAuth/OIDC
-application boundary. None is selected or integrated. Phase 2 may add Entra
-workforce SSO and other separately approved enterprise OIDC or SAML identity
-providers. AWS and Google Cloud accounts are not consumer identity systems;
-future compatibility concerns their standards-based identity services or an
-organization's approved identity provider.
+**Identity-provider boundary**: D-062 selects Microsoft personal identity as
+the sole Phase 1 provider for consumer and prosumer individual accounts. The
+planned flow uses the system browser, OAuth 2.0 Authorization Code Flow, PKCE
+S256, `state`, and OIDC `nonce` behind the pluggable OAuth/OIDC application
+boundary. The authority is personal-account-only; work, school, guest, and
+arbitrary Entra tenants remain outside Phase 1. No provider registration,
+identity client, redirect handler, token exchange, or account path exists.
+Google is deferred until demonstrated demand after Microsoft verification.
+Apple is deferred until Mac App Store planning or demonstrated demand. Phase 2
+may separately add Entra workforce SSO and other approved enterprise OIDC or
+SAML identity providers.
 
 The configured identity provider determines the token issuer. The gateway must
 validate each trusted issuer, audience, signature, expiration, applicable
 tenant context, and authorization context against closed server-owned
-configuration. Provider neutrality is not permission for the WebView, model,
-user, or arbitrary configuration to select an issuer, endpoint, audience,
-client identity, tenant policy, or gateway origin.
+configuration. The planned Microsoft boundary uses separate public desktop and
+gateway API resource registrations, one exact delegated gateway scope, and the
+issuer returned by the approved personal-account OIDC discovery metadata. The
+canonical external identity key is provider ID plus normalized issuer plus
+subject. Email is optional contact data, never an identity key, and automatic
+email-based linking is prohibited. Provider neutrality is not permission for
+the WebView, model, user, or arbitrary configuration to select an issuer,
+endpoint, audience, client identity, tenant policy, or gateway origin.
 
 A future audience-bound gateway token has a maximum 15-minute lifetime and
-belongs only to trusted Rust process memory. A refresh or session credential
-belongs only to platform-secure credential storage: macOS Keychain on macOS and
-an equivalent separately reviewed facility on any future supported platform.
-Neither credential enters the WebView, SQLite, application logs, or ordinary
-CI.
+belongs only to trusted Rust process memory. Phase 1 requests only `openid`,
+`email`, and one exact delegated Cortexa gateway scope. `profile`, Microsoft
+Graph, directory, group, mail, calendar, file, and contact scopes are excluded.
+`offline_access` is excluded until a separate persistent-session decision. If
+later approved, a refresh or session credential belongs only to
+platform-secure credential storage: macOS Keychain on macOS and an equivalent
+separately reviewed facility on any future supported platform. No credential
+enters the WebView, SQLite, application logs, or ordinary CI.
 
 **Cloud-hosting boundary**: Cortexa AI is the planned operator. Azure Container
 Apps in Central US is the initial planned platform and region, and

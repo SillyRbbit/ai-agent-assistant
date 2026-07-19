@@ -37,8 +37,11 @@ account authority to a language model.
 - Executives, employees, and operators using Cortexa as an individual account.
 
 Phase 1 uses individual accounts, simple onboarding, and personal workspaces.
-It does not include enterprise tenant administration, SCIM, enterprise policy
-administration, or organization-wide deployment controls.
+D-062 selects Microsoft personal identity as its sole initial identity
+provider. Work, school, guest, and arbitrary Entra tenants remain outside the
+Phase 1 boundary. Google and Apple are deferred under their approved triggers.
+Phase 1 does not include enterprise tenant administration, SCIM, enterprise
+policy administration, or organization-wide deployment controls.
 
 ### Phase 2 users and stakeholders
 
@@ -111,23 +114,28 @@ No use case permits unattended consequential external action in the MVP.
   event, content, argument, idle, provider, and total deadlines.
 - **FR-015**: Cancellation shall be terminal and idempotent and shall reject
   late events and late approval outcomes.
-- **FR-016**: Phase 1 authentication shall use a system browser and OAuth 2.0
-  Authorization Code Flow with PKCE behind a provider-neutral OAuth/OIDC
-  application boundary.
-- **FR-017**: Only separately approved, closed identity-provider and issuer
-  configurations may be used. The gateway shall validate each trusted issuer,
-  audience, signature, expiration, applicable tenant, and authorization
-  context. The WebView, model, user content, and arbitrary runtime configuration
-  shall not select identity or gateway endpoints.
+- **FR-016**: Phase 1 authentication shall use Microsoft personal identity
+  through a system browser and OAuth 2.0 Authorization Code Flow with PKCE S256,
+  `state`, and OIDC `nonce` behind a provider-neutral OAuth/OIDC application
+  boundary.
+- **FR-017**: Phase 1 shall accept only the approved personal-account authority,
+  issuer, tenant, desktop client, gateway audience, redirect, and delegated
+  scope configuration. The gateway shall validate signature, expiration,
+  authorization context, and every closed identity field. The WebView, model,
+  user content, and arbitrary runtime configuration shall not select identity
+  or gateway endpoints.
 - **FR-018**: Gateway access tokens shall be audience-bound, limited to a
-  maximum 15-minute lifetime, and held only in trusted Rust memory. Refresh or
-  session credentials shall use approved platform-secure credential storage.
+  maximum 15-minute lifetime, and held only in trusted Rust memory. Initial
+  identity scopes shall be `openid`, `email`, and one Cortexa gateway delegated
+  scope. `offline_access` and persistent sessions require a separate decision.
 - **FR-019**: Identity-provider support, cloud hosting, and AI model-provider
   support shall remain separate approval boundaries. Phase 2 enterprise
   identity and administration shall remain optional capabilities separated
   from Phase 1 individual-account behavior. Initial production targets one
   primary Azure deployment; future AWS or Google Cloud portability does not
   constitute active-active multicloud or a three-cloud release requirement.
+  External accounts shall use provider ID plus normalized issuer plus subject;
+  email shall not identify or automatically link accounts.
 
 FR-012 and live transport portions of FR-010 through FR-019 are planned; the
 transport-free request and validation contracts are current. No account,

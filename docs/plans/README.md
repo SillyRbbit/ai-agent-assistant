@@ -10,6 +10,13 @@ YYYY-MM-DD-short-kebab-case-title.md
 
 Create a plan from `docs/templates/INCREMENT_TEMPLATE.md`. Link active plans from `PLANS.md` and the current `HANDOFF.md`.
 
+The verified-complete documentation-only O-006 Phase 1 identity decision is defined in
+[`o006-phase1-microsoft-personal-identity.md`](o006-phase1-microsoft-personal-identity.md).
+It records Microsoft personal identity as the sole Phase 1 provider under
+D-062 while deferring Google, Apple, persistent sessions, automatic email
+linking, and all implementation. Its result is `PASS WITH ADVISORIES`, and it
+awaits publication review.
+
 The verified-complete and published documentation-only
 O-006/O-007 decision-record increment is defined under
 [`o006-o007-staged-gateway-identity-retention-decisions.md`](o006-o007-staged-gateway-identity-retention-decisions.md).

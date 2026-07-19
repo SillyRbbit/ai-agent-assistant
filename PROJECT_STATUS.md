@@ -71,9 +71,10 @@ decision-required; ARB-003, ARB-004, ARB-005, and ARB-008 are blocked on future
 capabilities; ARB-006 and ARB-007 remain High but are non-blocking until
 explicit legal and release triggers; and ARB-044 remains superseded. D-060 now
 separates pluggable identity-provider support, Azure-first portable hosting, and
-future trusted AI model-provider support, but O-006 remains open for exact
-identity and AI-provider configurations. D-061 accepts O-007's product policy
-while provider-specific ZDR evidence remains pending. No `AgentProvider`,
+future trusted AI model-provider support. D-062 selects Microsoft personal
+identity for Phase 1, but exact identity evidence and O-006's AI-provider
+configuration remain open. D-061 accepts O-007's product policy while
+provider-specific ZDR evidence remains pending. No `AgentProvider`,
 identity integration, cloud deployment, live networking,
 executor, complete workflow, durable product data, enterprise control, signing,
 or notarization was implemented. No PR #33 publication action remains.
@@ -153,6 +154,10 @@ or notarization was implemented. No PR #33 publication action remains.
   squash-merged at `853da62`; branch Documentation run `29703530854` and
   post-merge Documentation run `29703588215` passed; no product implementation
   authorized**.
+- O-006 Phase 1 identity decision - **D-062 selects Microsoft personal identity
+  as the sole Phase 1 provider; documentation-only record verified complete
+  with advisories and awaiting publication review; implementation and ARB-002
+  remain blocked**.
 
 ## Prompt library capability and evidence
 
@@ -694,8 +699,9 @@ ADVISORIES` for that theoretical unsupported external consumer and the
   wire types, and checked against the 64 KiB limit after JSON escaping.
 - The fixed tool-set identity is gateway correlation/authorization input only;
   it grants no local policy, approval, audit, dispatch, or execution authority.
-- O-006 identity and AI-provider configurations and D-061's provider-specific
-  ZDR, disclosure, deployment, and security evidence still block live traffic.
+- D-062's exact identity evidence, O-006's AI-provider configuration, and
+  D-061's provider-specific ZDR, disclosure, deployment, and security evidence
+  still block live traffic.
   Networking, gateway deployment,
   credentials, Keychain, provider SDKs/parameters, model selection,
   continuation, retry/cancellation orchestration, context selection, runtime
@@ -975,9 +981,11 @@ Native launch passed with idempotent storage startup. The project owner confirme
 - **Current:** no deployed gateway, networking, integrated identity provider,
   gateway credential path, or external processing.
 - **Phase 1 target:** individual consumer and prosumer accounts, personal
-  workspaces, simple onboarding, provider-neutral system-browser OAuth/OIDC with
-  PKCE, and a Cortexa-operated Azure Container Apps gateway in Central US.
-  Microsoft, Google, and Apple remain candidate providers only.
+  workspaces, simple onboarding, Microsoft personal identity through the
+  provider-neutral system-browser OAuth/OIDC boundary with PKCE S256, and a
+  Cortexa-operated Azure Container Apps gateway in Central US. Google is
+  deferred until demonstrated demand after Microsoft verification; Apple is
+  deferred until Mac App Store planning or demonstrated demand.
 - **Phase 2 target:** organization accounts, team workspaces, Entra workforce
   SSO, tenant-aware authorization, RBAC, group controls, centralized
   administration, organization policy, and audit. SAML, SCIM, and other
@@ -996,9 +1004,10 @@ route only to separately approved AI providers; no implementation exists, no
 desktop provider credential is permitted, and every provider requires its own
 O-007 evidence.
 
-O-006 remains open for exact Phase 1 identity and AI-provider configurations.
-Provider-specific ZDR, disclosure, deployment, threat-model, and security
-evidence remain pending.
+O-006's Phase 1 provider selection is decided by D-062, but exact Microsoft
+registration, issuer, audience, redirect, scope, account, and threat-model
+evidence remain pending. The AI-provider configuration plus provider-specific
+ZDR, disclosure, deployment, and security evidence also remain pending.
 ARB-002 therefore remains High, unresolved, and not Ready for implementation.
 The original documentation-only decision record passed its exact 17-path
 closeout and mandatory gate with `PASS WITH ADVISORIES`. The provider-boundary
@@ -1008,10 +1017,16 @@ documentation paths. Source commit `4b474b4` passed branch Documentation run
 `29703530854`; PR #35 squash-merged it at `853da62`, and post-merge
 Documentation run `29703588215` passed. No publication action remains.
 
+The separate D-062 decision-record increment passes its exact 17-path
+documentation scope and mandatory
+`o006-phase1-microsoft-personal-identity-decision` gate with `PASS WITH
+ADVISORIES`. It is uncommitted and unpublished. No identity, registration,
+credential, Keychain, gateway, network, AI-provider, or runtime path was added.
+
 ## Next action
 
 No product or remediation increment is Ready. ARB-002 remains decision-required
-under the remaining O-006 identity and AI-provider configuration gates and
+under D-062's identity-evidence gates and O-006's AI-provider configuration and
 blocks live model networking. ARB-003, ARB-004, ARB-005, and ARB-008 remain blocked on future
 capability work. ARB-006 must be revisited before public distribution or
 external contributions; ARB-007 must be revisited before release-candidate or
@@ -1032,8 +1047,9 @@ selection, signing, notarization, or another remediation automatically.
 - Gateway operational telemetry and local trusted audit are separate and exclude credentials and raw content by default.
 - D-021 records the durable gateway boundary. D-060 later selects the planned
   operator, platform, region, inactive origin, pluggable identity boundary,
-  portable one-primary-cloud strategy, and future AI-provider boundary; O-006
-  still defers exact identity and AI-provider configurations until before
+  portable one-primary-cloud strategy, and future AI-provider boundary. D-062
+  later selects Microsoft personal identity for Phase 1; exact identity
+  evidence and O-006's AI-provider configuration remain deferred until before
   authentication or live networking.
 - D-061 later accepts the retention, data, logging, and disclosure policy;
   each AI provider requires its own approved ZDR and exact operational evidence

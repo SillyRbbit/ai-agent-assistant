@@ -63,8 +63,11 @@ squash-merged at `7bf1a5c` from source commit `26f68b4`. Branch Documentation
 run `29676662232` and post-merge Documentation run `29676693814` passed. D-059
 records the secure-default and trigger-bound policy. ARB-001 is resolved;
 ARB-002 remains decision-required. D-060 now separates pluggable identity,
-Azure-first portable hosting, and future trusted AI-provider support, while
-O-006 remains open for exact identity and AI-provider configurations. D-061
+Azure-first portable hosting, and future trusted AI-provider support. D-062
+selects Microsoft personal identity as the sole Phase 1 provider without
+authorizing implementation; Google and Apple are deferred, and exact
+registration evidence remains pending. O-006 remains open for the AI-provider
+configuration and remaining identity evidence. D-061
 accepts O-007's data, logging, disclosure, privacy, and security policy, but
 provider-specific ZDR evidence remains pending. ARB-003, ARB-004, ARB-005,
 and ARB-008 are blocked on future capabilities; ARB-006 and ARB-007 remain High
@@ -117,9 +120,9 @@ Recorded direction:
 - Current: no deployed gateway, networking, integrated identity provider,
   credential path, or external transmission.
 - Phase 1: consumer and prosumer individual accounts, personal workspaces,
-  simple onboarding, provider-neutral system-browser OAuth/OIDC with PKCE, and
-  a Cortexa-operated Azure gateway. Microsoft, Google, and Apple are candidates,
-  not selected providers.
+  simple onboarding, Microsoft personal identity through the provider-neutral
+  system-browser OAuth/OIDC boundary with PKCE S256, and a Cortexa-operated
+  Azure gateway. Google and Apple are deferred under D-062's triggers.
 - Phase 2: organization accounts, team workspaces, Entra workforce SSO,
   tenant-aware authorization, RBAC, group controls, administration, policy, and
   audit. SAML, SCIM, and other enterprise providers remain demand-driven future
@@ -138,9 +141,10 @@ Recorded direction:
   credentials remain prohibited, and every provider requires separate O-007
   evidence.
 
-O-006 remains open for exact identity and AI-provider configurations. O-007's
-policy is accepted, but operational provider-specific ZDR evidence is not
-present. ARB-002 remains High, unresolved, and unimplemented. No product source,
+O-006's Phase 1 provider selection is decided, but exact registration evidence
+and the AI-provider configuration remain open. O-007's policy is accepted, but
+operational provider-specific ZDR evidence is not present. ARB-002 remains
+High, unresolved, and unimplemented. No product source,
 dependency, Tauri, storage, permission, identity, cloud, network, gateway, or
 runtime path changes.
 
@@ -215,8 +219,10 @@ applicable evidence.
 
 No D-058, PR #33, or PR #35 publication action and no immediate High-severity
 code remediation remain. The exact 18-path O-006/O-007 provider-boundary
-amendment is published and closed. No product or remediation increment is
-Ready. O-006 exact identity and AI-provider configuration plus D-061
+amendment is published and closed. The D-062 documentation decision record is
+verified complete with advisories across exactly 17 paths and awaits publication
+review. No product or remediation increment is Ready.
+D-062's exact identity evidence, O-006's AI-provider configuration, and D-061
 operational evidence still block any live model-networking plan. Legal and
 release owners must separately resolve O-008 and O-009 before their
 distribution triggers. Do not begin ARB-002, any future-capability finding,
@@ -224,12 +230,30 @@ live transport, identity integration, cloud deployment, credentials,
 `AgentProvider`, AI-provider integration, execution, persistence, enterprise
 controls, licensing, signing, notarization, or another increment automatically.
 
+### D-062 decision-record verification
+
+Passed: documentation formatting and local links, repository policy, secret
+scan, whitespace, exact 17-path scope, protected-path review, D-060/D-061 and
+historical-report preservation, current-state consistency, complete diff,
+session-end inspection, and the mandatory post-increment gate. The result is
+`PASS WITH ADVISORIES`.
+
+Failed and corrected: the first documentation check reported only Prettier
+formatting in approved-scope files. Formatting was applied, one resulting
+paragraph split was corrected, and all final checks passed.
+
+Not run: frontend tests, Rust tests, application builds, native launch,
+Microsoft registration, identity, token, Keychain, gateway, networking, and
+provider checks. They are outside this documentation-only validation tier.
+Manual verification pending: none; the project owner approved the decision and
+exact scope.
+
 Ready-to-paste resume prompt:
 
 ```text
 Use $session-start.
 
-Start from clean synchronized main after PR #35 publication and the O-006 provider-boundary publication closeout. Confirm the publication-closeout marker remains valid and reconcile the actual repository state. Prepare the next bounded decision task only if its owner inputs and acceptance criteria are complete; otherwise report the exact remaining O-006, D-061, O-008, or O-009 decisions. Do not begin ARB-002 or any identity, cloud, gateway, networking, credential, AgentProvider, AI-provider, enterprise, licensing, signing, or notarization implementation.
+Review the complete documentation-only O-006 Phase 1 Microsoft personal identity decision. Confirm D-062, the exact 17-path scope, preserved D-060/D-061 and historical reports, passing documentation-tier checks, valid marker, and absence of product-source changes. Propose publication metadata and wait for approval. Do not begin ARB-002 or any identity, cloud, gateway, networking, credential, Keychain, AgentProvider, AI-provider, enterprise, licensing, signing, or notarization implementation.
 ```
 
 ## Increment 4V / ARB-001 publication
