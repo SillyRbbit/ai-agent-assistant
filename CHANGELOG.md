@@ -4,6 +4,11 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Published the documentation-only O-006/O-007 provider-boundary amendment
+  through PR #35 from source commit `4b474b4` and squash-merged it at `853da62`.
+  Branch Documentation run `29703530854` and post-merge Documentation run
+  `29703588215` passed. D-060, D-061, both completion reports, ARB-002's High
+  unresolved status, and all implementation prohibitions remain unchanged.
 - Recorded D-060 and D-061 as a documentation-only consumer-first,
   enterprise-ready gateway decision boundary, then amended D-060 to separate
   identity-provider support, Azure-first portable cloud hosting, and future

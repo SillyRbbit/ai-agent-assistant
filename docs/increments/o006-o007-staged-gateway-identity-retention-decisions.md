@@ -1,6 +1,6 @@
 # O-006/O-007 staged gateway identity and retention decisions
 
-Status: Provider-boundary amendment verified complete with advisories; uncommitted and unpublished
+Status: Provider-boundary amendment verified complete with advisories; published through PR #35 and squash-merged at `853da62`
 Date: 2026-07-19
 Owner: Project owner
 Baseline: clean synchronized `main` at `ef8083d`
@@ -99,6 +99,14 @@ superseding record.
 
 ## Next task
 
-Review the exact 18-path documentation-only amendment for publication and wait
-for separate Git direction. Do not begin ARB-002 or any identity, cloud,
-gateway, networking, enterprise, or AI-provider implementation.
+No publication action remains. O-006 exact identity and AI-provider
+configuration and D-061 provider-specific evidence remain required before any
+live networking plan can become Ready. Do not begin ARB-002 or any identity,
+cloud, gateway, networking, enterprise, or AI-provider implementation.
+
+## Publication evidence
+
+Source commit `4b474b4` passed branch Documentation run `29703530854`. PR #35
+squash-merged the amendment at `853da62`, and post-merge Documentation run
+`29703588215` passed. The original decision-record and provider-boundary
+completion reports remain unchanged historical evidence.

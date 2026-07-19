@@ -103,8 +103,10 @@ workflow, durable product data, enterprise controls, license grant, signing, or
 notarization may begin from these documentation records.
 
 The documentation-only O-006/O-007 provider-boundary amendment is verified
-complete with advisories under `o006-provider-boundary-amendment`, uncommitted,
-and unpublished. The original completion report remains unchanged. The
+complete with advisories under `o006-provider-boundary-amendment`, published
+through PR #35 from source commit `4b474b4`, and squash-merged at `853da62`.
+Branch Documentation run `29703530854` and post-merge Documentation run
+`29703588215` passed. The original completion reports remain unchanged. The
 amendment does not make ARB-002 or any identity, cloud, gateway, networking,
 credential, AI-provider, or enterprise implementation Ready.
 

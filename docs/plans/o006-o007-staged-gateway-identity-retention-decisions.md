@@ -1,6 +1,6 @@
 # O-006/O-007 staged gateway identity and retention decisions
 
-Status: Amendment complete with advisories; uncommitted and unpublished
+Status: Amendment complete with advisories; published through PR #35 and squash-merged at `853da62`
 Owner: Project owner
 Last updated: 2026-07-19
 Original gate ID: `o006-o007-staged-gateway-identity-retention-decisions`
@@ -264,8 +264,10 @@ decisions, original 17-path plan, and one-report scope expansion.
 
 Result: `PASS WITH ADVISORIES`. ARB-002 remains a pre-existing High finding
 that blocks live networking and the next product increment, not this
-documentation-only decision record. The exact 18-path scope remains uncommitted
-and unpublished.
+documentation-only decision record. Source commit `4b474b4` passed branch
+Documentation run `29703530854`; PR #35 squash-merged it at `853da62`, and
+post-merge Documentation run `29703588215` passed. No publication action
+remains.
 
 ## Documentation updates
 

@@ -10,7 +10,7 @@ YYYY-MM-DD-short-kebab-case-title.md
 
 Create a plan from `docs/templates/INCREMENT_TEMPLATE.md`. Link active plans from `PLANS.md` and the current `HANDOFF.md`.
 
-The verified-complete, uncommitted, and unpublished documentation-only
+The verified-complete and published documentation-only
 O-006/O-007 decision-record increment is defined under
 [`o006-o007-staged-gateway-identity-retention-decisions.md`](o006-o007-staged-gateway-identity-retention-decisions.md).
 It records current absence, a provider-neutral consumer/prosumer Phase 1, a
@@ -19,7 +19,8 @@ cloud-hosting, and future trusted AI model-provider boundaries, and
 provider-specific verified-ZDR controls without adding or authorizing product
 implementation. Its approved amendment uses gate
 `o006-provider-boundary-amendment` and is verified complete with advisories,
-uncommitted, and unpublished.
+published through PR #35 from source commit `4b474b4`, and squash-merged at
+`853da62`. No publication action remains.
 
 Meta risk-based GitHub Actions validation is locally verified with publication and hosted execution pending under [`meta-risk-based-ci.md`](meta-risk-based-ci.md). It replaces blanket persistent-runner checks with two read-only GitHub-hosted workflows and preserves the complete local final increment gate without changing application behavior or dependencies.
 

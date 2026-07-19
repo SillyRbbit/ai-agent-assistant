@@ -107,8 +107,10 @@ baseline `ef8083d`. Its mandatory gate began before edits. The exact scope is
 14 modified and three created documentation paths. Its approved
 provider-boundary amendment is verified complete with advisories under
 `o006-provider-boundary-amendment`, adds only a second closeout report, and
-expands the final scope to 18 documentation paths. Nothing is committed or
-published.
+expands the final scope to 18 documentation paths. Source commit `4b474b4`
+passed branch Documentation run `29703530854`; PR #35 squash-merged it at
+`853da62`, and post-merge Documentation run `29703588215` passed. No PR #35
+publication action remains.
 
 Recorded direction:
 
@@ -211,24 +213,23 @@ applicable evidence.
 
 ### Exact next task
 
-No D-058 or PR #33 publication action and no immediate High-severity code
-remediation remain. The exact 18-path O-006/O-007 provider-boundary amendment is
-verified complete with advisories, uncommitted, and unpublished. Its review for
-publication is the only next task. No product or remediation increment is
-Ready. O-006 identity and AI-provider configuration plus D-061 operational
-evidence still block any live model-networking plan. Legal and release owners
-must separately resolve O-008 and O-009 before their distribution triggers. Do
-not begin ARB-002, any future-capability finding, live transport, identity
-integration, cloud deployment, credentials, `AgentProvider`, AI-provider
-integration, execution, persistence, enterprise controls, licensing, signing,
-notarization, or another increment automatically.
+No D-058, PR #33, or PR #35 publication action and no immediate High-severity
+code remediation remain. The exact 18-path O-006/O-007 provider-boundary
+amendment is published and closed. No product or remediation increment is
+Ready. O-006 exact identity and AI-provider configuration plus D-061
+operational evidence still block any live model-networking plan. Legal and
+release owners must separately resolve O-008 and O-009 before their
+distribution triggers. Do not begin ARB-002, any future-capability finding,
+live transport, identity integration, cloud deployment, credentials,
+`AgentProvider`, AI-provider integration, execution, persistence, enterprise
+controls, licensing, signing, notarization, or another increment automatically.
 
 Ready-to-paste resume prompt:
 
 ```text
 Use $session-start.
 
-Review the complete 18-path O-006 provider-boundary amendment. Confirm D-060 separately defines pluggable identity providers, one-primary-cloud Azure-first portable hosting, and future trusted AI model-provider support; D-061 requires provider-specific evidence; no current AgentProvider exists; the original decision-record report is unchanged; ARB-002 remains High and unresolved; documentation-tier checks pass; and the o006-provider-boundary-amendment marker is valid. Propose a descriptive branch name, Conventional Commit message, PR title, and PR description, then wait for approval before staging, committing, pushing, or merging. Do not begin ARB-002 or any identity, cloud, gateway, networking, credential, AgentProvider, AI-provider, or enterprise implementation.
+Start from clean synchronized main after PR #35 publication and the O-006 provider-boundary publication closeout. Confirm the publication-closeout marker remains valid and reconcile the actual repository state. Prepare the next bounded decision task only if its owner inputs and acceptance criteria are complete; otherwise report the exact remaining O-006, D-061, O-008, or O-009 decisions. Do not begin ARB-002 or any identity, cloud, gateway, networking, credential, AgentProvider, AI-provider, enterprise, licensing, signing, or notarization implementation.
 ```
 
 ## Increment 4V / ARB-001 publication
