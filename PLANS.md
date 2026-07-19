@@ -4,14 +4,14 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-The D-058 dual-self-hosted-runner correction is verified complete under
-`docs/plans/meta-risk-based-ci.md`, published through PR #30, and squash-merged
-at `1780d7f` from implementation commit `9a2c75d` and documentation closeout
-commit `da08573`. Branch and post-merge CI and Documentation passed with the
-exact Linux runner 21 and macOS runner 22 assignments. The current exact
-11-path post-publication reconciliation changes documentation only, retains
-`PASS WITH ADVISORIES`, and re-finalizes the valid marker. Its publication
-remains separately controlled.
+No implementation plan is active. The D-058 dual-self-hosted-runner correction
+is verified complete under `docs/plans/meta-risk-based-ci.md`, published through
+PR #30, and squash-merged at `1780d7f` from implementation commit `9a2c75d` and
+documentation closeout commit `da08573`. Its exact 11-path post-publication
+project-memory reconciliation was published through PR #31 and squash-merged at
+`74a8d2c`; no D-058 publication action remains. ARB-002 is not Ready because
+O-006 and O-007 and the required owner threat-model decisions remain
+unresolved.
 
 Meta Increment 8 Prompt Library Reorganization is verified complete under
 `docs/increments/meta-prompt-library-reorganization.md`, published through PR

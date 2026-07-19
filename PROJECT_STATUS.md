@@ -47,8 +47,9 @@ commit `9a2c75d` and documentation closeout commit `da08573`. The original
 verification. Branch and post-merge CI and Documentation passed with the exact
 Linux runner 21 and macOS runner 22 assignments. The project owner confirmed
 the required isolated, unprivileged host baseline. The gate remains `PASS WITH
-ADVISORIES`, and its marker is re-finalized against the exact 11-path
-documentation-only post-publication reconciliation.
+ADVISORIES`. The exact 11-path post-publication project-memory reconciliation
+was published through PR #31 and squash-merged at `74a8d2c`; no D-058
+publication action remains.
 
 Meta Increment 8 Prompt Library Reorganization is **verified complete,
 published through PR #25, and squash-merged at `d26b5e1`** from verified source
@@ -943,9 +944,11 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Review the exact 11-path D-058 documentation-only post-publication memory
-reconciliation and wait for separate branch, staging, commit, and publication
-approval. Do not begin ARB-002 or another product/remediation increment.
+No product or remediation increment is Ready. ARB-002 remains blocked on O-006,
+O-007, and project-owner, security-owner, and executive-owner threat-model
+decisions. Its next possible step is a separately approved documentation-only
+planning increment. Do not begin live transport, credentials, ARB-002 product
+implementation, or another remediation automatically.
 
 ## Phase 4 planning result
 

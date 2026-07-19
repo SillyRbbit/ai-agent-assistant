@@ -47,17 +47,17 @@ not resolve those live-transport blockers.
 
 ## Meta and repository milestones
 
-| Meta milestone                                          | Status                            | Goal                                                                                                                | Acceptance gate                                                                                                   |
-| ------------------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| Meta Increment 1 - branding foundation                  | Completed and merged at `5edbf4d` | Canonical Cortexa assets, guidance, skill, README/favicon/sidebar use                                               | Asset, visual, build, scope, and `meta-01` gate evidence passed                                                   |
-| Meta Increment 2 - engineering operating system         | Completed                         | Consolidate authoritative engineering, architecture, requirements, roadmap, testing, security, and release guidance | Documentation accuracy, links, formatting, complete repository verification, diff review, and `meta-02` gate pass |
-| Meta Increment 3 - Codex automation and quality gates   | Completed and merged at `ad9042c` | Modular safe repository inspection and evidence-based review workflows                                              | Hook regressions, skill validation, complete verification, scope review, and valid `meta-03` marker passed        |
-| Meta Increment 4 - executive documentation request      | Stopped                           | No gate, plan, or repository edit exists                                                                            | Requires a newly selected and separately approved future increment                                                |
-| Meta Increment 5 - repository health and GitHub hygiene | Completed and merged at `6b149fa` | Honest repository entry points, review-only automation, GitHub intake, health checks, and licensing status          | Local and hosted verification plus `meta-05` gate evidence passed                                                 |
-| Meta Increment 6 - product readiness audit              | Completed and merged at `5281fac` | Evidence-based readiness assessment and ordered remediation backlog                                                 | Documentation audit and valid `meta-06` gate evidence passed; result `NOT READY (57/100)`                         |
-| Meta Increment 7 - verified application icon rollout    | Completed and merged at `96ba6ae` | Exactly 16 existing Tauri icon files generated from the approved source; debug/release bundles verified             | Raw dev icon and default DMG remain documented advisories; no product capability gate is satisfied                |
-| Remediation ARB-022 - project-memory reconciliation     | Completed and merged at `7c79e65` | PR #21 publication state and the live queue were reconciled without changing product source                         | Documentation checks and the `remediation-arb-022` gate passed; no remaining ARB-022 publication gate             |
-| Repository risk-based GitHub Actions validation         | Completed and merged at `1780d7f` | Two read-only risk-based workflows, deterministic path classification, consolidated audits, and dual-runner routing | Branch and post-merge runs passed on exact Linux runner 21 and macOS runner 22 selectors; valid D-058 marker      |
+| Meta milestone                                          | Status                                          | Goal                                                                                                                | Acceptance gate                                                                                                       |
+| ------------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Meta Increment 1 - branding foundation                  | Completed and merged at `5edbf4d`               | Canonical Cortexa assets, guidance, skill, README/favicon/sidebar use                                               | Asset, visual, build, scope, and `meta-01` gate evidence passed                                                       |
+| Meta Increment 2 - engineering operating system         | Completed                                       | Consolidate authoritative engineering, architecture, requirements, roadmap, testing, security, and release guidance | Documentation accuracy, links, formatting, complete repository verification, diff review, and `meta-02` gate pass     |
+| Meta Increment 3 - Codex automation and quality gates   | Completed and merged at `ad9042c`               | Modular safe repository inspection and evidence-based review workflows                                              | Hook regressions, skill validation, complete verification, scope review, and valid `meta-03` marker passed            |
+| Meta Increment 4 - executive documentation request      | Stopped                                         | No gate, plan, or repository edit exists                                                                            | Requires a newly selected and separately approved future increment                                                    |
+| Meta Increment 5 - repository health and GitHub hygiene | Completed and merged at `6b149fa`               | Honest repository entry points, review-only automation, GitHub intake, health checks, and licensing status          | Local and hosted verification plus `meta-05` gate evidence passed                                                     |
+| Meta Increment 6 - product readiness audit              | Completed and merged at `5281fac`               | Evidence-based readiness assessment and ordered remediation backlog                                                 | Documentation audit and valid `meta-06` gate evidence passed; result `NOT READY (57/100)`                             |
+| Meta Increment 7 - verified application icon rollout    | Completed and merged at `96ba6ae`               | Exactly 16 existing Tauri icon files generated from the approved source; debug/release bundles verified             | Raw dev icon and default DMG remain documented advisories; no product capability gate is satisfied                    |
+| Remediation ARB-022 - project-memory reconciliation     | Completed and merged at `7c79e65`               | PR #21 publication state and the live queue were reconciled without changing product source                         | Documentation checks and the `remediation-arb-022` gate passed; no remaining ARB-022 publication gate                 |
+| Repository risk-based GitHub Actions validation         | Completed at `1780d7f`; reconciled at `74a8d2c` | Two read-only risk-based workflows, deterministic path classification, consolidated audits, and dual-runner routing | Branch and post-merge runs passed on exact Linux runner 21 and macOS runner 22 selectors; D-058 publication is closed |
 
 Meta Increments 2, 3, 5, and 6 and repository risk-based CI change documentation
 or repository governance only. They do not satisfy any product capability or
@@ -83,16 +83,14 @@ Release milestones additionally require `RELEASE_CHECKLIST.md` and
 
 ## Current queue
 
-1. Review the exact 11-path D-058 post-publication memory reconciliation and
-   obtain separate branch, staging, commit, and publication approval.
-2. Do not begin ARB-002 automatically.
-3. Obtain project-owner, security-owner, and executive-owner approval before a
+1. Do not begin ARB-002 automatically.
+2. Obtain project-owner, security-owner, and executive-owner approval before a
    documentation-only ARB-002 threat-model planning increment.
-4. Do not implement live transport, credentials, or another remediation in the
+3. Do not implement live transport, credentials, or another remediation in the
    same step.
 
-Increment 4V is verified complete and published. No later product or
-remediation increment is Ready.
+Increment 4V is verified complete and published. D-058 and its project-memory
+reconciliation are closed. No later product or remediation increment is Ready.
 
 ## Rollback and reprioritization
 
