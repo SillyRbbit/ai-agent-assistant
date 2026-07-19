@@ -4,7 +4,14 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No implementation plan is active. The documentation-only O-006/O-007
+No implementation or decision-record plan is active. The documentation-only
+plan `docs/plans/o006-phase1-microsoft-personal-identity.md` is verified
+complete with advisories and awaits publication review. D-062 selects Microsoft
+personal identity as the sole Phase 1 provider, defers Google and Apple,
+excludes persistent sessions and automatic email linking, and preserves all
+implementation and ARB-002 blocks.
+
+The documentation-only O-006/O-007
 provider-boundary amendment is verified complete with advisories under gate
 `o006-provider-boundary-amendment` and
 `docs/plans/o006-o007-staged-gateway-identity-retention-decisions.md`. It records
@@ -15,8 +22,9 @@ provider-specific verified-ZDR, data-classification, logging, and disclosure
 policy. It changes no application source or behavior and does not implement
 ARB-002. Source commit `4b474b4` passed branch Documentation run `29703530854`;
 PR #35 squash-merged it at `853da62`, and post-merge Documentation run
-`29703588215` passed. No publication action remains. O-006 remains open for
-exact identity and AI-provider configurations.
+`29703588215` passed. No publication action remains. D-062 later selects the
+Phase 1 provider; O-006 remains open for exact Microsoft evidence and the
+AI-provider configuration.
 
 The documentation-only High-severity advisory disposition is verified complete
 with advisories under
@@ -34,8 +42,8 @@ PR #30, and squash-merged at `1780d7f` from implementation commit `9a2c75d` and
 documentation closeout commit `da08573`. Its exact 11-path post-publication
 project-memory reconciliation was published through PR #31 and squash-merged at
 `74a8d2c`; no D-058 publication action remains. ARB-002 is not Ready because
-O-006 identity and AI-provider configuration, provider-specific ZDR evidence,
-deployment, and the required
+D-062's identity evidence, O-006's AI-provider configuration, provider-specific
+ZDR evidence, deployment, and the required
 threat-model and implementation approvals remain unresolved.
 
 Meta Increment 8 Prompt Library Reorganization is verified complete under
@@ -135,6 +143,7 @@ docs/plans/04s-bind-terminal-initial-approval-presentation.md
 docs/plans/04t-bind-terminal-initial-approval-resolution.md
 docs/plans/04u-bind-initial-approval-run-termination.md
 docs/plans/o006-o007-staged-gateway-identity-retention-decisions.md
+docs/plans/o006-phase1-microsoft-personal-identity.md
 docs/plans/remediation-high-severity-advisory-disposition.md
 docs/plans/meta-01-branding-foundation.md
 docs/plans/meta-02-engineering-operating-system.md

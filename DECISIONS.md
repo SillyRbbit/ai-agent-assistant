@@ -2008,15 +2008,78 @@ Consequences:
 - No provider connectivity, account configuration, disclosure UI, logging,
   retention job, deletion process, credential, or product behavior is added.
 
+## D-062 - Select Microsoft personal identity for Phase 1
+
+Date: 2026-07-19
+Status: Accepted; configuration evidence and implementation remain approval-bound
+
+Decision: Microsoft personal identity is the sole Phase 1 identity provider.
+Phase 1 accepts personal Microsoft accounts only through the `/consumers`
+authority; work, school, guest, and arbitrary Entra tenants remain outside the
+initial boundary. Google is deferred until demonstrated demand after Microsoft
+verification. Sign in with Apple is deferred until Mac App Store planning or
+demonstrated demand. These deferrals do not remove D-060's provider-neutral
+application boundary or approve a later provider implicitly.
+
+The planned desktop flow uses the system browser and OAuth 2.0 Authorization
+Code Flow with PKCE S256, one-time `state`, and OIDC `nonce`. It uses separate
+registrations for the public desktop client and the Cortexa gateway API
+resource. The gateway validates the exact personal-account issuer from the
+approved OIDC discovery metadata, tenant, signature, expiration, audience,
+delegated scope, and authorization context. A closed loopback callback targets
+`127.0.0.1` on an ephemeral port; the exact registered representation, client
+identifier, gateway application identifier, issuer, audience, redirect, and
+scope values remain pre-implementation evidence and must not be invented or
+stored as secrets in the repository.
+
+Initial scopes are `openid`, `email`, and one exact delegated Cortexa gateway
+scope. `profile`, Microsoft Graph, directory, group, mail, calendar, file, and
+contact scopes are excluded. `offline_access` is excluded until a separate
+persistent-session decision. No refresh or session credential is authorized by
+this record.
+
+The canonical external account key is provider ID plus normalized issuer plus
+subject. Email is optional contact data, not an identity key, and matching
+email addresses never automatically link accounts. A future explicit
+cross-provider linking flow requires a separate threat model, reauthentication
+of both identities, collision handling, user confirmation, and redacted audit
+design.
+
+Rationale: Microsoft personal identity supports the accepted system-browser
+OIDC and PKCE boundary, can issue an access token for a separately registered
+Cortexa gateway API resource, and preserves a bounded path to a separately
+approved Phase 2 Entra workforce design. Personal-account-only authority avoids
+premature multitenant issuer and enterprise-policy complexity. Minimal scopes,
+stable subject-based identity, and no automatic email linking reduce privacy
+and account-takeover risk.
+
+Consequences:
+
+- O-006's Phase 1 provider choice is decided, but exact registration,
+  issuer/audience, redirect, account-lifecycle, and threat-model evidence remains
+  required before an identity implementation can be planned.
+- D-060's identity, hosting, and AI-provider boundaries remain independent.
+  Microsoft identity selection does not approve Azure deployment, gateway
+  networking, or an AI model provider.
+- D-061 still blocks external transmission until the selected AI provider's
+  exact ZDR, retention, logging, region, deletion, disclosure, and security
+  evidence passes.
+- ARB-002 remains High, unresolved, and not Ready. No account, registration,
+  OAuth/OIDC, redirect, token, Keychain, gateway, networking, or provider path
+  is implemented or authorized.
+- Google requires a later demand and gateway-session decision. Apple requires a
+  later native-versus-web identity decision and must be revisited before any Mac
+  App Store plan that triggers its login-service requirements.
+
 ## Open decisions
 
-| ID    | Topic                                                              | Required before                                      |
-| ----- | ------------------------------------------------------------------ | ---------------------------------------------------- |
-| O-002 | Workspace split between one Tauri crate and multiple Rust crates   | Revisit before later modularization                  |
-| O-003 | macOS target and hardware support beyond the provisional baseline  | Any Intel, older-macOS, or production support claim  |
-| O-006 | Exact identity, cloud-expansion, and AI-provider configurations    | Before authentication or live gateway networking     |
-| O-008 | Repository and distribution licensing                              | Before public distribution or external contributions |
-| O-009 | Signing, notarization, credential ownership, and release authority | Before trusted public macOS distribution             |
+| ID    | Topic                                                                             | Required before                                      |
+| ----- | --------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| O-002 | Workspace split between one Tauri crate and multiple Rust crates                  | Revisit before later modularization                  |
+| O-003 | macOS target and hardware support beyond the provisional baseline                 | Any Intel, older-macOS, or production support claim  |
+| O-006 | Exact Microsoft identity evidence, cloud expansion, and AI-provider configuration | Before authentication or live gateway networking     |
+| O-008 | Repository and distribution licensing                                             | Before public distribution or external contributions |
+| O-009 | Signing, notarization, credential ownership, and release authority                | Before trusted public macOS distribution             |
 
 O-007's policy decision is accepted in D-061. Provider-approved ZDR evidence,
 the required disclosure, and all deployment and security gates still block

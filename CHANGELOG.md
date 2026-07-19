@@ -4,6 +4,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Selected Microsoft personal identity as the sole Phase 1 identity provider in
+  D-062 without implementing authentication. Google and Apple are deferred;
+  `offline_access`, persistent sessions, automatic email linking, workforce
+  tenants, Microsoft Graph scopes, and all identity, gateway, credential, and
+  networking implementation remain excluded. ARB-002 remains High and not
+  Ready.
 - Published the documentation-only O-006/O-007 provider-boundary amendment
   through PR #35 from source commit `4b474b4` and squash-merged it at `853da62`.
   Branch Documentation run `29703530854` and post-merge Documentation run

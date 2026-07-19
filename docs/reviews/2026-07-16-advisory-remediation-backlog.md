@@ -1225,6 +1225,25 @@ deployment, disclosure, threat-model, and security-verification gates pass.
 This additive update changes no original finding, count, severity, historical
 disposition evidence, source code, or product behavior.
 
+## 2026-07-19 Phase 1 identity selection update
+
+D-062 selects Microsoft personal identity as the sole Phase 1 identity
+provider. Google is deferred until demonstrated demand after Microsoft
+verification; Apple is deferred until Mac App Store planning or demonstrated
+demand. The planned personal-account-only flow uses a separate public desktop
+client and gateway API resource, system-browser Authorization Code Flow with
+PKCE S256, `state`, OIDC `nonce`, and a closed loopback callback. Initial scopes
+are `openid`, `email`, and one exact delegated Cortexa gateway scope.
+`offline_access`, persistent sessions, Microsoft Graph scopes, workforce
+tenants, and automatic email linking remain excluded.
+
+ARB-002 remains High and unresolved. No identity implementation exists, and
+the exact client, resource, issuer, tenant, audience, redirect, scope,
+account-lifecycle, and threat-model evidence remains pending. O-006 also remains
+open for the AI-provider configuration, and D-061 provider-specific evidence
+still blocks external transmission. This update changes no original finding,
+count, severity, source code, or product behavior.
+
 ## Review and resolution boundary and rollback
 
 The original review started no remediation and changed no source, dependency,

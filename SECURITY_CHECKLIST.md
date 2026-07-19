@@ -60,9 +60,19 @@ production boundary exists.
 
 ## Gateway and provider boundary
 
-- [ ] O-006 selects the exact approved Phase 1 identity provider or providers,
-      issuer configuration, redirect handling, audience, and token-validation
-      boundary before authentication or live gateway traffic.
+- [ ] D-062's Microsoft personal-account boundary is implemented only after the
+      exact desktop client, gateway resource, discovery-derived issuer, tenant,
+      loopback redirect, delegated scope, and token-validation configuration are
+      approved and evidenced.
+- [ ] Authorization uses a system browser, PKCE S256, one-time `state`, OIDC
+      `nonce`, one callback, and terminal denial, timeout, and cancellation.
+- [ ] Work, school, guest, arbitrary Entra tenant, wrong issuer, wrong audience,
+      wrong scope, and replayed-code paths fail closed.
+- [ ] Initial scopes are only `openid`, `email`, and one exact delegated gateway
+      scope. `offline_access` and persistent sessions remain disabled without a
+      separate decision.
+- [ ] The account key is provider ID plus normalized issuer plus subject; email
+      never identifies or automatically links accounts.
 - [ ] The gateway validates every trusted issuer, audience, signature,
       expiration, applicable tenant, and authorization context against closed
       server-owned configuration.
