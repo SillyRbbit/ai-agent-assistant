@@ -1,7 +1,7 @@
 # Remediation - High-severity advisory disposition
 
-Status: Verified complete with advisories in the current workspace; publication
-pending
+Status: Verified complete with advisories; published through PR #33 and
+squash-merged at `7bf1a5c`
 Date: 2026-07-19
 Owner: Project maintainer
 Baseline: clean synchronized `main` at `6ce9fce`
@@ -73,6 +73,14 @@ for this documentation-only change.
 
 Manual verification pending: none.
 
+## Publication result
+
+- Source commit `26f68b4` passed Documentation run `29676662232`.
+- PR #33 squash-merged the exact verified disposition at `7bf1a5c`.
+- Post-merge Documentation run `29676693814` passed on clean merged `main`.
+- No PR #33 publication action remains. The marker is re-finalized against the
+  approved documentation-only publication closeout.
+
 ## Risks and rollback
 
 The principal risks are false resolution, hidden risk acceptance, premature
@@ -80,12 +88,13 @@ vendor or legal selection, and loss of explicit revisit triggers. D-059, the
 canonical backlog table, protected-path validation, and complete diff review
 control those risks.
 
-Before publication, restore the nine modified files and remove the three new
-records. After publication, revert only the bounded documentation commit. No
+The disposition rollback reverts squash commit `7bf1a5c`. A later
+documentation-only publication closeout is independently revertible. No
 runtime, data, dependency, configuration, permission, or release rollback
 applies.
 
 ## Next task
 
-None is Ready. Obtain explicit owners and decisions for O-006 and O-007 before
-any live model-networking plan. Do not start another remediation automatically.
+No publication action remains, and no remediation is Ready. Obtain explicit
+owners and decisions for O-006 and O-007 before any live model-networking plan.
+Do not start another remediation automatically.

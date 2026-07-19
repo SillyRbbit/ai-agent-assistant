@@ -69,8 +69,8 @@ This file is the ordered implementation queue. Work only on the first item marke
   **Verified complete; published through PR #23 and squash-merged at
   `6e6f91d`**.
 - High-severity advisory disposition:
-  **Documentation-only disposition complete in the current workspace; no
-  immediate code remediation authorized**.
+  **Verified complete with advisories; published through PR #33 and
+  squash-merged at `7bf1a5c`; no immediate code remediation authorized**.
 
 ## Queue status
 
@@ -85,6 +85,9 @@ superseded.
 
 The D-058 implementation and its post-publication reconciliation are closed;
 no D-058 publication task remains in the queue.
+
+The High-severity disposition is published and closed; no PR #33 publication
+task remains in the queue.
 
 No `REMEDIATE NOW` finding exists, and no later remediation or product
 increment is Ready. Do not begin ARB-002 automatically. O-006 and O-007 require

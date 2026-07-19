@@ -1,7 +1,7 @@
 # Remediation plan - High-severity advisory disposition
 
-Status: Verified complete with advisories in the current workspace; publication
-pending
+Status: Verified complete with advisories; published through PR #33 and
+squash-merged at `7bf1a5c`
 Date: 2026-07-19
 Owner: Project maintainer
 Gate ID: `remediation-high-severity-advisory-disposition`
@@ -25,6 +25,14 @@ deferred findings as resolved.
   bootstrap metadata only; no durable product repository exists.
 - No license grant, signed or notarized release, Intel support evidence, SSO,
   enrollment, fleet policy, or enterprise control plane exists or is claimed.
+
+## Publication evidence
+
+- Source commit `26f68b4` passed Documentation run `29676662232`.
+- PR #33 squash-merged the exact 12-path disposition at `7bf1a5c`.
+- Post-merge Documentation run `29676693814` passed on `main`.
+- No PR #33 publication action remains. The existing marker is re-finalized
+  against the approved documentation-only publication closeout.
 
 ## Approved dispositions
 
@@ -131,10 +139,10 @@ documentation-only and changes no executable or product path.
 
 ## Rollback
 
-Before publication, restore the nine modified documentation files and remove
-the three new records. After publication, revert only the bounded documentation
-commit. No product, dependency, database, migration, credential, configuration,
-permission, or release rollback applies.
+The disposition rollback reverts squash commit `7bf1a5c`. A later
+documentation-only publication closeout is independently revertible and does
+not change product behavior. No product, dependency, database, migration,
+credential, configuration, permission, or release rollback applies.
 
 ## Exit criteria
 

@@ -4,13 +4,14 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
-- Disposed every canonical High-severity advisory against current source
-  evidence without changing product behavior: ARB-001 remains resolved,
-  ARB-002 remains decision-required, four missing product capabilities remain
-  blocked as future work, ARB-006 and ARB-007 remain High with explicit legal
-  and release triggers, and ARB-044 remains superseded. D-059 records the
-  secure-default, no-false-resolution policy; O-006 and O-007 still block live
-  model traffic.
+- Published the evidence-based High-severity advisory disposition through PR
+  #33 from source commit `26f68b4` and squash-merged it at `7bf1a5c`. Branch
+  Documentation run `29676662232` and post-merge Documentation run
+  `29676693814` passed. ARB-001 remains resolved, ARB-002 remains
+  decision-required, four missing product capabilities remain blocked as
+  future work, ARB-006 and ARB-007 remain High with explicit legal and release
+  triggers, and ARB-044 remains superseded. D-059 records the secure-default,
+  no-false-resolution policy; O-006 and O-007 still block live model traffic.
 - Published the documentation-only D-058 project-memory reconciliation through
   PR #31 and squash-merged it at `74a8d2c`. Live governance documents now treat
   D-058 as closed without requesting another recursive publication closeout;
