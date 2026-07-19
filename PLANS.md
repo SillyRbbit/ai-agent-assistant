@@ -13,7 +13,10 @@ model-provider boundaries; a consumer/prosumer Phase 1; a later enterprise Phase
 2; Azure-first one-primary-cloud hosting with deferred portability; and D-061's
 provider-specific verified-ZDR, data-classification, logging, and disclosure
 policy. It changes no application source or behavior and does not implement
-ARB-002. O-006 remains open for exact identity and AI-provider configurations.
+ARB-002. Source commit `4b474b4` passed branch Documentation run `29703530854`;
+PR #35 squash-merged it at `853da62`, and post-merge Documentation run
+`29703588215` passed. No publication action remains. O-006 remains open for
+exact identity and AI-provider configurations.
 
 The documentation-only High-severity advisory disposition is verified complete
 with advisories under

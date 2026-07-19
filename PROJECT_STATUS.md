@@ -149,7 +149,9 @@ or notarization was implemented. No PR #33 publication action remains.
   implementation authorized**.
 - O-006/O-007 staged gateway identity and retention decisions -
   **provider-boundary documentation amendment verified complete with
-  advisories; uncommitted and unpublished; no product implementation
+  advisories; published through PR #35 from source commit `4b474b4` and
+  squash-merged at `853da62`; branch Documentation run `29703530854` and
+  post-merge Documentation run `29703588215` passed; no product implementation
   authorized**.
 
 ## Prompt library capability and evidence
@@ -1002,7 +1004,9 @@ The original documentation-only decision record passed its exact 17-path
 closeout and mandatory gate with `PASS WITH ADVISORIES`. The provider-boundary
 amendment also passes with advisories under its dedicated gate, preserves the
 original report unchanged, and expands only the closeout-report scope to 18
-documentation paths. It remains uncommitted and unpublished.
+documentation paths. Source commit `4b474b4` passed branch Documentation run
+`29703530854`; PR #35 squash-merged it at `853da62`, and post-merge
+Documentation run `29703588215` passed. No publication action remains.
 
 ## Next action
 

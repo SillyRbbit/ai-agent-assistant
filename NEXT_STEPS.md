@@ -73,8 +73,8 @@ This file is the ordered implementation queue. Work only on the first item marke
   squash-merged at `7bf1a5c`; no immediate code remediation authorized**.
 - O-006/O-007 staged gateway identity and retention decisions:
   **Provider-boundary documentation amendment verified complete with
-  advisories; uncommitted and unpublished; no product implementation
-  authorized**.
+  advisories; published through PR #35 and squash-merged at `853da62`; no
+  product implementation authorized**.
 
 ## Queue status
 
@@ -98,9 +98,9 @@ The High-severity disposition is published and closed; no PR #33 publication
 task remains in the queue.
 
 The O-006/O-007 provider-boundary amendment is verified complete with
-advisories and awaits only a separately approved publication review. Its exact
-18-path scope preserves the original report unchanged. It does not make ARB-002
-Ready.
+advisories, published through PR #35, and squash-merged at `853da62`. Its exact
+18-path scope preserves the original reports unchanged, and no publication
+action remains. It does not make ARB-002 Ready.
 
 No `REMEDIATE NOW` finding exists, and no later remediation or product
 increment is Ready. Do not begin ARB-002 automatically. Do not add a provider
