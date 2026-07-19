@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-07-18
+Last updated: 2026-07-19
 
 ## Current milestone
 
@@ -61,6 +61,16 @@ immediately before the post-publication project-memory sync. The required sync
 closeout is `PASS WITH ADVISORIES`, and the marker is re-finalized against that
 documentation-only state. Its sole advisory is pre-existing stale roadmap
 wording outside the approved scope.
+
+The documentation-only High-severity advisory disposition is complete in the
+current workspace under D-059. Current source evidence produces no
+`REMEDIATE NOW` item: ARB-001 remains resolved; ARB-002 is decision-required;
+ARB-003, ARB-004, ARB-005, and ARB-008 are blocked on future capabilities;
+ARB-006 and ARB-007 remain High but are non-blocking until explicit legal and
+release triggers; and ARB-044 remains superseded. No vendor, identity provider,
+license, credential owner, release authority, live networking, executor,
+complete workflow, durable product data, enterprise control, signing, or
+notarization was selected or implemented.
 
 ## Increment status
 
@@ -128,6 +138,8 @@ wording outside the approved scope.
 - Repository workflow: risk-based GitHub Actions validation - **verified
   complete with advisories; published through PR #30 and squash-merged at
   `1780d7f`; valid marker**.
+- High-severity advisory disposition - **documentation-only disposition
+  complete in the current workspace; no product implementation authorized**.
 
 ## Prompt library capability and evidence
 
@@ -944,11 +956,13 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-No product or remediation increment is Ready. ARB-002 remains blocked on O-006,
-O-007, and project-owner, security-owner, and executive-owner threat-model
-decisions. Its next possible step is a separately approved documentation-only
-planning increment. Do not begin live transport, credentials, ARB-002 product
-implementation, or another remediation automatically.
+No product or remediation increment is Ready. ARB-002 remains decision-required
+under O-006 and O-007 and blocks live model networking. ARB-003, ARB-004,
+ARB-005, and ARB-008 remain blocked on future capability work. ARB-006 must be
+revisited before public distribution or external contributions; ARB-007 must
+be revisited before release-candidate or public-distribution work. Do not begin
+transport, credentials, execution, persistence, enterprise controls, license
+selection, signing, notarization, or another remediation automatically.
 
 ## Phase 4 planning result
 

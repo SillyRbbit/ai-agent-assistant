@@ -4,7 +4,15 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No implementation plan is active. The D-058 dual-self-hosted-runner correction
+No implementation plan is active. The approved documentation-only
+High-severity advisory disposition is recorded under
+`docs/plans/remediation-high-severity-advisory-disposition.md`. It identifies
+no `REMEDIATE NOW` item and authorizes no product work: ARB-002 remains
+decision-required, four findings remain blocked on future capabilities, two
+remain High with explicit deferred triggers, and ARB-044 remains superseded.
+No later product or remediation increment is Ready.
+
+The D-058 dual-self-hosted-runner correction
 is verified complete under `docs/plans/meta-risk-based-ci.md`, published through
 PR #30, and squash-merged at `1780d7f` from implementation commit `9a2c75d` and
 documentation closeout commit `da08573`. Its exact 11-path post-publication
@@ -109,6 +117,7 @@ docs/plans/04r-bind-terminal-initial-policy.md
 docs/plans/04s-bind-terminal-initial-approval-presentation.md
 docs/plans/04t-bind-terminal-initial-approval-resolution.md
 docs/plans/04u-bind-initial-approval-run-termination.md
+docs/plans/remediation-high-severity-advisory-disposition.md
 docs/plans/meta-01-branding-foundation.md
 docs/plans/meta-02-engineering-operating-system.md
 docs/plans/meta-03-codex-automation.md

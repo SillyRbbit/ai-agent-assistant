@@ -1813,11 +1813,59 @@ Consequences:
 - No application source, product behavior, dependency version, lockfile, Tauri
   boundary, capability, permission, CSP, identifier, or SQLite schema changes.
 
+## D-059 - Use trigger-bound dispositions for unreachable High findings
+
+Date: 2026-07-19
+Status: Accepted
+
+Decision: assess High-severity findings against currently reachable behavior
+and active trust boundaries before selecting remediation. A High finding may
+remain deferred without a severity reduction only when the affected capability
+is absent or unreachable, no current boundary is weakened, the current safe
+increment remains verifiable, and an explicit future trigger and acceptance
+criteria remain recorded. Missing Executor, complete Workflow, durable product
+data, and enterprise controls are future product capabilities, not defects to
+implement inside this remediation.
+
+Use reversible secure defaults while owner decisions remain open. O-006 and
+O-007 remain decision-required and block all live model networking. The
+temporary repository posture is proprietary and all rights reserved without an
+open-source license grant. The provisional tested platform baseline is macOS
+14+ on Apple Silicon; Intel and older macOS support remain unclaimed. Signing
+and notarization block trusted public distribution, not unsigned local
+development. No vendor, identity provider, token issuer, legal license,
+credential owner, release authority, or signing owner is selected by this
+decision.
+
+Rationale: implementing absent capabilities merely to reduce an advisory count
+would expand scope and create unreviewed authority. Trigger-bound dispositions
+preserve visible High risk, prohibit premature networking and release claims,
+and identify the exact point at which each decision or capability becomes
+mandatory.
+
+Consequences:
+
+- ARB-001 remains `RESOLVED` with its published Increment 4V evidence.
+- ARB-002 is `DECISION REQUIRED`; O-006 and O-007 must be approved before live
+  gateway or provider traffic.
+- ARB-003, ARB-004, ARB-005, and ARB-008 are
+  `BLOCKED - FUTURE CAPABILITY`; they are not implemented by this remediation.
+- ARB-006 and ARB-007 are `DEFERRED - NON-BLOCKING` for current private local
+  development and retain High severity with explicit distribution and release
+  triggers.
+- ARB-044 remains `SUPERSEDED` by its canonical split findings.
+- No finding is recorded as accepted temporary risk, and no unresolved finding
+  is represented as resolved.
+- This decision changes documentation only and grants no network, execution,
+  persistence, enterprise, distribution, signing, or release authority.
+
 ## Open decisions
 
-| ID    | Topic                                                            | Required before                     |
-| ----- | ---------------------------------------------------------------- | ----------------------------------- |
-| O-002 | Workspace split between one Tauri crate and multiple Rust crates | Revisit before later modularization |
-| O-003 | macOS minimum deployment target confirmation on target Mac       | Native release preparation          |
-| O-006 | Gateway identity provider and deployment platform                | Before live gateway networking      |
-| O-007 | Provider retention mode and user disclosure                      | Before live provider traffic        |
+| ID    | Topic                                                              | Required before                                      |
+| ----- | ------------------------------------------------------------------ | ---------------------------------------------------- |
+| O-002 | Workspace split between one Tauri crate and multiple Rust crates   | Revisit before later modularization                  |
+| O-003 | macOS target and hardware support beyond the provisional baseline  | Any Intel, older-macOS, or production support claim  |
+| O-006 | Gateway identity provider and deployment platform                  | Before live gateway networking                       |
+| O-007 | Provider retention mode and user disclosure                        | Before live provider traffic                         |
+| O-008 | Repository and distribution licensing                              | Before public distribution or external contributions |
+| O-009 | Signing, notarization, credential ownership, and release authority | Before trusted public macOS distribution             |

@@ -1,6 +1,6 @@
 # Handoff
 
-Last updated: 2026-07-18
+Last updated: 2026-07-19
 
 ## Current state
 
@@ -58,6 +58,36 @@ gate remains `PASS WITH ADVISORIES`. The exact 11-path post-publication
 project-memory reconciliation was published through PR #31 and squash-merged at
 `74a8d2c`; no D-058 publication action remains.
 
+The project owner approved an evidence-based High-severity disposition without
+feature implementation. D-059 records the secure-default and trigger-bound
+policy. ARB-001 is resolved; ARB-002 remains decision-required under O-006 and
+O-007; ARB-003, ARB-004, ARB-005, and ARB-008 are blocked on future
+capabilities; ARB-006 and ARB-007 remain High and deferred until their explicit
+legal and release triggers; and ARB-044 remains superseded. No
+`REMEDIATE NOW` item exists. This documentation-only increment selects no
+vendor, identity provider, license, credential owner, or release authority and
+implements no networking, execution, complete workflow, durable product data,
+enterprise controls, signing, or notarization.
+
+### High-severity disposition verification
+
+Passed: final documentation formatting and links, repository policy, secret
+scan, whitespace, protected-path review, exact 12-path scope, complete diff,
+architecture, security, code-health, technical-debt, readiness, session-end,
+and mandatory post-increment gate checks. The consolidated result is
+`PASS WITH ADVISORIES`.
+
+Failed and corrected: intermediate documentation checks reported only Prettier
+formatting in approved-scope files. The first marker-finalization attempt also
+rejected three report categories outside the hook's closed vocabulary; the
+schema correction changed no severity, disposition, risk, or trigger. Final
+reruns passed.
+
+Not run: frontend tests, Rust tests, application builds, native launch,
+networked dependency audit, and product manual testing because no executable,
+dependency, workflow, or product path changed. Manual verification pending:
+none.
+
 ## Meta risk-based GitHub Actions validation
 
 ### D-058 correction
@@ -108,19 +138,21 @@ applicable evidence.
 
 ### Exact next task
 
-No D-058 implementation, closeout, or publication action remains. ARB-002 is
-not Ready because O-006 and O-007 and the required project-owner,
-security-owner, and executive-owner threat-model decisions remain unresolved.
-The next possible work is a separately approved documentation-only ARB-002
-threat-model planning increment. Do not begin ARB-002 product implementation,
-live transport, credentials, or another remediation automatically.
+No D-058 action or immediate High-severity code remediation remains. No product
+or remediation increment is Ready. The next security prerequisite is explicit
+owner resolution of O-006 and O-007 before any live model-networking plan can
+become Ready. Legal and release owners must separately resolve O-008 and O-009
+before their distribution triggers. Do not begin ARB-002, any
+future-capability finding, live transport, credentials, execution, persistence,
+enterprise controls, licensing, signing, notarization, or another increment
+automatically.
 
 Ready-to-paste resume prompt:
 
 ```text
 Use $session-start.
 
-Start from clean synchronized main after the D-058 publication closeout. Confirm the current completion marker and reconcile the actual repository state. Verify that no product or remediation increment is Ready and that ARB-002 remains blocked on O-006, O-007, and project-owner, security-owner, and executive-owner threat-model decisions. Recommend only the smallest next decision or planning step and wait for approval. Do not begin ARB-002 implementation, live transport, credentials, commit, push, or merge.
+Start from the verified High-severity advisory disposition on clean synchronized main. Confirm the completion marker and reconcile current repository evidence. Verify that ARB-002 remains decision-required under O-006 and O-007, four High findings remain blocked on future capabilities, and ARB-006 and ARB-007 retain their explicit legal and release triggers. Recommend only the smallest owner-decision or unrelated safe planning step and wait for approval. Do not begin live networking, credentials, execution, persistence, enterprise controls, licensing, signing, notarization, commit, push, or merge.
 ```
 
 ## Increment 4V / ARB-001 publication

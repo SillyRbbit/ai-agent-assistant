@@ -8,6 +8,10 @@
   ARB-001 is resolved and squash-merged through PR #23 at `6e6f91d` from
   reconstructed source commit `ec919e9`; original reviewed commit `3440ce9`
   remains preserved.
+- Disposition update: on 2026-07-19, the project owner approved D-059's
+  evidence-based High-severity disposition on clean synchronized `main` at
+  `6ce9fce`. The update changes current documentation only and does not rewrite
+  this report's dated baseline or original verification evidence.
 
 ## Conclusion
 
@@ -16,19 +20,26 @@ post-increment findings and 18 Product Readiness Audit findings. The original
 review normalized them to 25 still-valid remediation records plus closed or
 superseded historical dispositions. The current backlog contains 23 unresolved
 records and two subsequently resolved records, ARB-022 and ARB-001. No Critical
-finding exists. Seven unresolved High findings block live, pilot, release, or
-enterprise use. No later product remediation is Ready.
+finding exists. Seven unresolved High findings remain: one is
+decision-required, four are blocked on future capabilities, and two are
+non-blocking only until explicit legal or release triggers. Their severity is
+unchanged. No later product remediation is Ready.
 
 Increment 4V resolves ARB-001 by binding both successful terminal approval paths
 to the existing typed in-memory approval-audit adapter. ARB-022's
-documentation-only prerequisite is published at `7c79e65`. ARB-002 is the next
-priority, but requires security and executive decisions and a separately
-approved threat-model planning increment before implementation can be Ready.
+documentation-only prerequisite is published at `7c79e65`. ARB-002 remains the
+first security boundary but is `DECISION REQUIRED`, not Ready for
+implementation. O-006 and O-007 must close before live model networking.
 
 The original read-only review changed no source or existing documentation and
 created only this report. The later ARB-022 resolution changes the exact ten
 documentation paths recorded in its increment and post-increment review; it
 does not rewrite dated Meta 7 evidence or change product source.
+
+The later High-severity disposition updates only live documentation and this
+backlog. It adds no product capability, dependency, license grant, network,
+credential, persistence, execution, enterprise control, signing, or release
+authority.
 
 ## Scope and method
 
@@ -125,6 +136,40 @@ ADVISORIES`, and the `04v` marker is complete and valid.
   review, and gate evidence is recorded in
   `docs/reviews/2026-07-16-04v-post-increment-review.md`.
 
+## High-severity disposition update
+
+D-059 applies the project owner's 2026-07-19 direction without lowering any
+severity or converting deferred risk into resolution.
+
+| ID      | Finding                                     | Current evidence and reachability                                              | Affects implemented behavior                       | Required work                                                | Disposition                   |
+| ------- | ------------------------------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------- | ------------------------------------------------------------ | ----------------------------- |
+| ARB-001 | Terminal approval audit binding             | Published implementation and focused regression evidence close the former gap  | Yes; the implemented terminal paths are now bound  | None                                                         | `RESOLVED`                    |
+| ARB-002 | Gateway identity, deployment, and retention | No HTTP client, provider SDK, origin, credential, Keychain, or live traffic    | No current external processing exists              | Architecture, security, privacy, and owner decisions         | `DECISION REQUIRED`           |
+| ARB-003 | Restricted executor                         | No dispatcher, executor, platform action path, or execution IPC exists         | No operating-system action path exists             | New product capability plus architecture and security review | `BLOCKED - FUTURE CAPABILITY` |
+| ARB-004 | Production end-to-end workflow              | UI is mocked and trusted Rust boundaries are not production-wired              | No production workflow exists                      | New coordinator and integration capabilities                 | `BLOCKED - FUTURE CAPABILITY` |
+| ARB-005 | Durable audit and product-data lifecycle    | Audit is process-local; SQLite stores bootstrap metadata only                  | Current volatile behavior matches its stated scope | New durable-data capability and privacy architecture         | `BLOCKED - FUTURE CAPABILITY` |
+| ARB-006 | Repository and distribution license         | No license grant exists; repository guidance says none was selected            | No private local behavior is affected              | Legal and project-owner decision                             | `DEFERRED - NON-BLOCKING`     |
+| ARB-007 | Release integrity and artifact lineage      | Local builds exist; no signed, notarized, supported release is claimed         | No production distribution path is active          | Release-governance decisions and release engineering         | `DEFERRED - NON-BLOCKING`     |
+| ARB-008 | Enterprise controls                         | No SSO, enrollment, fleet, admin policy, governance, or support plane exists   | No enterprise deployment is claimed                | New product and operational capabilities                     | `BLOCKED - FUTURE CAPABILITY` |
+| ARB-044 | Combined release and enterprise readiness   | Canonical split findings cover its independent legal, release, and fleet risks | No independent current behavior                    | Follow ARB-006, ARB-007, ARB-008, and ARB-010                | `SUPERSEDED`                  |
+
+No unresolved item is currently exploitable through an implemented live
+network, executor, durable-product-data, enterprise, or production-release path
+because those paths do not exist. This is not risk acceptance: each High
+finding remains tracked and becomes blocking at its recorded trigger.
+
+| ID      | Current and future blocking scope                                                         | Required owner                                        | Revisit trigger                                                        | Acceptance criteria                                                                                                  |
+| ------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| ARB-001 | Blocks nothing; regression would block future orchestration                               | Engineering and security                              | Any change to terminal approval or approval-audit ownership            | Existing exact binding, redaction, failure, idempotence, and late-outcome tests continue to pass                     |
+| ARB-002 | Does not block local mocks; blocks all live model networking and external processing      | Project, security, privacy, and executive owners      | Before adding a network client, gateway origin, token, or live traffic | Close O-006/O-007 with identity, deployment, token lifecycle, data classes, disclosure, logging, retention, deletion |
+| ARB-003 | Does not block transport-free work; blocks local action execution and a functional pilot  | Product, architecture, and security owners            | Before adding dispatch or any operating-system side effect             | One exact allowlisted tool with typed authority, idempotency, cancellation, result, audit, and failure contracts     |
+| ARB-004 | Does not block isolated primitives; blocks a controlled end-to-end pilot                  | Product and architecture owners                       | Before wiring UI, transport, policy, approval, audit, and execution    | Separately verified coordinator, IPC/events, transport, executor, result, cancellation, and recovery increments      |
+| ARB-005 | Does not block volatile behavior; blocks durable audit, recovery, and a durable pilot     | Product, security, and privacy owners                 | Before persisting approval evidence or user/product content            | Approved inventory, key ownership, transactions, migrations, retention, export/delete, backup, and recovery          |
+| ARB-006 | Does not block private development; blocks public distribution and external contributions | Project owner and legal reviewer                      | Before public distribution, open-source publication, or contributions  | Explicit reviewed license and reconciled contribution/distribution terms; until then all rights remain reserved      |
+| ARB-007 | Does not block unsigned local development; blocks trusted public macOS distribution       | Project, release, security, and credential owners     | Before release-candidate or public-distribution work                   | Resolve O-003/O-009; verify targets, artifact identity, signing, notarization, hashes, rollback, uninstall, support  |
+| ARB-008 | Does not block single-user local work; blocks enterprise onboarding and deployment        | Executive, product, security, privacy, and operations | Before onboarding enterprise users or managed devices                  | Separately approved identity, enrollment, fleet policy, data governance, support, and incident-operation controls    |
+| ARB-044 | No independent block                                                                      | Owners of canonical split findings                    | If a source report still treats the combined finding as active         | All references point to canonical findings without duplicate remediation                                             |
+
 ## Prioritized unresolved backlog
 
 | Priority | ID      | Severity | Category             | Summary                                                                       | Blocks next product increment    |
@@ -189,8 +234,8 @@ ADVISORIES`, and the `04v` marker is complete and valid.
 
 - **Original increment or report:** `04k-F1`, `04n-F1`, `04n-F2`,
   `meta-06-F2`, PRA-004, O-006, and O-007.
-- **Current status:** Still valid; the broad 4K transport deferral is
-  superseded by this exact current boundary.
+- **Current status:** `DECISION REQUIRED`; the broad 4K transport deferral is
+  superseded by this exact current boundary. O-006 and O-007 block live traffic.
 - **Severity / category:** High / Security.
 - **Why it matters:** Live model traffic cannot be approved without an exact
   desktop principal, gateway deployment, server credential owner, short-lived
@@ -216,8 +261,8 @@ ADVISORIES`, and the `04v` marker is complete and valid.
 
 - **Original increment or report:** PRA-003 and the capability-specific portion
   of `04m-F1`.
-- **Current status:** Still valid; the old generic platform advisory is
-  superseded by this exact executor boundary.
+- **Current status:** `BLOCKED - FUTURE CAPABILITY`; the old generic platform
+  advisory is superseded by this exact executor boundary.
 - **Severity / category:** High / Security.
 - **Why it matters:** Strict schemas and approvals do not produce user value
   unless one registered implementation can perform an exact action only after
@@ -241,7 +286,7 @@ ADVISORIES`, and the `04v` marker is complete and valid.
 
 - **Original increment or report:** `meta-06-F4`, PRA-001, and trusted-context
   deferrals in the Phase 3 plans.
-- **Current status:** Still valid.
+- **Current status:** `BLOCKED - FUTURE CAPABILITY`.
 - **Severity / category:** High / Architecture.
 - **Why it matters:** Current UI value is mocked while current Rust security
   primitives are transport-free and disconnected.
@@ -265,7 +310,8 @@ ADVISORIES`, and the `04v` marker is complete and valid.
 
 - **Original increment or report:** `04h-F1`, `04i-F1`, `04l-F1`,
   `04u-F2`, and PRA-007.
-- **Current status:** Still valid; duplicate reports share this root cause.
+- **Current status:** `BLOCKED - FUTURE CAPABILITY`; duplicate reports share
+  this root cause.
 - **Severity / category:** High / Reliability.
 - **Why it matters:** Approval evidence, conversations, tasks, memory, and
   recovery cannot survive process restart or satisfy retention and deletion
@@ -291,7 +337,9 @@ ADVISORIES`, and the `04v` marker is complete and valid.
 ### ARB-006 - Select an explicit repository and distribution license
 
 - **Original increment or report:** License portion of PRA-005 and D-047.
-- **Current status:** Still valid.
+- **Current status:** `DEFERRED - NON-BLOCKING`; severity remains High. The
+  temporary posture is proprietary and all rights reserved, with no license
+  grant.
 - **Severity / category:** High / Documentation.
 - **Why it matters:** Distribution and an open contribution program require
   explicit legal terms.
@@ -313,7 +361,9 @@ ADVISORIES`, and the `04v` marker is complete and valid.
 
 - **Original increment or report:** Release-technical portion of PRA-005 and
   PRA-018.
-- **Current status:** Still valid.
+- **Current status:** `DEFERRED - NON-BLOCKING`; severity remains High for
+  release. The provisional tested baseline is macOS 14+ on Apple Silicon, and
+  no Intel or production-distribution claim is made.
 - **Severity / category:** High / Reliability.
 - **Why it matters:** Enterprise distribution requires a supported target,
   reviewed artifact identity, signing, notarization, update, rollback, and
@@ -337,7 +387,7 @@ ADVISORIES`, and the `04v` marker is complete and valid.
 
 - **Original increment or report:** PRA-015 and the enterprise portion of
   `meta-06-F6`.
-- **Current status:** Still valid.
+- **Current status:** `BLOCKED - FUTURE CAPABILITY`.
 - **Severity / category:** High / Architecture.
 - **Why it matters:** Enterprise deployment needs governance beyond a
   single-user local prototype.

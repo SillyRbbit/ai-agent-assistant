@@ -1,6 +1,6 @@
 # Next steps
 
-Last updated: 2026-07-18
+Last updated: 2026-07-19
 
 This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must close before later feature work begins.
 
@@ -68,21 +68,36 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Increment 4V / ARB-001 - terminal approval audit binding:
   **Verified complete; published through PR #23 and squash-merged at
   `6e6f91d`**.
+- High-severity advisory disposition:
+  **Documentation-only disposition complete in the current workspace; no
+  immediate code remediation authorized**.
 
 ## Queue status
 
 ### No remediation is Ready
 
-**Status:** Increment 4V / ARB-001 is published at `6e6f91d`; ARB-002 remains
-blocked on O-006 and O-007 plus project-owner, security-owner, and
-executive-owner threat-model decisions.
+**Status:** D-059 classifies all canonical High findings without lowering
+severity or representing deferred work as resolved. ARB-001 is resolved.
+ARB-002 is decision-required. ARB-003, ARB-004, ARB-005, and ARB-008 are
+blocked on future product capabilities. ARB-006 and ARB-007 are deferred and
+non-blocking only until their explicit legal and release triggers. ARB-044 is
+superseded.
 
 The D-058 implementation and its post-publication reconciliation are closed;
 no D-058 publication task remains in the queue.
 
-Do not begin ARB-002 automatically. Its next possible step is a separately
-approved documentation-only threat-model planning increment; live transport,
-credentials, and product implementation remain blocked.
+No `REMEDIATE NOW` finding exists, and no later remediation or product
+increment is Ready. Do not begin ARB-002 automatically. O-006 and O-007 require
+explicit project, security, privacy, and executive decisions before any live
+model networking. Do not add a provider client, gateway origin, credential,
+Keychain adapter, or external content path before both decisions close.
+
+Do not implement ARB-003, ARB-004, ARB-005, or ARB-008 during advisory
+disposition work. Revisit ARB-006 before public distribution or external
+contributions. Revisit ARB-007 before release-candidate or public-distribution
+work. Until then, preserve the proprietary/all-rights-reserved posture, macOS
+14+ Apple Silicon provisional baseline, and unsigned local-development
+boundary without claiming Intel support or production release readiness.
 
 Repository Workflow Increment 4G is **Verified complete**. It adds only the repository-local post-increment skill, deterministic Stop-hook validator, focused tests, report assets, and workflow documentation required to replace D-027's one-time exception. Its consolidated result is `PASS WITH ADVISORIES`; the advisory is the documented project-hook trust/bypass boundary.
 
