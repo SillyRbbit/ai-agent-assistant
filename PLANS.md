@@ -6,10 +6,13 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 No implementation or decision-record plan is active. The documentation-only
 plan `docs/plans/o006-phase1-microsoft-personal-identity.md` is verified
-complete with advisories and awaits publication review. D-062 selects Microsoft
-personal identity as the sole Phase 1 provider, defers Google and Apple,
-excludes persistent sessions and automatic email linking, and preserves all
-implementation and ARB-002 blocks.
+complete with advisories, published through PR #37 from source commit
+`e39523f`, and squash-merged at `c458f27`; branch Documentation run
+`29705183818` and post-merge Documentation run `29705209977` passed, and no
+publication action remains. D-062 selects Microsoft personal identity as the
+sole Phase 1 provider, defers Google and Apple, excludes persistent sessions
+and automatic email linking, and preserves all implementation and ARB-002
+blocks.
 
 The documentation-only O-006/O-007
 provider-boundary amendment is verified complete with advisories under gate

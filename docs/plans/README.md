@@ -14,8 +14,9 @@ The verified-complete documentation-only O-006 Phase 1 identity decision is defi
 [`o006-phase1-microsoft-personal-identity.md`](o006-phase1-microsoft-personal-identity.md).
 It records Microsoft personal identity as the sole Phase 1 provider under
 D-062 while deferring Google, Apple, persistent sessions, automatic email
-linking, and all implementation. Its result is `PASS WITH ADVISORIES`, and it
-awaits publication review.
+linking, and all implementation. Its result is `PASS WITH ADVISORIES`; it was
+published through PR #37 and squash-merged at `c458f27`, and no publication
+action remains.
 
 The verified-complete and published documentation-only
 O-006/O-007 decision-record increment is defined under

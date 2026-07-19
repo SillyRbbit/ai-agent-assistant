@@ -1,6 +1,6 @@
 # O-006 Phase 1 Microsoft personal identity decision
 
-Status: Verified complete with advisories; awaiting publication review
+Status: Verified complete with advisories; published and closed
 Date: 2026-07-19
 Owner: Project owner
 Baseline: clean synchronized `main` at `c90c77f`
@@ -58,6 +58,14 @@ pending: none; the project owner approved the decision and exact scope.
 
 Result: `PASS WITH ADVISORIES`. ARB-002 remains the pre-existing High blocker
 for any later identity, gateway, or model-networking implementation.
+
+## Publication status
+
+Source commit `e39523f` passed branch Documentation run `29705183818`. PR #37
+squash-merged the decision record at `c458f27`, and post-merge Documentation
+run `29705209977` passed. The source and squash trees are identical. No
+publication action remains, and publication changes no implementation boundary
+or ARB-002 disposition.
 
 ## Rollback
 

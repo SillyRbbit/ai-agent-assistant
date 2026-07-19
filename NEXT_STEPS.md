@@ -77,8 +77,9 @@ This file is the ordered implementation queue. Work only on the first item marke
   product implementation authorized**.
 - O-006 Phase 1 identity decision:
   **Microsoft personal identity selected as the sole Phase 1 provider under
-  D-062; documentation-only decision record verified complete with advisories
-  and awaiting publication review; no implementation authorized**.
+  D-062; documentation-only decision record verified complete with advisories,
+  published through PR #37, and squash-merged at `c458f27`; no implementation
+  authorized and no publication action remains**.
 
 ## Queue status
 

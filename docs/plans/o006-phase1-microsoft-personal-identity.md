@@ -1,6 +1,6 @@
 # O-006 Phase 1 Microsoft personal identity decision
 
-Status: Verified complete with advisories; awaiting publication review
+Status: Verified complete with advisories; published and closed
 Owner: Project owner
 Date: 2026-07-19
 Gate ID: `o006-phase1-microsoft-personal-identity-decision`
@@ -118,3 +118,11 @@ Before publication, restore only the exact 17 documentation paths. After
 publication, revert only the bounded documentation commit. A later owner-policy
 change must append a superseding decision instead of deleting D-062. No runtime,
 credential, registration, cloud, network, dependency, or data rollback applies.
+
+## Publication
+
+Source commit `e39523f` passed branch Documentation run `29705183818`. PR #37
+squash-merged the decision record at `c458f27`, and post-merge Documentation
+run `29705209977` passed. The source and squash trees are identical. Publication
+does not authorize identity, gateway, networking, credential, Keychain,
+AI-provider, enterprise, licensing, signing, notarization, or ARB-002 work.

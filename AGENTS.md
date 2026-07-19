@@ -93,9 +93,12 @@ closeout state. No PR #33 publication action remains. The disposition does not
 authorize product implementation: ARB-001 is resolved; ARB-002 remains
 decision-required under O-006's exact registration, AI-provider, and evidence
 gates. The documentation-only D-062 record is verified complete with
-advisories under `o006-phase1-microsoft-personal-identity-decision`; it selects
-Microsoft personal identity as the sole Phase 1 identity provider without
-authorizing implementation, and Google and Apple are deferred.
+advisories under `o006-phase1-microsoft-personal-identity-decision`, published
+through PR #37 from source commit `e39523f`, and squash-merged at `c458f27`;
+branch Documentation run `29705183818` and post-merge Documentation run
+`29705209977` passed, and no publication action remains. It selects Microsoft
+personal identity as the sole Phase 1 identity provider without authorizing
+implementation, and Google and Apple are deferred.
 D-060 still separates pluggable identity, Azure-first portable hosting, and
 future trusted AI-provider selection, and D-061 accepts the data policy while
 provider-specific ZDR evidence remains pending. No `AgentProvider`
