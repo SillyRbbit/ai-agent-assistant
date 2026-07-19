@@ -82,6 +82,14 @@ production boundary exists.
 - [ ] Every AI model provider is separately approved for retention, ZDR, data
       use, logging, region, and security. No provider inherits another
       provider's approval, and desktop clients receive no provider credential.
+- [ ] D-063's Azure OpenAI candidate is implemented only with an exact approved
+      Standard/Regional Central US deployment, managed identity,
+      least-privilege RBAC, foreground Responses, disabled storage and
+      background mode, strict custom functions, and no automatic provider
+      fallback.
+- [ ] The exact Azure resource reports `ContentLogging=false`, and the selected
+      stateless Responses configuration has documented no application-state
+      retention before real user content.
 - [ ] D-061 provider-approved ZDR evidence is verified for the exact provider,
       production organization, project, endpoint, model, and region before real
       user content; pre-verification tests use only synthetic data.

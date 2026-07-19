@@ -4,8 +4,14 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No implementation or decision-record plan is active. The documentation-only
-plan `docs/plans/o006-phase1-microsoft-personal-identity.md` is verified
+The active documentation-only plan is
+`docs/plans/o006-phase1-azure-openai-provider.md`. D-063 selects Azure OpenAI
+in Microsoft Foundry as the sole Phase 1 synthetic-evaluation candidate while
+preserving every deployment, ZDR, disclosure, networking, implementation, and
+ARB-002 block.
+
+The documentation-only plan
+`docs/plans/o006-phase1-microsoft-personal-identity.md` is verified
 complete with advisories, published through PR #37 from source commit
 `e39523f`, and squash-merged at `c458f27`; branch Documentation run
 `29705183818` and post-merge Documentation run `29705209977` passed, and no
@@ -26,8 +32,8 @@ policy. It changes no application source or behavior and does not implement
 ARB-002. Source commit `4b474b4` passed branch Documentation run `29703530854`;
 PR #35 squash-merged it at `853da62`, and post-merge Documentation run
 `29703588215` passed. No publication action remains. D-062 later selects the
-Phase 1 provider; O-006 remains open for exact Microsoft evidence and the
-AI-provider configuration.
+Phase 1 identity provider; D-063 now selects the Phase 1 AI-provider candidate,
+while exact Microsoft and Azure operational evidence remains open.
 
 The documentation-only High-severity advisory disposition is verified complete
 with advisories under
