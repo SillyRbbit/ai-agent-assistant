@@ -136,6 +136,12 @@ No use case permits unattended consequential external action in the MVP.
   constitute active-active multicloud or a three-cloud release requirement.
   External accounts shall use provider ID plus normalized issuer plus subject;
   email shall not identify or automatically link accounts.
+- **FR-020**: Phase 1 model evaluation shall target Azure OpenAI in Microsoft
+  Foundry through the Cortexa gateway using managed identity, least-privilege
+  RBAC, one regional deployment, foreground Responses, `store: false`,
+  `background: false`, strict custom functions, and no automatic provider
+  fallback. Exact provider configuration and D-061 evidence remain mandatory
+  before any real user content.
 
 FR-012 and live transport portions of FR-010 through FR-019 are planned; the
 transport-free request and validation contracts are current. No account,
@@ -322,6 +328,8 @@ Every item remains subject to the incremental security gates in `ROADMAP.md`.
 - An implemented `AgentProvider`, AI model-provider integration, Azure, AWS, or
   Google Cloud deployment, active-active multicloud, cloud failover, or a
   three-cloud initial release.
+- Automatic cross-provider fallback or treating one provider's retention
+  approval as approval for another.
 
 ## Success criteria
 

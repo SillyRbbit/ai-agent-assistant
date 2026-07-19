@@ -4,6 +4,14 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Selected Azure OpenAI in Microsoft Foundry as the Phase 1
+  synthetic-evaluation provider candidate under D-063. The planned boundary
+  uses one Central US regional deployment, managed identity and
+  least-privilege RBAC, foreground Responses with storage disabled, strict
+  custom functions, and no automatic provider fallback. No cloud resource,
+  networking, credential, provider adapter, real-content approval, or product
+  behavior is added; D-061 evidence and ARB-002 remain blocking.
+
 - Published the documentation-only D-062 Phase 1 Microsoft personal identity
   decision through PR #37 from source commit `e39523f` and squash-merged it at
   `c458f27`. Branch Documentation run `29705183818` and post-merge

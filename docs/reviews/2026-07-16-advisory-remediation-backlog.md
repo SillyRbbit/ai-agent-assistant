@@ -1244,6 +1244,19 @@ open for the AI-provider configuration, and D-061 provider-specific evidence
 still blocks external transmission. This update changes no original finding,
 count, severity, source code, or product behavior.
 
+## 2026-07-19 Phase 1 AI-provider selection update
+
+D-063 selects Azure OpenAI in Microsoft Foundry as the sole Phase 1
+synthetic-evaluation candidate. It does not deploy a resource, enable traffic,
+or satisfy D-061. The exact Azure resource, deployment, endpoint, model,
+version, region, `ContentLogging=false`, stateless Responses behavior, access,
+logging, deletion, disclosure, and security evidence remain mandatory before
+real user content. Direct OpenAI and other providers remain separately approved
+future adapters, and automatic fallback is prohibited.
+
+ARB-002 remains High, unresolved, and not Ready. This additive update changes
+no original finding, count, severity, source code, or product behavior.
+
 ## Review and resolution boundary and rollback
 
 The original review started no remediation and changed no source, dependency,

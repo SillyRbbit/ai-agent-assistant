@@ -2071,15 +2071,71 @@ Consequences:
   later native-versus-web identity decision and must be revisited before any Mac
   App Store plan that triggers its login-service requirements.
 
+## D-063 - Select Azure OpenAI as the Phase 1 AI-provider candidate
+
+Date: 2026-07-19
+Status: Accepted for synthetic evaluation only; deployment and real-content approval remain blocked
+
+Decision: Azure OpenAI in Microsoft Foundry is the sole Phase 1 AI
+model-provider candidate. The planned Cortexa gateway may call one
+Standard/Regional Azure OpenAI deployment in Central US through the Responses
+API. The initial synthetic-evaluation model candidate is `gpt-5.1`, version
+`2025-11-13`; that model and version are not production commitments and must be
+revalidated when an exact resource and deployment are approved.
+
+The Azure Container Apps gateway must authenticate to Azure OpenAI with a
+managed identity and least-privilege Azure RBAC. API-key authentication is not
+approved. Provider credentials or tokens must never reach the desktop,
+WebView, SQLite, repository, logs, ordinary CI, or user-controlled
+configuration.
+
+The first provider contract is foreground Responses streaming with
+`store: false`, `background: false`, strict custom functions, and parallel tool
+calls disabled. Files, retrieval, Assistants, Agents, Batch, stored
+completions, hosted tools, web search, MCP, code execution, and response
+retrieval are excluded. Provider errors and events must be normalized by the
+gateway before they cross into trusted Rust. No automatic fallback to direct
+OpenAI or another provider is permitted.
+
+This selection does not satisfy D-061. Real user content remains prohibited
+until the exact Azure subscription, resource, endpoint, deployment, model,
+version, region, and commercial agreement have Microsoft-approved retention
+evidence; the resource reports `ContentLogging=false`; the exact stateless
+Responses configuration has documented no application-state retention; and
+logging, deletion, access, disclosure, security, and operational evidence all
+pass. Until then, only synthetic test data may be used under a separately
+approved future transport plan.
+
+Rationale: Azure OpenAI aligns with the accepted Azure-first gateway target and
+supports managed identity, Azure RBAC, regional deployment, and resource-level
+abuse-monitoring evidence. A provider-neutral gateway contract preserves a
+later direct OpenAI or other approved provider adapter without distributing
+credentials or provider-specific authority to the desktop.
+
+Consequences:
+
+- O-006's Phase 1 AI-provider choice is decided, but no Azure resource,
+  deployment, endpoint, credential, network path, or `AgentProvider` exists.
+- D-061 remains an operational live-traffic gate; policy intent, `store:
+false`, or this decision record is not ZDR evidence.
+- Direct OpenAI and other providers are deferred until separately justified
+  and independently approved under D-061. There is no silent or automatic
+  cross-provider fallback.
+- ARB-002 remains High, unresolved, and not Ready. Exact identity evidence,
+  deployment and threat-model evidence, disclosure, implementation, and
+  operational verification remain incomplete.
+- This record changes documentation only and grants no cloud, networking,
+  identity, credential, Keychain, provider, or runtime authority.
+
 ## Open decisions
 
-| ID    | Topic                                                                             | Required before                                      |
-| ----- | --------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| O-002 | Workspace split between one Tauri crate and multiple Rust crates                  | Revisit before later modularization                  |
-| O-003 | macOS target and hardware support beyond the provisional baseline                 | Any Intel, older-macOS, or production support claim  |
-| O-006 | Exact Microsoft identity evidence, cloud expansion, and AI-provider configuration | Before authentication or live gateway networking     |
-| O-008 | Repository and distribution licensing                                             | Before public distribution or external contributions |
-| O-009 | Signing, notarization, credential ownership, and release authority                | Before trusted public macOS distribution             |
+| ID    | Topic                                                                                       | Required before                                      |
+| ----- | ------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| O-002 | Workspace split between one Tauri crate and multiple Rust crates                            | Revisit before later modularization                  |
+| O-003 | macOS target and hardware support beyond the provisional baseline                           | Any Intel, older-macOS, or production support claim  |
+| O-006 | Exact Microsoft identity evidence, Azure deployment evidence, and future provider expansion | Before authentication or live gateway networking     |
+| O-008 | Repository and distribution licensing                                                       | Before public distribution or external contributions |
+| O-009 | Signing, notarization, credential ownership, and release authority                          | Before trusted public macOS distribution             |
 
 O-007's policy decision is accepted in D-061. Provider-approved ZDR evidence,
 the required disclosure, and all deployment and security gates still block

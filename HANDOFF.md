@@ -63,11 +63,12 @@ squash-merged at `7bf1a5c` from source commit `26f68b4`. Branch Documentation
 run `29676662232` and post-merge Documentation run `29676693814` passed. D-059
 records the secure-default and trigger-bound policy. ARB-001 is resolved;
 ARB-002 remains decision-required. D-060 now separates pluggable identity,
-Azure-first portable hosting, and future trusted AI-provider support. D-062
+Azure-first portable hosting, and trusted AI-provider support. D-062
 selects Microsoft personal identity as the sole Phase 1 provider without
 authorizing implementation; Google and Apple are deferred, and exact
-registration evidence remains pending. O-006 remains open for the AI-provider
-configuration and remaining identity evidence. D-061
+registration evidence remains pending. D-063 selects Azure OpenAI as the Phase
+1 synthetic-evaluation candidate without authorizing deployment or traffic.
+Exact Azure deployment and remaining identity evidence are pending. D-061
 accepts O-007's data, logging, disclosure, privacy, and security policy, but
 provider-specific ZDR evidence remains pending. ARB-003, ARB-004, ARB-005,
 and ARB-008 are blocked on future capabilities; ARB-006 and ARB-007 remain High
@@ -226,9 +227,11 @@ No D-058, PR #33, or PR #35 publication action and no immediate High-severity
 code remediation remain. The exact 18-path O-006/O-007 provider-boundary
 amendment is published and closed. The D-062 documentation decision record is
 verified complete with advisories, published through PR #37, and closed; no
-publication action remains. No product or remediation increment is Ready.
-D-062's exact identity evidence, O-006's AI-provider configuration, and D-061
-operational evidence still block any live model-networking plan. Legal and
+publication action remains. The active D-063 documentation-only decision
+record selects Azure OpenAI for synthetic evaluation. No product or remediation
+increment is Ready. D-062's exact identity evidence, D-063's exact Azure
+deployment evidence, and D-061 operational evidence still block any live
+model-networking plan. Legal and
 release owners must separately resolve O-008 and O-009 before their
 distribution triggers. Do not begin ARB-002, any future-capability finding,
 live transport, identity integration, cloud deployment, credentials,
@@ -258,12 +261,12 @@ Publication passed: source commit `e39523f` passed branch Documentation run
 run `29705209977` passed. The dedicated publication-closeout gate preserves the
 original report and records no product or trust-boundary change.
 
-Ready-to-paste resume prompt:
+Ready-to-paste resume prompt after this decision closes:
 
 ```text
 Use $session-start.
 
-Review the complete ten-path documentation-only O-006 Phase 1 identity publication closeout. Confirm source commit e39523f, PR #37, squash commit c458f27, successful Documentation runs 29705183818 and 29705209977, preserved D-060/D-061/D-062 and historical evidence, passing documentation-tier checks, valid marker, and absence of product-source changes. Wait for project-owner direction before any Git publication action. Do not begin ARB-002 or any identity, cloud, gateway, networking, credential, Keychain, AgentProvider, AI-provider, enterprise, licensing, signing, or notarization implementation.
+Review the complete documentation-only O-006 Phase 1 Azure OpenAI provider decision. Confirm D-063, the exact documentation scope, preserved D-060/D-061/D-062 and historical evidence, passing documentation-tier checks, valid marker, and absence of product-source changes. Propose publication names and wait for approval. Do not begin ARB-002 or any identity, cloud, gateway, networking, credential, Keychain, AgentProvider, AI-provider, enterprise, licensing, signing, or notarization implementation.
 ```
 
 ## Increment 4V / ARB-001 publication

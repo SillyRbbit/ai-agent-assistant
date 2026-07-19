@@ -80,6 +80,10 @@ This file is the ordered implementation queue. Work only on the first item marke
   D-062; documentation-only decision record verified complete with advisories,
   published through PR #37, and squash-merged at `c458f27`; no implementation
   authorized and no publication action remains**.
+- O-006 Phase 1 AI-provider decision:
+  **Active documentation-only increment; D-063 selects Azure OpenAI as the
+  synthetic-evaluation candidate without authorizing implementation or live
+  traffic**.
 
 ## Queue status
 
@@ -88,8 +92,9 @@ This file is the ordered implementation queue. Work only on the first item marke
 **Status:** D-059 classifies all canonical High findings without lowering
 severity or representing deferred work as resolved. ARB-001 is resolved.
 ARB-002 remains decision-required. D-062 selects Microsoft personal identity
-for Phase 1, but exact registration and threat-model evidence plus the
-AI-provider configuration remain unresolved. D-060 separates pluggable
+for Phase 1, and D-063 selects Azure OpenAI as the synthetic-evaluation
+candidate, but exact registration, deployment, D-061, and threat-model evidence
+remain unresolved. D-060 separates pluggable
 identity, Azure-first portable hosting, and future trusted AI-provider
 selection; D-061 accepts O-007's product policy, but provider-specific ZDR
 evidence remains mandatory. ARB-003, ARB-004, ARB-005,
@@ -112,8 +117,8 @@ No `REMEDIATE NOW` finding exists, and no later remediation or product
 increment is Ready. Do not begin ARB-002 automatically. Do not add a provider
 client, `AgentProvider`, gateway origin, cloud deployment, identity integration,
 credential, Keychain adapter, or external content path before D-062's exact
-evidence passes, O-006 selects the AI-provider configuration, each provider's
-ZDR is verified, the required disclosure exists, and a separate implementation
+evidence passes, D-063's exact Azure configuration and D-061 evidence pass, the
+required disclosure exists, and a separate implementation
 and threat model are approved. Container portability
 does not authorize AWS, Google Cloud, active-active multicloud, failover, or a
 three-cloud release.

@@ -184,9 +184,15 @@ data-residency, resilience, or commercial justification. There is no
 active-active multicloud architecture, three-cloud release requirement, or
 approved secondary-cloud failover.
 
-**AI model-provider boundary**: the future gateway and future trusted
-`AgentProvider` abstraction may support multiple separately approved AI model
-providers. No `AgentProvider` implementation currently exists. Provider
+**AI model-provider boundary**: D-063 selects Azure OpenAI in Microsoft Foundry
+as the sole Phase 1 synthetic-evaluation candidate behind the future gateway.
+The planned gateway uses one Standard/Regional Central US deployment, managed
+identity with least-privilege Azure RBAC, and foreground Responses streaming
+with `store: false`, `background: false`, strict custom functions, and parallel
+calls disabled. The exact model and version remain deployment-time evidence,
+not a stable desktop contract. The future gateway and trusted `AgentProvider`
+abstraction may support multiple separately approved AI model providers. No
+`AgentProvider` implementation currently exists. Provider
 selection occurs only in the trusted gateway or trusted core under closed
 policy. Desktop clients never receive provider credentials. Initial Azure
 provider secrets belong only in Azure-managed gateway secret storage; any

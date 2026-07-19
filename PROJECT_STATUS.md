@@ -72,8 +72,9 @@ capabilities; ARB-006 and ARB-007 remain High but are non-blocking until
 explicit legal and release triggers; and ARB-044 remains superseded. D-060 now
 separates pluggable identity-provider support, Azure-first portable hosting, and
 future trusted AI model-provider support. D-062 selects Microsoft personal
-identity for Phase 1, but exact identity evidence and O-006's AI-provider
-configuration remain open. D-061 accepts O-007's product policy while
+identity for Phase 1. D-063 selects Azure OpenAI as the Phase 1
+synthetic-evaluation candidate, but exact identity, Azure deployment, and D-061
+evidence remain open. D-061 accepts O-007's product policy while
 provider-specific ZDR evidence remains pending. No `AgentProvider`,
 identity integration, cloud deployment, live networking,
 executor, complete workflow, durable product data, enterprise control, signing,
@@ -159,6 +160,9 @@ or notarization was implemented. No PR #33 publication action remains.
   with advisories, published through PR #37, and squash-merged at `c458f27`;
   implementation and ARB-002 remain blocked, and no publication action
   remains**.
+- O-006 Phase 1 AI-provider decision - **active documentation-only record;
+  D-063 selects Azure OpenAI for synthetic evaluation only and preserves all
+  implementation and live-traffic blocks**.
 
 ## Prompt library capability and evidence
 
@@ -1005,10 +1009,11 @@ route only to separately approved AI providers; no implementation exists, no
 desktop provider credential is permitted, and every provider requires its own
 O-007 evidence.
 
-O-006's Phase 1 provider selection is decided by D-062, but exact Microsoft
+O-006's Phase 1 identity selection is decided by D-062, and D-063 selects the
+Azure OpenAI synthetic-evaluation candidate, but exact Microsoft
 registration, issuer, audience, redirect, scope, account, and threat-model
-evidence remain pending. The AI-provider configuration plus provider-specific
-ZDR, disclosure, deployment, and security evidence also remain pending.
+evidence remain pending. Exact Azure resource, ZDR, disclosure, deployment, and
+security evidence also remain pending.
 ARB-002 therefore remains High, unresolved, and not Ready for implementation.
 The original documentation-only decision record passed its exact 17-path
 closeout and mandatory gate with `PASS WITH ADVISORIES`. The provider-boundary
@@ -1030,7 +1035,7 @@ path was added.
 ## Next action
 
 No product or remediation increment is Ready. ARB-002 remains decision-required
-under D-062's identity-evidence gates and O-006's AI-provider configuration and
+under D-062's identity-evidence gates and D-063's Azure evidence gates and
 blocks live model networking. ARB-003, ARB-004, ARB-005, and ARB-008 remain blocked on future
 capability work. ARB-006 must be revisited before public distribution or
 external contributions; ARB-007 must be revisited before release-candidate or

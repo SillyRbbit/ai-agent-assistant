@@ -1,5 +1,10 @@
 # Implementation plans
 
+The active documentation-only O-006 Phase 1 AI-provider decision is defined in
+[`o006-phase1-azure-openai-provider.md`](o006-phase1-azure-openai-provider.md).
+It selects Azure OpenAI in Microsoft Foundry for synthetic evaluation only and
+preserves every deployment, evidence, networking, and implementation block.
+
 Store active or completed multi-step implementation plans in this directory.
 
 Naming convention:

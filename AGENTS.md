@@ -100,8 +100,10 @@ branch Documentation run `29705183818` and post-merge Documentation run
 personal identity as the sole Phase 1 identity provider without authorizing
 implementation, and Google and Apple are deferred.
 D-060 still separates pluggable identity, Azure-first portable hosting, and
-future trusted AI-provider selection, and D-061 accepts the data policy while
-provider-specific ZDR evidence remains pending. No `AgentProvider`
+trusted AI-provider selection. D-063 selects Azure OpenAI as the Phase 1
+synthetic-evaluation candidate without authorizing deployment or traffic, and
+D-061 accepts the data policy while exact resource-specific ZDR evidence
+remains pending. No `AgentProvider`
 implementation exists. ARB-003, ARB-004, ARB-005, and ARB-008 are blocked on future
 capabilities; ARB-006 and ARB-007 are deferred without a severity reduction
 until their explicit legal and release triggers; and ARB-044 remains
@@ -127,7 +129,7 @@ credential, AI-provider, or enterprise implementation Ready.
 - Do not implement identity or enable gateway networking until D-062's exact
   Microsoft registration, issuer, audience, redirect, scope, account, and
   threat-model evidence passes. Do not enable external transmission until
-  O-006 also selects the AI-provider configuration, D-061's provider-specific
+  D-063's exact Azure deployment and D-061 provider-specific
   ZDR and disclosure evidence passes, and a separate implementation is
   approved.
 - Do not describe container portability as deployed AWS or Google Cloud support,
