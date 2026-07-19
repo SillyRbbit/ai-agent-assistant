@@ -59,8 +59,8 @@ This file is the ordered implementation queue. Work only on the first item marke
   **Verified complete with advisories and squash-merged through PR #24 at
   `eaf6c9f`**.
 - Repository workflow - risk-based GitHub Actions validation:
-  **Committed on PR #30; D-058 correction verified locally with advisories and
-  valid marker; publication pending**.
+  **Implementation commit `9a2c75d` remotely verified on open PR #30; D-058
+  closeout verified with advisories and valid marker; merge pending**.
 - Meta Increment 8 - Prompt Library Reorganization:
   **Verified complete; published through PR #25 and squash-merged at
   `d26b5e1`**.
@@ -70,19 +70,19 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Queue status
 
-### Review and publish the D-058 dual-runner correction
+### Review and publish the D-058 remote-verification closeout
 
-**Status:** The original 29-path implementation is committed as `4fb7f31` on
-open PR #30. GitHub-hosted jobs failed before allocation because the account
-Actions limit was exhausted. The exact 22-path D-058 correction is uncommitted;
-automated local verification passes, the project owner confirmed both runner
-services satisfy the isolated, unprivileged host baseline, and the gate is
-`PASS WITH ADVISORIES` with a valid marker.
+**Status:** The original implementation and exact D-058 correction are
+committed and pushed as `9a2c75d` on open PR #30. CI run `29670565671` and
+Documentation run `29670565657` passed as push-triggered executions. Linux
+runner 21 received classification, documentation, frontend, Linux Rust, and
+dependency audit; macOS runner 22 received target-Mac Rust. The exact 12-path
+documentation-only closeout passes its focused checks, and the gate is
+`PASS WITH ADVISORIES` with a valid re-finalized marker.
 
-Review the exact correction and wait for separate commit/push approval. After
-push, require Linux runner 21 and macOS runner 22 execution evidence and confirm
-no pull-request event received either persistent runner before merge. Do not
-combine ARB-002 or product work.
+Review the closeout and wait for separate staging, commit, and push approval.
+Merge PR #30 only with separate approval. Do not combine ARB-002 or product
+work.
 
 ### No later remediation is Ready
 

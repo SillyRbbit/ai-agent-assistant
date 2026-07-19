@@ -1,6 +1,6 @@
 # Meta Increment - risk-based GitHub Actions validation
 
-Status: Dual-runner publication correction verified locally; publication pending
+Status: Dual-runner correction verified locally and remotely; merge pending
 
 ## Goal
 
@@ -24,6 +24,10 @@ increment gate.
   exhausted. No workflow step executed.
 - GitHub runner inspection found Linux runner 21 and macOS runner 22 online,
   idle, and carrying the exact `cortexa-ci` selectors.
+- D-058 implementation commit `9a2c75d` produced successful push-triggered CI
+  run `29670565671` and Documentation run `29670565657`. Linux runner 21
+  executed classification, documentation, frontend, Linux Rust, and dependency
+  audit; macOS runner 22 executed target-Mac Rust.
 
 ## Exact implementation scope
 
@@ -177,22 +181,24 @@ python3 .codex/hooks/post_increment_gate.py status
 ```
 
 Run the pinned Rust advisory command locally where practical. Actual Linux and
-macOS runner execution remains pending until a separately approved publication
-step.
+macOS runner execution passed for `9a2c75d`; future workflow changes require
+fresh remote evidence.
 
 ## Manual verification
 
 The project owner confirmed both runner services satisfy D-058's dedicated,
-unprivileged host baseline. No product manual check applies. After publication,
-confirm trusted push selection, Linux job assignment to runner 21, target-Mac
-Rust assignment to runner 22, and absence of direct pull-request execution.
+unprivileged host baseline. No product manual check applies. Push-triggered
+remote verification confirmed Linux job assignment to runner 21 and target-Mac
+Rust assignment to runner 22. The run listing for `9a2c75d` contains no direct
+pull-request execution.
 
 ## Rollback
 
-Before the correction is committed, restore its declared paths from `4fb7f31`.
-After publication, revert D-058 to the D-057 hosted selectors only after Actions
-minutes or billing are available, then rerun local and remote checks. No
-product, dependency, database, or native rollback is required.
+Before PR #30 merges, revert `9a2c75d` on the feature branch if D-058 must be
+withdrawn. After merge, return to D-057 hosted selectors only after Actions
+minutes or billing are available and a separate security review approves the
+change, then rerun local and remote checks. No product, dependency, database,
+or native rollback is required.
 
 ## Exit criteria
 
@@ -202,6 +208,8 @@ product, dependency, database, or native rollback is required.
   in-workflow host provisioning.
 - Focused classifier and repository-policy tests pass.
 - Complete local verification passes after the final executable edit.
+- Push-triggered CI and Documentation execute successfully on their exact Linux
+  and macOS selectors.
 - Documentation and project memory match observed evidence.
 - The mandatory report is PASS or PASS WITH ADVISORIES and the
   `repository-dual-self-hosted-runner-routing` marker is valid.

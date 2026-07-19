@@ -46,13 +46,14 @@ was complete and valid on clean `d26b5e1` immediately before this
 post-publication project-memory sync. No product source, behavior, dependency,
 Tauri, storage, permission, skill, or hook changed.
 
-Meta risk-based GitHub Actions validation is committed as `4fb7f31` on open PR
-#30. Its original 29-path implementation passed complete local verification.
-The current uncommitted D-058 correction passes all automated local checks, and
-the project owner confirmed both runner services satisfy the required isolated,
-unprivileged host baseline. Its gate result is `PASS WITH ADVISORIES`, and the
-completion marker is complete and valid. No correction commit or push has
-occurred; actual dual-runner workflow execution remains pending publication.
+Meta risk-based GitHub Actions validation and the exact D-058 correction are
+committed and pushed as `9a2c75d` on open PR #30. Its original 29-path
+implementation and bounded 22-path correction passed complete local
+verification. Push-triggered CI run `29670565671` and Documentation run
+`29670565657` passed. The project owner confirmed both runner services satisfy
+the required isolated, unprivileged host baseline. Its gate result remains
+`PASS WITH ADVISORIES`, and the completion marker is re-finalized against this
+documentation-only remote-verification closeout. PR #30 remains unmerged.
 
 ## Meta risk-based GitHub Actions validation
 
@@ -80,24 +81,29 @@ tests, 28 hook tests, repository policy, complete `npm run verify`, exact
 all-target Rust tests, documentation, secret, link, protected-path, diff,
 architecture, security, code-health, technical-debt, and readiness reviews.
 
+Remote passed: CI run `29670565671` and Documentation run `29670565657` were
+both successful `push` events for `9a2c75d`. Linux runner 21
+`henry-dang-HP-Elite-Slice` ran classification, documentation, frontend, Linux
+Rust, and dependency audit. macOS runner 22 `Henrys-MacBook-Pro` ran target-Mac
+Rust. The workflow listing for that commit contains no `pull_request` event.
+
 Failed: the original hosted PR jobs failed before runner allocation because of
 the GitHub Actions limit; this is the trigger for D-058, not a repository-step
 failure.
 
 Manual passed: the project owner confirmed both runner services use dedicated
 unprivileged accounts with no interactive `sudo`, personal files, SSH keys,
-production credentials, cloud metadata, or mounted sensitive data. Actual
-Linux/macOS jobs require approved publication and remain a non-blocking local
-advisory. npm and Cargo audits were not repeated because dependency manifests
-and lockfiles are unchanged and their exact passing `4fb7f31` evidence remains
-valid. No product manual check applies.
+production credentials, cloud metadata, or mounted sensitive data. No product
+manual check applies. The documentation-only closeout does not rerun product
+checks; the passing local implementation gate and remote jobs remain the
+applicable evidence.
 
 ### Exact next task
 
-Review the exact 22-path dual-runner correction and wait for separate
-commit/push approval. After push, require Linux runner 21 and macOS runner 22
-execution evidence and confirm no pull-request event received either runner
-before merging PR #30. Do not begin ARB-002 or another product/remediation
+Review the exact 12-path documentation-only D-058 remote-verification closeout
+and the proposed Conventional Commit, then wait for separate staging, commit,
+and push approval. After closeout publication, merge PR #30 only with separate
+project-owner approval. Do not begin ARB-002 or another product/remediation
 increment.
 
 ## Increment 4V / ARB-001 publication

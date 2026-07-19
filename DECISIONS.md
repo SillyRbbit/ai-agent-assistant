@@ -1754,7 +1754,8 @@ Consequences:
 ## D-058 - Route risk-based validation across dedicated Linux and macOS runners
 
 Date: 2026-07-18
-Status: Accepted; implementation and remote verification in progress on PR #30
+Status: Accepted; implementation commit `9a2c75d` and remote verification pass
+on open PR #30; merge pending
 
 Decision: preserve D-057's two-workflow risk classification and consolidated
 dependency audit, but route eligible jobs to the two registered
@@ -1789,6 +1790,11 @@ on the product platform.
 
 Consequences:
 
+- Push-triggered CI run `29670565671` and Documentation run `29670565657`
+  passed for `9a2c75d`. Linux runner 21 executed classification,
+  documentation, frontend, Linux Rust, and dependency audit; macOS runner 22
+  executed target-Mac Rust. The run listing for that commit contains only the
+  two push-triggered workflows.
 - Persistent runners are not ephemeral security boundaries. Trusted writer
   access, workflow review, host isolation, patching, workspace cleanup, and
   incident response remain mandatory controls.

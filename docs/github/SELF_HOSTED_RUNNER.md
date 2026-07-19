@@ -50,6 +50,26 @@ As verified through the GitHub API on 2026-07-18, runner 21
 idle, and carried their exact selectors. Remote status is transient and must be
 checked again before relying on a run.
 
+## Verified PR #30 execution
+
+D-058 implementation commit `9a2c75d` produced two successful push-triggered
+workflows on 2026-07-18:
+
+- CI run `29670565671`: classification job `88148646821`, frontend job
+  `88148677830`, Linux Rust job `88148677826`, and dependency-audit job
+  `88148677832` ran on Linux runner 21 `henry-dang-HP-Elite-Slice` with labels
+  `[self-hosted, Linux, X64, cortexa-ci]`.
+- Documentation run `29670565657`: documentation job `88148646740` ran on
+  Linux runner 21 with the same exact selector.
+- CI job `88148677829`: target-Mac Rust ran on macOS runner 22
+  `Henrys-MacBook-Pro` with labels
+  `[self-hosted, macOS, X64, cortexa-ci]`.
+
+The GitHub run listing for `9a2c75d` contains only those two `push` events. No
+`pull_request` execution is claimed or authorized. This proves the reviewed
+D-058 assignment for that commit, not future runner health or release
+readiness.
+
 ## Trust policy
 
 The runners may execute only:
@@ -116,7 +136,7 @@ mutate system packages or require `sudo`.
 
 ## Active verification
 
-Before relying on the runners:
+For each later workflow or runner change:
 
 1. Confirm both runners are `online`, idle, and have their exact labels.
 2. Push the reviewed workflow branch only after local checks pass.

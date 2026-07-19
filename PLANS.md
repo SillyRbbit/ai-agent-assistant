@@ -4,12 +4,13 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-The D-058 dual-self-hosted-runner publication correction is verified locally
-with advisories under `docs/plans/meta-risk-based-ci.md` on PR #30. The original
-29-path implementation is committed as `4fb7f31`; the exact 22-path correction
-is uncommitted with a valid marker and changes workflow routing and governance
-only, not product behavior or dependencies. Publication and actual dual-runner
-execution remain pending separate approval.
+The D-058 dual-self-hosted-runner correction is committed and pushed as
+`9a2c75d` under `docs/plans/meta-risk-based-ci.md` on open PR #30. Successful
+push-triggered CI run `29670565671` and Documentation run `29670565657` prove
+the exact Linux runner 21 and macOS runner 22 assignments. The current exact
+12-path closeout changes documentation only, retains `PASS WITH ADVISORIES`,
+and re-finalizes the valid marker. Closeout publication and merge remain
+separately controlled.
 
 Meta Increment 8 Prompt Library Reorganization is verified complete under
 `docs/increments/meta-prompt-library-reorganization.md`, published through PR

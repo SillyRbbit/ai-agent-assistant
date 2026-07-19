@@ -33,31 +33,31 @@
     "git restore --source=HEAD -- docs/reviews/2026-07-18-meta-risk-based-ci-post-increment-review.md",
     "python3 .codex/hooks/post_increment_gate.py finalize --increment repository-dual-self-hosted-runner-routing --report docs/reviews/2026-07-18-repository-dual-self-hosted-runner-routing-post-increment-review.md",
     "python3 .codex/hooks/post_increment_gate.py status",
+    "gh run view 29670565671 --json databaseId,event,status,conclusion,headSha,name,url,jobs",
+    "gh run view 29670565657 --json databaseId,event,status,conclusion,headSha,name,url,jobs",
+    "gh api repos/SillyRbbit/ai-agent-assistant/actions/runs/29670565671/jobs --jq '.jobs[] | {id, name, conclusion, runner_name, labels}'",
+    "gh api repos/SillyRbbit/ai-agent-assistant/actions/runs/29670565657/jobs --jq '.jobs[] | {id, name, conclusion, runner_name, labels}'",
+    "gh run list --commit 9a2c75de9640ea9118bdc552a0d7c63155e0181f --json databaseId,event,name,status,conclusion,headSha,url",
+    "gh pr view 30 --json number,title,state,headRefName,headRefOid,baseRefName,mergeable,mergeStateStatus,statusCheckRollup,body,url",
+    "gh pr edit 30 --body <D-058 remote-verification closeout description>",
+    "gh pr view 30 --json headRefOid,mergeable,mergeStateStatus,body,url",
+    "npx prettier --write AGENTS.md CHANGELOG.md DECISIONS.md HANDOFF.md NEXT_STEPS.md PLANS.md PROJECT_STATUS.md ROADMAP.md docs/github/SELF_HOSTED_RUNNER.md docs/increments/meta-risk-based-ci.md docs/plans/meta-risk-based-ci.md docs/reviews/2026-07-18-repository-dual-self-hosted-runner-routing-post-increment-review.md",
+    "git diff --exit-code -- .github src src-tauri tests scripts package.json package-lock.json Cargo.toml Cargo.lock src-tauri/Cargo.toml src-tauri/Cargo.lock .codex .agents",
     "complete architecture, security, code-health, technical-debt, roadmap-readiness, and diff review"
   ],
   "files_changed": [
-    ".github/workflows/ci.yml",
-    ".github/workflows/documentation.yml",
     "AGENTS.md",
     "CHANGELOG.md",
-    "CODE_REVIEW.md",
     "DECISIONS.md",
-    "ENGINEERING_GUIDE.md",
     "HANDOFF.md",
     "NEXT_STEPS.md",
     "PLANS.md",
     "PROJECT_STATUS.md",
     "ROADMAP.md",
-    "SECURITY.md",
-    "SECURITY_CHECKLIST.md",
-    "TESTING_GUIDE.md",
     "docs/github/SELF_HOSTED_RUNNER.md",
     "docs/increments/meta-risk-based-ci.md",
     "docs/plans/meta-risk-based-ci.md",
-    "docs/reviews/2026-07-18-repository-dual-self-hosted-runner-routing-post-increment-review.md",
-    "scripts/repository_health.py",
-    "scripts/tests/test_ci_change_scope.py",
-    "scripts/tests/test_repository_health.py"
+    "docs/reviews/2026-07-18-repository-dual-self-hosted-runner-routing-post-increment-review.md"
   ],
   "findings": [
     {
@@ -65,10 +65,10 @@
       "blocks_next_increment": false,
       "category": "Security",
       "effort": "Small",
-      "milestone": "PR #30 publication and ongoing runner operations",
-      "risk": "Local review cannot prove actual remote job assignment or the continuing isolation and maintenance posture of either persistent runner after publication.",
+      "milestone": "Ongoing runner operations",
+      "risk": "Successful remote assignment for one reviewed commit does not prove the continuing isolation, maintenance, or path-ownership posture of either persistent runner.",
       "severity": "Advisory",
-      "summary": "Actual dual-runner execution and continued host isolation remain pending publication evidence and ongoing operator control."
+      "summary": "Remote assignment passed; continued host isolation and path ownership remain operator-maintained advisories."
     }
   ],
   "increment_id": "repository-dual-self-hosted-runner-routing",
@@ -79,9 +79,9 @@
       "status": "Passed"
     },
     {
-      "check": "After publication, confirm Linux jobs use runner 21, target-Mac Rust uses runner 22, and no pull-request event receives either persistent runner.",
-      "required": false,
-      "status": "Manual verification pending"
+      "check": "Confirm successful push-triggered runs assign classification, documentation, frontend, Linux Rust, and dependency audit to runner 21; assign target-Mac Rust to runner 22; and list no pull-request run for the reviewed commit.",
+      "required": true,
+      "status": "Passed"
     }
   ],
   "next_increment_readiness": "Blocked",
@@ -147,6 +147,36 @@
       "command": "python3 .codex/hooks/session_end_gate.py",
       "required": true,
       "status": "Passed"
+    },
+    {
+      "command": "gh run view 29670565671 --json databaseId,event,status,conclusion,headSha,name,url,jobs",
+      "required": true,
+      "status": "Passed"
+    },
+    {
+      "command": "gh run view 29670565657 --json databaseId,event,status,conclusion,headSha,name,url,jobs",
+      "required": true,
+      "status": "Passed"
+    },
+    {
+      "command": "gh api repos/SillyRbbit/ai-agent-assistant/actions/runs/29670565671/jobs --jq '.jobs[] | {id, name, conclusion, runner_name, labels}'",
+      "required": true,
+      "status": "Passed"
+    },
+    {
+      "command": "gh api repos/SillyRbbit/ai-agent-assistant/actions/runs/29670565657/jobs --jq '.jobs[] | {id, name, conclusion, runner_name, labels}'",
+      "required": true,
+      "status": "Passed"
+    },
+    {
+      "command": "gh run list --commit 9a2c75de9640ea9118bdc552a0d7c63155e0181f --json databaseId,event,name,status,conclusion,headSha,url",
+      "required": true,
+      "status": "Passed"
+    },
+    {
+      "command": "git diff --exit-code -- .github src src-tauri tests scripts package.json package-lock.json Cargo.toml Cargo.lock src-tauri/Cargo.toml src-tauri/Cargo.lock .codex .agents",
+      "required": true,
+      "status": "Passed"
     }
   ]
 }
@@ -157,6 +187,7 @@ Increment: D-058 dual-self-hosted-runner publication correction
 Branch: `codex/ci/risk-based-github-actions-validation`
 Pull request: #30
 Baseline commit: `4fb7f31`
+D-058 implementation commit: `9a2c75d`
 
 ## Executive summary
 
@@ -174,19 +205,26 @@ Rust tests for every Rust-classified change.
 
 The automated implementation checks pass, and the project owner confirmed on
 2026-07-18 that both runner services satisfy D-058's isolated, unprivileged
-host baseline. The result is `PASS WITH ADVISORIES`; actual dual-runner job
-assignment remains pending publication. No product source, dependency,
-lockfile, hook, skill, Tauri boundary, capability, permission, CSP, SQLite,
-identifier, or behavior changed.
+host baseline. Commit `9a2c75d` produced successful push-triggered CI run
+`29670565671` and Documentation run `29670565657`. The result remains `PASS
+WITH ADVISORIES` because persistent-host maintenance and path ownership remain
+operator responsibilities. No product source, dependency, lockfile, hook,
+skill, Tauri boundary, capability, permission, CSP, SQLite, identifier, or
+behavior changed.
 
 ## Scope and boundaries
 
-The correction changes exactly 22 paths: two workflows, repository workflow
-policy and tests, one push-range classifier fixture, and the authority, runner,
-plan, review, changelog, roadmap, and project-memory files required to record
-D-058. The original branch remains the same 29-path product-neutral increment;
-the correction adds one dedicated D-058 report while preserving the historical
-Meta CI report unchanged.
+Implementation commit `9a2c75d` contains the exact reviewed 22-path correction:
+two workflows, repository workflow policy and tests, one push-range classifier
+fixture, and the authority, runner, plan, review, changelog, roadmap, and
+project-memory files required to record D-058. The original branch remains the
+same 29-path product-neutral increment, and the historical Meta CI report is
+unchanged.
+
+This post-publication closeout changes exactly 12 documentation paths: eight
+root authority and project-memory files, the runner guide, the Meta CI increment
+and plan, and this D-058 report. No workflow, classifier, repository validator,
+application source, dependency, lockfile, hook, or skill file changes.
 
 The workflows no longer subscribe to `pull_request`. Eligible pushes are
 limited to `main`, `codex/**`, `feature/**`, `fix/**`, `refactor/**`, `meta/**`,
@@ -215,6 +253,21 @@ Passed:
 - Documentation, secret-pattern, link, generated-output, protected-path,
   whitespace, architecture, security, code-health, technical-debt, and
   roadmap-readiness checks pass.
+- CI run `29670565671` completed successfully as a `push` event for
+  `9a2c75d`. Linux runner 21 `henry-dang-HP-Elite-Slice` executed
+  classification job `88148646821`, frontend job `88148677830`, Linux Rust job
+  `88148677826`, and dependency-audit job `88148677832` with exact labels
+  `[self-hosted, Linux, X64, cortexa-ci]`.
+- Documentation run `29670565657` completed successfully as a `push` event for
+  `9a2c75d`; job `88148646740` executed on Linux runner 21 with the same exact
+  selector.
+- Target-Mac Rust job `88148677829` passed on macOS runner 22
+  `Henrys-MacBook-Pro` with exact labels
+  `[self-hosted, macOS, X64, cortexa-ci]`.
+- The GitHub run listing for `9a2c75d` contains only CI run `29670565671` and
+  Documentation run `29670565657`, both with event `push`.
+- PR #30 remains open, mergeable, and clean at head `9a2c75d`; its description
+  now records the successful remote evidence instead of pending execution.
 
 Failed required checks: none in the final state. The first final `npm run
 verify` attempt stopped because the edited `ROADMAP.md` table needed Prettier;
@@ -229,18 +282,18 @@ External failure: the original hosted jobs failed before execution because of
 the account Actions limit. This is recorded evidence for D-058, not a passing
 or failed repository verification command.
 
-Checks not run: actual Linux and macOS self-hosted workflow jobs require an
-approved commit and push. npm and Cargo audits were not repeated because the
-dependency manifests and lockfiles are unchanged and their exact passing
-`4fb7f31` evidence remains valid.
+Checks not run during the documentation-only closeout: frontend, Rust, Tauri,
+and product builds were not rerun locally because no applicable source,
+dependency, lockfile, workflow, classifier, or repository-validator path
+changed. Their passing local implementation evidence and successful remote jobs
+for `9a2c75d` remain applicable.
 
 Mandatory manual verification passed: the project owner confirmed both runner
 services use dedicated unprivileged accounts with no interactive `sudo`,
 personal files, SSH keys, production credentials, cloud metadata, or mounted
-sensitive data. After publication, confirm job-to-runner assignment and that no
-pull-request event receives a persistent runner; this is a non-blocking
-publication advisory, not local completion evidence. No product or native UI
-manual check applies.
+sensitive data. GitHub evidence confirms the exact job-to-runner assignment and
+shows only push-triggered runs for `9a2c75d`. No product or native UI manual
+check applies.
 
 ## Architecture findings
 
@@ -260,9 +313,9 @@ secrets, immutable actions, disabled checkout credentials, no write or
 publication commands, no `sudo`, fixed Git arguments, and validated SHAs and
 paths. Runner accounts and packages remain provisioned outside workflows.
 
-Actual runner assignment and successful dual-runner execution remain mandatory
-before PR #30 merges. Continuing host isolation, patching, workspace cleanup,
-monitoring, and incident response remain operator-controlled advisories.
+Actual runner assignment and successful dual-runner execution passed for
+`9a2c75d`. Continuing host isolation, patching, workspace cleanup, monitoring,
+and incident response remain operator-controlled advisories.
 
 ## Code-health findings
 
@@ -281,48 +334,53 @@ guide make both obligations explicit.
 
 No product work is reordered. ARB-002 remains Blocked on O-006/O-007 and owner
 decisions. The only next task is review and publication of this exact
-dual-runner correction.
+documentation-only remote-verification closeout, followed by separately
+approved PR #30 merge.
 
 ## Completion decision
 
 `PASS WITH ADVISORIES`. Automated verification passed, the required
 host-isolation manual check passed by explicit project-owner confirmation, and
-no Critical or High blocking finding remains. The completion marker is complete
-and valid. Actual Linux/macOS workflow execution remains pending publication
-and is required before merge.
+the exact Linux/macOS remote assignment passed for `9a2c75d`. No Critical or
+High blocking finding remains. The completion marker is complete and valid
+after documentation-only closeout re-finalization. Ongoing persistent-host
+maintenance and path ownership remain advisories.
 
 ## Next-increment readiness
 
 `Blocked`. ARB-002 remains blocked on O-006/O-007 and project-owner,
-security-owner, and executive-owner decisions. The only allowed next action is
-review and publication of this exact D-058 correction.
+security-owner, and executive-owner decisions. The only allowed next actions
+are review and publication of this exact D-058 closeout and separately approved
+merge of PR #30.
 
 ## Exact files changed
 
-The machine manifest records the complete exact 22-path correction: two
-workflows, three repository validator/test paths, and 17 authority, runner,
-plan, review, changelog, roadmap, and project-memory paths. No application
-source, dependency, lockfile, hook, skill, Tauri, SQLite, or product path
-changed.
+The machine manifest records the exact 12-path documentation-only closeout:
+`AGENTS.md`, `CHANGELOG.md`, `DECISIONS.md`, `HANDOFF.md`, `NEXT_STEPS.md`,
+`PLANS.md`, `PROJECT_STATUS.md`, `ROADMAP.md`, the runner guide, the Meta CI
+increment and plan, and this report. No workflow, classifier, repository
+validator, application source, dependency, lockfile, hook, skill, Tauri,
+SQLite, or product path changed.
 
 ## Exact commands executed
 
-The machine manifest records all inspection, baseline, focused, complete,
-documentation, security, protected-path, session-end, finalization, and status
-commands. It distinguishes the hosted allocation failures, the resolved
+The machine manifest records all implementation inspection, baseline, focused,
+complete, documentation, security, protected-path, session-end, finalization,
+and status commands plus the remote run, job-assignment, event, and PR evidence.
+It distinguishes the historical hosted allocation failures, the resolved
 ROADMAP formatting stop, and the rejected historical report filename from the
 final passing verification and valid marker.
 
 ## Rollback
 
-Before publication, restore the 22 correction paths from `4fb7f31`. After
-publication, return to D-057 hosted selectors only after Actions availability
-is restored and a separate security review approves the transition. No product,
-dependency, database, or native rollback is required.
+Before PR #30 merges, revert `9a2c75d` on the feature branch if D-058 must be
+withdrawn. After merge, return to D-057 hosted selectors only after Actions
+availability is restored and a separate security review approves the
+transition. No product, dependency, database, or native rollback is required.
 
 ## Exact next task
 
-Review the exact 22-path dual-runner correction and wait for separate
-commit/push approval. After push, require Linux runner 21 and macOS runner 22
-execution evidence and confirm no pull-request event received either runner
-before merging PR #30. Do not begin ARB-002 or another increment.
+Review the exact 12-path documentation-only D-058 remote-verification closeout
+and the proposed Conventional Commit, then wait for separate staging, commit,
+and push approval. Merge PR #30 only with separate project-owner approval. Do
+not begin ARB-002 or another increment.

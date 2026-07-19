@@ -40,14 +40,14 @@ both PR #30 jobs before allocation because the Actions minute or spending limit
 was exhausted. D-058 now authorizes active risk-based routing across Linux
 runner 21 and macOS runner 22.
 
-Meta risk-based GitHub Actions validation is committed as `4fb7f31` on open PR
-#30. Its original 29-path scope passed complete local verification. The current
-D-058 correction keeps exactly two workflows, adds trusted dual-runner routing,
-17 classifier cases, and 38 repository tests. Automated local verification
-passes, and the project owner confirmed the required isolated, unprivileged
-host baseline. The gate is `PASS WITH ADVISORIES`, and its completion marker is
-complete and valid. Actual Linux/macOS workflow execution remains pending
-publication.
+Meta risk-based GitHub Actions validation and the D-058 correction are committed
+and pushed as `9a2c75d` on open PR #30. The original 29-path scope and bounded
+22-path correction passed complete local verification. Push-triggered CI run
+`29670565671` and Documentation run `29670565657` passed with the exact Linux
+runner 21 and macOS runner 22 assignments. The project owner confirmed the
+required isolated, unprivileged host baseline. The gate remains `PASS WITH
+ADVISORIES`, and its marker is re-finalized against the 12-path
+documentation-only closeout. PR #30 remains unmerged.
 
 Meta Increment 8 Prompt Library Reorganization is **verified complete,
 published through PR #25, and squash-merged at `d26b5e1`** from verified source
@@ -124,8 +124,8 @@ wording outside the approved scope.
 - Repository workflow: trusted self-hosted runner routing - **verified complete
   with advisories and squash-merged through PR #24 at `eaf6c9f`**.
 - Repository workflow: risk-based GitHub Actions validation - **committed on
-  open PR #30; D-058 correction verified locally with advisories and valid
-  marker; publication pending**.
+  open PR #30 at `9a2c75d`; D-058 correction verified locally and remotely with
+  advisories and valid marker; merge pending**.
 
 ## Prompt library capability and evidence
 
@@ -144,7 +144,7 @@ wording outside the approved scope.
 
 ## GitHub validation capability and evidence
 
-- Active CI and Documentation are being corrected under D-058 to use exact
+- Active CI and Documentation use D-058's exact
   Linux and macOS `cortexa-ci` selectors with `contents: read`, immutable
   official action SHAs, disabled checkout credential persistence, concurrency
   cancellation, bounded timeouts, no secrets, and no repository-write or
@@ -162,8 +162,11 @@ wording outside the approved scope.
   it rejects pull-request triggers, mutable actions, write permission,
   unexpected workflows, and unapproved selectors.
 - Automated D-058 local verification and required project-owner host-isolation
-  confirmation pass. The marker is complete and valid. Actual Linux/macOS jobs
-  remain pending publication and are not claimed as passed.
+  confirmation pass. CI run `29670565671` and Documentation run `29670565657`
+  passed as push-triggered executions for `9a2c75d`. Linux runner 21 handled
+  classification, documentation, frontend, Linux Rust, and dependency audit;
+  macOS runner 22 handled target-Mac Rust. The marker is complete and valid
+  after documentation-only closeout re-finalization.
 - D-054 and D-057 remain preserved in dated records; returning to hosted
   routing requires a separate security decision.
 
@@ -937,10 +940,10 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Confirm both runner services satisfy D-058's isolated, unprivileged host
-baseline. Then finalize and review the correction before publication approval.
-After push, require actual Linux runner 21 and macOS runner 22 evidence before
-merge. Do not begin ARB-002 or another product/remediation increment.
+Review the exact 12-path D-058 documentation-only remote-verification closeout
+and wait for separate staging, commit, and push approval. Merge PR #30 only
+with separate project-owner approval. Do not begin ARB-002 or another
+product/remediation increment.
 
 ## Phase 4 planning result
 
