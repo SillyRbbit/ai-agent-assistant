@@ -84,6 +84,16 @@ boundary. Its post-publication project-memory reconciliation was published
 through PR #31 and squash-merged at `74a8d2c`; no D-058 publication action
 remains. Ongoing host maintenance and path ownership remain advisories.
 
+The High-severity advisory disposition review is approved as documentation-only
+work under `docs/plans/remediation-high-severity-advisory-disposition.md`. It
+does not authorize product implementation. ARB-001 is resolved; ARB-002 remains
+decision-required under O-006 and O-007; ARB-003, ARB-004, ARB-005, and ARB-008
+are blocked on future capabilities; ARB-006 and ARB-007 are deferred without a
+severity reduction until their explicit legal and release triggers; and
+ARB-044 remains superseded. No live model networking, executor, complete
+workflow, durable product data, enterprise controls, license grant, signing, or
+notarization may begin from this disposition record.
+
 ## Non-negotiable product boundaries
 
 - Keep the application local-first.
