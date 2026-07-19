@@ -1859,13 +1859,165 @@ Consequences:
 - This decision changes documentation only and grants no network, execution,
   persistence, enterprise, distribution, signing, or release authority.
 
+## D-060 - Separate identity, hosting, and AI-provider boundaries
+
+Date: 2026-07-19
+Status: Accepted; exact identity and AI-provider configurations remain approval-bound
+
+Decision: Cortexa AI will use an Azure-first, provider-neutral architecture.
+The following identity-provider, cloud-hosting, and AI model-provider boundaries
+are separate. Selecting or approving one does not select or approve another.
+
+**Current state:** no gateway is deployed, no networking is enabled, no
+identity provider is integrated, no cloud deployment exists, and no AI
+model-provider networking exists. Only synthetic test data may be considered by
+a separately approved future transport test.
+
+**Identity providers:** the application boundary will be pluggable OAuth 2.0
+and OpenID Connect. Phase 1 may support Microsoft, Google, and Apple consumer
+sign-in through a system browser using Authorization Code Flow with PKCE. These
+are candidates, not enabled configurations. Phase 2 may support Microsoft Entra
+ID workforce SSO and other separately approved enterprise OIDC or SAML identity
+providers. AWS accounts and Google Cloud accounts are not treated as consumer
+identity systems; future support concerns their associated standards-based
+identity services or an organization's approved identity provider.
+
+The configured identity provider determines the token issuer. The Cortexa
+gateway must validate every configured trusted issuer, audience, signature,
+expiration, tenant context when applicable, and authorization context against a
+closed server-owned configuration. A user, WebView, model, desktop content, or
+arbitrary runtime configuration may not select an issuer, authorization
+endpoint, token endpoint, audience, client identity, tenant rule, or gateway
+origin. Exact providers, issuers, redirect URIs, scopes, account-linking rules,
+and tenant policies require separate approval before implementation.
+
+A gateway access token must be audience-bound to the Cortexa AI gateway, have a
+maximum 15-minute lifetime, and exist only in trusted Rust process memory. A
+refresh or session credential belongs only in platform-secure credential
+storage: macOS Keychain for the macOS application and an equivalent separately
+reviewed facility on any future supported platform. Neither credential may
+enter the WebView, SQLite, application logs, or ordinary CI.
+
+**Cloud hosting:** Microsoft Azure Container Apps in Central US is the primary
+planned hosting platform and region. The reserved production origin is
+`https://api.cortexaai.io`. No Azure resource or gateway currently exists, and
+the origin must not be described as active or approved until DNS, TLS,
+deployment, authentication, authorization, logging restrictions, and security
+verification all pass. Initial production will use one primary cloud.
+
+The gateway should remain containerized and portable enough for future AWS or
+Google Cloud deployment. Those deployments are deferred until customer,
+data-residency, resilience, or commercial requirements justify them. This
+decision does not define active-active multicloud, require three-cloud
+deployment, promise cloud failover, or approve a second cloud.
+
+**AI model providers:** the future gateway and a future trusted
+`AgentProvider` abstraction may support multiple separately approved AI model
+providers. No `AgentProvider` implementation currently exists; Increment 4K
+deleted the legacy generic provider scaffold. Provider selection must occur in
+the trusted gateway or trusted core according to closed policy. The desktop
+must never receive an AI provider credential. Each provider requires separate
+approval for retention, ZDR, data use, logging, region, and security under
+D-061 before it may receive real user content.
+
+AI provider credentials are owned by Henry Dang, Founder & Principal Engineer,
+Cortexa AI. For the initial Azure target they belong only in Azure-managed
+gateway secret storage; any future cloud requires an equivalent separately
+reviewed managed secret facility. Credentials are never distributed to the
+desktop application or stored in the repository, SQLite, application logs, or
+ordinary CI. Henry Dang is also the operations and incident-response owner.
+HTTPS is the only permitted future gateway transport.
+
+Phase 1 targets individual consumers, consultants, IT professionals,
+small-business owners, and other professional power users through individual
+accounts, simple onboarding, and personal workspaces. Phase 2 may add
+organization accounts, team workspaces, centralized billing and administration,
+role-based access control, organization policy and audit, workforce SSO,
+tenant-aware authorization, and group-based controls. Phase 1 has no enterprise
+tenant administration, SCIM, enterprise policy administration, or
+organization-wide deployment control.
+
+Rationale: identity federation, deployment topology, and AI provider routing
+have different trust, privacy, availability, and ownership boundaries. Keeping
+them separate prevents an Azure-first deployment from becoming Entra-only,
+prevents identity support from implying cloud support, and prevents one AI
+provider's approval from being inherited by another.
+
+Consequences:
+
+- Azure Container Apps, Central US, the Cortexa-operated gateway, and the
+  reserved origin are selected initial targets, not deployed facts.
+- O-006 remains decision-required for exact Phase 1 identity configurations,
+  any later cloud expansion, and every AI model-provider approval.
+- Entra workforce identity is a Phase 2 enterprise target, not the exclusive
+  Phase 1 consumer identity mechanism.
+- Container portability is a design constraint, not active-active multicloud or
+  a three-cloud release requirement.
+- No networking, cloud resource, DNS, credential, OAuth/OIDC flow, PKCE,
+  Keychain adapter, token validation, identity federation, `AgentProvider`, AI
+  provider integration, team workspace, enterprise administration, SAML, or
+  SCIM implementation is authorized.
+- D-021's gateway, credential, token-lifetime, and trust-boundary rules remain
+  authoritative and compatible with this staged selection.
+
+## D-061 - Require verified ZDR and bounded external-processing disclosure
+
+Date: 2026-07-19
+Status: Accepted; provider ZDR verification remains a live-traffic gate
+
+Decision: no external model processing is currently permitted. For each AI
+model provider, provider-approved Zero Data Retention must be verified for the
+exact production organization, project, endpoint, model, and region
+configuration. Until that provider-specific evidence exists, only synthetic
+test data may be considered for a separately approved future transport test;
+real user content remains prohibited. After ZDR is verified, the initial
+permitted real-user data class is limited to explicitly submitted,
+non-sensitive text.
+
+Credentials and secrets, attachments, regulated data, financial or healthcare
+data, and sensitive personal data remain prohibited in both the consumer and
+enterprise phases. Gateway logging is limited to operational metadata with a
+maximum seven-day retention. Content logging is prohibited. External-processing
+disclosure is required before the first external transmission and must remain
+visible in Settings.
+
+Henry Dang, Founder & Principal Engineer, Cortexa AI, is the privacy owner and
+security owner. ZDR must not be claimed from `store: false` or intended
+configuration alone; provider approval and exact account/project evidence are
+required. A later implementation must also verify endpoint and model
+eligibility, deletion procedures, allowed metadata fields, access controls, and
+the disclosure presentation before any external transmission.
+
+Rationale: provider retention controls and product logging are separate
+boundaries. Requiring verified ZDR, a narrow initial data class, explicit
+disclosure, and content-free operational logs prevents an implementation plan
+from treating configuration intent as privacy evidence.
+
+Consequences:
+
+- O-007's product policy and accountable owners are decided, but no current or
+  future live traffic is authorized by this record and no provider inherits
+  another provider's approval.
+- Synthetic-only testing remains the maximum pre-ZDR data boundary and still
+  requires a separately approved transport plan and disclosure gate.
+- Real user content remains blocked until provider-approved ZDR is verified;
+  verification is an operational prerequisite, not a documentation claim.
+- ARB-002 remains High and unresolved because O-006 identity and AI-provider
+  configurations, deployment, threat modeling, implementation, and operational
+  verification remain incomplete.
+- No provider connectivity, account configuration, disclosure UI, logging,
+  retention job, deletion process, credential, or product behavior is added.
+
 ## Open decisions
 
 | ID    | Topic                                                              | Required before                                      |
 | ----- | ------------------------------------------------------------------ | ---------------------------------------------------- |
 | O-002 | Workspace split between one Tauri crate and multiple Rust crates   | Revisit before later modularization                  |
 | O-003 | macOS target and hardware support beyond the provisional baseline  | Any Intel, older-macOS, or production support claim  |
-| O-006 | Gateway identity provider and deployment platform                  | Before live gateway networking                       |
-| O-007 | Provider retention mode and user disclosure                        | Before live provider traffic                         |
+| O-006 | Exact identity, cloud-expansion, and AI-provider configurations    | Before authentication or live gateway networking     |
 | O-008 | Repository and distribution licensing                              | Before public distribution or external contributions |
 | O-009 | Signing, notarization, credential ownership, and release authority | Before trusted public macOS distribution             |
+
+O-007's policy decision is accepted in D-061. Provider-approved ZDR evidence,
+the required disclosure, and all deployment and security gates still block
+external transmission.

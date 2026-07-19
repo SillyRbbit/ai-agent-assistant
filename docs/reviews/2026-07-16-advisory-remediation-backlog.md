@@ -1189,6 +1189,42 @@ Use $session-start.
 Start from clean synchronized main after the verified Increment 4V / ARB-001 remediation is published. Reconcile the actual repository and valid 04v completion marker. Plan only the smallest documentation-only ARB-002 threat-model increment needed to decide gateway identity, desktop credential ownership, gateway deployment, provider retention, and user disclosure under O-006 and O-007. State exact files, risks, non-goals, verification, decisions required, and rollback. Update planning documentation only, then wait for project-owner, security-owner, and executive-owner approval. Do not begin a product gate, implement transport, add credentials, commit, push, merge, or start another remediation.
 ```
 
+## 2026-07-19 O-006/O-007 decision-record update
+
+D-060 now records Cortexa AI as the planned gateway operator, Azure Container
+Apps in Central US as the planned hosting target, the reserved inactive
+`https://api.cortexaai.io` origin, a provider-neutral consumer/prosumer Phase 1,
+and a later Entra-capable enterprise Phase 2. Microsoft, Google, and Apple are
+candidate Phase 1 providers only. O-006 remains open for the exact first
+provider or providers and issuer configuration.
+
+The approved provider-boundary amendment distinguishes three independent
+categories. Identity uses a pluggable OAuth/OIDC boundary with consumer
+candidates in Phase 1 and compatible enterprise OIDC/SAML providers in Phase 2.
+Hosting remains one-primary-cloud Azure-first, with AWS and Google Cloud
+portability deferred and no active-active or three-cloud claim. A future trusted
+`AgentProvider` abstraction may route only to separately approved AI model
+providers; no implementation exists, and every provider requires its own O-007
+retention, ZDR, data-use, logging, region, and security evidence. O-006 therefore
+remains open for exact identity and AI-provider configurations and any future
+cloud expansion.
+
+D-061 accepts O-007's cross-phase product policy: provider-approved ZDR is
+required before real user content; pre-verification testing is synthetic only;
+initial post-verification data is explicitly submitted, non-sensitive text;
+sensitive categories and content logging are prohibited; operational metadata
+retention is capped at seven days; and disclosure precedes the first
+transmission and remains visible in Settings. Provider ZDR approval and exact
+configuration evidence are still pending.
+
+ARB-002 remains High, `DECISION REQUIRED`, and unresolved. It does not affect a
+currently reachable external path because no gateway, network client, identity
+integration, credential loader, or provider transport exists. It continues to
+block authentication and live model networking until O-006 closes and the ZDR,
+deployment, disclosure, threat-model, and security-verification gates pass.
+This additive update changes no original finding, count, severity, historical
+disposition evidence, source code, or product behavior.
+
 ## Review and resolution boundary and rollback
 
 The original review started no remediation and changed no source, dependency,

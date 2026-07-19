@@ -1,7 +1,7 @@
 # Cortexa product requirements
 
 Status: Authoritative normalized product requirements
-Last updated: 2026-07-15
+Last updated: 2026-07-19
 
 ## Purpose and authority
 
@@ -26,19 +26,33 @@ account authority to a language model.
 
 ## Target users
 
-### Primary users
+### Phase 1 primary users
 
-- Executives who need a controlled workspace for requests, follow-up, tasks,
-  context, and approvals across work systems.
-- Employees and operators who need repeatable assistance without surrendering
-  accountability for consequential actions.
+- Individual consumers and professional power users who need a controlled
+  personal workspace.
+- Consultants and IT professionals who coordinate work across changing
+  contexts without enterprise administration.
+- Small-business owners who need bounded assistance without organization-wide
+  deployment controls.
+- Executives, employees, and operators using Cortexa as an individual account.
 
-### Stakeholders
+Phase 1 uses individual accounts, simple onboarding, and personal workspaces.
+It does not include enterprise tenant administration, SCIM, enterprise policy
+administration, or organization-wide deployment controls.
 
-- IT leaders responsible for deployment, identity, support, and integration.
+### Phase 2 users and stakeholders
+
+- Organizations that require team workspaces, centralized billing and
+  administration, role-based access control, organization policy, and audit.
+- IT leaders responsible for workforce identity, deployment, support, and
+  integration.
 - Security and privacy reviewers responsible for permissions, data movement,
   credentials, audit, and supply-chain risk.
 - Business owners responsible for workflow outcomes and adoption.
+
+Phase 2 may add Microsoft Entra ID workforce SSO, tenant-aware authorization,
+and group-based policy. SAML, SCIM, and other enterprise identity providers are
+future, demand-driven scope rather than Phase 1 requirements.
 
 The first platform is macOS. Portable domain behavior should remain suitable
 for later Windows, Linux, and iOS work where platform capabilities permit.
@@ -87,17 +101,38 @@ No use case permits unattended consequential external action in the MVP.
 - **FR-011**: Trusted Rust shall create a closed versioned, size-bounded gateway
   request with an exact supported tool-set identifier.
 - **FR-012**: A production gateway shall authenticate and authorize the desktop
-  principal, own the production provider credential, force approved Responses
-  parameters, and normalize upstream events.
+  principal, own all AI model-provider credentials, select only separately
+  approved providers under trusted policy, force approved provider parameters,
+  and normalize upstream events. Desktop clients shall never receive provider
+  credentials.
 - **FR-013**: Trusted Rust shall reject unknown, malformed, out-of-sequence,
   oversized, late, or multiply terminal gateway events.
 - **FR-014**: Runs shall enforce independently reviewed turn, request, retry,
   event, content, argument, idle, provider, and total deadlines.
 - **FR-015**: Cancellation shall be terminal and idempotent and shall reject
   late events and late approval outcomes.
+- **FR-016**: Phase 1 authentication shall use a system browser and OAuth 2.0
+  Authorization Code Flow with PKCE behind a provider-neutral OAuth/OIDC
+  application boundary.
+- **FR-017**: Only separately approved, closed identity-provider and issuer
+  configurations may be used. The gateway shall validate each trusted issuer,
+  audience, signature, expiration, applicable tenant, and authorization
+  context. The WebView, model, user content, and arbitrary runtime configuration
+  shall not select identity or gateway endpoints.
+- **FR-018**: Gateway access tokens shall be audience-bound, limited to a
+  maximum 15-minute lifetime, and held only in trusted Rust memory. Refresh or
+  session credentials shall use approved platform-secure credential storage.
+- **FR-019**: Identity-provider support, cloud hosting, and AI model-provider
+  support shall remain separate approval boundaries. Phase 2 enterprise
+  identity and administration shall remain optional capabilities separated
+  from Phase 1 individual-account behavior. Initial production targets one
+  primary Azure deployment; future AWS or Google Cloud portability does not
+  constitute active-active multicloud or a three-cloud release requirement.
 
-FR-012 and live transport portions of FR-010 through FR-015 are planned; the
-transport-free request and validation contracts are current.
+FR-012 and live transport portions of FR-010 through FR-019 are planned; the
+transport-free request and validation contracts are current. No account,
+identity-provider, OAuth/OIDC, PKCE, token, gateway, or external-processing path
+is implemented.
 
 ### Tools, policy, and approval
 
@@ -183,13 +218,30 @@ privileged adapter is enabled.
   secret, signing, and provenance review before production release.
 - **SR-010**: Raw personal content shall not be duplicated into audit or
   operational logs.
+- **SR-011**: No external model processing shall occur until an approved
+  identity configuration, deployed gateway, disclosure, and that AI provider's
+  retention, data-use, logging, region, and security evidence satisfy their
+  exact gates.
+- **SR-012**: Before provider-approved ZDR is verified for the exact provider,
+  organization, project, endpoint, model, and region configuration, external
+  testing shall use synthetic data only. After verification, initial real-user
+  processing is limited to explicitly submitted, non-sensitive text.
+- **SR-013**: Credentials, attachments, regulated data, financial or healthcare
+  data, and sensitive personal data shall not be transmitted in the initial
+  consumer or enterprise processing boundary.
+- **SR-014**: Gateway logs shall contain operational metadata only, retain it
+  for no more than seven days, and never contain content. External-processing
+  disclosure shall precede the first transmission and remain visible in
+  Settings.
 
 `SECURITY.md` and `SECURITY_CHECKLIST.md` provide the normative guardrails.
 
 ## Non-functional requirements
 
 - **NFR-001 Portability**: keep platform-neutral behavior in Rust and React
-  modules that do not depend on macOS APIs.
+  modules that do not depend on macOS APIs. Keep a future gateway containerized
+  enough for separately justified cloud portability without claiming current
+  multicloud deployment or failover.
 - **NFR-002 Reliability**: deterministic boundaries shall produce stable typed
   outcomes and fail closed under malformed or late input.
 - **NFR-003 Performance**: interactive UI state shall remain responsive; bounded
@@ -228,6 +280,7 @@ This baseline is an engineering proof, not the complete user-ready MVP.
 The first usable controlled macOS MVP should include:
 
 - native launch, menu access, main workspace, and text interaction;
+- individual accounts, simple onboarding, and personal workspaces;
 - live bounded assistant streaming through an authenticated product gateway;
 - conversation and task persistence with user controls;
 - strict local tool registry, deterministic policy, exact approvals, restricted
@@ -255,6 +308,12 @@ Every item remains subject to the incremental security gates in `ROADMAP.md`.
   or database keys in the application bundle, WebView, SQLite, logs, or audit.
 - Claiming enterprise synchronization, mobile support, or cross-platform parity
   before those capabilities are implemented and verified.
+- Enterprise tenant administration, organization policy administration,
+  organization-wide deployment controls, SAML, or SCIM in the Phase 1 consumer
+  and prosumer launch.
+- An implemented `AgentProvider`, AI model-provider integration, Azure, AWS, or
+  Google Cloud deployment, active-active multicloud, cloud failover, or a
+  three-cloud initial release.
 
 ## Success criteria
 

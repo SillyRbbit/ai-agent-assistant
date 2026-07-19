@@ -4,8 +4,19 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No implementation plan is active. The documentation-only High-severity
-advisory disposition is verified complete with advisories under
+No implementation plan is active. The documentation-only O-006/O-007
+provider-boundary amendment is verified complete with advisories under gate
+`o006-provider-boundary-amendment` and
+`docs/plans/o006-o007-staged-gateway-identity-retention-decisions.md`. It records
+current absence; separate identity-provider, cloud-hosting, and AI
+model-provider boundaries; a consumer/prosumer Phase 1; a later enterprise Phase
+2; Azure-first one-primary-cloud hosting with deferred portability; and D-061's
+provider-specific verified-ZDR, data-classification, logging, and disclosure
+policy. It changes no application source or behavior and does not implement
+ARB-002. O-006 remains open for exact identity and AI-provider configurations.
+
+The documentation-only High-severity advisory disposition is verified complete
+with advisories under
 `docs/plans/remediation-high-severity-advisory-disposition.md`, published
 through PR #33, and squash-merged at `7bf1a5c` from source commit `26f68b4`.
 Branch and post-merge Documentation passed, and no publication action remains.
@@ -20,8 +31,9 @@ PR #30, and squash-merged at `1780d7f` from implementation commit `9a2c75d` and
 documentation closeout commit `da08573`. Its exact 11-path post-publication
 project-memory reconciliation was published through PR #31 and squash-merged at
 `74a8d2c`; no D-058 publication action remains. ARB-002 is not Ready because
-O-006 and O-007 and the required owner threat-model decisions remain
-unresolved.
+O-006 identity and AI-provider configuration, provider-specific ZDR evidence,
+deployment, and the required
+threat-model and implementation approvals remain unresolved.
 
 Meta Increment 8 Prompt Library Reorganization is verified complete under
 `docs/increments/meta-prompt-library-reorganization.md`, published through PR
@@ -119,6 +131,7 @@ docs/plans/04r-bind-terminal-initial-policy.md
 docs/plans/04s-bind-terminal-initial-approval-presentation.md
 docs/plans/04t-bind-terminal-initial-approval-resolution.md
 docs/plans/04u-bind-initial-approval-run-termination.md
+docs/plans/o006-o007-staged-gateway-identity-retention-decisions.md
 docs/plans/remediation-high-severity-advisory-disposition.md
 docs/plans/meta-01-branding-foundation.md
 docs/plans/meta-02-engineering-operating-system.md

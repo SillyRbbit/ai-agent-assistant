@@ -4,6 +4,17 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Recorded D-060 and D-061 as a documentation-only consumer-first,
+  enterprise-ready gateway decision boundary, then amended D-060 to separate
+  identity-provider support, Azure-first portable cloud hosting, and future
+  trusted AI model-provider support. Microsoft, Google, and Apple remain Phase
+  1 identity candidates; Entra and compatible enterprise OIDC/SAML providers
+  remain Phase 2 targets. Azure Container Apps in Central US and the inactive
+  `https://api.cortexaai.io` origin remain the one-primary-cloud initial target;
+  AWS, Google Cloud, active-active multicloud, and three-cloud deployment remain
+  deferred. Every AI provider requires independent O-007 evidence. No
+  `AgentProvider`, networking, identity, credential, cloud, enterprise, or
+  runtime behavior changed, and ARB-002 remains High and unresolved.
 - Published the evidence-based High-severity advisory disposition through PR
   #33 from source commit `26f68b4` and squash-merged it at `7bf1a5c`. Branch
   Documentation run `29676662232` and post-merge Documentation run

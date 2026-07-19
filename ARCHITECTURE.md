@@ -1,7 +1,7 @@
 # Cortexa architecture
 
 Status: Authoritative current-state architecture
-Last updated: 2026-07-16
+Last updated: 2026-07-19
 
 ## Reading this document
 
@@ -132,15 +132,73 @@ or executor.
 ### Agent provider
 
 **Planned**: trusted Rust will call one configured authenticated product gateway
-using a closed request and normalized response protocol.
+using a closed request and normalized response protocol. Identity-provider,
+cloud-hosting, and AI model-provider support are separate boundaries under
+D-060; approval of one does not approve another.
 
 **Current absence**: the legacy generic provider scaffold was deleted in
 Increment 4K. No HTTP client, provider SDK, gateway origin, model name,
 authentication, credential loader, or live Responses request exists.
 
-The production OpenAI credential belongs only to the future gateway. A future
-short-lived gateway token belongs to trusted Rust memory and platform secret
-storage, never the WebView or SQLite.
+**Identity-provider boundary**: Phase 1 consumer and prosumer individual
+accounts may use Microsoft, Google, or Apple sign-in through a system browser
+and OAuth 2.0 Authorization Code Flow with PKCE behind a pluggable OAuth/OIDC
+application boundary. None is selected or integrated. Phase 2 may add Entra
+workforce SSO and other separately approved enterprise OIDC or SAML identity
+providers. AWS and Google Cloud accounts are not consumer identity systems;
+future compatibility concerns their standards-based identity services or an
+organization's approved identity provider.
+
+The configured identity provider determines the token issuer. The gateway must
+validate each trusted issuer, audience, signature, expiration, applicable
+tenant context, and authorization context against closed server-owned
+configuration. Provider neutrality is not permission for the WebView, model,
+user, or arbitrary configuration to select an issuer, endpoint, audience,
+client identity, tenant policy, or gateway origin.
+
+A future audience-bound gateway token has a maximum 15-minute lifetime and
+belongs only to trusted Rust process memory. A refresh or session credential
+belongs only to platform-secure credential storage: macOS Keychain on macOS and
+an equivalent separately reviewed facility on any future supported platform.
+Neither credential enters the WebView, SQLite, application logs, or ordinary
+CI.
+
+**Cloud-hosting boundary**: Cortexa AI is the planned operator. Azure Container
+Apps in Central US is the initial planned platform and region, and
+`https://api.cortexaai.io` is the reserved production origin. None is deployed,
+active, or approved for traffic. Initial production targets one primary cloud.
+The containerized gateway should remain portable enough for future AWS or
+Google Cloud deployment, but those targets require separate customer,
+data-residency, resilience, or commercial justification. There is no
+active-active multicloud architecture, three-cloud release requirement, or
+approved secondary-cloud failover.
+
+**AI model-provider boundary**: the future gateway and future trusted
+`AgentProvider` abstraction may support multiple separately approved AI model
+providers. No `AgentProvider` implementation currently exists. Provider
+selection occurs only in the trusted gateway or trusted core under closed
+policy. Desktop clients never receive provider credentials. Initial Azure
+provider secrets belong only in Azure-managed gateway secret storage; any
+future cloud requires an equivalent reviewed managed-secret facility.
+
+**Phase 2 target**: organization accounts and team workspaces may add
+centralized administration, role-based access control, organization policy and
+audit, Microsoft Entra ID workforce SSO, tenant-aware token validation, and
+group-based authorization. SAML, SCIM, and other enterprise identity providers
+remain demand-driven future decisions. No enterprise identity or administration
+capability currently exists.
+
+D-061 permits no current external processing. Each AI model provider requires
+separate approval for retention, ZDR, data use, logging, region, and security.
+Before provider-approved ZDR is verified for that provider's exact production
+configuration, only synthetic test data may be considered by a separately
+approved future transport test. Real user content then remains limited
+initially to explicitly submitted, non-sensitive text; credentials,
+attachments, regulated data, financial or healthcare data, and sensitive
+personal data are prohibited. Gateway logs contain operational metadata only
+for at most seven days, content logging is prohibited, and the
+external-processing disclosure must precede the first transmission and remain
+visible in Settings.
 
 ### Tool registry and schemas
 
@@ -252,22 +310,22 @@ reviewed repository ICNS byte-for-byte.
 
 ## Current and future capability matrix
 
-| Capability                                    | State                         | Evidence or gate                            |
-| --------------------------------------------- | ----------------------------- | ------------------------------------------- |
-| React workspace and navigation                | Current                       | Frontend tests and application source       |
-| Assistant interaction                         | Mocked                        | Deterministic in-memory driver only         |
-| App info and menu routing                     | Current                       | Narrow Tauri command/event                  |
-| SQLite bootstrap metadata                     | Current                       | Storage tests and startup integration       |
-| Gateway request/protocol validation           | Current, transport-free       | Phase 4A and 4N-4P                          |
-| Function schema and policy binding            | Current, non-authorizing      | Phase 4B-4C and 4Q-4R                       |
-| Approval presentation/resolution/cancellation | Current, disconnected         | Phase 4D-4E and 4S-4U                       |
-| Approval audit adapter                        | Current, bound and volatile   | Phase 4H and 4V                             |
-| Live gateway and Responses transport          | Planned                       | Blocked by O-006 and O-007 plus future plan |
-| Restricted tool execution                     | Planned                       | No dispatcher or executor exists            |
-| Product memory and task persistence           | Planned                       | Phase 8 direction only                      |
-| Privileged macOS integrations                 | Planned or prohibited for MVP | Separate permission and threat-model gates  |
-| Generic shell or model-to-device execution    | Prohibited                    | `SECURITY.md`                               |
-| Signing, notarization, and production release | Planned                       | Phase 10 and `RELEASE_CHECKLIST.md`         |
+| Capability                                    | State                         | Evidence or gate                                               |
+| --------------------------------------------- | ----------------------------- | -------------------------------------------------------------- |
+| React workspace and navigation                | Current                       | Frontend tests and application source                          |
+| Assistant interaction                         | Mocked                        | Deterministic in-memory driver only                            |
+| App info and menu routing                     | Current                       | Narrow Tauri command/event                                     |
+| SQLite bootstrap metadata                     | Current                       | Storage tests and startup integration                          |
+| Gateway request/protocol validation           | Current, transport-free       | Phase 4A and 4N-4P                                             |
+| Function schema and policy binding            | Current, non-authorizing      | Phase 4B-4C and 4Q-4R                                          |
+| Approval presentation/resolution/cancellation | Current, disconnected         | Phase 4D-4E and 4S-4U                                          |
+| Approval audit adapter                        | Current, bound and volatile   | Phase 4H and 4V                                                |
+| Live gateway and model-provider transport     | Planned                       | Blocked by O-006, per-provider O-007 evidence, and future plan |
+| Restricted tool execution                     | Planned                       | No dispatcher or executor exists                               |
+| Product memory and task persistence           | Planned                       | Phase 8 direction only                                         |
+| Privileged macOS integrations                 | Planned or prohibited for MVP | Separate permission and threat-model gates                     |
+| Generic shell or model-to-device execution    | Prohibited                    | `SECURITY.md`                                                  |
+| Signing, notarization, and production release | Planned                       | Phase 10 and `RELEASE_CHECKLIST.md`                            |
 
 ## Approved future data flow
 
