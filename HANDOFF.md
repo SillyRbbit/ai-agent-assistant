@@ -46,14 +46,16 @@ was complete and valid on clean `d26b5e1` immediately before this
 post-publication project-memory sync. No product source, behavior, dependency,
 Tauri, storage, permission, skill, or hook changed.
 
-Meta risk-based GitHub Actions validation and the exact D-058 correction are
-committed and pushed as `9a2c75d` on open PR #30. Its original 29-path
-implementation and bounded 22-path correction passed complete local
-verification. Push-triggered CI run `29670565671` and Documentation run
-`29670565657` passed. The project owner confirmed both runner services satisfy
-the required isolated, unprivileged host baseline. Its gate result remains
-`PASS WITH ADVISORIES`, and the completion marker is re-finalized against this
-documentation-only remote-verification closeout. PR #30 remains unmerged.
+Meta risk-based GitHub Actions validation and D-058 are verified complete,
+published through PR #30, and squash-merged at `1780d7f` from implementation
+commit `9a2c75d` and documentation closeout commit `da08573`. Its original
+29-path implementation and bounded 22-path correction passed complete local
+verification. Branch CI run `29670565671` and Documentation runs `29670565657`
+and `29671289962` passed before merge. Post-merge CI run `29672575232` and
+Documentation run `29672575254` also passed. The project owner confirmed both
+runner services satisfy the required isolated, unprivileged host baseline. Its
+gate remains `PASS WITH ADVISORIES`, and the completion marker is re-finalized
+against this exact 11-path documentation-only post-publication reconciliation.
 
 ## Meta risk-based GitHub Actions validation
 
@@ -87,6 +89,11 @@ both successful `push` events for `9a2c75d`. Linux runner 21
 Rust, and dependency audit. macOS runner 22 `Henrys-MacBook-Pro` ran target-Mac
 Rust. The workflow listing for that commit contains no `pull_request` event.
 
+Publication passed: closeout commit `da08573` passed Documentation run
+`29671289962`. PR #30 squash-merged at `1780d7f`; post-merge CI run
+`29672575232` and Documentation run `29672575254` passed with the same exact
+runner assignments.
+
 Failed: the original hosted PR jobs failed before runner allocation because of
 the GitHub Actions limit; this is the trigger for D-058, not a repository-step
 failure.
@@ -100,11 +107,11 @@ applicable evidence.
 
 ### Exact next task
 
-Review the exact 12-path documentation-only D-058 remote-verification closeout
-and the proposed Conventional Commit, then wait for separate staging, commit,
-and push approval. After closeout publication, merge PR #30 only with separate
-project-owner approval. Do not begin ARB-002 or another product/remediation
-increment.
+Review the exact 11-path documentation-only D-058 post-publication memory
+reconciliation, confirm the valid marker and absence of protected-path changes,
+and propose a descriptive branch name, Conventional Commit, PR title, and PR
+description. Wait for project-owner approval before staging, committing, or
+pushing. Do not begin ARB-002 or another product/remediation increment.
 
 ## Increment 4V / ARB-001 publication
 

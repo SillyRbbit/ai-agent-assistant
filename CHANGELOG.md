@@ -4,12 +4,13 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
-- Pushed D-058 implementation commit `9a2c75d` to PR #30 and verified successful
-  push-triggered CI run `29670565671` and Documentation run `29670565657`.
-  Linux runner 21 executed classification, documentation, frontend, Linux Rust,
-  and dependency audit; macOS runner 22 executed target-Mac Rust. PR #30 remains
-  open and unmerged pending separate documentation-closeout publication and
-  merge approval.
+- Published D-058 through PR #30 from implementation commit `9a2c75d` and
+  documentation closeout commit `da08573`, then squash-merged it at `1780d7f`.
+  Branch CI run `29670565671`, branch Documentation runs `29670565657` and
+  `29671289962`, post-merge CI run `29672575232`, and post-merge Documentation
+  run `29672575254` passed with the exact Linux runner 21 and macOS runner 22
+  assignments. The marker remains valid after post-publication documentation
+  reconciliation.
 - Replaced blanket validation with two read-only, risk-based workflows.
   Documentation-only changes run focused documentation and repository checks;
   application changes select frontend, Linux Rust, target-Mac Rust, and

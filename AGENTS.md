@@ -72,14 +72,17 @@ pre-existing stale roadmap wording outside the approved scope. Do not begin
 another product or remediation increment. Current implementation facts and
 future boundaries are authoritative in `ARCHITECTURE.md`.
 
-Meta risk-based GitHub Actions validation is committed and pushed on open PR
-#30 at `9a2c75d`. Push-triggered CI run `29670565671` and Documentation run
-`29670565657` passed. Linux runner 21 executed classification, documentation,
-frontend, Linux Rust, and dependency-audit jobs; macOS runner 22 executed
-target-Mac Rust. D-058 keeps persistent runners off `pull_request` and
-`pull_request_target` events and changes no application behavior, dependency,
-Tauri configuration, permission, SQLite, or product boundary. PR #30 remains
-unmerged and requires separate closeout publication and merge approval.
+Meta risk-based GitHub Actions validation is verified complete, published
+through PR #30, and squash-merged at `1780d7f` from implementation commit
+`9a2c75d` and documentation closeout commit `da08573`. Branch and post-merge
+push-triggered CI and Documentation runs passed with Linux runner 21 handling
+classification, documentation, frontend, Linux Rust, and dependency audit and
+macOS runner 22 handling target-Mac Rust. D-058 keeps persistent runners off
+`pull_request` and `pull_request_target` events and changes no application
+behavior, dependency, Tauri configuration, permission, SQLite, or product
+boundary. Its marker is re-finalized against the post-publication
+documentation-only state; ongoing host maintenance and path ownership remain
+advisories.
 
 ## Non-negotiable product boundaries
 

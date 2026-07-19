@@ -43,6 +43,14 @@
     "gh pr view 30 --json headRefOid,mergeable,mergeStateStatus,body,url",
     "npx prettier --write AGENTS.md CHANGELOG.md DECISIONS.md HANDOFF.md NEXT_STEPS.md PLANS.md PROJECT_STATUS.md ROADMAP.md docs/github/SELF_HOSTED_RUNNER.md docs/increments/meta-risk-based-ci.md docs/plans/meta-risk-based-ci.md docs/reviews/2026-07-18-repository-dual-self-hosted-runner-routing-post-increment-review.md",
     "git diff --exit-code -- .github src src-tauri tests scripts package.json package-lock.json Cargo.toml Cargo.lock src-tauri/Cargo.toml src-tauri/Cargo.lock .codex .agents",
+    "gh pr view 30 --json state,mergedAt,mergeCommit,headRefOid,url",
+    "gh run list --commit 1780d7fb668541dbb6a7fbd6fb39b82ce49fd753 --json databaseId,event,name,status,conclusion,headSha,url",
+    "gh run view 29672575232 --json databaseId,event,status,conclusion,headSha,name,url,jobs",
+    "gh run watch 29672575232 --exit-status --interval 10",
+    "gh api repos/SillyRbbit/ai-agent-assistant/actions/runs/29672575232/jobs --jq '.jobs[] | {id, name, conclusion, runner_name, labels}'",
+    "gh api repos/SillyRbbit/ai-agent-assistant/actions/runs/29672575254/jobs --jq '.jobs[] | {id, name, conclusion, runner_name, labels}'",
+    "npx prettier --write AGENTS.md CHANGELOG.md DECISIONS.md HANDOFF.md NEXT_STEPS.md PLANS.md PROJECT_STATUS.md ROADMAP.md docs/increments/meta-risk-based-ci.md docs/plans/meta-risk-based-ci.md docs/reviews/2026-07-18-repository-dual-self-hosted-runner-routing-post-increment-review.md",
+    "git diff --exit-code -- .github src src-tauri tests scripts package.json package-lock.json Cargo.toml Cargo.lock src-tauri/Cargo.toml src-tauri/Cargo.lock .codex .agents docs/github/SELF_HOSTED_RUNNER.md docs/reviews/2026-07-18-meta-risk-based-ci-post-increment-review.md",
     "complete architecture, security, code-health, technical-debt, roadmap-readiness, and diff review"
   ],
   "files_changed": [
@@ -54,7 +62,6 @@
     "PLANS.md",
     "PROJECT_STATUS.md",
     "ROADMAP.md",
-    "docs/github/SELF_HOSTED_RUNNER.md",
     "docs/increments/meta-risk-based-ci.md",
     "docs/plans/meta-risk-based-ci.md",
     "docs/reviews/2026-07-18-repository-dual-self-hosted-runner-routing-post-increment-review.md"
@@ -177,6 +184,36 @@
       "command": "git diff --exit-code -- .github src src-tauri tests scripts package.json package-lock.json Cargo.toml Cargo.lock src-tauri/Cargo.toml src-tauri/Cargo.lock .codex .agents",
       "required": true,
       "status": "Passed"
+    },
+    {
+      "command": "gh pr view 30 --json state,mergedAt,mergeCommit,headRefOid,url",
+      "required": true,
+      "status": "Passed"
+    },
+    {
+      "command": "gh run list --commit 1780d7fb668541dbb6a7fbd6fb39b82ce49fd753 --json databaseId,event,name,status,conclusion,headSha,url",
+      "required": true,
+      "status": "Passed"
+    },
+    {
+      "command": "gh run watch 29672575232 --exit-status --interval 10",
+      "required": true,
+      "status": "Passed"
+    },
+    {
+      "command": "gh api repos/SillyRbbit/ai-agent-assistant/actions/runs/29672575232/jobs --jq '.jobs[] | {id, name, conclusion, runner_name, labels}'",
+      "required": true,
+      "status": "Passed"
+    },
+    {
+      "command": "gh api repos/SillyRbbit/ai-agent-assistant/actions/runs/29672575254/jobs --jq '.jobs[] | {id, name, conclusion, runner_name, labels}'",
+      "required": true,
+      "status": "Passed"
+    },
+    {
+      "command": "git diff --exit-code -- .github src src-tauri tests scripts package.json package-lock.json Cargo.toml Cargo.lock src-tauri/Cargo.toml src-tauri/Cargo.lock .codex .agents docs/github/SELF_HOSTED_RUNNER.md docs/reviews/2026-07-18-meta-risk-based-ci-post-increment-review.md",
+      "required": true,
+      "status": "Passed"
     }
   ]
 }
@@ -184,10 +221,12 @@
 
 Date: 2026-07-18
 Increment: D-058 dual-self-hosted-runner publication correction
-Branch: `codex/ci/risk-based-github-actions-validation`
+Implementation branch: `codex/ci/risk-based-github-actions-validation`
 Pull request: #30
 Baseline commit: `4fb7f31`
 D-058 implementation commit: `9a2c75d`
+Documentation closeout commit: `da08573`
+Published main commit: `1780d7f`
 
 ## Executive summary
 
@@ -212,6 +251,11 @@ operator responsibilities. No product source, dependency, lockfile, hook,
 skill, Tauri boundary, capability, permission, CSP, SQLite, identifier, or
 behavior changed.
 
+Documentation closeout commit `da08573` passed Documentation run
+`29671289962`. PR #30 was then squash-merged at `1780d7f`. Post-merge CI run
+`29672575232` and Documentation run `29672575254` passed with the exact Linux
+runner 21 and macOS runner 22 assignments.
+
 ## Scope and boundaries
 
 Implementation commit `9a2c75d` contains the exact reviewed 22-path correction:
@@ -221,10 +265,13 @@ project-memory files required to record D-058. The original branch remains the
 same 29-path product-neutral increment, and the historical Meta CI report is
 unchanged.
 
-This post-publication closeout changes exactly 12 documentation paths: eight
-root authority and project-memory files, the runner guide, the Meta CI increment
-and plan, and this D-058 report. No workflow, classifier, repository validator,
-application source, dependency, lockfile, hook, or skill file changes.
+The pre-merge remote-verification closeout changed exactly 12 documentation
+paths and is preserved in source commit `da08573`. This post-publication memory
+reconciliation changes exactly 11 documentation paths: eight root authority
+and project-memory files, the Meta CI increment and plan, and this D-058 report.
+The runner guide and historical Meta CI report remain unchanged. No workflow,
+classifier, repository validator, application source, dependency, lockfile,
+hook, or skill file changes.
 
 The workflows no longer subscribe to `pull_request`. Eligible pushes are
 limited to `main`, `codex/**`, `feature/**`, `fix/**`, `refactor/**`, `meta/**`,
@@ -266,8 +313,17 @@ Passed:
   `[self-hosted, macOS, X64, cortexa-ci]`.
 - The GitHub run listing for `9a2c75d` contains only CI run `29670565671` and
   Documentation run `29670565657`, both with event `push`.
-- PR #30 remains open, mergeable, and clean at head `9a2c75d`; its description
-  now records the successful remote evidence instead of pending execution.
+- Before closeout and merge, PR #30 was open, mergeable, and clean at
+  implementation head `9a2c75d`; its description recorded the successful
+  remote evidence instead of pending execution.
+- Documentation closeout commit `da08573` passed push-triggered Documentation
+  run `29671289962` on Linux runner 21 before merge.
+- PR #30 squash-merged at `1780d7f`. Post-merge CI run `29672575232` passed
+  classification, frontend, Linux Rust, dependency audit, and target-Mac Rust;
+  post-merge Documentation run `29672575254` also passed.
+- Post-merge classification, documentation, frontend, Linux Rust, and dependency
+  audit ran on Linux runner 21 `henry-dang-HP-Elite-Slice`; target-Mac Rust ran
+  on macOS runner 22 `Henrys-MacBook-Pro`.
 
 Failed required checks: none in the final state. The first final `npm run
 verify` attempt stopped because the edited `ROADMAP.md` table needed Prettier;
@@ -282,11 +338,11 @@ External failure: the original hosted jobs failed before execution because of
 the account Actions limit. This is recorded evidence for D-058, not a passing
 or failed repository verification command.
 
-Checks not run during the documentation-only closeout: frontend, Rust, Tauri,
-and product builds were not rerun locally because no applicable source,
-dependency, lockfile, workflow, classifier, or repository-validator path
-changed. Their passing local implementation evidence and successful remote jobs
-for `9a2c75d` remain applicable.
+Checks not run during this documentation-only post-publication reconciliation:
+frontend, Rust, Tauri, and product builds were not rerun locally because no
+applicable source, dependency, lockfile, workflow, classifier, or
+repository-validator path changed. Passing local implementation evidence,
+branch runs, and post-merge runs remain applicable.
 
 Mandatory manual verification passed: the project owner confirmed both runner
 services use dedicated unprivileged accounts with no interactive `sudo`,
@@ -314,8 +370,9 @@ publication commands, no `sudo`, fixed Git arguments, and validated SHAs and
 paths. Runner accounts and packages remain provisioned outside workflows.
 
 Actual runner assignment and successful dual-runner execution passed for
-`9a2c75d`. Continuing host isolation, patching, workspace cleanup, monitoring,
-and incident response remain operator-controlled advisories.
+`9a2c75d` and published `1780d7f`. Continuing host isolation, patching,
+workspace cleanup, monitoring, and incident response remain
+operator-controlled advisories.
 
 ## Code-health findings
 
@@ -333,9 +390,8 @@ guide make both obligations explicit.
 ## Roadmap findings
 
 No product work is reordered. ARB-002 remains Blocked on O-006/O-007 and owner
-decisions. The only next task is review and publication of this exact
-documentation-only remote-verification closeout, followed by separately
-approved PR #30 merge.
+decisions. The only next task is review and separate publication of this exact
+documentation-only post-publication memory reconciliation.
 
 ## Completion decision
 
@@ -343,24 +399,26 @@ approved PR #30 merge.
 host-isolation manual check passed by explicit project-owner confirmation, and
 the exact Linux/macOS remote assignment passed for `9a2c75d`. No Critical or
 High blocking finding remains. The completion marker is complete and valid
-after documentation-only closeout re-finalization. Ongoing persistent-host
-maintenance and path ownership remain advisories.
+after documentation-only post-publication re-finalization. PR #30 is published
+at `1780d7f`, and its post-merge CI and Documentation runs passed. Ongoing
+persistent-host maintenance and path ownership remain advisories.
 
 ## Next-increment readiness
 
 `Blocked`. ARB-002 remains blocked on O-006/O-007 and project-owner,
 security-owner, and executive-owner decisions. The only allowed next actions
-are review and publication of this exact D-058 closeout and separately approved
-merge of PR #30.
+are review and separate publication of this exact D-058 post-publication memory
+reconciliation.
 
 ## Exact files changed
 
-The machine manifest records the exact 12-path documentation-only closeout:
+The machine manifest records the exact 11-path documentation-only
+post-publication reconciliation:
 `AGENTS.md`, `CHANGELOG.md`, `DECISIONS.md`, `HANDOFF.md`, `NEXT_STEPS.md`,
-`PLANS.md`, `PROJECT_STATUS.md`, `ROADMAP.md`, the runner guide, the Meta CI
-increment and plan, and this report. No workflow, classifier, repository
-validator, application source, dependency, lockfile, hook, skill, Tauri,
-SQLite, or product path changed.
+`PLANS.md`, `PROJECT_STATUS.md`, `ROADMAP.md`, the Meta CI increment and plan,
+and this report. The runner guide is not changed in this reconciliation. No
+workflow, classifier, repository validator, application source, dependency,
+lockfile, hook, skill, Tauri, SQLite, or product path changed.
 
 ## Exact commands executed
 
@@ -373,14 +431,15 @@ final passing verification and valid marker.
 
 ## Rollback
 
-Before PR #30 merges, revert `9a2c75d` on the feature branch if D-058 must be
-withdrawn. After merge, return to D-057 hosted selectors only after Actions
+After publication, revert squash commit `1780d7f` only through a separately
+reviewed repository change. Return to D-057 hosted selectors only after Actions
 availability is restored and a separate security review approves the
 transition. No product, dependency, database, or native rollback is required.
 
 ## Exact next task
 
-Review the exact 12-path documentation-only D-058 remote-verification closeout
-and the proposed Conventional Commit, then wait for separate staging, commit,
-and push approval. Merge PR #30 only with separate project-owner approval. Do
-not begin ARB-002 or another increment.
+Review the exact 11-path documentation-only D-058 post-publication memory
+reconciliation, confirm the valid marker and protected-path exclusion, and
+propose a descriptive branch name, Conventional Commit, PR title, and PR
+description. Wait for project-owner approval before staging, committing, or
+pushing. Do not begin ARB-002 or another increment.
