@@ -148,6 +148,11 @@ High, unresolved, and unimplemented. No product source,
 dependency, Tauri, storage, permission, identity, cloud, network, gateway, or
 runtime path changes.
 
+The D-062 decision record was published through PR #37 from source commit
+`e39523f` and squash-merged at `c458f27`. Branch Documentation run
+`29705183818` and post-merge Documentation run `29705209977` passed. The source
+and squash trees are identical, and no PR #37 publication action remains.
+
 ### Decision-record verification
 
 The original decision record and amendment pass documentation formatting and
@@ -220,8 +225,8 @@ applicable evidence.
 No D-058, PR #33, or PR #35 publication action and no immediate High-severity
 code remediation remain. The exact 18-path O-006/O-007 provider-boundary
 amendment is published and closed. The D-062 documentation decision record is
-verified complete with advisories across exactly 17 paths and awaits publication
-review. No product or remediation increment is Ready.
+verified complete with advisories, published through PR #37, and closed; no
+publication action remains. No product or remediation increment is Ready.
 D-062's exact identity evidence, O-006's AI-provider configuration, and D-061
 operational evidence still block any live model-networking plan. Legal and
 release owners must separately resolve O-008 and O-009 before their
@@ -248,12 +253,17 @@ provider checks. They are outside this documentation-only validation tier.
 Manual verification pending: none; the project owner approved the decision and
 exact scope.
 
+Publication passed: source commit `e39523f` passed branch Documentation run
+`29705183818`; PR #37 squash-merged it at `c458f27`; post-merge Documentation
+run `29705209977` passed. The dedicated publication-closeout gate preserves the
+original report and records no product or trust-boundary change.
+
 Ready-to-paste resume prompt:
 
 ```text
 Use $session-start.
 
-Review the complete documentation-only O-006 Phase 1 Microsoft personal identity decision. Confirm D-062, the exact 17-path scope, preserved D-060/D-061 and historical reports, passing documentation-tier checks, valid marker, and absence of product-source changes. Propose publication metadata and wait for approval. Do not begin ARB-002 or any identity, cloud, gateway, networking, credential, Keychain, AgentProvider, AI-provider, enterprise, licensing, signing, or notarization implementation.
+Review the complete ten-path documentation-only O-006 Phase 1 identity publication closeout. Confirm source commit e39523f, PR #37, squash commit c458f27, successful Documentation runs 29705183818 and 29705209977, preserved D-060/D-061/D-062 and historical evidence, passing documentation-tier checks, valid marker, and absence of product-source changes. Wait for project-owner direction before any Git publication action. Do not begin ARB-002 or any identity, cloud, gateway, networking, credential, Keychain, AgentProvider, AI-provider, enterprise, licensing, signing, or notarization implementation.
 ```
 
 ## Increment 4V / ARB-001 publication

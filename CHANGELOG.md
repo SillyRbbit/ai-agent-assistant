@@ -4,6 +4,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Published the documentation-only D-062 Phase 1 Microsoft personal identity
+  decision through PR #37 from source commit `e39523f` and squash-merged it at
+  `c458f27`. Branch Documentation run `29705183818` and post-merge
+  Documentation run `29705209977` passed. D-060, D-061, D-062, the original
+  completion report, ARB-002's High unresolved status, and all implementation
+  prohibitions remain unchanged.
 - Selected Microsoft personal identity as the sole Phase 1 identity provider in
   D-062 without implementing authentication. Google and Apple are deferred;
   `offline_access`, persistent sessions, automatic email linking, workforce

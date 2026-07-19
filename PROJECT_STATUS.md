@@ -156,8 +156,9 @@ or notarization was implemented. No PR #33 publication action remains.
   authorized**.
 - O-006 Phase 1 identity decision - **D-062 selects Microsoft personal identity
   as the sole Phase 1 provider; documentation-only record verified complete
-  with advisories and awaiting publication review; implementation and ARB-002
-  remain blocked**.
+  with advisories, published through PR #37, and squash-merged at `c458f27`;
+  implementation and ARB-002 remain blocked, and no publication action
+  remains**.
 
 ## Prompt library capability and evidence
 
@@ -1020,8 +1021,11 @@ Documentation run `29703588215` passed. No publication action remains.
 The separate D-062 decision-record increment passes its exact 17-path
 documentation scope and mandatory
 `o006-phase1-microsoft-personal-identity-decision` gate with `PASS WITH
-ADVISORIES`. It is uncommitted and unpublished. No identity, registration,
-credential, Keychain, gateway, network, AI-provider, or runtime path was added.
+ADVISORIES`. Source commit `e39523f` passed branch Documentation run
+`29705183818`; PR #37 squash-merged it at `c458f27`; post-merge Documentation
+run `29705209977` passed. No publication action remains, and no identity,
+registration, credential, Keychain, gateway, network, AI-provider, or runtime
+path was added.
 
 ## Next action
 
