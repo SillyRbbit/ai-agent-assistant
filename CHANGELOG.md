@@ -4,6 +4,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Published the documentation-only D-058 project-memory reconciliation through
+  PR #31 and squash-merged it at `74a8d2c`. Live governance documents now treat
+  D-058 as closed without requesting another recursive publication closeout;
+  dated plan, increment, and review evidence remains unchanged.
 - Published D-058 through PR #30 from implementation commit `9a2c75d` and
   documentation closeout commit `da08573`, then squash-merged it at `1780d7f`.
   Branch CI run `29670565671`, branch Documentation runs `29670565657` and

@@ -54,8 +54,9 @@ verification. Branch CI run `29670565671` and Documentation runs `29670565657`
 and `29671289962` passed before merge. Post-merge CI run `29672575232` and
 Documentation run `29672575254` also passed. The project owner confirmed both
 runner services satisfy the required isolated, unprivileged host baseline. Its
-gate remains `PASS WITH ADVISORIES`, and the completion marker is re-finalized
-against this exact 11-path documentation-only post-publication reconciliation.
+gate remains `PASS WITH ADVISORIES`. The exact 11-path post-publication
+project-memory reconciliation was published through PR #31 and squash-merged at
+`74a8d2c`; no D-058 publication action remains.
 
 ## Meta risk-based GitHub Actions validation
 
@@ -107,11 +108,20 @@ applicable evidence.
 
 ### Exact next task
 
-Review the exact 11-path documentation-only D-058 post-publication memory
-reconciliation, confirm the valid marker and absence of protected-path changes,
-and propose a descriptive branch name, Conventional Commit, PR title, and PR
-description. Wait for project-owner approval before staging, committing, or
-pushing. Do not begin ARB-002 or another product/remediation increment.
+No D-058 implementation, closeout, or publication action remains. ARB-002 is
+not Ready because O-006 and O-007 and the required project-owner,
+security-owner, and executive-owner threat-model decisions remain unresolved.
+The next possible work is a separately approved documentation-only ARB-002
+threat-model planning increment. Do not begin ARB-002 product implementation,
+live transport, credentials, or another remediation automatically.
+
+Ready-to-paste resume prompt:
+
+```text
+Use $session-start.
+
+Start from clean synchronized main after the D-058 publication closeout. Confirm the current completion marker and reconcile the actual repository state. Verify that no product or remediation increment is Ready and that ARB-002 remains blocked on O-006, O-007, and project-owner, security-owner, and executive-owner threat-model decisions. Recommend only the smallest next decision or planning step and wait for approval. Do not begin ARB-002 implementation, live transport, credentials, commit, push, or merge.
+```
 
 ## Increment 4V / ARB-001 publication
 

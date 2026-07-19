@@ -60,7 +60,8 @@ This file is the ordered implementation queue. Work only on the first item marke
   `eaf6c9f`**.
 - Repository workflow - risk-based GitHub Actions validation:
   **Verified complete with advisories; published through PR #30 and
-  squash-merged at `1780d7f`; valid marker**.
+  squash-merged at `1780d7f`; its post-publication project-memory reconciliation
+  was published through PR #31 and squash-merged at `74a8d2c`**.
 - Meta Increment 8 - Prompt Library Reorganization:
   **Verified complete; published through PR #25 and squash-merged at
   `d26b5e1`**.
@@ -70,23 +71,14 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Queue status
 
-### Review and publish the D-058 post-publication memory reconciliation
-
-**Status:** Implementation commit `9a2c75d` and documentation closeout commit
-`da08573` were squash-merged through PR #30 at `1780d7f`. Branch and post-merge
-CI and Documentation passed with exact Linux runner 21 and macOS runner 22
-assignments. The exact 11-path documentation-only memory reconciliation passes
-focused checks, and the gate is `PASS WITH ADVISORIES` with a valid
-re-finalized marker.
-
-Review the reconciliation and wait for separate branch, staging, commit, and
-publication approval. Do not combine ARB-002 or product work.
-
-### No later remediation is Ready
+### No remediation is Ready
 
 **Status:** Increment 4V / ARB-001 is published at `6e6f91d`; ARB-002 remains
 blocked on O-006 and O-007 plus project-owner, security-owner, and
 executive-owner threat-model decisions.
+
+The D-058 implementation and its post-publication reconciliation are closed;
+no D-058 publication task remains in the queue.
 
 Do not begin ARB-002 automatically. Its next possible step is a separately
 approved documentation-only threat-model planning increment; live transport,

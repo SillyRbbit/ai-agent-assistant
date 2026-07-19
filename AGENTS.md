@@ -80,9 +80,9 @@ classification, documentation, frontend, Linux Rust, and dependency audit and
 macOS runner 22 handling target-Mac Rust. D-058 keeps persistent runners off
 `pull_request` and `pull_request_target` events and changes no application
 behavior, dependency, Tauri configuration, permission, SQLite, or product
-boundary. Its marker is re-finalized against the post-publication
-documentation-only state; ongoing host maintenance and path ownership remain
-advisories.
+boundary. Its post-publication project-memory reconciliation was published
+through PR #31 and squash-merged at `74a8d2c`; no D-058 publication action
+remains. Ongoing host maintenance and path ownership remain advisories.
 
 ## Non-negotiable product boundaries
 
