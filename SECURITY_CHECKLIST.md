@@ -151,11 +151,15 @@ production boundary exists.
 - [ ] External actions use immutable commit digests and are reviewed through
       dependency proposals rather than mutable tags.
 - [ ] Pull-request code is treated as untrusted even when checks pass.
-- [ ] Persistent self-hosted jobs require the repository-specific runner label
-      and do not use `pull_request`; pushes are limited to the documented
-      maintainer-controlled branch families.
-- [ ] The self-hosted machine is dedicated, unprivileged, credential-free, and
-      contains no unrelated sensitive data or trusted-service access.
+- [ ] Persistent self-hosted workflows have no `pull_request` or
+      `pull_request_target` trigger and accept only the trusted branch-push
+      allowlist, schedule, or explicit dispatch defined by D-058.
+- [ ] Path classification is deterministic, includes deletions, and fails
+      closed by running both application jobs for unknown non-documentation
+      paths.
+- [ ] Dependency, workflow, Tauri, IPC, storage, migration, permission, and
+      security-sensitive changes receive every affected application and audit
+      check.
 - [ ] Linux runner success is not substituted for required target-Mac native,
       signing, notarization, installer, or release evidence.
 - [ ] Dependabot proposals remain human-reviewed and cannot write or merge to

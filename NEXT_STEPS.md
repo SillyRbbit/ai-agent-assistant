@@ -58,6 +58,9 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Repository workflow - trusted self-hosted runner routing:
   **Verified complete with advisories and squash-merged through PR #24 at
   `eaf6c9f`**.
+- Repository workflow - risk-based GitHub Actions validation:
+  **Implementation commit `9a2c75d` remotely verified on open PR #30; D-058
+  closeout verified with advisories and valid marker; merge pending**.
 - Meta Increment 8 - Prompt Library Reorganization:
   **Verified complete; published through PR #25 and squash-merged at
   `d26b5e1`**.
@@ -66,6 +69,20 @@ This file is the ordered implementation queue. Work only on the first item marke
   `6e6f91d`**.
 
 ## Queue status
+
+### Review and publish the D-058 remote-verification closeout
+
+**Status:** The original implementation and exact D-058 correction are
+committed and pushed as `9a2c75d` on open PR #30. CI run `29670565671` and
+Documentation run `29670565657` passed as push-triggered executions. Linux
+runner 21 received classification, documentation, frontend, Linux Rust, and
+dependency audit; macOS runner 22 received target-Mac Rust. The exact 12-path
+documentation-only closeout passes its focused checks, and the gate is
+`PASS WITH ADVISORIES` with a valid re-finalized marker.
+
+Review the closeout and wait for separate staging, commit, and push approval.
+Merge PR #30 only with separate approval. Do not combine ARB-002 or product
+work.
 
 ### No later remediation is Ready
 

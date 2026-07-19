@@ -58,10 +58,9 @@ source commit `ec919e9`; hosted CI, Documentation, and Security passed. Its
 `04v` marker remains complete and valid on clean synchronized `main`. The
 original reviewed commit remains preserved at `3440ce9` on
 `codex/feature/bind-terminal-approval-audit-pre-refresh`. Repository self-hosted
-runner routing is verified
-complete with advisories and squash-merged through PR #24 at `eaf6c9f`; CI,
-Documentation, and Security pass on runner 21. Its completion marker was valid
-on clean `eaf6c9f` immediately before the prompt-library gate began. Meta
+runner routing is preserved as historical D-054 evidence and was squash-merged
+through PR #24 at `eaf6c9f`; its three workflows passed on runner 21 before
+later D-057 work superseded active routing. Meta
 Increment 8 Prompt Library Reorganization is verified complete, published
 through PR #25, and squash-merged at `d26b5e1` from verified source commit
 `2d3261a`; hosted CI, Documentation, and Security passed. Its consolidated
@@ -72,6 +71,15 @@ marker is re-finalized against that documentation-only state; the advisory is
 pre-existing stale roadmap wording outside the approved scope. Do not begin
 another product or remediation increment. Current implementation facts and
 future boundaries are authoritative in `ARCHITECTURE.md`.
+
+Meta risk-based GitHub Actions validation is committed and pushed on open PR
+#30 at `9a2c75d`. Push-triggered CI run `29670565671` and Documentation run
+`29670565657` passed. Linux runner 21 executed classification, documentation,
+frontend, Linux Rust, and dependency-audit jobs; macOS runner 22 executed
+target-Mac Rust. D-058 keeps persistent runners off `pull_request` and
+`pull_request_target` events and changes no application behavior, dependency,
+Tauri configuration, permission, SQLite, or product boundary. PR #30 remains
+unmerged and requires separate closeout publication and merge approval.
 
 ## Non-negotiable product boundaries
 
@@ -167,6 +175,13 @@ check as complete.
 
 The authoritative strategy is in `ENGINEERING_GUIDE.md`; exact commands and the
 change-to-test matrix are in `TESTING_GUIDE.md`.
+
+GitHub Actions uses the same risk classes for hosted feedback, but does not
+replace local completion evidence. Documentation-only pull requests run only
+documentation validation. Frontend, Rust, and cross-cutting paths select their
+applicable hosted jobs; manual dispatch is the explicit full hosted fallback.
+When repository paths or boundaries change, update and test both workflow path
+filters and the repository-local classifier in the same increment.
 
 ## Documentation and handoff rules
 

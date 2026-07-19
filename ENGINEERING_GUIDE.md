@@ -87,7 +87,9 @@ boundaries.
 - Keep APIs narrow and make invalid states difficult to represent.
 - Avoid unrelated refactors, generated output, and metadata churn.
 - Keep GitHub workflows read-only, secret-free, digest-pinned, and incapable of
-  committing, pushing, publishing, deploying, signing, or auto-merging.
+  committing, pushing, publishing, deploying, signing, or auto-merging. Never
+  route untrusted pull-request events to persistent self-hosted runners; D-058
+  limits them to reviewed branch pushes, schedule, and explicit dispatch.
 - Add comments only when they explain a non-obvious invariant or boundary.
 - Never claim a command passed unless its actual output was observed.
 
@@ -255,6 +257,41 @@ as applicable. A check omitted because it is outside the affected change class
 is `Not run`, with the risk-based reason recorded; it must not be represented as
 Passed. Do not rerun identical successful checks unless relevant content changed
 afterward.
+
+### GitHub Actions and local responsibility
+
+GitHub Actions provides risk-based pull-request and `main` feedback; it does
+not replace the final local increment gate or target-platform evidence.
+
+- `.github/workflows/documentation.yml` runs Markdown, prompt, link, path,
+  whitespace, YAML-format, and repository-governance checks without application
+  tests or builds.
+- `.github/workflows/ci.yml` uses `scripts/ci_change_scope.py` to select
+  frontend, Rust, and dependency-audit jobs from fixed Git comparisons.
+- Documentation-only paths do not start application CI. Frontend-only and Rust
+  test/example paths remain isolated. IPC, Tauri, policy, approval, storage,
+  migration, dependency, security, CI-workflow, and executable validation
+  paths select every affected application job.
+- Scheduled CI runs only the dependency audit. Manual CI dispatch runs all
+  application jobs. Manual Documentation dispatch runs the documentation tier.
+- The complete `npm run verify` command remains mandatory locally when this
+  policy or the approved increment class requires it, including when hosted
+  path filtering skips unrelated jobs.
+
+Both workflows use exact repository-specific self-hosted selectors. Linux owns
+classification, documentation, frontend, Linux Rust, and dependency audits;
+the target-Mac runner adds macOS Rust validation for Rust-classified changes.
+Both preserve immutable official action SHAs, top-level `contents: read`,
+non-persistent checkout credentials, no secret context, bounded timeouts, and
+concurrency cancellation. They do not upload or cache build output. Update both
+event path filters and classifier fixtures when
+repository structure or trust-boundary ownership changes.
+
+GitHub path-filtered checks are conditional and must not be represented as
+universally enforced branch-protection checks. Remote branch protection,
+rulesets, runner availability, billing, and check requirements require separate
+authenticated evidence. Applicable workflow results remain required review
+evidence even when the hosting plan cannot enforce them.
 
 ## Increment workflow
 

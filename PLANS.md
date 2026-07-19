@@ -4,8 +4,15 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No implementation plan is active. Meta Increment 8 Prompt Library
-Reorganization is verified complete under
+The D-058 dual-self-hosted-runner correction is committed and pushed as
+`9a2c75d` under `docs/plans/meta-risk-based-ci.md` on open PR #30. Successful
+push-triggered CI run `29670565671` and Documentation run `29670565657` prove
+the exact Linux runner 21 and macOS runner 22 assignments. The current exact
+12-path closeout changes documentation only, retains `PASS WITH ADVISORIES`,
+and re-finalizes the valid marker. Closeout publication and merge remain
+separately controlled.
+
+Meta Increment 8 Prompt Library Reorganization is verified complete under
 `docs/increments/meta-prompt-library-reorganization.md`, published through PR
 #25, and squash-merged at `d26b5e1`. It reorganizes only the copy-paste prompt
 library, active guidance references, D-055, current project memory, and
@@ -107,6 +114,7 @@ docs/plans/meta-03-codex-automation.md
 docs/plans/meta-05-repository-health.md
 docs/plans/repository-dependency-baseline-compatibility.md
 docs/plans/meta-07-verified-application-icon-rollout.md
+docs/plans/meta-risk-based-ci.md
 ```
 
 Increments 2C and 2D were verified on the Apple Silicon target Mac.
@@ -138,51 +146,52 @@ A plan must contain:
 
 ## Plan index
 
-| Plan                                           | Status   | Owner              | Last updated |
-| ---------------------------------------------- | -------- | ------------------ | ------------ |
-| Increment 2B-1 SQLite migration skeleton       | Complete | Project maintainer | 2026-07-13   |
-| Increment 2C storage startup integration       | Complete | Project maintainer | 2026-07-13   |
-| Increment 2D menu-bar/window lifecycle         | Complete | Project maintainer | 2026-07-13   |
-| Increment 2E React application shell           | Complete | Project maintainer | 2026-07-13   |
-| Increment 2F mocked interaction shell          | Complete | Project maintainer | 2026-07-13   |
-| Increment 2G integration hardening             | Complete | Project maintainer | 2026-07-13   |
-| Increment 3A in-memory conversation sessions   | Complete | Project maintainer | 2026-07-13   |
-| Increment 3B mock context provenance           | Complete | Project maintainer | 2026-07-13   |
-| Increment 3C simulated tool result             | Complete | Project maintainer | 2026-07-13   |
-| Increment 3D bounded mock-loop completion      | Complete | Project maintainer | 2026-07-14   |
-| Increment 4A gateway protocol contract         | Complete | Project maintainer | 2026-07-14   |
-| Increment 4B local tool-schema validation      | Complete | Project maintainer | 2026-07-14   |
-| Increment 4C trusted policy-input binding      | Complete | Project maintainer | 2026-07-14   |
-| Increment 4D exact approval binding            | Complete | Project maintainer | 2026-07-14   |
-| Increment 4E trusted approval decision source  | Complete | Project maintainer | 2026-07-14   |
-| Increment 4F Cortexa product display rename    | Complete | Project maintainer | 2026-07-14   |
-| Workflow Increment 4G post-increment gate      | Complete | Project maintainer | 2026-07-14   |
-| Increment 4H typed approval-audit adapter      | Complete | Project maintainer | 2026-07-15   |
-| Increment 4I remove generic audit scaffold     | Complete | Project maintainer | 2026-07-15   |
-| Workflow Increment 4J deletion fingerprint     | Complete | Project maintainer | 2026-07-15   |
-| Increment 4K remove legacy provider scaffold   | Complete | Project maintainer | 2026-07-15   |
-| Increment 4L remove legacy memory scaffold     | Complete | Project maintainer | 2026-07-15   |
-| Increment 4M remove legacy platform scaffold   | Complete | Project maintainer | 2026-07-15   |
-| Increment 4N bounded initial gateway request   | Complete | Project maintainer | 2026-07-15   |
-| Increment 4O bound initial gateway turn        | Complete | Project maintainer | 2026-07-15   |
-| Increment 4P schema-bound initial events       | Complete | Project maintainer | 2026-07-15   |
-| Increment 4Q terminal initial function release | Complete | Project maintainer | 2026-07-15   |
-| Increment 4R terminal initial policy binding   | Complete | Project maintainer | 2026-07-15   |
-| Increment 4S terminal approval presentation    | Complete | Project maintainer | 2026-07-15   |
-| Increment 4T terminal approval resolution      | Complete | Project maintainer | 2026-07-15   |
-| Increment 4U approval run termination          | Complete | Project maintainer | 2026-07-15   |
-| Increment 4V terminal approval audit binding   | Complete | Project maintainer | 2026-07-18   |
-| Meta Increment 1 branding foundation           | Complete | Project maintainer | 2026-07-15   |
-| Meta Increment 2 engineering operating system  | Complete | Project maintainer | 2026-07-15   |
-| Meta Increment 3 Codex automation              | Complete | Project maintainer | 2026-07-15   |
-| Meta Increment 4 executive documentation       | Stopped  | Project maintainer | 2026-07-16   |
-| Meta Increment 5 repository health             | Complete | Project maintainer | 2026-07-16   |
-| Meta Increment 6 product readiness audit       | Complete | Project maintainer | 2026-07-16   |
-| Repository dependency baseline compatibility   | Complete | Project maintainer | 2026-07-16   |
-| Meta Increment 7 application icon rollout      | Complete | Project maintainer | 2026-07-16   |
-| Meta Increment 8 Prompt Library Reorganization | Complete | Project maintainer | 2026-07-17   |
-| ARB-022 memory reconciliation                  | Complete | Project maintainer | 2026-07-16   |
-| Repository self-hosted runner routing          | Complete | Project maintainer | 2026-07-17   |
+| Plan                                            | Status   | Owner              | Last updated |
+| ----------------------------------------------- | -------- | ------------------ | ------------ |
+| Increment 2B-1 SQLite migration skeleton        | Complete | Project maintainer | 2026-07-13   |
+| Increment 2C storage startup integration        | Complete | Project maintainer | 2026-07-13   |
+| Increment 2D menu-bar/window lifecycle          | Complete | Project maintainer | 2026-07-13   |
+| Increment 2E React application shell            | Complete | Project maintainer | 2026-07-13   |
+| Increment 2F mocked interaction shell           | Complete | Project maintainer | 2026-07-13   |
+| Increment 2G integration hardening              | Complete | Project maintainer | 2026-07-13   |
+| Increment 3A in-memory conversation sessions    | Complete | Project maintainer | 2026-07-13   |
+| Increment 3B mock context provenance            | Complete | Project maintainer | 2026-07-13   |
+| Increment 3C simulated tool result              | Complete | Project maintainer | 2026-07-13   |
+| Increment 3D bounded mock-loop completion       | Complete | Project maintainer | 2026-07-14   |
+| Increment 4A gateway protocol contract          | Complete | Project maintainer | 2026-07-14   |
+| Increment 4B local tool-schema validation       | Complete | Project maintainer | 2026-07-14   |
+| Increment 4C trusted policy-input binding       | Complete | Project maintainer | 2026-07-14   |
+| Increment 4D exact approval binding             | Complete | Project maintainer | 2026-07-14   |
+| Increment 4E trusted approval decision source   | Complete | Project maintainer | 2026-07-14   |
+| Increment 4F Cortexa product display rename     | Complete | Project maintainer | 2026-07-14   |
+| Workflow Increment 4G post-increment gate       | Complete | Project maintainer | 2026-07-14   |
+| Increment 4H typed approval-audit adapter       | Complete | Project maintainer | 2026-07-15   |
+| Increment 4I remove generic audit scaffold      | Complete | Project maintainer | 2026-07-15   |
+| Workflow Increment 4J deletion fingerprint      | Complete | Project maintainer | 2026-07-15   |
+| Increment 4K remove legacy provider scaffold    | Complete | Project maintainer | 2026-07-15   |
+| Increment 4L remove legacy memory scaffold      | Complete | Project maintainer | 2026-07-15   |
+| Increment 4M remove legacy platform scaffold    | Complete | Project maintainer | 2026-07-15   |
+| Increment 4N bounded initial gateway request    | Complete | Project maintainer | 2026-07-15   |
+| Increment 4O bound initial gateway turn         | Complete | Project maintainer | 2026-07-15   |
+| Increment 4P schema-bound initial events        | Complete | Project maintainer | 2026-07-15   |
+| Increment 4Q terminal initial function release  | Complete | Project maintainer | 2026-07-15   |
+| Increment 4R terminal initial policy binding    | Complete | Project maintainer | 2026-07-15   |
+| Increment 4S terminal approval presentation     | Complete | Project maintainer | 2026-07-15   |
+| Increment 4T terminal approval resolution       | Complete | Project maintainer | 2026-07-15   |
+| Increment 4U approval run termination           | Complete | Project maintainer | 2026-07-15   |
+| Increment 4V terminal approval audit binding    | Complete | Project maintainer | 2026-07-18   |
+| Meta Increment 1 branding foundation            | Complete | Project maintainer | 2026-07-15   |
+| Meta Increment 2 engineering operating system   | Complete | Project maintainer | 2026-07-15   |
+| Meta Increment 3 Codex automation               | Complete | Project maintainer | 2026-07-15   |
+| Meta Increment 4 executive documentation        | Stopped  | Project maintainer | 2026-07-16   |
+| Meta Increment 5 repository health              | Complete | Project maintainer | 2026-07-16   |
+| Meta Increment 6 product readiness audit        | Complete | Project maintainer | 2026-07-16   |
+| Repository dependency baseline compatibility    | Complete | Project maintainer | 2026-07-16   |
+| Meta Increment 7 application icon rollout       | Complete | Project maintainer | 2026-07-16   |
+| Meta Increment 8 Prompt Library Reorganization  | Complete | Project maintainer | 2026-07-17   |
+| ARB-022 memory reconciliation                   | Complete | Project maintainer | 2026-07-16   |
+| Repository self-hosted runner routing           | Complete | Project maintainer | 2026-07-17   |
+| Repository risk-based GitHub Actions validation | Complete | Project maintainer | 2026-07-18   |
 
 ## Meta Increment 1 branding and identity foundation - complete
 

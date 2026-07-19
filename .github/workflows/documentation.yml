@@ -12,12 +12,22 @@ on:
       - "phase*/**"
     paths:
       - "**/*.md"
-      - ".github/**"
-      - ".gitignore"
+      - "**/*.mdx"
+      - "docs/**"
+      - "prompts/**"
+      - ".agents/**"
       - "assets/branding/**"
+      - ".github/**/*.yml"
+      - ".github/**/*.yaml"
+      - ".github/CODEOWNERS"
+      - ".gitignore"
+      - ".prettierignore"
+      - ".prettierrc*"
+      - "LICENSE*"
       - "package.json"
+      - "package-lock.json"
       - "scripts/repository_health.py"
-      - "scripts/tests/**"
+      - "scripts/tests/test_repository_health.py"
   workflow_dispatch:
 
 permissions:
@@ -31,9 +41,9 @@ jobs:
   documentation:
     name: Documentation and repository policy
     runs-on: [self-hosted, Linux, X64, cortexa-ci]
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
-      - name: Verify self-hosted runner prerequisites
+      - name: Verify Linux runner prerequisites
         shell: bash
         run: |
           set -euo pipefail
@@ -41,9 +51,10 @@ jobs:
           command -v git
           command -v python3
 
-      - name: Check out reviewed source
+      - name: Check out reviewed source and comparison history
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Set up pinned Node.js
@@ -55,5 +66,19 @@ jobs:
       - name: Install locked documentation tools
         run: npm ci --ignore-scripts
 
-      - name: Check Markdown, YAML, links, and repository policy
-        run: npm run docs:check && npm run repository:check
+      - name: Check changed lines for whitespace errors
+        env:
+          CI_BASE_SHA: ${{ github.event.before }}
+          CI_EVENT_NAME: ${{ github.event_name }}
+          CI_HEAD_SHA: ${{ github.sha }}
+        run: >-
+          python3 scripts/ci_change_scope.py diff-check
+          --event "${CI_EVENT_NAME}"
+          --base "${CI_BASE_SHA}"
+          --head "${CI_HEAD_SHA}"
+
+      - name: Check Markdown, YAML, links, and prompt paths
+        run: npm run docs:check
+
+      - name: Check repository governance and tracked content
+        run: npm run repository:check

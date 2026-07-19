@@ -22,6 +22,63 @@ def load_module():
 health = load_module()
 
 
+def write_valid_workflows(root: Path) -> None:
+    workflow_root = root / ".github" / "workflows"
+    workflow_root.mkdir(parents=True)
+    shared = (
+        "on:\n"
+        "  push:\n"
+        "    branches:\n"
+        "      - main\n"
+        '      - "codex/**"\n'
+        '      - "feature/**"\n'
+        '      - "fix/**"\n'
+        '      - "refactor/**"\n'
+        '      - "meta/**"\n'
+        '      - "phase*/**"\n'
+        "    paths:\n"
+        '      - "src/**"\n'
+        "  workflow_dispatch:\n"
+        "permissions:\n"
+        "  contents: read\n"
+        "concurrency:\n"
+        "  group: fixture\n"
+        "  cancel-in-progress: true\n"
+    )
+    (workflow_root / "ci.yml").write_text(
+        shared
+        + "  schedule:\n"
+        + '    - cron: "23 13 * * 1"\n'
+        + "jobs:\n"
+        + "  classify:\n"
+        + "    name: Classify change\n"
+        + "    runs-on: [self-hosted, Linux, X64, cortexa-ci]\n"
+        + "    steps:\n"
+        + "      - uses: actions/checkout@"
+        + ("a" * 40)
+        + " # v7\n"
+        + "        with:\n          persist-credentials: false\n"
+        + "      - run: python3 scripts/ci_change_scope.py classify\n"
+        + "      - run: python3 -m unittest discover -s scripts/tests -v\n"
+        + "      - run: python3 -m unittest discover -s .codex/hooks/tests -v\n"
+        + "  frontend:\n    name: Frontend validation\n    runs-on: [self-hosted, Linux, X64, cortexa-ci]\n"
+        + "  rust:\n    name: Linux Rust validation\n    runs-on: [self-hosted, Linux, X64, cortexa-ci]\n"
+        + "  rust-macos:\n    name: Target-Mac Rust validation\n    runs-on: [self-hosted, macOS, X64, cortexa-ci]\n"
+        + "  audit:\n    name: Dependency and secret audit\n    runs-on: [self-hosted, Linux, X64, cortexa-ci]\n"
+        + '  # "src-tauri/**" "assets/branding/**" "package-lock.json" ".prettierrc*" ".codex/**" ".github/workflows/ci.yml" ".github/workflows/documentation.yml"\n',
+        encoding="utf-8",
+    )
+    (workflow_root / "documentation.yml").write_text(
+        shared.replace('      - "src/**"', '      - "**/*.md"')
+        + "jobs:\n"
+        + "  documentation:\n"
+        + "    runs-on: [self-hosted, Linux, X64, cortexa-ci]\n"
+        + "    steps:\n"
+        + '      - run: npm run docs:check && npm run repository:check # "prompts/**" ".agents/**" "LICENSE*"\n',
+        encoding="utf-8",
+    )
+
+
 class RepositoryHealthTests(unittest.TestCase):
     def test_links_accept_existing_targets_and_ignore_fenced_examples(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -98,97 +155,117 @@ class RepositoryHealthTests(unittest.TestCase):
 
             self.assertTrue(any("not-present" in finding.detail for finding in findings))
 
-    def test_workflow_check_accepts_immutable_read_only_action(self) -> None:
+    def test_prompt_check_accepts_metadata_and_declared_placeholders(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            path = root / ".github" / "workflows" / "ci.yml"
+            path = root / "prompts" / "increments" / "fixture.md"
             path.parent.mkdir(parents=True)
             path.write_text(
-                "permissions:\n  contents: read\njobs:\n  check:\n    steps:\n"
-                "      - uses: actions/checkout@" + ("a" * 40) + " # v6\n"
-                "        with:\n          persist-credentials: false\n",
+                "# Fixture\n\n"
+                "- **Category:** Increment\n"
+                "- **Purpose:** Test.\n"
+                "- **Use when:** Testing.\n"
+                "- **Do not use when:** Not testing.\n"
+                "- **Required inputs:** `{{VALUE}}`.\n"
+                "- **Expected outputs:** Result.\n"
+                "- **Related skills:** None.\n"
+                "- **Related prompts:** None.\n"
+                "- **Last reviewed:** 2026-07-18\n\n"
+                "## Prompt\n\n```text\nUse {{VALUE}}.\n```\n",
                 encoding="utf-8",
             )
+
+            self.assertEqual(health.prompt_findings(root), ())
+
+    def test_prompt_check_rejects_missing_metadata_and_undeclared_placeholder(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = root / "prompts" / "fixture.md"
+            path.parent.mkdir(parents=True)
+            path.write_text(
+                "# Fixture\n\n- **Required inputs:** None.\n\n"
+                "## Prompt\n\n```text\nUse {{VALUE}}.\n```\n",
+                encoding="utf-8",
+            )
+
+            findings = health.prompt_findings(root)
+
+            self.assertTrue(any("required metadata" in finding.detail for finding in findings))
+            self.assertTrue(any("VALUE" in finding.detail for finding in findings))
+
+    def test_prompt_check_rejects_stale_active_prompt_path(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "prompts").mkdir()
+            (root / "prompts" / "README.md").write_text(
+                "Use `prompts/removed.md`.\n", encoding="utf-8"
+            )
+
+            findings = health.prompt_findings(root)
+
+            self.assertTrue(any("stale prompt path" in finding.detail for finding in findings))
+
+    def test_workflow_check_accepts_risk_based_dual_runner_workflows(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_workflows(root)
 
             self.assertEqual(health.workflow_findings(root), ())
 
     def test_workflow_check_rejects_mutable_action_and_write_permission(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
+            write_valid_workflows(root)
             path = root / ".github" / "workflows" / "ci.yml"
-            path.parent.mkdir(parents=True)
             path.write_text(
-                "permissions:\n  contents: write\njobs:\n  check:\n    steps:\n"
-                "      - uses: actions/checkout@v6\n",
+                path.read_text(encoding="utf-8")
+                .replace("contents: read", "contents: write")
+                .replace("actions/checkout@" + ("a" * 40), "actions/checkout@v7"),
                 encoding="utf-8",
+            )
+
+            details = {finding.detail for finding in health.workflow_findings(root)}
+
+            self.assertIn("write workflow permission is prohibited", details)
+            self.assertIn("action reference is not pinned to an immutable digest", details)
+
+    def test_workflow_check_rejects_hosted_runner_and_pull_request_trigger(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_workflows(root)
+            path = root / ".github" / "workflows" / "ci.yml"
+            path.write_text(
+                path.read_text(encoding="utf-8")
+                .replace("  push:\n", "  pull_request:\n", 1)
+                .replace(
+                    "runs-on: [self-hosted, Linux, X64, cortexa-ci]",
+                    "runs-on: ubuntu-latest",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+
+            details = {finding.detail for finding in health.workflow_findings(root)}
+
+            self.assertTrue(
+                any("must not subscribe to pull_request" in detail for detail in details),
+            )
+            self.assertIn(
+                "runner selector is not an approved dedicated Cortexa runner",
+                details,
+            )
+
+    def test_workflow_check_rejects_unexpected_workflow(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_workflows(root)
+            (root / ".github" / "workflows" / "extra.yml").write_text(
+                "permissions:\n  contents: read\n", encoding="utf-8"
             )
 
             findings = health.workflow_findings(root)
 
-            self.assertEqual(len(findings), 2)
-
-    def test_workflow_check_accepts_allowlisted_repository_runner(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            path = root / ".github" / "workflows" / "ci.yml"
-            path.parent.mkdir(parents=True)
-            path.write_text(
-                "on:\n  push:\n    branches:\n"
-                "      - main\n"
-                '      - "codex/**"\n'
-                '      - "feature/**"\n'
-                '      - "fix/**"\n'
-                '      - "refactor/**"\n'
-                '      - "meta/**"\n'
-                '      - "phase*/**"\n'
-                "  workflow_dispatch:\n"
-                "jobs:\n  verify:\n"
-                "    runs-on: [self-hosted, Linux, X64, cortexa-ci]\n",
-                encoding="utf-8",
-            )
-
-            self.assertEqual(health.workflow_findings(root), ())
-
-    def test_workflow_check_rejects_unguarded_or_generic_self_hosted_runner(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            path = root / ".github" / "workflows" / "ci.yml"
-            path.parent.mkdir(parents=True)
-            path.write_text(
-                "jobs:\n  verify:\n    runs-on: [self-hosted, Linux, X64]\n",
-                encoding="utf-8",
-            )
-
-            findings = health.workflow_findings(root)
-
-            self.assertEqual(
-                {finding.detail for finding in findings},
-                {
-                    "self-hosted job must require the exact repository runner labels",
-                    "self-hosted workflow must exclude pull requests and restrict push branches",
-                },
-            )
-
-    def test_workflow_check_rejects_pull_request_on_exact_repository_runner(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            path = root / ".github" / "workflows" / "ci.yml"
-            path.parent.mkdir(parents=True)
-            path.write_text(
-                "on:\n  pull_request:\n  workflow_dispatch:\n"
-                "jobs:\n  verify:\n"
-                "    runs-on: [self-hosted, Linux, X64, cortexa-ci]\n",
-                encoding="utf-8",
-            )
-
-            findings = health.workflow_findings(root)
-
-            self.assertEqual(
-                {finding.detail for finding in findings},
-                {
-                    "self-hosted workflow must exclude pull requests and restrict push branches"
-                },
-            )
+            self.assertTrue(any("unexpected workflow" in finding.detail for finding in findings))
 
 
 if __name__ == "__main__":

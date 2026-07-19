@@ -34,12 +34,20 @@ squash-merged through PR #23 at `6e6f91d`** from reconstructed source commit
 remains complete and valid.
 
 Repository self-hosted runner routing and its approved private-only portability
-correction are **verified complete with advisories and squash-merged through PR
-#24 at `eaf6c9f`**. Runner 21 is online with the exact `self-hosted`, `Linux`,
-`X64`, and `cortexa-ci` labels. The managed service owns the sole session with
-the correct Rustup/Cargo PATH. CI, Documentation, and Security passed on final
-branch commit `cfa976f`. The completion marker remained valid on clean merged
-`main` before Meta Increment 8 began.
+correction remain **verified D-054 history squash-merged through PR #24 at
+`eaf6c9f`**. D-057's hosted routing is also historical after GitHub rejected
+both PR #30 jobs before allocation because the Actions minute or spending limit
+was exhausted. D-058 now authorizes active risk-based routing across Linux
+runner 21 and macOS runner 22.
+
+Meta risk-based GitHub Actions validation and the D-058 correction are committed
+and pushed as `9a2c75d` on open PR #30. The original 29-path scope and bounded
+22-path correction passed complete local verification. Push-triggered CI run
+`29670565671` and Documentation run `29670565657` passed with the exact Linux
+runner 21 and macOS runner 22 assignments. The project owner confirmed the
+required isolated, unprivileged host baseline. The gate remains `PASS WITH
+ADVISORIES`, and its marker is re-finalized against the 12-path
+documentation-only closeout. PR #30 remains unmerged.
 
 Meta Increment 8 Prompt Library Reorganization is **verified complete,
 published through PR #25, and squash-merged at `d26b5e1`** from verified source
@@ -115,6 +123,9 @@ wording outside the approved scope.
   PR #22 and squash-merged at `7c79e65`**.
 - Repository workflow: trusted self-hosted runner routing - **verified complete
   with advisories and squash-merged through PR #24 at `eaf6c9f`**.
+- Repository workflow: risk-based GitHub Actions validation - **committed on
+  open PR #30 at `9a2c75d`; D-058 correction verified locally and remotely with
+  advisories and valid marker; merge pending**.
 
 ## Prompt library capability and evidence
 
@@ -131,25 +142,33 @@ wording outside the approved scope.
   repository, complete application, and Tauri no-bundle checks pass. The
   complete diff contains no product-source or runtime change.
 
-## Self-hosted runner capability and evidence
+## GitHub validation capability and evidence
 
-- The registered repository runner is online, idle, Linux x64, version
-  `2.335.1`, and has the repository-specific `cortexa-ci` label in addition to
-  GitHub's three default labels.
-- All three workflows select the exact four-label identity and prevent fork or
-  dependency-bot pull-request execution by omitting `pull_request` and allowing
-  pushes only to documented maintainer-controlled branch families.
-- Workflow permissions remain `contents: read`; no secrets, write operations,
-  publication steps, mutable actions, or persisted checkout credentials were
-  added.
-- Repository-health regression tests accept only the exact selector and trust
-  condition. The complete local `npm run verify` passes.
-- Final Security run `29630372253`, Documentation run `29630372279`, and CI run
-  `29630372265` pass on runner 21 for branch commit `cfa976f`; PR #24 is
-  squash-merged at `eaf6c9f`.
-- The exact private-only correction passes focused tests, strict Clippy,
-  complete target-Mac verification, and complete Linux verification. Linux
-  results do not replace target-Mac native evidence.
+- Active CI and Documentation use D-058's exact
+  Linux and macOS `cortexa-ci` selectors with `contents: read`, immutable
+  official action SHAs, disabled checkout credential persistence, concurrency
+  cancellation, bounded timeouts, no secrets, and no repository-write or
+  publication step.
+- Event filters prevent Markdown-only work from starting Application CI. A
+  standard-library fixed-SHA classifier selects frontend, Rust, and audit jobs;
+  unknown non-documentation paths fail closed.
+- Seventeen classifier cases cover documentation, frontend, application brand
+  assets, Rust, IPC, security-sensitive Rust, dependencies, workflow and hook
+  governance, push ranges, manual dispatch, schedule, deletion, and unsafe
+  paths.
+- The former weekly Security workflow remains consolidated into CI's audit job
+  with the exact D-025/D-046 RustSec baseline. Repository health accepts only
+  the two active workflows, exact runner selectors, and trusted push allowlist;
+  it rejects pull-request triggers, mutable actions, write permission,
+  unexpected workflows, and unapproved selectors.
+- Automated D-058 local verification and required project-owner host-isolation
+  confirmation pass. CI run `29670565671` and Documentation run `29670565657`
+  passed as push-triggered executions for `9a2c75d`. Linux runner 21 handled
+  classification, documentation, frontend, Linux Rust, and dependency audit;
+  macOS runner 22 handled target-Mac Rust. The marker is complete and valid
+  after documentation-only closeout re-finalization.
+- D-054 and D-057 remain preserved in dated records; returning to hosted
+  routing requires a separate security decision.
 
 ## Repository dependency baseline compatibility evidence
 
@@ -921,11 +940,10 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Review and publish only the trusted self-hosted runner routing increment. Confirm
-CI, Documentation, and Security execute successfully on runner 21, then finalize
-its report and marker. After that increment is merged, update open PR #23 onto
-the new `main` and rerun its existing verified 4V scope. Do not begin ARB-002 or
-another remediation.
+Review the exact 12-path D-058 documentation-only remote-verification closeout
+and wait for separate staging, commit, and push approval. Merge PR #30 only
+with separate project-owner approval. Do not begin ARB-002 or another
+product/remediation increment.
 
 ## Phase 4 planning result
 

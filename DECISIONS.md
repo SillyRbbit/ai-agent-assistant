@@ -1571,7 +1571,8 @@ Consequences:
 
 Date: 2026-07-17
 Status: Accepted; verified implementation squash-merged through PR #24 at
-`eaf6c9f`
+`eaf6c9f`; original active routing superseded by D-057, with its trust controls
+reused and extended by D-058
 
 Decision: assign the repository-specific `cortexa-ci` custom label to the
 registered Linux x64 runner and require the exact
@@ -1697,6 +1698,116 @@ Consequences:
   linter settings, and manual target-platform requirements remain unchanged.
 - The preserved stash containing an earlier draft is not applied because it
   also contains stale Meta Increment 8 state.
+
+## D-057 - Use risk-based GitHub-hosted validation for untrusted changes
+
+Date: 2026-07-18
+Status: Accepted historical design; active routing superseded by D-058 after
+GitHub rejected both PR #30 jobs before allocation because the account Actions
+minute or spending limit was exhausted
+
+Decision: replace the three D-054 persistent-runner workflows with two
+read-only workflows on ephemeral GitHub-hosted `ubuntu-latest` runners.
+Documentation validates Markdown, prompts, project memory, links, paths, YAML,
+and repository governance without application builds. Application CI uses a
+standard-library classifier over fixed Git SHAs to select frontend, Rust, and
+dependency-audit jobs. Unknown non-documentation paths fail closed to both
+application jobs. Security-sensitive paths also select the audit job.
+
+Consolidate the former weekly Security workflow into CI's dependency-audit job.
+Preserve D-025's exact two-vulnerability RustSec baseline and D-046's exact
+18-warning baseline, immutable official action SHAs, `contents: read`, disabled
+checkout credential persistence, no repository secrets, concurrency
+cancellation, bounded timeouts, and the prohibition on repository writes,
+publication, deployment, signing, and notarization.
+
+The workflows run for pull requests targeting `main`, pushes to `main`, and
+explicit dispatch; CI retains the weekly audit schedule. Event-level path
+filters prevent documentation-only changes from starting Application CI.
+Classifier rules, workflow paths, focused fixtures, and the testing matrix must
+change together when repository structure or boundary ownership changes.
+
+Rationale: D-054 restored checks during a GitHub-hosted runner availability
+problem, but a persistent machine is an inappropriate default for untrusted
+pull-request code and forced the full suite for unrelated changes. Ephemeral
+hosted runners restore pull-request validation while D-056's risk classes avoid
+unnecessary compilation and preserve fail-closed behavior for ambiguous paths.
+
+Consequences:
+
+- D-054 remains historical and rollback evidence. The registered self-hosted
+  runner is not selected by active workflows and requires a separate security
+  decision before reuse.
+- GitHub Actions does not replace the local final increment gate or target-Mac
+  native, signing, notarization, installer, and release evidence.
+- Path-filtered workflows are conditional and cannot be represented as
+  universal branch-protection checks because a skipped required workflow may
+  remain pending. Require each applicable job during review and use manual
+  dispatch plus the local gate for ambiguous scope.
+- Remote rulesets, branch protection, billing, runner availability, and hosted
+  execution are not proven by local YAML or command validation. Hosted results
+  remain pending until publication and actual GitHub runs.
+- The official checkout and Node setup actions are pinned by full commit SHA.
+  No application source, product behavior, dependency version, lockfile, Tauri
+  boundary, capability, permission, CSP, identifier, or SQLite schema changes.
+
+## D-058 - Route risk-based validation across dedicated Linux and macOS runners
+
+Date: 2026-07-18
+Status: Accepted; implementation commit `9a2c75d` and remote verification pass
+on open PR #30; merge pending
+
+Decision: preserve D-057's two-workflow risk classification and consolidated
+dependency audit, but route eligible jobs to the two registered
+repository-specific self-hosted runners. The exact Linux selector is
+`[self-hosted, Linux, X64, cortexa-ci]`; the exact target-Mac selector is
+`[self-hosted, macOS, X64, cortexa-ci]`. Linux owns classification, repository
+policy, documentation, frontend, Linux Rust, and dependency-audit jobs.
+Rust-classified changes also run strict Clippy and all Rust targets on macOS so
+target-gated native code is compiled and tested.
+
+The workflows must not subscribe to `pull_request` or `pull_request_target`.
+Eligible pushes are limited to `main`, `codex/**`, `feature/**`, `fix/**`,
+`refactor/**`, `meta/**`, and `phase*/**`; CI retains its weekly dependency
+audit schedule and both workflows retain explicit dispatch. Fork,
+external-contributor, and dependency-bot changes must be reviewed and
+reproduced on a maintainer-controlled allowlisted branch before either
+persistent runner executes them.
+
+Preserve top-level `contents: read`, no secret context, immutable official
+action SHAs, disabled checkout credentials, fixed Git commands and validated
+SHAs/paths, concurrency cancellation, bounded timeouts, no `sudo`, and the
+prohibition on repository writes, publication, deployment, signing, or
+notarization. Host packages and runner services are provisioned outside
+workflow execution under dedicated unprivileged accounts.
+
+Rationale: the D-057 workflows were locally valid, but GitHub rejected both
+PR #30 hosted jobs before runner allocation because the account Actions minute
+or spending limit was exhausted. Reusing the registered runners restores
+validation without weakening D-056's risk-based selection. Adding the macOS
+job preserves Linux portability checks while compiling target-gated native Rust
+on the product platform.
+
+Consequences:
+
+- Push-triggered CI run `29670565671` and Documentation run `29670565657`
+  passed for `9a2c75d`. Linux runner 21 executed classification,
+  documentation, frontend, Linux Rust, and dependency audit; macOS runner 22
+  executed target-Mac Rust. The run listing for that commit contains only the
+  two push-triggered workflows.
+- Persistent runners are not ephemeral security boundaries. Trusted writer
+  access, workflow review, host isolation, patching, workspace cleanup, and
+  incident response remain mandatory controls.
+- Pull-request checks are produced only after a reviewed commit is pushed to an
+  allowlisted repository branch. Missing checks on an untrusted PR are never
+  approval to merge.
+- Linux and target-Mac Rust checks complement each other. Neither proves native
+  UI behavior, signing, notarization, installer behavior, or release readiness.
+- D-054 and D-057 remain dated historical and rollback evidence. Returning to
+  hosted runners after billing or minute availability is restored requires a
+  separate reviewed routing change.
+- No application source, product behavior, dependency version, lockfile, Tauri
+  boundary, capability, permission, CSP, identifier, or SQLite schema changes.
 
 ## Open decisions
 

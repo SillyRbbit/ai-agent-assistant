@@ -4,6 +4,27 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Pushed D-058 implementation commit `9a2c75d` to PR #30 and verified successful
+  push-triggered CI run `29670565671` and Documentation run `29670565657`.
+  Linux runner 21 executed classification, documentation, frontend, Linux Rust,
+  and dependency audit; macOS runner 22 executed target-Mac Rust. PR #30 remains
+  open and unmerged pending separate documentation-closeout publication and
+  merge approval.
+- Replaced blanket validation with two read-only, risk-based workflows.
+  Documentation-only changes run focused documentation and repository checks;
+  application changes select frontend, Linux Rust, target-Mac Rust, and
+  dependency-audit jobs from a deterministic fail-closed classifier.
+- Consolidated the weekly JavaScript and Rust advisory checks into CI, added 16
+  classifier cases and expanded repository-health coverage to 37 tests, pinned
+  official actions by verified v7.0.0 commit SHA, and preserved the complete
+  local increment gate. D-058 adds a direct push-range fixture, raising the
+  classifier suite to 17 cases and repository tests to 38.
+- Recorded the failed PR #30 hosted allocation caused by exhausted Actions
+  minutes or spending limit and routed trusted pushes to exact Linux and macOS
+  `cortexa-ci` selectors under D-058. Persistent runners receive no pull-request
+  event, secret, write, `sudo`, deployment, or publication path. No product
+  source, dependency, lockfile, Tauri boundary, permission, CSP, or SQLite
+  behavior changed.
 - Published Increment 4V / ARB-001 through PR #23 from reconstructed source
   commit `ec919e9`; hosted CI, Documentation, and Security passed before the
   exact 19-path remediation was squash-merged at `6e6f91d`. The `04v` marker

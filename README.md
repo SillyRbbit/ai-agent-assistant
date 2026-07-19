@@ -2,7 +2,6 @@
 
 [![CI](https://github.com/SillyRbbit/ai-agent-assistant/actions/workflows/ci.yml/badge.svg)](https://github.com/SillyRbbit/ai-agent-assistant/actions/workflows/ci.yml)
 [![Documentation](https://github.com/SillyRbbit/ai-agent-assistant/actions/workflows/documentation.yml/badge.svg)](https://github.com/SillyRbbit/ai-agent-assistant/actions/workflows/documentation.yml)
-[![Security](https://github.com/SillyRbbit/ai-agent-assistant/actions/workflows/security.yml/badge.svg)](https://github.com/SillyRbbit/ai-agent-assistant/actions/workflows/security.yml)
 
 <img src="assets/branding/logo-primary.png" alt="Cortexa logo" width="144" />
 
@@ -118,10 +117,14 @@ npm run repository:check
 npm run build
 ```
 
-The repository also defines read-only [CI](.github/workflows/ci.yml),
-[documentation](.github/workflows/documentation.yml), and
-[security](.github/workflows/security.yml) workflows. A green development build
-is not a signed, notarized, or supported production release.
+The repository defines read-only, risk-based [application
+CI](.github/workflows/ci.yml) and
+[documentation](.github/workflows/documentation.yml) workflows. Application CI
+classifies source changes into frontend, Rust, cross-cutting, and dependency
+audit jobs; documentation-only changes use the smaller documentation workflow.
+GitHub checks complement rather than replace the local final increment gate. A
+green development build is not a signed, notarized, or supported production
+release.
 
 ## Contributing and planning
 

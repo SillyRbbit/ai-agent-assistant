@@ -1,22 +1,35 @@
-# Self-hosted GitHub Actions runner
+# Self-hosted GitHub Actions runners
 
-Status: Repository operating standard
+Status: Active under D-058
 
-This repository routes CI, documentation, and security workflows to one
-repository-scoped Linux x64 runner. The runner is a persistent build machine,
-not an isolated security boundary and not target-macOS evidence.
+Active CI and Documentation workflows use two repository-scoped persistent
+runners. Runner 21 is Linux x64 and owns classification, documentation,
+frontend, Linux Rust, and dependency audits. Runner 22 is macOS x64 and adds
+target-Mac Rust validation whenever the classifier selects Rust.
+
+Neither runner is an isolated security boundary. The workflows therefore do
+not subscribe to `pull_request` or `pull_request_target`. D-058 is the active
+routing decision; D-054 and D-057 remain historical and rollback evidence.
+
+## Active configuration
 
 ## Required labels
 
-Every repository workflow must request all four labels:
+The Linux runner requires:
 
 ```yaml
 runs-on: [self-hosted, Linux, X64, cortexa-ci]
 ```
 
-`self-hosted`, `Linux`, and `X64` are GitHub-managed labels. `cortexa-ci` is the
-repository-specific custom label. Reapply the custom label when replacing or
-reregistering the runner.
+The target-Mac runner requires:
+
+```yaml
+runs-on: [self-hosted, macOS, X64, cortexa-ci]
+```
+
+`self-hosted`, the operating-system label, and `X64` are GitHub-managed labels.
+`cortexa-ci` is repository-specific. Reapply it when replacing or
+reregistering either runner.
 
 List the registered runner and its labels:
 
@@ -32,9 +45,34 @@ gh api --method POST \
   -f 'labels[]=cortexa-ci'
 ```
 
+As verified through the GitHub API on 2026-07-18, runner 21
+`henry-dang-HP-Elite-Slice` and runner 22 `Henrys-MacBook-Pro` were online,
+idle, and carried their exact selectors. Remote status is transient and must be
+checked again before relying on a run.
+
+## Verified PR #30 execution
+
+D-058 implementation commit `9a2c75d` produced two successful push-triggered
+workflows on 2026-07-18:
+
+- CI run `29670565671`: classification job `88148646821`, frontend job
+  `88148677830`, Linux Rust job `88148677826`, and dependency-audit job
+  `88148677832` ran on Linux runner 21 `henry-dang-HP-Elite-Slice` with labels
+  `[self-hosted, Linux, X64, cortexa-ci]`.
+- Documentation run `29670565657`: documentation job `88148646740` ran on
+  Linux runner 21 with the same exact selector.
+- CI job `88148677829`: target-Mac Rust ran on macOS runner 22
+  `Henrys-MacBook-Pro` with labels
+  `[self-hosted, macOS, X64, cortexa-ci]`.
+
+The GitHub run listing for `9a2c75d` contains only those two `push` events. No
+`pull_request` execution is claimed or authorized. This proves the reviewed
+D-058 assignment for that commit, not future runner health or release
+readiness.
+
 ## Trust policy
 
-The runner may execute only:
+The runners may execute only:
 
 - pushes to `main`, `codex/**`, `feature/**`, `fix/**`, `refactor/**`,
   `meta/**`, or `phase*/**`;
@@ -50,8 +88,8 @@ branch, and run the complete checks there.
 The trigger allowlist is a repository guardrail, not isolation from a trusted
 writer who can change and push the workflow itself. Limit write access, require
 review of `.github/workflows/`, and do not place production credentials or
-unrelated sensitive material on the runner host. Do not add `pull_request` back
-while this persistent runner is selected.
+unrelated sensitive material on either runner host. Do not add `pull_request`
+while persistent runners are selected.
 
 ## Host baseline
 
@@ -60,13 +98,19 @@ account must not have interactive `sudo`, production credentials, SSH keys,
 cloud metadata access, personal files, mounted production data, or access to
 other trusted services.
 
-The host must provide:
+Both hosts must provide Git, Bash, Python 3, outbound HTTPS, and the GitHub
+runner service. The Linux host must also provide:
 
-- Git, Bash, Python 3, `curl`, and `file`;
+- `curl` and `file`;
 - Rustup with Cargo available to the runner service account;
 - `pkg-config` and the Tauri v2 Linux development packages; and
-- outbound HTTPS access required by GitHub Actions, npm, Rustup, Cargo, and the
-  explicit dependency-audit jobs.
+- access required by npm, Rustup, Cargo, and the explicit dependency-audit
+  jobs.
+
+The macOS host must provide Xcode Command Line Tools and Rustup with Cargo
+available to the runner service account. Native UI, signing, notarization, and
+installer checks remain manual or release-specific; the target-Mac workflow
+does not claim them.
 
 For Debian or Ubuntu, install the Tauri prerequisites outside workflow
 execution:
@@ -86,18 +130,17 @@ sudo apt install \
   wget
 ```
 
-The workflows install the pinned Node.js version, the pinned Rust toolchain,
-locked npm dependencies, and the pinned Cargo audit tool. They do not mutate
-system packages or require `sudo`.
+The workflows install the pinned Node.js version where needed, the pinned Rust
+toolchain, locked npm dependencies, and the pinned Cargo audit tool. They do not
+mutate system packages or require `sudo`.
 
-## Verification
+## Active verification
 
-Before relying on the runner:
+For each later workflow or runner change:
 
-1. Confirm the runner is `online`, idle, and has all four labels.
+1. Confirm both runners are `online`, idle, and have their exact labels.
 2. Push the reviewed workflow branch only after local checks pass.
-3. Confirm CI, Documentation, and Security jobs name the intended runner and
-   complete successfully.
+3. Confirm Linux jobs name runner 21 and target-Mac Rust names runner 22.
 4. Confirm fork and dependency-bot pull requests do not receive the runner.
 5. Continue to run native menus, windows, dialogs, icons, signing, notarization,
    and installer checks on a target Mac.
@@ -114,15 +157,17 @@ Before relying on the runner:
 - Prefer an ephemeral runner with a clean host lifecycle when the repository
   begins accepting untrusted pull requests.
 
-## Rollback
+## Return to hosted runners
 
-Restore the previous hosted `runs-on` values, remove the self-hosted trust
-conditions and preflight steps, and remove the `cortexa-ci` label:
+After Actions minute or billing availability is restored, a separately
+reviewed decision may restore hosted `runs-on` values and pull-request triggers.
+Only after active workflows no longer select the persistent hosts, remove the
+`cortexa-ci` label from each runner:
 
 ```bash
 gh api --method DELETE \
   repos/SillyRbbit/ai-agent-assistant/actions/runners/RUNNER_ID/labels/cortexa-ci
 ```
 
-Run local repository checks and hosted workflow checks before treating rollback
-as complete.
+Run local repository checks and actual hosted workflow checks before treating
+the transition as complete.

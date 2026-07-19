@@ -31,11 +31,11 @@ is verified complete and published through PR #23. Reconstructed source commit
 `codex/feature/bind-terminal-approval-audit-pre-refresh`, and the `04v` marker
 remains complete and valid on clean synchronized `main`.
 
-Repository self-hosted runner routing is verified complete with advisories and
-squash-merged through PR #24 at `eaf6c9f`. The final branch commit was
-`cfa976f`; CI, Documentation, and Security passed on runner 21 before merge.
-The `repository-self-hosted-runner` marker remained valid on clean synchronized
-`main` immediately before the prompt-library gate began.
+Repository self-hosted runner routing remains preserved as verified D-054
+history squash-merged through PR #24 at `eaf6c9f`. D-057's hosted design is now
+also historical after GitHub rejected both PR #30 jobs before allocation because
+the account Actions minute or spending limit was exhausted. D-058 authorizes
+risk-based routing across registered Linux runner 21 and macOS runner 22.
 
 Meta Increment 8 Prompt Library Reorganization is verified complete and
 published. Verified source commit `2d3261a` passed hosted CI, Documentation,
@@ -45,6 +45,66 @@ before file moves, its consolidated result is `PASS`, and its completion marker
 was complete and valid on clean `d26b5e1` immediately before this
 post-publication project-memory sync. No product source, behavior, dependency,
 Tauri, storage, permission, skill, or hook changed.
+
+Meta risk-based GitHub Actions validation and the exact D-058 correction are
+committed and pushed as `9a2c75d` on open PR #30. Its original 29-path
+implementation and bounded 22-path correction passed complete local
+verification. Push-triggered CI run `29670565671` and Documentation run
+`29670565657` passed. The project owner confirmed both runner services satisfy
+the required isolated, unprivileged host baseline. Its gate result remains
+`PASS WITH ADVISORIES`, and the completion marker is re-finalized against this
+documentation-only remote-verification closeout. PR #30 remains unmerged.
+
+## Meta risk-based GitHub Actions validation
+
+### D-058 correction
+
+- Exactly two workflows remain. Linux runner 21 owns classification,
+  documentation, frontend, Linux Rust, and dependency audits. macOS runner 22
+  adds target-Mac strict Clippy and all-target Rust tests.
+- Neither workflow subscribes to `pull_request` or `pull_request_target`.
+  Eligible pushes remain limited to `main`, `codex/**`, `feature/**`, `fix/**`,
+  `refactor/**`, `meta/**`, and `phase*/**`; CI retains schedule and explicit
+  dispatch.
+- Read-only permissions, immutable action SHAs, disabled checkout credentials,
+  no secrets, no `sudo`, fixed Git arguments, validated SHAs/paths, risk-based
+  classification, and the consolidated dependency audit remain intact.
+- A focused push-range classifier fixture raises the classifier suite to 17
+  cases and the repository suite to 38 tests.
+- No application source, dependency, lockfile, Tauri boundary, capability,
+  permission, CSP, SQLite, identifier, hook, skill, or product behavior changed.
+
+### Verification state
+
+Passed: mandatory gate begin, workflow YAML, 17 classifier cases, 38 repository
+tests, 28 hook tests, repository policy, complete `npm run verify`, exact
+all-target Rust tests, documentation, secret, link, protected-path, diff,
+architecture, security, code-health, technical-debt, and readiness reviews.
+
+Remote passed: CI run `29670565671` and Documentation run `29670565657` were
+both successful `push` events for `9a2c75d`. Linux runner 21
+`henry-dang-HP-Elite-Slice` ran classification, documentation, frontend, Linux
+Rust, and dependency audit. macOS runner 22 `Henrys-MacBook-Pro` ran target-Mac
+Rust. The workflow listing for that commit contains no `pull_request` event.
+
+Failed: the original hosted PR jobs failed before runner allocation because of
+the GitHub Actions limit; this is the trigger for D-058, not a repository-step
+failure.
+
+Manual passed: the project owner confirmed both runner services use dedicated
+unprivileged accounts with no interactive `sudo`, personal files, SSH keys,
+production credentials, cloud metadata, or mounted sensitive data. No product
+manual check applies. The documentation-only closeout does not rerun product
+checks; the passing local implementation gate and remote jobs remain the
+applicable evidence.
+
+### Exact next task
+
+Review the exact 12-path documentation-only D-058 remote-verification closeout
+and the proposed Conventional Commit, then wait for separate staging, commit,
+and push approval. After closeout publication, merge PR #30 only with separate
+project-owner approval. Do not begin ARB-002 or another product/remediation
+increment.
 
 ## Increment 4V / ARB-001 publication
 

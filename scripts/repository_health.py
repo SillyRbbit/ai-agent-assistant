@@ -25,15 +25,40 @@ ACTION_USE = re.compile(
 IMMUTABLE_ACTION = re.compile(r"^[^@\s]+@[0-9a-fA-F]{40}$")
 IMMUTABLE_CONTAINER = re.compile(r"^docker://[^@\s]+@sha256:[0-9a-fA-F]{64}$")
 WRITE_PERMISSION = re.compile(r"^\s*[a-z][a-z-]*:\s*write\s*$", re.MULTILINE)
-SELF_HOSTED_RUNNER_SELECTOR = "runs-on: [self-hosted, Linux, X64, cortexa-ci]"
-SELF_HOSTED_PUSH_BRANCHES = (
-    "- main",
+RUNNER_SELECTOR = re.compile(r"^\s*runs-on:\s*(?P<selector>.+?)\s*$", re.MULTILINE)
+PROMPT_PLACEHOLDER = re.compile(r"\{\{(?P<name>[A-Z][A-Z0-9_]*)\}\}")
+PROMPT_PATH_REFERENCE = re.compile(r"\bprompts/[A-Za-z0-9_./-]+\.md\b")
+EXPECTED_WORKFLOWS = frozenset({"ci.yml", "documentation.yml"})
+LINUX_RUNNER_SELECTOR = "[self-hosted, Linux, X64, cortexa-ci]"
+MACOS_RUNNER_SELECTOR = "[self-hosted, macOS, X64, cortexa-ci]"
+TRUSTED_WORKFLOW_BRANCHES = (
     '- "codex/**"',
     '- "feature/**"',
     '- "fix/**"',
     '- "refactor/**"',
     '- "meta/**"',
     '- "phase*/**"',
+)
+REQUIRED_PROMPT_METADATA = (
+    "Category",
+    "Purpose",
+    "Use when",
+    "Do not use when",
+    "Required inputs",
+    "Expected outputs",
+    "Related skills",
+    "Related prompts",
+    "Last reviewed",
+)
+ACTIVE_PROMPT_REFERENCE_PATHS = (
+    "AGENTS.md",
+    "ASSISTANT_USAGE.md",
+    "CODE_REVIEW.md",
+    "CONTRIBUTING.md",
+    "ENGINEERING_GUIDE.md",
+    "README.md",
+    "SECURITY.md",
+    "TESTING_GUIDE.md",
 )
 
 SECRET_PATTERNS = (
@@ -79,13 +104,16 @@ AUTHORITATIVE_COMMAND_DOCUMENTS = (
 REQUIRED_SCRIPTS = frozenset(
     {
         "build",
+        "build:frontend",
         "docs:check",
         "format:check",
+        "format:frontend",
         "lint",
         "repository:check",
         "security:scan",
         "tauri",
         "test",
+        "test:frontend",
         "test:hooks",
         "test:integration",
         "test:repository",
@@ -317,6 +345,82 @@ def command_findings(root: Path) -> tuple[Finding, ...]:
     return tuple(findings)
 
 
+def prompt_findings(root: Path) -> tuple[Finding, ...]:
+    prompt_root = root / "prompts"
+    if not prompt_root.is_dir():
+        return (Finding("prompts", "prompts", "prompt library is missing"),)
+
+    findings: list[Finding] = []
+    prompt_paths = tuple(
+        path
+        for path in sorted(prompt_root.rglob("*.md"))
+        if path != prompt_root / "README.md"
+    )
+    if not prompt_paths:
+        findings.append(Finding("prompts", "prompts", "no reusable prompts exist"))
+
+    for path in prompt_paths:
+        relative_path = path.relative_to(root).as_posix()
+        text = read_text(path)
+        if text is None:
+            findings.append(Finding("prompts", relative_path, "prompt is not UTF-8 text"))
+            continue
+        prompt_offset = text.find("\n## Prompt")
+        template_offset = text.find("\n## Template")
+        body_offsets = tuple(offset for offset in (prompt_offset, template_offset) if offset >= 0)
+        if not body_offsets:
+            findings.append(Finding("prompts", relative_path, "prompt body heading is missing"))
+            metadata_text = text
+        else:
+            metadata_text = text[: min(body_offsets)]
+
+        for name in REQUIRED_PROMPT_METADATA:
+            marker = f"- **{name}:**"
+            if marker not in metadata_text:
+                findings.append(
+                    Finding("prompts", relative_path, f"required metadata {name!r} is missing")
+                )
+
+        required_inputs = next(
+            (
+                line
+                for line in metadata_text.splitlines()
+                if line.startswith("- **Required inputs:**")
+            ),
+            "",
+        )
+        placeholders = {match.group("name") for match in PROMPT_PLACEHOLDER.finditer(text)}
+        undeclared = tuple(
+            name for name in sorted(placeholders) if f"{{{{{name}}}}}" not in required_inputs
+        )
+        if undeclared:
+            findings.append(
+                Finding(
+                    "prompts",
+                    relative_path,
+                    f"placeholders are not declared as required inputs: {', '.join(undeclared)}",
+                )
+            )
+
+    active_paths = (*ACTIVE_PROMPT_REFERENCE_PATHS, "prompts/README.md")
+    for relative_path in active_paths:
+        path = root / relative_path
+        if not path.is_file():
+            continue
+        text = read_text(path)
+        if text is None:
+            continue
+        for match in PROMPT_PATH_REFERENCE.finditer(without_fenced_code(text)):
+            target = root / match.group(0)
+            if target.is_file():
+                continue
+            line = text.count("\n", 0, match.start()) + 1
+            findings.append(
+                Finding("prompts", relative_path, f"stale prompt path {match.group(0)!r}", line)
+            )
+    return tuple(findings)
+
+
 def workflow_findings(root: Path) -> tuple[Finding, ...]:
     workflow_directory = root / ".github" / "workflows"
     if not workflow_directory.is_dir():
@@ -326,6 +430,11 @@ def workflow_findings(root: Path) -> tuple[Finding, ...]:
     workflows = sorted((*workflow_directory.glob("*.yml"), *workflow_directory.glob("*.yaml")))
     if not workflows:
         return (Finding("workflows", ".github/workflows", "no workflow files exist"),)
+    workflow_names = {path.name for path in workflows}
+    for name in sorted(EXPECTED_WORKFLOWS - workflow_names):
+        findings.append(Finding("workflows", f".github/workflows/{name}", "required workflow is missing"))
+    for name in sorted(workflow_names - EXPECTED_WORKFLOWS):
+        findings.append(Finding("workflows", f".github/workflows/{name}", "unexpected workflow is present"))
     for path in workflows:
         relative_path = path.relative_to(root).as_posix()
         text = read_text(path)
@@ -341,12 +450,18 @@ def workflow_findings(root: Path) -> tuple[Finding, ...]:
                 findings.append(Finding("workflows", relative_path, "action reference is not pinned to an immutable digest", line))
         prohibited = (
             ("pull_request_target:", "pull_request_target is prohibited"),
+            (
+                "pull_request:",
+                "persistent self-hosted workflows must not subscribe to pull_request",
+            ),
             ("persist-credentials: true", "checkout credentials must not persist"),
             ("${{ secrets.", "workflow must not require repository secrets"),
             ("git commit ", "workflow must not create commits"),
             ("git push", "workflow must not push"),
+            ("sudo ", "self-hosted workflows must not provision the runner with sudo"),
             ("npm publish", "workflow must not publish packages"),
             ("cargo publish", "workflow must not publish crates"),
+            ("continue-on-error:", "mandatory workflow checks must not continue on error"),
         )
         for needle, detail in prohibited:
             offset = text.find(needle)
@@ -354,28 +469,109 @@ def workflow_findings(root: Path) -> tuple[Finding, ...]:
                 findings.append(Finding("workflows", relative_path, detail, text.count("\n", 0, offset) + 1))
         for match in WRITE_PERMISSION.finditer(text):
             findings.append(Finding("workflows", relative_path, "write workflow permission is prohibited", text.count("\n", 0, match.start()) + 1))
-        if "self-hosted" in text:
-            if SELF_HOSTED_RUNNER_SELECTOR not in text:
+        if "permissions:\n  contents: read" not in text:
+            findings.append(Finding("workflows", relative_path, "top-level contents: read permission is required"))
+        selectors = tuple(match.group("selector") for match in RUNNER_SELECTOR.finditer(text))
+        for match in RUNNER_SELECTOR.finditer(text):
+            if match.group("selector") not in {
+                LINUX_RUNNER_SELECTOR,
+                MACOS_RUNNER_SELECTOR,
+            }:
                 findings.append(
                     Finding(
                         "workflows",
                         relative_path,
-                        "self-hosted job must require the exact repository runner labels",
+                        "runner selector is not an approved dedicated Cortexa runner",
+                        text.count("\n", 0, match.start()) + 1,
                     )
                 )
-            missing_branches = tuple(
-                branch for branch in SELF_HOSTED_PUSH_BRANCHES if branch not in text
+
+        required_common = (
+            "push:",
+            "workflow_dispatch:",
+            "paths:",
+            "concurrency:",
+            "cancel-in-progress: true",
+        )
+        missing_common = tuple(value for value in required_common if value not in text)
+        if missing_common:
+            findings.append(
+                Finding(
+                    "workflows",
+                    relative_path,
+                    f"required trigger or concurrency policy is missing: {', '.join(missing_common)}",
+                )
             )
-            if (
-                "pull_request:" in text
-                or "workflow_dispatch:" not in text
-                or missing_branches
+        required_branches = ("branches:\n      - main", *TRUSTED_WORKFLOW_BRANCHES)
+        missing_branches = tuple(value for value in required_branches if value not in text)
+        if missing_branches:
+            findings.append(
+                Finding(
+                    "workflows",
+                    relative_path,
+                    f"trusted push branch allowlist is incomplete: {', '.join(missing_branches)}",
+                )
+            )
+
+        if path.name == "ci.yml":
+            required_ci = (
+                "schedule:",
+                "scripts/ci_change_scope.py",
+                "Frontend validation",
+                "Linux Rust validation",
+                "Target-Mac Rust validation",
+                "Dependency and secret audit",
+                LINUX_RUNNER_SELECTOR,
+                MACOS_RUNNER_SELECTOR,
+                ".codex/hooks/tests",
+                "scripts/tests",
+                '"src/**"',
+                '"src-tauri/**"',
+                '"assets/branding/**"',
+                '"package-lock.json"',
+                '".prettierrc*"',
+                '".codex/**"',
+                '".github/workflows/ci.yml"',
+                '".github/workflows/documentation.yml"',
+            )
+            missing_ci = tuple(value for value in required_ci if value not in text)
+            if missing_ci:
+                findings.append(
+                    Finding(
+                        "workflows",
+                        relative_path,
+                        f"application CI policy is incomplete: {', '.join(missing_ci)}",
+                    )
+                )
+        elif path.name == "documentation.yml":
+            required_documentation = (
+                '"**/*.md"',
+                '"LICENSE*"',
+                '"prompts/**"',
+                '".agents/**"',
+                "npm run docs:check",
+                "npm run repository:check",
+                LINUX_RUNNER_SELECTOR,
+            )
+            missing_documentation = tuple(
+                value for value in required_documentation if value not in text
+            )
+            if missing_documentation:
+                findings.append(
+                    Finding(
+                        "workflows",
+                        relative_path,
+                        f"documentation CI policy is incomplete: {', '.join(missing_documentation)}",
+                    )
+                )
+            if selectors and any(
+                selector != LINUX_RUNNER_SELECTOR for selector in selectors
             ):
                 findings.append(
                     Finding(
                         "workflows",
                         relative_path,
-                        "self-hosted workflow must exclude pull requests and restrict push branches",
+                        "documentation jobs must use the dedicated Linux runner",
                     )
                 )
     return tuple(findings)
@@ -383,7 +579,7 @@ def workflow_findings(root: Path) -> tuple[Finding, ...]:
 
 def checks_for(command: str) -> tuple[str, ...]:
     if command == "all":
-        return ("links", "secrets", "generated", "license", "commands", "workflows")
+        return ("links", "secrets", "generated", "license", "commands", "prompts", "workflows")
     return (command,)
 
 
@@ -401,6 +597,8 @@ def run_checks(root: Path, command: str) -> tuple[Finding, ...]:
             findings.extend(license_findings(root))
         elif check == "commands":
             findings.extend(command_findings(root))
+        elif check == "prompts":
+            findings.extend(prompt_findings(root))
         elif check == "workflows":
             findings.extend(workflow_findings(root))
         else:
@@ -412,7 +610,7 @@ def parse_arguments(arguments: Sequence[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "check",
-        choices=("all", "links", "secrets", "generated", "license", "commands", "workflows"),
+        choices=("all", "links", "secrets", "generated", "license", "commands", "prompts", "workflows"),
     )
     return parser.parse_args(arguments)
 

@@ -10,6 +10,33 @@ on:
       - "refactor/**"
       - "meta/**"
       - "phase*/**"
+    paths:
+      - "src/**"
+      - "src-tauri/**"
+      - "tests/**"
+      - "scripts/**"
+      - ".codex/**"
+      - "index.html"
+      - "public/**"
+      - "assets/branding/**"
+      - ".node-version"
+      - ".prettierignore"
+      - ".prettierrc*"
+      - "package.json"
+      - "package-lock.json"
+      - "npm-shrinkwrap.json"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "rust-toolchain*"
+      - "vite.config.*"
+      - "vitest.config.*"
+      - "tsconfig*.json"
+      - "eslint.config.*"
+      - ".github/workflows/ci.yml"
+      - ".github/workflows/documentation.yml"
+      - ".github/workflows/security.yml"
+  schedule:
+    - cron: "23 13 * * 1"
   workflow_dispatch:
 
 permissions:
@@ -20,24 +47,75 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  verify:
-    name: Full repository verification
+  classify:
+    name: Classify change and enforce repository policy
     runs-on: [self-hosted, Linux, X64, cortexa-ci]
-    timeout-minutes: 45
+    timeout-minutes: 5
+    outputs:
+      frontend: ${{ steps.scope.outputs.frontend }}
+      rust: ${{ steps.scope.outputs.rust }}
+      audit: ${{ steps.scope.outputs.audit }}
     steps:
-      - name: Verify self-hosted runner prerequisites
+      - name: Verify Linux runner prerequisites
         shell: bash
         run: |
           set -euo pipefail
           test "${RUNNER_OS}" = "Linux"
           command -v git
           command -v python3
-          command -v rustup
-          command -v cargo
-          command -v pkg-config
-          pkg-config --exists webkit2gtk-4.1
-          pkg-config --exists javascriptcoregtk-4.1
-          pkg-config --exists gtk+-3.0
+
+      - name: Check out reviewed source and comparison history
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check changed lines for whitespace errors
+        env:
+          CI_BASE_SHA: ${{ github.event.before }}
+          CI_EVENT_NAME: ${{ github.event_name }}
+          CI_HEAD_SHA: ${{ github.sha }}
+        run: >-
+          python3 scripts/ci_change_scope.py diff-check
+          --event "${CI_EVENT_NAME}"
+          --base "${CI_BASE_SHA}"
+          --head "${CI_HEAD_SHA}"
+
+      - name: Classify affected application checks
+        id: scope
+        env:
+          CI_BASE_SHA: ${{ github.event.before }}
+          CI_EVENT_NAME: ${{ github.event_name }}
+          CI_HEAD_SHA: ${{ github.sha }}
+        run: >-
+          python3 scripts/ci_change_scope.py classify
+          --event "${CI_EVENT_NAME}"
+          --base "${CI_BASE_SHA}"
+          --head "${CI_HEAD_SHA}"
+          >> "${GITHUB_OUTPUT}"
+
+      - name: Check repository policy and tracked secrets
+        run: python3 scripts/repository_health.py all
+
+      - name: Test repository workflow classifiers and policy gates
+        run: python3 -m unittest discover -s scripts/tests -p 'test_*.py' -v
+
+      - name: Test repository hooks
+        run: python3 -m unittest discover -s .codex/hooks/tests -p 'test_*.py' -v
+
+  frontend:
+    name: Frontend validation
+    needs: classify
+    if: needs.classify.outputs.frontend == 'true'
+    runs-on: [self-hosted, Linux, X64, cortexa-ci]
+    timeout-minutes: 15
+    steps:
+      - name: Verify Linux runner prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${RUNNER_OS}" = "Linux"
+          command -v git
 
       - name: Check out reviewed source
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -50,11 +128,137 @@ jobs:
           node-version-file: .node-version
           cache: npm
 
-      - name: Install pinned Rust toolchain
-        run: rustup toolchain install 1.90.0 --profile minimal --component clippy,rustfmt
-
       - name: Install locked JavaScript dependencies
         run: npm ci
 
-      - name: Run complete repository verification
-        run: npm run verify
+      - name: Check frontend formatting
+        run: npm run format:frontend
+
+      - name: Lint frontend
+        run: npm run lint:frontend
+
+      - name: Type-check frontend
+        run: npm run typecheck
+
+      - name: Test frontend
+        run: npm run test:frontend
+
+      - name: Build production frontend
+        run: npm run build:frontend
+
+  rust:
+    name: Linux Rust validation
+    needs: classify
+    if: needs.classify.outputs.rust == 'true'
+    runs-on: [self-hosted, Linux, X64, cortexa-ci]
+    timeout-minutes: 30
+    steps:
+      - name: Verify Linux runner prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${RUNNER_OS}" = "Linux"
+          command -v git
+          command -v rustup
+          command -v cargo
+          command -v pkg-config
+          pkg-config --exists webkit2gtk-4.1
+          pkg-config --exists javascriptcoregtk-4.1
+          pkg-config --exists gtk+-3.0
+
+      - name: Check out reviewed source
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Install repository-pinned Rust toolchain
+        run: rustup toolchain install 1.90.0 --profile minimal --component clippy,rustfmt
+
+      - name: Check Rust formatting
+        run: cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+
+      - name: Lint Rust with warnings denied
+        run: cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+
+      - name: Test all Rust targets
+        run: cargo test --manifest-path src-tauri/Cargo.toml --all-targets --locked
+
+  rust-macos:
+    name: Target-Mac Rust validation
+    needs: classify
+    if: needs.classify.outputs.rust == 'true'
+    runs-on: [self-hosted, macOS, X64, cortexa-ci]
+    timeout-minutes: 30
+    steps:
+      - name: Verify macOS runner prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${RUNNER_OS}" = "macOS"
+          command -v git
+          command -v rustup
+          command -v cargo
+
+      - name: Check out reviewed source
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Install repository-pinned Rust toolchain
+        run: rustup toolchain install 1.90.0 --profile minimal --component clippy,rustfmt
+
+      - name: Lint target-Mac Rust with warnings denied
+        run: cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
+
+      - name: Test all target-Mac Rust targets
+        run: cargo test --manifest-path src-tauri/Cargo.toml --all-targets --locked
+
+  dependency-audit:
+    name: Dependency and secret audit
+    needs: classify
+    if: needs.classify.outputs.audit == 'true'
+    runs-on: [self-hosted, Linux, X64, cortexa-ci]
+    timeout-minutes: 20
+    steps:
+      - name: Verify Linux runner prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${RUNNER_OS}" = "Linux"
+          command -v git
+          command -v python3
+          command -v rustup
+          command -v cargo
+
+      - name: Check out reviewed source
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Set up pinned Node.js without package cache
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+
+      - name: Scan tracked content for secret patterns
+        run: npm run security:scan
+
+      - name: Audit JavaScript dependencies
+        run: npm audit --audit-level=low
+
+      - name: Install repository-pinned Rust toolchain
+        run: rustup toolchain install 1.90.0 --profile minimal
+
+      - name: Install pinned Rust audit tool
+        run: cargo install cargo-audit --version 0.22.2 --locked --root "${RUNNER_TEMP}/cargo-audit"
+
+      - name: Audit Rust dependencies against the accepted baseline
+        shell: bash
+        run: |
+          set -uo pipefail
+          set +e
+          PATH="${RUNNER_TEMP}/cargo-audit/bin:${PATH}" cargo audit --file src-tauri/Cargo.lock --json > "${RUNNER_TEMP}/cargo-audit.json"
+          audit_status=$?
+          set -e
+          python3 scripts/cargo_audit_gate.py "${RUNNER_TEMP}/cargo-audit.json" --cargo-audit-exit "${audit_status}"
