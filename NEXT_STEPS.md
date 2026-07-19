@@ -59,8 +59,8 @@ This file is the ordered implementation queue. Work only on the first item marke
   **Verified complete with advisories and squash-merged through PR #24 at
   `eaf6c9f`**.
 - Repository workflow - risk-based GitHub Actions validation:
-  **Implementation commit `9a2c75d` remotely verified on open PR #30; D-058
-  closeout verified with advisories and valid marker; merge pending**.
+  **Verified complete with advisories; published through PR #30 and
+  squash-merged at `1780d7f`; valid marker**.
 - Meta Increment 8 - Prompt Library Reorganization:
   **Verified complete; published through PR #25 and squash-merged at
   `d26b5e1`**.
@@ -70,19 +70,17 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Queue status
 
-### Review and publish the D-058 remote-verification closeout
+### Review and publish the D-058 post-publication memory reconciliation
 
-**Status:** The original implementation and exact D-058 correction are
-committed and pushed as `9a2c75d` on open PR #30. CI run `29670565671` and
-Documentation run `29670565657` passed as push-triggered executions. Linux
-runner 21 received classification, documentation, frontend, Linux Rust, and
-dependency audit; macOS runner 22 received target-Mac Rust. The exact 12-path
-documentation-only closeout passes its focused checks, and the gate is
-`PASS WITH ADVISORIES` with a valid re-finalized marker.
+**Status:** Implementation commit `9a2c75d` and documentation closeout commit
+`da08573` were squash-merged through PR #30 at `1780d7f`. Branch and post-merge
+CI and Documentation passed with exact Linux runner 21 and macOS runner 22
+assignments. The exact 11-path documentation-only memory reconciliation passes
+focused checks, and the gate is `PASS WITH ADVISORIES` with a valid
+re-finalized marker.
 
-Review the closeout and wait for separate staging, commit, and push approval.
-Merge PR #30 only with separate approval. Do not combine ARB-002 or product
-work.
+Review the reconciliation and wait for separate branch, staging, commit, and
+publication approval. Do not combine ARB-002 or product work.
 
 ### No later remediation is Ready
 

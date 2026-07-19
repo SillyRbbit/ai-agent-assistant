@@ -40,14 +40,15 @@ both PR #30 jobs before allocation because the Actions minute or spending limit
 was exhausted. D-058 now authorizes active risk-based routing across Linux
 runner 21 and macOS runner 22.
 
-Meta risk-based GitHub Actions validation and the D-058 correction are committed
-and pushed as `9a2c75d` on open PR #30. The original 29-path scope and bounded
-22-path correction passed complete local verification. Push-triggered CI run
-`29670565671` and Documentation run `29670565657` passed with the exact Linux
-runner 21 and macOS runner 22 assignments. The project owner confirmed the
-required isolated, unprivileged host baseline. The gate remains `PASS WITH
-ADVISORIES`, and its marker is re-finalized against the 12-path
-documentation-only closeout. PR #30 remains unmerged.
+Meta risk-based GitHub Actions validation and D-058 are **verified complete,
+published through PR #30, and squash-merged at `1780d7f`** from implementation
+commit `9a2c75d` and documentation closeout commit `da08573`. The original
+29-path scope and bounded 22-path correction passed complete local
+verification. Branch and post-merge CI and Documentation passed with the exact
+Linux runner 21 and macOS runner 22 assignments. The project owner confirmed
+the required isolated, unprivileged host baseline. The gate remains `PASS WITH
+ADVISORIES`, and its marker is re-finalized against the exact 11-path
+documentation-only post-publication reconciliation.
 
 Meta Increment 8 Prompt Library Reorganization is **verified complete,
 published through PR #25, and squash-merged at `d26b5e1`** from verified source
@@ -123,9 +124,9 @@ wording outside the approved scope.
   PR #22 and squash-merged at `7c79e65`**.
 - Repository workflow: trusted self-hosted runner routing - **verified complete
   with advisories and squash-merged through PR #24 at `eaf6c9f`**.
-- Repository workflow: risk-based GitHub Actions validation - **committed on
-  open PR #30 at `9a2c75d`; D-058 correction verified locally and remotely with
-  advisories and valid marker; merge pending**.
+- Repository workflow: risk-based GitHub Actions validation - **verified
+  complete with advisories; published through PR #30 and squash-merged at
+  `1780d7f`; valid marker**.
 
 ## Prompt library capability and evidence
 
@@ -166,7 +167,9 @@ wording outside the approved scope.
   passed as push-triggered executions for `9a2c75d`. Linux runner 21 handled
   classification, documentation, frontend, Linux Rust, and dependency audit;
   macOS runner 22 handled target-Mac Rust. The marker is complete and valid
-  after documentation-only closeout re-finalization.
+  after documentation-only post-publication re-finalization. Closeout commit
+  `da08573` passed Documentation run `29671289962`; post-merge CI run
+  `29672575232` and Documentation run `29672575254` passed on `1780d7f`.
 - D-054 and D-057 remain preserved in dated records; returning to hosted
   routing requires a separate security decision.
 
@@ -940,10 +943,9 @@ Native launch passed with idempotent storage startup. The project owner confirme
 
 ## Next action
 
-Review the exact 12-path D-058 documentation-only remote-verification closeout
-and wait for separate staging, commit, and push approval. Merge PR #30 only
-with separate project-owner approval. Do not begin ARB-002 or another
-product/remediation increment.
+Review the exact 11-path D-058 documentation-only post-publication memory
+reconciliation and wait for separate branch, staging, commit, and publication
+approval. Do not begin ARB-002 or another product/remediation increment.
 
 ## Phase 4 planning result
 

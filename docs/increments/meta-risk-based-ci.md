@@ -1,6 +1,6 @@
 # Meta Increment - risk-based GitHub Actions validation
 
-Status: Verified locally and remotely with advisories; merge pending
+Status: Verified complete with advisories; published and merged at `1780d7f`
 Date: 2026-07-18
 Baseline: clean synchronized `main` at `1c03f66`
 Gate: `repository-dual-self-hosted-runner-routing`
@@ -33,6 +33,8 @@ increment gate, security-sensitive checks, and product behavior.
 - Preserved D-054 and D-057 as dated historical evidence and recorded D-058 for
   active Linux/macOS routing after GitHub rejected both PR #30 hosted jobs
   before allocation because the Actions minute or spending limit was exhausted.
+- Published implementation commit `9a2c75d` and documentation closeout commit
+  `da08573` through PR #30, then squash-merged them at `1780d7f`.
 
 ## Change-to-workflow matrix
 
@@ -135,6 +137,12 @@ services satisfy D-058's dedicated, unprivileged host baseline. Remote
 job-to-runner assignment also passed. Continuing host isolation, patching,
 cleanup, monitoring, and incident response remain explicit advisories.
 
+Documentation closeout commit `da08573` passed push-triggered Documentation run
+`29671289962`. After squash merge at `1780d7f`, push-triggered CI run
+`29672575232` and Documentation run `29672575254` passed. Linux runner 21
+executed classification, documentation, frontend, Linux Rust, and dependency
+audit; macOS runner 22 executed target-Mac Rust.
+
 ## Review outcome
 
 - Architecture: no product or runtime boundary changed. Linux, target-Mac, and
@@ -152,9 +160,9 @@ cleanup, monitoring, and incident response remain explicit advisories.
 Result: `PASS WITH ADVISORIES`. Automated local verification and the required
 project-owner host-isolation confirmation pass, no Critical or High blocking
 finding remains, and the `repository-dual-self-hosted-runner-routing` marker is
-complete and valid after documentation-only closeout re-finalization. Actual
-dual-runner execution passed for `9a2c75d`; ongoing persistent-host maintenance
-and path ownership remain advisories.
+complete and valid after documentation-only post-publication re-finalization.
+Branch and post-merge dual-runner execution passed; ongoing persistent-host
+maintenance and path ownership remain advisories.
 
 ## Risks and rollback
 
@@ -164,15 +172,15 @@ filters, classifier rules, fixtures, and testing matrix must change together;
 unknown paths fail closed. Conditional path-filtered workflows are not
 represented as universal branch-protection checks.
 
-Before PR #30 merges, revert `9a2c75d` on the feature branch if D-058 must be
-withdrawn. After merge, restore D-057's hosted selectors only when Actions
+After publication, revert squash commit `1780d7f` only through a separately
+reviewed repository change. Restore D-057's hosted selectors only when Actions
 availability is repaired and a separate security review approves the change,
 then rerun local and remote validation. Rollback needs no product, database,
 dependency, or host rebuild.
 
 ## Exact next task
 
-Review the exact 12-path D-058 documentation-only remote-verification closeout
-and wait for separate staging, commit, and push approval. Merge PR #30 only
-with separate project-owner approval. Do not begin ARB-002 or another
-increment.
+Review the exact 11-path D-058 documentation-only post-publication memory
+reconciliation, confirm the valid marker and protected-path exclusion, and wait
+for separate branch, staging, commit, and publication approval. Do not begin
+ARB-002 or another increment.

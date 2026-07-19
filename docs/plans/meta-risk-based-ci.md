@@ -1,6 +1,6 @@
 # Meta Increment - risk-based GitHub Actions validation
 
-Status: Dual-runner correction verified locally and remotely; merge pending
+Status: Dual-runner correction verified complete; published and merged at `1780d7f`
 
 ## Goal
 
@@ -28,6 +28,10 @@ increment gate.
   run `29670565671` and Documentation run `29670565657`. Linux runner 21
   executed classification, documentation, frontend, Linux Rust, and dependency
   audit; macOS runner 22 executed target-Mac Rust.
+- Documentation closeout commit `da08573` passed Documentation run
+  `29671289962`. PR #30 squash-merged at `1780d7f`; post-merge CI run
+  `29672575232` and Documentation run `29672575254` passed with the same exact
+  Linux and macOS assignments.
 
 ## Exact implementation scope
 
@@ -194,8 +198,8 @@ pull-request execution.
 
 ## Rollback
 
-Before PR #30 merges, revert `9a2c75d` on the feature branch if D-058 must be
-withdrawn. After merge, return to D-057 hosted selectors only after Actions
+After publication, revert squash commit `1780d7f` only through a separately
+reviewed repository change. Return to D-057 hosted selectors only after Actions
 minutes or billing are available and a separate security review approves the
 change, then rerun local and remote checks. No product, dependency, database,
 or native rollback is required.
