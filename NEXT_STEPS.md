@@ -81,9 +81,10 @@ This file is the ordered implementation queue. Work only on the first item marke
   published through PR #37, and squash-merged at `c458f27`; no implementation
   authorized and no publication action remains**.
 - O-006 Phase 1 AI-provider decision:
-  **Active documentation-only increment; D-063 selects Azure OpenAI as the
-  synthetic-evaluation candidate without authorizing implementation or live
-  traffic**.
+  **D-063 selects Azure OpenAI as the synthetic-evaluation candidate;
+  documentation-only record verified complete with advisories, published
+  through PR #39, and squash-merged at `4abd49d`; no implementation authorized
+  and no publication action remains**.
 
 ## Queue status
 

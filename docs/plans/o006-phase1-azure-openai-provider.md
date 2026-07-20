@@ -1,6 +1,6 @@
 # O-006 Phase 1 Azure OpenAI provider decision
 
-Status: Active documentation-only decision increment
+Status: Verified complete with advisories; published and closed
 Owner: Project owner
 Date: 2026-07-19
 Baseline: clean synchronized `main` at `30ae547`
@@ -101,3 +101,12 @@ must be an additive superseding decision.
 - Current absence and ARB-002's High unresolved status remain explicit.
 - The exact 17-path documentation scope passes all required checks and has a
   valid completion marker.
+
+## Publication
+
+Source commit `e432681` passed Documentation run `29706772519`. PR #39
+squash-merged the exact decision record at `4abd49d`; the source and squash
+trees are identical. No publication action remains. Publication does not
+authorize identity, Azure deployment, gateway networking, credentials,
+Keychain, `AgentProvider`, AI-provider connectivity, real user content,
+enterprise, licensing, signing, notarization, or ARB-002 work.

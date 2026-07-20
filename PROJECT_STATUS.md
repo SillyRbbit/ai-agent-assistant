@@ -160,9 +160,12 @@ or notarization was implemented. No PR #33 publication action remains.
   with advisories, published through PR #37, and squash-merged at `c458f27`;
   implementation and ARB-002 remain blocked, and no publication action
   remains**.
-- O-006 Phase 1 AI-provider decision - **active documentation-only record;
-  D-063 selects Azure OpenAI for synthetic evaluation only and preserves all
-  implementation and live-traffic blocks**.
+- O-006 Phase 1 AI-provider decision - **D-063 selects Azure OpenAI for
+  synthetic evaluation only; documentation-only record verified complete with
+  advisories, published through PR #39 from source commit `e432681`, and
+  squash-merged at `4abd49d`; Documentation run `29706772519` passed, all
+  implementation and live-traffic blocks remain, and no publication action
+  remains**.
 
 ## Prompt library capability and evidence
 

@@ -4,6 +4,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Published the documentation-only D-063 Phase 1 Azure OpenAI provider decision
+  through PR #39 from source commit `e432681` and squash-merged it at
+  `4abd49d`. Documentation run `29706772519` passed, the source and squash trees
+  are identical, and no publication action remains. D-060 through D-063,
+  ARB-002's High unresolved status, and all implementation prohibitions remain
+  unchanged.
 - Selected Azure OpenAI in Microsoft Foundry as the Phase 1
   synthetic-evaluation provider candidate under D-063. The planned boundary
   uses one Central US regional deployment, managed identity and
