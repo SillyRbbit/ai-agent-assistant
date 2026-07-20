@@ -2127,6 +2127,101 @@ false`, or this decision record is not ZDR evidence.
 - This record changes documentation only and grants no cloud, networking,
   identity, credential, Keychain, provider, or runtime authority.
 
+## D-064 - Stage gateway evidence and close the Phase 1 configuration
+
+Date: 2026-07-19
+Status: Accepted design boundary; provisioning, transport, and real-content activation remain separately approval-bound
+
+Decision: resolve the circular dependency between pre-implementation design
+and post-provisioning evidence by separating ARB-002 into four explicit stages:
+
+1. **Stage A - design:** the documentation-only ARB-002A threat model and
+   closed configuration specification.
+2. **Stage B - no-traffic provisioning:** separately approved creation of the
+   intended Microsoft registrations and Azure resources with traffic disabled,
+   followed by sanitized configuration and ownership evidence.
+3. **Stage C - synthetic-only transport:** separately approved implementation
+   and security verification using only owner-approved synthetic text after
+   external-processing disclosure and acknowledgement.
+4. **Stage D - real-content activation:** separately approved activation only
+   after exact provider-approved ZDR, `ContentLogging=false`, stateless
+   Responses, retention, deletion, disclosure, operational, and security
+   evidence passes.
+
+No stage grants authority for or automatically starts the next stage. Missing,
+expired, failed, or mismatched evidence keeps dependent stages blocked.
+
+The closed Phase 1 identity configuration uses Microsoft personal identity,
+separate public desktop and gateway API registrations, an API Application ID
+URI in the form `api://<gateway-api-client-id>`, one delegated scope named
+`gateway.access`, and a loopback callback on `127.0.0.1`, an
+operating-system-assigned ephemeral port, and `/oauth/callback`. The planned
+flow retains D-062's system-browser Authorization Code Flow, PKCE S256,
+`state`, `nonce`, minimal scopes, maximum 15-minute gateway token, no
+`offline_access`, and provider-plus-issuer-plus-subject account key. Actual
+registration identifiers and observed token claims are Stage B and Stage C
+evidence, not repository constants. Any difference from the closed audience or
+callback fails closed and requires an additive decision.
+
+Microsoft currently documents a default access-token lifetime of approximately
+60 to 90 minutes and manifest-specific handling for HTTP `127.0.0.1` redirects.
+Neither is represented as satisfying Cortexa's accepted 15-minute gateway-token
+maximum or ephemeral callback until Stage B and Stage C evidence passes. If the
+accepted values cannot be enforced for Microsoft personal accounts, a later
+additive architecture decision is required; there is no silent lifetime or
+redirect fallback.
+
+The closed Azure configuration uses one Cortexa-operated Azure Container Apps
+gateway in Central US, the reserved inactive
+`https://api.cortexaai.io` origin, one dedicated non-shared user-assigned
+managed identity, `Cognitive Services OpenAI User` at the exact Azure OpenAI
+resource scope, a private Azure OpenAI endpoint, and disabled Azure OpenAI
+public network access before any provider traffic. API-key fallback,
+subscription- or resource-group-wide runtime roles, caller-selected endpoints,
+unrestricted egress, alternate provider origins, secondary-cloud failover, and
+automatic provider fallback are prohibited.
+
+External-processing disclosure requires an explicit versioned acknowledgement
+before the first external transmission, including synthetic transmission, and
+after a material provider, retention, data-classification, or disclosure
+change. Exact user-facing copy and acknowledgement storage remain Stage C
+evidence. Operational identifiers and evidence belong in a restricted
+owner-approved evidence store; the repository contains only sanitized
+references and no credentials or tokens.
+
+The authoritative detail is in
+`docs/security/phase4-gateway-configuration-spec.md` and
+`docs/security/phase4-gateway-threat-model.md`. D-060 through D-063 remain
+authoritative and are not superseded.
+
+Rationale: identity registration, resource provisioning, transport proof, and
+provider retention evidence cannot all exist before implementation. Explicit
+stages let the project approve secure defaults without fabricating operational
+proof, while requiring exact evidence before each newly reachable boundary.
+
+Consequences:
+
+- ARB-002A closes only the documentation design stage. It creates no current
+  authentication, cloud, network, provider, disclosure, or data path.
+- ARB-002 remains High and unresolved. Stage B, Stage C, and Stage D each need
+  a bounded plan, project-owner approval, verification, and rollback.
+- Stage C permits only synthetic data and still requires disclosure before its
+  first transmission. Stage D remains blocked by D-061 evidence for the exact
+  intended production configuration.
+- An actual registration ID, subscription, resource, endpoint, deployment,
+  model/version, DNS record, certificate, or evidence-store location must not
+  be invented in repository documentation.
+- Exact disclosure copy, registration/resource evidence, deployment-time model
+  availability, provider approval, and operational verification remain future
+  prerequisites rather than accepted facts.
+- The maximum 15-minute gateway-token lifetime and approved IP-literal
+  ephemeral callback remain hard Stage C blockers until compatible Microsoft
+  configuration and target-Mac behavior are evidenced.
+- No identity client, OAuth/OIDC flow, loopback listener, token, Keychain
+  integration, Azure resource, DNS, credential, networking, `AgentProvider`,
+  provider call, disclosure UI, runtime behavior, or ARB-002 implementation is
+  authorized.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

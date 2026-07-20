@@ -45,8 +45,32 @@ be mistaken for an end-to-end security path.
 - Azure Container Apps in Central US is the initial planned hosting target, and `https://api.cortexaai.io` is the reserved origin. The origin remains inactive until DNS, TLS, deployment, authentication, authorization, logging, and security verification pass. Initial production uses one primary cloud. Container portability does not authorize AWS, Google Cloud, active-active multicloud, cloud failover, or a three-cloud release.
 - A future trusted `AgentProvider` abstraction may select only separately approved AI model providers under trusted gateway or core policy. No implementation currently exists. Each AI provider requires independent retention, ZDR, data-use, logging, region, and security approval.
 - D-063 selects Azure OpenAI in Microsoft Foundry as the sole Phase 1 synthetic-evaluation candidate. The planned gateway uses managed identity and least-privilege Azure RBAC rather than an API key, one Standard/Regional Central US deployment, foreground Responses with `store: false` and `background: false`, strict custom functions, and no parallel function calls. No resource, deployment, identity, RBAC assignment, endpoint, or network path exists.
+- D-064 closes the pre-implementation configuration and separates design,
+  no-traffic provisioning, synthetic-only transport, and real-content
+  activation. Its authoritative configuration is
+  [`docs/security/phase4-gateway-configuration-spec.md`](docs/security/phase4-gateway-configuration-spec.md),
+  and its threat actors, trust boundaries, abuse cases, controls, and required
+  tests are in
+  [`docs/security/phase4-gateway-threat-model.md`](docs/security/phase4-gateway-threat-model.md).
+  No stage authorizes or starts the next stage.
+- The closed registration uses separate Microsoft personal desktop and gateway
+  API applications, `api://<gateway-api-client-id>`, delegated scope
+  `gateway.access`, and a `127.0.0.1` ephemeral callback at
+  `/oauth/callback`. Actual identifiers and observed claims remain restricted
+  operational evidence; mismatch fails closed.
+- The closed Azure boundary uses one dedicated non-shared user-assigned managed
+  identity, exact-resource `Cognitive Services OpenAI User` RBAC, a private
+  Azure OpenAI endpoint, and disabled provider public network access before any
+  provider traffic. API-key fallback, broad runtime roles, unrestricted egress,
+  alternate origins, and automatic fallback are prohibited.
 - Direct OpenAI and other providers remain separately approved future adapters. Automatic or silent provider fallback is prohibited because it can cross retention, region, and contractual boundaries.
 - A future desktop gateway access token must be short-lived with a maximum 15-minute lifetime, audience-bound, read only by trusted Rust through the platform secret-store abstraction, and stored in process memory. Initial scopes are `openid`, `email`, and one exact delegated gateway scope. `profile`, Microsoft Graph, directory, group, mail, calendar, file, contact, and `offline_access` scopes are excluded. Persistent sessions and `offline_access` require a separate decision; any later approved refresh or session credential must use platform-secure credential storage. The WebView must never receive any credential.
+- Microsoft's documented default access-token lifetime does not satisfy the
+  accepted 15-minute maximum. Stage B must prove an enforceable compatible
+  personal-account configuration or an additive decision must define another
+  short-lived gateway-session boundary. The manifest-based `127.0.0.1`
+  ephemeral callback also requires Stage B and target-Mac Stage C evidence. No
+  silent lifetime or redirect fallback is permitted.
 - The Rust core may send only a closed, size-bounded request contract to one configured HTTPS gateway origin. The WebView must not choose the gateway URL, identity provider, AI model provider, model, provider parameters, tool schemas, or authorization headers.
 - The gateway authenticates and authorizes the desktop principal, applies request/rate/model/tool-set limits, selects an approved AI model provider under trusted policy, injects only that server-held provider credential, and normalizes upstream events. It cannot approve or execute local tools.
 - The gateway selects exact server-side tool-set versions. It must not forward arbitrary caller-supplied OpenAI tools, hosted tools, MCP servers, shell tools, or provider parameters.
@@ -60,6 +84,11 @@ be mistaken for an end-to-end security path.
 - Provider and gateway failures cross into Rust only as closed redacted error codes, retryability, bounded retry delay, and opaque correlation IDs. Raw response bodies, headers, stack traces, prompts, model output, function arguments, and credentials must not cross this boundary.
 - The gateway operational log and the local trusted audit log are separate. Gateway logs contain only authentication outcome, opaque principal/correlation IDs, contract/model versions, timing, status, rate-limit metadata, and aggregate usage, with a maximum seven-day retention. Content logging is prohibited. The local audit owns model-proposal, policy, approval, execution, cancellation, and outcome evidence without duplicating prompts, raw arguments, raw results, or raw errors.
 - External-processing disclosure must be presented before the first transmission and remain visible in Settings.
+- Disclosure requires explicit versioned acknowledgement before the first
+  external transmission, including a synthetic-only Stage C transmission, and
+  after material provider, retention, data-classification, or disclosure
+  changes. Exact copy and acknowledgement storage require separate Stage C
+  approval and evidence.
 
 ## Prohibited changes before an approved live-gateway increment
 

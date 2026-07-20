@@ -4,8 +4,18 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No implementation or decision-record plan is active. The documentation-only
-plan `docs/plans/o006-phase1-azure-openai-provider.md` is verified complete with
+No implementation plan is active. The exact 19-path documentation-only ARB-002A
+gateway threat model and closed configuration is verified complete with
+advisories and awaits publication under
+`docs/plans/arb-002a-gateway-threat-model-and-configuration.md`. D-064 records
+four independent evidence stages and closed Microsoft registration, Azure
+network, managed-identity, RBAC, disclosure, and evidence defaults. This plan
+does not authorize Stage B provisioning, Stage C synthetic transport, Stage D
+real-content activation, or any runtime implementation. ARB-002 remains High
+and unresolved, and no later increment may start automatically.
+
+The documentation-only plan
+`docs/plans/o006-phase1-azure-openai-provider.md` is verified complete with
 advisories, published through PR #39 from source commit `e432681`, and
 squash-merged at `4abd49d`; Documentation run `29706772519` passed, and no
 publication action remains. D-063 selects Azure OpenAI in Microsoft Foundry as

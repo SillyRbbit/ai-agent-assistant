@@ -1,5 +1,13 @@
 # Implementation plans
 
+The verified-complete documentation-only ARB-002A plan awaiting publication is
+[`arb-002a-gateway-threat-model-and-configuration.md`](arb-002a-gateway-threat-model-and-configuration.md).
+It defines D-064, the Phase 4 gateway threat model, and the closed configuration
+required before later no-traffic provisioning, synthetic-only transport, or
+real-content activation. It changes no product source or runtime behavior and
+does not make a later ARB-002 increment Ready. Its result is `PASS WITH
+ADVISORIES`.
+
 The verified-complete documentation-only O-006 Phase 1 AI-provider decision is
 defined in
 [`o006-phase1-azure-openai-provider.md`](o006-phase1-azure-openai-provider.md).

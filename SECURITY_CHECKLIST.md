@@ -60,6 +60,12 @@ production boundary exists.
 
 ## Gateway and provider boundary
 
+- [ ] D-064's four stages are enforced independently: design evidence does not
+      authorize provisioning, provisioning does not authorize traffic,
+      synthetic traffic does not authorize real content, and no stage starts
+      automatically.
+- [ ] The approved threat model and closed configuration specification are
+      reviewed for the exact environment before Stage B, Stage C, or Stage D.
 - [ ] D-062's Microsoft personal-account boundary is implemented only after the
       exact desktop client, gateway resource, discovery-derived issuer, tenant,
       loopback redirect, delegated scope, and token-validation configuration are
@@ -73,6 +79,15 @@ production boundary exists.
       separate decision.
 - [ ] The account key is provider ID plus normalized issuer plus subject; email
       never identifies or automatically links accounts.
+- [ ] The registrations are separate public desktop and gateway API
+      applications; the Application ID URI format is
+      `api://<gateway-api-client-id>`, the only delegated scope is
+      `gateway.access`, and the callback is `127.0.0.1` on an ephemeral port at
+      `/oauth/callback`.
+- [ ] The gateway API requests access-token version 2, and Stage B/C evidence
+      proves both the manifest-based IP-literal redirect behavior and an
+      enforceable maximum 15-minute gateway-token lifetime. Microsoft defaults
+      are not treated as evidence.
 - [ ] The gateway validates every trusted issuer, audience, signature,
       expiration, applicable tenant, and authorization context against closed
       server-owned configuration.
@@ -87,6 +102,12 @@ production boundary exists.
       least-privilege RBAC, foreground Responses, disabled storage and
       background mode, strict custom functions, and no automatic provider
       fallback.
+- [ ] The gateway uses one dedicated non-shared user-assigned managed identity
+      and only `Cognitive Services OpenAI User` at the exact Azure OpenAI
+      resource scope; API-key fallback and broader runtime roles are absent.
+- [ ] Azure OpenAI public network access is disabled and the gateway uses the
+      approved private endpoint and restricted egress before synthetic or real
+      provider traffic.
 - [ ] The exact Azure resource reports `ContentLogging=false`, and the selected
       stateless Responses configuration has documented no application-state
       retention before real user content.
@@ -95,6 +116,9 @@ production boundary exists.
       user content; pre-verification tests use only synthetic data.
 - [ ] External-processing disclosure exists before the first transmission and
       remains visible in Settings.
+- [ ] The current disclosure version is explicitly acknowledged before first
+      transmission and after a material provider, retention,
+      data-classification, or disclosure change.
 - [ ] The desktop uses one configured HTTPS gateway origin and cannot override
       model, tools, schemas, credentials, or arbitrary provider parameters.
 - [ ] The gateway authenticates and authorizes the principal, selects only an

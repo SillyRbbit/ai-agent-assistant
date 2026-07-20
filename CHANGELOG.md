@@ -4,6 +4,16 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added D-064 and the documentation-only ARB-002A Phase 4 gateway threat model
+  and closed configuration specification. The design separates no-traffic
+  provisioning, synthetic-only transport, and real-content activation; closes
+  the non-secret Microsoft registration, Azure network, managed-identity, RBAC,
+  disclosure, evidence, and security-test defaults; and preserves every later
+  approval gate.
+- No identity, cloud resource, DNS, credential, Keychain, gateway networking,
+  `AgentProvider`, Azure OpenAI connection, disclosure UI, external processing,
+  dependency, Tauri boundary, or application behavior is added. ARB-002 remains
+  High and unresolved.
 - Published the documentation-only D-063 Phase 1 Azure OpenAI provider decision
   through PR #39 from source commit `e432681` and squash-merged it at
   `4abd49d`. Documentation run `29706772519` passed, the source and squash trees
