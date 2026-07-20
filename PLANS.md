@@ -4,11 +4,13 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-The active documentation-only plan is
-`docs/plans/o006-phase1-azure-openai-provider.md`. D-063 selects Azure OpenAI
-in Microsoft Foundry as the sole Phase 1 synthetic-evaluation candidate while
-preserving every deployment, ZDR, disclosure, networking, implementation, and
-ARB-002 block.
+No implementation or decision-record plan is active. The documentation-only
+plan `docs/plans/o006-phase1-azure-openai-provider.md` is verified complete with
+advisories, published through PR #39 from source commit `e432681`, and
+squash-merged at `4abd49d`; Documentation run `29706772519` passed, and no
+publication action remains. D-063 selects Azure OpenAI in Microsoft Foundry as
+the sole Phase 1 synthetic-evaluation candidate while preserving every
+deployment, ZDR, disclosure, networking, implementation, and ARB-002 block.
 
 The documentation-only plan
 `docs/plans/o006-phase1-microsoft-personal-identity.md` is verified

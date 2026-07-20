@@ -227,9 +227,12 @@ No D-058, PR #33, or PR #35 publication action and no immediate High-severity
 code remediation remain. The exact 18-path O-006/O-007 provider-boundary
 amendment is published and closed. The D-062 documentation decision record is
 verified complete with advisories, published through PR #37, and closed; no
-publication action remains. The active D-063 documentation-only decision
-record selects Azure OpenAI for synthetic evaluation. No product or remediation
-increment is Ready. D-062's exact identity evidence, D-063's exact Azure
+publication action remains. The D-063 documentation-only decision record is
+verified complete with advisories, published through PR #39 from source commit
+`e432681`, and squash-merged at `4abd49d`; Documentation run `29706772519`
+passed, the source and squash trees are identical, and no publication action
+remains. No product or remediation increment is Ready. D-062's exact identity
+evidence, D-063's exact Azure
 deployment evidence, and D-061 operational evidence still block any live
 model-networking plan. Legal and
 release owners must separately resolve O-008 and O-009 before their
@@ -261,12 +264,12 @@ Publication passed: source commit `e39523f` passed branch Documentation run
 run `29705209977` passed. The dedicated publication-closeout gate preserves the
 original report and records no product or trust-boundary change.
 
-Ready-to-paste resume prompt after this decision closes:
+Ready-to-paste resume prompt:
 
 ```text
 Use $session-start.
 
-Review the complete documentation-only O-006 Phase 1 Azure OpenAI provider decision. Confirm D-063, the exact documentation scope, preserved D-060/D-061/D-062 and historical evidence, passing documentation-tier checks, valid marker, and absence of product-source changes. Propose publication names and wait for approval. Do not begin ARB-002 or any identity, cloud, gateway, networking, credential, Keychain, AgentProvider, AI-provider, enterprise, licensing, signing, or notarization implementation.
+Start from clean synchronized main after publication of the D-063 Azure OpenAI provider decision and its documentation-only closeout. Confirm the publication-closeout marker remains valid and project memory is publication-stable. Identify the smallest remaining decision-only O-006 or D-061 evidence task without beginning ARB-002 or implementing identity, cloud, gateway, networking, credentials, Keychain, AgentProvider, AI-provider connectivity, enterprise, licensing, signing, or notarization work. Do not edit files, begin a gate, commit, push, or merge. Wait for project-owner direction.
 ```
 
 ## Increment 4V / ARB-001 publication

@@ -1,6 +1,6 @@
 # O-006 Phase 1 Azure OpenAI provider decision
 
-Status: Verified complete with advisories; publication pending
+Status: Verified complete with advisories; published and closed
 Date: 2026-07-19
 Owner: Project owner
 Baseline: clean synchronized `main` at `30ae547`
@@ -53,3 +53,10 @@ for any implementation or live external processing.
 
 Restore only the exact documentation scope before publication. After
 publication, supersede D-063 additively if the provider decision changes.
+
+## Publication status
+
+Source commit `e432681` passed Documentation run `29706772519`. PR #39
+squash-merged the decision record at `4abd49d`; the source and squash trees are
+identical. No publication action remains, and publication changes no
+implementation boundary or ARB-002 disposition.

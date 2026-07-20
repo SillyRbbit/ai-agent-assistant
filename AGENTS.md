@@ -101,9 +101,11 @@ personal identity as the sole Phase 1 identity provider without authorizing
 implementation, and Google and Apple are deferred.
 D-060 still separates pluggable identity, Azure-first portable hosting, and
 trusted AI-provider selection. D-063 selects Azure OpenAI as the Phase 1
-synthetic-evaluation candidate without authorizing deployment or traffic, and
-D-061 accepts the data policy while exact resource-specific ZDR evidence
-remains pending. No `AgentProvider`
+synthetic-evaluation candidate without authorizing deployment or traffic. Its
+documentation-only record was published through PR #39 from source commit
+`e432681` and squash-merged at `4abd49d`; Documentation run `29706772519`
+passed, and no publication action remains. D-061 accepts the data policy while
+exact resource-specific ZDR evidence remains pending. No `AgentProvider`
 implementation exists. ARB-003, ARB-004, ARB-005, and ARB-008 are blocked on future
 capabilities; ARB-006 and ARB-007 are deferred without a severity reduction
 until their explicit legal and release triggers; and ARB-044 remains
