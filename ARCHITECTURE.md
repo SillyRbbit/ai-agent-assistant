@@ -174,6 +174,13 @@ platform-secure credential storage: macOS Keychain on macOS and an equivalent
 separately reviewed facility on any future supported platform. No credential
 enters the WebView, SQLite, application logs, or ordinary CI.
 
+Microsoft currently documents a longer default access-token lifetime. Stage B
+must prove a Microsoft personal-account configuration that enforces Cortexa's
+maximum 15-minute boundary, or an additive decision must define another
+short-lived gateway-session exchange. Stage C stays blocked until then. The
+manifest-based `127.0.0.1` ephemeral callback also requires exact Stage B and
+target-Mac Stage C evidence; no redirect or lifetime fallback is implicit.
+
 **Cloud-hosting boundary**: Cortexa AI is the planned operator. Azure Container
 Apps in Central US is the initial planned platform and region, and
 `https://api.cortexaai.io` is the reserved production origin. None is deployed,
@@ -216,6 +223,32 @@ personal data are prohibited. Gateway logs contain operational metadata only
 for at most seven days, content logging is prohibited, and the
 external-processing disclosure must precede the first transmission and remain
 visible in Settings.
+
+**Closed Phase 1 gateway configuration**: D-064 separates future work into
+design, no-traffic provisioning, synthetic-only transport, and real-content
+activation. The authoritative design is
+[`docs/security/phase4-gateway-configuration-spec.md`](docs/security/phase4-gateway-configuration-spec.md),
+and its trust boundaries, abuse cases, controls, and security-test matrix are
+in
+[`docs/security/phase4-gateway-threat-model.md`](docs/security/phase4-gateway-threat-model.md).
+
+The planned identity registration uses one public Microsoft personal desktop
+client and one separate gateway API resource. The closed API Application ID URI
+format is `api://<gateway-api-client-id>`, its sole delegated scope is
+`gateway.access`, and the callback is `127.0.0.1` on an ephemeral port at
+`/oauth/callback`. Registration identifiers and observed token claims remain
+future evidence. A mismatch fails closed rather than falling back to another
+issuer, audience, scope, redirect, or account type.
+
+The planned gateway uses one dedicated non-shared user-assigned managed
+identity and exact-resource `Cognitive Services OpenAI User` RBAC. Azure OpenAI
+must be reachable only through a private endpoint with public network access
+disabled before any synthetic or real provider traffic. The public gateway
+origin remains authenticated HTTPS; no Container Apps hostname, alternate
+origin, public provider endpoint, API key, or unrestricted egress is a fallback.
+
+This closed design is not a deployed architecture. D-064 grants no Stage B,
+Stage C, or Stage D authority, and ARB-002 remains High and unresolved.
 
 ### Tool registry and schemas
 

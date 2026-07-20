@@ -143,10 +143,22 @@ No use case permits unattended consequential external action in the MVP.
   fallback. Exact provider configuration and D-061 evidence remain mandatory
   before any real user content.
 
+Phase 1 gateway activation shall use D-064's four independent stages. An
+approved threat model and closed configuration do not authorize resource
+creation; no-traffic provisioning does not authorize authentication or
+provider traffic; synthetic-only verification does not authorize real user
+content; and real-content activation requires exact D-061 evidence and a
+separate project-owner decision. The closed registration uses separate desktop
+and gateway API applications, delegated scope `gateway.access`, and a loopback
+callback on `127.0.0.1` at `/oauth/callback`. The planned Azure path uses a
+dedicated user-assigned managed identity, exact-resource inference RBAC, and a
+private Azure OpenAI endpoint with public network access disabled.
+
 FR-012 and live transport portions of FR-010 through FR-019 are planned; the
 transport-free request and validation contracts are current. No account,
 identity-provider, OAuth/OIDC, PKCE, token, gateway, or external-processing path
-is implemented.
+is implemented. D-064 is a documentation contract, not product capability or
+operational evidence.
 
 ### Tools, policy, and approval
 

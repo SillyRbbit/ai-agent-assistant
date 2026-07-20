@@ -85,14 +85,31 @@ This file is the ordered implementation queue. Work only on the first item marke
   documentation-only record verified complete with advisories, published
   through PR #39, and squash-merged at `4abd49d`; no implementation authorized
   and no publication action remains**.
+- ARB-002A - gateway threat model and closed configuration:
+  **Verified complete with advisories under D-064; awaiting publication; no
+  provisioning, transport, real-content activation, or runtime implementation
+  authorized**.
 
 ## Queue status
 
-### No remediation is Ready
+### No runtime remediation is Ready
 
-**Status:** D-059 classifies all canonical High findings without lowering
+**Status:** The exact 19-path documentation-only ARB-002A scope in
+`docs/plans/arb-002a-gateway-threat-model-and-configuration.md` is verified
+complete with advisories and awaiting publication. D-064 separates
+pre-implementation design, no-traffic provisioning, synthetic-only transport,
+and real-content activation so operational proof is never fabricated and no
+stage automatically starts the next. Publication requires separate
+project-owner direction.
+
+Stage C is specifically blocked until Stage B proves an enforceable maximum
+15-minute Microsoft personal gateway token and the manifest-based
+`127.0.0.1` ephemeral callback is verified on the target Mac. Microsoft's
+documented defaults are not accepted as evidence, and no fallback is implied.
+
+D-059 classifies all canonical High findings without lowering
 severity or representing deferred work as resolved. ARB-001 is resolved.
-ARB-002 remains decision-required. D-062 selects Microsoft personal identity
+ARB-002 remains High and unresolved. D-062 selects Microsoft personal identity
 for Phase 1, and D-063 selects Azure OpenAI as the synthetic-evaluation
 candidate, but exact registration, deployment, D-061, and threat-model evidence
 remain unresolved. D-060 separates pluggable
@@ -114,8 +131,8 @@ advisories, published through PR #35, and squash-merged at `853da62`. Its exact
 18-path scope preserves the original reports unchanged, and no publication
 action remains. It does not make ARB-002 Ready.
 
-No `REMEDIATE NOW` finding exists, and no later remediation or product
-increment is Ready. Do not begin ARB-002 automatically. Do not add a provider
+No runtime remediation or product increment is Ready. Do not begin ARB-002B or
+another ARB-002 implementation automatically. Do not add a provider
 client, `AgentProvider`, gateway origin, cloud deployment, identity integration,
 credential, Keychain adapter, or external content path before D-062's exact
 evidence passes, D-063's exact Azure configuration and D-061 evidence pass, the

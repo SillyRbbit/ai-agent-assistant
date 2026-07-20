@@ -121,6 +121,15 @@ Branch Documentation run `29703530854` and post-merge Documentation run
 amendment does not make ARB-002 or any identity, cloud, gateway, networking,
 credential, AI-provider, or enterprise implementation Ready.
 
+ARB-002A is the verified-complete documentation-only gateway threat-model and
+closed-configuration increment awaiting publication under
+`docs/plans/arb-002a-gateway-threat-model-and-configuration.md`. D-064 separates
+design, no-traffic provisioning, synthetic-only transport, and real-content
+activation. Its design artifacts grant no registration, resource, credential,
+identity, network, provider, disclosure-UI, or runtime authority. ARB-002
+remains High and unresolved; every later stage requires a separate plan and
+project-owner approval.
+
 ## Non-negotiable product boundaries
 
 - Keep the application local-first.
@@ -134,6 +143,10 @@ credential, AI-provider, or enterprise implementation Ready.
   D-063's exact Azure deployment and D-061 provider-specific
   ZDR and disclosure evidence passes, and a separate implementation is
   approved.
+- Do not treat D-064's closed configuration or threat model as operational
+  evidence. Do not create registrations or Azure resources, send synthetic
+  traffic, or activate real content without the separately approved Stage B,
+  Stage C, and Stage D gates.
 - Do not describe container portability as deployed AWS or Google Cloud support,
   active-active multicloud, cloud failover, or a three-cloud release.
 - Do not add Accessibility, screen capture, Apple Events, microphone access, or

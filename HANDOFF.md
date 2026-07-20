@@ -173,6 +173,101 @@ product path changed. Manual verification pending: none; the project owner
 approved the decisions, the exact documentation scope, and the one-report gate
 expansion before editing.
 
+## ARB-002A gateway threat model and closed configuration
+
+The project owner approved an exact 19-path documentation-only increment on
+clean synchronized `main` at `92bd2c3`. The mandatory
+`arb-002a-gateway-threat-model-and-configuration` gate began before edits.
+D-064 separates four evidence stages: design, no-traffic provisioning,
+synthetic-only transport, and real-content activation. No stage grants or
+starts the next.
+
+The authoritative design artifacts are
+`docs/security/phase4-gateway-threat-model.md` and
+`docs/security/phase4-gateway-configuration-spec.md`. They define the separate
+Microsoft personal desktop and gateway API registrations, `gateway.access`,
+the `127.0.0.1` ephemeral callback at `/oauth/callback`, the fixed Cortexa
+gateway boundary, dedicated user-assigned managed identity, exact-resource
+RBAC, private Azure OpenAI access, provider evidence, disclosure, logging,
+threat actors, abuse cases, controls, security tests, activation blockers, and
+rollback.
+
+Current absence is unchanged. No identity client, registration, OAuth/OIDC
+flow, loopback listener, token, Keychain adapter, Azure resource, DNS,
+certificate, credential, gateway transport, `AgentProvider`, Azure OpenAI
+connection, disclosure UI, external transmission, or runtime behavior exists
+or is authorized. D-060 through D-063 remain authoritative. ARB-002 remains
+High and unresolved; Stage B, Stage C, and Stage D require separate plans and
+project-owner approval.
+
+Two evidence blockers are explicit rather than hidden: Microsoft's documented
+default access-token lifetime exceeds the accepted 15-minute gateway-token
+maximum, and the approved HTTP `127.0.0.1` ephemeral callback requires manifest
+and target-Mac proof. Stage C remains blocked unless both accepted boundaries
+are evidenced or superseded by an additive owner decision.
+
+### ARB-002A verification
+
+Passed: final Markdown formatting and local links, repository policy, secret
+scan, whitespace, exact 19-path scope, protected paths, source and direct-
+dependency absence, D-064 and stage consistency, official-reference review,
+complete diff review, architecture, security, code-health, technical-debt,
+readiness, session-end inspection, and mandatory post-increment gate. Result:
+`PASS WITH ADVISORIES`; the completion marker is complete and valid.
+
+Failed and corrected: the first documentation check found only formatting in
+the plan, two security artifacts, and `ROADMAP.md`; a later evidence edit
+required the two security artifacts to be formatted again. The first scope
+count collapsed the untracked `docs/security/` directory; the corrected check
+uses `--untracked-files=all`. The first final pass found one formatting-only
+wrap in `ROADMAP.md`. No correction changed the 19-path scope or D-064.
+
+Not run: frontend tests, Rust tests, application builds, native launch,
+Microsoft registration, identity, Azure, DNS/TLS, managed identity, RBAC,
+gateway, provider, disclosure UI, ZDR, and operational verification. They are
+outside this documentation tier. Manual verification pending: none.
+
+Exact files changed:
+
+```text
+AGENTS.md
+ARCHITECTURE.md
+CHANGELOG.md
+DECISIONS.md
+HANDOFF.md
+NEXT_STEPS.md
+PLANS.md
+PRODUCT_REQUIREMENTS.md
+PROJECT_STATUS.md
+ROADMAP.md
+SECURITY.md
+SECURITY_CHECKLIST.md
+docs/increments/arb-002a-gateway-threat-model-and-configuration.md
+docs/plans/README.md
+docs/plans/arb-002a-gateway-threat-model-and-configuration.md
+docs/reviews/2026-07-16-advisory-remediation-backlog.md
+docs/reviews/2026-07-19-arb-002a-gateway-threat-model-and-configuration-post-increment-review.md
+docs/security/phase4-gateway-configuration-spec.md
+docs/security/phase4-gateway-threat-model.md
+```
+
+The exact command inventory and actual outcomes are in the consolidated review.
+The required final commands are `npm run docs:check`, `npm run
+repository:check`, `npm run security:scan`, `git diff --check`, exact scope and
+protected-path assertions, source/dependency absence scans,
+`python3 .codex/hooks/session_end_gate.py`, and marker finalization/status.
+
+### Exact next task
+
+Review this exact documentation-only ARB-002A workspace for publication. Do not
+begin Stage B, Stage C, Stage D, ARB-002 runtime work, or another remediation.
+
+### Ready-to-paste resume prompt
+
+```text
+Review the complete 19-path documentation-only ARB-002A gateway threat model and closed configuration increment. Confirm D-064, the four independent evidence stages, the Microsoft personal registration boundary, Azure Container Apps and Azure OpenAI boundaries, provider-specific D-061 evidence, disclosure and consent behavior, threat model and security-test matrix, passing documentation-tier checks, valid arb-002a-gateway-threat-model-and-configuration marker, preserved D-060 through D-063 and dated evidence, and absence of application-source or protected-path changes. Confirm the documented 15-minute token-lifetime and IP-literal loopback evidence blockers remain unresolved for Stage C. Propose a descriptive branch name, Conventional Commit message, PR title, and PR description, then wait for approval before staging, committing, pushing, or merging. Do not begin Stage B, Stage C, Stage D, ARB-002 runtime work, or another remediation.
+```
+
 ## Meta risk-based GitHub Actions validation
 
 ### D-058 correction

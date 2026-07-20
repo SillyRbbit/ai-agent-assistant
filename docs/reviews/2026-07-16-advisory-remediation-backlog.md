@@ -235,7 +235,11 @@ finding remains tracked and becomes blocking at its recorded trigger.
 - **Original increment or report:** `04k-F1`, `04n-F1`, `04n-F2`,
   `meta-06-F2`, PRA-004, O-006, and O-007.
 - **Current status:** `DECISION REQUIRED`; the broad 4K transport deferral is
-  superseded by this exact current boundary. O-006 and O-007 block live traffic.
+  superseded by this exact current boundary. D-060 through D-063 select the
+  Phase 1 boundaries, and D-064 closes the pre-implementation design, but
+  no-traffic provisioning, synthetic transport, provider evidence, and
+  real-content activation remain incomplete. O-006 and D-061 block live
+  traffic.
 - **Severity / category:** High / Security.
 - **Why it matters:** Live model traffic cannot be approved without an exact
   desktop principal, gateway deployment, server credential owner, short-lived
@@ -246,15 +250,17 @@ finding remains tracked and becomes blocking at its recorded trigger.
 - **Impact if ignored:** Credentials or personal content could cross the wrong
   boundary, and the fixed local tool-set could disagree with the deployed
   gateway.
-- **Recommended remediation / effort:** Decide O-006/O-007 and approve a threat
-  model before any transport implementation. Effort: Large.
+- **Recommended remediation / effort:** Complete ARB-002A's documentation-only
+  threat model and closed configuration, then use separately approved Stage B
+  no-traffic provisioning, Stage C synthetic-only transport, and Stage D
+  real-content activation. Effort: Large across all stages.
 - **Dependencies:** Security and executive ownership, deployment platform,
   provider retention terms, data classification, and ARB-001.
 - **Regression risks:** Premature transport could leak request bytes, log
   content, accept caller-selected origins or tool sets, or weaken cancellation
   and redaction.
 - **Blocks next product increment:** No for transport-free 4V; yes for any live
-  gateway increment.
+  gateway increment. ARB-002A does not make a runtime increment Ready.
 - **Recommended milestone:** Live gateway architecture.
 
 ### ARB-003 - Add one restricted executor and exact platform implementation
@@ -1256,6 +1262,33 @@ future adapters, and automatic fallback is prohibited.
 
 ARB-002 remains High, unresolved, and not Ready. This additive update changes
 no original finding, count, severity, source code, or product behavior.
+
+## 2026-07-19 ARB-002A staged threat-model update
+
+D-064 closes the pre-implementation configuration and threat-model design
+without representing operational evidence as present. It separates Stage A
+documentation, Stage B no-traffic registration and Azure provisioning, Stage C
+synthetic-only authenticated transport, and Stage D real-content activation.
+No stage authorizes or automatically starts the next.
+
+The closed design uses separate Microsoft personal desktop and gateway API
+registrations, `api://<gateway-api-client-id>`, delegated scope
+`gateway.access`, and a `127.0.0.1` ephemeral callback at `/oauth/callback`.
+The Azure design uses a dedicated non-shared user-assigned managed identity,
+exact-resource inference RBAC, a private Azure OpenAI endpoint, disabled
+provider public network access, restricted egress, and no API-key or provider
+fallback. Disclosure requires versioned acknowledgement before first external
+transmission, including synthetic traffic.
+
+ARB-002 remains High and unresolved. Exact registrations, token claims, Azure
+resources, DNS/TLS, provider-approved ZDR, `ContentLogging=false`, stateless
+Responses, disclosure copy and storage, security tests, operational evidence,
+and separate Stage B through Stage D approvals remain absent. Microsoft's
+documented default token lifetime also exceeds the accepted 15-minute maximum,
+and the manifest-based IP-literal ephemeral callback remains unproven. Both are
+hard Stage C evidence gates. This additive update changes no original finding
+count or severity and no product source, dependency, configuration, capability,
+permission, data, or runtime behavior.
 
 ## Review and resolution boundary and rollback
 
