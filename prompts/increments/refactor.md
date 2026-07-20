@@ -13,6 +13,8 @@
 ## Prompt
 
 ```text
+Follow the root AGENTS.md and docs/governance/MASTER_PROMPT.md. Apply the current task-specific instructions below without violating the approved increment.
+
 Use $verified-increment for this behavior-preserving refactor.
 
 Goal: {{REFACTOR_GOAL}}
@@ -26,5 +28,5 @@ State the structural root cause, exact edits, protected behavior, risks, regress
 
 Do not add features, dependencies, permissions, schema changes, public API changes, or speculative abstractions. Keep the refactor within {{FILE_SCOPE}} and stop before scope expansion.
 
-Run focused contract tests and architecture and code review. Follow the Risk-Based Validation Policy in AGENTS.md and ENGINEERING_GUIDE.md: use focused checks during implementation, then run the complete required completion-gate verification for the selected tier once after the final relevant edit. Cross-cutting, security-sensitive, dependency, Tauri-configuration, and release work still requires npm run verify plus applicable manual checks. Run the post-increment gate. Report any behavior change as a blocker rather than accepting it as refactor fallout. Do not commit, push, merge, or start another increment automatically.
+Run focused contract tests and architecture and code review. Follow the Risk-Based Validation Policy in MASTER_PROMPT.md and ENGINEERING_GUIDE.md; task-specific validation may be stricter. Run the post-increment gate. Report any behavior change as a blocker rather than accepting it as refactor fallout. Do not commit, push, merge, or start another increment automatically.
 ```

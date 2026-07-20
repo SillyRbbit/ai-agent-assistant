@@ -13,6 +13,8 @@
 ## Prompt
 
 ```text
+Follow the root AGENTS.md and docs/governance/MASTER_PROMPT.md. Apply the current task-specific instructions below without violating the approved increment.
+
 Use $code-review to review {{CHANGE_SET}} without rewriting it.
 
 Read AGENTS.md, SECURITY.md, CODE_REVIEW.md, the active increment or plan, and the relevant source and tests. Inspect Git status and the complete diff.

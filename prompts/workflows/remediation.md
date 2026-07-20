@@ -13,6 +13,8 @@
 ## Prompt
 
 ```text
+Follow the root AGENTS.md and docs/governance/MASTER_PROMPT.md. Apply the current task-specific instructions below without violating the approved increment.
+
 Coordinate remediation from {{BACKLOG_PATH}} using {{SELECTION_MODE}}.
 
 Read AGENTS.md, the complete backlog, source reports, current source/tests, project memory, and applicable architecture, security, testing, roadmap, and decision documents. Revalidate candidate findings before treating them as work.
@@ -21,5 +23,5 @@ Classify each candidate as still valid, resolved, superseded, duplicate, or no l
 
 For a single advisory, prepare prompts/increments/remediation-single-advisory.md. For one severity, prepare prompts/increments/remediation-by-severity.md. Replace every placeholder and present the bounded increment, exact files, risks, non-goals, verification, and rollback. Wait for project-owner approval before implementation.
 
-After an approved increment, require focused regression evidence, backlog dispositions, project-memory synchronization, and the post-increment gate. Follow the Risk-Based Validation Policy in AGENTS.md and ENGINEERING_GUIDE.md: use focused checks during implementation, then run the complete required completion-gate verification for the selected tier once after the final relevant edit. Never reduce security-sensitive, dependency, Tauri-configuration, or release validation. Stop before selecting or starting the next remediation automatically.
+After an approved increment, require focused regression evidence, backlog dispositions, project-memory synchronization, and the post-increment gate. Follow the Risk-Based Validation Policy in MASTER_PROMPT.md and ENGINEERING_GUIDE.md; task-specific validation may be stricter. Stop before selecting or starting the next remediation automatically.
 ```

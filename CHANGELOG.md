@@ -4,6 +4,13 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added the documentation-only Codex instruction hierarchy: concise root
+  `AGENTS.md`, detailed `docs/governance/MASTER_PROMPT.md`, aligned active
+  prompts/templates, D-065, and the advisory model-and-effort recommendation
+  policy. No product, dependency, workflow, hook, deployment, or runtime
+  behavior changes.
+- Recorded ARB-002A publication through PR #41 and squash commit `36ce9ab`
+  without authorizing Stage B, Stage C, Stage D, or ARB-002 runtime work.
 - Added D-064 and the documentation-only ARB-002A Phase 4 gateway threat model
   and closed configuration specification. The design separates no-traffic
   provisioning, synthetic-only transport, and real-content activation; closes

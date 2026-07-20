@@ -28,8 +28,10 @@
 ## Prompt
 
 \`\`\`text
+Follow the root AGENTS.md and docs/governance/MASTER_PROMPT.md. Apply the current task-specific instructions below without violating the approved increment.
+
 Revalidate the selected findings against current source and tests. {{SCOPE_CONTROLS}}
 
-Present exact files, risks, non-goals, tests, verification, and rollback. Wait for approval before editing. Follow the Risk-Based Validation Policy in AGENTS.md and ENGINEERING_GUIDE.md: use focused checks during implementation, then run the complete required completion-gate verification for the selected tier once after the final relevant edit. Never reduce cross-cutting, security-sensitive, dependency, Tauri-configuration, or release validation. Do not mark findings resolved without source and verification evidence or start another remediation automatically.
+Present exact files, risks, non-goals, tests, verification, and rollback. Wait for approval before editing. Follow the Risk-Based Validation Policy in MASTER_PROMPT.md and ENGINEERING_GUIDE.md. Do not mark findings resolved without source and verification evidence or start another remediation automatically.
 \`\`\`
 ```

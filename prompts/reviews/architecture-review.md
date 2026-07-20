@@ -13,6 +13,8 @@
 ## Prompt
 
 ```text
+Follow the root AGENTS.md and docs/governance/MASTER_PROMPT.md. Apply the current task-specific instructions below without violating the approved increment.
+
 Use $architecture-review.
 
 Review {{CHANGE_OR_PLAN}} against ARCHITECTURE.md, ENGINEERING_GUIDE.md, accepted decisions, and its exact increment boundary. Inspect the complete diff and affected source and tests. Distinguish current, mocked, planned, and prohibited behavior.

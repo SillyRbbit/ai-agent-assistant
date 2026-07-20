@@ -13,6 +13,8 @@
 ## Prompt
 
 ```text
+Follow the root AGENTS.md and docs/governance/MASTER_PROMPT.md. Apply the current task-specific instructions below without violating the approved increment.
+
 Use $verified-increment.
 
 Plan and implement {{INCREMENT_NAME}} for {{SEVERITY}} findings in {{BACKLOG_PATH}}. Use {{BRANCH_NAME}} only after approval. Record the review date as {{REPORT_DATE}}.
@@ -27,5 +29,5 @@ Present the exact remediation plan, files, risks, non-goals, tests, verification
 
 After approval, implement only the accepted group. Add focused regression tests and preserve unrelated behavior and security boundaries. Do not add unrelated feature work. Do not mark a finding resolved without source and verification evidence.
 
-At closeout, update {{BACKLOG_PATH}} with resolved, skipped, deferred, superseded, duplicate, and remaining findings; record exact evidence and keep the resolving commit pending until committed. Follow the Risk-Based Validation Policy in AGENTS.md and ENGINEERING_GUIDE.md: use focused checks during implementation, then run the complete required completion-gate verification for the selected tier once after the final relevant edit. Cross-cutting, security-sensitive, dependency, Tauri-configuration, and release work still requires npm run verify plus applicable manual checks. Run the post-increment gate. Do not start another remediation, commit, push, or merge automatically.
+At closeout, update {{BACKLOG_PATH}} with resolved, skipped, deferred, superseded, duplicate, and remaining findings; record exact evidence and keep the resolving commit pending until committed. Follow the Risk-Based Validation Policy in MASTER_PROMPT.md and ENGINEERING_GUIDE.md; task-specific validation may be stricter. Run the post-increment gate. Do not start another remediation, commit, push, or merge automatically.
 ```

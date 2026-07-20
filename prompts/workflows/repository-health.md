@@ -13,11 +13,13 @@
 ## Prompt
 
 ```text
+Follow the root AGENTS.md and docs/governance/MASTER_PROMPT.md. Apply the current task-specific instructions below without violating the approved increment.
+
 Review repository health for {{HEALTH_SCOPE}}.
 
 Read AGENTS.md, ENGINEERING_GUIDE.md, CONTRIBUTING.md, CODE_REVIEW.md, SECURITY.md, TESTING_GUIDE.md, and applicable GitHub and workflow documentation. Inspect Git status, CI definitions, action pins, permissions, templates, ownership, dependency automation, documentation links, ignored/generated files, licensing evidence, and available repository checks.
 
 Report evidence-backed findings by severity. Distinguish local repository evidence from remote GitHub settings that were not authenticated. Do not expose secrets, enable automatic commits or merges, add deployment, or change product source.
 
-If correction is requested, propose one bounded repository-governance increment with exact files, risks, non-goals, verification, and rollback. Wait for approval before editing. Follow the Risk-Based Validation Policy in AGENTS.md and ENGINEERING_GUIDE.md: use focused checks during implementation, then run the complete required completion-gate verification for the selected tier once after the final relevant edit. Repository policy, documentation, and security checks remain mandatory, and security-sensitive, dependency, Tauri-configuration, or release work still requires npm run verify plus applicable manual checks.
+If correction is requested, propose one bounded repository-governance increment with exact files, risks, non-goals, verification, and rollback. Wait for approval before editing. Follow the Risk-Based Validation Policy in MASTER_PROMPT.md and ENGINEERING_GUIDE.md; repository policy, documentation, and security checks remain mandatory.
 ```

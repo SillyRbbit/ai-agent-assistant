@@ -13,6 +13,8 @@
 ## Prompt
 
 ```text
+Follow the root AGENTS.md and docs/governance/MASTER_PROMPT.md. Apply the current task-specific instructions below without violating the approved increment.
+
 Use $documentation-sync for {{DOCUMENTATION_SCOPE}}.
 
 Read AGENTS.md and inspect Git status, recent commits or diff, actual verification output, and every affected current-state document. Update only facts supported by repository evidence.

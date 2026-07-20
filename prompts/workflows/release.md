@@ -13,6 +13,8 @@
 ## Prompt
 
 ```text
+Follow the root AGENTS.md and docs/governance/MASTER_PROMPT.md. Apply the current task-specific instructions below without violating the approved increment.
+
 Coordinate the {{RELEASE_CHANNEL}} release candidate {{RELEASE_CANDIDATE}}.
 
 Read AGENTS.md, RELEASE_CHECKLIST.md, SECURITY_CHECKLIST.md, TESTING_GUIDE.md, accepted decisions, current status, and release notes. Confirm a clean reviewed commit and define exact artifacts, target platforms, version, hashes, signing/notarization expectations, installer checks, disclosures, and rollback.

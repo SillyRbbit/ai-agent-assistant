@@ -28,6 +28,8 @@
 ## Prompt
 
 \`\`\`text
+Follow the root AGENTS.md and docs/governance/MASTER_PROMPT.md. Apply the current task-specific instructions below without violating the approved increment.
+
 {{REVIEW_BODY}}
 
 Report evidence-backed findings first in severity order. Do not modify files, approve work, or invent verification evidence.

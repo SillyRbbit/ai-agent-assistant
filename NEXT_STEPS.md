@@ -1,6 +1,6 @@
 # Next steps
 
-Last updated: 2026-07-19
+Last updated: 2026-07-20
 
 This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must close before later feature work begins.
 
@@ -86,9 +86,9 @@ This file is the ordered implementation queue. Work only on the first item marke
   through PR #39, and squash-merged at `4abd49d`; no implementation authorized
   and no publication action remains**.
 - ARB-002A - gateway threat model and closed configuration:
-  **Verified complete with advisories under D-064; awaiting publication; no
-  provisioning, transport, real-content activation, or runtime implementation
-  authorized**.
+  **Verified complete with advisories under D-064; published through PR #41 and
+  squash-merged at `36ce9ab`; no provisioning, transport, real-content
+  activation, or runtime implementation authorized**.
 
 ## Queue status
 
@@ -96,11 +96,14 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 **Status:** The exact 19-path documentation-only ARB-002A scope in
 `docs/plans/arb-002a-gateway-threat-model-and-configuration.md` is verified
-complete with advisories and awaiting publication. D-064 separates
+complete with advisories and published through PR #41 at `36ce9ab`. D-064 separates
 pre-implementation design, no-traffic provisioning, synthetic-only transport,
 and real-content activation so operational proof is never fabricated and no
-stage automatically starts the next. Publication requires separate
-project-owner direction.
+stage automatically starts the next.
+
+Repository Governance - Codex instruction hierarchy is verified complete with
+`PASS WITH ADVISORIES`. It established D-065 without beginning Stage B, Stage
+C, Stage D, ARB-002 runtime work, or altering the approved product queue.
 
 Stage C is specifically blocked until Stage B proves an enforceable maximum
 15-minute Microsoft personal gateway token and the manifest-based

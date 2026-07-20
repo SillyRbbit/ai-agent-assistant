@@ -12,9 +12,13 @@ pwd
 ```
 
 The root should contain `AGENTS.md`, `HANDOFF.md`, `package.json`, and `src-tauri/`.
+After reading the root instructions, read
+`docs/governance/MASTER_PROMPT.md` before selecting or changing work.
 
 Read `ENGINEERING_GUIDE.md` for documentation authority, Definition of Ready,
 increment workflow, review, Definition of Done, and release boundaries.
+`AGENTS.md` is the concise safety entry point; the master prompt provides the
+detailed Codex rules and the required final-response recommendation format.
 
 ## 2. Confirm the local application works
 
@@ -103,6 +107,8 @@ an external presentation as the source of current product facts.
 Reusable prompts are indexed by purpose in `prompts/README.md`. Open the
 appropriate increment, review, workflow, or authoring-template prompt, replace
 every documented placeholder, and paste its `Prompt` block into the assistant.
+Each active prompt follows root `AGENTS.md` and
+`docs/governance/MASTER_PROMPT.md` before applying its task-specific scope.
 
 Recommended sequence:
 
