@@ -11,8 +11,23 @@ and audit. Engineering work must improve the product without weakening that
 boundary or representing planned capability as implemented.
 
 This guide defines how the repository is engineered. `AGENTS.md` contains the
-short mandatory rules for coding assistants. This guide provides the complete
-operating model for maintainers, contributors, and assistants.
+short mandatory rules for coding assistants, and
+`docs/governance/MASTER_PROMPT.md` contains the detailed repository-wide Codex
+instruction layer. This guide provides the complete operating model for
+maintainers, contributors, and assistants.
+
+## Codex instruction hierarchy
+
+Platform and system instructions take precedence over repository instructions.
+Within the repository, use root `AGENTS.md`, then
+`docs/governance/MASTER_PROMPT.md`, then current project-state records, then
+the approved task-specific skill, prompt, plan, or increment. More-specific
+directory-level `AGENTS.md` files may add constraints when present.
+
+The master document is a maintainable instruction layer, not a replacement for
+accepted decisions, security rules, source evidence, or the current approved
+increment. It requires an advisory model-and-effort recommendation in final
+Codex responses and documents future multi-agent concepts as deferred only.
 
 ## Documentation authority
 

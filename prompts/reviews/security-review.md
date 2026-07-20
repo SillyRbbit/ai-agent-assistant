@@ -13,6 +13,8 @@
 ## Prompt
 
 ```text
+Follow the root AGENTS.md and docs/governance/MASTER_PROMPT.md. Apply the current task-specific instructions below without violating the approved increment.
+
 Use $security-review for {{CHANGE_OR_COMPONENT}}.
 
 Read AGENTS.md, SECURITY.md, SECURITY_CHECKLIST.md, CODE_REVIEW.md, ARCHITECTURE.md, DECISIONS.md, the active plan, and affected code and tests.

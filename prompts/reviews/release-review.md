@@ -13,6 +13,8 @@
 ## Prompt
 
 ```text
+Follow the root AGENTS.md and docs/governance/MASTER_PROMPT.md. Apply the current task-specific instructions below without violating the approved increment.
+
 Use $release-review for {{RELEASE_CANDIDATE}}.
 
 Review RELEASE_CHECKLIST.md, SECURITY_CHECKLIST.md, TESTING_GUIDE.md, accepted decisions, current status, release notes, exact commit, and exact artifacts. Verify clean state, versioning, dependency and secret audits, tests, builds, hashes, signing, notarization, installer behavior, launch, upgrade, rollback, and disclosures.

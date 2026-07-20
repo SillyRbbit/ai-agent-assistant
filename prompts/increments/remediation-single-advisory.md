@@ -13,6 +13,8 @@
 ## Prompt
 
 ```text
+Follow the root AGENTS.md and docs/governance/MASTER_PROMPT.md. Apply the current task-specific instructions below without violating the approved increment.
+
 Use $verified-increment.
 
 Resolve only {{ADVISORY_ID}} ({{SHORT_NAME}}) from {{BACKLOG_PATH}} using its original evidence in {{SOURCE_REPORT}}. Use {{BRANCH_NAME}} only after approval.
@@ -23,5 +25,5 @@ State the exact root cause, remediation approach, files, tests, verification, re
 
 After approval, implement only {{ADVISORY_ID}} and directly required root-cause work. Preserve verified behavior and trust boundaries, use typed errors where production behavior changes, and add focused regression tests. Stop before unrelated cleanup, features, or advisories.
 
-Mark {{ADVISORY_ID}} resolved only with source and verification evidence. Record its resolving commit as pending until committed, preserve skipped or remaining advisories, and create the required remediation increment record. Follow the Risk-Based Validation Policy in AGENTS.md and ENGINEERING_GUIDE.md: use focused checks during implementation, then run the complete required completion-gate verification for the selected tier once after the final relevant edit. Cross-cutting, security-sensitive, dependency, Tauri-configuration, and release work still requires npm run verify plus applicable manual checks. Run the post-increment gate and stop. Do not commit, push, merge, or start another remediation automatically.
+Mark {{ADVISORY_ID}} resolved only with source and verification evidence. Record its resolving commit as pending until committed, preserve skipped or remaining advisories, and create the required remediation increment record. Follow the Risk-Based Validation Policy in MASTER_PROMPT.md and ENGINEERING_GUIDE.md; task-specific validation may be stricter. Run the post-increment gate and stop. Do not commit, push, merge, or start another remediation automatically.
 ```

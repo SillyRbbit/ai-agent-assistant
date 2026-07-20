@@ -13,6 +13,8 @@
 ## Prompt
 
 ```text
+Follow the root AGENTS.md and docs/governance/MASTER_PROMPT.md. Apply the current task-specific instructions below without violating the approved increment.
+
 Use $executive-review for {{MILESTONE_OR_CHANGE}}.
 
 Base the assessment only on PRODUCT_REQUIREMENTS.md, ROADMAP.md, PROJECT_STATUS.md, ARCHITECTURE.md, and verified review evidence. Separate implemented, mocked, planned, blocked, and prohibited capability.

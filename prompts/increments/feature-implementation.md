@@ -13,6 +13,8 @@
 ## Prompt
 
 ```text
+Follow the root AGENTS.md and docs/governance/MASTER_PROMPT.md. Apply the current task-specific instructions below without violating the approved increment.
+
 Use $verified-increment for feature {{FEATURE_NAME}}.
 
 Acceptance criteria:
@@ -27,5 +29,5 @@ Define one user-visible outcome, exact source/test/closeout files, data and trus
 
 After approval, implement only the accepted plan. Keep presentation, trusted-core, IPC, persistence, platform, and network ownership aligned with ARCHITECTURE.md. Add focused success, failure, boundary, and regression tests. Preserve all unrelated behavior and stop before any scope expansion.
 
-Follow the Risk-Based Validation Policy in AGENTS.md and ENGINEERING_GUIDE.md: use focused checks during implementation, then run the complete required completion-gate verification for the selected tier once after the final relevant edit. Cross-cutting, security-sensitive, dependency, Tauri-configuration, and release work still requires npm run verify plus applicable manual checks. Run the post-increment gate. Do not commit, push, merge, release, or begin another increment without separate direction.
+Follow the Risk-Based Validation Policy in MASTER_PROMPT.md and ENGINEERING_GUIDE.md; task-specific validation may be stricter. Run the post-increment gate. Do not commit, push, merge, release, or begin another increment without separate direction.
 ```

@@ -28,8 +28,10 @@
 ## Prompt
 
 \`\`\`text
+Follow the root AGENTS.md and docs/governance/MASTER_PROMPT.md. Apply the current task-specific instructions below without violating the approved increment.
+
 {{PROMPT_BODY}}
 
-Read the authoritative repository documents, inspect the baseline, state exact scope and verification, and wait for approval before editing. Follow the Risk-Based Validation Policy in AGENTS.md and ENGINEERING_GUIDE.md: use focused checks during implementation, then run the complete required completion-gate verification for the selected tier once after the final relevant edit. Never reduce cross-cutting, security-sensitive, dependency, Tauri-configuration, or release validation. Do not commit, push, merge, publish, or begin another increment automatically.
+Read the authoritative repository documents, inspect the baseline, state exact scope and verification, and wait for approval before editing. Follow the Risk-Based Validation Policy in MASTER_PROMPT.md and ENGINEERING_GUIDE.md. Do not commit, push, merge, publish, or begin another increment automatically.
 \`\`\`
 ```

@@ -13,6 +13,8 @@
 ## Prompt
 
 ```text
+Follow the root AGENTS.md and docs/governance/MASTER_PROMPT.md. Apply the current task-specific instructions below without violating the approved increment.
+
 Use $readiness-review.
 
 Review {{CANDIDATE_INCREMENT}} against NEXT_STEPS.md, ROADMAP.md, PROJECT_STATUS.md, ARCHITECTURE.md, accepted decisions, Git evidence, prerequisites, and its plan. Require one bounded goal, exact files, risks, non-goals, verification, manual gates, and rollback.

@@ -5,9 +5,10 @@ assistants. Use a prompt when a repository skill is unavailable, when the task
 needs explicit placeholders, or when a repeatable multi-step instruction is
 more convenient than invoking a skill directly.
 
-`AGENTS.md`, `ENGINEERING_GUIDE.md`, `SECURITY.md`, accepted decisions, and the
-current approved plan remain authoritative. A prompt does not override those
-files, grant approval, or prove that a command ran.
+`AGENTS.md`, `docs/governance/MASTER_PROMPT.md`, `ENGINEERING_GUIDE.md`,
+`SECURITY.md`, accepted decisions, and the current approved plan remain
+authoritative. A prompt does not override those files, grant approval, or prove
+that a command ran.
 
 ## Directory map
 
@@ -50,6 +51,12 @@ files, grant approval, or prove that a command ran.
 Do not convert every prompt into a skill. Add or change a skill only when Codex
 needs a named operational capability rather than a copy-and-paste instruction.
 
+Every active prompt starts by requiring root `AGENTS.md` and
+`docs/governance/MASTER_PROMPT.md`, then applies its own bounded goal,
+acceptance criteria, validation, and stop conditions. The common instruction
+layer owns global Git, safety, validation, documentation, and recommendation
+rules; prompts retain task-specific controls.
+
 ## How to run a prompt
 
 1. Open the prompt that matches the task.
@@ -64,7 +71,8 @@ repository-relative unless the prompt explicitly requests an external path.
 ## Risk-based validation
 
 Every reusable increment prompt follows the Risk-Based Validation Policy in
-[`AGENTS.md`](../AGENTS.md) and
+[`AGENTS.md`](../AGENTS.md),
+[`MASTER_PROMPT.md`](../docs/governance/MASTER_PROMPT.md), and
 [`ENGINEERING_GUIDE.md`](../ENGINEERING_GUIDE.md). During implementation, run
 the smallest affected checks and batch related edits. After the final relevant
 edit, run the complete required completion-gate verification for the selected

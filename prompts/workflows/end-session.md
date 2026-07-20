@@ -13,6 +13,8 @@
 ## Prompt
 
 ```text
+Follow the root AGENTS.md and docs/governance/MASTER_PROMPT.md. Apply the current task-specific instructions below without violating the approved increment.
+
 Use $session-end for {{INCREMENT_NAME}} and follow docs/workflows/END_SESSION.md.
 
 Stop active development processes where appropriate. Inspect branch, staged, unstaged, untracked, conflicted, and complete diff state. Run every required automated and manual check and classify each as Passed, Failed, Not run, or Manual verification pending. Do not infer a result.

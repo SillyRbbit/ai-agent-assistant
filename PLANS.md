@@ -4,9 +4,15 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No implementation plan is active. The exact 19-path documentation-only ARB-002A
-gateway threat model and closed configuration is verified complete with
-advisories and awaits publication under
+No implementation plan is active. The documentation-only
+`docs/plans/repository-governance-codex-instruction-hierarchy.md` is verified
+complete with `PASS WITH ADVISORIES`; it created the concise root instruction
+entry point and detailed Codex master instruction layer without changing the
+product roadmap, source, dependencies, hooks, or runtime behavior.
+
+The exact 19-path documentation-only ARB-002A gateway threat model and closed
+configuration is verified complete with advisories and published through PR #41
+at `36ce9ab` under
 `docs/plans/arb-002a-gateway-threat-model-and-configuration.md`. D-064 records
 four independent evidence stages and closed Microsoft registration, Azure
 network, managed-identity, RBAC, disclosure, and evidence defaults. This plan

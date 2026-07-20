@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-07-19
+Last updated: 2026-07-20
 
 ## Current milestone
 
@@ -81,8 +81,8 @@ executor, complete workflow, durable product data, enterprise control, signing,
 or notarization was implemented. No PR #33 publication action remains.
 
 ARB-002A is verified complete with advisories as an exact 19-path
-documentation-only increment on clean baseline `92bd2c3` and awaits
-publication. D-064 closes the pre-implementation configuration and
+documentation-only increment on clean baseline `92bd2c3`, published through
+PR #41, and squash-merged at `36ce9ab`. D-064 closes the pre-implementation configuration and
 threat-model design by separating Stage A design, Stage B no-traffic
 provisioning, Stage C synthetic-only transport, and Stage D real-content
 activation. It creates no current registration, Azure resource, identity,
@@ -91,6 +91,10 @@ ARB-002 remains High and unresolved, and no later stage is Ready or authorized.
 Microsoft's documented default token lifetime exceeds the accepted 15-minute
 gateway-token maximum, and the manifest-based IP-literal ephemeral callback is
 unproven; both are hard Stage C evidence gates rather than resolved facts.
+
+Repository Governance - Codex instruction hierarchy is verified complete with
+`PASS WITH ADVISORIES`. It creates no product capability and does not change
+the approved Phase 4 queue.
 
 ## Increment status
 
@@ -179,8 +183,9 @@ unproven; both are hard Stage C evidence gates rather than resolved facts.
   implementation and live-traffic blocks remain, and no publication action
   remains**.
 - ARB-002A gateway threat model and closed configuration - **verified complete
-  with advisories under D-064 and awaiting publication; exact 19-path
-  documentation-only scope; no runtime or provisioning authority**.
+  with advisories under D-064; published through PR #41 and squash-merged at
+  `36ce9ab`; exact 19-path documentation-only scope; no runtime or
+  provisioning authority**.
 
 ## Prompt library capability and evidence
 

@@ -1,8 +1,39 @@
 # Handoff
 
-Last updated: 2026-07-19
+Last updated: 2026-07-20
 
 ## Current state
+
+ARB-002A was published through PR #41 and squash-merged at `36ce9ab`; its
+valid `PASS WITH ADVISORIES` marker remains evidence for Stage A only. Stage B,
+Stage C, Stage D, and ARB-002 runtime work remain blocked. The
+documentation-only repository-governance Codex instruction hierarchy is
+verified complete with `PASS WITH ADVISORIES`; its valid marker records the
+concise root instructions, master prompt, aligned reusable prompts, and D-065.
+No application, dependency, CI, hook, skill, deployment, or runtime path
+changed.
+
+## Current exact task
+
+No product or remediation increment is Ready. Obtain separate project-owner
+direction before selecting a future decision-only, documentation-only, or
+implementation task. Do not begin Stage B, Stage C, Stage D, ARB-002 runtime
+work, another remediation, or any identity, cloud, gateway, networking,
+credential, Keychain, AgentProvider, AI-provider, or enterprise implementation.
+
+### Ready-to-paste resume prompt
+
+```text
+Use $session-start.
+
+Start from the clean synchronized baseline after publication of the
+repository-governance Codex instruction hierarchy. Confirm its completion
+marker remains valid, reconcile the actual repository state, and identify one
+smallest bounded task only after project-owner direction. Do not begin ARB-002
+Stage B, Stage C, Stage D, runtime work, or any identity, cloud, gateway,
+networking, credential, Keychain, AgentProvider, AI-provider, or enterprise
+implementation without separate approval.
+```
 
 Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,
 and merged on the target Mac. Meta Increment 1 branding and identity foundation

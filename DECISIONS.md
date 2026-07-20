@@ -2222,6 +2222,50 @@ Consequences:
   provider call, disclosure UI, runtime behavior, or ARB-002 implementation is
   authorized.
 
+## D-065 - Establish the Codex instruction hierarchy
+
+Date: 2026-07-20
+Status: Accepted repository-governance policy
+
+Decision: use root `AGENTS.md` as the concise automatically loaded repository
+entry point and `docs/governance/MASTER_PROMPT.md` as the detailed,
+maintainable repository-wide Codex instruction layer.
+
+Instruction precedence is platform and system instructions, root `AGENTS.md`,
+the master prompt, current project-state records, the approved task-specific
+skill/prompt/plan, then future directory-level `AGENTS.md` files. This
+instruction ordering does not replace the documentation-authority ordering in
+`ENGINEERING_GUIDE.md`.
+
+All active reusable prompts must begin by requiring root `AGENTS.md` and the
+master prompt, then preserve their task-specific goals, scope, validation, and
+stop conditions. The existing `prompts/README.md` remains the prompt index;
+no prompt is deleted, renamed, or relocated by this decision.
+
+The master prompt defines global scope, validation, security, Git, handoff,
+future multi-agent, and final-response guidance. It requires an advisory
+model-and-effort recommendation based on the next proposed work. GPT-5.6 Terra
+is preferred for documentation and planning and GPT-5.6 Sol for implementation
+when available; otherwise Codex must name the closest available fallback. The
+recommendation does not switch models and must not recommend Ultra while
+multi-agent/subagent execution remains outside approved scope.
+
+Future multi-agent concepts may be documented only. This decision authorizes no
+product orchestration, subagent execution, agent communication, workflow engine,
+background worker, database, provider integration, cloud service, IPC, UI,
+dependency, hook, or model-routing automation.
+
+Consequences:
+
+- Root instructions remain concise while essential safety, destructive-Git, and
+  validation restrictions stay directly available.
+- Detailed global rules are maintained once in the master prompt and reference
+  authoritative architecture, security, testing, and project-state documents.
+- The approved product roadmap is preserved. The hierarchy does not authorize
+  Stage B, Stage C, Stage D, ARB-002 runtime work, or another product increment.
+- A missing or unavailable preferred model requires a transparent fallback
+  recommendation, not an unsupported claim about the active model.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

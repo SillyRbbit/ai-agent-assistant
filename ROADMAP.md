@@ -1,7 +1,7 @@
 # Cortexa roadmap
 
 Status: Authoritative milestone roadmap
-Last updated: 2026-07-19
+Last updated: 2026-07-20
 
 ## Status model
 
@@ -92,7 +92,7 @@ individually approved providers, and no such implementation currently exists.
 | Remediation ARB-022 - project-memory reconciliation      | Completed and merged at `7c79e65`               | PR #21 publication state and the live queue were reconciled without changing product source                         | Documentation checks and the `remediation-arb-022` gate passed; no remaining ARB-022 publication gate                                                                                   |
 | Repository risk-based GitHub Actions validation          | Completed at `1780d7f`; reconciled at `74a8d2c` | Two read-only risk-based workflows, deterministic path classification, consolidated audits, and dual-runner routing | Branch and post-merge runs passed on exact Linux runner 21 and macOS runner 22 selectors; D-058 publication is closed                                                                   |
 | High-severity advisory disposition                       | Completed and merged at `7bf1a5c`               | Evidence-based disposition of ARB-001 through ARB-008 and ARB-044 without source or feature work                    | D-062 selects the Phase 1 provider; exact identity evidence and O-006 AI-provider configuration remain open; O-008/O-009 retain legal and release gates; D-061 evidence remains pending |
-| ARB-002A - gateway threat model and closed configuration | Verified; awaiting publication                  | D-064 separates design, no-traffic provisioning, synthetic transport, and real-content activation                   | Exact 19-path documentation checks and gate pass with advisories; later stages remain separately blocked                                                                                |
+| ARB-002A - gateway threat model and closed configuration | Published at `36ce9ab`                          | D-064 separates design, no-traffic provisioning, synthetic transport, and real-content activation                   | Exact 19-path documentation checks and gate pass with advisories; later stages remain separately blocked                                                                                |
 
 Meta Increments 2, 3, 5, and 6 and repository risk-based CI change documentation
 or repository governance only. They do not satisfy any product capability or
@@ -118,18 +118,16 @@ Release milestones additionally require `RELEASE_CHECKLIST.md` and
 
 ## Current queue
 
-1. Review and publish only the verified documentation-only ARB-002A scope when
-   separately directed.
-2. Do not begin Stage B no-traffic provisioning, Stage C synthetic transport,
+1. Do not begin Stage B no-traffic provisioning, Stage C synthetic transport,
    Stage D real-content activation, or another High remediation automatically.
-3. Later work must collect D-062's exact Microsoft registration and token
+2. Later work must collect D-062's exact Microsoft registration and token
    evidence, D-063's exact Azure deployment evidence, and D-061 provider,
    disclosure, retention, and operational evidence under separate plans.
-4. Keep ARB-003, ARB-004, ARB-005, and ARB-008 blocked until separately
+3. Keep ARB-003, ARB-004, ARB-005, and ARB-008 blocked until separately
    approved capability increments are selected.
-5. Revisit ARB-006 only before public distribution or external contributions,
+4. Revisit ARB-006 only before public distribution or external contributions,
    and ARB-007 only before release-candidate or public-distribution work.
-6. Do not add transport, credentials, execution, persistence, enterprise
+5. Do not add transport, credentials, execution, persistence, enterprise
    controls, a license grant, signing, or notarization from this roadmap entry.
 
 Increment 4V is verified complete and published. D-058 and its project-memory

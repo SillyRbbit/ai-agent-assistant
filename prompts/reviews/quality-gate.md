@@ -13,6 +13,8 @@
 ## Prompt
 
 ```text
+Follow the root AGENTS.md and docs/governance/MASTER_PROMPT.md. Apply the current task-specific instructions below without violating the approved increment.
+
 Use $quality-gate for {{INCREMENT_NAME}}.
 
 Run python3 .codex/hooks/session_end_gate.py, then execute every automated and manual check required by the plan. Record Passed, Failed, Not run, and Manual verification pending accurately. Review the complete change set with $architecture-review, $security-review, $code-review, $technical-debt, and $readiness-review.

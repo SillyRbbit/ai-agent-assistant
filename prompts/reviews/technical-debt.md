@@ -13,6 +13,8 @@
 ## Prompt
 
 ```text
+Follow the root AGENTS.md and docs/governance/MASTER_PROMPT.md. Apply the current task-specific instructions below without violating the approved increment.
+
 Use $technical-debt.
 
 Review {{CHANGE_OR_AREA}} using the complete diff, active plan, ARCHITECTURE.md, CODE_REVIEW.md, and roadmap state. Identify only concrete duplication, dead code, misleading abstractions, brittle tests, deferred failures, portability gaps, dependency issues, or documentation drift.
