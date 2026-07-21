@@ -44,7 +44,19 @@ be mistaken for an end-to-end security path.
 - Phase 2 may add Entra workforce SSO, tenant-aware validation, group authorization, and enterprise administration. Those controls and other compatible enterprise OIDC or SAML identity providers remain separately approved future capabilities. AWS and Google Cloud accounts are not treated as consumer identity providers.
 - Azure Container Apps in Central US is the initial planned hosting target, and `https://api.cortexaai.io` is the reserved origin. The origin remains inactive until DNS, TLS, deployment, authentication, authorization, logging, and security verification pass. Initial production uses one primary cloud. Container portability does not authorize AWS, Google Cloud, active-active multicloud, cloud failover, or a three-cloud release.
 - A future trusted `AgentProvider` abstraction may select only separately approved AI model providers under trusted gateway or core policy. No implementation currently exists. Each AI provider requires independent retention, ZDR, data-use, logging, region, and security approval.
-- D-063 selects Azure OpenAI in Microsoft Foundry as the sole Phase 1 synthetic-evaluation candidate. The planned gateway uses managed identity and least-privilege Azure RBAC rather than an API key, one Standard/Regional Central US deployment, foreground Responses with `store: false` and `background: false`, strict custom functions, and no parallel function calls. No resource, deployment, identity, RBAC assignment, endpoint, or network path exists.
+- D-066 selects OpenAI as the sole synthetic-demo candidate. Any future credential is gateway-owned and never reaches the desktop or WebView; exact data-control evidence, disclosure, limits, and a separate implementation plan remain mandatory. The owner configured a non-secret project boundary, but no API credential, endpoint integration, or network path exists.
+- D-067 selects Cloudflare Workers Free only as the future internal-demo gateway
+  candidate. The OpenAI project exists with owner-confirmed synthetic-only
+  restrictions, bounded spend/rate settings, one allowed model, and disabled
+  API-call logging; its identifier and any future key remain outside the
+  repository. A future key may exist only as a Worker secret. No Worker, route,
+  secret, client authentication, deployment, or provider traffic exists.
+- D-068 permits one future 30-day-maximum Cloudflare Access service token only
+  for the owner-only fake-data demo. Its secret is macOS-Keychain-only and
+  trusted-Rust-only; the Access policy is restricted to one application and the
+  Worker must validate JWT signature, issuer, and exact audience. Revocation and
+  route disablement fail closed. No token or Keychain item currently exists,
+  and D-064's production 15-minute access-token maximum is unchanged.
 - D-064 closes the pre-implementation configuration and separates design,
   no-traffic provisioning, synthetic-only transport, and real-content
   activation. Its authoritative configuration is
@@ -58,12 +70,16 @@ be mistaken for an end-to-end security path.
   `gateway.access`, and a `127.0.0.1` ephemeral callback at
   `/oauth/callback`. Actual identifiers and observed claims remain restricted
   operational evidence; mismatch fails closed.
-- The closed Azure boundary uses one dedicated non-shared user-assigned managed
+- The closed Azure boundary below is retained as historical D-064 design
+  evidence only; D-066 supersedes it as the synthetic-demo provider direction.
+  It uses one dedicated non-shared user-assigned managed
   identity, exact-resource `Cognitive Services OpenAI User` RBAC, a private
   Azure OpenAI endpoint, and disabled provider public network access before any
   provider traffic. API-key fallback, broad runtime roles, unrestricted egress,
   alternate origins, and automatic fallback are prohibited.
-- Direct OpenAI and other providers remain separately approved future adapters. Automatic or silent provider fallback is prohibited because it can cross retention, region, and contractual boundaries.
+- Other providers remain separately approved future adapters. Automatic or
+  silent provider fallback is prohibited because it can cross retention, region,
+  and contractual boundaries.
 - A future desktop gateway access token must be short-lived with a maximum 15-minute lifetime, audience-bound, read only by trusted Rust through the platform secret-store abstraction, and stored in process memory. Initial scopes are `openid`, `email`, and one exact delegated gateway scope. `profile`, Microsoft Graph, directory, group, mail, calendar, file, contact, and `offline_access` scopes are excluded. Persistent sessions and `offline_access` require a separate decision; any later approved refresh or session credential must use platform-secure credential storage. The WebView must never receive any credential.
 - Microsoft's documented default access-token lifetime does not satisfy the
   accepted 15-minute maximum. Stage B must prove an enforceable compatible

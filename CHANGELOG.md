@@ -4,6 +4,30 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added D-068's documentation-only, demo-only Cloudflare Access service-token
+  exception: 30-day maximum, macOS-Keychain-only secret, trusted-Rust-only
+  access, one application, Worker JWT validation, and immediate revocation. No
+  credential, cloud resource, deployment, or runtime behavior was added.
+
+- Selected Cloudflare Workers Free in D-067 as the documentation-only remote
+  gateway candidate for the internal OpenAI synthetic demo. No Worker, DNS,
+  secret, credential, deployment, provider request, or runtime behavior was
+  added.
+
+- Recorded the owner-only synthetic-demo decisions for fake data, disclosure,
+  fixed limits, disable switch, and server-side-only future key ownership. No
+  credential, provider request, networking, external transmission, or runtime
+  behavior was added.
+
+- Added the documentation-only readiness plan for a future OpenAI synthetic
+  demo gateway. It records required evidence and approvals; no account,
+  credential, networking, provider request, external transmission, or runtime
+  behavior was added.
+
+- Superseded the unpublished Azure Stage B plan with D-066's documentation-only
+  OpenAI synthetic-demo direction. No account, credential, networking, provider
+  request, external transmission, or runtime behavior was added.
+
 - Added the documentation-only Codex instruction hierarchy: concise root
   `AGENTS.md`, detailed `docs/governance/MASTER_PROMPT.md`, aligned active
   prompts/templates, D-065, and the advisory model-and-effort recommendation

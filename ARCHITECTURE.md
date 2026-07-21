@@ -191,19 +191,28 @@ data-residency, resilience, or commercial justification. There is no
 active-active multicloud architecture, three-cloud release requirement, or
 approved secondary-cloud failover.
 
-**AI model-provider boundary**: D-063 selects Azure OpenAI in Microsoft Foundry
-as the sole Phase 1 synthetic-evaluation candidate behind the future gateway.
-The planned gateway uses one Standard/Regional Central US deployment, managed
-identity with least-privilege Azure RBAC, and foreground Responses streaming
-with `store: false`, `background: false`, strict custom functions, and parallel
-calls disabled. The exact model and version remain deployment-time evidence,
-not a stable desktop contract. The future gateway and trusted `AgentProvider`
-abstraction may support multiple separately approved AI model providers. No
-`AgentProvider` implementation currently exists. Provider
-selection occurs only in the trusted gateway or trusted core under closed
-policy. Desktop clients never receive provider credentials. Initial Azure
-provider secrets belong only in Azure-managed gateway secret storage; any
-future cloud requires an equivalent reviewed managed-secret facility.
+**AI model-provider boundary**: D-066 selects OpenAI as the sole synthetic-demo
+candidate behind a future trusted gateway; D-063's Azure design is superseded
+before publication. No provider transport is planned or implemented by this
+decision. Any later OpenAI implementation must establish its exact model,
+version, data controls, limits, and server-side secret handling as separate
+evidence; desktop clients never receive provider credentials. The Azure-specific
+configuration below remains historical D-064 design evidence only, not the
+current demo-provider direction.
+
+D-067 selects Cloudflare Workers Free as the sole remote gateway candidate for
+the internal synthetic demo. A future Worker owns the OpenAI key as a Worker
+secret, accepts only authenticated bounded synthetic-text requests, emits only
+closed redacted results, and gains no local tool authority. No Worker, route,
+secret, authentication mechanism, or network path currently exists. This
+demo-only choice does not replace the planned production hosting boundary.
+
+D-068 permits one future demo-only Cloudflare Access service token. Its secret
+remains in macOS Keychain, trusted Rust sends it only to the fixed gateway
+origin, Cloudflare Access restricts it to one application, and the Worker
+independently validates the Access JWT signature, issuer, and audience. This
+30-day maximum machine credential is not a production pattern and does not
+change D-064's 15-minute production access-token maximum.
 
 **Phase 2 target**: organization accounts and team workspaces may add
 centralized administration, role-based access control, organization policy and
@@ -240,7 +249,7 @@ format is `api://<gateway-api-client-id>`, its sole delegated scope is
 future evidence. A mismatch fails closed rather than falling back to another
 issuer, audience, scope, redirect, or account type.
 
-The planned gateway uses one dedicated non-shared user-assigned managed
+The former Azure-design gateway uses one dedicated non-shared user-assigned managed
 identity and exact-resource `Cognitive Services OpenAI User` RBAC. Azure OpenAI
 must be reachable only through a private endpoint with public network access
 disabled before any synthetic or real provider traffic. The public gateway

@@ -2266,6 +2266,57 @@ Consequences:
 - A missing or unavailable preferred model requires a transparent fallback
   recommendation, not an unsupported claim about the active model.
 
+## D-066 - Select OpenAI for a synthetic-only demo
+
+Date: 2026-07-20
+Status: Accepted documentation-only provider decision
+
+Decision: supersede D-063's unpublished Azure provider direction with OpenAI as
+the sole candidate for a future synthetic-data-only demo. A future trusted
+gateway owns any credential; the desktop and WebView never receive it. No API
+call, account, key, external transmission, production data, tool execution,
+automatic fallback, or multi-provider routing is authorized by this decision.
+
+Consequences: the Azure Stage B plan is superseded before publication. A later
+implementation requires exact OpenAI data-control evidence, owner-approved
+synthetic corpus, disclosure, fixed limits, redacted errors, security tests,
+and a separate project-owner approval.
+
+## D-067 - Select Cloudflare Workers for the internal synthetic-demo gateway
+
+Date: 2026-07-20
+Status: Accepted documentation-only deployment decision
+
+Decision: select Cloudflare Workers Free as the sole remote gateway candidate
+for the internal, owner-only OpenAI synthetic demo. A future OpenAI API key may
+exist only as a Cloudflare Worker secret. This does not select client-to-Worker
+authentication or authorize a Worker, DNS route, secret, deployment, provider
+request, Keychain credential, or runtime code.
+
+Consequences: Cloudflare is a demo-only boundary and does not replace the
+historical planned Azure production architecture. Client authentication,
+Worker route/domain, deployment, logging, rotation, rollback, and manual
+security evidence require a separate approved plan. Automatic provider
+fallback and prompt/response logging remain prohibited.
+
+## D-068 - Permit one Cloudflare Access service token for the internal demo
+
+Date: 2026-07-20
+Status: Accepted documentation-only security exception
+
+Decision: permit one Cloudflare Access service token, with a maximum 30-day
+duration, to authenticate trusted Rust to one future internal-demo Access
+application. Its Client Secret may exist only in macOS Keychain and may be read
+only by trusted Rust. The future Worker must validate the Access JWT signature,
+issuer, and exact audience. Immediate token revocation and route disablement are
+mandatory rollback controls.
+
+Consequences: this is a narrow owner-only, fake-data, non-production exception.
+It does not change D-064's maximum 15-minute production gateway access-token
+requirement or authorize a token, Keychain item, Access application, Worker,
+route, DNS record, deployment, or provider traffic. There is no bypass, retry,
+alternate credential, or provider fallback.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

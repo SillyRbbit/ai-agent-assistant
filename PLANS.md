@@ -4,7 +4,27 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No implementation plan is active. The documentation-only
+No plan is active. The completed
+[`cloudflare-access-service-token-demo-exception.md`](docs/plans/cloudflare-access-service-token-demo-exception.md)
+records the narrow demo-only authentication exception while leaving all
+external resources and credentials blocked. The completed
+[`cloudflare-synthetic-demo-gateway-decision.md`](docs/plans/cloudflare-synthetic-demo-gateway-decision.md)
+selects Cloudflare Workers Free as the demo-only remote gateway candidate while
+leaving client authentication and deployment separately blocked.
+
+The completed
+[`openai-synthetic-demo-gateway-readiness-plan.md`](docs/plans/openai-synthetic-demo-gateway-readiness-plan.md)
+defines the required evidence and approvals before any future implementation can
+be proposed.
+
+The completed
+[`openai-synthetic-demo-provider-decision.md`](docs/plans/openai-synthetic-demo-provider-decision.md)
+supersedes the unpublished Azure Stage B plan for a future synthetic-only demo.
+
+The former Azure Stage B plan is superseded before publication; no Azure
+resource or runtime change was made.
+
+No runtime implementation plan is active. The documentation-only
 `docs/plans/repository-governance-codex-instruction-hierarchy.md` is verified
 complete with `PASS WITH ADVISORIES`; it created the concise root instruction
 entry point and detailed Codex master instruction layer without changing the

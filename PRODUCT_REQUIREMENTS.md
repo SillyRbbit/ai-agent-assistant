@@ -136,12 +136,16 @@ No use case permits unattended consequential external action in the MVP.
   constitute active-active multicloud or a three-cloud release requirement.
   External accounts shall use provider ID plus normalized issuer plus subject;
   email shall not identify or automatically link accounts.
-- **FR-020**: Phase 1 model evaluation shall target Azure OpenAI in Microsoft
-  Foundry through the Cortexa gateway using managed identity, least-privilege
-  RBAC, one regional deployment, foreground Responses, `store: false`,
-  `background: false`, strict custom functions, and no automatic provider
-  fallback. Exact provider configuration and D-061 evidence remain mandatory
-  before any real user content.
+- **FR-020**: Synthetic demo evaluation shall target OpenAI only through a
+  future trusted gateway. Credentials remain server-owned; exact data-control
+  evidence, disclosure, limits, and D-061 evidence remain mandatory before any
+  real user content. D-067 selects Cloudflare Workers Free only for the internal
+  synthetic-demo gateway; it does not alter production hosting. Automatic
+  provider fallback is prohibited.
+- **FR-020A**: The internal fake-data demo may use one D-068 Cloudflare Access
+  service token for at most 30 days, stored only in macOS Keychain and accessed
+  only by trusted Rust. This exception is non-production and does not change
+  the 15-minute production gateway access-token maximum.
 
 Phase 1 gateway activation shall use D-064's four independent stages. An
 approved threat model and closed configuration do not authorize resource
@@ -150,9 +154,9 @@ provider traffic; synthetic-only verification does not authorize real user
 content; and real-content activation requires exact D-061 evidence and a
 separate project-owner decision. The closed registration uses separate desktop
 and gateway API applications, delegated scope `gateway.access`, and a loopback
-callback on `127.0.0.1` at `/oauth/callback`. The planned Azure path uses a
-dedicated user-assigned managed identity, exact-resource inference RBAC, and a
-private Azure OpenAI endpoint with public network access disabled.
+callback on `127.0.0.1` at `/oauth/callback`. D-064's Azure path remains
+historical configuration evidence only; D-066 supersedes it for a future
+synthetic demo and grants no provisioning or transport authority.
 
 FR-012 and live transport portions of FR-010 through FR-019 are planned; the
 transport-free request and validation contracts are current. No account,

@@ -92,6 +92,13 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Queue status
 
+### Completed documentation-only task: Cloudflare Access service-token demo exception
+
+**Status:** Complete. D-068 permits one 30-day-maximum, Keychain-held Cloudflare
+Access service token only for the owner-only fake-data demo. It authorizes
+documentation only; token creation, deployment, secrets, traffic, and runtime
+remain blocked.
+
 ### No runtime remediation is Ready
 
 **Status:** The exact 19-path documentation-only ARB-002A scope in
@@ -113,9 +120,10 @@ documented defaults are not accepted as evidence, and no fallback is implied.
 D-059 classifies all canonical High findings without lowering
 severity or representing deferred work as resolved. ARB-001 is resolved.
 ARB-002 remains High and unresolved. D-062 selects Microsoft personal identity
-for Phase 1, and D-063 selects Azure OpenAI as the synthetic-evaluation
-candidate, but exact registration, deployment, D-061, and threat-model evidence
-remain unresolved. D-060 separates pluggable
+for Phase 1. D-066 supersedes D-063's unpublished Azure synthetic-demo
+direction with OpenAI only for a future synthetic demo; exact identity,
+OpenAI data-control, D-061, disclosure, and threat-model evidence remain
+unresolved. D-060 separates pluggable
 identity, Azure-first portable hosting, and future trusted AI-provider
 selection; D-061 accepts O-007's product policy, but provider-specific ZDR
 evidence remains mandatory. ARB-003, ARB-004, ARB-005,
@@ -138,7 +146,7 @@ No runtime remediation or product increment is Ready. Do not begin ARB-002B or
 another ARB-002 implementation automatically. Do not add a provider
 client, `AgentProvider`, gateway origin, cloud deployment, identity integration,
 credential, Keychain adapter, or external content path before D-062's exact
-evidence passes, D-063's exact Azure configuration and D-061 evidence pass, the
+evidence passes, D-066's exact OpenAI data-control and D-061 evidence pass, the
 required disclosure exists, and a separate implementation
 and threat model are approved. Container portability
 does not authorize AWS, Google Cloud, active-active multicloud, failover, or a
