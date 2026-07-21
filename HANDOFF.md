@@ -15,24 +15,23 @@ changed.
 
 ## Current exact task
 
-No product or remediation increment is Ready. Obtain separate project-owner
-direction before selecting a future decision-only, documentation-only, or
-implementation task. Do not begin Stage B, Stage C, Stage D, ARB-002 runtime
-work, another remediation, or any identity, cloud, gateway, networking,
-credential, Keychain, AgentProvider, AI-provider, or enterprise implementation.
+The documentation-only Cloudflare Access service-token demo exception is
+complete. No product increment is Ready. Obtain separate project-owner
+direction before a no-traffic Access/Worker deployment plan. Do not create a
+token, Keychain item, Access application, Worker, route, DNS record, secret,
+provider request, or runtime behavior.
 
 ### Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Start from the clean synchronized baseline after publication of the
-repository-governance Codex instruction hierarchy. Confirm its completion
-marker remains valid, reconcile the actual repository state, and identify one
-smallest bounded task only after project-owner direction. Do not begin ARB-002
-Stage B, Stage C, Stage D, runtime work, or any identity, cloud, gateway,
-networking, credential, Keychain, AgentProvider, AI-provider, or enterprise
-implementation without separate approval.
+Start from the published documentation bundle ending with the completed
+`cloudflare-access-service-token-demo-exception` gate. Confirm its marker
+remains valid and reconcile the actual branch and working tree. No product
+increment is Ready. Do not create a service token, Keychain item, Access
+application, Worker, route, DNS record, secret, or provider request without a
+separately approved no-traffic deployment plan.
 ```
 
 Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,

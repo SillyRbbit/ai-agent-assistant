@@ -72,9 +72,10 @@ capabilities; ARB-006 and ARB-007 remain High but are non-blocking until
 explicit legal and release triggers; and ARB-044 remains superseded. D-060 now
 separates pluggable identity-provider support, Azure-first portable hosting, and
 future trusted AI model-provider support. D-062 selects Microsoft personal
-identity for Phase 1. D-063 selects Azure OpenAI as the Phase 1
-synthetic-evaluation candidate, but exact identity, Azure deployment, and D-061
-evidence remain open. D-061 accepts O-007's product policy while
+identity for Phase 1. D-066 supersedes D-063's unpublished Azure
+synthetic-evaluation direction with OpenAI only for a future synthetic demo;
+exact identity, OpenAI data-control, disclosure, and D-061 evidence remain open.
+D-061 accepts O-007's product policy while
 provider-specific ZDR evidence remains pending. No `AgentProvider`,
 identity integration, cloud deployment, live networking,
 executor, complete workflow, durable product data, enterprise control, signing,
@@ -95,6 +96,33 @@ unproven; both are hard Stage C evidence gates rather than resolved facts.
 Repository Governance - Codex instruction hierarchy is verified complete with
 `PASS WITH ADVISORIES`. It creates no product capability and does not change
 the approved Phase 4 queue.
+
+The Azure Stage B planning increment is superseded before publication. D-066
+selects OpenAI only for a future synthetic demo; no account, credential,
+networking, external transmission, or runtime authority is granted.
+
+The completed documentation-only readiness plan records the exact provider
+data-control, synthetic-corpus, disclosure, server-side secret, limits,
+redaction, test, and rollback evidence required before any implementation may
+be proposed. It does not make a provider increment Ready.
+
+The project owner has selected fake synthetic data only, an internal owner-only
+audience, pre-request disclosure, fixed low limits with a fail-closed disable
+switch, and server-side-only future API-key ownership. Exact provider
+data-control evidence and a separate approved implementation plan remain
+required.
+
+D-067 selects Cloudflare Workers Free only as the future internal synthetic-demo
+gateway. The owner configured the non-secret OpenAI project controls; no
+project identifier is recorded. No Worker, route, DNS change, secret, client
+authentication, deployment, or provider traffic exists, and production hosting
+is unchanged.
+
+D-068 permits one future 30-day-maximum Cloudflare Access service token only
+for the owner-only fake-data demo. Its secret is limited to macOS Keychain and
+trusted Rust; one Access application and Worker JWT validation are required.
+No token, Keychain item, Access application, Worker, route, DNS change, secret,
+deployment, or traffic exists. The production 15-minute requirement is unchanged.
 
 ## Increment status
 
@@ -1032,11 +1060,12 @@ route only to separately approved AI providers; no implementation exists, no
 desktop provider credential is permitted, and every provider requires its own
 O-007 evidence.
 
-O-006's Phase 1 identity selection is decided by D-062, and D-063 selects the
-Azure OpenAI synthetic-evaluation candidate, but exact Microsoft
-registration, issuer, audience, redirect, scope, account, and threat-model
-evidence remain pending. Exact Azure resource, ZDR, disclosure, deployment, and
-security evidence also remain pending.
+O-006's Phase 1 identity selection is decided by D-062. D-066 supersedes
+D-063's unpublished Azure synthetic-evaluation direction with OpenAI only for a
+future synthetic demo; exact Microsoft registration, issuer, audience, redirect,
+scope, account, OpenAI data-control, disclosure, and threat-model evidence
+remain pending. No Azure resource, OpenAI account, credential, endpoint, or
+provider traffic exists.
 ARB-002 therefore remains High, unresolved, and not Ready for implementation.
 The original documentation-only decision record passed its exact 17-path
 closeout and mandatory gate with `PASS WITH ADVISORIES`. The provider-boundary
@@ -1058,8 +1087,9 @@ path was added.
 ## Next action
 
 No product or remediation increment is Ready. ARB-002 remains decision-required
-under D-062's identity-evidence gates and D-063's Azure evidence gates and
-blocks live model networking. ARB-003, ARB-004, ARB-005, and ARB-008 remain blocked on future
+under D-062's identity-evidence gates and D-066's OpenAI data-control,
+disclosure, and security-evidence gates and blocks live model networking.
+ARB-003, ARB-004, ARB-005, and ARB-008 remain blocked on future
 capability work. ARB-006 must be revisited before public distribution or
 external contributions; ARB-007 must be revisited before release-candidate or
 public-distribution work. Review the verified documentation decision record for
