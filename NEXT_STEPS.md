@@ -1,6 +1,6 @@
 # Next steps
 
-Last updated: 2026-07-20
+Last updated: 2026-07-28
 
 This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must close before later feature work begins.
 
@@ -91,6 +91,16 @@ This file is the ordered implementation queue. Work only on the first item marke
   activation, or runtime implementation authorized**.
 
 ## Queue status
+
+### Completed documentation-only planning: Cloudflare demo local security boundary
+
+**Status:** Complete; no implementation authorized.
+[`cloudflare-demo-local-security-boundary.md`](docs/plans/cloudflare-demo-local-security-boundary.md)
+defines a fake-credential-first Keychain proof and future local deny-only Worker
+boundary. It adds no code, dependency, credential, Keychain item, Worker,
+Access application, policy, route, DNS change, secret, provider request, or
+traffic. Separate exact implementation plans remain required, and neither is
+Ready.
 
 ### Completed documentation-only reconciliation: Cloudflare Zero Trust onboarding
 

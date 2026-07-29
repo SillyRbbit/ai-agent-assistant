@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-07-20
+Last updated: 2026-07-28
 
 ## Current milestone
 
@@ -137,6 +137,15 @@ application or policy, service token, Worker, route, DNS change, device
 enrollment, secret, provider request, traffic, source, or runtime behavior
 exists. This attestation was not independently verified through the Cloudflare
 dashboard, API, or a provider request and does not make another increment Ready.
+
+The documentation-only Cloudflare demo local security-boundary plan is
+complete. It defines two future, separately approval-bound local implementation
+increments: fake-credential-only macOS Keychain proof for a trusted Rust reader,
+and a local deny-only Worker artifact with persistent no-route configuration and
+no provider egress. No source, test, dependency, credential, Keychain item,
+Worker, Access application, policy, route, DNS change, secret, deployment,
+provider request, traffic, or runtime behavior was added. Neither future code
+increment is Ready.
 
 ## Increment status
 

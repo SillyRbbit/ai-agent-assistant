@@ -4,6 +4,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added the documentation-only Cloudflare demo local security-boundary plan.
+  It defines fake-credential-first Keychain proof, trusted-Rust-only credential
+  reads, and a future local deny-only Worker with no route, preview URL,
+  provider egress, secret, deployment, or traffic. No code, dependency,
+  credential, Keychain item, or Cloudflare configuration was added.
+
 - Recorded the owner-attested, Free-plan Cloudflare Zero Trust organization
   onboarding for the owner-only demo boundary. Cloudflare's default
   account-member identity provider is present; no Access application, policy,

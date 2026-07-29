@@ -9,6 +9,11 @@ organization exists with only Cloudflare's default account-member identity
 provider. It has no Access application, policy, service token, Worker, route,
 DNS change, device enrollment, secret, provider request, or traffic. The
 completed documentation-only
+[`cloudflare-demo-local-security-boundary.md`](docs/plans/cloudflare-demo-local-security-boundary.md)
+defines fake-credential-first Keychain proof and a future local deny-only Worker
+boundary. It authorizes no code, dependency, credential, Keychain write,
+Cloudflare change, provider request, or traffic. The
+completed documentation-only
 [`cloudflare-access-worker-no-traffic-deployment.md`](docs/plans/cloudflare-access-worker-no-traffic-deployment.md)
 defines the exact future operational scope for a disabled Cloudflare Access and
 Worker boundary. It creates no external resource, token, Keychain item, secret,

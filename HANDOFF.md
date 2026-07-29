@@ -1,6 +1,6 @@
 # Handoff
 
-Last updated: 2026-07-20
+Last updated: 2026-07-28
 
 ## Current state
 
@@ -15,27 +15,26 @@ changed.
 
 ## Current exact task
 
-The owner-attested Cloudflare Zero Trust organization is configured on the Free
-plan for the owner-only demo boundary. Cloudflare's mandatory default identity
-provider is restricted to account members. No Access application, policy,
-service token, Worker, route, DNS change, device enrollment, secret, provider
-request, traffic, or runtime behavior exists. The completed documentation-only
-Cloudflare Access and Worker no-traffic deployment plan remains the future
-operational boundary only. No product increment is Ready; do not begin another
-Cloudflare operational increment without separate project-owner approval of its
-exact external scope and manual evidence.
+The documentation-only Cloudflare demo local security-boundary plan is
+complete. It defines fake-credential-first Keychain proof and a future local
+deny-only Worker boundary, but adds no code, dependency, credential, Keychain
+item, Cloudflare configuration, route, DNS change, provider request, traffic,
+or runtime behavior. The owner-attested Free-plan Zero Trust organization still
+has only Cloudflare's mandatory account-member identity provider. No product or
+operational increment is Ready; each Keychain, Worker, or external step requires
+its own exact plan and separate project-owner approval.
 
 ### Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Start from the owner-attested Cloudflare Zero Trust onboarding reconciliation.
-Confirm its marker remains valid and reconcile the actual branch and working
-tree. Do not create an Access application, policy, token, Keychain item,
-Worker, route, DNS record, secret, deployment, provider request, traffic, or
-runtime behavior. Wait for separate project-owner approval before another
-operational increment.
+Start from the completed documentation-only Cloudflare demo local
+security-boundary plan. Confirm its marker remains valid and reconcile the
+actual branch and working tree. No code increment is Ready. Do not add a
+Keychain adapter or item, Worker source or dependency, Access application,
+policy, token, route, DNS record, secret, deployment, provider request,
+traffic, or runtime behavior without a separately approved exact increment.
 ```
 
 Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,
