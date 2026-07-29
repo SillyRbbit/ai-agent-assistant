@@ -2373,6 +2373,26 @@ production maximum are unchanged. This decision creates no credential,
 Keychain item, application identity, entitlement, Cloudflare resource, provider
 request, traffic, runtime behavior, or implementation authority.
 
+## D-071 - Do not select macOS credential controls by documentation alone
+
+Date: 2026-07-28
+Status: Accepted documentation-only decision boundary
+
+Decision: a future real-demo credential boundary must use either a stable,
+owner-controlled signed application identity with least-privilege Keychain
+access or a narrowly reviewed alternative app-specific ACL. A separate
+owner-approved decision must select one model and define its scope, lifecycle,
+revocation, update/reinstall behavior, and target-Mac evidence before any
+implementation may begin. The secret-memory model must separately define
+bounded ownership, one-time use, redaction, practical zeroization limits, and
+failure closure.
+
+Consequences: repeated prompts from an unsigned executable are not a selected
+control and no unsigned fallback is permitted. This decision creates no signing
+asset, certificate, entitlement, profile, Keychain item, credential, Cloudflare
+resource, provider request, traffic, runtime behavior, or implementation
+authority. D-064 and D-068 remain unchanged.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

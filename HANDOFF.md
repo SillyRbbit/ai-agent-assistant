@@ -36,19 +36,25 @@ transfer, lifecycle, dependency, and private target-Mac evidence gates before
 any future real-ingestion proposal. It authorizes no code, Keychain action,
 credential, Cloudflare resource, provider request, traffic, or runtime work.
 
+The documentation-only Cloudflare macOS identity and secret-memory boundary
+plan is complete. It records the future control-selection criteria and private
+evidence required before real credential work, without choosing a control or
+creating signing, Keychain, credential, Cloudflare, provider, traffic, or
+runtime capability.
+
 ### Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Start from the completed Cloudflare real-credential readiness plan. Confirm its
-marker remains valid and reconcile the actual branch and working tree. Real
-credential ingestion is Blocked pending a separately approved stable signed
-identity or narrow ACL, secret-memory, lifecycle, and target-Mac evidence
-increment. No implementation increment is Ready. Do not add a real credential
-or Keychain item, runtime consumer, IPC, Worker source, Access application,
-policy, token, route, DNS record, secret, deployment, provider request,
-traffic, or runtime behavior without a separately approved exact increment.
+Start from the completed Cloudflare macOS identity and secret-memory boundary
+plan. Confirm its marker remains valid and reconcile the actual branch and
+working tree. No macOS credential control has been selected, and real ingestion
+is Blocked pending a separately approved selection/implementation increment.
+Do not add a signing asset, Keychain item, credential, runtime consumer, IPC,
+Worker source, Access application, policy, token, route, DNS record, secret,
+deployment, provider request, traffic, or runtime behavior without a separately
+approved exact increment.
 ```
 
 Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,

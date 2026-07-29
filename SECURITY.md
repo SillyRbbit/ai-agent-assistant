@@ -70,6 +70,10 @@ be mistaken for an end-to-end security path.
   dependency reassessment, and target-Mac evidence before real demo-token
   ingestion can be proposed. This is a planning gate, not credential or
   Cloudflare-action authority.
+- D-071 requires a separate owner-approved selection between signed identity
+  and narrow app-specific ACL; it also requires a distinct secret-memory model.
+  Unsigned prompt behavior is not an approved fallback, and documentation
+  creates no signing, Keychain, credential, or Cloudflare authority.
 - D-064 closes the pre-implementation configuration and separates design,
   no-traffic provisioning, synthetic-only transport, and real-content
   activation. Its authoritative configuration is

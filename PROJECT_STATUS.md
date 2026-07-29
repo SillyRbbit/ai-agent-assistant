@@ -167,6 +167,12 @@ Cloudflare demo-token ingestion proposal. It adds no code, credential,
 Keychain action, Cloudflare resource, provider request, traffic, or runtime
 behavior; D-064 and D-068 remain unchanged.
 
+The documentation-only macOS identity and secret-memory boundary plan is
+complete. It requires a later owner-approved choice between stable signed
+identity and narrow app-specific ACL, plus bounded secret handling and private
+target-Mac evidence. It creates no signing, Keychain, credential, Cloudflare,
+provider, traffic, or runtime capability.
+
 ## Increment status
 
 - Increment 1: smallest runnable Tauri application — **complete**.

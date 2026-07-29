@@ -22,6 +22,13 @@ evidence before real demo-token ingestion can be proposed. It creates no
 credential, Keychain action, Cloudflare resource, provider request, traffic, or
 runtime behavior.
 
+The completed documentation-only
+[`cloudflare-demo-macos-identity-secret-boundary-plan.md`](docs/plans/cloudflare-demo-macos-identity-secret-boundary-plan.md)
+defines selection criteria for a future signed identity or narrow Keychain ACL,
+bounded secret-memory controls, lifecycle, and private target-Mac evidence. It
+chooses neither control and creates no signing, Keychain, credential, Cloudflare,
+provider, traffic, or runtime capability.
+
 The owner-attested Free-plan Cloudflare Zero Trust organization exists with
 only Cloudflare's default account-member identity provider. It has no Access
 application, policy, service token, Worker, route, DNS change, device

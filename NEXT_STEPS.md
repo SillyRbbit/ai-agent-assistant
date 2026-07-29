@@ -116,6 +116,15 @@ credential, Keychain action, Cloudflare resource, provider request, traffic, or
 runtime behavior. A later exact design or implementation increment requires
 separate owner approval.
 
+### Completed documentation-only planning: Cloudflare macOS identity and secret-memory boundary
+
+**Status:** Complete; selection and implementation remain Blocked.
+[`cloudflare-demo-macos-identity-secret-boundary-plan.md`](docs/plans/cloudflare-demo-macos-identity-secret-boundary-plan.md)
+defines the selection criteria, bounded secret-memory controls, lifecycle, and
+private target-Mac evidence for a future real demo-token proposal. It chooses
+neither a signed identity nor narrow ACL and creates no signing, Keychain,
+credential, Cloudflare, provider, traffic, or runtime capability.
+
 ### Completed documentation-only planning: Cloudflare demo local security boundary
 
 **Status:** Complete; no implementation authorized.

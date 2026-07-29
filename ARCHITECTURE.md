@@ -231,6 +231,11 @@ owner transfer, rotation, revocation, rollback, dependency reassessment, and
 target-Mac evidence before an implementation proposal can be considered. This
 adds no runtime path or external authority.
 
+D-071 keeps the future macOS access-control choice and secret-memory model out
+of the current runtime. A later owner-approved decision must select a stable
+signed identity or narrow app-specific ACL and define bounded one-time secret
+ownership before implementation; unsigned prompts are not a fallback.
+
 **Phase 2 target**: organization accounts and team workspaces may add
 centralized administration, role-based access control, organization policy and
 audit, Microsoft Entra ID workforce SSO, tenant-aware token validation, and

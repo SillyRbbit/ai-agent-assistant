@@ -4,6 +4,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added a documentation-only Cloudflare macOS identity and secret-memory
+  boundary plan. It defines future selection criteria for stable signed identity
+  or narrow Keychain ACL, bounded secret handling, lifecycle, and private
+  target-Mac evidence without choosing a control or adding signing, Keychain,
+  credential, Cloudflare, provider, traffic, or runtime capability.
+
 - Added a documentation-only Cloudflare real-credential readiness plan. It
   records the stable macOS identity/ACL, secret-memory, direct owner transfer,
   rotation/revocation/rollback, dependency-review, and target-Mac evidence
