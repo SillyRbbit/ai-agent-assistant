@@ -130,6 +130,14 @@ operational boundary, but creates no external resource, credential, route, DNS
 record, deployment, provider request, traffic, source, or runtime behavior.
 Separate project-owner approval remains required before an operational increment.
 
+The owner attested that one Free-plan Cloudflare Zero Trust organization is now
+configured for the internal demo boundary. Cloudflare's automatically created
+default identity provider is restricted to account members. No Access
+application or policy, service token, Worker, route, DNS change, device
+enrollment, secret, provider request, traffic, source, or runtime behavior
+exists. This attestation was not independently verified through the Cloudflare
+dashboard, API, or a provider request and does not make another increment Ready.
+
 ## Increment status
 
 - Increment 1: smallest runnable Tauri application — **complete**.

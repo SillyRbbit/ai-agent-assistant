@@ -92,9 +92,19 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Queue status
 
+### Completed documentation-only reconciliation: Cloudflare Zero Trust onboarding
+
+**Status:** Complete owner-attested current-state reconciliation. The Free-plan
+Zero Trust organization exists with Cloudflare's default identity provider
+restricted to account members. No Access application, policy, service token,
+Worker, route, DNS change, device enrollment, secret, provider request, or
+traffic exists. This control-plane onboarding does not make an operational or
+product increment Ready.
+
 ### Completed documentation-only planning: Cloudflare Access and Worker no-traffic deployment
 
-**Status:** Complete; no external action authorized.
+**Status:** Complete; it authorized no external action by that planning
+increment.
 [`cloudflare-access-worker-no-traffic-deployment.md`](docs/plans/cloudflare-access-worker-no-traffic-deployment.md)
 defines the future one-application, one-token, disabled-Worker boundary and
 required rollback/manual evidence. It creates no token, Keychain item, Access

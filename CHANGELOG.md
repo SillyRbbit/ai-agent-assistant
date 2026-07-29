@@ -4,6 +4,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Recorded the owner-attested, Free-plan Cloudflare Zero Trust organization
+  onboarding for the owner-only demo boundary. Cloudflare's default
+  account-member identity provider is present; no Access application, policy,
+  service token, Worker, route, DNS change, device enrollment, secret,
+  provider request, or traffic was added.
+
 - Added the documentation-only Cloudflare Access and Worker no-traffic
   deployment plan. It defines future owner approval, disabled-worker,
   one-application/one-token, rollback, and manual-evidence requirements without

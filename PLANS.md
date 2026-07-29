@@ -4,12 +4,17 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No plan is active. The completed documentation-only
+No plan is active. The owner-attested Free-plan Cloudflare Zero Trust
+organization exists with only Cloudflare's default account-member identity
+provider. It has no Access application, policy, service token, Worker, route,
+DNS change, device enrollment, secret, provider request, or traffic. The
+completed documentation-only
 [`cloudflare-access-worker-no-traffic-deployment.md`](docs/plans/cloudflare-access-worker-no-traffic-deployment.md)
 defines the exact future operational scope for a disabled Cloudflare Access and
 Worker boundary. It creates no external resource, token, Keychain item, secret,
 deployment, route, DNS record, provider request, or runtime behavior. A
-separate project-owner approval remains required before any operational action.
+separate project-owner approval remains required before any further operational
+action.
 
 The completed
 [`cloudflare-access-service-token-demo-exception.md`](docs/plans/cloudflare-access-service-token-demo-exception.md)

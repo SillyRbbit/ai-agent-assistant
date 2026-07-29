@@ -15,24 +15,27 @@ changed.
 
 ## Current exact task
 
-The documentation-only Cloudflare Access and Worker no-traffic deployment plan
-is complete. It defines a later operational boundary only; it creates no token,
-Keychain item, Access application, Worker, route, DNS record, secret,
-deployment, provider request, traffic, or runtime behavior. No product
-increment is Ready. Do not begin an operational Cloudflare increment without a
-separate project-owner approval of its exact external scope and manual evidence.
+The owner-attested Cloudflare Zero Trust organization is configured on the Free
+plan for the owner-only demo boundary. Cloudflare's mandatory default identity
+provider is restricted to account members. No Access application, policy,
+service token, Worker, route, DNS change, device enrollment, secret, provider
+request, traffic, or runtime behavior exists. The completed documentation-only
+Cloudflare Access and Worker no-traffic deployment plan remains the future
+operational boundary only. No product increment is Ready; do not begin another
+Cloudflare operational increment without separate project-owner approval of its
+exact external scope and manual evidence.
 
 ### Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Start from the completed documentation-only Cloudflare Access and Worker
-no-traffic deployment plan. Confirm its marker remains valid and reconcile the
-actual branch and working tree. Do not create a token, Keychain item, Access
-application, Worker, route, DNS record, secret, deployment, provider request,
-or traffic. Wait for separate project-owner approval before any operational
-increment.
+Start from the owner-attested Cloudflare Zero Trust onboarding reconciliation.
+Confirm its marker remains valid and reconcile the actual branch and working
+tree. Do not create an Access application, policy, token, Keychain item,
+Worker, route, DNS record, secret, deployment, provider request, traffic, or
+runtime behavior. Wait for separate project-owner approval before another
+operational increment.
 ```
 
 Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,
