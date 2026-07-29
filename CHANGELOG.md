@@ -4,6 +4,15 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added a fake-only, local macOS Keychain proof for the Cloudflare Access demo
+  boundary. Trusted Rust reads exactly two fixed generic-password labels through
+  pinned Security.framework bindings and returns only closed status or redacted
+  errors. Target-Mac evidence passed missing-item, cancelled/denied-as-cancelled,
+  successful-read, and cleanup checks. Repeated unsigned-executable prompts
+  keep real credential ingestion blocked. No real credential, Keychain item,
+  runtime wiring, IPC, Cloudflare change, request, deployment, or traffic
+  remains.
+
 - Added the documentation-only Cloudflare demo local security-boundary plan.
   It defines fake-credential-first Keychain proof, trusted-Rust-only credential
   reads, and a future local deny-only Worker with no route, preview URL,

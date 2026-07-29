@@ -92,6 +92,19 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Queue status
 
+### Completed implementation: Cloudflare demo fake Keychain proof
+
+**Status:** Verified complete with advisories; no real ingestion authorized.
+[`cloudflare-demo-fake-keychain-proof.md`](docs/plans/cloudflare-demo-fake-keychain-proof.md)
+adds one macOS-only, status-only trusted Rust probe for exactly two fixed
+generic-password labels. Automated checks use deterministic fake sources and
+never touch Keychain. Owner-operated target-Mac evidence passed missing,
+cancelled/denied-as-cancelled, available, and cleanup outcomes. Repeated
+authorization prompts did not establish stable unsigned-executable access.
+Both fake items were removed. A real credential, runtime consumer, Worker, or
+Cloudflare action remains Blocked and requires a separate exact plan and owner
+approval.
+
 ### Completed documentation-only planning: Cloudflare demo local security boundary
 
 **Status:** Complete; no implementation authorized.

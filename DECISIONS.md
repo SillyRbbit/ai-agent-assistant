@@ -2317,6 +2317,45 @@ requirement or authorize a token, Keychain item, Access application, Worker,
 route, DNS record, deployment, or provider traffic. There is no bypass, retry,
 alternate credential, or provider fallback.
 
+## D-069 - Accept the fake-only macOS Keychain proof and keep real ingestion blocked
+
+Date: 2026-07-28
+Status: Accepted local security-boundary evidence; real credential ingestion remains blocked
+
+Decision: accept one local, fake-value-only macOS Keychain proof implemented in
+trusted Rust. It may read only service
+`io.cortexa.demo.cloudflare-access` with the fixed `client-id` and
+`client-secret` accounts through exactly pinned macOS-only
+`security-framework 3.7.0` and `security-framework-sys 2.17.0`. The public
+boundary returns only `Available` or closed redacted errors. It exposes no raw
+credential, write, update, delete, enumeration, arbitrary-label lookup, Tauri
+command, WebView path, SQLite storage, startup integration, network client, or
+runtime credential consumer.
+
+Owner-operated target-Mac evidence used only two fake generic-password items.
+It observed missing, cancelled/denied-as-cancelled, and available outcomes, then
+removed both items and re-observed missing. Multiple login-keychain
+authorization prompts were required. This does not prove stable app-specific
+access for the unsigned development executable.
+
+Consequences:
+
+- The fake proof may complete with an advisory because it achieved its
+  evidence goal and left no credential behind.
+- Real service-token creation or ingestion remains blocked until a separately
+  approved increment defines a stable signed identity or another narrowly
+  reviewed app-specific access-control design, production-grade secret-memory
+  handling, one-time owner transfer, rotation, revocation, and rollback.
+- The pinned wrapper is MIT OR Apache-2.0, requires Rust 1.85 or newer, and has
+  no build script. Its upstream maintenance metadata says
+  `looking-for-maintainer`, so dependency health must be reassessed before real
+  credential use.
+- D-068's 30-day maximum remains demo-only. D-064's production 15-minute
+  access-token maximum is unchanged.
+- No real credential, Keychain item, Access application, Worker, route, DNS
+  record, secret, deployment, provider request, traffic, or runtime behavior is
+  authorized.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

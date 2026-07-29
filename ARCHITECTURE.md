@@ -214,6 +214,17 @@ independently validates the Access JWT signature, issuer, and audience. This
 30-day maximum machine credential is not a production pattern and does not
 change D-064's 15-minute production access-token maximum.
 
+**Current fake-only Keychain proof**: `credentials::cloudflare_access` uses
+macOS-only Security.framework bindings to read exactly the fixed
+`io.cortexa.demo.cloudflare-access` service with separate `client-id` and
+`client-secret` accounts. It validates bounded visible-ASCII fake values and
+returns only `Available` or a closed redacted error. It exposes no raw-value
+accessor and has no Tauri command, WebView, SQLite, startup, network, or runtime
+consumer. Target-Mac evidence passed fake-item availability and cleanup, but
+the unsigned development executable required repeated authorization prompts.
+That proof does not establish stable app-specific access, so D-069 keeps real
+credential ingestion blocked.
+
 **Phase 2 target**: organization accounts and team workspaces may add
 centralized administration, role-based access control, organization policy and
 audit, Microsoft Entra ID workforce SSO, tenant-aware token validation, and

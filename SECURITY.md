@@ -57,6 +57,13 @@ be mistaken for an end-to-end security path.
   Worker must validate JWT signature, issuer, and exact audience. Revocation and
   route disablement fail closed. No token or Keychain item currently exists,
   and D-064's production 15-minute access-token maximum is unchanged.
+- D-069 accepts only the fake-value macOS Keychain read proof. The trusted Rust
+  adapter uses fixed service/account labels, exposes no raw value, returns
+  closed redacted outcomes, and has no write, delete, enumeration, IPC, WebView,
+  SQLite, startup, network, or runtime-consumer path. Owner-operated evidence
+  removed both fake items after successful proof. Repeated authorization
+  prompts did not prove stable unsigned-executable access; real credential
+  ingestion remains blocked.
 - D-064 closes the pre-implementation configuration and separates design,
   no-traffic provisioning, synthetic-only transport, and real-content
   activation. Its authoritative configuration is

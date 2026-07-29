@@ -4,11 +4,21 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No plan is active. The owner-attested Free-plan Cloudflare Zero Trust
-organization exists with only Cloudflare's default account-member identity
-provider. It has no Access application, policy, service token, Worker, route,
-DNS change, device enrollment, secret, provider request, or traffic. The
-completed documentation-only
+No plan is active. The completed
+[`cloudflare-demo-fake-keychain-proof.md`](docs/plans/cloudflare-demo-fake-keychain-proof.md)
+adds only a fake-value, status-only macOS Keychain read proof. Its
+owner-operated target-Mac evidence observed missing,
+cancelled/denied-as-cancelled, available, and post-cleanup missing outcomes.
+Repeated authorization prompts did not prove stable unsigned-executable
+access, so real credential ingestion remains blocked. No fake item remains, and
+no real credential, runtime wiring, IPC, Cloudflare change, provider request,
+deployment, or traffic exists.
+
+The owner-attested Free-plan Cloudflare Zero Trust organization exists with
+only Cloudflare's default account-member identity provider. It has no Access
+application, policy, service token, Worker, route, DNS change, device
+enrollment, secret, provider request, or traffic. The completed
+documentation-only
 [`cloudflare-demo-local-security-boundary.md`](docs/plans/cloudflare-demo-local-security-boundary.md)
 defines fake-credential-first Keychain proof and a future local deny-only Worker
 boundary. It authorizes no code, dependency, credential, Keychain write,

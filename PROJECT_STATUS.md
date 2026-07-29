@@ -147,6 +147,19 @@ Worker, Access application, policy, route, DNS change, secret, deployment,
 provider request, traffic, or runtime behavior was added. Neither future code
 increment is Ready.
 
+The fake-only macOS Keychain proof is implemented and verified on the target
+Mac with advisories. Trusted Rust uses pinned macOS-only
+`security-framework 3.7.0` and `security-framework-sys 2.17.0` bindings to read
+only the fixed service `io.cortexa.demo.cloudflare-access` and fixed
+`client-id` and `client-secret` accounts. The public proof returns only
+`Available` or closed redacted errors; it exposes no raw value and has no
+Tauri, IPC, WebView, SQLite, startup, network, or runtime-consumer wiring.
+Owner-operated fake-item evidence passed missing,
+cancelled/denied-as-cancelled, successful availability, and post-removal
+missing checks. Multiple authorization prompts did not prove stable
+unsigned-executable access, so real credential ingestion remains Blocked. Both
+fake items were removed, and no real credential or Cloudflare object exists.
+
 ## Increment status
 
 - Increment 1: smallest runnable Tauri application — **complete**.

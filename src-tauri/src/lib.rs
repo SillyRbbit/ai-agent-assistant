@@ -2,6 +2,7 @@ pub mod agent;
 mod app_info;
 pub mod approvals;
 pub mod audit;
+pub mod credentials;
 mod error;
 pub mod menu_bar;
 pub mod policy;

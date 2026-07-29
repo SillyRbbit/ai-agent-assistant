@@ -15,26 +15,34 @@ changed.
 
 ## Current exact task
 
-The documentation-only Cloudflare demo local security-boundary plan is
-complete. It defines fake-credential-first Keychain proof and a future local
-deny-only Worker boundary, but adds no code, dependency, credential, Keychain
-item, Cloudflare configuration, route, DNS change, provider request, traffic,
-or runtime behavior. The owner-attested Free-plan Zero Trust organization still
-has only Cloudflare's mandatory account-member identity provider. No product or
-operational increment is Ready; each Keychain, Worker, or external step requires
-its own exact plan and separate project-owner approval.
+The fake-only Cloudflare demo macOS Keychain proof is complete with advisories.
+Pinned macOS-only Security.framework bindings read exactly two fixed labels and
+return only closed status or redacted errors; no raw value crosses the adapter.
+The proof is not wired into Tauri startup, IPC, the WebView, networking, or a
+runtime credential consumer.
+
+Owner-operated target-Mac evidence observed an initial missing item, a closed
+cancelled outcome when the native denial/cancel interaction was used, a final
+`available` result for the two fake items, and the expected missing result
+after both fake items were removed. Multiple login-keychain authorization
+prompts were required. Stable app-specific access for the unsigned development
+executable was not proved, so real credential ingestion remains Blocked. No
+fake or real credential remains, and no Cloudflare resource, request, route,
+DNS change, deployment, traffic, or provider path exists.
 
 ### Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Start from the completed documentation-only Cloudflare demo local
-security-boundary plan. Confirm its marker remains valid and reconcile the
-actual branch and working tree. No code increment is Ready. Do not add a
-Keychain adapter or item, Worker source or dependency, Access application,
-policy, token, route, DNS record, secret, deployment, provider request,
-traffic, or runtime behavior without a separately approved exact increment.
+Start from the completed fake-only Cloudflare demo macOS Keychain proof.
+Confirm its marker remains valid and reconcile the actual branch and working
+tree. Real credential ingestion is Blocked because stable unsigned-executable
+Keychain access was not proved. No increment is Ready. Do not add a real
+credential or Keychain item, runtime consumer, IPC, Worker source, Access
+application, policy, token, route, DNS record, secret, deployment, provider
+request, traffic, or runtime behavior without a separately approved exact
+increment.
 ```
 
 Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,
