@@ -4,7 +4,14 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No plan is active. The completed
+No plan is active. The completed documentation-only
+[`cloudflare-access-worker-no-traffic-deployment.md`](docs/plans/cloudflare-access-worker-no-traffic-deployment.md)
+defines the exact future operational scope for a disabled Cloudflare Access and
+Worker boundary. It creates no external resource, token, Keychain item, secret,
+deployment, route, DNS record, provider request, or runtime behavior. A
+separate project-owner approval remains required before any operational action.
+
+The completed
 [`cloudflare-access-service-token-demo-exception.md`](docs/plans/cloudflare-access-service-token-demo-exception.md)
 records the narrow demo-only authentication exception while leaving all
 external resources and credentials blocked. The completed

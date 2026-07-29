@@ -4,6 +4,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added the documentation-only Cloudflare Access and Worker no-traffic
+  deployment plan. It defines future owner approval, disabled-worker,
+  one-application/one-token, rollback, and manual-evidence requirements without
+  creating a token, Keychain item, Access application, Worker, route, DNS
+  record, secret, deployment, provider request, traffic, or runtime behavior.
+
 - Added D-068's documentation-only, demo-only Cloudflare Access service-token
   exception: 30-day maximum, macOS-Keychain-only secret, trusted-Rust-only
   access, one application, Worker JWT validation, and immediate revocation. No

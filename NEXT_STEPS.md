@@ -92,6 +92,16 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Queue status
 
+### Completed documentation-only planning: Cloudflare Access and Worker no-traffic deployment
+
+**Status:** Complete; no external action authorized.
+[`cloudflare-access-worker-no-traffic-deployment.md`](docs/plans/cloudflare-access-worker-no-traffic-deployment.md)
+defines the future one-application, one-token, disabled-Worker boundary and
+required rollback/manual evidence. It creates no token, Keychain item, Access
+application, Worker, route, DNS record, secret, deployment, provider request,
+or traffic. A separate project-owner approval is required before an operational
+increment can begin.
+
 ### Completed documentation-only task: Cloudflare Access service-token demo exception
 
 **Status:** Complete. D-068 permits one 30-day-maximum, Keychain-held Cloudflare

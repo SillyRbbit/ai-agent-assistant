@@ -15,23 +15,24 @@ changed.
 
 ## Current exact task
 
-The documentation-only Cloudflare Access service-token demo exception is
-complete. No product increment is Ready. Obtain separate project-owner
-direction before a no-traffic Access/Worker deployment plan. Do not create a
-token, Keychain item, Access application, Worker, route, DNS record, secret,
-provider request, or runtime behavior.
+The documentation-only Cloudflare Access and Worker no-traffic deployment plan
+is complete. It defines a later operational boundary only; it creates no token,
+Keychain item, Access application, Worker, route, DNS record, secret,
+deployment, provider request, traffic, or runtime behavior. No product
+increment is Ready. Do not begin an operational Cloudflare increment without a
+separate project-owner approval of its exact external scope and manual evidence.
 
 ### Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Start from the published documentation bundle ending with the completed
-`cloudflare-access-service-token-demo-exception` gate. Confirm its marker
-remains valid and reconcile the actual branch and working tree. No product
-increment is Ready. Do not create a service token, Keychain item, Access
-application, Worker, route, DNS record, secret, or provider request without a
-separately approved no-traffic deployment plan.
+Start from the completed documentation-only Cloudflare Access and Worker
+no-traffic deployment plan. Confirm its marker remains valid and reconcile the
+actual branch and working tree. Do not create a token, Keychain item, Access
+application, Worker, route, DNS record, secret, deployment, provider request,
+or traffic. Wait for separate project-owner approval before any operational
+increment.
 ```
 
 Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,

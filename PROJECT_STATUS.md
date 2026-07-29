@@ -124,6 +124,12 @@ trusted Rust; one Access application and Worker JWT validation are required.
 No token, Keychain item, Access application, Worker, route, DNS change, secret,
 deployment, or traffic exists. The production 15-minute requirement is unchanged.
 
+The documentation-only Cloudflare Access and Worker no-traffic deployment plan
+is complete. It defines a later one-application, one-token, disabled-Worker
+operational boundary, but creates no external resource, credential, route, DNS
+record, deployment, provider request, traffic, source, or runtime behavior.
+Separate project-owner approval remains required before an operational increment.
+
 ## Increment status
 
 - Increment 1: smallest runnable Tauri application — **complete**.
