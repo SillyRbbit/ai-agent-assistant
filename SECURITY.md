@@ -78,6 +78,9 @@ be mistaken for an end-to-end security path.
   authorize signing assets or real credential handling; a later exact plan must
   define least-privilege scope, secret-memory ownership, lifecycle, and private
   target-Mac evidence.
+- D-073 constrains a later fake-only signed-identity and secret-memory proof to
+  three existing Rust paths. Any dependency, configuration, entitlement, IPC,
+  networking, or runtime need requires new owner approval.
 - D-064 closes the pre-implementation configuration and separates design,
   no-traffic provisioning, synthetic-only transport, and real-content
   activation. Its authoritative configuration is

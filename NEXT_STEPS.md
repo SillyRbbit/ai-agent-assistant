@@ -134,6 +134,14 @@ boundary and defines later signing provenance, secret-memory, lifecycle, and
 private-evidence gates. It creates no signing asset, Keychain action,
 credential, Cloudflare resource, provider request, traffic, or runtime behavior.
 
+### Completed documentation-only planning: signed-identity and secret-memory proof
+
+**Status:** Complete; implementation remains Blocked.
+[`cloudflare-demo-signed-identity-secret-memory-implementation-plan.md`](docs/plans/cloudflare-demo-signed-identity-secret-memory-implementation-plan.md)
+limits a later fake-only implementation to the existing credential module,
+integration test, and status-only example. It creates no code, dependency,
+signing, Keychain, credential, Cloudflare, traffic, or runtime behavior.
+
 ### Completed documentation-only planning: Cloudflare demo local security boundary
 
 **Status:** Complete; no implementation authorized.

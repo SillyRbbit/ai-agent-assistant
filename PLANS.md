@@ -36,6 +36,12 @@ defines later signing provenance, secret-memory, lifecycle, and private evidence
 requirements. It creates no signing asset, Keychain action, credential,
 Cloudflare resource, provider request, traffic, or runtime behavior.
 
+The completed documentation-only
+[`cloudflare-demo-signed-identity-secret-memory-implementation-plan.md`](docs/plans/cloudflare-demo-signed-identity-secret-memory-implementation-plan.md)
+defines a future three-file fake-only proof for signed identity and bounded
+secret memory. It adds no code, dependency, signing, Keychain, credential,
+Cloudflare, traffic, or runtime behavior.
+
 The owner-attested Free-plan Cloudflare Zero Trust organization exists with
 only Cloudflare's default account-member identity provider. It has no Access
 application, policy, service token, Worker, route, DNS change, device

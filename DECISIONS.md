@@ -2410,6 +2410,21 @@ Cloudflare resource, provider request, traffic, runtime behavior, or
 implementation. Unsigned behavior remains prohibited as a fallback. D-064 and
 D-068 remain unchanged.
 
+## D-073 - Constrain the signed-identity secret proof to three existing Rust paths
+
+Date: 2026-07-28
+Status: Accepted documentation-only implementation boundary
+
+Decision: a future fake-only signed-identity and bounded secret-memory proof may
+change only `cloudflare_access.rs`, its public integration test, and its
+status-only example. It must stop for new approval before adding any dependency,
+manifest, lockfile, entitlement, profile, Tauri configuration, script, IPC,
+startup, WebView, network, or runtime-consumer path.
+
+Consequences: this boundary authorizes no implementation, signing, Keychain
+action, credential, Cloudflare resource, provider request, traffic, or runtime
+behavior. D-064 and D-068 remain unchanged.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

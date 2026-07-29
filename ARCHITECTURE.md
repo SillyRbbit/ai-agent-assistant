@@ -240,6 +240,11 @@ D-072 selects signed macOS application identity as that future control model.
 It remains documentation-only: no signed artifact, entitlement, Keychain access,
 secret consumer, or runtime path exists.
 
+D-073 limits a future fake-only signed-identity and bounded secret-memory proof
+to the existing credential module, public integration test, and status-only
+example. No manifest, entitlement, Tauri, IPC, startup, WebView, network, or
+runtime-consumer path is authorized.
+
 **Phase 2 target**: organization accounts and team workspaces may add
 centralized administration, role-based access control, organization policy and
 audit, Microsoft Entra ID workforce SSO, tenant-aware token validation, and

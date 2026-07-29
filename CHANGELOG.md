@@ -4,6 +4,11 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added a documentation-only implementation plan for the future signed-identity
+  and bounded secret-memory proof. It locks a fake-only future increment to
+  three existing Rust paths without adding code, dependencies, signing,
+  Keychain, credentials, Cloudflare, traffic, or runtime behavior.
+
 - Selected stable signed macOS application identity as the future Cloudflare
   demo credential-control model in documentation only. The decision defines
   later signing provenance, secret-memory, lifecycle, and private target-Mac

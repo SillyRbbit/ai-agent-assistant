@@ -48,18 +48,24 @@ the later signing, secret-memory, lifecycle, and private-evidence gates without
 creating a signing asset, Keychain action, credential, Cloudflare resource,
 provider request, traffic, or runtime behavior.
 
+The documentation-only signed-identity and secret-memory implementation plan is
+complete. It limits a future fake-only proof to three existing Rust paths and
+requires private signed target-Mac evidence, without adding code, dependencies,
+signing, Keychain, credentials, Cloudflare, traffic, or runtime behavior.
+
 ### Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Start from the completed Cloudflare signed macOS identity decision. Confirm its
-marker remains valid and reconcile the actual branch and working tree. Signed
-identity is selected, but no implementation increment is Ready. Do not add a
-signing asset, Keychain item, credential, runtime consumer, IPC, Worker source,
-Access application, policy, token, route, DNS record, secret, deployment,
-provider request, traffic, or runtime behavior without a separately approved
-exact increment.
+Start from the completed Cloudflare signed-identity and secret-memory
+implementation plan. Confirm its marker remains valid and reconcile the actual
+branch and working tree. The future fake-only proof is limited to three existing
+Rust paths but is not approved for implementation. Do not add a signing asset,
+Keychain item, credential, runtime consumer, IPC, Worker source, Access
+application, policy, token, route, DNS record, secret, deployment, provider
+request, traffic, or runtime behavior without a separately approved exact
+increment.
 ```
 
 Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,

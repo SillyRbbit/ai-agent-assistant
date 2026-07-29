@@ -178,6 +178,11 @@ credential-control model under D-072. This documentation-only decision creates
 no certificate, profile, entitlement, signing action, Keychain item, credential,
 Cloudflare resource, provider request, traffic, or runtime capability.
 
+The documentation-only signed-identity and secret-memory implementation plan is
+complete. It limits a later fake-only proof to three existing Rust paths and
+requires private signed target-Mac evidence. It adds no code, dependency,
+signing, Keychain, credential, Cloudflare, traffic, or runtime behavior.
+
 ## Increment status
 
 - Increment 1: smallest runnable Tauri application — **complete**.
