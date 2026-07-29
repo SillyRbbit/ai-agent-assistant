@@ -173,6 +173,11 @@ identity and narrow app-specific ACL, plus bounded secret handling and private
 target-Mac evidence. It creates no signing, Keychain, credential, Cloudflare,
 provider, traffic, or runtime capability.
 
+The owner selected stable signed macOS application identity as the future demo
+credential-control model under D-072. This documentation-only decision creates
+no certificate, profile, entitlement, signing action, Keychain item, credential,
+Cloudflare resource, provider request, traffic, or runtime capability.
+
 ## Increment status
 
 - Increment 1: smallest runnable Tauri application — **complete**.

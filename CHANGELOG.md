@@ -4,6 +4,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Selected stable signed macOS application identity as the future Cloudflare
+  demo credential-control model in documentation only. The decision defines
+  later signing provenance, secret-memory, lifecycle, and private target-Mac
+  evidence gates without adding signing, Keychain, credential, Cloudflare,
+  provider, traffic, or runtime capability.
+
 - Added a documentation-only Cloudflare macOS identity and secret-memory
   boundary plan. It defines future selection criteria for stable signed identity
   or narrow Keychain ACL, bounded secret handling, lifecycle, and private

@@ -125,6 +125,15 @@ private target-Mac evidence for a future real demo-token proposal. It chooses
 neither a signed identity nor narrow ACL and creates no signing, Keychain,
 credential, Cloudflare, provider, traffic, or runtime capability.
 
+### Completed documentation-only decision: Cloudflare signed macOS identity
+
+**Status:** Complete; implementation remains Blocked.
+[`cloudflare-demo-signed-identity-decision.md`](docs/plans/cloudflare-demo-signed-identity-decision.md)
+selects stable signed macOS application identity for the future demo credential
+boundary and defines later signing provenance, secret-memory, lifecycle, and
+private-evidence gates. It creates no signing asset, Keychain action,
+credential, Cloudflare resource, provider request, traffic, or runtime behavior.
+
 ### Completed documentation-only planning: Cloudflare demo local security boundary
 
 **Status:** Complete; no implementation authorized.

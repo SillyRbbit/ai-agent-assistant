@@ -2393,6 +2393,23 @@ asset, certificate, entitlement, profile, Keychain item, credential, Cloudflare
 resource, provider request, traffic, runtime behavior, or implementation
 authority. D-064 and D-068 remain unchanged.
 
+## D-072 - Select signed macOS identity for the future demo credential boundary
+
+Date: 2026-07-28
+Status: Accepted documentation-only owner decision
+
+Decision: select one stable, owner-controlled signed macOS application identity
+as the future credential control model. The narrow alternative Keychain ACL is
+not selected. A later implementation must define least-privilege Keychain scope,
+bounded secret-memory ownership, one-time consumption, lifecycle, private
+target-Mac evidence, and signing provenance before handling a real credential.
+
+Consequences: this decision does not create or authorize a certificate, signing
+identity, profile, entitlement, notarization, Keychain item, credential,
+Cloudflare resource, provider request, traffic, runtime behavior, or
+implementation. Unsigned behavior remains prohibited as a fallback. D-064 and
+D-068 remain unchanged.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

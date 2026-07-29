@@ -236,6 +236,10 @@ of the current runtime. A later owner-approved decision must select a stable
 signed identity or narrow app-specific ACL and define bounded one-time secret
 ownership before implementation; unsigned prompts are not a fallback.
 
+D-072 selects signed macOS application identity as that future control model.
+It remains documentation-only: no signed artifact, entitlement, Keychain access,
+secret consumer, or runtime path exists.
+
 **Phase 2 target**: organization accounts and team workspaces may add
 centralized administration, role-based access control, organization policy and
 audit, Microsoft Entra ID workforce SSO, tenant-aware token validation, and

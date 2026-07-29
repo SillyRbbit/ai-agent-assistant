@@ -29,6 +29,13 @@ bounded secret-memory controls, lifecycle, and private target-Mac evidence. It
 chooses neither control and creates no signing, Keychain, credential, Cloudflare,
 provider, traffic, or runtime capability.
 
+The completed documentation-only
+[`cloudflare-demo-signed-identity-decision.md`](docs/plans/cloudflare-demo-signed-identity-decision.md)
+selects stable signed macOS identity as the future credential control model and
+defines later signing provenance, secret-memory, lifecycle, and private evidence
+requirements. It creates no signing asset, Keychain action, credential,
+Cloudflare resource, provider request, traffic, or runtime behavior.
+
 The owner-attested Free-plan Cloudflare Zero Trust organization exists with
 only Cloudflare's default account-member identity provider. It has no Access
 application, policy, service token, Worker, route, DNS change, device

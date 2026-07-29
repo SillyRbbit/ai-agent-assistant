@@ -42,19 +42,24 @@ evidence required before real credential work, without choosing a control or
 creating signing, Keychain, credential, Cloudflare, provider, traffic, or
 runtime capability.
 
+The owner selected stable signed macOS application identity as the future demo
+credential-control model under D-072. The documentation-only decision defines
+the later signing, secret-memory, lifecycle, and private-evidence gates without
+creating a signing asset, Keychain action, credential, Cloudflare resource,
+provider request, traffic, or runtime behavior.
+
 ### Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Start from the completed Cloudflare macOS identity and secret-memory boundary
-plan. Confirm its marker remains valid and reconcile the actual branch and
-working tree. No macOS credential control has been selected, and real ingestion
-is Blocked pending a separately approved selection/implementation increment.
-Do not add a signing asset, Keychain item, credential, runtime consumer, IPC,
-Worker source, Access application, policy, token, route, DNS record, secret,
-deployment, provider request, traffic, or runtime behavior without a separately
-approved exact increment.
+Start from the completed Cloudflare signed macOS identity decision. Confirm its
+marker remains valid and reconcile the actual branch and working tree. Signed
+identity is selected, but no implementation increment is Ready. Do not add a
+signing asset, Keychain item, credential, runtime consumer, IPC, Worker source,
+Access application, policy, token, route, DNS record, secret, deployment,
+provider request, traffic, or runtime behavior without a separately approved
+exact increment.
 ```
 
 Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,

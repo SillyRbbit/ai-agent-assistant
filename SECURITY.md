@@ -74,6 +74,10 @@ be mistaken for an end-to-end security path.
   and narrow app-specific ACL; it also requires a distinct secret-memory model.
   Unsigned prompt behavior is not an approved fallback, and documentation
   creates no signing, Keychain, credential, or Cloudflare authority.
+- D-072 selects stable signed macOS identity as the future model. It does not
+  authorize signing assets or real credential handling; a later exact plan must
+  define least-privilege scope, secret-memory ownership, lifecycle, and private
+  target-Mac evidence.
 - D-064 closes the pre-implementation configuration and separates design,
   no-traffic provisioning, synthetic-only transport, and real-content
   activation. Its authoritative configuration is
