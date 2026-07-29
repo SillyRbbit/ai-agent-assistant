@@ -1,0 +1,476 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1350" viewBox="0 0 2400 1350" role="img" aria-labelledby="title desc">
+  <title id="title">Cortexa completed-vision technical architecture</title>
+  <desc id="desc">A detailed technical architecture diagram showing Cortexa clients, typed IPC, trusted Rust services, platform adapters, integrations, storage, gateways, external services, security controls, implementation statuses, and trust boundaries.</desc>
+  <defs>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; fill: #182033; }
+      .title { font-size: 42px; font-weight: 700; fill: #252B71; }
+      .subtitle { font-size: 18px; font-weight: 500; fill: #4758A2; }
+      .boundary-title { font-size: 18px; font-weight: 700; fill: #252B71; }
+      .boundary-copy { font-size: 12px; font-weight: 600; fill: #4758A2; }
+      .section-title { font-size: 18px; font-weight: 700; fill: #252B71; }
+      .card-title { font-size: 15px; font-weight: 700; }
+      .card-copy { font-size: 12px; font-weight: 500; fill: #4758A2; }
+      .micro { font-size: 10px; font-weight: 700; letter-spacing: .5px; }
+      .small { font-size: 12px; font-weight: 600; }
+      .implemented { fill: #E9F3F4; stroke: #4758A2; stroke-width: 2; }
+      .mocked { fill: #EEF4FA; stroke: #6C89BA; stroke-width: 2; }
+      .planned { fill: #F1F4FA; stroke: #6C89BA; stroke-width: 2; stroke-dasharray: 8 5; }
+      .optional { fill: #F5F6F8; stroke: #8A93A4; stroke-width: 2; stroke-dasharray: 3 5; }
+      .external { fill: #FBFBFB; stroke: #182033; stroke-width: 2; }
+      .prohibited { fill: #FFF7F6; stroke: #B42318; stroke-width: 2; }
+      .boundary { fill: #FFFFFF; stroke: #D9DEE8; stroke-width: 2; }
+      .trusted-boundary { fill: #F8FAFD; stroke: #252B71; stroke-width: 3; }
+      .status-current { fill: #252B71; }
+      .status-mocked { fill: #4758A2; }
+      .status-planned { fill: #6C89BA; }
+      .status-optional { fill: #8A93A4; }
+      .status-external { fill: #182033; }
+      .status-text { font-size: 9px; font-weight: 700; fill: #FBFBFB; letter-spacing: .5px; }
+      .rail-title { fill: #FBFBFB; }
+      .rail-label { fill: #9ABFC6; }
+      .warning { fill: #B42318; }
+      .flow { fill: none; stroke: #4758A2; stroke-width: 3; marker-end: url(#arrow); }
+      .future-flow { fill: none; stroke: #6C89BA; stroke-width: 3; stroke-dasharray: 8 6; marker-end: url(#arrow-future); }
+      .return-flow { fill: none; stroke: #9ABFC6; stroke-width: 2.5; stroke-dasharray: 4 5; marker-end: url(#arrow-return); }
+      .icon { fill: none; stroke: #252B71; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+      .icon-light { fill: none; stroke: #9ABFC6; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#4758A2"/>
+    </marker>
+    <marker id="arrow-future" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#6C89BA"/>
+    </marker>
+    <marker id="arrow-return" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#9ABFC6"/>
+    </marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#182033" flood-opacity=".07"/>
+    </filter>
+  </defs>
+
+  <rect width="2400" height="1350" fill="#FBFBFB"/>
+  <rect width="2400" height="10" fill="#252B71"/>
+  <text x="54" y="65" class="title">Cortexa · Technical Architecture Vision</text>
+  <text x="54" y="100" class="subtitle">Local-first control plane · closed trust boundaries · separately approved external processing</text>
+
+  <g transform="translate(1605 44)">
+    <rect x="0" y="0" width="18" height="18" rx="4" class="implemented"/>
+    <text x="26" y="14" class="small">Current</text>
+    <rect x="105" y="0" width="18" height="18" rx="4" class="mocked"/>
+    <text x="131" y="14" class="small">Mocked</text>
+    <rect x="220" y="0" width="18" height="18" rx="4" class="planned"/>
+    <text x="246" y="14" class="small">Planned</text>
+    <rect x="345" y="0" width="18" height="18" rx="4" class="optional"/>
+    <text x="371" y="14" class="small">Optional</text>
+    <rect x="474" y="0" width="18" height="18" rx="4" class="external"/>
+    <text x="500" y="14" class="small">External</text>
+  </g>
+  <line x1="54" y1="125" x2="2346" y2="125" stroke="#D9DEE8" stroke-width="2"/>
+
+  <!-- Trust boundary containers -->
+  <rect x="40" y="150" width="310" height="690" rx="18" class="boundary"/>
+  <rect x="370" y="150" width="290" height="690" rx="18" class="boundary"/>
+  <rect x="680" y="150" width="900" height="690" rx="18" class="trusted-boundary"/>
+  <rect x="1600" y="150" width="340" height="690" rx="18" class="boundary"/>
+  <rect x="1960" y="150" width="400" height="690" rx="18" class="boundary"/>
+
+  <text x="62" y="184" class="boundary-title">TB1 · Human + clients</text>
+  <text x="62" y="207" class="boundary-copy">Intent and presentation</text>
+  <text x="392" y="184" class="boundary-title">TB2 · WebView + IPC</text>
+  <text x="392" y="207" class="boundary-copy">Serialization, never authorization</text>
+  <text x="702" y="184" class="boundary-title">TB3 · Trusted Rust core</text>
+  <text x="702" y="207" class="boundary-copy">Only deterministic local code may grant action authority</text>
+  <text x="1622" y="184" class="boundary-title">TB4 · Device + data</text>
+  <text x="1622" y="207" class="boundary-copy">OS-protected resources</text>
+  <text x="1982" y="184" class="boundary-title">TB5 · Gateway + external</text>
+  <text x="1982" y="207" class="boundary-copy">Untrusted processors, no device authority</text>
+
+  <!-- TB1 clients -->
+  <g transform="translate(62 236)">
+    <rect width="266" height="94" rx="13" class="implemented"/>
+    <rect x="178" y="10" width="74" height="19" rx="9" class="status-current"/>
+    <text x="215" y="23" text-anchor="middle" class="status-text">CURRENT</text>
+    <rect x="18" y="20" width="42" height="33" rx="4" class="icon"/>
+    <line x1="28" y1="59" x2="50" y2="59" class="icon"/>
+    <text x="76" y="39" class="card-title">macOS desktop</text>
+    <text x="76" y="62" class="card-copy">Tauri shell, menu + workspace</text>
+    <text x="18" y="82" class="card-copy">Conversation behavior remains mocked</text>
+  </g>
+
+  <g transform="translate(62 348)">
+    <rect width="266" height="80" rx="13" class="planned"/>
+    <rect x="180" y="10" width="72" height="19" rx="9" class="status-planned"/>
+    <text x="216" y="23" text-anchor="middle" class="status-text">PLANNED</text>
+    <g transform="translate(20 22)" class="icon">
+      <rect width="34" height="28"/>
+      <line x1="17" y1="0" x2="17" y2="28"/>
+      <line x1="0" y1="14" x2="34" y2="14"/>
+    </g>
+    <text x="72" y="36" class="card-title">Windows + Linux</text>
+    <text x="72" y="58" class="card-copy">Portable UI and platform layers</text>
+  </g>
+
+  <g transform="translate(62 446)">
+    <rect width="266" height="80" rx="13" class="optional"/>
+    <rect x="176" y="10" width="76" height="19" rx="9" class="status-optional"/>
+    <text x="214" y="23" text-anchor="middle" class="status-text">OPTIONAL</text>
+    <rect x="25" y="16" width="24" height="42" rx="5" class="icon"/>
+    <text x="72" y="36" class="card-title">iOS + mobile</text>
+    <text x="72" y="58" class="card-copy">Future companion clients</text>
+  </g>
+
+  <g transform="translate(62 544)">
+    <rect width="266" height="80" rx="13" class="optional"/>
+    <rect x="176" y="10" width="76" height="19" rx="9" class="status-optional"/>
+    <text x="214" y="23" text-anchor="middle" class="status-text">OPTIONAL</text>
+    <rect x="18" y="19" width="42" height="31" rx="4" class="icon"/>
+    <circle cx="39" cy="35" r="8" class="icon"/>
+    <text x="72" y="36" class="card-title">Web companion</text>
+    <text x="72" y="58" class="card-copy">Conceptual, not browser-only</text>
+  </g>
+
+  <g transform="translate(62 642)">
+    <rect width="266" height="166" rx="13" class="planned"/>
+    <text x="18" y="31" class="card-title">Executive experience</text>
+    <text x="18" y="57" class="card-copy">• Conversational requests</text>
+    <text x="18" y="81" class="card-copy">• Context provenance</text>
+    <text x="18" y="105" class="card-copy">• Notifications + task status</text>
+    <text x="18" y="129" class="card-copy">• Preview, approve, reject, cancel</text>
+    <text x="18" y="153" class="card-copy">• Memory + integration controls</text>
+  </g>
+
+  <!-- TB2 WebView and IPC -->
+  <g transform="translate(392 236)">
+    <rect width="246" height="116" rx="13" class="implemented"/>
+    <rect x="158" y="10" width="74" height="19" rx="9" class="status-current"/>
+    <text x="195" y="23" text-anchor="middle" class="status-text">CURRENT</text>
+    <text x="18" y="43" class="card-title">React presentation</text>
+    <text x="18" y="67" class="card-copy">Reducer/context state</text>
+    <text x="18" y="89" class="card-copy">Typed UI services</text>
+    <text x="18" y="108" class="card-copy">Volatile conversations + activity</text>
+  </g>
+
+  <g transform="translate(392 374)">
+    <rect width="246" height="110" rx="13" class="implemented"/>
+    <text x="18" y="33" class="card-title">Narrow Tauri IPC</text>
+    <text x="18" y="58" class="card-copy">get_app_info only</text>
+    <text x="18" y="80" class="card-copy">Closed menu-route event</text>
+    <text x="18" y="101" class="card-copy">core:default capability</text>
+  </g>
+
+  <g transform="translate(392 506)">
+    <rect width="246" height="118" rx="13" class="prohibited"/>
+    <text x="18" y="32" class="card-title" fill="#B42318">Prohibited surfaces</text>
+    <text x="18" y="57" class="card-copy">No generic executor or shell</text>
+    <text x="18" y="79" class="card-copy">No raw SQL or filesystem</text>
+    <text x="18" y="101" class="card-copy">No provider or credential IPC</text>
+  </g>
+
+  <g transform="translate(392 646)">
+    <rect width="246" height="162" rx="13" class="planned"/>
+    <text x="18" y="32" class="card-title">Future command boundary</text>
+    <text x="18" y="57" class="card-copy">Narrow typed commands only</text>
+    <text x="18" y="81" class="card-copy">Unknown payloads validated</text>
+    <text x="18" y="105" class="card-copy">Capability-scoped per window</text>
+    <text x="18" y="129" class="card-copy">Closed redacted failures</text>
+    <text x="18" y="151" class="card-copy">No authority from presentation</text>
+  </g>
+
+  <!-- TB3 trusted Rust -->
+  <g transform="translate(702 236)">
+    <rect width="400" height="100" rx="13" class="planned"/>
+    <rect x="310" y="10" width="76" height="19" rx="9" class="status-planned"/>
+    <text x="348" y="23" text-anchor="middle" class="status-text">PLANNED</text>
+    <circle cx="34" cy="38" r="14" class="icon"/>
+    <circle cx="64" cy="28" r="8" class="icon"/>
+    <circle cx="64" cy="51" r="8" class="icon"/>
+    <line x1="48" y1="34" x2="56" y2="30" class="icon"/>
+    <line x1="48" y1="42" x2="56" y2="48" class="icon"/>
+    <text x="88" y="39" class="card-title">Executive assistant orchestrator</text>
+    <text x="88" y="63" class="card-copy">Run lifecycle · planning · routing · cancellation</text>
+    <text x="18" y="88" class="card-copy">No runtime coordinator exists today</text>
+  </g>
+
+  <g transform="translate(1122 236)">
+    <rect width="430" height="100" rx="13" class="optional"/>
+    <rect x="340" y="10" width="76" height="19" rx="9" class="status-optional"/>
+    <text x="378" y="23" text-anchor="middle" class="status-text">OPTIONAL</text>
+    <text x="18" y="39" class="card-title">Specialist agents + typed coordination</text>
+    <text x="18" y="63" class="card-copy">Conceptual research, scheduling and workflow specialists</text>
+    <text x="18" y="86" class="card-copy">No recursive delegation or autonomous authority</text>
+  </g>
+
+  <!-- Core interface grid -->
+  <g transform="translate(702 364)">
+    <rect width="250" height="96" rx="13" class="planned"/>
+    <text x="16" y="31" class="card-title">AgentProvider</text>
+    <text x="16" y="55" class="card-copy">Gateway/model abstraction</text>
+    <text x="16" y="77" class="card-copy">Legacy scaffold removed</text>
+  </g>
+  <g transform="translate(970 364)">
+    <rect width="250" height="96" rx="13" class="implemented"/>
+    <text x="16" y="31" class="card-title">ToolRegistry</text>
+    <text x="16" y="55" class="card-copy">2 strict schemas today</text>
+    <text x="16" y="77" class="card-copy">Local risk + permission facts</text>
+  </g>
+  <g transform="translate(1238 364)">
+    <rect width="314" height="96" rx="13" class="implemented"/>
+    <text x="16" y="31" class="card-title">Gateway protocol + validation</text>
+    <text x="16" y="55" class="card-copy">Closed frames, limits, sequence, terminal state</text>
+    <text x="16" y="77" class="card-copy">Transport-free and disconnected</text>
+  </g>
+
+  <g transform="translate(702 480)">
+    <rect width="250" height="96" rx="13" class="implemented"/>
+    <text x="16" y="31" class="card-title">PolicyEngine</text>
+    <text x="16" y="55" class="card-copy">Deterministic risk policy</text>
+    <text x="16" y="77" class="card-copy">Allow / approve / deny</text>
+  </g>
+  <g transform="translate(970 480)">
+    <rect width="250" height="96" rx="13" class="implemented"/>
+    <text x="16" y="31" class="card-title">ApprovalManager</text>
+    <text x="16" y="55" class="card-copy">Exact subject + one-time use</text>
+    <text x="16" y="77" class="card-copy">Current, native, disconnected</text>
+  </g>
+  <g transform="translate(1238 480)">
+    <rect width="314" height="96" rx="13" class="planned"/>
+    <text x="16" y="31" class="card-title">Restricted dispatcher + executor</text>
+    <text x="16" y="55" class="card-copy">Exact registered implementation only</text>
+    <text x="16" y="77" class="card-copy">Revalidate target + permission before effect</text>
+  </g>
+
+  <g transform="translate(702 596)">
+    <rect width="250" height="96" rx="13" class="implemented"/>
+    <text x="16" y="31" class="card-title">AuditLogger</text>
+    <text x="16" y="55" class="card-copy">Volatile approval receipt today</text>
+    <text x="16" y="77" class="card-copy">Durable run audit planned</text>
+  </g>
+  <g transform="translate(970 596)">
+    <rect width="250" height="96" rx="13" class="planned"/>
+    <text x="16" y="31" class="card-title">MemoryStore</text>
+    <text x="16" y="55" class="card-copy">Session, working, preferences</text>
+    <text x="16" y="77" class="card-copy">Opt-in review + deletion</text>
+  </g>
+  <g transform="translate(1238 596)">
+    <rect width="314" height="96" rx="13" class="planned"/>
+    <text x="16" y="31" class="card-title">PlatformAdapter</text>
+    <text x="16" y="55" class="card-copy">Portable domain → least-privilege native APIs</text>
+    <text x="16" y="77" class="card-copy">No generic OS action surface</text>
+  </g>
+
+  <g transform="translate(702 712)">
+    <rect width="400" height="96" rx="13" class="implemented"/>
+    <text x="16" y="31" class="card-title">Cancellation + bounded failures</text>
+    <text x="16" y="55" class="card-copy">Terminal local state · late outcomes rejected</text>
+    <text x="16" y="77" class="card-copy">Closed redacted errors · conservative limits</text>
+  </g>
+  <g transform="translate(1122 712)">
+    <rect width="430" height="96" rx="13" class="planned"/>
+    <text x="16" y="31" class="card-title">Task + workflow services</text>
+    <text x="16" y="55" class="card-copy">Resumable user-visible work with bounded retries</text>
+    <text x="16" y="77" class="card-copy">No hidden background autonomy</text>
+  </g>
+
+  <!-- TB4 device/data -->
+  <g transform="translate(1622 236)">
+    <rect width="296" height="96" rx="13" class="implemented"/>
+    <text x="16" y="31" class="card-title">macOS lifecycle adapter</text>
+    <text x="16" y="55" class="card-copy">Menu, window + native dialog</text>
+    <text x="16" y="77" class="card-copy">Privileged integrations absent</text>
+  </g>
+  <g transform="translate(1622 350)">
+    <rect width="296" height="96" rx="13" class="planned"/>
+    <text x="16" y="31" class="card-title">macOS capability adapters</text>
+    <text x="16" y="55" class="card-copy">Calendar, contacts, files, notifications</text>
+    <text x="16" y="77" class="card-copy">User-initiated permission flows</text>
+  </g>
+  <g transform="translate(1622 464)">
+    <rect width="296" height="88" rx="13" class="planned"/>
+    <text x="16" y="31" class="card-title">Windows + Linux adapters</text>
+    <text x="16" y="55" class="card-copy">Equivalent reviewed platform controls</text>
+  </g>
+  <g transform="translate(1622 570)">
+    <rect width="296" height="100" rx="13" class="implemented"/>
+    <ellipse cx="39" cy="29" rx="18" ry="7" class="icon"/>
+    <path d="M21 29v29c0 4 8 7 18 7s18-3 18-7V29" class="icon"/>
+    <text x="76" y="35" class="card-title">SQLite foundation</text>
+    <text x="76" y="58" class="card-copy">Migrations + bootstrap metadata</text>
+    <text x="16" y="84" class="card-copy">Encrypted product repositories planned</text>
+  </g>
+  <g transform="translate(1622 688)">
+    <rect width="296" height="120" rx="13" class="planned"/>
+    <path d="M23 30l14-7 14 7v11c0 11-7 18-14 22-7-4-14-11-14-22Z" class="icon"/>
+    <text x="70" y="37" class="card-title">Secrets + local data</text>
+    <text x="16" y="69" class="card-copy">Platform secret store / Keychain</text>
+    <text x="16" y="92" class="card-copy">Encrypted local product data</text>
+    <text x="16" y="113" class="card-copy">Optional local semantic index</text>
+  </g>
+
+  <!-- TB5 gateway/external -->
+  <g transform="translate(1982 236)">
+    <rect width="356" height="104" rx="13" class="planned"/>
+    <path d="M20 47c0-9 7-16 16-16 7 0 12 4 15 10 2-1 5-2 7-2 9 0 16 7 16 16H20Z" class="icon"/>
+    <text x="92" y="39" class="card-title">Cortexa product gateway</text>
+    <text x="92" y="62" class="card-copy">Azure Container Apps target</text>
+    <text x="18" y="87" class="card-copy">Authentication · limits · normalized stream</text>
+  </g>
+  <g transform="translate(1982 358)">
+    <rect width="356" height="88" rx="13" class="external"/>
+    <text x="18" y="32" class="card-title">Microsoft personal identity</text>
+    <text x="18" y="57" class="card-copy">System browser · OAuth/OIDC · PKCE</text>
+    <text x="250" y="78" class="micro">D-062 / D-064</text>
+  </g>
+  <g transform="translate(1982 464)">
+    <rect width="356" height="104" rx="13" class="external"/>
+    <rect x="20" y="22" width="44" height="40" rx="7" class="icon"/>
+    <path d="M31 42h22M42 31v22" class="icon"/>
+    <text x="82" y="38" class="card-title">Approved cloud language model</text>
+    <text x="82" y="61" class="card-copy">Untrusted output · per-provider controls</text>
+    <text x="18" y="88" class="card-copy">ZDR, region, retention + disclosure required</text>
+  </g>
+  <g transform="translate(1982 586)">
+    <rect width="356" height="96" rx="13" class="planned"/>
+    <text x="18" y="31" class="card-title">Cloudflare synthetic-demo gateway</text>
+    <text x="18" y="55" class="card-copy">Access + Worker · fake data only</text>
+    <text x="18" y="78" class="card-copy">Temporary validation path, not production</text>
+  </g>
+  <g transform="translate(1982 700)">
+    <rect width="356" height="108" rx="13" class="optional"/>
+    <text x="18" y="31" class="card-title">Optional intelligence services</text>
+    <text x="18" y="55" class="card-copy">Local models · retrieval · knowledge APIs</text>
+    <text x="18" y="78" class="card-copy">Each requires separate data + security review</text>
+    <text x="18" y="99" class="card-copy">No automatic provider fallback</text>
+  </g>
+
+  <!-- Selective main flows -->
+  <path d="M328 287 H392" class="flow"/>
+  <text x="360" y="274" text-anchor="middle" class="small">intent</text>
+  <path d="M638 429 H670 V286 H702" class="future-flow"/>
+  <text x="654" y="415" text-anchor="middle" class="small">typed command</text>
+  <path d="M902 336 V364" class="future-flow"/>
+  <path d="M1238 412 H1220" class="flow"/>
+  <path d="M1095 460 V468 H827 V480" class="flow"/>
+  <path d="M952 528 H970" class="flow"/>
+  <path d="M1220 528 H1238" class="future-flow"/>
+  <path d="M1552 644 H1622" class="future-flow"/>
+  <text x="1587" y="630" text-anchor="middle" class="small">adapter call</text>
+  <path d="M702 412 H670 V858 H1950 V288 H1982" class="future-flow"/>
+  <path d="M2160 358 V340" class="future-flow"/>
+  <path d="M2338 288 H2348 V516 H2338" class="future-flow"/>
+  <text x="2328" y="452" text-anchor="end" class="small">approved API</text>
+
+  <path d="M1982 518 H1950 V518 H1940" stroke="#B42318" stroke-width="2" stroke-dasharray="6 5" fill="none"/>
+  <circle cx="1960" cy="518" r="13" fill="#FBFBFB" stroke="#B42318" stroke-width="2"/>
+  <line x1="1951" y1="509" x2="1969" y2="527" stroke="#B42318" stroke-width="2"/>
+  <text x="1978" y="543" text-anchor="end" class="micro warning">NO MODEL / GATEWAY → DEVICE EXECUTION</text>
+
+  <!-- Tools and integrations -->
+  <rect x="40" y="870" width="2320" height="228" rx="18" class="boundary"/>
+  <text x="62" y="908" class="section-title">Restricted Tool &amp; Integration Plane</text>
+  <text x="62" y="932" class="boundary-copy">All inputs remain untrusted; every effect is schema-validated, policy-checked, permission-scoped, approval-bound when required, executed locally, and audited</text>
+
+  <g transform="translate(62 956)">
+    <rect width="250" height="112" rx="13" class="planned"/>
+    <path d="M18 22h34v25H18zM18 22l17 14 17-14" class="icon"/>
+    <text x="70" y="34" class="card-title">Email</text>
+    <text x="18" y="67" class="card-copy">Read + draft initially</text>
+    <text x="18" y="91" class="card-copy">Send separately gated</text>
+  </g>
+  <g transform="translate(330 956)">
+    <rect width="250" height="112" rx="13" class="planned"/>
+    <rect x="18" y="20" width="34" height="28" rx="3" class="icon"/>
+    <line x1="18" y1="30" x2="52" y2="30" class="icon"/>
+    <text x="70" y="34" class="card-title">Calendar</text>
+    <text x="18" y="67" class="card-copy">Events + reminders</text>
+    <text x="18" y="91" class="card-copy">Exact target preview</text>
+  </g>
+  <g transform="translate(598 956)">
+    <rect width="250" height="112" rx="13" class="planned"/>
+    <circle cx="35" cy="30" r="12" class="icon"/>
+    <path d="M17 59c3-13 10-18 18-18s15 5 18 18" class="icon"/>
+    <text x="70" y="34" class="card-title">Contacts</text>
+    <text x="18" y="67" class="card-copy">Scoped lookup</text>
+    <text x="18" y="91" class="card-copy">No automatic identity linking</text>
+  </g>
+  <g transform="translate(866 956)">
+    <rect width="250" height="112" rx="13" class="planned"/>
+    <path d="M18 20h17l6 7h15v27H18Z" class="icon"/>
+    <text x="72" y="34" class="card-title">Files</text>
+    <text x="18" y="67" class="card-copy">Authorized scopes only</text>
+    <text x="18" y="91" class="card-copy">Traversal + executable denial</text>
+  </g>
+  <g transform="translate(1134 956)">
+    <rect width="250" height="112" rx="13" class="planned"/>
+    <rect x="18" y="20" width="38" height="28" rx="4" class="icon"/>
+    <circle cx="37" cy="34" r="7" class="icon"/>
+    <text x="72" y="34" class="card-title">Browser + web</text>
+    <text x="18" y="67" class="card-copy">Restricted URL opening</text>
+    <text x="18" y="91" class="card-copy">Web content remains untrusted</text>
+  </g>
+  <g transform="translate(1402 956)">
+    <rect width="250" height="112" rx="13" class="planned"/>
+    <path d="M35 18c-9 0-14 7-14 15v9l-5 6h38l-5-6v-9c0-8-5-15-14-15Z" class="icon"/>
+    <text x="72" y="34" class="card-title">Notifications</text>
+    <text x="18" y="67" class="card-copy">User-requested completion</text>
+    <text x="18" y="91" class="card-copy">No hidden background action</text>
+  </g>
+  <g transform="translate(1670 956)">
+    <rect width="318" height="112" rx="13" class="optional"/>
+    <path d="M18 43c0-8 6-14 14-14 6 0 11 3 13 9 2-1 4-1 6-1 7 0 12 5 12 12H18Z" class="icon"/>
+    <text x="80" y="34" class="card-title">Cloud + business applications</text>
+    <text x="18" y="67" class="card-copy">Future SaaS and enterprise systems</text>
+    <text x="18" y="91" class="card-copy">Per-integration OAuth + revocation</text>
+  </g>
+  <g transform="translate(2006 956)">
+    <rect width="332" height="112" rx="13" class="optional"/>
+    <ellipse cx="38" cy="26" rx="18" ry="7" class="icon"/>
+    <path d="M20 26v27c0 4 8 7 18 7s18-3 18-7V26" class="icon"/>
+    <text x="76" y="34" class="card-title">Knowledge + retrieval</text>
+    <text x="18" y="67" class="card-copy">Optional local semantic index</text>
+    <text x="18" y="91" class="card-copy">Optional external retrieval service</text>
+  </g>
+
+  <path d="M1395 576 C1395 852 1210 852 1210 870" class="future-flow"/>
+  <text x="1412" y="842" class="small">validated proposal → approved effect</text>
+  <path d="M1770 870 V808" class="return-flow"/>
+  <text x="1786" y="844" class="small">verified result</text>
+
+  <!-- Security and governance -->
+  <rect x="40" y="1122" width="2320" height="166" rx="18" fill="#182033"/>
+  <path d="M70 1153l18-9 18 9v14c0 14-9 23-18 28-9-5-18-14-18-28Z" class="icon-light"/>
+  <text x="126" y="1164" font-size="19" font-weight="700" class="rail-title">Security &amp; Governance Control Plane</text>
+  <text x="126" y="1191" font-size="13" font-weight="500" class="rail-label">Cross-cutting controls apply to clients, Rust, storage, adapters, gateway operations and every external integration</text>
+
+  <g transform="translate(126 1220)">
+    <text x="0" y="0" class="micro rail-label">HUMAN AUTHORITY</text>
+    <text x="0" y="27" font-size="14" font-weight="600" class="rail-title">Consent · preview · cancel</text>
+  </g>
+  <g transform="translate(390 1220)">
+    <text x="0" y="0" class="micro rail-label">POLICY ENFORCEMENT</text>
+    <text x="0" y="27" font-size="14" font-weight="600" class="rail-title">Local risk + exact approval</text>
+  </g>
+  <g transform="translate(680 1220)">
+    <text x="0" y="0" class="micro rail-label">LEAST PRIVILEGE</text>
+    <text x="0" y="27" font-size="14" font-weight="600" class="rail-title">Narrow IPC · tools · permissions</text>
+  </g>
+  <g transform="translate(970 1220)">
+    <text x="0" y="0" class="micro rail-label">SECRETS</text>
+    <text x="0" y="27" font-size="14" font-weight="600" class="rail-title">Keychain + server-side credentials</text>
+  </g>
+  <g transform="translate(1260 1220)">
+    <text x="0" y="0" class="micro rail-label">DATA PROTECTION</text>
+    <text x="0" y="27" font-size="14" font-weight="600" class="rail-title">Encryption · minimization · retention</text>
+  </g>
+  <g transform="translate(1580 1220)">
+    <text x="0" y="0" class="micro rail-label">AUDIT + EVIDENCE</text>
+    <text x="0" y="27" font-size="14" font-weight="600" class="rail-title">Redacted lifecycle + outcomes</text>
+  </g>
+  <g transform="translate(1870 1220)">
+    <text x="0" y="0" class="micro rail-label">EXTERNAL PROCESSING</text>
+    <text x="0" y="27" font-size="14" font-weight="600" class="rail-title">Disclosure · ZDR · kill switch</text>
+  </g>
+
+  <text x="54" y="1328" font-size="12" font-weight="500" fill="#6C89BA">Solid = current or external · dashed = planned · dotted = optional/conceptual · repository evidence date: 2026-07-28</text>
+</svg>

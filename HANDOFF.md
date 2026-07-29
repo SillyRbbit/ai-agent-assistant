@@ -4,6 +4,16 @@ Last updated: 2026-07-28
 
 ## Current state
 
+The documentation-only final-vision architecture bundle is complete. It adds
+editable executive and technical SVGs, presentation PNG exports, and an
+evidence-based architecture summary under
+`docs/architecture/final-vision/`. Status styling clearly separates current,
+planned, optional, and external components. The diagrams preserve the
+untrusted-model and untrusted-WebView boundaries, deterministic local control,
+exact approval, restricted execution, audit, least privilege, and
+gateway-mediated external processing. No product source, dependency, runtime
+path, permission, credential, cloud resource, traffic, or deployment changed.
+
 ARB-002A was published through PR #41 and squash-merged at `36ce9ab`; its
 valid `PASS WITH ADVISORIES` marker remains evidence for Stage A only. Stage B,
 Stage C, Stage D, and ARB-002 runtime work remain blocked. The

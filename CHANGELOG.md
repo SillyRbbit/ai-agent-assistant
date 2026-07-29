@@ -4,6 +4,13 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added a documentation-only final-vision architecture bundle with simplified
+  executive and detailed technical diagrams, editable SVG sources,
+  presentation-ready PNG exports, and an evidence-based summary. The visuals
+  distinguish current, planned, optional, and external components without
+  changing product source, runtime behavior, permissions, credentials, cloud
+  resources, traffic, or deployment state.
+
 - Added a documentation-only implementation plan for the future signed-identity
   and bounded secret-memory proof. It locks a fake-only future increment to
   three existing Rust paths without adding code, dependencies, signing,
