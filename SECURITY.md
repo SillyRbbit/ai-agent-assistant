@@ -64,6 +64,12 @@ be mistaken for an end-to-end security path.
   removed both fake items after successful proof. Repeated authorization
   prompts did not prove stable unsigned-executable access; real credential
   ingestion remains blocked.
+- D-070 requires a separately approved stable signed application identity or
+  narrowly reviewed app-specific Keychain ACL, production secret-memory
+  lifecycle, direct owner-only transfer, rotation, revocation, rollback,
+  dependency reassessment, and target-Mac evidence before real demo-token
+  ingestion can be proposed. This is a planning gate, not credential or
+  Cloudflare-action authority.
 - D-064 closes the pre-implementation configuration and separates design,
   no-traffic provisioning, synthetic-only transport, and real-content
   activation. Its authoritative configuration is

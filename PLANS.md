@@ -14,6 +14,14 @@ access, so real credential ingestion remains blocked. No fake item remains, and
 no real credential, runtime wiring, IPC, Cloudflare change, provider request,
 deployment, or traffic exists.
 
+The completed documentation-only
+[`cloudflare-demo-real-credential-readiness-plan.md`](docs/plans/cloudflare-demo-real-credential-readiness-plan.md)
+requires stable app-specific Keychain access, secret-memory handling, direct
+owner transfer, lifecycle controls, dependency review, and private target-Mac
+evidence before real demo-token ingestion can be proposed. It creates no
+credential, Keychain action, Cloudflare resource, provider request, traffic, or
+runtime behavior.
+
 The owner-attested Free-plan Cloudflare Zero Trust organization exists with
 only Cloudflare's default account-member identity provider. It has no Access
 application, policy, service token, Worker, route, DNS change, device

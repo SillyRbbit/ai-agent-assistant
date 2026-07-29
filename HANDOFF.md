@@ -30,19 +30,25 @@ executable was not proved, so real credential ingestion remains Blocked. No
 fake or real credential remains, and no Cloudflare resource, request, route,
 DNS change, deployment, traffic, or provider path exists.
 
+The documentation-only Cloudflare real-credential readiness plan is complete.
+It records the mandatory stable identity/ACL, secret-memory, direct owner
+transfer, lifecycle, dependency, and private target-Mac evidence gates before
+any future real-ingestion proposal. It authorizes no code, Keychain action,
+credential, Cloudflare resource, provider request, traffic, or runtime work.
+
 ### Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Start from the completed fake-only Cloudflare demo macOS Keychain proof.
-Confirm its marker remains valid and reconcile the actual branch and working
-tree. Real credential ingestion is Blocked because stable unsigned-executable
-Keychain access was not proved. No increment is Ready. Do not add a real
-credential or Keychain item, runtime consumer, IPC, Worker source, Access
-application, policy, token, route, DNS record, secret, deployment, provider
-request, traffic, or runtime behavior without a separately approved exact
-increment.
+Start from the completed Cloudflare real-credential readiness plan. Confirm its
+marker remains valid and reconcile the actual branch and working tree. Real
+credential ingestion is Blocked pending a separately approved stable signed
+identity or narrow ACL, secret-memory, lifecycle, and target-Mac evidence
+increment. No implementation increment is Ready. Do not add a real credential
+or Keychain item, runtime consumer, IPC, Worker source, Access application,
+policy, token, route, DNS record, secret, deployment, provider request,
+traffic, or runtime behavior without a separately approved exact increment.
 ```
 
 Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,

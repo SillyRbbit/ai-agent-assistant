@@ -2356,6 +2356,23 @@ Consequences:
   record, secret, deployment, provider request, traffic, or runtime behavior is
   authorized.
 
+## D-070 - Require stable macOS credential controls before real demo ingestion
+
+Date: 2026-07-28
+Status: Accepted documentation-only readiness gate
+
+Decision: a future real Cloudflare Access demo service-token ingestion proposal
+requires a separately approved design and target-Mac evidence for stable signed
+application identity or a narrowly reviewed app-specific Keychain ACL,
+production-grade secret-memory lifecycle, direct owner-only transfer, rotation,
+revocation, rollback, and dependency-health reassessment. Repeated prompts from
+an unsigned development executable are not stable-access evidence.
+
+Consequences: D-068's one-token, 30-day demo exception and D-064's 15-minute
+production maximum are unchanged. This decision creates no credential,
+Keychain item, application identity, entitlement, Cloudflare resource, provider
+request, traffic, runtime behavior, or implementation authority.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

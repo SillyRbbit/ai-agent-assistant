@@ -225,6 +225,12 @@ the unsigned development executable required repeated authorization prompts.
 That proof does not establish stable app-specific access, so D-069 keeps real
 credential ingestion blocked.
 
+D-070 additionally requires a separately approved stable signed identity or
+narrow app-specific Keychain ACL, production secret-memory lifecycle, direct
+owner transfer, rotation, revocation, rollback, dependency reassessment, and
+target-Mac evidence before an implementation proposal can be considered. This
+adds no runtime path or external authority.
+
 **Phase 2 target**: organization accounts and team workspaces may add
 centralized administration, role-based access control, organization policy and
 audit, Microsoft Entra ID workforce SSO, tenant-aware token validation, and

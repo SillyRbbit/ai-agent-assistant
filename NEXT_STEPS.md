@@ -105,6 +105,17 @@ Both fake items were removed. A real credential, runtime consumer, Worker, or
 Cloudflare action remains Blocked and requires a separate exact plan and owner
 approval.
 
+### Completed documentation-only planning: Cloudflare real-credential readiness
+
+**Status:** Complete; real ingestion remains Blocked.
+[`cloudflare-demo-real-credential-readiness-plan.md`](docs/plans/cloudflare-demo-real-credential-readiness-plan.md)
+defines the stable identity/ACL, secret-memory, direct owner transfer,
+rotation/revocation/rollback, dependency reassessment, and private target-Mac
+evidence required before a future real demo-token proposal. It creates no code,
+credential, Keychain action, Cloudflare resource, provider request, traffic, or
+runtime behavior. A later exact design or implementation increment requires
+separate owner approval.
+
 ### Completed documentation-only planning: Cloudflare demo local security boundary
 
 **Status:** Complete; no implementation authorized.

@@ -160,6 +160,13 @@ missing checks. Multiple authorization prompts did not prove stable
 unsigned-executable access, so real credential ingestion remains Blocked. Both
 fake items were removed, and no real credential or Cloudflare object exists.
 
+The documentation-only real-credential readiness plan is complete. It records
+the stable identity/ACL, secret-memory, direct owner transfer, lifecycle,
+dependency-review, and target-Mac evidence gates that block any future real
+Cloudflare demo-token ingestion proposal. It adds no code, credential,
+Keychain action, Cloudflare resource, provider request, traffic, or runtime
+behavior; D-064 and D-068 remain unchanged.
+
 ## Increment status
 
 - Increment 1: smallest runnable Tauri application — **complete**.

@@ -4,6 +4,13 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added a documentation-only Cloudflare real-credential readiness plan. It
+  records the stable macOS identity/ACL, secret-memory, direct owner transfer,
+  rotation/revocation/rollback, dependency-review, and target-Mac evidence
+  gates required before any future real demo-token proposal. No credential,
+  Keychain action, Cloudflare resource, provider request, traffic, code, or
+  runtime behavior was added.
+
 - Added a fake-only, local macOS Keychain proof for the Cloudflare Access demo
   boundary. Trusted Rust reads exactly two fixed generic-password labels through
   pinned Security.framework bindings and returns only closed status or redacted
