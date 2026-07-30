@@ -2,16 +2,16 @@
 
 Status: Executive and technical architecture vision; not implementation evidence
 
-Evidence date: 2026-07-28
+Evidence date: 2026-07-29
 
 ## Deliverables
 
-| Artifact                                        | Purpose                                          |
-| ----------------------------------------------- | ------------------------------------------------ |
-| `ai-agent-assistant-executive-architecture.svg` | Simplified, editable 16:9 executive architecture |
-| `ai-agent-assistant-executive-architecture.png` | High-resolution executive presentation export    |
-| `ai-agent-assistant-technical-architecture.svg` | Detailed, editable 16:9 technical architecture   |
-| `ai-agent-assistant-technical-architecture.png` | High-resolution technical presentation export    |
+| Artifact                                        | Purpose                                                            |
+| ----------------------------------------------- | ------------------------------------------------------------------ |
+| `ai-agent-assistant-executive-architecture.svg` | Editable 16:9 executive visual story designed for a 30-second read |
+| `ai-agent-assistant-executive-architecture.png` | High-resolution executive presentation export                      |
+| `ai-agent-assistant-technical-architecture.svg` | Detailed, editable 16:9 technical architecture                     |
+| `ai-agent-assistant-technical-architecture.png` | High-resolution technical presentation export                      |
 
 The compatibility filenames retain the repository's historical
 `ai-agent-assistant` identifier under D-026. Human-facing diagram text uses the

@@ -1,12 +1,15 @@
 # Handoff
 
-Last updated: 2026-07-28
+Last updated: 2026-07-29
 
 ## Current state
 
-The documentation-only final-vision architecture bundle is complete. It adds
-editable executive and technical SVGs, presentation PNG exports, and an
-evidence-based architecture summary under
+The documentation-only final-vision architecture bundle is complete. Its
+executive view now tells a 30-second visual story from human intent through a
+trusted assistant, orchestration, policy and approval, controlled tools,
+intelligence and secure data, and business-ready governance. The bundle
+includes editable executive and technical SVGs, presentation PNG exports, and
+an evidence-based architecture summary under
 `docs/architecture/final-vision/`. Status styling clearly separates current,
 planned, optional, and external components. The diagrams preserve the
 untrusted-model and untrusted-WebView boundaries, deterministic local control,

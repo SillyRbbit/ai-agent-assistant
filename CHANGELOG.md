@@ -4,6 +4,13 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Redesigned the final-vision executive architecture as a concise visual story:
+  user goal, trusted assistant, orchestration, policy and human approval,
+  controlled tools, intelligence and secure data, and business-ready
+  governance. The technical architecture and every product, runtime,
+  permission, credential, provider, cloud, traffic, and deployment boundary
+  remain unchanged.
+
 - Added a documentation-only final-vision architecture bundle with simplified
   executive and detailed technical diagrams, editable SVG sources,
   presentation-ready PNG exports, and an evidence-based summary. The visuals

@@ -1,16 +1,17 @@
 # Project status
 
-Last updated: 2026-07-28
+Last updated: 2026-07-29
 
 ## Current milestone
 
-The documentation-only final-vision architecture bundle is complete. It
-provides simplified executive and detailed technical views, editable SVG
-sources, 3840 x 2160 presentation PNGs, and an evidence-based summary. The
-visuals distinguish implemented, planned, optional, and external components
-and preserve Cortexa's local-first trust boundaries. They authorize and
-implement no product source, runtime, permission, identity, credential,
-network, cloud, traffic, provider, or deployment capability.
+The documentation-only final-vision architecture bundle is complete. Its
+executive view presents the value proposition and operating model as a
+30-second visual story, while the detailed technical view remains unchanged.
+The bundle provides editable SVG sources, 3840 x 2160 presentation PNGs, and an
+evidence-based summary. The visuals distinguish implemented, planned, optional,
+and external components and preserve Cortexa's local-first trust boundaries.
+They authorize and implement no product source, runtime, permission, identity,
+credential, network, cloud, traffic, provider, or deployment capability.
 
 Phase 3 and Phase 4 Increments 4A through 4U are **verified complete,
 published, and merged into `main`**. Increment 4U is synchronized at `61525bf`.

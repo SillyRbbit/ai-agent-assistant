@@ -1,354 +1,463 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="title desc">
   <title id="title">Cortexa completed-vision executive architecture</title>
-  <desc id="desc">An executive architecture view distinguishing current, planned, conceptual, and external components of the Cortexa local-first executive assistant.</desc>
+  <desc id="desc">A six-part visual story showing a user working with a trusted AI assistant, local orchestration and controls, controlled tools, intelligence and data services, and business governance.</desc>
+
   <defs>
     <style>
-      text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; fill: #182033; }
-      .title { font-size: 38px; font-weight: 700; fill: #252B71; }
-      .subtitle { font-size: 18px; font-weight: 500; fill: #4758A2; }
-      .layer-title { font-size: 20px; font-weight: 700; fill: #252B71; }
-      .layer-subtitle { font-size: 14px; font-weight: 500; fill: #4758A2; }
-      .card-title { font-size: 17px; font-weight: 700; }
-      .card-copy { font-size: 13px; font-weight: 500; fill: #4758A2; }
-      .small { font-size: 12px; font-weight: 600; }
-      .legend { font-size: 13px; font-weight: 600; }
-      .implemented { fill: #E9F3F4; stroke: #4758A2; stroke-width: 2; }
-      .planned { fill: #F1F4FA; stroke: #6C89BA; stroke-width: 2; stroke-dasharray: 8 5; }
-      .optional { fill: #F5F6F8; stroke: #8A93A4; stroke-width: 2; stroke-dasharray: 3 5; }
-      .external { fill: #FBFBFB; stroke: #182033; stroke-width: 2; }
-      .container { fill: #FFFFFF; stroke: #D9DEE8; stroke-width: 2; }
-      .core-container { fill: #F8FAFD; stroke: #252B71; stroke-width: 3; }
-      .pill-current { fill: #252B71; }
-      .pill-planned { fill: #6C89BA; }
-      .pill-optional { fill: #8A93A4; }
-      .pill-external { fill: #182033; }
-      .pill-text { font-size: 10px; font-weight: 700; fill: #FBFBFB; letter-spacing: .6px; }
-      .rail-title { fill: #FBFBFB; }
-      .rail-label { fill: #9ABFC6; }
-      .warning { fill: #B42318; }
-      .flow { fill: none; stroke: #4758A2; stroke-width: 3; marker-end: url(#arrow); }
-      .future-flow { fill: none; stroke: #6C89BA; stroke-width: 3; stroke-dasharray: 8 6; marker-end: url(#arrow-future); }
-      .trust { fill: none; stroke: #9ABFC6; stroke-width: 2; stroke-dasharray: 5 6; }
-      .icon { fill: none; stroke: #252B71; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-      .icon-light { fill: none; stroke: #9ABFC6; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+      text {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        fill: #182033;
+      }
+
+      .eyebrow {
+        font-size: 13px;
+        font-weight: 750;
+        letter-spacing: 1.6px;
+        fill: #477987;
+      }
+
+      .title {
+        font-size: 48px;
+        font-weight: 760;
+        letter-spacing: -1px;
+        fill: #252b71;
+      }
+
+      .subtitle {
+        font-size: 19px;
+        font-weight: 520;
+        fill: #4758a2;
+      }
+
+      .zone-label {
+        font-size: 12px;
+        font-weight: 760;
+        letter-spacing: 1.2px;
+        fill: #667085;
+      }
+
+      .step-number {
+        font-size: 17px;
+        font-weight: 760;
+        fill: #fbfbfb;
+      }
+
+      .step-kicker {
+        font-size: 12px;
+        font-weight: 760;
+        letter-spacing: 1px;
+        fill: #477987;
+      }
+
+      .step-title {
+        font-size: 25px;
+        font-weight: 740;
+        letter-spacing: -.2px;
+        fill: #252b71;
+      }
+
+      .step-copy {
+        font-size: 15px;
+        font-weight: 520;
+        fill: #475467;
+      }
+
+      .support-title {
+        font-size: 17px;
+        font-weight: 720;
+        fill: #252b71;
+      }
+
+      .support-copy {
+        font-size: 13px;
+        font-weight: 520;
+        fill: #475467;
+      }
+
+      .governance-title {
+        font-size: 21px;
+        font-weight: 730;
+        fill: #fbfbfb;
+      }
+
+      .governance-subtitle {
+        font-size: 14px;
+        font-weight: 520;
+        fill: #c9d2e3;
+      }
+
+      .governance-label {
+        font-size: 12px;
+        font-weight: 760;
+        letter-spacing: .7px;
+        fill: #9abfc6;
+      }
+
+      .governance-copy {
+        font-size: 14px;
+        font-weight: 600;
+        fill: #fbfbfb;
+      }
+
+      .status-text {
+        font-size: 10px;
+        font-weight: 760;
+        letter-spacing: .65px;
+      }
+
+      .legend-text {
+        font-size: 12px;
+        font-weight: 650;
+        fill: #475467;
+      }
+
+      .warning {
+        font-size: 12px;
+        font-weight: 760;
+        fill: #b42318;
+      }
+
+      .story-card {
+        fill: #fff;
+        stroke: #d9dee8;
+        stroke-width: 2;
+      }
+
+      .story-card-core {
+        fill: #f8fafd;
+        stroke: #4758a2;
+        stroke-width: 2.5;
+      }
+
+      .current {
+        fill: #e9f3f4;
+        stroke: #477987;
+        stroke-width: 1.8;
+      }
+
+      .planned {
+        fill: #f1f4fa;
+        stroke: #6c89ba;
+        stroke-width: 1.8;
+        stroke-dasharray: 7 5;
+      }
+
+      .optional {
+        fill: #f5f6f8;
+        stroke: #8a93a4;
+        stroke-width: 1.8;
+        stroke-dasharray: 2 5;
+      }
+
+      .external {
+        fill: #fbfbfb;
+        stroke: #182033;
+        stroke-width: 1.8;
+      }
+
+      .icon {
+        fill: none;
+        stroke: #252b71;
+        stroke-width: 2.7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .icon-teal {
+        fill: none;
+        stroke: #477987;
+        stroke-width: 2.7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .flow {
+        fill: none;
+        stroke: #4758a2;
+        stroke-width: 4;
+        marker-end: url(#arrow);
+      }
+
+      .support-flow {
+        fill: none;
+        stroke: #6c89ba;
+        stroke-width: 2.5;
+        stroke-dasharray: 7 6;
+        marker-end: url(#arrow-soft);
+      }
+
+      .boundary {
+        fill: none;
+        stroke: #9abfc6;
+        stroke-width: 1.7;
+        stroke-dasharray: 7 7;
+      }
     </style>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-      <path d="M0 0 L10 5 L0 10 Z" fill="#4758A2"/>
+
+    <marker id="arrow" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto">
+      <path d="M0 0 L11 5.5 L0 11 Z" fill="#4758a2"/>
     </marker>
-    <marker id="arrow-future" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-      <path d="M0 0 L10 5 L0 10 Z" fill="#6C89BA"/>
+
+    <marker id="arrow-soft" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#6c89ba"/>
     </marker>
-    <filter id="shadow" x="-10%" y="-10%" width="120%" height="125%">
-      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#182033" flood-opacity=".08"/>
+
+    <filter id="shadow" x="-15%" y="-15%" width="130%" height="140%">
+      <feDropShadow dx="0" dy="7" stdDeviation="12" flood-color="#182033" flood-opacity=".09"/>
+    </filter>
+
+    <filter id="soft-shadow" x="-15%" y="-15%" width="130%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#182033" flood-opacity=".06"/>
     </filter>
   </defs>
 
-  <rect width="1920" height="1080" fill="#FBFBFB"/>
-  <rect x="0" y="0" width="1920" height="10" fill="#252B71"/>
+  <!-- Canvas -->
+  <rect width="1920" height="1080" fill="#fbfbfb"/>
+  <rect width="1920" height="10" fill="#252b71"/>
 
-  <text x="60" y="65" class="title">Cortexa · Completed Vision</text>
-  <text x="60" y="101" class="subtitle">A local-first executive assistant with deterministic control between AI intent and real-world action</text>
+  <!-- Title -->
+  <text x="64" y="54" class="eyebrow">COMPLETED-VISION ARCHITECTURE</text>
+  <text x="64" y="105" class="title">Cortexa</text>
+  <text x="64" y="142" class="subtitle">An intelligent, secure, cross-platform executive assistant that can understand, coordinate, and perform work while keeping the user in control.</text>
 
-  <g transform="translate(1190 42)">
-    <text x="0" y="15" class="legend">STATUS</text>
-    <rect x="72" y="0" width="20" height="20" rx="4" class="implemented"/>
-    <text x="100" y="15" class="legend">Current</text>
-    <rect x="187" y="0" width="20" height="20" rx="4" class="planned"/>
-    <text x="215" y="15" class="legend">Planned</text>
-    <rect x="305" y="0" width="20" height="20" rx="4" class="optional"/>
-    <text x="333" y="15" class="legend">Optional</text>
-    <rect x="430" y="0" width="20" height="20" rx="4" class="external"/>
-    <text x="458" y="15" class="legend">External</text>
+  <!-- Status legend -->
+  <g transform="translate(1380 48)">
+    <rect x="0" y="0" width="18" height="18" rx="4" class="current"/>
+    <text x="26" y="14" class="legend-text">Current</text>
+    <rect x="105" y="0" width="18" height="18" rx="4" class="planned"/>
+    <text x="131" y="14" class="legend-text">Planned</text>
+    <rect x="214" y="0" width="18" height="18" rx="4" class="optional"/>
+    <text x="240" y="14" class="legend-text">Optional</text>
+    <rect x="329" y="0" width="18" height="18" rx="4" class="external"/>
+    <text x="355" y="14" class="legend-text">External</text>
   </g>
 
-  <line x1="60" y1="128" x2="1860" y2="128" stroke="#D9DEE8" stroke-width="2"/>
+  <line x1="64" y1="172" x2="1856" y2="172" stroke="#d9dee8" stroke-width="2"/>
 
-  <!-- User experience -->
-  <g filter="url(#shadow)">
-    <rect x="60" y="160" width="320" height="540" rx="20" class="container"/>
+  <!-- Trust-zone labels -->
+  <text x="74" y="210" class="zone-label">HUMAN AUTHORITY</text>
+  <text x="414" y="210" class="zone-label">TRUSTED LOCAL CONTROL</text>
+  <text x="1438" y="210" class="zone-label">CONTROLLED EFFECTS</text>
+  <rect x="394" y="190" width="1010" height="390" rx="24" class="boundary"/>
+
+  <!-- Step 1 -->
+  <g transform="translate(64 232)" filter="url(#shadow)">
+    <rect width="300" height="324" rx="22" class="story-card"/>
   </g>
-  <text x="88" y="200" class="layer-title">User Experience</text>
-  <text x="88" y="226" class="layer-subtitle">Human intent, visibility and consent</text>
+  <g transform="translate(64 232)">
+    <circle cx="34" cy="34" r="22" fill="#252b71"/>
+    <text x="34" y="40" text-anchor="middle" class="step-number">1</text>
+    <rect x="205" y="18" width="77" height="22" rx="11" fill="#e9f3f4"/>
+    <text x="243.5" y="33" text-anchor="middle" class="status-text" fill="#477987">CURRENT</text>
 
-  <g transform="translate(88 252)">
-    <rect width="264" height="92" rx="14" class="implemented"/>
-    <rect x="175" y="12" width="75" height="20" rx="10" class="pill-current"/>
-    <text x="212.5" y="26" text-anchor="middle" class="pill-text">CURRENT</text>
-    <rect x="20" y="18" width="44" height="34" rx="4" class="icon"/>
-    <line x1="30" y1="58" x2="54" y2="58" class="icon"/>
-    <text x="78" y="45" class="card-title">macOS desktop</text>
-    <text x="78" y="68" class="card-copy">Current shell · mocked assistant</text>
-  </g>
+    <circle cx="150" cy="103" r="41" fill="#f1f4fa"/>
+    <circle cx="150" cy="90" r="13" class="icon"/>
+    <path d="M124 127c5-16 15-24 26-24s21 8 26 24" class="icon"/>
+    <path d="M104 76h-18v35h16l13 11v-11h9" class="icon-teal"/>
 
-  <g transform="translate(88 362)">
-    <rect width="264" height="82" rx="14" class="planned"/>
-    <rect x="177" y="11" width="73" height="20" rx="10" class="pill-planned"/>
-    <text x="213.5" y="25" text-anchor="middle" class="pill-text">PLANNED</text>
-    <g transform="translate(22 21)" class="icon">
-      <rect width="36" height="30"/>
-      <line x1="18" y1="0" x2="18" y2="30"/>
-      <line x1="0" y1="15" x2="36" y2="15"/>
+    <text x="28" y="170" class="step-kicker">ASK</text>
+    <text x="28" y="204" class="step-title">Set the goal</text>
+    <text x="28" y="238" class="step-copy">Talk naturally, share context,</text>
+    <text x="28" y="261" class="step-copy">and stay visibly in control.</text>
+
+    <g transform="translate(28 282)">
+      <rect width="88" height="25" rx="12.5" fill="#e9f3f4"/>
+      <text x="44" y="17" text-anchor="middle" class="status-text" fill="#477987">macOS NOW</text>
+      <rect x="96" width="148" height="25" rx="12.5" fill="#f1f4fa" stroke="#6c89ba" stroke-dasharray="5 4"/>
+      <text x="170" y="17" text-anchor="middle" class="status-text" fill="#6c89ba">WINDOWS + LINUX</text>
     </g>
-    <text x="78" y="39" class="card-title">Windows + Linux</text>
-    <text x="78" y="61" class="card-copy">Portable clients and adapters</text>
   </g>
 
-  <g transform="translate(88 462)">
-    <rect width="264" height="82" rx="14" class="optional"/>
-    <rect x="172" y="11" width="78" height="20" rx="10" class="pill-optional"/>
-    <text x="211" y="25" text-anchor="middle" class="pill-text">OPTIONAL</text>
-    <rect x="27" y="16" width="25" height="43" rx="5" class="icon"/>
-    <line x1="34" y1="52" x2="45" y2="52" class="icon"/>
-    <text x="78" y="39" class="card-title">iOS + mobile</text>
-    <text x="78" y="61" class="card-copy">Future companion experiences</text>
+  <!-- Step 2 -->
+  <g transform="translate(406 232)" filter="url(#shadow)">
+    <rect width="300" height="324" rx="22" class="story-card-core"/>
+  </g>
+  <g transform="translate(406 232)">
+    <circle cx="34" cy="34" r="22" fill="#252b71"/>
+    <text x="34" y="40" text-anchor="middle" class="step-number">2</text>
+    <rect x="179" y="18" width="103" height="22" rx="11" fill="#e9f3f4"/>
+    <text x="230.5" y="33" text-anchor="middle" class="status-text" fill="#477987">MOCKED TODAY</text>
+
+    <circle cx="150" cy="103" r="41" fill="#e9f3f4"/>
+    <path d="M150 71v64M118 103h64" class="icon-teal"/>
+    <circle cx="150" cy="103" r="23" class="icon"/>
+    <circle cx="150" cy="103" r="6" fill="#252b71"/>
+
+    <text x="28" y="170" class="step-kicker">UNDERSTAND</text>
+    <text x="28" y="204" class="step-title">Trusted assistant</text>
+    <text x="28" y="238" class="step-copy">Builds shared understanding</text>
+    <text x="28" y="261" class="step-copy">with transparent context.</text>
+
+    <rect x="28" y="282" width="244" height="25" rx="12.5" fill="#e9f3f4"/>
+    <text x="150" y="299" text-anchor="middle" class="status-text" fill="#477987">CURRENT EXPERIENCE · MOCK LOOP</text>
   </g>
 
-  <g transform="translate(88 562)">
-    <rect width="264" height="82" rx="14" class="optional"/>
-    <rect x="172" y="11" width="78" height="20" rx="10" class="pill-optional"/>
-    <text x="211" y="25" text-anchor="middle" class="pill-text">OPTIONAL</text>
-    <rect x="20" y="18" width="42" height="34" rx="4" class="icon"/>
-    <circle cx="41" cy="35" r="9" class="icon"/>
-    <line x1="32" y1="35" x2="50" y2="35" class="icon"/>
-    <text x="78" y="39" class="card-title">Web companion</text>
-    <text x="78" y="61" class="card-copy">Conceptual companion only</text>
+  <!-- Step 3 -->
+  <g transform="translate(748 232)" filter="url(#shadow)">
+    <rect width="300" height="324" rx="22" class="story-card-core"/>
+  </g>
+  <g transform="translate(748 232)">
+    <circle cx="34" cy="34" r="22" fill="#252b71"/>
+    <text x="34" y="40" text-anchor="middle" class="step-number">3</text>
+    <rect x="205" y="18" width="77" height="22" rx="11" fill="#f1f4fa" stroke="#6c89ba" stroke-dasharray="5 4"/>
+    <text x="243.5" y="33" text-anchor="middle" class="status-text" fill="#6c89ba">PLANNED</text>
+
+    <circle cx="150" cy="103" r="41" fill="#f1f4fa"/>
+    <circle cx="126" cy="103" r="10" class="icon"/>
+    <circle cx="167" cy="83" r="9" class="icon"/>
+    <circle cx="174" cy="122" r="9" class="icon"/>
+    <path d="M136 99l22-12M136 108l29 11" class="icon-teal"/>
+
+    <text x="28" y="170" class="step-kicker">COORDINATE</text>
+    <text x="28" y="204" class="step-title">Plan the work</text>
+    <text x="28" y="238" class="step-copy">Breaks goals into bounded tasks</text>
+    <text x="28" y="261" class="step-copy">and routes them deliberately.</text>
+
+    <rect x="28" y="282" width="244" height="25" rx="12.5" fill="#f1f4fa" stroke="#6c89ba" stroke-dasharray="5 4"/>
+    <text x="150" y="299" text-anchor="middle" class="status-text" fill="#6c89ba">ORCHESTRATION · OPTIONAL SPECIALISTS</text>
   </g>
 
-  <!-- Trusted local core -->
-  <g filter="url(#shadow)">
-    <rect x="420" y="160" width="720" height="540" rx="20" class="core-container"/>
+  <!-- Step 4 -->
+  <g transform="translate(1090 232)" filter="url(#shadow)">
+    <rect width="300" height="324" rx="22" class="story-card-core"/>
   </g>
-  <text x="450" y="200" class="layer-title">Trusted Local Control Plane</text>
-  <text x="450" y="226" class="layer-subtitle">Deterministic Rust owns validation, policy, approval, restricted execution and audit</text>
+  <g transform="translate(1090 232)">
+    <circle cx="34" cy="34" r="22" fill="#252b71"/>
+    <text x="34" y="40" text-anchor="middle" class="step-number">4</text>
+    <rect x="157" y="18" width="125" height="22" rx="11" fill="#e9f3f4"/>
+    <text x="219.5" y="33" text-anchor="middle" class="status-text" fill="#477987">CURRENT CONTRACTS</text>
 
-  <g transform="translate(450 252)">
-    <rect width="310" height="92" rx="14" class="implemented"/>
-    <rect x="220" y="12" width="76" height="20" rx="10" class="pill-current"/>
-    <text x="258" y="26" text-anchor="middle" class="pill-text">CURRENT</text>
-    <circle cx="35" cy="35" r="15" class="icon"/>
-    <path d="M27 35h16M35 27v16" class="icon"/>
-    <text x="64" y="43" class="card-title">Conversation workspace</text>
-    <text x="64" y="67" class="card-copy">Mock loop, tasks, activity and approvals</text>
-  </g>
+    <circle cx="150" cy="103" r="41" fill="#e9f3f4"/>
+    <path d="M150 68l28 13v21c0 20-13 33-28 42-15-9-28-22-28-42V81Z" class="icon"/>
+    <path d="M137 104l9 9 18-22" class="icon-teal"/>
 
-  <g transform="translate(780 252)">
-    <rect width="330" height="92" rx="14" class="planned"/>
-    <rect x="244" y="12" width="72" height="20" rx="10" class="pill-planned"/>
-    <text x="280" y="26" text-anchor="middle" class="pill-text">PLANNED</text>
-    <circle cx="35" cy="35" r="14" class="icon"/>
-    <circle cx="66" cy="25" r="8" class="icon"/>
-    <circle cx="66" cy="51" r="8" class="icon"/>
-    <line x1="49" y1="31" x2="58" y2="27" class="icon"/>
-    <line x1="49" y1="39" x2="58" y2="47" class="icon"/>
-    <text x="90" y="43" class="card-title">Agent orchestration</text>
-    <text x="90" y="67" class="card-copy">Run lifecycle · planning · routing</text>
+    <text x="28" y="170" class="step-kicker">PROTECT</text>
+    <text x="28" y="204" class="step-title">Control actions</text>
+    <text x="28" y="238" class="step-copy">Policy checks risk. Important</text>
+    <text x="28" y="261" class="step-copy">actions wait for your approval.</text>
+
+    <rect x="28" y="282" width="244" height="25" rx="12.5" fill="#f1f4fa" stroke="#6c89ba" stroke-dasharray="5 4"/>
+    <text x="150" y="299" text-anchor="middle" class="status-text" fill="#6c89ba">END-TO-END ENFORCEMENT PLANNED</text>
   </g>
 
-  <g transform="translate(450 370)">
-    <rect width="200" height="98" rx="14" class="implemented"/>
-    <text x="18" y="31" class="card-title">ToolRegistry</text>
-    <text x="18" y="55" class="card-copy">Strict schemas</text>
-    <text x="18" y="76" class="card-copy">Closed tool catalog</text>
+  <!-- Step 5 -->
+  <g transform="translate(1432 232)" filter="url(#shadow)">
+    <rect width="424" height="324" rx="22" class="story-card"/>
   </g>
-  <g transform="translate(670 370)">
-    <rect width="200" height="98" rx="14" class="implemented"/>
-    <text x="18" y="31" class="card-title">PolicyEngine</text>
-    <text x="18" y="55" class="card-copy">Risk classification</text>
-    <text x="18" y="76" class="card-copy">Fail-closed rules</text>
-  </g>
-  <g transform="translate(890 370)">
-    <rect width="220" height="98" rx="14" class="implemented"/>
-    <text x="18" y="31" class="card-title">ApprovalManager</text>
-    <text x="18" y="55" class="card-copy">Exact-subject consent</text>
-    <text x="18" y="76" class="card-copy">Current but disconnected</text>
+  <g transform="translate(1432 232)">
+    <circle cx="34" cy="34" r="22" fill="#252b71"/>
+    <text x="34" y="40" text-anchor="middle" class="step-number">5</text>
+    <rect x="329" y="18" width="77" height="22" rx="11" fill="#f1f4fa" stroke="#6c89ba" stroke-dasharray="5 4"/>
+    <text x="367.5" y="33" text-anchor="middle" class="status-text" fill="#6c89ba">PLANNED</text>
+
+    <circle cx="102" cy="103" r="41" fill="#f1f4fa"/>
+    <rect x="77" y="83" width="50" height="38" rx="7" class="icon"/>
+    <path d="M87 96h30M87 106h21" class="icon-teal"/>
+
+    <g transform="translate(178 68)">
+      <rect width="214" height="76" rx="14" class="external"/>
+      <path d="M18 25h29v23H18Z M18 25l14.5 12L47 25" class="icon"/>
+      <rect x="60" y="16" width="1" height="44" fill="#d9dee8"/>
+      <rect x="77" y="21" width="27" height="26" rx="3" class="icon"/>
+      <line x1="77" y1="29" x2="104" y2="29" class="icon"/>
+      <path d="M130 47V27h20l7 7h18v13Z" class="icon"/>
+    </g>
+
+    <text x="28" y="170" class="step-kicker">PERFORM</text>
+    <text x="28" y="204" class="step-title">Get work done</text>
+    <text x="28" y="238" class="step-copy">Least-privilege tools connect to devices,</text>
+    <text x="28" y="261" class="step-copy">email, calendars, files, cloud and business apps.</text>
+
+    <rect x="28" y="282" width="368" height="25" rx="12.5" fill="#f1f4fa" stroke="#6c89ba" stroke-dasharray="5 4"/>
+    <text x="212" y="299" text-anchor="middle" class="status-text" fill="#6c89ba">RESTRICTED TOOLS · APPROVED SERVICES</text>
   </g>
 
-  <path d="M650 419 H670" class="flow"/>
-  <path d="M870 419 H890" class="flow"/>
+  <!-- Main story arrows -->
+  <path d="M364 394H394" class="flow"/>
+  <path d="M706 394H736" class="flow"/>
+  <path d="M1048 394H1078" class="flow"/>
+  <path d="M1390 394H1420" class="flow"/>
 
-  <g transform="translate(450 494)">
-    <rect width="200" height="86" rx="14" class="planned"/>
-    <text x="18" y="32" class="card-title">Restricted executor</text>
-    <text x="18" y="57" class="card-copy">Exact approved actions</text>
-  </g>
-  <g transform="translate(670 494)">
-    <rect width="200" height="86" rx="14" class="planned"/>
-    <text x="18" y="32" class="card-title">Durable audit</text>
-    <text x="18" y="57" class="card-copy">Redacted traceability</text>
-  </g>
-  <g transform="translate(890 494)">
-    <rect width="220" height="86" rx="14" class="planned"/>
-    <text x="18" y="32" class="card-title">Memory + tasks</text>
-    <text x="18" y="57" class="card-copy">User-controlled persistence</text>
-  </g>
+  <!-- Intelligence and data foundation -->
+  <g transform="translate(64 612)">
+    <rect width="1792" height="188" rx="22" fill="#f1f4fa" stroke="#d9dee8" stroke-width="2"/>
+    <circle cx="34" cy="34" r="22" fill="#4758a2"/>
+    <text x="34" y="40" text-anchor="middle" class="step-number">6</text>
+    <text x="70" y="31" class="step-kicker">SUPPORT</text>
+    <text x="70" y="57" class="support-title">Intelligence, memory and secure data services strengthen every interaction</text>
 
-  <g transform="translate(450 606)">
-    <rect width="310" height="66" rx="14" class="planned"/>
-    <text x="18" y="28" class="card-title">PlatformAdapter</text>
-    <text x="18" y="49" class="card-copy">Least-privilege native integrations</text>
-  </g>
-  <g transform="translate(780 606)">
-    <rect width="330" height="66" rx="14" class="optional"/>
-    <text x="18" y="28" class="card-title">Specialist agent coordination</text>
-    <text x="18" y="49" class="card-copy">Conceptual · typed, policy-controlled only</text>
-  </g>
+    <g transform="translate(28 82)">
+      <rect width="400" height="78" rx="15" class="external"/>
+      <path d="M27 46c0-9 7-16 16-16 6 0 12 4 15 9 3-2 6-3 10-3 9 0 16 7 16 16H27Z" class="icon"/>
+      <text x="104" y="32" class="support-title">Approved cloud models</text>
+      <text x="104" y="55" class="support-copy">External intelligence · no device authority</text>
+    </g>
 
-  <!-- Gateway -->
-  <g filter="url(#shadow)">
-    <rect x="1180" y="160" width="300" height="540" rx="20" class="container"/>
-  </g>
-  <text x="1208" y="200" class="layer-title">Product Gateway</text>
-  <text x="1208" y="226" class="layer-subtitle">Cloud boundary · no device authority</text>
+    <g transform="translate(452 82)">
+      <rect width="400" height="78" rx="15" class="planned"/>
+      <ellipse cx="46" cy="27" rx="19" ry="8" class="icon"/>
+      <path d="M27 27v28c0 5 9 8 19 8s19-3 19-8V27M27 41c0 5 9 8 19 8s19-3 19-8" class="icon"/>
+      <text x="90" y="32" class="support-title">Memory + secure local data</text>
+      <text x="90" y="55" class="support-copy">Encrypted, user-controlled, retention-aware</text>
+    </g>
 
-  <g transform="translate(1208 252)">
-    <rect width="244" height="86" rx="14" class="planned"/>
-    <text x="18" y="32" class="card-title">AgentProvider</text>
-    <text x="18" y="57" class="card-copy">Approved model routing</text>
-  </g>
-  <g transform="translate(1208 360)">
-    <rect width="244" height="106" rx="14" class="planned"/>
-    <path d="M25 44c0-9 8-16 17-16 7 0 13 4 16 10 2-1 5-2 8-2 9 0 16 7 16 16H25Z" class="icon"/>
-    <text x="96" y="39" class="card-title">Authenticated gateway</text>
-    <text x="18" y="76" class="card-copy">Closed protocol · rate + cost limits</text>
-    <text x="18" y="96" class="card-copy">Server-side provider credentials</text>
-  </g>
-  <g transform="translate(1208 488)">
-    <rect width="244" height="86" rx="14" class="planned"/>
-    <path d="M28 31l14-7 14 7v11c0 11-7 18-14 22-7-4-14-11-14-22Z" class="icon"/>
-    <text x="76" y="37" class="card-title">Identity + secrets</text>
-    <text x="18" y="65" class="card-copy">Short-lived, audience-bound access</text>
-  </g>
-  <g transform="translate(1208 596)">
-    <rect width="244" height="76" rx="14" class="planned"/>
-    <text x="18" y="30" class="card-title">Synthetic demo path</text>
-    <text x="18" y="54" class="card-copy">Cloudflare · fake data only</text>
+    <g transform="translate(876 82)">
+      <rect width="400" height="78" rx="15" class="planned"/>
+      <path d="M28 24h30l10 10v28H28Z M58 24v11h10" class="icon"/>
+      <path d="M38 45h20M38 54h15" class="icon-teal"/>
+      <text x="90" y="32" class="support-title">Retrieval + knowledge</text>
+      <text x="90" y="55" class="support-copy">Curated context · optional semantic index</text>
+    </g>
+
+    <g transform="translate(1300 82)">
+      <rect width="464" height="78" rx="15" class="optional"/>
+      <circle cx="47" cy="43" r="21" class="icon"/>
+      <path d="M37 43h20M47 33v20" class="icon-teal"/>
+      <text x="88" y="32" class="support-title">Optional local intelligence</text>
+      <text x="88" y="55" class="support-copy">Local models and future private processing</text>
+    </g>
   </g>
 
-  <!-- External services -->
-  <g filter="url(#shadow)">
-    <rect x="1520" y="160" width="340" height="540" rx="20" class="container"/>
-  </g>
-  <text x="1548" y="200" class="layer-title">External Intelligence</text>
-  <text x="1548" y="226" class="layer-subtitle">Untrusted services · independently approved</text>
+  <path d="M522 612V584H556V566" class="support-flow"/>
+  <path d="M976 612V584H898V566" class="support-flow"/>
+  <path d="M1470 612V584H1240V566" class="support-flow"/>
 
-  <g transform="translate(1548 252)">
-    <rect width="284" height="100" rx="14" class="external"/>
-    <rect x="194" y="12" width="76" height="20" rx="10" class="pill-external"/>
-    <text x="232" y="26" text-anchor="middle" class="pill-text">EXTERNAL</text>
-    <rect x="20" y="24" width="46" height="42" rx="8" class="icon"/>
-    <path d="M31 45h24M43 33v24" class="icon"/>
-    <text x="82" y="48" class="card-title">Approved cloud models</text>
-    <text x="82" y="72" class="card-copy">Per-provider privacy + ZDR gates</text>
-  </g>
-  <g transform="translate(1548 374)">
-    <rect width="284" height="86" rx="14" class="external"/>
-    <circle cx="42" cy="36" r="16" class="icon"/>
-    <path d="M27 67c3-13 10-19 15-19s12 6 15 19" class="icon"/>
-    <text x="78" y="36" class="card-title">Microsoft identity</text>
-    <text x="78" y="60" class="card-copy">Personal OAuth/OIDC target</text>
-  </g>
-  <g transform="translate(1548 482)">
-    <rect width="284" height="86" rx="14" class="external"/>
-    <path d="M22 34h42v30H22zM22 34l21 17 21-17" class="icon"/>
-    <text x="82" y="36" class="card-title">Business systems</text>
-    <text x="82" y="60" class="card-copy">Email, calendar and SaaS</text>
-  </g>
-  <g transform="translate(1548 590)">
-    <rect width="284" height="82" rx="14" class="optional"/>
-    <ellipse cx="42" cy="29" rx="19" ry="8" class="icon"/>
-    <path d="M23 29v27c0 4 9 8 19 8s19-4 19-8V29" class="icon"/>
-    <text x="82" y="34" class="card-title">Local models + retrieval</text>
-    <text x="82" y="58" class="card-copy">Conceptual optional intelligence</text>
+  <!-- Business governance foundation -->
+  <g transform="translate(64 824)">
+    <rect width="1792" height="184" rx="22" fill="#182033"/>
+    <path d="M34 40l19-9 19 9v14c0 14-9 23-19 29-10-6-19-15-19-29Z" class="icon-teal"/>
+    <text x="88" y="47" class="governance-title">Business-ready governance</text>
+    <text x="88" y="72" class="governance-subtitle">A durable control plane makes actions explainable, reviewable and reversible.</text>
+
+    <g transform="translate(28 105)">
+      <text x="0" y="0" class="governance-label">USER CONSENT</text>
+      <text x="0" y="28" class="governance-copy">Preview · approve · cancel</text>
+    </g>
+    <g transform="translate(346 105)">
+      <text x="0" y="0" class="governance-label">POLICY + LEAST PRIVILEGE</text>
+      <text x="0" y="28" class="governance-copy">Risk checks · narrow permissions</text>
+    </g>
+    <g transform="translate(736 105)">
+      <text x="0" y="0" class="governance-label">SECRETS + ENCRYPTION</text>
+      <text x="0" y="28" class="governance-copy">Protected credentials · encrypted data</text>
+    </g>
+    <g transform="translate(1122 105)">
+      <text x="0" y="0" class="governance-label">AUDIT + ACCOUNTABILITY</text>
+      <text x="0" y="28" class="governance-copy">Redacted lifecycle · verified outcomes</text>
+    </g>
+    <g transform="translate(1492 105)">
+      <text x="0" y="0" class="governance-label">DATA BOUNDARIES</text>
+      <text x="0" y="28" class="governance-copy">Local-first · disclosed external use</text>
+    </g>
   </g>
 
-  <!-- Main communication paths -->
-  <path d="M380 425 H420" class="flow"/>
-  <text x="400" y="411" text-anchor="middle" class="small">intent</text>
-  <path d="M1140 355 H1180" class="future-flow"/>
-  <text x="1160" y="339" text-anchor="middle" class="small">bounded request</text>
-  <path d="M1480 355 H1520" class="future-flow"/>
-  <text x="1500" y="339" text-anchor="middle" class="small">approved API</text>
-
-  <!-- Controlled integrations -->
-  <g filter="url(#shadow)">
-    <rect x="60" y="730" width="1800" height="170" rx="20" class="container"/>
-  </g>
-  <text x="88" y="770" class="layer-title">Controlled Tools &amp; Integrations</text>
-  <text x="88" y="794" class="layer-subtitle">Every effect passes through local schema, policy, consent and least-privilege execution</text>
-
-  <g transform="translate(88 815)">
-    <rect width="230" height="60" rx="12" class="planned"/>
-    <path d="M18 18h34v25H18zM18 18l17 14 17-14" class="icon"/>
-    <text x="68" y="28" class="card-title">Email</text>
-    <text x="68" y="47" class="card-copy">Read/draft first</text>
-  </g>
-  <g transform="translate(336 815)">
-    <rect width="260" height="60" rx="12" class="planned"/>
-    <rect x="18" y="17" width="34" height="28" rx="3" class="icon"/>
-    <line x1="18" y1="27" x2="52" y2="27" class="icon"/>
-    <text x="68" y="28" class="card-title">Calendar + contacts</text>
-    <text x="68" y="47" class="card-copy">Scoped native access</text>
-  </g>
-  <g transform="translate(614 815)">
-    <rect width="250" height="60" rx="12" class="planned"/>
-    <path d="M18 17h17l6 7h15v24H18Z" class="icon"/>
-    <text x="72" y="28" class="card-title">Files + browser</text>
-    <text x="72" y="47" class="card-copy">Authorized scopes only</text>
-  </g>
-  <g transform="translate(882 815)">
-    <rect width="260" height="60" rx="12" class="planned"/>
-    <path d="M35 16c-9 0-14 7-14 15v9l-5 6h38l-5-6v-9c0-8-5-15-14-15Z" class="icon"/>
-    <text x="72" y="28" class="card-title">Notifications</text>
-    <text x="72" y="47" class="card-copy">User-initiated alerts</text>
-  </g>
-  <g transform="translate(1160 815)">
-    <rect width="300" height="60" rx="12" class="optional"/>
-    <path d="M18 39c0-8 6-14 14-14 6 0 11 3 13 9 2-1 4-1 6-1 7 0 12 5 12 12H18Z" class="icon"/>
-    <text x="82" y="28" class="card-title">Cloud platforms</text>
-    <text x="82" y="47" class="card-copy">Portable, separately approved</text>
-  </g>
-  <g transform="translate(1478 815)">
-    <rect width="354" height="60" rx="12" class="optional"/>
-    <rect x="18" y="17" width="35" height="30" rx="4" class="icon"/>
-    <line x1="28" y1="27" x2="43" y2="27" class="icon"/>
-    <line x1="28" y1="36" x2="43" y2="36" class="icon"/>
-    <text x="74" y="28" class="card-title">Third-party integrations</text>
-    <text x="74" y="47" class="card-copy">Future business applications</text>
+  <!-- Prohibited-path callout and evidence note -->
+  <g transform="translate(1325 785)">
+    <line x1="0" y1="0" x2="505" y2="0" stroke="#b42318" stroke-width="2" stroke-dasharray="6 5"/>
+    <circle cx="22" cy="0" r="10" fill="#fbfbfb" stroke="#b42318" stroke-width="2"/>
+    <line x1="15" y1="-7" x2="29" y2="7" stroke="#b42318" stroke-width="2"/>
+    <text x="42" y="5" class="warning">NO DIRECT MODEL-TO-DEVICE PATH</text>
   </g>
 
-  <path d="M780 700 V730" class="future-flow"/>
-  <text x="796" y="720" class="small">approved action</text>
-  <line x1="1480" y1="704" x2="1838" y2="704" stroke="#B42318" stroke-width="2" stroke-dasharray="6 5"/>
-  <circle cx="1659" cy="704" r="14" fill="#FBFBFB" stroke="#B42318" stroke-width="2"/>
-  <line x1="1649" y1="694" x2="1669" y2="714" stroke="#B42318" stroke-width="2"/>
-  <text x="1659" y="726" text-anchor="middle" font-size="12" font-weight="700" class="warning">NO DIRECT MODEL-TO-DEVICE PATH</text>
-
-  <!-- Security rail -->
-  <rect x="60" y="930" width="1800" height="96" rx="20" fill="#182033"/>
-  <path d="M92 955l18-9 18 9v14c0 14-9 23-18 28-9-5-18-14-18-28Z" class="icon-light"/>
-  <text x="146" y="966" font-size="19" font-weight="700" class="rail-title">Security &amp; Governance</text>
-  <text x="146" y="994" font-size="14" font-weight="500" class="rail-label">Human control is a product capability, not a prompt convention</text>
-
-  <g transform="translate(500 954)">
-    <text x="0" y="0" class="small rail-label">USER CONSENT</text>
-    <text x="0" y="28" font-size="15" font-weight="600" class="rail-title">Preview · approve · cancel</text>
-  </g>
-  <g transform="translate(760 954)">
-    <text x="0" y="0" class="small rail-label">LEAST PRIVILEGE</text>
-    <text x="0" y="28" font-size="15" font-weight="600" class="rail-title">Narrow tools + permissions</text>
-  </g>
-  <g transform="translate(1035 954)">
-    <text x="0" y="0" class="small rail-label">DATA BOUNDARIES</text>
-    <text x="0" y="28" font-size="15" font-weight="600" class="rail-title">Local-first · minimized external</text>
-  </g>
-  <g transform="translate(1330 954)">
-    <text x="0" y="0" class="small rail-label">SECRETS + ENCRYPTION</text>
-    <text x="0" y="28" font-size="15" font-weight="600" class="rail-title">Keychain + encrypted storage</text>
-  </g>
-  <g transform="translate(1635 954)">
-    <text x="0" y="0" class="small rail-label">AUDITABILITY</text>
-    <text x="0" y="28" font-size="15" font-weight="600" class="rail-title">Redacted, reviewable trail</text>
-  </g>
-
-  <text x="60" y="1058" font-size="12" font-weight="500" fill="#6C89BA">Vision diagram · statuses reflect repository evidence as of 2026-07-28 · future capabilities require separate approval and verification</text>
+  <text x="64" y="1042" font-size="11" font-weight="600" fill="#667085">Vision diagram · status reflects repository evidence as of 2026-07-29 · planned and optional capabilities require separate approval and verification</text>
 </svg>
