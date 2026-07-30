@@ -57,6 +57,13 @@ before company ownership, seller identity, or shared certificate control is
 needed and authorizes no account, signing, Keychain, credential, Cloudflare,
 provider, traffic, deployment, or runtime action.
 
+The completed documentation-only
+[`apple-developer-individual-enrollment-execution-plan.md`](docs/plans/apple-developer-individual-enrollment-execution-plan.md)
+defines the future owner-approved procedure for D-074's conditional individual
+enrollment model. It creates no Apple account action, enrollment, payment,
+agreement, signing asset, Keychain item, credential, Cloudflare, provider,
+traffic, deployment, or runtime behavior.
+
 The owner-attested Free-plan Cloudflare Zero Trust organization exists with
 only Cloudflare's default account-member identity provider. It has no Access
 application, policy, service token, Worker, route, DNS change, device

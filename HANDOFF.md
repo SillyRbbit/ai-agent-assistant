@@ -82,20 +82,27 @@ ownership, seller identity, or team certificate control is needed. It creates
 no Apple account action, signing asset, Keychain item, credential, Cloudflare,
 provider, traffic, deployment, or runtime authority.
 
+The documentation-only individual-enrollment execution plan is complete. It
+defines the separate future owner approval, ownership/seller-name gates,
+private evidence, stop conditions, and non-reversible purchase/contract risk
+for D-074's conditional individual model. It performs and authorizes no Apple
+account, enrollment, payment, agreement, signing, Keychain, credential,
+Cloudflare, provider, traffic, deployment, or runtime action.
+
 ### Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Start from D-074's completed Apple Developer enrollment recommendation. Confirm
-its marker remains valid and reconcile the actual branch and working tree. Do
-not enroll now. The owner may perform only the separate plan's read-only private
-account review if separately directed; its outcome cannot authorize signing,
-Keychain, credential, Cloudflare, provider, deployment, traffic, or runtime
-activity. Do not add a signing asset, Keychain item, credential, runtime
-consumer, IPC, Worker source, Access application, policy, token, route, DNS
-record, secret, deployment, provider request, traffic, or runtime behavior
-without a separately approved exact increment.
+Start from D-074 and the completed individual-enrollment execution plan. Confirm
+their markers remain valid and reconcile the actual branch and working tree. Do
+not enroll or access Apple Developer now. Any future individual enrollment
+requires a separate owner-approved operational increment and still cannot
+authorize signing, Keychain, credential, Cloudflare, provider, deployment,
+traffic, or runtime activity. Do not add a signing asset, Keychain item,
+credential, runtime consumer, IPC, Worker source, Access application, policy,
+token, route, DNS record, secret, deployment, provider request, traffic, or
+runtime behavior without a separately approved exact increment.
 ```
 
 Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,

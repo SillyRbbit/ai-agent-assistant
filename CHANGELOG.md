@@ -4,6 +4,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added a documentation-only future execution plan for D-074's conditional
+  individual Apple Developer enrollment model. It defines owner gates, private
+  evidence, stop conditions, and non-reversible commitment handling without
+  accessing Apple or creating any signing, Keychain, credential, Cloudflare,
+  provider, traffic, deployment, or runtime capability.
+
 - Added D-074's documentation-only Apple Developer enrollment recommendation:
   defer enrollment now; conditionally prefer individual membership for a later
   separately approved owner-only proof while Cortexa remains personally owned;

@@ -165,6 +165,16 @@ needed. It creates no account access, purchase, agreement, signing asset,
 Keychain item, credential, Cloudflare, provider, traffic, deployment, or
 runtime authority.
 
+### Completed documentation-only planning: Apple Developer individual enrollment execution
+
+**Status:** Complete; enrollment remains Blocked pending separate owner approval.
+[`apple-developer-individual-enrollment-execution-plan.md`](docs/plans/apple-developer-individual-enrollment-execution-plan.md)
+defines the D-074 conditional individual-enrollment procedure, owner gates,
+private evidence, stop conditions, and non-reversible commitment handling. It
+authorizes no Apple account access, enrollment, purchase, agreement, signing
+asset, Keychain item, credential, Cloudflare, provider, traffic, deployment, or
+runtime behavior.
+
 ### Completed documentation-only planning: Cloudflare demo local security boundary
 
 **Status:** Complete; no implementation authorized.

@@ -29,6 +29,12 @@ identity, or shared certificate control is required. No Apple, signing,
 Keychain, credential, Cloudflare, provider, traffic, deployment, or runtime
 action is authorized.
 
+The documentation-only D-074 individual-enrollment execution plan is complete.
+It defines a later owner-approved enrollment procedure, private evidence, stop
+conditions, and non-reversible-commitment handling without accessing Apple or
+creating any signing, Keychain, credential, Cloudflare, provider, traffic,
+deployment, or runtime capability. Enrollment remains Blocked.
+
 Phase 3 and Phase 4 Increments 4A through 4U are **verified complete,
 published, and merged into `main`**. Increment 4U is synchronized at `61525bf`.
 Meta Increment 1 branding and identity foundation is **verified complete and
