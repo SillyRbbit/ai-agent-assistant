@@ -2425,6 +2425,55 @@ Consequences: this boundary authorizes no implementation, signing, Keychain
 action, credential, Cloudflare resource, provider request, traffic, or runtime
 behavior. D-064 and D-068 remain unchanged.
 
+## D-074 - Defer Apple Developer enrollment and conditionally prefer individual membership
+
+Date: 2026-07-30
+Status: Accepted documentation-only owner recommendation
+
+Decision: Cortexa should not enroll in the Apple Developer Program now. Current
+documentation, mock, and fake-only planning work requires no membership. If a
+later separately approved owner-only fake-demo signing increment requires
+membership while Cortexa remains personally owned by one individual or sole
+proprietor, recommend individual enrollment. The individual enrollee is the
+Account Holder and can control the relevant signing assets, subject to Apple's
+then-current membership and certificate rules.
+
+Re-evaluate before enrollment and prefer organization enrollment instead when a
+legal entity should own the Apple agreement, seller identity, certificates, or
+future team access. Do not assume a later individual-to-organization transition
+is low-risk, automatic, or sufficient for company ownership; it requires a
+separate ownership, distribution, certificate-control, and migration review.
+
+Comparison:
+
+| Factor                     | Individual                                                                                          | Organization                                                                                                                | Recommendation for current scope                                                        |
+| -------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Ownership                  | One person is Account Holder and controls the membership relationship.                              | A legal entity owns the relationship through its authorized Account Holder.                                                 | Individual only while the owner-only demo remains personally owned.                     |
+| Seller-name visibility     | Apps are listed under the person's name.                                                            | Apps are listed under the legal entity name.                                                                                | Defer enrollment now; select organization before a company seller identity is needed.   |
+| Future team access         | Not the intended model for company-managed team ownership.                                          | Supports organization membership and delegated team access.                                                                 | Organization when contributors or business continuity require shared control.           |
+| Certificate control        | Individual Account Holder may manage permitted signing assets.                                      | Entity governance can separate company ownership from an individual employee.                                               | Individual for a sole owner; organization for company-controlled assets.                |
+| Cost                       | Apple currently lists the same Program membership price for individual and organization enrollment. | Apple currently lists the same Program membership price; organization eligibility has additional legal-entity requirements. | Cost does not decide the current choice.                                                |
+| Migration risk             | A later business transition could require ownership and distribution changes.                       | Avoids an avoidable personal-to-company ownership gap when a legal entity already exists.                                   | Do not enroll individually for short-term convenience if company ownership is imminent. |
+| Owner-only fake-demo scope | Can fit a sole owner's future limited proof.                                                        | Adds organizational prerequisites not needed for a personal proof.                                                          | Conditional individual preference only after separate approval.                         |
+
+Evidence basis: Apple's current enrollment guidance permits individual or
+organization enrollment, identifies the individual enrollee's legal-name seller
+visibility, and lists a 99 USD annual membership price that may vary by region.
+Apple's membership comparison identifies Developer ID and notarization as
+Program benefits, while its certificate overview says an individual enrollee is
+the Account Holder and that only an Account Holder or Admin can create
+distribution certificates. See [Become a member](https://developer.apple.com/programs/enroll/),
+[Choosing a Membership](https://developer.apple.com/support/compare-memberships/),
+and [Certificates overview](https://developer.apple.com/help/account/certificates/certificates-overview/).
+
+Consequences: this recommendation creates no membership, payment, agreement,
+account access, certificate, signing identity, key, profile, entitlement,
+notarization, Keychain item, credential, Cloudflare resource, provider setting,
+provider request, traffic, deployment, runtime behavior, or implementation
+authority. A free Xcode Personal Team is not accepted as the project's stable
+signed-identity boundary. D-064's 15-minute production requirement and D-068's
+30-day demo-only exception remain unchanged.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

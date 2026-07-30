@@ -50,6 +50,13 @@ proposal. It authorizes no enrollment, purchase, support request, role change,
 signing asset, download, installation, Keychain action, credential, Cloudflare,
 provider, traffic, deployment, or runtime behavior.
 
+D-074 defers Apple Developer Program enrollment and conditionally recommends an
+individual membership only for a later separately approved owner-only proof
+while Cortexa remains personally owned. It requires a fresh organization review
+before company ownership, seller identity, or shared certificate control is
+needed and authorizes no account, signing, Keychain, credential, Cloudflare,
+provider, traffic, deployment, or runtime action.
+
 The owner-attested Free-plan Cloudflare Zero Trust organization exists with
 only Cloudflare's default account-member identity provider. It has no Access
 application, policy, service token, Worker, route, DNS change, device

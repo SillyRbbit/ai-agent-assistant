@@ -154,6 +154,17 @@ installation, Keychain actions, credentials, Cloudflare, provider, traffic,
 deployment, and runtime behavior. Account eligibility cannot authorize a
 future proof or real credential ingestion.
 
+### Completed documentation-only decision: Apple Developer enrollment model
+
+**Status:** Complete; enrollment and all signing actions remain Blocked.
+D-074 defers Apple Developer Program enrollment now and conditionally recommends
+individual enrollment only if a later owner-only proof is separately approved
+while Cortexa remains personally owned. It requires a fresh organization review
+before company ownership, seller identity, or shared certificate control is
+needed. It creates no account access, purchase, agreement, signing asset,
+Keychain item, credential, Cloudflare, provider, traffic, deployment, or
+runtime authority.
+
 ### Completed documentation-only planning: Cloudflare demo local security boundary
 
 **Status:** Complete; no implementation authorized.

@@ -74,20 +74,28 @@ certificate or profile creation, download, installation, Keychain action, and
 all Cloudflare, provider, traffic, deployment, and runtime activity. The review
 itself is not yet performed, and every outcome leaves implementation Blocked.
 
+D-074 records the documentation-only enrollment recommendation: defer Apple
+Developer Program enrollment now; conditionally prefer individual membership
+only for a later separately approved owner-only proof while Cortexa remains
+personally owned; re-evaluate and prefer organization enrollment before company
+ownership, seller identity, or team certificate control is needed. It creates
+no Apple account action, signing asset, Keychain item, credential, Cloudflare,
+provider, traffic, deployment, or runtime authority.
+
 ### Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Start from the completed Apple Developer signing-identity owner-evidence plan.
-Confirm its marker remains valid and reconcile the actual branch and working
-tree. The owner may perform only the plan's read-only private account review if
-separately directed; its outcome cannot authorize signing, Keychain, credential,
-Cloudflare, provider, deployment, traffic, or runtime activity. Do not add a
-signing asset, Keychain item, credential, runtime consumer, IPC, Worker source,
-Access application, policy, token, route, DNS record, secret, deployment,
-provider request, traffic, or runtime behavior without a separately approved
-exact increment.
+Start from D-074's completed Apple Developer enrollment recommendation. Confirm
+its marker remains valid and reconcile the actual branch and working tree. Do
+not enroll now. The owner may perform only the separate plan's read-only private
+account review if separately directed; its outcome cannot authorize signing,
+Keychain, credential, Cloudflare, provider, deployment, traffic, or runtime
+activity. Do not add a signing asset, Keychain item, credential, runtime
+consumer, IPC, Worker source, Access application, policy, token, route, DNS
+record, secret, deployment, provider request, traffic, or runtime behavior
+without a separately approved exact increment.
 ```
 
 Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,

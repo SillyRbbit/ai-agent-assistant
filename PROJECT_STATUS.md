@@ -21,6 +21,14 @@ actions, download, installation, Keychain activity, and every Cloudflare,
 provider, traffic, deployment, and runtime action. No account evidence has been
 collected, and implementation remains Blocked.
 
+D-074 records the documentation-only Apple Developer enrollment recommendation:
+defer enrollment now; conditionally prefer individual membership only for a
+later separately approved owner-only proof while Cortexa is personally owned;
+re-evaluate and prefer organization enrollment before company ownership, seller
+identity, or shared certificate control is required. No Apple, signing,
+Keychain, credential, Cloudflare, provider, traffic, deployment, or runtime
+action is authorized.
+
 Phase 3 and Phase 4 Increments 4A through 4U are **verified complete,
 published, and merged into `main`**. Increment 4U is synchronized at `61525bf`.
 Meta Increment 1 branding and identity foundation is **verified complete and

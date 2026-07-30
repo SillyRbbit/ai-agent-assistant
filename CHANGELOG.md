@@ -4,6 +4,14 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added D-074's documentation-only Apple Developer enrollment recommendation:
+  defer enrollment now; conditionally prefer individual membership for a later
+  separately approved owner-only proof while Cortexa remains personally owned;
+  re-evaluate organization enrollment before company ownership, seller identity,
+  or shared certificate control is needed. No Apple, signing, Keychain,
+  credential, Cloudflare, provider, traffic, deployment, or runtime action was
+  added.
+
 - Added a documentation-only, owner-only Apple Developer signing-identity
   evidence plan. It defines a read-only private account review with closed
   sanitized outcomes while prohibiting enrollment, purchase, support requests,
