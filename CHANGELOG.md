@@ -4,6 +4,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added a documentation-only, owner-only Apple Developer signing-identity
+  evidence plan. It defines a read-only private account review with closed
+  sanitized outcomes while prohibiting enrollment, purchase, support requests,
+  role changes, signing assets, downloads, installation, Keychain actions,
+  credentials, Cloudflare, provider, traffic, deployment, and runtime behavior.
+
 - Redesigned the final-vision executive architecture as a concise visual story:
   user goal, trusted assistant, orchestration, policy and human approval,
   controlled tools, intelligence and secure data, and business-ready

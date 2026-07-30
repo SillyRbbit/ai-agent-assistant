@@ -42,6 +42,14 @@ defines a future three-file fake-only proof for signed identity and bounded
 secret memory. It adds no code, dependency, signing, Keychain, credential,
 Cloudflare, traffic, or runtime behavior.
 
+The completed documentation-only
+[`apple-developer-signing-identity-owner-evidence-plan.md`](docs/plans/apple-developer-signing-identity-owner-evidence-plan.md)
+defines a future owner-only, read-only private account review to clarify whether
+an existing Apple Developer account could later support a signing-identity
+proposal. It authorizes no enrollment, purchase, support request, role change,
+signing asset, download, installation, Keychain action, credential, Cloudflare,
+provider, traffic, deployment, or runtime behavior.
+
 The owner-attested Free-plan Cloudflare Zero Trust organization exists with
 only Cloudflare's default account-member identity provider. It has no Access
 application, policy, service token, Worker, route, DNS change, device

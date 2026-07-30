@@ -13,6 +13,14 @@ and external components and preserve Cortexa's local-first trust boundaries.
 They authorize and implement no product source, runtime, permission, identity,
 credential, network, cloud, traffic, provider, or deployment capability.
 
+The documentation-only Apple Developer signing-identity owner-evidence plan is
+complete. It defines only a future owner-operated, read-only private review of
+membership, signing-asset visibility, and apparent authority. It prohibits
+enrollment, purchase, support requests, role changes, certificate or profile
+actions, download, installation, Keychain activity, and every Cloudflare,
+provider, traffic, deployment, and runtime action. No account evidence has been
+collected, and implementation remains Blocked.
+
 Phase 3 and Phase 4 Increments 4A through 4U are **verified complete,
 published, and merged into `main`**. Increment 4U is synchronized at `61525bf`.
 Meta Increment 1 branding and identity foundation is **verified complete and

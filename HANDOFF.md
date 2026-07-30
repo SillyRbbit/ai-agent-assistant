@@ -66,19 +66,28 @@ complete. It limits a future fake-only proof to three existing Rust paths and
 requires private signed target-Mac evidence, without adding code, dependencies,
 signing, Keychain, credentials, Cloudflare, traffic, or runtime behavior.
 
+The documentation-only Apple Developer signing-identity owner-evidence plan is
+complete. It defines an owner-only, read-only browser review of membership,
+signing-asset visibility, and apparent authority using closed sanitized outcome
+categories. It prohibits enrollment, purchase, support requests, role changes,
+certificate or profile creation, download, installation, Keychain action, and
+all Cloudflare, provider, traffic, deployment, and runtime activity. The review
+itself is not yet performed, and every outcome leaves implementation Blocked.
+
 ### Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Start from the completed Cloudflare signed-identity and secret-memory
-implementation plan. Confirm its marker remains valid and reconcile the actual
-branch and working tree. The future fake-only proof is limited to three existing
-Rust paths but is not approved for implementation. Do not add a signing asset,
-Keychain item, credential, runtime consumer, IPC, Worker source, Access
-application, policy, token, route, DNS record, secret, deployment, provider
-request, traffic, or runtime behavior without a separately approved exact
-increment.
+Start from the completed Apple Developer signing-identity owner-evidence plan.
+Confirm its marker remains valid and reconcile the actual branch and working
+tree. The owner may perform only the plan's read-only private account review if
+separately directed; its outcome cannot authorize signing, Keychain, credential,
+Cloudflare, provider, deployment, traffic, or runtime activity. Do not add a
+signing asset, Keychain item, credential, runtime consumer, IPC, Worker source,
+Access application, policy, token, route, DNS record, secret, deployment,
+provider request, traffic, or runtime behavior without a separately approved
+exact increment.
 ```
 
 Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,

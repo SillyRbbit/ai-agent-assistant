@@ -142,6 +142,18 @@ limits a later fake-only implementation to the existing credential module,
 integration test, and status-only example. It creates no code, dependency,
 signing, Keychain, credential, Cloudflare, traffic, or runtime behavior.
 
+### Completed documentation-only planning: Apple Developer signing-identity owner evidence
+
+**Status:** Complete; private read-only review remains unperformed and every
+later action remains Blocked.
+[`apple-developer-signing-identity-owner-evidence-plan.md`](docs/plans/apple-developer-signing-identity-owner-evidence-plan.md)
+defines the owner-only sanitized account-evidence procedure for membership,
+signing-asset visibility, and apparent authority. It prohibits enrollment,
+purchase, support requests, role changes, signing assets, downloads,
+installation, Keychain actions, credentials, Cloudflare, provider, traffic,
+deployment, and runtime behavior. Account eligibility cannot authorize a
+future proof or real credential ingestion.
+
 ### Completed documentation-only planning: Cloudflare demo local security boundary
 
 **Status:** Complete; no implementation authorized.
