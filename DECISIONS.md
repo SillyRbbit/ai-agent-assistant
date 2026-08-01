@@ -2506,6 +2506,37 @@ traffic, code, dependency, or runtime behavior is created or authorized. D-064's
 15-minute production maximum and D-068's 30-day demo-only exception are
 unchanged.
 
+## D-076 - Defer the signed macOS identity path after TS-017
+
+Date: 2026-08-01
+Status: Accepted documentation-only owner decision
+
+Decision: defer the future signed macOS identity path selected by D-072 and
+D-075. TS-017's owner-operated read-only observations confirmed only that the
+configured user/default Keychain state was observable, zero valid code-signing
+identities were present, no authorization prompt appeared, and no state change
+was observed. They did not identify why Certificate Assistant could not create
+the CSR. The cause remains `not determined`.
+
+The owner considered and declined to initiate either of these future paths now:
+
+1. An owner-operated Apple Support assistance path. It would require its own
+   separately approved plan that limits account and diagnostic disclosure,
+   private evidence, external coordination, stop conditions, and follow-up.
+2. An alternate CSR workflow. It would require a separate design and owner
+   approval proving that the private key is generated only on the target Mac,
+   remains non-exported and owner-controlled, and preserves D-072's stable
+   signed-identity boundary without bypassing macOS or Apple controls.
+
+Consequences: do not repeat diagnostics, retry CSR creation, contact Apple
+Support, repair or alter Keychain state, or select an alternate CSR mechanism.
+The prior no-asset baseline remains: no CSR file, certificate, or new named
+private key exists. No Apple Developer access, certificate, key, signing,
+notarization, profile, App ID, entitlement, credential, Cloudflare resource,
+provider request, deployment, traffic, code, dependency, or runtime behavior is
+created or authorized. D-064's 15-minute production maximum and D-068's
+30-day demo-only exception are unchanged.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

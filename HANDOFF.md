@@ -139,19 +139,26 @@ asset, credential, Cloudflare, provider, deployment, traffic, code, dependency,
 or runtime action occurred. Diagnostic repetition, remediation, and certificate
 creation remain Blocked.
 
+D-076 records the owner's decision to defer the signed macOS identity path
+after TS-017. The decision preserves the `not determined` cause and the
+no-asset baseline. Apple Support assistance and any alternate CSR workflow are
+declined for now and require separate future plans that preserve target-Mac,
+owner-controlled, non-exported private-key evidence. No diagnostic repetition,
+Apple access, Keychain action, signing, credential, Cloudflare, provider,
+deployment, traffic, code, dependency, or runtime work is Ready.
+
 ### Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Start from the completed owner-operated TS-017 read-only diagnostic outcome:
-user and default Keychain configuration were observed, zero valid code-signing
-identities were found, no authorization prompt or state change was observed,
-and the cause remains not determined. Confirm its marker remains valid and
-reconcile the actual branch and working tree. No repetition, remediation, CSR
-retry, or signing increment is Ready. Do not access Apple Developer, reset or
-delete Keychain state, use Terminal or OpenSSL to generate signing material,
-contact Apple support, or create or use a signing asset. Do not add a
+Start from D-076 and the deferred TS-017 signed macOS identity path. Confirm
+its marker remains valid and reconcile the actual branch and working tree. The
+cause remains not determined; no diagnostic repetition, remediation, Apple
+Support contact, alternate CSR workflow, CSR retry, or signing increment is
+Ready. Do not access Apple Developer, reset or delete Keychain state, use
+Terminal or OpenSSL to generate signing material, contact Apple support, or
+create or use a signing asset. Do not add a
 certificate, CSR, key, profile, entitlement, Keychain item, credential,
 runtime consumer, IPC, Worker source, Access application, policy, token, route,
 DNS record, secret, deployment, provider request, traffic, or runtime behavior

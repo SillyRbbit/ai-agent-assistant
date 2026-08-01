@@ -77,6 +77,15 @@ and all repeat diagnostics, remediation, CSR, certificate, signing, credential,
 Cloudflare, provider, deployment, traffic, code, dependency, and runtime work
 remains Blocked.
 
+D-076 records the owner's documentation-only decision to defer the signed macOS
+identity path after TS-017. Apple Support assistance and an alternate CSR
+workflow were considered but are not authorized. Both require their own future
+plans and owner approval, including target-Mac, owner-control, non-exported
+private-key, privacy, and stop boundaries. The no-asset baseline and `not
+determined` cause remain intact; all Apple, Keychain, signing, credential,
+Cloudflare, provider, deployment, traffic, code, dependency, and runtime work
+remains Blocked.
+
 Phase 3 and Phase 4 Increments 4A through 4U are **verified complete,
 published, and merged into `main`**. Increment 4U is synchronized at `61525bf`.
 Meta Increment 1 branding and identity foundation is **verified complete and

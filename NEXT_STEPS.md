@@ -235,6 +235,18 @@ certificate creation, signing, credential handling, Cloudflare, provider,
 deployment, traffic, code, dependency, or runtime work. A future action requires
 a separately approved plan based on evidence beyond these inconclusive checks.
 
+### Completed documentation-only decision: Defer TS-017 signed identity path
+
+**Status:** Complete; no operational follow-up is Ready. D-076 records the
+owner's decision to defer the signed macOS identity path. It preserves the
+no-asset baseline and `not determined` cause. Apple Support assistance and an
+alternate CSR workflow are considered future options only; neither is approved
+or planned for execution. Each would require a separate owner-approved plan
+that proves target-Mac-only, owner-controlled, non-exported private-key and
+privacy boundaries. No diagnostic repetition, Apple, Keychain, signing,
+credential, Cloudflare, provider, deployment, traffic, code, dependency, or
+runtime action is authorized.
+
 ### Completed documentation-only planning: Cloudflare demo local security boundary
 
 **Status:** Complete; no implementation authorized.

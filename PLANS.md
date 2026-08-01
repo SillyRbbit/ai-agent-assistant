@@ -103,6 +103,14 @@ and no state change. The cause remains `not determined`. This outcome does not
 authorize repetition, remediation, CSR retry, signing, credential, Cloudflare,
 provider, deployment, traffic, code, dependency, or runtime behavior.
 
+D-076 records the owner's decision to defer the signed macOS identity path
+after TS-017. It creates no recovery plan. Apple Support and alternate CSR
+workflows remain future options requiring separate owner approval and evidence
+that preserves the D-072 target-Mac, owner-controlled, non-exported private-key
+boundary. No repeat diagnostic, Apple, Keychain, signing, credential,
+Cloudflare, provider, deployment, traffic, code, dependency, or runtime work is
+Ready.
+
 The owner-attested Free-plan Cloudflare Zero Trust organization exists with
 only Cloudflare's default account-member identity provider. It has no Access
 application, policy, service token, Worker, route, DNS change, device

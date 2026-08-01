@@ -820,3 +820,12 @@ readable without an authorization prompt and that no valid code-signing identity
 was present. They do not reproduce the original Certificate Assistant failure
 or distinguish among possible causes. The cause remains `not determined`; no
 resolution has been performed, and no retry or remediation is authorized.
+
+### Owner decision
+
+Date: 2026-08-01
+
+D-076 records the owner's decision to defer the signed macOS identity path.
+Apple Support assistance and an alternate CSR workflow were considered but are
+not authorized. The outcome remains unresolved and does not justify a Keychain
+repair, CSR retry, signing action, or alternate key-generation path.
