@@ -1,6 +1,6 @@
 # Handoff
 
-Last updated: 2026-07-31
+Last updated: 2026-08-01
 
 ## Current state
 
@@ -120,20 +120,27 @@ support, or choose an alternate signing asset without a separately approved
 remediation increment. Certificate creation, signing, the fake-only proof, and
 credential ingestion remain Blocked.
 
+The documentation-only TS-017 Certificate Assistant CSR-remediation plan is
+complete. It defines a future owner-operated, local-only diagnostic boundary
+that observes only the configured user/default Keychain state and a closed
+code-signing-identity count. It does not authorize running those diagnostics,
+Apple access, reproducing the CSR failure, or changing Keychain or signing
+state. Any future diagnostic execution requires its own explicit owner approval;
+if its evidence is inconclusive, the cause remains `not determined` and no
+recovery action may start.
+
 ### Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Start from the safely stopped Developer ID Application certificate-creation
-outcome: no CSR file, certificate, or new named private key was created, and
-the Certificate Assistant cause remains undetermined. Confirm the completion
-marker remains valid and reconcile the actual branch and working tree. Do not
-access Apple Developer, retry CSR creation, reset or delete Keychain state, use
-Terminal or OpenSSL to generate signing material, contact Apple support, or
-create or use a signing asset. If the owner chooses to continue, create only a
-documentation-only remediation plan with exact read-only diagnostics, risks,
-rollback, stop conditions, and private target-Mac evidence. Do not add a
+Start from the completed documentation-only TS-017 Certificate Assistant
+CSR-remediation plan. Confirm its marker remains valid and reconcile the actual
+branch and working tree. No diagnostic execution is Ready. Do not access Apple
+Developer, retry CSR creation, reset or delete Keychain state, use Terminal or
+OpenSSL to generate signing material, contact Apple support, or create or use a
+signing asset. If the owner chooses to proceed, first obtain separate approval
+for only the plan's exact read-only local diagnostic procedure. Do not add a
 certificate, CSR, key, profile, entitlement, Keychain item, credential,
 runtime consumer, IPC, Worker source, Access application, policy, token, route,
 DNS record, secret, deployment, provider request, traffic, or runtime behavior

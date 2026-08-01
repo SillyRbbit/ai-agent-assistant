@@ -796,3 +796,8 @@ limits, stop conditions, and recovery/rollback decision points. Continue to
 prohibit command-line private-key file generation and any unplanned Apple,
 signing, Keychain, credential, Cloudflare, provider, deployment, traffic, or
 runtime action.
+
+The documentation-only
+[`macos-certificate-assistant-csr-remediation-plan.md`](docs/plans/macos-certificate-assistant-csr-remediation-plan.md)
+now defines that future diagnostic boundary. It does not approve execution;
+separate explicit owner approval remains required before any observation runs.

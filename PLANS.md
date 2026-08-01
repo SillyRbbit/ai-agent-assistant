@@ -88,6 +88,14 @@ signing asset; any diagnostic or recovery work requires a separate
 documentation-only remediation plan before another Apple Developer, CSR,
 certificate, key, signing, or Keychain action.
 
+The completed documentation-only
+[`macos-certificate-assistant-csr-remediation-plan.md`](docs/plans/macos-certificate-assistant-csr-remediation-plan.md)
+defines only the future read-only local diagnostic boundary for TS-017. It
+names three closed observations, private sanitized evidence, stop conditions,
+and no-state-change rollback. It does not authorize diagnostic execution, Apple
+access, CSR retry, Keychain action, signing, credential, Cloudflare, provider,
+deployment, traffic, code, dependency, or runtime behavior.
+
 The owner-attested Free-plan Cloudflare Zero Trust organization exists with
 only Cloudflare's default account-member identity provider. It has no Access
 application, policy, service token, Worker, route, DNS change, device

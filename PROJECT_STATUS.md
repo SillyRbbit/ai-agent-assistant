@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-07-31
+Last updated: 2026-08-01
 
 ## Current milestone
 
@@ -59,6 +59,14 @@ for the future proof. A separate documentation-only remediation plan is the
 smallest possible next task; all Apple, CSR, certificate, key, signing,
 Keychain, credential, Cloudflare, provider, deployment, traffic, code,
 dependency, and runtime work remains Blocked.
+
+The documentation-only TS-017 Certificate Assistant CSR-remediation plan is
+complete. It defines only a later owner-operated, local read-only diagnostic
+procedure and private sanitized evidence. It allows neither diagnostic execution
+nor Apple access, CSR retry, Keychain action, signing, credential, Cloudflare,
+provider, deployment, traffic, code, dependency, or runtime behavior. The
+cause remains `not determined`; a separate exact owner approval is required
+before any diagnostic execution can be considered.
 
 Phase 3 and Phase 4 Increments 4A through 4U are **verified complete,
 published, and merged into `main`**. Increment 4U is synchronized at `61525bf`.

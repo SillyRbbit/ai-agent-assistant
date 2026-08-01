@@ -4,6 +4,13 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added a documentation-only remediation plan for TS-017's unavailable macOS
+  Certificate Assistant CSR outcome. It specifies a future owner-operated,
+  read-only diagnostic boundary and private sanitized evidence without
+  authorizing Apple access, CSR retry, Keychain modification, signing,
+  credential, Cloudflare, provider, deployment, traffic, code, dependency, or
+  runtime work.
+
 - Recorded the safely stopped owner-operated Developer ID Application
   certificate-creation attempt. macOS Certificate Assistant reported that the
   specified item could not be found in the Keychain before creating a CSR; the

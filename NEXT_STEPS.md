@@ -211,6 +211,18 @@ plan defining exact read-only diagnostics, risks, rollback, stop conditions,
 and sanitized private target-Mac evidence. It must not access Apple Developer or
 create, modify, export, revoke, or use any signing or credential asset.
 
+### Completed documentation-only planning: Certificate Assistant CSR remediation
+
+**Status:** Complete; diagnostic execution remains Blocked.
+[`macos-certificate-assistant-csr-remediation-plan.md`](docs/plans/macos-certificate-assistant-csr-remediation-plan.md)
+defines the exact future owner-operated, local-only, read-only diagnostic
+boundary for TS-017. It permits no execution now and prohibits Apple access,
+CSR retry, Keychain state changes, signing material, Apple Support contact,
+credentials, Cloudflare, provider, deployment, traffic, code, dependency, and
+runtime behavior. A separate explicit owner approval is required before the
+listed diagnostic observations could run. Inconclusive evidence preserves the
+`not determined` cause and authorizes no recovery path.
+
 ### Completed documentation-only planning: Cloudflare demo local security boundary
 
 **Status:** Complete; no implementation authorized.
