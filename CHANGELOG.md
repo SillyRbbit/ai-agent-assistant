@@ -4,6 +4,11 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Recorded the owner-attested completion of the separately approved individual
+  Apple Developer Program enrollment: membership is active and no signing asset
+  was created. This operational reconciliation adds no certificate, Keychain,
+  credential, Cloudflare, provider, deployment, traffic, or runtime capability.
+
 - Added a documentation-only future execution plan for D-074's conditional
   individual Apple Developer enrollment model. It defines owner gates, private
   evidence, stop conditions, and non-reversible commitment handling without

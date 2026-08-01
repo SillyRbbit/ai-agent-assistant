@@ -35,6 +35,13 @@ conditions, and non-reversible-commitment handling without accessing Apple or
 creating any signing, Keychain, credential, Cloudflare, provider, traffic,
 deployment, or runtime capability. Enrollment remains Blocked.
 
+The separately approved owner-operated individual Apple Developer Program
+enrollment is owner-attested complete: membership is active and no signing asset
+was created. This does not independently verify account state and authorizes no
+certificate, private key, profile, entitlement, Keychain item, credential,
+Cloudflare resource, provider setting, traffic, deployment, or runtime behavior.
+Signing and credential work remain Blocked.
+
 Phase 3 and Phase 4 Increments 4A through 4U are **verified complete,
 published, and merged into `main`**. Increment 4U is synchronized at `61525bf`.
 Meta Increment 1 branding and identity foundation is **verified complete and

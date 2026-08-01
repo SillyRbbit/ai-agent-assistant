@@ -89,20 +89,29 @@ for D-074's conditional individual model. It performs and authorizes no Apple
 account, enrollment, payment, agreement, signing, Keychain, credential,
 Cloudflare, provider, traffic, deployment, or runtime action.
 
+The separately approved owner-operated individual enrollment is complete by
+owner attestation: Apple Developer Program membership is active, and no signing
+asset was created. This is sanitized operational evidence only; no account,
+payment, membership identifier, certificate, private key, profile, entitlement,
+Keychain item, credential, Cloudflare resource, provider setting, traffic,
+deployment, or runtime behavior is recorded or authorized. Membership alone
+does not make signing, the fake-only signed proof, or real credential ingestion
+Ready.
+
 ### Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Start from D-074 and the completed individual-enrollment execution plan. Confirm
-their markers remain valid and reconcile the actual branch and working tree. Do
-not enroll or access Apple Developer now. Any future individual enrollment
-requires a separate owner-approved operational increment and still cannot
-authorize signing, Keychain, credential, Cloudflare, provider, deployment,
-traffic, or runtime activity. Do not add a signing asset, Keychain item,
-credential, runtime consumer, IPC, Worker source, Access application, policy,
-token, route, DNS record, secret, deployment, provider request, traffic, or
-runtime behavior without a separately approved exact increment.
+Start from the owner-attested active individual Apple Developer Program
+membership reconciliation. Confirm its marker remains valid and reconcile the
+actual branch and working tree. Do not access Apple Developer or create a
+signing asset. Membership does not authorize signing, Keychain, credential,
+Cloudflare, provider, deployment, traffic, or runtime activity. Do not add a
+certificate, CSR, key, profile, entitlement, Keychain item, credential, runtime
+consumer, IPC, Worker source, Access application, policy, token, route, DNS
+record, secret, deployment, provider request, traffic, or runtime behavior
+without a separately approved exact increment.
 ```
 
 Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,

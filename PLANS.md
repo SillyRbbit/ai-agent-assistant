@@ -64,6 +64,13 @@ enrollment model. It creates no Apple account action, enrollment, payment,
 agreement, signing asset, Keychain item, credential, Cloudflare, provider,
 traffic, deployment, or runtime behavior.
 
+The owner separately approved and owner-attested the individual enrollment
+described by that plan as active, with no signing asset created. This is a
+sanitized operational outcome, not account inspection or signing evidence; it
+does not authorize a certificate, key, profile, entitlement, Keychain item,
+credential, Cloudflare action, provider request, deployment, traffic, or runtime
+behavior.
+
 The owner-attested Free-plan Cloudflare Zero Trust organization exists with
 only Cloudflare's default account-member identity provider. It has no Access
 application, policy, service token, Worker, route, DNS change, device
