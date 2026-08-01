@@ -2474,6 +2474,38 @@ authority. A free Xcode Personal Team is not accepted as the project's stable
 signed-identity boundary. D-064's 15-minute production requirement and D-068's
 30-day demo-only exception remain unchanged.
 
+## D-075 - Select Developer ID Application for the future signed macOS identity proof
+
+Date: 2026-07-31
+Status: Accepted documentation-only identity-planning decision
+
+Decision: if a later separately approved owner-operated signing increment is
+needed for D-072's stable macOS application identity proof, select exactly one
+owner-controlled **Developer ID Application** certificate. Do not select a
+Developer ID Installer certificate, a Mac App Store distribution certificate,
+or an Apple Development certificate for that future proof. The proof's future
+purpose is a stable signed macOS application identity outside Mac App Store
+distribution; it does not include an installer, App Store submission, advanced
+capabilities, or product distribution.
+
+Apple identifies Developer ID Application as the certificate that signs a Mac
+app distributed outside the Mac App Store, and Developer ID Installer as the
+separate certificate for installer packages. Apple also states that Developer ID
+certificate creation requires the Account Holder role and a CSR, certificate
+download, and local Keychain installation. These are future, sensitive actions,
+not authorization for this decision. See [Developer ID certificates](https://developer.apple.com/help/account/certificates/create-developer-id-certificates/)
+and [Certificates overview](https://developer.apple.com/help/account/certificates/certificates-overview/).
+
+Consequences: a separate owner-approved operational increment must still define
+the target application identifier, private-key generation and non-export policy,
+private target-Mac evidence, certificate lifecycle, compromise response, and
+the exact fake-only signing procedure. No Apple account access, certificate,
+CSR, key, profile, App ID, entitlement, download, signing, notarization,
+Keychain activity, credential, Cloudflare action, provider request, deployment,
+traffic, code, dependency, or runtime behavior is created or authorized. D-064's
+15-minute production maximum and D-068's 30-day demo-only exception are
+unchanged.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

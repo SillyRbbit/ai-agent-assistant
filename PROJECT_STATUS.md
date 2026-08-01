@@ -42,6 +42,14 @@ certificate, private key, profile, entitlement, Keychain item, credential,
 Cloudflare resource, provider setting, traffic, deployment, or runtime behavior.
 Signing and credential work remain Blocked.
 
+D-075 selects Developer ID Application as the future certificate class for
+D-072's stable signed macOS identity proof. The documentation-only plan defines
+future owner-controlled private-key, lifecycle, private target-Mac evidence,
+and compromise-response boundaries. It creates no Apple access, certificate,
+CSR, key, profile, App ID, entitlement, download, signing, notarization,
+Keychain action, credential, Cloudflare, provider, deployment, traffic, code,
+dependency, or runtime behavior. Implementation remains Blocked.
+
 Phase 3 and Phase 4 Increments 4A through 4U are **verified complete,
 published, and merged into `main`**. Increment 4U is synchronized at `61525bf`.
 Meta Increment 1 branding and identity foundation is **verified complete and

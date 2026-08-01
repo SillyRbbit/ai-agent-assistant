@@ -71,6 +71,14 @@ does not authorize a certificate, key, profile, entitlement, Keychain item,
 credential, Cloudflare action, provider request, deployment, traffic, or runtime
 behavior.
 
+D-075 and the completed documentation-only
+[`macos-developer-id-identity-creation-plan.md`](docs/plans/macos-developer-id-identity-creation-plan.md)
+select Developer ID Application as the future certificate class and define its
+future owner-controlled creation and private target-Mac evidence boundary. They
+create no Apple access, certificate, CSR, key, profile, entitlement, signing,
+notarization, Keychain action, credential, Cloudflare action, provider request,
+deployment, traffic, code, dependency, or runtime behavior.
+
 The owner-attested Free-plan Cloudflare Zero Trust organization exists with
 only Cloudflare's default account-member identity provider. It has no Access
 application, policy, service token, Worker, route, DNS change, device

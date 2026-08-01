@@ -185,6 +185,18 @@ certificate, key, profile, entitlement, Keychain item, credential, Cloudflare,
 provider, deployment, traffic, or runtime detail. Membership alone does not make
 the fake-only signed proof or real credential ingestion Ready.
 
+### Completed documentation-only decision and planning: Developer ID Application identity
+
+**Status:** Complete; certificate creation and all signing work remain Blocked.
+D-075 selects Developer ID Application only as the future certificate class for
+the owner-selected stable macOS identity proof. The
+[`macos-developer-id-identity-creation-plan.md`](docs/plans/macos-developer-id-identity-creation-plan.md)
+defines the later owner-operated identity-creation, private-key, lifecycle,
+private target-Mac evidence, and stop boundaries. It creates no Apple account
+access, certificate, CSR, key, profile, App ID, entitlement, download, signing,
+notarization, Keychain action, credential, Cloudflare, provider, deployment,
+traffic, code, dependency, or runtime behavior.
+
 ### Completed documentation-only planning: Cloudflare demo local security boundary
 
 **Status:** Complete; no implementation authorized.

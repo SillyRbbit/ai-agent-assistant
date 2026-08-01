@@ -4,6 +4,11 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added D-075 and a documentation-only future Developer ID Application
+  identity-creation and private target-Mac evidence plan. They select no actual
+  certificate or key and authorize no Apple, signing, Keychain, credential,
+  Cloudflare, provider, deployment, traffic, code, dependency, or runtime work.
+
 - Recorded the owner-attested completion of the separately approved individual
   Apple Developer Program enrollment: membership is active and no signing asset
   was created. This operational reconciliation adds no certificate, Keychain,
