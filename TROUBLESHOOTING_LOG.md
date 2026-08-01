@@ -740,3 +740,59 @@ Keep the runner-specific label, no-pull-request rule, and push allowlist covered
 by repository-health tests. Reapply the label after runner replacement, keep
 the service account unprivileged and credential-free, and preserve separate
 target-Mac verification for native behavior.
+
+## TS-017 - Certificate Assistant cannot create the Developer ID CSR
+
+Date: 2026-07-31
+Status: Unresolved; operation stopped safely
+
+### Symptom
+
+On the macOS 26.6 arm64 target Mac, Keychain Access Certificate Assistant
+reported `The specified item could not be found in the keychain.` while the
+owner attempted to save the separately approved Developer ID Application CSR.
+No CSR file became available.
+
+### Observed evidence
+
+- The user keychain list and default-keychain read-only checks identified the
+  login keychain, but keychain-info checks returned parameter-related errors.
+- A read-only code-signing identity query found zero valid identities, which was
+  expected before certificate creation and does not explain the CSR failure.
+- A generic `<key>` row was visible before the failed attempt. It is not
+  evidence of a key created by this attempt.
+- The owner confirmed: no CSR file created, no certificate created, and no new
+  named private key observed.
+
+### Cause
+
+Not determined. The observed error and read-only diagnostics do not prove
+Keychain corruption, a missing keychain item, an access-control defect, or any
+other root cause. No such cause should be inferred without a separately
+approved diagnostic plan and reproducible evidence.
+
+### Safe disposition
+
+Stop the operational increment as `unavailable`. Do not retry CSR creation,
+reset, unlock, replace, or delete Keychain state, generate a private key through
+Terminal or OpenSSL, create a different certificate type, contact Apple support,
+or continue to certificate creation under this increment. No rollback action is
+needed because the owner observed no CSR file, certificate, or new named private
+key.
+
+### Verify
+
+Use only the owner's sanitized confirmation that no CSR file, certificate, or
+new named private key was created. Repository closure must pass documentation,
+repository-policy, secret-scan, whitespace, product-path, session-end, and
+post-increment checks without recording account, certificate, key, or Keychain
+identifiers.
+
+### Prevention
+
+Before any future attempt, approve a documentation-only remediation plan that
+defines the exact read-only Keychain diagnostics, expected results, privacy
+limits, stop conditions, and recovery/rollback decision points. Continue to
+prohibit command-line private-key file generation and any unplanned Apple,
+signing, Keychain, credential, Cloudflare, provider, deployment, traffic, or
+runtime action.

@@ -4,6 +4,14 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Recorded the safely stopped owner-operated Developer ID Application
+  certificate-creation attempt. macOS Certificate Assistant reported that the
+  specified item could not be found in the Keychain before creating a CSR; the
+  owner confirmed no CSR file, certificate, or new named private key was
+  created. The cause remains undetermined, and all signing, Keychain,
+  credential, Cloudflare, provider, deployment, traffic, and runtime work
+  remains blocked pending a separately approved remediation plan.
+
 - Added D-075 and a documentation-only future Developer ID Application
   identity-creation and private target-Mac evidence plan. They select no actual
   certificate or key and authorize no Apple, signing, Keychain, credential,

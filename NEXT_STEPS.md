@@ -197,6 +197,20 @@ access, certificate, CSR, key, profile, App ID, entitlement, download, signing,
 notarization, Keychain action, credential, Cloudflare, provider, deployment,
 traffic, code, dependency, or runtime behavior.
 
+### Safely stopped owner operation: Developer ID Application certificate creation
+
+**Status:** Unavailable; no signing asset exists and all later work is Blocked.
+The separately approved owner-operated attempt stopped after Certificate
+Assistant reported that the specified item could not be found in the Keychain.
+The owner confirmed no CSR file, certificate, or new named private key was
+created. The cause is not determined. Do not retry, reset or delete Keychain
+state, use Terminal or OpenSSL to create signing material, contact Apple
+support, or select another certificate path under this increment. If the owner
+chooses to continue, the smallest next task is a documentation-only remediation
+plan defining exact read-only diagnostics, risks, rollback, stop conditions,
+and sanitized private target-Mac evidence. It must not access Apple Developer or
+create, modify, export, revoke, or use any signing or credential asset.
+
 ### Completed documentation-only planning: Cloudflare demo local security boundary
 
 **Status:** Complete; no implementation authorized.

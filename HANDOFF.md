@@ -1,6 +1,6 @@
 # Handoff
 
-Last updated: 2026-07-29
+Last updated: 2026-07-31
 
 ## Current state
 
@@ -107,21 +107,37 @@ profile, App ID, entitlement, download, signing, notarization, Keychain action,
 credential, Cloudflare, provider, deployment, traffic, code, dependency, or
 runtime behavior.
 
+The separately approved owner-operated Developer ID Application
+certificate-creation increment stopped safely as `unavailable`. On the target
+Mac, Certificate Assistant reported `The specified item could not be found in
+the keychain.` before a CSR file was created. The owner confirmed that no CSR
+file, certificate, or new named private key was created. The existing generic
+`<key>` row observed before the attempt is not evidence of a new signing asset.
+The cause is not determined; read-only keychain-list and code-signing-identity
+checks did not establish one. Do not retry CSR creation, reset or delete
+Keychain state, generate a key through Terminal or OpenSSL, contact Apple
+support, or choose an alternate signing asset without a separately approved
+remediation increment. Certificate creation, signing, the fake-only proof, and
+credential ingestion remain Blocked.
+
 ### Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Start from D-075 and the completed Developer ID Application identity-creation
-plan. Confirm their marker remains valid and reconcile the actual branch and
-working tree. Do not access Apple Developer or create a signing asset. D-075
-does not authorize a certificate, CSR, key, profile, entitlement, signing,
-notarization, Keychain, credential, Cloudflare, provider, deployment, traffic,
-or runtime activity. Do not add a certificate, CSR, key, profile, entitlement,
-Keychain item, credential, runtime consumer, IPC, Worker source, Access
-application, policy, token, route, DNS record, secret, deployment, provider
-request, traffic, or runtime behavior without a separately approved exact
-increment.
+Start from the safely stopped Developer ID Application certificate-creation
+outcome: no CSR file, certificate, or new named private key was created, and
+the Certificate Assistant cause remains undetermined. Confirm the completion
+marker remains valid and reconcile the actual branch and working tree. Do not
+access Apple Developer, retry CSR creation, reset or delete Keychain state, use
+Terminal or OpenSSL to generate signing material, contact Apple support, or
+create or use a signing asset. If the owner chooses to continue, create only a
+documentation-only remediation plan with exact read-only diagnostics, risks,
+rollback, stop conditions, and private target-Mac evidence. Do not add a
+certificate, CSR, key, profile, entitlement, Keychain item, credential,
+runtime consumer, IPC, Worker source, Access application, policy, token, route,
+DNS record, secret, deployment, provider request, traffic, or runtime behavior
+without a separately approved exact increment.
 ```
 
 Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,

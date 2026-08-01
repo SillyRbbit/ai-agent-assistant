@@ -79,6 +79,15 @@ create no Apple access, certificate, CSR, key, profile, entitlement, signing,
 notarization, Keychain action, credential, Cloudflare action, provider request,
 deployment, traffic, code, dependency, or runtime behavior.
 
+The separately approved owner-operated Developer ID Application
+certificate-creation attempt stopped safely as `unavailable` before a CSR file
+was created. Owner-attested sanitized evidence confirms no certificate and no
+new named private key exists. Certificate Assistant's Keychain lookup error has
+no established root cause. The operational increment is closed without a
+signing asset; any diagnostic or recovery work requires a separate
+documentation-only remediation plan before another Apple Developer, CSR,
+certificate, key, signing, or Keychain action.
+
 The owner-attested Free-plan Cloudflare Zero Trust organization exists with
 only Cloudflare's default account-member identity provider. It has no Access
 application, policy, service token, Worker, route, DNS change, device

@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-07-29
+Last updated: 2026-07-31
 
 ## Current milestone
 
@@ -49,6 +49,16 @@ and compromise-response boundaries. It creates no Apple access, certificate,
 CSR, key, profile, App ID, entitlement, download, signing, notarization,
 Keychain action, credential, Cloudflare, provider, deployment, traffic, code,
 dependency, or runtime behavior. Implementation remains Blocked.
+
+The separately approved owner-operated certificate-creation attempt stopped
+safely as `unavailable`. Certificate Assistant reported that the specified item
+could not be found in the Keychain before producing a CSR file. Owner-attested
+sanitized evidence confirms no CSR file, certificate, or new named private key
+was created. No root cause has been established, and no signing identity exists
+for the future proof. A separate documentation-only remediation plan is the
+smallest possible next task; all Apple, CSR, certificate, key, signing,
+Keychain, credential, Cloudflare, provider, deployment, traffic, code,
+dependency, and runtime work remains Blocked.
 
 Phase 3 and Phase 4 Increments 4A through 4U are **verified complete,
 published, and merged into `main`**. Increment 4U is synchronized at `61525bf`.
