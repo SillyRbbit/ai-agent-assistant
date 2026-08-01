@@ -96,6 +96,13 @@ and no-state-change rollback. It does not authorize diagnostic execution, Apple
 access, CSR retry, Keychain action, signing, credential, Cloudflare, provider,
 deployment, traffic, code, dependency, or runtime behavior.
 
+The owner separately approved and completed the plan's three read-only local
+observations once. Sanitized evidence records observed user/default Keychain
+configuration, zero valid code-signing identities, no authorization prompt,
+and no state change. The cause remains `not determined`. This outcome does not
+authorize repetition, remediation, CSR retry, signing, credential, Cloudflare,
+provider, deployment, traffic, code, dependency, or runtime behavior.
+
 The owner-attested Free-plan Cloudflare Zero Trust organization exists with
 only Cloudflare's default account-member identity provider. It has no Access
 application, policy, service token, Worker, route, DNS change, device

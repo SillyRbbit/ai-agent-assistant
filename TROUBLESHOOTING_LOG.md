@@ -801,3 +801,22 @@ The documentation-only
 [`macos-certificate-assistant-csr-remediation-plan.md`](docs/plans/macos-certificate-assistant-csr-remediation-plan.md)
 now defines that future diagnostic boundary. It does not approve execution;
 separate explicit owner approval remains required before any observation runs.
+
+### Approved read-only diagnostic outcome
+
+Date: 2026-08-01
+
+The owner performed each of the plan's three local read-only observations once
+and reported only the approved sanitized categories:
+
+- user Keychain configuration: `observed`;
+- default Keychain configuration: `observed`;
+- valid code-signing identities: `zero`;
+- authorization prompt: `not observed`; and
+- state changed: `not observed`.
+
+These observations show that the configured user/default Keychain state was
+readable without an authorization prompt and that no valid code-signing identity
+was present. They do not reproduce the original Certificate Assistant failure
+or distinguish among possible causes. The cause remains `not determined`; no
+resolution has been performed, and no retry or remediation is authorized.

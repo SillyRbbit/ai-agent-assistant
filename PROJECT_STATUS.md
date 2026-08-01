@@ -68,6 +68,15 @@ provider, deployment, traffic, code, dependency, or runtime behavior. The
 cause remains `not determined`; a separate exact owner approval is required
 before any diagnostic execution can be considered.
 
+The separately approved owner-operated TS-017 read-only diagnostic increment
+is complete. Sanitized owner evidence records observed user and default
+Keychain configuration, zero valid code-signing identities, no authorization
+prompt, and no observed state change. This evidence neither identifies a root
+cause nor proves CSR creation readiness. The cause remains `not determined`,
+and all repeat diagnostics, remediation, CSR, certificate, signing, credential,
+Cloudflare, provider, deployment, traffic, code, dependency, and runtime work
+remains Blocked.
+
 Phase 3 and Phase 4 Increments 4A through 4U are **verified complete,
 published, and merged into `main`**. Increment 4U is synchronized at `61525bf`.
 Meta Increment 1 branding and identity foundation is **verified complete and

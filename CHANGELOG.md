@@ -4,6 +4,13 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Recorded the owner-operated, local-only TS-017 read-only diagnostic outcome:
+  user and default Keychain configuration were observed, the valid
+  code-signing-identity count was zero, no authorization prompt or state change
+  was observed, and the cause remains undetermined. No retry, remediation,
+  signing, credential, Cloudflare, provider, deployment, traffic, code,
+  dependency, or runtime action was added.
+
 - Added a documentation-only remediation plan for TS-017's unavailable macOS
   Certificate Assistant CSR outcome. It specifies a future owner-operated,
   read-only diagnostic boundary and private sanitized evidence without

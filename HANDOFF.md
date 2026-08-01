@@ -129,18 +129,29 @@ state. Any future diagnostic execution requires its own explicit owner approval;
 if its evidence is inconclusive, the cause remains `not determined` and no
 recovery action may start.
 
+The separately approved owner-operated TS-017 read-only diagnostic increment
+is complete by sanitized owner evidence. The configured user Keychain and
+default user Keychain were observed, the valid code-signing-identity count was
+zero, no authorization prompt appeared, and no state change was observed. These
+observations do not identify the Certificate Assistant failure's cause; it
+remains `not determined`. No Apple access, CSR retry, Keychain change, signing
+asset, credential, Cloudflare, provider, deployment, traffic, code, dependency,
+or runtime action occurred. Diagnostic repetition, remediation, and certificate
+creation remain Blocked.
+
 ### Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Start from the completed documentation-only TS-017 Certificate Assistant
-CSR-remediation plan. Confirm its marker remains valid and reconcile the actual
-branch and working tree. No diagnostic execution is Ready. Do not access Apple
-Developer, retry CSR creation, reset or delete Keychain state, use Terminal or
-OpenSSL to generate signing material, contact Apple support, or create or use a
-signing asset. If the owner chooses to proceed, first obtain separate approval
-for only the plan's exact read-only local diagnostic procedure. Do not add a
+Start from the completed owner-operated TS-017 read-only diagnostic outcome:
+user and default Keychain configuration were observed, zero valid code-signing
+identities were found, no authorization prompt or state change was observed,
+and the cause remains not determined. Confirm its marker remains valid and
+reconcile the actual branch and working tree. No repetition, remediation, CSR
+retry, or signing increment is Ready. Do not access Apple Developer, reset or
+delete Keychain state, use Terminal or OpenSSL to generate signing material,
+contact Apple support, or create or use a signing asset. Do not add a
 certificate, CSR, key, profile, entitlement, Keychain item, credential,
 runtime consumer, IPC, Worker source, Access application, policy, token, route,
 DNS record, secret, deployment, provider request, traffic, or runtime behavior

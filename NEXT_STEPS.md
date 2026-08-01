@@ -223,6 +223,18 @@ runtime behavior. A separate explicit owner approval is required before the
 listed diagnostic observations could run. Inconclusive evidence preserves the
 `not determined` cause and authorizes no recovery path.
 
+### Completed owner operation: Certificate Assistant read-only diagnostics
+
+**Status:** Complete with advisories; cause remains undetermined and all later
+work is Blocked. The owner performed each of the plan's three local read-only
+observations once and reported only sanitized categories: user and default
+Keychain configuration were observed, valid code-signing identities were
+`zero`, no authorization prompt appeared, and no state change was observed.
+This evidence does not authorize repetition, remediation, CSR retry,
+certificate creation, signing, credential handling, Cloudflare, provider,
+deployment, traffic, code, dependency, or runtime work. A future action requires
+a separately approved plan based on evidence beyond these inconclusive checks.
+
 ### Completed documentation-only planning: Cloudflare demo local security boundary
 
 **Status:** Complete; no implementation authorized.
