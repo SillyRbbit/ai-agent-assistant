@@ -2537,6 +2537,42 @@ provider request, deployment, traffic, code, dependency, or runtime behavior is
 created or authorized. D-064's 15-minute production maximum and D-068's
 30-day demo-only exception are unchanged.
 
+## D-077 - Conditionally reopen Apple Support contact consideration after TS-017
+
+Date: 2026-08-02
+Status: Accepted documentation-only owner decision
+
+Decision: retain D-076's deferral of the signed macOS identity path, but
+conditionally reopen consideration of exactly one future owner-operated Apple
+Support contact under
+[`apple-support-ts-017-assistance-plan.md`](docs/plans/apple-support-ts-017-assistance-plan.md).
+This narrow change supersedes only D-076's present decision not to consider an
+Apple Support path. It does not authorize Apple Support contact, Apple Developer
+access, a CSR retry, an alternate CSR workflow, or any signing-related action.
+
+Before any contact, the owner must separately approve an operational increment
+that names the existing assistance plan and limits the scope to one owner-only
+contact for diagnostic guidance. The minimum sanitized summary, optional broad
+macOS-version/architecture disclosure, no-screen-share/no-upload/no-device-access
+boundary, no-execution rule, closed outcome categories, and no-state-change
+rollback in that plan remain mandatory. No case number, transcript, screenshot,
+account detail, Keychain detail, signing-material identifier, or repository
+content may enter the repository or chat.
+
+The prior filesystem CSR/private-key pair was owner-attested deleted and never
+satisfied D-072. Ordinary deletion does not establish cryptographic erasure or
+signing readiness. TS-017's cause remains `not determined`; D-072's stable,
+owner-controlled signed-identity requirement remains unsatisfied. If the owner
+does not separately approve contact, or if a contact triggers any prohibited
+disclosure or state-changing recommendation, stop or return to D-076's full
+deferral without acting on advice.
+
+Consequences: no Apple Developer or Apple Support access, diagnostics, CSR or
+key creation, Keychain action, certificate, signing, credential, Cloudflare,
+provider, deployment, traffic, code, dependency, or runtime behavior is created
+or authorized. D-064's 15-minute production maximum and D-068's 30-day demo-only
+exception remain unchanged.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

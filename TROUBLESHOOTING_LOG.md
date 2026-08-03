@@ -865,3 +865,19 @@ This outcome closes custody of the known filesystem pair only. It does not prove
 cryptographic erasure from APFS/SSD remnants or snapshots, establish TS-017's
 cause, satisfy D-072, or supersede D-076. No recovery, regeneration, signing, or
 credential action is authorized.
+
+### Conditional Apple Support-contact consideration
+
+Date: 2026-08-02
+
+D-077 records the owner's choice to conditionally reopen consideration of one
+future owner-operated Apple Support contact under the existing TS-017 assistance
+plan. It does not authorize that contact, Apple Developer access, diagnostic
+repetition, CSR work, Keychain action, or any signing action. TS-017 remains
+`not determined`; D-076 continues to defer the signed-identity path.
+
+Any future operational approval must preserve the plan's minimum sanitized
+summary, privacy limits, no-screen-share/no-upload/no-device-access rule,
+no-execution rule, stop conditions, and closed outcome reporting. End the
+contact without acting on advice if any state-changing or prohibited request is
+made.

@@ -291,6 +291,18 @@ diagnostic, Apple Support, alternate CSR, signing, credential, Cloudflare,
 provider, deployment, traffic, code, dependency, or runtime work requires a
 separately approved exact increment.
 
+### Completed documentation-only decision: Conditional Apple Support consideration
+
+**Status:** Complete; Apple Support contact remains Blocked. D-077 conditionally
+reopens consideration of one future owner-operated TS-017 contact under the
+existing assistance plan while retaining D-076's signed-identity deferral. A
+separate owner-approved operational increment is mandatory before contact. The
+plan's minimum sanitized disclosure, no screen sharing/uploads/device access,
+no-execution rule, stop conditions, and closed evidence remain binding. No Apple
+Developer or Apple Support access, diagnostic, CSR, key, Keychain, certificate,
+signing, credential, Cloudflare, provider, deployment, traffic, code,
+dependency, or runtime action is authorized.
+
 ### Completed documentation-only planning: Cloudflare demo local security boundary
 
 **Status:** Complete; no implementation authorized.

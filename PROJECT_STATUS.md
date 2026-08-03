@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-08-01
+Last updated: 2026-08-02
 
 ## Current milestone
 
@@ -114,6 +114,15 @@ or snapshots. The filesystem custody blocker is closed, but D-072 remains
 unsatisfied and D-076 continues to defer the signed-identity path. No product,
 signing, credential, Cloudflare, provider, deployment, traffic, code,
 dependency, or runtime increment is Ready.
+
+D-077 conditionally reopens consideration of one future owner-operated Apple
+Support TS-017 contact under the existing assistance plan. It changes neither
+the `not determined` cause nor D-076's signing-path deferral, and contact itself
+remains Blocked pending separate operational approval. The minimum sanitized
+disclosure, privacy controls, no-execution rule, stop conditions, and closed
+evidence are mandatory for any future approval. No Apple Developer or Apple
+Support access, diagnostic, signing, credential, Cloudflare, provider,
+deployment, traffic, code, dependency, or runtime action is authorized.
 
 Phase 3 and Phase 4 Increments 4A through 4U are **verified complete,
 published, and merged into `main`**. Increment 4U is synchronized at `61525bf`.

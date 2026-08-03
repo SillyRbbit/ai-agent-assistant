@@ -4,6 +4,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added D-077's documentation-only owner decision to conditionally reopen
+  consideration of one future Apple Support TS-017 contact under the existing
+  assistance plan. The decision authorizes no contact or signing-related action.
+
 - Recorded the owner-operated paired deletion of the unuploaded CSR and its
   filesystem private key. Sanitized owner evidence reports both exact targets
   deleted, no additional material or remaining copy, no upload or use, and no

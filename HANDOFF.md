@@ -182,19 +182,26 @@ signing, Keychain, credential, Cloudflare, provider, deployment, traffic, code,
 dependency, or runtime work is Ready. D-064's production 15-minute maximum and
 D-068's 30-day demo-only exception remain unchanged.
 
+D-077 records the owner's documentation-only choice to conditionally reopen
+consideration of exactly one future Apple Support TS-017 contact under the
+existing assistance plan. It retains D-076's deferral of signing work and does
+not authorize contact itself. Any future contact still needs a separately
+approved owner-operated operational increment that preserves the plan's minimum
+sanitized disclosure, no-screen-share/no-upload/no-device-access boundary,
+no-execution rule, stop conditions, and closed outcome evidence.
+
 ### Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Start from the completed owner-attested paired deletion of the unuploaded CSR
-and filesystem private-key files. Confirm its completion marker remains valid
-and reconcile the actual branch and working tree. Ordinary deletion is not
-cryptographic erasure; TS-017 remains not determined, D-076 still defers the
-signed macOS identity path, and no product increment is Ready. Do not access
-Apple Developer, repeat diagnostics, retry CSR creation, alter Keychain state,
-use Terminal or OpenSSL to generate signing material, contact Apple Support, or
-create or use a signing asset. Do not add a
+Start from D-077's conditional reopening of future Apple Support-contact
+consideration. Confirm its completion marker remains valid and reconcile the
+actual branch and working tree. An Apple Support contact is not approved:
+D-076 still defers signing work, TS-017 remains not determined, and no product
+increment is Ready. Do not access Apple Developer or Apple Support, repeat
+diagnostics, retry CSR creation, alter Keychain state, use Terminal or OpenSSL
+to generate signing material, or create or use a signing asset. Do not add a
 certificate, CSR, key, profile, entitlement, Keychain item, credential,
 runtime consumer, IPC, Worker source, Access application, policy, token, route,
 DNS record, secret, deployment, provider request, traffic, or runtime behavior

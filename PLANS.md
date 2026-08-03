@@ -139,6 +139,15 @@ does not prove cryptographic erasure from APFS/SSD remnants or snapshots. The
 material-disposition plan is exhausted; D-072 remains unsatisfied, D-076 remains
 in force, and no signing or credential plan is Ready.
 
+D-077 conditionally reopens consideration of exactly one future owner-operated
+Apple Support TS-017 contact under the completed
+[`apple-support-ts-017-assistance-plan.md`](docs/plans/apple-support-ts-017-assistance-plan.md).
+It retains D-076's signed-identity deferral and does not authorize contact. A
+separate operational approval must bind one contact to that plan's minimum
+sanitized disclosure, privacy limits, stop conditions, no-execution rule, and
+closed outcome evidence. No Apple, signing, credential, Cloudflare, provider,
+deployment, traffic, code, dependency, or runtime work is Ready.
+
 The owner-attested Free-plan Cloudflare Zero Trust organization exists with
 only Cloudflare's default account-member identity provider. It has no Access
 application, policy, service token, Worker, route, DNS change, device
