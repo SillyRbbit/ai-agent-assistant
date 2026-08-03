@@ -829,3 +829,8 @@ D-076 records the owner's decision to defer the signed macOS identity path.
 Apple Support assistance and an alternate CSR workflow were considered but are
 not authorized. The outcome remains unresolved and does not justify a Keychain
 repair, CSR retry, signing action, or alternate key-generation path.
+
+The documentation-only
+[`apple-support-ts-017-assistance-plan.md`](docs/plans/apple-support-ts-017-assistance-plan.md)
+defines a possible future owner-only support contact. It does not authorize that
+contact or any response action.

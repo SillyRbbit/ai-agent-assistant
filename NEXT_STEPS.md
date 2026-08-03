@@ -247,6 +247,17 @@ privacy boundaries. No diagnostic repetition, Apple, Keychain, signing,
 credential, Cloudflare, provider, deployment, traffic, code, dependency, or
 runtime action is authorized.
 
+### Completed documentation-only planning: Apple Support TS-017 assistance
+
+**Status:** Complete; support contact remains Blocked.
+[`apple-support-ts-017-assistance-plan.md`](docs/plans/apple-support-ts-017-assistance-plan.md)
+defines a possible future owner-only Apple Support contact using minimum
+sanitized disclosure, no screen sharing, stop conditions, and no-state-change
+rollback. It preserves D-076's deferral and does not authorize contact,
+diagnostic repetition, remediation, Apple access, Keychain action, signing,
+credential, Cloudflare, provider, deployment, traffic, code, dependency, or
+runtime behavior.
+
 ### Completed documentation-only planning: Cloudflare demo local security boundary
 
 **Status:** Complete; no implementation authorized.

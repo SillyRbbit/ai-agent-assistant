@@ -86,6 +86,13 @@ determined` cause remain intact; all Apple, Keychain, signing, credential,
 Cloudflare, provider, deployment, traffic, code, dependency, and runtime work
 remains Blocked.
 
+The documentation-only future Apple Support TS-017 assistance plan is complete.
+It defines only a later owner-operated support-contact boundary: minimum
+sanitized disclosure, no screen sharing or data upload, explicit stop
+conditions, and no-state-change rollback. It does not authorize contact,
+diagnostics, remediation, Apple access, Keychain action, signing, credential,
+Cloudflare, provider, deployment, traffic, code, dependency, or runtime work.
+
 Phase 3 and Phase 4 Increments 4A through 4U are **verified complete,
 published, and merged into `main`**. Increment 4U is synchronized at `61525bf`.
 Meta Increment 1 branding and identity foundation is **verified complete and

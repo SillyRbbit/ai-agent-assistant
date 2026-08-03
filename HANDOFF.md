@@ -147,6 +147,14 @@ owner-controlled, non-exported private-key evidence. No diagnostic repetition,
 Apple access, Keychain action, signing, credential, Cloudflare, provider,
 deployment, traffic, code, dependency, or runtime work is Ready.
 
+The documentation-only future Apple Support TS-017 assistance plan is complete.
+It defines the owner-only minimum disclosure, privacy boundary, no-screen-share
+rule, stop conditions, and no-state-change rollback for a possible future
+support contact. It preserves D-076's deferral: contact itself and every
+diagnostic, remediation, Apple, Keychain, signing, credential, Cloudflare,
+provider, deployment, traffic, code, dependency, and runtime action remain
+Blocked pending separate owner approval.
+
 ### Ready-to-paste resume prompt
 
 ```text

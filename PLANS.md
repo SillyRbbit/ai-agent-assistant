@@ -111,6 +111,14 @@ boundary. No repeat diagnostic, Apple, Keychain, signing, credential,
 Cloudflare, provider, deployment, traffic, code, dependency, or runtime work is
 Ready.
 
+The completed documentation-only
+[`apple-support-ts-017-assistance-plan.md`](docs/plans/apple-support-ts-017-assistance-plan.md)
+defines the future owner-only Apple Support contact boundary for TS-017. It
+requires minimum sanitized disclosure, no screen sharing or uploads, closed
+outcome categories, stop conditions, and no-state-change rollback. It does not
+authorize contact or any Apple, Keychain, signing, credential, Cloudflare,
+provider, deployment, traffic, code, dependency, or runtime action.
+
 The owner-attested Free-plan Cloudflare Zero Trust organization exists with
 only Cloudflare's default account-member identity provider. It has no Access
 application, policy, service token, Worker, route, DNS change, device

@@ -4,6 +4,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added a documentation-only future Apple Support assistance plan for TS-017.
+  It defines minimum sanitized disclosure, owner-only contact controls, and
+  stop conditions without contacting Apple or authorizing any Apple, Keychain,
+  signing, credential, Cloudflare, provider, deployment, traffic, code,
+  dependency, or runtime action.
+
 - Added D-076's documentation-only owner decision to defer the signed macOS
   identity path after TS-017. Apple Support and any alternate CSR workflow
   remain future, separately approval-bound options; no Apple, Keychain,
