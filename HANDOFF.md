@@ -1,6 +1,6 @@
 # Handoff
 
-Last updated: 2026-08-01
+Last updated: 2026-08-02
 
 ## Current state
 
@@ -171,17 +171,29 @@ exact-target resolution, ambiguity stop conditions, irreversible-action
 acknowledgement, sanitized absence evidence, and no claim of cryptographic
 erasure on APFS/SSD. All material interaction remains Blocked.
 
+The separately approved owner-operated paired disposition is complete by
+sanitized owner evidence. The owner identified exactly the CSR/private-key pair,
+observed no additional signing material, deleted both files, observed no
+remaining copy, and confirmed neither upload nor use and no certificate
+creation. This records ordinary deletion only; it does not prove cryptographic
+erasure from APFS/SSD remnants or snapshots. The deleted material never
+satisfied D-072, D-076's signed-identity deferral remains in force, and no
+signing, Keychain, credential, Cloudflare, provider, deployment, traffic, code,
+dependency, or runtime work is Ready. D-064's production 15-minute maximum and
+D-068's 30-day demo-only exception remain unchanged.
+
 ### Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Start from D-076 and the deferred TS-017 signed macOS identity path. Confirm
-its marker remains valid and reconcile the actual branch and working tree. The
-cause remains not determined; no diagnostic repetition, remediation, Apple
-Support contact, alternate CSR workflow, CSR retry, or signing increment is
-Ready. Do not access Apple Developer, reset or delete Keychain state, use
-Terminal or OpenSSL to generate signing material, contact Apple support, or
+Start from the completed owner-attested paired deletion of the unuploaded CSR
+and filesystem private-key files. Confirm its completion marker remains valid
+and reconcile the actual branch and working tree. Ordinary deletion is not
+cryptographic erasure; TS-017 remains not determined, D-076 still defers the
+signed macOS identity path, and no product increment is Ready. Do not access
+Apple Developer, repeat diagnostics, retry CSR creation, alter Keychain state,
+use Terminal or OpenSSL to generate signing material, contact Apple Support, or
 create or use a signing asset. Do not add a
 certificate, CSR, key, profile, entitlement, Keychain item, credential,
 runtime consumer, IPC, Worker source, Access application, policy, token, route,

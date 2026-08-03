@@ -105,6 +105,16 @@ complete. It selects future abandonment and paired deletion while preserving a
 separate operational approval gate. It does not authorize target identification,
 inspection, movement, deletion, verification, signing, or credential work.
 
+The separately approved owner-operated paired disposition is complete.
+Sanitized owner evidence reports exact identification of the CSR/private-key
+pair, no additional signing material, completed deletion of both files, no
+remaining copy, no upload or use, and no certificate. This is ordinary deletion
+evidence only and does not establish cryptographic erasure from APFS/SSD remnants
+or snapshots. The filesystem custody blocker is closed, but D-072 remains
+unsatisfied and D-076 continues to defer the signed-identity path. No product,
+signing, credential, Cloudflare, provider, deployment, traffic, code,
+dependency, or runtime increment is Ready.
+
 Phase 3 and Phase 4 Increments 4A through 4U are **verified complete,
 published, and merged into `main`**. Increment 4U is synchronized at `61525bf`.
 Meta Increment 1 branding and identity foundation is **verified complete and

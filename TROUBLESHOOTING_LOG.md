@@ -849,3 +849,19 @@ boundary. No disposition action is authorized.
 The documentation-only
 [`filesystem-signing-material-disposition-plan.md`](docs/plans/filesystem-signing-material-disposition-plan.md)
 selects future abandonment and paired deletion. Execution remains unauthorized.
+
+### Paired filesystem signing-material disposition
+
+Date: 2026-08-02
+
+Under a separate owner-operated approval, the owner privately identified exactly
+the unuploaded CSR and its filesystem private-key file, observed no additional
+signing material, deleted both as one paired disposition, and verified their
+absence. Sanitized evidence reports no remaining copy, upload, use, or
+certificate. No filename, path, content, key material, account detail, or other
+private evidence entered the repository.
+
+This outcome closes custody of the known filesystem pair only. It does not prove
+cryptographic erasure from APFS/SSD remnants or snapshots, establish TS-017's
+cause, satisfy D-072, or supersede D-076. No recovery, regeneration, signing, or
+credential action is authorized.

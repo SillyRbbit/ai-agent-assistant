@@ -279,6 +279,18 @@ pair. It requires separate approval, exact private target resolution, stop on
 ambiguity, no content inspection, and no secure-erasure claim. No identification,
 deletion, signing, credential, cloud, product, or runtime action is authorized.
 
+### Completed owner operation: Paired filesystem signing-material deletion
+
+**Status:** Complete with residual-media advisory; no follow-on increment is
+Ready. Sanitized owner evidence reports exact identification of the intended
+CSR/private-key pair, no additional material, completed deletion of both files,
+no remaining copy, no upload or use, and no certificate. This closes the active
+filesystem custody blocker but does not prove cryptographic erasure from
+APFS/SSD remnants or snapshots, satisfy D-072, or supersede D-076. Any future
+diagnostic, Apple Support, alternate CSR, signing, credential, Cloudflare,
+provider, deployment, traffic, code, dependency, or runtime work requires a
+separately approved exact increment.
+
 ### Completed documentation-only planning: Cloudflare demo local security boundary
 
 **Status:** Complete; no implementation authorized.

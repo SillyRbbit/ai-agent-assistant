@@ -4,6 +4,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Recorded the owner-operated paired deletion of the unuploaded CSR and its
+  filesystem private key. Sanitized owner evidence reports both exact targets
+  deleted, no additional material or remaining copy, no upload or use, and no
+  certificate. Ordinary APFS/SSD deletion is not claimed as cryptographic
+  erasure, and D-072/D-076 remain unchanged.
+
 - Added a documentation-only containment and disposition plan selecting future
   abandonment and paired deletion of the unuploaded CSR and filesystem private
   key. Identification and deletion remain separately approval-bound; no signing

@@ -131,6 +131,14 @@ selects future abandonment and paired deletion, with a separate operational
 approval, exact-target and ambiguity controls, irreversible rollback boundary,
 and sanitized evidence. It authorizes no interaction with either file.
 
+The separately approved owner-operated paired disposition is complete by
+sanitized owner evidence. Exactly the intended CSR and filesystem private-key
+files were deleted, no additional material or remaining copy was observed,
+neither file was uploaded or used, and no certificate exists. Ordinary deletion
+does not prove cryptographic erasure from APFS/SSD remnants or snapshots. The
+material-disposition plan is exhausted; D-072 remains unsatisfied, D-076 remains
+in force, and no signing or credential plan is Ready.
+
 The owner-attested Free-plan Cloudflare Zero Trust organization exists with
 only Cloudflare's default account-member identity provider. It has no Access
 application, policy, service token, Worker, route, DNS change, device
