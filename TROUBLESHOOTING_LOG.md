@@ -845,3 +845,7 @@ scope. Neither was uploaded, used, copied, exported, or backed up; no
 certificate exists. Encryption and permissions were not inspected and remain
 undetermined. The material does not satisfy D-072's non-exported Keychain
 boundary. No disposition action is authorized.
+
+The documentation-only
+[`filesystem-signing-material-disposition-plan.md`](docs/plans/filesystem-signing-material-disposition-plan.md)
+selects future abandonment and paired deletion. Execution remains unauthorized.

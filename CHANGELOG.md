@@ -4,6 +4,11 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added a documentation-only containment and disposition plan selecting future
+  abandonment and paired deletion of the unuploaded CSR and filesystem private
+  key. Identification and deletion remain separately approval-bound; no signing
+  material or product state changed.
+
 - Recorded the safely stopped Apple Support TS-017 contact increment. No Apple
   contact or Developer access occurred; one unuploaded CSR file and one unused,
   unexported filesystem private-key file exist with encryption and permissions

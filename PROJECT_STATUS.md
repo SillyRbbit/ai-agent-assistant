@@ -100,6 +100,11 @@ exported, or backed up, and no certificate exists. Encryption and permissions
 are undetermined. This material fails D-072's required non-exported Keychain
 boundary. All inspection, disposition, signing, and credential work is Blocked.
 
+The documentation-only filesystem signing-material disposition plan is
+complete. It selects future abandonment and paired deletion while preserving a
+separate operational approval gate. It does not authorize target identification,
+inspection, movement, deletion, verification, signing, or credential work.
+
 Phase 3 and Phase 4 Increments 4A through 4U are **verified complete,
 published, and merged into `main`**. Increment 4U is synchronized at `61525bf`.
 Meta Increment 1 branding and identity foundation is **verified complete and

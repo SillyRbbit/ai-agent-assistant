@@ -164,6 +164,13 @@ D-072's owner-controlled, non-exported Keychain boundary. Do not inspect, use,
 move, rename, copy, export, back up, delete, change permissions, upload, or
 regenerate either file without a separately approved disposition plan.
 
+The documentation-only filesystem signing-material disposition plan is
+complete. It selects future abandonment and paired deletion of the CSR/key pair,
+but authorizes neither identification nor deletion. It requires owner-only
+exact-target resolution, ambiguity stop conditions, irreversible-action
+acknowledgement, sanitized absence evidence, and no claim of cryptographic
+erasure on APFS/SSD. All material interaction remains Blocked.
+
 ### Ready-to-paste resume prompt
 
 ```text

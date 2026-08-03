@@ -270,6 +270,15 @@ inspection, movement, deletion, upload, certificate, signing, credential,
 Cloudflare, provider, deployment, traffic, code, dependency, or runtime action
 is Ready.
 
+### Completed documentation-only planning: Filesystem signing-material disposition
+
+**Status:** Complete; operational disposition remains Blocked.
+[`filesystem-signing-material-disposition-plan.md`](docs/plans/filesystem-signing-material-disposition-plan.md)
+selects future abandonment and paired deletion of the unuploaded CSR/private-key
+pair. It requires separate approval, exact private target resolution, stop on
+ambiguity, no content inspection, and no secure-erasure claim. No identification,
+deletion, signing, credential, cloud, product, or runtime action is authorized.
+
 ### Completed documentation-only planning: Cloudflare demo local security boundary
 
 **Status:** Complete; no implementation authorized.

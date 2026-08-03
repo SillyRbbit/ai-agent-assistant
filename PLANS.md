@@ -125,6 +125,12 @@ private-key file now exist; encryption and permissions are undetermined and no
 certificate exists. The files do not satisfy D-072 and require a separate
 documentation-only containment and disposition plan before any action.
 
+The completed documentation-only
+[`filesystem-signing-material-disposition-plan.md`](docs/plans/filesystem-signing-material-disposition-plan.md)
+selects future abandonment and paired deletion, with a separate operational
+approval, exact-target and ambiguity controls, irreversible rollback boundary,
+and sanitized evidence. It authorizes no interaction with either file.
+
 The owner-attested Free-plan Cloudflare Zero Trust organization exists with
 only Cloudflare's default account-member identity provider. It has no Access
 application, policy, service token, Worker, route, DNS change, device
