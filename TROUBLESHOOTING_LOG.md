@@ -834,3 +834,14 @@ The documentation-only
 [`apple-support-ts-017-assistance-plan.md`](docs/plans/apple-support-ts-017-assistance-plan.md)
 defines a possible future owner-only support contact. It does not authorize that
 contact or any response action.
+
+### Stopped contact and filesystem signing-material outcome
+
+Date: 2026-08-02
+
+The owner did not contact Apple Support or access Apple Developer. One CSR file
+and one filesystem private-key file were created outside the approved contact
+scope. Neither was uploaded, used, copied, exported, or backed up; no
+certificate exists. Encryption and permissions were not inspected and remain
+undetermined. The material does not satisfy D-072's non-exported Keychain
+boundary. No disposition action is authorized.

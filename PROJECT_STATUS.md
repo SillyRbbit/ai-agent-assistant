@@ -93,6 +93,13 @@ conditions, and no-state-change rollback. It does not authorize contact,
 diagnostics, remediation, Apple access, Keychain action, signing, credential,
 Cloudflare, provider, deployment, traffic, code, dependency, or runtime work.
 
+The separately approved Apple Support contact increment stopped without Apple
+Support or Apple Developer access. Sanitized owner evidence records one CSR file
+and one filesystem private-key file; neither was uploaded, used, copied,
+exported, or backed up, and no certificate exists. Encryption and permissions
+are undetermined. This material fails D-072's required non-exported Keychain
+boundary. All inspection, disposition, signing, and credential work is Blocked.
+
 Phase 3 and Phase 4 Increments 4A through 4U are **verified complete,
 published, and merged into `main`**. Increment 4U is synchronized at `61525bf`.
 Meta Increment 1 branding and identity foundation is **verified complete and

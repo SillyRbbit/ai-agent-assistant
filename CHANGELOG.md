@@ -4,6 +4,11 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Recorded the safely stopped Apple Support TS-017 contact increment. No Apple
+  contact or Developer access occurred; one unuploaded CSR file and one unused,
+  unexported filesystem private-key file exist with encryption and permissions
+  undetermined. No certificate exists, and the material does not satisfy D-072.
+
 - Added a documentation-only future Apple Support assistance plan for TS-017.
   It defines minimum sanitized disclosure, owner-only contact controls, and
   stop conditions without contacting Apple or authorizing any Apple, Keychain,

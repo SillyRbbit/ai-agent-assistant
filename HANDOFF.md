@@ -155,6 +155,15 @@ diagnostic, remediation, Apple, Keychain, signing, credential, Cloudflare,
 provider, deployment, traffic, code, dependency, and runtime action remain
 Blocked pending separate owner approval.
 
+The separately approved Apple Support contact increment stopped before any
+support or Apple Developer access. During the increment, the owner created one
+CSR file and one filesystem private-key file outside the approved scope. Neither
+was uploaded, used, copied, exported, or backed up; no certificate exists;
+encryption and permissions are not determined. The material does not satisfy
+D-072's owner-controlled, non-exported Keychain boundary. Do not inspect, use,
+move, rename, copy, export, back up, delete, change permissions, upload, or
+regenerate either file without a separately approved disposition plan.
+
 ### Ready-to-paste resume prompt
 
 ```text

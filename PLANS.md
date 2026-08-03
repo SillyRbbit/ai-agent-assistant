@@ -119,6 +119,12 @@ outcome categories, stop conditions, and no-state-change rollback. It does not
 authorize contact or any Apple, Keychain, signing, credential, Cloudflare,
 provider, deployment, traffic, code, dependency, or runtime action.
 
+The separately approved owner contact stopped without Apple Support or Apple
+Developer access. One unuploaded CSR file and one unused, unexported filesystem
+private-key file now exist; encryption and permissions are undetermined and no
+certificate exists. The files do not satisfy D-072 and require a separate
+documentation-only containment and disposition plan before any action.
+
 The owner-attested Free-plan Cloudflare Zero Trust organization exists with
 only Cloudflare's default account-member identity provider. It has no Access
 application, policy, service token, Worker, route, DNS change, device

@@ -258,6 +258,18 @@ diagnostic repetition, remediation, Apple access, Keychain action, signing,
 credential, Cloudflare, provider, deployment, traffic, code, dependency, or
 runtime behavior.
 
+### Safely stopped owner operation: Apple Support contact and filesystem key
+
+**Status:** Stopped with an unresolved signing-material disposition blocker.
+No Apple Support or Apple Developer access occurred. One CSR file and one
+filesystem private-key file exist; neither was uploaded, used, copied,
+exported, or backed up, and no certificate exists. Encryption and permissions
+are not determined. The material does not satisfy D-072. The smallest possible
+future task is a documentation-only containment and disposition plan; no
+inspection, movement, deletion, upload, certificate, signing, credential,
+Cloudflare, provider, deployment, traffic, code, dependency, or runtime action
+is Ready.
+
 ### Completed documentation-only planning: Cloudflare demo local security boundary
 
 **Status:** Complete; no implementation authorized.
