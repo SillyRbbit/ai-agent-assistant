@@ -1,6 +1,6 @@
 # Handoff
 
-Last updated: 2026-08-02
+Last updated: 2026-08-04
 
 ## Current state
 
@@ -190,18 +190,27 @@ approved owner-operated operational increment that preserves the plan's minimum
 sanitized disclosure, no-screen-share/no-upload/no-device-access boundary,
 no-execution rule, stop conditions, and closed outcome evidence.
 
+The separately approved D-077 owner-operated contact increment is complete
+without contact. Sanitized owner evidence records `contact attempted: no`,
+`guidance: none`, `state changed: not observed`, and `cause: not determined`.
+No Apple Support or Apple Developer access or other action occurred. That
+operational approval is closed and grants no carry-forward authority. D-077
+still permits only consideration of one future contact; any later attempt needs
+a fresh exact owner approval under the assistance plan.
+
 ### Ready-to-paste resume prompt
 
 ```text
 Use $session-start.
 
-Start from D-077's conditional reopening of future Apple Support-contact
-consideration. Confirm its completion marker remains valid and reconcile the
-actual branch and working tree. An Apple Support contact is not approved:
-D-076 still defers signing work, TS-017 remains not determined, and no product
-increment is Ready. Do not access Apple Developer or Apple Support, repeat
-diagnostics, retry CSR creation, alter Keychain state, use Terminal or OpenSSL
-to generate signing material, or create or use a signing asset. Do not add a
+Start from the closed D-077 owner-contact increment, which ended with no Apple
+Support contact, guidance, or state change. Confirm its completion marker
+remains valid and reconcile the actual branch and working tree. No contact is
+approved; D-076 still defers signing work, TS-017 remains not determined, and
+no product increment is Ready. Do not access Apple Developer or Apple Support,
+repeat diagnostics, retry CSR creation, alter Keychain state, use Terminal or
+OpenSSL to generate signing material, or create or use a signing asset. Do not
+add a
 certificate, CSR, key, profile, entitlement, Keychain item, credential,
 runtime consumer, IPC, Worker source, Access application, policy, token, route,
 DNS record, secret, deployment, provider request, traffic, or runtime behavior

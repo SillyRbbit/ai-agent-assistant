@@ -881,3 +881,21 @@ summary, privacy limits, no-screen-share/no-upload/no-device-access rule,
 no-execution rule, stop conditions, and closed outcome reporting. End the
 contact without acting on advice if any state-changing or prohibited request is
 made.
+
+### D-077 owner-contact closed without contact
+
+Date: 2026-08-04
+
+The separately approved owner-operated contact increment ended without an Apple
+Support contact. The owner reported only the approved closed categories:
+
+- contact attempted: `no`;
+- guidance: `none`;
+- state changed: `not observed`; and
+- cause: `not determined`.
+
+No Apple Support or Apple Developer access, disclosure, diagnostic, or state
+change occurred. The operational approval is closed and does not carry forward.
+TS-017 remains unresolved, and any future contact requires another separately
+approved exact operational increment under D-077 and the existing assistance
+plan.

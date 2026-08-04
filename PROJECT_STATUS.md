@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-08-02
+Last updated: 2026-08-04
 
 ## Current milestone
 
@@ -123,6 +123,13 @@ disclosure, privacy controls, no-execution rule, stop conditions, and closed
 evidence are mandatory for any future approval. No Apple Developer or Apple
 Support access, diagnostic, signing, credential, Cloudflare, provider,
 deployment, traffic, code, dependency, or runtime action is authorized.
+
+The separately approved D-077 owner-operated contact increment closed with no
+Apple Support contact attempted, no guidance received, no observed state change,
+and the cause still `not determined`. No Apple Support or Apple Developer access
+or other action occurred. The approval grants no carry-forward authority; any
+future contact requires a new exact owner approval under the existing assistance
+plan. Signing and product work remain Blocked.
 
 Phase 3 and Phase 4 Increments 4A through 4U are **verified complete,
 published, and merged into `main`**. Increment 4U is synchronized at `61525bf`.

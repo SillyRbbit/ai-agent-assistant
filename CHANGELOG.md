@@ -4,6 +4,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Recorded the closed D-077 owner-contact increment: no Apple Support contact
+  was attempted, no guidance was received, no state change was observed, and
+  TS-017's cause remains undetermined.
+
 - Added D-077's documentation-only owner decision to conditionally reopen
   consideration of one future Apple Support TS-017 contact under the existing
   assistance plan. The decision authorizes no contact or signing-related action.
