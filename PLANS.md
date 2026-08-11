@@ -4,7 +4,14 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No plan is active. The owner-selected isolated
+No plan is active. The completed documentation-only
+[`2026-08-11-hermes-adr-transport-revision.md`](docs/plans/2026-08-11-hermes-adr-transport-revision.md)
+increment revised the Proposed multi-runtime ADR after the raw TUI-gateway
+stdio NO-GO. It kept ACP, Hermes serve, and native-only unselected; added no
+runtime, dependency, process, source, or application behavior; and leaves
+runtime implementation Blocked pending an owner decision and fresh readiness.
+
+The owner-selected isolated
 [`2026-08-11-hermes-transport-spike.md`](docs/plans/2026-08-11-hermes-transport-spike.md)
 plan is verified complete with advisories under gate `hermes-transport-spike`.
 It establishes a **NO-GO** for raw TUI-gateway stdio as a supported production

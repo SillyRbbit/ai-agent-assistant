@@ -102,6 +102,17 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Queue status
 
+### Completed documentation-only increment: Hermes ADR transport revision
+
+**Status:** Verified complete with advisories; no runtime implementation
+authorized. The
+[`2026-08-11-hermes-adr-transport-revision.md`](docs/plans/2026-08-11-hermes-adr-transport-revision.md)
+plan revised the Proposed ADR to retain the raw TUI-gateway stdio NO-GO and
+compare native-only with unselected public Hermes surfaces. It did not select
+ACP or Hermes serve, accept the ADR, execute Hermes, add dependencies, or
+create runtime source. Runtime implementation remains Blocked pending an
+explicit owner decision, a bounded later plan, and fresh readiness evidence.
+
 ### Completed isolated spike: Hermes raw TUI-gateway stdio
 
 **Status:** Verified complete with advisories; no runtime implementation

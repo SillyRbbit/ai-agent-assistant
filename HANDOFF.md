@@ -4,6 +4,17 @@ Last updated: 2026-08-11
 
 ## Current state
 
+The documentation-only
+[`2026-08-11-hermes-adr-transport-revision.md`](docs/plans/2026-08-11-hermes-adr-transport-revision.md)
+increment is complete with the review report and gate marker recorded below. It
+revised the Proposed multi-runtime ADR after the completed raw TUI-gateway stdio
+NO-GO, retained native-only, Hermes ACP, and Hermes serve as unselected paths,
+and made no source, dependency, runtime, provider, UI, process, credential, or
+external-state change. Its
+[`post-increment review`](docs/reviews/2026-08-11-hermes-adr-transport-revision-post-increment-review.md)
+records `PASS WITH ADVISORIES` because no runtime implementation increment is
+Ready.
+
 The isolated Hermes transport spike is verified complete with advisories under
 gate `hermes-transport-spike`. Official release evidence for Hermes Agent
 `0.20.0`, tag `v2026.8.3`, and commit
@@ -64,14 +75,17 @@ changed.
 
 ## Current exact task
 
-No plan is active. The isolated
-[`2026-08-11-hermes-transport-spike.md`](docs/plans/2026-08-11-hermes-transport-spike.md)
-is complete and stops at its negative transport result. No Hermes, runtime,
-provider, OpenClaw, multi-agent, deployment, or product implementation is
-authorized or Ready. The smallest possible follow-up is a separately selected
-documentation-only revision of the Proposed multi-runtime ADR that compares
-native-only architecture with supported public Hermes surfaces. It must not
-silently select ACP or `hermes serve`, execute Hermes, or begin adapter work.
+No runtime increment is Ready. The next task requires an owner-selected
+architecture decision: retain native-only behavior, accept a narrowly scoped
+native-runtime direction without Hermes, or authorize a separately planned
+comparison of one supported public Hermes surface. Do not silently select ACP
+or Hermes serve, accept the current Proposed ADR, execute Hermes, or begin an
+adapter.
+
+Resume prompt: Read the current project-memory chain and the completed Hermes
+ADR transport-revision plan and review. Ask the owner to select the next
+architecture decision; do not implement a runtime, run Hermes, or choose a
+transport by inference.
 
 The fake-only Cloudflare demo macOS Keychain proof is complete with advisories.
 Pinned macOS-only Security.framework bindings read exactly two fixed labels and

@@ -15,10 +15,10 @@ provider, process, credential, UI, or behavior change.
 > [`HERMES_TRANSPORT_SPIKE.md`](../spikes/HERMES_TRANSPORT_SPIKE.md) found that
 > Hermes Agent `0.20.0` / tag `v2026.8.3` has no supported public raw
 > TUI-gateway stdio launcher, initial version/capability negotiation, or
-> gateway-shutdown RPC. The preferred transport described below is therefore
-> unsuitable as a production contract. This ADR remains **Proposed** and must
-> be revised before acceptance; the spike does not select ACP, `hermes serve`,
-> or another mechanism and authorizes no implementation.
+> gateway-shutdown RPC. Raw TUI-gateway stdio is therefore rejected as a
+> supported production contract at that release. This ADR remains **Proposed**;
+> ACP, Hermes serve, and native-only remain unselected, and the spike
+> authorizes no implementation.
 
 ## Context
 
@@ -92,16 +92,42 @@ fallback, and independently usable runtime. It would not imply that the current
 native path already has transport, coordination, or execution.
 
 `HermesAgentRuntime` would be considered only in a later separately approved
-increment. If approved, it would use one immutable, version-pinned Hermes
-artifact in whole-process OS containment, managed by a Rust supervisor. The
-preferred transport would be a narrowly projected TUI-gateway JSON-RPC stream
-over stdio. All Hermes-specific process, protocol, configuration, and error
-types would remain in the adapter. No raw RPC relay would escape the adapter.
+increment after a new owner decision selects a supported public transport. It
+would use one immutable, version-pinned Hermes artifact in whole-process OS
+containment, managed by a Rust supervisor. All Hermes-specific process,
+protocol, configuration, compatibility, and error types would remain in the
+adapter. No raw RPC relay would escape the adapter.
 
 Runtime selection would be trusted, explicit, and fixed before each run. Native
 would be the default. A runtime failure would not cause automatic failover;
 returning to native would start a new explicitly authorized run so an ambiguous
 external outcome cannot be replayed.
+
+## Hermes transport status
+
+No Hermes transport is selected by this ADR.
+
+- **Raw TUI-gateway stdio:** rejected as a supported production transport for
+  Hermes Agent 0.20.0 / v2026.8.3. The completed spike found no public
+  launcher, no initial protocol/version/capability negotiation, and no
+  gateway-shutdown RPC. Its fixture-only mechanics are not Hermes conformance,
+  containment, or packaging evidence.
+- **Hermes ACP:** an unselected documented stdio candidate. A future,
+  separately approved assessment must prove a closed lifecycle projection,
+  protocol compatibility, version identity, bounded cancellation and shutdown,
+  capability disablement, redaction, and isolation without exposing tools,
+  permissions, or authorization semantics to Cortexa.
+- **Hermes serve:** an unselected documented loopback candidate. A future,
+  separately approved assessment must prove loopback-only authenticated startup,
+  an immutable artifact, whole-process containment, process-tree cleanup,
+  bounded WebSocket/HTTP translation, secret-safe configuration, packaging, and
+  target-Mac lifecycle evidence.
+- **Native-only:** remains a valid architecture outcome. The owner may retain
+  native-only behavior or later accept a narrow native runtime boundary without
+  selecting Hermes.
+
+No option above authorizes Hermes installation or execution, a dependency,
+process, socket, credential, provider, UI, runtime selector, or adapter.
 
 ## Alternatives
 
@@ -159,6 +185,27 @@ Costs:
 - creates a likely Rust/WebView-to-Hermes bypass.
 
 Rejected under this proposal.
+
+### 3a. Adopt raw TUI-gateway stdio as the Hermes adapter transport
+
+Rejected for the evaluated Hermes Agent 0.20.0 / v2026.8.3 release. The
+completed spike found that its raw gateway requires an internal Python-module
+entry point and lacks a supported public launcher, initial
+version/capability negotiation, and gateway-shutdown RPC. A deterministic fake
+proves only host-side framing and lifecycle mechanics; it is not evidence that
+the upstream interface is safe, stable, or packageable as a production
+contract.
+
+Any future upstream release with a public, version-negotiated, capability-bounded
+raw transport would require a new assessment, immutable provenance, containment
+evidence, and an owner-selected decision before reconsideration.
+
+### 3b. Select Hermes ACP or contained Hermes serve
+
+Deferred. Both are possible documented public surfaces, but neither has been
+selected, run, or proven in this repository. Each needs its own bounded,
+evidence-backed comparison against native-only behavior before it can become a
+proposed adapter transport.
 
 ### 4. Treat Hermes as the provider transport
 
@@ -316,7 +363,9 @@ This ADR deliberately does not decide:
 - the exact Hermes distribution channel, artifact hash, optional extras, or
   installer;
 - the concrete macOS whole-process containment technology;
-- stdio launcher versus loopback `hermes serve` fallback;
+- whether a supported public Hermes transport should be selected at all;
+- whether a future evidence-backed comparison should evaluate Hermes ACP,
+  contained loopback Hermes serve, or a later public raw transport;
 - TUI-gateway protocol versioning, schema generation, or compatibility window;
 - runtime installation, update, rollback, repair, removal, or packaging UI;
 - provider credentials, disclosure, live networking, or user data;
@@ -351,7 +400,8 @@ following:
       rollback, no dependency additions, and no behavior/UI change.
 - [ ] The owner accepts that Hermes remains separately blocked on immutable
       provenance, whole-process containment, protocol compatibility,
-      lifecycle, credentials, packaging, and security evidence.
+      lifecycle, credentials, packaging, and security evidence, and that no
+      Hermes transport is selected by this Proposed ADR.
 - [ ] D-030, D-032, D-033, D-034, D-060 through D-064, D-065, and D-078 remain
       intact unless an additive accepted decision explicitly supersedes them.
 - [ ] The accepted decision is recorded in `DECISIONS.md`; this Proposed file

@@ -899,3 +899,41 @@ change occurred. The operational approval is closed and does not carry forward.
 TS-017 remains unresolved, and any future contact requires another separately
 approved exact operational increment under D-077 and the existing assistance
 plan.
+
+## TS-018 - Sandboxed post-increment gate state write is denied
+
+Date: 2026-08-11
+Status: Resolved for the active Codex session
+
+### Symptom
+
+Starting the documentation-only Hermes ADR transport revision with the required
+post-increment gate command returned:
+
+    post-increment-gate: post-increment state could not be written
+
+The working tree was clean and .codex/state plus its existing state file were
+owned by the repository user and had ordinary writable Unix modes.
+
+### Cause
+
+The Codex workspace sandbox denied creating the gate's temporary state file in
+.codex/state, independently of Unix ownership and mode. This is an execution
+environment restriction, not a repository permission, product, or gate defect.
+
+### Resolution
+
+Run the same required gate command with explicitly approved elevated workspace
+permission. It created the active hermes-adr-transport-revision marker without
+changing the hook, reducing gate checks, or altering repository controls.
+
+### Verify
+
+Run the post-increment gate status command. Expected: the increment is active
+until its required review and closeout workflow writes a valid completion state.
+
+### Prevention
+
+When a required repository hook can read but cannot atomically write its local
+state under a managed sandbox, inspect the state path and rerun that exact hook
+with explicit elevated permission. Do not bypass, edit, or disable the gate.

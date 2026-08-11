@@ -4,6 +4,12 @@ Last updated: 2026-08-11
 
 ## Current milestone
 
+The documentation-only Hermes ADR transport revision is **verified complete
+with advisories**. It preserved the raw TUI-gateway stdio NO-GO and records
+native-only, Hermes ACP, and Hermes serve as unselected paths. It did not accept
+an ADR, select a transport, execute Hermes, or change source, dependencies,
+runtime behavior, credentials, provider boundaries, or application readiness.
+
 The isolated Hermes transport spike is **verified complete with advisories**.
 Against official Hermes Agent `0.20.0` / `v2026.8.3` evidence, raw TUI-gateway
 stdio is **NO-GO** as the selected supported production integration mechanism:
@@ -1311,12 +1317,12 @@ publication only when separately directed. Do not begin transport, identity
 integration, credentials, execution, persistence, enterprise controls, license
 selection, signing, notarization, or another remediation automatically.
 
-For the runtime direction specifically, the smallest possible next action is a
-separately owner-selected documentation-only revision of the Proposed
-multi-runtime ADR. It must reconcile the raw-stdio **NO-GO** without silently
-selecting ACP, `hermes serve`, or an adapter implementation. Runtime work remains
-Blocked pending that revision, an accepted decision if the owner chooses one,
-and a fresh readiness review.
+For the runtime direction specifically, no implementation is Ready. The next
+step is an owner-selected architecture decision: retain native-only behavior,
+accept a narrow native-runtime direction without Hermes, or authorize a
+separately planned comparison of one supported public Hermes surface. Any later
+runtime source work remains Blocked pending that decision, a bounded approved
+plan, and a fresh readiness review.
 
 ## Phase 4 planning result
 

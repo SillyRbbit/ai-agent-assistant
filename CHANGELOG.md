@@ -4,6 +4,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Completed a documentation-only revision of the Proposed multi-runtime ADR after
+  the completed Hermes transport spike rejected raw TUI-gateway stdio as a
+  supported production contract. The revision records native-only, Hermes ACP,
+  and Hermes serve as unselected paths; it adds no Hermes runtime, dependency,
+  process, source, or application behavior.
+
 - Added an isolated Rust/Python fixture spike for the pinned Hermes TUI-gateway
   wire. Seven ordinary tests verify bounded fake-process lifecycle, framing,
   cancellation, timeout, malformed/forbidden output, stderr separation,
