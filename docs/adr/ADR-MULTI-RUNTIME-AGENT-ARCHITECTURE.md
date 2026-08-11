@@ -11,6 +11,15 @@ This proposal is non-authoritative until the project owner accepts it through
 the repository's decision process. It authorizes no code, dependency, runtime,
 provider, process, credential, UI, or behavior change.
 
+> **Blocking spike result (2026-08-11):** The isolated
+> [`HERMES_TRANSPORT_SPIKE.md`](../spikes/HERMES_TRANSPORT_SPIKE.md) found that
+> Hermes Agent `0.20.0` / tag `v2026.8.3` has no supported public raw
+> TUI-gateway stdio launcher, initial version/capability negotiation, or
+> gateway-shutdown RPC. The preferred transport described below is therefore
+> unsuitable as a production contract. This ADR remains **Proposed** and must
+> be revised before acceptance; the spike does not select ACP, `hermes serve`,
+> or another mechanism and authorizes no implementation.
+
 ## Context
 
 Cortexa currently has no `AgentRuntime`, `NativeAgentRuntime`,

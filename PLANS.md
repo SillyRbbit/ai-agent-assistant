@@ -4,7 +4,16 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No plan is active. The documentation-only
+No plan is active. The owner-selected isolated
+[`2026-08-11-hermes-transport-spike.md`](docs/plans/2026-08-11-hermes-transport-spike.md)
+plan is verified complete with advisories under gate `hermes-transport-spike`.
+It establishes a **NO-GO** for raw TUI-gateway stdio as a supported production
+contract at Hermes Agent `0.20.0` / `v2026.8.3`, while proving only bounded
+host mechanics against a deterministic fixture. Hermes was neither installed
+nor executed, and no production runtime, dependency, application path, ADR
+acceptance, or native behavior changed.
+
+The completed documentation-only
 [`2026-08-11-project-direction-runtime-boundaries.md`](docs/plans/2026-08-11-project-direction-runtime-boundaries.md)
 plan is verified complete with advisories under D-078 and the valid
 `repository-project-direction-runtime-boundaries` marker. It records present

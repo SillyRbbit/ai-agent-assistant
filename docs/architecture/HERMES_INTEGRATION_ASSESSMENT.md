@@ -15,6 +15,17 @@ This document evaluates a hypothesis. It does not claim that `AgentRuntime`,
 or a live native agent exists. D-078 remains the accepted direction; the ADR
 created with this assessment remains Proposed.
 
+> **Post-assessment transport result (2026-08-11):** The isolated
+> [`HERMES_TRANSPORT_SPIKE.md`](../spikes/HERMES_TRANSPORT_SPIKE.md) disproved
+> raw TUI-gateway stdio as a supported production integration mechanism for
+> Hermes Agent `0.20.0` / tag `v2026.8.3`. The tagged release exposes no public
+> raw-gateway launcher, no initial version or capability negotiation, and no
+> gateway-shutdown RPC. The conditional recommendation below is retained as
+> historical assessment evidence, but its raw-stdio preference is superseded.
+> No adapter should be implemented until the Proposed ADR is separately
+> revised to evaluate a supported public transport; this notice does not select
+> ACP, `hermes serve`, or any other replacement.
+
 ## 1. Executive summary
 
 **Recommendation: CONDITIONAL GO.** Continue with a small application-owned

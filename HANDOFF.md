@@ -4,6 +4,22 @@ Last updated: 2026-08-11
 
 ## Current state
 
+The isolated Hermes transport spike is verified complete with advisories under
+gate `hermes-transport-spike`. Official release evidence for Hermes Agent
+`0.20.0`, tag `v2026.8.3`, and commit
+`3c27eb6234bf91b8ceee9e9071591b31e9b148cb` establishes that raw TUI-gateway
+stdio has no supported public launcher, initial version/capability negotiation,
+or gateway-shutdown RPC. That selected production mechanism is **NO-GO**. A
+test-only Rust harness and deterministic Python fixture prove bounded framing,
+one fake session/text turn, timeouts, terminal cancellation, malformed/forbidden
+input rejection, closed exit handling, stderr separation, environment
+isolation, redaction, and direct-child reap. Seven ordinary spike tests pass;
+the version-only real-Hermes probe is ignored and was not run. Hermes was not
+installed or executed. No production source, dependency, manifest, lockfile,
+feature, UI, IPC, Tauri permission, runtime, provider, native behavior, or
+external state changed. The multi-runtime ADR remains Proposed and cannot be
+accepted unchanged.
+
 The documentation-only project-direction and runtime-boundary increment is
 verified complete with advisories under D-078 and a valid completion marker.
 `docs/PROJECT_DIRECTION.md` records Cortexa's present private, owner-only,
@@ -48,13 +64,14 @@ changed.
 
 ## Current exact task
 
-No plan is active. The owner-requested repository-governance work is complete
-under
-[`2026-08-11-project-direction-runtime-boundaries.md`](docs/plans/2026-08-11-project-direction-runtime-boundaries.md).
-No Hermes, OpenClaw, provider, multi-agent, deployment, or product implementation
-is authorized or Ready. A later exact owner-selected task must start from D-078,
-preserve the verified native path, and pass the normal readiness and increment
-gates.
+No plan is active. The isolated
+[`2026-08-11-hermes-transport-spike.md`](docs/plans/2026-08-11-hermes-transport-spike.md)
+is complete and stops at its negative transport result. No Hermes, runtime,
+provider, OpenClaw, multi-agent, deployment, or product implementation is
+authorized or Ready. The smallest possible follow-up is a separately selected
+documentation-only revision of the Proposed multi-runtime ADR that compares
+native-only architecture with supported public Hermes surfaces. It must not
+silently select ACP or `hermes serve`, execute Hermes, or begin adapter work.
 
 The fake-only Cloudflare demo macOS Keychain proof is complete with advisories.
 Pinned macOS-only Security.framework bindings read exactly two fixed labels and
@@ -231,16 +248,17 @@ a fresh exact owner approval under the assistance plan.
 ```text
 Use $session-start.
 
-Start from the verified-complete documentation-only project-direction and
-runtime-boundary increment under D-078. Confirm its completion marker remains
-valid and reconcile the actual branch and working tree without discarding the
-separate orphan-gate review. No product or external-runtime increment is Ready.
-Treat AgentRuntime, NativeAgentRuntime, HermesAgentRuntime, and OpenClaw as
-conceptual only; preserve the verified native Rust path and deterministic mocks.
-Do not install a framework, add a dependency, access Apple or another external
-service, add networking, credentials, IPC, execution, deployment, traffic, or
-runtime behavior without a separately approved exact increment. Continue only
-the next task explicitly selected by the project owner.
+Start from the verified-complete isolated Hermes transport spike under gate
+hermes-transport-spike and confirm its completion marker remains valid. Re-read
+docs/spikes/HERMES_TRANSPORT_SPIKE.md and the blocking notice in the Proposed
+multi-runtime ADR. Raw TUI-gateway stdio is NO-GO as a supported production
+contract for Hermes Agent 0.20.0 / v2026.8.3; do not implement an adapter or
+silently select ACP or hermes serve. Hermes was not installed or executed, and
+the native application path is unchanged. No product or external-runtime
+increment is Ready. Continue only a separately owner-selected,
+documentation-only ADR revision or another exact task after a fresh readiness
+review. Do not install or run Hermes, add dependencies, networking, credentials,
+IPC, execution, permissions, deployment, traffic, or runtime behavior.
 ```
 
 Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,

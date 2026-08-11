@@ -94,8 +94,28 @@ This file is the ordered implementation queue. Work only on the first item marke
   native preservation, conceptual adapter boundaries, and the living ExecPlan
   convention are documented; no product or external-runtime implementation is
   authorized or Ready**.
+- Isolated Hermes transport spike:
+  **Verified complete with advisories; raw TUI-gateway stdio is NO-GO as a
+  supported production contract for Hermes Agent `0.20.0` / `v2026.8.3`; seven
+  deterministic fixture tests pass, the real-Hermes probe was not run, and no
+  production runtime or native behavior changed**.
 
 ## Queue status
+
+### Completed isolated spike: Hermes raw TUI-gateway stdio
+
+**Status:** Verified complete with advisories; no runtime implementation
+authorized. The
+[`2026-08-11-hermes-transport-spike.md`](docs/plans/2026-08-11-hermes-transport-spike.md)
+plan and
+[`HERMES_TRANSPORT_SPIKE.md`](docs/spikes/HERMES_TRANSPORT_SPIKE.md) establish
+that the selected raw-stdio mechanism lacks a supported public launcher,
+initial version/capability negotiation, and a gateway-shutdown RPC at the pinned
+release. The fixture proves host mechanics only, not Hermes conformance,
+containment, descendant cleanup, packaging, or target-platform readiness. The
+multi-runtime ADR remains Proposed and requires a separately selected revision
+before any acceptance or implementation. ACP and `hermes serve` are unselected
+alternatives, not Ready work.
 
 ### Completed documentation-only project direction and runtime boundaries
 

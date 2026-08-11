@@ -4,6 +4,15 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added an isolated Rust/Python fixture spike for the pinned Hermes TUI-gateway
+  wire. Seven ordinary tests verify bounded fake-process lifecycle, framing,
+  cancellation, timeout, malformed/forbidden output, stderr separation,
+  environment isolation, redaction, and direct-child cleanup; the real-Hermes
+  version probe remains ignored. Official `0.20.0` / `v2026.8.3` evidence makes
+  raw TUI-gateway stdio NO-GO as a supported production contract. No Hermes,
+  production source, dependency, application runtime, or native behavior was
+  added or changed.
+
 - Added D-078 and durable project-direction guidance for Cortexa's current
   private, owner-only, local-first personal scope; preserved the verified native
   path; documented a conceptual framework-neutral native/Hermes adapter

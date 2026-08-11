@@ -4,6 +4,18 @@ Last updated: 2026-08-11
 
 ## Current milestone
 
+The isolated Hermes transport spike is **verified complete with advisories**.
+Against official Hermes Agent `0.20.0` / `v2026.8.3` evidence, raw TUI-gateway
+stdio is **NO-GO** as the selected supported production integration mechanism:
+there is no public raw-gateway launcher, initial version/capability negotiation,
+or gateway-shutdown RPC. Seven ordinary tests pass against a deterministic
+fixture and cover bounded framing, a fake session/text turn, deadlines,
+cancellation, malformed/forbidden output, early/midstream exit, separate
+bounded stderr, environment isolation, redaction, and direct-child reap. The
+ignored real-Hermes version probe was not run. Hermes is not installed, no
+production path or dependency changed, native behavior remains unchanged, and
+the multi-runtime ADR remains Proposed pending a separate revision.
+
 The documentation-only project-direction and runtime-boundary increment is
 **verified complete with advisories** under D-078 and a valid completion marker.
 Cortexa's present scope is a private, owner-only, local-first personal project
@@ -1298,6 +1310,13 @@ public-distribution work. Review the verified documentation decision record for
 publication only when separately directed. Do not begin transport, identity
 integration, credentials, execution, persistence, enterprise controls, license
 selection, signing, notarization, or another remediation automatically.
+
+For the runtime direction specifically, the smallest possible next action is a
+separately owner-selected documentation-only revision of the Proposed
+multi-runtime ADR. It must reconcile the raw-stdio **NO-GO** without silently
+selecting ACP, `hermes serve`, or an adapter implementation. Runtime work remains
+Blocked pending that revision, an accepted decision if the owner chooses one,
+and a fresh readiness review.
 
 ## Phase 4 planning result
 
