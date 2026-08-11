@@ -1,7 +1,7 @@
 # Cortexa architecture
 
 Status: Authoritative current-state architecture
-Last updated: 2026-07-19
+Last updated: 2026-08-11
 
 ## Reading this document
 
@@ -128,6 +128,39 @@ modules are intentionally transport-free where runtime coordination is absent.
 Every emitted value remains non-authorizing. There is no Tauri caller, live
 transport, provider adapter, runtime coordinator, continuation loop, dispatcher,
 or executor.
+
+### Runtime adapter direction
+
+**Planned direction only**: the repository has no `AgentRuntime` trait and no
+`NativeAgentRuntime`, `HermesAgentRuntime`, OpenClaw adapter, or runtime selector.
+A future separately approved, application-owned seam may use this conceptual
+shape:
+
+```mermaid
+flowchart TD
+    Contract["AgentRuntime<br/>planned Cortexa-owned contract"]
+    Contract --> Native["NativeAgentRuntime<br/>planned default, reference, explicit fallback, and test path"]
+    Contract --> Hermes["HermesAgentRuntime<br/>planned optional experimental adapter"]
+```
+
+`NativeAgentRuntime` would compose the existing typed native components without
+renaming or moving them merely to satisfy the abstraction. It should preserve a
+standalone deterministic path. “Fallback” means an explicit application-owned
+runtime choice; it does not authorize automatic model-provider failover.
+
+`HermesAgentRuntime` would keep all Hermes types, configuration, events, and
+errors inside one adapter and translate them to closed bounded Cortexa-owned
+types. OpenClaw is only a possible later evaluation and is not a current or
+selected adapter. No external runtime may own validation, policy, approval,
+restricted execution, cancellation, audit, credentials, or direct device
+access. Its output remains untrusted and must traverse the same deterministic
+Rust gates as any other proposal.
+
+This conceptual runtime seam is separate from model-provider transport. It does
+not restore D-032's deleted synchronous arbitrary-string `AgentProvider` or
+authorize networking, dependencies, credentials, provider selection, a live
+model, coordination, dispatch, execution, multi-agent behavior, or a Tauri
+capability.
 
 ### Agent provider
 

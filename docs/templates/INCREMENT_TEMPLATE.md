@@ -14,9 +14,15 @@ Last updated: YYYY-MM-DD
 
 ## Existing behavior and constraints
 
+## Current-state evidence
+
 ## Files expected to change
 
-## Implementation steps
+## Affected components
+
+## Interfaces and invariants
+
+## Implementation milestones
 
 - [ ] Step 1
 - [ ] Step 2
@@ -32,14 +38,29 @@ Last updated: YYYY-MM-DD
 # Add exact commands.
 ```
 
+## Risks
+
 ## Rollback or failure strategy
+
+## Decisions made
+
+Record decisions as the plan evolves. Link an accepted decision record when the
+choice changes durable architecture, security, product, or repository policy.
+
+## Discoveries
+
+Record evidence that changes understanding, scope, sequencing, or risk.
+
+## Progress
+
+Maintain dated progress entries and keep milestone checkboxes current.
 
 ## Acceptance criteria
 
 - [ ] Criterion 1
 - [ ] Criterion 2
 
-## Actual results
+## Final results
 
 Complete this section before marking the increment complete.
 

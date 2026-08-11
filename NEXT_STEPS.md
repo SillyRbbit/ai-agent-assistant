@@ -1,6 +1,6 @@
 # Next steps
 
-Last updated: 2026-07-28
+Last updated: 2026-08-11
 
 This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must close before later feature work begins.
 
@@ -89,8 +89,26 @@ This file is the ordered implementation queue. Work only on the first item marke
   **Verified complete with advisories under D-064; published through PR #41 and
   squash-merged at `36ce9ab`; no provisioning, transport, real-content
   activation, or runtime implementation authorized**.
+- Repository project direction and runtime boundaries:
+  **Verified complete with advisories under D-078; present personal scope,
+  native preservation, conceptual adapter boundaries, and the living ExecPlan
+  convention are documented; no product or external-runtime implementation is
+  authorized or Ready**.
 
 ## Queue status
+
+### Completed documentation-only project direction and runtime boundaries
+
+**Status:** Verified complete with advisories; no product implementation
+authorized.
+[`2026-08-11-project-direction-runtime-boundaries.md`](docs/plans/2026-08-11-project-direction-runtime-boundaries.md)
+records present private owner-only scope, preserves verified native Rust and
+deterministic mock assets, and limits `AgentRuntime`, `NativeAgentRuntime`, and
+optional experimental `HermesAgentRuntime` to conceptual future direction.
+OpenClaw remains only a possible later evaluation. D-078 does not cancel
+accepted future targets or make Hermes, provider, transport, execution,
+multi-agent, deployment, or product work Ready. Any later implementation
+requires a new exact owner-selected plan and gate.
 
 ### Completed implementation: Cloudflare demo fake Keychain proof
 

@@ -1,8 +1,28 @@
 # Handoff
 
-Last updated: 2026-08-04
+Last updated: 2026-08-11
 
 ## Current state
+
+The documentation-only project-direction and runtime-boundary increment is
+verified complete with advisories under D-078 and a valid completion marker.
+`docs/PROJECT_DIRECTION.md` records Cortexa's present private, owner-only,
+local-first personal scope, the exact
+clean-architecture/personal-scope/future-product principle, native preservation,
+and only a conceptual future `AgentRuntime` adapter seam. Root instructions link
+that authority, `ARCHITECTURE.md` records that no named runtime type exists, and
+the existing ExecPlan convention now includes interfaces, invariants, risks,
+decisions, discoveries, progress, and final results. No source, test,
+dependency, configuration, permission, runtime behavior, external action, or
+current capability changed. Previously accepted consumer, cloud, provider,
+enterprise, signing, and release targets are neither canceled nor implemented.
+Hermes remains an optional experimental adapter concept; OpenClaw remains only
+a possible later evaluation.
+
+The prior orphaned `apple-support-ts-017-owner-contact-d077-contact-1` gate was
+closed through a separate no-operation review before this increment. That
+review grants no Apple or other operational authority and is preserved as
+pre-existing uncommitted documentation evidence.
 
 The documentation-only final-vision architecture bundle is complete. Its
 executive view now tells a 30-second visual story from human intent through a
@@ -27,6 +47,14 @@ No application, dependency, CI, hook, skill, deployment, or runtime path
 changed.
 
 ## Current exact task
+
+No plan is active. The owner-requested repository-governance work is complete
+under
+[`2026-08-11-project-direction-runtime-boundaries.md`](docs/plans/2026-08-11-project-direction-runtime-boundaries.md).
+No Hermes, OpenClaw, provider, multi-agent, deployment, or product implementation
+is authorized or Ready. A later exact owner-selected task must start from D-078,
+preserve the verified native path, and pass the normal readiness and increment
+gates.
 
 The fake-only Cloudflare demo macOS Keychain proof is complete with advisories.
 Pinned macOS-only Security.framework bindings read exactly two fixed labels and
@@ -203,18 +231,16 @@ a fresh exact owner approval under the assistance plan.
 ```text
 Use $session-start.
 
-Start from the closed D-077 owner-contact increment, which ended with no Apple
-Support contact, guidance, or state change. Confirm its completion marker
-remains valid and reconcile the actual branch and working tree. No contact is
-approved; D-076 still defers signing work, TS-017 remains not determined, and
-no product increment is Ready. Do not access Apple Developer or Apple Support,
-repeat diagnostics, retry CSR creation, alter Keychain state, use Terminal or
-OpenSSL to generate signing material, or create or use a signing asset. Do not
-add a
-certificate, CSR, key, profile, entitlement, Keychain item, credential,
-runtime consumer, IPC, Worker source, Access application, policy, token, route,
-DNS record, secret, deployment, provider request, traffic, or runtime behavior
-without a separately approved exact increment.
+Start from the verified-complete documentation-only project-direction and
+runtime-boundary increment under D-078. Confirm its completion marker remains
+valid and reconcile the actual branch and working tree without discarding the
+separate orphan-gate review. No product or external-runtime increment is Ready.
+Treat AgentRuntime, NativeAgentRuntime, HermesAgentRuntime, and OpenClaw as
+conceptual only; preserve the verified native Rust path and deterministic mocks.
+Do not install a framework, add a dependency, access Apple or another external
+service, add networking, credentials, IPC, execution, deployment, traffic, or
+runtime behavior without a separately approved exact increment. Continue only
+the next task explicitly selected by the project owner.
 ```
 
 Phase 3 and Phase 4 Increments 4A through 4U are verified complete, published,

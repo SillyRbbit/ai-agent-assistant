@@ -6,7 +6,10 @@ Cortexa is a local-first desktop executive assistant. The model is an untrusted
 planner; deterministic Rust owns validation, policy, approval, execution, and
 audit. This concise entry point contains mandatory safeguards. Read
 [`docs/governance/MASTER_PROMPT.md`](docs/governance/MASTER_PROMPT.md) before
-beginning repository work.
+beginning repository work. Read
+[`docs/PROJECT_DIRECTION.md`](docs/PROJECT_DIRECTION.md) for owner-approved
+present scope and planned architecture direction; it is not implementation or
+readiness evidence.
 
 Platform and system instructions take precedence over this repository. More
 specific directory-level `AGENTS.md` files, when introduced, add constraints
@@ -16,15 +19,16 @@ for their directory but cannot weaken these safeguards.
 
 1. `AGENTS.md`
 2. `docs/governance/MASTER_PROMPT.md`
-3. `ENGINEERING_GUIDE.md`
-4. `HANDOFF.md`
-5. `PROJECT_STATUS.md`
-6. `NEXT_STEPS.md`
-7. `ARCHITECTURE.md`
-8. `PRODUCT_REQUIREMENTS.md`
-9. `DECISIONS.md`
-10. `TROUBLESHOOTING_LOG.md`
-11. The active plan, increment, workflow, or task-specific prompt
+3. `docs/PROJECT_DIRECTION.md`
+4. `ENGINEERING_GUIDE.md`
+5. `HANDOFF.md`
+6. `PROJECT_STATUS.md`
+7. `NEXT_STEPS.md`
+8. `ARCHITECTURE.md`
+9. `PRODUCT_REQUIREMENTS.md`
+10. `DECISIONS.md`
+11. `TROUBLESHOOTING_LOG.md`
+12. The active plan, increment, workflow, or task-specific prompt
 
 For security-sensitive work, also read `SECURITY.md`,
 `SECURITY_CHECKLIST.md`, `CODE_REVIEW.md`, and `TESTING_GUIDE.md`.
@@ -37,6 +41,10 @@ start the next increment early.
 
 - Keep the product local-first. Treat model output, WebView data, files,
   websites, clipboard, contacts, calendars, and tool results as untrusted.
+- Scope current work as a private, owner-only personal project. Do not infer a
+  current need for SaaS, multi-tenancy, billing, enterprise IAM, public
+  deployment, or production-scale distributed systems. Preserve clean
+  framework-neutral boundaries for possible future publication.
 - Never permit direct model-to-device or WebView-to-device execution. Do not
   add unrestricted shell execution or a generic `execute_action` tool.
 - Do not expose or store secrets, OAuth credentials, API keys, tokens, or
@@ -49,6 +57,13 @@ start the next increment early.
 - D-064 is documentation-only design evidence. Stage B provisioning, Stage C
   synthetic transport, and Stage D real-content activation each require their
   own plan and project-owner approval. ARB-002 remains unresolved.
+- Preserve verified native typed boundaries, deterministic mocks, contracts,
+  tests, and decisions. `AgentRuntime`, `NativeAgentRuntime`,
+  and `HermesAgentRuntime` are planned concepts only; OpenClaw is evaluation-only
+  and is neither selected nor planned. Implementation, dependencies, or removal
+  require a separately approved increment. Keep external-framework types inside
+  narrow adapters, and never transfer validation, policy, approval, execution,
+  or audit authority to them.
 
 ## Work and Git safety
 
@@ -56,12 +71,32 @@ start the next increment early.
   declared scope; do not refactor or implement speculatively.
 - Inspect the relevant code, tests, Git branch, and working tree before edits.
   State the goal, non-goals, exact files, risks, and verification first.
+- Read current implementation before proposing replacement. Prefer adapting or
+  wrapping verified code over rewriting it around an external framework.
+- After an exact task is authorized, safe in-scope local work may proceed
+  without repeated confirmation. External writes, destructive actions,
+  publication, deployment, credential changes, and material scope expansion
+  still require explicit authorization.
 - Do not discard, overwrite, reset, clean, stash, or silently rewrite existing
   work. Stop if uncommitted work overlaps planned edits.
 - Do not create branches, commit, push, merge, release, or publish unless the
   project owner explicitly directs that action.
 - Use descriptive `codex/` branches, Conventional Commits, and squash merges
   only after required checks pass and explicit approval is given.
+
+## Execution plans
+
+Reuse `PLANS.md`, `docs/plans/`, and
+`docs/templates/INCREMENT_TEMPLATE.md`; do not create a parallel plan system.
+Treat an ExecPlan as a living implementation document for significant
+architecture, external integration, cross-cutting, multi-step, or
+security-sensitive work. Record current-state evidence, scope and non-goals,
+components, interfaces and invariants, milestones, validation, risks, rollback,
+decisions, discoveries, progress, and final results.
+
+A plan does not grant authority. When an exact prompt already authorizes
+implementation, update the plan, begin the required gate, and continue in the
+same task unless the prompt is analysis-only or a stop condition is reached.
 
 ## Validation and completion
 

@@ -2573,6 +2573,59 @@ provider, deployment, traffic, code, dependency, or runtime behavior is created
 or authorized. D-064's 15-minute production maximum and D-068's 30-day demo-only
 exception remain unchanged.
 
+## D-078 - Adopt personal-project scope and conceptual runtime-adapter direction
+
+Date: 2026-08-11
+Status: Accepted owner project-direction and documentation-only architecture
+decision
+
+Decision: Cortexa is currently a private, personally owned, local-first side
+project for one technical user, the repository owner. Its present uses are
+personal productivity, experimentation, learning, development, and
+demonstrations. It does not currently require SaaS infrastructure,
+multi-tenancy, billing, enterprise IAM, public deployment infrastructure, or
+production-scale distributed systems.
+
+This present scope does not cancel D-060 or the accepted Phase 1 and Phase 2
+future product targets. Cortexa may later be published or publicly distributed.
+Clean application-owned and framework-neutral boundaries should preserve that
+option, while every publication, commercial, cloud, enterprise, and distributed
+capability remains deferred until an explicit owner-selected increment satisfies
+its evidence, decision, security, and authorization gates.
+
+Adopt this guiding principle:
+
+> Build it with clean architecture. Scope it like a personal project. Preserve
+> the path to a future product.
+
+Preserve the verified native Rust boundaries, deterministic frontend mocks,
+closed contracts, tests, documentation, and accepted decisions unless a later
+task explicitly authorizes evidence-backed removal. This does not revive the
+unused generic scaffolds removed in Increments 4I through 4M, including D-032's
+legacy synchronous arbitrary-string `AgentProvider`.
+
+For future planning only, an application-owned `AgentRuntime` seam may expose a
+`NativeAgentRuntime` over the current typed native path and an optional
+experimental `HermesAgentRuntime` adapter. The native path should remain the
+default, an explicit fallback, the reference and deterministic test path, and a
+possible standalone runtime. Hermes-specific types must stay inside its adapter.
+OpenClaw may be evaluated later but is not selected or planned for
+implementation. None of these runtime types currently exists.
+
+Every runtime output remains untrusted. Deterministic Rust retains validation,
+policy, exact approval, restricted execution, cancellation, and audit ownership.
+The conceptual runtime seam is distinct from provider transport and grants no
+network, dependency, credential, model, coordination, dispatch, execution,
+multi-agent, permission, or device authority.
+
+Consequences: `docs/PROJECT_DIRECTION.md` is the durable present-scope and
+planned-direction guide below accepted decisions and current-state evidence.
+Future external-runtime work requires its own bounded plan and explicit owner
+approval. No production source, dependency, application behavior, current
+capability, or readiness classification changes through this decision.
+Previously accepted consumer, cloud, provider, enterprise, signing, and release
+targets are neither canceled nor implemented.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

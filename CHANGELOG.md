@@ -4,6 +4,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added D-078 and durable project-direction guidance for Cortexa's current
+  private, owner-only, local-first personal scope; preserved the verified native
+  path; documented a conceptual framework-neutral native/Hermes adapter
+  direction; and expanded the existing living ExecPlan convention. No product
+  source, dependency, runtime behavior, or future capability was added.
+
 - Recorded the closed D-077 owner-contact increment: no Apple Support contact
   was attempted, no guidance was received, no state change was observed, and
   TS-017's cause remains undetermined.

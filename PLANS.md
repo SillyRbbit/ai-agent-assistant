@@ -4,7 +4,17 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No plan is active. The completed
+No plan is active. The documentation-only
+[`2026-08-11-project-direction-runtime-boundaries.md`](docs/plans/2026-08-11-project-direction-runtime-boundaries.md)
+plan is verified complete with advisories under D-078 and the valid
+`repository-project-direction-runtime-boundaries` marker. It records present
+owner-only personal scope, native-architecture preservation, a conceptual
+framework-neutral runtime-adapter direction, and refinements to the existing
+living ExecPlan convention. It authorizes no production source, dependency,
+Hermes/OpenClaw installation, runtime behavior, external action, or future
+product capability.
+
+The completed
 [`cloudflare-demo-fake-keychain-proof.md`](docs/plans/cloudflare-demo-fake-keychain-proof.md)
 adds only a fake-value, status-only macOS Keychain read proof. Its
 owner-operated target-Mac evidence observed missing,
@@ -375,15 +385,25 @@ Increments 2C and 2D were verified on the Apple Silicon target Mac.
 A plan must contain:
 
 - Goal and user-visible outcome.
-- Scope and explicit non-goals.
-- Existing behavior and constraints.
+- Current-state evidence, existing behavior, and constraints.
+- Scope, affected components, and explicit non-goals.
+- Interfaces and invariants that must remain stable.
 - Files expected to change.
-- Ordered implementation steps.
+- Ordered implementation milestones and dated progress.
 - Security and privacy considerations.
 - Tests and verification commands.
+- Risks, discoveries, and decisions made while work proceeds.
 - Rollback or failure strategy.
 - Exit criteria.
+- Final results based on observed evidence.
 - Documentation updates.
+
+Treat the plan as a living implementation document. Keep its milestones,
+decisions, discoveries, progress, verification, and final results synchronized
+with actual work. A plan alone grants no authority. When an exact task already
+authorizes implementation, update the plan, begin the required gate, and
+continue in the same task unless the request is analysis-only or a stop
+condition is reached.
 
 ## Plan status values
 

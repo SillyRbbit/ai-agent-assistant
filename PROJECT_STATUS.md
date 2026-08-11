@@ -1,8 +1,24 @@
 # Project status
 
-Last updated: 2026-08-04
+Last updated: 2026-08-11
 
 ## Current milestone
+
+The documentation-only project-direction and runtime-boundary increment is
+**verified complete with advisories** under D-078 and a valid completion marker.
+Cortexa's present scope is a private, owner-only, local-first personal project
+for productivity, experimentation, learning, development, and demonstrations.
+SaaS, multi-tenancy, billing, enterprise IAM, public deployment, and
+production-scale distributed systems remain deferred possibilities rather than
+current needs. The repository preserves the verified native path and describes
+`AgentRuntime`, `NativeAgentRuntime`, and optional experimental
+`HermesAgentRuntime` only as a future framework-neutral seam; OpenClaw is not
+selected or planned. No named runtime type, source, test, dependency,
+configuration, permission, product behavior, or readiness changed.
+
+The separate orphaned `apple-support-ts-017-owner-contact-d077-contact-1` gate
+was closed as a no-operation workflow reconciliation before this increment. It
+created no external or product authority.
 
 The documentation-only final-vision architecture bundle is complete. Its
 executive view presents the value proposition and operating model as a
