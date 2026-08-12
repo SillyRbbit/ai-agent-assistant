@@ -2733,6 +2733,56 @@ process, socket, credential, provider request, UI, or behavior. A failed spike
 preserves native-only operation and requires an additive ADR revision before
 another transport can be selected.
 
+Subsequent evidence: the owner-selected spike returned FAIL / NO-GO at
+Milestone 0. Complete immutable runtime provenance, supported suppression of
+update/credential/plugin/skill/privileged-tool initialization, and exact
+target-Mac containment could not be established. The associated WebSocket ADR
+is rejected as an implementation basis for the pinned release. No Hermes
+server, socket, session, provider, credential, tool, or adapter was started.
+
+## D-081 - Reject Hermes ACP for the pinned release and retain native-only operation
+
+Date: 2026-08-11
+Status: Accepted owner evaluation outcome
+
+Decision: Reject Hermes ACP as the transport for an experimental
+`HermesAgentRuntime` at Hermes Agent package/application version `0.20.0`, tag
+`v2026.8.3`, commit
+`3c27eb6234bf91b8ceee9e9071591b31e9b148cb`.
+
+ACP is materially better than the rejected raw TUI-gateway stdio mechanism as
+a wire contract: it has a supported public launcher, newline-delimited JSON-RPC
+stdio, protocol/version initialization, structured session methods and update
+events, cancellation, and stdout/stderr separation. It also avoids the
+listener, token, and dynamic-port concerns of the rejected `hermes serve`
+WebSocket path.
+
+Those advantages do not satisfy Cortexa's authority boundary. Pinned ACP
+session construction hardcodes Hermes's broad `hermes-acp` toolset, including
+terminal/process, filesystem mutation, browser, memory, skills, code execution,
+and delegation. Tool progress and selected terminal/edit permission callbacks
+do not route every effect through Cortexa's registered schemas, deterministic
+policy, exact approval, restricted executor, and audit before execution. No
+supported conversation-only or true zero-tool ACP mode exists at this release.
+
+The operator-supplied candidate is also ineligible for real execution: the
+complete virtual environment and external Python runtime are not covered by an
+immutable content manifest, and the pinned optional
+`agent-client-protocol==0.9.0` package is absent. No install, repair, update, or
+candidate execution is authorized.
+
+Consequences: the ACP ADR is Rejected. D-080 remains the historical accepted
+evaluation decision whose selected path also failed; raw TUI-gateway stdio,
+managed `hermes serve` WebSocket, and ACP are all rejected for the exact pinned
+release under their evaluated conditions. Native remains sole/default.
+`HermesAgentRuntime` remains Draft/Blocked with no selected transport. Do not
+automatically evaluate OpenAI-compatible HTTP, another protocol, patched
+Hermes, or another release. A future proposal requires a separate owner-
+approved decision, a fully content-manifested artifact, an upstream/enforced
+conversation-only mode, exact target-platform containment, and a fresh spike.
+No application source, production dependency, provider, credential, process,
+socket, UI, or behavior changes through this decision.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

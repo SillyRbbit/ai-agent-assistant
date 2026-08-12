@@ -190,7 +190,7 @@ capability.
 
 #### Hermes transport evaluation
 
-**Accepted evaluation direction; negative spike complete at Milestone 0**:
+**No selected transport; three pinned-release mechanisms rejected**:
 D-080 rejects raw TUI-gateway stdio for production at Hermes Agent package/application version
 `0.20.0`, release tag `v2026.8.3`, source commit
 `3c27eb6234bf91b8ceee9e9071591b31e9b148cb`. It conditionally selects a
@@ -225,9 +225,27 @@ restrict Hermes egress to the exact deterministic local fake-provider endpoint,
 deny every other network/Unix-socket destination, enforce closed protocol/event
 limits, and clean up containment membership including detached descendants.
 Configuration and upstream allowlists are defense in depth; they do not replace
-the OS boundary. A failure to prove any of these controls is NO-GO. The current
-negative result does not select ACP or authorize an adapter; a different path or
-patched distribution requires a separate owner-approved ADR/plan amendment.
+the OS boundary. A failure to prove any of these controls is NO-GO. That
+WebSocket/containment basis is rejected and authorizes no adapter.
+
+D-081 separately rejects ACP for the same pinned release. ACP has a supported
+public newline-delimited JSON-RPC stdio launcher, reported protocol and
+implementation version, sessions, structured updates, cancellation, and
+stdout/stderr separation. Every session nevertheless hardcodes the broad
+`hermes-acp` toolset inside Hermes, including terminal/process, filesystem
+mutation, browser, memory, skills, code execution, and delegation. Tool
+progress and selected permission callbacks do not move pre-execution
+validation, policy, exact approval, restricted execution, and audit into
+Cortexa-owned Rust.
+
+The supplied candidate also lacks a complete immutable runtime/interpreter
+manifest and its pinned `agent-client-protocol==0.9.0` dependency. Five
+deterministic fixture tests prove only bounded host-side framing and
+direct-child mechanics; no Hermes executable was run. Raw TUI-gateway stdio,
+managed `hermes serve` WebSocket, and ACP are rejected for the exact pinned
+release under their evaluated conditions. A different path, patched
+distribution, or later Hermes release requires a separate owner-approved
+ADR/plan amendment and fresh contained spike.
 
 ### Agent provider
 

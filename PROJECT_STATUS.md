@@ -4,6 +4,26 @@ Last updated: 2026-08-11
 
 ## Current milestone
 
+The owner-selected Hermes ACP transport spike is **verified complete with
+advisories** under gate `hermes-acp-transport-spike`; its transport verdict is
+**NO GO**. Against exact
+Hermes Agent `0.20.0` / `v2026.8.3` /
+`3c27eb6234bf91b8ceee9e9071591b31e9b148cb`, official pinned source confirms
+ACP's public newline-delimited JSON-RPC stdio launcher, initialization/version
+data, structured session/update methods, cancellation, and stdout/stderr
+separation. The same source also shows that normal ACP sessions hardcode broad
+internal terminal/process, filesystem, browser, memory, skill, code-execution,
+and delegation tools. Their effects are not all routed through Cortexa's
+deterministic validation, policy, exact approval, restricted executor, and
+audit before execution, and no supported true zero-tool ACP mode exists. This
+triggered the mandatory governance stop condition. The supplied candidate also
+lacks complete immutable runtime provenance and the installed pinned ACP SDK.
+Five deterministic fixture tests pass; they prove only host mechanics. No real
+Hermes command, import, process, provider, credential, session, tool, network,
+adapter, production source, dependency, UI, or Native behavior ran or changed.
+D-081 rejects ACP for the exact release, Native remains sole/default, and
+Prompt 4D remains unstarted.
+
 The owner-selected Hermes serve WebSocket containment spike is **verified
 complete with advisories** under gate `hermes-serve-websocket-spike`; its
 transport verdict remains **FAIL / NO-GO at Milestone 0**. The supplied Hermes

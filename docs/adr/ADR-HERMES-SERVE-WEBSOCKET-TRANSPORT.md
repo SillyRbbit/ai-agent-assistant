@@ -1,17 +1,45 @@
 # ADR: Hermes serve WebSocket transport for contained evaluation
 
-Status: Accepted; conditional evaluation direction, implementation Blocked
+Status: Rejected after isolated spike; historical D-080 evaluation record
 Date: 2026-08-11
 Decision owners: Project owner
-Related accepted decisions: D-078, D-079, D-080
+Related accepted decisions: D-078, D-079, D-080, D-081
 Related evidence:
 [`HERMES_INTEGRATION_ASSESSMENT.md`](../architecture/HERMES_INTEGRATION_ASSESSMENT.md)
 and [`HERMES_TRANSPORT_SPIKE.md`](../spikes/HERMES_TRANSPORT_SPIKE.md)
 
-This ADR selects a transport for a later isolated containment spike. It does not
-approve a production adapter, execute or install Hermes, add a dependency,
-open a socket, use a provider, handle a credential, or change application
-behavior.
+This ADR selected the transport for the now-completed isolated containment
+spike. The spike returned FAIL / NO-GO at Milestone 0. This historical record
+does not approve a production adapter, execute or install Hermes, add a
+dependency, open a socket, use a provider, handle a credential, or change
+application behavior.
+
+Except for the outcome section and explicit subsequent-result notes, the
+remaining decision language preserves the original D-080 evaluation contract
+in historical present tense; it is not current approval or readiness.
+
+## Outcome after spike
+
+The owner-selected spike preserved in
+[`HERMES_SERVE_WEBSOCKET_SPIKE.md`](../spikes/HERMES_SERVE_WEBSOCKET_SPIKE.md)
+rejected this mechanism under the approved D-080 conditions because:
+
+1. the supplied provenance did not content-manifest the complete virtual
+   environment or the externally located Python runtime used by the launcher;
+2. pinned source had no supported complete switch for update-prefetch,
+   dotenv/managed-secret loading, credential keepalive, plugin discovery, skill
+   synchronization, and a true zero-tool startup; and
+3. the reviewed target-Mac `sandbox-exec` mechanism could not prove the exact
+   dynamic-listener, package-manager execution, blanket Unix-socket, or
+   detached-descendant membership and cleanup guarantees.
+
+Those were explicit NO-GO conditions. No Hermes server, listener, WebSocket,
+session, prompt, provider, credential, tool, or adapter was started. The result
+rejects this evaluated transport/containment combination without claiming that
+every possible future WebSocket implementation or Hermes release is unsafe.
+It prevents `HermesAgentRuntime` implementation against this mechanism unless
+an additive owner-approved decision supplies materially different evidence and
+controls.
 
 ## Context
 
@@ -227,9 +255,10 @@ promoted to a public contract.
 
 ### Hermes ACP
 
-Deferred as a documented fallback. ACP is broader than the required initial
-projection and is neither selected nor implemented. A new owner decision is
-required before any ACP assessment.
+At D-080's decision time, ACP was deferred as a documented fallback. It was
+later evaluated separately and rejected by D-081 for the pinned release because
+its normal sessions hardcode privileged internal tools without a supported
+conversation-only mode or application-owned pre-execution gate.
 
 ### Direct WebView or application-service connection
 

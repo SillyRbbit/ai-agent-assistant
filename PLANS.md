@@ -5,6 +5,20 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Active plan
 
 No plan is active. The owner-selected
+[`2026-08-11-hermes-acp-transport-spike.md`](docs/plans/2026-08-11-hermes-acp-transport-spike.md)
+is **verified complete with advisories** under gate
+`hermes-acp-transport-spike`.
+Official pinned source and five passing deterministic fixture tests establish
+that ACP is a supported structured stdio wire but fails the required
+application-owned governance boundary: the hardcoded `hermes-acp` toolset can
+execute terminal, filesystem, browser, memory, skill, code, and delegation
+actions inside Hermes before Cortexa can authorize them. The candidate also
+lacks complete immutable runtime provenance and the installed ACP SDK. The
+verdict is NO GO, the ACP ADR is Rejected under D-081, the adapter remains
+Draft/Blocked, Native remains sole/default, and no real Hermes process was run.
+The transport verdict remains NO GO and no later plan is Ready.
+
+The prior owner-selected
 [`2026-08-11-hermes-serve-websocket-spike.md`](docs/plans/2026-08-11-hermes-serve-websocket-spike.md)
 increment is **verified complete with advisories** under gate
 `hermes-serve-websocket-spike`; its transport verdict remains **FAIL / NO-GO at

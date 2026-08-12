@@ -4,6 +4,16 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Rejected Hermes ACP for the pinned `0.20.0` / `v2026.8.3` release under
+  D-081. The structured JSON-RPC stdio contract is supported, but every ACP
+  session hardcodes privileged internal terminal, filesystem, browser, memory,
+  skill, code-execution, and delegation tools without a supported
+  conversation-only mode or Cortexa-owned pre-execution gate. The candidate
+  also lacks complete immutable runtime provenance and its installed ACP SDK.
+  Five deterministic fixture tests pass; real Hermes was not executed. Native
+  remains sole/default and no production source, dependency, UI, provider,
+  credential, or behavior changed.
+
 - Recorded the Hermes serve WebSocket containment spike's Milestone 0 FAIL.
   The supplied `0.20.0` / `v2026.8.3` candidate passed source, critical-hash,
   package-metadata, and isolated module-discovery checks, but lacked a complete

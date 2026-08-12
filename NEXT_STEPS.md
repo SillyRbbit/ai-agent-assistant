@@ -115,8 +115,28 @@ This file is the ordered implementation queue. Work only on the first item marke
   `hermes-serve-websocket-spike`; transport verdict FAIL / NO-GO at Milestone 0. Complete runtime provenance, supported closed startup controls, and exact
   target-Mac containment were disproved for the supplied candidate before any
   Hermes process or harness started.**
+- Hermes ACP transport spike:
+  **Verified complete with advisories; transport verdict NO GO under D-081. ACP
+  has a public structured JSON-RPC stdio contract, but
+  the pinned implementation hardcodes privileged internal tools without a
+  supported conversation-only mode. Five deterministic fixture tests pass;
+  the incomplete candidate was not executed and Native remains sole/default.**
 
 ## Queue status
+
+### Completed negative spike: Hermes ACP
+
+**Status:** **Verified complete with advisories; transport verdict NO GO; all
+later Hermes work Blocked**. The
+[`2026-08-11-hermes-acp-transport-spike.md`](docs/plans/2026-08-11-hermes-acp-transport-spike.md)
+plan verified a stronger structured wire than raw TUI stdio, but the pinned
+implementation hardcodes terminal/process, filesystem mutation, browser,
+memory, skills, code execution, and delegation inside Hermes. Selected ACP
+permission callbacks and tool updates do not provide a Cortexa-owned
+pre-execution gate. The candidate also lacks complete immutable runtime
+provenance and the installed pinned ACP SDK. Five fixture tests pass; no real
+Hermes command ran. D-081 rejects ACP for the pinned release. No implementation
+or additional transport plan is Ready.
 
 ### Completed implementation: Native agent runtime boundary
 
@@ -151,13 +171,14 @@ is not Ready.
 
 ### Draft later adapter: HermesAgentRuntime
 
-**Status:** **Draft; Blocked**. The
+**Status:** **Draft; Blocked with no selected transport**. The
 [`2026-08-11-hermes-agent-runtime-adapter.md`](docs/plans/2026-08-11-hermes-agent-runtime-adapter.md)
-plan remains blocked because the contained spike failed Milestone 0. A renewed
-adapter proposal requires an owner-approved architecture/transport amendment,
-an eligible contained spike, exact dependencies and scope, and a fresh
-readiness review. Native remains sole/default. No adapter, selector, process,
-dependency, or tool capability exists.
+plan remains blocked because both the contained WebSocket spike and separate
+ACP spike returned NO GO. A renewed adapter proposal requires an owner-approved
+architecture/transport amendment, an eligible contained spike, exact
+dependencies and scope, and a fresh readiness review. Native remains
+sole/default. No adapter, selector, process, dependency, or tool capability
+exists.
 
 ### Completed documentation-only increment: Hermes runtime architecture decisions
 

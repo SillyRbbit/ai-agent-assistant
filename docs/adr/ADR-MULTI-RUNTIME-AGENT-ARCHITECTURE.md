@@ -3,7 +3,7 @@
 Status: Accepted
 Date: 2026-08-11
 Decision owners: Project owner
-Related accepted decisions: D-078, D-079, D-080
+Related accepted decisions: D-078, D-079, D-080, D-081
 Assessment:
 [`HERMES_INTEGRATION_ASSESSMENT.md`](../architecture/HERMES_INTEGRATION_ASSESSMENT.md)
 
@@ -22,13 +22,24 @@ behavior change in this documentation increment.
 > supported production contract at that release. D-080 conditionally selects
 > managed local `hermes serve` plus the documented TUI-gateway
 > JSON-RPC/WebSocket surface for a later contained spike after native-runtime
-> completion. ACP remains deferred. No Hermes adapter is authorized or Ready.
+> completion. That spike subsequently returned NO GO at Milestone 0. D-081
+> also rejects ACP for the pinned release because it hardcodes privileged
+> internal tool execution without a supported conversation-only mode. No
+> Hermes transport, adapter, or implementation plan is selected or Ready.
+
+> **Current implementation note (2026-08-11):** The accepted native phase is
+> now verified complete. The repository contains the application-owned
+> `AgentRuntime` foundation and sole/default `NativeAgentRuntime`; it still has
+> no runtime coordinator, selector, provider transport, Hermes adapter, live
+> model, or application/UI consumer.
 
 ## Context
 
-Cortexa currently has no `AgentRuntime`, `NativeAgentRuntime`,
-`HermesAgentRuntime`, runtime selector, live provider, live agent coordinator,
-dispatcher, executor, or product memory store.
+At this ADR's decision-time checkpoint, Cortexa had no `AgentRuntime`,
+`NativeAgentRuntime`, `HermesAgentRuntime`, runtime selector, live provider,
+live agent coordinator, dispatcher, executor, or product memory store. As the
+current implementation note above records, the native runtime foundation was
+subsequently implemented; the other listed components remain absent.
 
 The verified Rust path consists of a transport-free `InitialGatewayTurn` that
 serializes one bounded request, validates normalized gateway events and local
@@ -96,12 +107,14 @@ default, reference implementation, deterministic contract-test path, explicit
 fallback, and independently usable runtime. It would not imply that the current
 native path already has transport, coordination, or execution.
 
-`HermesAgentRuntime` may be considered only in a later separately approved
-increment after the native boundary is verified and D-080's contained transport
-spike passes. It would use one immutable, version-pinned Hermes artifact in
-whole-process OS containment, managed by a Rust supervisor. All Hermes-specific
-process, protocol, configuration, compatibility, and error types would remain
-in the adapter. No raw RPC relay would escape the adapter.
+At decision time, `HermesAgentRuntime` could be considered only after the
+native boundary and D-080's separately gated transport spike passed. The native
+boundary subsequently passed, while the D-080 WebSocket spike and D-081 ACP
+spike returned NO GO. No Hermes transport now satisfies that prerequisite. Any
+future adapter would still require one immutable, version-pinned artifact in
+whole-process OS containment, managed by a Rust supervisor, with all Hermes-
+specific process, protocol, configuration, compatibility, and error types kept
+inside the adapter and no raw RPC relay escaping it.
 
 Runtime selection would be trusted, explicit, and fixed before each run. Native
 would be the default. A runtime failure would not cause automatic failover;
@@ -110,11 +123,8 @@ external outcome cannot be replayed.
 
 ## Hermes transport status
 
-D-080 selects one transport direction for evaluation only: a Rust-supervised,
-managed local `hermes serve` child bound to loopback, with a closed projection
-of the documented TUI-gateway JSON-RPC/WebSocket surface. The selection is
-conditional on a separately executed spike after the native boundary completes;
-it is not production-adapter approval.
+The bullets below preserve the original D-080 evaluation shape while recording
+its subsequent spike outcomes. No transport is currently selected or Ready.
 
 - **Raw TUI-gateway stdio:** rejected as a supported production transport for
   Hermes Agent package/application version `0.20.0`, release tag `v2026.8.3`.
@@ -122,17 +132,12 @@ it is not production-adapter approval.
   protocol/version/capability negotiation, and no gateway-shutdown RPC. Its
   fixture-only mechanics are not Hermes conformance, containment, or packaging
   evidence.
-- **Hermes serve:** conditionally selected for a contained spike only. The spike
-  must prove authenticated numeric-loopback startup, whole-distribution
-  provenance, preinstalled `[web]`/POSIX `[pty]` support, suppression of the
-  pinned lazy-install/update paths, denial of every pinned dotenv/managed-secret
-  source, endpoint-level network and Unix-socket denial, containment-wide
-  cleanup of detached descendants, bounded WebSocket translation, secret-safe
-  configuration, isolated state, prohibited-capability failure, and target-Mac
-  lifecycle evidence. The exact conditional constraints are authoritative in
+- **Hermes serve:** rejected after its contained spike returned NO GO at
+  Milestone 0. The exact evaluated conditions and failure evidence remain in
   [`ADR-HERMES-SERVE-WEBSOCKET-TRANSPORT.md`](ADR-HERMES-SERVE-WEBSOCKET-TRANSPORT.md).
-- **Hermes ACP:** deferred as a documented fallback. It is neither selected nor
-  implemented and requires a new owner decision before any assessment or code.
+- **Hermes ACP:** rejected under D-081 for the pinned release because normal ACP
+  sessions hardcode privileged internal tools without a supported
+  conversation-only mode or application-owned gate before every effect.
 - **Native-only:** remains the default, reference, deterministic test path,
   explicit fallback, potential standalone runtime, and valid long-term outcome
   if the Hermes spike or adapter does not pass.
@@ -214,16 +219,16 @@ evidence, and an owner-selected decision before reconsideration.
 
 ### 3b. Evaluate contained managed local `hermes serve`
 
-Selected conditionally under D-080 for a separately gated spike after the
-native boundary is complete. The spike must treat the broad server as untrusted,
-use loopback-only authenticated WebSocket access and whole-process containment,
-and return NO-GO if tool restriction, lifecycle, compatibility, or isolation
-cannot be proved.
+Conditionally selected under D-080 for a separately gated spike after the
+native boundary. That spike returned NO GO at Milestone 0 because complete
+runtime provenance, supported closed startup controls, and exact target-Mac
+containment could not be established. The mechanism is no longer selected.
 
 ### 3c. Evaluate Hermes ACP
 
-Deferred as a documented fallback. ACP is not selected or implemented and may
-be evaluated only after a new owner decision.
+Subsequently evaluated under the owner-approved isolated ACP spike and rejected
+by D-081. Its public structured wire does not cure the pinned runtime's broad
+Hermes-owned tool authority.
 
 ### 4. Treat Hermes as the provider transport
 
@@ -301,7 +306,7 @@ Acceptance means:
   persistence, and UI selection remain separate;
 - framework capabilities cannot expand the runtime contract without another
   explicit decision;
-- the conditionally selected Hermes spike and any future adapter carry high
+- the historically selected Hermes spike and any future adapter carry high
   process, protocol, packaging,
   dependency, and security cost even though the top-level interface is small;
 - normal tests remain network-free and Hermes-free through native and fake
@@ -382,8 +387,8 @@ This ADR deliberately does not decide:
 - the exact Hermes distribution channel, artifact hash, optional extras, or
   installer used by a future contained spike;
 - the concrete macOS whole-process containment technology;
-- whether a later owner decision should evaluate Hermes ACP after the selected
-  `hermes serve` path;
+- whether a later owner decision should revisit any external runtime after both
+  the `hermes serve` and ACP paths failed;
 - TUI-gateway protocol versioning, schema generation, or compatibility window;
 - runtime installation, update, rollback, repair, removal, or packaging UI;
 - provider credentials, disclosure, live networking, or user data;
@@ -417,8 +422,9 @@ Acceptance was recorded after the project owner confirmed all of the following:
       rollback, no dependency additions, and no behavior/UI change.
 - [x] The owner accepts that Hermes remains separately blocked on immutable
       provenance, whole-process containment, protocol compatibility,
-      lifecycle, credentials, packaging, and security evidence. D-080 selects
-      `hermes serve`/WebSocket for a contained spike only, not an adapter.
+      lifecycle, credentials, packaging, and security evidence. D-080 selected
+      `hermes serve`/WebSocket only for a contained spike; that spike and the
+      later D-081 ACP evaluation both returned NO GO.
 - [x] D-030, D-032, D-033, D-034, D-060 through D-064, D-065, and D-078 remain
       intact unless an additive accepted decision explicitly supersedes them.
 - [x] The accepted architecture and conditional transport decisions are recorded

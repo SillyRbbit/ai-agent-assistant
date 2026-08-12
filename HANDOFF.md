@@ -5,6 +5,25 @@ Last updated: 2026-08-11
 ## Current state
 
 The owner-selected
+[`2026-08-11-hermes-acp-transport-spike.md`](docs/plans/2026-08-11-hermes-acp-transport-spike.md)
+increment is **verified complete with advisories** under gate
+`hermes-acp-transport-spike`; its transport verdict is **NO GO**. Official
+pinned Hermes Agent `0.20.0`, tag `v2026.8.3`, commit
+`3c27eb6234bf91b8ceee9e9071591b31e9b148cb` source confirms that ACP has a
+public newline-delimited JSON-RPC stdio contract, initialization/version data,
+structured sessions and updates, cancellation, and stdout/stderr separation.
+It also confirms that each normal ACP session hardcodes the broad
+`hermes-acp` toolset inside Hermes, including terminal/process, filesystem
+mutation, browser, memory, skills, code execution, and delegation. No supported
+conversation-only mode or Cortexa-owned pre-execution gate exists for every
+effect, so the mandatory capability-containment stop condition fired. The
+operator candidate also lacks complete immutable interpreter/runtime
+provenance and the installed pinned ACP SDK. Five deterministic fixture tests
+pass, but no candidate command, import, process, provider, credential, session,
+tool, network, or adapter ran. D-081 rejects ACP for this exact release; Native
+remains sole/default and Prompt 4D was not started.
+
+The owner-selected
 [`2026-08-11-hermes-serve-websocket-spike.md`](docs/plans/2026-08-11-hermes-serve-websocket-spike.md)
 increment is **verified complete with advisories** under gate
 `hermes-serve-websocket-spike`; its transport verdict remains **FAIL / NO-GO at
@@ -98,7 +117,7 @@ a possible later evaluation.
 The prior orphaned `apple-support-ts-017-owner-contact-d077-contact-1` gate was
 closed through a separate no-operation review before this increment. That
 review grants no Apple or other operational authority and is preserved as
-pre-existing uncommitted documentation evidence.
+pre-existing tracked historical evidence.
 
 The documentation-only final-vision architecture bundle is complete. Its
 executive view now tells a 30-second visual story from human intent through a
@@ -124,23 +143,21 @@ changed.
 
 ## Current exact task
 
-Review the verified negative-result spike report and valid
-`hermes-serve-websocket-spike` completion evidence. Do not run Hermes, create a
-fixture harness, implement Prompt 4D, approve the adapter, switch transports, or
-weaken the failed controls. The smallest potential next task is an owner-approved
-documentation/ADR amendment that decides whether to require an upstream/pinned
-Hermes build with explicit disable controls and a fully content-manifested
-interpreter/runtime, evaluate a different reviewed containment mechanism, or
-reconsider ACP. No implementation plan is Ready.
+Review the verified negative ACP spike and valid completion evidence. Do not
+execute Hermes, repair the candidate, implement Prompt 4D, approve the adapter,
+select another transport, or weaken the capability-containment requirement.
+Await explicit owner direction; no Hermes implementation or additional
+transport plan is Ready.
 
-Resume prompt: Read `AGENTS.md`, the project-memory chain, D-079/D-080,
-`docs/plans/2026-08-11-hermes-serve-websocket-spike.md`,
-`docs/spikes/HERMES_SERVE_WEBSOCKET_SPIKE.md`, and the post-increment review.
-Require gate `hermes-serve-websocket-spike` to be complete and valid with PASS
-WITH ADVISORIES while preserving the distinct FAIL / NO-GO transport verdict.
-Preserve the candidate as read-only and do not launch Hermes. Await explicit
-owner direction for a documentation/ADR amendment; do not begin Prompt 4D,
-switch transports, add containment code, or change Native as sole/default.
+Resume prompt: Read `AGENTS.md`, the project-memory chain, D-079 through D-081,
+both rejected Hermes transport ADRs, the ACP ADR,
+`docs/plans/2026-08-11-hermes-acp-transport-spike.md`,
+`docs/spikes/HERMES_ACP_TRANSPORT_SPIKE.md`, and its post-increment review.
+Require gate `hermes-acp-transport-spike` to be complete and valid while
+preserving the distinct **NO GO** transport verdict. Confirm Native remains
+sole/default and no real Hermes process ran. Await explicit owner direction;
+do not begin Prompt 4D, switch protocols, patch Hermes, add containment code,
+or change Native.
 
 The fake-only Cloudflare demo macOS Keychain proof is complete with advisories.
 Pinned macOS-only Security.framework bindings read exactly two fixed labels and
