@@ -141,6 +141,12 @@ This file is the ordered implementation queue. Work only on the first item marke
   cancellation now exist as deterministic Rust-only contracts. Native remains
   sole/default; no provider, tool, policy, memory, IPC, UI, dependency, Hermes,
   external I/O, or visible behavior was added.**
+- Per-agent governance:
+  **Verified complete with advisories and published at `2687294` under gate
+  `agent-governance`.**
+- Volatile agent memory and approved documents:
+  **Verified complete with advisories and published at `5e53f55` under gate
+  `agent-memory-approved-documents`; its published completion marker is valid.**
 
 ## Queue status
 
@@ -163,11 +169,12 @@ closed task lifecycle, trusted context, application-service delegation, exact
 one-child limits, direct Personal response, one no-I/O Personal -> Research ->
 Personal synthesis, result return, and cancellation above the unchanged
 one-run runtime. The foundation is not connected to Tauri, React, a provider,
-or a live model. Governance,
-knowledge/document boundaries, research/knowledge, engineering-quality,
-infrastructure/operations, automation, parallelism, desktop UI, demos, and
-final review remain separately Blocked. Native stays
-sole/default; the other seven roles remain Deferred; Hermes remains Blocked.
+or a live model. At that baseline governance, knowledge/document boundaries,
+research/knowledge, engineering-quality, infrastructure/operations,
+automation, parallelism, desktop UI, demos, and final review were separately
+gated. D-084 and D-085 are now published, and D-086's exact fixture-only
+Research/Knowledge workflow is verified complete with advisories in the
+current workspace. Native stays sole/default; Hermes remains Blocked.
 
 ### Completed implementation: Per-agent governance
 
@@ -182,7 +189,7 @@ separately gated at that baseline.
 
 ### Completed implementation: Volatile agent memory and approved documents
 
-**Status:** **Verified complete with advisories; publication pending**. D-085 and
+**Status:** **Verified complete with advisories; published at `5e53f55`**. D-085 and
 [`2026-08-12-agent-memory-approved-documents.md`](docs/plans/2026-08-12-agent-memory-approved-documents.md)
 narrow the owner's request to volatile bounded namespaces, version-bound shared
 proposals, sealed live/application authority, selected `.txt`/`.md` reads, and
@@ -190,9 +197,22 @@ one direct Personal Assistant-to-Knowledge mock-runtime task. Focused memory,
 document-reader, and public contracts pass 6/6, 9/9, and 10/10. Complete Rust
 and repository verification and independent reviews pass with `PASS WITH
 ADVISORIES`; the accepted residual is the pure-`std` Unix document-open TOCTOU
-race. This does not resolve ARB-005, add persistence, or enable
-Research-to-Knowledge. No later plan is Ready; publication requires separate
-owner direction.
+race. Its completion marker is valid for the published tree. This does not
+resolve ARB-005, add persistence, or itself enable Research-to-Knowledge.
+
+### Completed implementation awaiting publication: Research and Knowledge workflow
+
+**Status:** **Verified complete with advisories; publication pending under
+D-086**. The
+[`2026-08-11-research-knowledge-workflow.md`](docs/plans/2026-08-11-research-knowledge-workflow.md)
+implements only one deterministic,
+fixture-only, Rust Personal Assistant -> Research -> Knowledge -> Personal
+sequence with sequential sibling children, strict structured outputs, exact
+fixture-source provenance, truthful partial outcomes, task-local memory
+cleanup, and no provider, retrieval, tools, network, persistence, IPC, UI,
+parallelism, or general workflow engine. Focused and complete validation pass.
+Every later product, specialist, provider, UI, persistence, parallelism, and
+device-effect plan remains Blocked; no later plan is Ready.
 
 ### Completed negative spike: Hermes ACP
 

@@ -77,12 +77,80 @@ production boundary exists.
 - [ ] Document and selected-memory input is labeled untrusted and bounded before
       the runtime request. Paths/content are absent from Debug, errors, events,
       audit, logs, SQLite, and automatic memory.
-- [ ] Knowledge is eligible only for the separate direct Personal Assistant
-      document route. Generic Personal-to-Research remains unchanged,
-      Research-to-Knowledge is blocked, and no specialist can delegate.
+- [ ] Knowledge eligibility remains non-authorizing. D-085's direct Personal
+      Assistant document route and D-086's sealed fixture workflow are separate
+      application-service paths; generic Personal-to-Research remains unchanged,
+      generic/direct Research-to-Knowledge remains denied, and no specialist can
+      delegate or create a child.
 - [ ] No IPC, file picker, provider, live model, durable memory, vector search,
       background index, document write, new dependency, permission, executor,
       or device effect is introduced by this boundary.
+
+## Sealed Research and Knowledge workflow
+
+- [ ] Trusted application code selects the exact fixture-only V1 workflow from
+      a live Personal Assistant root before output; untrusted content, a runtime,
+      an agent, the WebView, or catalog activation cannot select or widen it.
+- [ ] The workflow is fixed at three tasks, two non-replenishing sequential
+      depth-one sibling children, one active child, four run attempts, 32 runtime
+      events, 32 generic events, 16 workflow events, 16 matching audit records,
+      and zero automatic retries. Generic/document paths retain their limits.
+- [ ] The immutable source catalog contains one to eight deterministic fixtures
+      with canonical application-issued IDs. Research references only catalog
+      IDs; Knowledge references only IDs present in the exact validated
+      predecessor Research task/version; unknown, duplicate, remapped, or
+      invented references fail closed.
+- [ ] The objective is capped at 2,048 scalar values/8,192 bytes, aggregate
+      fixture evidence at 8,192 bytes, serialized catalog at 16,384 bytes,
+      specialist results at 8,192 scalars/16,384 bytes, each Research/Knowledge
+      input at 26,624 bytes, and synthesis at 36,864 bytes with a 4,096-byte
+      disclosure/framing sub-bound. Exact limits reject rather than truncate and
+      have N/N+1 plus Unicode coverage.
+- [ ] Specialist JSON rejects unknown fields, trailing or outer content,
+      malformed values, duplicate references, unsupported confidence or version,
+      and reasoning. Missing references or explicit incompleteness produce typed
+      partial quality: a Research missing-source partial skips Knowledge, while
+      a valid Knowledge partial is retained. Raw invalid output never reaches
+      the next stage.
+- [ ] Final Personal synthesis is a strict V1 envelope whose answer is capped at
+      2,048 scalars/8,192 bytes, source-ID set exactly matches the validated
+      Research outcome, fixture disclosure is true, partial status is disclosed
+      when applicable, and status matches the validated stage outcomes.
+      Invented/duplicate/unknown IDs, false disclosure, wrong status, URLs,
+      live-research claims, reasoning, malformed data, and unknown fields fail
+      the root without a completed workflow result.
+- [ ] Before a terminal runtime event is accepted, the root event cap and all
+      transition capacity are checked and parsing, terminal output, next
+      task/request/descriptive attribution, and fallback or synthesis input are
+      prepared. A preparation error leaves the run, task, budget, events, audit,
+      memory, and workflow phase unchanged.
+- [ ] A continuation runtime-start failure does not turn an already accepted
+      terminal event into rejection, retry it, or replenish budget. The failed
+      attempt is terminalized, fallback or root failure is applied, and only the
+      closed content-free continuation-failure variant is exposed.
+- [ ] Research failure/cancellation/invalid output and valid missing-source
+      partials skip Knowledge and permit only typed partial Personal synthesis.
+      Knowledge failure/cancellation/invalid output preserves only validated
+      Research; a valid incomplete Knowledge result remains partial. Synthesis
+      failure fabricates no result, and the 32-event hard cap starts no fallback
+      that cannot safely accept an event.
+- [ ] Root cancellation resolves pending governance and cancels the active child
+      before the root, records one workflow cancellation, starts no next stage,
+      rejects late events, and preserves retryable live state when cancellation
+      itself fails.
+- [ ] Research and Knowledge access only their own agent-private and
+      task-temporary memory through exact live grants. Terminal cleanup removes
+      task memory, sibling memory is never copied, and reusable Knowledge remains
+      pending review with no automatic proposal, approval, selection, persistence,
+      or synthesis-as-fact.
+- [ ] Workflow events and matching volatile audit records are content-free.
+      `ResearchKnowledgeAttribution` is descriptive only, keeps run/request
+      identity private and redacted, cannot reconstruct live authority, and
+      contains no objective, source content, finding, summary, proposal, path,
+      URL, output, or reasoning.
+- [ ] D-086 changes no provider/network/process/filesystem/tool/executor,
+      persistence, IPC/UI, dependency, capability, permission, external runtime,
+      `AgentRuntime`, `NativeAgentRuntime`, or Native sole/default boundary.
 
 ## Tauri IPC review
 

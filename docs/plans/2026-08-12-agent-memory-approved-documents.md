@@ -1,6 +1,6 @@
 # Volatile agent memory and approved-document Knowledge boundary
 
-Status: Verified complete with advisories; publication pending
+Status: Verified complete with advisories; published at `5e53f55`
 Owner: Project owner
 Last updated: 2026-08-12
 Decision: D-085, preserving D-084, D-083, D-082, D-079, and D-033
@@ -86,11 +86,15 @@ picker, React surface, provider, live model, background indexing, or persistence
 
 ## Current-state evidence
 
-- Before this planning diff, `git status --short --branch` showed clean
+- The completed increment was committed and pushed on `main` at `5e53f55`.
+  Its `agent-memory-approved-documents` marker was complete,
+  fingerprint-valid, and `PASS WITH ADVISORIES` for that published tree. The
+  dated post-increment report remains unchanged.
+- At the original planning baseline, `git status --short --branch` showed clean
   synchronized `main` at `2687294` and the `agent-governance` marker was
-  complete, fingerprint-valid, and PASS WITH ADVISORIES. The marker now reports
-  `valid: false` only because D-085 and this uncommitted successor plan changed
-  the workspace; the historical governance report is not rewritten.
+  complete, fingerprint-valid, and PASS WITH ADVISORIES. During D-085
+  implementation that earlier marker ceased matching the changed workspace as
+  expected; the historical governance report was not rewritten.
 - `cargo test --manifest-path src-tauri/Cargo.toml --test agent_definition_registry_contract --locked`:
   6 passed.
 - `cargo test --manifest-path src-tauri/Cargo.toml --test agent_governance_contract --locked`:
@@ -671,6 +675,8 @@ an additive superseding decision rather than rewriting D-085 history.
   `npm run verify`, documentation/repository/security checks, diff hygiene,
   session-end inventory, and independent reviews. The quality result is `PASS
 WITH ADVISORIES`; only the pure-`std` document-open TOCTOU residual remains.
+- 2026-08-12: Published the complete bounded increment on `main` at `5e53f55`;
+  its completion marker is valid for the published tree.
 
 ## Acceptance criteria
 
@@ -703,8 +709,12 @@ Independent architecture, security, code-health, technical-debt, and readiness
 reviews found no blocker. The sole accepted advisory is the narrow pure-`std`
 document-open TOCTOU residual; remediation belongs to a future approved
 file-picker/platform-adapter increment and blocks neither completion nor the
-next increment. No next plan is Ready, so readiness is `Blocked`. Publication
-remains a separate project-owner action.
+next increment. The increment is published at `5e53f55` with a valid
+published-tree completion marker. At D-085 closeout, D-086 selected the
+separate fixture-only Research/Knowledge workflow as the sole Ready next plan
+and no successor implementation was claimed here. D-086 was later separately
+owner-authorized and implemented under its own gate; that additive successor
+state does not rewrite D-085's historical scope or evidence.
 
 ## Documentation updates
 

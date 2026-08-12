@@ -2,18 +2,29 @@
 
 Use an execution plan for work that spans multiple modules, changes a trust boundary, or cannot be verified in one short edit-test cycle.
 
-## Active plan
+## Current plan state
 
-The owner-selected
+The owner-approved
+[`2026-08-11-research-knowledge-workflow.md`](docs/plans/2026-08-11-research-knowledge-workflow.md)
+is **verified complete with advisories; publication pending** under D-086. Its
+`agent-research-knowledge-workflow` gate validates one deterministic,
+fixture-only, Rust Personal Assistant -> Research -> Knowledge -> Personal
+sequence above the unchanged runtime boundary. Strict bounded stage and final
+synthesis contracts preserve only catalog-issued source IDs, partial outcomes
+remain truthful, specialists remain sequential depth-one siblings, and no
+provider, retrieval tool, network, filesystem discovery, persistence, IPC,
+UI, parallelism, or general workflow engine was added. No later plan is Ready;
+publication and any next increment require separate owner direction.
+
+The completed
 [`2026-08-12-agent-memory-approved-documents.md`](docs/plans/2026-08-12-agent-memory-approved-documents.md)
-is **verified complete with advisories; publication pending** under D-085. It
-combines only a new bounded volatile memory domain with the narrow selected
-UTF-8 text/Markdown Knowledge boundary. Focused memory tests pass 6/6,
-document-reader tests pass 9/9, and the public contract passes 10/10; all-target
-Rust passes 269 tests with one intentional ignored probe, and complete
-repository validation passes. The only accepted advisory is the narrow
-pure-`std` Unix document-open TOCTOU race. Durable memory/ARB-005 and the full
-Research-to-Knowledge workflow remain Blocked; no later plan is Ready.
+is **verified complete with advisories and published at `5e53f55`** under
+D-085. Its `agent-memory-approved-documents` marker was complete,
+fingerprint-valid, and `PASS WITH ADVISORIES` for the published tree. Focused
+memory tests passed 6/6, document-reader tests passed 9/9, the public contract
+passed 10/10, and complete repository validation passed. The accepted residual
+is the narrow pure-`std` Unix document-open TOCTOU race; durable memory and
+ARB-005 remain Blocked.
 
 The prior owner-selected
 [`2026-08-11-agent-governance.md`](docs/plans/2026-08-11-agent-governance.md)
@@ -24,11 +35,11 @@ ownership and route boundaries.
 
 The prerequisite AgentDefinition/AgentRegistry increment is published at
 `f42a6c7`, and the task/orchestration increment is published at `1d1d9d6` with
-a valid completion marker. Native remains sole/default and the other seven
-roles remain Deferred at that published baseline. The governance implementation
-added no executor, memory, provider, runtime tool lane, IPC, UI, or specialist
-activation. D-085 is the separately owner-selected successor direction; every
-other later plan remains Blocked.
+a valid completion marker. Native remains sole/default. The governance
+implementation added no executor, provider, runtime tool lane, IPC, UI, or
+specialist activation. D-085 later added only its verified volatile-memory and
+approved-document boundary. D-086 implements only the exact sealed workflow
+above; every other later plan remains Blocked.
 
 The prior owner-selected
 [`2026-08-11-hermes-acp-transport-spike.md`](docs/plans/2026-08-11-hermes-acp-transport-spike.md)

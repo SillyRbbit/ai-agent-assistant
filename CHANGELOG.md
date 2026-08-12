@@ -4,6 +4,19 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Implemented D-086's sealed fixture-only Personal Assistant -> Research ->
+  Knowledge & Document -> Personal synthesis workflow above the unchanged
+  Native runtime boundary. Added strict bounded Research, Knowledge, and final
+  synthesis contracts; catalog-issued fixture provenance; sequential
+  depth-one sibling tasks; truthful partial failure and cancellation; isolated
+  task-local memory; pending-only reusable-knowledge proposals; content-free
+  workflow events; and redacted non-authoritative attribution records. Focused
+  and complete validation pass with `PASS WITH ADVISORIES`. No provider, live
+  retrieval, network, filesystem discovery, persistence, tool execution,
+  dependency, Tauri/React wiring, IPC, UI, parallelism, general workflow
+  engine, Hermes path, or other-agent activation was added. Native remains
+  sole/default and no later plan is Ready.
+
 - Implemented D-085's bounded workflow-local volatile memory namespaces,
   version-bound shared proposals, explicit selected-context boundary, linear
   approved `.txt`/`.md` document lifecycle, and separate direct Personal

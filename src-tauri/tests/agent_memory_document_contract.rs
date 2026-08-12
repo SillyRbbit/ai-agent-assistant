@@ -1074,7 +1074,8 @@ fn document_child_and_root_cancellation_cleanup_is_exact_and_child_first(
 }
 
 #[test]
-fn knowledge_is_reachable_only_through_the_approved_document_route() -> Result<(), Box<dyn Error>> {
+fn knowledge_generic_delegation_stays_denied_and_approved_document_route_works(
+) -> Result<(), Box<dyn Error>> {
     let mut personal = AgentOrchestrator::new(MockAgentRuntime::new(MockMode::Success))?;
     let root = personal.start_root(ROOT_OBJECTIVE)?;
     let before = (

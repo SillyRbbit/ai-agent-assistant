@@ -4,15 +4,21 @@ Last updated: 2026-08-12
 
 ## Current milestone
 
-The D-085 bounded volatile-memory and approved-document Knowledge increment is
-**verified complete with advisories; publication pending** under gate
-`agent-memory-approved-documents`. Focused memory tests pass 6/6,
-document-reader tests pass 9/9, and the public contract passes 10/10. The
-all-target Rust suite passes 269 tests with one intentionally ignored opt-in
-Hermes probe; complete repository verification and independent architecture,
-security, and code review pass. The only accepted advisory is the narrow
-pure-`std` Unix document-open TOCTOU race. Durable memory/ARB-005 and the full
-Research-to-Knowledge workflow remain Blocked; no later plan is Ready.
+The D-086 fixture-only Research/Knowledge increment and
+[`2026-08-11-research-knowledge-workflow.md`](docs/plans/2026-08-11-research-knowledge-workflow.md)
+are **verified complete with advisories; publication pending**. The unwired Rust
+workflow uses two sequential depth-one sibling specialists, strict structured
+stage and final synthesis contracts, catalog-issued fixture source IDs,
+truthful partial outcomes, zero automatic retries, child-first cancellation,
+and task-local memory cleanup. Generic/direct Research-to-Knowledge remains
+denied. Focused D-086 units, orchestrator units, and public workflow contracts
+pass, as do complete Rust/repository validation and independent reviews.
+
+D-085 remains **verified complete with advisories and published at `5e53f55`**
+with its valid published-tree marker and narrow pure-`std` Unix document-open
+TOCTOU advisory. Durable memory/ARB-005, live research/retrieval, providers,
+tools, IPC, UI, parallelism, and all later workflows remain Blocked. No later
+plan is Ready.
 
 The Rust core now carries nine exact policy-profile identities from sealed
 definitions through tasks, live execution contexts, delegation, governed tool
@@ -27,7 +33,9 @@ D-085 adds only workflow-local volatile namespaces, version-bound reviewed
 shared proposals, an explicit selected-context boundary, a one-shot approved
 `.txt`/`.md` reader, and a separate direct Personal Assistant-to-Knowledge
 mock-runtime task. Knowledge is `Initial` only for that route; generic
-Personal-to-Knowledge and every Research-to-Knowledge path remain denied.
+Personal-to-Knowledge and every generic/direct Research-to-Knowledge path
+remain denied. D-086's sealed sequence is orchestrator-owned sibling task
+creation, not delegation by Research.
 Native remains sole/default. No executor, durable memory, provider, live model,
 persistence, Tauri consumer, multi-agent frontend, dependency, permission,
 platform effect, external I/O, or Hermes integration exists.
@@ -1413,12 +1421,11 @@ path was added.
 
 ## Next action
 
-The immediate task is owner review of the verified D-085 increment and, only on
-separate explicit direction, publication from its complete uncommitted
-workspace. Do not extend the settled implementation or begin another phase.
-Durable memory/ARB-005, Research-to-Knowledge, and every other later native
-multi-agent phase remain Blocked. No next plan is Ready. Hermes remains
-Deferred/Blocked.
+The immediate task is separate owner review and publication direction for the
+verified D-086 fixture-only Research/Knowledge increment. Do not begin a new
+implementation automatically. Durable memory/ARB-005, live retrieval, bounded
+parallelism, every other native multi-agent phase, provider, IPC, UI, and
+device effects remain Blocked. Hermes remains Deferred/Blocked.
 
 All other product and remediation gates remain unchanged. ARB-002 remains
 decision-required under D-062's identity-evidence gates and D-066's OpenAI

@@ -6,5 +6,6 @@ pub mod governance;
 pub mod native_runtime;
 pub mod orchestrator;
 pub mod registry;
+pub mod research_knowledge;
 pub mod runtime;
 pub mod task;

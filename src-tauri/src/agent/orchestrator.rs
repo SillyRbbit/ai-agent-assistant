@@ -22,10 +22,18 @@ use super::governance::{
 };
 use super::native_runtime::NativeAgentRuntime;
 use super::registry::{AgentRegistry, AgentRegistryError};
+use super::research_knowledge::{
+    FinalSynthesisResult, KnowledgeResultQuality, KnowledgeStageOutcome,
+    ResearchKnowledgeAttribution, ResearchKnowledgeAuditOutcome, ResearchKnowledgeAuditRecord,
+    ResearchKnowledgeContinuationFailure, ResearchKnowledgeError,
+    ResearchKnowledgePartialFailureCode, ResearchKnowledgeStage, ResearchKnowledgeWorkflowEvent,
+    ResearchKnowledgeWorkflowRequest, ResearchKnowledgeWorkflowResult, ResearchResult,
+    ResearchResultQuality, ResearchStageOutcome, MAX_WORKFLOW_AUDIT_RECORDS, MAX_WORKFLOW_EVENTS,
+};
 use super::runtime::{
     AgentRuntime, RuntimeAvailability, RuntimeCancellationOutcome, RuntimeCapability, RuntimeError,
     RuntimeEventAcceptance, RuntimeEventEnvelope, RuntimeEventRejection, RuntimeHealth, RuntimeId,
-    RuntimeRun, RuntimeRunStatus, RuntimeTurnRequest,
+    RuntimeRun, RuntimeRunStatus, RuntimeTurnRequest, UntrustedRuntimeEvent,
 };
 use super::task::{
     AgentExecutionContext, AgentTask, AgentTaskCancellationOutcome, AgentTaskContext,
@@ -60,6 +68,9 @@ pub const MAX_RUNTIME_EVENTS_PER_ROOT: usize = 32;
 pub const MAX_ORCHESTRATION_EVENTS_PER_ROOT: usize = 32;
 pub const MAX_DOCUMENT_RUNTIME_INPUT_BYTES: usize = MAX_DOCUMENT_RAW_REQUEST_BYTES;
 pub const MAX_DOCUMENT_RUNTIME_FRAMING_BYTES: usize = 2_048;
+pub const MAX_RESEARCH_KNOWLEDGE_TASKS_PER_ROOT: usize = 3;
+pub const MAX_RESEARCH_KNOWLEDGE_CHILDREN_PER_ROOT: u8 = 2;
+pub const MAX_RESEARCH_KNOWLEDGE_RUNTIME_RUNS_PER_ROOT: u8 = 4;
 
 static NEXT_WORKFLOW_SEQUENCE: AtomicU64 = AtomicU64::new(1);
 
@@ -307,6 +318,138 @@ pub enum AgentOrchestrationEvent {
     },
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum ResearchKnowledgeWorkflowAcceptance {
+    ResearchStarted { context: AgentExecutionContext },
+    PersonalFallbackStarted { context: AgentExecutionContext },
+}
+
+impl ResearchKnowledgeWorkflowAcceptance {
+    #[must_use]
+    pub fn context(&self) -> &AgentExecutionContext {
+        match self {
+            Self::ResearchStarted { context } | Self::PersonalFallbackStarted { context } => {
+                context
+            }
+        }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+enum ResearchKnowledgePhase {
+    ResearchRunning(AgentTaskId),
+    KnowledgeRunning(AgentTaskId),
+    SynthesisRunning,
+    Completed,
+    Failed,
+    Cancelled,
+}
+
+struct ResearchKnowledgeWorkflowState {
+    request: ResearchKnowledgeWorkflowRequest,
+    phase: ResearchKnowledgePhase,
+    research: Option<ResearchStageOutcome>,
+    knowledge: Option<KnowledgeStageOutcome>,
+    result: Option<ResearchKnowledgeWorkflowResult>,
+    child_count: u8,
+    run_attempts: u8,
+    events: Vec<ResearchKnowledgeWorkflowEvent>,
+    audit: Vec<ResearchKnowledgeAuditRecord>,
+    audit_contexts: BTreeMap<AgentTaskId, ResearchKnowledgeAttribution>,
+    continuation_failure: Option<ResearchKnowledgeContinuationFailure>,
+}
+
+impl ResearchKnowledgeWorkflowState {
+    fn new(
+        request: ResearchKnowledgeWorkflowRequest,
+        research_task_id: AgentTaskId,
+        root_context: AgentExecutionContext,
+        research_context: AgentExecutionContext,
+    ) -> Self {
+        let audit_contexts = BTreeMap::from([
+            (
+                root_context.task_id().clone(),
+                ResearchKnowledgeAttribution::from_execution_context(&root_context),
+            ),
+            (
+                research_task_id.clone(),
+                ResearchKnowledgeAttribution::from_execution_context(&research_context),
+            ),
+        ]);
+        Self {
+            request,
+            phase: ResearchKnowledgePhase::ResearchRunning(research_task_id),
+            research: None,
+            knowledge: None,
+            result: None,
+            child_count: 1,
+            run_attempts: 2,
+            events: Vec::with_capacity(MAX_WORKFLOW_EVENTS),
+            audit: Vec::with_capacity(MAX_WORKFLOW_AUDIT_RECORDS),
+            audit_contexts,
+            continuation_failure: None,
+        }
+    }
+
+    fn active_child(&self, task_id: &AgentTaskId) -> bool {
+        matches!(
+            &self.phase,
+            ResearchKnowledgePhase::ResearchRunning(active)
+                | ResearchKnowledgePhase::KnowledgeRunning(active)
+                if active == task_id
+        )
+    }
+
+    fn active_stage(&self) -> ResearchKnowledgeStage {
+        match self.phase {
+            ResearchKnowledgePhase::ResearchRunning(_) => ResearchKnowledgeStage::Research,
+            ResearchKnowledgePhase::KnowledgeRunning(_) => {
+                ResearchKnowledgeStage::KnowledgeOrganization
+            }
+            ResearchKnowledgePhase::SynthesisRunning
+            | ResearchKnowledgePhase::Completed
+            | ResearchKnowledgePhase::Failed
+            | ResearchKnowledgePhase::Cancelled => ResearchKnowledgeStage::Synthesis,
+        }
+    }
+}
+
+enum PreparedResearchKnowledgeTerminal {
+    ResearchToKnowledge {
+        output: AgentTaskOutput,
+        research: ResearchResult,
+        continuation: PreparedKnowledgeContinuation,
+    },
+    ResearchToSynthesis {
+        task_outcome: AgentTaskOutcome,
+        research: ResearchStageOutcome,
+        knowledge: KnowledgeStageOutcome,
+        code: ResearchKnowledgePartialFailureCode,
+        synthesis_request: RuntimeTurnRequest,
+    },
+    KnowledgeToSynthesis {
+        task_outcome: AgentTaskOutcome,
+        knowledge: KnowledgeStageOutcome,
+        code: Option<ResearchKnowledgePartialFailureCode>,
+        synthesis_request: RuntimeTurnRequest,
+    },
+    SynthesisCompleted {
+        output: AgentTaskOutput,
+        synthesis: FinalSynthesisResult,
+    },
+    SynthesisFailed {
+        task_code: AgentTaskFailureCode,
+        workflow_code: ResearchKnowledgePartialFailureCode,
+    },
+}
+
+struct PreparedKnowledgeContinuation {
+    task: AgentTask,
+    request: RuntimeTurnRequest,
+    attribution: ResearchKnowledgeAttribution,
+    fallback_synthesis_request: RuntimeTurnRequest,
+}
+
 struct ActiveRun<T: RuntimeRun> {
     run: T,
     output: String,
@@ -339,6 +482,7 @@ pub struct AgentOrchestrator<R: AgentRuntime> {
     run_count: u8,
     runtime_event_count: usize,
     events: Vec<AgentOrchestrationEvent>,
+    research_knowledge: Option<ResearchKnowledgeWorkflowState>,
 }
 
 impl<R: AgentRuntime> AgentOrchestrator<R> {
@@ -389,6 +533,7 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             run_count: 0,
             runtime_event_count: 0,
             events: Vec::with_capacity(MAX_ORCHESTRATION_EVENTS_PER_ROOT),
+            research_knowledge: None,
         })
     }
 
@@ -635,6 +780,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         source_context: &AgentExecutionContext,
         proposal: DelegationProposal,
     ) -> AgentOrchestratorResult<DelegationAcceptance> {
+        if self.research_knowledge.is_some() {
+            return Err(AgentOrchestratorError::ResearchKnowledgeWorkflowAlreadySelected);
+        }
         let attribution = self.live_attribution(source_context)?;
         let target_agent_id = proposal.target_agent_id;
         let matrix = self
@@ -689,6 +837,96 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         }
     }
 
+    pub fn request_research_knowledge_workflow(
+        &mut self,
+        source_context: &AgentExecutionContext,
+        request: ResearchKnowledgeWorkflowRequest,
+    ) -> AgentOrchestratorResult<ResearchKnowledgeWorkflowAcceptance> {
+        if self.research_knowledge.is_some() {
+            return Err(AgentOrchestratorError::ResearchKnowledgeWorkflowAlreadySelected);
+        }
+        let attribution = self.live_attribution(source_context)?;
+        let target = AgentId::Research;
+        let matrix = self
+            .governance
+            .evaluate_delegation(attribution.agent_id(), target);
+        let reservation = self
+            .governance
+            .begin_delegation(attribution.clone(), target)?;
+
+        let proposal = DelegationProposal::new(
+            target,
+            request.objective().to_owned(),
+            Some("Use only the application-supplied deterministic fixture catalog".to_owned()),
+            "Return one strict ResearchResultV1 JSON object with known source IDs",
+        )?;
+        if let Err(error) =
+            self.validate_research_knowledge_start(source_context, &attribution, &proposal, matrix)
+        {
+            self.governance
+                .deny_delegation(reservation, matrix, delegation_error_code(&error));
+            return Err(error);
+        }
+
+        let token = self.governance.allow_delegation(reservation);
+        let result = self.perform_research_knowledge_start(
+            attribution,
+            source_context.clone(),
+            request,
+            proposal,
+        );
+        match result {
+            Ok(acceptance) => {
+                self.governance
+                    .finish_delegation(token, AgentControlResult::ChildCreated, None);
+                Ok(acceptance)
+            }
+            Err(error) => {
+                self.governance.finish_delegation(
+                    token,
+                    AgentControlResult::Failed,
+                    Some(delegation_error_code(&error)),
+                );
+                Err(error)
+            }
+        }
+    }
+
+    #[must_use]
+    pub fn research_knowledge_result(&self) -> Option<&ResearchKnowledgeWorkflowResult> {
+        self.research_knowledge
+            .as_ref()
+            .and_then(|workflow| workflow.result.as_ref())
+    }
+
+    #[must_use]
+    pub fn research_knowledge_events(&self) -> &[ResearchKnowledgeWorkflowEvent] {
+        self.research_knowledge
+            .as_ref()
+            .map_or(&[], |workflow| workflow.events.as_slice())
+    }
+
+    #[must_use]
+    pub fn research_knowledge_audit_records(&self) -> &[ResearchKnowledgeAuditRecord] {
+        self.research_knowledge
+            .as_ref()
+            .map_or(&[], |workflow| workflow.audit.as_slice())
+    }
+
+    #[must_use]
+    pub fn research_knowledge_continuation_failure(
+        &self,
+    ) -> Option<ResearchKnowledgeContinuationFailure> {
+        self.research_knowledge
+            .as_ref()
+            .and_then(|workflow| workflow.continuation_failure)
+    }
+
+    #[must_use]
+    pub fn shared_memory_proposal_count(&self) -> usize {
+        self.memory.proposal_count()
+    }
+
     pub fn request_document_task(
         &mut self,
         source_context: &AgentExecutionContext,
@@ -696,6 +934,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         operation: DocumentOperation,
         memory_selection: Option<MemoryContextSelection>,
     ) -> AgentOrchestratorResult<AgentExecutionContext> {
+        if self.research_knowledge.is_some() {
+            return Err(AgentOrchestratorError::ResearchKnowledgeWorkflowAlreadySelected);
+        }
         let attribution = self.live_attribution(source_context)?;
         self.validate_document_task_after_attribution(source_context, &attribution)?;
         let source_task_id = attribution.task_id().clone();
@@ -854,6 +1095,191 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             task_id: child_task_id,
         });
         Ok(child_context)
+    }
+
+    fn validate_research_knowledge_start(
+        &self,
+        source_context: &AgentExecutionContext,
+        attribution: &AgentAttribution,
+        proposal: &DelegationProposal,
+        matrix: DelegationMatrixOutcome,
+    ) -> AgentOrchestratorResult<()> {
+        self.validate_delegation_after_attribution(source_context, proposal, matrix)?;
+        if attribution.agent_id() != AgentId::PersonalAssistant
+            || attribution.task_id() != attribution.root_task_id().task_id()
+            || attribution.parent_task_id().is_some()
+            || attribution.depth() != 0
+        {
+            return Err(AgentOrchestratorError::UnauthorizedSource {
+                agent_id: attribution.agent_id(),
+            });
+        }
+        let research = self.registry.get(AgentId::Research)?;
+        if research.activation() != AgentActivation::Initial {
+            return Err(AgentOrchestratorError::AgentDeferred {
+                agent_id: AgentId::Research,
+            });
+        }
+        if research.memory_profile_id() != AgentMemoryProfileId::ResearchWorkingMemoryV1 {
+            return Err(AgentOrchestratorError::ResearchMemoryProfileMismatch);
+        }
+        let knowledge = self.registry.get(AgentId::KnowledgeDocument)?;
+        if knowledge.activation() != AgentActivation::Initial {
+            return Err(AgentOrchestratorError::AgentDeferred {
+                agent_id: AgentId::KnowledgeDocument,
+            });
+        }
+        if knowledge.memory_profile_id() != AgentMemoryProfileId::KnowledgeWorkingMemoryV1 {
+            return Err(AgentOrchestratorError::KnowledgeMemoryProfileMismatch);
+        }
+        if self
+            .tasks
+            .len()
+            .checked_add(2)
+            .is_none_or(|count| count > MAX_RESEARCH_KNOWLEDGE_TASKS_PER_ROOT)
+        {
+            return Err(AgentOrchestratorError::TotalChildLimitExceeded);
+        }
+        if self
+            .run_count
+            .checked_add(3)
+            .is_none_or(|count| count > MAX_RESEARCH_KNOWLEDGE_RUNTIME_RUNS_PER_ROOT)
+        {
+            return Err(AgentOrchestratorError::RunLimitExceeded);
+        }
+        if self.runtime_event_count >= MAX_RUNTIME_EVENTS_PER_ROOT {
+            return Err(AgentOrchestratorError::RuntimeEventLimitExceeded);
+        }
+        self.ensure_event_capacity(12)
+    }
+
+    fn perform_research_knowledge_start(
+        &mut self,
+        source_attribution: AgentAttribution,
+        source_context: AgentExecutionContext,
+        request: ResearchKnowledgeWorkflowRequest,
+        proposal: DelegationProposal,
+    ) -> AgentOrchestratorResult<ResearchKnowledgeWorkflowAcceptance> {
+        let source_task_id = source_attribution.task_id().clone();
+        let root_task_id = source_attribution.root_task_id().clone();
+        let research_task_id =
+            AgentTaskId::new(format!("agent-task-child-{}-1", self.workflow_sequence))?;
+        let research_definition = self.registry.get(AgentId::Research)?;
+        let research_input = request.build_research_input()?;
+        let research_request = self.runtime_request(&research_task_id, 2, &research_input)?;
+        let research_run_identity = research_request.identity();
+        let mut research_task = AgentTask::new_child(
+            research_task_id.clone(),
+            root_task_id.clone(),
+            ParentTaskId::from_task_id(source_task_id.clone()),
+            research_definition.identity(),
+            proposal.objective,
+            proposal.context,
+            proposal.expected_deliverable,
+        )?;
+        research_task.start()?;
+        let research_audit_context =
+            AgentExecutionContext::for_task(&research_task, self.runtime_id, research_run_identity);
+
+        let mut source_run = self
+            .runs
+            .remove(&source_task_id)
+            .ok_or(AgentOrchestratorError::NoActiveRun)?;
+        match source_run.run.cancel() {
+            Ok(RuntimeCancellationOutcome::Cancelled)
+            | Ok(RuntimeCancellationOutcome::AlreadyTerminal(RuntimeRunStatus::Cancelled)) => {}
+            Ok(RuntimeCancellationOutcome::AlreadyTerminal(status)) if status.is_terminal() => {
+                self.fail_active_task(&source_task_id, AgentTaskFailureCode::RuntimeStateMismatch)?;
+                return Err(AgentOrchestratorError::UnexpectedRuntimeStatus { status });
+            }
+            Ok(RuntimeCancellationOutcome::AlreadyTerminal(status)) => {
+                self.runs.insert(source_task_id, source_run);
+                return Err(AgentOrchestratorError::UnexpectedRuntimeStatus { status });
+            }
+            Err(error) => {
+                self.runs.insert(source_task_id, source_run);
+                return Err(AgentOrchestratorError::Runtime(error));
+            }
+        }
+
+        self.tasks
+            .get_mut(&source_task_id)
+            .ok_or(AgentOrchestratorError::TaskNotFound)?
+            .wait_for_child()?;
+        self.tasks.insert(research_task_id.clone(), research_task);
+        self.active_child_task_id = Some(research_task_id.clone());
+        self.child_created = true;
+        self.run_count = self
+            .run_count
+            .checked_add(1)
+            .ok_or(AgentOrchestratorError::RunLimitExceeded)?;
+        self.events
+            .push(AgentOrchestrationEvent::DelegationRequested {
+                source_task_id: source_task_id.clone(),
+                target_agent_id: AgentId::Research,
+            });
+        self.events
+            .push(AgentOrchestrationEvent::DelegationAccepted {
+                source_task_id: source_task_id.clone(),
+                target_agent_id: AgentId::Research,
+            });
+        self.events.push(AgentOrchestrationEvent::ChildCreated {
+            task_id: research_task_id.clone(),
+            parent_task_id: source_task_id.clone(),
+        });
+        self.events.push(AgentOrchestrationEvent::ChildStarted {
+            task_id: research_task_id.clone(),
+        });
+        let mut workflow = ResearchKnowledgeWorkflowState::new(
+            request,
+            research_task_id.clone(),
+            source_context,
+            research_audit_context,
+        );
+        workflow
+            .events
+            .push(ResearchKnowledgeWorkflowEvent::ResearchStarted {
+                task_id: research_task_id.clone(),
+            });
+        workflow.audit.push(ResearchKnowledgeAuditRecord::new(
+            0,
+            workflow
+                .audit_contexts
+                .get(&research_task_id)
+                .ok_or(AgentOrchestratorError::ResearchKnowledgeStageMismatch)?
+                .clone(),
+            None,
+            ResearchKnowledgeStage::Research,
+            ResearchKnowledgeAuditOutcome::Started,
+        ));
+        self.research_knowledge = Some(workflow);
+
+        match self.start_runtime_run(research_request) {
+            Ok(run) => {
+                let active = ActiveRun {
+                    run,
+                    output: String::new(),
+                    next_sequence: 0,
+                };
+                let task = self
+                    .tasks
+                    .get(&research_task_id)
+                    .ok_or(AgentOrchestratorError::TaskNotFound)?;
+                let context = active.context(task, self.runtime_id);
+                self.runs.insert(research_task_id, active);
+                Ok(ResearchKnowledgeWorkflowAcceptance::ResearchStarted { context })
+            }
+            Err(error) => {
+                self.terminalize_workflow_child_failure(
+                    &research_task_id,
+                    AgentTaskFailureCode::RuntimeStartFailed,
+                    ResearchKnowledgePartialFailureCode::RuntimeStartFailed,
+                )?;
+                let context = self.start_research_knowledge_synthesis()?;
+                let _ = error;
+                Ok(ResearchKnowledgeWorkflowAcceptance::PersonalFallbackStarted { context })
+            }
+        }
     }
 
     fn perform_delegation(
@@ -1070,6 +1496,21 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             self.terminate_for_runtime_event_limit(task_id)?;
             return Err(AgentOrchestratorError::RuntimeEventLimitExceeded);
         }
+        let prepared_terminal = self.prepare_research_knowledge_terminal(task_id, &event)?;
+        if prepared_terminal.is_none()
+            && matches!(
+                event,
+                UntrustedRuntimeEvent::ResponseCompleted
+                    | UntrustedRuntimeEvent::ResponseFailed { .. }
+            )
+            && self.research_knowledge.as_ref().is_some_and(|workflow| {
+                workflow.active_child(task_id)
+                    || (matches!(workflow.phase, ResearchKnowledgePhase::SynthesisRunning)
+                        && self.root_task_id.as_ref() == Some(task_id))
+            })
+        {
+            return Err(AgentOrchestratorError::ResearchKnowledgeStageMismatch);
+        }
 
         let result = {
             let active = self
@@ -1107,13 +1548,35 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
                 }
             }
             RuntimeEventAcceptance::ResponseCompleted => {
-                self.complete_active_task(task_id)?;
+                if let Some(prepared) = prepared_terminal {
+                    let prior_failure = self.research_knowledge_continuation_failure();
+                    if let Err(error) =
+                        self.apply_prepared_research_knowledge_terminal(task_id, prepared)
+                    {
+                        if self.research_knowledge_continuation_failure() == prior_failure {
+                            return Err(error);
+                        }
+                    }
+                } else {
+                    self.complete_active_task(task_id)?;
+                }
             }
             RuntimeEventAcceptance::ResponseFailed { failure } => {
-                self.fail_active_task(
-                    task_id,
-                    AgentTaskFailureCode::RuntimeReported(failure.code()),
-                )?;
+                if let Some(prepared) = prepared_terminal {
+                    let prior_failure = self.research_knowledge_continuation_failure();
+                    if let Err(error) =
+                        self.apply_prepared_research_knowledge_terminal(task_id, prepared)
+                    {
+                        if self.research_knowledge_continuation_failure() == prior_failure {
+                            return Err(error);
+                        }
+                    }
+                } else {
+                    self.fail_active_task(
+                        task_id,
+                        AgentTaskFailureCode::RuntimeReported(failure.code()),
+                    )?;
+                }
             }
             RuntimeEventAcceptance::ToolProposal { .. } => {
                 self.fail_active_task(task_id, AgentTaskFailureCode::RuntimeOutputInvalid)?;
@@ -1121,6 +1584,456 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             }
         }
         Ok(accepted)
+    }
+
+    fn prepare_research_knowledge_terminal(
+        &self,
+        task_id: &AgentTaskId,
+        event: &UntrustedRuntimeEvent,
+    ) -> AgentOrchestratorResult<Option<PreparedResearchKnowledgeTerminal>> {
+        let Some(workflow) = self.research_knowledge.as_ref() else {
+            return Ok(None);
+        };
+        let is_terminal = matches!(
+            event,
+            UntrustedRuntimeEvent::ResponseCompleted | UntrustedRuntimeEvent::ResponseFailed { .. }
+        );
+        if !is_terminal {
+            return Ok(None);
+        }
+        let phase_matches = match &workflow.phase {
+            ResearchKnowledgePhase::ResearchRunning(active)
+            | ResearchKnowledgePhase::KnowledgeRunning(active) => active == task_id,
+            ResearchKnowledgePhase::SynthesisRunning => self.root_task_id.as_ref() == Some(task_id),
+            ResearchKnowledgePhase::Completed
+            | ResearchKnowledgePhase::Failed
+            | ResearchKnowledgePhase::Cancelled => false,
+        };
+        if !phase_matches {
+            return Ok(None);
+        }
+        self.preflight_research_knowledge_terminal_capacity(task_id)?;
+        let active = self
+            .runs
+            .get(task_id)
+            .ok_or(AgentOrchestratorError::NoActiveRun)?;
+        let task = self
+            .tasks
+            .get(task_id)
+            .ok_or(AgentOrchestratorError::TaskNotFound)?;
+
+        let prepared = match (&workflow.phase, event) {
+            (
+                ResearchKnowledgePhase::ResearchRunning(active_task_id),
+                UntrustedRuntimeEvent::ResponseCompleted,
+            ) if active_task_id == task_id => {
+                match workflow
+                    .request
+                    .parse_research_result(task_id.clone(), &active.output)
+                {
+                    Ok(research) if research.quality() == ResearchResultQuality::Complete => {
+                        let output = AgentTaskOutput::new(active.output.clone())?;
+                        match workflow.request.build_knowledge_input(&research) {
+                            Ok(knowledge_input) => {
+                                let fallback_synthesis_input =
+                                    workflow.request.build_synthesis_input(
+                                        &ResearchStageOutcome::Completed(research.clone()),
+                                        &KnowledgeStageOutcome::Failed(
+                                            AgentTaskFailureCode::RuntimeStartFailed,
+                                        ),
+                                    )?;
+                                let root_task_id = self
+                                    .root_task_id
+                                    .clone()
+                                    .ok_or(AgentOrchestratorError::RootMissing)?;
+                                let knowledge_task_id = AgentTaskId::new(format!(
+                                    "agent-task-child-{}-2",
+                                    self.workflow_sequence
+                                ))?;
+                                let mut knowledge_task = AgentTask::new_child(
+                                    knowledge_task_id.clone(),
+                                    RootTaskId::from_task_id(root_task_id.clone()),
+                                    ParentTaskId::from_task_id(root_task_id.clone()),
+                                    self.registry
+                                        .get(AgentId::KnowledgeDocument)?
+                                        .identity(),
+                                    AgentTaskObjective::new(
+                                        "Organize the validated ResearchResultV1 evidence",
+                                    )?,
+                                    Some(AgentTaskContext::new(
+                                        "Use only the validated Research result and its known fixture source IDs",
+                                    )?),
+                                    AgentTaskExpectedDeliverable::new(
+                                        "Return one strict KnowledgeResultV1 JSON object for Personal synthesis",
+                                    )?,
+                                )?;
+                                knowledge_task.start()?;
+                                let knowledge_run = self
+                                    .run_count
+                                    .checked_add(1)
+                                    .ok_or(AgentOrchestratorError::RunLimitExceeded)?;
+                                let synthesis_run = knowledge_run
+                                    .checked_add(1)
+                                    .ok_or(AgentOrchestratorError::RunLimitExceeded)?;
+                                let knowledge_request = self.runtime_request(
+                                    &knowledge_task_id,
+                                    knowledge_run,
+                                    &knowledge_input,
+                                )?;
+                                let knowledge_context = AgentExecutionContext::for_task(
+                                    &knowledge_task,
+                                    self.runtime_id,
+                                    knowledge_request.identity(),
+                                );
+                                let fallback_synthesis_request = self.runtime_request(
+                                    &root_task_id,
+                                    synthesis_run,
+                                    &fallback_synthesis_input,
+                                )?;
+                                PreparedResearchKnowledgeTerminal::ResearchToKnowledge {
+                                    output,
+                                    research,
+                                    continuation: PreparedKnowledgeContinuation {
+                                        task: knowledge_task,
+                                        request: knowledge_request,
+                                        attribution:
+                                            ResearchKnowledgeAttribution::from_execution_context(
+                                                &knowledge_context,
+                                            ),
+                                        fallback_synthesis_request,
+                                    },
+                                }
+                            }
+                            Err(_) => {
+                                let research_outcome =
+                                    ResearchStageOutcome::Completed(research.clone());
+                                let knowledge_outcome = KnowledgeStageOutcome::Failed(
+                                    AgentTaskFailureCode::RuntimeOutputInvalid,
+                                );
+                                let synthesis_input = workflow
+                                    .request
+                                    .build_synthesis_input(&research_outcome, &knowledge_outcome)?;
+                                let synthesis_request = self.runtime_request(
+                                    self.root_task_id
+                                        .as_ref()
+                                        .ok_or(AgentOrchestratorError::RootMissing)?,
+                                    self.run_count
+                                        .checked_add(1)
+                                        .ok_or(AgentOrchestratorError::RunLimitExceeded)?,
+                                    &synthesis_input,
+                                )?;
+                                PreparedResearchKnowledgeTerminal::ResearchToSynthesis {
+                                    task_outcome: AgentTaskOutcome::Completed(
+                                        AgentTaskResult::new(
+                                            task_id.clone(),
+                                            AgentId::Research,
+                                            output,
+                                        ),
+                                    ),
+                                    research: research_outcome,
+                                    knowledge: knowledge_outcome,
+                                    code:
+                                        ResearchKnowledgePartialFailureCode::InputPreparationFailed,
+                                    synthesis_request,
+                                }
+                            }
+                        }
+                    }
+                    Ok(research) => {
+                        let output = AgentTaskOutput::new(active.output.clone())?;
+                        let research_outcome = ResearchStageOutcome::Completed(research);
+                        let knowledge_outcome = KnowledgeStageOutcome::SkippedResearchIncomplete;
+                        let synthesis_input = workflow
+                            .request
+                            .build_synthesis_input(&research_outcome, &knowledge_outcome)?;
+                        let synthesis_request = self.runtime_request(
+                            self.root_task_id
+                                .as_ref()
+                                .ok_or(AgentOrchestratorError::RootMissing)?,
+                            self.run_count
+                                .checked_add(1)
+                                .ok_or(AgentOrchestratorError::RunLimitExceeded)?,
+                            &synthesis_input,
+                        )?;
+                        PreparedResearchKnowledgeTerminal::ResearchToSynthesis {
+                            task_outcome: AgentTaskOutcome::Completed(AgentTaskResult::new(
+                                task_id.clone(),
+                                AgentId::Research,
+                                output,
+                            )),
+                            research: research_outcome,
+                            knowledge: knowledge_outcome,
+                            code: ResearchKnowledgePartialFailureCode::MissingSourceReferences,
+                            synthesis_request,
+                        }
+                    }
+                    Err(_) => {
+                        let task_code = AgentTaskFailureCode::RuntimeOutputInvalid;
+                        let research_outcome = ResearchStageOutcome::Failed(task_code);
+                        let knowledge_outcome = KnowledgeStageOutcome::SkippedResearchUnavailable;
+                        let synthesis_input = workflow
+                            .request
+                            .build_synthesis_input(&research_outcome, &knowledge_outcome)?;
+                        let synthesis_request = self.runtime_request(
+                            self.root_task_id
+                                .as_ref()
+                                .ok_or(AgentOrchestratorError::RootMissing)?,
+                            self.run_count
+                                .checked_add(1)
+                                .ok_or(AgentOrchestratorError::RunLimitExceeded)?,
+                            &synthesis_input,
+                        )?;
+                        PreparedResearchKnowledgeTerminal::ResearchToSynthesis {
+                            task_outcome: AgentTaskOutcome::Failed(AgentTaskFailure::new(
+                                task_id.clone(),
+                                AgentId::Research,
+                                task_code,
+                            )),
+                            research: research_outcome,
+                            knowledge: knowledge_outcome,
+                            code: ResearchKnowledgePartialFailureCode::InvalidStructuredOutput,
+                            synthesis_request,
+                        }
+                    }
+                }
+            }
+            (
+                ResearchKnowledgePhase::KnowledgeRunning(active_task_id),
+                UntrustedRuntimeEvent::ResponseCompleted,
+            ) if active_task_id == task_id => {
+                let research = match workflow.research.as_ref() {
+                    Some(ResearchStageOutcome::Completed(result)) => result,
+                    _ => return Err(AgentOrchestratorError::ResearchResultUnavailable),
+                };
+                match workflow.request.parse_knowledge_result(
+                    task_id.clone(),
+                    research,
+                    &active.output,
+                ) {
+                    Ok(knowledge) => {
+                        let output = AgentTaskOutput::new(active.output.clone())?;
+                        let knowledge_outcome = KnowledgeStageOutcome::Completed(knowledge.clone());
+                        let synthesis_input = workflow.request.build_synthesis_input(
+                            workflow
+                                .research
+                                .as_ref()
+                                .ok_or(AgentOrchestratorError::ResearchResultUnavailable)?,
+                            &knowledge_outcome,
+                        )?;
+                        let synthesis_request = self.runtime_request(
+                            self.root_task_id
+                                .as_ref()
+                                .ok_or(AgentOrchestratorError::RootMissing)?,
+                            self.run_count
+                                .checked_add(1)
+                                .ok_or(AgentOrchestratorError::RunLimitExceeded)?,
+                            &synthesis_input,
+                        )?;
+                        let code = (knowledge.quality() != KnowledgeResultQuality::Complete)
+                            .then_some(
+                                ResearchKnowledgePartialFailureCode::MissingSourceReferences,
+                            );
+                        PreparedResearchKnowledgeTerminal::KnowledgeToSynthesis {
+                            task_outcome: AgentTaskOutcome::Completed(AgentTaskResult::new(
+                                task_id.clone(),
+                                AgentId::KnowledgeDocument,
+                                output,
+                            )),
+                            knowledge: knowledge_outcome,
+                            code,
+                            synthesis_request,
+                        }
+                    }
+                    Err(_) => {
+                        let task_code = AgentTaskFailureCode::RuntimeOutputInvalid;
+                        let knowledge_outcome = KnowledgeStageOutcome::Failed(task_code);
+                        let synthesis_input = workflow.request.build_synthesis_input(
+                            workflow
+                                .research
+                                .as_ref()
+                                .ok_or(AgentOrchestratorError::ResearchResultUnavailable)?,
+                            &knowledge_outcome,
+                        )?;
+                        let synthesis_request = self.runtime_request(
+                            self.root_task_id
+                                .as_ref()
+                                .ok_or(AgentOrchestratorError::RootMissing)?,
+                            self.run_count
+                                .checked_add(1)
+                                .ok_or(AgentOrchestratorError::RunLimitExceeded)?,
+                            &synthesis_input,
+                        )?;
+                        PreparedResearchKnowledgeTerminal::KnowledgeToSynthesis {
+                            task_outcome: AgentTaskOutcome::Failed(AgentTaskFailure::new(
+                                task_id.clone(),
+                                AgentId::KnowledgeDocument,
+                                task_code,
+                            )),
+                            knowledge: knowledge_outcome,
+                            code: Some(
+                                ResearchKnowledgePartialFailureCode::InvalidStructuredOutput,
+                            ),
+                            synthesis_request,
+                        }
+                    }
+                }
+            }
+            (
+                ResearchKnowledgePhase::SynthesisRunning,
+                UntrustedRuntimeEvent::ResponseCompleted,
+            ) if self.root_task_id.as_ref() == Some(task_id) => {
+                let research = workflow
+                    .research
+                    .as_ref()
+                    .ok_or(AgentOrchestratorError::ResearchResultUnavailable)?;
+                let knowledge = workflow
+                    .knowledge
+                    .as_ref()
+                    .ok_or(AgentOrchestratorError::KnowledgeResultUnavailable)?;
+                match workflow.request.parse_final_synthesis_result(
+                    research,
+                    knowledge,
+                    &active.output,
+                ) {
+                    Ok(synthesis) => PreparedResearchKnowledgeTerminal::SynthesisCompleted {
+                        output: AgentTaskOutput::new(synthesis.answer().to_owned())?,
+                        synthesis,
+                    },
+                    Err(_) => PreparedResearchKnowledgeTerminal::SynthesisFailed {
+                        task_code: AgentTaskFailureCode::RuntimeOutputInvalid,
+                        workflow_code: ResearchKnowledgePartialFailureCode::InvalidStructuredOutput,
+                    },
+                }
+            }
+            (
+                ResearchKnowledgePhase::ResearchRunning(active_task_id),
+                UntrustedRuntimeEvent::ResponseFailed { failure },
+            ) if active_task_id == task_id => {
+                let task_code = AgentTaskFailureCode::RuntimeReported(failure.code());
+                let research_outcome = ResearchStageOutcome::Failed(task_code);
+                let knowledge_outcome = KnowledgeStageOutcome::SkippedResearchUnavailable;
+                let synthesis_input = workflow
+                    .request
+                    .build_synthesis_input(&research_outcome, &knowledge_outcome)?;
+                let synthesis_request = self.runtime_request(
+                    self.root_task_id
+                        .as_ref()
+                        .ok_or(AgentOrchestratorError::RootMissing)?,
+                    self.run_count
+                        .checked_add(1)
+                        .ok_or(AgentOrchestratorError::RunLimitExceeded)?,
+                    &synthesis_input,
+                )?;
+                PreparedResearchKnowledgeTerminal::ResearchToSynthesis {
+                    task_outcome: AgentTaskOutcome::Failed(AgentTaskFailure::new(
+                        task_id.clone(),
+                        task.agent_id(),
+                        task_code,
+                    )),
+                    research: research_outcome,
+                    knowledge: knowledge_outcome,
+                    code: ResearchKnowledgePartialFailureCode::RuntimeFailed,
+                    synthesis_request,
+                }
+            }
+            (
+                ResearchKnowledgePhase::KnowledgeRunning(active_task_id),
+                UntrustedRuntimeEvent::ResponseFailed { failure },
+            ) if active_task_id == task_id => {
+                let task_code = AgentTaskFailureCode::RuntimeReported(failure.code());
+                let knowledge_outcome = KnowledgeStageOutcome::Failed(task_code);
+                let synthesis_input = workflow.request.build_synthesis_input(
+                    workflow
+                        .research
+                        .as_ref()
+                        .ok_or(AgentOrchestratorError::ResearchResultUnavailable)?,
+                    &knowledge_outcome,
+                )?;
+                let synthesis_request = self.runtime_request(
+                    self.root_task_id
+                        .as_ref()
+                        .ok_or(AgentOrchestratorError::RootMissing)?,
+                    self.run_count
+                        .checked_add(1)
+                        .ok_or(AgentOrchestratorError::RunLimitExceeded)?,
+                    &synthesis_input,
+                )?;
+                PreparedResearchKnowledgeTerminal::KnowledgeToSynthesis {
+                    task_outcome: AgentTaskOutcome::Failed(AgentTaskFailure::new(
+                        task_id.clone(),
+                        task.agent_id(),
+                        task_code,
+                    )),
+                    knowledge: knowledge_outcome,
+                    code: Some(ResearchKnowledgePartialFailureCode::RuntimeFailed),
+                    synthesis_request,
+                }
+            }
+            (
+                ResearchKnowledgePhase::SynthesisRunning,
+                UntrustedRuntimeEvent::ResponseFailed { failure },
+            ) if self.root_task_id.as_ref() == Some(task_id) => {
+                PreparedResearchKnowledgeTerminal::SynthesisFailed {
+                    task_code: AgentTaskFailureCode::RuntimeReported(failure.code()),
+                    workflow_code: ResearchKnowledgePartialFailureCode::RuntimeFailed,
+                }
+            }
+            _ => return Ok(None),
+        };
+        Ok(Some(prepared))
+    }
+
+    fn preflight_research_knowledge_terminal_capacity(
+        &self,
+        task_id: &AgentTaskId,
+    ) -> AgentOrchestratorResult<()> {
+        let Some(workflow) = self.research_knowledge.as_ref() else {
+            return Ok(());
+        };
+        let (workflow_transitions, generic_events, additional_tasks, additional_runs) =
+            match &workflow.phase {
+                ResearchKnowledgePhase::ResearchRunning(active) if active == task_id => {
+                    (4usize, 7usize, 1usize, 2u8)
+                }
+                ResearchKnowledgePhase::KnowledgeRunning(active) if active == task_id => {
+                    (2, 3, 0, 1)
+                }
+                ResearchKnowledgePhase::SynthesisRunning
+                    if self.root_task_id.as_ref() == Some(task_id) =>
+                {
+                    (1, 1, 0, 0)
+                }
+                _ => return Ok(()),
+            };
+        if workflow
+            .events
+            .len()
+            .checked_add(workflow_transitions)
+            .is_none_or(|count| count > MAX_WORKFLOW_EVENTS)
+            || workflow
+                .audit
+                .len()
+                .checked_add(workflow_transitions)
+                .is_none_or(|count| count > MAX_WORKFLOW_AUDIT_RECORDS)
+        {
+            return Err(AgentOrchestratorError::ResearchKnowledgeJournalLimitExceeded);
+        }
+        if self
+            .tasks
+            .len()
+            .checked_add(additional_tasks)
+            .is_none_or(|count| count > MAX_RESEARCH_KNOWLEDGE_TASKS_PER_ROOT)
+        {
+            return Err(AgentOrchestratorError::TotalChildLimitExceeded);
+        }
+        if self
+            .run_count
+            .checked_add(additional_runs)
+            .is_none_or(|count| count > MAX_RESEARCH_KNOWLEDGE_RUNTIME_RUNS_PER_ROOT)
+        {
+            return Err(AgentOrchestratorError::RunLimitExceeded);
+        }
+        self.ensure_event_capacity(generic_events)
     }
 
     pub fn cancel_task(
@@ -1365,7 +2278,634 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         self.ensure_run_capacity()
     }
 
+    fn apply_prepared_research_knowledge_terminal(
+        &mut self,
+        task_id: &AgentTaskId,
+        prepared: PreparedResearchKnowledgeTerminal,
+    ) -> AgentOrchestratorResult<()> {
+        self.runs
+            .remove(task_id)
+            .ok_or(AgentOrchestratorError::NoActiveRun)?;
+        match prepared {
+            PreparedResearchKnowledgeTerminal::ResearchToKnowledge {
+                output,
+                research,
+                continuation,
+            } => self.start_prepared_knowledge_after_research(
+                task_id,
+                output,
+                research,
+                continuation,
+            ),
+            PreparedResearchKnowledgeTerminal::ResearchToSynthesis {
+                task_outcome,
+                research,
+                knowledge,
+                code,
+                synthesis_request,
+            } => {
+                let completed_research = matches!(task_outcome, AgentTaskOutcome::Completed(_));
+                self.finish_workflow_child_task(task_id, task_outcome)?;
+                let root_task_id = self
+                    .root_task_id
+                    .clone()
+                    .ok_or(AgentOrchestratorError::RootMissing)?;
+                let mut workflow = self
+                    .research_knowledge
+                    .take()
+                    .ok_or(AgentOrchestratorError::ResearchKnowledgeWorkflowMissing)?;
+                workflow.research = Some(research);
+                workflow.knowledge = Some(knowledge);
+                if code == ResearchKnowledgePartialFailureCode::InputPreparationFailed
+                    && completed_research
+                {
+                    push_workflow_transition(
+                        &mut workflow,
+                        task_id.clone(),
+                        AgentId::Research,
+                        None,
+                        ResearchKnowledgeStage::Research,
+                        ResearchKnowledgeWorkflowEvent::ResearchCompleted {
+                            task_id: task_id.clone(),
+                            quality: ResearchResultQuality::Complete,
+                        },
+                        ResearchKnowledgeAuditOutcome::Completed,
+                    )?;
+                    push_workflow_transition(
+                        &mut workflow,
+                        root_task_id,
+                        AgentId::PersonalAssistant,
+                        Some(task_id.clone()),
+                        ResearchKnowledgeStage::KnowledgeOrganization,
+                        ResearchKnowledgeWorkflowEvent::PartialFailure {
+                            stage: ResearchKnowledgeStage::KnowledgeOrganization,
+                            code,
+                        },
+                        ResearchKnowledgeAuditOutcome::PartialFailure(code),
+                    )?;
+                } else {
+                    push_workflow_transition(
+                        &mut workflow,
+                        task_id.clone(),
+                        AgentId::Research,
+                        None,
+                        ResearchKnowledgeStage::Research,
+                        ResearchKnowledgeWorkflowEvent::PartialFailure {
+                            stage: ResearchKnowledgeStage::Research,
+                            code,
+                        },
+                        ResearchKnowledgeAuditOutcome::PartialFailure(code),
+                    )?;
+                }
+                self.research_knowledge = Some(workflow);
+                self.start_research_knowledge_synthesis_prepared(synthesis_request)
+                    .map(|_| ())
+            }
+            PreparedResearchKnowledgeTerminal::KnowledgeToSynthesis {
+                task_outcome,
+                knowledge,
+                code,
+                synthesis_request,
+            } => {
+                self.finish_workflow_child_task(task_id, task_outcome)?;
+                let predecessor = self
+                    .research_knowledge
+                    .as_ref()
+                    .and_then(|workflow| workflow.research.as_ref())
+                    .and_then(|outcome| match outcome {
+                        ResearchStageOutcome::Completed(result) => Some(result.task_id().clone()),
+                        ResearchStageOutcome::Failed(_) | ResearchStageOutcome::Cancelled => None,
+                    });
+                let mut workflow = self
+                    .research_knowledge
+                    .take()
+                    .ok_or(AgentOrchestratorError::ResearchKnowledgeWorkflowMissing)?;
+                let quality = match &knowledge {
+                    KnowledgeStageOutcome::Completed(result) => Some(result.quality()),
+                    KnowledgeStageOutcome::Failed(_)
+                    | KnowledgeStageOutcome::Cancelled
+                    | KnowledgeStageOutcome::SkippedResearchIncomplete
+                    | KnowledgeStageOutcome::SkippedResearchUnavailable => None,
+                };
+                workflow.knowledge = Some(knowledge);
+                let (event, audit) = match code {
+                    Some(code) => (
+                        ResearchKnowledgeWorkflowEvent::PartialFailure {
+                            stage: ResearchKnowledgeStage::KnowledgeOrganization,
+                            code,
+                        },
+                        ResearchKnowledgeAuditOutcome::PartialFailure(code),
+                    ),
+                    None => (
+                        ResearchKnowledgeWorkflowEvent::KnowledgeOrganizationCompleted {
+                            task_id: task_id.clone(),
+                            quality: quality
+                                .ok_or(AgentOrchestratorError::KnowledgeResultUnavailable)?,
+                        },
+                        ResearchKnowledgeAuditOutcome::Completed,
+                    ),
+                };
+                push_workflow_transition(
+                    &mut workflow,
+                    task_id.clone(),
+                    AgentId::KnowledgeDocument,
+                    predecessor,
+                    ResearchKnowledgeStage::KnowledgeOrganization,
+                    event,
+                    audit,
+                )?;
+                self.research_knowledge = Some(workflow);
+                self.start_research_knowledge_synthesis_prepared(synthesis_request)
+                    .map(|_| ())
+            }
+            PreparedResearchKnowledgeTerminal::SynthesisCompleted { output, synthesis } => {
+                self.ensure_event_capacity(1)?;
+                let task = self
+                    .tasks
+                    .get_mut(task_id)
+                    .ok_or(AgentOrchestratorError::TaskNotFound)?;
+                task.complete(AgentTaskResult::new(
+                    task.id().clone(),
+                    task.agent_id(),
+                    output,
+                ))?;
+                self.events.push(AgentOrchestrationEvent::RootCompleted {
+                    task_id: task_id.clone(),
+                });
+                let mut workflow = self
+                    .research_knowledge
+                    .take()
+                    .ok_or(AgentOrchestratorError::ResearchKnowledgeWorkflowMissing)?;
+                let research = workflow
+                    .research
+                    .clone()
+                    .ok_or(AgentOrchestratorError::ResearchResultUnavailable)?;
+                let knowledge = workflow
+                    .knowledge
+                    .clone()
+                    .ok_or(AgentOrchestratorError::KnowledgeResultUnavailable)?;
+                push_workflow_transition(
+                    &mut workflow,
+                    task_id.clone(),
+                    AgentId::PersonalAssistant,
+                    None,
+                    ResearchKnowledgeStage::Synthesis,
+                    ResearchKnowledgeWorkflowEvent::Completed {
+                        task_id: task_id.clone(),
+                    },
+                    ResearchKnowledgeAuditOutcome::Completed,
+                )?;
+                let root_task_id = self
+                    .tasks
+                    .get(task_id)
+                    .ok_or(AgentOrchestratorError::TaskNotFound)?
+                    .root_task_id()
+                    .clone();
+                workflow.result = Some(ResearchKnowledgeWorkflowResult::new(
+                    root_task_id,
+                    research,
+                    knowledge,
+                    synthesis,
+                ));
+                workflow.phase = ResearchKnowledgePhase::Completed;
+                self.research_knowledge = Some(workflow);
+                self.cleanup_terminal_task(task_id);
+                Ok(())
+            }
+            PreparedResearchKnowledgeTerminal::SynthesisFailed {
+                task_code,
+                workflow_code,
+            } => self.fail_workflow_root_without_run(task_code, workflow_code),
+        }
+    }
+
+    fn start_prepared_knowledge_after_research(
+        &mut self,
+        research_task_id: &AgentTaskId,
+        research_output: AgentTaskOutput,
+        research: super::research_knowledge::ResearchResult,
+        continuation: PreparedKnowledgeContinuation,
+    ) -> AgentOrchestratorResult<()> {
+        self.ensure_event_capacity(4)?;
+        let PreparedKnowledgeContinuation {
+            task: knowledge_task,
+            request: knowledge_request,
+            attribution: knowledge_attribution,
+            fallback_synthesis_request,
+        } = continuation;
+        let root_task_id = self
+            .root_task_id
+            .clone()
+            .ok_or(AgentOrchestratorError::RootMissing)?;
+        let knowledge_task_id = knowledge_task.id().clone();
+        let next_run = self
+            .run_count
+            .checked_add(1)
+            .ok_or(AgentOrchestratorError::RunLimitExceeded)?;
+        if next_run > MAX_RESEARCH_KNOWLEDGE_RUNTIME_RUNS_PER_ROOT {
+            return Err(AgentOrchestratorError::RunLimitExceeded);
+        }
+        self.finish_workflow_child_task(
+            research_task_id,
+            AgentTaskOutcome::Completed(AgentTaskResult::new(
+                research_task_id.clone(),
+                AgentId::Research,
+                research_output,
+            )),
+        )?;
+
+        self.tasks.insert(knowledge_task_id.clone(), knowledge_task);
+        self.active_child_task_id = Some(knowledge_task_id.clone());
+        self.run_count = next_run;
+        self.events.push(AgentOrchestrationEvent::ChildCreated {
+            task_id: knowledge_task_id.clone(),
+            parent_task_id: root_task_id,
+        });
+        self.events.push(AgentOrchestrationEvent::ChildStarted {
+            task_id: knowledge_task_id.clone(),
+        });
+
+        let mut workflow = self
+            .research_knowledge
+            .take()
+            .ok_or(AgentOrchestratorError::ResearchKnowledgeWorkflowMissing)?;
+        workflow.research = Some(ResearchStageOutcome::Completed(research.clone()));
+        workflow
+            .audit_contexts
+            .insert(knowledge_task_id.clone(), knowledge_attribution);
+        workflow.child_count = 2;
+        workflow.run_attempts = next_run;
+        push_workflow_transition(
+            &mut workflow,
+            research_task_id.clone(),
+            AgentId::Research,
+            None,
+            ResearchKnowledgeStage::Research,
+            ResearchKnowledgeWorkflowEvent::ResearchCompleted {
+                task_id: research_task_id.clone(),
+                quality: ResearchResultQuality::Complete,
+            },
+            ResearchKnowledgeAuditOutcome::Completed,
+        )?;
+        push_workflow_transition(
+            &mut workflow,
+            knowledge_task_id.clone(),
+            AgentId::KnowledgeDocument,
+            Some(research_task_id.clone()),
+            ResearchKnowledgeStage::KnowledgeOrganization,
+            ResearchKnowledgeWorkflowEvent::KnowledgeOrganizationStarted {
+                task_id: knowledge_task_id.clone(),
+                predecessor_task_id: research_task_id.clone(),
+            },
+            ResearchKnowledgeAuditOutcome::Started,
+        )?;
+        workflow.phase = ResearchKnowledgePhase::KnowledgeRunning(knowledge_task_id.clone());
+        self.research_knowledge = Some(workflow);
+
+        match self.start_runtime_run(knowledge_request) {
+            Ok(run) => {
+                self.runs.insert(
+                    knowledge_task_id,
+                    ActiveRun {
+                        run,
+                        output: String::new(),
+                        next_sequence: 0,
+                    },
+                );
+                Ok(())
+            }
+            Err(error) => {
+                self.record_research_knowledge_continuation_failure(
+                    ResearchKnowledgeContinuationFailure::KnowledgeRuntimeStartFailed,
+                )?;
+                self.terminalize_workflow_child_failure(
+                    &knowledge_task_id,
+                    AgentTaskFailureCode::RuntimeStartFailed,
+                    ResearchKnowledgePartialFailureCode::RuntimeStartFailed,
+                )?;
+                self.start_research_knowledge_synthesis_prepared(fallback_synthesis_request)?;
+                Err(error)
+            }
+        }
+    }
+
+    fn finish_workflow_child_task(
+        &mut self,
+        child_task_id: &AgentTaskId,
+        outcome: AgentTaskOutcome,
+    ) -> AgentOrchestratorResult<()> {
+        self.ensure_event_capacity(2)?;
+        let root_task_id = self
+            .root_task_id
+            .clone()
+            .ok_or(AgentOrchestratorError::RootMissing)?;
+        let child = self
+            .tasks
+            .get_mut(child_task_id)
+            .ok_or(AgentOrchestratorError::TaskNotFound)?;
+        let agent_id = child.agent_id();
+        match &outcome {
+            AgentTaskOutcome::Completed(result) => child.complete(result.clone())?,
+            AgentTaskOutcome::Failed(failure) => child.fail(failure.clone())?,
+            AgentTaskOutcome::Cancelled(_) => {
+                if child.cancel() != AgentTaskCancellationOutcome::Cancelled {
+                    return Err(AgentOrchestratorError::InvalidTaskState {
+                        status: child.status(),
+                    });
+                }
+            }
+        }
+        match &outcome {
+            AgentTaskOutcome::Completed(_) => {
+                self.events.push(AgentOrchestrationEvent::ChildCompleted {
+                    task_id: child_task_id.clone(),
+                });
+            }
+            AgentTaskOutcome::Failed(failure) => {
+                self.events.push(AgentOrchestrationEvent::ChildFailed {
+                    task_id: child_task_id.clone(),
+                    code: failure.code(),
+                });
+            }
+            AgentTaskOutcome::Cancelled(_) => {
+                self.events.push(AgentOrchestrationEvent::TaskCancelled {
+                    task_id: child_task_id.clone(),
+                    agent_id,
+                });
+            }
+        }
+        self.events.push(AgentOrchestrationEvent::ResultReturned {
+            child_task_id: child_task_id.clone(),
+            parent_task_id: root_task_id,
+            outcome: outcome.kind(),
+        });
+        self.child_outcome = Some(outcome);
+        self.active_child_task_id = None;
+        self.cleanup_terminal_task(child_task_id);
+        Ok(())
+    }
+
+    fn terminalize_workflow_child_failure(
+        &mut self,
+        task_id: &AgentTaskId,
+        task_code: AgentTaskFailureCode,
+        workflow_code: ResearchKnowledgePartialFailureCode,
+    ) -> AgentOrchestratorResult<()> {
+        let phase = self
+            .research_knowledge
+            .as_ref()
+            .ok_or(AgentOrchestratorError::ResearchKnowledgeWorkflowMissing)?
+            .phase
+            .clone();
+        let (stage, agent_id, predecessor) = match phase {
+            ResearchKnowledgePhase::ResearchRunning(ref active) if active == task_id => {
+                (ResearchKnowledgeStage::Research, AgentId::Research, None)
+            }
+            ResearchKnowledgePhase::KnowledgeRunning(ref active) if active == task_id => (
+                ResearchKnowledgeStage::KnowledgeOrganization,
+                AgentId::KnowledgeDocument,
+                self.research_knowledge
+                    .as_ref()
+                    .and_then(|workflow| workflow.research.as_ref())
+                    .and_then(|outcome| match outcome {
+                        ResearchStageOutcome::Completed(result) => Some(result.task_id().clone()),
+                        ResearchStageOutcome::Failed(_) | ResearchStageOutcome::Cancelled => None,
+                    }),
+            ),
+            _ => return Err(AgentOrchestratorError::ResearchKnowledgeStageMismatch),
+        };
+        let failure = AgentTaskFailure::new(task_id.clone(), agent_id, task_code);
+        self.finish_workflow_child_task(task_id, AgentTaskOutcome::Failed(failure))?;
+        let mut workflow = self
+            .research_knowledge
+            .take()
+            .ok_or(AgentOrchestratorError::ResearchKnowledgeWorkflowMissing)?;
+        match stage {
+            ResearchKnowledgeStage::Research => {
+                workflow.research = Some(ResearchStageOutcome::Failed(task_code));
+                workflow.knowledge = Some(KnowledgeStageOutcome::SkippedResearchUnavailable);
+            }
+            ResearchKnowledgeStage::KnowledgeOrganization => {
+                workflow.knowledge = Some(KnowledgeStageOutcome::Failed(task_code));
+            }
+            ResearchKnowledgeStage::Synthesis => {}
+        }
+        push_workflow_transition(
+            &mut workflow,
+            task_id.clone(),
+            agent_id,
+            predecessor,
+            stage,
+            ResearchKnowledgeWorkflowEvent::PartialFailure {
+                stage,
+                code: workflow_code,
+            },
+            ResearchKnowledgeAuditOutcome::PartialFailure(workflow_code),
+        )?;
+        self.research_knowledge = Some(workflow);
+        Ok(())
+    }
+
+    fn start_research_knowledge_synthesis(
+        &mut self,
+    ) -> AgentOrchestratorResult<AgentExecutionContext> {
+        self.ensure_event_capacity(1)?;
+        let root_task_id = self
+            .root_task_id
+            .clone()
+            .ok_or(AgentOrchestratorError::RootMissing)?;
+        let workflow = self
+            .research_knowledge
+            .take()
+            .ok_or(AgentOrchestratorError::ResearchKnowledgeWorkflowMissing)?;
+        let research = workflow
+            .research
+            .as_ref()
+            .ok_or(AgentOrchestratorError::ResearchResultUnavailable)?;
+        let knowledge = workflow
+            .knowledge
+            .as_ref()
+            .ok_or(AgentOrchestratorError::KnowledgeResultUnavailable)?;
+        let synthesis_input = match workflow.request.build_synthesis_input(research, knowledge) {
+            Ok(input) => input,
+            Err(error) => {
+                self.research_knowledge = Some(workflow);
+                self.fail_workflow_root_without_run(
+                    AgentTaskFailureCode::RuntimeOutputInvalid,
+                    ResearchKnowledgePartialFailureCode::InvalidStructuredOutput,
+                )?;
+                return Err(AgentOrchestratorError::ResearchKnowledge(error));
+            }
+        };
+        let next_run = self
+            .run_count
+            .checked_add(1)
+            .ok_or(AgentOrchestratorError::RunLimitExceeded)?;
+        let synthesis_request = self.runtime_request(&root_task_id, next_run, &synthesis_input)?;
+        self.research_knowledge = Some(workflow);
+        self.start_research_knowledge_synthesis_prepared(synthesis_request)
+    }
+
+    fn start_research_knowledge_synthesis_prepared(
+        &mut self,
+        synthesis_request: RuntimeTurnRequest,
+    ) -> AgentOrchestratorResult<AgentExecutionContext> {
+        self.ensure_event_capacity(1)?;
+        let root_task_id = self
+            .root_task_id
+            .clone()
+            .ok_or(AgentOrchestratorError::RootMissing)?;
+        let mut workflow = self
+            .research_knowledge
+            .take()
+            .ok_or(AgentOrchestratorError::ResearchKnowledgeWorkflowMissing)?;
+        let next_run = self
+            .run_count
+            .checked_add(1)
+            .ok_or(AgentOrchestratorError::RunLimitExceeded)?;
+        if next_run > MAX_RESEARCH_KNOWLEDGE_RUNTIME_RUNS_PER_ROOT {
+            self.research_knowledge = Some(workflow);
+            self.fail_workflow_root_without_run(
+                AgentTaskFailureCode::RuntimeStartFailed,
+                ResearchKnowledgePartialFailureCode::RuntimeStartFailed,
+            )?;
+            return Err(AgentOrchestratorError::RunLimitExceeded);
+        }
+        self.tasks
+            .get_mut(&root_task_id)
+            .ok_or(AgentOrchestratorError::TaskNotFound)?
+            .resume_from_child()?;
+        let synthesis_audit_context = AgentExecutionContext::for_task(
+            self.tasks
+                .get(&root_task_id)
+                .ok_or(AgentOrchestratorError::TaskNotFound)?,
+            self.runtime_id,
+            synthesis_request.identity(),
+        );
+        self.run_count = next_run;
+        workflow.run_attempts = next_run;
+        workflow.audit_contexts.insert(
+            root_task_id.clone(),
+            ResearchKnowledgeAttribution::from_execution_context(&synthesis_audit_context),
+        );
+        match self.start_runtime_run(synthesis_request) {
+            Ok(run) => {
+                let active = ActiveRun {
+                    run,
+                    output: String::new(),
+                    next_sequence: 0,
+                };
+                let context = active.context(
+                    self.tasks
+                        .get(&root_task_id)
+                        .ok_or(AgentOrchestratorError::TaskNotFound)?,
+                    self.runtime_id,
+                );
+                self.runs.insert(root_task_id.clone(), active);
+                self.events.push(AgentOrchestrationEvent::ParentResumed {
+                    task_id: root_task_id.clone(),
+                });
+                push_workflow_transition(
+                    &mut workflow,
+                    root_task_id.clone(),
+                    AgentId::PersonalAssistant,
+                    None,
+                    ResearchKnowledgeStage::Synthesis,
+                    ResearchKnowledgeWorkflowEvent::SynthesisStarted {
+                        task_id: root_task_id,
+                    },
+                    ResearchKnowledgeAuditOutcome::Started,
+                )?;
+                workflow.phase = ResearchKnowledgePhase::SynthesisRunning;
+                self.research_knowledge = Some(workflow);
+                Ok(context)
+            }
+            Err(error) => {
+                let prior = workflow.continuation_failure;
+                workflow.continuation_failure = Some(match prior {
+                    Some(ResearchKnowledgeContinuationFailure::KnowledgeRuntimeStartFailed) => {
+                        ResearchKnowledgeContinuationFailure::KnowledgeAndSynthesisRuntimeStartFailed
+                    }
+                    _ => ResearchKnowledgeContinuationFailure::SynthesisRuntimeStartFailed,
+                });
+                self.research_knowledge = Some(workflow);
+                self.fail_workflow_root_without_run(
+                    AgentTaskFailureCode::RuntimeStartFailed,
+                    ResearchKnowledgePartialFailureCode::RuntimeStartFailed,
+                )?;
+                Err(error)
+            }
+        }
+    }
+
+    fn record_research_knowledge_continuation_failure(
+        &mut self,
+        failure: ResearchKnowledgeContinuationFailure,
+    ) -> AgentOrchestratorResult<()> {
+        self.research_knowledge
+            .as_mut()
+            .ok_or(AgentOrchestratorError::ResearchKnowledgeWorkflowMissing)?
+            .continuation_failure = Some(failure);
+        Ok(())
+    }
+
+    fn fail_workflow_root_without_run(
+        &mut self,
+        task_code: AgentTaskFailureCode,
+        workflow_code: ResearchKnowledgePartialFailureCode,
+    ) -> AgentOrchestratorResult<()> {
+        self.ensure_event_capacity(1)?;
+        let root_task_id = self
+            .root_task_id
+            .clone()
+            .ok_or(AgentOrchestratorError::RootMissing)?;
+        let root = self
+            .tasks
+            .get_mut(&root_task_id)
+            .ok_or(AgentOrchestratorError::TaskNotFound)?;
+        root.fail(AgentTaskFailure::new(
+            root_task_id.clone(),
+            AgentId::PersonalAssistant,
+            task_code,
+        ))?;
+        self.events.push(AgentOrchestrationEvent::RootFailed {
+            task_id: root_task_id.clone(),
+            code: task_code,
+        });
+        let mut workflow = self
+            .research_knowledge
+            .take()
+            .ok_or(AgentOrchestratorError::ResearchKnowledgeWorkflowMissing)?;
+        push_workflow_transition(
+            &mut workflow,
+            root_task_id,
+            AgentId::PersonalAssistant,
+            None,
+            ResearchKnowledgeStage::Synthesis,
+            ResearchKnowledgeWorkflowEvent::PartialFailure {
+                stage: ResearchKnowledgeStage::Synthesis,
+                code: workflow_code,
+            },
+            ResearchKnowledgeAuditOutcome::PartialFailure(workflow_code),
+        )?;
+        workflow.phase = ResearchKnowledgePhase::Failed;
+        self.research_knowledge = Some(workflow);
+        let root_task_id = self
+            .root_task_id
+            .clone()
+            .ok_or(AgentOrchestratorError::RootMissing)?;
+        self.cleanup_terminal_task(&root_task_id);
+        Ok(())
+    }
+
     fn complete_active_task(&mut self, task_id: &AgentTaskId) -> AgentOrchestratorResult<()> {
+        if self.research_knowledge.as_ref().is_some_and(|workflow| {
+            workflow.active_child(task_id)
+                || (matches!(workflow.phase, ResearchKnowledgePhase::SynthesisRunning)
+                    && self.root_task_id.as_ref() == Some(task_id))
+        }) {
+            return Err(AgentOrchestratorError::ResearchKnowledgeStageMismatch);
+        }
         let active = self
             .runs
             .remove(task_id)
@@ -1412,6 +2952,13 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         task_id: &AgentTaskId,
         code: AgentTaskFailureCode,
     ) -> AgentOrchestratorResult<()> {
+        if self.research_knowledge.as_ref().is_some_and(|workflow| {
+            workflow.active_child(task_id)
+                || (matches!(workflow.phase, ResearchKnowledgePhase::SynthesisRunning)
+                    && self.root_task_id.as_ref() == Some(task_id))
+        }) {
+            return self.fail_research_knowledge_task(task_id, code);
+        }
         let run_status = self.runs.get(task_id).map(|active| active.run.status());
         if run_status.is_some_and(|status| status.is_terminal()) {
             self.runs.remove(task_id);
@@ -1446,6 +2993,35 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         } else {
             self.finish_child_and_resume(task_id, outcome)
         }
+    }
+
+    fn fail_research_knowledge_task(
+        &mut self,
+        task_id: &AgentTaskId,
+        code: AgentTaskFailureCode,
+    ) -> AgentOrchestratorResult<()> {
+        let run_status = self.runs.get(task_id).map(|active| active.run.status());
+        if run_status.is_some_and(RuntimeRunStatus::is_terminal) {
+            self.runs.remove(task_id);
+        } else {
+            let _ = self.cancel_run(task_id)?;
+        }
+        let is_synthesis = self.root_task_id.as_ref() == Some(task_id)
+            && self.research_knowledge.as_ref().is_some_and(|workflow| {
+                matches!(workflow.phase, ResearchKnowledgePhase::SynthesisRunning)
+            });
+        if is_synthesis {
+            return self.fail_workflow_root_without_run(
+                code,
+                ResearchKnowledgePartialFailureCode::RuntimeFailed,
+            );
+        }
+        self.terminalize_workflow_child_failure(
+            task_id,
+            code,
+            ResearchKnowledgePartialFailureCode::RuntimeFailed,
+        )?;
+        self.start_research_knowledge_synthesis().map(|_| ())
     }
 
     fn finish_child_and_resume(
@@ -1578,6 +3154,29 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         &mut self,
         root_task_id: &AgentTaskId,
     ) -> AgentOrchestratorResult<AgentTaskCancellationOutcome> {
+        let workflow_cancel_stage = self
+            .research_knowledge
+            .as_ref()
+            .filter(|workflow| {
+                !matches!(
+                    workflow.phase,
+                    ResearchKnowledgePhase::Completed
+                        | ResearchKnowledgePhase::Failed
+                        | ResearchKnowledgePhase::Cancelled
+                )
+            })
+            .map(ResearchKnowledgeWorkflowState::active_stage);
+        if workflow_cancel_stage.is_some() {
+            let workflow = self
+                .research_knowledge
+                .as_ref()
+                .ok_or(AgentOrchestratorError::ResearchKnowledgeWorkflowMissing)?;
+            if workflow.events.len() >= MAX_WORKFLOW_EVENTS
+                || workflow.audit.len() >= MAX_WORKFLOW_AUDIT_RECORDS
+            {
+                return Err(AgentOrchestratorError::ResearchKnowledgeJournalLimitExceeded);
+            }
+        }
         let child_id = self.active_child_task_id.clone();
         self.ensure_event_capacity(usize::from(child_id.is_some()) + 1)?;
         let child_error = if let Some(child_id) = child_id {
@@ -1610,6 +3209,23 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
                 agent_id: task.agent_id(),
             });
             self.cleanup_terminal_task(root_task_id);
+            if let Some(stage) = workflow_cancel_stage {
+                let mut workflow = self
+                    .research_knowledge
+                    .take()
+                    .ok_or(AgentOrchestratorError::ResearchKnowledgeWorkflowMissing)?;
+                push_workflow_transition(
+                    &mut workflow,
+                    root_task_id.clone(),
+                    AgentId::PersonalAssistant,
+                    None,
+                    stage,
+                    ResearchKnowledgeWorkflowEvent::Cancelled { stage },
+                    ResearchKnowledgeAuditOutcome::Cancelled,
+                )?;
+                workflow.phase = ResearchKnowledgePhase::Cancelled;
+                self.research_knowledge = Some(workflow);
+            }
         }
         if let Some(error) = child_error {
             Err(error)
@@ -1623,6 +3239,13 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         child_task_id: &AgentTaskId,
         root_is_cancelling: bool,
     ) -> AgentOrchestratorResult<AgentTaskCancellationOutcome> {
+        if self
+            .research_knowledge
+            .as_ref()
+            .is_some_and(|workflow| workflow.active_child(child_task_id))
+        {
+            return self.cancel_research_knowledge_child(child_task_id, root_is_cancelling);
+        }
         self.cancel_pending_governance(child_task_id)?;
         let disposition = self.cancel_run(child_task_id)?;
         if root_is_cancelling {
@@ -1683,6 +3306,113 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             task.agent_id(),
         ));
         self.finish_child_and_resume(child_task_id, outcome)?;
+        Ok(AgentTaskCancellationOutcome::Cancelled)
+    }
+
+    fn cancel_research_knowledge_child(
+        &mut self,
+        child_task_id: &AgentTaskId,
+        root_is_cancelling: bool,
+    ) -> AgentOrchestratorResult<AgentTaskCancellationOutcome> {
+        self.cancel_pending_governance(child_task_id)?;
+        let disposition = self.cancel_run(child_task_id)?;
+        let phase = self
+            .research_knowledge
+            .as_ref()
+            .ok_or(AgentOrchestratorError::ResearchKnowledgeWorkflowMissing)?
+            .phase
+            .clone();
+        let (stage, agent_id, predecessor) = match phase {
+            ResearchKnowledgePhase::ResearchRunning(ref active) if active == child_task_id => {
+                (ResearchKnowledgeStage::Research, AgentId::Research, None)
+            }
+            ResearchKnowledgePhase::KnowledgeRunning(ref active) if active == child_task_id => (
+                ResearchKnowledgeStage::KnowledgeOrganization,
+                AgentId::KnowledgeDocument,
+                self.research_knowledge
+                    .as_ref()
+                    .and_then(|workflow| workflow.research.as_ref())
+                    .and_then(|outcome| match outcome {
+                        ResearchStageOutcome::Completed(result) => Some(result.task_id().clone()),
+                        ResearchStageOutcome::Failed(_) | ResearchStageOutcome::Cancelled => None,
+                    }),
+            ),
+            _ => return Err(AgentOrchestratorError::ResearchKnowledgeStageMismatch),
+        };
+        if let RunCancellationDisposition::UnexpectedTerminal(status) = disposition {
+            self.terminalize_workflow_child_failure(
+                child_task_id,
+                AgentTaskFailureCode::RuntimeStateMismatch,
+                ResearchKnowledgePartialFailureCode::RuntimeFailed,
+            )?;
+            if !root_is_cancelling {
+                self.start_research_knowledge_synthesis()?;
+            }
+            return Err(AgentOrchestratorError::UnexpectedRuntimeStatus { status });
+        }
+
+        if root_is_cancelling {
+            let child = self
+                .tasks
+                .get_mut(child_task_id)
+                .ok_or(AgentOrchestratorError::TaskNotFound)?;
+            let outcome = child.cancel();
+            if outcome == AgentTaskCancellationOutcome::Cancelled {
+                self.events.push(AgentOrchestrationEvent::TaskCancelled {
+                    task_id: child_task_id.clone(),
+                    agent_id,
+                });
+                self.active_child_task_id = None;
+                self.cleanup_terminal_task(child_task_id);
+                let workflow = self
+                    .research_knowledge
+                    .as_mut()
+                    .ok_or(AgentOrchestratorError::ResearchKnowledgeWorkflowMissing)?;
+                match stage {
+                    ResearchKnowledgeStage::Research => {
+                        workflow.research = Some(ResearchStageOutcome::Cancelled);
+                        workflow.knowledge =
+                            Some(KnowledgeStageOutcome::SkippedResearchUnavailable);
+                    }
+                    ResearchKnowledgeStage::KnowledgeOrganization => {
+                        workflow.knowledge = Some(KnowledgeStageOutcome::Cancelled);
+                    }
+                    ResearchKnowledgeStage::Synthesis => {}
+                }
+            }
+            return Ok(outcome);
+        }
+
+        let cancellation = super::task::AgentTaskCancellation::new(child_task_id.clone(), agent_id);
+        self.finish_workflow_child_task(child_task_id, AgentTaskOutcome::Cancelled(cancellation))?;
+        let mut workflow = self
+            .research_knowledge
+            .take()
+            .ok_or(AgentOrchestratorError::ResearchKnowledgeWorkflowMissing)?;
+        match stage {
+            ResearchKnowledgeStage::Research => {
+                workflow.research = Some(ResearchStageOutcome::Cancelled);
+                workflow.knowledge = Some(KnowledgeStageOutcome::SkippedResearchUnavailable);
+            }
+            ResearchKnowledgeStage::KnowledgeOrganization => {
+                workflow.knowledge = Some(KnowledgeStageOutcome::Cancelled);
+            }
+            ResearchKnowledgeStage::Synthesis => {}
+        }
+        push_workflow_transition(
+            &mut workflow,
+            child_task_id.clone(),
+            agent_id,
+            predecessor,
+            stage,
+            ResearchKnowledgeWorkflowEvent::PartialFailure {
+                stage,
+                code: ResearchKnowledgePartialFailureCode::Cancelled,
+            },
+            ResearchKnowledgeAuditOutcome::Cancelled,
+        )?;
+        self.research_knowledge = Some(workflow);
+        self.start_research_knowledge_synthesis()?;
         Ok(AgentTaskCancellationOutcome::Cancelled)
     }
 
@@ -1754,6 +3484,13 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         &mut self,
         task_id: &AgentTaskId,
     ) -> AgentOrchestratorResult<()> {
+        if self
+            .research_knowledge
+            .as_ref()
+            .is_some_and(|workflow| workflow.active_child(task_id))
+        {
+            return self.terminate_research_knowledge_for_event_limit(task_id);
+        }
         let code = AgentTaskFailureCode::RuntimeEventLimitExceeded;
         if self.root_task_id.as_ref() == Some(task_id) {
             return self.fail_active_task(task_id, code);
@@ -1794,6 +3531,41 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             code,
         });
         self.cleanup_terminal_task(task_id);
+        self.cleanup_terminal_task(&root_task_id);
+        Ok(())
+    }
+
+    fn terminate_research_knowledge_for_event_limit(
+        &mut self,
+        child_task_id: &AgentTaskId,
+    ) -> AgentOrchestratorResult<()> {
+        let code = AgentTaskFailureCode::RuntimeEventLimitExceeded;
+        let _ = self.cancel_run(child_task_id)?;
+        self.terminalize_workflow_child_failure(
+            child_task_id,
+            code,
+            ResearchKnowledgePartialFailureCode::RuntimeFailed,
+        )?;
+        let root_task_id = self
+            .root_task_id
+            .clone()
+            .ok_or(AgentOrchestratorError::RootMissing)?;
+        self.tasks
+            .get_mut(&root_task_id)
+            .ok_or(AgentOrchestratorError::TaskNotFound)?
+            .fail(AgentTaskFailure::new(
+                root_task_id.clone(),
+                AgentId::PersonalAssistant,
+                code,
+            ))?;
+        self.events.push(AgentOrchestrationEvent::RootFailed {
+            task_id: root_task_id.clone(),
+            code,
+        });
+        self.research_knowledge
+            .as_mut()
+            .ok_or(AgentOrchestratorError::ResearchKnowledgeWorkflowMissing)?
+            .phase = ResearchKnowledgePhase::Failed;
         self.cleanup_terminal_task(&root_task_id);
         Ok(())
     }
@@ -1859,6 +3631,41 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
     }
 }
 
+fn push_workflow_transition(
+    workflow: &mut ResearchKnowledgeWorkflowState,
+    task_id: AgentTaskId,
+    agent_id: AgentId,
+    predecessor_task_id: Option<AgentTaskId>,
+    stage: ResearchKnowledgeStage,
+    event: ResearchKnowledgeWorkflowEvent,
+    outcome: ResearchKnowledgeAuditOutcome,
+) -> AgentOrchestratorResult<()> {
+    if workflow.events.len() >= MAX_WORKFLOW_EVENTS
+        || workflow.audit.len() >= MAX_WORKFLOW_AUDIT_RECORDS
+    {
+        return Err(AgentOrchestratorError::ResearchKnowledgeJournalLimitExceeded);
+    }
+    let sequence = u8::try_from(workflow.audit.len())
+        .map_err(|_| AgentOrchestratorError::ResearchKnowledgeJournalLimitExceeded)?;
+    let attribution = workflow
+        .audit_contexts
+        .get(&task_id)
+        .ok_or(AgentOrchestratorError::ResearchKnowledgeStageMismatch)?
+        .clone();
+    if attribution.agent_id() != agent_id {
+        return Err(AgentOrchestratorError::ResearchKnowledgeStageMismatch);
+    }
+    workflow.events.push(event);
+    workflow.audit.push(ResearchKnowledgeAuditRecord::new(
+        sequence,
+        attribution,
+        predecessor_task_id,
+        stage,
+        outcome,
+    ));
+    Ok(())
+}
+
 impl AgentOrchestrator<NativeAgentRuntime> {
     pub fn native() -> AgentOrchestratorResult<Self> {
         Self::new(NativeAgentRuntime)
@@ -1887,6 +3694,10 @@ impl<R: AgentRuntime> fmt::Debug for AgentOrchestrator<R> {
             .field("run_count", &self.run_count)
             .field("runtime_event_count", &self.runtime_event_count)
             .field("event_count", &self.events.len())
+            .field(
+                "research_knowledge_selected",
+                &self.research_knowledge.is_some(),
+            )
             .finish()
     }
 }
@@ -2019,6 +3830,7 @@ fn delegation_error_code(error: &AgentOrchestratorError) -> AgentGovernanceError
         | AgentOrchestratorError::Governance(_)
         | AgentOrchestratorError::Memory(_)
         | AgentOrchestratorError::Document(_)
+        | AgentOrchestratorError::ResearchKnowledge(_)
         | AgentOrchestratorError::WorkflowIdentityExhausted
         | AgentOrchestratorError::RootAlreadyExists
         | AgentOrchestratorError::RootMissing
@@ -2030,6 +3842,13 @@ fn delegation_error_code(error: &AgentOrchestratorError) -> AgentGovernanceError
         | AgentOrchestratorError::OutputLimitExceeded
         | AgentOrchestratorError::OutcomeMismatch
         | AgentOrchestratorError::KnowledgeMemoryProfileMismatch
+        | AgentOrchestratorError::ResearchMemoryProfileMismatch
+        | AgentOrchestratorError::ResearchKnowledgeWorkflowAlreadySelected
+        | AgentOrchestratorError::ResearchKnowledgeWorkflowMissing
+        | AgentOrchestratorError::ResearchKnowledgeStageMismatch
+        | AgentOrchestratorError::ResearchKnowledgeJournalLimitExceeded
+        | AgentOrchestratorError::ResearchResultUnavailable
+        | AgentOrchestratorError::KnowledgeResultUnavailable
         | AgentOrchestratorError::DocumentInputTooLarge
         | AgentOrchestratorError::RuntimeEventLimitExceeded => {
             AgentGovernanceErrorCode::TaskMutationFailed
@@ -2049,6 +3868,8 @@ pub enum AgentOrchestratorError {
     Memory(#[from] MemoryStoreError),
     #[error("approved-document access rejected the operation: {0}")]
     Document(#[from] ApprovedDocumentError),
+    #[error("the Research/Knowledge workflow rejected the operation: {0}")]
+    ResearchKnowledge(#[from] ResearchKnowledgeError),
     #[error("agent runtime rejected the operation: {0}")]
     Runtime(#[from] RuntimeError),
     #[error("the selected runtime is unavailable")]
@@ -2079,6 +3900,20 @@ pub enum AgentOrchestratorError {
     AgentDeferred { agent_id: AgentId },
     #[error("the Knowledge & Document definition has an unexpected memory profile")]
     KnowledgeMemoryProfileMismatch,
+    #[error("the Research definition has an unexpected memory profile")]
+    ResearchMemoryProfileMismatch,
+    #[error("the Research/Knowledge workflow is already selected for this root")]
+    ResearchKnowledgeWorkflowAlreadySelected,
+    #[error("the Research/Knowledge workflow state is missing")]
+    ResearchKnowledgeWorkflowMissing,
+    #[error("the Research/Knowledge workflow stage does not match the active task")]
+    ResearchKnowledgeStageMismatch,
+    #[error("the Research/Knowledge workflow journal reached its closed bound")]
+    ResearchKnowledgeJournalLimitExceeded,
+    #[error("a validated Research result is unavailable")]
+    ResearchResultUnavailable,
+    #[error("a validated Knowledge result is unavailable")]
+    KnowledgeResultUnavailable,
     #[error("the delegation route is not allowed: {source_agent_id} -> {target}")]
     RouteDenied {
         source_agent_id: AgentId,

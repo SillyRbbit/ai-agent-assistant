@@ -20,14 +20,18 @@ orchestrator-derived live attribution, profile-aware deterministic policy,
 agent-origin approval, an exact delegation matrix, and a bounded volatile audit
 family. D-085 adds a separately bounded workflow-local volatile memory store,
 selected-record context assembly, an approved-document reader, and one direct
-Personal Assistant-to-Knowledge document task. A successful terminal native or
-run-termination resolution cannot leave the initial turn without one typed
-legacy audit receipt. Agent governance reserves one audit slot before downstream
-mutation and records execution only as `NotAttempted`. There is no live provider
-transport, dispatcher, executor, durable or user-facing product memory, platform
-adapter, or durable audit. Current resolutions, memory, records, references, and
-receipts are volatile and non-authorizing and must not be mistaken for an end-
-to-end security path.
+Personal Assistant-to-Knowledge document task. D-086 adds one separately
+selected, fixture-only Personal-to-Research-to-Knowledge-to-Personal sequence
+with strict structured results, source-ID provenance, truthful partial outcomes,
+child-first cancellation, and a content-free volatile workflow journal and
+attribution audit. A successful terminal native or run-termination resolution
+cannot leave the initial turn without one typed legacy audit receipt. Agent
+governance reserves one audit slot before downstream mutation and records
+execution only as `NotAttempted`. There is no live provider transport,
+dispatcher, executor, durable or user-facing product memory, platform adapter,
+or durable audit. Current resolutions, memory, records, references, and receipts
+are volatile and non-authorizing and must not be mistaken for an end-to-end
+security path.
 
 ## Non-negotiable invariants
 
@@ -53,9 +57,44 @@ to-end security path.
 - Approved-document access uses opaque workflow-bound references selected by
   trusted application code. Paths remain private, roots cannot be enumerated,
   and one-time read authority grants no general filesystem permission.
-- The direct Personal Assistant-to-Knowledge document route does not alter
-  generic Personal-to-Research delegation. Research-to-Knowledge remains
-  blocked and specialists cannot spawn agents.
+- The direct Personal Assistant-to-Knowledge document route and D-086's sealed
+  fixture workflow do not alter generic Personal-to-Research delegation.
+  Generic or direct Research-to-Knowledge remains denied, specialists cannot
+  spawn agents, and only the orchestrator may create the Knowledge sibling after
+  validating the exact Research result.
+- The sealed workflow permits only three tasks, two non-replenishing sequential
+  depth-one children, one active child, four run attempts, 32 runtime events,
+  32 generic events, 16 workflow events, 16 matching workflow audit records,
+  and zero automatic retries. Overflow fails closed and never replenishes a
+  task, child, run, event, or retry budget.
+- Research output may reference only IDs from the immutable one-to-eight-source
+  application fixture catalog. Knowledge output may preserve only references
+  from the validated predecessor Research task and version. Unknown, duplicate,
+  remapped, malformed, oversized, or reasoning-bearing output fails closed;
+  a valid Research result with missing references remains partial and skips
+  Knowledge, a valid incomplete Knowledge result remains partial, and citations
+  are never invented.
+- D-086 terminal parsing, terminal task output, remaining capacity, next task,
+  request, descriptive attribution, and fallback/synthesis input are prepared
+  before terminal runtime acceptance. Preparation failure causes zero workflow
+  mutation. A continuation start failure cannot reverse an accepted terminal
+  event and is exposed only through a closed content-free failure category.
+- Research or Knowledge failure/cancellation never forwards raw invalid output;
+  only validated results plus typed stage status may reach Personal synthesis.
+  Personal synthesis itself must pass the strict bounded V1 result contract,
+  preserve exactly the Research outcome's source-ID set, affirm fixture-only
+  evidence, disclose partial status when applicable, and match the derived
+  complete/partial status; invented references, URLs, live-research claims,
+  reasoning, false disclosure, and unknown fields fail the root.
+  Research missing-source partials skip Knowledge; Knowledge partials preserve
+  validated Research. Root cancellation resolves pending governance, cancels
+  the active child before the root, starts no later stage, preserves retryable
+  live state on cancellation failure, and rejects late events.
+- `ResearchKnowledgeAttribution` is a non-authoritative descriptive snapshot.
+  Its run/request identity remains private and redacted, it cannot reconstruct a
+  live execution context or grant policy/approval/memory/runtime/execution
+  authority, and its journal records contain no objective, fixture content,
+  findings, summary, proposal, path, URL, output, or reasoning.
 - Governance audit is closed, redacted, volatile, capped at 32 subjects, and
   never authorizes an action.
 - Untrusted content cannot grant permission or change policy.
@@ -213,6 +252,21 @@ Apply the dependency and supply-chain sections of `SECURITY_CHECKLIST.md` and
   persistence, vector search, background indexing, document writing, or device
   effect. Any later consumer requires a separate approved plan and privacy
   evidence.
+- D-086 transports specialist data only through validated structured results;
+  it never reads sibling memory. Research and Knowledge retain access only to
+  their own live agent-private and task-temporary namespaces, and terminal
+  cleanup removes task-temporary records.
+- A reusable Knowledge value remains `PendingReview`. It is not inserted into
+  `MemoryStore`, assigned a shared-proposal identity, approved, selected,
+  persisted, or treated as fact by synthesis.
+- D-086 fixture labels/evidence, objective text, findings, summaries, proposals,
+  runtime output, arbitrary references, paths, URLs, and reasoning remain absent
+  from Debug, errors, workflow events, workflow audit, logs, SQLite, IPC, and
+  automatic memory. Its fixture-only disclosure does not prove live retrieval
+  or factual correctness.
+- D-086 adds no provider, model, credential, network, process, filesystem read,
+  tool, executor, persistence, IPC, UI, dependency, capability, permission,
+  Hermes/OpenClaw adapter, or `AgentRuntime`/`NativeAgentRuntime` widening.
 
 ## GitHub automation boundary
 

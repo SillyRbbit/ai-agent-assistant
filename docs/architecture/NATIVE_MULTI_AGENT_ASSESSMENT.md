@@ -1,11 +1,11 @@
 # Native multi-agent architecture assessment
 
-Status: Owner-accepted architecture assessment; catalog, bounded first-flow, and non-executing governance foundations implemented
+Status: Owner-accepted architecture assessment; catalog, governance, memory/document, and sealed fixture workflow foundations implemented
 Assessment date: 2026-08-11
 Last reconciled: 2026-08-12
 Decision authority:
 [`ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md`](../adr/ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md)
-and D-082/D-083/D-084
+and D-082 through D-086
 
 This assessment records the smallest native multi-agent direction supported by
 the repository's current code and trust boundaries. The catalog increment
@@ -24,14 +24,48 @@ that D-084 published checkpoint.
 > lowercase `.txt`/`.md` UTF-8 files, and one separate direct Personal
 > Assistant-to-Knowledge document task. Focused memory, document, integration,
 > registry, governance, orchestration, and runtime contracts, complete
-> repository validation, and independent review pass with `PASS WITH
-ADVISORIES`; the only accepted residual is the pure-`std` Unix document-open
-> TOCTOU race. The boundary
-> has no persistence, IPC, UI, provider, live model, executor, unrestricted file
-> tool, vector index, new dependency, or device effect. Generic Personal-to-
-> Research remains unchanged and Research-to-Knowledge remains Blocked. Earlier
-> absence, catalog-state, and future-target statements below remain the dated
-> assessment checkpoint rather than current D-085 capability evidence.
+> repository validation, and independent review pass. The result is
+> `PASS WITH ADVISORIES`; the only accepted residual is the pure-`std` Unix
+> document-open TOCTOU race. The boundary has no persistence, IPC, UI, provider,
+> live model, executor, unrestricted file tool, vector index, new dependency, or
+> device effect. Generic Personal-to-Research remains unchanged and
+> Research-to-Knowledge remained Blocked at that checkpoint. Earlier absence,
+> catalog-state, and future-target statements below remain the dated assessment
+> checkpoint rather than current D-085 capability evidence.
+
+> **Additive current-state note (D-086, 2026-08-12):** D-086 now implements one
+> separately selected, Rust-only, fixture-only Personal Assistant -> Research ->
+> Knowledge -> Personal synthesis application-service sequence. Research and
+> Knowledge are sequential depth-one siblings created only by
+> `AgentOrchestrator`; generic/direct Research-to-Knowledge remains denied and
+> no specialist can spawn. The sealed path permits three tasks, two
+> non-replenishing children, one active child, four runtime-run attempts, 32
+> runtime and generic events, 16 workflow events and matching content-free
+> attribution records, and zero automatic retries. One to eight immutable
+> application fixtures supply the only source IDs. Strict Research V1 and
+> Knowledge V1 results preserve exact predecessor/source provenance, label
+> missing references as partial, skip Knowledge when Research lacks complete
+> source attribution, retain valid incomplete Knowledge as partial, and reject
+> unknown, duplicate, remapped, malformed, oversized, or reasoning-bearing
+> output. The strict final synthesis V1 envelope also requires the exact
+> Research source-ID set, fixture disclosure, applicable partial disclosure, and
+> stage-derived status; invented citations, URLs, live-research claims,
+> reasoning, and unknown fields fail the root. Terminal parsing, remaining
+> capacity, task output, next-task/request attribution, and fallback
+> or synthesis input are prepared before terminal event acceptance; preparation
+> failure has zero workflow mutation, and a later continuation-start failure
+> does not reverse the accepted terminal event. Research or Knowledge failure
+> yields only typed partial synthesis input; root cancellation is child-first
+> and starts no later stage. Specialist private/task memory stays isolated,
+> task memory is cleaned at terminal state, and reusable Knowledge remains
+> pending review. The workflow journal and audit expose no source content,
+> objective, finding, summary, proposal, path, URL, output, or reasoning, and
+> their descriptive attribution cannot grant authority. Focused 12-unit and
+> 18-contract evidence passes. No provider, network, process, filesystem read,
+> tool, executor, persistence, IPC, UI, dependency, permission, external runtime,
+> or `AgentRuntime`/`NativeAgentRuntime` widening was added. Earlier future and
+> absence statements below remain decision-time evidence where this note now
+> records the superseding current state.
 
 ## 1. Executive summary
 
@@ -362,17 +396,21 @@ direct Personal response uses one run; the delegated path uses an initial
 Personal run, one Research child run, and one fresh Personal synthesis run.
 This evidence does not authorize a provider or live model.
 
-### Future staged workflow families
+### Staged workflow families
 
 The following arrows describe bounded artifact/task sequencing, not direct
 agent-to-agent spawning. Every specialist task remains a child created and
 validated by `AgentOrchestrator`; specialist agents never spawn another agent.
-Each family requires its own plan to expand the initial one-child-total budget
-to an explicit finite count while keeping depth one and concurrency one until a
-later bounded-parallelism decision.
+D-086 implements only the Research and Knowledge family through its exact
+fixture-only plan and two-child cap. Each remaining family requires its own plan
+to expand the generic one-child-total budget to an explicit finite count while
+keeping depth one and concurrency one until a later bounded-parallelism
+decision.
 
 - **Research and knowledge:** Personal Assistant -> Research Agent -> Knowledge
-  & Document Agent -> Personal Assistant synthesis.
+  & Document Agent -> Personal Assistant synthesis. Current only as D-086's
+  sealed deterministic fixture workflow; it is not a generic delegation route
+  or live research capability.
 - **Engineering quality:** Personal Assistant -> Coding Agent -> QA & Validation
   Agent -> Security & Risk Agent -> Personal Assistant synthesis -> approval
   before any separately authorized consequential change.
@@ -416,13 +454,14 @@ target through `AgentRegistry`, create the child task, and call the selected
 runtime. A later model-originated delegation proposal may be translated into a
 closed untrusted value, but only this application service can create the task.
 
-The initial route policy is application/orchestrator-owned rather than a field
-on `AgentDefinition`: only Personal Assistant may be the root, only Personal
-Assistant to Research Agent is accepted in the first deterministic flow, and
-Research Agent may not delegate. Registry membership or catalog activation
-never authorizes a delegation edge. Later workflow plans may add exact closed
-routes and a finite total-stage cap, but may not relax specialist non-spawning,
-depth-one lineage, or application validation by implication.
+The generic route policy is application/orchestrator-owned rather than a field
+on `AgentDefinition`: only Personal Assistant may be the root, generic
+delegation remains Personal Assistant to Research Agent, and Research Agent may
+not delegate. Registry membership or catalog activation never authorizes a
+delegation edge. D-086 is a separate sealed application-service sequence, not a
+new generic route. Later workflow plans may add exact closed routes and a finite
+total-stage cap, but may not relax specialist non-spawning, depth-one lineage,
+or application validation by implication.
 
 Delegation is neither shell execution nor an external host tool.
 
@@ -630,6 +669,10 @@ The near-term sequence is recorded in the authoritative root
 [`NATIVE_MULTI_AGENT_ROADMAP.md`](../roadmap/NATIVE_MULTI_AGENT_ROADMAP.md).
 The
 [`Agent definition and registry`](../plans/2026-08-11-agent-definition-registry.md)
-plan is implemented and verified locally. Task/orchestration and every later
-phase remain Blocked pending publication, fresh review, and separate owner
-authorization.
+plan is implemented and verified locally. That sentence and the original
+future-phase language record the assessment checkpoint. D-083 through D-086 now
+add the verified task/orchestrator, non-executing governance, volatile
+memory/approved-document, and sealed fixture-only Research/Knowledge foundations
+described in the additive notes above. Engineering-quality,
+infrastructure/operations, automation, persistence, provider/runtime wiring,
+IPC/UI, and every other later phase remain separately gated.

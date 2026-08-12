@@ -135,9 +135,9 @@ or executor.
 runtime foundation now exists in Rust. `AgentRuntime` constructs one bounded
 run from application-owned typed input. `RuntimeRun` exposes closed identity,
 status, bounded untrusted-event acceptance, typed failure, and exact idempotent
-cancellation. The repository still has no runtime coordinator, selector,
-provider transport, live model, Hermes adapter, OpenClaw adapter, or Tauri/UI
-consumer.
+cancellation. The repository still has no live application-session runtime
+consumer, runtime selector, provider transport, live model, Hermes adapter,
+OpenClaw adapter, or Tauri/UI consumer.
 
 ```mermaid
 flowchart TD
@@ -202,7 +202,7 @@ flowchart TD
     Personal --> Orchestrator["AgentOrchestrator<br/>implemented; unwired"]
     Orchestrator --> Research["Implemented generic route<br/>Personal Assistant to Research Agent"]
     Orchestrator --> Knowledge["Implemented document route<br/>Personal Assistant to Knowledge & Document"]
-    Orchestrator -. staged .-> ResearchKnowledge["Blocked sequence<br/>Research Agent to Knowledge & Document"]
+    Orchestrator --> ResearchKnowledge["Implemented sealed fixture workflow<br/>Research then Knowledge sibling"]
     Orchestrator -. staged .-> Engineering["Engineering<br/>Coding + QA + Security"]
     Orchestrator -. staged .-> Operations["Infrastructure & operations<br/>Cloud + Systems + QA + Security"]
     Orchestrator -. staged .-> Automation["Automation<br/>Workflow Automation"]
@@ -226,9 +226,9 @@ memory, provider, or device authority.
 The catalog marks Personal Assistant, Research Agent, and Knowledge & Document
 Agent `Initial`; all nine definitions remain unwired and none is a shipping
 assistant. Knowledge eligibility applies only to D-085's separate approved-
-document route and grants no generic delegation edge. The embedded
-instruction sources are closed application-owned Rust assets rather than
-runtime-loaded files.
+document route and D-086's sealed fixture workflow; neither grants a generic
+delegation edge. The embedded instruction sources are closed application-owned
+Rust assets rather than runtime-loaded files.
 
 `AgentTask` now owns one bounded objective, exact agent/root/parent/depth
 lineage, the closed `Pending`/`Running`/`WaitingForChild`/terminal state
@@ -239,16 +239,20 @@ memory-profile identities. Both profiles are captured from the sealed built-in
 definition identity rather than supplied independently by a caller.
 
 `AgentOrchestrator<R: AgentRuntime>` is a separate application service. One
-instance owns at most one root workflow, two tasks, three sequential runtime
-runs, one non-replenishing child, one active child, depth one, and 32 runtime
-and application events. It owns task assignment, exact live-context checks,
-the generic Personal Assistant-to-Research route, D-085's separate approved-
-document Personal Assistant-to-Knowledge route, bounded output accumulation,
-result attribution, synthesis resumption, and child-first cancellation. It is
-not a runtime, provider, policy engine, tool registry, approval manager, or
-executor. It directly owns one workflow-local `MemoryStore` and
-`ApprovedDocumentReader` without transferring their authority to an agent or
-runtime, and composes the non-executing governance service below.
+instance owns at most one root workflow. Its generic and approved-document
+paths retain two tasks, three sequential runtime runs, one non-replenishing
+child, one active child, depth one, and 32 runtime and application events.
+D-086's separately selected sealed workflow alone expands those finite limits
+to three tasks, two non-replenishing sequential children, one active child,
+four runs, and the same depth-one and 32-event limits. It owns task assignment,
+exact live-context checks, the generic Personal Assistant-to-Research route,
+D-085's separate approved-document Personal Assistant-to-Knowledge route,
+D-086's fixed Research/Knowledge sequence, bounded output accumulation, result
+attribution, synthesis resumption, and child-first cancellation. It is not a
+runtime, provider, policy engine, tool registry, approval manager, or executor.
+It directly owns one workflow-local `MemoryStore` and `ApprovedDocumentReader`
+without transferring their authority to an agent or runtime, and composes the
+non-executing governance service below.
 
 A root may complete directly in one runtime run. Delegation is accepted only
 before root output begins; the orchestrator then terminally cancels that first
@@ -269,20 +273,23 @@ Workflow Automation is not `AgentOrchestrator`. Agents may emit bounded
 recommendations or typed requests; application code owns lifecycle,
 authorization, approval, execution, and audit decisions.
 
-The implemented orchestration boundary uses depth one, one child task total per
+The generic orchestration boundary uses depth one, one child task total per
 root, and one active child. Completion or cancellation does not replenish the
 budget. Only the orchestrator may create a child task. Generic delegation is a
 typed application-service call and remains exactly Personal Assistant to
 Research Agent. D-085 adds a separate trusted application document-task call
 from Personal Assistant to Knowledge & Document; it is not generic delegation,
 a runtime control event, shell command, filesystem tool, or `agent.delegate`
-host tool.
+host tool. D-086 separately expands only its sealed workflow to two sequential
+sibling children while retaining depth and active-child concurrency at one.
 
 The initial root is exactly Personal Assistant. Research and Knowledge cannot
 delegate; self, reverse, unknown, and all other generic routes fail before task
-creation. Research-to-Knowledge remains Blocked. These allowlists are owned by
-the application/orchestrator. Registry membership, activation, or a memory
-profile grants no route. Later research/knowledge, engineering-quality,
+creation. Generic or direct Research-to-Knowledge remains denied. D-086 adds
+only one application-selected sealed sequence in which the orchestrator creates
+Knowledge as a new depth-one sibling after validating the Research result.
+These allowlists are owned by the application/orchestrator. Registry membership,
+activation, or a memory profile grants no route. Later engineering-quality,
 infrastructure/operations, and automation workflows must add exact closed
 routes and finite task caps under separate plans. Their arrows mean
 orchestrator-controlled sequencing at depth one, never specialist spawning.
@@ -334,8 +341,8 @@ separately gated.
 The current baseline contains no multi-agent Tauri IPC, multi-agent React state,
 provider, live model, tool executor, platform adapter, durable audit, durable
 memory, or device action. The catalog, task, orchestrator, governance, volatile
-memory, and approved-document foundations are Rust-only and unwired. The Tasks
-and Memory screens remain placeholders.
+memory, approved-document, and sealed fixture-workflow foundations are Rust-only
+and unwired. The Tasks and Memory screens remain placeholders.
 
 #### Volatile memory and approved-document Knowledge boundary
 
@@ -385,7 +392,9 @@ raw UTF-8 bytes including framing. The result is one attributed
 `DocumentTaskResult`, followed by a fresh Personal Assistant synthesis run.
 Knowledge cannot choose paths, crawl roots, use tools, write artifacts,
 delegate, or publish approved shared memory. The generic delegation matrix is
-unchanged and Research-to-Knowledge remains Blocked.
+unchanged. At the D-085 checkpoint, Research-to-Knowledge remained blocked;
+D-086 now adds only the separately selected sealed sibling sequence described
+below and does not create a generic or direct delegation edge.
 
 Focused evidence passes 6 memory units, 9 document units, 10 public memory/
 document contracts, and the 7 registry, 10 governance, 22 orchestration, 20
@@ -404,6 +413,101 @@ See
 [`ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md`](docs/adr/ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md),
 the authoritative [`ROADMAP.md`](ROADMAP.md), and its subordinate
 [`NATIVE_MULTI_AGENT_ROADMAP.md`](docs/roadmap/NATIVE_MULTI_AGENT_ROADMAP.md).
+
+#### Sealed fixture-only Research and Knowledge workflow
+
+**Current implemented Rust foundation; unwired and deterministic-test driven**:
+D-086 adds `agent::research_knowledge` and a closed
+`ResearchKnowledgeWorkflowRequest` for the versioned `research-knowledge-v1`
+application-service path inside `AgentOrchestrator`. Trusted application code
+selects the path from an exact live Personal Assistant root. The orchestrator
+terminally cancels the initial Personal run, creates one Research child, creates
+one Knowledge child only after accepting a structurally valid, source-complete
+Research result, and then starts a fresh Personal synthesis run. Research and
+Knowledge are sequential depth-one siblings with the same root; neither
+specialist creates a task, delegates, or invokes a runtime.
+
+The workflow's exact limits are three tasks, two non-replenishing children, one
+active child, four sequential runtime-run attempts, 32 accepted runtime events,
+32 generic orchestration events, 16 workflow events, 16 matching workflow audit
+records, and zero automatic retries. The immutable fixture catalog contains one
+to eight sources. Source IDs are canonical application-issued values of at most
+64 ASCII bytes; aggregate evidence is at most 8,192 bytes and the serialized
+catalog at most 16,384 bytes. The objective is bounded to 2,048 Unicode scalar
+values and 8,192 bytes. Research and Knowledge inputs are each capped at 26,624
+bytes; final synthesis is capped at 36,864 bytes with a separate 4,096-byte
+fixture-disclosure-and-framing bound. Specialist output retains the existing
+8,192-scalar/16,384-byte task-output bound.
+
+Both specialist results are strict JSON with unknown fields and trailing or
+outer content rejected. Research V1 permits at most 16 findings, four unresolved
+questions, four limitations, and four source references per item. Knowledge V1
+requires one to eight sections and permits at most 16 extracted facts, four
+contradictions, and four references per item. Research references must exist in
+the application catalog; Knowledge references must already exist in the
+validated Research result. The orchestrator binds the Knowledge predecessor to
+the exact Research task and result version. Missing references or an explicit
+incomplete result produce a typed partial quality; unknown, duplicate, or
+remapped references fail closed. Final Personal output is also one strict V1
+JSON envelope with an answer bounded to 2,048 scalar values/8,192 bytes, exactly
+the source-ID set preserved by the Research outcome, `fixture_based: true`, and
+a stage-derived `complete` or `partial` status. Its answer must disclose fixture
+evidence and, when applicable, partial status.
+Missing, duplicate, unknown, or invented references, false fixture disclosure,
+wrong status, URLs, live-research claims, reasoning, and unknown fields fail the
+root rather than creating a completed workflow result. The final workflow
+result retains that validated synthesis together with the closed Research and
+Knowledge stage outcomes. No raw invalid output, arbitrary citation, URL, path,
+or reasoning is forwarded.
+
+Before an accepted D-086 terminal runtime event mutates workflow state, the
+orchestrator checks the root event cap and prepares parsing, the terminal task
+output, remaining capacity, the next Knowledge task/request/non-authoritative
+attribution, and the applicable fallback or synthesis request. A preparation
+failure leaves the live run and workflow unchanged. If a continuation runtime
+cannot start after the terminal event is accepted, that event remains accepted;
+the consumed task/run attempt remains consumed, fallback or root failure is
+applied, and a closed `ResearchKnowledgeContinuationFailure` records only the
+continuation category. There are no retries or budget replenishment.
+
+Research failure, cancellation, invalid structured output, or a valid result
+with missing source references skips Knowledge and may start truthful partial
+Personal synthesis; the partial Research result is retained when it is valid.
+Knowledge failure, cancellation, or invalid output preserves only the validated
+Research result and may start partial synthesis. A valid incomplete Knowledge
+result is retained with partial quality. Synthesis failure fails the root
+without fabricating a workflow result. Root cancellation resolves pending
+governance, cancels the active child before the root, records one workflow
+cancellation, starts no later stage, and rejects late events. A cancellation
+failure preserves the still-live state for retry.
+
+Research and Knowledge may access only their own D-085 agent-private and
+task-temporary memory through exact live grants. Terminal cleanup removes task
+temporary records, sibling memory is never copied, and the structured result is
+the only sibling transport. A reusable Knowledge value remains
+`PendingReview`; D-086 does not create, approve, select, persist, or synthesize
+from it as approved memory.
+
+The journal exposes only the closed `ResearchStarted`, `ResearchCompleted`,
+`KnowledgeOrganizationStarted`, `KnowledgeOrganizationCompleted`,
+`SynthesisStarted`, `PartialFailure`, `Cancelled`, and `Completed` variants.
+Each bounded volatile `ResearchKnowledgeAuditRecord` pairs a transition with a
+content-free `ResearchKnowledgeAttribution` snapshot. The snapshot carries
+agent, policy-profile, memory-profile, task/root/parent, runtime, and depth
+identity while keeping run/request identity private and redacted. It cannot be
+converted into a live execution context or used as policy, approval, memory,
+runtime, or execution authority. Neither events nor audit records contain the
+objective, fixture label/content, findings, summary, proposal, path, URL,
+output, or reasoning.
+
+Focused evidence passes 12 contract/parser units and 18 public workflow
+contracts, including exact order and provenance, partial branches, terminal
+preparation failure with zero mutation, cancellation and cancellation failure,
+single and combined continuation-start failures, the runtime-event cap, and the
+unchanged sole/default Native construction path. No provider, live model,
+network, process, filesystem read, tool, executor, persistence, IPC, UI,
+dependency, capability, permission, Hermes/OpenClaw adapter, or runtime-contract
+widening is added.
 
 #### Hermes transport evaluation
 
@@ -753,6 +857,7 @@ reviewed repository ICNS byte-for-byte.
 | Approval audit adapter                        | Current, bound and volatile    | Phase 4H and 4V                                                |
 | Workflow-local volatile agent memory          | Current, unwired               | D-085 verified contracts; process-local only                   |
 | Selected UTF-8 text/Markdown document reading | Current, unwired and read-only | D-085 verified contracts; no IPC or provider                   |
+| Fixture-only Research/Knowledge workflow      | Current, unwired and sealed    | D-086 strict contracts; deterministic runtime events only      |
 | Live gateway and model-provider transport     | Planned                        | Blocked by O-006, per-provider O-007 evidence, and future plan |
 | Restricted tool execution                     | Planned                        | No dispatcher or executor exists                               |
 | Product memory and task persistence           | Planned                        | Phase 8 direction only                                         |

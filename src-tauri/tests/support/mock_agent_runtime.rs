@@ -14,6 +14,7 @@ pub enum MockMode {
     Unhealthy,
     StartFailure,
     StartFailureAt(u8),
+    StartFailuresAt(u8, u8),
     UnexpectedStartStatusAt(u8, RuntimeRunStatus),
     CancelFailureAt(u8),
     CancelAlreadyTerminalAt(u8, RuntimeRunStatus),
@@ -129,7 +130,13 @@ impl AgentRuntime for MockAgentRuntime {
             request_id: request.request_id().as_str().to_owned(),
             selected_text: request.selected_text().as_str().to_owned(),
         });
-        if matches!(self.mode, MockMode::StartFailureAt(ordinal) if ordinal == start_ordinal) {
+        if matches!(self.mode, MockMode::StartFailureAt(ordinal) if ordinal == start_ordinal)
+            || matches!(
+                self.mode,
+                MockMode::StartFailuresAt(first, second)
+                    if first == start_ordinal || second == start_ordinal
+            )
+        {
             return Err(RuntimeError::BoundaryFailure(RuntimeBoundaryStage::Start));
         }
         match self.mode {

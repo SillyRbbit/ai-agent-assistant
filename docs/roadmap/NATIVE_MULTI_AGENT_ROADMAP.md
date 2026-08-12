@@ -3,7 +3,7 @@
 Status: Subordinate staged roadmap; no implementation authority
 Authority: [`ROADMAP.md`](../../ROADMAP.md) remains the authoritative milestone
 roadmap
-Decision: D-082, D-083, D-084, D-085, and
+Decision: D-082, D-083, D-084, D-085, D-086, and
 [`ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md`](../adr/ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md)
 Last updated: 2026-08-12
 
@@ -15,8 +15,11 @@ does not change root-roadmap status or authorize implementation. The closed
 nine-definition catalog, deterministic registry, bounded orchestrator, and
 non-executing governance foundation now exist, remain unwired, and grant no
 device or provider authority. D-085's workflow-local bounded volatile memory
-store and approved-document reader are verified complete with advisories; no
-executor, durable memory, Tauri consumer, or multi-agent UI exists.
+store and approved-document reader are verified complete with advisories and
+published at `5e53f55`. D-086's exact fixture-based sequential
+Research/Knowledge workflow is verified complete with advisories under its
+bounded gate. No executor, durable memory, Tauri consumer, or multi-agent UI
+exists.
 
 `AgentOrchestrator`, `AgentRuntime`, `NativeAgentRuntime`, `AgentRegistry`,
 `ToolRegistry`, `PolicyEngine`, `ApprovalManager`, `AuditLogger`, `MemoryStore`,
@@ -53,7 +56,7 @@ to use a live model or tool.
 | -------------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------- |
 | Personal Assistant         | `Initial`             | Definition/registry verification, then the separately verified task/orchestration foundation                |
 | Research Agent             | `Initial`             | Initial bounded Personal-to-Research workflow; governed retrieval remains separately gated                  |
-| Knowledge & Document Agent | `Initial`             | Only D-085's separate bounded Personal-to-Knowledge approved-document route; no generic delegation          |
+| Knowledge & Document Agent | `Initial`             | D-085's direct approved-document route; D-086's verified sealed fixture workflow adds no generic delegation |
 | Coding Agent               | `Deferred`            | Engineering workflow plus approved repository/change/test controls                                          |
 | QA & Validation Agent      | `Deferred`            | Engineering-quality validation boundary; it never becomes approval authority                                |
 | Security & Risk Agent      | `Deferred`            | Engineering/security review boundary; it remains advisory and never becomes policy or remediation authority |
@@ -77,8 +80,9 @@ native catalog's staged work inside those phases.
 | 1          | Register all nine privilege-free definitions; mark only Personal Assistant and Research Agent `Initial`                                                                              | Verified and published at `f42a6c7`; catalog remains inert and unwired  |
 | 2-3        | Add task lifecycle, trusted context, limits, explicit delegation, result collection, cancellation, and the deterministic Personal-to-Research-to-Personal proof above `AgentRuntime` | Verified complete under D-083; foundation remains Rust-only and unwired |
 | 4          | Bind D-084's non-executing per-agent profile/policy/approval/audit foundation; establish approved file/root and document-processing boundaries only in a separate later increment    | Governance verified and published at `2687294`                          |
-| 5          | Add D-085's selected bounded volatile namespaces and approved `.txt`/`.md` Knowledge boundary; keep durable memory and Research/Knowledge separate                                   | Verified complete with advisories; publication pending                  |
-| 6          | Increase child concurrency only through explicit deterministic limits, cancellation, and resource bounds                                                                             | Blocked until sequential behavior is verified                           |
+| 5          | Add D-085's selected bounded volatile namespaces and approved `.txt`/`.md` Knowledge boundary; keep durable memory separate                                                          | Verified complete with advisories; published at `5e53f55`               |
+| 5A         | Add D-086's exact fixture-only Personal-to-Research-to-Knowledge-to-Personal sequential workflow without widening generic delegation                                                 | Verified complete with advisories under its bounded gate                |
+| 6          | Increase child concurrency only through explicit deterministic limits, cancellation, and resource bounds                                                                             | Blocked pending its own decision, Ready plan, and owner authorization   |
 | 7          | Stage engineering-quality, infrastructure/operations, and automation workflows with each specialist separately enabled                                                               | Blocked on role-specific governance and tool/platform decisions         |
 | 8          | Add typed catalog, task, progress, attribution, cancellation, and approval-explanation UI through narrow Tauri IPC                                                                   | Blocked on stable backend contracts                                     |
 | 9          | Demonstrate only bounded synthetic or separately approved workflows without capability overclaiming                                                                                  | Blocked on the selected workflow's complete gates                       |
@@ -116,11 +120,15 @@ Personal Assistant
   -> Personal Assistant synthesis
 ```
 
-The first generic-delegation milestone stops after the Research Agent result.
-D-085 separately adds a direct Personal Assistant-to-Knowledge task over one
-selected approved document. It does not connect Research to Knowledge or grant
-either role file selection, enumeration, persistence, or tool authority.
-External research requires separately governed read-only tools.
+The implemented generic-delegation milestone stops after the Research Agent
+result. D-085 separately adds a direct Personal Assistant-to-Knowledge task over
+one selected approved document. D-086 implements only one sealed,
+fixture-based orchestrator sequence in which both specialists remain sibling
+children of the Personal root. The deterministic contracts complete that
+connection without permitting direct Research-to-Knowledge delegation, and
+neither role gains file selection, enumeration, persistence, or tool
+authority. External research requires separately governed read-only tools and
+remains Blocked.
 
 ### Engineering quality
 
@@ -176,10 +184,11 @@ approval, restricted execution, and audit.
 The AgentDefinition/AgentRegistry, combined orchestration, and D-084 bounded
 non-executing governance foundations are implemented, verified, and published.
 D-085 separately selects one combined volatile-memory and narrow
-approved-document Knowledge increment. It is verified complete with advisories;
-publication requires separate owner direction. Durable memory,
-Research-to-Knowledge, and every other later phase remain Blocked, and no next
-plan is Ready.
+approved-document Knowledge increment; it is verified complete with advisories
+and published at `5e53f55`. D-086's exact fixture-only Research/Knowledge
+workflow is verified complete with advisories and awaits separate publication
+direction. Durable memory, live retrieval, bounded parallelism, and every
+other later phase remain Blocked; no later plan is Ready.
 
 | Area                                   | Plan                                                                                                                                      |
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |

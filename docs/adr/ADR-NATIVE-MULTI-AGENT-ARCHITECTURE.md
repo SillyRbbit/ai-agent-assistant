@@ -35,6 +35,26 @@ or device authority is added. The decision-time text below is preserved as
 historical architecture evidence where its future tense or absence statements
 describe the earlier checkpoint.
 
+Amended by D-086 on 2026-08-12: the owner authorized and the Rust core now
+implements one sealed fixture-only Personal Assistant -> Research -> Knowledge
+-> Personal synthesis sequence. Research and Knowledge are sequential
+depth-one siblings created only by `AgentOrchestrator`; generic/direct
+Research-to-Knowledge remains denied. The exact workflow permits three tasks,
+two non-replenishing children, one active child, four run attempts, 32 runtime
+and generic events, 16 workflow events and matching descriptive audit records,
+and zero retries. Strict versioned specialist and final synthesis results
+preserve application-issued fixture source IDs and exact predecessor identity;
+final synthesis must preserve exactly the Research source-ID set, disclose
+fixture and applicable partial status, and use the stage-consistent status.
+Partial results, continuation-start failure, child-first cancellation,
+task-memory cleanup, pending-review Knowledge proposals, and content-free
+events/audit remain bounded and non-authorizing. It adds no provider, network,
+process, filesystem
+read, tool, executor, persistence, IPC, UI, dependency, capability, permission,
+Hermes/OpenClaw adapter, or `AgentRuntime`/`NativeAgentRuntime` widening. The
+decision-time text below remains historical evidence where D-086 now supplies
+the exact implemented exception.
+
 ## Context
 
 Cortexa now contains an application-owned `AgentRuntime`/`RuntimeRun`
@@ -230,6 +250,65 @@ creation. Every root and child task remains independently attributable and
 cancellable, and root cancellation propagates exactly once to the active
 child.
 
+### D-086 sealed Research and Knowledge amendment
+
+D-086 implements only the Research sequence above, through the exact
+[`Research and Knowledge workflow`](../plans/2026-08-11-research-knowledge-workflow.md).
+It is a trusted application-service state machine selected from an exact live
+Personal Assistant root, not a `DelegationRequest`, runtime control event,
+model-proposed tool, or new route in the generic delegation matrix. The
+orchestrator creates Research and then, only after accepting and validating its
+strict result, creates Knowledge as a separate sibling with the same root.
+
+The sealed exception is fixed at three tasks, two non-replenishing depth-one
+children, one active child, four sequential run attempts, 32 runtime events, 32
+generic orchestration events, 16 workflow events, 16 matching audit records,
+and zero automatic retries. It accepts one to eight immutable deterministic
+fixtures; Research may reference only their application-issued IDs, and
+Knowledge may preserve only IDs in the exact validated Research task/version.
+Research and Knowledge inputs are each capped at 26,624 bytes, specialist
+output at 8,192 scalar values/16,384 bytes, and synthesis at 36,864 bytes with
+a 4,096-byte disclosure-and-framing sub-bound. A valid Research result with
+missing references remains partial and skips Knowledge; a valid incomplete
+Knowledge result remains partial. Unknown, duplicate, remapped, malformed,
+oversized, trailing/outer, or reasoning-bearing output fails closed, and raw
+invalid output never reaches another stage.
+
+Final synthesis is a separate strict V1 result. Its answer is capped at 2,048
+scalar values/8,192 bytes, its source-ID set must equal the validated Research
+outcome's set, `fixture_based` must be true, and its `complete`/`partial` status
+must match the specialist outcomes. The answer must disclose fixture evidence
+and partial status when applicable. Invented, missing, duplicate, or unknown
+references, wrong disclosure/status, URLs, live-research claims, reasoning,
+malformed data, trailing/outer content, and unknown fields fail the root without
+a completed workflow result.
+
+Terminal transitions check remaining capacity and prepare parsing, task output,
+the next Knowledge task/request/descriptive attribution, and fallback or
+synthesis input before terminal runtime acceptance. Preparation failure causes
+zero workflow mutation. Once accepted, a terminal event remains accepted even
+if a continuation runtime cannot start; the consumed attempt remains consumed,
+the closed continuation category is recorded, and fallback or root failure is
+applied without retry. Research failure/cancellation skips Knowledge; Knowledge
+failure/cancellation retains only validated Research; synthesis failure
+fabricates no result. Root cancellation resolves governance and cancels the
+active child before the root, records no later stage, and rejects late events.
+
+Specialist private/task memory remains isolated and terminal cleanup removes
+task-temporary records. Structured results, not memory, are the only sibling
+transport. Reusable Knowledge remains pending review and is not automatically
+created, approved, selected, persisted, or treated as fact in `MemoryStore`.
+Workflow events and the volatile `ResearchKnowledgeAuditRecord` are
+content-free. Their `ResearchKnowledgeAttribution` is a descriptive snapshot
+whose run/request identity stays private and redacted and which cannot recreate
+live policy, approval, memory, runtime, or execution authority.
+
+This amendment changes no provider, network, process, filesystem, tool,
+executor, persistence, IPC, UI, dependency, capability, permission, external
+runtime, `AgentRuntime`, or `NativeAgentRuntime` boundary. Native remains the
+sole/default implementation; Hermes remains Deferred/Blocked and OpenClaw
+remains evaluation-only.
+
 ### Delegation mechanism
 
 Use an explicit application-service call with a typed `DelegationRequest`.
@@ -327,6 +406,12 @@ Costs and constraints:
 The authoritative phases are in [`ROADMAP.md`](../../ROADMAP.md). This ADR does
 not authorize implementation by itself.
 
+D-086 completes only the research/knowledge portion of step 4 through its
+separately accepted sealed plan. Engineering-quality,
+infrastructure/operations, automation, bounded parallelism, UI/provider wiring,
+and every other later phase remain gated. D-086 does not make this ADR general
+implementation authority.
+
 ## Preservation guarantees
 
 - Do not delete, duplicate, or weaken `InitialGatewayTurn`,
@@ -354,6 +439,9 @@ not authorize implementation by itself.
   documentation-only limitation by accepting this bounded architecture.
 - D-078's personal-project scope and possible future publication direction
   remain unchanged.
+- D-086 supplies the only implemented exception to the original future
+  Research/Knowledge family: the fixed fixture workflow described above. It
+  leaves D-079's runtime boundary and every generic delegation rule unchanged.
 
 ## Rollback
 

@@ -204,6 +204,41 @@ shipping dispatcher or executor.
   minimizing content.
 - **FR-036**: Gateway operational logs and local audit shall remain separate and
   follow approved retention and redaction rules.
+- **FR-037**: The sealed fixture-only Research and Knowledge workflow shall be
+  selected only by trusted application code from an exact live Personal
+  Assistant root. It shall use exactly two sequential depth-one specialist
+  siblings, at most one active child, three total tasks, four sequential run
+  attempts, two non-replenishing child attempts, and zero automatic retries.
+  Generic Personal-to-Research and the separate approved-document route shall
+  retain their existing limits; generic or direct Research-to-Knowledge shall
+  remain denied.
+- **FR-038**: Research and Knowledge results shall be strict, bounded,
+  versioned structured data. Research may reference only application-issued
+  IDs from one to eight deterministic fixtures; Knowledge may preserve only
+  IDs already validated from the exact predecessor Research task/version.
+  A valid Research result with missing references shall remain partial and skip
+  Knowledge; a valid incomplete Knowledge result shall remain partial. Unknown,
+  duplicate, remapped, malformed, oversized, or reasoning-bearing output shall
+  fail closed. Final synthesis shall be a strict bounded V1 envelope whose
+  source-ID set exactly matches the set preserved by the validated Research
+  outcome, whose fixture disclosure is true, and whose complete/partial status
+  matches the validated stage outcomes. Its answer shall remain within 2,048
+  scalar values/8,192 bytes and explicitly disclose fixture evidence and
+  partial status when applicable. Missing, invented, duplicate, or unknown
+  references, false disclosure, wrong status, URLs, live-research claims,
+  reasoning, and unknown fields shall fail closed; final synthesis shall never
+  receive raw invalid specialist output.
+- **FR-039**: Workflow partial failure, continuation-start failure,
+  cancellation, memory, event, and audit handling shall remain bounded and
+  truthful. Terminal transitions shall preflight required capacity and prepare
+  parsing and continuation input before accepting the terminal runtime event;
+  an accepted terminal event shall not be reversed by a later continuation
+  start failure. Root cancellation shall cancel pending governance and the
+  active child before the root and start no later stage. Specialist task memory
+  shall be isolated and cleaned at terminal state, reusable Knowledge content
+  shall remain pending review, and the 16-record workflow journal and matching
+  non-authoritative attribution audit shall exclude content and grant no
+  authority.
 
 Only bootstrap metadata storage, a turn-bound volatile in-memory approval-audit
 adapter, and D-085's unwired workflow-local volatile memory and approved-
@@ -211,9 +246,16 @@ document boundary are current. D-085 implements four bounded memory namespaces,
 explicit selected-record context, versioned shared review, selected lowercase
 `.txt`/`.md` reading, and one direct Personal Assistant-to-Knowledge
 deterministic task. It does not persist across its one-root orchestrator, expose
-a user-facing file or memory surface, enable Research-to-Knowledge, or satisfy
-durable product-memory requirements. Product persistence, durable or user-
-facing memory, task repositories, and durable audit remain planned.
+a user-facing file or memory surface, or satisfy durable product-memory
+requirements. D-086 separately implements only the unwired fixture-only
+Personal-to-Research-to-Knowledge-to-Personal application-service sequence. Its
+strict parsers cap every structured output envelope at 8,192 scalar values and
+16,384 bytes and the final answer itself at 2,048 scalars/8,192 bytes. Research
+and Knowledge inputs are capped at 26,624 bytes each, synthesis input at 36,864
+bytes, runtime and generic events at 32 each, and workflow events/audit records
+at 16 each. It adds no live research, provider, persistence, durable or generic
+audit, or user-facing behavior. Product persistence, durable or user-facing
+memory, task repositories, and durable audit remain planned.
 
 ### Permissions and integrations
 
@@ -309,6 +351,9 @@ The repository currently provides:
 - an unwired workflow-local volatile memory and selected-document boundary,
   including one deterministic Personal Assistant-to-Knowledge task, with no
   persistence, IPC, provider, or user-facing consumer;
+- an unwired sealed fixture-only Personal-to-Research-to-Knowledge-to-Personal
+  workflow with strict source provenance, typed partial results, child-first
+  cancellation, and content-free volatile workflow evidence;
 - no live model, gateway, tool execution, durable product persistence, integration,
   privileged permission, or durable audit path.
 

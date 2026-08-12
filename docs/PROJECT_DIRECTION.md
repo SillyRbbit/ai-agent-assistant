@@ -126,15 +126,15 @@ specialists deny them. Approval never dispatches a tool, every execution result
 is `NotAttempted`, runtime tool proposals remain rejected, and no provider, IPC,
 UI, durable audit, executor, or device action exists.
 
-The deterministic orchestration phase keeps delegation depth, total-child
-budget per root, and active-child concurrency at one; the root is Personal
-Assistant and only the orchestrator may create a child task. Terminal child
-work does not replenish that phase's budget. Generic delegation remains exactly
-Personal Assistant to Research Agent. D-085 adds a separate direct Personal
-Assistant-to-Knowledge approved-document route without enabling
-Research-to-Knowledge or specialist spawning. Future staged workflows remain
-orchestrator-sequenced at depth one and require exact finite task caps and
-separate plans.
+The generic deterministic orchestration phase keeps delegation depth,
+total-child budget per root, and active-child concurrency at one; the root is
+Personal Assistant and only the orchestrator may create a child task. Terminal
+child work does not replenish that phase's budget. Generic delegation remains
+exactly Personal Assistant to Research Agent. D-085 adds a separate direct
+Personal Assistant-to-Knowledge approved-document route. Neither path enables
+generic/direct Research-to-Knowledge or specialist spawning. Later workflow
+families remain orchestrator-sequenced at depth one and require exact finite
+task caps and separate plans.
 
 D-085 implements a process-local, one-workflow `MemoryStore` with approved-
 shared, agent-private, task-temporary, and proposed-shared domains; exact sealed
@@ -142,12 +142,35 @@ memory-profile attribution; explicit bounded context selection; versioned
 application review; and terminal cleanup. It also adds an opaque, read-only
 approved-document boundary for selected nonempty lowercase `.txt`/`.md` UTF-8
 files and one deterministic Knowledge child plus fresh Personal synthesis run.
-Knowledge is now `Initial` only for that separate non-authorizing route. Paths
-remain application-selected and private; documents and memory remain untrusted.
-No persistence, IPC, UI, provider, live model, vector search, unrestricted file
-tool, executor, or device authority exists. Focused contracts, the complete
-repository suite, and independent review pass with `PASS WITH ADVISORIES`; the
-only accepted residual is the pure-`std` Unix document-open TOCTOU race.
+At the D-085 checkpoint, Knowledge became `Initial` only for that separate
+non-authorizing route; D-086 now also uses the same non-authorizing eligibility
+inside its sealed fixture workflow. Paths remain application-selected and
+private; documents and memory remain untrusted. No persistence, IPC, UI,
+provider, live model, vector search, unrestricted file tool, executor, or
+device authority exists. Focused contracts, the complete repository suite, and
+independent review pass with `PASS WITH ADVISORIES`; the only accepted residual
+is the pure-`std` Unix document-open TOCTOU race.
+
+D-086 implements one further sealed, fixture-only application-service sequence:
+Personal Assistant -> Research -> Knowledge -> Personal synthesis. Research and
+Knowledge are sequential depth-one siblings created only by the orchestrator.
+The path is fixed at three tasks, two non-replenishing children, one active
+child, four run attempts, 32 runtime and generic events, 16 workflow events and
+matching non-authoritative audit records, and zero automatic retries. Strict
+versioned results preserve only application-issued fixture source IDs; missing
+Research references produce explicit partial status and skip Knowledge, valid
+incomplete Knowledge remains partial, and unknown or remapped references fail
+closed. Final Personal synthesis is likewise strict: its catalog references,
+fixture-only disclosure, and complete/partial status are validated; its source
+set must exactly match validated Research and its answer must disclose fixture
+and applicable partial status, while invented citations, URLs, live-research
+claims, or reasoning fail the root.
+Terminal preparation, truthful fallback, child-first cancellation,
+task-memory cleanup, pending-review Knowledge proposals, content-free events,
+and descriptive redacted attribution remain application-owned. Generic/direct
+Research-to-Knowledge remains denied; this exact sequence grants neither
+specialist spawn authority nor any tool, provider, network, filesystem,
+persistence, IPC, UI, runtime, approval, execution, or device authority.
 
 The catalog now marks Personal Assistant, Research, and Knowledge as
 non-authorizing `Initial`; the other six roles remain Deferred. Registration,
@@ -237,5 +260,10 @@ reached.
 - D-065 governs the repository instruction hierarchy and documentation-only
   treatment of future multi-agent concepts.
 - D-078 records this present-scope, preservation, and runtime-adapter direction.
+- D-082 accepts the application-owned native multi-agent architecture above the
+  runtime seam.
+- D-086 authorizes only the implemented fixed fixture-based Research and
+  Knowledge sibling sequence and leaves generic delegation and runtime authority
+  unchanged.
 - `ARCHITECTURE.md`, `PROJECT_STATUS.md`, and `NEXT_STEPS.md` distinguish current
   capability, verified state, and authorized queue order.

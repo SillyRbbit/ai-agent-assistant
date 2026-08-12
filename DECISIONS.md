@@ -3201,6 +3201,85 @@ does not prove a shipping UI, native file picker, provider, model quality,
 durable memory, full Research-to-Knowledge workflow, or general document
 processing.
 
+## D-086 - Add one structured Research-to-Knowledge workflow
+
+Date: 2026-08-12
+Status: Accepted owner architecture and implementation decision
+
+Decision: Authorize one deterministic, Rust-only Personal Assistant ->
+Research Agent -> Knowledge & Document Agent -> Personal Assistant synthesis
+workflow above the existing `AgentRuntime` port. This is a fixed application
+service, not a general workflow engine. Both specialists are sequential sibling
+children of the same Personal Assistant root at depth one. Only
+`AgentOrchestrator` creates either child; Research never delegates to or spawns
+Knowledge.
+
+D-086 preserves D-079 and D-082 through D-085 except for this workflow's exact
+finite sequencing limits. Generic delegation remains Personal Assistant ->
+Research and retains its original one-child semantics. D-085's separate
+approved-document Personal Assistant -> Knowledge route remains unchanged. The
+sealed workflow alone may own three tasks, two non-replenishing children, one
+active child, and four sequential runtime runs: initial Personal, Research,
+Knowledge, and final Personal synthesis. Automatic retries are zero.
+
+The workflow accepts only a bounded immutable catalog of application-supplied
+deterministic fixtures. It does not authorize search, browser, network,
+provider, filesystem discovery, or live research. Runtime output is untrusted
+strict structured data. Research may reference only opaque source IDs issued by
+the application catalog; Knowledge may preserve only references already
+validated from the Research result. Unknown or remapped IDs fail closed,
+missing references produce explicit partial status, and the application never
+invents a citation. Final synthesis receives validated attributed results plus
+an explicit fixture-only disclosure and stage status, never raw invalid output
+or chain-of-thought.
+
+Research and Knowledge may use the D-085 private and task-temporary memory
+namespaces only through their exact live contexts. Sibling private/task memory
+is not transferred. A reusable-knowledge value remains proposal data or an
+entry in `ProposedShared`; it is never automatically approved, selected,
+persisted, or treated as fact. Durable memory and ARB-005 remain unresolved.
+
+The application exposes a bounded content-free workflow event family for
+Research start/completion, Knowledge organization start/completion, synthesis
+start, partial failure, cancellation, and completion. A separate closed
+volatile workflow attribution record binds stage, task/root/agent/runtime/run,
+predecessor where applicable, and typed outcome without source content,
+findings, summaries, paths, URLs, prompts, output, or reasoning. It is not a
+generic or durable `AuditLogger` and grants no authority.
+
+Research failure, cancellation, or invalid structured output skips Knowledge
+and permits a bounded truthful Personal fallback. Knowledge failure,
+cancellation, or invalid output permits Personal synthesis from the validated
+Research result plus an explicit unavailable status. Root cancellation cancels
+pending governance and the active child before the root and never starts a
+later stage. Final synthesis failure fails the root. Late, duplicate, foreign,
+cross-stage, wrong-run, and wrong-sequence events fail before mutation.
+
+Knowledge instructions advance to a versioned V2 source because the role may
+now consume validated Research evidence in addition to D-085 approved
+documents. This changes no runtime, native-runtime, policy profile, tool,
+approval, executor, document-reader, provider, permission, IPC, or UI
+authority.
+
+Consequences: the exact Research/Knowledge ExecPlan may proceed after fresh
+readiness, architecture, and security review. Completion proves only bounded
+fixture-based orchestration, structured specialist and final-output
+attribution, partial-failure handling,
+and Native-compatible contracts. It does not prove live research, provider or
+model quality, factual accuracy, user-visible capability, a general workflow
+engine, parallelism, or activation of Coding, QA, Security, Cloud, Systems
+Operations, or Workflow Automation.
+
+Implementation outcome (2026-08-12): the bounded D-086 implementation is
+verified complete with advisories under gate
+`agent-research-knowledge-workflow`. Strict Research, Knowledge, and final
+synthesis contracts accept only catalog-issued fixture references; the sealed
+orchestrator sequence preserves depth-one sibling lineage, one active child,
+zero retries, truthful partial failure, child-first cancellation, and
+task-local memory cleanup. Native remains sole/default and unchanged. Generic
+Research-to-Knowledge delegation, live retrieval, providers, persistence, IPC,
+UI, parallelism, and every other specialist workflow remain Blocked.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

@@ -4,47 +4,42 @@ Last updated: 2026-08-12
 
 ## Current state
 
-The owner-approved D-084 per-agent governance increment is **verified complete
-with advisories and published at `2687294`** under gate `agent-governance`.
-Above the published task/orchestration baseline at `1d1d9d6`, the Rust core
-now binds nine exact policy profiles and orchestrator-validated live task/run
-attribution through profile-aware deterministic policy, closed agent-origin
-approval, the exact Personal Assistant-to-Research delegation matrix, and a
-bounded volatile governance audit.
+D-086's exact
+[`2026-08-11-research-knowledge-workflow.md`](docs/plans/2026-08-11-research-knowledge-workflow.md)
+is **verified complete with advisories; publication pending** under gate
+`agent-research-knowledge-workflow`. Above the published D-083 orchestration,
+D-084 governance, and D-085 volatile memory/document boundaries, the unwired
+Rust core now supports exactly one deterministic fixture-only Personal
+Assistant -> Research -> Knowledge & Document -> Personal synthesis workflow.
+Both specialists are sequential depth-one siblings created only by
+`AgentOrchestrator`; generic/direct Research-to-Knowledge delegation remains
+denied.
 
-The new path is deliberately non-executing. Personal Assistant alone is
-eligible for the two existing local schemas: date/time deterministically
-allows, and local-task creation requires exact approval. All eight other
-profiles deny current tools. Every outcome records `NotAttempted`; runtime tool
-proposals remain rejected, delegation remains outside `ToolRegistry`, and only
-`AgentOrchestrator` may create a child. Pending approval blocks runtime events
-and delegation and is audited before task cancellation, including child-first
-root cancellation. Audit is typed, redacted, volatile, replay-safe, and capped
-at 32 subjects.
+The implementation validates strict bounded Research, Knowledge, and final
+synthesis contracts. Only application-catalog fixture source IDs may cross
+stages; unknown references, URLs, hidden-reasoning fields, false fixture
+disclosure, unknown fields, malformed data, and bound violations fail closed.
+Research or Knowledge failure, incomplete attribution, runtime-start failure,
+and cancellation produce typed truthful partial or terminal outcomes with zero
+automatic retries. Task-temporary memory is cleaned at terminal state and an
+optional reusable Knowledge value remains `PendingReview` rather than becoming
+approved shared memory.
 
-Focused governance units pass 6/6, audit units 14/14, orchestrator units 8/8,
-the public governance contract 10/10, and existing orchestration/runtime/
-registry/gateway contracts remain green. Complete Rust, `npm run verify`,
-strict Clippy, architecture, security, and code reviews pass with two
-non-blocking coverage advisories. No Tauri/React behavior, executor, provider,
-live model, memory, durable audit, credential, dependency, permission, process,
-network, filesystem, Hermes integration, or user-visible behavior was added.
-`NativeAgentRuntime` remains sole/default and the other seven roles remain
-Deferred at that published baseline.
+Focused Research/Knowledge units pass 12/12, orchestrator units pass 10/10,
+and the public workflow contract passes 18/18. Existing memory/document,
+generic orchestration, governance, definition/registry, runtime, and gateway
+regressions pass. Complete all-target Rust, strict Clippy, `npm run verify`,
+documentation, repository, security, diff, and session-end checks pass. The
+quality result is `PASS WITH ADVISORIES`; the internal continuation-failure
+branch can later use a more explicit typed outcome without changing the closed
+public behavior. `NativeAgentRuntime` remains sole/default and unchanged.
 
-D-085's bounded volatile memory plus approved-document Knowledge increment is
-**verified complete with advisories; publication pending**. It adds sealed
-workflow-local memory authority,
-version-bound reviewed proposals, bounded explicit context selection, linear
-document reservation/consumption, aggregate request budgets, cleanup, and a
-separate direct Personal Assistant-to-Knowledge mock-runtime route. Focused
-memory tests pass 6/6, document-reader tests pass 9/9, and the public contract
-passes 10/10. The all-target Rust suite passes 269 tests with one intentionally
-ignored opt-in Hermes probe; complete repository validation and independent
-review pass. The quality result is `PASS WITH ADVISORIES`; the only accepted
-residual is the pure-`std` Unix document-open TOCTOU race. ARB-005 durable
-persistence and the full Research-to-Knowledge workflow remain Blocked, and no
-later plan is Ready.
+The published D-084 baseline remains at `2687294`; D-085 remains published at
+`5e53f55` with its historical pure-`std` Unix document-open TOCTOU advisory.
+No provider, live retrieval, network, filesystem discovery, durable memory,
+tool execution, dependency, Tauri/React wiring, IPC, UI, parallelism, general
+workflow engine, Hermes integration, or other-agent activation was added.
+ARB-005 and every later plan remain Blocked; no later plan is Ready.
 
 Hermes integration is **Deferred — evaluated transport and containment
 requirements not met**. Raw TUI-gateway stdio, managed `hermes serve`
@@ -195,22 +190,18 @@ changed.
 
 ## Current exact task
 
-Review the exact verified D-085 workspace and its post-increment evidence. If
-the project owner explicitly directs publication, create one Conventional
-Commit containing only the complete bounded increment and push only under that
-direction. Do not extend the implementation, begin a later plan, or implement
-durable memory, SQLite product data, unrestricted file access, vector search,
-Research-to-Knowledge, provider, IPC, UI, or another roadmap phase.
+Obtain separate owner direction to review and publish the verified D-086
+increment. Do not begin bounded parallelism or another product plan: no later
+plan is Ready.
 
-Resume prompt: Read `AGENTS.md`, the project-memory chain, D-079 through D-085,
-the native multi-agent ADR/assessment, both roadmaps, the published governance
-plan/review at `2687294`, and the verified D-085 ExecPlan/increment/review.
-Inspect Git status, the complete diff, and live marker status. Do not change the
-settled increment or start another phase. If and only if the owner explicitly
-requests publication, commit the exact D-085 change set using the repository's
-Conventional Commit convention and push the current branch to its configured
-upstream. Preserve Native as sole/default and leave durable memory plus the full
-Research-to-Knowledge workflow Blocked.
+Resume prompt: Read `AGENTS.md`, the project-memory chain, D-079 and D-082
+through D-086, the native multi-agent ADR/assessment and both roadmaps, the
+published D-085 evidence at `5e53f55`, the D-086 plan, increment record, and
+post-increment review. Inspect Git status and require the
+`agent-research-knowledge-workflow` marker to remain complete and valid for the
+unchanged workspace. Await explicit owner direction before committing or
+pushing D-086. Do not start bounded parallelism, live retrieval, provider,
+tools, durable memory, IPC, UI, or another workflow.
 
 The fake-only Cloudflare demo macOS Keychain proof is complete with advisories.
 Pinned macOS-only Security.framework bindings read exactly two fixed labels and
