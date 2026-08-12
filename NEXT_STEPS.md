@@ -171,16 +171,28 @@ sole/default; the other seven roles remain Deferred; Hermes remains Blocked.
 
 ### Completed implementation: Per-agent governance
 
-**Status:** **Verified complete with advisories; publication pending**. The
+**Status:** **Verified complete with advisories; published at `2687294`**. The
 [`2026-08-11-agent-governance.md`](docs/plans/2026-08-11-agent-governance.md)
 implements nine exact policy profiles, orchestrator-derived live attribution,
 the closed Personal-to-Research delegation matrix, reuse of the existing
 deterministic policy and approval boundaries, and a bounded volatile governance
 audit. It is strictly non-executing: runtime tool proposals remain rejected,
 every execution result is `NotAttempted`, and memory namespace remains
-separately gated. The next action is owner review and, only on explicit
-direction, publication as one bounded commit. Phase 5 and all later plans remain
-Blocked.
+separately gated at that baseline.
+
+### Completed implementation: Volatile agent memory and approved documents
+
+**Status:** **Verified complete with advisories; publication pending**. D-085 and
+[`2026-08-12-agent-memory-approved-documents.md`](docs/plans/2026-08-12-agent-memory-approved-documents.md)
+narrow the owner's request to volatile bounded namespaces, version-bound shared
+proposals, sealed live/application authority, selected `.txt`/`.md` reads, and
+one direct Personal Assistant-to-Knowledge mock-runtime task. Focused memory,
+document-reader, and public contracts pass 6/6, 9/9, and 10/10. Complete Rust
+and repository verification and independent reviews pass with `PASS WITH
+ADVISORIES`; the accepted residual is the pure-`std` Unix document-open TOCTOU
+race. This does not resolve ARB-005, add persistence, or enable
+Research-to-Knowledge. No later plan is Ready; publication requires separate
+owner direction.
 
 ### Completed negative spike: Hermes ACP
 

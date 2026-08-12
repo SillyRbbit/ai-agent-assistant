@@ -18,13 +18,16 @@ cancellation, and a turn-bound in-memory approval-audit adapter. It also has an
 unwired non-executing per-agent governance foundation: nine closed profiles,
 orchestrator-derived live attribution, profile-aware deterministic policy,
 agent-origin approval, an exact delegation matrix, and a bounded volatile audit
-family. A successful terminal native or run-termination resolution cannot leave
-the initial turn without one typed legacy audit receipt. Agent governance
-reserves one audit slot before downstream mutation and records execution only
-as `NotAttempted`. There is no live provider transport, dispatcher, executor,
-product memory, platform adapter, or durable audit. Current resolutions,
-records, and receipts are volatile and non-authorizing and must not be mistaken
-for an end-to-end security path.
+family. D-085 adds a separately bounded workflow-local volatile memory store,
+selected-record context assembly, an approved-document reader, and one direct
+Personal Assistant-to-Knowledge document task. A successful terminal native or
+run-termination resolution cannot leave the initial turn without one typed
+legacy audit receipt. Agent governance reserves one audit slot before downstream
+mutation and records execution only as `NotAttempted`. There is no live provider
+transport, dispatcher, executor, durable or user-facing product memory, platform
+adapter, or durable audit. Current resolutions, memory, records, references, and
+receipts are volatile and non-authorizing and must not be mistaken for an end-
+to-end security path.
 
 ## Non-negotiable invariants
 
@@ -41,6 +44,18 @@ for an end-to-end security path.
   executor and every execution disposition is `NotAttempted`.
 - Delegation stays outside `ToolRegistry`; only the orchestrator may create a
   child after the exact Personal Assistant-to-Research matrix and finite limits.
+- Memory access requires sealed definition/task/live-runtime attribution,
+  including the exact memory profile; no caller or untrusted content supplies a
+  grant, namespace, owner, or application-review authority.
+- Proposed shared memory is unreadable as approved shared until an exact
+  version-checked application review promotes it. Private and task memory never
+  transfer across agents or workflows.
+- Approved-document access uses opaque workflow-bound references selected by
+  trusted application code. Paths remain private, roots cannot be enumerated,
+  and one-time read authority grants no general filesystem permission.
+- The direct Personal Assistant-to-Knowledge document route does not alter
+  generic Personal-to-Research delegation. Research-to-Knowledge remains
+  blocked and specialists cannot spawn agents.
 - Governance audit is closed, redacted, volatile, capped at 32 subjects, and
   never authorizes an action.
 - Untrusted content cannot grant permission or change policy.
@@ -179,6 +194,25 @@ Apply the dependency and supply-chain sections of `SECURITY_CHECKLIST.md` and
 - Redact content from logs and audit details unless the exact field is required for an approved action.
 - Use opaque references rather than arbitrary paths where possible.
 - Reject symlink escapes and unsupported executable content when file tooling is implemented.
+- D-085 memory is process-local to one bounded orchestrator. Approved shared,
+  private, task-temporary, and proposed-shared content has exact ownership,
+  quotas, versioned review, deletion, terminal cleanup, disable, and drop
+  behavior; it never enters SQLite or another workflow.
+- The approved-document reader accepts only exact registered lowercase `.txt`
+  or `.md` nonempty UTF-8 files within the documented bounds. It rejects
+  traversal, noncanonical members, symlinks, hard-link aliases, unsupported or
+  changed targets, replay, revocation, and cross-workflow references.
+- On supported Unix targets, registered, opened-handle, and final-path identity
+  are compared before and after the bounded read. The pure-standard-library open
+  sequence retains a narrow TOCTOU residual advisory. Non-Unix targets report
+  this boundary unavailable rather than weakening it.
+- Raw document text and explicitly selected approved-shared context are labeled
+  untrusted, bounded before runtime request construction, and excluded from
+  Debug, errors, orchestration events, governance audit, and automatic memory.
+- D-085 adds no IPC, file picker, provider transmission, unrestricted file tool,
+  persistence, vector search, background indexing, document writing, or device
+  effect. Any later consumer requires a separate approved plan and privacy
+  evidence.
 
 ## GitHub automation boundary
 

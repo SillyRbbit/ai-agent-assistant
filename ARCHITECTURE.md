@@ -200,8 +200,9 @@ unchanged one-run runtime seam.
 flowchart TD
     User["User"] -. "future caller" .-> Personal["Personal Assistant<br/>current inert definition"]
     Personal --> Orchestrator["AgentOrchestrator<br/>implemented; unwired"]
-    Orchestrator --> Initial["Implemented bounded route<br/>Personal Assistant to Research Agent"]
-    Orchestrator -. staged .-> Knowledge["Research & knowledge<br/>Knowledge & Document"]
+    Orchestrator --> Research["Implemented generic route<br/>Personal Assistant to Research Agent"]
+    Orchestrator --> Knowledge["Implemented document route<br/>Personal Assistant to Knowledge & Document"]
+    Orchestrator -. staged .-> ResearchKnowledge["Blocked sequence<br/>Research Agent to Knowledge & Document"]
     Orchestrator -. staged .-> Engineering["Engineering<br/>Coding + QA + Security"]
     Orchestrator -. staged .-> Operations["Infrastructure & operations<br/>Cloud + Systems + QA + Security"]
     Orchestrator -. staged .-> Automation["Automation<br/>Workflow Automation"]
@@ -222,8 +223,10 @@ their closed `Initial`/`Deferred` catalog state. Discovery is non-authorizing;
 operational selection and task creation fail closed for deferred definitions.
 Neither registration, grouping, nor activation grants tools, routing, policy,
 memory, provider, or device authority.
-The catalog marks only Personal Assistant and Research Agent `Initial`; all
-nine definitions remain unwired and none is a shipping assistant. The embedded
+The catalog marks Personal Assistant, Research Agent, and Knowledge & Document
+Agent `Initial`; all nine definitions remain unwired and none is a shipping
+assistant. Knowledge eligibility applies only to D-085's separate approved-
+document route and grants no generic delegation edge. The embedded
 instruction sources are closed application-owned Rust assets rather than
 runtime-loaded files.
 
@@ -231,20 +234,21 @@ runtime-loaded files.
 lineage, the closed `Pending`/`Running`/`WaitingForChild`/terminal state
 machine, and at most one typed terminal outcome. `AgentExecutionContext` is
 derived from live task and runtime-run state and binds the agent, task, root,
-optional parent, runtime, depth, run, request, and exact versioned policy-profile
-identities. It deliberately contains no inert memory-namespace placeholder.
-The profile is captured from the sealed built-in definition identity rather
-than supplied independently by a caller.
+optional parent, runtime, depth, run, request, and exact versioned policy- and
+memory-profile identities. Both profiles are captured from the sealed built-in
+definition identity rather than supplied independently by a caller.
 
 `AgentOrchestrator<R: AgentRuntime>` is a separate application service. One
 instance owns at most one root workflow, two tasks, three sequential runtime
 runs, one non-replenishing child, one active child, depth one, and 32 runtime
 and application events. It owns task assignment, exact live-context checks,
-the sole Personal Assistant-to-Research route, bounded output accumulation,
+the generic Personal Assistant-to-Research route, D-085's separate approved-
+document Personal Assistant-to-Knowledge route, bounded output accumulation,
 result attribution, synthesis resumption, and child-first cancellation. It is
-not a runtime, provider, policy engine, tool registry, approval manager, memory
-store, or executor. It composes the application-owned non-executing governance
-service below without transferring any of those component authorities.
+not a runtime, provider, policy engine, tool registry, approval manager, or
+executor. It directly owns one workflow-local `MemoryStore` and
+`ApprovedDocumentReader` without transferring their authority to an agent or
+runtime, and composes the non-executing governance service below.
 
 A root may complete directly in one runtime run. Delegation is accepted only
 before root output begins; the orchestrator then terminally cancels that first
@@ -265,20 +269,23 @@ Workflow Automation is not `AgentOrchestrator`. Agents may emit bounded
 recommendations or typed requests; application code owns lifecycle,
 authorization, approval, execution, and audit decisions.
 
-The implemented Personal-to-Research boundary uses depth one, one child task
-total per root, and one active child. Completion or cancellation does not
-replenish the budget. Only the orchestrator may create a child task. A typed
-application-service call is the internal mechanism; delegation is not a
-runtime control event, shell command, or `agent.delegate` host tool.
+The implemented orchestration boundary uses depth one, one child task total per
+root, and one active child. Completion or cancellation does not replenish the
+budget. Only the orchestrator may create a child task. Generic delegation is a
+typed application-service call and remains exactly Personal Assistant to
+Research Agent. D-085 adds a separate trusted application document-task call
+from Personal Assistant to Knowledge & Document; it is not generic delegation,
+a runtime control event, shell command, filesystem tool, or `agent.delegate`
+host tool.
 
-The initial root is exactly Personal Assistant and the only first-flow child
-edge is Personal Assistant to Research Agent. Research Agent cannot delegate;
-self, reverse, unknown, or other routes fail before task creation. This
-allowlist is owned by the application/orchestrator. A definition's registry
-membership or activation does not grant a route. Later research/knowledge,
-engineering-quality, infrastructure/operations, and automation workflows must
-add exact closed routes and finite task caps under separate plans. Their arrows
-mean orchestrator-controlled sequencing at depth one, never specialist spawning.
+The initial root is exactly Personal Assistant. Research and Knowledge cannot
+delegate; self, reverse, unknown, and all other generic routes fail before task
+creation. Research-to-Knowledge remains Blocked. These allowlists are owned by
+the application/orchestrator. Registry membership, activation, or a memory
+profile grants no route. Later research/knowledge, engineering-quality,
+infrastructure/operations, and automation workflows must add exact closed
+routes and finite task caps under separate plans. Their arrows mean
+orchestrator-controlled sequencing at depth one, never specialist spawning.
 
 #### Per-agent governance foundation
 
@@ -317,22 +324,80 @@ and grants no authority. Delegation remains outside `ToolRegistry`; the audit
 records the exact Personal-to-Research matrix result independently from later
 control denial or child-creation outcome.
 
-Before any later memory access, persistence, data-bearing privileged action,
-or device effect, a separately enforced memory-namespace identity remains
-mandatory. Missing, unknown, stale, duplicate, or mismatched identity fails
-closed and never defaults to Personal Assistant.
+Before memory access, a sealed built-in definition now supplies the exact
+memory-profile identity carried through task, live execution context, and
+attribution. Missing, unknown, stale, foreign, or mismatched live identity fails
+before content clone or mutation and never defaults to Personal Assistant.
+Persistence, data-bearing privileged actions, and device effects remain
+separately gated.
 
-Current baseline code still contains no memory namespace, multi-agent Tauri
-IPC, multi-agent React state, provider, live model, tool executor, platform
-adapter, durable audit, or device action. The catalog, task, orchestrator, and
-governance foundations are Rust-only and unwired. The Tasks and Memory screens
-remain placeholders.
+The current baseline contains no multi-agent Tauri IPC, multi-agent React state,
+provider, live model, tool executor, platform adapter, durable audit, durable
+memory, or device action. The catalog, task, orchestrator, governance, volatile
+memory, and approved-document foundations are Rust-only and unwired. The Tasks
+and Memory screens remain placeholders.
 
-The target namespace model is shared user/project, agent-private,
-task-temporary, and proposed-shared memory. No product `MemoryStore`, vector
-database, embedding service, or semantic index is selected or implemented.
-Proposed shared memory is inert until explicit application policy and user
-controls promote it.
+#### Volatile memory and approved-document Knowledge boundary
+
+**Current verified Rust foundation; unwired**: D-085 adds one application-owned
+`MemoryStore` and one
+`ApprovedDocumentReader` directly owned by each one-root `AgentOrchestrator`.
+They are process-local, non-global, non-injectable application services with no
+thread, database, network, provider, clock, background index, or persistence.
+Dropping the orchestrator/store clears retained content; nothing crosses an
+orchestrator workflow or survives process exit.
+
+The closed memory namespaces are approved shared, agent-private,
+task-temporary, and proposed shared. Personal Assistant may read approved
+shared and its own private/task records. Research and Knowledge may use only
+their own private/task records and create inert proposals; the other six roles
+are memory-disabled. Approved-shared promotion requires trusted application
+review against an exact proposal version. Reads name exact record IDs, context
+selection is bounded to eight records and 8,192 bytes, and no history,
+document, namespace, sibling result, or private record is copied implicitly.
+Terminal task cleanup removes only that task's temporary records. Disable
+atomically clears all volatile memory and re-enable starts empty.
+
+Agent memory access requires a non-cloneable grant derived from exact live
+agent, policy profile, memory profile, task/root/parent, runtime, depth, run, and
+request attribution. Application review/delete/disable and document
+registration/revocation use separate application-control proof types. These
+proofs have no public constructor and cannot be supplied by a model, runtime,
+WebView, document, or caller-authored identity.
+
+The document reader retains exact paths privately behind opaque workflow-bound
+IDs. Trusted application code may register one user-selected file, task
+attachment, generated artifact, or exact approved-root member. There is no
+directory enumeration. Reads accept only nonempty lowercase `.txt` or `.md`
+UTF-8 content up to 16,384 bytes. Relative paths, component counts, roots, and
+references are bounded; traversal, noncanonical input, symlinks, hard-link
+aliases, non-regular files, unsupported formats, replacement, detected in-read
+mutation, replay, revocation, and cross-workflow binding fail closed. Supported
+Unix targets compare registered, opened-handle, and final-path identity before
+and after the bounded read. Pure-`std` opening retains a narrow documented
+TOCTOU advisory; non-Unix targets report this boundary unavailable.
+
+One reference is linearly reserved, then aborted or consumed. After the root
+run is terminally cancelled, a consumed reference feeds exactly one direct
+Personal Assistant-to-Knowledge child request. The document and an optional
+explicit approved-shared selection are labeled untrusted and bounded to 26,624
+raw UTF-8 bytes including framing. The result is one attributed
+`DocumentTaskResult`, followed by a fresh Personal Assistant synthesis run.
+Knowledge cannot choose paths, crawl roots, use tools, write artifacts,
+delegate, or publish approved shared memory. The generic delegation matrix is
+unchanged and Research-to-Knowledge remains Blocked.
+
+Focused evidence passes 6 memory units, 9 document units, 10 public memory/
+document contracts, and the 7 registry, 10 governance, 22 orchestration, 20
+runtime, and 10 gateway regression contracts. Both storage smoke contracts
+pass. The all-target Rust suite passes 269 tests with one intentionally ignored
+opt-in Hermes probe; formatting, all-target/all-feature check, strict Clippy,
+complete repository verification, and independent architecture/security/code
+review pass. The quality result is `PASS WITH ADVISORIES` for the accepted
+pure-`std` document-open TOCTOU residual. No Tauri command, React consumer,
+provider, live model, SQLite product data, dependency, permission, executor, or
+device effect was added. See
+[`AGENT_MEMORY_DOCUMENT_PRIVACY.md`](docs/security/AGENT_MEMORY_DOCUMENT_PRIVACY.md).
 
 See
 [`NATIVE_MULTI_AGENT_ASSESSMENT.md`](docs/architecture/NATIVE_MULTI_AGENT_ASSESSMENT.md),
@@ -616,9 +681,15 @@ receipt authorizes dispatch, execution, or provider continuation.
 **Mocked**: the React Memory page is a placeholder and conversation state is
 volatile.
 
-**Current absence**: the legacy generic Rust memory scaffold was deleted in
-Increment 4L. No product memory repository, retention control, encryption,
-review/delete flow, or model-context selector exists.
+**Current, unwired and volatile**: D-085 adds a new bounded namespace-aware
+`MemoryStore` owned by one `AgentOrchestrator`, with explicit selected-record
+context, versioned application review, exact deletion, task cleanup, and atomic
+disable. It is not the deleted legacy scaffold and does not persist, cross a
+workflow, or satisfy user-facing product-memory requirements.
+
+**Current absence**: there is no durable product memory repository, SQLite
+product-data schema, encryption/key boundary, restart recovery, export, UI,
+cross-session selector, vector database, embedding service, or semantic index.
 
 ### Platform adapters
 
@@ -670,22 +741,24 @@ reviewed repository ICNS byte-for-byte.
 
 ## Current and future capability matrix
 
-| Capability                                    | State                         | Evidence or gate                                               |
-| --------------------------------------------- | ----------------------------- | -------------------------------------------------------------- |
-| React workspace and navigation                | Current                       | Frontend tests and application source                          |
-| Assistant interaction                         | Mocked                        | Deterministic in-memory driver only                            |
-| App info and menu routing                     | Current                       | Narrow Tauri command/event                                     |
-| SQLite bootstrap metadata                     | Current                       | Storage tests and startup integration                          |
-| Gateway request/protocol validation           | Current, transport-free       | Phase 4A and 4N-4P                                             |
-| Function schema and policy binding            | Current, non-authorizing      | Phase 4B-4C and 4Q-4R                                          |
-| Approval presentation/resolution/cancellation | Current, disconnected         | Phase 4D-4E and 4S-4U                                          |
-| Approval audit adapter                        | Current, bound and volatile   | Phase 4H and 4V                                                |
-| Live gateway and model-provider transport     | Planned                       | Blocked by O-006, per-provider O-007 evidence, and future plan |
-| Restricted tool execution                     | Planned                       | No dispatcher or executor exists                               |
-| Product memory and task persistence           | Planned                       | Phase 8 direction only                                         |
-| Privileged macOS integrations                 | Planned or prohibited for MVP | Separate permission and threat-model gates                     |
-| Generic shell or model-to-device execution    | Prohibited                    | `SECURITY.md`                                                  |
-| Signing, notarization, and production release | Planned                       | Phase 10 and `RELEASE_CHECKLIST.md`                            |
+| Capability                                    | State                          | Evidence or gate                                               |
+| --------------------------------------------- | ------------------------------ | -------------------------------------------------------------- |
+| React workspace and navigation                | Current                        | Frontend tests and application source                          |
+| Assistant interaction                         | Mocked                         | Deterministic in-memory driver only                            |
+| App info and menu routing                     | Current                        | Narrow Tauri command/event                                     |
+| SQLite bootstrap metadata                     | Current                        | Storage tests and startup integration                          |
+| Gateway request/protocol validation           | Current, transport-free        | Phase 4A and 4N-4P                                             |
+| Function schema and policy binding            | Current, non-authorizing       | Phase 4B-4C and 4Q-4R                                          |
+| Approval presentation/resolution/cancellation | Current, disconnected          | Phase 4D-4E and 4S-4U                                          |
+| Approval audit adapter                        | Current, bound and volatile    | Phase 4H and 4V                                                |
+| Workflow-local volatile agent memory          | Current, unwired               | D-085 verified contracts; process-local only                   |
+| Selected UTF-8 text/Markdown document reading | Current, unwired and read-only | D-085 verified contracts; no IPC or provider                   |
+| Live gateway and model-provider transport     | Planned                        | Blocked by O-006, per-provider O-007 evidence, and future plan |
+| Restricted tool execution                     | Planned                        | No dispatcher or executor exists                               |
+| Product memory and task persistence           | Planned                        | Phase 8 direction only                                         |
+| Privileged macOS integrations                 | Planned or prohibited for MVP  | Separate permission and threat-model gates                     |
+| Generic shell or model-to-device execution    | Prohibited                     | `SECURITY.md`                                                  |
+| Signing, notarization, and production release | Planned                        | Phase 10 and `RELEASE_CHECKLIST.md`                            |
 
 ## Approved future data flow
 

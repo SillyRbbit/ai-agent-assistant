@@ -14,7 +14,24 @@ also implements a bounded task domain and deterministic Personal-to-Research-
 to-Personal application-service contract. D-084 adds exact profiles, live
 attribution, non-executing policy/approval composition, a closed delegation
 matrix, and bounded volatile governance evidence. None is connected to Tauri,
-React, a provider, live model, executor, memory store, or external runtime.
+React, a provider, live model, executor, memory store, or external runtime at
+that D-084 published checkpoint.
+
+> **Additive current-state note (D-085, 2026-08-12):** The focused D-085
+> implementation now adds a new workflow-local volatile `MemoryStore`, sealed
+> memory-profile attribution, explicit bounded context selection, versioned
+> application review, opaque approved-document references for selected
+> lowercase `.txt`/`.md` UTF-8 files, and one separate direct Personal
+> Assistant-to-Knowledge document task. Focused memory, document, integration,
+> registry, governance, orchestration, and runtime contracts, complete
+> repository validation, and independent review pass with `PASS WITH
+ADVISORIES`; the only accepted residual is the pure-`std` Unix document-open
+> TOCTOU race. The boundary
+> has no persistence, IPC, UI, provider, live model, executor, unrestricted file
+> tool, vector index, new dependency, or device effect. Generic Personal-to-
+> Research remains unchanged and Research-to-Knowledge remains Blocked. Earlier
+> absence, catalog-state, and future-target statements below remain the dated
+> assessment checkpoint rather than current D-085 capability evidence.
 
 ## 1. Executive summary
 

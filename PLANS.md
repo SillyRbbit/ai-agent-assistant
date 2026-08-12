@@ -5,18 +5,30 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Active plan
 
 The owner-selected
+[`2026-08-12-agent-memory-approved-documents.md`](docs/plans/2026-08-12-agent-memory-approved-documents.md)
+is **verified complete with advisories; publication pending** under D-085. It
+combines only a new bounded volatile memory domain with the narrow selected
+UTF-8 text/Markdown Knowledge boundary. Focused memory tests pass 6/6,
+document-reader tests pass 9/9, and the public contract passes 10/10; all-target
+Rust passes 269 tests with one intentional ignored probe, and complete
+repository validation passes. The only accepted advisory is the narrow
+pure-`std` Unix document-open TOCTOU race. Durable memory/ARB-005 and the full
+Research-to-Knowledge workflow remain Blocked; no later plan is Ready.
+
+The prior owner-selected
 [`2026-08-11-agent-governance.md`](docs/plans/2026-08-11-agent-governance.md)
-is **verified complete with advisories** under gate `agent-governance`. D-084's
-bounded non-executing profile, policy, approval, delegation-matrix, and volatile
-audit foundation preserves D-082/D-083 ownership and route boundaries. The
-increment is uncommitted and awaits owner review; no later plan is Ready.
+is **verified complete with advisories and published at `2687294`** under gate
+`agent-governance`. D-084's bounded non-executing profile, policy, approval,
+delegation-matrix, and volatile audit foundation preserves D-082/D-083
+ownership and route boundaries.
 
 The prerequisite AgentDefinition/AgentRegistry increment is published at
 `f42a6c7`, and the task/orchestration increment is published at `1d1d9d6` with
 a valid completion marker. Native remains sole/default and the other seven
-roles remain Deferred. The implementation added no executor, memory, provider,
-runtime tool lane, IPC, UI, or specialist activation; every later plan remains
-Blocked.
+roles remain Deferred at that published baseline. The governance implementation
+added no executor, memory, provider, runtime tool lane, IPC, UI, or specialist
+activation. D-085 is the separately owner-selected successor direction; every
+other later plan remains Blocked.
 
 The prior owner-selected
 [`2026-08-11-hermes-acp-transport-spike.md`](docs/plans/2026-08-11-hermes-acp-transport-spike.md)

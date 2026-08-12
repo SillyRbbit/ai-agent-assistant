@@ -40,6 +40,50 @@ production boundary exists.
 - [ ] No policy/approval outcome reaches an executor, device, provider, IPC,
       memory store, filesystem, network, process, or platform adapter.
 
+## Volatile agent memory and approved documents
+
+- [ ] The immutable built-in definition is the sole agent-to-memory-profile
+      mapping, and the exact profile is sealed through task, execution context,
+      live attribution, and each memory grant.
+- [ ] Agent memory operations require a non-cloneable live grant derived only
+      after exact agent, task, root, parent, policy, memory-profile, runtime,
+      depth, run, and request validation.
+- [ ] Application review, approved-shared deletion, memory disable, document
+      registration, and revocation use separate application-control proofs that
+      no model, runtime, WebView, file, or caller identity can construct.
+- [ ] Approved-shared, agent-private, task-temporary, and proposed-shared memory
+      have exact owners, bounds, retention, deletion, cleanup, disable, and
+      workflow-drop semantics; no record crosses orchestrator instances.
+- [ ] Shared proposals remain inert until an exact expected-version review;
+      edit, approve, approve-edited, reject, withdraw, and delete failures leave
+      all records, versions, counts, and byte accounting unchanged.
+- [ ] Context assembly names exact record IDs, rejects duplicates and
+      inaccessible namespaces, applies record/count/byte bounds atomically, and
+      never copies history, documents, siblings, private records, or a namespace
+      implicitly.
+- [ ] Approved-document registration accepts only trusted application-selected
+      files, attachments, generated artifacts, or exact approved-root members;
+      paths are private and no enumeration API exists.
+- [ ] Document reads accept only bounded nonempty lowercase `.txt`/`.md` UTF-8
+      content and reject traversal, noncanonical components, symlinks, hard-link
+      aliases, non-regular files, replacement, detected mutation, replay,
+      revocation, and foreign workflow/task authority.
+- [ ] Supported Unix targets compare registered, opened-handle, and final-path
+      identity before and after the bounded read; the pure-`std` TOCTOU advisory
+      is recorded, and unsupported targets fail unavailable.
+- [ ] A document reference follows one linear available/reserved/consumed or
+      revoked lifecycle; failed root cancellation aborts the reservation, while
+      post-cancellation child-start failure never advertises retry.
+- [ ] Document and selected-memory input is labeled untrusted and bounded before
+      the runtime request. Paths/content are absent from Debug, errors, events,
+      audit, logs, SQLite, and automatic memory.
+- [ ] Knowledge is eligible only for the separate direct Personal Assistant
+      document route. Generic Personal-to-Research remains unchanged,
+      Research-to-Knowledge is blocked, and no specialist can delegate.
+- [ ] No IPC, file picker, provider, live model, durable memory, vector search,
+      background index, document write, new dependency, permission, executor,
+      or device effect is introduced by this boundary.
+
 ## Tauri IPC review
 
 - [ ] Every command and event is narrow, typed, explicitly registered, and

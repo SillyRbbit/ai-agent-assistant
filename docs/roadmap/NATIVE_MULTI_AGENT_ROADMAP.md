@@ -3,7 +3,7 @@
 Status: Subordinate staged roadmap; no implementation authority
 Authority: [`ROADMAP.md`](../../ROADMAP.md) remains the authoritative milestone
 roadmap
-Decision: D-082, D-083, D-084, and
+Decision: D-082, D-083, D-084, D-085, and
 [`ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md`](../adr/ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md)
 Last updated: 2026-08-12
 
@@ -14,8 +14,9 @@ catalog, activation sequence, workflow map, and separately gated plan set. It
 does not change root-roadmap status or authorize implementation. The closed
 nine-definition catalog, deterministic registry, bounded orchestrator, and
 non-executing governance foundation now exist, remain unwired, and grant no
-device or provider authority. No executor, memory store, Tauri consumer, or
-multi-agent UI exists.
+device or provider authority. D-085's workflow-local bounded volatile memory
+store and approved-document reader are verified complete with advisories; no
+executor, durable memory, Tauri consumer, or multi-agent UI exists.
 
 `AgentOrchestrator`, `AgentRuntime`, `NativeAgentRuntime`, `AgentRegistry`,
 `ToolRegistry`, `PolicyEngine`, `ApprovalManager`, `AuditLogger`, `MemoryStore`,
@@ -52,7 +53,7 @@ to use a live model or tool.
 | -------------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------- |
 | Personal Assistant         | `Initial`             | Definition/registry verification, then the separately verified task/orchestration foundation                |
 | Research Agent             | `Initial`             | Initial bounded Personal-to-Research workflow; governed retrieval remains separately gated                  |
-| Knowledge & Document Agent | `Deferred`            | Approved document roots, knowledge boundaries, memory lifecycle, and applicable governance                  |
+| Knowledge & Document Agent | `Initial`             | Only D-085's separate bounded Personal-to-Knowledge approved-document route; no generic delegation          |
 | Coding Agent               | `Deferred`            | Engineering workflow plus approved repository/change/test controls                                          |
 | QA & Validation Agent      | `Deferred`            | Engineering-quality validation boundary; it never becomes approval authority                                |
 | Security & Risk Agent      | `Deferred`            | Engineering/security review boundary; it remains advisory and never becomes policy or remediation authority |
@@ -71,17 +72,17 @@ shell, cloud, memory, provider, or device right.
 The ten root-roadmap phases remain authoritative. The entries below explain the
 native catalog's staged work inside those phases.
 
-| Root phase | Staged native outcome                                                                                                                                                                | Status relationship                                                                  |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
-| 1          | Register all nine privilege-free definitions; mark only Personal Assistant and Research Agent `Initial`                                                                              | Verified and published at `f42a6c7`; catalog remains inert and unwired               |
-| 2-3        | Add task lifecycle, trusted context, limits, explicit delegation, result collection, cancellation, and the deterministic Personal-to-Research-to-Personal proof above `AgentRuntime` | Verified complete under D-083; foundation remains Rust-only and unwired              |
-| 4          | Bind D-084's non-executing per-agent profile/policy/approval/audit foundation; establish approved file/root and document-processing boundaries only in a separate later increment    | Governance verified complete; publication pending; document boundary remains Blocked |
-| 5          | Add explicit memory namespaces/lifecycle, then stage the Research/Knowledge workflow                                                                                                 | Blocked on Phase 4, ARB-005, and the memory/workflow plans                           |
-| 6          | Increase child concurrency only through explicit deterministic limits, cancellation, and resource bounds                                                                             | Blocked until sequential behavior is verified                                        |
-| 7          | Stage engineering-quality, infrastructure/operations, and automation workflows with each specialist separately enabled                                                               | Blocked on role-specific governance and tool/platform decisions                      |
-| 8          | Add typed catalog, task, progress, attribution, cancellation, and approval-explanation UI through narrow Tauri IPC                                                                   | Blocked on stable backend contracts                                                  |
-| 9          | Demonstrate only bounded synthetic or separately approved workflows without capability overclaiming                                                                                  | Blocked on the selected workflow's complete gates                                    |
-| 10         | Review architecture, security, privacy, cancellation, audit, portability, and rollback across completed phases                                                                       | Blocked until sufficient implementation evidence exists                              |
+| Root phase | Staged native outcome                                                                                                                                                                | Status relationship                                                     |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| 1          | Register all nine privilege-free definitions; mark only Personal Assistant and Research Agent `Initial`                                                                              | Verified and published at `f42a6c7`; catalog remains inert and unwired  |
+| 2-3        | Add task lifecycle, trusted context, limits, explicit delegation, result collection, cancellation, and the deterministic Personal-to-Research-to-Personal proof above `AgentRuntime` | Verified complete under D-083; foundation remains Rust-only and unwired |
+| 4          | Bind D-084's non-executing per-agent profile/policy/approval/audit foundation; establish approved file/root and document-processing boundaries only in a separate later increment    | Governance verified and published at `2687294`                          |
+| 5          | Add D-085's selected bounded volatile namespaces and approved `.txt`/`.md` Knowledge boundary; keep durable memory and Research/Knowledge separate                                   | Verified complete with advisories; publication pending                  |
+| 6          | Increase child concurrency only through explicit deterministic limits, cancellation, and resource bounds                                                                             | Blocked until sequential behavior is verified                           |
+| 7          | Stage engineering-quality, infrastructure/operations, and automation workflows with each specialist separately enabled                                                               | Blocked on role-specific governance and tool/platform decisions         |
+| 8          | Add typed catalog, task, progress, attribution, cancellation, and approval-explanation UI through narrow Tauri IPC                                                                   | Blocked on stable backend contracts                                     |
+| 9          | Demonstrate only bounded synthetic or separately approved workflows without capability overclaiming                                                                                  | Blocked on the selected workflow's complete gates                       |
+| 10         | Review architecture, security, privacy, cancellation, audit, portability, and rollback across completed phases                                                                       | Blocked until sufficient implementation evidence exists                 |
 
 ## Delegation and sequencing invariants
 
@@ -115,10 +116,11 @@ Personal Assistant
   -> Personal Assistant synthesis
 ```
 
-The first usable milestone stops after the Research Agent result. Knowledge &
-Document joins only after approved file/root, document, memory, and governance
-boundaries exist. External research requires separately governed read-only
-tools.
+The first generic-delegation milestone stops after the Research Agent result.
+D-085 separately adds a direct Personal Assistant-to-Knowledge task over one
+selected approved document. It does not connect Research to Knowledge or grant
+either role file selection, enumeration, persistence, or tool authority.
+External research requires separately governed read-only tools.
 
 ### Engineering quality
 
@@ -171,16 +173,19 @@ approval, restricted execution, and audit.
 
 ## Separately gated plans
 
-The AgentDefinition/AgentRegistry and combined orchestration foundations are
-implemented, verified, and published. D-084's bounded non-executing governance
-foundation is implemented and verified locally; publication remains a separate
-owner action. Knowledge/document boundaries and every phase after governance
-remain Blocked.
+The AgentDefinition/AgentRegistry, combined orchestration, and D-084 bounded
+non-executing governance foundations are implemented, verified, and published.
+D-085 separately selects one combined volatile-memory and narrow
+approved-document Knowledge increment. It is verified complete with advisories;
+publication requires separate owner direction. Durable memory,
+Research-to-Knowledge, and every other later phase remain Blocked, and no next
+plan is Ready.
 
 | Area                                   | Plan                                                                                                                                      |
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | Orchestration foundation               | [`2026-08-11-agent-orchestration-task-lifecycle.md`](../plans/2026-08-11-agent-orchestration-task-lifecycle.md)                           |
 | Per-agent governance                   | [`2026-08-11-agent-governance.md`](../plans/2026-08-11-agent-governance.md)                                                               |
+| Volatile memory + approved documents   | [`2026-08-12-agent-memory-approved-documents.md`](../plans/2026-08-12-agent-memory-approved-documents.md)                                 |
 | Knowledge and document boundaries      | [`2026-08-11-knowledge-document-boundaries.md`](../plans/2026-08-11-knowledge-document-boundaries.md)                                     |
 | Agent-specific memory                  | [`2026-08-11-agent-memory.md`](../plans/2026-08-11-agent-memory.md)                                                                       |
 | Research and knowledge workflow        | [`2026-08-11-research-knowledge-workflow.md`](../plans/2026-08-11-research-knowledge-workflow.md)                                         |
@@ -195,7 +200,7 @@ remain Blocked.
 ## Non-goals and authority
 
 This roadmap does not authorize production code, dependencies, providers,
-tools, memory, persistence, processes, networking, Tauri IPC, UI, credentials,
+tools, additional memory, persistence, processes, networking, Tauri IPC, UI, credentials,
 platform permissions, agent activation, workflow execution, commit, or
 publication. It does not select Hermes or another external framework. Native
 remains sole/default, and Hermes remains Deferred/Blocked.

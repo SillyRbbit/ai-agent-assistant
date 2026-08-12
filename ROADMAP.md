@@ -84,23 +84,23 @@ D-082 accepts application-owned native multi-agent architecture above the
 implemented single-run `AgentRuntime`/sole-default `NativeAgentRuntime`
 foundation. This sequence is subordinate to the same acceptance gates as every
 other product milestone. It does not imply a live provider, model, tool,
-memory, coordinator, Tauri consumer, or frontend integration.
+durable memory, Tauri consumer, or frontend integration.
 
 The detailed activation and workflow sequence lives in the subordinate
 [`NATIVE_MULTI_AGENT_ROADMAP.md`](docs/roadmap/NATIVE_MULTI_AGENT_ROADMAP.md);
 this root roadmap remains authoritative.
 
-| Phase                                          | Status    | Bounded outcome                                                                                                                                                        | Gate to advance                                                                                           |
-| ---------------------------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| 1. Agent definition and registry               | Completed | Nine immutable definitions and deterministic registry; only Personal Assistant and Research are `Initial`, none operational                                            | Preserve the verified catalog; publication requires separate owner direction                              |
-| 2-3. Task orchestration and first bounded flow | Completed | Closed task lifecycle, trusted context, depth-one typed delegation, one deterministic Research child/result, Personal synthesis, and cancellation above `AgentRuntime` | D-083, verified catalog foundation, deterministic contracts, full validation, and post-increment evidence |
-| 4. Agent-specific governance                   | Completed | D-084's non-executing per-agent identity, profile, policy, approval, delegation-matrix, and volatile audit foundation; knowledge/document boundaries remain separate   | Preserve the verified boundary; publication requires separate owner direction                             |
-| 5. Agent-specific memory                       | Blocked   | User-controlled shared/private/temporary/proposed-shared namespaces, followed by the staged Research/Knowledge workflow                                                | Phase 4, ARB-005 resolution, and the Blocked memory and research/knowledge plans                          |
-| 6. Bounded parallelism                         | Blocked   | Explicit finite concurrency, deterministic cancellation, ordering, and resource limits                                                                                 | Sequential workflows verified plus the Blocked bounded-parallelism plan                                   |
-| 7. Staged specialist workflows                 | Blocked   | Engineering-quality, infrastructure/operations, and automation workflows with exact routes/caps and separate consequential-action gates                                | Governance evidence plus the three Blocked specialist-workflow plans                                      |
-| 8. Desktop UI                                  | Blocked   | Typed catalog/task/progress/attribution/cancellation presentation and control through narrow Tauri IPC                                                                 | Stable backend contracts plus the Blocked multi-agent UI plan                                             |
-| 9. End-to-end demonstrations                   | Blocked   | Bounded synthetic or separately approved demonstrations with exact attribution and no overclaiming                                                                     | Selected workflow gates plus the Blocked demonstration plan                                               |
-| 10. Architecture/security review               | Blocked   | Cross-phase ownership, isolation, cancellation, audit, privacy, portability, and rollback review                                                                       | Complete selected evidence plus the Blocked final-review plan                                             |
+| Phase                                          | Status    | Bounded outcome                                                                                                                                                             | Gate to advance                                                                                           |
+| ---------------------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| 1. Agent definition and registry               | Completed | Nine immutable definitions and deterministic registry; only Personal Assistant and Research are `Initial`, none operational                                                 | Preserve the verified catalog; publication requires separate owner direction                              |
+| 2-3. Task orchestration and first bounded flow | Completed | Closed task lifecycle, trusted context, depth-one typed delegation, one deterministic Research child/result, Personal synthesis, and cancellation above `AgentRuntime`      | D-083, verified catalog foundation, deterministic contracts, full validation, and post-increment evidence |
+| 4. Agent-specific governance                   | Completed | D-084's non-executing per-agent identity, profile, policy, approval, delegation-matrix, and volatile audit foundation; published at `2687294`                               | Preserve the verified boundary                                                                            |
+| 5. Agent-specific memory                       | Completed | D-085's bounded volatile memory, selected `.txt`/`.md` reader, and direct Personal-to-Knowledge task are verified; durable memory and Research-to-Knowledge remain separate | Preserve the verified boundary; ARB-005 still blocks durable storage                                      |
+| 6. Bounded parallelism                         | Blocked   | Explicit finite concurrency, deterministic cancellation, ordering, and resource limits                                                                                      | Sequential workflows verified plus the Blocked bounded-parallelism plan                                   |
+| 7. Staged specialist workflows                 | Blocked   | Engineering-quality, infrastructure/operations, and automation workflows with exact routes/caps and separate consequential-action gates                                     | Governance evidence plus the three Blocked specialist-workflow plans                                      |
+| 8. Desktop UI                                  | Blocked   | Typed catalog/task/progress/attribution/cancellation presentation and control through narrow Tauri IPC                                                                      | Stable backend contracts plus the Blocked multi-agent UI plan                                             |
+| 9. End-to-end demonstrations                   | Blocked   | Bounded synthetic or separately approved demonstrations with exact attribution and no overclaiming                                                                          | Selected workflow gates plus the Blocked demonstration plan                                               |
+| 10. Architecture/security review               | Blocked   | Cross-phase ownership, isolation, cancellation, audit, privacy, portability, and rollback review                                                                            | Complete selected evidence plus the Blocked final-review plan                                             |
 
 The first usable engineering milestone is the completed deterministic
 Personal-to-Research contract. It is not a shipping/live assistant milestone.
@@ -158,13 +158,12 @@ Release milestones additionally require `RELEASE_CHECKLIST.md` and
 
 ## Current queue
 
-1. Review and, only on explicit owner direction, publish the verified D-084
-   non-executing per-agent governance increment as its own commit.
-2. Keep Phase 5 memory and all later native-agent work Blocked until D-084 has
-   a clean synchronized publication baseline and a separately approved plan.
-   Runtime tool proposals remain rejected, Native remains sole/default, and
-   memory, knowledge/document, specialist workflow, provider, IPC, UI, and
-   device effects remain absent.
+1. Review D-085's verified complete-with-advisories workspace and publish it
+   only on separate explicit project-owner direction. Do not start another
+   phase automatically.
+2. Keep durable memory/ARB-005, Research-to-Knowledge, every other specialist
+   workflow, provider, IPC, UI, and device effects Blocked. Runtime tool
+   proposals remain rejected and Native remains sole/default.
 3. Do not begin Stage B no-traffic provisioning, Stage C synthetic transport,
    Stage D real-content activation, or another High remediation automatically.
 4. Later work must collect D-062's exact Microsoft registration and token
@@ -181,8 +180,9 @@ Increment 4V is verified complete and published. D-058 and its project-memory
 reconciliation are closed. The High-severity disposition identifies no
 immediate code remediation. ARB-002A is documentation-only. The agent
 definition/registry increment is published at `f42a6c7`; combined Phase 2-3 is
-published at `1d1d9d6`; Phase 4 governance is locally verified and awaits owner
-review and publication. No later product plan is Ready automatically.
+published at `1d1d9d6`; Phase 4 governance is published at `2687294`. D-085 is
+verified complete with advisories in the uncommitted workspace; publication is
+a separate owner action. No other later product plan is Ready automatically.
 
 ## Rollback and reprioritization
 

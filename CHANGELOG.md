@@ -4,6 +4,16 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Implemented D-085's bounded workflow-local volatile memory namespaces,
+  version-bound shared proposals, explicit selected-context boundary, linear
+  approved `.txt`/`.md` document lifecycle, and separate direct Personal
+  Assistant-to-Knowledge mock-runtime route. Focused memory, document-reader,
+  and public contracts pass 6/6, 9/9, and 10/10. Complete repository validation,
+  independent review, and closeout pass with `PASS WITH ADVISORIES`; the only
+  accepted residual is the narrow pure-`std` Unix document-open TOCTOU race.
+  Native remains sole/default; no durable memory, Research-to-Knowledge, IPC,
+  provider, persistence, new dependency, or platform effect was added.
+
 - Implemented D-084's bounded non-executing per-agent governance foundation:
   nine exact policy profiles, sealed live task/run attribution, profile-aware
   deterministic policy, closed agent-origin approval, an exact separately

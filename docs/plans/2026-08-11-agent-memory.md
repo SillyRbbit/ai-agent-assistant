@@ -1,17 +1,23 @@
 # Agent-specific memory
 
-Status: Blocked; draft follow-on, not approved for implementation
+Status: Blocked; durable-memory follow-on only, not approved for implementation
 Owner: Project owner
 Last updated: 2026-08-11
-Blocked on: verified agent governance, approved knowledge/document boundaries,
-resolution of ARB-005, and a fresh privacy, security, architecture, and
-readiness review
+Blocked on: completion of D-085's separately selected volatile boundary,
+resolution of ARB-005, and a fresh persistence/privacy/security/architecture/
+readiness decision and plan
+
+Disposition: D-085 and
+[`2026-08-12-agent-memory-approved-documents.md`](2026-08-12-agent-memory-approved-documents.md)
+absorb only this draft's volatile namespace behavior. This file now retains the
+future durable storage, encryption, recovery, export, and restart-lifecycle
+work that D-085 explicitly does not authorize.
 
 ## Future goal
 
-Define application-owned shared user/project, agent-private, task-temporary,
-and proposed-shared memory namespaces with explicit attribution, visibility,
-retention, deletion, export, and promotion rules.
+Define durable application-owned storage, encryption/key ownership, restart
+recovery, export, corruption handling, and migration/rollback for the bounded
+namespace contracts only after D-085 and ARB-005 evidence exist.
 
 ## Provisional boundaries
 

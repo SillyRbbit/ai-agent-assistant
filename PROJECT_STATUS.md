@@ -4,9 +4,15 @@ Last updated: 2026-08-12
 
 ## Current milestone
 
-The owner-approved D-084 per-agent governance increment is **verified complete
-with advisories** under gate `agent-governance` and remains uncommitted. The
-published prerequisite is D-083's task/orchestration baseline at `1d1d9d6`.
+The D-085 bounded volatile-memory and approved-document Knowledge increment is
+**verified complete with advisories; publication pending** under gate
+`agent-memory-approved-documents`. Focused memory tests pass 6/6,
+document-reader tests pass 9/9, and the public contract passes 10/10. The
+all-target Rust suite passes 269 tests with one intentionally ignored opt-in
+Hermes probe; complete repository verification and independent architecture,
+security, and code review pass. The only accepted advisory is the narrow
+pure-`std` Unix document-open TOCTOU race. Durable memory/ARB-005 and the full
+Research-to-Knowledge workflow remain Blocked; no later plan is Ready.
 
 The Rust core now carries nine exact policy-profile identities from sealed
 definitions through tasks, live execution contexts, delegation, governed tool
@@ -17,14 +23,14 @@ them. Delegation remains an explicit Personal-to-Research application service,
 not a tool. Runtime tool proposals remain rejected and every governance outcome
 records execution as `NotAttempted`.
 
-Focused governance tests pass 6/6, audit 14/14, orchestrator 8/8, and the public
-governance contract 10/10. Existing orchestration/runtime/registry/gateway
-contracts, complete Rust tests, strict Clippy, `npm run verify`, documentation,
-repository, security, and diff checks pass. Native remains sole/default; the
-other seven roles remain Deferred. No executor, memory namespace, durable audit,
-provider, live model, persistence, Tauri consumer, multi-agent frontend,
-dependency, permission, platform effect, external I/O, or Hermes integration
-exists.
+D-085 adds only workflow-local volatile namespaces, version-bound reviewed
+shared proposals, an explicit selected-context boundary, a one-shot approved
+`.txt`/`.md` reader, and a separate direct Personal Assistant-to-Knowledge
+mock-runtime task. Knowledge is `Initial` only for that route; generic
+Personal-to-Knowledge and every Research-to-Knowledge path remain denied.
+Native remains sole/default. No executor, durable memory, provider, live model,
+persistence, Tauri consumer, multi-agent frontend, dependency, permission,
+platform effect, external I/O, or Hermes integration exists.
 
 Hermes integration is **Deferred — evaluated transport and containment
 requirements not met**. Raw stdio, managed WebSocket, and ACP remain rejected
@@ -1407,11 +1413,12 @@ path was added.
 
 ## Next action
 
-The immediate next task is owner review and, only with separate direction,
-publication of the verified D-084 governance increment to a clean synchronized
-baseline. Phase 5 memory and every later native multi-agent phase remain
-Blocked pending that baseline, fresh review, and separate exact owner
-authorization. Hermes remains Deferred/Blocked.
+The immediate task is owner review of the verified D-085 increment and, only on
+separate explicit direction, publication from its complete uncommitted
+workspace. Do not extend the settled implementation or begin another phase.
+Durable memory/ARB-005, Research-to-Knowledge, and every other later native
+multi-agent phase remain Blocked. No next plan is Ready. Hermes remains
+Deferred/Blocked.
 
 All other product and remediation gates remain unchanged. ARB-002 remains
 decision-required under D-062's identity-evidence gates and D-066's OpenAI

@@ -1,10 +1,14 @@
 # Knowledge and document boundaries
 
-Status: Blocked; draft follow-on, not approved for implementation
+Status: Superseded by D-085's selected narrow `.txt`/`.md` boundary
 Owner: Project owner
 Last updated: 2026-08-11
-Blocked on: verified orchestration and per-agent governance, resolution of the
-applicable ARB-005 memory/storage gates, and a fresh privacy/security review
+Disposition: The owner-selected
+[`2026-08-12-agent-memory-approved-documents.md`](2026-08-12-agent-memory-approved-documents.md)
+replaces this provisional draft for a volatile, no-persistence, read-only
+selected-file boundary. Any richer format, parser, picker, IPC, artifact writer,
+or durable storage work requires a new plan; this historical draft grants no
+authority.
 Roadmap:
 [`NATIVE_MULTI_AGENT_ROADMAP.md`](../roadmap/NATIVE_MULTI_AGENT_ROADMAP.md)
 

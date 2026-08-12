@@ -24,6 +24,7 @@ use crate::{
         AgentDelegationAuditReservation, AgentGovernanceRecord, AgentPendingApprovalAuditToken,
         AgentPendingDelegationAuditToken, InMemoryAgentGovernanceAudit,
     },
+    memory::AgentMemoryProfileId,
     policy::engine::DeterministicPolicyEngine,
     policy::types::{PolicyOutcome, PolicyReason},
     tools::{
@@ -159,6 +160,7 @@ pub struct AgentAttribution {
     parent_task_id: Option<ParentTaskId>,
     runtime_id: RuntimeId,
     policy_profile_id: AgentPolicyProfileId,
+    memory_profile_id: AgentMemoryProfileId,
     depth: u8,
     runtime_run_identity: RuntimeRunIdentity,
 }
@@ -175,6 +177,7 @@ impl AgentAttribution {
             parent_task_id: context.parent_task_id().cloned(),
             runtime_id: context.runtime_id(),
             policy_profile_id: context.policy_profile_id(),
+            memory_profile_id: context.memory_profile_id(),
             depth: context.depth(),
             runtime_run_identity: context.runtime_run_identity().clone(),
         }
@@ -211,6 +214,11 @@ impl AgentAttribution {
     }
 
     #[must_use]
+    pub const fn memory_profile_id(&self) -> AgentMemoryProfileId {
+        self.memory_profile_id
+    }
+
+    #[must_use]
     pub const fn depth(&self) -> u8 {
         self.depth
     }
@@ -231,6 +239,7 @@ impl fmt::Debug for AgentAttribution {
             .field("parent_task_id", &self.parent_task_id)
             .field("runtime_id", &self.runtime_id)
             .field("policy_profile_id", &self.policy_profile_id)
+            .field("memory_profile_id", &self.memory_profile_id)
             .field("depth", &self.depth)
             .field("runtime_run_identity", &self.runtime_run_identity)
             .finish()
@@ -1047,6 +1056,7 @@ mod tests {
     };
     use crate::agent::{definition::AgentId, orchestrator::AgentOrchestrator};
     use crate::approvals::manager::ApprovalManager;
+    use crate::memory::AgentMemoryProfileId;
     use crate::tools::types::ToolSchema;
 
     #[test]
@@ -1163,6 +1173,12 @@ mod tests {
 
         let mut service = AgentGovernanceService::built_in()?;
         let attribution = orchestrator.live_attribution_for_test(&context)?;
+        assert_eq!(
+            attribution.memory_profile_id(),
+            AgentMemoryProfileId::PersonalAssistantMemoryV1
+        );
+        assert_eq!(attribution, attribution.clone());
+        assert!(format!("{attribution:?}").contains("PersonalAssistantMemoryV1"));
         let outcome = service.evaluate_tool(
             attribution,
             AgentToolProposal::new(

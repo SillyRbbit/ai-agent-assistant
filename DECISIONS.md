@@ -3104,6 +3104,103 @@ Hermes integration, specialist activation, or visible behavior is authorized.
 Later knowledge/document, memory, specialist workflow, parallelism, UI, and
 end-to-end work remains Blocked.
 
+## D-085 - Add volatile agent memory and an approved-document Knowledge boundary
+
+Date: 2026-08-12
+Status: Accepted owner security and architecture decision
+
+Decision: Authorize one bounded implementation increment that replaces the
+absence left by D-033 with a new namespace-aware, application-owned, volatile
+`MemoryStore`; adds a narrow read-only approved-document boundary; and makes the
+Knowledge & Document Agent eligible only for an explicit Personal Assistant to
+Knowledge document task. The former deleted arbitrary-content memory scaffold
+must not be restored, and the existing SQLite bootstrap, React conversation
+state, runtime, native runtime, tools, policy, approval, governance audit, and
+storage migrations remain unchanged except for the exact agent identity fields
+needed to enforce memory access.
+
+The memory model is process-local, workflow-local, and bounded. One one-root
+`AgentOrchestrator` owns one store; records never cross orchestrator workflows
+and are cleared when that owner drops. It distinguishes approved shared memory,
+agent-private memory, task-temporary memory, and proposed shared memory.
+Personal Assistant may read approved shared memory, use its own private and
+task-temporary memory, and propose shared content. Research and Knowledge may
+use only their own private and task-temporary memory and may propose shared
+content; shared context reaches them only through explicit application-owned
+selection. Other agents remain memory-disabled. No agent may directly create an
+approved shared record. A closed application review decision may edit, approve,
+or reject a proposal only against the exact reviewed version; stale review,
+withdrawal, or deletion fails atomically. Promotion is atomic and approval is
+not tool or execution authority.
+
+`AgentDefinition` remains the sole mapping from agent identity to a closed
+memory-access profile. That profile is captured into `AgentTask`,
+`AgentExecutionContext`, and live `AgentAttribution`; missing, stale, forged, or
+mismatched memory identity fails closed. All store access is sequenced by the
+application after exact live-context validation and requires a non-forgeable,
+non-cloneable live access grant; review and configuration use a distinct sealed
+application-control authority. Reads require exact record
+selection; there is no broad implicit read of all shared memory, conversation
+history, documents, sibling results, or another agent's private/task data.
+Task-temporary records are removed only after the corresponding task reaches a
+terminal state; failed cancellation leaves live task memory intact for a safe
+retry. Disabling the volatile store clears its records and makes later access
+fail closed until explicitly re-enabled.
+
+The document boundary is a dedicated `ApprovedDocumentReader`, not a generic
+filesystem tool or platform adapter. Trusted application code may register one
+user-selected file, task attachment, approved-root member, or application-owned
+generated artifact and receives an opaque task-bound reference. Agents and
+runtime input never receive or select a path. Approved-root members use closed
+relative paths; absolute paths, traversal, schemes, directory enumeration,
+non-regular files, and symlink roots/components/targets are rejected. Every
+read uses a linear reserve/abort/commit lifecycle, revalidates authorization and
+file identity, opens once, and reads through a fixed byte limit. The exact
+encoded document request, including selected memory and framing, is bounded by
+the existing runtime-request limit. Errors, Debug, audit, and events contain no
+path or document content.
+
+Initial format support on the repository's supported Unix executable-test
+targets is exactly UTF-8 plain text in lowercase `.txt`
+and Markdown in lowercase `.md`. Invalid UTF-8, NUL-bearing/binary-looking
+content, empty or oversized files, PDFs, office documents, HTML, RTF, archives,
+images, OCR, and external extraction services are unsupported. Non-Unix targets
+compile but fail closed as unavailable without adding unsafe code or a
+dependency. The application
+may request only the closed initial operations `Read`, `Summarize`,
+`ExtractFacts`, `IdentifySections`, `Classify`, and `ProposeOutline`; these are
+instructions for a bounded agent task and do not claim a parser, provider,
+artifact writer, or successful semantic transformation.
+
+Knowledge & Document changes from deferred catalog metadata to initial
+eligibility only after the memory and document contracts pass. Generic
+delegation remains governed by the exact Personal Assistant to Research matrix.
+A separate document-task entry validates a live Personal Assistant root,
+approved document reference, Knowledge eligibility, depth and one-child limits,
+then starts one Knowledge child with only the selected operation, bounded
+document content, and content-free provenance label. Research to Knowledge is
+not implemented, specialists still cannot spawn, and no other deferred agent is
+activated. `NativeAgentRuntime` remains sole/default and runtime tool proposals
+remain rejected.
+
+This increment intentionally does not resolve ARB-005. No memory or document
+content enters SQLite, the development database, logs, audit, Tauri IPC, React,
+provider traffic, backup, export, synchronization, or external storage. The
+volatile store has no restart recovery or durable-retention claim. Durable
+memory still requires a separate accepted encryption/key ownership, schema,
+migration, transaction, retention, deletion/export, recovery, corruption, and
+rollback decision. No vector database, embedding service, semantic index,
+filesystem plugin, OCR service, dependency, permission, credential, network,
+process, Hermes integration, or unrestricted file access is authorized.
+
+Consequences: the combined memory/document ExecPlan may proceed after it fixes
+exact types, limits, ownership, lifecycle, files, tests, validation, and
+rollback and passes a fresh readiness review. Completion proves only an unwired
+Rust application boundary and deterministic mock-runtime Knowledge task. It
+does not prove a shipping UI, native file picker, provider, model quality,
+durable memory, full Research-to-Knowledge workflow, or general document
+processing.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

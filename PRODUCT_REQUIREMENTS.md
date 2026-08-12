@@ -205,9 +205,15 @@ shipping dispatcher or executor.
 - **FR-036**: Gateway operational logs and local audit shall remain separate and
   follow approved retention and redaction rules.
 
-Only bootstrap metadata storage and a turn-bound volatile in-memory
-approval-audit adapter are current. Product persistence, memory, task
-repositories, and durable audit are planned.
+Only bootstrap metadata storage, a turn-bound volatile in-memory approval-audit
+adapter, and D-085's unwired workflow-local volatile memory and approved-
+document boundary are current. D-085 implements four bounded memory namespaces,
+explicit selected-record context, versioned shared review, selected lowercase
+`.txt`/`.md` reading, and one direct Personal Assistant-to-Knowledge
+deterministic task. It does not persist across its one-root orchestrator, expose
+a user-facing file or memory surface, enable Research-to-Knowledge, or satisfy
+durable product-memory requirements. Product persistence, durable or user-
+facing memory, task repositories, and durable audit remain planned.
 
 ### Permissions and integrations
 
@@ -300,7 +306,10 @@ The repository currently provides:
 - SQLite migration and bootstrap metadata infrastructure;
 - transport-free gateway request, event, function-schema, policy, approval,
   cancellation, and in-memory approval-audit primitives;
-- no live model, gateway, tool execution, product persistence, integration,
+- an unwired workflow-local volatile memory and selected-document boundary,
+  including one deterministic Personal Assistant-to-Knowledge task, with no
+  persistence, IPC, provider, or user-facing consumer;
+- no live model, gateway, tool execution, durable product persistence, integration,
   privileged permission, or durable audit path.
 
 This baseline is an engineering proof, not the complete user-ready MVP.

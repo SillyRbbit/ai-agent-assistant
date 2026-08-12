@@ -123,38 +123,44 @@ unwired task/runtime core. Nine exact policy profiles bind sealed definition,
 task, live runtime, approval, delegation, and volatile audit attribution. The
 Personal profile alone is eligible for the two existing local schemas; all
 specialists deny them. Approval never dispatches a tool, every execution result
-is `NotAttempted`, runtime tool proposals remain rejected, and no memory,
-provider, IPC, UI, durable audit, executor, or device action exists.
+is `NotAttempted`, runtime tool proposals remain rejected, and no provider, IPC,
+UI, durable audit, executor, or device action exists.
 
-The initial deterministic phase keeps delegation depth, total-child budget per
-root, and active-child concurrency at one; the root is Personal Assistant, only
-Personal Assistant to Research Agent is enabled, and only the orchestrator may
-create a child task. Terminal child work does not replenish that phase's budget.
-Future staged workflows remain orchestrator-sequenced at depth one and require
-exact finite task caps and separate plans. The implemented first flow uses a
-typed application-service call, never a runtime control event or host tool. A
-direct root response uses one run. Delegation terminally cancels the initial
-root run, uses one Research child run, and starts a fresh Personal synthesis
-run from the bounded attributed child outcome. The separately approved catalog
-increment implements all nine closed definitions, their versioned embedded
-instruction sources, and a deterministic immutable registry. Only Personal
-Assistant and Research carry the non-authorizing `Initial` marker;
-registration, activation, task creation, or orchestration grants no tool,
-policy, approval, memory, provider, execution, or device authority.
+The deterministic orchestration phase keeps delegation depth, total-child
+budget per root, and active-child concurrency at one; the root is Personal
+Assistant and only the orchestrator may create a child task. Terminal child
+work does not replenish that phase's budget. Generic delegation remains exactly
+Personal Assistant to Research Agent. D-085 adds a separate direct Personal
+Assistant-to-Knowledge approved-document route without enabling
+Research-to-Knowledge or specialist spawning. Future staged workflows remain
+orchestrator-sequenced at depth one and require exact finite task caps and
+separate plans.
 
-D-084 now authorizes the next bounded Rust-only foundation: nine exact
-versioned policy-profile identities, live agent/task/runtime attribution, the
-closed Personal-to-Research delegation matrix, and non-executing policy,
-approval, and volatile audit evidence. Runtime tool proposals stay disabled;
-every execution result is `NotAttempted`; memory namespace remains mandatory
-before a later memory- or data-bearing privileged action; and no agent becomes
-operational merely because the governance contract exists.
+D-085 implements a process-local, one-workflow `MemoryStore` with approved-
+shared, agent-private, task-temporary, and proposed-shared domains; exact sealed
+memory-profile attribution; explicit bounded context selection; versioned
+application review; and terminal cleanup. It also adds an opaque, read-only
+approved-document boundary for selected nonempty lowercase `.txt`/`.md` UTF-8
+files and one deterministic Knowledge child plus fresh Personal synthesis run.
+Knowledge is now `Initial` only for that separate non-authorizing route. Paths
+remain application-selected and private; documents and memory remain untrusted.
+No persistence, IPC, UI, provider, live model, vector search, unrestricted file
+tool, executor, or device authority exists. Focused contracts, the complete
+repository suite, and independent review pass with `PASS WITH ADVISORIES`; the
+only accepted residual is the pure-`std` Unix document-open TOCTOU race.
+
+The catalog now marks Personal Assistant, Research, and Knowledge as
+non-authorizing `Initial`; the other six roles remain Deferred. Registration,
+activation, task creation, memory profile, or orchestration grants no tool,
+policy, approval, provider, execution, or device authority.
 
 `AgentOrchestrator`, `AgentRuntime`, `NativeAgentRuntime`, `AgentRegistry`,
 `ToolRegistry`, `PolicyEngine`, `ApprovalManager`, `AuditLogger`, `MemoryStore`,
-and `PlatformAdapter` remain application-owned authorities (some are planned,
-not current code). Security & Risk is not the policy engine, QA & Validation is
-not the approval manager, and Workflow Automation is not the orchestrator.
+and `PlatformAdapter` remain application-owned authorities. The workflow-local
+volatile `MemoryStore` now exists; durable memory, a general audit logger, and
+`PlatformAdapter` remain planned. Security & Risk is not the policy engine, QA
+& Validation is not the approval manager, and Workflow Automation is not the
+orchestrator.
 
 ## Architectural boundaries to preserve
 

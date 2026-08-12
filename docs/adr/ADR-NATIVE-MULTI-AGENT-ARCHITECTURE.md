@@ -21,6 +21,20 @@ and typed policy/approval/audit evidence with execution always
 `NotAttempted`. It does not change `AgentRuntime`, enable runtime tool
 proposals, add an executor or memory namespace, or activate a specialist.
 
+Amended by D-085 on 2026-08-12: the owner authorized a new bounded workflow-
+local volatile `MemoryStore`, exact memory-profile attribution, versioned
+application review, opaque approved-document references for selected lowercase
+`.txt`/`.md` UTF-8 files, and one separate direct Personal Assistant-to-
+Knowledge document task. The implementation and complete verification are
+`PASS WITH ADVISORIES`; the accepted advisory is the narrow pure-`std` Unix
+document-open TOCTOU residual. Knowledge catalog eligibility applies only
+to that application-owned route; generic Personal-to-Research delegation is
+unchanged, Research-to-Knowledge remains Blocked, and no persistence, IPC, UI,
+provider, live model, executor, unrestricted filesystem tool, new dependency,
+or device authority is added. The decision-time text below is preserved as
+historical architecture evidence where its future tense or absence statements
+describe the earlier checkpoint.
+
 ## Context
 
 Cortexa now contains an application-owned `AgentRuntime`/`RuntimeRun`

@@ -16,6 +16,7 @@ use super::{
     governance::AgentPolicyProfileId,
     runtime::{RuntimeFailureCode, RuntimeId, RuntimeRunIdentity},
 };
+use crate::memory::AgentMemoryProfileId;
 
 pub const MAX_AGENT_TASK_OBJECTIVE_CHARACTERS: usize = 4_096;
 pub const MAX_AGENT_TASK_OBJECTIVE_BYTES: usize = 16_384;
@@ -404,6 +405,7 @@ pub enum AgentTaskCancellationOutcome {
 pub struct AgentExecutionContext {
     agent_id: AgentId,
     policy_profile_id: AgentPolicyProfileId,
+    memory_profile_id: AgentMemoryProfileId,
     task_id: AgentTaskId,
     root_task_id: RootTaskId,
     parent_task_id: Option<ParentTaskId>,
@@ -421,6 +423,7 @@ impl AgentExecutionContext {
         Self {
             agent_id: task.agent_id,
             policy_profile_id: task.policy_profile_id,
+            memory_profile_id: task.memory_profile_id,
             task_id: task.id.clone(),
             root_task_id: task.root_task_id.clone(),
             parent_task_id: task.parent_task_id.clone(),
@@ -438,6 +441,11 @@ impl AgentExecutionContext {
     #[must_use]
     pub const fn policy_profile_id(&self) -> AgentPolicyProfileId {
         self.policy_profile_id
+    }
+
+    #[must_use]
+    pub const fn memory_profile_id(&self) -> AgentMemoryProfileId {
+        self.memory_profile_id
     }
 
     #[must_use]
@@ -474,6 +482,7 @@ impl AgentExecutionContext {
     pub(super) fn matches_task(&self, task: &AgentTask) -> bool {
         self.agent_id == task.agent_id
             && self.policy_profile_id == task.policy_profile_id
+            && self.memory_profile_id == task.memory_profile_id
             && self.task_id == task.id
             && self.root_task_id == task.root_task_id
             && self.parent_task_id == task.parent_task_id
@@ -487,6 +496,7 @@ impl fmt::Debug for AgentExecutionContext {
             .debug_struct("AgentExecutionContext")
             .field("agent_id", &self.agent_id)
             .field("policy_profile_id", &self.policy_profile_id)
+            .field("memory_profile_id", &self.memory_profile_id)
             .field("task_id", &self.task_id)
             .field("root_task_id", &self.root_task_id)
             .field("parent_task_id", &self.parent_task_id)
@@ -504,6 +514,7 @@ pub struct AgentTask {
     parent_task_id: Option<ParentTaskId>,
     agent_id: AgentId,
     policy_profile_id: AgentPolicyProfileId,
+    memory_profile_id: AgentMemoryProfileId,
     depth: u8,
     objective: AgentTaskObjective,
     delegated_context: Option<AgentTaskContext>,
@@ -524,6 +535,7 @@ impl AgentTask {
             parent_task_id: None,
             agent_id: definition_identity.agent_id(),
             policy_profile_id: definition_identity.policy_profile_id(),
+            memory_profile_id: definition_identity.memory_profile_id(),
             depth: 0,
             objective,
             delegated_context: None,
@@ -559,6 +571,7 @@ impl AgentTask {
             parent_task_id: Some(parent_task_id),
             agent_id: definition_identity.agent_id(),
             policy_profile_id: definition_identity.policy_profile_id(),
+            memory_profile_id: definition_identity.memory_profile_id(),
             depth: MAX_AGENT_TASK_DEPTH,
             objective,
             delegated_context,
@@ -591,6 +604,11 @@ impl AgentTask {
     #[must_use]
     pub const fn policy_profile_id(&self) -> AgentPolicyProfileId {
         self.policy_profile_id
+    }
+
+    #[must_use]
+    pub const fn memory_profile_id(&self) -> AgentMemoryProfileId {
+        self.memory_profile_id
     }
 
     #[must_use]
@@ -712,6 +730,7 @@ impl fmt::Debug for AgentTask {
             .field("parent_task_id", &self.parent_task_id)
             .field("agent_id", &self.agent_id)
             .field("policy_profile_id", &self.policy_profile_id)
+            .field("memory_profile_id", &self.memory_profile_id)
             .field("depth", &self.depth)
             .field("objective", &self.objective)
             .field("delegated_context", &self.delegated_context)
@@ -771,6 +790,7 @@ pub enum AgentTaskError {
 mod tests {
     use super::*;
     use crate::agent::{definition::AgentDefinition, runtime::RuntimeTurnRequest};
+    use crate::memory::AgentMemoryProfileId;
 
     fn task_id(value: &str) -> AgentTaskDomainResult<AgentTaskId> {
         AgentTaskId::new(value)
@@ -911,6 +931,10 @@ mod tests {
             root.policy_profile_id(),
             AgentPolicyProfileId::PersonalAssistantV1
         );
+        assert_eq!(
+            root.memory_profile_id(),
+            AgentMemoryProfileId::PersonalAssistantMemoryV1
+        );
         assert_eq!(root.depth(), 0);
         assert_eq!(root.status(), AgentTaskStatus::Pending);
 
@@ -924,6 +948,10 @@ mod tests {
         assert_eq!(
             child.policy_profile_id(),
             AgentPolicyProfileId::ResearchReadOnlyV1
+        );
+        assert_eq!(
+            child.memory_profile_id(),
+            AgentMemoryProfileId::ResearchWorkingMemoryV1
         );
         assert_eq!(child.depth(), MAX_AGENT_TASK_DEPTH);
         assert!(child.delegated_context().is_some());
@@ -1139,6 +1167,10 @@ mod tests {
             context.policy_profile_id(),
             AgentPolicyProfileId::ResearchReadOnlyV1
         );
+        assert_eq!(
+            context.memory_profile_id(),
+            AgentMemoryProfileId::ResearchWorkingMemoryV1
+        );
         assert_eq!(context.task_id(), task.id());
         assert_eq!(context.root_task_id(), task.root_task_id());
         assert_eq!(context.parent_task_id(), task.parent_task_id());
@@ -1149,6 +1181,10 @@ mod tests {
         let mut forged_profile = context.clone();
         forged_profile.policy_profile_id = AgentPolicyProfileId::PersonalAssistantV1;
         assert!(!forged_profile.matches_task(&task));
+
+        let mut forged_memory_profile = context.clone();
+        forged_memory_profile.memory_profile_id = AgentMemoryProfileId::PersonalAssistantMemoryV1;
+        assert!(!forged_memory_profile.matches_task(&task));
         Ok(())
     }
 

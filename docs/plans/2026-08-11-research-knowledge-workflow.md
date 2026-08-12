@@ -3,8 +3,12 @@
 Status: Blocked; draft follow-on, not approved for implementation
 Owner: Project owner
 Last updated: 2026-08-11
-Blocked on: verified task/orchestration, per-agent governance, knowledge and
-document boundaries, and agent memory plus an exact workflow readiness review
+Blocked on: verified D-085 volatile memory and approved-document boundaries,
+then a separate exact Research-to-Knowledge workflow readiness review and owner
+authorization
+
+D-085 activates only a direct Personal Assistant-to-Knowledge document task.
+It does not satisfy or implement this two-specialist sequence.
 Roadmap:
 [`NATIVE_MULTI_AGENT_ROADMAP.md`](../roadmap/NATIVE_MULTI_AGENT_ROADMAP.md)
 
