@@ -3,7 +3,7 @@
 Status: Accepted
 Date: 2026-08-11
 Decision owners: Project owner
-Related accepted decisions: D-078, D-079, D-080, D-081
+Related accepted decisions: D-078, D-079, D-080, D-081, D-082
 Assessment:
 [`HERMES_INTEGRATION_ASSESSMENT.md`](../architecture/HERMES_INTEGRATION_ASSESSMENT.md)
 
@@ -32,6 +32,15 @@ behavior change in this documentation increment.
 > `AgentRuntime` foundation and sole/default `NativeAgentRuntime`; it still has
 > no runtime coordinator, selector, provider transport, Hermes adapter, live
 > model, or application/UI consumer.
+
+> **Native multi-agent direction (2026-08-11):** D-082 accepts a separate
+> application-owned `AgentOrchestrator` above this one-run runtime seam and a
+> nine-role application-owned catalog with staged activation. It does not
+> broaden `AgentRuntime` or select an external framework. Only the
+> definition/registry plan is Ready; it initially enables Personal Assistant
+> and Research Agent for a later deterministic flow, while tasks,
+> orchestration, governance, memory, workflows, concurrency, and UI remain
+> separately gated.
 
 ## Context
 

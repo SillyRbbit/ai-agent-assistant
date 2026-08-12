@@ -1,6 +1,6 @@
 # Next steps
 
-Last updated: 2026-08-11
+Last updated: 2026-08-12
 
 This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must close before later feature work begins.
 
@@ -121,8 +121,39 @@ This file is the ordered implementation queue. Work only on the first item marke
   the pinned implementation hardcodes privileged internal tools without a
   supported conversation-only mode. Five deterministic fixture tests pass;
   the incomplete candidate was not executed and Native remains sole/default.**
+- Native multi-agent architecture documentation:
+  **Verified complete with advisories under gate
+  `native-multi-agent-architecture` after owner steering expanded the accepted
+  catalog to nine roles. The architecture remains documentation-only and
+  uncommitted for owner review.**
 
 ## Queue status
+
+### Ready plan: Agent definition and registry
+
+**Status:** **Ready; owner-approved plan, not Active**. It may start only after
+this architecture documentation is reviewed and published to a clean
+synchronized baseline and the owner provides a separate exact implementation
+task. Those are execution-start gates, not a second plan status. The
+[`2026-08-11-agent-definition-registry.md`](docs/plans/2026-08-11-agent-definition-registry.md)
+plan adds only closed framework-neutral agent IDs and definitions, embedded
+application-owned versioned instruction sources, closed non-authorizing staged
+activation, a concrete deterministic immutable registry, all nine catalog
+roles, typed validation/errors, redaction, and deterministic tests. Only
+Personal Assistant and Research are `Initial` for a later
+flow; none is operational. It does not add tasks, orchestration, delegation,
+tools, policy changes, memory, provider/model work, Tauri/React wiring,
+dependencies, or behavior.
+
+### Blocked follow-on: Agent orchestration and task lifecycle
+
+**Status:** **Blocked** on verified/published definition-registry completion and
+a fresh architecture, security, and readiness review. The draft
+[`2026-08-11-agent-orchestration-task-lifecycle.md`](docs/plans/2026-08-11-agent-orchestration-task-lifecycle.md)
+records only the intended task/context/delegation/limit boundary. Governance,
+knowledge/document boundaries, research/knowledge, engineering-quality,
+infrastructure/operations, automation, parallelism, desktop UI, demos, and
+final review have separate Blocked stubs in the subordinate native roadmap.
 
 ### Completed negative spike: Hermes ACP
 
@@ -171,7 +202,8 @@ is not Ready.
 
 ### Draft later adapter: HermesAgentRuntime
 
-**Status:** **Draft; Blocked with no selected transport**. The
+**Status:** **Draft; Blocked with no selected transport; Deferred — evaluated
+transport and containment requirements not met**. The
 [`2026-08-11-hermes-agent-runtime-adapter.md`](docs/plans/2026-08-11-hermes-agent-runtime-adapter.md)
 plan remains blocked because both the contained WebSocket spike and separate
 ACP spike returned NO GO. A renewed adapter proposal requires an owner-approved
@@ -224,12 +256,14 @@ spike; ACP remains deferred.
 authorized.
 [`2026-08-11-project-direction-runtime-boundaries.md`](docs/plans/2026-08-11-project-direction-runtime-boundaries.md)
 records present private owner-only scope, preserves verified native Rust and
-deterministic mock assets, and limits `AgentRuntime`, `NativeAgentRuntime`, and
-optional experimental `HermesAgentRuntime` to conceptual future direction.
-OpenClaw remains only a possible later evaluation. D-078 does not cancel
-accepted future targets or make Hermes, provider, transport, execution,
-multi-agent, deployment, or product work Ready. Any later implementation
-requires a new exact owner-selected plan and gate.
+deterministic mock assets, and at that checkpoint limited `AgentRuntime`,
+`NativeAgentRuntime`, and optional experimental `HermesAgentRuntime` to
+conceptual future direction. D-079's later native implementation and D-082's
+accepted multi-agent direction supersede that absence claim. OpenClaw remains
+only a possible later evaluation. D-078 does not cancel accepted future targets
+or make Hermes, provider, transport, execution, deployment, or other product
+work Ready. Every later implementation still requires an exact owner-selected
+plan and gate.
 
 ### Completed implementation: Cloudflare demo fake Keychain proof
 
@@ -532,9 +566,10 @@ advisories, published through PR #35, and squash-merged at `853da62`. Its exact
 18-path scope preserves the original reports unchanged, and no publication
 action remains. It does not make ARB-002 Ready.
 
-No other runtime remediation or product increment is Ready; D-079's narrow
-native boundary plan above is the sole exception. Do not begin ARB-002B or
-another ARB-002 implementation automatically. Do not add a provider
+The D-079 native boundary is complete. The AgentDefinition/AgentRegistry plan
+recorded above is now the sole Ready product plan; it remains not Active and
+requires the documented publication and exact owner-task start gates. Do not
+begin ARB-002B or another ARB-002 implementation automatically. Do not add a provider
 client, `AgentProvider`, gateway origin, cloud deployment, identity integration,
 credential, Keychain adapter, or external content path before D-062's exact
 evidence passes, D-066's exact OpenAI data-control and D-061 evidence pass, the

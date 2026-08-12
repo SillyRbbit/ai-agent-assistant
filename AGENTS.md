@@ -58,12 +58,14 @@ start the next increment early.
   synthetic transport, and Stage D real-content activation each require their
   own plan and project-owner approval. ARB-002 remains unresolved.
 - Preserve verified native typed boundaries, deterministic mocks, contracts,
-  tests, and decisions. `AgentRuntime`, `NativeAgentRuntime`,
-  and `HermesAgentRuntime` are planned concepts only; OpenClaw is evaluation-only
-  and is neither selected nor planned. Implementation, dependencies, or removal
-  require a separately approved increment. Keep external-framework types inside
-  narrow adapters, and never transfer validation, policy, approval, execution,
-  or audit authority to them.
+  tests, and decisions. `AgentRuntime` and the sole/default
+  `NativeAgentRuntime` foundation are implemented but not wired to Tauri,
+  React, a provider, or a live model. D-082 accepts native multi-agent
+  architecture above that runtime; only separately approved bounded plans may
+  implement its phases. `HermesAgentRuntime` remains Deferred/Blocked and
+  OpenClaw is evaluation-only. Keep external-framework types inside narrow
+  adapters, and never transfer validation, policy, approval, execution, audit,
+  memory, or device authority to a runtime or agent.
 
 ## Work and Git safety
 

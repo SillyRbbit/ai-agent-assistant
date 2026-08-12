@@ -3,6 +3,8 @@
 Status: Executive and technical architecture vision; not implementation evidence
 
 Evidence date: 2026-07-29
+Current-state reconciliation: 2026-08-11 under D-079 and D-082; diagram files
+retain their original evidence date and remain target-architecture artifacts
 
 ## Deliverables
 
@@ -117,7 +119,10 @@ gateway architecture.
 The repository does not yet define implementation contracts for these items,
 so the diagrams label them optional or conceptual:
 
-- specialist agents and agent-to-agent coordination;
+- accepted native nine-role catalog: Personal Assistant; Research; Knowledge &
+  Document; Coding; QA & Validation; Security & Risk; Cloud Infrastructure;
+  Systems Operations; and Workflow Automation, behind a bounded
+  application-owned orchestrator with staged activation;
 - a web companion;
 - mobile clients beyond the documented iOS portability direction;
 - local language models;
@@ -136,10 +141,13 @@ autonomy, direct device execution, or authority derived from another agent.
 1. **Completed vision, not roadmap authorization:** the diagrams compose the
    accepted target architecture with explicitly requested future concepts. They
    do not make any product increment Ready.
-2. **Specialized agents:** the repository permits future documentation of
-   specialized roles but contains no accepted runtime design. The diagrams
-   therefore show one optional typed coordination boundary rather than named
-   production agents.
+2. **Specialized agents:** D-079 implements the native runtime foundation and
+   D-082 accepts a separate native orchestrator with nine named
+   application-owned roles. Only Personal Assistant and Research Agent are
+   initially selected for a future deterministic flow; the remaining catalog
+   roles are staged. No agent definition, registry, activation, task,
+   delegation, provider, or UI is implemented yet, so diagrams remain target
+   architecture rather than current capability.
 3. **Web and mobile:** Windows, Linux, and iOS portability are documented.
    A web companion and broader mobile support are conceptual and do not change
    the requirement that Cortexa is not a browser-only product.
@@ -166,6 +174,8 @@ autonomy, direct device execution, or authority derived from another agent.
   staged production gateway boundaries.
 - D-066 through D-073: synthetic-demo provider, Cloudflare, Keychain, signed
   identity, and bounded secret-memory constraints.
+- D-079 and D-082: implemented native runtime foundation plus accepted bounded
+  native multi-agent application-service direction.
 
 ## Evidence sources
 

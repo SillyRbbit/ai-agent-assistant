@@ -56,25 +56,26 @@ does not restore the unused generic scaffolds deleted in Increments 4I through
 not prevent a later explicitly approved increment from removing a verified
 component for evidence-backed reasons.
 
-## Conceptual runtime direction
+## Current runtime and native multi-agent direction
 
-The following names describe a future application-owned seam. They are not
-current Rust traits, structs, services, runtime selection, or shipping behavior:
+The application-owned runtime foundation now exists in Rust but is not wired to
+Tauri, React, a provider, or a live model:
 
 ```text
 AgentRuntime
 ├── NativeAgentRuntime
-└── HermesAgentRuntime
+└── HermesAgentRuntime (deferred; not implemented)
 ```
 
-- `AgentRuntime` would be a framework-neutral contract owned by Cortexa.
-- `NativeAgentRuntime` would compose the existing typed native path. It should
-  remain the default, an explicit fallback, the reference implementation, a
-  deterministic development and contract-test path, and a possible standalone
-  runtime. “Fallback” does not mean automatic model-provider failover.
-- `HermesAgentRuntime` would be an optional experimental adapter. Hermes types,
-  configuration, events, and errors must stay inside that adapter and translate
-  into closed, bounded Cortexa-owned types at the boundary.
+- `AgentRuntime` is a framework-neutral one-run contract owned by Cortexa.
+- `NativeAgentRuntime` composes the existing typed native path. It is the
+  sole/default runtime, explicit future fallback, reference implementation,
+  deterministic contract-test path, and possible standalone runtime. “Fallback”
+  does not mean automatic runtime or model-provider failover.
+- `HermesAgentRuntime` remains **Deferred — evaluated transport and containment
+  requirements not met**. Raw stdio, managed `hermes serve` WebSocket, and ACP
+  were rejected for the exact evaluated Hermes `0.20.0` / `v2026.8.3`
+  conditions. No replacement transport is selected.
 - OpenClaw may be evaluated later as another possible adapter. It is not a
   current adapter, selected dependency, implementation task, or planned
   integration.
@@ -87,6 +88,52 @@ Every runtime and provider result remains untrusted. Deterministic Rust outside
 an external adapter retains validation, policy, exact approval, restricted
 execution, cancellation, and audit ownership. No external runtime, framework,
 model, gateway, WebView, or hook gains direct device authority.
+
+D-082 accepts a native multi-agent application-service layer above this runtime:
+
+The diagram is a logical task/delegation topology. Actual control remains with
+the application/orchestrator, which invokes `AgentRuntime` for each run; agent
+definitions do not call runtimes or gain authority.
+
+```text
+Personal Assistant
+       |
+       v
+AgentOrchestrator
+       |
+       +-- Research & knowledge roles
+       +-- Software engineering roles
+       +-- Infrastructure & operations roles
+       `-- Workflow Automation Agent
+               |
+               v
+       NativeAgentRuntime
+```
+
+The planned catalog contains nine application-owned roles: Personal Assistant;
+Research; Knowledge & Document; Coding; QA & Validation; Security & Risk; Cloud
+Infrastructure; Systems Operations; and Workflow Automation. QA and Security
+are cross-cutting, but group membership grants no route or authority.
+`AgentOrchestrator`, task lifecycle, delegation, policy profiles, and memory
+namespaces stay outside `AgentRuntime`.
+
+The initial deterministic phase keeps delegation depth, total-child budget per
+root, and active-child concurrency at one; the root is Personal Assistant, only
+Personal Assistant to Research Agent is enabled, and only the orchestrator may
+create a child task. Terminal child work does not replenish that phase's budget.
+Future staged workflows remain orchestrator-sequenced at depth one and require
+exact finite task caps and separate plans. This is accepted architecture and
+planning direction, not current behavior; only the separately approved
+AgentDefinition/AgentRegistry plan is Ready. It defines all nine roles but
+initially enables only Personal Assistant and Research Agent, and registration
+or activation never grants tools, policy, approval, memory, provider, or device
+authority.
+
+`AgentOrchestrator`, `AgentRuntime`, `NativeAgentRuntime`, `AgentRegistry`,
+`ToolRegistry`, `PolicyEngine`, `ApprovalManager`, `AuditLogger`, `MemoryStore`,
+and `PlatformAdapter` remain application-owned authorities (some are planned,
+not current code). Security & Risk is not the policy engine, QA & Validation is
+not the approval manager, and Workflow Automation is not the orchestrator.
 
 ## Architectural boundaries to preserve
 

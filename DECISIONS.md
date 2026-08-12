@@ -2783,6 +2783,181 @@ conversation-only mode, exact target-platform containment, and a fresh spike.
 No application source, production dependency, provider, credential, process,
 socket, UI, or behavior changes through this decision.
 
+## D-082 - Accept application-owned native multi-agent architecture
+
+Date: 2026-08-11
+Status: Accepted owner architecture decision
+
+Decision: Adopt application-owned native multi-agent orchestration as the
+primary agent direction above D-079's implemented single-run runtime seam:
+
+The diagram is a logical task/delegation topology, not a component-call or
+authority graph. The orchestrator invokes `AgentRuntime` for root and child
+runs; definitions do not call a runtime.
+
+```text
+User -> Personal Assistant -> AgentOrchestrator
+                              |
+                              +-- Research and knowledge
+                              |   +-- Research Agent
+                              |   `-- Knowledge & Document Agent
+                              +-- Software engineering
+                              |   +-- Coding Agent
+                              |   +-- QA & Validation Agent
+                              |   `-- Security & Risk Agent
+                              +-- Infrastructure and operations
+                              |   +-- Cloud Infrastructure Agent
+                              |   +-- Systems Operations Agent
+                              |   +-- QA & Validation Agent
+                              |   `-- Security & Risk Agent
+                              `-- Automation
+                                  `-- Workflow Automation Agent
+
+AgentOrchestrator -> AgentRuntime -> NativeAgentRuntime (sole/default)
+```
+
+The first planned catalog contains exactly nine immutable application-owned
+definitions: Personal Assistant; Research Agent; Coding Agent; Cloud
+Infrastructure Agent; Systems Operations Agent; Knowledge & Document Agent; QA
+& Validation Agent; Security & Risk Agent; and Workflow Automation Agent. The
+functional groups are exactly Core orchestration (Personal Assistant), Research
+and knowledge (Research and Knowledge & Document), Software engineering
+(Coding, QA & Validation, and Security & Risk), Infrastructure and operations
+(Cloud Infrastructure, Systems Operations, QA & Validation, and Security &
+Risk), and Automation (Workflow Automation). QA & Validation and Security &
+Risk are cross-cutting participants in software, infrastructure, operations,
+document, and automation workflows.
+
+The first definition/registry increment is planned to introduce all nine
+definitions, but this creates no operational agent. Personal Assistant and
+Research Agent are only catalog-eligible for the later deterministic initial
+flow. Knowledge & Document is gated on the knowledge/document and memory phase;
+Coding on engineering; QA & Validation on engineering quality; Security & Risk
+on engineering security; Cloud Infrastructure on infrastructure; Systems
+Operations on infrastructure/operations; and Workflow Automation on typed
+workflow governance. Unknown or gated targets fail closed, and registry
+membership, grouping, or activation posture never grants a route or privilege.
+
+The role boundaries are durable. Personal Assistant owns user-facing
+classification, controlled delegation requests, progress, synthesis, and
+approval explanation without unrestricted privileged tools. Research is
+read-only by default and may use internal or external research only through
+governed tools. Knowledge & Document is limited to approved files or roots and
+cannot crawl unrestricted paths or silently write durable shared memory.
+Coding cannot autonomously commit, push, install dependencies, or run
+destructive commands. Cloud Infrastructure cannot autonomously apply, mutate,
+delete, change IAM, or use credentials. Systems Operations cannot autonomously
+restart, shut down, delete, change configuration/accounts, or use privileged
+shell execution. QA & Validation may use only approved safe validation tools,
+cannot approve its own privileged action, and is not `ApprovalManager`.
+Security & Risk is advisory, is not `PolicyEngine`, and cannot authorize or
+execute remediation. Workflow Automation may propose only typed bounded
+workflows and cannot execute arbitrary commands, bypass `AgentOrchestrator`,
+`ToolRegistry`, `PolicyEngine`, `ApprovalManager`, or `AuditLogger`, self-modify,
+recursively expand, or become `AgentOrchestrator`.
+
+Agents are resolved through a validated deterministic `AgentRegistry`.
+`AgentOrchestrator` is the sole application service allowed to create and
+schedule agent tasks; it owns assignment, bounded delegation, task lifecycle,
+workflow sequencing, result collection, attribution, and cancellation
+propagation. It calls `AgentRuntime`; it does not become a runtime, provider,
+tool registry, policy engine, approval manager, audit logger, memory store, or
+unrestricted device-effect executor.
+
+`AgentRuntime` remains the closed one-run execution boundary accepted by D-079.
+`NativeAgentRuntime` remains sole/default, reference implementation,
+deterministic contract-test path, explicit future fallback, and possible
+standalone/publishable runtime. No selector or automatic fallback is added.
+
+`AgentOrchestrator`, `AgentRuntime`, `NativeAgentRuntime`, `AgentRegistry`,
+`ToolRegistry`, `PolicyEngine`, `ApprovalManager`, the future application-owned
+`AuditLogger`, the future application-owned `MemoryStore`, and a future bounded
+application-owned `PlatformAdapter` retain separate authoritative boundaries.
+Naming a planned component is not implementation evidence and does not revive
+the deleted generic scaffolds. Agents may recommend or emit typed requests
+only. Application code validates lifecycle and routes, makes policy and
+approval decisions, records audit, and dispatches any separately approved
+restricted effect through registered tools and a bounded platform adapter.
+
+The initial Personal-to-Research milestone uses depth one, at most one child
+task total per root, and at most one active child; completion or cancellation
+does not replenish that budget. Only the orchestrator may create a child task
+through an explicit typed application-service call. A runtime event or
+`agent.delegate` host tool does not create children. A future untrusted
+proposal may be validated into a delegation request, but it grants no
+authority.
+
+The initial root is exactly Personal Assistant and the sole allowed child edge
+is Personal Assistant to Research Agent. Research Agent cannot delegate, and
+self, reverse, unknown, or out-of-route requests fail before task creation.
+This route policy belongs to the application/orchestrator; registry membership
+or definition metadata never authorizes delegation.
+
+Four later workflow families are accepted only as staged direction:
+
+- Research: Personal Assistant -> Research Agent -> Knowledge & Document Agent
+  -> Personal Assistant synthesis.
+- Engineering: Personal Assistant -> Coding Agent -> QA & Validation Agent ->
+  Security & Risk Agent -> Personal Assistant synthesis -> approval before a
+  consequential application action.
+- Infrastructure and operations: Personal Assistant -> exactly one of Cloud
+  Infrastructure Agent or Systems Operations Agent -> QA & Validation Agent ->
+  Security & Risk Agent -> Personal Assistant synthesis -> approval before a
+  consequential application action.
+- Automation: Personal Assistant -> Workflow Automation Agent -> application
+  validation of its typed proposal -> QA & Validation Agent -> Security & Risk
+  Agent -> owner approval where required -> orchestrator coordination of only
+  the validated approved workflow.
+
+Those arrows are sequential orchestration and bounded result flow, never
+specialist-to-specialist spawning. Every specialist remains a direct child of
+the Personal Assistant root, so maximum depth remains one. Active-child
+concurrency remains one until a separately approved bounded-parallelism phase.
+The initial one-total-child budget applies only to the first
+Personal-to-Research milestone; each later workflow plan must explicitly raise
+the finite total-child budget to its allowlisted sequence (two for Research and
+three for Engineering, Infrastructure/Operations, or Automation). Specialists
+never spawn; Workflow Automation only proposes; over-budget, recursive,
+unavailable, or unallowlisted requests fail before task creation. Every task is
+independently attributable and cancellable.
+
+Before privileged behavior is introduced, every agent action must bind exact
+agent, task, optional parent task, runtime, policy profile, and memory namespace
+identity. The application derives those values from trusted registry and
+orchestrator state. Missing, unknown, duplicate, stale, or mismatched identity
+fails closed and never defaults to the Personal Assistant. Agent names and
+runtime capabilities grant no permission.
+
+Tools, schemas, deterministic policy, exact approval, restricted execution,
+audit, credentials, persistence, memory, and platform access remain
+application-owned and separately gated. No external agent framework is
+required for the initial implementation. Agent names and activation posture do
+not grant capabilities.
+
+Hermes integration is Deferred — evaluated transport and containment
+requirements not met. D-080 remains the historical accepted WebSocket
+evaluation decision whose mechanism failed, and D-081 remains the accepted ACP
+rejection for Hermes Agent `0.20.0` / tag `v2026.8.3` / commit
+`3c27eb6234bf91b8ceee9e9071591b31e9b148cb`. `HermesAgentRuntime` remains
+Draft/Blocked with no selected transport. This is not permanent abandonment;
+any future release or mechanism requires a separate accepted decision and
+evidence. External runtimes may still implement `AgentRuntime` without owning
+orchestration or governance.
+
+Consequences: the AgentDefinition/AgentRegistry plan is the sole next Ready
+multi-agent implementation plan, but this documentation increment authorizes no
+code. That plan covers all nine inert definitions with staged catalog
+eligibility. Tasks, orchestration, delegation, per-agent governance,
+knowledge/document boundaries, four staged workflows, memory, parallelism,
+desktop UI, providers, tools, demos, and final architecture/security review
+remain Blocked or Future under separate plans.
+D-079 remains intact. D-082 supersedes only D-065's then-current
+documentation-only limitation by accepting this bounded architecture while
+retaining D-065's no-implicit-authority, implementation, and trust-boundary
+rules. D-078's personal-project scope remains intact. No production source,
+test, dependency, provider, process, IPC, UI, or behavior changes through this
+decision.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

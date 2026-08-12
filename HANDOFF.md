@@ -1,8 +1,46 @@
 # Handoff
 
-Last updated: 2026-08-11
+Last updated: 2026-08-12
 
 ## Current state
+
+The owner-selected documentation-only
+[`2026-08-11-native-multi-agent-architecture.md`](docs/plans/2026-08-11-native-multi-agent-architecture.md)
+increment is **verified complete with advisories** under gate
+`native-multi-agent-architecture` after the owner expanded the catalog to nine
+roles before closeout. It remains uncommitted for owner review.
+D-082 and the Accepted
+[`ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md`](docs/adr/ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md)
+place a separate application-owned `AgentOrchestrator` above D-079's
+implemented one-run `AgentRuntime` and sole/default `NativeAgentRuntime`.
+The initial Personal-to-Research flow fixes delegation depth, total-child
+budget, and active-child concurrency at one, without replenishment. Future
+staged workflows remain depth-one/orchestrator-sequenced and must declare exact
+finite stage budgets. Only the orchestrator creates tasks. Tools, policy,
+approvals, execution, audit, memory, providers, and device authority remain
+outside agent and generic runtime contracts and orchestrator authority; Native
+still composes the existing application-owned turn.
+
+The root roadmap retains ten authoritative phases while the subordinate roadmap
+expands their staged nine-role work. Only
+[`2026-08-11-agent-definition-registry.md`](docs/plans/2026-08-11-agent-definition-registry.md)
+is Ready. It covers nine immutable definitions and instruction sources, a
+closed non-authorizing activation disposition, deterministic registry,
+validation, and no-I/O tests. Only Personal Assistant and Research are
+initially selected for a later flow; all nine remain inert/unwired. It may start
+only after this documentation completes, is separately reviewed/committed/
+pushed to a clean baseline, and the owner provides an exact implementation
+task. Every later plan remains Blocked. No production source, test, dependency,
+provider, process, Tauri/React path, or visible behavior is changing.
+
+Hermes integration is **Deferred — evaluated transport and containment
+requirements not met**. Raw TUI-gateway stdio, managed `hermes serve`
+WebSocket, and ACP remain rejected for the exact evaluated Hermes Agent
+`0.20.0` / tag `v2026.8.3` / commit
+`3c27eb6234bf91b8ceee9e9071591b31e9b148cb` conditions. All evidence is
+preserved, no alternate transport was selected, and `HermesAgentRuntime`
+remains Draft/Blocked. This does not claim every future Hermes release is
+unusable.
 
 The owner-selected
 [`2026-08-11-hermes-acp-transport-spike.md`](docs/plans/2026-08-11-hermes-acp-transport-spike.md)
@@ -101,17 +139,18 @@ Accepted architecture and conditional evaluation direction.
 
 The documentation-only project-direction and runtime-boundary increment is
 verified complete with advisories under D-078 and a valid completion marker.
-`docs/PROJECT_DIRECTION.md` records Cortexa's present private, owner-only,
-local-first personal scope, the exact
+At that increment's checkpoint, `docs/PROJECT_DIRECTION.md` recorded Cortexa's
+present private, owner-only, local-first personal scope, the exact
 clean-architecture/personal-scope/future-product principle, native preservation,
-and only a conceptual future `AgentRuntime` adapter seam. Root instructions link
-that authority, `ARCHITECTURE.md` records that no named runtime type exists, and
-the existing ExecPlan convention now includes interfaces, invariants, risks,
-decisions, discoveries, progress, and final results. No source, test,
-dependency, configuration, permission, runtime behavior, external action, or
-current capability changed. Previously accepted consumer, cloud, provider,
-enterprise, signing, and release targets are neither canceled nor implemented.
-Hermes remains an optional experimental adapter concept; OpenClaw remains only
+and only a conceptual future `AgentRuntime` adapter seam. D-079's later native
+implementation and D-082's accepted multi-agent direction now supersede that
+absence claim without rewriting its historical evidence. The existing ExecPlan
+convention includes interfaces, invariants, risks, decisions, discoveries,
+progress, and final results. No source, test, dependency, configuration,
+permission, runtime behavior, external action, or current capability changed in
+the D-078 increment. Previously accepted consumer, cloud, provider, enterprise,
+signing, and release targets are neither canceled nor implemented. Hermes is
+now Deferred/Blocked; OpenClaw remains only
 a possible later evaluation.
 
 The prior orphaned `apple-support-ts-017-owner-contact-d077-contact-1` gate was
@@ -143,21 +182,22 @@ changed.
 
 ## Current exact task
 
-Review the verified negative ACP spike and valid completion evidence. Do not
-execute Hermes, repair the candidate, implement Prompt 4D, approve the adapter,
-select another transport, or weaken the capability-containment requirement.
-Await explicit owner direction; no Hermes implementation or additional
-transport plan is Ready.
+Review and publish the verified, uncommitted native multi-agent architecture
+documentation as one documentation-only commit only if the owner explicitly
+requests commit and push. Do not begin AgentDefinition/AgentRegistry or any
+later phase from the dirty/unpublished baseline.
 
-Resume prompt: Read `AGENTS.md`, the project-memory chain, D-079 through D-081,
-both rejected Hermes transport ADRs, the ACP ADR,
-`docs/plans/2026-08-11-hermes-acp-transport-spike.md`,
-`docs/spikes/HERMES_ACP_TRANSPORT_SPIKE.md`, and its post-increment review.
-Require gate `hermes-acp-transport-spike` to be complete and valid while
-preserving the distinct **NO GO** transport verdict. Confirm Native remains
-sole/default and no real Hermes process ran. Await explicit owner direction;
-do not begin Prompt 4D, switch protocols, patch Hermes, add containment code,
-or change Native.
+Resume prompt: Read `AGENTS.md`, the project-memory chain, D-079 through D-082,
+`docs/architecture/NATIVE_MULTI_AGENT_ASSESSMENT.md`,
+`docs/adr/ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md`, root `ROADMAP.md`,
+`docs/plans/2026-08-11-native-multi-agent-architecture.md`, and its
+post-increment review. Confirm gate `native-multi-agent-architecture` is
+complete and valid, the changed inventory is documentation-only, Native remains
+sole/default, Hermes remains Deferred/Blocked, and exactly one implementation
+plan is Ready. If the owner authorizes publication, commit and push only this
+verified documentation scope. Otherwise stop. Do not implement agent
+definitions, registry, tasks, orchestration, governance, memory, concurrency,
+specialist agents, UI, providers, tools, or Hermes.
 
 The fake-only Cloudflare demo macOS Keychain proof is complete with advisories.
 Pinned macOS-only Security.framework bindings read exactly two fixed labels and

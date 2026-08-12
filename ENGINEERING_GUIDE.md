@@ -1,7 +1,7 @@
 # Cortexa engineering guide
 
 Status: Authoritative engineering operating model
-Last updated: 2026-07-18
+Last updated: 2026-08-11
 
 ## Mission
 
@@ -27,7 +27,9 @@ directory-level `AGENTS.md` files may add constraints when present.
 The master document is a maintainable instruction layer, not a replacement for
 accepted decisions, security rules, source evidence, or the current approved
 increment. It requires an advisory model-and-effort recommendation in final
-Codex responses and documents future multi-agent concepts as deferred only.
+Codex responses. D-082 now accepts bounded native multi-agent architecture as
+documentation direction; each implementation phase remains deferred until its
+own exact owner-approved increment.
 
 ## Documentation authority
 

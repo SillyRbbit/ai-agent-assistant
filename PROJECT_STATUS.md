@@ -1,8 +1,42 @@
 # Project status
 
-Last updated: 2026-08-11
+Last updated: 2026-08-12
 
 ## Current milestone
+
+The owner-selected native multi-agent architecture documentation increment is
+**verified complete with advisories** under gate
+`native-multi-agent-architecture` and remains intentionally uncommitted. An
+owner steering update expanded the planned catalog to nine roles before
+closeout. D-082
+accepts an application-owned `AgentOrchestrator` above the implemented one-run
+`AgentRuntime` and sole/default `NativeAgentRuntime`. Agents are
+application-owned privilege-free definitions with closed staged activation;
+only the orchestrator may create a child task; the first Personal-to-Research
+flow fixes depth, total-child budget, and concurrency at one; and later
+workflow plans must retain depth/concurrency one while setting exact finite
+stage budgets. Tools, policy, approvals, execution, audit, memory, providers,
+and device authority stay application-owned outside the generic runtime
+contract and orchestrator authority. Native still composes the existing turn.
+
+No agent definition, registry, task, orchestrator, delegation, execution
+context, agent-aware policy/audit, memory namespace, provider, Tauri consumer,
+or multi-agent frontend state exists. The first Ready plan adds the exact nine
+closed definitions, nine versioned instruction sources, non-authorizing staged
+activation, a deterministic immutable registry, bounded validation, and tests.
+Only Personal Assistant and Research Agent are `Initial` for a
+future flow; all definitions remain inert/unwired. The plan is Ready and not
+Active, and may start only after this documentation completes, is published to
+a clean baseline, and receives an exact owner implementation task. Every later
+plan remains Blocked. The completed documentation changed no production source,
+test, dependency, provider, process, IPC, UI, or behavior.
+
+Hermes integration is **Deferred — evaluated transport and containment
+requirements not met**. Raw stdio, managed WebSocket, and ACP remain rejected
+only for the exact evaluated `0.20.0` / `v2026.8.3` / commit
+`3c27eb6234bf91b8ceee9e9071591b31e9b148cb` conditions. No evidence was
+deleted, no replacement transport was selected, and no production source,
+test, dependency, process, IPC, UI, provider, or behavior changed.
 
 The owner-selected Hermes ACP transport spike is **verified complete with
 advisories** under gate `hermes-acp-transport-spike`; its transport verdict is
@@ -98,11 +132,13 @@ Cortexa's present scope is a private, owner-only, local-first personal project
 for productivity, experimentation, learning, development, and demonstrations.
 SaaS, multi-tenancy, billing, enterprise IAM, public deployment, and
 production-scale distributed systems remain deferred possibilities rather than
-current needs. The repository preserves the verified native path and describes
-`AgentRuntime`, `NativeAgentRuntime`, and optional experimental
-`HermesAgentRuntime` only as a future framework-neutral seam; OpenClaw is not
-selected or planned. No named runtime type, source, test, dependency,
-configuration, permission, product behavior, or readiness changed.
+current needs. At that checkpoint the repository preserved the verified native
+path and described `AgentRuntime`, `NativeAgentRuntime`, and optional
+experimental `HermesAgentRuntime` only as a future framework-neutral seam.
+D-079's later implementation and D-082's accepted direction supersede that
+absence claim; OpenClaw remains unselected. No named runtime type, source, test,
+dependency, configuration, permission, product behavior, or readiness changed
+in the D-078 increment.
 
 The separate orphaned `apple-support-ts-017-owner-contact-d077-contact-1` gate
 was closed as a no-operation workflow reconciliation before this increment. It
@@ -1376,23 +1412,22 @@ path was added.
 
 ## Next action
 
-No product or remediation increment is Ready. ARB-002 remains decision-required
-under D-062's identity-evidence gates and D-066's OpenAI data-control,
-disclosure, and security-evidence gates and blocks live model networking.
-ARB-003, ARB-004, ARB-005, and ARB-008 remain blocked on future
+The AgentDefinition/AgentRegistry plan is the sole Ready product plan and is not
+Active. The immediate next task is owner review and, only with separate
+direction, publication of the verified native multi-agent architecture
+documentation to a clean baseline. A separate exact owner task is still
+required before implementation. Task/orchestration and every later native
+multi-agent phase remain Blocked/Future; Hermes remains Deferred/Blocked.
+
+All other product and remediation gates remain unchanged. ARB-002 remains
+decision-required under D-062's identity-evidence gates and D-066's OpenAI
+data-control, disclosure, and security-evidence gates and blocks live model
+networking. ARB-003, ARB-004, ARB-005, and ARB-008 remain blocked on future
 capability work. ARB-006 must be revisited before public distribution or
 external contributions; ARB-007 must be revisited before release-candidate or
-public-distribution work. Review the verified documentation decision record for
-publication only when separately directed. Do not begin transport, identity
-integration, credentials, execution, persistence, enterprise controls, license
-selection, signing, notarization, or another remediation automatically.
-
-For the runtime direction specifically, no implementation is Ready. The next
-step is an owner-selected architecture decision: retain native-only behavior,
-accept a narrow native-runtime direction without Hermes, or authorize a
-separately planned comparison of one supported public Hermes surface. Any later
-runtime source work remains Blocked pending that decision, a bounded approved
-plan, and a fresh readiness review.
+public-distribution work. Do not begin transport, identity integration,
+credentials, execution, persistence, enterprise controls, license selection,
+signing, notarization, or another remediation automatically.
 
 ## Phase 4 planning result
 

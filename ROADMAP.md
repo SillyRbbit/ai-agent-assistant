@@ -1,7 +1,7 @@
 # Cortexa roadmap
 
 Status: Authoritative milestone roadmap
-Last updated: 2026-07-20
+Last updated: 2026-08-12
 
 ## Status model
 
@@ -78,6 +78,47 @@ multicloud, failover, or a three-cloud release. AI model-provider support is
 also separate: a future trusted `AgentProvider` boundary may route only to
 individually approved providers, and no such implementation currently exists.
 
+## Native multi-agent roadmap
+
+D-082 accepts application-owned native multi-agent architecture above the
+implemented single-run `AgentRuntime`/sole-default `NativeAgentRuntime`
+foundation. This sequence is subordinate to the same acceptance gates as every
+other product milestone. It does not imply a live provider, model, tool,
+memory, coordinator, Tauri consumer, or frontend integration.
+
+The detailed activation and workflow sequence lives in the subordinate
+[`NATIVE_MULTI_AGENT_ROADMAP.md`](docs/roadmap/NATIVE_MULTI_AGENT_ROADMAP.md);
+this root roadmap remains authoritative.
+
+| Phase                                    | Status  | Bounded outcome                                                                                                                         | Gate to advance                                                                                                                                                              |
+| ---------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1. Agent definition and registry         | Ready   | Nine immutable definitions and deterministic registry; only Personal Assistant and Research are `Initial`, none operational             | Separately authorize and verify [`2026-08-11-agent-definition-registry.md`](docs/plans/2026-08-11-agent-definition-registry.md) from a clean published architecture baseline |
+| 2. Task and orchestration foundation     | Blocked | Closed task lifecycle, context, depth-one limits, typed delegation, results, and cancellation above `AgentRuntime`                      | Verified Phase 1 plus fresh review of [`2026-08-11-agent-orchestration-task-lifecycle.md`](docs/plans/2026-08-11-agent-orchestration-task-lifecycle.md)                      |
+| 3. First Personal-to-Research delegation | Blocked | Deterministic no-I/O root task, one Research child, one attributed result, and Personal synthesis                                       | Verified Phase 2 plus an exact deterministic integration plan; no live provider                                                                                              |
+| 4. Agent-specific governance             | Blocked | Per-agent identity through tools, policy, approval, cancellation, audit, and separately gated knowledge/document boundaries             | Phase 3 evidence plus the Blocked governance and knowledge/document plans                                                                                                    |
+| 5. Agent-specific memory                 | Blocked | User-controlled shared/private/temporary/proposed-shared namespaces, followed by the staged Research/Knowledge workflow                 | Phase 4, ARB-005 resolution, and the Blocked memory and research/knowledge plans                                                                                             |
+| 6. Bounded parallelism                   | Blocked | Explicit finite concurrency, deterministic cancellation, ordering, and resource limits                                                  | Sequential workflows verified plus the Blocked bounded-parallelism plan                                                                                                      |
+| 7. Staged specialist workflows           | Blocked | Engineering-quality, infrastructure/operations, and automation workflows with exact routes/caps and separate consequential-action gates | Governance evidence plus the three Blocked specialist-workflow plans                                                                                                         |
+| 8. Desktop UI                            | Blocked | Typed catalog/task/progress/attribution/cancellation presentation and control through narrow Tauri IPC                                  | Stable backend contracts plus the Blocked multi-agent UI plan                                                                                                                |
+| 9. End-to-end demonstrations             | Blocked | Bounded synthetic or separately approved demonstrations with exact attribution and no overclaiming                                      | Selected workflow gates plus the Blocked demonstration plan                                                                                                                  |
+| 10. Architecture/security review         | Blocked | Cross-phase ownership, isolation, cancellation, audit, privacy, portability, and rollback review                                        | Complete selected evidence plus the Blocked final-review plan                                                                                                                |
+
+The first usable engineering milestone is Phase 3's deterministic
+Personal-to-Research flow. It is not a shipping/live assistant milestone.
+Delegation remains an explicit application-service operation: only
+`AgentOrchestrator` creates child tasks, with initial depth, total-child budget
+per root, and active-child concurrency all fixed at one. Completion or
+cancellation does not replenish that phase's child budget. Later workflow
+arrows are orchestrator-controlled sequential stages at depth one, never direct
+specialist spawning. Every expansion requires an exact finite task cap, and
+later phases may not begin automatically.
+
+Hermes integration remains **Deferred — evaluated transport and containment
+requirements not met**. The rejected raw TUI-gateway stdio, managed
+`hermes serve` WebSocket, and ACP evidence for Hermes Agent `0.20.0` /
+`v2026.8.3` is preserved and does not block the native sequence. It also does
+not select a replacement external transport.
+
 ## Meta and repository milestones
 
 | Meta milestone                                           | Status                                          | Goal                                                                                                                | Acceptance gate                                                                                                                                                                         |
@@ -118,22 +159,30 @@ Release milestones additionally require `RELEASE_CHECKLIST.md` and
 
 ## Current queue
 
-1. Do not begin Stage B no-traffic provisioning, Stage C synthetic transport,
+1. Review and publish the completed native multi-agent architecture
+   documentation before separately authorizing Phase 1. A Ready plan grants no
+   implementation authority by itself.
+2. Do not begin Phase 2 or any later multi-agent phase automatically. Keep
+   delegation depth/concurrency at the documented bounds and keep Native
+   sole/default.
+3. Do not begin Stage B no-traffic provisioning, Stage C synthetic transport,
    Stage D real-content activation, or another High remediation automatically.
-2. Later work must collect D-062's exact Microsoft registration and token
+4. Later work must collect D-062's exact Microsoft registration and token
    evidence, D-063's exact Azure deployment evidence, and D-061 provider,
    disclosure, retention, and operational evidence under separate plans.
-3. Keep ARB-003, ARB-004, ARB-005, and ARB-008 blocked until separately
+5. Keep ARB-003, ARB-004, ARB-005, and ARB-008 blocked until separately
    approved capability increments are selected.
-4. Revisit ARB-006 only before public distribution or external contributions,
+6. Revisit ARB-006 only before public distribution or external contributions,
    and ARB-007 only before release-candidate or public-distribution work.
-5. Do not add transport, credentials, execution, persistence, enterprise
+7. Do not add transport, credentials, execution, persistence, enterprise
    controls, a license grant, signing, or notarization from this roadmap entry.
 
 Increment 4V is verified complete and published. D-058 and its project-memory
 reconciliation are closed. The High-severity disposition identifies no
-immediate code remediation. ARB-002A is documentation-only; no later runtime or
-remediation increment is Ready.
+immediate code remediation. ARB-002A is documentation-only. The agent
+definition/registry plan is the only new Ready product plan; it remains
+not Active and cannot start until this documentation increment is separately
+reviewed and published and an exact implementation task is authorized.
 
 ## Rollback and reprioritization
 

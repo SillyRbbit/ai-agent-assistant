@@ -2,6 +2,8 @@
 
 Status: Draft; Blocked after WebSocket and ACP NO-GO results; no selected
 Hermes transport
+Disposition: Deferred — evaluated transport and containment requirements not
+met
 Owner: Project owner
 Last updated: 2026-08-11
 

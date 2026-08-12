@@ -4,6 +4,17 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Accepted D-082's application-owned native multi-agent architecture above the
+  implemented one-run `AgentRuntime` and sole/default `NativeAgentRuntime`.
+  Added the evidence-based assessment, nine-role catalog and staged-activation
+  roadmap, one Ready AgentDefinition/AgentRegistry plan, and separately Blocked
+  orchestration, governance, workflow, parallelism, UI, demonstration, and
+  final-review plans. Only Personal Assistant and Research are initially
+  selected for a future flow; none is operational. Hermes remains
+  Deferred/Blocked with every negative transport record preserved. No
+  production source, test, dependency, provider, process, Tauri/React path, or
+  visible behavior changed.
+
 - Rejected Hermes ACP for the pinned `0.20.0` / `v2026.8.3` release under
   D-081. The structured JSON-RPC stdio contract is supported, but every ACP
   session hardcodes privileged internal terminal, filesystem, browser, memory,

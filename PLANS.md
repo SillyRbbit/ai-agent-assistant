@@ -4,7 +4,32 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No plan is active. The owner-selected
+No plan is active. The owner-selected documentation-only
+[`2026-08-11-native-multi-agent-architecture.md`](docs/plans/2026-08-11-native-multi-agent-architecture.md)
+is **verified complete with advisories** under gate
+`native-multi-agent-architecture` and remains intentionally uncommitted for
+owner review. The owner expanded the catalog to nine roles before closeout;
+D-082 accepts an application-owned `AgentOrchestrator` above the
+implemented single-run `AgentRuntime` and sole/default `NativeAgentRuntime`.
+The assessment, ADR, root roadmap, subordinate activation roadmap, and plan set
+preserve all native boundaries and Hermes NO-GO evidence. No production source,
+test, dependency, provider, process, Tauri/React path, or behavior changed.
+
+The
+[`2026-08-11-agent-definition-registry.md`](docs/plans/2026-08-11-agent-definition-registry.md)
+plan is the sole new **Ready** implementation plan. It covers only immutable
+framework-neutral definitions, application-owned versioned instructions, a
+deterministic registry, all nine application-owned roles, closed staged
+activation, bounded validation, and deterministic tests. Only Personal
+Assistant and Research are `Initial` for a later flow; none is
+operational. Its plan status is Ready and not Active. It may start only after
+this documentation is verified, reviewed, and published to a clean synchronized
+baseline and the owner provides an exact implementation task. The orchestration,
+governance, knowledge/document, workflow, parallelism, UI, demonstration, and
+final-review plans all remain Blocked under `ROADMAP.md` and
+`docs/roadmap/NATIVE_MULTI_AGENT_ROADMAP.md`.
+
+The prior owner-selected
 [`2026-08-11-hermes-acp-transport-spike.md`](docs/plans/2026-08-11-hermes-acp-transport-spike.md)
 is **verified complete with advisories** under gate
 `hermes-acp-transport-spike`.
@@ -15,8 +40,9 @@ execute terminal, filesystem, browser, memory, skill, code, and delegation
 actions inside Hermes before Cortexa can authorize them. The candidate also
 lacks complete immutable runtime provenance and the installed ACP SDK. The
 verdict is NO GO, the ACP ADR is Rejected under D-081, the adapter remains
-Draft/Blocked, Native remains sole/default, and no real Hermes process was run.
-The transport verdict remains NO GO and no later plan is Ready.
+Draft/Blocked with the disposition **Deferred — evaluated transport and
+containment requirements not met**, Native remains sole/default, and no real
+Hermes process was run. No Hermes plan is Ready.
 
 The prior owner-selected
 [`2026-08-11-hermes-serve-websocket-spike.md`](docs/plans/2026-08-11-hermes-serve-websocket-spike.md)

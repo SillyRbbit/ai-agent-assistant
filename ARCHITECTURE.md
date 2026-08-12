@@ -185,19 +185,108 @@ Rust gates as any other proposal.
 This conceptual runtime seam is separate from model-provider transport. It does
 not restore D-032's deleted synchronous arbitrary-string `AgentProvider` or
 authorize networking, dependencies, credentials, provider selection, a live
-model, coordination, dispatch, execution, multi-agent behavior, or a Tauri
-capability.
+model, dispatch, execution, or a Tauri capability. D-082 separately accepts the
+multi-agent application-service target below; it does not add current behavior.
+
+#### Native multi-agent application-service direction
+
+**Accepted target; not implemented**: D-082 places native multi-agent
+coordination above the existing one-run runtime seam.
+
+```mermaid
+flowchart TD
+    User["User"] --> Personal["Personal Assistant<br/>planned definition"]
+    Personal --> Orchestrator["AgentOrchestrator<br/>planned application service"]
+    Orchestrator --> Initial["Initial catalog pair<br/>Personal Assistant + Research Agent"]
+    Orchestrator -. staged .-> Knowledge["Research & knowledge<br/>Knowledge & Document"]
+    Orchestrator -. staged .-> Engineering["Engineering<br/>Coding + QA + Security"]
+    Orchestrator -. staged .-> Operations["Infrastructure & operations<br/>Cloud + Systems + QA + Security"]
+    Orchestrator -. staged .-> Automation["Automation<br/>Workflow Automation"]
+    Orchestrator --> Runtime["AgentRuntime<br/>implemented one-run boundary"]
+    Runtime --> Native["NativeAgentRuntime<br/>sole/default; implemented and unwired"]
+```
+
+Agent-role arrows show logical assignment/delegation, not component authority.
+The orchestrator invokes the runtime for each root or child run; definitions do
+not call runtimes.
+
+The planned `AgentDefinition` is immutable, application-owned identity,
+purpose, versioned instructions, and a non-authorizing activation disposition.
+The catalog documents the closed functional groups, including cross-cutting
+membership, without adding a routing field. The planned `AgentRegistry`
+performs validated deterministic lookup/listing of all nine definitions and
+their closed `Initial`/`Deferred` catalog state. Discovery is non-authorizing;
+operational selection and task creation fail closed for deferred definitions.
+Neither registration, grouping, nor activation grants tools, routing, policy,
+memory, provider, or device authority.
+The first Ready implementation plan defines all nine accepted roles but marks
+only Personal Assistant and Research Agent `Initial` for a later
+deterministic flow; none has a current application consumer.
+
+The planned `AgentOrchestrator` is a separate application service. It owns task
+assignment, a closed task lifecycle, bounded delegation, result collection,
+attribution, and cancellation propagation. It calls `AgentRuntime` for one
+bounded run; it does not become a runtime, provider, policy engine, tool
+registry, approval manager, audit logger, memory store, or executor.
+
+Authoritative application boundaries remain `AgentOrchestrator`,
+`AgentRuntime`, `NativeAgentRuntime`, `AgentRegistry`, `ToolRegistry`,
+`PolicyEngine`, `ApprovalManager`, `AuditLogger`, `MemoryStore`, and
+`PlatformAdapter`, with several still planned rather than implemented. Security
+& Risk is not `PolicyEngine`, QA & Validation is not `ApprovalManager`, and
+Workflow Automation is not `AgentOrchestrator`. Agents may emit bounded
+recommendations or typed requests; application code owns lifecycle,
+authorization, approval, execution, and audit decisions.
+
+The initial Personal-to-Research phase uses depth one, one child task total per
+root, and one active child. Completion or cancellation does not replenish that
+phase's budget. Only the orchestrator may create a child task. A typed
+application-service call is the selected internal mechanism; delegation is not
+a runtime control event, shell command, or `agent.delegate` host tool. Child
+results remain bounded untrusted data for Personal Assistant synthesis.
+
+The initial root is exactly Personal Assistant and the only first-flow child
+edge is Personal Assistant to Research Agent. Research Agent cannot delegate;
+self, reverse, unknown, or other routes fail before task creation. This
+allowlist is owned by the application/orchestrator. A definition's registry
+membership or activation does not grant a route. Later research/knowledge,
+engineering-quality, infrastructure/operations, and automation workflows must
+add exact closed routes and finite task caps under separate plans. Their arrows
+mean orchestrator-controlled sequencing at depth one, never specialist spawning.
+
+Before any governed agent action, a future `AgentExecutionContext` must bind
+the exact agent, task, optional parent task, runtime, policy profile, and memory
+namespace identities. The application derives the context from the registry
+and orchestrator. Missing, unknown, stale, duplicate, or mismatched identity
+fails closed and never defaults to the Personal Assistant.
+
+Current code contains no agent definition, registry, task, orchestrator,
+delegation, agent-aware policy/audit, memory namespace, multi-agent Tauri IPC,
+or multi-agent React state. `RuntimeTurnRequest` carries only run ID, request
+ID, and bounded selected text. The Tasks and Memory screens remain placeholders.
+
+The target namespace model is shared user/project, agent-private,
+task-temporary, and proposed-shared memory. No product `MemoryStore`, vector
+database, embedding service, or semantic index is selected or implemented.
+Proposed shared memory is inert until explicit application policy and user
+controls promote it.
+
+See
+[`NATIVE_MULTI_AGENT_ASSESSMENT.md`](docs/architecture/NATIVE_MULTI_AGENT_ASSESSMENT.md),
+[`ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md`](docs/adr/ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md),
+the authoritative [`ROADMAP.md`](ROADMAP.md), and its subordinate
+[`NATIVE_MULTI_AGENT_ROADMAP.md`](docs/roadmap/NATIVE_MULTI_AGENT_ROADMAP.md).
 
 #### Hermes transport evaluation
 
 **No selected transport; three pinned-release mechanisms rejected**:
-D-080 rejects raw TUI-gateway stdio for production at Hermes Agent package/application version
-`0.20.0`, release tag `v2026.8.3`, source commit
-`3c27eb6234bf91b8ceee9e9071591b31e9b148cb`. It conditionally selects a
-Rust-supervised managed local `hermes serve` child plus a closed projection of
-the documented TUI-gateway JSON-RPC/WebSocket surface for a contained spike
-only after the native runtime boundary is verified complete. ACP remains a
-deferred fallback.
+D-080 records raw TUI-gateway stdio as rejected for production at Hermes Agent
+package/application version `0.20.0`, release tag `v2026.8.3`, source commit
+`3c27eb6234bf91b8ceee9e9071591b31e9b148cb`. At decision time it conditionally
+selected a Rust-supervised managed local `hermes serve` child plus a closed
+projection of the documented TUI-gateway JSON-RPC/WebSocket surface for a
+contained spike after the native boundary. That spike later returned NO-GO.
+ACP was then evaluated separately and rejected under D-081.
 
 No Hermes executable, dependency, process, socket, token, runtime home,
 provider, or adapter exists in the repository. The owner supplied an external

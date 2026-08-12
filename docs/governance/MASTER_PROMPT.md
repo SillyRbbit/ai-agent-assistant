@@ -1,7 +1,7 @@
 # Cortexa master instructions
 
 Status: Authoritative repository-wide Codex instruction detail
-Last updated: 2026-07-20
+Last updated: 2026-08-11
 
 ## 1. Purpose
 
@@ -144,19 +144,30 @@ not call partial verification complete. Distinguish Passed, Failed, Not run, and
 Manual verification pending. Current project state belongs in the root
 project-memory documents, not in copied prompt boilerplate.
 
-## 17. Future multi-agent boundaries
+## 17. Native multi-agent boundaries
 
-Future approved work may document specialized roles, a supervisor, typed agent
-messages, shared workflow state, policy-controlled tools, human approvals,
-verification, retry/cancellation, resumable workflows, and observability.
-None is currently authorized. Do not implement or invoke product-level
-multi-agent behavior, orchestration, supervisors, planners, executors,
-verifiers, agent-to-agent communication, autonomous planning, recursive
-delegation, subagents for application implementation, parallel agent execution,
-workflow engines, event buses, queues, persistent agent tasks, databases,
-background workers, provider integration, new Tauri commands, IPC, UI, cloud,
-containers, distributed services, or speculative dependencies. Documentation is
-not implementation authorization.
+D-082 accepts an application-owned native multi-agent target with a separate
+`AgentOrchestrator` above the implemented single-run `AgentRuntime` and
+sole/default `NativeAgentRuntime`. The accepted direction permits bounded plans
+for a nine-role immutable catalog, staged activation, tasks, depth-one
+delegation, typed execution context, cancellation, attribution, and later
+governed workflows. An ADR or Ready plan is not implementation authorization.
+
+Only a separately approved increment may implement one bounded phase. Do not
+infer authority for orchestration, model/provider execution, agent-to-agent
+communication, tools, policy changes, approvals, memory, persistent tasks,
+parallel execution, background workers, new Tauri commands, IPC, UI, cloud,
+containers, or distributed services. Only the orchestrator may create a child
+task. The first Personal-to-Research flow fixes depth, total-child budget per
+root, and active-child concurrency at one, without budget replenishment.
+Future staged workflows require exact closed routes and finite task caps; their
+arrows never authorize specialist spawning, and depth remains one unless a new
+decision explicitly changes it. Agents, catalog activation, and runtimes remain
+untrusted and non-authorizing. Security & Risk is not `PolicyEngine`, QA &
+Validation is not `ApprovalManager`, and Workflow Automation is not
+`AgentOrchestrator`. Recursive delegation, hidden background autonomy, generic
+workflow engines, event buses, queues, external frameworks, and speculative
+dependencies remain prohibited without a later accepted decision and plan.
 
 ## 18. Codex model-and-effort policy
 
