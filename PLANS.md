@@ -4,19 +4,28 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No plan is active. The owner-approved documentation-only
+No plan is active. The owner-approved
+[`2026-08-11-native-agent-runtime-boundary.md`](docs/plans/2026-08-11-native-agent-runtime-boundary.md)
+plan is verified complete with advisories under gate
+`native-agent-runtime-boundary`. The bounded source adds an application-owned
+`AgentRuntime`/`RuntimeRun` foundation, the sole/default `NativeAgentRuntime`
+composition over the unchanged `InitialGatewayTurn`, and a private deterministic
+`MockAgentRuntime` contract fixture. The full repository verification, Rust
+all-target suite, architecture/security/code reviews, documentation checks, and
+completion marker pass. It does not wire Tauri or React, add a provider/model/
+network/process/dependency, integrate Hermes, change the visible frontend mock,
+or add runtime selection or automatic fallback. No later increment is Ready;
+the contained Hermes spike still requires publication of this scope and a fresh
+security/readiness review.
+
+The owner-approved documentation-only
 [`2026-08-11-hermes-runtime-architecture-decisions.md`](docs/plans/2026-08-11-hermes-runtime-architecture-decisions.md)
-plan is complete with advisories under gate
-`hermes-runtime-architecture-decisions` and intentionally remains uncommitted
-for owner review. It accepts the small application-owned runtime target,
-conditionally selects managed local `hermes serve` plus TUI-gateway
-JSON-RPC/WebSocket for a later contained spike, makes the native runtime
-boundary the sole next Ready implementation plan, and keeps all Hermes execution
-and adapter work blocked. It changes documentation only and authorizes no
-production source, dependency, Hermes execution, process, socket, credential,
-provider, model, tool, UI, or external action. Do not begin the Ready plan until
-this decision scope is separately published to a clean synchronized baseline
-and the owner issues an exact implementation prompt.
+plan was committed separately at `701c061`. D-079 accepted the small
+application-owned runtime target and D-080 conditionally selected managed local
+`hermes serve` plus TUI-gateway JSON-RPC/WebSocket for a later contained spike.
+That documentation increment added no runtime behavior; its clean published
+baseline authorized the current native plan only through the owner's separate
+implementation prompt.
 
 The completed documentation-only
 [`2026-08-11-hermes-adr-transport-revision.md`](docs/plans/2026-08-11-hermes-adr-transport-revision.md)

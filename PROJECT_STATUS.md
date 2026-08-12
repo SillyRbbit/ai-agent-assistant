@@ -4,20 +4,31 @@ Last updated: 2026-08-11
 
 ## Current milestone
 
-The documentation-only Hermes runtime architecture-decision increment is
-**complete with advisories in the uncommitted working tree**. D-079 accepts the
-small application-owned `AgentRuntime -> NativeAgentRuntime |
-HermesAgentRuntime` target, while confirming that none of those types exists
-yet. D-080 conditionally selects a contained managed local `hermes serve`
-JSON-RPC/WebSocket spike after native completion and preserves the raw-stdio
-NO-GO. The native boundary plan is Ready for a separately authorized later run;
-the WebSocket spike remains Blocked on native completion and fresh containment
-review; the adapter remains Draft/Blocked on both phases. Pinned source is
-Hermes Agent `0.20.0`, tag `v2026.8.3`, commit
-`3c27eb6234bf91b8ceee9e9071591b31e9b148cb`. No production source, test,
-dependency, configuration, Hermes execution, process, socket, credential,
-provider, UI, or behavior changed. This Phase 2 documentation is intentionally
-not committed or pushed.
+The owner-approved native agent runtime boundary is **verified complete with
+advisories** under gate `native-agent-runtime-boundary`. The Rust
+core now has a closed application-owned `AgentRuntime`/`RuntimeRun` foundation,
+the sole/default `NativeAgentRuntime` wrapper that delegates to the unchanged
+`InitialGatewayTurn`, and a private deterministic `MockAgentRuntime` contract
+fixture. The common event lane supports bounded response start, streaming text,
+closed failure, completion, identity/sequence validation, typed rejection, and
+exact cancellation. Native does not claim shared tool proposals; the existing
+concrete frame lane preserves local schema, policy, approval, and audit results
+without moving governance into the runtime contract. Focused runtime tests pass
+20/20; the unchanged public gateway contract passes 10/10, gateway-protocol
+units 18/18, and gateway-request units 10/10. The all-target Rust suite passed
+150 tests with the one explicitly opt-in real-Hermes version probe ignored;
+`npm run verify`, the Tauri release build, repository/docs checks, and security
+scan pass. No Tauri/React wiring, visible behavior, provider, network, process,
+dependency, Hermes code, credential, model, selector, or automatic fallback was
+added.
+
+The documentation-only Hermes runtime decisions are published at `701c061`.
+D-079 accepts the native-first architecture, and D-080 keeps the managed local
+`hermes serve` JSON-RPC/WebSocket path conditional on a later contained spike.
+The spike remains Blocked until native completion plus fresh containment and
+readiness review; the adapter remains Draft/Blocked. Raw TUI-gateway stdio stays
+NO-GO for Hermes Agent `0.20.0`, tag `v2026.8.3`, commit
+`3c27eb6234bf91b8ceee9e9071591b31e9b148cb`.
 
 The documentation-only Hermes ADR transport revision is **verified complete
 with advisories**. At that increment's closeout, it preserved the raw

@@ -4,6 +4,16 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Implemented the application-owned `AgentRuntime`/`RuntimeRun` foundation and
+  sole/default `NativeAgentRuntime` as a thin composition over the unchanged
+  `InitialGatewayTurn`. Added bounded typed runtime events, closed capabilities
+  and errors, exact run cancellation, bidirectional input-lane isolation,
+  redacted domain types, and a private deterministic `MockAgentRuntime` contract
+  fixture. Focused runtime, unchanged gateway regressions, the all-target Rust
+  suite, full repository verification, Tauri release build, and security scan
+  pass. No Hermes, provider, network, process, dependency,
+  Tauri/React wiring, selector, automatic fallback, or visible behavior changed.
+
 - Accepted D-079's application-owned native-first runtime architecture and
   D-080's conditional contained `hermes serve` JSON-RPC/WebSocket evaluation
   direction. The native boundary ExecPlan is Ready for a later separately

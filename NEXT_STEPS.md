@@ -100,24 +100,32 @@ This file is the ordered implementation queue. Work only on the first item marke
   deterministic fixture tests pass, the real-Hermes probe was not run, and no
   production runtime or native behavior changed**.
 - Hermes runtime architecture decisions:
-  **Documentation-only decision increment complete with advisories in the
-  uncommitted working tree; D-079 accepts the native-first runtime architecture,
+  **Documentation-only decision increment complete with advisories and
+  published at `701c061`; D-079 accepts the native-first runtime architecture,
   D-080 conditionally selects a contained `hermes serve` WebSocket spike, and
   no runtime source, dependency, Hermes execution, or behavior changed**.
+- Native agent runtime boundary:
+  **Verified complete with advisories under gate
+  `native-agent-runtime-boundary`. The application-owned runtime foundation,
+  sole/default native wrapper, and private deterministic mock exist; all local
+  validation passes. No Hermes, provider, network, process, dependency,
+  Tauri/React wiring, selector, or visible behavior was added.**
 
 ## Queue status
 
-### Next implementation: Native agent runtime boundary
+### Completed implementation: Native agent runtime boundary
 
-**Status:** **Ready**; sole next implementation plan, not active. The
+**Status:** **Verified complete with advisories**; no later increment is Ready. The
 [`2026-08-11-native-agent-runtime-boundary.md`](docs/plans/2026-08-11-native-agent-runtime-boundary.md)
-plan implements only the small application-owned `AgentRuntime` contract,
+has a valid completion marker after the complete applicable validation suite,
+independent reviews, documentation closeout, and post-increment report. The
+boundary contains closed application-owned run/event types,
 `NativeAgentRuntime` composition over the verified native turn, and a private
-deterministic no-I/O `MockAgentRuntime` contract fixture. Hermes, transport,
-provider, process, dependency, UI, and runtime selection remain out of scope.
-The plan may begin only after this uncommitted decision increment is separately
-reviewed and published to a clean synchronized baseline and the owner gives an
-exact implementation prompt.
+deterministic no-I/O `MockAgentRuntime` contract fixture. Hermes, provider,
+process, dependency, UI, runtime selection, automatic fallback, and behavior
+changes remain out of scope. Publication still requires separate owner
+direction. The later spike must not begin until a fresh security/readiness
+review passes.
 
 ### Blocked later spike: Hermes serve WebSocket containment
 
@@ -141,7 +149,7 @@ tool capability exists.
 
 ### Completed documentation-only increment: Hermes runtime architecture decisions
 
-**Status:** Complete with advisories in the uncommitted working tree; no
+**Status:** Complete with advisories and published at `701c061`; no
 implementation authorized by this completion. The
 [`2026-08-11-hermes-runtime-architecture-decisions.md`](docs/plans/2026-08-11-hermes-runtime-architecture-decisions.md)
 plan records D-079/D-080, preserves the raw-stdio NO-GO, readies only the native

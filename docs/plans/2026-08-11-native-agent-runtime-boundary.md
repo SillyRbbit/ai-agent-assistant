@@ -1,6 +1,6 @@
 # Native agent runtime boundary
 
-Status: Ready; owner-approved for a later implementation run, not active
+Status: Verified complete with advisories
 Owner: Project owner
 Last updated: 2026-08-11
 
@@ -75,8 +75,9 @@ runtime selector, or new UI becomes available.
 - Native cancellation is local, idempotent, and terminal. No process or
   transport currently exists to cancel.
 - D-079 accepts the application-owned runtime architecture, and the owner has
-  selected this exact plan as the sole next Ready implementation phase. A later
-  implementation prompt must still begin its own clean gate.
+  selected this exact plan as the sole next Ready implementation phase. This
+  run began gate `native-agent-runtime-boundary` from a clean synchronized
+  `main` baseline at `701c061`.
 
 ## Current-state evidence
 
@@ -97,6 +98,19 @@ runtime selector, or new UI becomes available.
   `docs/adr/ADR-MULTI-RUNTIME-AGENT-ARCHITECTURE.md`, recorded durably as D-079.
 - D-080 keeps the contained Hermes WebSocket spike Blocked until this plan is
   verified complete; no Hermes concern is needed to implement this phase.
+- The complete call-site inventory found no production caller of
+  `InitialGatewayTurn`: construction occurs only in its unit tests and
+  `src-tauri/tests/gateway_request_contract.rs`. React continues to use the
+  separate `browserMockRunDriver`, and Tauri exposes only `get_app_info`.
+- The exact native symbols being adapted are `InitialGatewayTurn::{new,
+request_bytes,status,accept_frame,cancel,
+cancel_pending_approval_for_run_termination}` plus the macOS-only
+  `resolve_approval_source_outcome`. `InitialGatewayEvent` contains both
+  lifecycle/text results and governance-owned `PolicyEvaluated` and
+  `ApprovalPresentationReady` results.
+- `GatewayStreamValidator`, `GatewayStreamStatus`, `validate_function_call`,
+  `ToolRegistry`, `PolicyEngine`, `ApprovalManager`, and typed approval audit
+  remain unchanged and continue to own their current responsibilities.
 
 ## Files expected to change
 
@@ -138,19 +152,49 @@ tools, policy, approval, and audit implementations are behaviorally unaffected.
 
 ## Interfaces and invariants
 
-### Proposed contract shape
+### Final contract shape
 
-The final Rust syntax is chosen during Milestone 1 and must remain dependency-
-free. Conceptually the port supports only:
+Milestone 1 selected two small dependency-free traits because the current unit
+of work is one bounded turn, not a runtime-owned session registry:
 
 - `describe() -> RuntimeDescriptor`;
-- `start(RuntimeTurnRequest) -> RuntimeRun`;
-- delivery/acceptance of closed `UntrustedRuntimeEvent` values for one run; and
-- `cancel(RuntimeRunId) -> RuntimeCancellationOutcome`.
+- `start(RuntimeTurnRequest) -> RuntimeRun` through an associated run type; and
+- `RuntimeRun::{run_id,status,accept_event,cancel}` for one closed untrusted
+  event sink and exact local run lifecycle.
 
 A reviewer must be able to explain every method using current native behavior.
 If a method exists only because Hermes might need it, remove it or stop the
 increment.
+
+The common event contract is an application-owned sink/acceptance boundary. It
+contains closed start, text, proposal, completion, and failure values and never
+exposes normalized JSON, provider/framework payloads, policy decisions,
+approval presentations, or audit types. The native adapter translates supported
+shared events privately into the unchanged normalized gateway frame and maps
+only lifecycle/text/failure acceptance back to application-owned types.
+
+The current native turn returns `PolicyEvaluated` and
+`ApprovalPresentationReady` only after its concrete registry, schema, policy,
+approval, and audit boundaries have run. The common native descriptor therefore
+does **not** claim `UntrustedToolProposals`; such an event fails closed as a
+capability mismatch and terminalizes the shared run. The concrete
+`NativeAgentRun::{accept_frame,cancel_pending_approval_for_run_termination}`
+lane preserves exact current tool/policy/approval behavior without putting
+governance types on `AgentRuntime`. Mixing a concrete frame lane into the
+shared-event lane is rejected before shared processing.
+
+### Current behavior-to-method matrix
+
+| Implemented symbol              | Current behavior mapped                                                                                                                  | Explicitly not claimed                                       |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `AgentRuntime::describe`        | closed Native identity, in-process availability, local-boundary health, and bounded capabilities                                         | provider/model/network readiness                             |
+| `AgentRuntime::start`           | constructs exactly one `InitialGatewayTurn` from the owned typed request                                                                 | session registry, connection, retry, transport, or execution |
+| `RuntimeRun::{run_id,status}`   | identity retained by the wrapper and one-to-one `GatewayStreamStatus` mapping                                                            | persistence or cross-run coordination                        |
+| `RuntimeRun::accept_event`      | privately serializes closed shared lifecycle/text/failure values and delegates acceptance to the unchanged validator                     | raw JSON/RPC, provider payloads, governance, or execution    |
+| `RuntimeRun::cancel`            | delegates local stream cancellation and, when present, the existing audited run-termination cancellation of a run-owned pending approval | process cancellation or approval resolution authority        |
+| `NativeAgentRun::request_bytes` | borrows the exact request serialized and owned by `InitialGatewayTurn`                                                                   | provider send or arbitrary transport bytes                   |
+| `NativeAgentRun::accept_frame`  | delegates normalized untrusted-frame validation and preserves exact `InitialGatewayEvent`/error results                                  | generic runtime authority or raw frame bypass                |
+| native approval methods         | delegate the existing exact pending-approval termination and macOS source-resolution paths                                               | approval ownership in `AgentRuntime`                         |
 
 ### Closed types
 
@@ -161,15 +205,20 @@ increment.
   risk, permission, approval, execution, or framework field.
 - `RuntimeCapabilities` is a closed bounded set. It initially describes only
   verified native behavior; a declaration never grants permission.
-- `UntrustedRuntimeEvent` contains only the minimum closed variants needed for
-  current response start/text, untrusted proposal, completion, failure, and
-  cancellation behavior. Unknown variants/fields/versions fail closed.
+- `UntrustedRuntimeEvent` contains only closed response-start, text-delta,
+  untrusted-proposal, completion, and failure values. Tool arguments are a
+  bounded redacted string only at this explicit untrusted serialization
+  boundary; `serde_json::Value` is not a domain contract.
+- `RuntimeEventAcceptance` returns only application-owned lifecycle, text,
+  proposal, completion, or failure values. It cannot carry policy, approval,
+  audit, execution, credential, provider configuration, or framework types.
 - `RuntimeError` uses closed redacted variants and does not retain selected
   content, arguments, upstream bytes, or arbitrary failure strings.
 
 ### Ownership
 
-- `AgentRuntime` owns runtime lifecycle/event production only.
+- `AgentRuntime` owns only the currently provable local runtime descriptor and
+  one-turn closed event/lifecycle foundation.
 - `InitialGatewayTurn` and the gateway validator continue to own independent
   protocol, sequence, size, and content validation.
 - `ToolRegistry` owns local tool identity/schema/risk/permission metadata.
@@ -189,6 +238,10 @@ increment.
 - Debug and error output remains redacted.
 - Native is recorded as the default/reference/explicit-fallback direction only;
   no selector or fallback code is added.
+- `NativeAgentRun::cancel` owns only local run termination. The existing
+  pending-approval termination path is invoked only as terminal run cleanup;
+  its audit-bearing result remains concrete and cannot enter the generic
+  cancellation result.
 
 ### Deterministic mock
 
@@ -212,26 +265,26 @@ must still feed independent local validation.
 
 ## Implementation milestones
 
-- [ ] Milestone 0 - owner gate and clean baseline
+- [x] Milestone 0 - owner gate and clean baseline
   - confirm accepted D-079 and D-080 remain current;
   - confirm the documentation closeout classified this exact plan Ready;
   - require no overlapping uncommitted work;
   - begin exactly one `native-agent-runtime-boundary` gate.
-- [ ] Milestone 1 - contract proof on paper and in negative tests
+- [x] Milestone 1 - contract proof on paper and in negative tests
   - write the exact current-behavior-to-method matrix;
   - choose closed types without new dependencies;
   - add negative contract tests first;
   - stop if the contract needs framework, provider, executor, memory, storage,
     or generic JSON/RPC concepts.
-- [ ] Milestone 2 - native wrapper
+- [x] Milestone 2 - native wrapper
   - add `NativeAgentRuntime` as a thin composition root;
   - forward only existing verified behavior;
   - retain all `InitialGatewayTurn` coverage and add native parity cases.
-- [ ] Milestone 3 - adversarial and regression coverage
+- [x] Milestone 3 - adversarial and regression coverage
   - verify invalid IDs, limits, unknown variants, out-of-order/late events,
     cancellation, double terminal state, redaction, and capability mismatch;
   - prove no Tauri/frontend/provider/execution behavior changed.
-- [ ] Milestone 4 - architecture and completion evidence
+- [x] Milestone 4 - architecture and completion evidence
   - label the boundary implemented but unwired;
   - run required verification/reviews;
   - synchronize current project memory;
@@ -287,6 +340,7 @@ once after the final product/doc edit:
 
 ```bash
 cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+cargo check --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked
 cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
 cargo test --manifest-path src-tauri/Cargo.toml --all-targets --locked
 npm run verify
@@ -351,6 +405,15 @@ The future implementation run must still record:
   prove portability but cannot honestly claim a live native runtime.
 - The frontend mock is a separate application service and should not be routed
   through the Rust boundary in this phase.
+- The shared native lane can safely accept lifecycle, text, completion, and
+  failure events through the unchanged validator. It cannot honestly expose a
+  pre-governance tool proposal because the current concrete turn retains that
+  call and later returns policy or approval results. Native therefore omits the
+  shared proposal capability while preserving the exact concrete tool lane.
+- Exact run cancellation must also close a pending approval created by the
+  concrete turn. The wrapper delegates that cleanup to the existing typed,
+  audited run-termination method and exposes no approval or audit data through
+  `AgentRuntime`.
 - A future Hermes adapter needs process supervision and protocol translation,
   but adding either now would expand this native-only plan.
 
@@ -361,41 +424,74 @@ The future implementation run must still record:
 - 2026-08-11: The owner accepted D-079 and selected this exact plan. A fresh
   documentation readiness review classified it Ready; implementation has not
   begun and no source, test, dependency, or behavior changed.
+- 2026-08-11: Reconfirmed a clean synchronized `main` baseline at `701c061`,
+  passed the 10-test public gateway contract and 10-test gateway-request unit
+  baseline, and began gate `native-agent-runtime-boundary`.
+- 2026-08-11: Completed the exact symbol/call-site inventory. Selected an
+  associated-run `AgentRuntime`/`RuntimeRun` foundation, a closed shared event
+  sink, and a separate concrete native frame/governance lane.
+- 2026-08-11: Added the native wrapper and private deterministic mock contract
+  suite. Focused evidence currently passes 20 tests plus the unchanged 10-test
+  public gateway contract, 18 gateway-protocol units, and 10 gateway-request
+  units; complete-gate validation remains pending.
+- 2026-08-11: Independent review found and the implementation corrected a
+  missing shared event path, noncanonical capability storage, nonterminal mock
+  failures, generic cancellation that could leave a run-owned approval pending,
+  one-way lane isolation, event construction that required retaining the consumed
+  request, unbounded output text, thin negative coverage, and identifier Debug
+  exposure. Focused tests and strict Clippy pass after the corrections.
+- 2026-08-11: The all-target Rust suite passed 150 tests with one explicitly
+  opt-in real-Hermes version probe ignored. `npm run verify`, frontend tests,
+  hooks/repository tests, the Tauri release build, docs/repository checks,
+  security scan, session-end inventory, and post-increment marker all pass.
 
 ## Acceptance criteria
 
 - [x] Owner accepts or amends the multi-runtime ADR through a durable decision.
 - [x] Fresh readiness review classifies this exact plan Ready or Ready with
       advisories.
-- [ ] The contract contains only descriptor, start, closed untrusted events,
+- [x] The contract contains only descriptor, start, closed untrusted events,
       and cancellation responsibilities necessary for current native behavior.
-- [ ] `NativeAgentRuntime` composes the unchanged `InitialGatewayTurn`.
-- [ ] All direct existing tests and new native parity/adversarial tests pass.
-- [ ] No behavior, UI, Tauri IPC/capability, provider, network, dependency,
+- [x] `NativeAgentRuntime` composes the unchanged `InitialGatewayTurn`.
+- [x] All direct existing tests and new native parity/adversarial tests pass in
+      the complete applicable suite.
+- [x] No behavior, UI, Tauri IPC/capability, provider, network, dependency,
       process, execution, credential, memory, persistence, or external action
       is added.
-- [ ] No arbitrary JSON/string/RPC/provider escape hatch or generic authority
+- [x] No arbitrary JSON/string/RPC/provider escape hatch or generic authority
       interface is introduced.
-- [ ] Documentation says the boundary is unwired and not a live agent runtime.
-- [ ] Architecture, security, code-health, technical-debt, readiness,
+- [x] Documentation says the boundary is unwired and not a live agent runtime.
+- [x] Architecture, security, code-health, technical-debt, readiness,
       session-end, and post-increment reviews pass.
-- [ ] Native remains default/reference/explicit-fallback direction, with no
+- [x] Native remains default/reference/explicit-fallback direction, with no
       automatic fallback implementation.
 
 ## Final results
 
-Not started. The architecture and plan are owner-approved, but this plan must
-not be marked Active until a later implementation run confirms a clean baseline
-and begins gate `native-agent-runtime-boundary`.
+Implementation is verified complete with advisories. The
+new application-owned contract, default native composition wrapper, and private
+deterministic mock exist only in Rust source/test infrastructure. Focused
+runtime and unchanged gateway regressions pass; the all-target Rust suite passed
+150 tests with one explicitly opt-in real-Hermes version probe ignored; and
+`npm run verify`, the Tauri release build, docs/repository checks, security scan,
+and session-end/post-increment gates pass. No Hermes, provider, network, process,
+dependency, Tauri/React wiring, runtime selector, automatic fallback, or
+user-visible behavior was added.
+
+Quality result: `PASS WITH ADVISORIES`. The implementation has no remaining
+source/test finding. Root `AGENTS.md` still describes the runtime names as
+planned concepts; updating that repository-governance wording was outside this
+approved path inventory and should be a separate bounded documentation change
+before later Hermes implementation work.
 
 ## Documentation updates
 
 When separately approved and completed:
 
 - [x] `DECISIONS.md` records the accepted ADR before implementation.
-- [ ] `ARCHITECTURE.md` distinguishes implemented-unwired boundary from mocked,
+- [x] `ARCHITECTURE.md` distinguishes implemented-unwired boundary from mocked,
       planned, and shipping behavior.
-- [ ] `PLANS.md`, `HANDOFF.md`, `PROJECT_STATUS.md`, `NEXT_STEPS.md`, and
+- [x] `PLANS.md`, `HANDOFF.md`, `PROJECT_STATUS.md`, `NEXT_STEPS.md`, and
       `CHANGELOG.md` record actual evidence only.
-- [ ] `docs/increments/native-agent-runtime-boundary.md` records scope/results.
-- [ ] A valid post-increment review records the complete diff and checks.
+- [x] `docs/increments/native-agent-runtime-boundary.md` records scope/results.
+- [x] A valid post-increment review records the complete diff and checks.

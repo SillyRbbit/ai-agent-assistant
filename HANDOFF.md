@@ -4,19 +4,31 @@ Last updated: 2026-08-11
 
 ## Current state
 
-The documentation-only
-[`2026-08-11-hermes-runtime-architecture-decisions.md`](docs/plans/2026-08-11-hermes-runtime-architecture-decisions.md)
-increment is complete with advisories in the uncommitted working tree. D-079
-accepts the small application-owned multi-runtime architecture, D-080 accepts
+The owner-approved
+[`2026-08-11-native-agent-runtime-boundary.md`](docs/plans/2026-08-11-native-agent-runtime-boundary.md)
+increment is verified complete with advisories under gate
+`native-agent-runtime-boundary`. The bounded Rust implementation contains a
+closed application-owned `AgentRuntime`/
+`RuntimeRun` event and lifecycle foundation, the sole/default
+`NativeAgentRuntime` wrapper around the unchanged `InitialGatewayTurn`, and a
+private deterministic `MockAgentRuntime` contract fixture. Twenty focused
+runtime tests, the unchanged 10-test public gateway contract, 18 gateway-
+protocol units, and 10 gateway-request units pass. The all-target Rust suite
+passed 150 tests with one explicitly opt-in real-Hermes version probe ignored;
+full repository verification, Tauri release build, docs/repository checks, and
+the secret scan pass. The visible React mock,
+Tauri command surface, native governance ownership, and user-visible behavior
+remain unchanged. No Hermes code, dependency, process, provider, network,
+credential, model, selector, fallback, or external action was added. Independent
+review corrections are incorporated and the post-increment marker is valid.
+
+The documentation-only runtime architecture decisions were published separately
+at `701c061`. D-079 accepts the current native-first boundary and D-080 retains
 managed local `hermes serve` plus a closed TUI-gateway JSON-RPC/WebSocket
-projection only as a conditional contained-spike direction, and raw
-TUI-gateway stdio remains rejected. The native runtime boundary plan is Ready
-for a later separately authorized implementation run. The WebSocket spike is
-Blocked until native completion and a fresh containment/readiness review; the
-Hermes adapter is Draft/Blocked until both phases pass. No runtime source,
-test, dependency, Hermes process, socket, credential, provider, UI, or behavior
-changed. Phase 2 is intentionally not committed or pushed and must be reviewed
-and published separately before implementation begins.
+projection only as a conditional later spike. Raw TUI-gateway stdio remains
+rejected. The WebSocket spike stays Blocked until the current native gate is
+validly complete and a fresh security/readiness review passes; the Hermes
+adapter remains Draft/Blocked until both phases pass.
 
 The documentation-only
 [`2026-08-11-hermes-adr-transport-revision.md`](docs/plans/2026-08-11-hermes-adr-transport-revision.md)
@@ -92,19 +104,21 @@ changed.
 
 ## Current exact task
 
-Review the uncommitted 16-path Hermes runtime architecture-decision increment
-and its valid completion evidence. If the owner separately directs publication,
-commit and push that documentation-only scope from a cleanly inspected staged
-diff. Do not begin the Ready native runtime plan while this decision increment
-is uncommitted, and do not begin the blocked WebSocket spike or Draft Hermes
-adapter automatically.
+Review the verified native runtime boundary diff and its valid completion
+evidence. If the owner separately directs publication, commit and push this
+bounded implementation and documentation as one Conventional Commit from the
+cleanly inspected diff. Do not begin the Blocked Hermes serve spike or Draft
+Hermes adapter automatically. A later separately approved governance-doc sync
+should update root `AGENTS.md`, whose planned-concepts wording predates the now
+implemented native foundation.
 
-Resume prompt: Read `AGENTS.md`, the project-memory chain,
-`docs/plans/2026-08-11-hermes-runtime-architecture-decisions.md`, and its
-post-increment review. Inspect the uncommitted 16-path documentation diff and
-gate status. Await exact owner direction before committing or pushing it; do not
-implement `AgentRuntime`, execute Hermes, or begin a later phase in the same
-task.
+Resume prompt: Read `AGENTS.md`, the project-memory chain, accepted D-079/D-080,
+`docs/plans/2026-08-11-native-agent-runtime-boundary.md`, and its post-increment
+review. Inspect the complete uncommitted diff and require gate
+`native-agent-runtime-boundary` to be complete and valid. Await exact owner
+direction before committing or pushing; do not add Hermes, wire Tauri/React, or
+begin the later spike. Treat the stale planned-concepts wording in root
+`AGENTS.md` as a separately scoped governance-document advisory.
 
 The fake-only Cloudflare demo macOS Keychain proof is complete with advisories.
 Pinned macOS-only Security.framework bindings read exactly two fixed labels and

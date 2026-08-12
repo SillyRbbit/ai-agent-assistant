@@ -131,22 +131,48 @@ or executor.
 
 ### Runtime adapter direction
 
-**Accepted target direction; not implemented**: D-079 accepts the
-application-owned architecture below, but the repository still has no
-`AgentRuntime` trait, `NativeAgentRuntime`, `HermesAgentRuntime`, OpenClaw
-adapter, or runtime selector. The accepted conceptual shape is:
+**Current foundation; not wired to the application**: D-079's application-owned
+runtime foundation now exists in Rust. `AgentRuntime` constructs one bounded
+run from application-owned typed input. `RuntimeRun` exposes closed identity,
+status, bounded untrusted-event acceptance, typed failure, and exact idempotent
+cancellation. The repository still has no runtime coordinator, selector,
+provider transport, live model, Hermes adapter, OpenClaw adapter, or Tauri/UI
+consumer.
 
 ```mermaid
 flowchart TD
-    Contract["AgentRuntime<br/>accepted target; not implemented"]
-    Contract --> Native["NativeAgentRuntime<br/>next Ready phase; default, reference, explicit fallback, and test path"]
-    Contract --> Hermes["HermesAgentRuntime<br/>optional experimental; separately Blocked"]
+    Application["Application services<br/>not wired"] --> Contract["AgentRuntime<br/>implemented typed foundation"]
+    Contract --> Native["NativeAgentRuntime<br/>implemented; default/reference; test-only consumer"]
+    Contract -. future blocked .-> Hermes["HermesAgentRuntime<br/>not implemented"]
 ```
 
-`NativeAgentRuntime` would compose the existing typed native components without
-renaming or moving them merely to satisfy the abstraction. It should preserve a
-standalone deterministic path. “Fallback” means an explicit application-owned
-runtime choice; it does not authorize automatic model-provider failover.
+`NativeAgentRuntime` is the sole/default implementation. It constructs and owns
+exactly one unchanged `InitialGatewayTurn`; its concrete surface delegates the
+turn's exact request bytes, normalized-frame validation, policy and approval
+results, trusted macOS approval resolution, and audited run-termination cleanup.
+The common shared-event lane privately translates only closed lifecycle, text,
+and failure values through the unchanged gateway validator. Native does not
+claim shared tool-proposal capability because the existing tool lane produces
+governance-owned results. Concrete frames and shared runtime events cannot be
+mixed within one run.
+
+`RuntimeCapabilities` is a fixed closed representation. Capability declarations
+grant no permission. Run/request/response/tool-call identities, selected text,
+output text, and arguments use bounded application-owned types with redacted
+Debug output. Generic cancellation closes either a nonterminal stream or a
+run-owned pending approval through the existing typed audited termination path;
+approval and audit values never enter the generic result.
+
+`MockAgentRuntime` exists only as a private deterministic Rust contract fixture.
+It uses fixed application-owned events, supports controlled unavailability,
+start/event failure, invalid transitions, capability contradiction, terminal
+cancellation, and late-event rejection, and has no clock, thread, filesystem,
+network, process, model, provider, or Hermes prerequisite. The separate visible
+React mock is unchanged.
+
+“Fallback” remains an explicit future application-owned runtime choice; no
+selector or automatic fallback code exists, and automatic model-provider
+failover is not authorized.
 
 `HermesAgentRuntime` would keep all Hermes types, configuration, events, and
 errors inside one adapter and translate them to closed bounded Cortexa-owned
