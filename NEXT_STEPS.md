@@ -110,12 +110,17 @@ This file is the ordered implementation queue. Work only on the first item marke
   sole/default native wrapper, and private deterministic mock exist; all local
   validation passes. No Hermes, provider, network, process, dependency,
   Tauri/React wiring, selector, or visible behavior was added.**
+- Hermes serve WebSocket containment spike:
+  **Verified complete with advisories under gate
+  `hermes-serve-websocket-spike`; transport verdict FAIL / NO-GO at Milestone 0. Complete runtime provenance, supported closed startup controls, and exact
+  target-Mac containment were disproved for the supplied candidate before any
+  Hermes process or harness started.**
 
 ## Queue status
 
 ### Completed implementation: Native agent runtime boundary
 
-**Status:** **Verified complete with advisories**; no later increment is Ready. The
+**Status:** **Verified complete with advisories**; Native remains sole/default. The
 [`2026-08-11-native-agent-runtime-boundary.md`](docs/plans/2026-08-11-native-agent-runtime-boundary.md)
 has a valid completion marker after the complete applicable validation suite,
 independent reviews, documentation closeout, and post-increment report. The
@@ -123,29 +128,36 @@ boundary contains closed application-owned run/event types,
 `NativeAgentRuntime` composition over the verified native turn, and a private
 deterministic no-I/O `MockAgentRuntime` contract fixture. Hermes, provider,
 process, dependency, UI, runtime selection, automatic fallback, and behavior
-changes remain out of scope. Publication still requires separate owner
-direction. The later spike must not begin until a fresh security/readiness
-review passes.
+changes remain out of scope. Its clean published baseline enabled the separately
+authorized Hermes spike Milestone 0 review; that review failed before launch.
 
-### Blocked later spike: Hermes serve WebSocket containment
+### Completed negative spike: Hermes serve WebSocket containment
 
-**Status:** **Blocked**. The
+**Status:** **Verified complete with advisories; transport verdict FAIL / NO-GO
+at Milestone 0; all later Hermes work Blocked**. The
 [`2026-08-11-hermes-serve-websocket-spike.md`](docs/plans/2026-08-11-hermes-serve-websocket-spike.md)
-plan is owner-approved for later execution only after the native boundary has a
-valid completion marker and a fresh security/readiness review proves the exact
-read-only distribution, installed extras, no-install/no-update controls,
-dotenv/managed-secret denial, endpoint-level network/Unix-socket containment,
-and cleanup of detached descendants. It is not current work and authorizes no
-Hermes execution now.
+plan reached an approved stop condition before execution. The supplied pinned
+candidate passed exact source/tag/commit, critical-hash, package-metadata, and
+sanitized module-discovery checks but lacks a complete immutable manifest for
+its virtual environment and external Python runtime. Pinned source has no
+supported complete no-update/no-credential/no-plugin/zero-tool startup mode,
+and reviewed `sandbox-exec` cannot prove exact dynamic-listener,
+package-manager, Unix-socket, or detached-descendant guarantees. No Hermes
+process, socket, WebSocket, provider, credential, harness, or adapter was
+started. The negative-result increment completed its prove-or-disprove objective
+without weakening the stop conditions. Any renewed proposal requires a
+separately owner-approved ADR/plan amendment and exact replacement controls; it
+is not Ready.
 
 ### Draft later adapter: HermesAgentRuntime
 
 **Status:** **Draft; Blocked**. The
 [`2026-08-11-hermes-agent-runtime-adapter.md`](docs/plans/2026-08-11-hermes-agent-runtime-adapter.md)
-plan remains blocked until the native boundary is verified, the contained spike
-passes, exact dependencies and scope are approved, and a fresh readiness review
-passes. Native remains default. No adapter, selector, process, dependency, or
-tool capability exists.
+plan remains blocked because the contained spike failed Milestone 0. A renewed
+adapter proposal requires an owner-approved architecture/transport amendment,
+an eligible contained spike, exact dependencies and scope, and a fresh
+readiness review. Native remains sole/default. No adapter, selector, process,
+dependency, or tool capability exists.
 
 ### Completed documentation-only increment: Hermes runtime architecture decisions
 

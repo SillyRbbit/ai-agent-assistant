@@ -1,13 +1,15 @@
 # Hermes serve WebSocket containment spike
 
-Status: Blocked; owner-approved for later execution only after the native
-runtime boundary completes and a fresh security/readiness review passes
+Status: Verified complete with advisories; spike verdict FAIL / NO-GO at
+Milestone 0 before any Hermes process launch
 Owner: Project owner
 Last updated: 2026-08-11
 
-This is an isolated technical-spike ExecPlan under D-080. It is not active and
-does not authorize Hermes execution until every Milestone 0 prerequisite is
-verified in a later owner-selected run.
+This is an isolated technical-spike ExecPlan under D-080. The owner supplied a
+pinned candidate and authorized Milestone 0. Static provenance, import,
+upstream-source, architecture, security, and readiness reviews produced a
+decisive negative result before launch. No later milestone or Hermes process
+was started.
 
 ## Goal
 
@@ -23,7 +25,10 @@ None. The desktop UI and native runtime remain unchanged. The result is an
 isolated evidence report with a GO, CONDITIONAL GO, or NO-GO recommendation for
 a later experimental adapter.
 
-## Scope
+## Originally approved scope
+
+The following was the approved scope. Milestone 0 stopped before the test
+supervisor, fake server, or real-runtime portions were implemented:
 
 - Build a test-only Rust supervisor and closed WebSocket projection against a
   deterministic local fake server.
@@ -57,9 +62,8 @@ a later experimental adapter.
 
 ## Existing behavior and constraints
 
-- D-079's `AgentRuntime` and `NativeAgentRuntime` do not yet exist. This plan
-  remains Blocked until their implementation and valid completion evidence are
-  present.
+- D-079's `AgentRuntime` and `NativeAgentRuntime` are verified complete under
+  gate `native-agent-runtime-boundary`; Native remains the sole/default runtime.
 - The prior raw-stdio spike is NO-GO and proved fixture mechanics only; its
   internal-module launcher must not be reused.
 - `hermes serve` is a supported public launcher but exposes a broad authenticated
@@ -70,9 +74,10 @@ a later experimental adapter.
 - No documented single `--no-tools` switch proves the required conversation-only
   capability set. OS containment and observed-behavior rejection are
   load-bearing.
-- The exact target-Mac whole-process containment mechanism is not yet selected
-  or proven. Milestone 0 must record it and its deny guarantees before a real
-  Hermes process may start.
+- Target-Mac review disproved `sandbox-exec` as a sufficient sole containment
+  mechanism for this plan. It cannot prove exact dynamic-listener restriction,
+  package-manager execution denial, blanket Unix-socket denial, or membership
+  and cleanup of detached descendants. No alternative mechanism was selected.
 
 ## Current-state evidence
 
@@ -95,10 +100,11 @@ a later experimental adapter.
 
 Experimental scope:
 
-- `src-tauri/tests/hermes_serve_websocket_spike.rs` (new)
-- `src-tauri/tests/fixtures/hermes_serve_websocket_stub.py` (new)
-- `docs/spikes/HERMES_SERVE_WEBSOCKET_SPIKE.md` (new)
+- `docs/spikes/HERMES_SERVE_WEBSOCKET_SPIKE.md` (new negative-result report)
 - this plan
+
+The planned Rust harness and Python fixture were not created because Milestone
+0 reached an explicit stop condition before implementation.
 
 Closeout scope:
 
@@ -117,11 +123,12 @@ capability, workflow, hook, skill, installer, or generated file is in scope. If
 the exact containment proof requires a helper file or entitlement, update this
 plan and obtain owner approval before editing or executing Hermes.
 
-## Affected components
+## Planned affected components; not created
 
-- Rust integration-test process supervisor and protocol harness only.
-- Deterministic local fake server fixture.
-- Disposable target-Mac containment evidence and documentation.
+- Planned Rust integration-test process supervisor and protocol harness only.
+- Planned deterministic local fake server fixture.
+- Reviewed target-Mac containment prerequisites and negative-result
+  documentation only; no containment process was started.
 
 No production runtime, provider, policy, approval, tool, audit, memory,
 platform, storage, Tauri, or React component changes.
@@ -268,7 +275,8 @@ thread even when `HERMES_DESKTOP=1` is absent.
 
 ## Implementation milestones
 
-- [ ] Milestone 0 - prerequisites and exact containment plan
+- [x] Milestone 0 - prerequisite and exact-containment review completed with a
+      negative result; required controls remain unmet
   - require clean synchronized baseline after valid
     `native-agent-runtime-boundary` completion;
   - confirm D-079/D-080 and this plan are still current;
@@ -286,8 +294,9 @@ thread even when `HERMES_DESKTOP=1` is absent.
     explicit filesystem, endpoint-level network, Unix-socket, Keychain, process,
     and detached-descendant membership/termination guarantees;
   - record the exact deterministic local fake-provider endpoint for a text turn;
-  - run fresh architecture, security, and readiness review; and
-  - begin exactly one `hermes-serve-websocket-spike` gate.
+  - fresh architecture, security, and readiness reviews returned Blocked;
+  - begin exactly one `hermes-serve-websocket-spike` gate only to preserve and
+    validate this negative-result documentation after the stop decision.
 - [ ] Milestone 1 - deterministic fake server and closed host state machine
   - add success, timeout, cancel, crash, malformed, auth, version, forbidden,
     stderr, redaction, and cleanup scenarios;
@@ -306,7 +315,7 @@ thread even when `HERMES_DESKTOP=1` is absent.
     and state leakage are denied;
   - prove cleanup of an intentionally detached `setsid` descendant and record
     target-Mac containment-membership and socket cleanup.
-- [ ] Milestone 4 - report and stop
+- [x] Milestone 4 - negative report, documentation sync, and safe stop complete
   - publish GO, CONDITIONAL GO, or NO-GO with exact evidence and limitations;
   - synchronize documentation and finalize the gate;
   - do not begin the adapter.
@@ -375,6 +384,28 @@ The opt-in target-Mac command and containment evidence must be added verbatim
 before this plan becomes Ready. Missing required manual containment evidence
 makes the quality result FAIL.
 
+Milestone 0 stopped before the new fixture/real-runtime targets existed, so
+their commands were not run. The applicable negative-result closeout commands
+were:
+
+```bash
+cargo test --manifest-path src-tauri/Cargo.toml --test hermes_transport_spike --locked
+cargo test --manifest-path src-tauri/Cargo.toml --test agent_runtime_contract --locked
+npm run verify
+npm run docs:check
+npm run repository:check
+npm run security:scan
+git diff --check
+git diff --exit-code -- src src-tauri/src src-tauri/tests src-tauri/Cargo.toml src-tauri/Cargo.lock package.json package-lock.json src-tauri/tauri.conf.json src-tauri/capabilities .github .codex .agents
+python3 .codex/hooks/session_end_gate.py
+python3 .codex/hooks/post_increment_gate.py status
+```
+
+Exact outcomes and the negative/not-run transport evidence are in the
+post-increment review. The spike verdict is FAIL / NO-GO; the separately scored
+engineering closeout is PASS WITH ADVISORIES because the plan's
+prove-or-disprove objective completed safely.
+
 ## Risks
 
 | Risk                                  | Severity | Mitigation / blocker                                                                   |
@@ -396,11 +427,11 @@ Any Critical or High unresolved finding blocks completion and the adapter.
 
 ## Rollback or failure strategy
 
-Delete the two experimental test/fixture files and disposable isolated runtime
-directory, preserve the report as negative evidence when appropriate, and
-revert only this spike's current-memory entries. Validate that no child, socket,
-token, profile, file, cache, or fake-provider process remains. Native runtime
-source and behavior remain unchanged.
+No experimental test/fixture file or runtime directory was created. Rollback is
+to revert only this spike's ten documentation paths and remove any disposable
+preflight state. The observed disposable preflight directory was removed; no
+Hermes child, socket, token, profile, cache, or fake-provider process was
+created. Native runtime source and behavior remain unchanged.
 
 ## Decisions made
 
@@ -419,15 +450,49 @@ source and behavior remain unchanged.
   remove that authentication requirement.
 - The pinned ready event has no protocol version/capability attestation, so
   compatibility is host-enforced rather than negotiated.
+- The supplied source archive, three critical-file digests, clean Git state,
+  package metadata, and 61-package inventory are internally consistent, and a
+  sanitized isolated `find_spec`/metadata preflight found the required web and
+  PTY modules. They do not constitute the plan-required complete-runtime
+  manifest: the virtual environment contains 4,077 regular files and delegates
+  to an externally located, owner-writable Python runtime that is absent from
+  the supplied manifest.
+- The pinned server starts update-prefetch, dotenv/managed-secret loading,
+  credential keepalive, skill synchronization, and plugin discovery without a
+  supported complete disable mode. Its default toolset is privileged, and an
+  empty toolset does not mean zero tools. Containment could deny effects but
+  could not truthfully establish the required absence of those attempts.
+- A credential-free deterministic loopback OpenAI-compatible fake provider is
+  source-supported, but that does not cure the startup and containment
+  blockers.
+- On the target Mac, deprecated `sandbox-exec` restrictions inherit across
+  descendants but provide no containment membership/kill primitive. Static
+  policy also cannot restrict a port-zero child to only its dynamically chosen
+  inbound port, distinguish allowed Python from `python -m pip`, or deny
+  anonymous Unix socket pairs.
 
 ## Progress
 
 - 2026-08-11: Plan created from D-080. No experimental file was created, no
   Hermes candidate was discovered or run, and all milestones remain Blocked.
+- 2026-08-11: The owner supplied a pinned installed candidate and authorized
+  Milestone 0. Exact source/tag/commit, critical hashes, installed metadata, and
+  sanitized module discovery passed. Complete-runtime provenance and the
+  required target-Mac containment/startup-suppression guarantees failed fresh
+  architecture, security, and readiness review. The work stopped before any
+  `hermes serve` process, socket, WebSocket frame, session, provider, tool, or
+  fixture implementation.
+- 2026-08-11: Added the bounded negative-result report for closeout review. The
+  adapter remains Draft/Blocked; Native remains sole/default; Prompt 4D was not
+  started.
+- 2026-08-11: Post-increment review classified the bounded negative-result
+  closeout PASS WITH ADVISORIES. Critical provenance, startup, and containment
+  findings block every later Hermes increment rather than preservation of this
+  safely stopped evidence.
 
 ## Acceptance criteria
 
-- [ ] Native `AgentRuntime` and `NativeAgentRuntime` are verified complete.
+- [x] Native `AgentRuntime` and `NativeAgentRuntime` are verified complete.
 - [ ] Exact distribution manifest/digest and provenance, `[web]`/POSIX `[pty]`,
       install/update suppression, containment mechanism, fake-provider endpoint,
       commands, and target-Mac evidence are approved and recorded.
@@ -444,20 +509,40 @@ source and behavior remain unchanged.
 - [ ] Cancellation, timeout reconciliation, crash handling, shutdown, forced
       cleanup, and redaction pass.
 - [ ] Architecture, security, portability, packaging, and rollback reviews pass.
-- [ ] The report declares GO, CONDITIONAL GO, or NO-GO without beginning an
+- [x] The report declares GO, CONDITIONAL GO, or NO-GO without beginning an
       adapter.
 
 ## Final results
 
-Not started. Status remains Blocked.
+**FAIL / NO-GO under the approved D-080 conditions.** Milestone 0 disproved
+readiness before real execution. The candidate matches Hermes Agent `0.20.0`,
+tag `v2026.8.3`, and commit
+`3c27eb6234bf91b8ceee9e9071591b31e9b148cb`; its source and critical hashes are
+consistent and required modules are discoverable. The supplied evidence does
+not hash the complete virtual environment or its external Python runtime.
+
+More decisively, the pinned release has no supported startup mode that disables
+update-prefetch, dotenv/managed-secret initialization, credential keepalive,
+plugin discovery, skill synchronization, and all tools. The reviewed
+`sandbox-exec` mechanism cannot independently satisfy the exact dynamic
+listener, package-manager, Unix-socket, or detached-descendant controls. No
+Hermes executable or server process was run, no fake/real WebSocket test was
+created, and no credential was required or accessed. See
+`docs/spikes/HERMES_SERVE_WEBSOCKET_SPIKE.md`.
+
+This result does not select ACP or another transport and does not amend D-080 by
+inference. A later proposal requires an owner-approved ADR/plan amendment and
+either an upstream/pinned Hermes build with explicit disable controls plus a
+complete immutable runtime manifest, or a separately reviewed containment
+mechanism that closes every failed guarantee.
 
 ## Documentation updates
 
-When separately executed:
+Negative-result closeout:
 
-- [ ] `HANDOFF.md`
-- [ ] `PROJECT_STATUS.md`
-- [ ] `NEXT_STEPS.md`
+- [x] `HANDOFF.md`
+- [x] `PROJECT_STATUS.md`
+- [x] `NEXT_STEPS.md`
 - [ ] `DECISIONS.md`, only if evidence requires an additive decision
-- [ ] `CHANGELOG.md`
+- [x] `CHANGELOG.md`
 - [ ] `TROUBLESHOOTING_LOG.md`, only for a durable failure/resolution

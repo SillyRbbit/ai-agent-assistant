@@ -4,6 +4,26 @@ Last updated: 2026-08-11
 
 ## Current state
 
+The owner-selected
+[`2026-08-11-hermes-serve-websocket-spike.md`](docs/plans/2026-08-11-hermes-serve-websocket-spike.md)
+increment is **verified complete with advisories** under gate
+`hermes-serve-websocket-spike`; its transport verdict remains **FAIL / NO-GO at
+Milestone 0**. The supplied Hermes Agent `0.20.0`, tag
+`v2026.8.3`, commit `3c27eb6234bf91b8ceee9e9071591b31e9b148cb`
+candidate passed exact source/tag/commit, clean Git, source archive, three
+critical-file hashes, 61-package metadata reconciliation, and sanitized
+required-module discovery. Its provenance does not content-manifest the
+4,077-file virtual environment or externally located owner-writable Python
+runtime. Pinned source has no supported complete switch for no update,
+dotenv/managed-secret loading, credential keepalive, plugins, skills, and zero
+tools. Target-Mac review found deprecated `sandbox-exec` insufficient for exact
+port-zero listener restriction, package-manager execution denial, blanket Unix
+socket denial, and containment-wide detached-descendant cleanup. The approved
+stop condition fired before any Hermes server, socket, WebSocket, session,
+provider, model, credential, fixture harness, or adapter work. Native remains
+sole/default and Prompt 4D was not started. The negative-result closeout passes;
+the Critical findings block every later Hermes increment.
+
 The owner-approved
 [`2026-08-11-native-agent-runtime-boundary.md`](docs/plans/2026-08-11-native-agent-runtime-boundary.md)
 increment is verified complete with advisories under gate
@@ -25,10 +45,10 @@ review corrections are incorporated and the post-increment marker is valid.
 The documentation-only runtime architecture decisions were published separately
 at `701c061`. D-079 accepts the current native-first boundary and D-080 retains
 managed local `hermes serve` plus a closed TUI-gateway JSON-RPC/WebSocket
-projection only as a conditional later spike. Raw TUI-gateway stdio remains
-rejected. The WebSocket spike stays Blocked until the current native gate is
-validly complete and a fresh security/readiness review passes; the Hermes
-adapter remains Draft/Blocked until both phases pass.
+projection only as a conditional spike. Raw TUI-gateway stdio remains rejected.
+The conditional WebSocket path has now failed its Milestone 0 prerequisites;
+D-080 does not silently select ACP or another transport, and the Hermes adapter
+remains Draft/Blocked.
 
 The documentation-only
 [`2026-08-11-hermes-adr-transport-revision.md`](docs/plans/2026-08-11-hermes-adr-transport-revision.md)
@@ -104,21 +124,23 @@ changed.
 
 ## Current exact task
 
-Review the verified native runtime boundary diff and its valid completion
-evidence. If the owner separately directs publication, commit and push this
-bounded implementation and documentation as one Conventional Commit from the
-cleanly inspected diff. Do not begin the Blocked Hermes serve spike or Draft
-Hermes adapter automatically. A later separately approved governance-doc sync
-should update root `AGENTS.md`, whose planned-concepts wording predates the now
-implemented native foundation.
+Review the verified negative-result spike report and valid
+`hermes-serve-websocket-spike` completion evidence. Do not run Hermes, create a
+fixture harness, implement Prompt 4D, approve the adapter, switch transports, or
+weaken the failed controls. The smallest potential next task is an owner-approved
+documentation/ADR amendment that decides whether to require an upstream/pinned
+Hermes build with explicit disable controls and a fully content-manifested
+interpreter/runtime, evaluate a different reviewed containment mechanism, or
+reconsider ACP. No implementation plan is Ready.
 
-Resume prompt: Read `AGENTS.md`, the project-memory chain, accepted D-079/D-080,
-`docs/plans/2026-08-11-native-agent-runtime-boundary.md`, and its post-increment
-review. Inspect the complete uncommitted diff and require gate
-`native-agent-runtime-boundary` to be complete and valid. Await exact owner
-direction before committing or pushing; do not add Hermes, wire Tauri/React, or
-begin the later spike. Treat the stale planned-concepts wording in root
-`AGENTS.md` as a separately scoped governance-document advisory.
+Resume prompt: Read `AGENTS.md`, the project-memory chain, D-079/D-080,
+`docs/plans/2026-08-11-hermes-serve-websocket-spike.md`,
+`docs/spikes/HERMES_SERVE_WEBSOCKET_SPIKE.md`, and the post-increment review.
+Require gate `hermes-serve-websocket-spike` to be complete and valid with PASS
+WITH ADVISORIES while preserving the distinct FAIL / NO-GO transport verdict.
+Preserve the candidate as read-only and do not launch Hermes. Await explicit
+owner direction for a documentation/ADR amendment; do not begin Prompt 4D,
+switch transports, add containment code, or change Native as sole/default.
 
 The fake-only Cloudflare demo macOS Keychain proof is complete with advisories.
 Pinned macOS-only Security.framework bindings read exactly two fixed labels and

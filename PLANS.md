@@ -4,7 +4,24 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No plan is active. The owner-approved
+No plan is active. The owner-selected
+[`2026-08-11-hermes-serve-websocket-spike.md`](docs/plans/2026-08-11-hermes-serve-websocket-spike.md)
+increment is **verified complete with advisories** under gate
+`hermes-serve-websocket-spike`; its transport verdict remains **FAIL / NO-GO at
+Milestone 0**. The supplied Hermes Agent `0.20.0` / `v2026.8.3` candidate passed
+source/tag/commit, critical-hash, installed-metadata, and sanitized
+module-discovery checks. It did not supply a complete immutable manifest for its
+4,077-file virtual environment and external Python runtime. Pinned source has no
+supported complete no-update/no-credential/no-plugin/zero-tool startup mode,
+and reviewed target-Mac `sandbox-exec` cannot prove the required exact dynamic
+listener, package-manager execution denial, blanket Unix-socket denial, or
+detached-descendant membership/cleanup. The stop condition fired before any
+Hermes process, socket, WebSocket, session, provider, credential, harness, or
+adapter work. This evidence-backed negative result completed the spike's
+prove-or-disprove objective; every Critical finding still blocks the Draft
+adapter and all later Hermes implementation.
+
+The owner-approved
 [`2026-08-11-native-agent-runtime-boundary.md`](docs/plans/2026-08-11-native-agent-runtime-boundary.md)
 plan is verified complete with advisories under gate
 `native-agent-runtime-boundary`. The bounded source adds an application-owned
@@ -14,9 +31,8 @@ composition over the unchanged `InitialGatewayTurn`, and a private deterministic
 all-target suite, architecture/security/code reviews, documentation checks, and
 completion marker pass. It does not wire Tauri or React, add a provider/model/
 network/process/dependency, integrate Hermes, change the visible frontend mock,
-or add runtime selection or automatic fallback. No later increment is Ready;
-the contained Hermes spike still requires publication of this scope and a fresh
-security/readiness review.
+or add runtime selection or automatic fallback. Its clean published baseline
+enabled the now-failed Milestone 0 review; Native remains sole/default.
 
 The owner-approved documentation-only
 [`2026-08-11-hermes-runtime-architecture-decisions.md`](docs/plans/2026-08-11-hermes-runtime-architecture-decisions.md)

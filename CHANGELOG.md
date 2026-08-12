@@ -4,6 +4,16 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Recorded the Hermes serve WebSocket containment spike's Milestone 0 FAIL.
+  The supplied `0.20.0` / `v2026.8.3` candidate passed source, critical-hash,
+  package-metadata, and isolated module-discovery checks, but lacked a complete
+  immutable runtime/interpreter manifest. Pinned startup has no supported
+  complete no-update/no-credential/no-plugin/zero-tool mode, and reviewed
+  target-Mac `sandbox-exec` could not meet exact listener, package-manager,
+  Unix-socket, or detached-descendant controls. The stop condition fired before
+  any Hermes process, WebSocket, provider, credential, harness, dependency, or
+  adapter change; Native remains sole/default and Prompt 4D was not started.
+
 - Implemented the application-owned `AgentRuntime`/`RuntimeRun` foundation and
   sole/default `NativeAgentRuntime` as a thin composition over the unchanged
   `InitialGatewayTurn`. Added bounded typed runtime events, closed capabilities

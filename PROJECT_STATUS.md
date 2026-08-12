@@ -4,6 +4,25 @@ Last updated: 2026-08-11
 
 ## Current milestone
 
+The owner-selected Hermes serve WebSocket containment spike is **verified
+complete with advisories** under gate `hermes-serve-websocket-spike`; its
+transport verdict remains **FAIL / NO-GO at Milestone 0**. The supplied Hermes
+Agent `0.20.0` / `v2026.8.3` /
+`3c27eb6234bf91b8ceee9e9071591b31e9b148cb` candidate passed source,
+tag, clean-state, source-archive, three critical-file, 61-package-metadata, and
+sanitized module-discovery checks. The supplied provenance does not cover the
+complete 4,077-file virtual environment or its external owner-writable Python
+runtime. Static pinned-source review found unavoidable update-prefetch,
+dotenv/managed-secret loading, credential keepalive, skill synchronization,
+plugin discovery, and privileged default-tool initialization without a
+supported complete disable mode. Target-Mac review found `sandbox-exec` alone
+cannot prove exact dynamic-listener, package-manager execution, blanket
+Unix-socket, or detached-descendant cleanup guarantees. No Hermes process,
+socket, WebSocket, session, credential, provider, model, harness, dependency,
+adapter, or application behavior was started or changed. The negative-result
+evaluation passes its engineering closeout; every Critical finding blocks later
+Hermes work. Native remains sole/default and Prompt 4D remains unstarted.
+
 The owner-approved native agent runtime boundary is **verified complete with
 advisories** under gate `native-agent-runtime-boundary`. The Rust
 core now has a closed application-owned `AgentRuntime`/`RuntimeRun` foundation,
@@ -23,11 +42,12 @@ dependency, Hermes code, credential, model, selector, or automatic fallback was
 added.
 
 The documentation-only Hermes runtime decisions are published at `701c061`.
-D-079 accepts the native-first architecture, and D-080 keeps the managed local
-`hermes serve` JSON-RPC/WebSocket path conditional on a later contained spike.
-The spike remains Blocked until native completion plus fresh containment and
-readiness review; the adapter remains Draft/Blocked. Raw TUI-gateway stdio stays
-NO-GO for Hermes Agent `0.20.0`, tag `v2026.8.3`, commit
+D-079 accepts the native-first architecture, and D-080 conditionally selects
+the managed local `hermes serve` JSON-RPC/WebSocket path for evaluation. That
+path has now failed Milestone 0 under its approved prerequisites and remains
+Blocked; D-080 does not silently select ACP or another transport, and the
+adapter remains Draft/Blocked. Raw TUI-gateway stdio stays NO-GO for Hermes
+Agent `0.20.0`, tag `v2026.8.3`, commit
 `3c27eb6234bf91b8ceee9e9071591b31e9b148cb`.
 
 The documentation-only Hermes ADR transport revision is **verified complete
