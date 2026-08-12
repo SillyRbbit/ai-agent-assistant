@@ -1,7 +1,7 @@
 # Cortexa security checklist
 
 Status: Authoritative change and release security review checklist
-Last updated: 2026-07-16
+Last updated: 2026-08-12
 
 Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
@@ -17,6 +17,28 @@ production boundary exists.
       bounded before implementation.
 - [ ] No model output, WebView state, gateway data, external content, or tool
       result is treated as authorization.
+
+## Native agent governance
+
+- [ ] Agent attribution is derived only after exact live task, lineage,
+      runtime, run, request, and profile validation; callers cannot override it.
+- [ ] Agent policy input is distinct from legacy gateway `PolicyInput` and has
+      no conversion that bypasses profile eligibility.
+- [ ] Agent definitions are the sole agent-to-profile mapping; unknown,
+      missing, duplicate, stale, or mismatched profile identity fails closed.
+- [ ] Runtime tool proposals remain rejected unless a later approved runtime
+      coordinator explicitly changes that boundary.
+- [ ] Delegation remains outside `ToolRegistry`; only the orchestrator creates
+      child tasks through an exact closed matrix and finite limits.
+- [ ] Approval retains exact closed origin and one-time subject binding through
+      pending, presentation, source result, cancellation, expiry, and resolution.
+- [ ] Governance audit reserves bounded evidence before downstream mutation,
+      redacts content/identity in Debug, and records exact matrix, policy,
+      approval, control, error, and `NotAttempted` execution disposition.
+- [ ] Cancellation resolves and audits a pending approval before runtime/task
+      mutation, with child-first ordering for root cancellation.
+- [ ] No policy/approval outcome reaches an executor, device, provider, IPC,
+      memory store, filesystem, network, process, or platform adapter.
 
 ## Tauri IPC review
 

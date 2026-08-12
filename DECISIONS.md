@@ -3012,6 +3012,98 @@ prove a provider, model, tool, memory store, UI, or shipping assistant flow.
 Later governance, knowledge/document, memory, parallelism, specialist, UI, and
 end-to-end demonstration plans remain separately gated.
 
+## D-084 - Add a non-executing per-agent governance foundation
+
+Date: 2026-08-12
+Status: Accepted owner security and architecture decision
+
+Decision: Authorize one bounded security-sensitive increment that assigns an
+exact versioned policy profile to every built-in agent, carries application-
+derived live agent/task/runtime attribution through a synthetic tool-policy-
+approval-audit contract, and strengthens the exact initial delegation matrix.
+The increment is non-executing: `Allow`, approval, rejection, cancellation, and
+expiration are evidence only, and every execution disposition is
+`NotAttempted`.
+
+This decision preserves D-082 and D-083 ownership and route boundaries while
+resolving their deliberately deferred policy-profile question:
+
+- the nine built-in agents receive nine exact versioned profile identities;
+- profiles are immutable deterministic policy inputs, never role-derived
+  authority, generic permission booleans, or execution grants;
+- the application derives profile identity from the immutable definition when
+  creating a task and revalidates it against the exact live task and runtime
+  run before governance;
+- Personal Assistant alone may present the two already registered local tool
+  schemas to policy evaluation; every other profile has an empty current tool
+  allowlist;
+- the existing deterministic `PolicyEngine` remains singular and authoritative
+  for registered schema risk and permission classification;
+- the existing approval boundary remains the only pending user-approval
+  mechanism, and approval cannot dispatch because no executor is authorized;
+- one closed bounded volatile audit family records typed attribution,
+  policy/approval disposition, injected-clock evidence, and execution
+  `NotAttempted` without prompts, parameters, output, secrets, or reasoning;
+- delegation remains an explicit `AgentOrchestrator` service governed by the
+  exact Personal Assistant -> Research matrix, never a host tool or runtime
+  control event; and
+- QA & Validation and Security & Risk remain advisory, while Workflow
+  Automation remains proposal-only. None may approve, authorize, create child
+  tasks, or execute.
+
+Tool proposals accepted by a model/runtime remain disabled. The shared
+`AgentRuntime` and `NativeAgentRuntime` contracts do not change, and
+`AgentOrchestrator` continues to reject runtime `ToolProposal`. The new
+governance path is an application-owned synthetic contract used to prove exact
+identity, profile, policy, approval, denial, cancellation, audit, and
+redaction behavior. It does not claim shipping tool capability.
+
+Delegation does not pass through `ToolRegistry`. Only the orchestrator may
+create a child, after exact live-context, registry, activation, matrix, depth,
+and budget validation. Missing, unknown, stale, duplicate, deferred,
+mismatched, forged, unsupported, or unauthorized identity and action data fail
+closed before downstream authority or state mutation.
+
+The verified legacy concrete gateway turn remains compatible and explicitly
+separate. Its existing `SchemaValidatedFunctionCall`, `PolicyInput`, and public
+policy entry point remain legacy-only. The new path uses a distinct sealed
+agent request and a dedicated profile-aware method on the same deterministic
+policy engine; there is no public conversion into legacy `PolicyInput` and no
+optional identity or `None` fallback. Approval retains a closed explicit
+legacy-versus-agent origin. This increment does not claim that the legacy
+gateway is a multi-agent consumer or that its existing audit is the new
+governance audit.
+
+`AgentGovernanceService` is the non-executing composition boundary. One
+instance is composed inside the one-root orchestrator so every governance
+entry can revalidate the exact live task/run before sequencing the separate
+profile registry, tool registry, policy engine, approval manager, and closed
+governance audit. A pending approval blocks task runtime events and delegation;
+task cancellation consumes and audits it before terminalizing the runtime and
+task. This coordination does not move policy, approval, execution, or audit
+authority into an agent or runtime.
+
+Governance audit uses one preallocated bounded lifecycle record per exact tool
+or delegation subject. Capacity and replay checks precede policy, approval,
+runtime cancellation, or child allocation; later terminal updates are
+infallible and use a process-local logical tick. Tool records cover validation,
+policy, and approval states with execution always `NotAttempted`. Delegation
+records cover matrix denial, allow, child creation, or typed failure while
+remaining outside `ToolRegistry`.
+
+D-082's memory-namespace requirement remains mandatory before any future
+memory access, persistence, data-bearing privileged action, or device effect.
+No such behavior is introduced here, so an unenforced memory-namespace
+placeholder is forbidden and the memory decision remains separately gated.
+
+Consequences: the approved governance ExecPlan may proceed after a fresh
+Ready/Ready-with-advisories review. It may modify only the declared agent,
+policy, approval, audit, test, and documentation boundaries. No executor,
+provider, memory store, platform adapter, IPC, UI, permission, dependency,
+Hermes integration, specialist activation, or visible behavior is authorized.
+Later knowledge/document, memory, specialist workflow, parallelism, UI, and
+end-to-end work remains Blocked.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

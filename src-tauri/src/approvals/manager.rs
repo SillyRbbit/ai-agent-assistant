@@ -1,4 +1,3 @@
-use std::collections::BTreeSet;
 use std::fmt;
 #[cfg(target_os = "macos")]
 use std::sync::Arc;
@@ -8,13 +7,16 @@ use thiserror::Error;
 
 #[cfg(target_os = "macos")]
 use super::decision_source::{TrustedApprovalSourceOutcome, TrustedSourceDecision};
+use super::types::ApprovalDecision;
 #[cfg(target_os = "macos")]
 use super::types::ApprovalInteractionSource;
 use super::types::{
     ApprovalAction, ApprovalCancellationReason, ApprovalDisposition, ApprovalId,
-    ApprovalInteractionEvidence, ApprovalPreview, ApprovalRecipients, ApprovalRequestView,
-    ApprovalResolution, ApprovalReversibility, ApprovalRisk, ApprovalSchedule, ApprovalTarget,
+    ApprovalInteractionEvidence, ApprovalOrigin, ApprovalPreview, ApprovalRecipients,
+    ApprovalRequestView, ApprovalResolution, ApprovalReversibility, ApprovalRisk, ApprovalSchedule,
+    ApprovalTarget,
 };
+use crate::agent::governance::{AgentAttribution, AgentPolicyDecision, AgentPolicyReason};
 use crate::policy::types::{PolicyDecision, PolicyOutcome, PolicyReason};
 use crate::tools::types::{PermissionKind, RiskClass};
 
@@ -26,6 +28,8 @@ pub type ApprovalResult<T> = Result<T, ApprovalError>;
 
 pub trait ApprovalManager {
     fn create_request(&mut self, decision: PolicyDecision) -> ApprovalResult<ApprovalId>;
+    fn create_agent_request(&mut self, decision: AgentPolicyDecision)
+        -> ApprovalResult<ApprovalId>;
     fn pending(&self) -> ApprovalResult<Option<ApprovalRequestView<'_>>>;
     fn issue_presentation(&mut self, id: ApprovalId) -> ApprovalResult<ApprovalPresentation>;
     #[cfg(target_os = "macos")]
@@ -39,6 +43,9 @@ pub trait ApprovalManager {
 
 #[derive(Clone, Copy, Debug, Error, Eq, PartialEq)]
 pub enum ApprovalError {
+    #[cfg(test)]
+    #[error("test-only approval manager failure")]
+    TestOnlyFailure,
     #[error("policy outcome is not eligible for approval")]
     IneligiblePolicyOutcome { actual: PolicyOutcome },
     #[error("policy decision has no registered approval preview")]
@@ -85,6 +92,7 @@ pub struct ApprovalPresentation {
     id: ApprovalId,
     #[cfg(target_os = "macos")]
     manager_instance: Arc<ApprovalManagerInstanceMarker>,
+    origin: ApprovalOrigin,
     run_id: String,
     gateway_request_id: String,
     call_id: String,
@@ -92,6 +100,7 @@ pub struct ApprovalPresentation {
     tool_contract_version: u16,
     policy_outcome: PolicyOutcome,
     policy_reason: PolicyReason,
+    agent_policy_reason: Option<AgentPolicyReason>,
     risk_class: RiskClass,
     required_permission: PermissionKind,
     action: ApprovalAction,
@@ -108,6 +117,11 @@ impl ApprovalPresentation {
     #[must_use]
     pub fn id(&self) -> ApprovalId {
         self.id
+    }
+
+    #[must_use]
+    pub fn origin(&self) -> &ApprovalOrigin {
+        &self.origin
     }
 
     #[must_use]
@@ -146,6 +160,11 @@ impl ApprovalPresentation {
     }
 
     #[must_use]
+    pub fn agent_policy_reason(&self) -> Option<AgentPolicyReason> {
+        self.agent_policy_reason
+    }
+
+    #[must_use]
     pub fn risk_class(&self) -> RiskClass {
         self.risk_class
     }
@@ -170,6 +189,7 @@ impl ApprovalPresentation {
         ApprovalPresentationParts {
             id: self.id,
             manager_instance: self.manager_instance,
+            origin: self.origin,
             run_id: self.run_id,
             gateway_request_id: self.gateway_request_id,
             call_id: self.call_id,
@@ -177,6 +197,7 @@ impl ApprovalPresentation {
             tool_contract_version: self.tool_contract_version,
             policy_outcome: self.policy_outcome,
             policy_reason: self.policy_reason,
+            agent_policy_reason: self.agent_policy_reason,
             risk_class: self.risk_class,
             required_permission: self.required_permission,
             action: self.action,
@@ -196,6 +217,7 @@ impl fmt::Debug for ApprovalPresentation {
         formatter
             .debug_struct("ApprovalPresentation")
             .field("id", &self.id)
+            .field("origin", &self.origin)
             .field("identity", &"[REDACTED]")
             .field("tool_name", &self.tool_name)
             .field("tool_contract_version", &self.tool_contract_version)
@@ -219,6 +241,7 @@ impl fmt::Debug for ApprovalPresentation {
 pub(super) struct ApprovalPresentationParts {
     pub(super) id: ApprovalId,
     pub(super) manager_instance: Arc<ApprovalManagerInstanceMarker>,
+    pub(super) origin: ApprovalOrigin,
     pub(super) run_id: String,
     pub(super) gateway_request_id: String,
     pub(super) call_id: String,
@@ -226,6 +249,7 @@ pub(super) struct ApprovalPresentationParts {
     pub(super) tool_contract_version: u16,
     pub(super) policy_outcome: PolicyOutcome,
     pub(super) policy_reason: PolicyReason,
+    pub(super) agent_policy_reason: Option<AgentPolicyReason>,
     pub(super) risk_class: RiskClass,
     pub(super) required_permission: PermissionKind,
     pub(super) action: ApprovalAction,
@@ -255,20 +279,72 @@ impl ApprovalClock for SystemApprovalClock {
     }
 }
 
-#[derive(Eq, Ord, PartialEq, PartialOrd)]
-struct ApprovalSubjectKey {
-    run_id: String,
-    gateway_request_id: String,
-    call_id: String,
+#[derive(Clone, Eq, PartialEq)]
+enum ApprovalSubjectKey {
+    LegacyGateway {
+        run_id: String,
+        gateway_request_id: String,
+        call_id: String,
+    },
+    Agent {
+        attribution: AgentAttribution,
+        call_id: String,
+    },
 }
 
 impl ApprovalSubjectKey {
-    fn from_decision(decision: &PolicyDecision) -> Self {
-        let call = decision.validated_call();
-        Self {
-            run_id: call.run_id().to_owned(),
-            gateway_request_id: call.gateway_request_id().to_owned(),
-            call_id: call.call_id().to_owned(),
+    fn from_decision(decision: &ApprovalDecision) -> Self {
+        match decision {
+            ApprovalDecision::LegacyGateway(decision) => {
+                let call = decision.validated_call();
+                Self::LegacyGateway {
+                    run_id: call.run_id().to_owned(),
+                    gateway_request_id: call.gateway_request_id().to_owned(),
+                    call_id: call.call_id().to_owned(),
+                }
+            }
+            ApprovalDecision::Agent { decision, .. } => Self::Agent {
+                attribution: decision.request().attribution().clone(),
+                call_id: decision.request().call_id().to_owned(),
+            },
+        }
+    }
+
+    fn matches_source(
+        &self,
+        origin: &ApprovalOrigin,
+        run_id: &str,
+        gateway_request_id: &str,
+        call_id: &str,
+    ) -> bool {
+        match (self, origin) {
+            (
+                Self::LegacyGateway {
+                    run_id: expected_run_id,
+                    gateway_request_id: expected_request_id,
+                    call_id: expected_call_id,
+                },
+                ApprovalOrigin::LegacyGateway,
+            ) => {
+                expected_run_id == run_id
+                    && expected_request_id == gateway_request_id
+                    && expected_call_id == call_id
+            }
+            (
+                Self::Agent {
+                    attribution,
+                    call_id: expected_call_id,
+                },
+                ApprovalOrigin::Agent(source_attribution),
+            ) => {
+                attribution == source_attribution
+                    && attribution.runtime_run_identity().run_id().as_str() == run_id
+                    && attribution.runtime_run_identity().request_id().as_str()
+                        == gateway_request_id
+                    && expected_call_id == call_id
+            }
+            (Self::LegacyGateway { .. }, ApprovalOrigin::Agent(_))
+            | (Self::Agent { .. }, ApprovalOrigin::LegacyGateway) => false,
         }
     }
 }
@@ -276,7 +352,7 @@ impl ApprovalSubjectKey {
 struct PendingApproval {
     id: ApprovalId,
     subject: ApprovalSubjectKey,
-    decision: PolicyDecision,
+    decision: ApprovalDecision,
     deadline: Instant,
     presentation_issued: bool,
 }
@@ -284,8 +360,10 @@ struct PendingApproval {
 pub struct InMemoryApprovalManager {
     next_id: u64,
     pending: Option<PendingApproval>,
-    consumed_subjects: BTreeSet<ApprovalSubjectKey>,
+    consumed_subjects: Vec<ApprovalSubjectKey>,
     clock: Box<dyn ApprovalClock>,
+    #[cfg(test)]
+    fail_next_cancel: bool,
     #[cfg(target_os = "macos")]
     manager_instance: Arc<ApprovalManagerInstanceMarker>,
 }
@@ -300,11 +378,25 @@ impl InMemoryApprovalManager {
         Self {
             next_id: 0,
             pending: None,
-            consumed_subjects: BTreeSet::new(),
+            consumed_subjects: Vec::new(),
             clock: Box::new(clock),
+            #[cfg(test)]
+            fail_next_cancel: false,
             #[cfg(target_os = "macos")]
             manager_instance: Arc::new(ApprovalManagerInstanceMarker::new()),
         }
+    }
+
+    #[cfg(test)]
+    pub(crate) fn force_pending_due_for_test(&mut self) {
+        if let Some(pending) = self.pending.as_mut() {
+            pending.deadline = self.clock.now();
+        }
+    }
+
+    #[cfg(test)]
+    pub(crate) fn fail_next_cancel_for_test(&mut self) {
+        self.fail_next_cancel = true;
     }
 
     fn resolve_by_id(
@@ -331,8 +423,8 @@ impl InMemoryApprovalManager {
         let Some(pending) = self.pending.take() else {
             return Err(self.error_for_missing_id(id));
         };
-        self.consumed_subjects.insert(pending.subject);
-        Ok(ApprovalResolution::new(
+        self.consumed_subjects.push(pending.subject);
+        Ok(ApprovalResolution::from_approval_decision(
             pending.id,
             disposition,
             pending.decision,
@@ -368,50 +460,20 @@ impl fmt::Debug for InMemoryApprovalManager {
 
 impl ApprovalManager for InMemoryApprovalManager {
     fn create_request(&mut self, decision: PolicyDecision) -> ApprovalResult<ApprovalId> {
+        self.create_closed_request(ApprovalDecision::legacy(decision))
+    }
+
+    fn create_agent_request(
+        &mut self,
+        decision: AgentPolicyDecision,
+    ) -> ApprovalResult<ApprovalId> {
         let actual = decision.outcome();
         if actual != PolicyOutcome::RequireApproval {
             return Err(ApprovalError::IneligiblePolicyOutcome { actual });
         }
-        if ApprovalPreview::from_policy_decision(&decision).is_none() {
-            return Err(ApprovalError::UnsupportedApprovalSubject);
-        }
-
-        let subject = ApprovalSubjectKey::from_decision(&decision);
-        if self
-            .pending
-            .as_ref()
-            .is_some_and(|pending| pending.subject == subject)
-            || self.consumed_subjects.contains(&subject)
-        {
-            return Err(ApprovalError::DuplicateSubject);
-        }
-        if self.pending.is_some() {
-            return Err(ApprovalError::PendingApprovalExists);
-        }
-        if self.consumed_subjects.len() >= MAX_APPROVAL_SUBJECTS_PER_MANAGER {
-            return Err(ApprovalError::SubjectCapacityExhausted {
-                maximum: MAX_APPROVAL_SUBJECTS_PER_MANAGER,
-            });
-        }
-
-        let Some(next_id) = self.next_id.checked_add(1) else {
-            return Err(ApprovalError::IdSpaceExhausted);
-        };
-        let now = self.clock.now();
-        let Some(deadline) = self.clock.checked_add(now, APPROVAL_TTL) else {
-            return Err(ApprovalError::DeadlineOverflow);
-        };
-
-        let id = ApprovalId::new(next_id);
-        self.next_id = next_id;
-        self.pending = Some(PendingApproval {
-            id,
-            subject,
-            decision,
-            deadline,
-            presentation_issued: false,
-        });
-        Ok(id)
+        let decision =
+            ApprovalDecision::agent(decision).ok_or(ApprovalError::UnsupportedApprovalSubject)?;
+        self.create_closed_request(decision)
     }
 
     fn pending(&self) -> ApprovalResult<Option<ApprovalRequestView<'_>>> {
@@ -423,7 +485,7 @@ impl ApprovalManager for InMemoryApprovalManager {
             return Ok(None);
         }
 
-        ApprovalRequestView::from_policy_decision(
+        ApprovalRequestView::from_approval_decision(
             pending.id,
             &pending.decision,
             pending.deadline.saturating_duration_since(now),
@@ -444,29 +506,30 @@ impl ApprovalManager for InMemoryApprovalManager {
             let Some(expired) = self.pending.take() else {
                 return Err(self.error_for_missing_id(id));
             };
-            self.consumed_subjects.insert(expired.subject);
+            self.consumed_subjects.push(expired.subject);
             return Err(ApprovalError::PresentationUnavailableOrExpired(id.value()));
         }
         if pending.presentation_issued {
             return Err(ApprovalError::PresentationAlreadyIssued(id.value()));
         }
 
-        let preview = ApprovalPreview::from_policy_decision(&pending.decision)
+        let preview = ApprovalPreview::from_approval_decision(&pending.decision)
             .ok_or(ApprovalError::UnsupportedApprovalSubject)?;
-        let call = pending.decision.validated_call();
         let presentation = ApprovalPresentation {
             id,
             #[cfg(target_os = "macos")]
             manager_instance: Arc::clone(&self.manager_instance),
-            run_id: call.run_id().to_owned(),
-            gateway_request_id: call.gateway_request_id().to_owned(),
-            call_id: call.call_id().to_owned(),
-            tool_name: call.tool_name().to_owned(),
-            tool_contract_version: call.tool_contract_version(),
+            origin: pending.decision.origin(),
+            run_id: pending.decision.run_id().to_owned(),
+            gateway_request_id: pending.decision.gateway_request_id().to_owned(),
+            call_id: pending.decision.call_id().to_owned(),
+            tool_name: pending.decision.tool_name().to_owned(),
+            tool_contract_version: pending.decision.tool_contract_version(),
             policy_outcome: pending.decision.outcome(),
-            policy_reason: pending.decision.reason(),
-            risk_class: call.risk_class(),
-            required_permission: call.required_permission(),
+            policy_reason: pending.decision.policy_reason(),
+            agent_policy_reason: pending.decision.agent_policy_reason(),
+            risk_class: pending.decision.risk_class(),
+            required_permission: pending.decision.required_permission(),
             action: preview.action(),
             target: preview.target(),
             schedule: preview.schedule(),
@@ -501,9 +564,12 @@ impl ApprovalManager for InMemoryApprovalManager {
             return Err(ApprovalError::SourceKindMismatch);
         }
         if pending.id != outcome.id
-            || pending.subject.run_id != outcome.run_id
-            || pending.subject.gateway_request_id != outcome.gateway_request_id
-            || pending.subject.call_id != outcome.call_id
+            || !pending.subject.matches_source(
+                &outcome.origin,
+                &outcome.run_id,
+                &outcome.gateway_request_id,
+                &outcome.call_id,
+            )
         {
             return Err(ApprovalError::SourceOutcomeIdentityMismatch);
         }
@@ -553,6 +619,11 @@ impl ApprovalManager for InMemoryApprovalManager {
     }
 
     fn cancel_for_run_termination(&mut self, id: ApprovalId) -> ApprovalResult<ApprovalResolution> {
+        #[cfg(test)]
+        if self.fail_next_cancel {
+            self.fail_next_cancel = false;
+            return Err(ApprovalError::TestOnlyFailure);
+        }
         self.resolve_by_id(
             id,
             ApprovalDisposition::Cancelled(ApprovalCancellationReason::RunTerminated),
@@ -571,13 +642,62 @@ impl ApprovalManager for InMemoryApprovalManager {
         }
 
         let pending = self.pending.take()?;
-        self.consumed_subjects.insert(pending.subject);
-        Some(ApprovalResolution::new(
+        self.consumed_subjects.push(pending.subject);
+        Some(ApprovalResolution::from_approval_decision(
             pending.id,
             ApprovalDisposition::Expired,
             pending.decision,
             None,
         ))
+    }
+}
+
+impl InMemoryApprovalManager {
+    fn create_closed_request(&mut self, decision: ApprovalDecision) -> ApprovalResult<ApprovalId> {
+        let actual = decision.outcome();
+        if actual != PolicyOutcome::RequireApproval {
+            return Err(ApprovalError::IneligiblePolicyOutcome { actual });
+        }
+        if ApprovalPreview::from_approval_decision(&decision).is_none() {
+            return Err(ApprovalError::UnsupportedApprovalSubject);
+        }
+
+        let subject = ApprovalSubjectKey::from_decision(&decision);
+        if self
+            .pending
+            .as_ref()
+            .is_some_and(|pending| pending.subject == subject)
+            || self.consumed_subjects.contains(&subject)
+        {
+            return Err(ApprovalError::DuplicateSubject);
+        }
+        if self.pending.is_some() {
+            return Err(ApprovalError::PendingApprovalExists);
+        }
+        if self.consumed_subjects.len() >= MAX_APPROVAL_SUBJECTS_PER_MANAGER {
+            return Err(ApprovalError::SubjectCapacityExhausted {
+                maximum: MAX_APPROVAL_SUBJECTS_PER_MANAGER,
+            });
+        }
+
+        let Some(next_id) = self.next_id.checked_add(1) else {
+            return Err(ApprovalError::IdSpaceExhausted);
+        };
+        let now = self.clock.now();
+        let Some(deadline) = self.clock.checked_add(now, APPROVAL_TTL) else {
+            return Err(ApprovalError::DeadlineOverflow);
+        };
+
+        let id = ApprovalId::new(next_id);
+        self.next_id = next_id;
+        self.pending = Some(PendingApproval {
+            id,
+            subject,
+            decision,
+            deadline,
+            presentation_issued: false,
+        });
+        Ok(id)
     }
 }
 
@@ -1046,7 +1166,7 @@ mod tests {
         for index in 0..MAX_APPROVAL_SUBJECTS_PER_MANAGER {
             capacity_manager
                 .consumed_subjects
-                .insert(ApprovalSubjectKey {
+                .push(ApprovalSubjectKey::LegacyGateway {
                     run_id: format!("run-capacity-{index}"),
                     gateway_request_id: format!("gateway-request-capacity-{index}"),
                     call_id: format!("call-capacity-{index}"),

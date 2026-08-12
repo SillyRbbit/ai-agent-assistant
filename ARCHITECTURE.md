@@ -231,8 +231,10 @@ runtime-loaded files.
 lineage, the closed `Pending`/`Running`/`WaitingForChild`/terminal state
 machine, and at most one typed terminal outcome. `AgentExecutionContext` is
 derived from live task and runtime-run state and binds the agent, task, root,
-optional parent, runtime, depth, run, and request identities. It deliberately
-contains no inert policy-profile or memory-namespace placeholder.
+optional parent, runtime, depth, run, request, and exact versioned policy-profile
+identities. It deliberately contains no inert memory-namespace placeholder.
+The profile is captured from the sealed built-in definition identity rather
+than supplied independently by a caller.
 
 `AgentOrchestrator<R: AgentRuntime>` is a separate application service. One
 instance owns at most one root workflow, two tasks, three sequential runtime
@@ -240,8 +242,9 @@ runs, one non-replenishing child, one active child, depth one, and 32 runtime
 and application events. It owns task assignment, exact live-context checks,
 the sole Personal Assistant-to-Research route, bounded output accumulation,
 result attribution, synthesis resumption, and child-first cancellation. It is
-not a runtime, provider, policy engine, tool registry, approval manager, audit
-logger, memory store, or executor.
+not a runtime, provider, policy engine, tool registry, approval manager, memory
+store, or executor. It composes the application-owned non-executing governance
+service below without transferring any of those component authorities.
 
 A root may complete directly in one runtime run. Delegation is accepted only
 before root output begins; the orchestrator then terminally cancels that first
@@ -277,15 +280,53 @@ engineering-quality, infrastructure/operations, and automation workflows must
 add exact closed routes and finite task caps under separate plans. Their arrows
 mean orchestrator-controlled sequencing at depth one, never specialist spawning.
 
-Before any governed agent action, later phases must extend the current trusted
-context with enforced policy-profile and memory-namespace identities. Missing,
-unknown, stale, duplicate, or mismatched current identity already fails closed
-and never defaults to Personal Assistant.
+#### Per-agent governance foundation
 
-Current code still contains no agent-aware policy/audit, memory namespace,
-multi-agent Tauri IPC, multi-agent React state, provider, live model, or device
-action. The catalog, task, and orchestrator foundations are Rust-only and
-unwired. The Tasks and Memory screens remain placeholders.
+**Current Rust foundation; not wired to the application**: D-084 adds nine
+closed versioned policy profiles and captures the exact profile in each built-in
+definition, task, live execution context, delegation request, governed tool
+request, approval lifecycle, and governance record. `AgentDefinition` remains
+the sole AgentId-to-profile mapping. Only an orchestrator-private proof minted
+after exact live task/run validation can derive `AgentAttribution`; stale or
+foreign contexts fail before governance or audit mutation.
+
+`AgentGovernanceService` composes, but does not replace, the existing
+application-owned `ToolRegistry`, `DeterministicPolicyEngine`, and
+`ApprovalManager`, plus a new closed volatile governance audit. Its synthetic
+tool-proposal entry point is separate from runtime events and accepts only the
+two already registered local schemas. Personal Assistant alone is eligible:
+date/time is `Allow`, local-task creation is `RequireApproval`, and every other
+profile is `Deny`. All outcomes carry `ExecutionDisposition::NotAttempted`;
+there is no executor or dispatch. Runtime tool proposals remain rejected by the
+text-only orchestrator boundary.
+
+Approval origin is a closed `LegacyGateway` or exact `Agent` attribution. The
+pending request, presentation, trusted target-Mac result, cancellation, expiry,
+and terminal resolution preserve that origin without exposing attribution in
+Debug. Pending approval blocks further runtime events and delegation for its
+task. Task cancellation reconciles and audits approval first, with child-first
+ordering for root cancellation. A manager failure leaves approval/task/run
+state live and unchanged; a later runtime-cancellation failure leaves the
+approval terminally Cancelled while the task/run remain retryable.
+
+The governance audit is a typed, redacted, process-local family capped at 32
+subjects. It reserves one slot before policy/approval/control mutation, updates
+that slot through terminal disposition without new capacity, uses deterministic
+logical ticks, prevents exact-subject replay, retains no arguments or content,
+and grants no authority. Delegation remains outside `ToolRegistry`; the audit
+records the exact Personal-to-Research matrix result independently from later
+control denial or child-creation outcome.
+
+Before any later memory access, persistence, data-bearing privileged action,
+or device effect, a separately enforced memory-namespace identity remains
+mandatory. Missing, unknown, stale, duplicate, or mismatched identity fails
+closed and never defaults to Personal Assistant.
+
+Current baseline code still contains no memory namespace, multi-agent Tauri
+IPC, multi-agent React state, provider, live model, tool executor, platform
+adapter, durable audit, or device action. The catalog, task, orchestrator, and
+governance foundations are Rust-only and unwired. The Tasks and Memory screens
+remain placeholders.
 
 The target namespace model is shared user/project, agent-private,
 task-temporary, and proposed-shared memory. No product `MemoryStore`, vector

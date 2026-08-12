@@ -118,6 +118,14 @@ core also contains the bounded `AgentTask`, trusted `AgentExecutionContext`,
 and `AgentOrchestrator` foundation accepted by D-083. These remain unwired and
 do not make any definition a shipping or autonomous assistant.
 
+D-084 also implements a non-executing governance foundation above the same
+unwired task/runtime core. Nine exact policy profiles bind sealed definition,
+task, live runtime, approval, delegation, and volatile audit attribution. The
+Personal profile alone is eligible for the two existing local schemas; all
+specialists deny them. Approval never dispatches a tool, every execution result
+is `NotAttempted`, runtime tool proposals remain rejected, and no memory,
+provider, IPC, UI, durable audit, executor, or device action exists.
+
 The initial deterministic phase keeps delegation depth, total-child budget per
 root, and active-child concurrency at one; the root is Personal Assistant, only
 Personal Assistant to Research Agent is enabled, and only the orchestrator may
@@ -133,6 +141,14 @@ instruction sources, and a deterministic immutable registry. Only Personal
 Assistant and Research carry the non-authorizing `Initial` marker;
 registration, activation, task creation, or orchestration grants no tool,
 policy, approval, memory, provider, execution, or device authority.
+
+D-084 now authorizes the next bounded Rust-only foundation: nine exact
+versioned policy-profile identities, live agent/task/runtime attribution, the
+closed Personal-to-Research delegation matrix, and non-executing policy,
+approval, and volatile audit evidence. Runtime tool proposals stay disabled;
+every execution result is `NotAttempted`; memory namespace remains mandatory
+before a later memory- or data-bearing privileged action; and no agent becomes
+operational merely because the governance contract exists.
 
 `AgentOrchestrator`, `AgentRuntime`, `NativeAgentRuntime`, `AgentRegistry`,
 `ToolRegistry`, `PolicyEngine`, `ApprovalManager`, `AuditLogger`, `MemoryStore`,

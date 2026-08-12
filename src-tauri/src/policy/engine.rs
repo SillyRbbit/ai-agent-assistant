@@ -1,4 +1,8 @@
 use super::types::{PolicyDecision, PolicyInput, PolicyReason};
+use crate::agent::governance::{
+    AgentGovernanceResult, AgentPolicyDecision, AgentPolicyProfileRegistry, AgentPolicyReason,
+    AgentSchemaValidatedToolRequest,
+};
 use crate::tools::types::{PermissionKind, RiskClass};
 
 pub trait PolicyEngine {
@@ -12,6 +16,28 @@ impl DeterministicPolicyEngine {
     #[must_use]
     pub fn new() -> Self {
         Self
+    }
+
+    /// Evaluates one sealed, application-attributed agent tool request.
+    ///
+    /// The profile check is deliberately separate from the legacy gateway
+    /// policy entry point. An `Allow` result remains non-authorizing data.
+    pub fn evaluate_agent(
+        &self,
+        request: AgentSchemaValidatedToolRequest,
+        profile_registry: &AgentPolicyProfileRegistry,
+    ) -> AgentGovernanceResult<AgentPolicyDecision> {
+        let profile = profile_registry.get(request.attribution().policy_profile_id())?;
+        let reason = if profile.permits(request.schema()) {
+            AgentPolicyReason::Deterministic(classify(
+                request.risk_class(),
+                request.required_permission(),
+            ))
+        } else {
+            AgentPolicyReason::ProfileNotEligible
+        };
+
+        Ok(AgentPolicyDecision::from_reason(request, reason))
     }
 }
 

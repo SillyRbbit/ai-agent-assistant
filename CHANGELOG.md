@@ -4,6 +4,17 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Implemented D-084's bounded non-executing per-agent governance foundation:
+  nine exact policy profiles, sealed live task/run attribution, profile-aware
+  deterministic policy, closed agent-origin approval, an exact separately
+  audited Personal-to-Research delegation matrix, and a 32-subject volatile
+  redacted governance audit. Pending approval blocks task events/delegation and
+  is reconciled before child-first cancellation. All execution dispositions are
+  `NotAttempted`; runtime tool proposals remain rejected. Native remains
+  sole/default, and no executor, provider, memory, IPC, UI, dependency,
+  permission, platform adapter, Hermes path, external I/O, or visible behavior
+  was added.
+
 - Implemented D-083's bounded native task and orchestration foundation above
   the unchanged `AgentRuntime`: closed task identity/lineage/state/result
   types, trusted live execution contexts, exact Personal Assistant-to-Research

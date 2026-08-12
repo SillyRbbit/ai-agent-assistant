@@ -1,18 +1,20 @@
 # Native multi-agent architecture assessment
 
-Status: Owner-accepted architecture assessment; catalog and bounded first-flow foundations implemented
+Status: Owner-accepted architecture assessment; catalog, bounded first-flow, and non-executing governance foundations implemented
 Assessment date: 2026-08-11
 Last reconciled: 2026-08-12
 Decision authority:
 [`ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md`](../adr/ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md)
-and D-082/D-083
+and D-082/D-083/D-084
 
 This assessment records the smallest native multi-agent direction supported by
 the repository's current code and trust boundaries. The catalog increment
 implements agent definitions and a registry. D-083's combined increment now
 also implements a bounded task domain and deterministic Personal-to-Research-
-to-Personal application-service contract. Neither foundation is connected to
-Tauri, React, a provider, live model, tool, memory store, or external runtime.
+to-Personal application-service contract. D-084 adds exact profiles, live
+attribution, non-executing policy/approval composition, a closed delegation
+matrix, and bounded volatile governance evidence. None is connected to Tauri,
+React, a provider, live model, executor, memory store, or external runtime.
 
 ## 1. Executive summary
 
@@ -47,8 +49,10 @@ already exist. They are deliberately small, transport-free, and not connected
 to Tauri, React, a provider, or a live model. The closed nine-role definition
 catalog and non-authorizing activation metadata now exist. The bounded
 `AgentTask`, derived `AgentExecutionContext`, and
-`AgentOrchestrator<R: AgentRuntime>` foundations also exist; agent-aware
-governance, memory, IPC, and live execution do not.
+`AgentOrchestrator<R: AgentRuntime>` foundations also exist. D-084's exact
+policy-profile/attribution, agent-origin approval, delegation-matrix, and
+volatile governance-audit foundation now exists; memory, IPC, durable audit,
+and live execution do not.
 
 Preserve the existing runtime contract, `InitialGatewayTurn`, gateway
 validation, local tool schemas, deterministic policy, exact approval binding,
@@ -407,14 +411,16 @@ Delegation is neither shell execution nor an external host tool.
 
 ## 8. Governance architecture
 
-Every task action must be bound to a trusted `AgentExecutionContext` containing:
+Every governed task action is now bound to a trusted `AgentExecutionContext`
+containing:
 
 - `AgentId`;
 - `AgentTaskId`;
 - optional parent `AgentTaskId`;
 - `RuntimeId`;
 - closed policy profile identity; and
-- closed memory namespace identity.
+- no memory namespace yet; that identity remains mandatory before any future
+  memory/data-bearing privileged action.
 
 The application derives this context from the validated registry and
 orchestrator. A model/runtime/WebView may not supply or override it. Tool
@@ -427,17 +433,22 @@ fails closed before runtime start or action handling. The system must never
 silently default an unknown agent to Personal Assistant, inherit a parent's
 privilege, or treat a runtime capability as policy authority.
 
-Agent-specific governance is a later phase because today's `PolicyInput`,
-approval subject, and audit record do not carry agent/task lineage. That phase
-must extend the typed chain end to end rather than adding unenforced metadata.
+Agent-specific governance is implemented under D-084 as a separate sealed agent
+policy input, closed origin-aware approval lifecycle, exact delegation matrix,
+and 32-subject volatile audit. It does not add optional identity to legacy
+`PolicyInput`; agent attribution is derived only after the orchestrator checks
+the exact live task/run binding. Every execution disposition is
+`NotAttempted`. Memory namespace remains mandatory for a later privileged or
+data-bearing phase.
 
 The authoritative application boundaries are `AgentOrchestrator`,
 `AgentRuntime`, `NativeAgentRuntime`, `AgentRegistry`, `ToolRegistry`,
 `PolicyEngine`, `ApprovalManager`, `AuditLogger`, `MemoryStore`, and
-`PlatformAdapter`. Today only the runtime/native runtime, tool registry, policy
-engine, and approval manager exist under those names or roles; approval audit
-is a narrow in-memory adapter, while orchestrator, agent registry, general audit
-logger, memory store, and platform adapter remain accepted/planned boundaries.
+`PlatformAdapter`. The runtime/native runtime, orchestrator, agent registry,
+tool registry, policy engine, approval manager, narrow legacy approval audit,
+and closed per-agent governance audit now exist. A generic audit logger, memory
+store, and platform adapter remain absent; D-084 does not revive the deleted
+arbitrary-string logger.
 No agent substitutes for one: Security & Risk is not `PolicyEngine`, QA &
 Validation is not `ApprovalManager`, and Workflow Automation is not
 `AgentOrchestrator`.

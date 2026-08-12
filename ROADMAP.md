@@ -94,7 +94,7 @@ this root roadmap remains authoritative.
 | ---------------------------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | 1. Agent definition and registry               | Completed | Nine immutable definitions and deterministic registry; only Personal Assistant and Research are `Initial`, none operational                                            | Preserve the verified catalog; publication requires separate owner direction                              |
 | 2-3. Task orchestration and first bounded flow | Completed | Closed task lifecycle, trusted context, depth-one typed delegation, one deterministic Research child/result, Personal synthesis, and cancellation above `AgentRuntime` | D-083, verified catalog foundation, deterministic contracts, full validation, and post-increment evidence |
-| 4. Agent-specific governance                   | Blocked   | Per-agent identity through tools, policy, approval, cancellation, audit, and separately gated knowledge/document boundaries                                            | Published Phase 2-3 evidence plus reviewed governance and knowledge/document plans                        |
+| 4. Agent-specific governance                   | Completed | D-084's non-executing per-agent identity, profile, policy, approval, delegation-matrix, and volatile audit foundation; knowledge/document boundaries remain separate   | Preserve the verified boundary; publication requires separate owner direction                             |
 | 5. Agent-specific memory                       | Blocked   | User-controlled shared/private/temporary/proposed-shared namespaces, followed by the staged Research/Knowledge workflow                                                | Phase 4, ARB-005 resolution, and the Blocked memory and research/knowledge plans                          |
 | 6. Bounded parallelism                         | Blocked   | Explicit finite concurrency, deterministic cancellation, ordering, and resource limits                                                                                 | Sequential workflows verified plus the Blocked bounded-parallelism plan                                   |
 | 7. Staged specialist workflows                 | Blocked   | Engineering-quality, infrastructure/operations, and automation workflows with exact routes/caps and separate consequential-action gates                                | Governance evidence plus the three Blocked specialist-workflow plans                                      |
@@ -158,12 +158,13 @@ Release milestones additionally require `RELEASE_CHECKLIST.md` and
 
 ## Current queue
 
-1. Review and publish the completed combined Phase 2-3 task/orchestration
-   increment as one bounded change only with separate owner direction.
-2. Do not begin Phase 4 or any later multi-agent phase automatically. The
-   per-agent governance plan remains Blocked on publication, an exact
-   trust-boundary decision, fresh architecture/security/readiness review, and
-   separate owner authorization. Keep Native sole/default.
+1. Review and, only on explicit owner direction, publish the verified D-084
+   non-executing per-agent governance increment as its own commit.
+2. Keep Phase 5 memory and all later native-agent work Blocked until D-084 has
+   a clean synchronized publication baseline and a separately approved plan.
+   Runtime tool proposals remain rejected, Native remains sole/default, and
+   memory, knowledge/document, specialist workflow, provider, IPC, UI, and
+   device effects remain absent.
 3. Do not begin Stage B no-traffic provisioning, Stage C synthetic transport,
    Stage D real-content activation, or another High remediation automatically.
 4. Later work must collect D-062's exact Microsoft registration and token
@@ -180,8 +181,8 @@ Increment 4V is verified complete and published. D-058 and its project-memory
 reconciliation are closed. The High-severity disposition identifies no
 immediate code remediation. ARB-002A is documentation-only. The agent
 definition/registry increment is published at `f42a6c7`; combined Phase 2-3 is
-locally verified and awaits owner review and publication. No later product plan
-is Ready automatically.
+published at `1d1d9d6`; Phase 4 governance is locally verified and awaits owner
+review and publication. No later product plan is Ready automatically.
 
 ## Rollback and reprioritization
 

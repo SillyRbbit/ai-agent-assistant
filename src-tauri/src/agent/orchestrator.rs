@@ -14,6 +14,11 @@ use std::{
 use thiserror::Error;
 
 use super::definition::{AgentActivation, AgentId};
+use super::governance::{
+    AgentApprovalGovernanceOutcome, AgentAttribution, AgentControlResult, AgentGovernanceError,
+    AgentGovernanceErrorCode, AgentGovernanceService, AgentToolGovernanceOutcome,
+    AgentToolProposal, DelegationMatrixOutcome,
+};
 use super::native_runtime::NativeAgentRuntime;
 use super::registry::{AgentRegistry, AgentRegistryError};
 use super::runtime::{
@@ -28,6 +33,11 @@ use super::task::{
     AgentTaskOutput, AgentTaskResult, AgentTaskStatus, ParentTaskId, RootTaskId,
     MAX_AGENT_TASK_DEPTH, MAX_AGENT_TASK_OUTPUT_BYTES, MAX_AGENT_TASK_OUTPUT_CHARACTERS,
 };
+use crate::approvals::{manager::ApprovalPresentation, types::ApprovalRequestView};
+use crate::audit::governance::AgentGovernanceRecord;
+
+#[cfg(target_os = "macos")]
+use crate::approvals::decision_source::TrustedApprovalSourceOutcome;
 
 pub const MAX_TASKS_PER_ROOT: usize = 2;
 pub const MAX_CHILDREN_PER_ROOT: u8 = 1;
@@ -37,6 +47,10 @@ pub const MAX_RUNTIME_EVENTS_PER_ROOT: usize = 32;
 pub const MAX_ORCHESTRATION_EVENTS_PER_ROOT: usize = 32;
 
 static NEXT_WORKFLOW_SEQUENCE: AtomicU64 = AtomicU64::new(1);
+
+/// Unconstructible outside this module. Passing it proves that attribution was
+/// derived only after the orchestrator checked the exact live task/run binding.
+pub(super) struct LiveAgentAttributionProof(());
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum RunCancellationDisposition {
@@ -107,8 +121,7 @@ impl fmt::Debug for DelegationProposal {
 /// Trusted delegation request assembled from a live execution context.
 #[derive(Clone, Eq, PartialEq)]
 pub struct DelegationRequest {
-    source_agent_id: AgentId,
-    source_task_id: AgentTaskId,
+    source_attribution: AgentAttribution,
     target_agent_id: AgentId,
     objective: AgentTaskObjective,
     context: Option<AgentTaskContext>,
@@ -118,12 +131,17 @@ pub struct DelegationRequest {
 impl DelegationRequest {
     #[must_use]
     pub const fn source_agent_id(&self) -> AgentId {
-        self.source_agent_id
+        self.source_attribution.agent_id()
     }
 
     #[must_use]
     pub fn source_task_id(&self) -> &AgentTaskId {
-        &self.source_task_id
+        self.source_attribution.task_id()
+    }
+
+    #[must_use]
+    pub fn source_attribution(&self) -> &AgentAttribution {
+        &self.source_attribution
     }
 
     #[must_use]
@@ -151,8 +169,7 @@ impl fmt::Debug for DelegationRequest {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         formatter
             .debug_struct("DelegationRequest")
-            .field("source_agent_id", &self.source_agent_id)
-            .field("source_task_id", &self.source_task_id)
+            .field("source_attribution", &self.source_attribution)
             .field("target_agent_id", &self.target_agent_id)
             .field("objective", &"[REDACTED]")
             .field("context", &self.context.as_ref().map(|_| "[REDACTED]"))
@@ -248,6 +265,7 @@ pub struct AgentOrchestrator<R: AgentRuntime> {
     registry: AgentRegistry,
     runtime: R,
     runtime_id: RuntimeId,
+    governance: AgentGovernanceService,
     tasks: BTreeMap<AgentTaskId, AgentTask>,
     runs: BTreeMap<AgentTaskId, ActiveRun<R::Run>>,
     root_task_id: Option<AgentTaskId>,
@@ -293,6 +311,7 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             registry,
             runtime,
             runtime_id: descriptor.id(),
+            governance: AgentGovernanceService::built_in()?,
             tasks: BTreeMap::new(),
             runs: BTreeMap::new(),
             root_task_id: None,
@@ -325,7 +344,7 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         let task_id = AgentTaskId::new(format!("agent-task-root-{}", self.workflow_sequence))?;
         let mut task = AgentTask::new_root(
             task_id.clone(),
-            AgentId::PersonalAssistant,
+            definition.identity(),
             AgentTaskObjective::new(objective)?,
         );
         let request = self.runtime_request(&task_id, 1, task.objective().as_str())?;
@@ -357,16 +376,70 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         source_context: &AgentExecutionContext,
         proposal: DelegationProposal,
     ) -> AgentOrchestratorResult<DelegationAcceptance> {
-        self.validate_delegation(source_context, &proposal)?;
-        self.ensure_event_capacity(4)?;
-        self.ensure_run_capacity()?;
+        let attribution = self.live_attribution(source_context)?;
+        let target_agent_id = proposal.target_agent_id;
+        let matrix = self
+            .governance
+            .evaluate_delegation(attribution.agent_id(), target_agent_id);
+        let reservation = self
+            .governance
+            .begin_delegation(attribution.clone(), target_agent_id)?;
+        if let Err(error) =
+            self.validate_delegation_after_attribution(source_context, &proposal, matrix)
+        {
+            let code = delegation_error_code(&error);
+            self.governance.deny_delegation(reservation, matrix, code);
+            return Err(error);
+        }
+        if let Err(error) = self.ensure_event_capacity(4) {
+            self.governance.deny_delegation(
+                reservation,
+                matrix,
+                AgentGovernanceErrorCode::EventLimitExceeded,
+            );
+            return Err(error);
+        }
+        if let Err(error) = self.ensure_run_capacity() {
+            self.governance.deny_delegation(
+                reservation,
+                matrix,
+                AgentGovernanceErrorCode::RunLimitExceeded,
+            );
+            return Err(error);
+        }
 
-        let source_task_id = source_context.task_id().clone();
+        let audit_token = self.governance.allow_delegation(reservation);
+        let result = self.perform_delegation(attribution, proposal);
+        match result {
+            Ok(acceptance) => {
+                self.governance.finish_delegation(
+                    audit_token,
+                    AgentControlResult::ChildCreated,
+                    None,
+                );
+                Ok(acceptance)
+            }
+            Err(error) => {
+                self.governance.finish_delegation(
+                    audit_token,
+                    AgentControlResult::Failed,
+                    Some(delegation_error_code(&error)),
+                );
+                Err(error)
+            }
+        }
+    }
+
+    fn perform_delegation(
+        &mut self,
+        source_attribution: AgentAttribution,
+        proposal: DelegationProposal,
+    ) -> AgentOrchestratorResult<DelegationAcceptance> {
+        let source_task_id = source_attribution.task_id().clone();
         let child_task_id =
             AgentTaskId::new(format!("agent-task-child-{}-1", self.workflow_sequence))?;
         let request = DelegationRequest {
-            source_agent_id: source_context.agent_id(),
-            source_task_id: source_task_id.clone(),
+            source_attribution,
             target_agent_id: proposal.target_agent_id,
             objective: proposal.objective,
             context: proposal.context,
@@ -374,11 +447,12 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         };
         let root_id = RootTaskId::from_task_id(source_task_id.clone());
         let parent_id = ParentTaskId::from_task_id(source_task_id.clone());
+        let target_definition = self.registry.get(request.target_agent_id)?;
         let mut child = AgentTask::new_child(
             child_task_id.clone(),
             root_id,
             parent_id,
-            request.target_agent_id,
+            target_definition.identity(),
             request.objective.clone(),
             request.context.clone(),
             request.expected_deliverable.clone(),
@@ -458,6 +532,69 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         })
     }
 
+    pub fn govern_tool_proposal(
+        &mut self,
+        context: &AgentExecutionContext,
+        proposal: AgentToolProposal,
+    ) -> AgentOrchestratorResult<AgentToolGovernanceOutcome> {
+        let attribution = self.live_attribution(context)?;
+        self.governance
+            .evaluate_tool(attribution, proposal)
+            .map_err(AgentOrchestratorError::Governance)
+    }
+
+    pub fn pending_governance_approval(
+        &mut self,
+        task_id: &AgentTaskId,
+    ) -> AgentOrchestratorResult<Option<ApprovalRequestView<'_>>> {
+        if !self.governance.has_pending_for_task(task_id) {
+            return Ok(None);
+        }
+        let context = self.current_context(task_id)?;
+        let attribution =
+            AgentAttribution::from_live_context(&context, &LiveAgentAttributionProof(()));
+        self.governance
+            .pending(&attribution)
+            .map_err(AgentOrchestratorError::Governance)
+    }
+
+    pub fn issue_governance_presentation(
+        &mut self,
+        context: &AgentExecutionContext,
+    ) -> AgentOrchestratorResult<ApprovalPresentation> {
+        let attribution = self.live_attribution(context)?;
+        self.governance
+            .issue_presentation(&attribution)
+            .map_err(AgentOrchestratorError::Governance)
+    }
+
+    #[cfg(target_os = "macos")]
+    pub fn resolve_governance_source_outcome(
+        &mut self,
+        context: &AgentExecutionContext,
+        outcome: TrustedApprovalSourceOutcome,
+    ) -> AgentOrchestratorResult<AgentApprovalGovernanceOutcome> {
+        let attribution = self.live_attribution(context)?;
+        self.governance
+            .resolve_source_outcome(&attribution, outcome)
+            .map_err(AgentOrchestratorError::Governance)
+    }
+
+    pub fn expire_governance_approval(
+        &mut self,
+        context: &AgentExecutionContext,
+    ) -> AgentOrchestratorResult<Option<AgentApprovalGovernanceOutcome>> {
+        let attribution = self.live_attribution(context)?;
+        self.governance
+            .expire_due(&attribution)
+            .map_err(AgentOrchestratorError::Governance)
+    }
+
+    #[must_use]
+    pub fn governance_audit_records(&self) -> Vec<AgentGovernanceRecord> {
+        self.governance.audit_records()
+    }
+
     pub fn accept_runtime_event(
         &mut self,
         task_id: &AgentTaskId,
@@ -485,6 +622,23 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
                     RuntimeError::EventRejected(RuntimeEventRejection::InvalidSequence),
                 ));
             }
+        }
+        let attribution = {
+            let task = self
+                .tasks
+                .get(task_id)
+                .ok_or(AgentOrchestratorError::TaskNotFound)?;
+            let active = self
+                .runs
+                .get(task_id)
+                .ok_or(AgentOrchestratorError::NoActiveRun)?;
+            AgentAttribution::from_live_context(
+                &active.context(task, self.runtime_id),
+                &LiveAgentAttributionProof(()),
+            )
+        };
+        if self.governance.has_pending_for(&attribution) {
+            return Err(AgentOrchestratorError::GovernanceApprovalPending);
         }
         if self.runtime_event_count >= MAX_RUNTIME_EVENTS_PER_ROOT {
             self.terminate_for_runtime_event_limit(task_id)?;
@@ -621,11 +775,10 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         Ok(active.context(task, self.runtime_id))
     }
 
-    fn validate_delegation(
+    fn live_attribution(
         &self,
         source_context: &AgentExecutionContext,
-        proposal: &DelegationProposal,
-    ) -> AgentOrchestratorResult<()> {
+    ) -> AgentOrchestratorResult<AgentAttribution> {
         let task = self
             .tasks
             .get(source_context.task_id())
@@ -645,6 +798,39 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
                 status: task.status(),
             });
         }
+        Ok(AgentAttribution::from_live_context(
+            source_context,
+            &LiveAgentAttributionProof(()),
+        ))
+    }
+
+    #[cfg(test)]
+    pub(crate) fn live_attribution_for_test(
+        &self,
+        context: &AgentExecutionContext,
+    ) -> AgentOrchestratorResult<AgentAttribution> {
+        self.live_attribution(context)
+    }
+
+    fn validate_delegation_after_attribution(
+        &self,
+        source_context: &AgentExecutionContext,
+        proposal: &DelegationProposal,
+        matrix: DelegationMatrixOutcome,
+    ) -> AgentOrchestratorResult<()> {
+        let task = self
+            .tasks
+            .get(source_context.task_id())
+            .ok_or(AgentOrchestratorError::TaskNotFound)?;
+        let active = self
+            .runs
+            .get(source_context.task_id())
+            .ok_or(AgentOrchestratorError::NoActiveRun)?;
+        let attribution =
+            AgentAttribution::from_live_context(source_context, &LiveAgentAttributionProof(()));
+        if self.governance.has_pending_for(&attribution) {
+            return Err(AgentOrchestratorError::GovernanceApprovalPending);
+        }
         if task.agent_id() != AgentId::PersonalAssistant
             || self.root_task_id.as_ref() != Some(task.id())
         {
@@ -661,7 +847,7 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
                 agent_id: proposal.target_agent_id,
             });
         }
-        if proposal.target_agent_id != AgentId::Research {
+        if matrix != DelegationMatrixOutcome::Allowed {
             return Err(AgentOrchestratorError::RouteDenied {
                 source_agent_id: task.agent_id(),
                 target: proposal.target_agent_id,
@@ -887,6 +1073,7 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         } else {
             None
         };
+        self.cancel_pending_governance(root_task_id)?;
         let root_disposition = self.cancel_run(root_task_id)?;
         if let RunCancellationDisposition::UnexpectedTerminal(status) = root_disposition {
             self.fail_active_task(root_task_id, AgentTaskFailureCode::RuntimeStateMismatch)?;
@@ -915,6 +1102,7 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         child_task_id: &AgentTaskId,
         root_is_cancelling: bool,
     ) -> AgentOrchestratorResult<AgentTaskCancellationOutcome> {
+        self.cancel_pending_governance(child_task_id)?;
         let disposition = self.cancel_run(child_task_id)?;
         if root_is_cancelling {
             let child = self
@@ -998,6 +1186,19 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         }
         active.output.push_str(delta);
         Ok(())
+    }
+
+    fn cancel_pending_governance(&mut self, task_id: &AgentTaskId) -> AgentOrchestratorResult<()> {
+        if !self.governance.has_pending_for_task(task_id) {
+            return Ok(());
+        }
+        let context = self.current_context(task_id)?;
+        let attribution =
+            AgentAttribution::from_live_context(&context, &LiveAgentAttributionProof(()));
+        self.governance
+            .cancel_pending_for_task(&attribution)
+            .map(|_| ())
+            .map_err(AgentOrchestratorError::Governance)
     }
 
     fn cancel_run(
@@ -1183,12 +1384,67 @@ fn map_runtime_error(error: RuntimeError) -> AgentOrchestratorError {
     }
 }
 
+fn delegation_error_code(error: &AgentOrchestratorError) -> AgentGovernanceErrorCode {
+    match error {
+        AgentOrchestratorError::GovernanceApprovalPending => {
+            AgentGovernanceErrorCode::ApprovalPending
+        }
+        AgentOrchestratorError::UnauthorizedSource { .. } => {
+            AgentGovernanceErrorCode::UnauthorizedSource
+        }
+        AgentOrchestratorError::Registry(AgentRegistryError::UnknownAgent { .. }) => {
+            AgentGovernanceErrorCode::TargetUnknown
+        }
+        AgentOrchestratorError::AgentDeferred { .. } => AgentGovernanceErrorCode::TargetDeferred,
+        AgentOrchestratorError::RouteDenied { .. } => AgentGovernanceErrorCode::DelegationDenied,
+        AgentOrchestratorError::DepthExceeded => AgentGovernanceErrorCode::DepthExceeded,
+        AgentOrchestratorError::ActiveChildLimitExceeded => {
+            AgentGovernanceErrorCode::ActiveChildLimitExceeded
+        }
+        AgentOrchestratorError::TotalChildLimitExceeded => {
+            AgentGovernanceErrorCode::TotalChildLimitExceeded
+        }
+        AgentOrchestratorError::DelegationAfterRuntimeOutput => {
+            AgentGovernanceErrorCode::DelegationAfterRuntimeOutput
+        }
+        AgentOrchestratorError::EventLimitExceeded => AgentGovernanceErrorCode::EventLimitExceeded,
+        AgentOrchestratorError::RunLimitExceeded => AgentGovernanceErrorCode::RunLimitExceeded,
+        AgentOrchestratorError::Runtime(_)
+        | AgentOrchestratorError::UnexpectedRuntimeStatus { .. } => {
+            AgentGovernanceErrorCode::RuntimeCancellationFailed
+        }
+        AgentOrchestratorError::RuntimeUnavailable
+        | AgentOrchestratorError::RuntimeUnhealthy
+        | AgentOrchestratorError::RuntimeCapabilityMissing { .. } => {
+            AgentGovernanceErrorCode::ChildStartFailed
+        }
+        AgentOrchestratorError::Task(_)
+        | AgentOrchestratorError::Registry(_)
+        | AgentOrchestratorError::Governance(_)
+        | AgentOrchestratorError::WorkflowIdentityExhausted
+        | AgentOrchestratorError::RootAlreadyExists
+        | AgentOrchestratorError::RootMissing
+        | AgentOrchestratorError::TaskNotFound
+        | AgentOrchestratorError::NoActiveRun
+        | AgentOrchestratorError::ContextMismatch
+        | AgentOrchestratorError::InvalidTaskState { .. }
+        | AgentOrchestratorError::ToolProposalUnsupported
+        | AgentOrchestratorError::OutputLimitExceeded
+        | AgentOrchestratorError::OutcomeMismatch
+        | AgentOrchestratorError::RuntimeEventLimitExceeded => {
+            AgentGovernanceErrorCode::TaskMutationFailed
+        }
+    }
+}
+
 #[derive(Clone, Copy, Debug, Error, Eq, PartialEq)]
 pub enum AgentOrchestratorError {
     #[error("agent task domain rejected the operation: {0}")]
     Task(#[from] AgentTaskError),
     #[error("agent registry rejected the operation: {0}")]
     Registry(#[from] AgentRegistryError),
+    #[error("agent governance rejected the operation: {0}")]
+    Governance(#[from] AgentGovernanceError),
     #[error("agent runtime rejected the operation: {0}")]
     Runtime(#[from] RuntimeError),
     #[error("the selected runtime is unavailable")]
@@ -1209,6 +1465,8 @@ pub enum AgentOrchestratorError {
     NoActiveRun,
     #[error("the supplied execution context does not match trusted live state")]
     ContextMismatch,
+    #[error("the task has a pending governance approval")]
+    GovernanceApprovalPending,
     #[error("the task state does not allow the requested operation: {status:?}")]
     InvalidTaskState { status: AgentTaskStatus },
     #[error("the source agent cannot request delegation: {agent_id}")]
@@ -1248,7 +1506,13 @@ pub enum AgentOrchestratorError {
 mod tests {
     use super::*;
     use crate::agent::definition::AgentDefinition;
+    use crate::agent::governance::{AgentApprovalAuditDisposition, AgentExecutionDisposition};
     use crate::agent::runtime::{RuntimeEventEnvelope, RuntimeResponseId, UntrustedRuntimeEvent};
+
+    #[cfg(target_os = "macos")]
+    use crate::approvals::decision_source::test_outcome_from_dialog_result;
+    #[cfg(target_os = "macos")]
+    use rfd::MessageDialogResult;
 
     fn proposal(target: AgentId) -> AgentTaskDomainResult<DelegationProposal> {
         DelegationProposal::new(
@@ -1257,6 +1521,316 @@ mod tests {
             Some("Use only supplied evidence".to_owned()),
             "Return one attributed summary",
         )
+    }
+
+    #[test]
+    fn presentation_after_expiry_terminalizes_agent_audit_and_pending_binding(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let mut orchestrator = AgentOrchestrator::native()?;
+        let root = orchestrator.start_root("Create a bounded local task")?;
+        orchestrator.govern_tool_proposal(
+            &root,
+            AgentToolProposal::new(
+                "expired-agent-call",
+                "create_local_task",
+                1,
+                r#"{"title":"Review fixture"}"#,
+            )?,
+        )?;
+        orchestrator.governance.force_pending_due_for_test();
+        assert!(matches!(
+            orchestrator.issue_governance_presentation(&root),
+            Err(AgentOrchestratorError::Governance(
+                AgentGovernanceError::ApprovalExpired
+            ))
+        ));
+        assert!(orchestrator
+            .pending_governance_approval(root.task_id())?
+            .is_none());
+        assert!(orchestrator
+            .governance_audit_records()
+            .iter()
+            .any(|record| matches!(
+                record,
+                AgentGovernanceRecord::Tool(record)
+                    if record.approval() == AgentApprovalAuditDisposition::Expired
+            )));
+        Ok(())
+    }
+
+    #[test]
+    fn approval_cancel_failure_stops_before_runtime_or_task_mutation(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let mut orchestrator = AgentOrchestrator::native()?;
+        let root = orchestrator.start_root("Create a bounded local task")?;
+        let root_id = root.task_id().clone();
+        orchestrator.govern_tool_proposal(
+            &root,
+            AgentToolProposal::new(
+                "cancel-manager-failure",
+                "create_local_task",
+                1,
+                r#"{"title":"Review fixture"}"#,
+            )?,
+        )?;
+        orchestrator.governance.fail_next_approval_cancel_for_test();
+        assert_eq!(
+            orchestrator.cancel_task(&root_id),
+            Err(AgentOrchestratorError::Governance(
+                AgentGovernanceError::ApprovalLifecycle
+            ))
+        );
+        assert_eq!(
+            orchestrator.task(&root_id).map(AgentTask::status),
+            Some(AgentTaskStatus::Running)
+        );
+        assert!(orchestrator.current_context(&root_id).is_ok());
+        let pending = orchestrator.pending_governance_approval(&root_id)?;
+        assert!(pending.is_some());
+        drop(pending);
+        assert!(orchestrator
+            .governance_audit_records()
+            .iter()
+            .any(|record| matches!(
+                record,
+                AgentGovernanceRecord::Tool(record)
+                    if record.approval() == AgentApprovalAuditDisposition::Pending
+            )));
+        Ok(())
+    }
+
+    #[test]
+    fn direct_child_cancellation_reconciles_pending_approval_before_task_and_runtime(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let mut orchestrator = AgentOrchestrator::native()?;
+        let root = orchestrator.start_root("Answer one bounded question")?;
+        let child = orchestrator
+            .request_delegation(&root, proposal(AgentId::Research)?)?
+            .child_context()
+            .clone();
+        let child_id = child.task_id().clone();
+        let attribution = orchestrator.live_attribution(&child)?;
+        orchestrator
+            .governance
+            .seed_pending_approval_for_test(attribution, "child-direct-pending")?;
+
+        let events_before = orchestrator.events().to_vec();
+        orchestrator.governance.fail_next_approval_cancel_for_test();
+        assert_eq!(
+            orchestrator.cancel_task(&child_id),
+            Err(AgentOrchestratorError::Governance(
+                AgentGovernanceError::ApprovalLifecycle
+            ))
+        );
+        assert_eq!(orchestrator.events(), events_before);
+        assert_eq!(
+            orchestrator.task(&child_id).map(AgentTask::status),
+            Some(AgentTaskStatus::Running)
+        );
+        assert!(orchestrator.current_context(&child_id).is_ok());
+        assert!(orchestrator
+            .governance_audit_records()
+            .iter()
+            .any(|record| matches!(
+                record,
+                AgentGovernanceRecord::Tool(record)
+                    if record.approval() == AgentApprovalAuditDisposition::Pending
+            )));
+
+        assert_eq!(
+            orchestrator.cancel_task(&child_id)?,
+            AgentTaskCancellationOutcome::Cancelled
+        );
+        assert_eq!(
+            orchestrator.task(&child_id).map(AgentTask::status),
+            Some(AgentTaskStatus::Cancelled)
+        );
+        assert_eq!(
+            orchestrator.root_task().map(AgentTask::status),
+            Some(AgentTaskStatus::Running)
+        );
+        assert!(orchestrator
+            .governance_audit_records()
+            .iter()
+            .any(|record| matches!(
+                record,
+                AgentGovernanceRecord::Tool(record)
+                    if record.lifecycle()
+                        == crate::audit::governance::AgentToolGovernanceLifecycleState::ApprovalResolved
+                        && record.approval() == AgentApprovalAuditDisposition::Cancelled
+            )));
+        assert!(matches!(
+            &orchestrator.events()[events_before.len()..],
+            [
+                AgentOrchestrationEvent::TaskCancelled {
+                    task_id,
+                    agent_id: AgentId::Research
+                },
+                AgentOrchestrationEvent::ResultReturned {
+                    child_task_id,
+                    ..
+                },
+                AgentOrchestrationEvent::ParentResumed { .. }
+            ] if task_id == &child_id && child_task_id == &child_id
+        ));
+        Ok(())
+    }
+
+    #[test]
+    fn root_cancellation_reconciles_child_pending_approval_before_child_and_root(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let mut orchestrator = AgentOrchestrator::native()?;
+        let root = orchestrator.start_root("Answer one bounded question")?;
+        let root_id = root.task_id().clone();
+        let child = orchestrator
+            .request_delegation(&root, proposal(AgentId::Research)?)?
+            .child_context()
+            .clone();
+        let child_id = child.task_id().clone();
+        let attribution = orchestrator.live_attribution(&child)?;
+        orchestrator
+            .governance
+            .seed_pending_approval_for_test(attribution, "child-root-pending")?;
+
+        let events_before = orchestrator.events().to_vec();
+        orchestrator.governance.fail_next_approval_cancel_for_test();
+        assert_eq!(
+            orchestrator.cancel_task(&root_id),
+            Err(AgentOrchestratorError::Governance(
+                AgentGovernanceError::ApprovalLifecycle
+            ))
+        );
+        assert_eq!(orchestrator.events(), events_before);
+        assert_eq!(
+            orchestrator.task(&root_id).map(AgentTask::status),
+            Some(AgentTaskStatus::WaitingForChild)
+        );
+        assert_eq!(
+            orchestrator.task(&child_id).map(AgentTask::status),
+            Some(AgentTaskStatus::Running)
+        );
+        assert!(orchestrator.current_context(&child_id).is_ok());
+
+        assert_eq!(
+            orchestrator.cancel_task(&root_id)?,
+            AgentTaskCancellationOutcome::Cancelled
+        );
+        assert_eq!(
+            orchestrator.task(&child_id).map(AgentTask::status),
+            Some(AgentTaskStatus::Cancelled)
+        );
+        assert_eq!(
+            orchestrator.task(&root_id).map(AgentTask::status),
+            Some(AgentTaskStatus::Cancelled)
+        );
+        assert!(orchestrator
+            .governance_audit_records()
+            .iter()
+            .any(|record| matches!(
+                record,
+                AgentGovernanceRecord::Tool(record)
+                    if record.lifecycle()
+                        == crate::audit::governance::AgentToolGovernanceLifecycleState::ApprovalResolved
+                        && record.approval() == AgentApprovalAuditDisposition::Cancelled
+            )));
+        assert!(matches!(
+            &orchestrator.events()[events_before.len()..],
+            [
+                AgentOrchestrationEvent::TaskCancelled {
+                    task_id: cancelled_child,
+                    agent_id: AgentId::Research
+                },
+                AgentOrchestrationEvent::TaskCancelled {
+                    task_id: cancelled_root,
+                    agent_id: AgentId::PersonalAssistant
+                }
+            ] if cancelled_child == &child_id && cancelled_root == &root_id
+        ));
+        Ok(())
+    }
+
+    #[cfg(target_os = "macos")]
+    #[test]
+    fn agent_approval_source_resolution_retains_origin_without_execution(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let mut orchestrator = AgentOrchestrator::native()?;
+        let root = orchestrator.start_root("Create a bounded local task")?;
+        let governance = orchestrator.govern_tool_proposal(
+            &root,
+            AgentToolProposal::new(
+                "agent-approval-call",
+                "create_local_task",
+                1,
+                r#"{"title":"Review fixture"}"#,
+            )?,
+        )?;
+        assert!(matches!(
+            governance,
+            AgentToolGovernanceOutcome::ApprovalPending { .. }
+        ));
+        let presentation = orchestrator.issue_governance_presentation(&root)?;
+        let outcome = test_outcome_from_dialog_result(
+            presentation,
+            MessageDialogResult::Custom("Approve".to_owned()),
+        );
+        let resolved = orchestrator.resolve_governance_source_outcome(&root, outcome)?;
+        assert_eq!(
+            resolved.disposition(),
+            AgentApprovalAuditDisposition::Approved
+        );
+        assert_eq!(
+            resolved.execution(),
+            AgentExecutionDisposition::NotAttempted
+        );
+        assert!(orchestrator
+            .pending_governance_approval(root.task_id())?
+            .is_none());
+        assert_eq!(
+            orchestrator.govern_tool_proposal(
+                &root,
+                AgentToolProposal::new("agent-approval-call", "get_current_datetime", 1, "{}",)?,
+            ),
+            Err(AgentOrchestratorError::Governance(
+                AgentGovernanceError::DuplicateSubject
+            ))
+        );
+        assert!(orchestrator
+            .governance_audit_records()
+            .iter()
+            .any(|record| matches!(
+                record,
+                AgentGovernanceRecord::Tool(record)
+                    if record.approval() == AgentApprovalAuditDisposition::Approved
+                        && record.execution() == AgentExecutionDisposition::NotAttempted
+            )));
+
+        let mut rejected = AgentOrchestrator::native()?;
+        let rejected_root = rejected.start_root("Create another bounded local task")?;
+        rejected.govern_tool_proposal(
+            &rejected_root,
+            AgentToolProposal::new(
+                "agent-rejection-call",
+                "create_local_task",
+                1,
+                r#"{"title":"Reject fixture"}"#,
+            )?,
+        )?;
+        let rejected_presentation = rejected.issue_governance_presentation(&rejected_root)?;
+        let rejected_outcome = test_outcome_from_dialog_result(
+            rejected_presentation,
+            MessageDialogResult::Custom("Reject".to_owned()),
+        );
+        let rejected_resolution =
+            rejected.resolve_governance_source_outcome(&rejected_root, rejected_outcome)?;
+        assert_eq!(
+            rejected_resolution.disposition(),
+            AgentApprovalAuditDisposition::Rejected
+        );
+        assert_eq!(
+            rejected_resolution.execution(),
+            AgentExecutionDisposition::NotAttempted
+        );
+        Ok(())
     }
 
     #[test]
@@ -1279,6 +1853,15 @@ mod tests {
         assert_eq!(orchestrator.task_count(), 1);
         assert!(!orchestrator.child_created);
         assert!(orchestrator.active_child_task_id.is_none());
+        assert!(orchestrator
+            .governance_audit_records()
+            .iter()
+            .any(|record| matches!(
+                record,
+                AgentGovernanceRecord::Delegation(record)
+                    if record.matrix() == DelegationMatrixOutcome::Allowed
+                        && record.error() == Some(AgentGovernanceErrorCode::TargetUnknown)
+            )));
         Ok(())
     }
 
@@ -1292,7 +1875,7 @@ mod tests {
             AgentTaskId::new("synthetic-depth-one-root")?,
             RootTaskId::from_task_id(original_id.clone()),
             ParentTaskId::from_task_id(original_id.clone()),
-            AgentId::PersonalAssistant,
+            AgentDefinition::built_in(AgentId::PersonalAssistant)?.identity(),
             AgentTaskObjective::new("Synthetic depth invariant")?,
             None,
             AgentTaskExpectedDeliverable::new("Reject before delegation")?,
@@ -1315,6 +1898,15 @@ mod tests {
         );
         assert_eq!(depth.task_count(), 1);
         assert!(!depth.child_created);
+        assert!(depth
+            .governance_audit_records()
+            .iter()
+            .any(|record| matches!(
+                record,
+                AgentGovernanceRecord::Delegation(record)
+                    if record.matrix() == DelegationMatrixOutcome::Allowed
+                        && record.error() == Some(AgentGovernanceErrorCode::DepthExceeded)
+            )));
 
         let mut active_limit = AgentOrchestrator::native()?;
         let root = active_limit.start_root("Answer one bounded question")?;
@@ -1325,6 +1917,16 @@ mod tests {
         );
         assert_eq!(active_limit.task_count(), 1);
         assert!(!active_limit.child_created);
+        assert!(active_limit
+            .governance_audit_records()
+            .iter()
+            .any(|record| matches!(
+                record,
+                AgentGovernanceRecord::Delegation(record)
+                    if record.matrix() == DelegationMatrixOutcome::Allowed
+                        && record.error()
+                        == Some(AgentGovernanceErrorCode::ActiveChildLimitExceeded)
+            )));
         Ok(())
     }
 
@@ -1345,6 +1947,31 @@ mod tests {
         );
         assert_eq!(one_root.task_count(), 1);
         assert!(!one_root.child_created);
+        assert!(one_root
+            .governance_audit_records()
+            .iter()
+            .any(|record| matches!(
+                record,
+                AgentGovernanceRecord::Delegation(record)
+                    if record.matrix() == DelegationMatrixOutcome::Allowed
+                        && record.error() == Some(AgentGovernanceErrorCode::RunLimitExceeded)
+            )));
+
+        let mut route_denied = AgentOrchestrator::native()?;
+        let route_root = route_denied.start_root("Reject a self route")?;
+        assert!(matches!(
+            route_denied.request_delegation(&route_root, proposal(AgentId::PersonalAssistant)?),
+            Err(AgentOrchestratorError::RouteDenied { .. })
+        ));
+        assert!(route_denied
+            .governance_audit_records()
+            .iter()
+            .any(|record| matches!(
+                record,
+                AgentGovernanceRecord::Delegation(record)
+                    if record.matrix() == DelegationMatrixOutcome::Denied
+                        && record.error() == Some(AgentGovernanceErrorCode::DelegationDenied)
+            )));
 
         one_root.runtime_event_count = MAX_RUNTIME_EVENTS_PER_ROOT;
         let event = RuntimeEventEnvelope::for_identity(

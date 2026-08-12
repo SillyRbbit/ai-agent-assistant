@@ -156,7 +156,7 @@ for a later flow; none is operational.
 
 ### Completed implementation: Agent task orchestration and first bounded delegation
 
-**Status:** **Verified complete with advisories; publication pending**. The
+**Status:** **Verified complete with advisories; published at `1d1d9d6`**. The
 [`2026-08-11-agent-orchestration-task-lifecycle.md`](docs/plans/2026-08-11-agent-orchestration-task-lifecycle.md)
 combines the former foundation and deterministic first-flow phases. It adds a
 closed task lifecycle, trusted context, application-service delegation, exact
@@ -166,19 +166,21 @@ one-run runtime. The foundation is not connected to Tauri, React, a provider,
 or a live model. Governance,
 knowledge/document boundaries, research/knowledge, engineering-quality,
 infrastructure/operations, automation, parallelism, desktop UI, demos, and
-final review remain separately Blocked. No later plan is Ready. Native stays
+final review remain separately Blocked. Native stays
 sole/default; the other seven roles remain Deferred; Hermes remains Blocked.
 
-### Blocked next planning: Per-agent governance
+### Completed implementation: Per-agent governance
 
-**Status:** **Blocked; draft follow-on, not approved for implementation**. The
+**Status:** **Verified complete with advisories; publication pending**. The
 [`2026-08-11-agent-governance.md`](docs/plans/2026-08-11-agent-governance.md)
-must be reconciled against the verified orchestration boundary and decide exact
-policy-profile and memory-namespace identities plus their binding through
-tools, policy, approval, cancellation, audit, and results. Publication of the
-current increment, fresh architecture/security/readiness review, an accepted
-trust-boundary decision, and separate owner authorization are required before
-any implementation.
+implements nine exact policy profiles, orchestrator-derived live attribution,
+the closed Personal-to-Research delegation matrix, reuse of the existing
+deterministic policy and approval boundaries, and a bounded volatile governance
+audit. It is strictly non-executing: runtime tool proposals remain rejected,
+every execution result is `NotAttempted`, and memory namespace remains
+separately gated. The next action is owner review and, only on explicit
+direction, publication as one bounded commit. Phase 5 and all later plans remain
+Blocked.
 
 ### Completed negative spike: Hermes ACP
 

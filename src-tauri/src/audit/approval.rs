@@ -4,7 +4,7 @@ use thiserror::Error;
 
 use crate::approvals::types::{
     ApprovalAuthenticationEvidence, ApprovalCancellationReason, ApprovalDisposition, ApprovalId,
-    ApprovalInteractionEvidence, ApprovalInteractionSource, ApprovalNativeButton,
+    ApprovalInteractionEvidence, ApprovalInteractionSource, ApprovalNativeButton, ApprovalOrigin,
     ApprovalResolution,
 };
 use crate::policy::types::{PolicyOutcome, PolicyReason};
@@ -257,7 +257,8 @@ impl fmt::Debug for InMemoryApprovalAuditAdapter {
 }
 
 fn validate_resolution(resolution: &ApprovalResolution) -> ApprovalAuditResult<()> {
-    if resolution.tool_name() != APPROVAL_TOOL_NAME
+    if resolution.origin() != &ApprovalOrigin::LegacyGateway
+        || resolution.tool_name() != APPROVAL_TOOL_NAME
         || resolution.tool_contract_version() != APPROVAL_TOOL_CONTRACT_VERSION
         || resolution.risk_class() != RiskClass::ReversibleLocalAction
         || resolution.required_permission() != PermissionKind::None

@@ -14,12 +14,17 @@ approval where required, execute only registered tools, and record redacted
 audit events.
 
 The current repository implements transport-free validation, policy, approval,
-cancellation, and a turn-bound in-memory approval-audit adapter. A successful
-terminal native or run-termination resolution cannot leave the initial turn
-without one typed audit receipt. It has no live provider transport, runtime
-coordinator, dispatcher, executor, product memory, or durable audit. Current
-resolutions, records, and receipts are volatile and non-authorizing and must not
-be mistaken for an end-to-end security path.
+cancellation, and a turn-bound in-memory approval-audit adapter. It also has an
+unwired non-executing per-agent governance foundation: nine closed profiles,
+orchestrator-derived live attribution, profile-aware deterministic policy,
+agent-origin approval, an exact delegation matrix, and a bounded volatile audit
+family. A successful terminal native or run-termination resolution cannot leave
+the initial turn without one typed legacy audit receipt. Agent governance
+reserves one audit slot before downstream mutation and records execution only
+as `NotAttempted`. There is no live provider transport, dispatcher, executor,
+product memory, platform adapter, or durable audit. Current resolutions,
+records, and receipts are volatile and non-authorizing and must not be mistaken
+for an end-to-end security path.
 
 ## Non-negotiable invariants
 
@@ -30,6 +35,14 @@ be mistaken for an end-to-end security path.
 - Class 4 actions are not registered in the MVP.
 - Class 5 behavior is prohibited.
 - Approval is bound to canonical arguments, tool identity, expiry, and one-time consumption.
+- Agent-origin approval is additionally bound to exact live agent/task/root/
+  parent/runtime/profile/depth/run/request attribution.
+- Runtime tool proposals remain rejected; synthetic agent governance has no
+  executor and every execution disposition is `NotAttempted`.
+- Delegation stays outside `ToolRegistry`; only the orchestrator may create a
+  child after the exact Personal Assistant-to-Research matrix and finite limits.
+- Governance audit is closed, redacted, volatile, capped at 32 subjects, and
+  never authorizes an action.
 - Untrusted content cannot grant permission or change policy.
 - Credentials, authentication codes, private keys, and production API keys are never logged or stored in SQLite.
 - Privileged macOS permissions are requested only from a user-initiated feature flow.

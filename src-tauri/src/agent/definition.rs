@@ -1,12 +1,14 @@
 //! Closed application-owned agent catalog definitions.
 //!
-//! Definitions are immutable descriptive configuration. Identity, activation,
-//! and instruction metadata grant no runtime, tool, policy, approval, memory,
-//! provider, credential, network, filesystem, or device authority.
+//! Definitions are immutable descriptive configuration. Identity, policy-profile,
+//! activation, and instruction metadata grant no runtime, tool, policy, approval,
+//! memory, provider, credential, network, filesystem, or device authority.
 
 use std::{fmt, str::FromStr};
 
 use thiserror::Error;
+
+use super::governance::AgentPolicyProfileId;
 
 pub const MAX_AGENT_DISPLAY_NAME_CHARACTERS: usize = 64;
 pub const MAX_AGENT_PURPOSE_CHARACTERS: usize = 512;
@@ -223,6 +225,7 @@ impl AgentInstructionSource {
 #[derive(Clone, Eq, PartialEq)]
 pub struct AgentDefinition {
     id: AgentId,
+    policy_profile_id: AgentPolicyProfileId,
     display_name: String,
     purpose: String,
     instruction_source: AgentInstructionSource,
@@ -263,6 +266,7 @@ impl AgentDefinition {
 
         Ok(Self {
             id,
+            policy_profile_id: built_in_policy_profile_id(id),
             display_name,
             purpose,
             instruction_source,
@@ -273,6 +277,19 @@ impl AgentDefinition {
     #[must_use]
     pub const fn id(&self) -> AgentId {
         self.id
+    }
+
+    #[must_use]
+    pub const fn policy_profile_id(&self) -> AgentPolicyProfileId {
+        self.policy_profile_id
+    }
+
+    #[must_use]
+    pub(super) const fn identity(&self) -> AgentDefinitionIdentity {
+        AgentDefinitionIdentity {
+            agent_id: self.id,
+            policy_profile_id: self.policy_profile_id,
+        }
     }
 
     #[must_use]
@@ -306,6 +323,7 @@ impl fmt::Debug for AgentDefinition {
         formatter
             .debug_struct("AgentDefinition")
             .field("id", &self.id)
+            .field("policy_profile_id", &self.policy_profile_id)
             .field(
                 "display_name_characters",
                 &self.display_name.chars().count(),
@@ -321,6 +339,28 @@ impl fmt::Debug for AgentDefinition {
             )
             .field("activation", &self.activation)
             .finish()
+    }
+}
+
+/// Sealed identity resolved from one immutable application-owned definition.
+///
+/// Task constructors consume this pair so callers cannot independently combine
+/// an agent identity with another agent's policy profile.
+#[derive(Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub(super) struct AgentDefinitionIdentity {
+    agent_id: AgentId,
+    policy_profile_id: AgentPolicyProfileId,
+}
+
+impl AgentDefinitionIdentity {
+    #[must_use]
+    pub(super) const fn agent_id(&self) -> AgentId {
+        self.agent_id
+    }
+
+    #[must_use]
+    pub(super) const fn policy_profile_id(&self) -> AgentPolicyProfileId {
+        self.policy_profile_id
     }
 }
 
@@ -498,6 +538,20 @@ const fn built_in_instruction_source(id: AgentId) -> AgentInstructionSource {
     }
 }
 
+const fn built_in_policy_profile_id(id: AgentId) -> AgentPolicyProfileId {
+    match id {
+        AgentId::PersonalAssistant => AgentPolicyProfileId::PersonalAssistantV1,
+        AgentId::Research => AgentPolicyProfileId::ResearchReadOnlyV1,
+        AgentId::Coding => AgentPolicyProfileId::CodingGovernedV1,
+        AgentId::CloudInfrastructure => AgentPolicyProfileId::CloudInfrastructureGovernedV1,
+        AgentId::SystemsOperations => AgentPolicyProfileId::SystemsOperationsGovernedV1,
+        AgentId::KnowledgeDocument => AgentPolicyProfileId::KnowledgeDocumentsV1,
+        AgentId::QaValidation => AgentPolicyProfileId::QualityValidationAdvisoryV1,
+        AgentId::SecurityRisk => AgentPolicyProfileId::SecurityRiskAdvisoryV1,
+        AgentId::WorkflowAutomation => AgentPolicyProfileId::WorkflowProposalOnlyV1,
+    }
+}
+
 const fn built_in_activation(id: AgentId) -> AgentActivation {
     match id {
         AgentId::PersonalAssistant | AgentId::Research => AgentActivation::Initial,
@@ -529,6 +583,54 @@ mod tests {
         MAX_AGENT_DISPLAY_NAME_CHARACTERS, MAX_AGENT_INSTRUCTION_CHARACTERS,
         MAX_AGENT_PURPOSE_CHARACTERS,
     };
+    use crate::agent::governance::AgentPolicyProfileId;
+
+    #[test]
+    fn built_in_definitions_are_the_sole_exact_agent_profile_mapping(
+    ) -> Result<(), AgentDefinitionError> {
+        let expected = [
+            (
+                AgentId::PersonalAssistant,
+                AgentPolicyProfileId::PersonalAssistantV1,
+            ),
+            (AgentId::Research, AgentPolicyProfileId::ResearchReadOnlyV1),
+            (AgentId::Coding, AgentPolicyProfileId::CodingGovernedV1),
+            (
+                AgentId::CloudInfrastructure,
+                AgentPolicyProfileId::CloudInfrastructureGovernedV1,
+            ),
+            (
+                AgentId::SystemsOperations,
+                AgentPolicyProfileId::SystemsOperationsGovernedV1,
+            ),
+            (
+                AgentId::KnowledgeDocument,
+                AgentPolicyProfileId::KnowledgeDocumentsV1,
+            ),
+            (
+                AgentId::QaValidation,
+                AgentPolicyProfileId::QualityValidationAdvisoryV1,
+            ),
+            (
+                AgentId::SecurityRisk,
+                AgentPolicyProfileId::SecurityRiskAdvisoryV1,
+            ),
+            (
+                AgentId::WorkflowAutomation,
+                AgentPolicyProfileId::WorkflowProposalOnlyV1,
+            ),
+        ];
+
+        for (agent_id, policy_profile_id) in expected {
+            let definition = AgentDefinition::built_in(agent_id)?;
+            let identity = definition.identity();
+            assert_eq!(definition.policy_profile_id(), policy_profile_id);
+            assert_eq!(identity.agent_id(), agent_id);
+            assert_eq!(identity.policy_profile_id(), policy_profile_id);
+        }
+
+        Ok(())
+    }
 
     #[test]
     fn validates_display_name_and_purpose_scalar_boundaries() {

@@ -3,6 +3,7 @@ use std::time::Duration;
 
 use thiserror::Error;
 
+use crate::agent::governance::{AgentAttribution, AgentPolicyDecision, AgentPolicyReason};
 use crate::policy::types::{PolicyDecision, PolicyOutcome, PolicyReason};
 use crate::tools::schema::ValidatedToolArguments;
 use crate::tools::types::{PermissionKind, RiskClass};
@@ -165,6 +166,158 @@ pub enum ApprovalRisk {
     CreatesLocalTask,
 }
 
+/// Closed provenance for an approval lifecycle.
+///
+/// Agent attribution is derived by the application and remains attached to
+/// the approval through presentation and terminal resolution. This value is
+/// evidence only; it carries no execution authority.
+#[derive(Clone, Eq, PartialEq)]
+pub enum ApprovalOrigin {
+    LegacyGateway,
+    Agent(AgentAttribution),
+}
+
+impl ApprovalOrigin {
+    #[must_use]
+    pub fn agent_attribution(&self) -> Option<&AgentAttribution> {
+        match self {
+            Self::LegacyGateway => None,
+            Self::Agent(attribution) => Some(attribution),
+        }
+    }
+}
+
+impl fmt::Debug for ApprovalOrigin {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::LegacyGateway => formatter.write_str("LegacyGateway"),
+            Self::Agent(_) => formatter.debug_tuple("Agent").field(&"[REDACTED]").finish(),
+        }
+    }
+}
+
+/// The one closed internal decision family accepted by the approval manager.
+///
+/// The deterministic reason is sealed alongside an agent decision so legacy
+/// accessors can remain infallible without treating an ineligible agent
+/// profile as approval-eligible.
+#[derive(Eq, PartialEq)]
+pub(crate) enum ApprovalDecision {
+    LegacyGateway(PolicyDecision),
+    Agent {
+        decision: AgentPolicyDecision,
+        deterministic_reason: PolicyReason,
+    },
+}
+
+impl ApprovalDecision {
+    pub(crate) fn legacy(decision: PolicyDecision) -> Self {
+        Self::LegacyGateway(decision)
+    }
+
+    pub(crate) fn agent(decision: AgentPolicyDecision) -> Option<Self> {
+        let AgentPolicyReason::Deterministic(deterministic_reason) = decision.reason() else {
+            return None;
+        };
+        Some(Self::Agent {
+            decision,
+            deterministic_reason,
+        })
+    }
+
+    pub(crate) fn outcome(&self) -> PolicyOutcome {
+        match self {
+            Self::LegacyGateway(decision) => decision.outcome(),
+            Self::Agent { decision, .. } => decision.outcome(),
+        }
+    }
+
+    pub(crate) fn policy_reason(&self) -> PolicyReason {
+        match self {
+            Self::LegacyGateway(decision) => decision.reason(),
+            Self::Agent {
+                deterministic_reason,
+                ..
+            } => *deterministic_reason,
+        }
+    }
+
+    pub(crate) fn agent_policy_reason(&self) -> Option<AgentPolicyReason> {
+        match self {
+            Self::LegacyGateway(_) => None,
+            Self::Agent { decision, .. } => Some(decision.reason()),
+        }
+    }
+
+    pub(crate) fn origin(&self) -> ApprovalOrigin {
+        match self {
+            Self::LegacyGateway(_) => ApprovalOrigin::LegacyGateway,
+            Self::Agent { decision, .. } => {
+                ApprovalOrigin::Agent(decision.request().attribution().clone())
+            }
+        }
+    }
+
+    pub(crate) fn run_id(&self) -> &str {
+        match self {
+            Self::LegacyGateway(decision) => decision.validated_call().run_id(),
+            Self::Agent { decision, .. } => decision
+                .request()
+                .attribution()
+                .runtime_run_identity()
+                .run_id()
+                .as_str(),
+        }
+    }
+
+    pub(crate) fn gateway_request_id(&self) -> &str {
+        match self {
+            Self::LegacyGateway(decision) => decision.validated_call().gateway_request_id(),
+            Self::Agent { decision, .. } => decision
+                .request()
+                .attribution()
+                .runtime_run_identity()
+                .request_id()
+                .as_str(),
+        }
+    }
+
+    pub(crate) fn call_id(&self) -> &str {
+        match self {
+            Self::LegacyGateway(decision) => decision.validated_call().call_id(),
+            Self::Agent { decision, .. } => decision.request().call_id(),
+        }
+    }
+
+    pub(crate) fn tool_name(&self) -> &str {
+        match self {
+            Self::LegacyGateway(decision) => decision.validated_call().tool_name(),
+            Self::Agent { decision, .. } => decision.request().schema().name(),
+        }
+    }
+
+    pub(crate) fn tool_contract_version(&self) -> u16 {
+        match self {
+            Self::LegacyGateway(decision) => decision.validated_call().tool_contract_version(),
+            Self::Agent { decision, .. } => decision.request().schema().version(),
+        }
+    }
+
+    pub(crate) fn risk_class(&self) -> RiskClass {
+        match self {
+            Self::LegacyGateway(decision) => decision.validated_call().risk_class(),
+            Self::Agent { decision, .. } => decision.request().risk_class(),
+        }
+    }
+
+    pub(crate) fn required_permission(&self) -> PermissionKind {
+        match self {
+            Self::LegacyGateway(decision) => decision.validated_call().required_permission(),
+            Self::Agent { decision, .. } => decision.request().required_permission(),
+        }
+    }
+}
+
 #[derive(Eq, PartialEq)]
 pub enum ApprovalAffectedData<'a> {
     LocalTaskTitle(&'a str),
@@ -206,6 +359,25 @@ impl<'a> ApprovalPreview<'a> {
                 title: arguments.title(),
             }),
             ValidatedToolArguments::GetCurrentDatetime => None,
+        }
+    }
+
+    pub(crate) fn from_approval_decision(decision: &'a ApprovalDecision) -> Option<Self> {
+        match decision {
+            ApprovalDecision::LegacyGateway(decision) => Self::from_policy_decision(decision),
+            ApprovalDecision::Agent { decision, .. } => {
+                if decision.outcome() != PolicyOutcome::RequireApproval {
+                    return None;
+                }
+                match decision.request().arguments() {
+                    ValidatedToolArguments::CreateLocalTask(arguments) => {
+                        Some(Self::CreateLocalTask {
+                            title: arguments.title(),
+                        })
+                    }
+                    ValidatedToolArguments::GetCurrentDatetime => None,
+                }
+            }
         }
     }
 
@@ -270,21 +442,23 @@ impl fmt::Debug for ApprovalPreview<'_> {
 
 pub struct ApprovalRequestView<'a> {
     id: ApprovalId,
-    decision: &'a PolicyDecision,
+    origin: ApprovalOrigin,
+    decision: &'a ApprovalDecision,
     preview: ApprovalPreview<'a>,
     remaining: Duration,
 }
 
 impl<'a> ApprovalRequestView<'a> {
-    pub(crate) fn from_policy_decision(
+    pub(crate) fn from_approval_decision(
         id: ApprovalId,
-        decision: &'a PolicyDecision,
+        decision: &'a ApprovalDecision,
         remaining: Duration,
     ) -> Option<Self> {
         Some(Self {
             id,
+            origin: decision.origin(),
             decision,
-            preview: ApprovalPreview::from_policy_decision(decision)?,
+            preview: ApprovalPreview::from_approval_decision(decision)?,
             remaining,
         })
     }
@@ -295,38 +469,43 @@ impl<'a> ApprovalRequestView<'a> {
     }
 
     #[must_use]
+    pub fn origin(&self) -> &ApprovalOrigin {
+        &self.origin
+    }
+
+    #[must_use]
     pub fn run_id(&self) -> &str {
-        self.decision.validated_call().run_id()
+        self.decision.run_id()
     }
 
     #[must_use]
     pub fn gateway_request_id(&self) -> &str {
-        self.decision.validated_call().gateway_request_id()
+        self.decision.gateway_request_id()
     }
 
     #[must_use]
     pub fn call_id(&self) -> &str {
-        self.decision.validated_call().call_id()
+        self.decision.call_id()
     }
 
     #[must_use]
     pub fn tool_name(&self) -> &str {
-        self.decision.validated_call().tool_name()
+        self.decision.tool_name()
     }
 
     #[must_use]
     pub fn tool_contract_version(&self) -> u16 {
-        self.decision.validated_call().tool_contract_version()
+        self.decision.tool_contract_version()
     }
 
     #[must_use]
     pub fn risk_class(&self) -> RiskClass {
-        self.decision.validated_call().risk_class()
+        self.decision.risk_class()
     }
 
     #[must_use]
     pub fn required_permission(&self) -> PermissionKind {
-        self.decision.validated_call().required_permission()
+        self.decision.required_permission()
     }
 
     #[must_use]
@@ -336,7 +515,12 @@ impl<'a> ApprovalRequestView<'a> {
 
     #[must_use]
     pub fn policy_reason(&self) -> PolicyReason {
-        self.decision.reason()
+        self.decision.policy_reason()
+    }
+
+    #[must_use]
+    pub fn agent_policy_reason(&self) -> Option<AgentPolicyReason> {
+        self.decision.agent_policy_reason()
     }
 
     #[must_use]
@@ -355,6 +539,7 @@ impl fmt::Debug for ApprovalRequestView<'_> {
         formatter
             .debug_struct("ApprovalRequestView")
             .field("id", &self.id)
+            .field("origin", &self.origin)
             .field("identity", &"[REDACTED]")
             .field("policy_outcome", &self.policy_outcome())
             .field("policy_reason", &self.policy_reason())
@@ -368,7 +553,8 @@ impl fmt::Debug for ApprovalRequestView<'_> {
 pub struct ApprovalResolution {
     id: ApprovalId,
     disposition: ApprovalDisposition,
-    decision: PolicyDecision,
+    origin: ApprovalOrigin,
+    decision: ApprovalDecision,
     interaction_evidence: Option<ApprovalInteractionEvidence>,
 }
 
@@ -382,6 +568,29 @@ impl ApprovalResolution {
         Self {
             id,
             disposition,
+            origin: ApprovalOrigin::LegacyGateway,
+            decision: ApprovalDecision::legacy(decision),
+            interaction_evidence,
+        }
+    }
+
+    pub(crate) fn from_approval_decision(
+        id: ApprovalId,
+        disposition: ApprovalDisposition,
+        decision: ApprovalDecision,
+        interaction_evidence: Option<ApprovalInteractionEvidence>,
+    ) -> Self {
+        let decision = match decision {
+            ApprovalDecision::LegacyGateway(decision) => {
+                return Self::new(id, disposition, decision, interaction_evidence);
+            }
+            agent @ ApprovalDecision::Agent { .. } => agent,
+        };
+        let origin = decision.origin();
+        Self {
+            id,
+            disposition,
+            origin,
             decision,
             interaction_evidence,
         }
@@ -398,43 +607,48 @@ impl ApprovalResolution {
     }
 
     #[must_use]
+    pub fn origin(&self) -> &ApprovalOrigin {
+        &self.origin
+    }
+
+    #[must_use]
     pub fn interaction_evidence(&self) -> Option<ApprovalInteractionEvidence> {
         self.interaction_evidence
     }
 
     #[must_use]
     pub fn run_id(&self) -> &str {
-        self.decision.validated_call().run_id()
+        self.decision.run_id()
     }
 
     #[must_use]
     pub fn gateway_request_id(&self) -> &str {
-        self.decision.validated_call().gateway_request_id()
+        self.decision.gateway_request_id()
     }
 
     #[must_use]
     pub fn call_id(&self) -> &str {
-        self.decision.validated_call().call_id()
+        self.decision.call_id()
     }
 
     #[must_use]
     pub fn tool_name(&self) -> &str {
-        self.decision.validated_call().tool_name()
+        self.decision.tool_name()
     }
 
     #[must_use]
     pub fn tool_contract_version(&self) -> u16 {
-        self.decision.validated_call().tool_contract_version()
+        self.decision.tool_contract_version()
     }
 
     #[must_use]
     pub fn risk_class(&self) -> RiskClass {
-        self.decision.validated_call().risk_class()
+        self.decision.risk_class()
     }
 
     #[must_use]
     pub fn required_permission(&self) -> PermissionKind {
-        self.decision.validated_call().required_permission()
+        self.decision.required_permission()
     }
 
     #[must_use]
@@ -444,12 +658,17 @@ impl ApprovalResolution {
 
     #[must_use]
     pub fn policy_reason(&self) -> PolicyReason {
-        self.decision.reason()
+        self.decision.policy_reason()
+    }
+
+    #[must_use]
+    pub fn agent_policy_reason(&self) -> Option<AgentPolicyReason> {
+        self.decision.agent_policy_reason()
     }
 
     #[must_use]
     pub fn preview(&self) -> Option<ApprovalPreview<'_>> {
-        ApprovalPreview::from_policy_decision(&self.decision)
+        ApprovalPreview::from_approval_decision(&self.decision)
     }
 }
 
@@ -459,6 +678,7 @@ impl fmt::Debug for ApprovalResolution {
             .debug_struct("ApprovalResolution")
             .field("id", &self.id)
             .field("disposition", &self.disposition)
+            .field("origin", &self.origin)
             .field("identity", &"[REDACTED]")
             .field("policy_outcome", &self.policy_outcome())
             .field("policy_reason", &self.policy_reason())

@@ -14,6 +14,13 @@ Personal-to-Research-to-Personal increment. D-083 changes sequencing only; all
 ownership, trust-boundary, route, limit, and non-authority decisions below
 remain accepted.
 
+Amended by D-084 on 2026-08-12: the owner authorized a bounded non-executing
+per-agent governance foundation. It adds exact versioned policy profiles,
+application-derived live attribution, the closed Personal-to-Research matrix,
+and typed policy/approval/audit evidence with execution always
+`NotAttempted`. It does not change `AgentRuntime`, enable runtime tool
+proposals, add an executor or memory namespace, or activate a specialist.
+
 ## Context
 
 Cortexa now contains an application-owned `AgentRuntime`/`RuntimeRun`
@@ -22,11 +29,12 @@ foundation and a sole/default `NativeAgentRuntime` that composes the unchanged
 verified by deterministic tests. It is not connected to a provider, live
 model, Tauri command, React, or a product coordinator.
 
-The repository now has the separately verified nine-definition registry and
-D-083's bounded task/orchestrator foundation. Both are Rust-only and unwired.
-It still has no agent-aware governance, memory, provider, Tauri consumer,
-frontend flow, or live assistant. Keeping those concerns outside
-`AgentRuntime` preserves the one-run execution port and application ownership.
+The repository now has the separately verified nine-definition registry,
+D-083's bounded task/orchestrator foundation, and D-084's non-executing
+per-agent governance foundation. All are Rust-only and unwired. It still has no
+memory namespace, executor, provider, Tauri consumer, frontend flow, durable
+audit, or live assistant. Keeping those concerns outside `AgentRuntime`
+preserves the one-run execution port and application ownership.
 
 The evaluated Hermes Agent `0.20.0` / tag `v2026.8.3` raw stdio, managed
 `hermes serve` WebSocket, and ACP paths did not satisfy their approved

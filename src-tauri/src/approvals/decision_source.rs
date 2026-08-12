@@ -8,7 +8,7 @@ use super::manager::{
 };
 use super::types::{
     ApprovalAction, ApprovalAuthenticationEvidence, ApprovalId, ApprovalInteractionSource,
-    ApprovalNativeButton, ApprovalRecipients, ApprovalReversibility, ApprovalRisk,
+    ApprovalNativeButton, ApprovalOrigin, ApprovalRecipients, ApprovalReversibility, ApprovalRisk,
     ApprovalSchedule, ApprovalSourceFailure, ApprovalTarget,
 };
 
@@ -63,6 +63,7 @@ impl Default for MacOsNativeApprovalDecisionSource {
 pub struct TrustedApprovalSourceOutcome {
     id: ApprovalId,
     manager_instance: Arc<ApprovalManagerInstanceMarker>,
+    origin: ApprovalOrigin,
     run_id: String,
     gateway_request_id: String,
     call_id: String,
@@ -79,6 +80,7 @@ impl TrustedApprovalSourceOutcome {
         let ApprovalPresentationParts {
             id,
             manager_instance,
+            origin,
             run_id,
             gateway_request_id,
             call_id,
@@ -86,6 +88,7 @@ impl TrustedApprovalSourceOutcome {
             tool_contract_version,
             policy_outcome,
             policy_reason,
+            agent_policy_reason,
             risk_class,
             required_permission,
             action,
@@ -103,6 +106,7 @@ impl TrustedApprovalSourceOutcome {
             tool_contract_version,
             policy_outcome,
             policy_reason,
+            agent_policy_reason,
             risk_class,
             required_permission,
             action,
@@ -118,6 +122,7 @@ impl TrustedApprovalSourceOutcome {
         Self {
             id,
             manager_instance,
+            origin,
             run_id,
             gateway_request_id,
             call_id,
@@ -131,6 +136,7 @@ impl TrustedApprovalSourceOutcome {
         TrustedApprovalSourceOutcomeParts {
             id: self.id,
             manager_instance: self.manager_instance,
+            origin: self.origin,
             run_id: self.run_id,
             gateway_request_id: self.gateway_request_id,
             call_id: self.call_id,
@@ -157,6 +163,7 @@ impl fmt::Debug for TrustedApprovalSourceOutcome {
 pub(super) struct TrustedApprovalSourceOutcomeParts {
     pub(super) id: ApprovalId,
     pub(super) manager_instance: Arc<ApprovalManagerInstanceMarker>,
+    pub(super) origin: ApprovalOrigin,
     pub(super) run_id: String,
     pub(super) gateway_request_id: String,
     pub(super) call_id: String,
@@ -471,6 +478,7 @@ mod tests {
         ApprovalPresentationParts {
             id: parts.id,
             manager_instance: Arc::clone(&parts.manager_instance),
+            origin: parts.origin.clone(),
             run_id: parts.run_id.clone(),
             gateway_request_id: parts.gateway_request_id.clone(),
             call_id: parts.call_id.clone(),
@@ -478,6 +486,7 @@ mod tests {
             tool_contract_version: parts.tool_contract_version,
             policy_outcome: parts.policy_outcome,
             policy_reason: parts.policy_reason,
+            agent_policy_reason: parts.agent_policy_reason,
             risk_class: parts.risk_class,
             required_permission: parts.required_permission,
             action: parts.action,

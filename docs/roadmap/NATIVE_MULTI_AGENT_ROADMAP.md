@@ -3,7 +3,7 @@
 Status: Subordinate staged roadmap; no implementation authority
 Authority: [`ROADMAP.md`](../../ROADMAP.md) remains the authoritative milestone
 roadmap
-Decision: D-082 and
+Decision: D-082, D-083, D-084, and
 [`ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md`](../adr/ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md)
 Last updated: 2026-08-12
 
@@ -11,10 +11,11 @@ Last updated: 2026-08-12
 
 This document expands the native multi-agent portion of the root roadmap into a
 catalog, activation sequence, workflow map, and separately gated plan set. It
-does not change root-roadmap status, authorize implementation, or claim that an
-orchestrator, provider, tool, memory store, Tauri consumer, or multi-agent UI
-exists. The closed nine-definition catalog and deterministic registry now
-exist, remain inert, and grant no operational authority.
+does not change root-roadmap status or authorize implementation. The closed
+nine-definition catalog, deterministic registry, bounded orchestrator, and
+non-executing governance foundation now exist, remain unwired, and grant no
+device or provider authority. No executor, memory store, Tauri consumer, or
+multi-agent UI exists.
 
 `AgentOrchestrator`, `AgentRuntime`, `NativeAgentRuntime`, `AgentRegistry`,
 `ToolRegistry`, `PolicyEngine`, `ApprovalManager`, `AuditLogger`, `MemoryStore`,
@@ -70,17 +71,17 @@ shell, cloud, memory, provider, or device right.
 The ten root-roadmap phases remain authoritative. The entries below explain the
 native catalog's staged work inside those phases.
 
-| Root phase | Staged native outcome                                                                                                                                                                | Status relationship                                                         |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
-| 1          | Register all nine privilege-free definitions; mark only Personal Assistant and Research Agent `Initial`                                                                              | Verified and published at `f42a6c7`; catalog remains inert and unwired      |
-| 2-3        | Add task lifecycle, trusted context, limits, explicit delegation, result collection, cancellation, and the deterministic Personal-to-Research-to-Personal proof above `AgentRuntime` | Verified complete under D-083; foundation remains Rust-only and unwired     |
-| 4          | Bind per-agent governance, then establish approved file/root and document-processing boundaries                                                                                      | Blocked on publication plus reviewed governance and document-boundary plans |
-| 5          | Add explicit memory namespaces/lifecycle, then stage the Research/Knowledge workflow                                                                                                 | Blocked on Phase 4, ARB-005, and the memory/workflow plans                  |
-| 6          | Increase child concurrency only through explicit deterministic limits, cancellation, and resource bounds                                                                             | Blocked until sequential behavior is verified                               |
-| 7          | Stage engineering-quality, infrastructure/operations, and automation workflows with each specialist separately enabled                                                               | Blocked on role-specific governance and tool/platform decisions             |
-| 8          | Add typed catalog, task, progress, attribution, cancellation, and approval-explanation UI through narrow Tauri IPC                                                                   | Blocked on stable backend contracts                                         |
-| 9          | Demonstrate only bounded synthetic or separately approved workflows without capability overclaiming                                                                                  | Blocked on the selected workflow's complete gates                           |
-| 10         | Review architecture, security, privacy, cancellation, audit, portability, and rollback across completed phases                                                                       | Blocked until sufficient implementation evidence exists                     |
+| Root phase | Staged native outcome                                                                                                                                                                | Status relationship                                                                  |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| 1          | Register all nine privilege-free definitions; mark only Personal Assistant and Research Agent `Initial`                                                                              | Verified and published at `f42a6c7`; catalog remains inert and unwired               |
+| 2-3        | Add task lifecycle, trusted context, limits, explicit delegation, result collection, cancellation, and the deterministic Personal-to-Research-to-Personal proof above `AgentRuntime` | Verified complete under D-083; foundation remains Rust-only and unwired              |
+| 4          | Bind D-084's non-executing per-agent profile/policy/approval/audit foundation; establish approved file/root and document-processing boundaries only in a separate later increment    | Governance verified complete; publication pending; document boundary remains Blocked |
+| 5          | Add explicit memory namespaces/lifecycle, then stage the Research/Knowledge workflow                                                                                                 | Blocked on Phase 4, ARB-005, and the memory/workflow plans                           |
+| 6          | Increase child concurrency only through explicit deterministic limits, cancellation, and resource bounds                                                                             | Blocked until sequential behavior is verified                                        |
+| 7          | Stage engineering-quality, infrastructure/operations, and automation workflows with each specialist separately enabled                                                               | Blocked on role-specific governance and tool/platform decisions                      |
+| 8          | Add typed catalog, task, progress, attribution, cancellation, and approval-explanation UI through narrow Tauri IPC                                                                   | Blocked on stable backend contracts                                                  |
+| 9          | Demonstrate only bounded synthetic or separately approved workflows without capability overclaiming                                                                                  | Blocked on the selected workflow's complete gates                                    |
+| 10         | Review architecture, security, privacy, cancellation, audit, portability, and rollback across completed phases                                                                       | Blocked until sufficient implementation evidence exists                              |
 
 ## Delegation and sequencing invariants
 
@@ -170,11 +171,11 @@ approval, restricted execution, and audit.
 
 ## Separately gated plans
 
-The AgentDefinition/AgentRegistry plan is implemented, verified, and published.
-The combined orchestration-foundation plan is verified complete under D-083.
-No later plan is Ready: Phase 4 remains Blocked until this evidence is
-published and the governance and document-boundary plans receive fresh review
-and exact owner authorization.
+The AgentDefinition/AgentRegistry and combined orchestration foundations are
+implemented, verified, and published. D-084's bounded non-executing governance
+foundation is implemented and verified locally; publication remains a separate
+owner action. Knowledge/document boundaries and every phase after governance
+remain Blocked.
 
 | Area                                   | Plan                                                                                                                                      |
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |

@@ -4,34 +4,33 @@ Last updated: 2026-08-12
 
 ## Current state
 
-The owner-approved
-[`2026-08-11-agent-orchestration-task-lifecycle.md`](docs/plans/2026-08-11-agent-orchestration-task-lifecycle.md)
-increment is **verified complete with advisories** under gate
-`agent-task-orchestration` and remains uncommitted for owner review. D-083's
-combined Phase 2-3 foundation adds closed bounded task identities, lineage,
-content, lifecycle, results, failures, and cancellation; trusted execution
-contexts derived from live task/runtime state; and one generic
-`AgentOrchestrator<R: AgentRuntime>` above the unchanged runtime seam.
+The owner-approved D-084 per-agent governance increment is **verified complete
+with advisories** under gate `agent-governance`; publication is not authorized
+yet. Above the published task/orchestration baseline at `1d1d9d6`, the Rust core
+now binds nine exact policy profiles and orchestrator-validated live task/run
+attribution through profile-aware deterministic policy, closed agent-origin
+approval, the exact Personal Assistant-to-Research delegation matrix, and a
+bounded volatile governance audit.
 
-The orchestrator permits one Personal Assistant root to respond directly or
-use exactly one Research child and a fresh Personal synthesis run. It enforces
-depth one, two tasks, three runs, one non-replenishing child, one active child,
-32-event bounds, exact task/run/request/sequence attribution, deferred-role and
-route denial, text-only runtime handling, bounded attributed results, and
-child-first cancellation without orphaned work. The shared `MockAgentRuntime`
-remains test-only. Twenty-two orchestration contracts, 11 task units, 3
-orchestrator units, the unchanged runtime/registry/gateway contracts, the full
-Rust suite, repository verification, docs/repository checks, and security scan
-pass. Independent architecture and code reviews report PASS.
+The new path is deliberately non-executing. Personal Assistant alone is
+eligible for the two existing local schemas: date/time deterministically
+allows, and local-task creation requires exact approval. All eight other
+profiles deny current tools. Every outcome records `NotAttempted`; runtime tool
+proposals remain rejected, delegation remains outside `ToolRegistry`, and only
+`AgentOrchestrator` may create a child. Pending approval blocks runtime events
+and delegation and is audited before task cancellation, including child-first
+root cancellation. Audit is typed, redacted, volatile, replay-safe, and capped
+at 32 subjects.
 
-The catalog, task, and orchestration foundations remain Rust-only and unwired.
-No Tauri/React behavior, provider, live model, tool execution, policy or
-approval change, audit persistence, memory, credential, dependency, process,
+Focused governance units pass 6/6, audit units 14/14, orchestrator units 8/8,
+the public governance contract 10/10, and existing orchestration/runtime/
+registry/gateway contracts remain green. Complete Rust, `npm run verify`,
+strict Clippy, architecture, security, and code reviews pass with two
+non-blocking coverage advisories. No Tauri/React behavior, executor, provider,
+live model, memory, durable audit, credential, dependency, permission, process,
 network, filesystem, Hermes integration, or user-visible behavior was added.
 `NativeAgentRuntime` remains sole/default and the other seven roles remain
-Deferred. No later plan is Ready; per-agent governance remains Blocked pending
-publication, an exact trust-boundary decision, fresh review, and separate owner
-authorization.
+Deferred.
 
 Hermes integration is **Deferred — evaluated transport and containment
 requirements not met**. Raw TUI-gateway stdio, managed `hermes serve`
@@ -182,23 +181,20 @@ changed.
 
 ## Current exact task
 
-Review and publish the verified, uncommitted task/orchestration increment as one
-bounded commit only if the owner explicitly requests commit and push. Do not
-begin per-agent governance, knowledge/document work, specialist activation, UI,
-or any later phase from the unpublished baseline.
+Review and, only with separate explicit owner direction, commit and push the
+verified D-084 governance increment as one bounded commit. Do not begin Phase 5
+memory, knowledge/document processing, a specialist workflow, execution,
+provider, IPC, UI, or another roadmap phase.
 
-Resume prompt: Read `AGENTS.md`, the project-memory chain, D-079 through D-083,
-`docs/architecture/NATIVE_MULTI_AGENT_ASSESSMENT.md`,
-`docs/adr/ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md`, root `ROADMAP.md`,
-`docs/plans/2026-08-11-agent-orchestration-task-lifecycle.md`, and
-`docs/reviews/2026-08-12-agent-task-orchestration-post-increment-review.md`.
-Confirm gate `agent-task-orchestration` is complete and valid, the exact dirty
-inventory is limited to this verified increment, Native remains sole/default,
-the seven specialist definitions remain Deferred, Hermes remains Blocked, and
-no later plan is Ready. Commit and push only on explicit owner direction.
-If the owner authorizes publication, commit and push only this verified scope.
-Otherwise stop. Do not begin governance, knowledge/document boundaries, memory,
-parallelism, specialist workflows, UI, providers, tools, or Hermes.
+Resume prompt: Read `AGENTS.md`, the project-memory chain, D-079 through D-084,
+the native multi-agent ADR/assessment, both roadmaps, the completed
+`docs/plans/2026-08-11-agent-governance.md`, and its post-increment review.
+Confirm `main` starts from published orchestration commit `1d1d9d6`, gate
+`agent-governance` is complete and fingerprint-valid, and the exact governance
+increment remains uncommitted. If the owner explicitly requests publication,
+inspect the final diff, commit only that inventory with a Conventional Commit,
+and push the existing current branch/upstream. Otherwise make no Git write and
+do not start later implementation.
 
 The fake-only Cloudflare demo macOS Keychain proof is complete with advisories.
 Pinned macOS-only Security.framework bindings read exactly two fixed labels and

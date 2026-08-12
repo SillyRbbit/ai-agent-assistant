@@ -4,27 +4,27 @@ Last updated: 2026-08-12
 
 ## Current milestone
 
-The owner-approved combined task/orchestration increment is **verified complete
-with advisories** under gate `agent-task-orchestration` and remains uncommitted.
-D-083 preserves D-082/D-079 while adding the bounded `AgentTask` domain,
-trusted `AgentExecutionContext`, and generic
-`AgentOrchestrator<R: AgentRuntime>` above the unchanged one-run runtime seam.
-The Rust contract proves direct Personal responses and one deterministic
-Personal-to-Research-to-Personal flow with exact lineage, result attribution,
-identity/sequence validation, finite task/run/event limits, failure fallback,
-and child-first cancellation.
+The owner-approved D-084 per-agent governance increment is **verified complete
+with advisories** under gate `agent-governance` and remains uncommitted. The
+published prerequisite is D-083's task/orchestration baseline at `1d1d9d6`.
 
-The catalog, task, and orchestration foundations remain unwired. No agent-aware
-policy/audit, policy profile, memory namespace, provider, live model, tool
-execution, persistence, Tauri consumer, or multi-agent frontend state exists.
-The 22-test public orchestration contract, 11 task units, 3 orchestrator units,
-unchanged runtime/registry/gateway contracts, all-target Rust suite, full
-repository verification, documentation/repository checks, and security scan
-pass. Native remains sole/default; the other seven roles remain Deferred.
-Catalog identity, activation, task creation, and orchestration grant no tools,
-policy, approval, execution, audit, memory, provider, or device authority. No
-later plan is Ready; Phase 4 governance remains Blocked pending publication,
-fresh review, an exact trust-boundary decision, and owner authorization.
+The Rust core now carries nine exact policy-profile identities from sealed
+definitions through tasks, live execution contexts, delegation, governed tool
+requests, approval, and a bounded volatile audit. The orchestrator alone derives
+trusted attribution after exact live task/run validation. Personal Assistant
+alone is eligible for the two registered local schemas; every specialist denies
+them. Delegation remains an explicit Personal-to-Research application service,
+not a tool. Runtime tool proposals remain rejected and every governance outcome
+records execution as `NotAttempted`.
+
+Focused governance tests pass 6/6, audit 14/14, orchestrator 8/8, and the public
+governance contract 10/10. Existing orchestration/runtime/registry/gateway
+contracts, complete Rust tests, strict Clippy, `npm run verify`, documentation,
+repository, security, and diff checks pass. Native remains sole/default; the
+other seven roles remain Deferred. No executor, memory namespace, durable audit,
+provider, live model, persistence, Tauri consumer, multi-agent frontend,
+dependency, permission, platform effect, external I/O, or Hermes integration
+exists.
 
 Hermes integration is **Deferred — evaluated transport and containment
 requirements not met**. Raw stdio, managed WebSocket, and ACP remain rejected
@@ -1408,10 +1408,10 @@ path was added.
 ## Next action
 
 The immediate next task is owner review and, only with separate direction,
-publication of the verified AgentDefinition/AgentRegistry increment to a clean
-synchronized baseline. Task/orchestration and every later native multi-agent
-phase remain Blocked pending fresh architecture, security, and readiness review
-plus separate exact owner authorization. Hermes remains Deferred/Blocked.
+publication of the verified D-084 governance increment to a clean synchronized
+baseline. Phase 5 memory and every later native multi-agent phase remain
+Blocked pending that baseline, fresh review, and separate exact owner
+authorization. Hermes remains Deferred/Blocked.
 
 All other product and remediation gates remain unchanged. ARB-002 remains
 decision-required under D-062's identity-evidence gates and D-066's OpenAI

@@ -4,19 +4,19 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No plan is active. The owner-selected
-[`2026-08-11-agent-orchestration-task-lifecycle.md`](docs/plans/2026-08-11-agent-orchestration-task-lifecycle.md)
-is **verified complete with advisories** under gate
-`agent-task-orchestration`. D-083 combines the former task/orchestration
-foundation and first deterministic Personal-to-Research proof while preserving
-D-082's ownership and trust boundaries. The Rust-only foundation remains
-unwired and changes no shipping behavior.
+The owner-selected
+[`2026-08-11-agent-governance.md`](docs/plans/2026-08-11-agent-governance.md)
+is **verified complete with advisories** under gate `agent-governance`. D-084's
+bounded non-executing profile, policy, approval, delegation-matrix, and volatile
+audit foundation preserves D-082/D-083 ownership and route boundaries. The
+increment is uncommitted and awaits owner review; no later plan is Ready.
 
 The prerequisite AgentDefinition/AgentRegistry increment is published at
-`f42a6c7`. Native remains sole/default and the other seven roles remain
-Deferred. No later plan is Ready. Phase 4 per-agent governance remains Blocked
-pending publication of this increment, an exact trust-boundary decision, fresh
-architecture/security/readiness review, and separate owner authorization.
+`f42a6c7`, and the task/orchestration increment is published at `1d1d9d6` with
+a valid completion marker. Native remains sole/default and the other seven
+roles remain Deferred. The implementation added no executor, memory, provider,
+runtime tool lane, IPC, UI, or specialist activation; every later plan remains
+Blocked.
 
 The prior owner-selected
 [`2026-08-11-hermes-acp-transport-spike.md`](docs/plans/2026-08-11-hermes-acp-transport-spike.md)
