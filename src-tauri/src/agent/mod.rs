@@ -1,4 +1,5 @@
 pub mod definition;
+pub mod engineering_quality;
 pub mod function_call_validation;
 pub mod gateway_protocol;
 pub mod gateway_request;

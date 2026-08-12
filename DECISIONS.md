@@ -3280,6 +3280,119 @@ task-local memory cleanup. Native remains sole/default and unchanged. Generic
 Research-to-Knowledge delegation, live retrieval, providers, persistence, IPC,
 UI, parallelism, and every other specialist workflow remain Blocked.
 
+## D-087 - Add one fixture-only engineering quality workflow
+
+Date: 2026-08-12
+Status: Accepted owner security and implementation decision
+
+Decision: Authorize one deterministic, Rust-only, proposal-only Personal
+Assistant -> Coding Agent -> QA & Validation Agent -> Security & Risk Agent ->
+Personal Assistant synthesis workflow above the existing `AgentRuntime` port.
+This is a fixed application service, not a general workflow engine. The three
+specialists are sequential sibling children of the same Personal Assistant
+root at depth one. Only `AgentOrchestrator` creates them; specialists never
+delegate to or spawn one another.
+
+The initial mode accepts only bounded immutable synthetic repository fixtures
+supplied by the application. It may produce strict structured code analysis,
+architecture explanation, diff review, implementation planning, patch
+proposals, proposed validation, and advisory security review. It does not
+inspect the live repository or invoke a filesystem, code-search process, test,
+formatter, shell, package manager, network, credential source, or Git command.
+Fixture path labels and opaque file IDs grant no filesystem authority.
+An application-owned validation-evidence catalog may contain only deterministic
+`ObservedFixture` facts or `NotRun` proposed checks; it cannot represent a real
+test pass or external observation. QA must cover each application-issued
+acceptance criterion exactly once as demonstrated or not demonstrated, with
+exact evidence provenance. Missing, duplicate, or unknown coverage is invalid,
+and any not-demonstrated criterion makes the report incomplete or blocked.
+
+The sealed workflow may own exactly four tasks, three non-replenishing
+children, one active child, and five sequential runtime-run attempts: initial
+Personal, Coding, QA, Security, and final Personal synthesis. Delegation depth
+remains one and automatic retries remain zero. The workflow has exact bounded
+runtime, generic, workflow-event, descriptive-audit, input, result, list, and
+field limits defined in its ExecPlan. Capacity and successor state are prepared
+before terminal runtime acceptance, cancellation is child-first, late or
+mismatched events fail closed, and continuation-start failure cannot reverse an
+accepted terminal event or replenish a budget.
+The engineering selector is a sealed application-only operation, mutually
+exclusive in both directions with generic delegation, D-085 document work, and
+D-086. All workflow/task/profile/runtime/predecessor identity is derived from
+private live application state and remains redacted; model output supplies no
+trusted identity. Native request size, not raw selected-text length alone,
+remains bounded: the ExecPlan must choose and adversarially prove a
+conservative selected-text limit against the existing 65,536-byte encoded
+gateway boundary. Any unexpected Native serialization rejection inside that
+accepted limit is a typed stage-start failure and never an authority fallback.
+
+Coding returns a versioned `ChangeProposal` that references only known fixture
+file IDs and describes proposed patches as inert data. A closed application
+classifier represents fixture analysis and planning as proposal-only and
+represents actual file writes or deletion, path escape, dependency installation,
+package-manager/test/formatter execution, Git commit or push, branch deletion,
+destructive shell, credential access, and network access as denied. It never
+dispatches an operation or registers a tool.
+
+QA returns a versioned `ValidationReport` bound to the exact proposal. It must
+account for every supplied acceptance criterion, preserve proposed tests as
+`not_run`, identify missing validation or regression gaps, and remain advisory.
+QA cannot approve, become `ApprovalManager`, modify source, suppress a failing
+test, or fabricate executed evidence.
+
+Security returns a versioned `RiskAssessment` bound to the exact proposal and
+QA result or explicit QA-unavailable status. Findings must be evidence-bound or
+marked as hypotheses; absent dependency evidence is stated rather than
+invented. Security remains advisory, is not `PolicyEngine`, cannot authorize or
+remediate, cannot supply trusted risk or permission metadata, and cannot access
+or expose secret values.
+
+Final Personal synthesis preserves the validated proposal, QA, Security,
+fixture, and partial-failure attribution. It must state that inputs are
+fixture-based, the result is proposal-only, no changes or tests were executed,
+and carry an application-derived approval requirement: `NotApplicable` for
+analysis with no mutation proposal or `RequiredBeforeMutation` when a patch is
+proposed. No approval request is created in this increment because there is no
+actionable execution subject. The derived value is a deterministic result
+invariant, not approval by an agent, model, runtime, or orchestrator.
+
+Coding failure skips QA and Security and permits truthful Personal fallback.
+QA failure preserves the proposal and may be followed by Security with an
+explicit unavailable status; QA `incomplete` or `blocked` forces partial
+synthesis. Security failure preserves validated Coding and QA results and
+permits partial synthesis. Final synthesis failure fails the root. Invalid raw
+output never reaches a later stage.
+
+Coding, QA & Validation, and Security & Risk may move from `Deferred` to
+`Initial` only after their new exact versioned instructions, strict contracts,
+sealed workflow, and regression tests pass. `Initial` means non-authorizing
+eligibility for this one unwired fixture workflow; it does not mean a live
+assistant, repository tool, or operational capability. Their policy profiles
+remain tool-ineligible, their memory profile remains `MemoryDisabledV1`, and
+runtime tool proposals remain rejected.
+
+This decision does not add or change `ToolRegistry`, `PolicyEngine`,
+`ApprovalManager`, an executor, durable `AuditLogger`, memory, documents,
+`AgentRuntime`, `NativeAgentRuntime`, Tauri, React, dependencies, permissions,
+IPC, persistence, external frameworks, providers, or device behavior. The two
+existing tools remain unrelated and available only to Personal Assistant under
+the existing non-executing governance proof. Every execution disposition
+remains `NotAttempted`. Native remains sole/default. Codex, Hermes, and OpenClaw
+are not integrated.
+
+Consequences: the exact engineering-quality ExecPlan is Ready but not Active
+after recording the selected fixture-only contracts, limits, files, tests,
+validation, failure strategy, and rollback. Fresh readiness, architecture, and
+security review must confirm it against the actual workspace before its gate
+begins. Any actual repository inspection, scoped write, test or
+formatter execution, package/dependency operation, Git operation, or approval-
+to-execution path requires a separate accepted decision and plan defining exact
+registered schemas, repository-root and path containment, command allowlists,
+executor ownership, approval subjects, audit, rollback, and target-platform
+evidence. Cloud Infrastructure, Systems Operations, Workflow Automation,
+parallelism, provider/runtime wiring, IPC, UI, and all consequential actions
+remain separately Blocked.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

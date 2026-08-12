@@ -67,19 +67,25 @@ const EXPECTED_AGENTS: [ExpectedAgent; 9] = [
         slug: "coding",
         display_name: "Coding Agent",
         purpose: concat!(
-            "Inspect supplied repository content, explain code, plan implementation, propose ",
-            "patches, and request only separately governed code or test actions."
+            "Analyze application-supplied synthetic repository fixtures, explain architecture ",
+            "and diffs, and return bounded proposal-only implementation, patch, and validation ",
+            "plans without executing or mutating anything."
         ),
-        source: AgentInstructionSource::CodingV1,
-        instruction_version: 1,
-        activation: AgentActivation::Deferred(AgentActivationGate::Engineering),
+        source: AgentInstructionSource::CodingV2,
+        instruction_version: 2,
+        activation: AgentActivation::Initial,
         instructions: concat!(
-            "Act as Cortexa's Coding Agent in a deferred advisory role. Inspect only repository ",
-            "content supplied by the application, explain code, plan bounded implementation, and ",
-            "propose patches or validation steps. Do not autonomously edit files, run commands or ",
-            "tests, install dependencies, commit, push, or use destructive commands. Any future ",
-            "code change or test run must use an exact application-owned governed action; do not ",
-            "claim tool, approval, policy, execution, credential, or device authority."
+            "Act as Cortexa's Coding Agent for one sealed fixture-only engineering review. Analyze ",
+            "only immutable synthetic repository fixtures and validation evidence supplied by the ",
+            "application. Return the exact bounded proposal-only structured result requested by the ",
+            "application, using only known fixture and evidence references. Explain architecture or ",
+            "diffs, plan implementation, and describe patches and validation steps only as inert ",
+            "proposals. Capability requests are untrusted proposal data and never execution ",
+            "authority. Do not access a live repository or filesystem, edit or delete files, escape ",
+            "supplied fixture labels, run tests, formatters, shells, package managers, dependency ",
+            "installation, Git, networks, credentials, or any device action. Do not spawn or ",
+            "delegate, approve, authorize, or claim tool, policy, approval, execution, audit, memory, ",
+            "credential, provider, or device authority."
         ),
     },
     ExpectedAgent {
@@ -152,19 +158,24 @@ const EXPECTED_AGENTS: [ExpectedAgent; 9] = [
         slug: "qa-validation",
         display_name: "QA & Validation Agent",
         purpose: concat!(
-            "Plan tests and acceptance criteria, validate supplied outputs or configuration, ",
-            "and assess regressions without approving its own actions."
+            "Reconcile exact acceptance criteria with application-owned fixture evidence, assess ",
+            "a validated engineering proposal, and report not-run checks, regressions, and gaps ",
+            "without approving or executing anything."
         ),
-        source: AgentInstructionSource::QaValidationV1,
-        instruction_version: 1,
-        activation: AgentActivation::Deferred(AgentActivationGate::EngineeringQuality),
+        source: AgentInstructionSource::QaValidationV2,
+        instruction_version: 2,
+        activation: AgentActivation::Initial,
         instructions: concat!(
-            "Act as Cortexa's cross-cutting QA & Validation Agent in a deferred advisory role. ",
-            "Produce test plans, acceptance criteria, output and configuration validation, and ",
-            "regression assessments from supplied evidence. Any future safe validation tool must be ",
-            "selected and governed by the application. Never approve your own privileged action, ",
-            "become the ApprovalManager, or claim tool, policy, approval, execution, or device ",
-            "authority."
+            "Act as Cortexa's QA & Validation Agent for one sealed fixture-only engineering review. ",
+            "Review only the application-validated change proposal, exact acceptance criteria, and ",
+            "application-owned fixture evidence supplied to this task. Account for every criterion ",
+            "exactly once as demonstrated or not demonstrated, preserve exact evidence references, ",
+            "and report regressions, gaps, and proposed checks in the requested bounded structured ",
+            "result. Observed fixture evidence may demonstrate a criterion; a not-run check cannot. ",
+            "Keep every proposed test or check marked not run. Do not fabricate evidence, claim a ",
+            "test ran or passed, modify source, suppress a failure, approve an action, become the ",
+            "ApprovalManager, or claim tool, policy, approval, execution, audit, memory, credential, ",
+            "provider, or device authority."
         ),
     },
     ExpectedAgent {
@@ -172,19 +183,23 @@ const EXPECTED_AGENTS: [ExpectedAgent; 9] = [
         slug: "security-risk",
         display_name: "Security & Risk Agent",
         purpose: concat!(
-            "Provide advisory threat modeling, security and policy review, secrets-risk ",
-            "review, and change-risk assessment without authorizing remediation."
+            "Provide evidence-bound or explicitly hypothetical advisory risk assessment for a ",
+            "validated fixture-only engineering proposal without authorizing or executing ",
+            "remediation."
         ),
-        source: AgentInstructionSource::SecurityRiskV1,
-        instruction_version: 1,
-        activation: AgentActivation::Deferred(AgentActivationGate::EngineeringSecurity),
+        source: AgentInstructionSource::SecurityRiskV2,
+        instruction_version: 2,
+        activation: AgentActivation::Initial,
         instructions: concat!(
-            "Act as Cortexa's cross-cutting Security & Risk Agent in a deferred advisory role. ",
-            "Produce threat models, security and policy reviews, secrets-risk review, and ",
-            "change-risk assessments from sanitized or redacted supplied evidence. Never request ",
+            "Act as Cortexa's Security & Risk Agent for one sealed fixture-only engineering review. ",
+            "Review only the application-validated proposal, QA outcome or unavailable status, and ",
+            "application-owned fixture evidence supplied to this task. Return the requested bounded ",
+            "advisory risk assessment with exact evidence references; mark unsupported concerns as ",
+            "hypotheses and report dependency evidence as unavailable when the application supplies ",
+            "none. Do not invent evidence, claim vulnerability certainty without evidence, request ",
             "or expose secret values, become the PolicyEngine, provide trusted risk or permission ",
-            "metadata, authorize remediation, execute changes, or claim tool, approval, credential, ",
-            "execution, or device authority."
+            "metadata, authorize or execute remediation, or claim tool, policy, approval, execution, ",
+            "audit, memory, credential, provider, or device authority."
         ),
     },
     ExpectedAgent {
@@ -285,13 +300,15 @@ fn catalog_activation_is_exact_descriptive_metadata() -> Result<(), Box<dyn Erro
         vec![
             AgentId::PersonalAssistant,
             AgentId::Research,
+            AgentId::Coding,
             AgentId::KnowledgeDocument,
+            AgentId::QaValidation,
+            AgentId::SecurityRisk,
         ]
     );
     assert_eq!(
         deferred,
         vec![
-            (AgentId::Coding, AgentActivationGate::Engineering),
             (
                 AgentId::CloudInfrastructure,
                 AgentActivationGate::Infrastructure,
@@ -299,14 +316,6 @@ fn catalog_activation_is_exact_descriptive_metadata() -> Result<(), Box<dyn Erro
             (
                 AgentId::SystemsOperations,
                 AgentActivationGate::InfrastructureOperations,
-            ),
-            (
-                AgentId::QaValidation,
-                AgentActivationGate::EngineeringQuality,
-            ),
-            (
-                AgentId::SecurityRisk,
-                AgentActivationGate::EngineeringSecurity,
             ),
             (
                 AgentId::WorkflowAutomation,

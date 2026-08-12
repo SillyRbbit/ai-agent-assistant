@@ -4,6 +4,21 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Implemented D-087's sealed fixture-only, proposal-only Personal Assistant ->
+  Coding -> QA & Validation -> Security & Risk -> Personal synthesis workflow.
+  Added strict bounded `ChangeProposal`, `ValidationReport`, `RiskAssessment`,
+  and final synthesis contracts; application-issued fixture, criterion, and
+  evidence provenance; sequential depth-one sibling tasks; truthful partial
+  failure and cancellation; closed capability denial; content-free events; and
+  redacted non-authoritative attribution. Coding, QA, and Security are `Initial`
+  only for this unwired workflow; their tool profiles remain empty and memory
+  remains disabled. Complete verification and closeout pass with `PASS WITH
+ADVISORIES`. No live repository/filesystem/process/Git/
+  network access, tool or executor, approval request, mutation, dependency,
+  Tauri/React wiring, IPC, provider, external runtime, or device effect was
+  added. Every execution disposition remains `NotAttempted`, and Native remains
+  sole/default and unchanged.
+
 - Implemented D-086's sealed fixture-only Personal Assistant -> Research ->
   Knowledge & Document -> Personal synthesis workflow above the unchanged
   Native runtime boundary. Added strict bounded Research, Knowledge, and final

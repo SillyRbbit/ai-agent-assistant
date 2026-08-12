@@ -407,10 +407,14 @@ The authoritative phases are in [`ROADMAP.md`](../../ROADMAP.md). This ADR does
 not authorize implementation by itself.
 
 D-086 completes only the research/knowledge portion of step 4 through its
-separately accepted sealed plan. Engineering-quality,
-infrastructure/operations, automation, bounded parallelism, UI/provider wiring,
-and every other later phase remain gated. D-086 does not make this ADR general
-implementation authority.
+separately accepted sealed plan. D-087 separately completes only the fixture-
+based, proposal-only engineering-quality portion: Coding, QA, and Security are
+sequential depth-one siblings created by the orchestrator; strict structured
+results preserve application fixture/evidence provenance; every consequential
+capability remains denied; and no approval request or execution path exists.
+Infrastructure/operations, automation, bounded parallelism, UI/provider wiring,
+live repository effects, and every other later phase remain gated. Neither
+D-086 nor D-087 makes this ADR general implementation authority.
 
 ## Preservation guarantees
 
@@ -442,6 +446,10 @@ implementation authority.
 - D-086 supplies the only implemented exception to the original future
   Research/Knowledge family: the fixed fixture workflow described above. It
   leaves D-079's runtime boundary and every generic delegation rule unchanged.
+- D-087 supplies the implemented exception for the engineering-quality family:
+  one fixed fixture-only, proposal-only sibling sequence. It changes no generic
+  route, tool/policy/memory profile, approval/execution boundary,
+  `AgentRuntime`, or `NativeAgentRuntime` behavior.
 
 ## Rollback
 

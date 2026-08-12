@@ -67,6 +67,27 @@ that D-084 published checkpoint.
 > absence statements below remain decision-time evidence where this note now
 > records the superseding current state.
 
+> **Additive current-state note (D-087, 2026-08-12):** D-087 now implements one
+> separately selected, Rust-only, fixture-only and proposal-only Personal
+> Assistant -> Coding -> QA & Validation -> Security & Risk -> Personal
+> synthesis application-service sequence. The specialists are sequential
+> depth-one siblings created only by `AgentOrchestrator` under four-task,
+> three-child, five-run, one-active-child, 32-event, 16-workflow/audit-record,
+> and zero-retry limits. Strict V1 `ChangeProposal`, `ValidationReport`, and
+> `RiskAssessment` results preserve application-issued fixture, criterion,
+> proposal, QA, and evidence provenance. QA cannot approve or fabricate
+> execution; Security is evidence-bound or explicitly hypothetical and cannot
+> authorize, remediate, or become policy. Consequential capabilities remain
+> denied data. Final synthesis discloses fixture/proposal-only input and no
+> execution, and derives `RequiredBeforeMutation` for a patch without creating
+> an approval request. Coding, QA, and Security are `Initial` only for this
+> sealed unwired workflow; generic routes and their tool-ineligible, memory-
+> disabled profiles are unchanged. No live repository/filesystem/process/Git/
+> package/network access, tool, executor, mutation, dependency, IPC/UI,
+> provider, external runtime, or `AgentRuntime`/`NativeAgentRuntime` widening
+> was added. Earlier catalog/future statements below remain decision-time
+> evidence where this note records the superseding current state.
+
 ## 1. Executive summary
 
 The recommended architecture is an application-owned orchestration layer above
@@ -531,12 +552,14 @@ current requirements.
 
 ## 10. Current catalog, grouping, and privilege posture
 
-The first registry phase defines all nine roles, but only Personal Assistant
-and Research Agent carry `Initial`; the other seven carry `Deferred` plus a
-closed gate. Every definition is application-owned, immutable, privilege-free,
-and non-operational until a separate consumer exists. Catalog listing may show
-all nine and their exact state without presenting a deferred definition as
-available capability.
+The first registry phase defined all nine roles with only Personal Assistant
+and Research `Initial`. D-085 later made Knowledge `Initial` for its exact
+routes, and D-087 now makes Coding, QA, and Security `Initial` only for its
+sealed fixture-only proposal workflow. Cloud, Systems Operations, and Workflow
+Automation remain `Deferred`. Every definition is application-owned,
+immutable, privilege-free, and non-operational until a separate consumer
+exists. Catalog listing may show all nine and their exact state without
+presenting eligibility as a tool or live capability.
 
 | Functional group              | Catalog members                                                                                    |
 | ----------------------------- | -------------------------------------------------------------------------------------------------- |
@@ -550,20 +573,20 @@ QA & Validation and Security & Risk deliberately appear in multiple groups.
 Catalog listing remains deterministic; functional grouping is
 documentation-only and never authorizes a route, tool, permission, or action.
 
-| Agent                      | Catalog disposition / activation prerequisite          |
-| -------------------------- | ------------------------------------------------------ |
-| Personal Assistant         | `Initial` for the first deterministic flow             |
-| Research Agent             | `Initial` for the first deterministic flow             |
-| Knowledge & Document Agent | `Deferred` on knowledge/document and memory boundaries |
-| Coding Agent               | `Deferred` on the engineering workflow                 |
-| QA & Validation Agent      | `Deferred` on engineering-quality governance           |
-| Security & Risk Agent      | `Deferred` on engineering/security governance          |
-| Cloud Infrastructure Agent | `Deferred` on the infrastructure workflow              |
-| Systems Operations Agent   | `Deferred` on the infrastructure/operations workflow   |
-| Workflow Automation Agent  | `Deferred` on typed workflows and complete governance  |
+| Agent                      | Catalog disposition / activation prerequisite         |
+| -------------------------- | ----------------------------------------------------- |
+| Personal Assistant         | `Initial` for verified bounded workflows              |
+| Research Agent             | `Initial`; live retrieval remains gated               |
+| Knowledge & Document Agent | `Initial` only for D-085/D-086 sealed routes          |
+| Coding Agent               | `Initial` only for D-087 fixture/proposal workflow    |
+| QA & Validation Agent      | `Initial` only for D-087 fixture/proposal workflow    |
+| Security & Risk Agent      | `Initial` only for D-087 fixture/proposal workflow    |
+| Cloud Infrastructure Agent | `Deferred` on the infrastructure workflow             |
+| Systems Operations Agent   | `Deferred` on the infrastructure/operations workflow  |
+| Workflow Automation Agent  | `Deferred` on typed workflows and complete governance |
 
-`Initial` is a catalog state for a future orchestration phase, not a claim that
-either role is operational today. Every `Deferred` state is closed and
+`Initial` is catalog eligibility for exact verified unwired workflows, not a
+claim that a role is operational today. Every `Deferred` state is closed and
 application-controlled; no caller, model, runtime, group, or definition may
 promote it.
 
@@ -670,9 +693,10 @@ The near-term sequence is recorded in the authoritative root
 The
 [`Agent definition and registry`](../plans/2026-08-11-agent-definition-registry.md)
 plan is implemented and verified locally. That sentence and the original
-future-phase language record the assessment checkpoint. D-083 through D-086 now
+future-phase language record the assessment checkpoint. D-083 through D-087 now
 add the verified task/orchestrator, non-executing governance, volatile
-memory/approved-document, and sealed fixture-only Research/Knowledge foundations
-described in the additive notes above. Engineering-quality,
-infrastructure/operations, automation, persistence, provider/runtime wiring,
-IPC/UI, and every other later phase remain separately gated.
+memory/approved-document, sealed fixture-only Research/Knowledge, and sealed
+fixture-only proposal Engineering foundations described in the additive notes
+above. Infrastructure/operations, automation, live repository effects,
+persistence, provider/runtime wiring, IPC/UI, and every other later phase
+remain separately gated.

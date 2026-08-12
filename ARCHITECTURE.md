@@ -203,7 +203,7 @@ flowchart TD
     Orchestrator --> Research["Implemented generic route<br/>Personal Assistant to Research Agent"]
     Orchestrator --> Knowledge["Implemented document route<br/>Personal Assistant to Knowledge & Document"]
     Orchestrator --> ResearchKnowledge["Implemented sealed fixture workflow<br/>Research then Knowledge sibling"]
-    Orchestrator -. staged .-> Engineering["Engineering<br/>Coding + QA + Security"]
+    Orchestrator --> Engineering["Implemented sealed fixture workflow<br/>Coding then QA then Security siblings"]
     Orchestrator -. staged .-> Operations["Infrastructure & operations<br/>Cloud + Systems + QA + Security"]
     Orchestrator -. staged .-> Automation["Automation<br/>Workflow Automation"]
     Orchestrator --> Runtime["AgentRuntime<br/>implemented one-run boundary"]
@@ -223,12 +223,15 @@ their closed `Initial`/`Deferred` catalog state. Discovery is non-authorizing;
 operational selection and task creation fail closed for deferred definitions.
 Neither registration, grouping, nor activation grants tools, routing, policy,
 memory, provider, or device authority.
-The catalog marks Personal Assistant, Research Agent, and Knowledge & Document
-Agent `Initial`; all nine definitions remain unwired and none is a shipping
-assistant. Knowledge eligibility applies only to D-085's separate approved-
-document route and D-086's sealed fixture workflow; neither grants a generic
-delegation edge. The embedded instruction sources are closed application-owned
-Rust assets rather than runtime-loaded files.
+The catalog marks Personal Assistant, Research Agent, Knowledge & Document
+Agent, Coding Agent, QA & Validation Agent, and Security & Risk Agent `Initial`;
+all nine definitions remain unwired and none is a shipping assistant. Knowledge
+eligibility applies only to D-085's separate approved-document route and
+D-086's sealed fixture workflow. Coding, QA, and Security eligibility applies
+only to D-087's sealed fixture-only proposal workflow. None grants a generic
+delegation edge, tool, memory, or device capability. The embedded instruction
+sources are closed application-owned Rust assets rather than runtime-loaded
+files.
 
 `AgentTask` now owns one bounded objective, exact agent/root/parent/depth
 lineage, the closed `Pending`/`Running`/`WaitingForChild`/terminal state
@@ -242,13 +245,17 @@ definition identity rather than supplied independently by a caller.
 instance owns at most one root workflow. Its generic and approved-document
 paths retain two tasks, three sequential runtime runs, one non-replenishing
 child, one active child, depth one, and 32 runtime and application events.
-D-086's separately selected sealed workflow alone expands those finite limits
-to three tasks, two non-replenishing sequential children, one active child,
-four runs, and the same depth-one and 32-event limits. It owns task assignment,
+D-086's separately selected sealed workflow expands those finite limits to
+three tasks, two non-replenishing sequential children, one active child, four
+runs, and the same depth-one and 32-event limits. D-087's separately selected
+sealed engineering workflow uses four tasks, three non-replenishing sequential
+children, one active child, five runs, depth one, and the same global 32-event
+limit plus a 16-record workflow journal/audit. It owns task assignment,
 exact live-context checks, the generic Personal Assistant-to-Research route,
 D-085's separate approved-document Personal Assistant-to-Knowledge route,
-D-086's fixed Research/Knowledge sequence, bounded output accumulation, result
-attribution, synthesis resumption, and child-first cancellation. It is not a
+D-086's fixed Research/Knowledge sequence, D-087's fixed Coding/QA/Security
+sequence, bounded output accumulation, result attribution, synthesis
+resumption, and child-first cancellation. It is not a
 runtime, provider, policy engine, tool registry, approval manager, or executor.
 It directly owns one workflow-local `MemoryStore` and `ApprovedDocumentReader`
 without transferring their authority to an agent or runtime, and composes the
@@ -281,7 +288,9 @@ Research Agent. D-085 adds a separate trusted application document-task call
 from Personal Assistant to Knowledge & Document; it is not generic delegation,
 a runtime control event, shell command, filesystem tool, or `agent.delegate`
 host tool. D-086 separately expands only its sealed workflow to two sequential
-sibling children while retaining depth and active-child concurrency at one.
+sibling children, and D-087 separately expands only its sealed engineering
+workflow to three sequential sibling children. Both retain depth and active-
+child concurrency at one.
 
 The initial root is exactly Personal Assistant. Research and Knowledge cannot
 delegate; self, reverse, unknown, and all other generic routes fail before task
@@ -289,10 +298,12 @@ creation. Generic or direct Research-to-Knowledge remains denied. D-086 adds
 only one application-selected sealed sequence in which the orchestrator creates
 Knowledge as a new depth-one sibling after validating the Research result.
 These allowlists are owned by the application/orchestrator. Registry membership,
-activation, or a memory profile grants no route. Later engineering-quality,
-infrastructure/operations, and automation workflows must add exact closed
-routes and finite task caps under separate plans. Their arrows mean
-orchestrator-controlled sequencing at depth one, never specialist spawning.
+activation, or a memory profile grants no route. D-087 adds no generic Coding,
+QA, or Security route: only its exact application-selected sibling sequence is
+implemented. Later infrastructure/operations and automation workflows must add
+exact closed routes and finite task caps under separate plans. Their arrows
+mean orchestrator-controlled sequencing at depth one, never specialist
+spawning.
 
 #### Per-agent governance foundation
 
@@ -508,6 +519,51 @@ unchanged sole/default Native construction path. No provider, live model,
 network, process, filesystem read, tool, executor, persistence, IPC, UI,
 dependency, capability, permission, Hermes/OpenClaw adapter, or runtime-contract
 widening is added.
+
+#### Sealed fixture-only engineering quality workflow
+
+**Current implemented Rust foundation; unwired and proposal-only**: D-087 adds
+`agent::engineering_quality` and the fixed `engineering-quality-v1`
+application-service path inside `AgentOrchestrator`. Trusted application code
+selects it from an exact live Personal Assistant root. The orchestrator creates
+Coding, QA & Validation, and Security & Risk as three sequential depth-one
+siblings, then starts a fresh Personal synthesis run. Specialists never create
+tasks, delegate, invoke one another, or authorize an action.
+
+The request contains one bounded objective, one to eight immutable synthetic
+fixture files, one to eight application-issued acceptance criteria, and up to
+eight evidence records. Evidence is only `ObservedFixture` or `NotRun`; it
+cannot claim a live test or external observation. Strict V1 `ChangeProposal`,
+`ValidationReport`, and `RiskAssessment` results preserve exact fixture,
+criterion, proposal, QA, and evidence provenance. QA must reconcile every
+criterion exactly once and cannot approve or fabricate execution. Security
+findings are evidence-bound or explicit hypotheses and cannot authorize,
+remediate, replace policy, or expose secrets.
+
+Patch descriptions remain inert data. Live write/delete/path escape,
+dependency/package/test/formatter execution, Git operations, destructive shell,
+credential access, and network access are closed denied capabilities. Final
+synthesis must disclose fixture-only, proposal-only, and no-execution status.
+The application derives `NotApplicable` for analysis-only or
+`RequiredBeforeMutation` for a patch proposal, but creates no approval request
+because no executable subject exists.
+
+The exact limits are four tasks, three non-replenishing children, one active
+child, five sequential run attempts, 32 runtime/generic events, 16 workflow
+events, 16 matching descriptive audit records, and zero retries. Stage input is
+capped at 24,576 bytes and tested within Native's unchanged 65,536-byte encoded
+request boundary. Terminal state and successor input are prepared before event
+acceptance; cancellation is child-first and partial outcomes remain truthful.
+The selector is mutually exclusive with generic delegation, D-085, and D-086.
+
+Coding, QA, and Security are `Initial` only for this sealed unwired workflow.
+Their generic routes and tool-ineligible policy profiles are unchanged, memory
+remains disabled, runtime tool proposals fail closed, and every execution
+disposition remains `NotAttempted`. No live repository/filesystem/process/Git/
+package/network access, registered tool, executor, approval request,
+dependency, Tauri/React consumer, IPC, provider, external runtime, permission,
+or device effect was added. `AgentRuntime` and `NativeAgentRuntime` remain
+unchanged and Native remains sole/default.
 
 #### Hermes transport evaluation
 
@@ -858,6 +914,7 @@ reviewed repository ICNS byte-for-byte.
 | Workflow-local volatile agent memory          | Current, unwired               | D-085 verified contracts; process-local only                   |
 | Selected UTF-8 text/Markdown document reading | Current, unwired and read-only | D-085 verified contracts; no IPC or provider                   |
 | Fixture-only Research/Knowledge workflow      | Current, unwired and sealed    | D-086 strict contracts; deterministic runtime events only      |
+| Fixture-only engineering quality workflow     | Current, unwired and sealed    | D-087 proposal contracts; no repository access or execution    |
 | Live gateway and model-provider transport     | Planned                        | Blocked by O-006, per-provider O-007 evidence, and future plan |
 | Restricted tool execution                     | Planned                        | No dispatcher or executor exists                               |
 | Product memory and task persistence           | Planned                        | Phase 8 direction only                                         |

@@ -239,6 +239,21 @@ shipping dispatcher or executor.
   shall remain pending review, and the 16-record workflow journal and matching
   non-authoritative attribution audit shall exclude content and grant no
   authority.
+- **FR-039A**: The sealed fixture-only engineering-quality workflow shall be
+  selected only by trusted application code from an exact live Personal
+  Assistant root. `AgentOrchestrator` alone shall create Coding, QA &
+  Validation, and Security & Risk as three sequential depth-one siblings under
+  exact four-task, three-child, five-run, one-active-child, 32-event,
+  16-workflow-record, and zero-retry limits. Generic delegation, D-085, D-086,
+  and engineering selectors shall be mutually exclusive.
+- **FR-039B**: Engineering results shall be strict, bounded, versioned,
+  proposal-only data. `ChangeProposal` shall reference only application-issued
+  fixture/evidence IDs; `ValidationReport` shall reconcile every criterion
+  exactly once without fabricating execution; `RiskAssessment` shall remain
+  evidence-bound or explicitly hypothetical and advisory. Final synthesis
+  shall disclose fixture/proposal-only input and no execution, derive
+  `RequiredBeforeMutation` only when a patch is proposed, and create no
+  approval request or execution authority.
 
 Only bootstrap metadata storage, a turn-bound volatile in-memory approval-audit
 adapter, and D-085's unwired workflow-local volatile memory and approved-
@@ -256,6 +271,14 @@ bytes, runtime and generic events at 32 each, and workflow events/audit records
 at 16 each. It adds no live research, provider, persistence, durable or generic
 audit, or user-facing behavior. Product persistence, durable or user-facing
 memory, task repositories, and durable audit remain planned.
+
+D-087 separately implements only the unwired fixture-only, proposal-only
+Coding-to-QA-to-Security workflow. It adds no live repository/filesystem/
+process/Git/package/network access, registered engineering tool, executor,
+approval request, mutation, memory, persistence, Tauri/React consumer, IPC,
+provider, external runtime, or device behavior. Coding, QA, and Security are
+`Initial` only for that sealed workflow; generic routes and policy/memory
+profiles remain unchanged and execution remains `NotAttempted`.
 
 ### Permissions and integrations
 
@@ -354,6 +377,9 @@ The repository currently provides:
 - an unwired sealed fixture-only Personal-to-Research-to-Knowledge-to-Personal
   workflow with strict source provenance, typed partial results, child-first
   cancellation, and content-free volatile workflow evidence;
+- an unwired sealed fixture-only Personal-to-Coding-to-QA-to-Security-to-
+  Personal proposal workflow with strict evidence provenance, typed partial
+  results, closed capability denial, and no execution;
 - no live model, gateway, tool execution, durable product persistence, integration,
   privileged permission, or durable audit path.
 

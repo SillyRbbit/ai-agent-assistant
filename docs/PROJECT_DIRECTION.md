@@ -172,8 +172,22 @@ Research-to-Knowledge remains denied; this exact sequence grants neither
 specialist spawn authority nor any tool, provider, network, filesystem,
 persistence, IPC, UI, runtime, approval, execution, or device authority.
 
-The catalog now marks Personal Assistant, Research, and Knowledge as
-non-authorizing `Initial`; the other six roles remain Deferred. Registration,
+D-087 implements one separate fixture-only, proposal-only application-service
+sequence: Personal Assistant -> Coding -> QA & Validation -> Security & Risk ->
+Personal synthesis. The three specialists are sequential depth-one siblings
+created only by `AgentOrchestrator` under four-task, five-run,
+one-active-child, zero-retry limits. Strict proposal, validation, risk, and
+final synthesis results preserve application-issued fixture/criterion/evidence
+provenance. QA and Security remain advisory; consequential capabilities are
+denied data; a patch derives `RequiredBeforeMutation` without creating an
+approval request or execution subject. The path adds no live repository,
+filesystem, process, Git, package, network, tool, executor, mutation, memory,
+provider, IPC, UI, external runtime, or device authority.
+
+The catalog now marks Personal Assistant, Research, Knowledge, Coding, QA, and
+Security as non-authorizing `Initial`; Cloud, Systems Operations, and Workflow
+Automation remain Deferred. Coding, QA, and Security eligibility exists only
+for D-087's sealed unwired workflow. Registration,
 activation, task creation, memory profile, or orchestration grants no tool,
 policy, approval, provider, execution, or device authority.
 

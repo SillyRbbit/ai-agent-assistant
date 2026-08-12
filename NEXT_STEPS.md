@@ -147,6 +147,9 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Volatile agent memory and approved documents:
   **Verified complete with advisories and published at `5e53f55` under gate
   `agent-memory-approved-documents`; its published completion marker is valid.**
+- Research and Knowledge workflow:
+  **Verified complete with advisories and published at `3efd2c1` under gate
+  `agent-research-knowledge-workflow`.**
 
 ## Queue status
 
@@ -172,9 +175,10 @@ one-run runtime. The foundation is not connected to Tauri, React, a provider,
 or a live model. At that baseline governance, knowledge/document boundaries,
 research/knowledge, engineering-quality, infrastructure/operations,
 automation, parallelism, desktop UI, demos, and final review were separately
-gated. D-084 and D-085 are now published, and D-086's exact fixture-only
-Research/Knowledge workflow is verified complete with advisories in the
-current workspace. Native stays sole/default; Hermes remains Blocked.
+gated. D-084, D-085, and D-086 are now published. D-087 implements only the
+exact fixture-only, proposal-only engineering workflow below and is verified
+complete with advisories. Native stays sole/default;
+Hermes remains Blocked.
 
 ### Completed implementation: Per-agent governance
 
@@ -200,9 +204,9 @@ ADVISORIES`; the accepted residual is the pure-`std` Unix document-open TOCTOU
 race. Its completion marker is valid for the published tree. This does not
 resolve ARB-005, add persistence, or itself enable Research-to-Knowledge.
 
-### Completed implementation awaiting publication: Research and Knowledge workflow
+### Completed implementation: Research and Knowledge workflow
 
-**Status:** **Verified complete with advisories; publication pending under
+**Status:** **Verified complete with advisories; published at `3efd2c1` under
 D-086**. The
 [`2026-08-11-research-knowledge-workflow.md`](docs/plans/2026-08-11-research-knowledge-workflow.md)
 implements only one deterministic,
@@ -211,8 +215,37 @@ sequence with sequential sibling children, strict structured outputs, exact
 fixture-source provenance, truthful partial outcomes, task-local memory
 cleanup, and no provider, retrieval, tools, network, persistence, IPC, UI,
 parallelism, or general workflow engine. Focused and complete validation pass.
-Every later product, specialist, provider, UI, persistence, parallelism, and
-device-effect plan remains Blocked; no later plan is Ready.
+Every provider, UI, persistence, parallelism, repository-effect, and other
+specialist plan remains Blocked.
+
+### Verified complete: Fixture-only engineering quality workflow
+
+**Status:** **Verified complete with advisories under D-087**. The
+[`2026-08-11-engineering-quality-workflow.md`](docs/plans/2026-08-11-engineering-quality-workflow.md)
+is complete; no product plan is currently Active or Ready. It implements one
+sealed deterministic
+Personal Assistant -> Coding -> QA & Validation -> Security & Risk -> Personal
+synthesis sequence over application-supplied synthetic repository fixtures.
+Strict `ChangeProposal`, `ValidationReport`, `RiskAssessment`, and final
+synthesis contracts remain proposal-only, content-bounded, redacted, and
+non-authorizing. The orchestrator alone creates three sequential depth-one
+siblings under four-task, five-run, one-active-child, and zero-retry limits.
+Application-owned evidence distinguishes only fixture observations from checks
+that were not run; QA covers each criterion exactly once, a conservative input
+bound is proven against Native request serialization, workflow selectors are mutually exclusive, and
+approval status is derived as not applicable or required before mutation.
+
+The implementation adds no repository tool, live filesystem/code search, write, test or
+formatter execution, package/dependency operation, Git operation, shell,
+credential, network, executor, approval request, provider, IPC, UI, or external
+runtime. Such operations are typed denied proposals only. Coding, QA, and
+Security are `Initial` only for this sealed unwired workflow; their generic
+routes remain closed, their tool profiles remain empty, and memory remains
+disabled. Complete validation and closeout pass. Independent review returns
+`PASS WITH ADVISORIES`: before another multi-specialist workflow, consider a bounded
+private orchestrator decomposition without introducing a general workflow
+engine. No later owner-approved plan is Ready, so next-increment readiness is
+`Blocked`.
 
 ### Completed negative spike: Hermes ACP
 

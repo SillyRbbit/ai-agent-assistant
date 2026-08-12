@@ -270,17 +270,53 @@ fn complete_delegated_scenario_is_deterministic_across_fresh_instances(
 }
 
 #[test]
-fn deferred_and_unknown_targets_fail_closed_before_child_creation() -> Result<(), Box<dyn Error>> {
+fn generic_delegation_denies_initial_engineering_and_deferred_or_unknown_targets(
+) -> Result<(), Box<dyn Error>> {
     let mut orchestrator = AgentOrchestrator::new(MockAgentRuntime::new(MockMode::Success))?;
     let root = orchestrator.start_root(ROOT_OBJECTIVE)?;
-    let proposal =
-        DelegationProposal::new(AgentId::Coding, "Inspect code", None, "Return a summary")?;
-    assert_eq!(
-        orchestrator.request_delegation(&root, proposal),
-        Err(AgentOrchestratorError::AgentDeferred {
-            agent_id: AgentId::Coding,
-        })
-    );
+    let baseline = orchestrator.events().to_vec();
+
+    for target in [
+        AgentId::Coding,
+        AgentId::QaValidation,
+        AgentId::SecurityRisk,
+    ] {
+        let proposal = DelegationProposal::new(
+            target,
+            "Inspect supplied fixtures",
+            None,
+            "Return a bounded proposal",
+        )?;
+        assert_eq!(
+            orchestrator.request_delegation(&root, proposal),
+            Err(AgentOrchestratorError::RouteDenied {
+                source_agent_id: AgentId::PersonalAssistant,
+                target,
+            })
+        );
+        assert_eq!(orchestrator.events(), baseline);
+        assert_eq!(orchestrator.task_count(), 1);
+    }
+
+    for target in [
+        AgentId::CloudInfrastructure,
+        AgentId::SystemsOperations,
+        AgentId::WorkflowAutomation,
+    ] {
+        let proposal = DelegationProposal::new(
+            target,
+            "Inspect supplied fixtures",
+            None,
+            "Return a bounded proposal",
+        )?;
+        assert_eq!(
+            orchestrator.request_delegation(&root, proposal),
+            Err(AgentOrchestratorError::AgentDeferred { agent_id: target })
+        );
+        assert_eq!(orchestrator.events(), baseline);
+        assert_eq!(orchestrator.task_count(), 1);
+    }
+
     assert_eq!(orchestrator.task_count(), 1);
     assert_eq!(
         "unknown-specialist".parse::<AgentId>(),

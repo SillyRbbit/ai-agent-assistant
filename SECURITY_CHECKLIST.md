@@ -152,6 +152,39 @@ production boundary exists.
       persistence, IPC/UI, dependency, capability, permission, external runtime,
       `AgentRuntime`, `NativeAgentRuntime`, or Native sole/default boundary.
 
+## Sealed engineering quality workflow
+
+- [ ] Trusted application code alone selects D-087 from an exact live Personal
+      Assistant root; generic, document, D-086, and engineering selectors are
+      mutually exclusive and no specialist creates or delegates a task.
+- [ ] Coding, QA, and Security are sequential depth-one siblings under exact
+      four-task, three-child, five-run, one-active-child, 32-event,
+      16-workflow/audit-record, and zero-retry limits.
+- [ ] Fixture, criterion, and evidence IDs are immutable application-issued
+      references. Evidence is only `ObservedFixture` or `NotRun` and cannot
+      claim a live repository observation or executed test.
+- [ ] `ChangeProposal`, `ValidationReport`, `RiskAssessment`, and final
+      synthesis reject unknown/duplicate/malformed/oversized/trailing output,
+      reasoning, URLs, identity injection, authority claims, invented
+      references, and inconsistent stage status.
+- [ ] QA reconciles every criterion exactly once, cannot approve or fabricate
+      execution evidence, and forces incomplete/blocked status for
+      not-demonstrated criteria. Security remains evidence-bound or explicitly
+      hypothetical and cannot authorize, remediate, replace policy, or expose
+      secret values.
+- [ ] File write/delete/path escape, dependency/package/test/formatter
+      execution, Git operations, destructive shell, credential access, and
+      network access are denied proposal data with no dispatch path.
+- [ ] Final synthesis discloses fixture-only, proposal-only, and no-execution
+      status. `RequiredBeforeMutation` is application-derived for a patch but
+      creates no approval request or execution authority.
+- [ ] Coding, QA, and Security remain tool-ineligible and memory-disabled;
+      runtime tools fail closed, execution is `NotAttempted`, generic routes are
+      unchanged, and Native remains sole/default and unchanged.
+- [ ] D-087 adds no live repository/filesystem/process/Git/package/network
+      access, tool schema, executor, mutation, dependency, Tauri/React behavior,
+      IPC, provider, external runtime, permission, or device effect.
+
 ## Tauri IPC review
 
 - [ ] Every command and event is narrow, typed, explicitly registered, and

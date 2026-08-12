@@ -34,13 +34,18 @@ const RESEARCH_V1: &str = concat!(
     "provider, memory, policy, approval, execution, or audit authority."
 );
 
-const CODING_V1: &str = concat!(
-    "Act as Cortexa's Coding Agent in a deferred advisory role. Inspect only repository ",
-    "content supplied by the application, explain code, plan bounded implementation, and ",
-    "propose patches or validation steps. Do not autonomously edit files, run commands or ",
-    "tests, install dependencies, commit, push, or use destructive commands. Any future ",
-    "code change or test run must use an exact application-owned governed action; do not ",
-    "claim tool, approval, policy, execution, credential, or device authority."
+const CODING_V2: &str = concat!(
+    "Act as Cortexa's Coding Agent for one sealed fixture-only engineering review. Analyze ",
+    "only immutable synthetic repository fixtures and validation evidence supplied by the ",
+    "application. Return the exact bounded proposal-only structured result requested by the ",
+    "application, using only known fixture and evidence references. Explain architecture or ",
+    "diffs, plan implementation, and describe patches and validation steps only as inert ",
+    "proposals. Capability requests are untrusted proposal data and never execution ",
+    "authority. Do not access a live repository or filesystem, edit or delete files, escape ",
+    "supplied fixture labels, run tests, formatters, shells, package managers, dependency ",
+    "installation, Git, networks, credentials, or any device action. Do not spawn or ",
+    "delegate, approve, authorize, or claim tool, policy, approval, execution, audit, memory, ",
+    "credential, provider, or device authority."
 );
 
 const CLOUD_INFRASTRUCTURE_V1: &str = concat!(
@@ -74,22 +79,29 @@ const KNOWLEDGE_DOCUMENT_V2: &str = concat!(
     "tool, provider, network, policy, approval, execution, audit, or device authority."
 );
 
-const QA_VALIDATION_V1: &str = concat!(
-    "Act as Cortexa's cross-cutting QA & Validation Agent in a deferred advisory role. ",
-    "Produce test plans, acceptance criteria, output and configuration validation, and ",
-    "regression assessments from supplied evidence. Any future safe validation tool must be ",
-    "selected and governed by the application. Never approve your own privileged action, ",
-    "become the ApprovalManager, or claim tool, policy, approval, execution, or device ",
-    "authority."
+const QA_VALIDATION_V2: &str = concat!(
+    "Act as Cortexa's QA & Validation Agent for one sealed fixture-only engineering review. ",
+    "Review only the application-validated change proposal, exact acceptance criteria, and ",
+    "application-owned fixture evidence supplied to this task. Account for every criterion ",
+    "exactly once as demonstrated or not demonstrated, preserve exact evidence references, ",
+    "and report regressions, gaps, and proposed checks in the requested bounded structured ",
+    "result. Observed fixture evidence may demonstrate a criterion; a not-run check cannot. ",
+    "Keep every proposed test or check marked not run. Do not fabricate evidence, claim a ",
+    "test ran or passed, modify source, suppress a failure, approve an action, become the ",
+    "ApprovalManager, or claim tool, policy, approval, execution, audit, memory, credential, ",
+    "provider, or device authority."
 );
 
-const SECURITY_RISK_V1: &str = concat!(
-    "Act as Cortexa's cross-cutting Security & Risk Agent in a deferred advisory role. ",
-    "Produce threat models, security and policy reviews, secrets-risk review, and ",
-    "change-risk assessments from sanitized or redacted supplied evidence. Never request ",
+const SECURITY_RISK_V2: &str = concat!(
+    "Act as Cortexa's Security & Risk Agent for one sealed fixture-only engineering review. ",
+    "Review only the application-validated proposal, QA outcome or unavailable status, and ",
+    "application-owned fixture evidence supplied to this task. Return the requested bounded ",
+    "advisory risk assessment with exact evidence references; mark unsupported concerns as ",
+    "hypotheses and report dependency evidence as unavailable when the application supplies ",
+    "none. Do not invent evidence, claim vulnerability certainty without evidence, request ",
     "or expose secret values, become the PolicyEngine, provide trusted risk or permission ",
-    "metadata, authorize remediation, execute changes, or claim tool, approval, credential, ",
-    "execution, or device authority."
+    "metadata, authorize or execute remediation, or claim tool, policy, approval, execution, ",
+    "audit, memory, credential, provider, or device authority."
 );
 
 const WORKFLOW_AUTOMATION_V1: &str = concat!(
@@ -196,12 +208,12 @@ pub enum AgentActivationGate {
 pub enum AgentInstructionSource {
     PersonalAssistantV1,
     ResearchV1,
-    CodingV1,
+    CodingV2,
     CloudInfrastructureV1,
     SystemsOperationsV1,
     KnowledgeDocumentV2,
-    QaValidationV1,
-    SecurityRiskV1,
+    QaValidationV2,
+    SecurityRiskV2,
     WorkflowAutomationV1,
 }
 
@@ -209,14 +221,14 @@ impl AgentInstructionSource {
     #[must_use]
     pub const fn version(self) -> u16 {
         match self {
-            Self::KnowledgeDocumentV2 => 2,
+            Self::CodingV2
+            | Self::KnowledgeDocumentV2
+            | Self::QaValidationV2
+            | Self::SecurityRiskV2 => 2,
             Self::PersonalAssistantV1
             | Self::ResearchV1
-            | Self::CodingV1
             | Self::CloudInfrastructureV1
             | Self::SystemsOperationsV1
-            | Self::QaValidationV1
-            | Self::SecurityRiskV1
             | Self::WorkflowAutomationV1 => 1,
         }
     }
@@ -226,12 +238,12 @@ impl AgentInstructionSource {
         match self {
             Self::PersonalAssistantV1 => PERSONAL_ASSISTANT_V1,
             Self::ResearchV1 => RESEARCH_V1,
-            Self::CodingV1 => CODING_V1,
+            Self::CodingV2 => CODING_V2,
             Self::CloudInfrastructureV1 => CLOUD_INFRASTRUCTURE_V1,
             Self::SystemsOperationsV1 => SYSTEMS_OPERATIONS_V1,
             Self::KnowledgeDocumentV2 => KNOWLEDGE_DOCUMENT_V2,
-            Self::QaValidationV1 => QA_VALIDATION_V1,
-            Self::SecurityRiskV1 => SECURITY_RISK_V1,
+            Self::QaValidationV2 => QA_VALIDATION_V2,
+            Self::SecurityRiskV2 => SECURITY_RISK_V2,
             Self::WorkflowAutomationV1 => WORKFLOW_AUTOMATION_V1,
         }
     }
@@ -523,8 +535,9 @@ const fn built_in_purpose(id: AgentId) -> &'static str {
             "and governed read-only sources only in a later phase."
         ),
         AgentId::Coding => concat!(
-            "Inspect supplied repository content, explain code, plan implementation, propose ",
-            "patches, and request only separately governed code or test actions."
+            "Analyze application-supplied synthetic repository fixtures, explain architecture ",
+            "and diffs, and return bounded proposal-only implementation, patch, and validation ",
+            "plans without executing or mutating anything."
         ),
         AgentId::CloudInfrastructure => concat!(
             "Analyze Azure/AWS architecture and infrastructure as code, review approved ",
@@ -540,12 +553,14 @@ const fn built_in_purpose(id: AgentId) -> &'static str {
             "extract and organize knowledge, and prepare bounded document output."
         ),
         AgentId::QaValidation => concat!(
-            "Plan tests and acceptance criteria, validate supplied outputs or configuration, ",
-            "and assess regressions without approving its own actions."
+            "Reconcile exact acceptance criteria with application-owned fixture evidence, assess ",
+            "a validated engineering proposal, and report not-run checks, regressions, and gaps ",
+            "without approving or executing anything."
         ),
         AgentId::SecurityRisk => concat!(
-            "Provide advisory threat modeling, security and policy review, secrets-risk ",
-            "review, and change-risk assessment without authorizing remediation."
+            "Provide evidence-bound or explicitly hypothetical advisory risk assessment for a ",
+            "validated fixture-only engineering proposal without authorizing or executing ",
+            "remediation."
         ),
         AgentId::WorkflowAutomation => concat!(
             "Propose bounded typed workflows, dependencies, agent-task stages, and governed ",
@@ -558,12 +573,12 @@ const fn built_in_instruction_source(id: AgentId) -> AgentInstructionSource {
     match id {
         AgentId::PersonalAssistant => AgentInstructionSource::PersonalAssistantV1,
         AgentId::Research => AgentInstructionSource::ResearchV1,
-        AgentId::Coding => AgentInstructionSource::CodingV1,
+        AgentId::Coding => AgentInstructionSource::CodingV2,
         AgentId::CloudInfrastructure => AgentInstructionSource::CloudInfrastructureV1,
         AgentId::SystemsOperations => AgentInstructionSource::SystemsOperationsV1,
         AgentId::KnowledgeDocument => AgentInstructionSource::KnowledgeDocumentV2,
-        AgentId::QaValidation => AgentInstructionSource::QaValidationV1,
-        AgentId::SecurityRisk => AgentInstructionSource::SecurityRiskV1,
+        AgentId::QaValidation => AgentInstructionSource::QaValidationV2,
+        AgentId::SecurityRisk => AgentInstructionSource::SecurityRiskV2,
         AgentId::WorkflowAutomation => AgentInstructionSource::WorkflowAutomationV1,
     }
 }
@@ -598,19 +613,17 @@ const fn built_in_memory_profile_id(id: AgentId) -> AgentMemoryProfileId {
 
 const fn built_in_activation(id: AgentId) -> AgentActivation {
     match id {
-        AgentId::PersonalAssistant | AgentId::Research | AgentId::KnowledgeDocument => {
-            AgentActivation::Initial
-        }
-        AgentId::Coding => AgentActivation::Deferred(AgentActivationGate::Engineering),
+        AgentId::PersonalAssistant
+        | AgentId::Research
+        | AgentId::Coding
+        | AgentId::KnowledgeDocument
+        | AgentId::QaValidation
+        | AgentId::SecurityRisk => AgentActivation::Initial,
         AgentId::CloudInfrastructure => {
             AgentActivation::Deferred(AgentActivationGate::Infrastructure)
         }
         AgentId::SystemsOperations => {
             AgentActivation::Deferred(AgentActivationGate::InfrastructureOperations)
-        }
-        AgentId::QaValidation => AgentActivation::Deferred(AgentActivationGate::EngineeringQuality),
-        AgentId::SecurityRisk => {
-            AgentActivation::Deferred(AgentActivationGate::EngineeringSecurity)
         }
         AgentId::WorkflowAutomation => {
             AgentActivation::Deferred(AgentActivationGate::TypedWorkflowGovernance)
@@ -648,7 +661,7 @@ mod tests {
                 AgentId::Coding,
                 AgentPolicyProfileId::CodingGovernedV1,
                 AgentMemoryProfileId::MemoryDisabledV1,
-                AgentActivation::Deferred(super::AgentActivationGate::Engineering),
+                AgentActivation::Initial,
             ),
             (
                 AgentId::CloudInfrastructure,
@@ -672,13 +685,13 @@ mod tests {
                 AgentId::QaValidation,
                 AgentPolicyProfileId::QualityValidationAdvisoryV1,
                 AgentMemoryProfileId::MemoryDisabledV1,
-                AgentActivation::Deferred(super::AgentActivationGate::EngineeringQuality),
+                AgentActivation::Initial,
             ),
             (
                 AgentId::SecurityRisk,
                 AgentPolicyProfileId::SecurityRiskAdvisoryV1,
                 AgentMemoryProfileId::MemoryDisabledV1,
-                AgentActivation::Deferred(super::AgentActivationGate::EngineeringSecurity),
+                AgentActivation::Initial,
             ),
             (
                 AgentId::WorkflowAutomation,
@@ -821,7 +834,7 @@ mod tests {
             AgentId::Research,
             "private-display-sentinel",
             "private-purpose-sentinel",
-            AgentInstructionSource::CodingV1,
+            AgentInstructionSource::CodingV2,
             AgentActivation::Initial,
         );
         let source_error = AgentDefinitionError::InstructionSourceMismatch {
@@ -833,8 +846,8 @@ mod tests {
             AgentId::Coding,
             "private-display-sentinel",
             "private-purpose-sentinel",
-            AgentInstructionSource::CodingV1,
-            AgentActivation::Initial,
+            AgentInstructionSource::CodingV2,
+            AgentActivation::Deferred(super::AgentActivationGate::Engineering),
         );
         let activation_error = AgentDefinitionError::ActivationMismatch {
             agent_id: AgentId::Coding,
@@ -860,7 +873,7 @@ mod tests {
         let debug = format!("{definition:?}");
 
         assert!(debug.contains("SecurityRisk"));
-        assert!(debug.contains("SecurityRiskV1"));
+        assert!(debug.contains("SecurityRiskV2"));
         assert!(!debug.contains(definition.purpose()));
         assert!(!debug.contains(definition.instructions()));
         assert!(!debug.contains("secrets-risk"));

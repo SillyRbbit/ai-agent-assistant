@@ -6,12 +6,13 @@ Last updated: 2026-08-12
 
 D-086's exact
 [`2026-08-11-research-knowledge-workflow.md`](docs/plans/2026-08-11-research-knowledge-workflow.md)
-is **verified complete with advisories; publication pending** under gate
-`agent-research-knowledge-workflow`. Above the published D-083 orchestration,
+is **verified complete with advisories and published at `3efd2c1`** under gate
+`agent-research-knowledge-workflow`. Its completion marker was complete and
+valid on that clean published tree. Above the published D-083 orchestration,
 D-084 governance, and D-085 volatile memory/document boundaries, the unwired
-Rust core now supports exactly one deterministic fixture-only Personal
-Assistant -> Research -> Knowledge & Document -> Personal synthesis workflow.
-Both specialists are sequential depth-one siblings created only by
+Rust core supports exactly one deterministic fixture-only Personal Assistant
+-> Research -> Knowledge & Document -> Personal synthesis workflow. Both
+specialists are sequential depth-one siblings created only by
 `AgentOrchestrator`; generic/direct Research-to-Knowledge delegation remains
 denied.
 
@@ -36,10 +37,45 @@ public behavior. `NativeAgentRuntime` remains sole/default and unchanged.
 
 The published D-084 baseline remains at `2687294`; D-085 remains published at
 `5e53f55` with its historical pure-`std` Unix document-open TOCTOU advisory.
+D-087 now implements one fixture-only, proposal-only engineering-quality
+workflow, and
+[`2026-08-11-engineering-quality-workflow.md`](docs/plans/2026-08-11-engineering-quality-workflow.md)
+is **verified complete with advisories** under gate
+`agent-engineering-quality-workflow`.
+Its quality result is `PASS WITH ADVISORIES`. It implements strict Coding, QA,
+Security, and final synthesis results plus exact four-task, five-run, one-active-child, zero-retry,
+partial-failure, cancellation, denial, redaction, and descriptive-attribution
+contracts. Application-issued fixture, criterion, and validation-evidence IDs
+bind exact `ObservedFixture` versus `NotRun` provenance; no real test pass may
+be claimed. The sealed selector is mutually exclusive with generic, document,
+and D-086 paths; identity is application-derived/redacted; a conservative
+selected-text limit is tested against Native gateway serialization; and approval status
+is derived as `NotApplicable` or `RequiredBeforeMutation`. Coding, QA, and
+Security are now `Initial` only for this sealed, unwired workflow; their generic
+routes and empty tool profiles are unchanged and their memory profiles remain
+disabled. It explicitly adds
+no repository tool, live filesystem/code search,
+write, command/test/formatter/package/Git execution, approval request,
+executor, IPC, UI, provider, external runtime, or device effect. The later
+planning diff is expected to invalidate D-086's live workspace fingerprint; it
+does not invalidate D-086's recorded valid published-tree evidence.
+
+Full Rust formatting/check/strict-Clippy validation, focused contracts, the
+326-test all-target Rust suite with one intentional ignored probe, and
+`npm run verify` pass. The focused evidence includes 8 engineering units, 10
+orchestrator units, 20 public D-087 contracts, and the 7 registry, 10
+governance, 22 generic orchestration, 10 memory/document, 18 D-086, 20 runtime,
+and 10 gateway contracts. Final documentation, repository, security, diff, and
+session-end checks pass. The post-increment report is complete and ready for
+deterministic marker finalization.
+
 No provider, live retrieval, network, filesystem discovery, durable memory,
 tool execution, dependency, Tauri/React wiring, IPC, UI, parallelism, general
-workflow engine, Hermes integration, or other-agent activation was added.
-ARB-005 and every later plan remain Blocked; no later plan is Ready.
+workflow engine, Hermes integration, or activation of Cloud, Systems
+Operations, or Workflow Automation was added. ARB-005, all repository effects,
+and every other later plan remain Blocked. The accepted advisory is to consider
+decomposing private orchestrator internals before another multi-specialist
+workflow, without introducing a general workflow engine.
 
 Hermes integration is **Deferred — evaluated transport and containment
 requirements not met**. Raw TUI-gateway stdio, managed `hermes serve`
@@ -190,18 +226,22 @@ changed.
 
 ## Current exact task
 
-Obtain separate owner direction to review and publish the verified D-086
-increment. Do not begin bounded parallelism or another product plan: no later
-plan is Ready.
+D-087 is verified complete with advisories. Stop for separate owner direction;
+no later owner-approved plan is Ready. Do not change source, add a tool or
+executor, create a repository effect or approval dispatch, or begin another
+workflow. Do not commit or push without separate owner authorization.
 
 Resume prompt: Read `AGENTS.md`, the project-memory chain, D-079 and D-082
-through D-086, the native multi-agent ADR/assessment and both roadmaps, the
-published D-085 evidence at `5e53f55`, the D-086 plan, increment record, and
-post-increment review. Inspect Git status and require the
-`agent-research-knowledge-workflow` marker to remain complete and valid for the
-unchanged workspace. Await explicit owner direction before committing or
-pushing D-086. Do not start bounded parallelism, live retrieval, provider,
-tools, durable memory, IPC, UI, or another workflow.
+through D-087, the native multi-agent ADR/assessment and both roadmaps, the
+published D-086 evidence at `3efd2c1`, and
+`docs/plans/2026-08-11-engineering-quality-workflow.md` plus its increment and
+post-increment review. Inspect Git status and the complete diff, require gate
+`agent-engineering-quality-workflow` to report `status: complete` with
+`valid: true`, and preserve the frozen source. No later owner-approved plan is
+Ready. Do not add live repository access, file mutation,
+test/formatter/package/Git execution, an executor, provider, IPC, UI, Codex,
+Hermes, OpenClaw, or another agent workflow. Do not commit or push without
+separate owner authorization.
 
 The fake-only Cloudflare demo macOS Keychain proof is complete with advisories.
 Pinned macOS-only Security.framework bindings read exactly two fixed labels and

@@ -15,6 +15,7 @@ pub enum MockMode {
     StartFailure,
     StartFailureAt(u8),
     StartFailuresAt(u8, u8),
+    StartFailuresAtThree(u8, u8, u8),
     UnexpectedStartStatusAt(u8, RuntimeRunStatus),
     CancelFailureAt(u8),
     CancelAlreadyTerminalAt(u8, RuntimeRunStatus),
@@ -135,6 +136,13 @@ impl AgentRuntime for MockAgentRuntime {
                 self.mode,
                 MockMode::StartFailuresAt(first, second)
                     if first == start_ordinal || second == start_ordinal
+            )
+            || matches!(
+                self.mode,
+                MockMode::StartFailuresAtThree(first, second, third)
+                    if first == start_ordinal
+                        || second == start_ordinal
+                        || third == start_ordinal
             )
         {
             return Err(RuntimeError::BoundaryFailure(RuntimeBoundaryStage::Start));

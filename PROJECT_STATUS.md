@@ -6,7 +6,7 @@ Last updated: 2026-08-12
 
 The D-086 fixture-only Research/Knowledge increment and
 [`2026-08-11-research-knowledge-workflow.md`](docs/plans/2026-08-11-research-knowledge-workflow.md)
-are **verified complete with advisories; publication pending**. The unwired Rust
+are **verified complete with advisories and published at `3efd2c1`**. The unwired Rust
 workflow uses two sequential depth-one sibling specialists, strict structured
 stage and final synthesis contracts, catalog-issued fixture source IDs,
 truthful partial outcomes, zero automatic retries, child-first cancellation,
@@ -16,9 +16,23 @@ pass, as do complete Rust/repository validation and independent reviews.
 
 D-085 remains **verified complete with advisories and published at `5e53f55`**
 with its valid published-tree marker and narrow pure-`std` Unix document-open
-TOCTOU advisory. Durable memory/ARB-005, live research/retrieval, providers,
-tools, IPC, UI, parallelism, and all later workflows remain Blocked. No later
-plan is Ready.
+TOCTOU advisory. D-087 implements only one deterministic fixture-only,
+proposal-only engineering-quality workflow. Its exact
+[`ExecPlan`](docs/plans/2026-08-11-engineering-quality-workflow.md) is
+**verified complete with advisories** under gate
+`agent-engineering-quality-workflow`. It uses application-owned
+fixture/evidence provenance, exact
+criterion reconciliation, mutually exclusive selectors, private derived
+identity, a conservative Native request-size proof, and a derived not-applicable or
+required-before-mutation approval status. Coding, QA & Validation, and Security
+& Risk are `Initial` only for this sealed unwired workflow; their generic
+routes, tool-ineligible policy profiles, and disabled memory remain unchanged.
+Full source checks and `npm run verify` pass. The advisory is to consider a
+bounded private orchestrator decomposition before another multi-specialist
+workflow without adding a general workflow engine. Durable memory/ARB-005, live
+research/retrieval, providers,
+repository tools/effects, IPC, UI, parallelism, and all other later workflows
+remain Blocked.
 
 The Rust core now carries nine exact policy-profile identities from sealed
 definitions through tasks, live execution contexts, delegation, governed tool
@@ -36,7 +50,7 @@ mock-runtime task. Knowledge is `Initial` only for that route; generic
 Personal-to-Knowledge and every generic/direct Research-to-Knowledge path
 remain denied. D-086's sealed sequence is orchestrator-owned sibling task
 creation, not delegation by Research.
-Native remains sole/default. No executor, durable memory, provider, live model,
+Native remains sole/default and unchanged. No executor, durable memory, provider, live model,
 persistence, Tauri consumer, multi-agent frontend, dependency, permission,
 platform effect, external I/O, or Hermes integration exists.
 
@@ -1421,11 +1435,12 @@ path was added.
 
 ## Next action
 
-The immediate task is separate owner review and publication direction for the
-verified D-086 fixture-only Research/Knowledge increment. Do not begin a new
-implementation automatically. Durable memory/ARB-005, live retrieval, bounded
-parallelism, every other native multi-agent phase, provider, IPC, UI, and
-device effects remain Blocked. Hermes remains Deferred/Blocked.
+D-087 is verified complete with advisories. Stop for separate owner direction;
+no later owner-approved plan is Ready, so next-increment readiness is
+`Blocked`. Durable memory/
+ARB-005, live retrieval, bounded parallelism, infrastructure/operations,
+automation, repository tools or effects, provider, IPC, UI, and device effects
+remain Blocked. Hermes remains Deferred/Blocked.
 
 All other product and remediation gates remain unchanged. ARB-002 remains
 decision-required under D-062's identity-evidence gates and D-066's OpenAI

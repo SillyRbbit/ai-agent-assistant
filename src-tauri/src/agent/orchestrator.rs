@@ -15,6 +15,14 @@ use std::{
 use thiserror::Error;
 
 use super::definition::{AgentActivation, AgentId};
+use super::engineering_quality::{
+    ChangeProposalQuality, CodingStageOutcome, EngineeringCapabilityAuditDisposition,
+    EngineeringContinuationFailure, EngineeringPartialFailureCode, EngineeringQualityAttribution,
+    EngineeringQualityAuditOutcome, EngineeringQualityAuditRecord, EngineeringQualityError,
+    EngineeringQualityStage, EngineeringQualityWorkflowEvent, EngineeringQualityWorkflowRequest,
+    EngineeringQualityWorkflowResult, EngineeringReviewSynthesis, QaStageOutcome,
+    SecurityStageOutcome, MAX_ENGINEERING_AUDIT_RECORDS, MAX_ENGINEERING_WORKFLOW_EVENTS,
+};
 use super::governance::{
     AgentApprovalGovernanceOutcome, AgentAttribution, AgentControlResult, AgentGovernanceError,
     AgentGovernanceErrorCode, AgentGovernanceService, AgentToolGovernanceOutcome,
@@ -32,8 +40,9 @@ use super::research_knowledge::{
 };
 use super::runtime::{
     AgentRuntime, RuntimeAvailability, RuntimeCancellationOutcome, RuntimeCapability, RuntimeError,
-    RuntimeEventAcceptance, RuntimeEventEnvelope, RuntimeEventRejection, RuntimeHealth, RuntimeId,
-    RuntimeRun, RuntimeRunStatus, RuntimeTurnRequest, UntrustedRuntimeEvent,
+    RuntimeEventAcceptance, RuntimeEventEnvelope, RuntimeEventRejection, RuntimeFailureCode,
+    RuntimeHealth, RuntimeId, RuntimeRun, RuntimeRunStatus, RuntimeTurnRequest,
+    UntrustedRuntimeEvent,
 };
 use super::task::{
     AgentExecutionContext, AgentTask, AgentTaskCancellationOutcome, AgentTaskContext,
@@ -71,6 +80,18 @@ pub const MAX_DOCUMENT_RUNTIME_FRAMING_BYTES: usize = 2_048;
 pub const MAX_RESEARCH_KNOWLEDGE_TASKS_PER_ROOT: usize = 3;
 pub const MAX_RESEARCH_KNOWLEDGE_CHILDREN_PER_ROOT: u8 = 2;
 pub const MAX_RESEARCH_KNOWLEDGE_RUNTIME_RUNS_PER_ROOT: u8 = 4;
+pub const MAX_ENGINEERING_QUALITY_TASKS_PER_ROOT: usize = 4;
+pub const MAX_ENGINEERING_QUALITY_CHILDREN_PER_ROOT: u8 = 3;
+pub const MAX_ENGINEERING_QUALITY_RUNTIME_RUNS_PER_ROOT: u8 = 5;
+pub const MAX_ENGINEERING_QUALITY_EVENTS_PER_RUN: u32 = 8;
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum AgentWorkflowSelection {
+    GenericDelegation,
+    ApprovedDocument,
+    ResearchKnowledge,
+    EngineeringQuality,
+}
 
 static NEXT_WORKFLOW_SEQUENCE: AtomicU64 = AtomicU64::new(1);
 
@@ -336,6 +357,72 @@ impl ResearchKnowledgeWorkflowAcceptance {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
+pub enum EngineeringQualityWorkflowAcceptance {
+    CodingStarted { context: AgentExecutionContext },
+    PersonalFallbackStarted { context: AgentExecutionContext },
+}
+
+impl EngineeringQualityWorkflowAcceptance {
+    #[must_use]
+    pub fn context(&self) -> &AgentExecutionContext {
+        match self {
+            Self::CodingStarted { context } | Self::PersonalFallbackStarted { context } => context,
+        }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+enum EngineeringQualityPhase {
+    CodingRunning(AgentTaskId),
+    QaRunning(AgentTaskId),
+    SecurityRunning(AgentTaskId),
+    SynthesisRunning,
+    Completed,
+    Failed,
+    Cancelled,
+}
+
+struct EngineeringQualityWorkflowState {
+    request: EngineeringQualityWorkflowRequest,
+    phase: EngineeringQualityPhase,
+    coding: Option<CodingStageOutcome>,
+    qa: Option<QaStageOutcome>,
+    security: Option<SecurityStageOutcome>,
+    result: Option<EngineeringQualityWorkflowResult>,
+    child_count: u8,
+    run_attempts: u8,
+    accepted_events_by_task: BTreeMap<AgentTaskId, u32>,
+    events: Vec<EngineeringQualityWorkflowEvent>,
+    audit: Vec<EngineeringQualityAuditRecord>,
+    audit_contexts: BTreeMap<AgentTaskId, EngineeringQualityAttribution>,
+    continuation_failure: Option<EngineeringContinuationFailure>,
+}
+
+impl EngineeringQualityWorkflowState {
+    fn active_child(&self, task_id: &AgentTaskId) -> bool {
+        matches!(
+            &self.phase,
+            EngineeringQualityPhase::CodingRunning(active)
+                | EngineeringQualityPhase::QaRunning(active)
+                | EngineeringQualityPhase::SecurityRunning(active)
+                if active == task_id
+        )
+    }
+
+    fn active_event_task<'a>(&'a self, root_task_id: &'a AgentTaskId) -> Option<&'a AgentTaskId> {
+        match &self.phase {
+            EngineeringQualityPhase::CodingRunning(task_id)
+            | EngineeringQualityPhase::QaRunning(task_id)
+            | EngineeringQualityPhase::SecurityRunning(task_id) => Some(task_id),
+            EngineeringQualityPhase::SynthesisRunning => Some(root_task_id),
+            EngineeringQualityPhase::Completed
+            | EngineeringQualityPhase::Failed
+            | EngineeringQualityPhase::Cancelled => None,
+        }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
 enum ResearchKnowledgePhase {
     ResearchRunning(AgentTaskId),
     KnowledgeRunning(AgentTaskId),
@@ -450,6 +537,45 @@ struct PreparedKnowledgeContinuation {
     fallback_synthesis_request: RuntimeTurnRequest,
 }
 
+enum PreparedEngineeringTerminal {
+    Coding {
+        task_outcome: AgentTaskOutcome,
+        coding: CodingStageOutcome,
+        failure: Option<EngineeringPartialFailureCode>,
+        next: PreparedEngineeringNext,
+    },
+    Qa {
+        task_outcome: AgentTaskOutcome,
+        qa: QaStageOutcome,
+        failure: Option<EngineeringPartialFailureCode>,
+        next: PreparedEngineeringNext,
+    },
+    Security {
+        task_outcome: AgentTaskOutcome,
+        security: SecurityStageOutcome,
+        failure: Option<EngineeringPartialFailureCode>,
+        synthesis_request: RuntimeTurnRequest,
+    },
+    SynthesisCompleted {
+        output: AgentTaskOutput,
+        synthesis: EngineeringReviewSynthesis,
+    },
+    SynthesisFailed {
+        task_code: AgentTaskFailureCode,
+        workflow_code: EngineeringPartialFailureCode,
+    },
+    SynthesisCancelled,
+}
+
+enum PreparedEngineeringNext {
+    Child {
+        task: Box<AgentTask>,
+        request: RuntimeTurnRequest,
+        attribution: EngineeringQualityAttribution,
+    },
+    Synthesis(RuntimeTurnRequest),
+}
+
 struct ActiveRun<T: RuntimeRun> {
     run: T,
     output: String,
@@ -483,6 +609,8 @@ pub struct AgentOrchestrator<R: AgentRuntime> {
     runtime_event_count: usize,
     events: Vec<AgentOrchestrationEvent>,
     research_knowledge: Option<ResearchKnowledgeWorkflowState>,
+    engineering_quality: Option<EngineeringQualityWorkflowState>,
+    selected_workflow: Option<AgentWorkflowSelection>,
 }
 
 impl<R: AgentRuntime> AgentOrchestrator<R> {
@@ -534,6 +662,8 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             runtime_event_count: 0,
             events: Vec::with_capacity(MAX_ORCHESTRATION_EVENTS_PER_ROOT),
             research_knowledge: None,
+            engineering_quality: None,
+            selected_workflow: None,
         })
     }
 
@@ -780,10 +910,13 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         source_context: &AgentExecutionContext,
         proposal: DelegationProposal,
     ) -> AgentOrchestratorResult<DelegationAcceptance> {
-        if self.research_knowledge.is_some() {
-            return Err(AgentOrchestratorError::ResearchKnowledgeWorkflowAlreadySelected);
-        }
         let attribution = self.live_attribution(source_context)?;
+        if attribution.agent_id() != AgentId::PersonalAssistant {
+            return Err(AgentOrchestratorError::UnauthorizedSource {
+                agent_id: attribution.agent_id(),
+            });
+        }
+        self.ensure_workflow_selection_available(AgentWorkflowSelection::GenericDelegation, true)?;
         let target_agent_id = proposal.target_agent_id;
         let matrix = self
             .governance
@@ -819,6 +952,7 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         let result = self.perform_delegation(attribution, proposal);
         match result {
             Ok(acceptance) => {
+                self.selected_workflow = Some(AgentWorkflowSelection::GenericDelegation);
                 self.governance.finish_delegation(
                     audit_token,
                     AgentControlResult::ChildCreated,
@@ -842,9 +976,7 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         source_context: &AgentExecutionContext,
         request: ResearchKnowledgeWorkflowRequest,
     ) -> AgentOrchestratorResult<ResearchKnowledgeWorkflowAcceptance> {
-        if self.research_knowledge.is_some() {
-            return Err(AgentOrchestratorError::ResearchKnowledgeWorkflowAlreadySelected);
-        }
+        self.ensure_workflow_selection_available(AgentWorkflowSelection::ResearchKnowledge, false)?;
         let attribution = self.live_attribution(source_context)?;
         let target = AgentId::Research;
         let matrix = self
@@ -877,11 +1009,15 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         );
         match result {
             Ok(acceptance) => {
+                self.selected_workflow = Some(AgentWorkflowSelection::ResearchKnowledge);
                 self.governance
                     .finish_delegation(token, AgentControlResult::ChildCreated, None);
                 Ok(acceptance)
             }
             Err(error) => {
+                if self.research_knowledge.is_some() {
+                    self.selected_workflow = Some(AgentWorkflowSelection::ResearchKnowledge);
+                }
                 self.governance.finish_delegation(
                     token,
                     AgentControlResult::Failed,
@@ -922,6 +1058,170 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             .and_then(|workflow| workflow.continuation_failure)
     }
 
+    pub fn start_engineering_quality_workflow(
+        &mut self,
+        source_context: &AgentExecutionContext,
+        request: EngineeringQualityWorkflowRequest,
+    ) -> AgentOrchestratorResult<EngineeringQualityWorkflowAcceptance> {
+        let attribution = self.live_attribution(source_context)?;
+        self.validate_engineering_quality_start(source_context, &attribution)?;
+        let coding_input = request.build_coding_input()?;
+        let root_task_id = attribution.task_id().clone();
+        let coding_task_id =
+            AgentTaskId::new(format!("agent-task-child-{}-1", self.workflow_sequence))?;
+        let mut coding_task = AgentTask::new_child(
+            coding_task_id.clone(),
+            attribution.root_task_id().clone(),
+            ParentTaskId::from_task_id(root_task_id.clone()),
+            self.registry.get(AgentId::Coding)?.identity(),
+            AgentTaskObjective::new(request.objective().to_owned())?,
+            Some(AgentTaskContext::new(
+                "Use only the immutable application-supplied engineering fixture catalog",
+            )?),
+            AgentTaskExpectedDeliverable::new(
+                "Return one strict proposal-only ChangeProposalV1 JSON object",
+            )?,
+        )?;
+        coding_task.start()?;
+        let coding_request = self.runtime_request(&coding_task_id, 2, &coding_input)?;
+        let coding_context = AgentExecutionContext::for_task(
+            &coding_task,
+            self.runtime_id,
+            coding_request.identity(),
+        );
+        let root_context = source_context.clone();
+
+        let mut root_run = self
+            .runs
+            .remove(&root_task_id)
+            .ok_or(AgentOrchestratorError::NoActiveRun)?;
+        match root_run.run.cancel() {
+            Ok(RuntimeCancellationOutcome::Cancelled)
+            | Ok(RuntimeCancellationOutcome::AlreadyTerminal(RuntimeRunStatus::Cancelled)) => {}
+            Ok(RuntimeCancellationOutcome::AlreadyTerminal(status)) if status.is_terminal() => {
+                self.fail_active_task(&root_task_id, AgentTaskFailureCode::RuntimeStateMismatch)?;
+                return Err(AgentOrchestratorError::UnexpectedRuntimeStatus { status });
+            }
+            Ok(RuntimeCancellationOutcome::AlreadyTerminal(status)) => {
+                self.runs.insert(root_task_id, root_run);
+                return Err(AgentOrchestratorError::UnexpectedRuntimeStatus { status });
+            }
+            Err(error) => {
+                self.runs.insert(root_task_id, root_run);
+                return Err(AgentOrchestratorError::Runtime(error));
+            }
+        }
+
+        self.tasks
+            .get_mut(&root_task_id)
+            .ok_or(AgentOrchestratorError::TaskNotFound)?
+            .wait_for_child()?;
+        self.tasks.insert(coding_task_id.clone(), coding_task);
+        self.active_child_task_id = Some(coding_task_id.clone());
+        self.child_created = true;
+        self.run_count = 2;
+        self.events.push(AgentOrchestrationEvent::ChildCreated {
+            task_id: coding_task_id.clone(),
+            parent_task_id: root_task_id.clone(),
+        });
+        self.events.push(AgentOrchestrationEvent::ChildStarted {
+            task_id: coding_task_id.clone(),
+        });
+        let mut audit_contexts = BTreeMap::new();
+        audit_contexts.insert(
+            root_task_id.clone(),
+            EngineeringQualityAttribution::from_execution_context(&root_context),
+        );
+        audit_contexts.insert(
+            coding_task_id.clone(),
+            EngineeringQualityAttribution::from_execution_context(&coding_context),
+        );
+        let mut workflow = EngineeringQualityWorkflowState {
+            request,
+            phase: EngineeringQualityPhase::CodingRunning(coding_task_id.clone()),
+            coding: None,
+            qa: None,
+            security: None,
+            result: None,
+            child_count: 1,
+            run_attempts: 2,
+            accepted_events_by_task: BTreeMap::new(),
+            events: Vec::with_capacity(MAX_ENGINEERING_WORKFLOW_EVENTS),
+            audit: Vec::with_capacity(MAX_ENGINEERING_AUDIT_RECORDS),
+            audit_contexts,
+            continuation_failure: None,
+        };
+        push_engineering_transition(
+            &mut workflow,
+            coding_task_id.clone(),
+            None,
+            EngineeringQualityStage::Coding,
+            EngineeringQualityWorkflowEvent::CodingStarted {
+                task_id: coding_task_id.clone(),
+            },
+            EngineeringQualityAuditOutcome::Started,
+        )?;
+        self.engineering_quality = Some(workflow);
+        self.selected_workflow = Some(AgentWorkflowSelection::EngineeringQuality);
+        match self.start_runtime_run(coding_request) {
+            Ok(run) => {
+                self.runs.insert(
+                    coding_task_id,
+                    ActiveRun {
+                        run,
+                        output: String::new(),
+                        next_sequence: 0,
+                    },
+                );
+                Ok(EngineeringQualityWorkflowAcceptance::CodingStarted {
+                    context: coding_context,
+                })
+            }
+            Err(_) => {
+                self.record_engineering_continuation_failure(
+                    EngineeringContinuationFailure::CodingStartFailed,
+                );
+                self.terminalize_engineering_child_failure(
+                    &coding_task_id,
+                    AgentTaskFailureCode::RuntimeStartFailed,
+                    EngineeringPartialFailureCode::RuntimeStartFailed,
+                )?;
+                let context = self.start_engineering_synthesis()?;
+                Ok(EngineeringQualityWorkflowAcceptance::PersonalFallbackStarted { context })
+            }
+        }
+    }
+
+    #[must_use]
+    pub fn engineering_quality_result(&self) -> Option<&EngineeringQualityWorkflowResult> {
+        self.engineering_quality
+            .as_ref()
+            .and_then(|workflow| workflow.result.as_ref())
+    }
+
+    #[must_use]
+    pub fn engineering_quality_events(&self) -> &[EngineeringQualityWorkflowEvent] {
+        self.engineering_quality
+            .as_ref()
+            .map_or(&[], |workflow| workflow.events.as_slice())
+    }
+
+    #[must_use]
+    pub fn engineering_quality_audit_records(&self) -> &[EngineeringQualityAuditRecord] {
+        self.engineering_quality
+            .as_ref()
+            .map_or(&[], |workflow| workflow.audit.as_slice())
+    }
+
+    #[must_use]
+    pub fn engineering_quality_continuation_failure(
+        &self,
+    ) -> Option<EngineeringContinuationFailure> {
+        self.engineering_quality
+            .as_ref()
+            .and_then(|workflow| workflow.continuation_failure)
+    }
+
     #[must_use]
     pub fn shared_memory_proposal_count(&self) -> usize {
         self.memory.proposal_count()
@@ -934,9 +1234,7 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         operation: DocumentOperation,
         memory_selection: Option<MemoryContextSelection>,
     ) -> AgentOrchestratorResult<AgentExecutionContext> {
-        if self.research_knowledge.is_some() {
-            return Err(AgentOrchestratorError::ResearchKnowledgeWorkflowAlreadySelected);
-        }
+        self.ensure_workflow_selection_available(AgentWorkflowSelection::ApprovedDocument, true)?;
         let attribution = self.live_attribution(source_context)?;
         self.validate_document_task_after_attribution(source_context, &attribution)?;
         let source_task_id = attribution.task_id().clone();
@@ -1094,6 +1392,7 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         self.events.push(AgentOrchestrationEvent::ChildStarted {
             task_id: child_task_id,
         });
+        self.selected_workflow = Some(AgentWorkflowSelection::ApprovedDocument);
         Ok(child_context)
     }
 
@@ -1496,6 +1795,8 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             self.terminate_for_runtime_event_limit(task_id)?;
             return Err(AgentOrchestratorError::RuntimeEventLimitExceeded);
         }
+        self.preflight_engineering_event_capacity(task_id, &event)?;
+        let prepared_engineering = self.prepare_engineering_terminal(task_id, &event)?;
         let prepared_terminal = self.prepare_research_knowledge_terminal(task_id, &event)?;
         if prepared_terminal.is_none()
             && matches!(
@@ -1538,6 +1839,7 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             }
         };
         self.runtime_event_count += 1;
+        self.record_engineering_event_acceptance(task_id);
 
         match &accepted {
             RuntimeEventAcceptance::ResponseStarted { .. } => {}
@@ -1548,7 +1850,15 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
                 }
             }
             RuntimeEventAcceptance::ResponseCompleted => {
-                if let Some(prepared) = prepared_terminal {
+                if let Some(prepared) = prepared_engineering {
+                    let prior_failure = self.engineering_quality_continuation_failure();
+                    if let Err(error) = self.apply_prepared_engineering_terminal(task_id, prepared)
+                    {
+                        if self.engineering_quality_continuation_failure() == prior_failure {
+                            return Err(error);
+                        }
+                    }
+                } else if let Some(prepared) = prepared_terminal {
                     let prior_failure = self.research_knowledge_continuation_failure();
                     if let Err(error) =
                         self.apply_prepared_research_knowledge_terminal(task_id, prepared)
@@ -1562,7 +1872,15 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
                 }
             }
             RuntimeEventAcceptance::ResponseFailed { failure } => {
-                if let Some(prepared) = prepared_terminal {
+                if let Some(prepared) = prepared_engineering {
+                    let prior_failure = self.engineering_quality_continuation_failure();
+                    if let Err(error) = self.apply_prepared_engineering_terminal(task_id, prepared)
+                    {
+                        if self.engineering_quality_continuation_failure() == prior_failure {
+                            return Err(error);
+                        }
+                    }
+                } else if let Some(prepared) = prepared_terminal {
                     let prior_failure = self.research_knowledge_continuation_failure();
                     if let Err(error) =
                         self.apply_prepared_research_knowledge_terminal(task_id, prepared)
@@ -1584,6 +1902,1195 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             }
         }
         Ok(accepted)
+    }
+
+    fn preflight_engineering_event_capacity(
+        &self,
+        task_id: &AgentTaskId,
+        event: &UntrustedRuntimeEvent,
+    ) -> AgentOrchestratorResult<()> {
+        let Some(workflow) = self.engineering_quality.as_ref() else {
+            return Ok(());
+        };
+        let root_task_id = self
+            .root_task_id
+            .as_ref()
+            .ok_or(AgentOrchestratorError::RootMissing)?;
+        if workflow.active_event_task(root_task_id) != Some(task_id) {
+            return Ok(());
+        }
+        let accepted = workflow
+            .accepted_events_by_task
+            .get(task_id)
+            .copied()
+            .unwrap_or(0);
+        let is_terminal = matches!(
+            event,
+            UntrustedRuntimeEvent::ResponseCompleted | UntrustedRuntimeEvent::ResponseFailed { .. }
+        );
+        let maximum_before_accept = if is_terminal {
+            MAX_ENGINEERING_QUALITY_EVENTS_PER_RUN
+        } else {
+            MAX_ENGINEERING_QUALITY_EVENTS_PER_RUN.saturating_sub(1)
+        };
+        if accepted >= maximum_before_accept {
+            Err(AgentOrchestratorError::EngineeringEventLimitExceeded)
+        } else {
+            Ok(())
+        }
+    }
+
+    fn validate_engineering_quality_start(
+        &self,
+        source_context: &AgentExecutionContext,
+        attribution: &AgentAttribution,
+    ) -> AgentOrchestratorResult<()> {
+        self.ensure_workflow_selection_available(
+            AgentWorkflowSelection::EngineeringQuality,
+            false,
+        )?;
+        let task = self
+            .tasks
+            .get(source_context.task_id())
+            .ok_or(AgentOrchestratorError::TaskNotFound)?;
+        let active = self
+            .runs
+            .get(source_context.task_id())
+            .ok_or(AgentOrchestratorError::NoActiveRun)?;
+        if self.governance.has_pending_for(attribution) {
+            return Err(AgentOrchestratorError::GovernanceApprovalPending);
+        }
+        if attribution.agent_id() != AgentId::PersonalAssistant
+            || attribution.task_id() != attribution.root_task_id().task_id()
+            || attribution.parent_task_id().is_some()
+            || attribution.depth() != 0
+            || self.root_task_id.as_ref() != Some(task.id())
+        {
+            return Err(AgentOrchestratorError::UnauthorizedSource {
+                agent_id: attribution.agent_id(),
+            });
+        }
+        if active.run.status() != RuntimeRunStatus::AwaitingStart || !active.output.is_empty() {
+            return Err(AgentOrchestratorError::DelegationAfterRuntimeOutput);
+        }
+        if self.active_child_task_id.is_some() {
+            return Err(AgentOrchestratorError::ActiveChildLimitExceeded);
+        }
+        for agent_id in [
+            AgentId::Coding,
+            AgentId::QaValidation,
+            AgentId::SecurityRisk,
+        ] {
+            let definition = self.registry.get(agent_id)?;
+            if definition.activation() != AgentActivation::Initial {
+                return Err(AgentOrchestratorError::AgentDeferred { agent_id });
+            }
+            if definition.memory_profile_id() != AgentMemoryProfileId::MemoryDisabledV1 {
+                return Err(AgentOrchestratorError::EngineeringMemoryProfileMismatch { agent_id });
+            }
+        }
+        if self
+            .tasks
+            .len()
+            .checked_add(3)
+            .is_none_or(|count| count > MAX_ENGINEERING_QUALITY_TASKS_PER_ROOT)
+        {
+            return Err(AgentOrchestratorError::TotalChildLimitExceeded);
+        }
+        if self
+            .run_count
+            .checked_add(4)
+            .is_none_or(|count| count > MAX_ENGINEERING_QUALITY_RUNTIME_RUNS_PER_ROOT)
+        {
+            return Err(AgentOrchestratorError::RunLimitExceeded);
+        }
+        if self.runtime_event_count >= MAX_RUNTIME_EVENTS_PER_ROOT {
+            return Err(AgentOrchestratorError::RuntimeEventLimitExceeded);
+        }
+        self.ensure_event_capacity(14)
+    }
+
+    fn record_engineering_event_acceptance(&mut self, task_id: &AgentTaskId) {
+        let Some(workflow) = self.engineering_quality.as_mut() else {
+            return;
+        };
+        let Some(root_task_id) = self.root_task_id.as_ref() else {
+            return;
+        };
+        if workflow.active_event_task(root_task_id) == Some(task_id) {
+            let accepted = workflow
+                .accepted_events_by_task
+                .entry(task_id.clone())
+                .or_insert(0);
+            *accepted += 1;
+        }
+    }
+
+    fn prepare_engineering_terminal(
+        &self,
+        task_id: &AgentTaskId,
+        event: &UntrustedRuntimeEvent,
+    ) -> AgentOrchestratorResult<Option<PreparedEngineeringTerminal>> {
+        let Some(workflow) = self.engineering_quality.as_ref() else {
+            return Ok(None);
+        };
+        if !matches!(
+            event,
+            UntrustedRuntimeEvent::ResponseCompleted | UntrustedRuntimeEvent::ResponseFailed { .. }
+        ) {
+            return Ok(None);
+        }
+        let root_id = self
+            .root_task_id
+            .as_ref()
+            .ok_or(AgentOrchestratorError::RootMissing)?;
+        if workflow.active_event_task(root_id) != Some(task_id) {
+            return Ok(None);
+        }
+        let active = self
+            .runs
+            .get(task_id)
+            .ok_or(AgentOrchestratorError::NoActiveRun)?;
+        let next_run = self
+            .run_count
+            .checked_add(1)
+            .ok_or(AgentOrchestratorError::RunLimitExceeded)?;
+        let terminal = match (&workflow.phase, event) {
+            (EngineeringQualityPhase::CodingRunning(active_id), _) if active_id == task_id => {
+                let (task_outcome, coding, failure) = match event {
+                    UntrustedRuntimeEvent::ResponseCompleted => {
+                        match workflow
+                            .request
+                            .parse_change_proposal(task_id.clone(), &active.output)
+                        {
+                            Ok(proposal) => {
+                                let quality = proposal.quality();
+                                (
+                                    AgentTaskOutcome::Completed(AgentTaskResult::new(
+                                        task_id.clone(),
+                                        AgentId::Coding,
+                                        AgentTaskOutput::new(active.output.clone())?,
+                                    )),
+                                    CodingStageOutcome::Completed(Box::new(proposal)),
+                                    (quality == ChangeProposalQuality::PartialDeniedCapability)
+                                        .then_some(
+                                            EngineeringPartialFailureCode::ContainsDeniedCapability,
+                                        ),
+                                )
+                            }
+                            Err(_) => {
+                                let code = AgentTaskFailureCode::RuntimeOutputInvalid;
+                                (
+                                    AgentTaskOutcome::Failed(AgentTaskFailure::new(
+                                        task_id.clone(),
+                                        AgentId::Coding,
+                                        code,
+                                    )),
+                                    CodingStageOutcome::Failed(code),
+                                    Some(EngineeringPartialFailureCode::InvalidStructuredOutput),
+                                )
+                            }
+                        }
+                    }
+                    UntrustedRuntimeEvent::ResponseFailed { failure } => {
+                        if failure.code() == RuntimeFailureCode::Cancelled {
+                            (
+                                AgentTaskOutcome::Cancelled(
+                                    super::task::AgentTaskCancellation::new(
+                                        task_id.clone(),
+                                        AgentId::Coding,
+                                    ),
+                                ),
+                                CodingStageOutcome::Cancelled,
+                                Some(EngineeringPartialFailureCode::Cancelled),
+                            )
+                        } else {
+                            let code = AgentTaskFailureCode::RuntimeReported(failure.code());
+                            (
+                                AgentTaskOutcome::Failed(AgentTaskFailure::new(
+                                    task_id.clone(),
+                                    AgentId::Coding,
+                                    code,
+                                )),
+                                CodingStageOutcome::Failed(code),
+                                Some(EngineeringPartialFailureCode::RuntimeFailed),
+                            )
+                        }
+                    }
+                    _ => return Ok(None),
+                };
+                let next = match &coding {
+                    CodingStageOutcome::Completed(proposal) => {
+                        match workflow.request.build_qa_input(proposal) {
+                            Ok(input) => PreparedEngineeringNext::Child {
+                                task: Box::new(self.prepare_engineering_child(
+                                    AgentId::QaValidation,
+                                    2,
+                                    "Validate the exact engineering proposal against fixture criteria",
+                                    "Return one strict ValidationReportV1 JSON object",
+                                )?),
+                                request: self.runtime_request(
+                                    &AgentTaskId::new(format!(
+                                        "agent-task-child-{}-2",
+                                        self.workflow_sequence
+                                    ))?,
+                                    next_run,
+                                    &input,
+                                )?,
+                                attribution: self.prepare_engineering_child_attribution(
+                                    AgentId::QaValidation,
+                                    2,
+                                    next_run,
+                                )?,
+                            },
+                            Err(_) => PreparedEngineeringNext::Synthesis(
+                                self.prepare_engineering_synthesis_request(
+                                    &coding,
+                                    &QaStageOutcome::Failed(
+                                        AgentTaskFailureCode::RuntimeOutputInvalid,
+                                    ),
+                                    &SecurityStageOutcome::SkippedCodingUnavailable,
+                                    next_run,
+                                )?,
+                            ),
+                        }
+                    }
+                    CodingStageOutcome::Failed(_) | CodingStageOutcome::Cancelled => {
+                        PreparedEngineeringNext::Synthesis(
+                            self.prepare_engineering_synthesis_request(
+                                &coding,
+                                &QaStageOutcome::SkippedCodingUnavailable,
+                                &SecurityStageOutcome::SkippedCodingUnavailable,
+                                next_run,
+                            )?,
+                        )
+                    }
+                };
+                PreparedEngineeringTerminal::Coding {
+                    task_outcome,
+                    coding,
+                    failure,
+                    next,
+                }
+            }
+            (EngineeringQualityPhase::QaRunning(active_id), _) if active_id == task_id => {
+                let proposal = match workflow.coding.as_ref() {
+                    Some(CodingStageOutcome::Completed(proposal)) => proposal,
+                    _ => return Err(AgentOrchestratorError::EngineeringStageMismatch),
+                };
+                let (task_outcome, qa, failure) = match event {
+                    UntrustedRuntimeEvent::ResponseCompleted => match workflow
+                        .request
+                        .parse_validation_report(task_id.clone(), proposal, &active.output)
+                    {
+                        Ok(report) => (
+                            AgentTaskOutcome::Completed(AgentTaskResult::new(
+                                task_id.clone(),
+                                AgentId::QaValidation,
+                                AgentTaskOutput::new(active.output.clone())?,
+                            )),
+                            QaStageOutcome::Completed(report),
+                            None,
+                        ),
+                        Err(_) => {
+                            let code = AgentTaskFailureCode::RuntimeOutputInvalid;
+                            (
+                                AgentTaskOutcome::Failed(AgentTaskFailure::new(
+                                    task_id.clone(),
+                                    AgentId::QaValidation,
+                                    code,
+                                )),
+                                QaStageOutcome::Failed(code),
+                                Some(EngineeringPartialFailureCode::InvalidStructuredOutput),
+                            )
+                        }
+                    },
+                    UntrustedRuntimeEvent::ResponseFailed { failure } => {
+                        if failure.code() == RuntimeFailureCode::Cancelled {
+                            (
+                                AgentTaskOutcome::Cancelled(
+                                    super::task::AgentTaskCancellation::new(
+                                        task_id.clone(),
+                                        AgentId::QaValidation,
+                                    ),
+                                ),
+                                QaStageOutcome::Cancelled,
+                                Some(EngineeringPartialFailureCode::Cancelled),
+                            )
+                        } else {
+                            let code = AgentTaskFailureCode::RuntimeReported(failure.code());
+                            (
+                                AgentTaskOutcome::Failed(AgentTaskFailure::new(
+                                    task_id.clone(),
+                                    AgentId::QaValidation,
+                                    code,
+                                )),
+                                QaStageOutcome::Failed(code),
+                                Some(EngineeringPartialFailureCode::RuntimeFailed),
+                            )
+                        }
+                    }
+                    _ => return Ok(None),
+                };
+                let security_input = workflow.request.build_security_input(proposal, &qa)?;
+                let security_task = self.prepare_engineering_child(
+                    AgentId::SecurityRisk,
+                    3,
+                    "Assess bounded security and change risks for the validated proposal",
+                    "Return one strict RiskAssessmentV1 JSON object",
+                )?;
+                let security_request =
+                    self.runtime_request(security_task.id(), next_run, &security_input)?;
+                let attribution = EngineeringQualityAttribution::from_execution_context(
+                    &AgentExecutionContext::for_task(
+                        &security_task,
+                        self.runtime_id,
+                        security_request.identity(),
+                    ),
+                );
+                PreparedEngineeringTerminal::Qa {
+                    task_outcome,
+                    qa,
+                    failure,
+                    next: PreparedEngineeringNext::Child {
+                        task: Box::new(security_task),
+                        request: security_request,
+                        attribution,
+                    },
+                }
+            }
+            (EngineeringQualityPhase::SecurityRunning(active_id), _) if active_id == task_id => {
+                let proposal = match workflow.coding.as_ref() {
+                    Some(CodingStageOutcome::Completed(proposal)) => proposal,
+                    _ => return Err(AgentOrchestratorError::EngineeringStageMismatch),
+                };
+                let qa = workflow
+                    .qa
+                    .as_ref()
+                    .ok_or(AgentOrchestratorError::EngineeringStageMismatch)?;
+                let (task_outcome, security, failure) = match event {
+                    UntrustedRuntimeEvent::ResponseCompleted => match workflow
+                        .request
+                        .parse_risk_assessment(task_id.clone(), proposal, qa, &active.output)
+                    {
+                        Ok(risk) => (
+                            AgentTaskOutcome::Completed(AgentTaskResult::new(
+                                task_id.clone(),
+                                AgentId::SecurityRisk,
+                                AgentTaskOutput::new(active.output.clone())?,
+                            )),
+                            SecurityStageOutcome::Completed(risk),
+                            None,
+                        ),
+                        Err(_) => {
+                            let code = AgentTaskFailureCode::RuntimeOutputInvalid;
+                            (
+                                AgentTaskOutcome::Failed(AgentTaskFailure::new(
+                                    task_id.clone(),
+                                    AgentId::SecurityRisk,
+                                    code,
+                                )),
+                                SecurityStageOutcome::Failed(code),
+                                Some(EngineeringPartialFailureCode::InvalidStructuredOutput),
+                            )
+                        }
+                    },
+                    UntrustedRuntimeEvent::ResponseFailed { failure } => {
+                        if failure.code() == RuntimeFailureCode::Cancelled {
+                            (
+                                AgentTaskOutcome::Cancelled(
+                                    super::task::AgentTaskCancellation::new(
+                                        task_id.clone(),
+                                        AgentId::SecurityRisk,
+                                    ),
+                                ),
+                                SecurityStageOutcome::Cancelled,
+                                Some(EngineeringPartialFailureCode::Cancelled),
+                            )
+                        } else {
+                            let code = AgentTaskFailureCode::RuntimeReported(failure.code());
+                            (
+                                AgentTaskOutcome::Failed(AgentTaskFailure::new(
+                                    task_id.clone(),
+                                    AgentId::SecurityRisk,
+                                    code,
+                                )),
+                                SecurityStageOutcome::Failed(code),
+                                Some(EngineeringPartialFailureCode::RuntimeFailed),
+                            )
+                        }
+                    }
+                    _ => return Ok(None),
+                };
+                PreparedEngineeringTerminal::Security {
+                    task_outcome,
+                    synthesis_request: self.prepare_engineering_synthesis_request(
+                        workflow
+                            .coding
+                            .as_ref()
+                            .ok_or(AgentOrchestratorError::EngineeringStageMismatch)?,
+                        qa,
+                        &security,
+                        next_run,
+                    )?,
+                    security,
+                    failure,
+                }
+            }
+            (EngineeringQualityPhase::SynthesisRunning, _) if root_id == task_id => match event {
+                UntrustedRuntimeEvent::ResponseCompleted => match workflow.request.parse_synthesis(
+                    workflow
+                        .coding
+                        .as_ref()
+                        .ok_or(AgentOrchestratorError::EngineeringStageMismatch)?,
+                    workflow
+                        .qa
+                        .as_ref()
+                        .ok_or(AgentOrchestratorError::EngineeringStageMismatch)?,
+                    workflow
+                        .security
+                        .as_ref()
+                        .ok_or(AgentOrchestratorError::EngineeringStageMismatch)?,
+                    &active.output,
+                ) {
+                    Ok(synthesis) => PreparedEngineeringTerminal::SynthesisCompleted {
+                        output: AgentTaskOutput::new(synthesis.summary().to_owned())?,
+                        synthesis,
+                    },
+                    Err(_) => PreparedEngineeringTerminal::SynthesisFailed {
+                        task_code: AgentTaskFailureCode::RuntimeOutputInvalid,
+                        workflow_code: EngineeringPartialFailureCode::InvalidStructuredOutput,
+                    },
+                },
+                UntrustedRuntimeEvent::ResponseFailed { failure } => {
+                    if failure.code() == RuntimeFailureCode::Cancelled {
+                        PreparedEngineeringTerminal::SynthesisCancelled
+                    } else {
+                        PreparedEngineeringTerminal::SynthesisFailed {
+                            task_code: AgentTaskFailureCode::RuntimeReported(failure.code()),
+                            workflow_code: EngineeringPartialFailureCode::RuntimeFailed,
+                        }
+                    }
+                }
+                _ => return Ok(None),
+            },
+            _ => return Ok(None),
+        };
+        Ok(Some(terminal))
+    }
+
+    fn prepare_engineering_child(
+        &self,
+        agent_id: AgentId,
+        child_ordinal: u8,
+        objective: &str,
+        expected: &str,
+    ) -> AgentOrchestratorResult<AgentTask> {
+        let root_task_id = self
+            .root_task_id
+            .clone()
+            .ok_or(AgentOrchestratorError::RootMissing)?;
+        let mut task = AgentTask::new_child(
+            AgentTaskId::new(format!(
+                "agent-task-child-{}-{child_ordinal}",
+                self.workflow_sequence
+            ))?,
+            RootTaskId::from_task_id(root_task_id.clone()),
+            ParentTaskId::from_task_id(root_task_id),
+            self.registry.get(agent_id)?.identity(),
+            AgentTaskObjective::new(objective)?,
+            Some(AgentTaskContext::new(
+                "Use only application-validated fixture and predecessor projections",
+            )?),
+            AgentTaskExpectedDeliverable::new(expected)?,
+        )?;
+        task.start()?;
+        Ok(task)
+    }
+
+    fn prepare_engineering_child_attribution(
+        &self,
+        agent_id: AgentId,
+        child_ordinal: u8,
+        run_ordinal: u8,
+    ) -> AgentOrchestratorResult<EngineeringQualityAttribution> {
+        let (objective, expected) = match agent_id {
+            AgentId::QaValidation => (
+                "Validate the exact engineering proposal against fixture criteria",
+                "Return one strict ValidationReportV1 JSON object",
+            ),
+            AgentId::SecurityRisk => (
+                "Assess bounded security and change risks for the validated proposal",
+                "Return one strict RiskAssessmentV1 JSON object",
+            ),
+            _ => return Err(AgentOrchestratorError::EngineeringStageMismatch),
+        };
+        let task = self.prepare_engineering_child(agent_id, child_ordinal, objective, expected)?;
+        let identity = RuntimeTurnRequest::new(
+            format!("{}-run-{run_ordinal}", task.id().as_str()),
+            format!("{}-request-{run_ordinal}", task.id().as_str()),
+            "engineering-attribution-preflight",
+        )?
+        .identity();
+        Ok(EngineeringQualityAttribution::from_execution_context(
+            &AgentExecutionContext::for_task(&task, self.runtime_id, identity),
+        ))
+    }
+
+    fn prepare_engineering_synthesis_request(
+        &self,
+        coding: &CodingStageOutcome,
+        qa: &QaStageOutcome,
+        security: &SecurityStageOutcome,
+        run_ordinal: u8,
+    ) -> AgentOrchestratorResult<RuntimeTurnRequest> {
+        let input = self
+            .engineering_quality
+            .as_ref()
+            .ok_or(AgentOrchestratorError::EngineeringWorkflowMissing)?
+            .request
+            .build_synthesis_input(coding, qa, security)?;
+        self.runtime_request(
+            self.root_task_id
+                .as_ref()
+                .ok_or(AgentOrchestratorError::RootMissing)?,
+            run_ordinal,
+            &input,
+        )
+    }
+
+    fn apply_prepared_engineering_terminal(
+        &mut self,
+        task_id: &AgentTaskId,
+        prepared: PreparedEngineeringTerminal,
+    ) -> AgentOrchestratorResult<()> {
+        self.runs
+            .remove(task_id)
+            .ok_or(AgentOrchestratorError::NoActiveRun)?;
+        match prepared {
+            PreparedEngineeringTerminal::Coding {
+                task_outcome,
+                coding,
+                failure,
+                next,
+            } => {
+                self.finish_workflow_child_task(task_id, task_outcome)?;
+                let mut workflow = self
+                    .engineering_quality
+                    .take()
+                    .ok_or(AgentOrchestratorError::EngineeringWorkflowMissing)?;
+                workflow.coding = Some(coding.clone());
+                let (event, outcome) = match (failure, &coding) {
+                    (None, CodingStageOutcome::Completed(proposal)) => (
+                        EngineeringQualityWorkflowEvent::CodingCompleted {
+                            task_id: task_id.clone(),
+                            quality: proposal.quality(),
+                        },
+                        EngineeringQualityAuditOutcome::Completed,
+                    ),
+                    (Some(code), _) => (
+                        EngineeringQualityWorkflowEvent::PartialFailure {
+                            stage: EngineeringQualityStage::Coding,
+                            code,
+                        },
+                        EngineeringQualityAuditOutcome::PartialFailure(code),
+                    ),
+                    _ => return Err(AgentOrchestratorError::EngineeringStageMismatch),
+                };
+                push_engineering_transition(
+                    &mut workflow,
+                    task_id.clone(),
+                    None,
+                    EngineeringQualityStage::Coding,
+                    event,
+                    outcome,
+                )?;
+                if !matches!(coding, CodingStageOutcome::Completed(_)) {
+                    workflow.qa = Some(QaStageOutcome::SkippedCodingUnavailable);
+                    workflow.security = Some(SecurityStageOutcome::SkippedCodingUnavailable);
+                }
+                self.engineering_quality = Some(workflow);
+                self.start_prepared_engineering_next(task_id, next)
+            }
+            PreparedEngineeringTerminal::Qa {
+                task_outcome,
+                qa,
+                failure,
+                next,
+            } => {
+                self.finish_workflow_child_task(task_id, task_outcome)?;
+                let predecessor = self.engineering_coding_task_id();
+                let mut workflow = self
+                    .engineering_quality
+                    .take()
+                    .ok_or(AgentOrchestratorError::EngineeringWorkflowMissing)?;
+                workflow.qa = Some(qa.clone());
+                let (event, outcome) = match (failure, &qa) {
+                    (None, QaStageOutcome::Completed(report)) => (
+                        EngineeringQualityWorkflowEvent::QaValidationCompleted {
+                            task_id: task_id.clone(),
+                            conclusion: report.conclusion(),
+                        },
+                        EngineeringQualityAuditOutcome::Completed,
+                    ),
+                    (Some(code), _) => (
+                        EngineeringQualityWorkflowEvent::PartialFailure {
+                            stage: EngineeringQualityStage::QaValidation,
+                            code,
+                        },
+                        EngineeringQualityAuditOutcome::PartialFailure(code),
+                    ),
+                    _ => return Err(AgentOrchestratorError::EngineeringStageMismatch),
+                };
+                push_engineering_transition(
+                    &mut workflow,
+                    task_id.clone(),
+                    predecessor,
+                    EngineeringQualityStage::QaValidation,
+                    event,
+                    outcome,
+                )?;
+                self.engineering_quality = Some(workflow);
+                self.start_prepared_engineering_next(task_id, next)
+            }
+            PreparedEngineeringTerminal::Security {
+                task_outcome,
+                security,
+                failure,
+                synthesis_request,
+            } => {
+                self.finish_workflow_child_task(task_id, task_outcome)?;
+                let predecessor = self.engineering_qa_task_id();
+                let mut workflow = self
+                    .engineering_quality
+                    .take()
+                    .ok_or(AgentOrchestratorError::EngineeringWorkflowMissing)?;
+                workflow.security = Some(security);
+                let (event, outcome) = match failure {
+                    None => (
+                        EngineeringQualityWorkflowEvent::SecurityReviewCompleted {
+                            task_id: task_id.clone(),
+                        },
+                        EngineeringQualityAuditOutcome::Completed,
+                    ),
+                    Some(code) => (
+                        EngineeringQualityWorkflowEvent::PartialFailure {
+                            stage: EngineeringQualityStage::SecurityReview,
+                            code,
+                        },
+                        EngineeringQualityAuditOutcome::PartialFailure(code),
+                    ),
+                };
+                push_engineering_transition(
+                    &mut workflow,
+                    task_id.clone(),
+                    predecessor,
+                    EngineeringQualityStage::SecurityReview,
+                    event,
+                    outcome,
+                )?;
+                self.engineering_quality = Some(workflow);
+                self.start_engineering_synthesis_prepared(synthesis_request)
+                    .map(|_| ())
+            }
+            PreparedEngineeringTerminal::SynthesisCompleted { output, synthesis } => {
+                let root_task_id = task_id.clone();
+                self.tasks
+                    .get_mut(task_id)
+                    .ok_or(AgentOrchestratorError::TaskNotFound)?
+                    .complete(AgentTaskResult::new(
+                        task_id.clone(),
+                        AgentId::PersonalAssistant,
+                        output,
+                    ))?;
+                self.events.push(AgentOrchestrationEvent::RootCompleted {
+                    task_id: task_id.clone(),
+                });
+                let mut workflow = self
+                    .engineering_quality
+                    .take()
+                    .ok_or(AgentOrchestratorError::EngineeringWorkflowMissing)?;
+                push_engineering_transition(
+                    &mut workflow,
+                    task_id.clone(),
+                    None,
+                    EngineeringQualityStage::Synthesis,
+                    EngineeringQualityWorkflowEvent::Completed {
+                        task_id: task_id.clone(),
+                    },
+                    EngineeringQualityAuditOutcome::Completed,
+                )?;
+                workflow.result = Some(EngineeringQualityWorkflowResult::new(
+                    RootTaskId::from_task_id(root_task_id),
+                    workflow
+                        .coding
+                        .clone()
+                        .ok_or(AgentOrchestratorError::EngineeringStageMismatch)?,
+                    workflow
+                        .qa
+                        .clone()
+                        .ok_or(AgentOrchestratorError::EngineeringStageMismatch)?,
+                    workflow
+                        .security
+                        .clone()
+                        .ok_or(AgentOrchestratorError::EngineeringStageMismatch)?,
+                    synthesis,
+                ));
+                workflow.phase = EngineeringQualityPhase::Completed;
+                self.engineering_quality = Some(workflow);
+                self.cleanup_terminal_task(task_id);
+                Ok(())
+            }
+            PreparedEngineeringTerminal::SynthesisFailed {
+                task_code,
+                workflow_code,
+            } => self.fail_engineering_root_without_run(task_code, workflow_code),
+            PreparedEngineeringTerminal::SynthesisCancelled => {
+                let root_task_id = task_id.clone();
+                let outcome = self
+                    .tasks
+                    .get_mut(task_id)
+                    .ok_or(AgentOrchestratorError::TaskNotFound)?
+                    .cancel();
+                if outcome != AgentTaskCancellationOutcome::Cancelled {
+                    return Err(AgentOrchestratorError::OutcomeMismatch);
+                }
+                self.events.push(AgentOrchestrationEvent::TaskCancelled {
+                    task_id: root_task_id.clone(),
+                    agent_id: AgentId::PersonalAssistant,
+                });
+                let mut workflow = self
+                    .engineering_quality
+                    .take()
+                    .ok_or(AgentOrchestratorError::EngineeringWorkflowMissing)?;
+                push_engineering_transition(
+                    &mut workflow,
+                    root_task_id.clone(),
+                    None,
+                    EngineeringQualityStage::Synthesis,
+                    EngineeringQualityWorkflowEvent::Cancelled {
+                        stage: EngineeringQualityStage::Synthesis,
+                    },
+                    EngineeringQualityAuditOutcome::Cancelled,
+                )?;
+                workflow.phase = EngineeringQualityPhase::Cancelled;
+                self.engineering_quality = Some(workflow);
+                self.cleanup_terminal_task(&root_task_id);
+                Ok(())
+            }
+        }
+    }
+
+    fn start_prepared_engineering_next(
+        &mut self,
+        predecessor_task_id: &AgentTaskId,
+        next: PreparedEngineeringNext,
+    ) -> AgentOrchestratorResult<()> {
+        match next {
+            PreparedEngineeringNext::Synthesis(request) => self
+                .start_engineering_synthesis_prepared(request)
+                .map(|_| ()),
+            PreparedEngineeringNext::Child {
+                task,
+                request,
+                attribution,
+            } => {
+                let task_id = task.id().clone();
+                let agent_id = task.agent_id();
+                let (stage, event) = match agent_id {
+                    AgentId::QaValidation => (
+                        EngineeringQualityStage::QaValidation,
+                        EngineeringQualityWorkflowEvent::QaValidationStarted {
+                            task_id: task_id.clone(),
+                            predecessor_task_id: predecessor_task_id.clone(),
+                        },
+                    ),
+                    AgentId::SecurityRisk => (
+                        EngineeringQualityStage::SecurityReview,
+                        EngineeringQualityWorkflowEvent::SecurityReviewStarted {
+                            task_id: task_id.clone(),
+                            predecessor_task_id: predecessor_task_id.clone(),
+                        },
+                    ),
+                    _ => return Err(AgentOrchestratorError::EngineeringStageMismatch),
+                };
+                let root_task_id = self
+                    .root_task_id
+                    .clone()
+                    .ok_or(AgentOrchestratorError::RootMissing)?;
+                self.tasks.insert(task_id.clone(), *task);
+                self.active_child_task_id = Some(task_id.clone());
+                self.run_count = self
+                    .run_count
+                    .checked_add(1)
+                    .ok_or(AgentOrchestratorError::RunLimitExceeded)?;
+                self.events.push(AgentOrchestrationEvent::ChildCreated {
+                    task_id: task_id.clone(),
+                    parent_task_id: root_task_id,
+                });
+                self.events.push(AgentOrchestrationEvent::ChildStarted {
+                    task_id: task_id.clone(),
+                });
+                let mut workflow = self
+                    .engineering_quality
+                    .take()
+                    .ok_or(AgentOrchestratorError::EngineeringWorkflowMissing)?;
+                workflow.child_count = workflow
+                    .child_count
+                    .checked_add(1)
+                    .ok_or(AgentOrchestratorError::TotalChildLimitExceeded)?;
+                workflow.run_attempts = self.run_count;
+                workflow.audit_contexts.insert(task_id.clone(), attribution);
+                push_engineering_transition(
+                    &mut workflow,
+                    task_id.clone(),
+                    Some(predecessor_task_id.clone()),
+                    stage,
+                    event,
+                    EngineeringQualityAuditOutcome::Started,
+                )?;
+                workflow.phase = match agent_id {
+                    AgentId::QaValidation => EngineeringQualityPhase::QaRunning(task_id.clone()),
+                    AgentId::SecurityRisk => {
+                        EngineeringQualityPhase::SecurityRunning(task_id.clone())
+                    }
+                    _ => return Err(AgentOrchestratorError::EngineeringStageMismatch),
+                };
+                self.engineering_quality = Some(workflow);
+                match self.start_runtime_run(request) {
+                    Ok(run) => {
+                        self.runs.insert(
+                            task_id,
+                            ActiveRun {
+                                run,
+                                output: String::new(),
+                                next_sequence: 0,
+                            },
+                        );
+                        Ok(())
+                    }
+                    Err(error) => {
+                        match agent_id {
+                            AgentId::QaValidation => self.record_engineering_continuation_failure(
+                                EngineeringContinuationFailure::QaStartFailed,
+                            ),
+                            AgentId::SecurityRisk => self.record_engineering_continuation_failure(
+                                EngineeringContinuationFailure::SecurityStartFailed,
+                            ),
+                            _ => {}
+                        }
+                        self.terminalize_engineering_child_failure(
+                            &task_id,
+                            AgentTaskFailureCode::RuntimeStartFailed,
+                            EngineeringPartialFailureCode::RuntimeStartFailed,
+                        )?;
+                        if agent_id == AgentId::QaValidation {
+                            let _ = self.start_engineering_security();
+                        } else {
+                            let _ = self.start_engineering_synthesis();
+                        }
+                        Err(error)
+                    }
+                }
+            }
+        }
+    }
+
+    fn start_engineering_security(&mut self) -> AgentOrchestratorResult<AgentExecutionContext> {
+        let workflow = self
+            .engineering_quality
+            .as_ref()
+            .ok_or(AgentOrchestratorError::EngineeringWorkflowMissing)?;
+        let proposal = match workflow.coding.as_ref() {
+            Some(CodingStageOutcome::Completed(proposal)) => proposal,
+            _ => return Err(AgentOrchestratorError::EngineeringStageMismatch),
+        };
+        let qa = workflow
+            .qa
+            .as_ref()
+            .ok_or(AgentOrchestratorError::EngineeringStageMismatch)?;
+        let input = workflow.request.build_security_input(proposal, qa)?;
+        let task = self.prepare_engineering_child(
+            AgentId::SecurityRisk,
+            3,
+            "Assess bounded security and change risks for the validated proposal",
+            "Return one strict RiskAssessmentV1 JSON object",
+        )?;
+        let task_id = task.id().clone();
+        let request = self.runtime_request(&task_id, self.run_count + 1, &input)?;
+        let context = AgentExecutionContext::for_task(&task, self.runtime_id, request.identity());
+        let predecessor = self
+            .engineering_qa_task_id()
+            .or_else(|| self.engineering_coding_task_id())
+            .ok_or(AgentOrchestratorError::EngineeringStageMismatch)?;
+        self.start_prepared_engineering_next(
+            &predecessor,
+            PreparedEngineeringNext::Child {
+                task: Box::new(task),
+                request,
+                attribution: EngineeringQualityAttribution::from_execution_context(&context),
+            },
+        )?;
+        Ok(context)
+    }
+
+    fn start_engineering_synthesis(&mut self) -> AgentOrchestratorResult<AgentExecutionContext> {
+        let workflow = self
+            .engineering_quality
+            .as_ref()
+            .ok_or(AgentOrchestratorError::EngineeringWorkflowMissing)?;
+        let request = self.prepare_engineering_synthesis_request(
+            workflow
+                .coding
+                .as_ref()
+                .ok_or(AgentOrchestratorError::EngineeringStageMismatch)?,
+            workflow
+                .qa
+                .as_ref()
+                .ok_or(AgentOrchestratorError::EngineeringStageMismatch)?,
+            workflow
+                .security
+                .as_ref()
+                .ok_or(AgentOrchestratorError::EngineeringStageMismatch)?,
+            self.run_count + 1,
+        )?;
+        self.start_engineering_synthesis_prepared(request)
+    }
+
+    fn start_engineering_synthesis_prepared(
+        &mut self,
+        request: RuntimeTurnRequest,
+    ) -> AgentOrchestratorResult<AgentExecutionContext> {
+        let root_task_id = self
+            .root_task_id
+            .clone()
+            .ok_or(AgentOrchestratorError::RootMissing)?;
+        self.tasks
+            .get_mut(&root_task_id)
+            .ok_or(AgentOrchestratorError::TaskNotFound)?
+            .resume_from_child()?;
+        self.run_count = self
+            .run_count
+            .checked_add(1)
+            .ok_or(AgentOrchestratorError::RunLimitExceeded)?;
+        self.events.push(AgentOrchestrationEvent::ParentResumed {
+            task_id: root_task_id.clone(),
+        });
+        let context = {
+            let task = self
+                .tasks
+                .get(&root_task_id)
+                .ok_or(AgentOrchestratorError::TaskNotFound)?;
+            AgentExecutionContext::for_task(task, self.runtime_id, request.identity())
+        };
+        let mut workflow = self
+            .engineering_quality
+            .take()
+            .ok_or(AgentOrchestratorError::EngineeringWorkflowMissing)?;
+        workflow.run_attempts = self.run_count;
+        workflow.audit_contexts.insert(
+            root_task_id.clone(),
+            EngineeringQualityAttribution::from_execution_context(&context),
+        );
+        push_engineering_transition(
+            &mut workflow,
+            root_task_id.clone(),
+            None,
+            EngineeringQualityStage::Synthesis,
+            EngineeringQualityWorkflowEvent::SynthesisStarted {
+                task_id: root_task_id.clone(),
+            },
+            EngineeringQualityAuditOutcome::Started,
+        )?;
+        workflow.phase = EngineeringQualityPhase::SynthesisRunning;
+        self.engineering_quality = Some(workflow);
+        match self.start_runtime_run(request) {
+            Ok(run) => {
+                self.runs.insert(
+                    root_task_id,
+                    ActiveRun {
+                        run,
+                        output: String::new(),
+                        next_sequence: 0,
+                    },
+                );
+                Ok(context)
+            }
+            Err(error) => {
+                self.record_engineering_continuation_failure(
+                    EngineeringContinuationFailure::SynthesisStartFailed,
+                );
+                self.fail_engineering_root_without_run(
+                    AgentTaskFailureCode::RuntimeStartFailed,
+                    EngineeringPartialFailureCode::RuntimeStartFailed,
+                )?;
+                Err(error)
+            }
+        }
+    }
+
+    fn terminalize_engineering_child_failure(
+        &mut self,
+        task_id: &AgentTaskId,
+        task_code: AgentTaskFailureCode,
+        workflow_code: EngineeringPartialFailureCode,
+    ) -> AgentOrchestratorResult<()> {
+        let phase = self
+            .engineering_quality
+            .as_ref()
+            .ok_or(AgentOrchestratorError::EngineeringWorkflowMissing)?
+            .phase
+            .clone();
+        let (stage, agent_id) = match phase {
+            EngineeringQualityPhase::CodingRunning(ref active) if active == task_id => {
+                (EngineeringQualityStage::Coding, AgentId::Coding)
+            }
+            EngineeringQualityPhase::QaRunning(ref active) if active == task_id => {
+                (EngineeringQualityStage::QaValidation, AgentId::QaValidation)
+            }
+            EngineeringQualityPhase::SecurityRunning(ref active) if active == task_id => (
+                EngineeringQualityStage::SecurityReview,
+                AgentId::SecurityRisk,
+            ),
+            _ => return Err(AgentOrchestratorError::EngineeringStageMismatch),
+        };
+        self.finish_workflow_child_task(
+            task_id,
+            AgentTaskOutcome::Failed(AgentTaskFailure::new(task_id.clone(), agent_id, task_code)),
+        )?;
+        let predecessor = match stage {
+            EngineeringQualityStage::Coding => None,
+            EngineeringQualityStage::QaValidation => self.engineering_coding_task_id(),
+            EngineeringQualityStage::SecurityReview => self
+                .engineering_qa_task_id()
+                .or_else(|| self.engineering_coding_task_id()),
+            EngineeringQualityStage::Synthesis => None,
+        };
+        let mut workflow = self
+            .engineering_quality
+            .take()
+            .ok_or(AgentOrchestratorError::EngineeringWorkflowMissing)?;
+        match stage {
+            EngineeringQualityStage::Coding => {
+                workflow.coding = Some(CodingStageOutcome::Failed(task_code));
+                workflow.qa = Some(QaStageOutcome::SkippedCodingUnavailable);
+                workflow.security = Some(SecurityStageOutcome::SkippedCodingUnavailable);
+            }
+            EngineeringQualityStage::QaValidation => {
+                workflow.qa = Some(QaStageOutcome::Failed(task_code));
+            }
+            EngineeringQualityStage::SecurityReview => {
+                workflow.security = Some(SecurityStageOutcome::Failed(task_code));
+            }
+            EngineeringQualityStage::Synthesis => {}
+        }
+        push_engineering_transition(
+            &mut workflow,
+            task_id.clone(),
+            predecessor,
+            stage,
+            EngineeringQualityWorkflowEvent::PartialFailure {
+                stage,
+                code: workflow_code,
+            },
+            EngineeringQualityAuditOutcome::PartialFailure(workflow_code),
+        )?;
+        self.engineering_quality = Some(workflow);
+        Ok(())
+    }
+
+    fn fail_engineering_root_without_run(
+        &mut self,
+        task_code: AgentTaskFailureCode,
+        workflow_code: EngineeringPartialFailureCode,
+    ) -> AgentOrchestratorResult<()> {
+        let root_task_id = self
+            .root_task_id
+            .clone()
+            .ok_or(AgentOrchestratorError::RootMissing)?;
+        self.tasks
+            .get_mut(&root_task_id)
+            .ok_or(AgentOrchestratorError::TaskNotFound)?
+            .fail(AgentTaskFailure::new(
+                root_task_id.clone(),
+                AgentId::PersonalAssistant,
+                task_code,
+            ))?;
+        self.events.push(AgentOrchestrationEvent::RootFailed {
+            task_id: root_task_id.clone(),
+            code: task_code,
+        });
+        let mut workflow = self
+            .engineering_quality
+            .take()
+            .ok_or(AgentOrchestratorError::EngineeringWorkflowMissing)?;
+        push_engineering_transition(
+            &mut workflow,
+            root_task_id.clone(),
+            None,
+            EngineeringQualityStage::Synthesis,
+            EngineeringQualityWorkflowEvent::PartialFailure {
+                stage: EngineeringQualityStage::Synthesis,
+                code: workflow_code,
+            },
+            EngineeringQualityAuditOutcome::PartialFailure(workflow_code),
+        )?;
+        workflow.phase = EngineeringQualityPhase::Failed;
+        self.engineering_quality = Some(workflow);
+        self.cleanup_terminal_task(&root_task_id);
+        Ok(())
+    }
+
+    fn engineering_coding_task_id(&self) -> Option<AgentTaskId> {
+        self.engineering_quality
+            .as_ref()
+            .and_then(|workflow| {
+                workflow
+                    .audit_contexts
+                    .iter()
+                    .find(|(_, attribution)| attribution.agent_id() == AgentId::Coding)
+            })
+            .map(|(task_id, _)| task_id.clone())
+    }
+
+    fn engineering_qa_task_id(&self) -> Option<AgentTaskId> {
+        self.engineering_quality
+            .as_ref()
+            .and_then(|workflow| {
+                workflow
+                    .audit_contexts
+                    .iter()
+                    .find(|(_, attribution)| attribution.agent_id() == AgentId::QaValidation)
+            })
+            .map(|(task_id, _)| task_id.clone())
+    }
+
+    fn record_engineering_continuation_failure(&mut self, failure: EngineeringContinuationFailure) {
+        if let Some(workflow) = self.engineering_quality.as_mut() {
+            workflow.continuation_failure = Some(match (workflow.continuation_failure, failure) {
+                (
+                    Some(EngineeringContinuationFailure::CodingStartFailed),
+                    EngineeringContinuationFailure::SynthesisStartFailed,
+                ) => EngineeringContinuationFailure::CodingAndSynthesisStartFailed,
+                (
+                    Some(EngineeringContinuationFailure::QaStartFailed),
+                    EngineeringContinuationFailure::SecurityStartFailed,
+                ) => EngineeringContinuationFailure::QaAndSecurityStartFailed,
+                (
+                    Some(EngineeringContinuationFailure::QaStartFailed),
+                    EngineeringContinuationFailure::SynthesisStartFailed,
+                ) => EngineeringContinuationFailure::QaAndSynthesisStartFailed,
+                (
+                    Some(EngineeringContinuationFailure::QaAndSecurityStartFailed),
+                    EngineeringContinuationFailure::SynthesisStartFailed,
+                ) => EngineeringContinuationFailure::QaSecurityAndSynthesisStartFailed,
+                (
+                    Some(EngineeringContinuationFailure::SecurityStartFailed),
+                    EngineeringContinuationFailure::SynthesisStartFailed,
+                ) => EngineeringContinuationFailure::SecurityAndSynthesisStartFailed,
+                (_, current) => current,
+            });
+        }
     }
 
     fn prepare_research_knowledge_terminal(
@@ -2104,6 +3611,11 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         self.runtime_event_count
     }
 
+    #[must_use]
+    pub const fn selected_workflow(&self) -> Option<AgentWorkflowSelection> {
+        self.selected_workflow
+    }
+
     pub fn current_context(
         &self,
         task_id: &AgentTaskId,
@@ -2146,6 +3658,23 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             source_context,
             &LiveAgentAttributionProof(()),
         ))
+    }
+
+    fn ensure_workflow_selection_available(
+        &self,
+        requested: AgentWorkflowSelection,
+        allow_same: bool,
+    ) -> AgentOrchestratorResult<()> {
+        match self.selected_workflow {
+            Some(selected) if allow_same && selected == requested => Ok(()),
+            Some(AgentWorkflowSelection::ResearchKnowledge)
+                if requested == AgentWorkflowSelection::ResearchKnowledge =>
+            {
+                Err(AgentOrchestratorError::ResearchKnowledgeWorkflowAlreadySelected)
+            }
+            Some(selected) => Err(AgentOrchestratorError::WorkflowAlreadySelected { selected }),
+            None => Ok(()),
+        }
     }
 
     fn live_personal_root_attribution(
@@ -2899,6 +4428,13 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
     }
 
     fn complete_active_task(&mut self, task_id: &AgentTaskId) -> AgentOrchestratorResult<()> {
+        if self.engineering_quality.as_ref().is_some_and(|workflow| {
+            self.root_task_id
+                .as_ref()
+                .is_some_and(|root| workflow.active_event_task(root) == Some(task_id))
+        }) {
+            return Err(AgentOrchestratorError::EngineeringStageMismatch);
+        }
         if self.research_knowledge.as_ref().is_some_and(|workflow| {
             workflow.active_child(task_id)
                 || (matches!(workflow.phase, ResearchKnowledgePhase::SynthesisRunning)
@@ -2952,6 +4488,13 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         task_id: &AgentTaskId,
         code: AgentTaskFailureCode,
     ) -> AgentOrchestratorResult<()> {
+        if self.engineering_quality.as_ref().is_some_and(|workflow| {
+            self.root_task_id
+                .as_ref()
+                .is_some_and(|root| workflow.active_event_task(root) == Some(task_id))
+        }) {
+            return self.fail_engineering_task(task_id, code);
+        }
         if self.research_knowledge.as_ref().is_some_and(|workflow| {
             workflow.active_child(task_id)
                 || (matches!(workflow.phase, ResearchKnowledgePhase::SynthesisRunning)
@@ -2992,6 +4535,41 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             Ok(())
         } else {
             self.finish_child_and_resume(task_id, outcome)
+        }
+    }
+
+    fn fail_engineering_task(
+        &mut self,
+        task_id: &AgentTaskId,
+        code: AgentTaskFailureCode,
+    ) -> AgentOrchestratorResult<()> {
+        let run_status = self.runs.get(task_id).map(|active| active.run.status());
+        if run_status.is_some_and(RuntimeRunStatus::is_terminal) {
+            self.runs.remove(task_id);
+        } else {
+            let _ = self.cancel_run(task_id)?;
+        }
+        if self.root_task_id.as_ref() == Some(task_id) {
+            return self.fail_engineering_root_without_run(
+                code,
+                EngineeringPartialFailureCode::RuntimeFailed,
+            );
+        }
+        self.terminalize_engineering_child_failure(
+            task_id,
+            code,
+            EngineeringPartialFailureCode::RuntimeFailed,
+        )?;
+        let agent = self
+            .tasks
+            .get(task_id)
+            .map(AgentTask::agent_id)
+            .ok_or(AgentOrchestratorError::TaskNotFound)?;
+        match agent {
+            AgentId::Coding => self.start_engineering_synthesis().map(|_| ()),
+            AgentId::QaValidation => self.start_engineering_security().map(|_| ()),
+            AgentId::SecurityRisk => self.start_engineering_synthesis().map(|_| ()),
+            _ => Err(AgentOrchestratorError::EngineeringStageMismatch),
         }
     }
 
@@ -3154,6 +4732,28 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         &mut self,
         root_task_id: &AgentTaskId,
     ) -> AgentOrchestratorResult<AgentTaskCancellationOutcome> {
+        let engineering_cancel_stage = self
+            .engineering_quality
+            .as_ref()
+            .filter(|workflow| {
+                !matches!(
+                    workflow.phase,
+                    EngineeringQualityPhase::Completed
+                        | EngineeringQualityPhase::Failed
+                        | EngineeringQualityPhase::Cancelled
+                )
+            })
+            .map(|workflow| match workflow.phase {
+                EngineeringQualityPhase::CodingRunning(_) => EngineeringQualityStage::Coding,
+                EngineeringQualityPhase::QaRunning(_) => EngineeringQualityStage::QaValidation,
+                EngineeringQualityPhase::SecurityRunning(_) => {
+                    EngineeringQualityStage::SecurityReview
+                }
+                EngineeringQualityPhase::SynthesisRunning
+                | EngineeringQualityPhase::Completed
+                | EngineeringQualityPhase::Failed
+                | EngineeringQualityPhase::Cancelled => EngineeringQualityStage::Synthesis,
+            });
         let workflow_cancel_stage = self
             .research_knowledge
             .as_ref()
@@ -3209,6 +4809,22 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
                 agent_id: task.agent_id(),
             });
             self.cleanup_terminal_task(root_task_id);
+            if let Some(stage) = engineering_cancel_stage {
+                let mut workflow = self
+                    .engineering_quality
+                    .take()
+                    .ok_or(AgentOrchestratorError::EngineeringWorkflowMissing)?;
+                push_engineering_transition(
+                    &mut workflow,
+                    root_task_id.clone(),
+                    None,
+                    stage,
+                    EngineeringQualityWorkflowEvent::Cancelled { stage },
+                    EngineeringQualityAuditOutcome::Cancelled,
+                )?;
+                workflow.phase = EngineeringQualityPhase::Cancelled;
+                self.engineering_quality = Some(workflow);
+            }
             if let Some(stage) = workflow_cancel_stage {
                 let mut workflow = self
                     .research_knowledge
@@ -3239,6 +4855,13 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         child_task_id: &AgentTaskId,
         root_is_cancelling: bool,
     ) -> AgentOrchestratorResult<AgentTaskCancellationOutcome> {
+        if self
+            .engineering_quality
+            .as_ref()
+            .is_some_and(|workflow| workflow.active_child(child_task_id))
+        {
+            return self.cancel_engineering_child(child_task_id, root_is_cancelling);
+        }
         if self
             .research_knowledge
             .as_ref()
@@ -3307,6 +4930,119 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         ));
         self.finish_child_and_resume(child_task_id, outcome)?;
         Ok(AgentTaskCancellationOutcome::Cancelled)
+    }
+
+    fn cancel_engineering_child(
+        &mut self,
+        child_task_id: &AgentTaskId,
+        root_is_cancelling: bool,
+    ) -> AgentOrchestratorResult<AgentTaskCancellationOutcome> {
+        self.cancel_pending_governance(child_task_id)?;
+        let disposition = self.cancel_run(child_task_id)?;
+        if let RunCancellationDisposition::UnexpectedTerminal(status) = disposition {
+            let agent_id = self
+                .tasks
+                .get(child_task_id)
+                .map(AgentTask::agent_id)
+                .ok_or(AgentOrchestratorError::TaskNotFound)?;
+            self.terminalize_engineering_child_failure(
+                child_task_id,
+                AgentTaskFailureCode::RuntimeStateMismatch,
+                EngineeringPartialFailureCode::RuntimeFailed,
+            )?;
+            if !root_is_cancelling {
+                let _ = match agent_id {
+                    AgentId::Coding | AgentId::SecurityRisk => {
+                        self.start_engineering_synthesis().map(|_| ())
+                    }
+                    AgentId::QaValidation => self.start_engineering_security().map(|_| ()),
+                    _ => Err(AgentOrchestratorError::EngineeringStageMismatch),
+                };
+            }
+            return Err(AgentOrchestratorError::UnexpectedRuntimeStatus { status });
+        }
+        let (stage, agent_id) = match self
+            .engineering_quality
+            .as_ref()
+            .ok_or(AgentOrchestratorError::EngineeringWorkflowMissing)?
+            .phase
+        {
+            EngineeringQualityPhase::CodingRunning(ref active) if active == child_task_id => {
+                (EngineeringQualityStage::Coding, AgentId::Coding)
+            }
+            EngineeringQualityPhase::QaRunning(ref active) if active == child_task_id => {
+                (EngineeringQualityStage::QaValidation, AgentId::QaValidation)
+            }
+            EngineeringQualityPhase::SecurityRunning(ref active) if active == child_task_id => (
+                EngineeringQualityStage::SecurityReview,
+                AgentId::SecurityRisk,
+            ),
+            _ => return Err(AgentOrchestratorError::EngineeringStageMismatch),
+        };
+        let task = self
+            .tasks
+            .get_mut(child_task_id)
+            .ok_or(AgentOrchestratorError::TaskNotFound)?;
+        let outcome = task.cancel();
+        if outcome != AgentTaskCancellationOutcome::Cancelled {
+            return Ok(outcome);
+        }
+        self.events.push(AgentOrchestrationEvent::TaskCancelled {
+            task_id: child_task_id.clone(),
+            agent_id,
+        });
+        self.active_child_task_id = None;
+        self.cleanup_terminal_task(child_task_id);
+        let predecessor = match stage {
+            EngineeringQualityStage::Coding => None,
+            EngineeringQualityStage::QaValidation => self.engineering_coding_task_id(),
+            EngineeringQualityStage::SecurityReview => self
+                .engineering_qa_task_id()
+                .or_else(|| self.engineering_coding_task_id()),
+            EngineeringQualityStage::Synthesis => None,
+        };
+        let mut workflow = self
+            .engineering_quality
+            .take()
+            .ok_or(AgentOrchestratorError::EngineeringWorkflowMissing)?;
+        match stage {
+            EngineeringQualityStage::Coding => {
+                workflow.coding = Some(CodingStageOutcome::Cancelled);
+                workflow.qa = Some(QaStageOutcome::SkippedCodingUnavailable);
+                workflow.security = Some(SecurityStageOutcome::SkippedCodingUnavailable);
+            }
+            EngineeringQualityStage::QaValidation => {
+                workflow.qa = Some(QaStageOutcome::Cancelled);
+            }
+            EngineeringQualityStage::SecurityReview => {
+                workflow.security = Some(SecurityStageOutcome::Cancelled);
+            }
+            EngineeringQualityStage::Synthesis => {}
+        }
+        push_engineering_transition(
+            &mut workflow,
+            child_task_id.clone(),
+            predecessor,
+            stage,
+            EngineeringQualityWorkflowEvent::Cancelled { stage },
+            EngineeringQualityAuditOutcome::Cancelled,
+        )?;
+        self.engineering_quality = Some(workflow);
+        if !root_is_cancelling {
+            match stage {
+                EngineeringQualityStage::Coding => {
+                    let _ = self.start_engineering_synthesis();
+                }
+                EngineeringQualityStage::QaValidation => {
+                    let _ = self.start_engineering_security();
+                }
+                EngineeringQualityStage::SecurityReview => {
+                    let _ = self.start_engineering_synthesis();
+                }
+                EngineeringQualityStage::Synthesis => {}
+            }
+        }
+        Ok(outcome)
     }
 
     fn cancel_research_knowledge_child(
@@ -3666,6 +5402,53 @@ fn push_workflow_transition(
     Ok(())
 }
 
+fn push_engineering_transition(
+    workflow: &mut EngineeringQualityWorkflowState,
+    task_id: AgentTaskId,
+    predecessor_task_id: Option<AgentTaskId>,
+    stage: EngineeringQualityStage,
+    event: EngineeringQualityWorkflowEvent,
+    outcome: EngineeringQualityAuditOutcome,
+) -> AgentOrchestratorResult<()> {
+    if workflow.events.len() >= MAX_ENGINEERING_WORKFLOW_EVENTS
+        || workflow.audit.len() >= MAX_ENGINEERING_AUDIT_RECORDS
+    {
+        return Err(AgentOrchestratorError::EngineeringJournalLimitExceeded);
+    }
+    let sequence = u8::try_from(workflow.audit.len())
+        .map_err(|_| AgentOrchestratorError::EngineeringJournalLimitExceeded)?;
+    let attribution = workflow
+        .audit_contexts
+        .get(&task_id)
+        .ok_or(AgentOrchestratorError::EngineeringStageMismatch)?
+        .clone();
+    let capability_disposition = match &event {
+        EngineeringQualityWorkflowEvent::CodingCompleted {
+            quality: ChangeProposalQuality::Complete,
+            ..
+        } => EngineeringCapabilityAuditDisposition::ProposalOnly,
+        EngineeringQualityWorkflowEvent::CodingCompleted {
+            quality: ChangeProposalQuality::PartialDeniedCapability,
+            ..
+        }
+        | EngineeringQualityWorkflowEvent::PartialFailure {
+            stage: EngineeringQualityStage::Coding,
+            code: EngineeringPartialFailureCode::ContainsDeniedCapability,
+        } => EngineeringCapabilityAuditDisposition::DeniedRequested,
+        _ => EngineeringCapabilityAuditDisposition::NotApplicable,
+    };
+    workflow.events.push(event);
+    workflow.audit.push(EngineeringQualityAuditRecord::new(
+        sequence,
+        attribution,
+        predecessor_task_id,
+        stage,
+        outcome,
+        capability_disposition,
+    ));
+    Ok(())
+}
+
 impl AgentOrchestrator<NativeAgentRuntime> {
     pub fn native() -> AgentOrchestratorResult<Self> {
         Self::new(NativeAgentRuntime)
@@ -3831,6 +5614,7 @@ fn delegation_error_code(error: &AgentOrchestratorError) -> AgentGovernanceError
         | AgentOrchestratorError::Memory(_)
         | AgentOrchestratorError::Document(_)
         | AgentOrchestratorError::ResearchKnowledge(_)
+        | AgentOrchestratorError::EngineeringQuality(_)
         | AgentOrchestratorError::WorkflowIdentityExhausted
         | AgentOrchestratorError::RootAlreadyExists
         | AgentOrchestratorError::RootMissing
@@ -3842,14 +5626,20 @@ fn delegation_error_code(error: &AgentOrchestratorError) -> AgentGovernanceError
         | AgentOrchestratorError::OutputLimitExceeded
         | AgentOrchestratorError::OutcomeMismatch
         | AgentOrchestratorError::KnowledgeMemoryProfileMismatch
+        | AgentOrchestratorError::EngineeringMemoryProfileMismatch { .. }
+        | AgentOrchestratorError::EngineeringWorkflowMissing
+        | AgentOrchestratorError::EngineeringStageMismatch
+        | AgentOrchestratorError::EngineeringJournalLimitExceeded
         | AgentOrchestratorError::ResearchMemoryProfileMismatch
         | AgentOrchestratorError::ResearchKnowledgeWorkflowAlreadySelected
+        | AgentOrchestratorError::WorkflowAlreadySelected { .. }
         | AgentOrchestratorError::ResearchKnowledgeWorkflowMissing
         | AgentOrchestratorError::ResearchKnowledgeStageMismatch
         | AgentOrchestratorError::ResearchKnowledgeJournalLimitExceeded
         | AgentOrchestratorError::ResearchResultUnavailable
         | AgentOrchestratorError::KnowledgeResultUnavailable
         | AgentOrchestratorError::DocumentInputTooLarge
+        | AgentOrchestratorError::EngineeringEventLimitExceeded
         | AgentOrchestratorError::RuntimeEventLimitExceeded => {
             AgentGovernanceErrorCode::TaskMutationFailed
         }
@@ -3870,6 +5660,8 @@ pub enum AgentOrchestratorError {
     Document(#[from] ApprovedDocumentError),
     #[error("the Research/Knowledge workflow rejected the operation: {0}")]
     ResearchKnowledge(#[from] ResearchKnowledgeError),
+    #[error("the engineering-quality workflow rejected the operation: {0}")]
+    EngineeringQuality(#[from] EngineeringQualityError),
     #[error("agent runtime rejected the operation: {0}")]
     Runtime(#[from] RuntimeError),
     #[error("the selected runtime is unavailable")]
@@ -3902,8 +5694,18 @@ pub enum AgentOrchestratorError {
     KnowledgeMemoryProfileMismatch,
     #[error("the Research definition has an unexpected memory profile")]
     ResearchMemoryProfileMismatch,
+    #[error("an engineering specialist has an unexpected memory profile: {agent_id}")]
+    EngineeringMemoryProfileMismatch { agent_id: AgentId },
+    #[error("the engineering-quality workflow state is missing")]
+    EngineeringWorkflowMissing,
+    #[error("the engineering-quality workflow stage does not match the active task")]
+    EngineeringStageMismatch,
+    #[error("the engineering-quality workflow journal reached its closed bound")]
+    EngineeringJournalLimitExceeded,
     #[error("the Research/Knowledge workflow is already selected for this root")]
     ResearchKnowledgeWorkflowAlreadySelected,
+    #[error("another sealed workflow is already selected for this root: {selected:?}")]
+    WorkflowAlreadySelected { selected: AgentWorkflowSelection },
     #[error("the Research/Knowledge workflow state is missing")]
     ResearchKnowledgeWorkflowMissing,
     #[error("the Research/Knowledge workflow stage does not match the active task")]
@@ -3941,6 +5743,8 @@ pub enum AgentOrchestratorError {
     EventLimitExceeded,
     #[error("the per-root runtime-event limit is exceeded")]
     RuntimeEventLimitExceeded,
+    #[error("the engineering stage reserved its final event slot for a terminal event")]
+    EngineeringEventLimitExceeded,
     #[error("the aggregate approved-document runtime input exceeds its bound")]
     DocumentInputTooLarge,
 }

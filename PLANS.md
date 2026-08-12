@@ -4,17 +4,40 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
-The owner-approved
+The owner-authorized D-087
+[`2026-08-11-engineering-quality-workflow.md`](docs/plans/2026-08-11-engineering-quality-workflow.md)
+is **verified complete with advisories**. No product plan is currently Active
+or Ready. D-087 implements one
+deterministic, fixture-only, proposal-only Rust sequence: Personal Assistant ->
+Coding -> QA & Validation -> Security & Risk -> Personal synthesis. The plan
+defines strict versioned results, exact four-task/five-run/one-active-child/
+zero-retry limits, truthful partial outcomes, content-free attribution, and
+closed denial of writes, path escape, package/dependency/test/formatter/Git/
+shell/credential/network actions. It adds no ToolRegistry schema, executor,
+approval request, repository access, IPC, UI, provider, or external runtime.
+Application-owned validation evidence can express only observed fixture facts
+or not-run checks; the sealed selector is mutually exclusive with existing
+paths; a conservative selected-text bound is proven against Native
+serialization; and approval status is
+application-derived as not applicable or required before mutation.
+Full source and repository verification through `npm run verify` passes. The
+quality result is `PASS WITH ADVISORIES`: consider bounded private orchestrator
+decomposition before another multi-specialist workflow, without introducing a
+general workflow engine. Gate `agent-engineering-quality-workflow` remains
+active only until the pending documentation/repository/security/diff and
+session-end checks are recorded and its completion marker is finalized. No
+later owner-approved plan is Ready; next-increment readiness is `Blocked`.
+
+The completed
 [`2026-08-11-research-knowledge-workflow.md`](docs/plans/2026-08-11-research-knowledge-workflow.md)
-is **verified complete with advisories; publication pending** under D-086. Its
-`agent-research-knowledge-workflow` gate validates one deterministic,
+is **verified complete with advisories and published at `3efd2c1`** under D-086.
+Its `agent-research-knowledge-workflow` gate validates one deterministic,
 fixture-only, Rust Personal Assistant -> Research -> Knowledge -> Personal
 sequence above the unchanged runtime boundary. Strict bounded stage and final
 synthesis contracts preserve only catalog-issued source IDs, partial outcomes
 remain truthful, specialists remain sequential depth-one siblings, and no
 provider, retrieval tool, network, filesystem discovery, persistence, IPC,
-UI, parallelism, or general workflow engine was added. No later plan is Ready;
-publication and any next increment require separate owner direction.
+UI, parallelism, or general workflow engine was added.
 
 The completed
 [`2026-08-12-agent-memory-approved-documents.md`](docs/plans/2026-08-12-agent-memory-approved-documents.md)
@@ -38,8 +61,9 @@ The prerequisite AgentDefinition/AgentRegistry increment is published at
 a valid completion marker. Native remains sole/default. The governance
 implementation added no executor, provider, runtime tool lane, IPC, UI, or
 specialist activation. D-085 later added only its verified volatile-memory and
-approved-document boundary. D-086 implements only the exact sealed workflow
-above; every other later plan remains Blocked.
+approved-document boundary. D-086 implements only its exact sealed workflow.
+D-087 implements only the proposal-only engineering plan above; every
+repository tool/effect and other later plan remains Blocked.
 
 The prior owner-selected
 [`2026-08-11-hermes-acp-transport-spike.md`](docs/plans/2026-08-11-hermes-acp-transport-spike.md)

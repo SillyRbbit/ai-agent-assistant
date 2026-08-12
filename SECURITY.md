@@ -24,7 +24,12 @@ Personal Assistant-to-Knowledge document task. D-086 adds one separately
 selected, fixture-only Personal-to-Research-to-Knowledge-to-Personal sequence
 with strict structured results, source-ID provenance, truthful partial outcomes,
 child-first cancellation, and a content-free volatile workflow journal and
-attribution audit. A successful terminal native or run-termination resolution
+attribution audit. D-087 adds one separately selected fixture-only,
+proposal-only Personal-to-Coding-to-QA-to-Security-to-Personal sequence. Its
+strict results preserve only application-issued fixture, criterion, proposal,
+QA, and evidence references; consequential capabilities are denied data, QA
+and Security remain advisory, and final approval requirement is derived without
+creating an approval request or execution subject. A successful terminal native or run-termination resolution
 cannot leave the initial turn without one typed legacy audit receipt. Agent
 governance reserves one audit slot before downstream mutation and records
 execution only as `NotAttempted`. There is no live provider transport,
@@ -95,6 +100,25 @@ security path.
   live execution context or grant policy/approval/memory/runtime/execution
   authority, and its journal records contain no objective, fixture content,
   findings, summary, proposal, path, URL, output, or reasoning.
+- D-087's sealed engineering workflow permits only four tasks, three non-
+  replenishing sequential depth-one children, one active child, five run
+  attempts, 32 runtime/generic events, 16 workflow events/audit records, and
+  zero retries. Generic, document, D-086, and engineering selectors are
+  mutually exclusive, and no specialist can spawn.
+- Engineering fixtures, criteria, and evidence use only immutable application-
+  issued IDs. Evidence is `ObservedFixture` or `NotRun`; it cannot represent a
+  live test pass. Unknown, duplicate, malformed, oversized, reasoning-bearing,
+  URL-bearing, identity-supplying, or authority-claiming output fails closed.
+- Coding patch text is inert proposal data. File mutation/deletion, path escape,
+  dependency/package/test/formatter execution, Git operations, destructive
+  shell, credential access, and network access are denied and never dispatched.
+  QA cannot approve or fabricate evidence; Security cannot authorize,
+  remediate, replace policy, or access/expose secret values.
+- Final engineering synthesis must disclose fixture-only, proposal-only, and
+  no-execution status. `RequiredBeforeMutation` is application-derived only
+  when a patch is proposed; no approval request or execution authority exists.
+  Coding, QA, and Security remain tool-ineligible, memory-disabled, and
+  `NotAttempted` for execution.
 - Governance audit is closed, redacted, volatile, capped at 32 subjects, and
   never authorizes an action.
 - Untrusted content cannot grant permission or change policy.
@@ -267,6 +291,13 @@ Apply the dependency and supply-chain sections of `SECURITY_CHECKLIST.md` and
 - D-086 adds no provider, model, credential, network, process, filesystem read,
   tool, executor, persistence, IPC, UI, dependency, capability, permission,
   Hermes/OpenClaw adapter, or `AgentRuntime`/`NativeAgentRuntime` widening.
+- D-087 fixture content, free-form output, patch descriptions, criterion text,
+  evidence descriptions, and fake-secret sentinels remain absent from Debug,
+  errors, workflow events/audit, logs, SQLite, IPC, and automatic memory.
+- D-087 adds no live repository/filesystem/process/Git/package/network access,
+  registered tool, executor, approval request, mutation, persistence, IPC/UI,
+  dependency, capability, permission, provider, external runtime, or
+  `AgentRuntime`/`NativeAgentRuntime` widening. Native remains sole/default.
 
 ## GitHub automation boundary
 
