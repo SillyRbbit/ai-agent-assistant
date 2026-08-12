@@ -90,18 +90,18 @@ The detailed activation and workflow sequence lives in the subordinate
 [`NATIVE_MULTI_AGENT_ROADMAP.md`](docs/roadmap/NATIVE_MULTI_AGENT_ROADMAP.md);
 this root roadmap remains authoritative.
 
-| Phase                                    | Status  | Bounded outcome                                                                                                                         | Gate to advance                                                                                                                                                              |
-| ---------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1. Agent definition and registry         | Ready   | Nine immutable definitions and deterministic registry; only Personal Assistant and Research are `Initial`, none operational             | Separately authorize and verify [`2026-08-11-agent-definition-registry.md`](docs/plans/2026-08-11-agent-definition-registry.md) from a clean published architecture baseline |
-| 2. Task and orchestration foundation     | Blocked | Closed task lifecycle, context, depth-one limits, typed delegation, results, and cancellation above `AgentRuntime`                      | Verified Phase 1 plus fresh review of [`2026-08-11-agent-orchestration-task-lifecycle.md`](docs/plans/2026-08-11-agent-orchestration-task-lifecycle.md)                      |
-| 3. First Personal-to-Research delegation | Blocked | Deterministic no-I/O root task, one Research child, one attributed result, and Personal synthesis                                       | Verified Phase 2 plus an exact deterministic integration plan; no live provider                                                                                              |
-| 4. Agent-specific governance             | Blocked | Per-agent identity through tools, policy, approval, cancellation, audit, and separately gated knowledge/document boundaries             | Phase 3 evidence plus the Blocked governance and knowledge/document plans                                                                                                    |
-| 5. Agent-specific memory                 | Blocked | User-controlled shared/private/temporary/proposed-shared namespaces, followed by the staged Research/Knowledge workflow                 | Phase 4, ARB-005 resolution, and the Blocked memory and research/knowledge plans                                                                                             |
-| 6. Bounded parallelism                   | Blocked | Explicit finite concurrency, deterministic cancellation, ordering, and resource limits                                                  | Sequential workflows verified plus the Blocked bounded-parallelism plan                                                                                                      |
-| 7. Staged specialist workflows           | Blocked | Engineering-quality, infrastructure/operations, and automation workflows with exact routes/caps and separate consequential-action gates | Governance evidence plus the three Blocked specialist-workflow plans                                                                                                         |
-| 8. Desktop UI                            | Blocked | Typed catalog/task/progress/attribution/cancellation presentation and control through narrow Tauri IPC                                  | Stable backend contracts plus the Blocked multi-agent UI plan                                                                                                                |
-| 9. End-to-end demonstrations             | Blocked | Bounded synthetic or separately approved demonstrations with exact attribution and no overclaiming                                      | Selected workflow gates plus the Blocked demonstration plan                                                                                                                  |
-| 10. Architecture/security review         | Blocked | Cross-phase ownership, isolation, cancellation, audit, privacy, portability, and rollback review                                        | Complete selected evidence plus the Blocked final-review plan                                                                                                                |
+| Phase                                    | Status    | Bounded outcome                                                                                                                         | Gate to advance                                                                                                                                         |
+| ---------------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1. Agent definition and registry         | Completed | Nine immutable definitions and deterministic registry; only Personal Assistant and Research are `Initial`, none operational             | Preserve the verified catalog; publication requires separate owner direction                                                                            |
+| 2. Task and orchestration foundation     | Blocked   | Closed task lifecycle, context, depth-one limits, typed delegation, results, and cancellation above `AgentRuntime`                      | Verified Phase 1 plus fresh review of [`2026-08-11-agent-orchestration-task-lifecycle.md`](docs/plans/2026-08-11-agent-orchestration-task-lifecycle.md) |
+| 3. First Personal-to-Research delegation | Blocked   | Deterministic no-I/O root task, one Research child, one attributed result, and Personal synthesis                                       | Verified Phase 2 plus an exact deterministic integration plan; no live provider                                                                         |
+| 4. Agent-specific governance             | Blocked   | Per-agent identity through tools, policy, approval, cancellation, audit, and separately gated knowledge/document boundaries             | Phase 3 evidence plus the Blocked governance and knowledge/document plans                                                                               |
+| 5. Agent-specific memory                 | Blocked   | User-controlled shared/private/temporary/proposed-shared namespaces, followed by the staged Research/Knowledge workflow                 | Phase 4, ARB-005 resolution, and the Blocked memory and research/knowledge plans                                                                        |
+| 6. Bounded parallelism                   | Blocked   | Explicit finite concurrency, deterministic cancellation, ordering, and resource limits                                                  | Sequential workflows verified plus the Blocked bounded-parallelism plan                                                                                 |
+| 7. Staged specialist workflows           | Blocked   | Engineering-quality, infrastructure/operations, and automation workflows with exact routes/caps and separate consequential-action gates | Governance evidence plus the three Blocked specialist-workflow plans                                                                                    |
+| 8. Desktop UI                            | Blocked   | Typed catalog/task/progress/attribution/cancellation presentation and control through narrow Tauri IPC                                  | Stable backend contracts plus the Blocked multi-agent UI plan                                                                                           |
+| 9. End-to-end demonstrations             | Blocked   | Bounded synthetic or separately approved demonstrations with exact attribution and no overclaiming                                      | Selected workflow gates plus the Blocked demonstration plan                                                                                             |
+| 10. Architecture/security review         | Blocked   | Cross-phase ownership, isolation, cancellation, audit, privacy, portability, and rollback review                                        | Complete selected evidence plus the Blocked final-review plan                                                                                           |
 
 The first usable engineering milestone is Phase 3's deterministic
 Personal-to-Research flow. It is not a shipping/live assistant milestone.
@@ -159,10 +159,10 @@ Release milestones additionally require `RELEASE_CHECKLIST.md` and
 
 ## Current queue
 
-1. Review and publish the completed native multi-agent architecture
-   documentation before separately authorizing Phase 1. A Ready plan grants no
-   implementation authority by itself.
-2. Do not begin Phase 2 or any later multi-agent phase automatically. Keep
+1. Review and publish the completed AgentDefinition/AgentRegistry increment as
+   one bounded change only with separate owner direction.
+2. Do not begin Phase 2 or any later multi-agent phase automatically. Require a
+   fresh architecture, security, and readiness review, and keep
    delegation depth/concurrency at the documented bounds and keep Native
    sole/default.
 3. Do not begin Stage B no-traffic provisioning, Stage C synthetic transport,
@@ -180,9 +180,8 @@ Release milestones additionally require `RELEASE_CHECKLIST.md` and
 Increment 4V is verified complete and published. D-058 and its project-memory
 reconciliation are closed. The High-severity disposition identifies no
 immediate code remediation. ARB-002A is documentation-only. The agent
-definition/registry plan is the only new Ready product plan; it remains
-not Active and cannot start until this documentation increment is separately
-reviewed and published and an exact implementation task is authorized.
+definition/registry increment is locally verified and awaiting owner review and
+publication. No later product plan is Ready automatically.
 
 ## Rollback and reprioritization
 

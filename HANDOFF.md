@@ -4,34 +4,27 @@ Last updated: 2026-08-12
 
 ## Current state
 
-The owner-selected documentation-only
-[`2026-08-11-native-multi-agent-architecture.md`](docs/plans/2026-08-11-native-multi-agent-architecture.md)
-increment is **verified complete with advisories** under gate
-`native-multi-agent-architecture` after the owner expanded the catalog to nine
-roles before closeout. It remains uncommitted for owner review.
-D-082 and the Accepted
-[`ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md`](docs/adr/ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md)
-place a separate application-owned `AgentOrchestrator` above D-079's
-implemented one-run `AgentRuntime` and sole/default `NativeAgentRuntime`.
-The initial Personal-to-Research flow fixes delegation depth, total-child
-budget, and active-child concurrency at one, without replenishment. Future
-staged workflows remain depth-one/orchestrator-sequenced and must declare exact
-finite stage budgets. Only the orchestrator creates tasks. Tools, policy,
-approvals, execution, audit, memory, providers, and device authority remain
-outside agent and generic runtime contracts and orchestrator authority; Native
-still composes the existing application-owned turn.
-
-The root roadmap retains ten authoritative phases while the subordinate roadmap
-expands their staged nine-role work. Only
+The owner-approved
 [`2026-08-11-agent-definition-registry.md`](docs/plans/2026-08-11-agent-definition-registry.md)
-is Ready. It covers nine immutable definitions and instruction sources, a
-closed non-authorizing activation disposition, deterministic registry,
-validation, and no-I/O tests. Only Personal Assistant and Research are
-initially selected for a later flow; all nine remain inert/unwired. It may start
-only after this documentation completes, is separately reviewed/committed/
-pushed to a clean baseline, and the owner provides an exact implementation
-task. Every later plan remains Blocked. No production source, test, dependency,
-provider, process, Tauri/React path, or visible behavior is changing.
+increment is **verified complete with advisories** under gate
+`agent-definition-registry` and remains intentionally uncommitted for owner
+review. The Rust core now contains exactly nine closed immutable
+`AgentDefinition` values, nine versioned embedded `AgentInstructionSource`
+values, closed non-authorizing activation metadata, and one deterministic
+immutable `AgentRegistry`. Personal Assistant and Research alone are
+`Initial`; the other seven carry their exact deferred gate. All nine remain
+inert and unwired because no task, orchestrator, selector, provider, or catalog
+consumer exists.
+
+Focused definition, registry, native runtime, and gateway regressions pass, as
+does the complete applicable repository validation. D-082's architecture is
+preserved: identity and catalog state grant no tools, policy, approval, memory,
+provider, execution, or device authority. No task, delegation, orchestration,
+parallelism, workflow, Tauri/React path, dependency, persistence, process,
+network, or user-visible behavior changed. `NativeAgentRuntime` remains the
+sole/default runtime and Hermes remains Deferred/Blocked. Every later native
+multi-agent plan remains Blocked pending publication, fresh review, and
+separate owner authorization.
 
 Hermes integration is **Deferred — evaluated transport and containment
 requirements not met**. Raw TUI-gateway stdio, managed `hermes serve`
@@ -182,22 +175,22 @@ changed.
 
 ## Current exact task
 
-Review and publish the verified, uncommitted native multi-agent architecture
-documentation as one documentation-only commit only if the owner explicitly
-requests commit and push. Do not begin AgentDefinition/AgentRegistry or any
-later phase from the dirty/unpublished baseline.
+Review and publish the verified, uncommitted AgentDefinition/AgentRegistry
+increment as one bounded commit only if the owner explicitly requests commit
+and push. Do not begin task/orchestration or any later phase from the dirty
+unpublished baseline.
 
 Resume prompt: Read `AGENTS.md`, the project-memory chain, D-079 through D-082,
 `docs/architecture/NATIVE_MULTI_AGENT_ASSESSMENT.md`,
 `docs/adr/ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md`, root `ROADMAP.md`,
-`docs/plans/2026-08-11-native-multi-agent-architecture.md`, and its
-post-increment review. Confirm gate `native-multi-agent-architecture` is
-complete and valid, the changed inventory is documentation-only, Native remains
-sole/default, Hermes remains Deferred/Blocked, and exactly one implementation
-plan is Ready. If the owner authorizes publication, commit and push only this
-verified documentation scope. Otherwise stop. Do not implement agent
-definitions, registry, tasks, orchestration, governance, memory, concurrency,
-specialist agents, UI, providers, tools, or Hermes.
+`docs/plans/2026-08-11-agent-definition-registry.md`, and
+`docs/reviews/2026-08-11-agent-definition-registry-post-increment-review.md`.
+Confirm gate `agent-definition-registry` is complete and valid, the exact
+changed inventory is limited to the verified catalog increment, Native remains
+sole/default, Hermes remains Deferred/Blocked, and every later plan is Blocked.
+If the owner authorizes publication, commit and push only this verified scope.
+Otherwise stop. Do not implement tasks, orchestration, delegation, governance,
+memory, concurrency, specialist workflows, UI, providers, tools, or Hermes.
 
 The fake-only Cloudflare demo macOS Keychain proof is complete with advisories.
 Pinned macOS-only Security.framework bindings read exactly two fixed labels and

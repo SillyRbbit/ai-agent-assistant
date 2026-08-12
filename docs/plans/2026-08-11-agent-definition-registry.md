@@ -1,11 +1,12 @@
 # Agent definition and registry
 
-Status: Ready; owner-approved for a later implementation run, not active
+Status: Verified complete with advisories
 Owner: Project owner
 Last updated: 2026-08-12
-Implementation-start gates: publish the verified native multi-agent architecture
-documentation to a clean synchronized baseline and receive a separate exact
-owner implementation task
+Implementation-start gates: satisfied on clean synchronized `main` at
+`48ab264dc26f4c289b6160e9ec703cbba1997624`; the architecture documentation is
+published, its completion marker is valid, and the owner supplied the separate
+exact implementation task
 
 ## Goal
 
@@ -79,6 +80,44 @@ behavior remain unchanged.
   all nine remain inert and unwired in this increment.
 - The registry has one implementation and one source, so a registry trait or
   plugin interface is speculative.
+
+## Current file and symbol inventory
+
+- `src-tauri/src/agent/mod.rs` currently exports only
+  `function_call_validation`, `gateway_protocol`, `gateway_request`,
+  `native_runtime`, and `runtime`; it has no product-agent catalog module.
+- `src-tauri/src/agent/runtime.rs` owns `AgentRuntime`, `RuntimeRun`, and their
+  closed one-run descriptor, request, event, cancellation, and error types.
+- `src-tauri/src/agent/native_runtime.rs` owns the sole/default
+  `NativeAgentRuntime` and `NativeAgentRun`, which delegate to one unchanged
+  `InitialGatewayTurn`.
+- `src-tauri/src/agent/gateway_request.rs` privately composes the fixed
+  `InMemoryToolRegistry`, deterministic policy, approval manager, and typed
+  approval-audit adapter. None becomes definition or registry metadata.
+- `src-tauri/tests/agent_runtime_contract.rs` contains the private test-only
+  `MockAgentRuntime`; no production mock or catalog consumer exists.
+- `src-tauri/src/lib.rs` registers only `get_app_info`; React still uses the
+  separate deterministic browser mock.
+- The repository has no product `AgentId`, `AgentDefinition`, `AgentRegistry`,
+  persona, instruction loader, provider, model policy, agent policy profile, or
+  memory namespace to adapt. Repository prompts and skills are development
+  assets, not product-agent instructions.
+- `tools::registry` supplies only the useful deterministic `BTreeMap` and
+  duplicate-before-insert convention. Its mutable trait and tool authority are
+  not reused.
+
+## Exact planned symbols
+
+- `definition.rs`: `AgentId`, `AgentIdParseError`, `AgentActivation`,
+  `AgentActivationGate`, `AgentInstructionSource`, `AgentDefinition`,
+  `AgentDefinitionError`, the three text limits, exact built-in specifications,
+  and private text/mapping validation.
+- `registry.rs`: concrete immutable `AgentRegistry`, `AgentRegistryError`,
+  fallible `built_in`, crate-private validated test assembly, typed `get`, and
+  deterministic borrowed `list`.
+- `agent/mod.rs`: only `pub mod definition` and `pub mod registry` additions.
+- `agent_definition_registry_contract.rs`: public catalog identity, exact
+  metadata, ordering, lookup, activation, redaction, and inert-boundary tests.
 
 ## Exact files expected to change
 
@@ -379,6 +418,21 @@ evidence that the agent can be started.
    edits, perform architecture/security/code reviews, synchronize project
    memory, generate the review, and finalize the post-increment marker.
 
+## Milestones
+
+- [x] Milestone 0 - verify the published D-082 baseline, clean synchronized
+      Git state, exact owner authority, relevant source/tests, and passing
+      20-test native runtime regression baseline; begin gate
+      `agent-definition-registry`.
+- [x] Milestone 1 - implement the closed nine-role definition and instruction
+      source model with bounded validation and redacted typed errors.
+- [x] Milestone 2 - implement the concrete immutable deterministic registry and
+      narrow module exports.
+- [x] Milestone 3 - add private validation tests, the public contract suite,
+      and unchanged native/gateway regression evidence.
+- [x] Milestone 4 - run the full completion suite, complete independent reviews,
+      synchronize documentation, and finalize the post-increment marker.
+
 ## Test plan
 
 Required focused coverage:
@@ -416,6 +470,8 @@ Focused while implementing:
 
 ```bash
 cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::definition::tests
+cargo test --manifest-path src-tauri/Cargo.toml --lib --locked agent::registry::tests
 cargo test --manifest-path src-tauri/Cargo.toml --test agent_definition_registry_contract --locked
 cargo test --manifest-path src-tauri/Cargo.toml --test agent_runtime_contract --locked
 cargo test --manifest-path src-tauri/Cargo.toml --test gateway_request_contract --locked
@@ -488,20 +544,20 @@ remains unchanged and usable as before.
 
 ## Acceptance criteria
 
-- [ ] Exactly nine application-owned built-in definitions exist in the declared
+- [x] Exactly nine application-owned built-in definitions exist in the declared
       stable order.
-- [ ] Definitions, instruction sources, activation values, and gates are closed,
+- [x] Definitions, instruction sources, activation values, and gates are closed,
       versioned where applicable, bounded, validated, immutable, and redacted.
-- [ ] Exactly Personal Assistant and Research Agent are `Initial`; every other
+- [x] Exactly Personal Assistant and Research Agent are `Initial`; every other
       role reports its exact deferred gate, and none is represented as currently
       operational.
-- [ ] The registry is concrete, deterministic, read-only, and fail-closed.
-- [ ] Duplicate, missing, unknown, malformed, mismatch, and limit cases have
+- [x] The registry is concrete, deterministic, read-only, and fail-closed.
+- [x] Duplicate, missing, unknown, malformed, mismatch, and limit cases have
       deterministic tests.
-- [ ] No runtime, task, orchestration, delegation, governance, memory, provider,
+- [x] No runtime, task, orchestration, delegation, governance, memory, provider,
       Tauri, React, dependency, or behavior change occurs.
-- [ ] Native remains sole/default and runtime regressions pass.
-- [ ] Complete applicable validation, reviews, docs sync, and completion marker
+- [x] Native remains sole/default and runtime regressions pass.
+- [x] Complete applicable validation, reviews, docs sync, and completion marker
       pass.
 
 ## Progress
@@ -512,6 +568,28 @@ remains unchanged and usable as before.
 - 2026-08-11: owner steering expanded the catalog to nine definitions and
   required closed staged-activation metadata while leaving this the sole Ready,
   definition/registry-only plan.
+- 2026-08-12: architecture baseline published at `48ab264`; Git confirmed clean
+  and synchronized; the owner supplied the exact implementation task.
+- 2026-08-12: readiness returned Ready with advisories, the existing native
+  runtime contract passed 20/20, and gate `agent-definition-registry` began.
+- 2026-08-12: implemented the exact nine definitions, embedded V1 instruction
+  sources, closed activation metadata, deterministic registry, two module
+  exports, five definition units, three registry units, and six public contract
+  tests. Native runtime and gateway regressions remained unchanged and passed.
+- 2026-08-12: the first combined private-unit test invocation used two Cargo
+  filters and was rejected by Cargo before executing tests. The declared plan
+  commands were corrected to one filter per invocation; both suites pass.
+- 2026-08-12: strict Clippy initially rejected test-only `expect`/`expect_err`
+  assertions. They were replaced with typed results/pattern comparisons; the
+  strict all-target/all-feature Clippy rerun passes.
+- 2026-08-12: the first `npm run verify` stopped at Prettier warnings in the two
+  edited roadmap tables. The declared documentation inventory was formatted;
+  the full verification rerun passed, including 124 frontend tests, 109 Rust
+  library tests, all Rust integration tests, frontend production build, and the
+  Tauri release build without bundling.
+- 2026-08-12: all-target Rust passed 169 tests with one explicitly opt-in
+  real-Hermes version probe ignored. Independent architecture, security, code,
+  and readiness reviews found no implementation defect or technical debt.
 
 ## Discoveries
 
@@ -524,12 +602,26 @@ remains unchanged and usable as before.
   grouping is documentation rather than a single-valued definition field.
 - Registry mutation and dynamic instruction loading would add authority and
   failure modes without a current consumer.
+- The implementation prompt's instruction-file paths are conceptual. The
+  approved plan's closed embedded `AgentInstructionSource` values are the
+  authoritative repository convention for this increment; missing or
+  unreadable files are therefore unrepresentable rather than runtime failures.
+- `Initial` and `Deferred` describe future catalog eligibility only. This
+  increment adds no operational availability, enable/disable, start, selection,
+  or gate-evaluation API.
 
 ## Final results
 
-Not started.
+Implemented exactly nine closed application-owned definitions, their exact V1
+embedded instruction sources, descriptive staged-activation metadata, and one
+deterministic immutable registry. Added five private definition tests, three
+private registry tests, and six public contract tests. All focused and complete
+validation passes; the post-increment review records `PASS WITH ADVISORIES`
+only because publication and every later phase remain separately gated.
 
 ## Documentation updates
 
-Not started. On verified completion, synchronize only observed current-state
-facts and preserve the Accepted ADR and roadmap phase boundaries.
+Complete. Current-state architecture, project direction, assessment,
+roadmaps, plan queue, handoff, status, next steps, and changelog now distinguish
+the implemented inert catalog from the still-unimplemented orchestration and
+later specialist phases. D-082 and all Hermes evidence remain unchanged.

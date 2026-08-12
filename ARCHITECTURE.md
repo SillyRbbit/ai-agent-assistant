@@ -1,7 +1,7 @@
 # Cortexa architecture
 
 Status: Authoritative current-state architecture
-Last updated: 2026-08-11
+Last updated: 2026-08-12
 
 ## Reading this document
 
@@ -188,14 +188,16 @@ authorize networking, dependencies, credentials, provider selection, a live
 model, dispatch, execution, or a Tauri capability. D-082 separately accepts the
 multi-agent application-service target below; it does not add current behavior.
 
-#### Native multi-agent application-service direction
+#### Native catalog foundation and multi-agent application-service direction
 
-**Accepted target; not implemented**: D-082 places native multi-agent
-coordination above the existing one-run runtime seam.
+**Current catalog foundation; orchestration not implemented**: D-082 places
+native multi-agent coordination above the existing one-run runtime seam. The
+first bounded implementation now provides only the closed definitions,
+versioned embedded instructions, and deterministic registry described below.
 
 ```mermaid
 flowchart TD
-    User["User"] --> Personal["Personal Assistant<br/>planned definition"]
+    User["User"] --> Personal["Personal Assistant<br/>current inert definition"]
     Personal --> Orchestrator["AgentOrchestrator<br/>planned application service"]
     Orchestrator --> Initial["Initial catalog pair<br/>Personal Assistant + Research Agent"]
     Orchestrator -. staged .-> Knowledge["Research & knowledge<br/>Knowledge & Document"]
@@ -210,18 +212,19 @@ Agent-role arrows show logical assignment/delegation, not component authority.
 The orchestrator invokes the runtime for each root or child run; definitions do
 not call runtimes.
 
-The planned `AgentDefinition` is immutable, application-owned identity,
+The current `AgentDefinition` is immutable, application-owned identity,
 purpose, versioned instructions, and a non-authorizing activation disposition.
 The catalog documents the closed functional groups, including cross-cutting
-membership, without adding a routing field. The planned `AgentRegistry`
+membership, without adding a routing field. The current `AgentRegistry`
 performs validated deterministic lookup/listing of all nine definitions and
 their closed `Initial`/`Deferred` catalog state. Discovery is non-authorizing;
 operational selection and task creation fail closed for deferred definitions.
 Neither registration, grouping, nor activation grants tools, routing, policy,
 memory, provider, or device authority.
-The first Ready implementation plan defines all nine accepted roles but marks
-only Personal Assistant and Research Agent `Initial` for a later
-deterministic flow; none has a current application consumer.
+The implemented catalog marks only Personal Assistant and Research Agent
+`Initial` for a later deterministic flow; all nine remain inert and none has a
+current application consumer. The embedded instruction sources are closed
+application-owned Rust assets rather than runtime-loaded files.
 
 The planned `AgentOrchestrator` is a separate application service. It owns task
 assignment, a closed task lifecycle, bounded delegation, result collection,
@@ -260,10 +263,11 @@ namespace identities. The application derives the context from the registry
 and orchestrator. Missing, unknown, stale, duplicate, or mismatched identity
 fails closed and never defaults to the Personal Assistant.
 
-Current code contains no agent definition, registry, task, orchestrator,
-delegation, agent-aware policy/audit, memory namespace, multi-agent Tauri IPC,
-or multi-agent React state. `RuntimeTurnRequest` carries only run ID, request
-ID, and bounded selected text. The Tasks and Memory screens remain placeholders.
+Current code contains no task, orchestrator, delegation, agent-aware
+policy/audit, memory namespace, multi-agent Tauri IPC, or multi-agent React
+state. The implemented definition/registry catalog remains unwired.
+`RuntimeTurnRequest` carries only run ID, request ID, and bounded selected text.
+The Tasks and Memory screens remain placeholders.
 
 The target namespace model is shared user/project, agent-private,
 task-temporary, and proposed-shared memory. No product `MemoryStore`, vector

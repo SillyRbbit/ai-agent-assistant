@@ -4,32 +4,24 @@ Last updated: 2026-08-12
 
 ## Current milestone
 
-The owner-selected native multi-agent architecture documentation increment is
-**verified complete with advisories** under gate
-`native-multi-agent-architecture` and remains intentionally uncommitted. An
-owner steering update expanded the planned catalog to nine roles before
-closeout. D-082
-accepts an application-owned `AgentOrchestrator` above the implemented one-run
-`AgentRuntime` and sole/default `NativeAgentRuntime`. Agents are
-application-owned privilege-free definitions with closed staged activation;
-only the orchestrator may create a child task; the first Personal-to-Research
-flow fixes depth, total-child budget, and concurrency at one; and later
-workflow plans must retain depth/concurrency one while setting exact finite
-stage budgets. Tools, policy, approvals, execution, audit, memory, providers,
-and device authority stay application-owned outside the generic runtime
-contract and orchestrator authority. Native still composes the existing turn.
+The owner-approved AgentDefinition/AgentRegistry increment is **verified
+complete with advisories** under gate `agent-definition-registry` and remains
+intentionally uncommitted. The Rust core now contains exactly nine closed
+application-owned definitions, nine versioned embedded instruction sources,
+closed non-authorizing activation metadata, and one deterministic immutable
+registry. Personal Assistant and Research Agent alone are `Initial`; the other
+seven report their exact deferred gate. All nine remain inert and unwired.
 
-No agent definition, registry, task, orchestrator, delegation, execution
-context, agent-aware policy/audit, memory namespace, provider, Tauri consumer,
-or multi-agent frontend state exists. The first Ready plan adds the exact nine
-closed definitions, nine versioned instruction sources, non-authorizing staged
-activation, a deterministic immutable registry, bounded validation, and tests.
-Only Personal Assistant and Research Agent are `Initial` for a
-future flow; all definitions remain inert/unwired. The plan is Ready and not
-Active, and may start only after this documentation completes, is published to
-a clean baseline, and receives an exact owner implementation task. Every later
-plan remains Blocked. The completed documentation changed no production source,
-test, dependency, provider, process, IPC, UI, or behavior.
+No task, orchestrator, delegation, execution context, agent-aware policy/audit,
+memory namespace, provider, Tauri consumer, or multi-agent frontend state
+exists. D-082 still places any future `AgentOrchestrator` above the implemented
+one-run `AgentRuntime` and sole/default `NativeAgentRuntime`. Catalog identity,
+instructions, discovery, and activation metadata grant no tools, policy,
+approval, execution, audit, memory, provider, or device authority. Focused and
+complete applicable validation pass without changing native runtime/gateway
+source, dependencies, IPC, UI, process/network behavior, or visible behavior.
+Every later plan remains Blocked pending publication, fresh review, and exact
+owner authorization.
 
 Hermes integration is **Deferred — evaluated transport and containment
 requirements not met**. Raw stdio, managed WebSocket, and ACP remain rejected
@@ -1412,12 +1404,11 @@ path was added.
 
 ## Next action
 
-The AgentDefinition/AgentRegistry plan is the sole Ready product plan and is not
-Active. The immediate next task is owner review and, only with separate
-direction, publication of the verified native multi-agent architecture
-documentation to a clean baseline. A separate exact owner task is still
-required before implementation. Task/orchestration and every later native
-multi-agent phase remain Blocked/Future; Hermes remains Deferred/Blocked.
+The immediate next task is owner review and, only with separate direction,
+publication of the verified AgentDefinition/AgentRegistry increment to a clean
+synchronized baseline. Task/orchestration and every later native multi-agent
+phase remain Blocked pending fresh architecture, security, and readiness review
+plus separate exact owner authorization. Hermes remains Deferred/Blocked.
 
 All other product and remediation gates remain unchanged. ARB-002 remains
 decision-required under D-062's identity-evidence gates and D-066's OpenAI

@@ -1,7 +1,7 @@
 # Cortexa project direction
 
 Status: Owner-approved repository-governance and planned-architecture direction
-Last updated: 2026-08-11
+Last updated: 2026-08-12
 Decision authority: D-078
 
 This document defines present project scope and future-facing architecture
@@ -110,12 +110,12 @@ AgentOrchestrator
        NativeAgentRuntime
 ```
 
-The planned catalog contains nine application-owned roles: Personal Assistant;
+The current inert catalog contains nine application-owned roles: Personal Assistant;
 Research; Knowledge & Document; Coding; QA & Validation; Security & Risk; Cloud
 Infrastructure; Systems Operations; and Workflow Automation. QA and Security
 are cross-cutting, but group membership grants no route or authority.
 `AgentOrchestrator`, task lifecycle, delegation, policy profiles, and memory
-namespaces stay outside `AgentRuntime`.
+namespaces stay outside `AgentRuntime` and remain unimplemented.
 
 The initial deterministic phase keeps delegation depth, total-child budget per
 root, and active-child concurrency at one; the root is Personal Assistant, only
@@ -123,11 +123,13 @@ Personal Assistant to Research Agent is enabled, and only the orchestrator may
 create a child task. Terminal child work does not replenish that phase's budget.
 Future staged workflows remain orchestrator-sequenced at depth one and require
 exact finite task caps and separate plans. This is accepted architecture and
-planning direction, not current behavior; only the separately approved
-AgentDefinition/AgentRegistry plan is Ready. It defines all nine roles but
-initially enables only Personal Assistant and Research Agent, and registration
-or activation never grants tools, policy, approval, memory, provider, or device
-authority.
+planning direction, not current orchestration behavior. The separately
+approved AgentDefinition/AgentRegistry increment now implements all nine closed
+definitions, their versioned embedded instruction sources, and a deterministic
+immutable registry. Only Personal Assistant and Research carry the
+non-authorizing `Initial` catalog marker; no definition is operational, and
+registration or activation never grants tools, policy, approval, memory,
+provider, or device authority.
 
 `AgentOrchestrator`, `AgentRuntime`, `NativeAgentRuntime`, `AgentRegistry`,
 `ToolRegistry`, `PolicyEngine`, `ApprovalManager`, `AuditLogger`, `MemoryStore`,

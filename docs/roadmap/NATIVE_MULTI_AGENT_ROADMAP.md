@@ -12,8 +12,9 @@ Last updated: 2026-08-12
 This document expands the native multi-agent portion of the root roadmap into a
 catalog, activation sequence, workflow map, and separately gated plan set. It
 does not change root-roadmap status, authorize implementation, or claim that an
-agent definition, registry, orchestrator, provider, tool, memory store, Tauri
-consumer, or multi-agent UI exists.
+orchestrator, provider, tool, memory store, Tauri consumer, or multi-agent UI
+exists. The closed nine-definition catalog and deterministic registry now
+exist, remain inert, and grant no operational authority.
 
 `AgentOrchestrator`, `AgentRuntime`, `NativeAgentRuntime`, `AgentRegistry`,
 `ToolRegistry`, `PolicyEngine`, `ApprovalManager`, `AuditLogger`, `MemoryStore`,
@@ -41,22 +42,22 @@ Automation is not `AgentOrchestrator`.
 
 ## Planned staged activation
 
-Phase 1 may register all nine definitions, but catalog presence is
+Phase 1 registers all nine definitions, but catalog presence is
 non-authorizing. `Initial` below means eligible only for a future
 deterministic orchestration phase; it does not mean operational, wired, or able
 to use a live model or tool.
 
-| Agent                      | Planned Phase 1 catalog state | Earliest activation gate                                                                                    |
-| -------------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| Personal Assistant         | `Initial`                     | Definition/registry verification, then the separately verified task/orchestration foundation                |
-| Research Agent             | `Initial`                     | Initial bounded Personal-to-Research workflow; governed retrieval remains separately gated                  |
-| Knowledge & Document Agent | `Deferred`                    | Approved document roots, knowledge boundaries, memory lifecycle, and applicable governance                  |
-| Coding Agent               | `Deferred`                    | Engineering workflow plus approved repository/change/test controls                                          |
-| QA & Validation Agent      | `Deferred`                    | Engineering-quality validation boundary; it never becomes approval authority                                |
-| Security & Risk Agent      | `Deferred`                    | Engineering/security review boundary; it remains advisory and never becomes policy or remediation authority |
-| Cloud Infrastructure Agent | `Deferred`                    | Infrastructure workflow plus separately approved read-only inventory and change-governance controls         |
-| Systems Operations Agent   | `Deferred`                    | Operations workflow plus separately approved read-only diagnostics and platform controls                    |
-| Workflow Automation Agent  | `Deferred`                    | Typed workflow schema, validation, governance, approval, audit, and orchestrator coordination               |
+| Agent                      | Phase 1 catalog state | Earliest activation gate                                                                                    |
+| -------------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Personal Assistant         | `Initial`             | Definition/registry verification, then the separately verified task/orchestration foundation                |
+| Research Agent             | `Initial`             | Initial bounded Personal-to-Research workflow; governed retrieval remains separately gated                  |
+| Knowledge & Document Agent | `Deferred`            | Approved document roots, knowledge boundaries, memory lifecycle, and applicable governance                  |
+| Coding Agent               | `Deferred`            | Engineering workflow plus approved repository/change/test controls                                          |
+| QA & Validation Agent      | `Deferred`            | Engineering-quality validation boundary; it never becomes approval authority                                |
+| Security & Risk Agent      | `Deferred`            | Engineering/security review boundary; it remains advisory and never becomes policy or remediation authority |
+| Cloud Infrastructure Agent | `Deferred`            | Infrastructure workflow plus separately approved read-only inventory and change-governance controls         |
+| Systems Operations Agent   | `Deferred`            | Operations workflow plus separately approved read-only diagnostics and platform controls                    |
+| Workflow Automation Agent  | `Deferred`            | Typed workflow schema, validation, governance, approval, audit, and orchestrator coordination               |
 
 Catalog discovery lists all nine definitions and their exact state. Deferred
 agents fail closed only at later operational selection/task-creation boundaries;
@@ -69,18 +70,18 @@ shell, cloud, memory, provider, or device right.
 The ten root-roadmap phases remain authoritative. The entries below explain the
 native catalog's staged work inside those phases.
 
-| Root phase | Staged native outcome                                                                                                        | Status relationship                                                                                    |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| 1          | Register all nine privilege-free definitions; initially enable only Personal Assistant and Research Agent                    | The definition/registry ExecPlan is the sole Ready plan; implementation still needs separate authority |
-| 2          | Add task lifecycle, execution context, limits, explicit delegation, result collection, and cancellation above `AgentRuntime` | Blocked on verified Phase 1                                                                            |
-| 3          | Prove the deterministic Personal-to-Research flow with one child and Personal synthesis                                      | Blocked on Phase 2 and an exact deterministic integration plan                                         |
-| 4          | Bind per-agent governance, then establish approved file/root and document-processing boundaries                              | Blocked on verified deterministic orchestration and the governance/document plans                      |
-| 5          | Add explicit memory namespaces/lifecycle, then stage the Research/Knowledge workflow                                         | Blocked on Phase 4, ARB-005, and the memory/workflow plans                                             |
-| 6          | Increase child concurrency only through explicit deterministic limits, cancellation, and resource bounds                     | Blocked until sequential behavior is verified                                                          |
-| 7          | Stage engineering-quality, infrastructure/operations, and automation workflows with each specialist separately enabled       | Blocked on role-specific governance and tool/platform decisions                                        |
-| 8          | Add typed catalog, task, progress, attribution, cancellation, and approval-explanation UI through narrow Tauri IPC           | Blocked on stable backend contracts                                                                    |
-| 9          | Demonstrate only bounded synthetic or separately approved workflows without capability overclaiming                          | Blocked on the selected workflow's complete gates                                                      |
-| 10         | Review architecture, security, privacy, cancellation, audit, portability, and rollback across completed phases               | Blocked until sufficient implementation evidence exists                                                |
+| Root phase | Staged native outcome                                                                                                        | Status relationship                                                               |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| 1          | Register all nine privilege-free definitions; mark only Personal Assistant and Research Agent `Initial`                      | Verified locally; inert catalog awaits owner-directed publication                 |
+| 2          | Add task lifecycle, execution context, limits, explicit delegation, result collection, and cancellation above `AgentRuntime` | Blocked on verified Phase 1                                                       |
+| 3          | Prove the deterministic Personal-to-Research flow with one child and Personal synthesis                                      | Blocked on Phase 2 and an exact deterministic integration plan                    |
+| 4          | Bind per-agent governance, then establish approved file/root and document-processing boundaries                              | Blocked on verified deterministic orchestration and the governance/document plans |
+| 5          | Add explicit memory namespaces/lifecycle, then stage the Research/Knowledge workflow                                         | Blocked on Phase 4, ARB-005, and the memory/workflow plans                        |
+| 6          | Increase child concurrency only through explicit deterministic limits, cancellation, and resource bounds                     | Blocked until sequential behavior is verified                                     |
+| 7          | Stage engineering-quality, infrastructure/operations, and automation workflows with each specialist separately enabled       | Blocked on role-specific governance and tool/platform decisions                   |
+| 8          | Add typed catalog, task, progress, attribution, cancellation, and approval-explanation UI through narrow Tauri IPC           | Blocked on stable backend contracts                                               |
+| 9          | Demonstrate only bounded synthetic or separately approved workflows without capability overclaiming                          | Blocked on the selected workflow's complete gates                                 |
+| 10         | Review architecture, security, privacy, cancellation, audit, portability, and rollback across completed phases               | Blocked until sufficient implementation evidence exists                           |
 
 ## Delegation and sequencing invariants
 
@@ -170,8 +171,9 @@ approval, restricted execution, and audit.
 
 ## Separately gated plans
 
-Only the AgentDefinition/AgentRegistry plan is Ready. Every plan below is
-Blocked and requires fresh owner approval after its prerequisites are verified.
+The AgentDefinition/AgentRegistry plan is implemented and verified locally.
+Every plan below remains Blocked and requires publication, fresh review, and
+owner approval after its prerequisites are verified.
 
 | Area                                   | Plan                                                                                                                                      |
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |

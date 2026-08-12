@@ -4,30 +4,24 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No plan is active. The owner-selected documentation-only
-[`2026-08-11-native-multi-agent-architecture.md`](docs/plans/2026-08-11-native-multi-agent-architecture.md)
-is **verified complete with advisories** under gate
-`native-multi-agent-architecture` and remains intentionally uncommitted for
-owner review. The owner expanded the catalog to nine roles before closeout;
-D-082 accepts an application-owned `AgentOrchestrator` above the
-implemented single-run `AgentRuntime` and sole/default `NativeAgentRuntime`.
-The assessment, ADR, root roadmap, subordinate activation roadmap, and plan set
-preserve all native boundaries and Hermes NO-GO evidence. No production source,
-test, dependency, provider, process, Tauri/React path, or behavior changed.
-
-The
+No plan is active. The owner-approved
 [`2026-08-11-agent-definition-registry.md`](docs/plans/2026-08-11-agent-definition-registry.md)
-plan is the sole new **Ready** implementation plan. It covers only immutable
-framework-neutral definitions, application-owned versioned instructions, a
-deterministic registry, all nine application-owned roles, closed staged
-activation, bounded validation, and deterministic tests. Only Personal
-Assistant and Research are `Initial` for a later flow; none is
-operational. Its plan status is Ready and not Active. It may start only after
-this documentation is verified, reviewed, and published to a clean synchronized
-baseline and the owner provides an exact implementation task. The orchestration,
-governance, knowledge/document, workflow, parallelism, UI, demonstration, and
-final-review plans all remain Blocked under `ROADMAP.md` and
-`docs/roadmap/NATIVE_MULTI_AGENT_ROADMAP.md`.
+is **verified complete with advisories** under gate
+`agent-definition-registry` and remains intentionally uncommitted for owner
+review. The bounded Rust implementation adds exactly nine closed immutable
+definitions, versioned embedded application instructions, non-authorizing
+`Initial`/`Deferred` metadata, and one deterministic immutable registry. Only
+Personal Assistant and Research are `Initial`; every definition remains inert
+and unwired. Focused and full validation pass. No task, orchestrator,
+delegation, selection service, tool grant, policy/approval change, memory,
+provider, process, Tauri/React path, dependency, or visible behavior was added.
+Native remains sole/default and Hermes remains Deferred/Blocked.
+
+The prior native multi-agent architecture documentation is published at
+`48ab264` and remains the D-082 authority. Task/orchestration and every later
+native multi-agent plan remain Blocked pending publication of this increment,
+fresh architecture/security/readiness review, and separate exact owner
+authorization. No later plan is Ready automatically.
 
 The prior owner-selected
 [`2026-08-11-hermes-acp-transport-spike.md`](docs/plans/2026-08-11-hermes-acp-transport-spike.md)

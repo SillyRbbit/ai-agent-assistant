@@ -124,31 +124,34 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Native multi-agent architecture documentation:
   **Verified complete with advisories under gate
   `native-multi-agent-architecture` after owner steering expanded the accepted
-  catalog to nine roles. The architecture remains documentation-only and
-  uncommitted for owner review.**
+  catalog to nine roles. The architecture is published at `48ab264` and
+  authorized the separately completed catalog increment.**
+- Agent definition and registry:
+  **Verified complete with advisories under gate `agent-definition-registry`.
+  Exactly nine closed definitions, versioned embedded instructions,
+  non-authorizing activation metadata, and one deterministic immutable registry
+  now exist. All remain inert/unwired; Native is sole/default and no
+  orchestration, provider, tool, policy, memory, IPC, UI, dependency, or Hermes
+  behavior was added.**
 
 ## Queue status
 
-### Ready plan: Agent definition and registry
+### Completed implementation: Agent definition and registry
 
-**Status:** **Ready; owner-approved plan, not Active**. It may start only after
-this architecture documentation is reviewed and published to a clean
-synchronized baseline and the owner provides a separate exact implementation
-task. Those are execution-start gates, not a second plan status. The
+**Status:** **Verified complete with advisories; awaiting owner-directed
+publication**. The
 [`2026-08-11-agent-definition-registry.md`](docs/plans/2026-08-11-agent-definition-registry.md)
-plan adds only closed framework-neutral agent IDs and definitions, embedded
-application-owned versioned instruction sources, closed non-authorizing staged
-activation, a concrete deterministic immutable registry, all nine catalog
-roles, typed validation/errors, redaction, and deterministic tests. Only
-Personal Assistant and Research are `Initial` for a later
-flow; none is operational. It does not add tasks, orchestration, delegation,
-tools, policy changes, memory, provider/model work, Tauri/React wiring,
-dependencies, or behavior.
+plan adds only the exact closed nine-role catalog, embedded application-owned
+versioned instructions, descriptive `Initial`/`Deferred` metadata, a concrete
+deterministic immutable registry, bounded validation, typed errors, redaction,
+and deterministic tests. Personal Assistant and Research alone are `Initial`
+for a later flow; none is operational. The increment is not committed or
+pushed by this task.
 
 ### Blocked follow-on: Agent orchestration and task lifecycle
 
-**Status:** **Blocked** on verified/published definition-registry completion and
-a fresh architecture, security, and readiness review. The draft
+**Status:** **Blocked** on publication of the verified definition-registry
+increment and a fresh architecture, security, and readiness review. The draft
 [`2026-08-11-agent-orchestration-task-lifecycle.md`](docs/plans/2026-08-11-agent-orchestration-task-lifecycle.md)
 records only the intended task/context/delegation/limit boundary. Governance,
 knowledge/document boundaries, research/knowledge, engineering-quality,
@@ -566,15 +569,15 @@ advisories, published through PR #35, and squash-merged at `853da62`. Its exact
 18-path scope preserves the original reports unchanged, and no publication
 action remains. It does not make ARB-002 Ready.
 
-The D-079 native boundary is complete. The AgentDefinition/AgentRegistry plan
-recorded above is now the sole Ready product plan; it remains not Active and
-requires the documented publication and exact owner-task start gates. Do not
-begin ARB-002B or another ARB-002 implementation automatically. Do not add a provider
-client, `AgentProvider`, gateway origin, cloud deployment, identity integration,
-credential, Keychain adapter, or external content path before D-062's exact
-evidence passes, D-066's exact OpenAI data-control and D-061 evidence pass, the
-required disclosure exists, and a separate implementation
-and threat model are approved. Container portability
+The D-079 native boundary and inert AgentDefinition/AgentRegistry catalog are
+complete. Publish the verified catalog only with owner direction; task and
+orchestration work remains Blocked pending that publication, fresh review, and
+exact owner authority. Do not begin ARB-002B or another ARB-002 implementation
+automatically. Do not add a provider client, `AgentProvider`, gateway origin,
+cloud deployment, identity integration, credential, Keychain adapter, or
+external content path before D-062's exact evidence passes, D-066's exact OpenAI
+data-control and D-061 evidence pass, the required disclosure exists, and a
+separate implementation and threat model are approved. Container portability
 does not authorize AWS, Google Cloud, active-active multicloud, failover, or a
 three-cloud release.
 

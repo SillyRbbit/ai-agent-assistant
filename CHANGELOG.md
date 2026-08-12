@@ -4,6 +4,16 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Implemented the inert application-owned nine-role agent catalog with closed
+  typed IDs, bounded purposes, exact versioned embedded instruction sources,
+  descriptive `Initial`/`Deferred` activation metadata, and a deterministic
+  immutable registry. Added fail-closed validation, typed redacted errors, and
+  deterministic definition/registry contracts. Personal Assistant and Research
+  alone are marked `Initial`, but no role is operational. Native remains
+  sole/default; no task, orchestration, delegation, tool/policy authority,
+  memory, provider, process, dependency, Tauri/React path, Hermes integration,
+  or visible behavior changed.
+
 - Accepted D-082's application-owned native multi-agent architecture above the
   implemented one-run `AgentRuntime` and sole/default `NativeAgentRuntime`.
   Added the evidence-based assessment, nine-role catalog and staged-activation

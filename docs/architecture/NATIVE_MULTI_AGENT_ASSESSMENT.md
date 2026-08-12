@@ -1,6 +1,6 @@
 # Native multi-agent architecture assessment
 
-Status: Owner-accepted architecture assessment; implementation not started
+Status: Owner-accepted architecture assessment; catalog foundation implemented
 Assessment date: 2026-08-11
 Last reconciled: 2026-08-12
 Decision authority:
@@ -8,9 +8,10 @@ Decision authority:
 and D-082
 
 This assessment records the smallest native multi-agent direction supported by
-the repository's current code and trust boundaries. It does not implement an
-agent definition, registry, task, orchestrator, provider, tool, memory store,
-Tauri command, frontend flow, or external runtime.
+the repository's current code and trust boundaries. The first bounded catalog
+increment now implements agent definitions and a registry. This assessment does
+not implement a task, orchestrator, provider, tool, memory store, Tauri command,
+frontend flow, or external runtime.
 
 ## 1. Executive summary
 
@@ -42,9 +43,9 @@ application-owned providers, tools, policy, approvals, audit, and memory
 
 The application-owned `AgentRuntime` and sole/default `NativeAgentRuntime`
 already exist. They are deliberately small, transport-free, and not connected
-to Tauri, React, a provider, or a live model. Multi-agent definitions, catalog
-activation, tasks, delegation, orchestration, agent-aware governance, and agent
-memory do not yet exist.
+to Tauri, React, a provider, or a live model. The closed nine-role definition
+catalog and non-authorizing activation metadata now exist. Tasks, delegation,
+orchestration, agent-aware governance, and agent memory do not.
 
 Preserve the existing runtime contract, `InitialGatewayTurn`, gateway
 validation, local tool schemas, deterministic policy, exact approval binding,
@@ -159,8 +160,13 @@ tests, not a live assistant session.
 - Frontend application and mock-driver tests cover the deterministic visible
   demonstration.
 
-No current test exercises an agent definition, registry, task, orchestrator,
-delegation, agent-specific policy, or agent memory because none exists.
+`src-tauri/tests/agent_definition_registry_contract.rs` exercises the exact
+nine-definition public catalog, closed IDs, embedded instruction sources,
+activation metadata, deterministic ordering/lookup, and redaction. Private
+definition and registry units cover bounds, control characters, mapping
+mismatches, duplicate registration, and partial lookup. No current test
+exercises a task, orchestrator, delegation, agent-specific policy, or agent
+memory because those do not exist.
 
 ## 3. Existing agent concepts and disposition
 
@@ -184,21 +190,21 @@ delegation, agent-specific policy, or agent memory because none exists.
 | Hermes adapter and Hermes tools/memory/subagents                             | **DEFER**                           | Preserve the negative evidence; select nothing automatically.                         |
 | Distributed workers, recursive spawning, marketplace, or cloud control plane | **DEFER**                           | Outside current personal-project scope.                                               |
 
-The repository has no current product-agent definition, role registry, persona,
-route, task model, orchestration model, agent-specific instruction source,
-memory namespace, or agent privilege declaration.
+The repository now has a closed product-agent definition, deterministic role
+registry, and versioned embedded instruction source. It has no route, task
+model, orchestration model, memory namespace, or agent privilege declaration.
 
-## 4. Proposed domain model
+## 4. Domain model and remaining target
 
-### Implement first
+### Implemented catalog foundation
 
-`AgentId` should be a stable, bounded, canonical application-owned identifier.
-The first catalog contains all nine owner-selected roles: Personal Assistant,
+`AgentId` is a stable, bounded, canonical application-owned identifier. The
+catalog contains all nine owner-selected roles: Personal Assistant,
 Research Agent, Coding Agent, Cloud Infrastructure Agent, Systems Operations
 Agent, Knowledge & Document Agent, QA & Validation Agent, Security & Risk Agent,
 and Workflow Automation Agent.
 
-`AgentDefinition` should be immutable and privilege-free. It needs only:
+`AgentDefinition` is immutable and privilege-free. It contains only:
 
 - `AgentId`;
 - a bounded display name;
@@ -207,12 +213,12 @@ and Workflow Automation Agent.
 - a closed catalog activation disposition.
 
 Definitions, documented group membership, and activation disposition must not
-grant tools, policy outcomes, memory, provider access, or runtime capabilities. The first
-instructions should be compiled application assets represented by a closed
-enum/version. They must not be loaded from repository skills, arbitrary files,
-URLs, user content, Hermes profiles, or provider payloads.
+grant tools, policy outcomes, memory, provider access, or runtime capabilities.
+The current instructions are compiled application assets represented by a
+closed enum/version. They are not loaded from repository skills, arbitrary
+files, URLs, user content, Hermes profiles, or provider payloads.
 
-The initial catalog marks only Personal Assistant and Research Agent as
+The current catalog marks only Personal Assistant and Research Agent as
 `Initial` for the later deterministic first flow. `Initial` means
 catalog-eligible, not
 operational: no current consumer can execute either definition. Every other
@@ -222,7 +228,7 @@ looked up/listed non-authoritatively; unknown IDs fail at lookup, and deferred
 or unavailable roles fail closed at later operational selection/task creation.
 A caller cannot override the disposition.
 
-`AgentRegistry` should initially be a concrete immutable collection containing
+`AgentRegistry` is a concrete immutable collection containing
 exactly those nine definitions, with validated construction, deterministic
 ordering, exact lookup, duplicate rejection, a typed unknown-agent result, and
 the closed activation disposition on every returned definition. It has no
@@ -450,9 +456,9 @@ Hermes memory cannot substitute for the application store. No vector database,
 embedding service, semantic index, or retrieval dependency is justified by the
 current requirements.
 
-## 10. Planned catalog, grouping, and privilege posture
+## 10. Current catalog, grouping, and privilege posture
 
-The first registry phase may define all nine roles, but only Personal Assistant
+The first registry phase defines all nine roles, but only Personal Assistant
 and Research Agent carry `Initial`; the other seven carry `Deferred` plus a
 closed gate. Every definition is application-owned, immutable, privilege-free,
 and non-operational until a separate consumer exists. Catalog listing may show
@@ -588,7 +594,8 @@ coordination merely to keep that option open.
 The near-term sequence is recorded in the authoritative root
 [`ROADMAP.md`](../../ROADMAP.md) and expanded in the subordinate
 [`NATIVE_MULTI_AGENT_ROADMAP.md`](../roadmap/NATIVE_MULTI_AGENT_ROADMAP.md).
-Only the
+The
 [`Agent definition and registry`](../plans/2026-08-11-agent-definition-registry.md)
-plan is Ready, and a plan still requires a separately authorized implementation
-run.
+plan is implemented and verified locally. Task/orchestration and every later
+phase remain Blocked pending publication, fresh review, and separate owner
+authorization.
