@@ -2958,6 +2958,60 @@ rules. D-078's personal-project scope remains intact. No production source,
 test, dependency, provider, process, IPC, UI, or behavior changes through this
 decision.
 
+## D-083 - Combine the task/orchestration foundation and first deterministic delegation proof
+
+Date: 2026-08-12
+Status: Accepted owner architecture and sequencing amendment
+
+Decision: Combine the former native multi-agent roadmap Phases 2 and 3 into one
+bounded implementation increment. The increment may implement the closed task
+lifecycle, trusted execution context, application-owned `AgentOrchestrator`,
+typed delegation, result return, cancellation, direct Personal Assistant
+response, and exactly one deterministic Personal Assistant -> Research Agent
+-> Personal Assistant synthesis proof.
+
+This decision supersedes only D-082's requirement to verify those two phases as
+separate increments. Every D-082 ownership, trust-boundary, catalog, route,
+limit, and non-authority rule remains in force:
+
+- `AgentOrchestrator` is the only component that may create a child task;
+- the root is Personal Assistant and the only child target is Research Agent;
+- depth, total-child budget, and active-child concurrency are one, and the
+  total budget is not replenished after a terminal child;
+- the other seven catalog roles remain `Deferred` and non-operational;
+- delegation is an explicit typed application-service operation, never an
+  `agent.delegate` host tool or runtime control event;
+- `AgentRuntime` remains a one-run port and `NativeAgentRuntime` remains the
+  sole/default runtime;
+- policy, approval, registered tools, restricted execution, audit, memory,
+  provider, IPC, UI, persistence, parallelism, and external frameworks remain
+  outside this increment; and
+- Hermes remains Deferred/Blocked.
+
+The combined deterministic delegated lifecycle may use at most three
+sequential runtime runs: an initial Personal Assistant run, one Research Agent
+child run, and a fresh Personal Assistant synthesis run. Accepting delegation
+terminates only the initial root runtime run and moves the root task to
+`WaitingForChild`; it does not cancel the root task. A terminal child outcome
+is returned as bounded, attributed, untrusted application data before the
+orchestrator starts the synthesis run. A direct response uses only the initial
+root run.
+
+The orchestrator derives agent, task, root, parent, runtime, depth, and active
+run identities from trusted application state. Callers and model text may not
+supply or override those identities. Policy-profile and memory-namespace IDs
+are omitted until their enforcing phases rather than represented by inert
+placeholders. Objectives, delegated context, expected deliverables, results,
+events, and errors remain closed, bounded, and redacted. Runtime tool proposals
+fail closed because this increment is text-only.
+
+Consequences: the combined plan may become Ready after its exact lifecycle,
+interfaces, files, tests, validation, and rollback are reviewed. Successful
+completion proves deterministic application orchestration only; it does not
+prove a provider, model, tool, memory store, UI, or shipping assistant flow.
+Later governance, knowledge/document, memory, parallelism, specialist, UI, and
+end-to-end demonstration plans remain separately gated.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

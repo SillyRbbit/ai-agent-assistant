@@ -133,30 +133,52 @@ This file is the ordered implementation queue. Work only on the first item marke
   now exist. All remain inert/unwired; Native is sole/default and no
   orchestration, provider, tool, policy, memory, IPC, UI, dependency, or Hermes
   behavior was added.**
+- Agent task orchestration and first bounded delegation:
+  **Verified complete with advisories under gate `agent-task-orchestration`.
+  D-083's closed task lifecycle, trusted live context, direct Personal response,
+  exact Personal-to-Research delegation, attributed child outcome, fresh
+  Personal synthesis, identity isolation, bounded events, and child-first
+  cancellation now exist as deterministic Rust-only contracts. Native remains
+  sole/default; no provider, tool, policy, memory, IPC, UI, dependency, Hermes,
+  external I/O, or visible behavior was added.**
 
 ## Queue status
 
 ### Completed implementation: Agent definition and registry
 
-**Status:** **Verified complete with advisories; awaiting owner-directed
-publication**. The
+**Status:** **Verified complete with advisories; published at `f42a6c7`**. The
 [`2026-08-11-agent-definition-registry.md`](docs/plans/2026-08-11-agent-definition-registry.md)
 plan adds only the exact closed nine-role catalog, embedded application-owned
 versioned instructions, descriptive `Initial`/`Deferred` metadata, a concrete
 deterministic immutable registry, bounded validation, typed errors, redaction,
 and deterministic tests. Personal Assistant and Research alone are `Initial`
-for a later flow; none is operational. The increment is not committed or
-pushed by this task.
+for a later flow; none is operational.
 
-### Blocked follow-on: Agent orchestration and task lifecycle
+### Completed implementation: Agent task orchestration and first bounded delegation
 
-**Status:** **Blocked** on publication of the verified definition-registry
-increment and a fresh architecture, security, and readiness review. The draft
+**Status:** **Verified complete with advisories; publication pending**. The
 [`2026-08-11-agent-orchestration-task-lifecycle.md`](docs/plans/2026-08-11-agent-orchestration-task-lifecycle.md)
-records only the intended task/context/delegation/limit boundary. Governance,
+combines the former foundation and deterministic first-flow phases. It adds a
+closed task lifecycle, trusted context, application-service delegation, exact
+one-child limits, direct Personal response, one no-I/O Personal -> Research ->
+Personal synthesis, result return, and cancellation above the unchanged
+one-run runtime. The foundation is not connected to Tauri, React, a provider,
+or a live model. Governance,
 knowledge/document boundaries, research/knowledge, engineering-quality,
 infrastructure/operations, automation, parallelism, desktop UI, demos, and
-final review have separate Blocked stubs in the subordinate native roadmap.
+final review remain separately Blocked. No later plan is Ready. Native stays
+sole/default; the other seven roles remain Deferred; Hermes remains Blocked.
+
+### Blocked next planning: Per-agent governance
+
+**Status:** **Blocked; draft follow-on, not approved for implementation**. The
+[`2026-08-11-agent-governance.md`](docs/plans/2026-08-11-agent-governance.md)
+must be reconciled against the verified orchestration boundary and decide exact
+policy-profile and memory-namespace identities plus their binding through
+tools, policy, approval, cancellation, audit, and results. Publication of the
+current increment, fresh architecture/security/readiness review, an accepted
+trust-boundary decision, and separate owner authorization are required before
+any implementation.
 
 ### Completed negative spike: Hermes ACP
 

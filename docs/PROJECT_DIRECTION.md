@@ -110,26 +110,29 @@ AgentOrchestrator
        NativeAgentRuntime
 ```
 
-The current inert catalog contains nine application-owned roles: Personal Assistant;
+The current catalog contains nine application-owned roles: Personal Assistant;
 Research; Knowledge & Document; Coding; QA & Validation; Security & Risk; Cloud
 Infrastructure; Systems Operations; and Workflow Automation. QA and Security
-are cross-cutting, but group membership grants no route or authority.
-`AgentOrchestrator`, task lifecycle, delegation, policy profiles, and memory
-namespaces stay outside `AgentRuntime` and remain unimplemented.
+are cross-cutting, but group membership grants no route or authority. The Rust
+core also contains the bounded `AgentTask`, trusted `AgentExecutionContext`,
+and `AgentOrchestrator` foundation accepted by D-083. These remain unwired and
+do not make any definition a shipping or autonomous assistant.
 
 The initial deterministic phase keeps delegation depth, total-child budget per
 root, and active-child concurrency at one; the root is Personal Assistant, only
 Personal Assistant to Research Agent is enabled, and only the orchestrator may
 create a child task. Terminal child work does not replenish that phase's budget.
 Future staged workflows remain orchestrator-sequenced at depth one and require
-exact finite task caps and separate plans. This is accepted architecture and
-planning direction, not current orchestration behavior. The separately
-approved AgentDefinition/AgentRegistry increment now implements all nine closed
-definitions, their versioned embedded instruction sources, and a deterministic
-immutable registry. Only Personal Assistant and Research carry the
-non-authorizing `Initial` catalog marker; no definition is operational, and
-registration or activation never grants tools, policy, approval, memory,
-provider, or device authority.
+exact finite task caps and separate plans. The implemented first flow uses a
+typed application-service call, never a runtime control event or host tool. A
+direct root response uses one run. Delegation terminally cancels the initial
+root run, uses one Research child run, and starts a fresh Personal synthesis
+run from the bounded attributed child outcome. The separately approved catalog
+increment implements all nine closed definitions, their versioned embedded
+instruction sources, and a deterministic immutable registry. Only Personal
+Assistant and Research carry the non-authorizing `Initial` marker;
+registration, activation, task creation, or orchestration grants no tool,
+policy, approval, memory, provider, execution, or device authority.
 
 `AgentOrchestrator`, `AgentRuntime`, `NativeAgentRuntime`, `AgentRegistry`,
 `ToolRegistry`, `PolicyEngine`, `ApprovalManager`, `AuditLogger`, `MemoryStore`,

@@ -4,6 +4,18 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Implemented D-083's bounded native task and orchestration foundation above
+  the unchanged `AgentRuntime`: closed task identity/lineage/state/result
+  types, trusted live execution contexts, exact Personal Assistant-to-Research
+  delegation, direct Personal responses, attributed child outcomes, fresh
+  Personal synthesis runs, fail-closed runtime-event routing, and child-first
+  cancellation. Added a shared test-only deterministic runtime fixture and
+  contracts for identity isolation, denial, bounds, failures, cancellation,
+  redaction, and exact output attribution. The foundation is Rust-only and
+  unwired; Native remains sole/default, the other seven roles remain Deferred,
+  and no provider, tool, policy, memory, IPC, UI, dependency, Hermes, external
+  I/O, or user-visible behavior changed.
+
 - Implemented the inert application-owned nine-role agent catalog with closed
   typed IDs, bounded purposes, exact versioned embedded instruction sources,
   descriptive `Initial`/`Deferred` activation metadata, and a deterministic

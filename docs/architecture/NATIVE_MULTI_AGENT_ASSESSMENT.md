@@ -1,17 +1,18 @@
 # Native multi-agent architecture assessment
 
-Status: Owner-accepted architecture assessment; catalog foundation implemented
+Status: Owner-accepted architecture assessment; catalog and bounded first-flow foundations implemented
 Assessment date: 2026-08-11
 Last reconciled: 2026-08-12
 Decision authority:
 [`ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md`](../adr/ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md)
-and D-082
+and D-082/D-083
 
 This assessment records the smallest native multi-agent direction supported by
-the repository's current code and trust boundaries. The first bounded catalog
-increment now implements agent definitions and a registry. This assessment does
-not implement a task, orchestrator, provider, tool, memory store, Tauri command,
-frontend flow, or external runtime.
+the repository's current code and trust boundaries. The catalog increment
+implements agent definitions and a registry. D-083's combined increment now
+also implements a bounded task domain and deterministic Personal-to-Research-
+to-Personal application-service contract. Neither foundation is connected to
+Tauri, React, a provider, live model, tool, memory store, or external runtime.
 
 ## 1. Executive summary
 
@@ -44,8 +45,10 @@ application-owned providers, tools, policy, approvals, audit, and memory
 The application-owned `AgentRuntime` and sole/default `NativeAgentRuntime`
 already exist. They are deliberately small, transport-free, and not connected
 to Tauri, React, a provider, or a live model. The closed nine-role definition
-catalog and non-authorizing activation metadata now exist. Tasks, delegation,
-orchestration, agent-aware governance, and agent memory do not.
+catalog and non-authorizing activation metadata now exist. The bounded
+`AgentTask`, derived `AgentExecutionContext`, and
+`AgentOrchestrator<R: AgentRuntime>` foundations also exist; agent-aware
+governance, memory, IPC, and live execution do not.
 
 Preserve the existing runtime contract, `InitialGatewayTurn`, gateway
 validation, local tool schemas, deterministic policy, exact approval binding,
@@ -312,7 +315,7 @@ User request
   -> terminal root result
 ```
 
-Initial Phase 3 invariants:
+Implemented combined Phase 2-3 invariants:
 
 - the root agent is exactly Personal Assistant;
 - the only initial delegation edge is Personal Assistant to Research Agent;
@@ -331,9 +334,12 @@ Initial Phase 3 invariants:
 - child results are bounded data, not instructions or authority; and
 - ordinary tests use deterministic runtimes and no external I/O.
 
-The first deterministic delegation demonstration should use a mock/fake runtime
-and fixed scripts. It should prove ordering, lineage, cancellation, limits, and
-synthesis inputs before any live provider is considered.
+The deterministic delegation contract uses the shared test-only mock and fixed
+application-owned events. It proves ordering, lineage, attribution,
+cancellation, limits, failure fallback, and synthesis inputs without I/O. A
+direct Personal response uses one run; the delegated path uses an initial
+Personal run, one Research child run, and one fresh Personal synthesis run.
+This evidence does not authorize a provider or live model.
 
 ### Future staged workflow families
 

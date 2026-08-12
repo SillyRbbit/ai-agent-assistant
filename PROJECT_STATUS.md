@@ -4,24 +4,27 @@ Last updated: 2026-08-12
 
 ## Current milestone
 
-The owner-approved AgentDefinition/AgentRegistry increment is **verified
-complete with advisories** under gate `agent-definition-registry` and remains
-intentionally uncommitted. The Rust core now contains exactly nine closed
-application-owned definitions, nine versioned embedded instruction sources,
-closed non-authorizing activation metadata, and one deterministic immutable
-registry. Personal Assistant and Research Agent alone are `Initial`; the other
-seven report their exact deferred gate. All nine remain inert and unwired.
+The owner-approved combined task/orchestration increment is **verified complete
+with advisories** under gate `agent-task-orchestration` and remains uncommitted.
+D-083 preserves D-082/D-079 while adding the bounded `AgentTask` domain,
+trusted `AgentExecutionContext`, and generic
+`AgentOrchestrator<R: AgentRuntime>` above the unchanged one-run runtime seam.
+The Rust contract proves direct Personal responses and one deterministic
+Personal-to-Research-to-Personal flow with exact lineage, result attribution,
+identity/sequence validation, finite task/run/event limits, failure fallback,
+and child-first cancellation.
 
-No task, orchestrator, delegation, execution context, agent-aware policy/audit,
-memory namespace, provider, Tauri consumer, or multi-agent frontend state
-exists. D-082 still places any future `AgentOrchestrator` above the implemented
-one-run `AgentRuntime` and sole/default `NativeAgentRuntime`. Catalog identity,
-instructions, discovery, and activation metadata grant no tools, policy,
-approval, execution, audit, memory, provider, or device authority. Focused and
-complete applicable validation pass without changing native runtime/gateway
-source, dependencies, IPC, UI, process/network behavior, or visible behavior.
-Every later plan remains Blocked pending publication, fresh review, and exact
-owner authorization.
+The catalog, task, and orchestration foundations remain unwired. No agent-aware
+policy/audit, policy profile, memory namespace, provider, live model, tool
+execution, persistence, Tauri consumer, or multi-agent frontend state exists.
+The 22-test public orchestration contract, 11 task units, 3 orchestrator units,
+unchanged runtime/registry/gateway contracts, all-target Rust suite, full
+repository verification, documentation/repository checks, and security scan
+pass. Native remains sole/default; the other seven roles remain Deferred.
+Catalog identity, activation, task creation, and orchestration grant no tools,
+policy, approval, execution, audit, memory, provider, or device authority. No
+later plan is Ready; Phase 4 governance remains Blocked pending publication,
+fresh review, an exact trust-boundary decision, and owner authorization.
 
 Hermes integration is **Deferred — evaluated transport and containment
 requirements not met**. Raw stdio, managed WebSocket, and ACP remain rejected

@@ -8,6 +8,12 @@ Extends: D-079
 Related assessment:
 [`NATIVE_MULTI_AGENT_ASSESSMENT.md`](../architecture/NATIVE_MULTI_AGENT_ASSESSMENT.md)
 
+Amended by D-083 on 2026-08-12: the owner combined the former implementation
+sequence steps 2 and 3 into one bounded task/orchestration and deterministic
+Personal-to-Research-to-Personal increment. D-083 changes sequencing only; all
+ownership, trust-boundary, route, limit, and non-authority decisions below
+remain accepted.
+
 ## Context
 
 Cortexa now contains an application-owned `AgentRuntime`/`RuntimeRun`
@@ -16,10 +22,11 @@ foundation and a sole/default `NativeAgentRuntime` that composes the unchanged
 verified by deterministic tests. It is not connected to a provider, live
 model, Tauri command, React, or a product coordinator.
 
-The repository has no product-agent definitions, registry, task model,
-orchestrator, delegation service, agent-aware governance, or agent memory.
-Adding those concerns inside `AgentRuntime` would turn a one-run execution port
-into a broad framework interface and weaken application ownership.
+The repository now has the separately verified nine-definition registry and
+D-083's bounded task/orchestrator foundation. Both are Rust-only and unwired.
+It still has no agent-aware governance, memory, provider, Tauri consumer,
+frontend flow, or live assistant. Keeping those concerns outside
+`AgentRuntime` preserves the one-run execution port and application ownership.
 
 The evaluated Hermes Agent `0.20.0` / tag `v2026.8.3` raw stdio, managed
 `hermes serve` WebSocket, and ACP paths did not satisfy their approved
@@ -282,16 +289,16 @@ Costs and constraints:
 1. Add only immutable framework-neutral definitions and a deterministic
    registry for all nine roles, with only Personal Assistant and Research Agent
    catalog-eligible for the later first flow and every definition still inert.
-2. Add task lifecycle, execution context, orchestration limits, and the explicit
-   delegation service with the initial one-child-total, depth-one, sequential
-   limit and without a live provider or UI.
-3. Prove one deterministic Personal-to-Research-to-Personal flow.
-4. Extend per-agent governance and knowledge/document boundaries through
+2. Add task lifecycle, execution context, orchestration limits, the explicit
+   delegation service, and one deterministic Personal-to-Research-to-Personal
+   proof with the initial one-child-total, depth-one, sequential limit and
+   without a live provider or UI.
+3. Extend per-agent governance and knowledge/document boundaries through
    separate accepted designs before any privilege or persistence is added.
-5. Activate the research/knowledge, engineering-quality,
+4. Activate the research/knowledge, engineering-quality,
    infrastructure/operations, and automation workflow families only through
    their separate plans and exact route/tool/data limits.
-6. Consider bounded parallelism, desktop UI, end-to-end demonstrations, and a
+5. Consider bounded parallelism, desktop UI, end-to-end demonstrations, and a
    final architecture/security review only after their prerequisites are
    verified.
 

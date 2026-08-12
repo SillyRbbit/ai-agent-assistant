@@ -188,18 +188,19 @@ authorize networking, dependencies, credentials, provider selection, a live
 model, dispatch, execution, or a Tauri capability. D-082 separately accepts the
 multi-agent application-service target below; it does not add current behavior.
 
-#### Native catalog foundation and multi-agent application-service direction
+#### Native catalog, task, and bounded orchestration foundation
 
-**Current catalog foundation; orchestration not implemented**: D-082 places
-native multi-agent coordination above the existing one-run runtime seam. The
-first bounded implementation now provides only the closed definitions,
-versioned embedded instructions, and deterministic registry described below.
+**Current Rust foundation; not wired to the application**: D-082 established
+the native multi-agent ownership model and D-083 combined its former task and
+first-flow phases. The Rust core now contains the closed catalog, bounded task
+domain, and one deterministic application-owned orchestration service above the
+unchanged one-run runtime seam.
 
 ```mermaid
 flowchart TD
-    User["User"] --> Personal["Personal Assistant<br/>current inert definition"]
-    Personal --> Orchestrator["AgentOrchestrator<br/>planned application service"]
-    Orchestrator --> Initial["Initial catalog pair<br/>Personal Assistant + Research Agent"]
+    User["User"] -. "future caller" .-> Personal["Personal Assistant<br/>current inert definition"]
+    Personal --> Orchestrator["AgentOrchestrator<br/>implemented; unwired"]
+    Orchestrator --> Initial["Implemented bounded route<br/>Personal Assistant to Research Agent"]
     Orchestrator -. staged .-> Knowledge["Research & knowledge<br/>Knowledge & Document"]
     Orchestrator -. staged .-> Engineering["Engineering<br/>Coding + QA + Security"]
     Orchestrator -. staged .-> Operations["Infrastructure & operations<br/>Cloud + Systems + QA + Security"]
@@ -221,16 +222,36 @@ their closed `Initial`/`Deferred` catalog state. Discovery is non-authorizing;
 operational selection and task creation fail closed for deferred definitions.
 Neither registration, grouping, nor activation grants tools, routing, policy,
 memory, provider, or device authority.
-The implemented catalog marks only Personal Assistant and Research Agent
-`Initial` for a later deterministic flow; all nine remain inert and none has a
-current application consumer. The embedded instruction sources are closed
-application-owned Rust assets rather than runtime-loaded files.
+The catalog marks only Personal Assistant and Research Agent `Initial`; all
+nine definitions remain unwired and none is a shipping assistant. The embedded
+instruction sources are closed application-owned Rust assets rather than
+runtime-loaded files.
 
-The planned `AgentOrchestrator` is a separate application service. It owns task
-assignment, a closed task lifecycle, bounded delegation, result collection,
-attribution, and cancellation propagation. It calls `AgentRuntime` for one
-bounded run; it does not become a runtime, provider, policy engine, tool
-registry, approval manager, audit logger, memory store, or executor.
+`AgentTask` now owns one bounded objective, exact agent/root/parent/depth
+lineage, the closed `Pending`/`Running`/`WaitingForChild`/terminal state
+machine, and at most one typed terminal outcome. `AgentExecutionContext` is
+derived from live task and runtime-run state and binds the agent, task, root,
+optional parent, runtime, depth, run, and request identities. It deliberately
+contains no inert policy-profile or memory-namespace placeholder.
+
+`AgentOrchestrator<R: AgentRuntime>` is a separate application service. One
+instance owns at most one root workflow, two tasks, three sequential runtime
+runs, one non-replenishing child, one active child, depth one, and 32 runtime
+and application events. It owns task assignment, exact live-context checks,
+the sole Personal Assistant-to-Research route, bounded output accumulation,
+result attribution, synthesis resumption, and child-first cancellation. It is
+not a runtime, provider, policy engine, tool registry, approval manager, audit
+logger, memory store, or executor.
+
+A root may complete directly in one runtime run. Delegation is accepted only
+before root output begins; the orchestrator then terminally cancels that first
+run without cancelling the root task, starts one Research child run, treats its
+bounded result/failure/cancellation as untrusted attributed data, and starts a
+fresh Personal Assistant synthesis run. Runtime events must match the exact
+active task, run, request, and sequence before any limit or content processing.
+Tool proposals fail this text-only boundary closed and are never forwarded.
+Process-local workflow namespaces prevent events or contexts from one live
+orchestrator instance from binding to another.
 
 Authoritative application boundaries remain `AgentOrchestrator`,
 `AgentRuntime`, `NativeAgentRuntime`, `AgentRegistry`, `ToolRegistry`,
@@ -241,12 +262,11 @@ Workflow Automation is not `AgentOrchestrator`. Agents may emit bounded
 recommendations or typed requests; application code owns lifecycle,
 authorization, approval, execution, and audit decisions.
 
-The initial Personal-to-Research phase uses depth one, one child task total per
-root, and one active child. Completion or cancellation does not replenish that
-phase's budget. Only the orchestrator may create a child task. A typed
-application-service call is the selected internal mechanism; delegation is not
-a runtime control event, shell command, or `agent.delegate` host tool. Child
-results remain bounded untrusted data for Personal Assistant synthesis.
+The implemented Personal-to-Research boundary uses depth one, one child task
+total per root, and one active child. Completion or cancellation does not
+replenish the budget. Only the orchestrator may create a child task. A typed
+application-service call is the internal mechanism; delegation is not a
+runtime control event, shell command, or `agent.delegate` host tool.
 
 The initial root is exactly Personal Assistant and the only first-flow child
 edge is Personal Assistant to Research Agent. Research Agent cannot delegate;
@@ -257,17 +277,15 @@ engineering-quality, infrastructure/operations, and automation workflows must
 add exact closed routes and finite task caps under separate plans. Their arrows
 mean orchestrator-controlled sequencing at depth one, never specialist spawning.
 
-Before any governed agent action, a future `AgentExecutionContext` must bind
-the exact agent, task, optional parent task, runtime, policy profile, and memory
-namespace identities. The application derives the context from the registry
-and orchestrator. Missing, unknown, stale, duplicate, or mismatched identity
-fails closed and never defaults to the Personal Assistant.
+Before any governed agent action, later phases must extend the current trusted
+context with enforced policy-profile and memory-namespace identities. Missing,
+unknown, stale, duplicate, or mismatched current identity already fails closed
+and never defaults to Personal Assistant.
 
-Current code contains no task, orchestrator, delegation, agent-aware
-policy/audit, memory namespace, multi-agent Tauri IPC, or multi-agent React
-state. The implemented definition/registry catalog remains unwired.
-`RuntimeTurnRequest` carries only run ID, request ID, and bounded selected text.
-The Tasks and Memory screens remain placeholders.
+Current code still contains no agent-aware policy/audit, memory namespace,
+multi-agent Tauri IPC, multi-agent React state, provider, live model, or device
+action. The catalog, task, and orchestrator foundations are Rust-only and
+unwired. The Tasks and Memory screens remain placeholders.
 
 The target namespace model is shared user/project, agent-private,
 task-temporary, and proposed-shared memory. No product `MemoryStore`, vector

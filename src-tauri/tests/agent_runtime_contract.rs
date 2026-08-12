@@ -11,15 +11,18 @@ use ai_agent_assistant_lib::agent::gateway_request::{
 use ai_agent_assistant_lib::agent::native_runtime::{NativeAgentRunError, NativeAgentRuntime};
 use ai_agent_assistant_lib::agent::runtime::{
     AgentRuntime, RuntimeAvailability, RuntimeBoundaryStage, RuntimeCancellationOutcome,
-    RuntimeCapabilities, RuntimeCapability, RuntimeDescriptor, RuntimeError,
-    RuntimeEventAcceptance, RuntimeEventEnvelope, RuntimeEventRejection, RuntimeFailure,
-    RuntimeFailureCode, RuntimeHealth, RuntimeId, RuntimeInvalidEvent, RuntimeInvalidRequest,
-    RuntimeOutputText, RuntimeResponseId, RuntimeRun, RuntimeRunId, RuntimeRunIdentity,
+    RuntimeCapability, RuntimeError, RuntimeEventAcceptance, RuntimeEventEnvelope,
+    RuntimeEventRejection, RuntimeFailure, RuntimeFailureCode, RuntimeHealth, RuntimeId,
+    RuntimeInvalidEvent, RuntimeInvalidRequest, RuntimeOutputText, RuntimeResponseId, RuntimeRun,
     RuntimeRunStatus, RuntimeTurnRequest, UntrustedRuntimeEvent, UntrustedRuntimeToolProposal,
     MAX_RUNTIME_OUTPUT_TEXT_BYTES,
 };
 use ai_agent_assistant_lib::policy::types::PolicyOutcome;
 use serde_json::{json, Value};
+
+mod support;
+
+use support::mock_agent_runtime::{MockAgentRuntime, MockMode};
 
 const RUN_ID: &str = "runtime-contract-run-1";
 const REQUEST_ID: &str = "runtime-contract-request-1";
@@ -748,182 +751,6 @@ fn native_start_maps_serialized_request_limit_without_content_leak() -> Result<(
     assert!(!debug.contains(&"s".repeat(64)));
     assert!(!display.contains(&"s".repeat(64)));
     Ok(())
-}
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-enum MockMode {
-    Success,
-    Unavailable,
-    StartFailure,
-    EventFailure,
-    CapabilityContradiction,
-}
-
-struct MockAgentRuntime {
-    mode: MockMode,
-}
-
-impl MockAgentRuntime {
-    const fn new(mode: MockMode) -> Self {
-        Self { mode }
-    }
-}
-
-impl AgentRuntime for MockAgentRuntime {
-    type Run = MockAgentRun;
-
-    fn describe(&self) -> RuntimeDescriptor {
-        let (availability, health, capabilities) = match self.mode {
-            MockMode::Unavailable => (
-                RuntimeAvailability::Unavailable,
-                RuntimeHealth::Unhealthy,
-                RuntimeCapabilities::new(false, false),
-            ),
-            MockMode::CapabilityContradiction => (
-                RuntimeAvailability::Available,
-                RuntimeHealth::Healthy,
-                RuntimeCapabilities::new(false, false),
-            ),
-            _ => (
-                RuntimeAvailability::Available,
-                RuntimeHealth::Healthy,
-                RuntimeCapabilities::new(true, false),
-            ),
-        };
-        RuntimeDescriptor::new(RuntimeId::Native, availability, health, capabilities)
-    }
-
-    fn start(&self, request: RuntimeTurnRequest) -> Result<Self::Run, RuntimeError> {
-        match self.mode {
-            MockMode::Unavailable => Err(RuntimeError::Unavailable),
-            MockMode::StartFailure => {
-                Err(RuntimeError::BoundaryFailure(RuntimeBoundaryStage::Start))
-            }
-            _ => Ok(MockAgentRun {
-                identity: request.identity(),
-                capabilities: self.describe().capabilities(),
-                mode: self.mode,
-                status: RuntimeRunStatus::AwaitingStart,
-                next_sequence: 0,
-            }),
-        }
-    }
-}
-
-struct MockAgentRun {
-    identity: RuntimeRunIdentity,
-    capabilities: RuntimeCapabilities,
-    mode: MockMode,
-    status: RuntimeRunStatus,
-    next_sequence: u32,
-}
-
-impl RuntimeRun for MockAgentRun {
-    fn run_id(&self) -> &RuntimeRunId {
-        self.identity.run_id()
-    }
-
-    fn identity(&self) -> &RuntimeRunIdentity {
-        &self.identity
-    }
-
-    fn status(&self) -> RuntimeRunStatus {
-        self.status
-    }
-
-    fn accept_event(
-        &mut self,
-        envelope: RuntimeEventEnvelope,
-    ) -> Result<RuntimeEventAcceptance, RuntimeError> {
-        if self.status.is_terminal() {
-            return Err(RuntimeError::EventRejected(
-                RuntimeEventRejection::InvalidState,
-            ));
-        }
-
-        let (run_id, request_id, sequence, event) = envelope.into_parts();
-        if run_id != *self.identity.run_id() || request_id != *self.identity.request_id() {
-            return Err(RuntimeError::EventRejected(
-                RuntimeEventRejection::IdentityMismatch,
-            ));
-        }
-        if sequence != self.next_sequence {
-            return Err(RuntimeError::EventRejected(
-                RuntimeEventRejection::InvalidSequence,
-            ));
-        }
-        if self.mode == MockMode::EventFailure && sequence == 1 {
-            self.status = RuntimeRunStatus::Failed;
-            return Err(RuntimeError::BoundaryFailure(
-                RuntimeBoundaryStage::EventAcceptance,
-            ));
-        }
-
-        let accepted = match event {
-            UntrustedRuntimeEvent::ResponseStarted { response_id }
-                if self.status == RuntimeRunStatus::AwaitingStart =>
-            {
-                self.status = RuntimeRunStatus::Streaming;
-                RuntimeEventAcceptance::ResponseStarted { response_id }
-            }
-            UntrustedRuntimeEvent::OutputTextDelta { .. }
-                if !self.capabilities.supports(RuntimeCapability::StreamingText) =>
-            {
-                self.status = RuntimeRunStatus::Failed;
-                return Err(RuntimeError::CapabilityUnavailable(
-                    RuntimeCapability::StreamingText,
-                ));
-            }
-            UntrustedRuntimeEvent::OutputTextDelta { delta }
-                if self.status == RuntimeRunStatus::Streaming =>
-            {
-                RuntimeEventAcceptance::OutputTextDelta { delta }
-            }
-            UntrustedRuntimeEvent::ToolProposal { .. }
-                if !self
-                    .capabilities
-                    .supports(RuntimeCapability::UntrustedToolProposals) =>
-            {
-                self.status = RuntimeRunStatus::Failed;
-                return Err(RuntimeError::CapabilityUnavailable(
-                    RuntimeCapability::UntrustedToolProposals,
-                ));
-            }
-            UntrustedRuntimeEvent::ToolProposal { proposal }
-                if self.status == RuntimeRunStatus::Streaming =>
-            {
-                RuntimeEventAcceptance::ToolProposal { proposal }
-            }
-            UntrustedRuntimeEvent::ResponseCompleted
-                if self.status == RuntimeRunStatus::Streaming =>
-            {
-                self.status = RuntimeRunStatus::Completed;
-                RuntimeEventAcceptance::ResponseCompleted
-            }
-            UntrustedRuntimeEvent::ResponseFailed { failure }
-                if self.status == RuntimeRunStatus::Streaming =>
-            {
-                self.status = RuntimeRunStatus::Failed;
-                RuntimeEventAcceptance::ResponseFailed { failure }
-            }
-            _ => {
-                return Err(RuntimeError::EventRejected(
-                    RuntimeEventRejection::InvalidState,
-                ));
-            }
-        };
-        self.next_sequence += 1;
-        Ok(accepted)
-    }
-
-    fn cancel(&mut self) -> Result<RuntimeCancellationOutcome, RuntimeError> {
-        if self.status.is_terminal() {
-            Ok(RuntimeCancellationOutcome::AlreadyTerminal(self.status))
-        } else {
-            self.status = RuntimeRunStatus::Cancelled;
-            Ok(RuntimeCancellationOutcome::Cancelled)
-        }
-    }
 }
 
 fn collect_mock_script(

@@ -4,24 +4,19 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No plan is active. The owner-approved
-[`2026-08-11-agent-definition-registry.md`](docs/plans/2026-08-11-agent-definition-registry.md)
+No plan is active. The owner-selected
+[`2026-08-11-agent-orchestration-task-lifecycle.md`](docs/plans/2026-08-11-agent-orchestration-task-lifecycle.md)
 is **verified complete with advisories** under gate
-`agent-definition-registry` and remains intentionally uncommitted for owner
-review. The bounded Rust implementation adds exactly nine closed immutable
-definitions, versioned embedded application instructions, non-authorizing
-`Initial`/`Deferred` metadata, and one deterministic immutable registry. Only
-Personal Assistant and Research are `Initial`; every definition remains inert
-and unwired. Focused and full validation pass. No task, orchestrator,
-delegation, selection service, tool grant, policy/approval change, memory,
-provider, process, Tauri/React path, dependency, or visible behavior was added.
-Native remains sole/default and Hermes remains Deferred/Blocked.
+`agent-task-orchestration`. D-083 combines the former task/orchestration
+foundation and first deterministic Personal-to-Research proof while preserving
+D-082's ownership and trust boundaries. The Rust-only foundation remains
+unwired and changes no shipping behavior.
 
-The prior native multi-agent architecture documentation is published at
-`48ab264` and remains the D-082 authority. Task/orchestration and every later
-native multi-agent plan remain Blocked pending publication of this increment,
-fresh architecture/security/readiness review, and separate exact owner
-authorization. No later plan is Ready automatically.
+The prerequisite AgentDefinition/AgentRegistry increment is published at
+`f42a6c7`. Native remains sole/default and the other seven roles remain
+Deferred. No later plan is Ready. Phase 4 per-agent governance remains Blocked
+pending publication of this increment, an exact trust-boundary decision, fresh
+architecture/security/readiness review, and separate owner authorization.
 
 The prior owner-selected
 [`2026-08-11-hermes-acp-transport-spike.md`](docs/plans/2026-08-11-hermes-acp-transport-spike.md)
