@@ -10,6 +10,12 @@ This is isolated experiment evidence, not a production adapter, runtime,
 provider, containment boundary, or implementation authorization. Hermes was not
 installed or executed. Native Cortexa source and behavior were not changed.
 
+> **Subsequent decision (2026-08-11):** D-080 preserves this raw-stdio NO-GO
+> and conditionally selects managed local `hermes serve` plus the documented
+> TUI-gateway JSON-RPC/WebSocket surface for a new contained spike after the
+> native runtime boundary is verified. This notice does not change the evidence
+> or verdict below and authorizes no Hermes execution or adapter.
+
 ## Verdict
 
 **NO-GO for the selected production mechanism at the evaluated release.**

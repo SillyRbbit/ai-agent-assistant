@@ -5,12 +5,28 @@ Last updated: 2026-08-11
 ## Current state
 
 The documentation-only
+[`2026-08-11-hermes-runtime-architecture-decisions.md`](docs/plans/2026-08-11-hermes-runtime-architecture-decisions.md)
+increment is complete with advisories in the uncommitted working tree. D-079
+accepts the small application-owned multi-runtime architecture, D-080 accepts
+managed local `hermes serve` plus a closed TUI-gateway JSON-RPC/WebSocket
+projection only as a conditional contained-spike direction, and raw
+TUI-gateway stdio remains rejected. The native runtime boundary plan is Ready
+for a later separately authorized implementation run. The WebSocket spike is
+Blocked until native completion and a fresh containment/readiness review; the
+Hermes adapter is Draft/Blocked until both phases pass. No runtime source,
+test, dependency, Hermes process, socket, credential, provider, UI, or behavior
+changed. Phase 2 is intentionally not committed or pushed and must be reviewed
+and published separately before implementation begins.
+
+The documentation-only
 [`2026-08-11-hermes-adr-transport-revision.md`](docs/plans/2026-08-11-hermes-adr-transport-revision.md)
-increment is complete with the review report and gate marker recorded below. It
-revised the Proposed multi-runtime ADR after the completed raw TUI-gateway stdio
-NO-GO, retained native-only, Hermes ACP, and Hermes serve as unselected paths,
-and made no source, dependency, runtime, provider, UI, process, credential, or
-external-state change. Its
+increment is complete with the review report and gate marker recorded below. At
+that increment's closeout, it revised the Proposed multi-runtime ADR after the
+completed raw TUI-gateway stdio NO-GO and retained native-only, Hermes ACP, and
+Hermes serve as unselected paths. D-079/D-080 now supersede that former decision
+status without rewriting its historical evidence. It made no source,
+dependency, runtime, provider, UI, process, credential, or external-state
+change. Its
 [`post-increment review`](docs/reviews/2026-08-11-hermes-adr-transport-revision-post-increment-review.md)
 records `PASS WITH ADVISORIES` because no runtime implementation increment is
 Ready.
@@ -28,8 +44,9 @@ isolation, redaction, and direct-child reap. Seven ordinary spike tests pass;
 the version-only real-Hermes probe is ignored and was not run. Hermes was not
 installed or executed. No production source, dependency, manifest, lockfile,
 feature, UI, IPC, Tauri permission, runtime, provider, native behavior, or
-external state changed. The multi-runtime ADR remains Proposed and cannot be
-accepted unchanged.
+external state changed. The multi-runtime ADR was Proposed and could not be
+accepted unchanged at that spike checkpoint; D-079/D-080 now record its revised
+Accepted architecture and conditional evaluation direction.
 
 The documentation-only project-direction and runtime-boundary increment is
 verified complete with advisories under D-078 and a valid completion marker.
@@ -75,17 +92,19 @@ changed.
 
 ## Current exact task
 
-No runtime increment is Ready. The next task requires an owner-selected
-architecture decision: retain native-only behavior, accept a narrowly scoped
-native-runtime direction without Hermes, or authorize a separately planned
-comparison of one supported public Hermes surface. Do not silently select ACP
-or Hermes serve, accept the current Proposed ADR, execute Hermes, or begin an
-adapter.
+Review the uncommitted 16-path Hermes runtime architecture-decision increment
+and its valid completion evidence. If the owner separately directs publication,
+commit and push that documentation-only scope from a cleanly inspected staged
+diff. Do not begin the Ready native runtime plan while this decision increment
+is uncommitted, and do not begin the blocked WebSocket spike or Draft Hermes
+adapter automatically.
 
-Resume prompt: Read the current project-memory chain and the completed Hermes
-ADR transport-revision plan and review. Ask the owner to select the next
-architecture decision; do not implement a runtime, run Hermes, or choose a
-transport by inference.
+Resume prompt: Read `AGENTS.md`, the project-memory chain,
+`docs/plans/2026-08-11-hermes-runtime-architecture-decisions.md`, and its
+post-increment review. Inspect the uncommitted 16-path documentation diff and
+gate status. Await exact owner direction before committing or pushing it; do not
+implement `AgentRuntime`, execute Hermes, or begin a later phase in the same
+task.
 
 The fake-only Cloudflare demo macOS Keychain proof is complete with advisories.
 Pinned macOS-only Security.framework bindings read exactly two fixed labels and

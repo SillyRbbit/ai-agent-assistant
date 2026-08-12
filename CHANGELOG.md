@@ -4,11 +4,21 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Accepted D-079's application-owned native-first runtime architecture and
+  D-080's conditional contained `hermes serve` JSON-RPC/WebSocket evaluation
+  direction. The native boundary ExecPlan is Ready for a later separately
+  authorized run; the WebSocket spike remains Blocked on verified native
+  completion and fresh containment review; the Hermes adapter remains
+  Draft/Blocked on both phases. Raw TUI-gateway stdio stays NO-GO. This
+  documentation-only increment adds no runtime source, test, dependency, Hermes
+  execution, process, socket, credential, provider, UI, or behavior.
+
 - Completed a documentation-only revision of the Proposed multi-runtime ADR after
   the completed Hermes transport spike rejected raw TUI-gateway stdio as a
-  supported production contract. The revision records native-only, Hermes ACP,
-  and Hermes serve as unselected paths; it adds no Hermes runtime, dependency,
-  process, source, or application behavior.
+  supported production contract. At that increment's closeout the revision
+  recorded native-only, Hermes ACP, and Hermes serve as unselected paths;
+  D-079/D-080 now supersede that former status. It added no Hermes runtime,
+  dependency, process, source, or application behavior.
 
 - Added an isolated Rust/Python fixture spike for the pinned Hermes TUI-gateway
   wire. Seven ordinary tests verify bounded fake-process lifecycle, framing,

@@ -1,12 +1,12 @@
 # Native agent runtime boundary
 
-Status: Proposed; Blocked pending owner acceptance of the multi-runtime ADR and
-a fresh readiness review
+Status: Ready; owner-approved for a later implementation run, not active
 Owner: Project owner
 Last updated: 2026-08-11
 
-This is the proposed next-phase ExecPlan. It is not active, grants no authority,
-and was not executed during the Hermes architecture assessment.
+This is the next executable implementation ExecPlan under D-079. It is not
+active, grants no editing authority by itself, and was not executed during the
+architecture-decision documentation increment.
 
 ## Goal
 
@@ -28,6 +28,10 @@ runtime selector, or new UI becomes available.
   maps coherently to current native behavior.
 - Add `NativeAgentRuntime` as a composition wrapper around the unchanged
   `InitialGatewayTurn` and existing typed boundaries.
+- Add a deterministic test-only `MockAgentRuntime` inside the runtime contract
+  suite. It uses no network, model, provider, Hermes installation, process, or
+  external I/O and supports fixed success, failure, capability, invalid-state,
+  and cancellation scenarios.
 - Add deterministic native contract tests for parity, closed types, limits,
   cancellation, terminal state, and failure behavior.
 - Document the implemented boundary accurately as source/test infrastructure,
@@ -70,8 +74,9 @@ runtime selector, or new UI becomes available.
   current provider trait.
 - Native cancellation is local, idempotent, and terminal. No process or
   transport currently exists to cancel.
-- D-078 permits only a conceptual runtime direction until a separate plan and
-  approval authorize implementation.
+- D-079 accepts the application-owned runtime architecture, and the owner has
+  selected this exact plan as the sole next Ready implementation phase. A later
+  implementation prompt must still begin its own clean gate.
 
 ## Current-state evidence
 
@@ -88,9 +93,10 @@ runtime selector, or new UI becomes available.
 - Public native boundaries are covered by
   `gateway_request_contract.rs`, `policy_input_binding.rs`,
   `approval_binding.rs`, and `approval_audit_binding.rs`.
-- The proposed ADR is
-  `docs/adr/ADR-MULTI-RUNTIME-AGENT-ARCHITECTURE.md`; it must be accepted through
-  the repository decision process before this plan can become Ready.
+- The accepted ADR is
+  `docs/adr/ADR-MULTI-RUNTIME-AGENT-ARCHITECTURE.md`, recorded durably as D-079.
+- D-080 keeps the contained Hermes WebSocket spike Blocked until this plan is
+  verified complete; no Hermes concern is needed to implement this phase.
 
 ## Files expected to change
 
@@ -107,7 +113,6 @@ Product and test scope:
 Architecture and closeout scope:
 
 - `ARCHITECTURE.md`
-- `DECISIONS.md` only to record the owner-accepted ADR before implementation
 - `PLANS.md`
 - `HANDOFF.md`
 - `PROJECT_STATUS.md`
@@ -185,6 +190,19 @@ increment.
 - Native is recorded as the default/reference/explicit-fallback direction only;
   no selector or fallback code is added.
 
+### Deterministic mock
+
+- `MockAgentRuntime` is a private test fixture in
+  `src-tauri/tests/agent_runtime_contract.rs`, not production scaffolding.
+- It implements the exact application-owned contract with fixed scripts and no
+  clock, thread, filesystem, network, subprocess, model, Hermes, or provider.
+- It declares only explicit closed capabilities and fails when a script emits a
+  capability contradiction.
+- It supports deterministic unavailable, start failure, event failure,
+  cancellation, late-event, and duplicate-terminal scenarios.
+- It never replaces or alters the existing visible frontend mock; the two mocks
+  exercise different boundaries.
+
 ### Separation from provider transport
 
 The port must not contain a `complete(prompt) -> String` shape, provider/model
@@ -195,14 +213,14 @@ must still feed independent local validation.
 ## Implementation milestones
 
 - [ ] Milestone 0 - owner gate and clean baseline
-  - accept or amend the Proposed ADR through `DECISIONS.md`;
-  - run readiness review;
+  - confirm accepted D-079 and D-080 remain current;
+  - confirm the documentation closeout classified this exact plan Ready;
   - require no overlapping uncommitted work;
   - begin exactly one `native-agent-runtime-boundary` gate.
-- [ ] Milestone 1 - contract proof on paper and in compile-failing tests
+- [ ] Milestone 1 - contract proof on paper and in negative tests
   - write the exact current-behavior-to-method matrix;
   - choose closed types without new dependencies;
-  - add negative/compile-oriented contract tests first;
+  - add negative contract tests first;
   - stop if the contract needs framework, provider, executor, memory, storage,
     or generic JSON/RPC concepts.
 - [ ] Milestone 2 - native wrapper
@@ -240,6 +258,8 @@ must still feed independent local validation.
 Focused Rust tests must cover:
 
 - exact native descriptor and bounded capability declaration;
+- deterministic `MockAgentRuntime` success, failure, capability, invalid-state,
+  cancellation, late-event, and duplicate-terminal scripts with no I/O;
 - valid construction from current run/request/content inputs;
 - invalid/empty/oversized identities and content;
 - current text-only completion parity;
@@ -310,7 +330,13 @@ completion and requires owner direction.
 
 ## Decisions made
 
-None. This plan remains Proposed. The future owner-approved run must record:
+- D-079 accepts the small application-owned runtime architecture and this
+  native-first phase.
+- `MockAgentRuntime` is test-only contract infrastructure in
+  `agent_runtime_contract.rs`; no production mock abstraction is added.
+- D-080 leaves all Hermes execution in a later blocked spike.
+
+The future implementation run must still record:
 
 - accepted ADR/decision ID;
 - final boundary name and visibility;
@@ -332,11 +358,14 @@ None. This plan remains Proposed. The future owner-approved run must record:
 
 - 2026-08-11: Proposed from the Hermes integration assessment. No milestone has
   begun and no implementation file has changed.
+- 2026-08-11: The owner accepted D-079 and selected this exact plan. A fresh
+  documentation readiness review classified it Ready; implementation has not
+  begun and no source, test, dependency, or behavior changed.
 
 ## Acceptance criteria
 
-- [ ] Owner accepts or amends the multi-runtime ADR through a durable decision.
-- [ ] Fresh readiness review classifies this exact plan Ready or Ready with
+- [x] Owner accepts or amends the multi-runtime ADR through a durable decision.
+- [x] Fresh readiness review classifies this exact plan Ready or Ready with
       advisories.
 - [ ] The contract contains only descriptor, start, closed untrusted events,
       and cancellation responsibilities necessary for current native behavior.
@@ -355,15 +384,15 @@ None. This plan remains Proposed. The future owner-approved run must record:
 
 ## Final results
 
-Not started. This plan was created as an output of a documentation-only
-assessment and must not be marked Active until the owner accepts the ADR,
-selects this task, reconciles the working tree, and begins a new gate.
+Not started. The architecture and plan are owner-approved, but this plan must
+not be marked Active until a later implementation run confirms a clean baseline
+and begins gate `native-agent-runtime-boundary`.
 
 ## Documentation updates
 
 When separately approved and completed:
 
-- [ ] `DECISIONS.md` records the accepted/amended ADR before implementation.
+- [x] `DECISIONS.md` records the accepted ADR before implementation.
 - [ ] `ARCHITECTURE.md` distinguishes implemented-unwired boundary from mocked,
       planned, and shipping behavior.
 - [ ] `PLANS.md`, `HANDOFF.md`, `PROJECT_STATUS.md`, `NEXT_STEPS.md`, and

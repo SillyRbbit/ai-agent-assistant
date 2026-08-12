@@ -12,8 +12,16 @@ tag `v2026.7.20`, commit
 
 This document evaluates a hypothesis. It does not claim that `AgentRuntime`,
 `NativeAgentRuntime`, `HermesAgentRuntime`, a Hermes installation, a provider,
-or a live native agent exists. D-078 remains the accepted direction; the ADR
-created with this assessment remains Proposed.
+or a live native agent exists. At the time of this assessment, D-078 was the
+accepted direction and the ADR created with this assessment remained Proposed.
+
+> **Subsequent accepted decisions (2026-08-11):** D-079 accepts the small
+> application-owned multi-runtime architecture, and D-080 conditionally selects
+> managed local `hermes serve` plus TUI-gateway JSON-RPC/WebSocket for a later
+> contained spike after native-runtime completion. Those decisions supersede
+> this assessment's Proposed/no-transport-selected state and raw-stdio
+> preference. The body remains historical assessment evidence; it does not
+> authorize Hermes execution or an adapter.
 
 > **Post-assessment transport result (2026-08-11):** The isolated
 > [`HERMES_TRANSPORT_SPIKE.md`](../spikes/HERMES_TRANSPORT_SPIKE.md) disproved
@@ -22,9 +30,10 @@ created with this assessment remains Proposed.
 > raw-gateway launcher, no initial version or capability negotiation, and no
 > gateway-shutdown RPC. The conditional recommendation below is retained as
 > historical assessment evidence, but its raw-stdio preference is superseded.
-> No adapter should be implemented until the Proposed ADR is separately
-> revised to evaluate a supported public transport; this notice does not select
-> ACP, `hermes serve`, or any other replacement.
+> At that spike's closeout, no adapter could be implemented until the Proposed
+> ADR was separately revised to evaluate a supported public transport, and this
+> notice selected no replacement. D-079/D-080 above now record the additive
+> decision outcome while keeping adapter implementation separately Blocked.
 
 ## 1. Executive summary
 

@@ -92,26 +92,74 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Repository project direction and runtime boundaries:
   **Verified complete with advisories under D-078; present personal scope,
   native preservation, conceptual adapter boundaries, and the living ExecPlan
-  convention are documented; no product or external-runtime implementation is
-  authorized or Ready**.
+  convention are documented; at that checkpoint no product or external-runtime
+  implementation was authorized or Ready**.
 - Isolated Hermes transport spike:
   **Verified complete with advisories; raw TUI-gateway stdio is NO-GO as a
   supported production contract for Hermes Agent `0.20.0` / `v2026.8.3`; seven
   deterministic fixture tests pass, the real-Hermes probe was not run, and no
   production runtime or native behavior changed**.
+- Hermes runtime architecture decisions:
+  **Documentation-only decision increment complete with advisories in the
+  uncommitted working tree; D-079 accepts the native-first runtime architecture,
+  D-080 conditionally selects a contained `hermes serve` WebSocket spike, and
+  no runtime source, dependency, Hermes execution, or behavior changed**.
 
 ## Queue status
+
+### Next implementation: Native agent runtime boundary
+
+**Status:** **Ready**; sole next implementation plan, not active. The
+[`2026-08-11-native-agent-runtime-boundary.md`](docs/plans/2026-08-11-native-agent-runtime-boundary.md)
+plan implements only the small application-owned `AgentRuntime` contract,
+`NativeAgentRuntime` composition over the verified native turn, and a private
+deterministic no-I/O `MockAgentRuntime` contract fixture. Hermes, transport,
+provider, process, dependency, UI, and runtime selection remain out of scope.
+The plan may begin only after this uncommitted decision increment is separately
+reviewed and published to a clean synchronized baseline and the owner gives an
+exact implementation prompt.
+
+### Blocked later spike: Hermes serve WebSocket containment
+
+**Status:** **Blocked**. The
+[`2026-08-11-hermes-serve-websocket-spike.md`](docs/plans/2026-08-11-hermes-serve-websocket-spike.md)
+plan is owner-approved for later execution only after the native boundary has a
+valid completion marker and a fresh security/readiness review proves the exact
+read-only distribution, installed extras, no-install/no-update controls,
+dotenv/managed-secret denial, endpoint-level network/Unix-socket containment,
+and cleanup of detached descendants. It is not current work and authorizes no
+Hermes execution now.
+
+### Draft later adapter: HermesAgentRuntime
+
+**Status:** **Draft; Blocked**. The
+[`2026-08-11-hermes-agent-runtime-adapter.md`](docs/plans/2026-08-11-hermes-agent-runtime-adapter.md)
+plan remains blocked until the native boundary is verified, the contained spike
+passes, exact dependencies and scope are approved, and a fresh readiness review
+passes. Native remains default. No adapter, selector, process, dependency, or
+tool capability exists.
+
+### Completed documentation-only increment: Hermes runtime architecture decisions
+
+**Status:** Complete with advisories in the uncommitted working tree; no
+implementation authorized by this completion. The
+[`2026-08-11-hermes-runtime-architecture-decisions.md`](docs/plans/2026-08-11-hermes-runtime-architecture-decisions.md)
+plan records D-079/D-080, preserves the raw-stdio NO-GO, readies only the native
+boundary plan, and independently gates the contained WebSocket spike and Draft
+adapter. It uses Hermes Agent `0.20.0`, tag `v2026.8.3`, commit
+`3c27eb6234bf91b8ceee9e9071591b31e9b148cb` as the canonical source. No
+production source, test, dependency, process, socket, credential, provider, UI,
+or behavior changed.
 
 ### Completed documentation-only increment: Hermes ADR transport revision
 
 **Status:** Verified complete with advisories; no runtime implementation
 authorized. The
 [`2026-08-11-hermes-adr-transport-revision.md`](docs/plans/2026-08-11-hermes-adr-transport-revision.md)
-plan revised the Proposed ADR to retain the raw TUI-gateway stdio NO-GO and
-compare native-only with unselected public Hermes surfaces. It did not select
-ACP or Hermes serve, accept the ADR, execute Hermes, add dependencies, or
-create runtime source. Runtime implementation remains Blocked pending an
-explicit owner decision, a bounded later plan, and fresh readiness evidence.
+plan revised the Proposed ADR to retain the raw TUI-gateway stdio NO-GO and, at
+that increment's closeout, compared native-only with unselected public Hermes
+surfaces. D-079/D-080 now supersede that former decision status. The increment
+did not execute Hermes, add dependencies, or create runtime source.
 
 ### Completed isolated spike: Hermes raw TUI-gateway stdio
 
@@ -124,9 +172,10 @@ that the selected raw-stdio mechanism lacks a supported public launcher,
 initial version/capability negotiation, and a gateway-shutdown RPC at the pinned
 release. The fixture proves host mechanics only, not Hermes conformance,
 containment, descendant cleanup, packaging, or target-platform readiness. The
-multi-runtime ADR remains Proposed and requires a separately selected revision
-before any acceptance or implementation. ACP and `hermes serve` are unselected
-alternatives, not Ready work.
+multi-runtime ADR was Proposed and required a separately selected revision at
+that spike checkpoint. D-079/D-080 now preserve this evidence while accepting
+the native-first architecture and only a conditional contained `hermes serve`
+spike; ACP remains deferred.
 
 ### Completed documentation-only project direction and runtime boundaries
 
@@ -399,7 +448,7 @@ Access service token only for the owner-only fake-data demo. It authorizes
 documentation only; token creation, deployment, secrets, traffic, and runtime
 remain blocked.
 
-### No runtime remediation is Ready
+### Other runtime remediation remains Blocked
 
 **Status:** The exact 19-path documentation-only ARB-002A scope in
 `docs/plans/arb-002a-gateway-threat-model-and-configuration.md` is verified
@@ -442,7 +491,8 @@ advisories, published through PR #35, and squash-merged at `853da62`. Its exact
 18-path scope preserves the original reports unchanged, and no publication
 action remains. It does not make ARB-002 Ready.
 
-No runtime remediation or product increment is Ready. Do not begin ARB-002B or
+No other runtime remediation or product increment is Ready; D-079's narrow
+native boundary plan above is the sole exception. Do not begin ARB-002B or
 another ARB-002 implementation automatically. Do not add a provider
 client, `AgentProvider`, gateway origin, cloud deployment, identity integration,
 credential, Keychain adapter, or external content path before D-062's exact

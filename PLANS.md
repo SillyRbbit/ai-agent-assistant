@@ -4,12 +4,29 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Active plan
 
-No plan is active. The completed documentation-only
+No plan is active. The owner-approved documentation-only
+[`2026-08-11-hermes-runtime-architecture-decisions.md`](docs/plans/2026-08-11-hermes-runtime-architecture-decisions.md)
+plan is complete with advisories under gate
+`hermes-runtime-architecture-decisions` and intentionally remains uncommitted
+for owner review. It accepts the small application-owned runtime target,
+conditionally selects managed local `hermes serve` plus TUI-gateway
+JSON-RPC/WebSocket for a later contained spike, makes the native runtime
+boundary the sole next Ready implementation plan, and keeps all Hermes execution
+and adapter work blocked. It changes documentation only and authorizes no
+production source, dependency, Hermes execution, process, socket, credential,
+provider, model, tool, UI, or external action. Do not begin the Ready plan until
+this decision scope is separately published to a clean synchronized baseline
+and the owner issues an exact implementation prompt.
+
+The completed documentation-only
 [`2026-08-11-hermes-adr-transport-revision.md`](docs/plans/2026-08-11-hermes-adr-transport-revision.md)
 increment revised the Proposed multi-runtime ADR after the raw TUI-gateway
-stdio NO-GO. It kept ACP, Hermes serve, and native-only unselected; added no
-runtime, dependency, process, source, or application behavior; and leaves
-runtime implementation Blocked pending an owner decision and fresh readiness.
+stdio NO-GO. At that increment's closeout it kept ACP, Hermes serve, and
+native-only unselected; added no runtime, dependency, process, source, or
+application behavior; and left runtime implementation Blocked pending an owner
+decision and fresh readiness. D-079 and D-080, recorded by the active plan
+above, supersede that former decision status without changing its historical
+evidence.
 
 The owner-selected isolated
 [`2026-08-11-hermes-transport-spike.md`](docs/plans/2026-08-11-hermes-transport-spike.md)

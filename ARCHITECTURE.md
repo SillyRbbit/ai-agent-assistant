@@ -131,16 +131,16 @@ or executor.
 
 ### Runtime adapter direction
 
-**Planned direction only**: the repository has no `AgentRuntime` trait and no
-`NativeAgentRuntime`, `HermesAgentRuntime`, OpenClaw adapter, or runtime selector.
-A future separately approved, application-owned seam may use this conceptual
-shape:
+**Accepted target direction; not implemented**: D-079 accepts the
+application-owned architecture below, but the repository still has no
+`AgentRuntime` trait, `NativeAgentRuntime`, `HermesAgentRuntime`, OpenClaw
+adapter, or runtime selector. The accepted conceptual shape is:
 
 ```mermaid
 flowchart TD
-    Contract["AgentRuntime<br/>planned Cortexa-owned contract"]
-    Contract --> Native["NativeAgentRuntime<br/>planned default, reference, explicit fallback, and test path"]
-    Contract --> Hermes["HermesAgentRuntime<br/>planned optional experimental adapter"]
+    Contract["AgentRuntime<br/>accepted target; not implemented"]
+    Contract --> Native["NativeAgentRuntime<br/>next Ready phase; default, reference, explicit fallback, and test path"]
+    Contract --> Hermes["HermesAgentRuntime<br/>optional experimental; separately Blocked"]
 ```
 
 `NativeAgentRuntime` would compose the existing typed native components without
@@ -161,6 +161,31 @@ not restore D-032's deleted synchronous arbitrary-string `AgentProvider` or
 authorize networking, dependencies, credentials, provider selection, a live
 model, coordination, dispatch, execution, multi-agent behavior, or a Tauri
 capability.
+
+#### Hermes transport evaluation
+
+**Accepted evaluation direction; not implemented**: D-080 rejects raw
+TUI-gateway stdio for production at Hermes Agent package/application version
+`0.20.0`, release tag `v2026.8.3`, source commit
+`3c27eb6234bf91b8ceee9e9071591b31e9b148cb`. It conditionally selects a
+Rust-supervised managed local `hermes serve` child plus a closed projection of
+the documented TUI-gateway JSON-RPC/WebSocket surface for a contained spike
+only after the native runtime boundary is verified complete. ACP remains a
+deferred fallback.
+
+No Hermes executable, dependency, process, socket, token, runtime home,
+provider, or adapter exists in the repository. The future spike remains
+Blocked on exact target-Mac whole-process containment, isolated state and
+environment, whole-distribution provenance, importable `[web]`/POSIX `[pty]`
+extras, and authenticated
+`ws://127.0.0.1:<port>/api/ws?token=<per-launch-token>` startup. It must suppress
+the pinned lazy-install and update-check paths, keep the candidate read-only,
+deny every pinned dotenv/managed-secret source without reading secret contents,
+restrict Hermes egress to the exact deterministic local fake-provider endpoint,
+deny every other network/Unix-socket destination, enforce closed protocol/event
+limits, and clean up containment membership including detached descendants.
+Configuration and upstream allowlists are defense in depth; they do not replace
+the OS boundary. A failure to prove any of these controls is NO-GO.
 
 ### Agent provider
 

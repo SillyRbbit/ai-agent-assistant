@@ -4,11 +4,28 @@ Last updated: 2026-08-11
 
 ## Current milestone
 
+The documentation-only Hermes runtime architecture-decision increment is
+**complete with advisories in the uncommitted working tree**. D-079 accepts the
+small application-owned `AgentRuntime -> NativeAgentRuntime |
+HermesAgentRuntime` target, while confirming that none of those types exists
+yet. D-080 conditionally selects a contained managed local `hermes serve`
+JSON-RPC/WebSocket spike after native completion and preserves the raw-stdio
+NO-GO. The native boundary plan is Ready for a separately authorized later run;
+the WebSocket spike remains Blocked on native completion and fresh containment
+review; the adapter remains Draft/Blocked on both phases. Pinned source is
+Hermes Agent `0.20.0`, tag `v2026.8.3`, commit
+`3c27eb6234bf91b8ceee9e9071591b31e9b148cb`. No production source, test,
+dependency, configuration, Hermes execution, process, socket, credential,
+provider, UI, or behavior changed. This Phase 2 documentation is intentionally
+not committed or pushed.
+
 The documentation-only Hermes ADR transport revision is **verified complete
-with advisories**. It preserved the raw TUI-gateway stdio NO-GO and records
-native-only, Hermes ACP, and Hermes serve as unselected paths. It did not accept
-an ADR, select a transport, execute Hermes, or change source, dependencies,
-runtime behavior, credentials, provider boundaries, or application readiness.
+with advisories**. At that increment's closeout, it preserved the raw
+TUI-gateway stdio NO-GO and recorded native-only, Hermes ACP, and Hermes serve
+as unselected paths. D-079/D-080 now supersede that former decision status
+without rewriting the historical evidence. It did not execute Hermes or change
+source, dependencies, runtime behavior, credentials, provider boundaries, or
+application readiness.
 
 The isolated Hermes transport spike is **verified complete with advisories**.
 Against official Hermes Agent `0.20.0` / `v2026.8.3` evidence, raw TUI-gateway
@@ -20,7 +37,9 @@ cancellation, malformed/forbidden output, early/midstream exit, separate
 bounded stderr, environment isolation, redaction, and direct-child reap. The
 ignored real-Hermes version probe was not run. Hermes is not installed, no
 production path or dependency changed, native behavior remains unchanged, and
-the multi-runtime ADR remains Proposed pending a separate revision.
+the multi-runtime ADR was still Proposed at that spike checkpoint. D-079/D-080
+now record its revised Accepted architecture and conditional evaluation
+direction.
 
 The documentation-only project-direction and runtime-boundary increment is
 **verified complete with advisories** under D-078 and a valid completion marker.

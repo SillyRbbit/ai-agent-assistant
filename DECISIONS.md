@@ -2626,6 +2626,113 @@ capability, or readiness classification changes through this decision.
 Previously accepted consumer, cloud, provider, enterprise, signing, and release
 targets are neither canceled nor implemented.
 
+## D-079 - Accept the application-owned multi-runtime agent architecture
+
+Date: 2026-08-11
+Status: Accepted owner architecture decision
+
+Decision: Accept the small framework-neutral runtime target documented in
+`docs/adr/ADR-MULTI-RUNTIME-AGENT-ARCHITECTURE.md`:
+
+```text
+AgentRuntime
+├── NativeAgentRuntime
+└── HermesAgentRuntime
+```
+
+`AgentRuntime` owns only a closed, bounded runtime descriptor, current-needed
+capabilities, one run start boundary, untrusted events, terminal state, typed
+errors, and exact idempotent cancellation. It does not own provider transport,
+tools, policy, approval, restricted execution, audit, memory, storage, secrets,
+platform access, Tauri IPC, or the WebView. Runtime output remains untrusted and
+must traverse the existing deterministic Rust gates.
+
+`NativeAgentRuntime` is implemented first by composing, not rewriting, the
+verified `InitialGatewayTurn` and native typed boundaries. Native remains the
+default, reference implementation, deterministic contract-test path, explicit
+fallback, and possible standalone runtime. Fallback means a separately started,
+explicitly selected run; it never means automatic cross-runtime/provider
+failover or replay after an ambiguous result.
+
+The native plan may use a deterministic test-only `MockAgentRuntime` to prove
+the application-owned contract, failures, cancellation, and capability
+discovery without network, Hermes, a model, or external I/O. The mock is test
+infrastructure, not a production runtime or replacement for the visible
+frontend deterministic mock.
+
+`HermesAgentRuntime` remains optional, experimental, and separately blocked.
+All Hermes process, protocol, configuration, version, event, and error types
+must remain inside its adapter and translate to Cortexa-owned closed types. The
+adapter may not revive D-032's deleted arbitrary-string `AgentProvider` or the
+generic audit, memory, and platform scaffolds removed under D-030, D-033, and
+D-034.
+
+Consequences: the native runtime boundary plan is the sole next Ready
+implementation plan, but a plan alone grants no editing authority and this
+documentation increment adds no runtime code. Provider, process, UI, tool,
+execution, persistence, credential, and external-runtime phases remain
+independent. No later phase starts automatically. D-060 through D-064, D-065,
+and D-078 remain intact.
+
+## D-080 - Conditionally select managed local Hermes serve WebSocket transport
+
+Date: 2026-08-11
+Status: Accepted conditional evaluation decision; implementation Blocked
+
+Decision: Preserve the completed raw TUI-gateway stdio NO-GO and conditionally
+select a Rust-supervised managed local `hermes serve` child plus a closed
+projection of the documented TUI-gateway JSON-RPC/WebSocket protocol for a
+contained spike after the native runtime boundary is verified complete.
+
+The canonical evaluated upstream is Hermes Agent package/application version
+`0.20.0`, calendar release tag `v2026.8.3`, source commit
+`3c27eb6234bf91b8ceee9e9071591b31e9b148cb`, released 2026-08-03. The package
+version and tag are separate identifiers for the same tagged source artifact.
+Mutable `main` or `latest` is not the compatibility target.
+
+The spike must use only an explicit validated complete Hermes distribution,
+`127.0.0.1`, an OS-assigned port, and a high-entropy per-launch backend token
+sent only through `HERMES_DASHBOARD_SESSION_TOKEN` and the private
+`/api/ws?token=...` query. It must use an isolated owner-only Hermes home and
+working directory, a sanitized environment, a closed method/event projection,
+strict byte/event/time limits, redaction, and whole-process plus descendant
+containment. The containment must restrict Hermes egress to the exact local
+fake-provider endpoint, deny every other network/Unix-socket destination, and
+track and terminate descendants that detach into another session or process
+group. It must prove readiness, liveness, version, one synthetic text-only
+session, streaming, timeout reconciliation, cooperative interrupt plus bounded
+status reconciliation through the pinned human-oriented
+`Agent Running: Yes|No` line, mandatory `session.info`/`message.start` events,
+crash handling, and clean/forced shutdown without a live credential or cloud
+provider.
+
+The spike may not install or update Hermes or enable tools, approvals, secrets,
+MCP, memory, skills, plugins, subagents, schedules, messaging, shell,
+filesystem, Git, clipboard, browser, cloud, or device actions. It must preflight
+the exact `[web]` and POSIX `[pty]` extras, keep the distribution read-only, and
+prove that the pinned lazy-dependency and update-check paths cannot execute a
+package manager, mutate the artifact, or reach a network. Configuration and
+allowlists are defense in depth, not containment. The spike must also enumerate
+and deny the pinned distribution-root, isolated-home, machine-managed, and
+configured external dotenv/managed-secret sources without reading their
+contents. A forbidden method/event, host access, unapproved endpoint, Unix
+socket, process escape, install/update or secret-source access attempt,
+unbounded output, ambiguous terminal result, inability to prove tool absence,
+or missing whole-distribution provenance makes the result NO-GO.
+
+Raw TUI-gateway stdio remains rejected for the evaluated release. ACP remains a
+documented deferred fallback and is neither selected nor implemented. The
+contained spike is Blocked until D-079's native phase passes. The
+`HermesAgentRuntime` adapter remains Draft/Blocked until both phases pass,
+supported-version and packaging assumptions are recorded, containment is
+demonstrated, and tool execution remains disabled.
+
+Consequences: this decision selects an evaluation direction, not a production
+adapter or current capability. It adds no source, dependency, executable,
+process, socket, credential, provider request, UI, or behavior. A failed spike
+preserves native-only operation and requires an additive ADR revision before
+another transport can be selected.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |
