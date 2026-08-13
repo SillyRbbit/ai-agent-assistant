@@ -1,7 +1,7 @@
 # Native agent governance matrices
 
-Status: Accepted D-084 contract with D-085 through D-088 current-state amendments
-Last updated: 2026-08-12
+Status: Accepted D-084 contract with D-085 through D-090 current-state amendments
+Last updated: 2026-08-13
 
 These matrices are deterministic application configuration, not permissions
 granted by a model, role name, group, registry membership, or runtime. No entry
@@ -19,7 +19,7 @@ authorizes execution in this increment.
 | Knowledge & Document | `KnowledgeDocumentsV1`          | None                                            | None              | `Initial`; D-085/D-086 routes only         |
 | QA & Validation      | `QualityValidationAdvisoryV1`   | None                                            | None              | `Initial`; D-087/D-088 advisory only       |
 | Security & Risk      | `SecurityRiskAdvisoryV1`        | None                                            | None              | `Initial`; D-087/D-088 advisory only       |
-| Workflow Automation  | `WorkflowProposalOnlyV1`        | None                                            | None              | Deferred/proposal-only                     |
+| Workflow Automation  | `WorkflowProposalOnlyV1`        | None                                            | None              | `Initial`; D-090 proposal selector only    |
 
 `Initial` is non-authorizing metadata. Personal Assistant's eligibility only
 permits deterministic policy evaluation of existing schemas; it does not
@@ -56,10 +56,13 @@ expired resolutions all retain `NotAttempted`.
 Only the orchestrator may create a child. Delegation is not a tool and does
 not traverse tool schema, tool policy, or approval.
 
-Sealed D-085 through D-088 workflows are trusted application-service selectors,
+Sealed D-085 through D-090 workflows are trusted application-service selectors,
 not generic delegation. D-088 creates either Cloud or Systems, then QA and
 Security, as sequential depth-one siblings. These exact child creations do not
-add a generic route and never traverse tool policy or approval.
+add a generic route and never traverse tool policy or approval. D-090 creates
+Workflow Automation only inside the exact proposal lifecycle; its take-once
+manual token maps complete A-D proposals to existing sealed selectors in a
+fresh orchestrator. E, tool steps, and approval steps never dispatch.
 
 ## Authority matrix
 
@@ -68,7 +71,7 @@ add a generic route and never traverse tool policy or approval.
 | Model/runtime                           | Untrusted text/tool data only | No                        | No                    | No                     | No                        | No                         |
 | Personal Assistant role                 | Bounded request data          | No                        | No                    | No                     | No                        | No                         |
 | Specialist roles                        | Bounded advisory data         | No                        | No                    | No                     | No                        | No                         |
-| Workflow Automation role                | Future typed proposal only    | No                        | No                    | No                     | No                        | No                         |
+| Workflow Automation role                | Current typed proposal only   | No                        | No                    | No                     | No                        | No                         |
 | `AgentOrchestrator`                     | Coordinates trusted calls     | Yes, exact allowlist only | No                    | No                     | No                        | Via service only           |
 | `AgentGovernanceService`                | No                            | No                        | Sequences engine only | Sequences manager only | No                        | Yes, closed records only   |
 | `PolicyEngine`                          | No                            | No                        | Yes                   | No                     | No                        | No                         |

@@ -1,6 +1,38 @@
 # Handoff
 
-Last updated: 2026-08-12
+Last updated: 2026-08-13
+
+## Current D-090 verified checkpoint
+
+Gate `agent-workflow-automation-proposals` is complete and valid. D-090 source and tests are
+implemented for the exact strict Personal -> Workflow Automation -> Personal
+proposal lifecycle, five immutable templates, A-D-only expiring take-once
+manual dispatch to existing fixture-only/no-I/O selectors in a fresh
+orchestrator, and proposal-only template E. Workflow Automation is `Initial`
+only for this selector; its generic route remains denied, tool profile remains
+empty, and memory remains disabled. Tool and approval steps are recognized and
+validated but never executable, and no approval request is created.
+
+Final source evidence is current: focused Workflow Automation tests pass 12/12,
+the public contract passes 18/18, strict all-target/all-feature Clippy passes,
+all-target Rust passes 393 tests with one intentionally ignored opt-in Hermes
+probe, and `npm run verify` passes with 124 frontend and 208 Rust library tests,
+all integration contracts, and frontend and Tauri release builds. Independent
+architecture, security, and code review is `PASS WITH ADVISORIES` with no
+blocker. Final documentation, repository, security, diff, session-end, and
+deterministic marker checks pass. No next owner-selected Ready plan exists, so
+next-increment readiness is `Blocked`.
+
+Exact resume prompt: "Read `AGENTS.md`, the required project-memory chain,
+D-090, `docs/plans/2026-08-11-workflow-automation.md`,
+`docs/increments/agent-workflow-automation-proposals.md`, and
+`docs/reviews/2026-08-13-agent-workflow-automation-proposals-post-increment-review.md`.
+Confirm the D-090 marker reports `status: complete` and `valid: true`, reconcile
+the working tree with this handoff, and preserve the settled `PASS WITH
+ADVISORIES` reviews. Do not begin another increment: no next owner-selected
+Ready plan exists. Keep tool execution, approval dispatch, template E
+execution, scheduling, persistence, UI/IPC, providers, and effects deferred.
+Do not commit or push without separate owner authorization."
 
 ## Current state
 
@@ -69,7 +101,8 @@ and 10 gateway contracts. Final documentation, repository, security, diff, and
 session-end checks pass. Its deterministic completion marker is complete and
 valid on the clean published tree.
 
-No provider, live retrieval, network, filesystem discovery, durable memory,
+At the published D-087 checkpoint, no provider, live retrieval, network,
+filesystem discovery, durable memory,
 tool execution, dependency, Tauri/React wiring, IPC, UI, parallelism, general
 workflow engine, Hermes integration, or activation of Cloud, Systems
 Operations, or Workflow Automation was added. The accepted advisory is to
@@ -85,7 +118,9 @@ Cloud -> QA -> Security -> Personal synthesis and Personal Assistant -> Systems
 -> QA -> Security -> Personal synthesis. No Terraform/platform command, live
 inventory, credential, tool, executor, approval request, provider, IPC/UI,
 parallelism, or effect is authorized. Every live infrastructure/operations
-boundary, Workflow Automation, and ARB-005 remain Blocked.
+boundary, executable Workflow Automation, and ARB-005 remained Blocked at that
+D-088 checkpoint. The current D-090 proposal/manual sealed-dispatch exception
+is recorded at the top of this handoff.
 
 The Cloud built-in fixture contains synthetic Terraform configuration, Azure
 architecture, and validation evidence. The Systems built-in contains a
@@ -103,8 +138,9 @@ The quality result is `PASS WITH ADVISORIES`. Before another workflow or any
 live/tool increment, decompose the large private infrastructure module and
 orchestrator integration into smaller typed private components without adding
 a general engine. String and credential-pattern guards remain defense-in-depth
-only and cannot authorize any later live/effect path. No later owner-approved
-Ready plan exists, so next-increment readiness is `Blocked`.
+only and cannot authorize any later live/effect path. At the D-088 checkpoint
+no later owner-approved Ready plan existed, so its next-increment readiness was
+`Blocked`.
 
 Hermes integration is **Deferred — evaluated transport and containment
 requirements not met**. Raw TUI-gateway stdio, managed `hermes serve`

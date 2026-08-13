@@ -1,7 +1,7 @@
 # Cortexa product requirements
 
 Status: Authoritative normalized product requirements
-Last updated: 2026-07-19
+Last updated: 2026-08-13
 
 ## Purpose and authority
 
@@ -269,6 +269,23 @@ shipping dispatcher or executor.
   shall remain advisory; consequential capabilities shall be denied and never
   dispatched; final synthesis shall create no approval request or execution
   authority.
+- **FR-039E**: Trusted application code shall select one sealed Personal ->
+  Workflow Automation -> Personal proposal lifecycle. The application shall
+  own five immutable templates and validate exact step shape, dependencies,
+  agents, cycles, limits, bounded inputs, strict structured output, and
+  application-derived disposition. Complete A-D proposals alone may issue one
+  opaque, process-local, expiring take-once manual token whose fresh destination
+  maps only to the matching existing fixture-only/no-I/O selector. Template E
+  shall remain proposal-only; no agent or runtime may construct the token or
+  select the destination.
+- **FR-039F**: Workflow Automation shall remain memory-disabled, tool-
+  ineligible, non-spawning, and non-authorizing. Unknown tool/version/arguments
+  shall fail closed; known tool and approval steps shall be recognized but
+  remain non-executable and shall issue no token or approval request. The
+  original 120-second monotonic deadline shall propagate through manual A-D
+  dispatch and be checked cooperatively at trusted destination lifecycle
+  ingress with child-first cancellation and no successor after expiry. It does
+  not promise hard preemption of an in-flight synchronous runtime call.
 
 Only bootstrap metadata storage, a turn-bound volatile in-memory approval-audit
 adapter, and D-085's unwired workflow-local volatile memory and approved-
@@ -304,6 +321,13 @@ executor, approval dispatch, provider, IPC/UI, dependency, persistence,
 permission, external runtime, or effect. Cloud and Systems are `Initial` only
 for those sealed selectors; QA/Security remain advisory and all four roles stay
 tool-ineligible and memory-disabled.
+
+D-090 separately implements one unwired strict Personal-to-Workflow-
+Automation-to-Personal proposal selector and a take-once manual bridge to the
+existing sealed A-D fixture workflows. Workflow Automation is `Initial` only
+for that selector; generic delegation remains denied. Template E, all tool and
+approval steps, scheduling, persistence, and every external effect remain
+non-executable.
 
 ### Permissions and integrations
 
@@ -408,6 +432,9 @@ The repository currently provides:
 - two unwired sealed fixture-only Personal-to-Cloud-or-Systems-to-QA-to-
   Security-to-Personal proposal workflows with strict fixture provenance,
   typed partial results, closed capability denial, and no I/O or execution;
+- one unwired strict Personal-to-Workflow-Automation-to-Personal proposal
+  lifecycle with five immutable templates, A-D-only take-once manual sealed
+  dispatch, proposal-only E, and no tool or approval execution;
 - no live model, gateway, tool execution, durable product persistence, integration,
   privileged permission, or durable audit path.
 

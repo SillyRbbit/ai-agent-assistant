@@ -55,6 +55,20 @@ Hermes/OpenClaw adapter, or `AgentRuntime`/`NativeAgentRuntime` widening. The
 decision-time text below remains historical evidence where D-086 now supplies
 the exact implemented exception.
 
+Amended by D-090 on 2026-08-13: after D-087/D-088 sealed fixture workflows and
+D-089's behavior-preserving private decomposition, the Rust core now implements
+one strict Personal Assistant -> Workflow Automation -> Personal proposal
+lifecycle. Five immutable application templates are validated; complete A-D
+proposals alone may issue an expiring process-local take-once token that a fresh
+orchestrator consumes to select the matching existing sealed no-I/O workflow.
+Template E and every tool/approval step remain non-executable. Workflow
+Automation is `Initial` only for this selector, with generic routing denied,
+tools ineligible, and memory disabled. D-090 narrows the provisional automation
+topology below for this phase: QA and Security are not invoked. It adds no
+general engine, scheduler, persistence, executor, approval dispatch, provider,
+IPC/UI, external runtime, I/O, or effect. The propagated monotonic deadline is
+cooperative and does not preempt a runtime call already in flight.
+
 ## Context
 
 Cortexa now contains an application-owned `AgentRuntime`/`RuntimeRun`
@@ -139,7 +153,7 @@ Role responsibility and activation posture are bounded as follows:
 | Security & Risk Agent      | Advisory threat modeling, secrets/policy review, security and change-risk analysis; not `PolicyEngine` and cannot authorize or execute remediation.                                                                                  | Gated on the engineering-security phase.                                                                    |
 | Cloud Infrastructure Agent | D-088 synthetic Terraform-configuration and Azure-architecture fixture assessment and inert change planning; no live inventory, command, apply, mutation, deletion, IAM change, or credential use.                                   | `Initial` only for D-088's sealed Cloud fixture selector; every live capability remains separately gated.   |
 | Systems Operations Agent   | D-088 synthetic service-snapshot, sanitized-log, and recovery-scenario fixture assessment and inert operational planning; no live diagnostic, restart, shutdown, deletion, configuration/account change, or privileged shell.        | `Initial` only for D-088's sealed Systems fixture selector; every live capability remains separately gated. |
-| Workflow Automation Agent  | Typed workflow proposals and dependency/sequence composition; no arbitrary execution, bypass of `AgentOrchestrator`, `ToolRegistry`, `PolicyEngine`, `ApprovalManager`, or `AuditLogger`, recursive expansion, or self-modification. | Gated until typed workflows and their governance exist.                                                     |
+| Workflow Automation Agent  | Typed workflow proposals and dependency/sequence composition; no arbitrary execution, bypass of `AgentOrchestrator`, `ToolRegistry`, `PolicyEngine`, `ApprovalManager`, or `AuditLogger`, recursive expansion, or self-modification. | `Initial` only for D-090's sealed proposal selector; every executable capability remains gated.             |
 
 Catalog eligibility is closed application state, not operational evidence or
 authorization. The first increment wires no definition to a runtime, provider,
@@ -242,6 +256,13 @@ validation.
   later route needs an explicit total-child budget of three agent tasks; any
   device effect still traverses the separately governed application execution
   boundary.
+
+The Automation bullet above is the provisional D-082 future topology. D-090
+explicitly narrows the implemented first phase to Personal Assistant ->
+Workflow Automation -> Personal synthesis. It invokes no QA/Security review and
+executes no proposal. Only application validation may issue one take-once A-D
+manual token to an existing sealed fixture selector; E, tools, approvals, and
+all broader execution remain gated.
 
 Specialists never create children. Workflow Automation proposes a typed
 workflow but cannot schedule or execute it. Self, reverse, recursive,
@@ -416,9 +437,11 @@ D-088 separately completes only two fixture-only/no-I/O infrastructure and
 systems operations selectors. Each creates its named specialist, QA, and
 Security as sequential depth-one siblings, preserves strict application-issued
 fixture/evidence provenance, denies consequential capabilities, and creates no
-approval request or execution path. Automation, bounded parallelism, UI/
-provider wiring, live repository or infrastructure effects, and every other
-later phase remain gated. D-086 through D-088 do not make this ADR general
+approval request or execution path. D-090 separately implements only the
+strict typed proposal and one-time A-D manual sealed-dispatch boundary described
+above. Executable automation, bounded parallelism, UI/provider wiring, live
+repository or infrastructure effects, and every other later phase remain
+gated. D-086 through D-090 do not make this ADR general
 implementation authority.
 
 ## Preservation guarantees

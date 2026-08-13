@@ -6,6 +6,8 @@
 //! memory store, scheduler, or UI boundary.
 
 mod infrastructure_operations_workflow;
+mod workflow_automation_dispatch;
+mod workflow_automation_proposal;
 
 use std::{
     collections::BTreeMap,
@@ -68,6 +70,16 @@ use super::task::{
     AgentTaskOutput, AgentTaskResult, AgentTaskStatus, ParentTaskId, RootTaskId,
     MAX_AGENT_TASK_DEPTH, MAX_AGENT_TASK_OUTPUT_BYTES, MAX_AGENT_TASK_OUTPUT_CHARACTERS,
 };
+use super::workflow_automation::{
+    WorkflowAutomationAttribution, WorkflowAutomationAuditOutcome, WorkflowAutomationAuditRecord,
+    WorkflowAutomationContinuationFailure, WorkflowAutomationError,
+    WorkflowAutomationPartialFailureCode, WorkflowAutomationProposalRequest,
+    WorkflowAutomationStage, WorkflowAutomationWorkflowAcceptance, WorkflowAutomationWorkflowEvent,
+    WorkflowAutomationWorkflowResult, WorkflowManualDispatch, WorkflowManualDispatchAvailability,
+    WorkflowProposalId, WorkflowProposalStageOutcome, WorkflowSynthesisDisposition,
+    MAX_WORKFLOW_AUDIT_RECORDS as MAX_WORKFLOW_AUTOMATION_AUDIT_RECORDS,
+    MAX_WORKFLOW_DURATION_SECONDS, MAX_WORKFLOW_EVENTS as MAX_WORKFLOW_AUTOMATION_EVENTS,
+};
 use crate::approvals::{manager::ApprovalPresentation, types::ApprovalRequestView};
 use crate::audit::governance::AgentGovernanceRecord;
 use crate::documents::{
@@ -82,6 +94,7 @@ use crate::memory::{
     MemoryStoreError, MemoryWriteTarget, SharedMemoryProposalId, SharedMemoryProposalView,
     SharedMemoryReviewDecision, SharedMemoryReviewReceipt,
 };
+use workflow_automation_proposal::WorkflowAutomationWorkflowState;
 
 #[cfg(target_os = "macos")]
 use crate::approvals::decision_source::TrustedApprovalSourceOutcome;
@@ -105,6 +118,10 @@ pub const MAX_INFRASTRUCTURE_OPERATIONS_TASKS_PER_ROOT: usize = 4;
 pub const MAX_INFRASTRUCTURE_OPERATIONS_CHILDREN_PER_ROOT: u8 = 3;
 pub const MAX_INFRASTRUCTURE_OPERATIONS_RUNTIME_RUNS_PER_ROOT: u8 = 5;
 pub const MAX_INFRASTRUCTURE_OPERATIONS_EVENTS_PER_RUN: u32 = 8;
+pub const MAX_WORKFLOW_AUTOMATION_TASKS_PER_ROOT: usize = 2;
+pub const MAX_WORKFLOW_AUTOMATION_RUNTIME_RUNS_PER_ROOT: u8 = 3;
+pub const MAX_WORKFLOW_AUTOMATION_RUNTIME_EVENTS_PER_ROOT: usize = 16;
+pub const MAX_WORKFLOW_AUTOMATION_ORCHESTRATION_EVENTS_PER_ROOT: usize = 16;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum AgentWorkflowSelection {
@@ -114,6 +131,7 @@ pub enum AgentWorkflowSelection {
     EngineeringQuality,
     CloudInfrastructure,
     SystemsOperations,
+    WorkflowAutomation,
 }
 
 static NEXT_WORKFLOW_SEQUENCE: AtomicU64 = AtomicU64::new(1);
@@ -791,6 +809,9 @@ pub struct AgentOrchestrator<R: AgentRuntime> {
     research_knowledge: Option<ResearchKnowledgeWorkflowState>,
     engineering_quality: Option<EngineeringQualityWorkflowState>,
     infrastructure_operations: Option<InfrastructureOperationsWorkflowState>,
+    workflow_automation: Option<WorkflowAutomationWorkflowState>,
+    workflow_clock: workflow_automation_dispatch::WorkflowClock,
+    manual_workflow_dispatch: Option<workflow_automation_dispatch::ManualWorkflowDispatchState>,
     selected_workflow: Option<AgentWorkflowSelection>,
 }
 
@@ -845,6 +866,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             research_knowledge: None,
             engineering_quality: None,
             infrastructure_operations: None,
+            workflow_automation: None,
+            workflow_clock: workflow_automation_dispatch::system_workflow_clock(),
+            manual_workflow_dispatch: None,
             selected_workflow: None,
         })
     }
@@ -2015,6 +2039,8 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         task_id: &AgentTaskId,
         envelope: RuntimeEventEnvelope,
     ) -> AgentOrchestratorResult<RuntimeEventAcceptance> {
+        self.enforce_manual_workflow_deadline_before_ingress()?;
+        self.enforce_workflow_automation_deadline_before_ingress()?;
         let (run_id, request_id, sequence, event) = envelope.clone().into_parts();
         let is_tool_proposal = matches!(
             event,
@@ -2061,6 +2087,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         }
         self.preflight_engineering_event_capacity(task_id, &event)?;
         self.preflight_infrastructure_operations_event_capacity(task_id, &event)?;
+        self.preflight_workflow_automation_event_capacity(task_id, &event)?;
+        let prepared_workflow_automation =
+            self.prepare_workflow_automation_terminal(task_id, &event)?;
         let prepared_infrastructure =
             self.prepare_infrastructure_operations_terminal(task_id, &event)?;
         let prepared_engineering = self.prepare_engineering_terminal(task_id, &event)?;
@@ -2078,6 +2107,23 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             })
         {
             return Err(AgentOrchestratorError::ResearchKnowledgeStageMismatch);
+        }
+
+        // Terminal preparation can consume measurable time. Resample a
+        // manually dispatched workflow's cooperative lease at the last safe
+        // pre-accept boundary so an expired call cannot commit the terminal
+        // event or start a successor. After acceptance, the prepared state
+        // transition is applied atomically without another clock decision.
+        if matches!(
+            event,
+            UntrustedRuntimeEvent::ResponseCompleted | UntrustedRuntimeEvent::ResponseFailed { .. }
+        ) {
+            if self.manual_workflow_dispatch.is_some() {
+                self.enforce_manual_workflow_deadline_before_ingress()?;
+            }
+            if self.workflow_automation.is_some() {
+                self.enforce_workflow_automation_deadline_before_ingress()?;
+            }
         }
 
         let result = {
@@ -2108,6 +2154,7 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         self.runtime_event_count += 1;
         self.record_engineering_event_acceptance(task_id);
         self.record_infrastructure_operations_event_acceptance(task_id);
+        self.record_workflow_automation_event_acceptance(task_id);
 
         match &accepted {
             RuntimeEventAcceptance::ResponseStarted { .. } => {}
@@ -2118,7 +2165,16 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
                 }
             }
             RuntimeEventAcceptance::ResponseCompleted => {
-                if let Some(prepared) = prepared_infrastructure {
+                if let Some(prepared) = prepared_workflow_automation {
+                    let prior = self.workflow_automation_continuation_failure();
+                    if let Err(error) =
+                        self.apply_prepared_workflow_automation_terminal(task_id, prepared)
+                    {
+                        if self.workflow_automation_continuation_failure() == prior {
+                            return Err(error);
+                        }
+                    }
+                } else if let Some(prepared) = prepared_infrastructure {
                     let prior = self
                         .infrastructure_operations
                         .as_ref()
@@ -2156,7 +2212,16 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
                 }
             }
             RuntimeEventAcceptance::ResponseFailed { failure } => {
-                if let Some(prepared) = prepared_infrastructure {
+                if let Some(prepared) = prepared_workflow_automation {
+                    let prior = self.workflow_automation_continuation_failure();
+                    if let Err(error) =
+                        self.apply_prepared_workflow_automation_terminal(task_id, prepared)
+                    {
+                        if self.workflow_automation_continuation_failure() == prior {
+                            return Err(error);
+                        }
+                    }
+                } else if let Some(prepared) = prepared_infrastructure {
                     let prior = self
                         .infrastructure_operations
                         .as_ref()
@@ -2201,6 +2266,7 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
                 return Err(AgentOrchestratorError::ToolProposalUnsupported);
             }
         }
+        self.refresh_manual_workflow_dispatch()?;
         Ok(accepted)
     }
 
@@ -3847,6 +3913,8 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         &mut self,
         task_id: &AgentTaskId,
     ) -> AgentOrchestratorResult<AgentTaskCancellationOutcome> {
+        self.enforce_manual_workflow_deadline_before_ingress()?;
+        self.enforce_workflow_automation_deadline_before_ingress()?;
         let task = self
             .tasks
             .get(task_id)
@@ -3855,11 +3923,15 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             return Ok(AgentTaskCancellationOutcome::AlreadyTerminal(task.status()));
         }
         let is_root = self.root_task_id.as_ref() == Some(task_id);
-        if is_root {
+        let outcome = if is_root {
             self.cancel_root(task_id)
         } else {
             self.cancel_child(task_id, false)
+        };
+        if outcome.is_ok() {
+            self.refresh_manual_workflow_dispatch()?;
         }
+        outcome
     }
 
     #[must_use]
@@ -4728,6 +4800,13 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
     }
 
     fn complete_active_task(&mut self, task_id: &AgentTaskId) -> AgentOrchestratorResult<()> {
+        if self.workflow_automation.as_ref().is_some_and(|workflow| {
+            self.root_task_id
+                .as_ref()
+                .is_some_and(|root| workflow.active_event_task(root) == Some(task_id))
+        }) {
+            return Err(AgentOrchestratorError::WorkflowAutomationStageMismatch);
+        }
         if self
             .infrastructure_operations
             .as_ref()
@@ -4799,6 +4878,13 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         task_id: &AgentTaskId,
         code: AgentTaskFailureCode,
     ) -> AgentOrchestratorResult<()> {
+        if self.workflow_automation.as_ref().is_some_and(|workflow| {
+            self.root_task_id
+                .as_ref()
+                .is_some_and(|root| workflow.active_event_task(root) == Some(task_id))
+        }) {
+            return self.fail_workflow_automation_task(task_id, code);
+        }
         if self
             .infrastructure_operations
             .as_ref()
@@ -5054,6 +5140,8 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         &mut self,
         root_task_id: &AgentTaskId,
     ) -> AgentOrchestratorResult<AgentTaskCancellationOutcome> {
+        let workflow_automation_cancel_stage = self.workflow_automation_root_cancellation_stage();
+        self.preflight_workflow_automation_root_cancellation(workflow_automation_cancel_stage)?;
         let infrastructure_cancel_stage = self.infrastructure_root_cancel_stage();
         let engineering_cancel_stage = self
             .engineering_quality
@@ -5169,6 +5257,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             if let Some(stage) = infrastructure_cancel_stage {
                 self.record_infrastructure_root_cancelled(root_task_id, stage)?;
             }
+            if let Some(stage) = workflow_automation_cancel_stage {
+                self.record_workflow_automation_root_cancelled(root_task_id, stage)?;
+            }
         }
         if let Some(error) = child_error {
             Err(error)
@@ -5182,6 +5273,13 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         child_task_id: &AgentTaskId,
         root_is_cancelling: bool,
     ) -> AgentOrchestratorResult<AgentTaskCancellationOutcome> {
+        if self
+            .workflow_automation
+            .as_ref()
+            .is_some_and(|workflow| workflow.active_child(child_task_id))
+        {
+            return self.cancel_workflow_automation_child(child_task_id, root_is_cancelling);
+        }
         if self
             .infrastructure_operations
             .as_ref()
@@ -5950,6 +6048,7 @@ fn delegation_error_code(error: &AgentOrchestratorError) -> AgentGovernanceError
         | AgentOrchestratorError::ResearchKnowledge(_)
         | AgentOrchestratorError::EngineeringQuality(_)
         | AgentOrchestratorError::InfrastructureOperations(_)
+        | AgentOrchestratorError::WorkflowAutomation(_)
         | AgentOrchestratorError::WorkflowIdentityExhausted
         | AgentOrchestratorError::RootAlreadyExists
         | AgentOrchestratorError::RootMissing
@@ -5968,6 +6067,16 @@ fn delegation_error_code(error: &AgentOrchestratorError) -> AgentGovernanceError
         | AgentOrchestratorError::ResearchMemoryProfileMismatch
         | AgentOrchestratorError::ResearchKnowledgeWorkflowAlreadySelected
         | AgentOrchestratorError::WorkflowAlreadySelected { .. }
+        | AgentOrchestratorError::WorkflowAutomationWorkflowMissing
+        | AgentOrchestratorError::WorkflowAutomationMemoryProfileMismatch
+        | AgentOrchestratorError::WorkflowAutomationStageMismatch
+        | AgentOrchestratorError::WorkflowAutomationJournalLimitExceeded
+        | AgentOrchestratorError::WorkflowAutomationEventLimitExceeded
+        | AgentOrchestratorError::ManualWorkflowDispatchAlreadySelected
+        | AgentOrchestratorError::ManualWorkflowDispatchMissing
+        | AgentOrchestratorError::ManualWorkflowDispatchStageMismatch
+        | AgentOrchestratorError::ManualWorkflowDispatchJournalLimitExceeded
+        | AgentOrchestratorError::ManualWorkflowExpiryCancellationFailed
         | AgentOrchestratorError::ResearchKnowledgeWorkflowMissing
         | AgentOrchestratorError::ResearchKnowledgeStageMismatch
         | AgentOrchestratorError::ResearchKnowledgeJournalLimitExceeded
@@ -6004,6 +6113,8 @@ pub enum AgentOrchestratorError {
     EngineeringQuality(#[from] EngineeringQualityError),
     #[error("the infrastructure/operations workflow rejected the operation: {0}")]
     InfrastructureOperations(#[from] InfrastructureOperationsError),
+    #[error("the workflow-automation boundary rejected the operation: {0}")]
+    WorkflowAutomation(#[from] super::workflow_automation::WorkflowAutomationError),
     #[error("agent runtime rejected the operation: {0}")]
     Runtime(#[from] RuntimeError),
     #[error("the selected runtime is unavailable")]
@@ -6048,6 +6159,26 @@ pub enum AgentOrchestratorError {
     ResearchKnowledgeWorkflowAlreadySelected,
     #[error("another sealed workflow is already selected for this root: {selected:?}")]
     WorkflowAlreadySelected { selected: AgentWorkflowSelection },
+    #[error("the Workflow Automation proposal state is missing")]
+    WorkflowAutomationWorkflowMissing,
+    #[error("the Workflow Automation definition has an unexpected memory profile")]
+    WorkflowAutomationMemoryProfileMismatch,
+    #[error("the Workflow Automation stage does not match the active task")]
+    WorkflowAutomationStageMismatch,
+    #[error("the Workflow Automation workflow journal reached its closed bound")]
+    WorkflowAutomationJournalLimitExceeded,
+    #[error("the Workflow Automation stage reserved its final event slot for a terminal event")]
+    WorkflowAutomationEventLimitExceeded,
+    #[error("a manual workflow dispatch is already selected")]
+    ManualWorkflowDispatchAlreadySelected,
+    #[error("the manual workflow dispatch state is missing")]
+    ManualWorkflowDispatchMissing,
+    #[error("the manual workflow dispatch stage is inconsistent")]
+    ManualWorkflowDispatchStageMismatch,
+    #[error("the manual workflow dispatch journal reached its closed bound")]
+    ManualWorkflowDispatchJournalLimitExceeded,
+    #[error("manual workflow deadline cancellation failed")]
+    ManualWorkflowExpiryCancellationFailed,
     #[error("the Research/Knowledge workflow state is missing")]
     ResearchKnowledgeWorkflowMissing,
     #[error("the Research/Knowledge workflow stage does not match the active task")]

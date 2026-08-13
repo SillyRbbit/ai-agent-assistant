@@ -2,10 +2,10 @@
 
 Status: Owner-accepted architecture assessment; catalog, governance, memory/document, and sealed fixture workflow foundations implemented
 Assessment date: 2026-08-11
-Last reconciled: 2026-08-12
+Last reconciled: 2026-08-13
 Decision authority:
 [`ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md`](../adr/ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md)
-and D-082 through D-086
+and D-082 through D-090
 
 This assessment records the smallest native multi-agent direction supported by
 the repository's current code and trust boundaries. The catalog increment
@@ -107,6 +107,24 @@ that D-084 published checkpoint.
 > persistence, external runtime, or effect was added. String/credential guards
 > are defense-in-depth only. Earlier future statements below remain historical
 > checkpoint evidence where this note records current state.
+
+> **Additive current-state note (D-090, 2026-08-13):** D-090 implements one
+> separately selected, Rust-only Personal Assistant -> Workflow Automation ->
+> Personal proposal lifecycle. Five immutable templates are validated under
+> strict shape, dependency, agent, tool-inspection, cycle, limit, framing, and
+> output contracts. Complete A-D proposals alone may issue one expiring,
+> process-local, take-once token that a fresh orchestrator consumes to select
+> the matching existing sealed fixture-only/no-I/O workflow. Template E and all
+> tool/approval steps remain non-executable. Workflow Automation is `Initial`
+> only for this selector; its generic route is denied, tool profile empty, and
+> memory disabled. D-090 narrows the provisional D-082 QA/Security automation
+> review route: neither role participates in this proposal lifecycle. Deadline
+> enforcement is cooperative and cannot preempt an in-flight synchronous
+> runtime call. Focused tests pass 12/12, the public contract passes 18/18,
+> strict Clippy passes, all-target Rust passes 393 tests with one intentionally
+> ignored probe, and complete verification passes. No general engine,
+> scheduling, persistence, executor, approval dispatch, provider, IPC/UI,
+> external runtime, I/O, credential, permission, or effect was added.
 
 ## 1. Executive summary
 
@@ -577,7 +595,8 @@ and Research `Initial`. D-085 later made Knowledge `Initial` for its exact
 routes, and D-087 makes Coding, QA, and Security `Initial` for its sealed
 fixture-only proposal workflow. D-088 now makes Cloud and Systems `Initial`
 only for their separate fixture/no-I/O selectors and reuses QA/Security as
-advisory stages. Workflow Automation remains `Deferred`. Every definition is application-owned,
+advisory stages. D-090 makes Workflow Automation `Initial` only for its sealed
+proposal selector. Every definition is application-owned,
 immutable, privilege-free, and non-operational until a separate consumer
 exists. Catalog listing may show all nine and their exact state without
 presenting eligibility as a tool or live capability.
@@ -604,7 +623,7 @@ documentation-only and never authorizes a route, tool, permission, or action.
 | Security & Risk Agent      | `Initial` only for D-087 fixture/proposal workflow       |
 | Cloud Infrastructure Agent | `Initial` only for D-088 sealed Cloud fixture workflow   |
 | Systems Operations Agent   | `Initial` only for D-088 sealed Systems fixture workflow |
-| Workflow Automation Agent  | `Deferred` on typed workflows and complete governance    |
+| Workflow Automation Agent  | `Initial` only for D-090's sealed proposal selector      |
 
 `Initial` is catalog eligibility for exact verified unwired workflows, not a
 claim that a role is operational today. Every `Deferred` state is closed and
@@ -688,6 +707,16 @@ propose structured workflows and analyze dependencies/sequencing. It cannot
 execute arbitrary commands, create tasks, bypass `AgentOrchestrator`,
 `ToolRegistry`, `PolicyEngine`, `ApprovalManager`, or `AuditLogger`, or create a
 self-modifying or recursively expanding workflow.
+
+D-090 implements the narrowed first phase: one Personal -> Workflow Automation
+-> Personal proposal selector, five
+immutable templates, and an expiring single-use manual token for A-D that maps
+only to existing fixture-only/no-I/O selectors in a fresh orchestrator.
+Template E and every tool/approval step remain non-executable. D-090 supersedes
+the provisional D-082 QA/Security proposal-review sequence for this phase;
+those roles are not invoked and no review claim is made. The original monotonic
+deadline propagates through any manual dispatch and is cooperatively checked at
+central destination lifecycle ingress; it is not a hard-preemption claim.
 
 ## 11. Personal-project scope
 

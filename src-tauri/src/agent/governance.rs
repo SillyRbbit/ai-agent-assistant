@@ -30,7 +30,7 @@ use crate::{
     tools::{
         registry::{InMemoryToolRegistry, ToolRegistry},
         schema::ValidatedToolArguments,
-        types::{PermissionKind, RiskClass, ToolDefinition, ToolSchema},
+        types::{PermissionKind, RiskClass, ToolSchema},
     },
 };
 
@@ -500,14 +500,7 @@ pub struct AgentGovernanceService {
 
 impl AgentGovernanceService {
     pub fn built_in() -> AgentGovernanceResult<Self> {
-        let mut tools = InMemoryToolRegistry::new();
-        tools
-            .register(ToolDefinition::from_schema(
-                ToolSchema::GetCurrentDatetimeV1,
-            ))
-            .map_err(|_| AgentGovernanceError::GovernanceConfiguration)?;
-        tools
-            .register(ToolDefinition::from_schema(ToolSchema::CreateLocalTaskV1))
+        let tools = InMemoryToolRegistry::built_in()
             .map_err(|_| AgentGovernanceError::GovernanceConfiguration)?;
         Ok(Self {
             profiles: AgentPolicyProfileRegistry::built_in()?,

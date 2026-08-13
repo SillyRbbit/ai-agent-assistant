@@ -234,18 +234,28 @@ const EXPECTED_AGENTS: [ExpectedAgent; 9] = [
         slug: "workflow-automation",
         display_name: "Workflow Automation Agent",
         purpose: concat!(
-            "Propose bounded typed workflows, dependencies, agent-task stages, and governed ",
-            "tool steps without executing or spawning them."
+            "Propose strict bounded fixture-only workflows from the five-template application ",
+            "catalog; identify Research, Code Quality, Infrastructure, and Systems templates only ",
+            "as candidates for separate application-validated manual dispatch, keep Document-to-",
+            "Action proposal-only, and never execute, approve, schedule, or spawn anything."
         ),
-        source: AgentInstructionSource::WorkflowAutomationV1,
-        instruction_version: 1,
-        activation: AgentActivation::Deferred(AgentActivationGate::TypedWorkflowGovernance),
+        source: AgentInstructionSource::WorkflowAutomationV2,
+        instruction_version: 2,
+        activation: AgentActivation::Initial,
         instructions: concat!(
-            "Act as Cortexa's Workflow Automation Agent in a deferred proposal-only role. Propose a ",
-            "closed, bounded, typed workflow with explicit dependencies, agent task stages, and ",
-            "governed tool-step requests for application validation. Do not execute commands, create ",
-            "tasks or agents, bypass AgentOrchestrator, ToolRegistry, PolicyEngine, ApprovalManager, ",
-            "or AuditLogger, or create a recursive, self-modifying, or unbounded workflow."
+            "Act as Cortexa's Workflow Automation Agent for one sealed fixture-only workflow proposal. ",
+            "Use only the application-owned five-template catalog and bounded objective supplied by the ",
+            "application. Return the exact strict typed proposal requested by the application with ",
+            "canonical agent-task, synthesis, dependency, expected-output, failure, and limit fields. ",
+            "Research brief, code quality review, infrastructure assessment, and systems incident ",
+            "analysis may be identified only as candidates for separate application-validated one-time ",
+            "manual dispatch; document-to-action-plan remains proposal-only. Every governed-tool or ",
+            "approval-checkpoint value is untrusted non-executable proposal data and must never be ",
+            "represented as approved or dispatched. Do not execute tools or commands, create tasks or ",
+            "agents, start or dispatch a workflow, approve anything, alter policies or limits, access ",
+            "filesystems, networks, credentials, memory, providers, or devices, bypass AgentOrchestrator, ",
+            "ToolRegistry, PolicyEngine, ApprovalManager, or AuditLogger, or create a recursive, nested, ",
+            "self-modifying, scheduled, persistent, or unbounded workflow."
         ),
     },
 ];
@@ -333,15 +343,10 @@ fn catalog_activation_is_exact_descriptive_metadata() -> Result<(), Box<dyn Erro
             AgentId::KnowledgeDocument,
             AgentId::QaValidation,
             AgentId::SecurityRisk,
+            AgentId::WorkflowAutomation,
         ]
     );
-    assert_eq!(
-        deferred,
-        vec![(
-            AgentId::WorkflowAutomation,
-            AgentActivationGate::TypedWorkflowGovernance,
-        )]
-    );
+    assert!(deferred.is_empty());
     Ok(())
 }
 

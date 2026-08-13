@@ -1,7 +1,7 @@
 # Cortexa security checklist
 
 Status: Authoritative change and release security review checklist
-Last updated: 2026-08-12
+Last updated: 2026-08-13
 
 Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
@@ -217,6 +217,35 @@ production boundary exists.
 - [x] D-088 adds no tool, command, credential, live access, executor, approval
       dispatch, provider, IPC/UI, dependency, permission, persistence, external
       runtime, `AgentRuntime`/`NativeAgentRuntime` widening, or device effect.
+
+## Typed Workflow Automation proposals and manual dispatch
+
+- [x] Trusted application code alone selects the sealed Personal -> Workflow
+      Automation -> Personal proposal lifecycle; generic Personal-to-Workflow-
+      Automation delegation remains denied and no specialist creates a task.
+- [x] Five immutable templates have exact steps and dependencies. Validation
+      rejects unknown or disabled agents, unknown/mismatched tools, malformed
+      arguments, duplicate/cyclic dependencies, unsupported/nested/self-
+      modifying steps, excessive limits, and false authority or effect claims.
+- [x] Known tool and approval steps are recognized only for fail-closed review;
+      executable tool count is zero, no policy or approval authority is invoked,
+      no approval subject exists, and no token can issue for such a proposal.
+- [x] Complete canonical A-D proposals alone may issue one opaque, non-cloneable,
+      non-serializable, process-local token. It is taken once, consumed on every
+      success or error, and maps in a fresh orchestrator only to the matching
+      existing sealed fixture workflow. Template E is proposal-only.
+- [x] The original 120-second monotonic deadline propagates into manual A-D
+      dispatch and is checked cooperatively at trusted lifecycle ingress.
+      Expiry performs child-first cancellation and starts no successor; the
+      design does not claim to preempt an in-flight synchronous runtime call.
+- [x] Proposal events/audit are content-free and capped at eight each; manual
+      dispatch records are capped at four and retain only opaque application-
+      derived identity, disposition, and terminal state.
+- [x] Workflow Automation is `Initial` only for the sealed proposal selector,
+      tool-ineligible, memory-disabled, non-spawning, and non-authorizing. D-090
+      adds no general engine, scheduler, persistence, parallelism, tool
+      execution, approval dispatch, provider, IPC/UI, external runtime, I/O,
+      credential access, permission, or device effect.
 
 ## Tauri IPC review
 

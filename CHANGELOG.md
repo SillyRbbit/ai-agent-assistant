@@ -4,14 +4,31 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Implemented D-090's strict fixture-only Workflow Automation proposal
+  boundary. One sealed Personal -> Workflow Automation -> Personal lifecycle
+  validates five immutable typed templates; complete A-D proposals alone can
+  yield an expiring take-once token that a fresh orchestrator consumes to
+  select an existing sealed no-I/O workflow. Template E and all tool/approval
+  steps remain non-executable. Workflow Automation is `Initial` only for that
+  selector, with its empty tool profile, disabled memory, and denied generic
+  route unchanged. Focused tests pass 12/12, the public contract passes 18/18,
+  strict Clippy passes, all-target Rust passes 393 tests with one intentional
+  ignored probe, and `npm run verify` passes with 124 frontend and 208 Rust
+  library tests plus frontend and Tauri release builds. Independent review is
+  `PASS WITH ADVISORIES`; final documentation, repository, security, diff,
+  session-end, and marker checks pass. No general engine, tool execution, approval dispatch,
+  scheduler, persistence, IPC/UI, provider, external runtime, I/O, or effect
+  was added.
+
 - Implemented D-089's behavior-preserving private workflow-internals
   decomposition. The D-088 Cloud/Systems lifecycle now resides in one private
   orchestrator child module, while immutable catalog, bounded framing, and
   strict parser/validation bodies reside in three private domain modules.
   Public contracts and behavior remain unchanged. Full `npm run verify`, the
   362-test all-target Rust suite, and independent review pass with one residual
-  non-blocking module-size advisory. Workflow Automation remains Deferred/
-  Blocked; no engine, tool, approval dispatch, execution, dependency, I/O,
+  non-blocking module-size advisory. At that D-089 checkpoint, Workflow
+  Automation remained Deferred/Blocked; no engine, tool, approval dispatch,
+  execution, dependency, I/O,
   IPC/UI, provider, or effect was added.
 
 - Implemented D-088's two separate sealed fixture-only/no-I/O workflows:

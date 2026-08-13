@@ -270,7 +270,7 @@ fn complete_delegated_scenario_is_deterministic_across_fresh_instances(
 }
 
 #[test]
-fn generic_delegation_denies_all_five_active_governed_specialists_and_deferred_or_unknown_targets(
+fn generic_delegation_denies_all_six_active_governed_specialists_and_unknown_targets(
 ) -> Result<(), Box<dyn Error>> {
     let mut orchestrator = AgentOrchestrator::new(MockAgentRuntime::new(MockMode::Success))?;
     let root = orchestrator.start_root(ROOT_OBJECTIVE)?;
@@ -282,6 +282,7 @@ fn generic_delegation_denies_all_five_active_governed_specialists_and_deferred_o
         AgentId::SystemsOperations,
         AgentId::QaValidation,
         AgentId::SecurityRisk,
+        AgentId::WorkflowAutomation,
     ] {
         let proposal = DelegationProposal::new(
             target,
@@ -295,22 +296,6 @@ fn generic_delegation_denies_all_five_active_governed_specialists_and_deferred_o
                 source_agent_id: AgentId::PersonalAssistant,
                 target,
             })
-        );
-        assert_eq!(orchestrator.events(), baseline);
-        assert_eq!(orchestrator.task_count(), 1);
-    }
-
-    {
-        let target = AgentId::WorkflowAutomation;
-        let proposal = DelegationProposal::new(
-            target,
-            "Inspect supplied fixtures",
-            None,
-            "Return a bounded proposal",
-        )?;
-        assert_eq!(
-            orchestrator.request_delegation(&root, proposal),
-            Err(AgentOrchestratorError::AgentDeferred { agent_id: target })
         );
         assert_eq!(orchestrator.events(), baseline);
         assert_eq!(orchestrator.task_count(), 1);

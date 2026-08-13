@@ -3613,6 +3613,91 @@ abstraction becomes necessary, or a tool, policy, approval, audit, runtime,
 memory, document, dependency, permission, IPC, UI, persistence, provider, or
 effect boundary would change.
 
+## D-090 - Narrow Workflow Automation to typed proposals and manual sealed dispatch
+
+Date: 2026-08-13
+Status: Accepted owner implementation decision
+
+Decision: activate Workflow Automation only as an application-owned,
+proposal-only planner for five immutable typed templates. The application
+strictly validates every proposal. A complete validated proposal for the four
+already implemented fixture-only/no-I/O workflow families may produce one
+process-local, non-clone, expiring dispatch token. A trusted manual
+application-service call may consume that token once in a fresh
+`AgentOrchestrator` and invoke only the corresponding existing sealed selector.
+Proposal completion never dispatches automatically.
+
+For this phase, D-090 narrows and supersedes D-082's provisional Automation
+topology that placed QA and Security after the Workflow Automation proposal.
+The implemented proposal route is exactly Personal -> Workflow Automation ->
+Personal synthesis. QA and Security participation in proposal review is
+deferred; neither is silently invoked or represented as having reviewed D-090
+output.
+
+The exact manually eligible families are Research -> Knowledge -> Personal
+synthesis; Coding -> QA -> Security -> Personal synthesis; Cloud -> QA ->
+Security -> Personal synthesis; and Systems -> QA -> Security -> Personal
+synthesis. Knowledge -> Workflow Automation proposal -> Personal synthesis is
+cataloged as proposal-only and produces no dispatch token. This increment does
+not implement a generic workflow engine or reinterpret the existing four
+state machines.
+
+The proposal schema recognizes only agent-task, synthesis, governed-tool, and
+approval-checkpoint step kinds. Every agent and tool reference is checked
+against application-owned registries; one shared crate-private built-in tool
+registry supplies the same two read-only definitions to governance and the
+validator without evaluating policy or creating an approval/audit subject.
+Dependencies, cycles, exact canonical
+shape, bounds, and activation are validated deterministically. Because no tool
+executor, approval-to-dispatch path, or general durable `AuditLogger` exists,
+every tool or approval step is non-executable and prevents token issuance. No
+approval request is created. Arbitrary shell/code/script fields, unknown step
+types, recursive/nested execution, self-modification, dynamic templates, and
+unbounded inputs fail closed.
+
+The proposal lifecycle is one Personal root, one depth-one Workflow Automation
+child, and Personal synthesis, with one active child, zero retries, and finite
+task/run/event/audit limits. The maximum duration is exactly 120 seconds and is
+enforced at cooperative monotonic checkpoints. The deadline cannot be extended and is
+carried into the one-time token. It does not promise hard preemption of a
+synchronous runtime call already executing. A successful A-D dispatch carries
+the original deadline into the destination orchestrator; its next trusted
+central event, successor, cancellation, or manual-result call after expiry
+attempts child-first cancellation and starts no successor. Tests use an
+injected monotonic clock without sleeps. No timer, hard preemption, or
+asynchronous expiry is claimed.
+
+Workflow Automation may be `Initial` only for this exact unwired proposal
+selector. It remains
+`WorkflowProposalOnlyV1`, `MemoryDisabledV1`, tool-ineligible, absent from
+generic delegation, unable to spawn, and non-authorizing. Native remains
+sole/default. Workflow-local content-free attribution is not a durable or
+general audit logger.
+
+This decision adds no tool schema or execution, policy permission, approval
+dispatch, executor, repository/filesystem/network/platform operation,
+credential access, memory/document access, persistence, scheduler, trigger,
+parallelism, provider, external runtime, dependency, configuration, IPC/UI,
+Tauri permission, deployment, or device effect. Workflow creation or proposal
+acceptance never authorizes current or future consequential action.
+
+Consequences: the exact
+[`workflow automation ExecPlan`](docs/plans/2026-08-11-workflow-automation.md)
+is verified complete with advisories under a complete, valid
+`agent-workflow-automation-proposals` gate. It must stop if a general runner,
+template-E dispatch, tool/approval execution, persistent workflow state, hard
+preemption, or any new I/O/effect boundary becomes necessary. Executable tool
+steps, approval dispatch, scheduling, recurring execution, and broader
+automation each require separate accepted decisions and prerequisites.
+
+Implementation evidence on 2026-08-13 passes the focused Workflow Automation
+tests 12/12, public contract 18/18, strict Clippy, 393 all-target Rust tests with
+one intentional ignored probe, and complete verification with 124 frontend and
+208 Rust library tests plus release builds. Independent architecture, security,
+and code review is `PASS WITH ADVISORIES`. Final documentation, repository,
+security, diff, session-end, and marker checks pass; no next owner-selected
+Ready plan exists.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

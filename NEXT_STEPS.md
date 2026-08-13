@@ -1,6 +1,6 @@
 # Next steps
 
-Last updated: 2026-08-12
+Last updated: 2026-08-13
 
 This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must close before later feature work begins.
 
@@ -272,25 +272,44 @@ and validation evidence. The Systems built-in is a synthetic service snapshot,
 sanitized log, recovery scenario, and validation evidence. Full source
 verification passes with `PASS WITH ADVISORIES`. Before another workflow or
 live/tool increment, decompose the large private module/orchestrator internals;
-string and credential guards remain defense-in-depth only. Workflow Automation
-and every live infrastructure, operations, or consequential-action boundary
-remain Blocked.
+string and credential guards remain defense-in-depth only. At the D-088
+checkpoint, Workflow Automation and every live infrastructure, operations, or
+consequential-action boundary remained Blocked; D-090's exact later proposal-
+only exception is the Active item below.
 
-### Ready prerequisite: private D-088 workflow internals decomposition
+### Completed prerequisite: private D-088 workflow internals decomposition
 
-**Status:** **Ready; owner-selected under D-089; not Active**. The
+**Status:** **Verified complete with advisories and published at `140f05b`**. The
 [`2026-08-12-agent-workflow-internals-decomposition.md`](docs/plans/2026-08-12-agent-workflow-internals-decomposition.md)
-plan performs only a behavior-preserving source ownership change: move the
+plan performed only a behavior-preserving source ownership change: it moved the
 private D-088 lifecycle out of the `AgentOrchestrator` facade and split the
 immutable catalog, bounded framing, and strict validation/parser code into
 private modules. Public paths, fixtures, validation order, errors, limits,
 events, attribution, cancellation, activation, profiles, and execution
-dispositions remain unchanged. It introduces no general workflow engine or
-Workflow Automation behavior. Begin gate
-`agent-workflow-internals-decomposition` only after its fresh reviews remain
-Ready. Workflow Automation implementation remains Blocked until this
-prerequisite has a valid completion marker and its own later decision and Ready
-plan.
+dispositions remain unchanged. Its complete valid marker clears the exact
+D-088 next-increment finding and introduces no general workflow engine or
+Workflow Automation behavior.
+
+### Completed: typed Workflow Automation proposals
+
+**Status:** **Verified complete with advisories under a complete, valid gate**.
+The exact
+[`2026-08-11-workflow-automation.md`](docs/plans/2026-08-11-workflow-automation.md)
+plan activates Workflow Automation only for one sealed Personal -> Workflow
+Automation -> Personal proposal lifecycle. Five immutable application templates
+are strictly validated. Complete A-D proposals may produce one expiring,
+process-local, non-clone token that a trusted manual call consumes in a fresh
+orchestrator to invoke only the matching existing fixture-only/no-I/O selector.
+Document-to-action remains proposal-only. Tool and approval steps are typed but
+always non-executable and create no approval request. Focused tests pass 12/12,
+the public contract passes 18/18, strict Clippy passes, all-target Rust passes
+393 tests with one intentional ignored probe, and `npm run verify` passes with
+124 frontend and 208 Rust library tests plus release builds. Independent review
+is `PASS WITH ADVISORIES`; final documentation, repository, security, diff,
+session-end, and marker checks pass. No next owner-selected Ready plan exists,
+so next-increment readiness is `Blocked`. Do not add a general engine,
+scheduler, persistence, tool
+execution, approval dispatch, provider, IPC/UI, or effect.
 
 ### Completed negative spike: Hermes ACP
 

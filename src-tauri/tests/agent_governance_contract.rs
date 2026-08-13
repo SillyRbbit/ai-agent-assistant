@@ -269,7 +269,7 @@ fn specialist_profiles_deny_current_tools_without_execution() -> Result<(), Box<
 }
 
 #[test]
-fn d088_active_specialist_profiles_remain_empty_and_tool_ineligible() -> Result<(), Box<dyn Error>>
+fn d090_active_specialist_profiles_remain_empty_and_tool_ineligible() -> Result<(), Box<dyn Error>>
 {
     let registry = AgentPolicyProfileRegistry::built_in()?;
 
@@ -279,6 +279,7 @@ fn d088_active_specialist_profiles_remain_empty_and_tool_ineligible() -> Result<
         AgentPolicyProfileId::SystemsOperationsGovernedV1,
         AgentPolicyProfileId::QualityValidationAdvisoryV1,
         AgentPolicyProfileId::SecurityRiskAdvisoryV1,
+        AgentPolicyProfileId::WorkflowProposalOnlyV1,
     ] {
         let profile = registry.get(profile_id)?;
         assert_eq!(profile.id(), profile_id);

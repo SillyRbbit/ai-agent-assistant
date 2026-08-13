@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-08-12
+Last updated: 2026-08-13
 
 ## Current milestone
 
@@ -48,19 +48,34 @@ all-target Rust tests with one intentional ignored probe, and complete
 private workflow/orchestrator internals before another workflow/live-tool
 increment, and never treat string/credential guards as authorization for a
 future live/effect path. Durable memory/ARB-005, live research/retrieval,
-providers, repository tools/effects, Workflow Automation, every live
+providers, repository tools/effects, executable Workflow Automation, every live
 infrastructure/operations boundary, IPC, UI, and parallelism remain Blocked.
 
-D-089 now selects the exact prerequisite needed to clear D-088's
-next-increment technical-debt finding. Its
-[`ExecPlan`](docs/plans/2026-08-12-agent-workflow-internals-decomposition.md)
-is Ready but not Active and changes only private source ownership: D-088
-lifecycle helpers leave the orchestrator facade, while catalog/framing/strict
-validation move into private submodules. It preserves every public path and
-behavior and adds no workflow engine, automation activation, tool, policy,
-approval, execution, runtime, IPC, or effect. Workflow Automation remains
-Blocked until this prerequisite closes with a valid marker and a fresh
-automation plan passes review.
+D-089's exact prerequisite is verified complete with advisories and published
+at `140f05b`. Its valid marker clears D-088's next-increment review-coupling
+finding: the D-088 lifecycle and catalog/framing/validation internals now have
+separate private ownership without changing behavior or adding an engine.
+
+D-090's narrowed Workflow Automation increment is verified complete with
+advisories under a complete, valid gate. Its exact
+[`ExecPlan`](docs/plans/2026-08-11-workflow-automation.md) permits only a sealed
+Personal -> Workflow Automation -> Personal proposal lifecycle, five immutable
+templates, and an explicit take-once manual mapping of complete A-D proposals
+to existing fixture-only/no-I/O selectors in a fresh orchestrator.
+Document-to-action is proposal-only. Every tool or approval step is recognized
+but non-executable; no approval request, executor, general engine, scheduler,
+persistence, IPC/UI, provider, or effect is added. Workflow Automation is
+`Initial` only for this selector; its generic route remains denied, tool profile
+empty, and memory disabled. The 120-second deadline propagates into manual A-D
+dispatch and is enforced cooperatively, not as hard preemption.
+
+Focused Workflow Automation tests pass 12/12, the public contract passes 18/18,
+strict Clippy passes, all-target Rust passes 393 tests with one intentionally
+ignored probe, and `npm run verify` passes with 124 frontend and 208 Rust
+library tests plus integration and release builds. Independent architecture,
+security, and code review is `PASS WITH ADVISORIES`. Final documentation,
+repository, security, diff, session-end, and marker checks pass. No next
+owner-selected Ready plan exists, so next-increment readiness is `Blocked`.
 
 The Rust core now carries nine exact policy-profile identities from sealed
 definitions through tasks, live execution contexts, delegation, governed tool
@@ -1465,12 +1480,14 @@ path was added.
 
 D-087 is verified complete with advisories and published at `a5d7ba1`. D-088's
 two fixture-only infrastructure and systems operations workflows are verified
-complete with advisories under a complete, valid gate.
-No later owner-approved plan is Ready, so next-increment readiness is
-`Blocked`. Any live infrastructure/operations access, tool, command,
+complete with advisories under a complete, valid gate. D-089 is published at
+`140f05b`. D-090 is verified complete with advisories under its complete,
+valid gate. No next owner-selected plan is Ready, so next-increment readiness
+is `Blocked`. Any live infrastructure/operations access, tool, command,
 credential, executor, approval dispatch,
 provider, IPC/UI, parallelism, or device effect remains Blocked. Durable memory/
-ARB-005, live retrieval, automation, and repository effects remain Blocked;
+ARB-005, live retrieval, executable automation, scheduling, template E
+dispatch, and repository effects remain Blocked;
 Hermes remains Deferred/Blocked.
 
 All other product and remediation gates remain unchanged. ARB-002 remains

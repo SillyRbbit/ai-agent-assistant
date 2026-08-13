@@ -1,7 +1,7 @@
 # Cortexa architecture
 
 Status: Authoritative current-state architecture
-Last updated: 2026-08-12
+Last updated: 2026-08-13
 
 ## Reading this document
 
@@ -205,7 +205,7 @@ flowchart TD
     Orchestrator --> ResearchKnowledge["Implemented sealed fixture workflow<br/>Research then Knowledge sibling"]
     Orchestrator --> Engineering["Implemented sealed fixture workflow<br/>Coding then QA then Security siblings"]
     Orchestrator --> Operations["Implemented separate sealed fixture workflows<br/>Cloud or Systems then QA then Security"]
-    Orchestrator -. staged .-> Automation["Automation<br/>Workflow Automation"]
+    Orchestrator --> Automation["Implemented sealed proposal lifecycle<br/>Workflow Automation"]
     Orchestrator --> Runtime["AgentRuntime<br/>implemented one-run boundary"]
     Runtime --> Native["NativeAgentRuntime<br/>sole/default; implemented and unwired"]
 ```
@@ -223,10 +223,8 @@ their closed `Initial`/`Deferred` catalog state. Discovery is non-authorizing;
 operational selection and task creation fail closed for deferred definitions.
 Neither registration, grouping, nor activation grants tools, routing, policy,
 memory, provider, or device authority.
-The catalog marks Personal Assistant, Research Agent, Knowledge & Document
-Agent, Coding Agent, QA & Validation Agent, Security & Risk Agent, Cloud
-Infrastructure Agent, and Systems Operations Agent `Initial`;
-all nine definitions remain unwired and none is a shipping assistant. Knowledge
+The catalog marks all nine definitions, including Workflow Automation,
+`Initial`; all remain unwired and none is a shipping assistant. Knowledge
 eligibility applies only to D-085's separate approved-document route and
 D-086's sealed fixture workflow. Coding, QA, and Security eligibility applies
 only to D-087's sealed fixture-only proposal workflow. None grants a generic
@@ -262,8 +260,10 @@ D-085's separate approved-document Personal Assistant-to-Knowledge route,
 D-086's fixed Research/Knowledge sequence, D-087's fixed Coding/QA/Security
 sequence, bounded output accumulation, result attribution, synthesis
 sequence, D-088's separate Cloud/QA/Security and Systems/QA/Security sequences,
-bounded output accumulation, result attribution, synthesis
-resumption, and child-first cancellation. It is not a
+D-090's fixed Personal/Workflow Automation/Personal proposal sequence and
+single-use mapping to the existing sealed A-D selectors, bounded output
+accumulation, result attribution, synthesis resumption, and child-first
+cancellation. It is not a
 runtime, provider, policy engine, tool registry, approval manager, or executor.
 It directly owns one workflow-local `MemoryStore` and `ApprovedDocumentReader`
 without transferring their authority to an agent or runtime, and composes the
@@ -310,10 +310,11 @@ activation, or a memory profile grants no route. D-087 adds no generic Coding,
 QA, or Security route: only its exact application-selected sibling sequence is
 implemented. D-088 likewise adds no generic Cloud, Systems, QA, or Security
 route: only its two separate application-selected sibling sequences exist.
-Later automation workflows must add
-exact closed routes and finite task caps under separate plans. Their arrows
-mean orchestrator-controlled sequencing at depth one, never specialist
-spawning.
+D-090 adds no generic Workflow Automation route: its application-selected
+proposal sequence and take-once A-D dispatch token are separate sealed
+selectors. Template E, every tool/approval step, and every later automation
+workflow remain non-executable. All workflow arrows mean orchestrator-controlled
+sequencing at depth one, never specialist spawning.
 
 #### Per-agent governance foundation
 
@@ -641,6 +642,43 @@ behavior, public API, tool, policy, approval, audit authority, activation,
 dependency, I/O, IPC, persistence, or effect. The remaining facade and private
 lifecycle are still substantial, so later workflow work must preserve separate
 reviewable private ownership rather than grow a generalized executor.
+
+#### Typed Workflow Automation proposals and manual sealed dispatch
+
+**Current implemented Rust foundation; unwired, fixture-only, and no-I/O**:
+D-090 adds one strict Personal Assistant -> Workflow Automation -> Personal
+synthesis proposal lifecycle. The application owns five immutable templates.
+Complete A-D proposals alone may yield one opaque, expiring, process-local,
+take-once token that a fresh orchestrator consumes to select the already
+implemented Research/Knowledge, Engineering, Cloud, or Systems fixture
+workflow. Template E remains proposal-only. The generic delegation matrix is
+unchanged and Workflow Automation never creates a task or invokes another
+agent.
+
+The validator enforces exact template shape and dependencies, closed step
+kinds, known enabled agents, cycle and count limits, strict bounded inputs,
+application-derived disposition, and read-only built-in tool identity, version,
+and argument inspection. Unknown tools fail closed. Known tool and approval
+steps are still non-executable and cannot issue a dispatch token; no policy,
+approval, tool-execution, or device boundary is called. Workflow Automation
+remains tool-ineligible and memory-disabled.
+
+The manual token is consumed on every dispatch attempt and never returned for
+retry. Its original 120-second monotonic deadline propagates into the selected
+destination and is checked cooperatively at trusted lifecycle ingress; expiry
+performs child-first cancellation and starts no successor. This cannot preempt
+a synchronous runtime call already in flight and is not a hard real-time or
+background-timer claim. Events, audit, and manual-dispatch records are bounded,
+content-free, and application-attributed.
+
+Workflow Automation is `Initial` only for this sealed proposal selector. D-090
+supersedes D-082's provisional QA/Security automation-review topology for this
+phase: QA and Security are not invoked in the proposal lifecycle. No general
+workflow engine, arbitrary DAG runner, scheduling, recurring/background/startup
+execution, persistence, parallelism, template E dispatch, tool execution,
+approval dispatch, provider, external runtime, Tauri/React consumer, IPC, I/O,
+credential access, permission, or device effect was added. Native remains
+sole/default.
 
 #### Hermes transport evaluation
 
@@ -993,6 +1031,7 @@ reviewed repository ICNS byte-for-byte.
 | Fixture-only Research/Knowledge workflow      | Current, unwired and sealed    | D-086 strict contracts; deterministic runtime events only      |
 | Fixture-only engineering quality workflow     | Current, unwired and sealed    | D-087 proposal contracts; no repository access or execution    |
 | Fixture-only Cloud and Systems workflows      | Current, unwired and sealed    | D-088 separate no-I/O selectors; no live access or execution   |
+| Typed Workflow Automation proposals           | Current, unwired and sealed    | D-090 A-D manual fixture dispatch; E/tools/approvals inert     |
 | Live gateway and model-provider transport     | Planned                        | Blocked by O-006, per-provider O-007 evidence, and future plan |
 | Restricted tool execution                     | Planned                        | No dispatcher or executor exists                               |
 | Product memory and task persistence           | Planned                        | Phase 8 direction only                                         |

@@ -35,7 +35,12 @@ Infrastructure or Systems Operations followed by QA, Security, and Personal
 synthesis. Their immutable built-ins contain only synthetic Terraform/Azure or
 sanitized service/log/recovery evidence. Consequential capabilities remain
 denied data and no command, credential, live access, approval dispatch, or
-effect exists. A successful terminal native or run-termination resolution
+effect exists. D-090 adds one strict fixture-only Personal-to-Workflow-
+Automation-to-Personal proposal lifecycle and a take-once manual bridge from
+complete A-D proposals to those existing sealed selectors. Template E and all
+tool/approval steps remain non-executable. Workflow Automation cannot construct
+trusted identity, create tasks, issue a token, approve, execute, or select a
+destination. A successful terminal native or run-termination resolution
 cannot leave the initial turn without one typed legacy audit receipt. Agent
 governance reserves one audit slot before downstream mutation and records
 execution only as `NotAttempted`. There is no live provider transport,
@@ -148,6 +153,28 @@ security path.
   not prove secret absence and cannot authorize any later live, credential,
   tool, command, or effect path; those require separate trusted containment and
   governance.
+- D-090's proposal selector is application-only and mutually exclusive with
+  every other selector. It permits two sequential depth-one tasks, three run
+  attempts, one child, zero retries, and bounded content-free event/audit
+  evidence. Only exact immutable A-D templates can become manually dispatchable;
+  E remains proposal-only.
+- Proposal validation fails closed on unknown/disabled agents, unknown or
+  mismatched tools, malformed arguments, duplicate or cyclic dependencies,
+  unsupported steps, excessive limits, nested execution, self-modification,
+  false authority/effect claims, and noncanonical template content. Known tool
+  and approval steps remain non-executable, create no approval subject, and
+  cannot issue a token.
+- A dispatch token is opaque, non-cloneable, non-serializable, process-local,
+  taken once, and consumed on success or every error. A fresh destination maps
+  it only to an existing sealed A-D selector. The propagated 120-second
+  monotonic deadline is cooperatively checked at trusted destination ingress;
+  expiry cancels child-first and starts no successor, but cannot preempt a
+  synchronous runtime call already in flight.
+- Workflow Automation remains tool-ineligible and memory-disabled; its generic
+  delegation route is denied. D-090 invokes neither QA nor Security in the
+  proposal lifecycle and adds no policy decision, approval request, executor,
+  scheduler, persistence, IPC/UI, provider, external runtime, I/O, credential,
+  or device effect.
 - Governance audit is closed, redacted, volatile, capped at 32 subjects, and
   never authorizes an action.
 - Untrusted content cannot grant permission or change policy.

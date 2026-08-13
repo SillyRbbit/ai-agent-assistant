@@ -11,3 +11,4 @@ pub mod registry;
 pub mod research_knowledge;
 pub mod runtime;
 pub mod task;
+pub mod workflow_automation;

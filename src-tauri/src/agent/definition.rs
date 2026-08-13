@@ -129,12 +129,20 @@ const SECURITY_RISK_V3: &str = concat!(
     "memory, credential, provider, or device authority."
 );
 
-const WORKFLOW_AUTOMATION_V1: &str = concat!(
-    "Act as Cortexa's Workflow Automation Agent in a deferred proposal-only role. Propose a ",
-    "closed, bounded, typed workflow with explicit dependencies, agent task stages, and ",
-    "governed tool-step requests for application validation. Do not execute commands, create ",
-    "tasks or agents, bypass AgentOrchestrator, ToolRegistry, PolicyEngine, ApprovalManager, ",
-    "or AuditLogger, or create a recursive, self-modifying, or unbounded workflow."
+const WORKFLOW_AUTOMATION_V2: &str = concat!(
+    "Act as Cortexa's Workflow Automation Agent for one sealed fixture-only workflow proposal. ",
+    "Use only the application-owned five-template catalog and bounded objective supplied by the ",
+    "application. Return the exact strict typed proposal requested by the application with ",
+    "canonical agent-task, synthesis, dependency, expected-output, failure, and limit fields. ",
+    "Research brief, code quality review, infrastructure assessment, and systems incident ",
+    "analysis may be identified only as candidates for separate application-validated one-time ",
+    "manual dispatch; document-to-action-plan remains proposal-only. Every governed-tool or ",
+    "approval-checkpoint value is untrusted non-executable proposal data and must never be ",
+    "represented as approved or dispatched. Do not execute tools or commands, create tasks or ",
+    "agents, start or dispatch a workflow, approve anything, alter policies or limits, access ",
+    "filesystems, networks, credentials, memory, providers, or devices, bypass AgentOrchestrator, ",
+    "ToolRegistry, PolicyEngine, ApprovalManager, or AuditLogger, or create a recursive, nested, ",
+    "self-modifying, scheduled, persistent, or unbounded workflow."
 );
 
 pub type AgentDefinitionResult<T> = Result<T, AgentDefinitionError>;
@@ -239,7 +247,7 @@ pub enum AgentInstructionSource {
     KnowledgeDocumentV2,
     QaValidationV3,
     SecurityRiskV3,
-    WorkflowAutomationV1,
+    WorkflowAutomationV2,
 }
 
 impl AgentInstructionSource {
@@ -250,8 +258,9 @@ impl AgentInstructionSource {
             Self::CodingV2
             | Self::CloudInfrastructureV2
             | Self::SystemsOperationsV2
-            | Self::KnowledgeDocumentV2 => 2,
-            Self::PersonalAssistantV1 | Self::ResearchV1 | Self::WorkflowAutomationV1 => 1,
+            | Self::KnowledgeDocumentV2
+            | Self::WorkflowAutomationV2 => 2,
+            Self::PersonalAssistantV1 | Self::ResearchV1 => 1,
         }
     }
 
@@ -266,7 +275,7 @@ impl AgentInstructionSource {
             Self::KnowledgeDocumentV2 => KNOWLEDGE_DOCUMENT_V2,
             Self::QaValidationV3 => QA_VALIDATION_V3,
             Self::SecurityRiskV3 => SECURITY_RISK_V3,
-            Self::WorkflowAutomationV1 => WORKFLOW_AUTOMATION_V1,
+            Self::WorkflowAutomationV2 => WORKFLOW_AUTOMATION_V2,
         }
     }
 }
@@ -372,6 +381,12 @@ impl AgentDefinition {
     #[must_use]
     pub const fn activation(&self) -> AgentActivation {
         self.activation
+    }
+
+    #[cfg(test)]
+    pub(crate) fn with_activation_for_test(mut self, activation: AgentActivation) -> Self {
+        self.activation = activation;
+        self
     }
 }
 
@@ -586,8 +601,10 @@ const fn built_in_purpose(id: AgentId) -> &'static str {
             "authorizing or executing remediation."
         ),
         AgentId::WorkflowAutomation => concat!(
-            "Propose bounded typed workflows, dependencies, agent-task stages, and governed ",
-            "tool steps without executing or spawning them."
+            "Propose strict bounded fixture-only workflows from the five-template application ",
+            "catalog; identify Research, Code Quality, Infrastructure, and Systems templates only ",
+            "as candidates for separate application-validated manual dispatch, keep Document-to-",
+            "Action proposal-only, and never execute, approve, schedule, or spawn anything."
         ),
     }
 }
@@ -602,7 +619,7 @@ const fn built_in_instruction_source(id: AgentId) -> AgentInstructionSource {
         AgentId::KnowledgeDocument => AgentInstructionSource::KnowledgeDocumentV2,
         AgentId::QaValidation => AgentInstructionSource::QaValidationV3,
         AgentId::SecurityRisk => AgentInstructionSource::SecurityRiskV3,
-        AgentId::WorkflowAutomation => AgentInstructionSource::WorkflowAutomationV1,
+        AgentId::WorkflowAutomation => AgentInstructionSource::WorkflowAutomationV2,
     }
 }
 
@@ -643,10 +660,8 @@ const fn built_in_activation(id: AgentId) -> AgentActivation {
         | AgentId::SystemsOperations
         | AgentId::KnowledgeDocument
         | AgentId::QaValidation
-        | AgentId::SecurityRisk => AgentActivation::Initial,
-        AgentId::WorkflowAutomation => {
-            AgentActivation::Deferred(AgentActivationGate::TypedWorkflowGovernance)
-        }
+        | AgentId::SecurityRisk
+        | AgentId::WorkflowAutomation => AgentActivation::Initial,
     }
 }
 
@@ -716,7 +731,7 @@ mod tests {
                 AgentId::WorkflowAutomation,
                 AgentPolicyProfileId::WorkflowProposalOnlyV1,
                 AgentMemoryProfileId::MemoryDisabledV1,
-                AgentActivation::Deferred(super::AgentActivationGate::TypedWorkflowGovernance),
+                AgentActivation::Initial,
             ),
         ];
 

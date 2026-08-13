@@ -29,13 +29,28 @@ tool increment, and to keep string/credential guards defense-in-depth only.
 
 The owner-selected D-089
 [`2026-08-12-agent-workflow-internals-decomposition.md`](docs/plans/2026-08-12-agent-workflow-internals-decomposition.md)
-is **Ready but not Active**. It is the exact behavior-preserving prerequisite
-that clears D-088's next-increment debt before Workflow Automation: extract
-only the private D-088 orchestrator lifecycle and split only its catalog,
-framing, and strict validation implementation. It adds no workflow capability,
+is **verified complete with advisories and published at `140f05b`**. Its valid
+marker clears D-088's exact next-increment decomposition finding while
+preserving all behavior and authority. It adds no workflow capability,
 activation, engine, tool, policy, approval, execution, IPC, or effect.
-Workflow Automation remains Blocked until this prerequisite completes with a
-valid marker and its own later plan passes fresh readiness review.
+
+The owner-selected D-090
+[`2026-08-11-workflow-automation.md`](docs/plans/2026-08-11-workflow-automation.md)
+is **verified complete with advisories** under a complete, valid
+`agent-workflow-automation-proposals` gate.
+It activates Workflow Automation only for strict typed proposals, catalogs five
+immutable templates, keeps document-to-action proposal-only, and permits only
+an explicit one-time process-local manual mapping of complete A-D proposals to
+the already implemented sealed fixture-only/no-I/O selectors in a fresh
+orchestrator. Tool and approval steps remain recognized but non-executable. It
+adds no general engine, scheduler, persistence, tool executor, approval
+dispatch, provider, IPC/UI, or effect.
+Focused tests pass 12/12, the public contract passes 18/18, strict Clippy
+passes, all-target Rust passes 393 tests with one intentional ignored probe,
+and `npm run verify` passes with 124 frontend and 208 Rust library tests plus
+release builds. Independent review is `PASS WITH ADVISORIES`. Final
+documentation, repository, security, diff, session-end, and marker checks
+pass; no next owner-selected Ready plan exists.
 
 The completed
 [`2026-08-11-research-knowledge-workflow.md`](docs/plans/2026-08-11-research-knowledge-workflow.md)

@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use thiserror::Error;
 
-use super::types::ToolDefinition;
+use super::{schema::ToolSchema, types::ToolDefinition};
 
 pub type ToolRegistryResult<T> = Result<T, ToolRegistryError>;
 
@@ -33,6 +33,19 @@ impl InMemoryToolRegistry {
     #[must_use]
     pub fn new() -> Self {
         Self::default()
+    }
+
+    /// Returns the closed application-owned tool catalog.
+    ///
+    /// Construction and read-only lookup grant no policy, approval, dispatch,
+    /// execution, audit, or device authority.
+    pub(crate) fn built_in() -> ToolRegistryResult<Self> {
+        let mut registry = Self::new();
+        registry.register(ToolDefinition::from_schema(
+            ToolSchema::GetCurrentDatetimeV1,
+        ))?;
+        registry.register(ToolDefinition::from_schema(ToolSchema::CreateLocalTaskV1))?;
+        Ok(registry)
     }
 }
 
@@ -140,5 +153,20 @@ mod tests {
                 "get_current_datetime".to_owned()
             ]
         );
+    }
+
+    #[test]
+    fn built_in_catalog_is_the_exact_shared_read_only_source() -> Result<(), ToolRegistryError> {
+        let registry = InMemoryToolRegistry::built_in()?;
+        let tools = registry.list();
+
+        assert_eq!(tools.len(), 2);
+        assert_eq!(tools[0].name(), "create_local_task");
+        assert_eq!(tools[1].name(), "get_current_datetime");
+        assert_eq!(
+            registry.get("run_shell"),
+            Err(ToolRegistryError::UnknownTool("run_shell".to_owned()))
+        );
+        Ok(())
     }
 }

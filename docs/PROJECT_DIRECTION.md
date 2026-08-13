@@ -1,7 +1,7 @@
 # Cortexa project direction
 
 Status: Owner-approved repository-governance and planned-architecture direction
-Last updated: 2026-08-12
+Last updated: 2026-08-13
 Decision authority: D-078
 
 This document defines present project scope and future-facing architecture
@@ -196,13 +196,24 @@ provenance; consequential capabilities remain denied; no command, credential,
 live access, tool, executor, approval dispatch, provider, IPC/UI, dependency,
 or effect exists.
 
-The catalog now marks Personal Assistant, Research, Knowledge, Coding, QA,
-Security, Cloud, and Systems as non-authorizing `Initial`; Workflow Automation
-remains Deferred. Coding/QA/Security eligibility exists only for D-087 and the
+The catalog now marks all nine definitions, including Workflow Automation, as
+non-authorizing `Initial`. Coding/QA/Security eligibility exists only for D-087 and the
 applicable D-088 cross-cutting stages; Cloud and Systems eligibility exists
-only for their separate D-088 sealed unwired selectors. Registration,
+only for their separate D-088 sealed unwired selectors. Workflow Automation
+eligibility exists only for D-090's sealed unwired proposal selector; its
+generic route, tool profile, memory profile, and non-authority posture remain
+unchanged. Registration,
 activation, task creation, memory profile, or orchestration grants no tool,
 policy, approval, provider, execution, or device authority.
+
+D-089 separately decomposes private workflow lifecycle and parser ownership
+without changing behavior. D-090 implements one strict Personal -> Workflow
+Automation -> Personal proposal lifecycle, five immutable templates, and an
+expiring take-once manual bridge from complete A-D proposals to the already
+implemented sealed fixture-only/no-I/O selectors. Template E and every tool or
+approval step remain non-executable. The cooperative deadline is not hard
+preemption. No general engine, scheduling, persistence, executor, approval
+dispatch, provider, IPC/UI, external runtime, I/O, or effect is added.
 
 `AgentOrchestrator`, `AgentRuntime`, `NativeAgentRuntime`, `AgentRegistry`,
 `ToolRegistry`, `PolicyEngine`, `ApprovalManager`, `AuditLogger`, `MemoryStore`,
