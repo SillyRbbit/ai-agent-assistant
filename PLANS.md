@@ -50,7 +50,26 @@ passes, all-target Rust passes 393 tests with one intentional ignored probe,
 and `npm run verify` passes with 124 frontend and 208 Rust library tests plus
 release builds. Independent review is `PASS WITH ADVISORIES`. Final
 documentation, repository, security, diff, session-end, and marker checks
-pass; no next owner-selected Ready plan exists.
+pass.
+
+The owner-selected D-091
+[`2026-08-11-bounded-agent-parallelism.md`](docs/plans/2026-08-11-bounded-agent-parallelism.md)
+is **verified complete with advisories under a complete, valid
+`agent-bounded-parallelism` gate**. It implements only one sealed
+fixture-only/no-I/O `BoundedParallel` selector with same-thread event
+multiplexing. Its three immutable scenarios use exact default-active two,
+hard-active/total-child three, depth-one, four-task, five-run, zero-retry,
+per-run eight-event, global/workflow/audit 32, root 120-second, and child
+60-second cooperative bounds. Results remain catalog-ordinal; failure policy is
+exactly `ContinuePartial`, `CancelDependentOnly`, or specialist-lane `FailFast`.
+No runtime trait, thread, provider concurrency, general engine, tool, I/O,
+IPC/UI, scheduling, persistence, or distributed infrastructure is authorized.
+Focused library and public D-091 contracts pass 41/41 each; strict Clippy,
+formatting, 481 all-target Rust tests with one ignored, and complete
+`npm run verify` pass. Independent code, architecture, and security review is
+`PASS WITH ADVISORIES`. Final post-documentation checks pass and deterministic
+finalization reports a complete, valid marker. No successor plan is owner-
+selected or Ready.
 
 The completed
 [`2026-08-11-research-knowledge-workflow.md`](docs/plans/2026-08-11-research-knowledge-workflow.md)

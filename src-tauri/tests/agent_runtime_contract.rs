@@ -1002,3 +1002,284 @@ fn mock_runtime_rejects_invalid_capability_and_terminal_transitions() -> Result<
     );
     Ok(())
 }
+
+#[test]
+fn mock_runtime_tracks_two_live_runs_and_local_terminal_dispositions() -> Result<(), Box<dyn Error>>
+{
+    let (runtime, recorder) = MockAgentRuntime::recording(MockMode::Success);
+    let first_request = RuntimeTurnRequest::new(
+        "mock-live-run-private-1",
+        "mock-live-request-private-1",
+        "first fixture",
+    )?;
+    let second_request = RuntimeTurnRequest::new(
+        "mock-live-run-private-2",
+        "mock-live-request-private-2",
+        "second fixture",
+    )?;
+    let second_started = RuntimeEventEnvelope::for_request(
+        &second_request,
+        0,
+        UntrustedRuntimeEvent::ResponseStarted {
+            response_id: RuntimeResponseId::new("mock-live-response-2")?,
+        },
+    );
+    let second_completed = RuntimeEventEnvelope::for_request(
+        &second_request,
+        1,
+        UntrustedRuntimeEvent::ResponseCompleted,
+    );
+
+    let mut first = runtime.start(first_request)?;
+    let mut second = runtime.start(second_request)?;
+
+    assert_eq!(recorder.live_runs().len(), 2);
+    assert_eq!(recorder.maximum_live_run_count(), 2);
+    assert_eq!(
+        recorder
+            .live_runs()
+            .iter()
+            .map(|record| (record.start_ordinal, record.status))
+            .collect::<Vec<_>>(),
+        vec![
+            (1, RuntimeRunStatus::AwaitingStart),
+            (2, RuntimeRunStatus::AwaitingStart),
+        ]
+    );
+
+    assert_eq!(first.cancel()?, RuntimeCancellationOutcome::Cancelled);
+    assert_eq!(
+        recorder
+            .live_runs()
+            .iter()
+            .map(|record| record.start_ordinal)
+            .collect::<Vec<_>>(),
+        vec![2]
+    );
+    assert_eq!(second.status(), RuntimeRunStatus::AwaitingStart);
+
+    second.accept_event(second_started)?;
+    assert_eq!(recorder.live_runs()[0].status, RuntimeRunStatus::Streaming);
+    second.accept_event(second_completed)?;
+
+    assert!(recorder.live_runs().is_empty());
+    assert_eq!(
+        recorder
+            .terminal_dispositions()
+            .iter()
+            .map(|record| (record.start_ordinal, record.status))
+            .collect::<Vec<_>>(),
+        vec![
+            (1, RuntimeRunStatus::Cancelled),
+            (2, RuntimeRunStatus::Completed),
+        ]
+    );
+    assert!(recorder.nonterminal_drops().is_empty());
+    Ok(())
+}
+
+#[test]
+fn mock_runtime_one_shot_cancel_failure_retains_then_releases_the_live_run(
+) -> Result<(), Box<dyn Error>> {
+    let (runtime, recorder) = MockAgentRuntime::recording(MockMode::CancelFailureOnceAt(1));
+    let mut run = runtime.start(RuntimeTurnRequest::new(
+        "mock-cancel-once-private-run",
+        "mock-cancel-once-private-request",
+        "cancel fixture",
+    )?)?;
+
+    assert_eq!(
+        run.cancel(),
+        Err(RuntimeError::BoundaryFailure(
+            RuntimeBoundaryStage::Cancellation
+        ))
+    );
+    assert_eq!(run.status(), RuntimeRunStatus::AwaitingStart);
+    assert_eq!(recorder.live_runs().len(), 1);
+    assert!(recorder.terminal_dispositions().is_empty());
+    assert!(recorder.cancellations().is_empty());
+
+    assert_eq!(run.cancel()?, RuntimeCancellationOutcome::Cancelled);
+    assert!(recorder.live_runs().is_empty());
+    assert_eq!(recorder.cancellations().len(), 1);
+    assert_eq!(
+        recorder
+            .terminal_dispositions()
+            .iter()
+            .map(|record| (record.start_ordinal, record.status))
+            .collect::<Vec<_>>(),
+        vec![(1, RuntimeRunStatus::Cancelled)]
+    );
+    assert!(recorder.nonterminal_drops().is_empty());
+    Ok(())
+}
+
+#[test]
+fn mock_runtime_records_nonterminal_drop_once_and_redacts_run_identity(
+) -> Result<(), Box<dyn Error>> {
+    let (runtime, recorder) = MockAgentRuntime::recording(MockMode::Success);
+    let run_id = "mock-dropped-private-run-sentinel";
+    let dropped = runtime.start(RuntimeTurnRequest::new(
+        run_id,
+        "mock-dropped-private-request-sentinel",
+        "drop fixture",
+    )?)?;
+
+    assert_eq!(recorder.live_runs().len(), 1);
+    drop(dropped);
+
+    assert!(recorder.live_runs().is_empty());
+    assert!(recorder.terminal_dispositions().is_empty());
+    let drops = recorder.nonterminal_drops();
+    assert_eq!(drops.len(), 1);
+    assert_eq!(drops[0].start_ordinal, 1);
+    assert_eq!(drops[0].status, RuntimeRunStatus::AwaitingStart);
+    let debug = format!("{drops:?}");
+    assert!(debug.contains("[REDACTED]"));
+    assert!(!debug.contains(run_id));
+    drop(drops);
+    assert_eq!(recorder.nonterminal_drops().len(), 1);
+
+    let (failed_runtime, failed_recorder) = MockAgentRuntime::recording(MockMode::StartFailure);
+    assert!(matches!(
+        failed_runtime.start(RuntimeTurnRequest::new(
+            "mock-failed-private-run",
+            "mock-failed-private-request",
+            "failed start fixture",
+        )?),
+        Err(RuntimeError::BoundaryFailure(RuntimeBoundaryStage::Start))
+    ));
+    assert!(failed_recorder.live_runs().is_empty());
+    assert_eq!(failed_recorder.maximum_live_run_count(), 0);
+    assert!(failed_recorder.terminal_dispositions().is_empty());
+    assert!(failed_recorder.nonterminal_drops().is_empty());
+    Ok(())
+}
+
+#[test]
+fn mock_runtime_can_return_a_foreign_identity_with_redacted_lifecycle_accounting(
+) -> Result<(), Box<dyn Error>> {
+    let (runtime, recorder) = MockAgentRuntime::recording(MockMode::ReturnedIdentityMismatchAt(1));
+    let request = RuntimeTurnRequest::new(
+        "mock-requested-private-run",
+        "mock-requested-private-request",
+        "identity mismatch fixture",
+    )?;
+    let requested_identity = request.identity();
+    let mut run = runtime.start(request)?;
+
+    assert_ne!(run.identity(), &requested_identity);
+    assert_ne!(run.run_id(), requested_identity.run_id());
+    assert_ne!(run.identity().request_id(), requested_identity.request_id());
+    assert_eq!(recorder.live_runs().len(), 1);
+    assert_eq!(recorder.maximum_live_run_count(), 1);
+    let live_debug = format!("{:?}", recorder.live_runs());
+    for private_identity in [
+        "mock-requested-private-run",
+        "mock-requested-private-request",
+        "mock-foreign-run-1",
+        "mock-foreign-request-1",
+    ] {
+        assert!(!live_debug.contains(private_identity));
+    }
+    assert!(live_debug.contains("[REDACTED]"));
+
+    assert_eq!(run.cancel()?, RuntimeCancellationOutcome::Cancelled);
+    assert!(recorder.live_runs().is_empty());
+    assert_eq!(
+        recorder.terminal_dispositions()[0].status,
+        RuntimeRunStatus::Cancelled
+    );
+    assert!(recorder.nonterminal_drops().is_empty());
+    Ok(())
+}
+
+#[test]
+fn mock_runtime_retains_a_foreign_run_until_one_shot_cancel_failure_is_retried(
+) -> Result<(), Box<dyn Error>> {
+    let (runtime, recorder) =
+        MockAgentRuntime::recording(MockMode::ReturnedIdentityMismatchWithCancelFailureOnceAt(1));
+    let request = RuntimeTurnRequest::new(
+        "mock-retained-requested-private-run",
+        "mock-retained-requested-private-request",
+        "retained identity mismatch fixture",
+    )?;
+    let requested_identity = request.identity();
+    let mut rejected = runtime.start(request)?;
+
+    assert_ne!(rejected.identity(), &requested_identity);
+    assert_eq!(
+        rejected.cancel(),
+        Err(RuntimeError::BoundaryFailure(
+            RuntimeBoundaryStage::Cancellation
+        ))
+    );
+    assert_eq!(rejected.status(), RuntimeRunStatus::AwaitingStart);
+    assert_eq!(recorder.live_runs().len(), 1);
+    assert!(recorder.terminal_dispositions().is_empty());
+    assert!(recorder.cancellations().is_empty());
+    assert!(recorder.nonterminal_drops().is_empty());
+
+    assert_eq!(rejected.cancel()?, RuntimeCancellationOutcome::Cancelled);
+    assert!(recorder.live_runs().is_empty());
+    assert_eq!(recorder.cancellations().len(), 1);
+    assert_eq!(recorder.terminal_dispositions().len(), 1);
+    assert_eq!(
+        recorder.terminal_dispositions()[0].status,
+        RuntimeRunStatus::Cancelled
+    );
+    assert!(recorder.nonterminal_drops().is_empty());
+    Ok(())
+}
+
+#[test]
+fn mock_runtime_can_return_one_live_identity_for_two_distinct_starts() -> Result<(), Box<dyn Error>>
+{
+    let (runtime, recorder) = MockAgentRuntime::recording(MockMode::DuplicateLiveIdentityAt(2));
+    let first_request = RuntimeTurnRequest::new(
+        "mock-duplicate-private-run-1",
+        "mock-duplicate-private-request-1",
+        "first duplicate fixture",
+    )?;
+    let first_requested_identity = first_request.identity();
+    let second_request = RuntimeTurnRequest::new(
+        "mock-duplicate-private-run-2",
+        "mock-duplicate-private-request-2",
+        "second duplicate fixture",
+    )?;
+    let second_requested_identity = second_request.identity();
+
+    let mut first = runtime.start(first_request)?;
+    let mut second = runtime.start(second_request)?;
+
+    assert_eq!(first.identity(), &first_requested_identity);
+    assert_eq!(second.identity(), first.identity());
+    assert_ne!(second.identity(), &second_requested_identity);
+    assert_eq!(recorder.live_runs().len(), 2);
+    assert_eq!(recorder.maximum_live_run_count(), 2);
+    assert_eq!(
+        recorder.live_runs()[0].run_id,
+        recorder.live_runs()[1].run_id
+    );
+    assert_ne!(recorder.starts()[0].run_id, recorder.starts()[1].run_id);
+
+    let live_debug = format!("{:?}", recorder.live_runs());
+    for private_identity in [
+        "mock-duplicate-private-run-1",
+        "mock-duplicate-private-request-1",
+        "mock-duplicate-private-run-2",
+        "mock-duplicate-private-request-2",
+    ] {
+        assert!(!live_debug.contains(private_identity));
+    }
+    assert!(live_debug.contains("[REDACTED]"));
+
+    assert_eq!(first.cancel()?, RuntimeCancellationOutcome::Cancelled);
+    assert_eq!(recorder.live_runs().len(), 1);
+    assert_eq!(second.status(), RuntimeRunStatus::AwaitingStart);
+    assert_eq!(second.cancel()?, RuntimeCancellationOutcome::Cancelled);
+    assert!(recorder.live_runs().is_empty());
+    assert_eq!(recorder.terminal_dispositions().len(), 2);
+    assert!(recorder.nonterminal_drops().is_empty());
+    Ok(())
+}

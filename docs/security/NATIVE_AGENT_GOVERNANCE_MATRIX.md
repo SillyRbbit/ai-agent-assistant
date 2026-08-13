@@ -1,6 +1,6 @@
 # Native agent governance matrices
 
-Status: Accepted D-084 contract with D-085 through D-090 current-state amendments
+Status: Accepted D-084 contract with D-085 through D-091 current-state amendments
 Last updated: 2026-08-13
 
 These matrices are deterministic application configuration, not permissions
@@ -56,13 +56,17 @@ expired resolutions all retain `NotAttempted`.
 Only the orchestrator may create a child. Delegation is not a tool and does
 not traverse tool schema, tool policy, or approval.
 
-Sealed D-085 through D-090 workflows are trusted application-service selectors,
+Sealed D-085 through D-091 workflows are trusted application-service selectors,
 not generic delegation. D-088 creates either Cloud or Systems, then QA and
 Security, as sequential depth-one siblings. These exact child creations do not
 add a generic route and never traverse tool policy or approval. D-090 creates
 Workflow Automation only inside the exact proposal lifecycle; its take-once
 manual token maps complete A-D proposals to existing sealed selectors in a
 fresh orchestrator. E, tool steps, and approval steps never dispatch.
+D-091 creates only the exact specialists in one of three immutable parallel
+scenario graphs. All children remain direct depth-one siblings created by the
+orchestrator; independent concurrent eligibility does not create a generic
+delegation edge, specialist spawn right, tool route, or approval authority.
 
 ## Authority matrix
 

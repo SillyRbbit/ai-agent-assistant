@@ -1,3 +1,4 @@
+pub mod bounded_parallelism;
 pub mod definition;
 pub mod engineering_quality;
 pub mod function_call_validation;

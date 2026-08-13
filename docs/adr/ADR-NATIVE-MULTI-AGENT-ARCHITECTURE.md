@@ -271,6 +271,17 @@ creation. Every root and child task remains independently attributable and
 cancellable, and root cancellation propagates exactly once to the active
 child.
 
+D-091 implements the separately decided bounded-parallel exception without
+changing depth or spawning authority. One orchestrator may retain two active
+specialists by default and at most three under a trusted pre-start choice, with
+three total specialist children, four tasks, five run attempts, and zero
+automatic retries. Its three immutable fixture-only graphs apply explicit
+`ContinuePartial`, `CancelDependentOnly`, or specialist-lane `FailFast` policy.
+All events remain same-thread and exactly task/run addressed; application-owned
+catalog ordinals control result, dependency, and cancellation order. This is
+not thread/provider concurrency, hard preemption, provider-session isolation,
+app-global admission, a general workflow engine, or distributed execution.
+
 ### D-086 sealed Research and Knowledge amendment
 
 D-086 implements only the Research sequence above, through the exact
@@ -420,9 +431,10 @@ Costs and constraints:
 4. Activate the research/knowledge, engineering-quality,
    infrastructure/operations, and automation workflow families only through
    their separate plans and exact route/tool/data limits.
-5. Consider bounded parallelism, desktop UI, end-to-end demonstrations, and a
-   final architecture/security review only after their prerequisites are
-   verified.
+5. Implement bounded parallelism only through D-091's sealed fixture selector;
+   consider desktop UI, end-to-end demonstrations, provider/app-global
+   concurrency, and a final architecture/security review only through later
+   separately approved plans.
 
 The authoritative phases are in [`ROADMAP.md`](../../ROADMAP.md). This ADR does
 not authorize implementation by itself.
@@ -439,9 +451,11 @@ Security as sequential depth-one siblings, preserves strict application-issued
 fixture/evidence provenance, denies consequential capabilities, and creates no
 approval request or execution path. D-090 separately implements only the
 strict typed proposal and one-time A-D manual sealed-dispatch boundary described
-above. Executable automation, bounded parallelism, UI/provider wiring, live
+above. D-091 separately implements only the sealed same-thread fixture
+parallelism described above. Executable automation, broader/provider/app-global
+parallelism, UI/provider wiring, live
 repository or infrastructure effects, and every other later phase remain
-gated. D-086 through D-090 do not make this ADR general
+gated. D-086 through D-091 do not make this ADR general
 implementation authority.
 
 ## Preservation guarantees

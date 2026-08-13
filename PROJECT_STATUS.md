@@ -47,7 +47,8 @@ all-target Rust tests with one intentional ignored probe, and complete
 `npm run verify`. The quality result is `PASS WITH ADVISORIES`: decompose large
 private workflow/orchestrator internals before another workflow/live-tool
 increment, and never treat string/credential guards as authorization for a
-future live/effect path. Durable memory/ARB-005, live research/retrieval,
+future live/effect path. At that D-088 checkpoint, durable memory/ARB-005, live
+research/retrieval,
 providers, repository tools/effects, executable Workflow Automation, every live
 infrastructure/operations boundary, IPC, UI, and parallelism remain Blocked.
 
@@ -75,7 +76,31 @@ ignored probe, and `npm run verify` passes with 124 frontend and 208 Rust
 library tests plus integration and release builds. Independent architecture,
 security, and code review is `PASS WITH ADVISORIES`. Final documentation,
 repository, security, diff, session-end, and marker checks pass. No next
-owner-selected Ready plan exists, so next-increment readiness is `Blocked`.
+owner-selected Ready plan existed at D-090 closeout.
+
+D-091's exact
+[`bounded-parallelism ExecPlan`](docs/plans/2026-08-11-bounded-agent-parallelism.md)
+is **verified complete with advisories under a complete, valid gate**. The
+implemented change is one
+sealed fixture-only/no-I/O `BoundedParallel` selector with same-thread runtime-
+event multiplexing, catalog-ordinal results, cooperative 120-second root and
+60-second child leases, depth one, default active two, hard active/total child
+three, four tasks, five runs, zero retries, and 32-entry global/workflow/audit
+bounds. Its exact scenarios are independent Research+Knowledge with
+`ContinuePartial`; independent Coding+Security then dependent QA with
+`CancelDependentOnly`; and independent Cloud+Systems then dependent Security
+with specialist-lane `FailFast`, each followed by truthful Personal synthesis
+when the root remains live. No runtime trait, thread, provider concurrency,
+general engine, tool, I/O, IPC/UI, scheduling, persistence, distributed
+infrastructure, or effect is authorized. Focused library and public contracts
+pass 41/41 each; strict Clippy and formatting pass; all-target Rust passes 481
+tests with one intentional ignored probe; and `npm run verify` passes with 124
+frontend and 249 passed Rust library tests plus one intentionally ignored
+probe, integration, and release builds.
+Independent code, architecture, security, and technical-debt review is `PASS
+WITH ADVISORIES`. Final documentation, repository, security, diff, and
+session-end checks pass; deterministic finalization completed and the marker is
+complete and valid. No owner-selected next plan is Ready.
 
 The Rust core now carries nine exact policy-profile identities from sealed
 definitions through tasks, live execution contexts, delegation, governed tool

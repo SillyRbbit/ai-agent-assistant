@@ -286,6 +286,27 @@ shipping dispatcher or executor.
   dispatch and be checked cooperatively at trusted destination lifecycle
   ingress with child-first cancellation and no successor after expiry. It does
   not promise hard preemption of an in-flight synchronous runtime call.
+- **FR-039G**: Trusted application code alone shall select the sealed D-091
+  bounded-parallel workflow. `AgentOrchestrator` may retain multiple independent
+  depth-one specialist runs under exact default-active two, hard-active and
+  total-child three, four-task, five-run-attempt, zero-retry, eight-event-per-
+  run, 32-record, 120-second-root, and 60-second-child limits. Specialists and
+  Workflow Automation shall not create children or nested workflows; excess
+  cataloged work shall queue locally or reject with typed behavior.
+- **FR-039H**: Parallel outcomes shall be exactly succeeded, failed, cancelled,
+  timed out, or skipped and shall be stored and synthesized in catalog ordinal
+  order. `ContinuePartial`, `CancelDependentOnly`, and specialist-lane
+  `FailFast` shall be explicit application policy. Root cancellation/expiry
+  shall sweep children deterministically; independent child cancellation shall
+  not cancel an unrelated sibling unless policy requires it. Final synthesis
+  shall expose each source agent, status, validated findings, failures, and
+  unresolved issues without concealing partial results.
+- **FR-039I**: Same-thread event multiplexing shall preserve exact task/run/
+  profile attribution, isolated context and task memory, separate cancellation
+  handles, cooperative deadlines, rejected-run cleanup, and no orphan run.
+  It shall not be represented as provider or CPU concurrency, hard preemption,
+  provider-session isolation, an app-global capacity coordinator, scheduler,
+  general workflow engine, or distributed execution.
 
 Only bootstrap metadata storage, a turn-bound volatile in-memory approval-audit
 adapter, and D-085's unwired workflow-local volatile memory and approved-
@@ -328,6 +349,12 @@ existing sealed A-D fixture workflows. Workflow Automation is `Initial` only
 for that selector; generic delegation remains denied. Template E, all tool and
 approval steps, scheduling, persistence, and every external effect remain
 non-executable.
+
+D-091 separately implements one unwired fixture-only/no-I/O bounded-parallel
+selector with three immutable scenarios, explicit failure policy, stable
+ordinal results, cooperative cancellation/deadlines, strict synthesis, and no
+runtime/provider/thread/general-engine widening. Its same-thread retained-run
+model is not production/provider concurrency evidence.
 
 ### Permissions and integrations
 
@@ -435,6 +462,9 @@ The repository currently provides:
 - one unwired strict Personal-to-Workflow-Automation-to-Personal proposal
   lifecycle with five immutable templates, A-D-only take-once manual sealed
   dispatch, proposal-only E, and no tool or approval execution;
+- one unwired fixture-only/no-I/O bounded-parallel selector with three sealed
+  same-thread event-multiplexed scenarios, explicit failure policy, stable
+  ordinal outcomes, truthful synthesis, and no provider/session/thread work;
 - no live model, gateway, tool execution, durable product persistence, integration,
   privileged permission, or durable audit path.
 

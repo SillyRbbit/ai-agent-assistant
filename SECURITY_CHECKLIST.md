@@ -247,6 +247,45 @@ production boundary exists.
       execution, approval dispatch, provider, IPC/UI, external runtime, I/O,
       credential access, permission, or device effect.
 
+## Bounded parallel specialist workflows
+
+- [x] Trusted application code alone selects D-091; selectors are mutually
+      exclusive, specialists and Workflow Automation cannot spawn or select a
+      nested workflow, and duplicate logical requests fail closed.
+- [x] Exact limits are depth one, default active two, hard active and total
+      child three, four tasks, five run attempts, zero retries, eight events per
+      run, 32 applicable records, a 120-second root lease, and 60-second child
+      leases capped by the root. Counters do not replenish.
+- [x] Each admitted child has distinct task, run, execution context, policy and
+      memory attribution, output state, cancellation handle, deadline, and
+      task-memory key. Cross-run, stale, late, terminal, wrong-sequence, and
+      over-cap events cannot mutate a sibling.
+- [x] `ContinuePartial`, `CancelDependentOnly`, and specialist-lane `FailFast`
+      are explicit application-owned policies. Root and policy cancellation
+      sweep in ordinal order and preserve closed resumable state on failure;
+      rejected run identities remain quarantined until cleanup succeeds.
+- [x] Outcomes are exactly succeeded, failed, cancelled, timed out, or skipped
+      and are stored, transferred, cancelled, and synthesized in immutable
+      catalog ordinal order rather than completion timing or map iteration.
+- [x] Strict Personal synthesis reconciles every source agent, status, finding
+      ID, failure, and unresolved issue. Partial results are disclosed;
+      malformed or concealing synthesis fails the root.
+- [x] Scenario-A memory access preserves exact existing live grants and sibling
+      isolation; every task-temporary namespace is cleaned terminally. Other
+      specialist profiles remain memory-disabled, and no result copies or
+      promotes memory.
+- [x] Workflow/audit evidence is bounded, content-free, descriptive, and non-
+      authorizing. Planned slots do not fabricate task/run identity and live
+      records require exact runtime attribution.
+- [x] Same-thread retained-run multiplexing is not represented as provider or
+      CPU concurrency, hard preemption, provider-session isolation, or an app-
+      global capacity coordinator. The fixture claim filter remains defense in
+      depth only.
+- [x] D-091 adds no runtime-trait/Native change, provider, thread/async worker,
+      scheduler, general graph engine, tool, policy permission, approval
+      dispatch, persistence, I/O, dependency, IPC/UI, remote/distributed
+      infrastructure, or device effect.
+
 ## Tauri IPC review
 
 - [ ] Every command and event is narrow, typed, explicitly registered, and

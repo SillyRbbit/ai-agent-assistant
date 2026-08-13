@@ -3698,6 +3698,147 @@ and code review is `PASS WITH ADVISORIES`. Final documentation, repository,
 security, diff, session-end, and marker checks pass; no next owner-selected
 Ready plan exists.
 
+## D-091 - Bound parallel specialists to one sealed same-thread selector
+
+Date: 2026-08-13
+Status: Accepted owner implementation decision
+
+Decision: add one application-owned `BoundedParallel` selector to
+`AgentOrchestrator` for three immutable fixture-only/no-I/O scenarios. The
+selector may retain multiple independent depth-one specialist `RuntimeRun`
+values and accept their later events through one same-thread, task/run-addressed
+multiplexing boundary. It does not create an OS thread, async executor,
+provider-concurrency path, scheduler, worker, distributed service, or general
+workflow engine. `AgentRuntime` and the sole/default `NativeAgentRuntime`
+remain unchanged.
+
+The exact scenarios are: Research plus Knowledge independently under
+`ContinuePartial`, then Personal synthesis; Coding plus Security independently,
+then dependent QA under `CancelDependentOnly`, then Personal synthesis; and
+Cloud plus Systems independently, then dependent Security under specialist-lane
+`FailFast`, then truthful Personal complete or partial synthesis. The
+application owns the scenario graphs, synthetic fixtures, stable work-item
+ordinals, dependency release, failure policy, and final ordered projection.
+Completion timing never selects result order. These scenarios do not modify or
+compose D-086 through D-090, and Workflow Automation cannot create a live task.
+
+Delegation depth remains one. The production default is two active specialist
+children; a trusted pre-start application choice may select one through the
+hard maximum of three. Total specialist children are three, total tasks
+including Personal are four, runtime-run attempts are five, retries are zero,
+accepted events are eight per run, and the global runtime, generic
+orchestration, workflow-event, and workflow-attribution journals are each
+bounded at 32 as applicable. The root lease is 120 seconds and each admitted
+child lease is 60 seconds capped by the root deadline. Deadlines use an
+injected monotonic clock and cooperative before/after checks; they cannot hard-
+preempt a synchronous runtime call already executing.
+
+Every cataloged slot enters the bounded root-local pending set in ordinal order
+and emits `Queued` exactly once, including immediately admitted, dependency-
+blocked, and capacity-waiting slots. It is not an `AgentTask` until `Started`.
+Hard-active, total, depth, duplicate, dependency, task/run, retry, and event
+violations fail with typed behavior before the set is created. Active-capacity
+release may admit an already-counted slot but never replenishes a budget.
+
+Every admitted child has a unique task, exact definition and policy-profile
+attribution, distinct `AgentExecutionContext` and `RuntimeRunIdentity`, bounded
+output/event state, child deadline, application cancellation handle, and
+separate task-memory identity. Research uses `ResearchWorkingMemoryV1` and
+Knowledge uses `KnowledgeWorkingMemoryV1`; scenario A may use only their
+existing live-grant-governed agent/task namespaces. Sibling reads fail,
+task-temporary data is cleaned at terminal state, and memory is never copied
+into results/synthesis, auto-written, proposed, or promoted. Coding, QA,
+Security, Cloud, and Systems remain `MemoryDisabledV1` and writes are denied.
+D-091 changes no production `MemoryStore`. No provider session registry exists;
+distinct run identity is the complete supported session boundary.
+
+The public ordered parallel status is exactly `Succeeded`, `Failed`,
+`Cancelled`, `TimedOut`, or `Skipped`. An admitted timeout uses the existing
+generic failed task/outcome with one new exact
+`AgentTaskFailureCode::DeadlineExceeded`; it projects as `TimedOut` without
+adding another generic task state or outcome variant. A skipped dependent was
+never admitted and therefore has no synthetic task, run, context, cancellation
+handle, or generic task outcome. Final Personal synthesis must identify every
+expected source agent and ordered application-derived status and must disclose
+failures, cancellations, timeouts, skipped dependencies, and unresolved issues.
+
+Root cancellation propagates child-first in stable ordinal order and leaves no
+live run, task memory, or pending task object only after every cancellation
+succeeds. A failure pauses the ordinal sweep: prior successful cancels remain
+terminal, the failing/later child or root/synthesis runs and root remain live in
+closed-cancelling state, no queued/dependent task, timeout, synthesis, or root
+terminal starts, and the next trusted ingress retries that ordinal. Unadmitted
+slots are `Skipped(RootCancelled)`, never cancelled tasks. Individual
+cancellation leaves independent siblings active under `ContinuePartial` and
+`CancelDependentOnly`; under `FailFast`, it cancels the remaining specialist
+lane. Retries remain zero except retrying an incomplete cancellation transition
+does not retry model/runtime work.
+
+Event deadline linearization validates exact identity/sequence and preflights
+the prepared terminal/result/transfer/successor state, then samples the
+monotonic clock immediately before `accept_event`; an accepted terminal event
+wins with no post-accept timeout. A late-returning start or expired nonterminal
+projects `TimedOut` only after cancellation succeeds. Cancel failure retains
+the live task/run and starts nothing. Root expiry uses the same resumable sweep;
+after success admitted active slots are `TimedOut(RootDeadlineExceeded)`,
+unadmitted slots are `Skipped(RootDeadlineExpired)`, the generic root is
+`Failed(DeadlineExceeded)`, and workflow state is `Failed` without synthesis.
+Every `runtime.start` failure is typed/nonretrying and follows the exact
+scenario policy, including dependent/synthesis starts, without an orphan.
+
+Events and matching workflow-local attribution records are closed, content-
+free, sequence-checked, and bounded. `Skipped` carries work-item ID, ordinal,
+expected agent, and closed reason. Queued/skipped planned slots carry sealed
+root/scenario/ordinal/expected-agent/profile attribution with no task/run/
+runtime identity. `Started` exists only after a successful start and validated
+returned run identity. Start error terminalizes the admitted task as
+`Failed(RuntimeStartFailed)` and emits one `StartAttemptFailed` event/audit
+outcome with root/scenario/subject/task/agent/profiles/runtime attempted
+attribution and explicitly no `RuntimeRunIdentity`; it replaces Started plus
+terminal. Live records use exact run attribution. Work-item `Progress` and the
+separate content-free Personal-root `SynthesisProgress` each have a matching
+audit outcome and coalesce to one applicable variant per run. The exact worst
+success bound remains 19 paired records against 32; capacity is preflighted and
+runtime events remain eight per run.
+
+All untrusted content has exact scalar, byte, list, and aggregate caps: the
+objective is 1,024 scalars/4,096 bytes, the fixture catalog 16,384 serialized
+bytes, specialist raw output 6,144 scalars/12,288 bytes, three findings plus one
+unresolved issue per child with 256 scalars/1,024 bytes each and 4,096 aggregate
+text bytes, each child transfer 6,144 bytes, the three-entry ordered transfer
+18,432 bytes, synthesis framing 2,048 bytes and total selected text 24,576
+bytes, and final synthesis 4,096 scalars/8,192 bytes with a three-entry/2,048-
+byte status table. Boundary, aggregate, escaping, and multibyte tests must prove
+the encoded Native request remains at or below 65,536 bytes.
+
+This decision adds no specialist spawning, recursion, nested workflow,
+replenishing fan-out, scheduling, persistence, tool, policy permission,
+approval dispatch, executor, provider, process, thread, dependency,
+configuration, credential, filesystem/network/platform I/O, IPC/UI, external
+runtime, distributed infrastructure, or device effect. Prior selectors retain
+their existing one-active-child behavior. Consequential capabilities remain
+separately gated.
+
+Consequences: the exact
+[`bounded parallelism ExecPlan`](docs/plans/2026-08-11-bounded-agent-parallelism.md)
+is Ready and owner-selected at clean synchronized baseline `1f85264`, with
+D-090's published completion marker complete and valid. The plan is not Active
+until `agent-bounded-parallelism` begins. Implementation must stop if it needs
+a runtime-trait or Native implementation change, thread/async/provider
+concurrency, a reusable graph/queue/scheduler abstraction, a fourth specialist,
+depth above one, a retry, a new authority or I/O boundary, or any file outside
+the declared scope.
+
+**Additive completion evidence (2026-08-13):** gate
+`agent-bounded-parallelism` began and D-091 implementation verification now
+passes. Focused library and public contracts are 41/41 each, strict Clippy and
+formatting pass, all-target Rust passes 481 tests with one intentionally
+ignored probe, and `npm run verify` passes. Independent code, architecture,
+security, and technical-debt review is `PASS WITH ADVISORIES` with no D-091
+completion blocker. Final post-documentation gates pass; deterministic
+finalization completed and status reports `complete`, `valid: true`, and `PASS
+WITH ADVISORIES`. No successor plan is owner-selected or Ready.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

@@ -464,7 +464,8 @@ D-086 implements only the Research and Knowledge family through its exact
 fixture-only plan and two-child cap. Each remaining family requires its own plan
 to expand the generic one-child-total budget to an explicit finite count while
 keeping depth one and concurrency one until a later bounded-parallelism
-decision.
+decision. D-091 now supplies only its exact same-thread bounded-parallel graphs;
+it does not grant generic concurrency or specialist spawning.
 
 - **Research and knowledge:** Personal Assistant -> Research Agent -> Knowledge
   & Document Agent -> Personal Assistant synthesis. Current only as D-086's
@@ -717,6 +718,22 @@ the provisional D-082 QA/Security proposal-review sequence for this phase;
 those roles are not invoked and no review claim is made. The original monotonic
 deadline propagates through any manual dispatch and is cooperatively checked at
 central destination lifecycle ingress; it is not a hard-preemption claim.
+
+D-091 implements one separate fixture-only/no-I/O `BoundedParallel` selector.
+Research and Knowledge may run independently under `ContinuePartial`; Coding
+and Security may run independently before dependent QA under
+`CancelDependentOnly`; and Cloud and Systems may run independently before
+dependent Security under specialist-lane `FailFast`. Personal synthesis uses
+stable catalog ordinals and must disclose exact source agents, statuses,
+validated finding IDs, failures, and unresolved issues.
+
+The selector retains several `RuntimeRun` values and multiplexes exact task/run
+events on one application thread. Limits are depth one, default active two,
+hard active/total child three, four tasks, five attempts, zero retries, eight
+events per run, 32 applicable records, and cooperative 120-second root/
+60-second child leases. This proves neither provider/CPU concurrency nor hard
+preemption, provider-session isolation, app-global coordination, scheduling,
+or distributed execution.
 
 ## 11. Personal-project scope
 
