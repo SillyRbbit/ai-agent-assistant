@@ -624,6 +624,24 @@ String and credential-pattern guards are defense-in-depth validation only; they
 cannot authorize a future live/effect path. `AgentRuntime` and
 `NativeAgentRuntime` remain unchanged and Native remains sole/default.
 
+#### Private workflow-internals ownership
+
+D-089 preserves every D-088 contract while narrowing review ownership. The
+public `agent::orchestrator` facade still owns task/run maps, central runtime
+event dispatch, workflow selection, and cancellation entry points, but the
+Cloud/Systems lifecycle implementation now resides in the private
+`orchestrator::infrastructure_operations_workflow` child. The public
+`agent::infrastructure_operations` contract facade retains all IDs, requests,
+results, events, errors, and redacted accessors; immutable catalog construction,
+bounded transfer framing, and strict wire validation reside in three private
+children. Cross-module lifecycle visibility is no wider than `pub(super)`.
+
+This is source decomposition only. It adds no shared workflow engine, runtime
+behavior, public API, tool, policy, approval, audit authority, activation,
+dependency, I/O, IPC, persistence, or effect. The remaining facade and private
+lifecycle are still substantial, so later workflow work must preserve separate
+reviewable private ownership rather than grow a generalized executor.
+
 #### Hermes transport evaluation
 
 **No selected transport; three pinned-release mechanisms rejected**:

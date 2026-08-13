@@ -3562,6 +3562,57 @@ policy, approval subjects, restricted executor, audit, rollback, and
 target-platform evidence. Workflow Automation and every consequential action
 remain Blocked.
 
+## D-089 - Decompose private workflow internals before Workflow Automation
+
+Date: 2026-08-12
+Status: Accepted owner implementation prerequisite
+
+Decision: satisfy the D-088 post-increment technical-debt gate through one
+behavior-preserving source-organization increment before Workflow Automation
+implementation begins. The increment extracts the private D-088 workflow
+lifecycle from the `AgentOrchestrator` facade and separates the immutable
+fixture, transfer-framing, and strict validation/parser implementation from the
+public infrastructure/operations contracts.
+
+This is a mechanical ownership change only. `AgentOrchestrator` remains the
+sole task, run, runtime-event, child-creation, cancellation, and selector
+authority. All existing public paths, serialized fields, fixture bytes, bounds,
+error variants, event and audit ordering, cancellation semantics, activation
+states, profiles, tool eligibility, memory behavior, and execution
+dispositions remain unchanged. Child modules are private; the narrow methods
+called by the facade may be no wider than `pub(super)`.
+
+The exact new private files are
+`agent/orchestrator/infrastructure_operations_workflow.rs` and the
+`agent/infrastructure_operations/{catalog,framing,validation}.rs` modules.
+Research/Knowledge and Engineering lifecycle code is not refactored in this
+increment; their public contracts and complete regression suites remain
+mandatory evidence. The extraction must not introduce a workflow trait,
+generic state machine, DAG executor, DSL, dynamic registry, scheduler, event
+bus, macro-generated engine, or reusable execution authority.
+
+This decision adds no Workflow Automation schema, proposal, validation,
+activation, task, run, tool, policy, approval, audit authority, execution,
+persistence, configuration, IPC, UI, provider, external runtime, parallelism,
+background work, or device effect. Native remains sole/default. D-079 and D-082
+through D-088 remain authoritative.
+
+Consequences: the owner-authorized Workflow Automation request remains the
+selected next product objective, but its implementation gate cannot begin
+until `agent-workflow-internals-decomposition` completes with a valid marker
+and a review that explicitly clears D-088's `blocks_next_increment` finding.
+Completion of this prerequisite grants only a fresh Workflow Automation
+readiness review; it does not activate the agent or authorize tool execution.
+Actual tool dispatch remains separately blocked because the current registry
+contains definitions only, approval does not dispatch, and every execution
+disposition remains `NotAttempted`.
+
+Stop the prerequisite if any public behavior or expected test result must
+change, any internal API must widen beyond `pub(super)`, a generalized workflow
+abstraction becomes necessary, or a tool, policy, approval, audit, runtime,
+memory, document, dependency, permission, IPC, UI, persistence, provider, or
+effect boundary would change.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

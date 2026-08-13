@@ -2,9 +2,9 @@
 
 Status: Blocked; draft follow-on, not approved for implementation
 Owner: Project owner
-Last updated: 2026-08-11
-Blocked on: typed workflow contracts, verified orchestration and governance,
-applicable specialist workflows, approval/audit binding, and a fresh review
+Last updated: 2026-08-13
+Blocked on: its own accepted decision, complete Ready plan, exact typed workflow
+contracts and initial family, approval/audit treatment, and a fresh review
 Roadmap:
 [`NATIVE_MULTI_AGENT_ROADMAP.md`](../roadmap/NATIVE_MULTI_AGENT_ROADMAP.md)
 
@@ -56,6 +56,12 @@ restricted execution, and audit.
   or UI through this draft.
 
 ## Required work before Ready
+
+D-089's private D-088 lifecycle/catalog/framing/validation decomposition is
+implemented and independent review clears the exact prior next-increment
+finding. Its final repository checks and deterministic completion marker remain
+the immediate closeout gate. Completion does not activate Workflow Automation
+or authorize execution.
 
 Define one exact schema and workflow family, hard limits, cycle/dependency
 semantics, cancellation and compensation, approval granularity, audit and

@@ -274,7 +274,23 @@ verification passes with `PASS WITH ADVISORIES`. Before another workflow or
 live/tool increment, decompose the large private module/orchestrator internals;
 string and credential guards remain defense-in-depth only. Workflow Automation
 and every live infrastructure, operations, or consequential-action boundary
-remain Blocked. No later owner-approved Ready plan exists.
+remain Blocked.
+
+### Ready prerequisite: private D-088 workflow internals decomposition
+
+**Status:** **Ready; owner-selected under D-089; not Active**. The
+[`2026-08-12-agent-workflow-internals-decomposition.md`](docs/plans/2026-08-12-agent-workflow-internals-decomposition.md)
+plan performs only a behavior-preserving source ownership change: move the
+private D-088 lifecycle out of the `AgentOrchestrator` facade and split the
+immutable catalog, bounded framing, and strict validation/parser code into
+private modules. Public paths, fixtures, validation order, errors, limits,
+events, attribution, cancellation, activation, profiles, and execution
+dispositions remain unchanged. It introduces no general workflow engine or
+Workflow Automation behavior. Begin gate
+`agent-workflow-internals-decomposition` only after its fresh reviews remain
+Ready. Workflow Automation implementation remains Blocked until this
+prerequisite has a valid completion marker and its own later decision and Ready
+plan.
 
 ### Completed negative spike: Hermes ACP
 

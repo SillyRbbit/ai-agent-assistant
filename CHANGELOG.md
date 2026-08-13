@@ -4,6 +4,16 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Implemented D-089's behavior-preserving private workflow-internals
+  decomposition. The D-088 Cloud/Systems lifecycle now resides in one private
+  orchestrator child module, while immutable catalog, bounded framing, and
+  strict parser/validation bodies reside in three private domain modules.
+  Public contracts and behavior remain unchanged. Full `npm run verify`, the
+  362-test all-target Rust suite, and independent review pass with one residual
+  non-blocking module-size advisory. Workflow Automation remains Deferred/
+  Blocked; no engine, tool, approval dispatch, execution, dependency, I/O,
+  IPC/UI, provider, or effect was added.
+
 - Implemented D-088's two separate sealed fixture-only/no-I/O workflows:
   Personal Assistant -> Cloud Infrastructure -> QA & Validation -> Security &
   Risk -> Personal synthesis, and the corresponding Systems Operations

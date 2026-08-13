@@ -673,6 +673,14 @@ QA & Validation and Security & Risk are cross-cutting roles in software,
 infrastructure, operations, document, and automation workflows. Cross-cutting
 participation does not change their advisory, non-authorizing posture.
 
+D-089 decomposes only the private D-088 implementation: the orchestrator facade
+retains task/run/event/cancellation authority, a private child owns the exact
+Cloud/Systems lifecycle, and private catalog/framing/validation children own
+the unchanged fixture and parser bodies. Public contracts, bounds, ordering,
+profiles, and `NotAttempted` execution semantics are unchanged. This clears the
+specific D-088 next-increment review-coupling blocker without selecting a
+general workflow engine.
+
 ### Automation
 
 **Workflow Automation Agent — gated on typed workflows and governance:** may

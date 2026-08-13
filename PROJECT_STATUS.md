@@ -51,6 +51,17 @@ future live/effect path. Durable memory/ARB-005, live research/retrieval,
 providers, repository tools/effects, Workflow Automation, every live
 infrastructure/operations boundary, IPC, UI, and parallelism remain Blocked.
 
+D-089 now selects the exact prerequisite needed to clear D-088's
+next-increment technical-debt finding. Its
+[`ExecPlan`](docs/plans/2026-08-12-agent-workflow-internals-decomposition.md)
+is Ready but not Active and changes only private source ownership: D-088
+lifecycle helpers leave the orchestrator facade, while catalog/framing/strict
+validation move into private submodules. It preserves every public path and
+behavior and adds no workflow engine, automation activation, tool, policy,
+approval, execution, runtime, IPC, or effect. Workflow Automation remains
+Blocked until this prerequisite closes with a valid marker and a fresh
+automation plan passes review.
+
 The Rust core now carries nine exact policy-profile identities from sealed
 definitions through tasks, live execution contexts, delegation, governed tool
 requests, approval, and a bounded volatile audit. The orchestrator alone derives
