@@ -248,6 +248,7 @@ pub enum AgentTaskFailureCode {
     RuntimeEventRejected,
     RuntimeEventLimitExceeded,
     RuntimeOutputInvalid,
+    DeadlineExceeded,
     RuntimeReported(RuntimeFailureCode),
 }
 

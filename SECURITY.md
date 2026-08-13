@@ -40,7 +40,13 @@ Automation-to-Personal proposal lifecycle and a take-once manual bridge from
 complete A-D proposals to those existing sealed selectors. Template E and all
 tool/approval steps remain non-executable. Workflow Automation cannot construct
 trusted identity, create tasks, issue a token, approve, execute, or select a
-destination. A successful terminal native or run-termination resolution
+destination. D-091 adds one further application-only, fixture-only/no-I/O
+bounded-parallel selector. It binds every live event to exact task/run/profile
+identity, orders outcome and cancellation handling by sealed catalog ordinal,
+isolates task memory and cancellation handles, validates strict bounded
+results/synthesis, and quarantines rejected runtime identities until cleanup
+succeeds. Its same-thread retained-run model is neither provider/CPU
+concurrency nor an app-global budget or session boundary. A successful terminal native or run-termination resolution
 cannot leave the initial turn without one typed legacy audit receipt. Agent
 governance reserves one audit slot before downstream mutation and records
 execution only as `NotAttempted`. There is no live provider transport,
@@ -175,6 +181,31 @@ security path.
   proposal lifecycle and adds no policy decision, approval request, executor,
   scheduler, persistence, IPC/UI, provider, external runtime, I/O, credential,
   or device effect.
+- D-091 is application-selected and mutually exclusive with every prior
+  selector. Specialists and Workflow Automation cannot select it, create a
+  child, delegate, or nest a workflow. Its exact limits are depth one, default
+  active two, hard active and total child three, four tasks, five run attempts,
+  zero retries, eight events per run, 32 applicable records, a 120-second root
+  lease, and 60-second child leases capped by the root.
+- Every admitted D-091 child has exact distinct task/run/context/profile/memory
+  attribution and an application cancellation handle. Cross-run, stale, late,
+  terminal, wrong-sequence, or over-cap events fail closed. Task memory remains
+  isolated and terminally cleaned; successful result transfer contains only
+  strict bounded fixture data, never memory or authority.
+- D-091 outcomes are exactly succeeded, failed, cancelled, timed out, or
+  skipped in catalog ordinal order. Explicit `ContinuePartial`,
+  `CancelDependentOnly`, and specialist-lane `FailFast` policy controls sibling
+  and dependent handling. Final synthesis must expose exact source agents,
+  statuses, finding IDs, failures, and unresolved issues.
+- Root cancellation/expiry sweeps active children deterministically before the
+  root/synthesis run. Cancellation failure preserves closed resumable live
+  state, and a rejected returned run remains quarantined until cleanup succeeds;
+  no root terminal may conceal a live rejected run.
+- Cooperative deadlines cannot preempt a synchronous runtime call already in
+  flight. Per-orchestrator limits do not prove provider or app-global capacity,
+  and distinct runtime-run identity does not prove provider-session isolation.
+  The lexical fixture authority-claim filter is defense in depth only and must
+  never authorize a future live/provider/tool/effect path.
 - Governance audit is closed, redacted, volatile, capped at 32 subjects, and
   never authorizes an action.
 - Untrusted content cannot grant permission or change policy.

@@ -97,8 +97,8 @@ this root roadmap remains authoritative.
 | 4. Agent-specific governance                   | Completed | D-084's non-executing per-agent identity, profile, policy, approval, delegation-matrix, and volatile audit foundation; published at `2687294`                          | Preserve the verified boundary                                                                            |
 | 5. Agent-specific memory                       | Completed | D-085's bounded volatile memory, selected `.txt`/`.md` reader, and direct Personal-to-Knowledge task are published at `5e53f55`; durable memory remains separate       | Preserve the verified boundary; ARB-005 still blocks durable storage                                      |
 | 5A. Sequential Research/Knowledge workflow     | Completed | D-086's exact fixture-only Personal-to-Research-to-Knowledge-to-Personal sequence passed its bounded implementation gate and is published at `3efd2c1`                 | Preserve the sealed sequential boundary                                                                   |
-| 6. Bounded parallelism                         | Blocked   | Explicit finite concurrency, deterministic cancellation, ordering, and resource limits                                                                                 | Sequential workflows verified plus the Blocked bounded-parallelism plan                                   |
-| 7. Staged specialist workflows                 | Completed | D-087 Engineering, D-088 Cloud/Systems, and D-090 proposal-only Automation verified; D-089 published at `140f05b`                                                      | Preserve the sealed proposal-only/no-I/O limits; no next plan is Ready                                    |
+| 6. Bounded parallelism                         | Completed | D-091's sealed fixture-only/no-I/O same-thread selector is verified complete with finite limits, cancellation, failure, ordering, and cleanup                          | Preserve the verified boundary; no successor is Ready                                                     |
+| 7. Staged specialist workflows                 | Completed | D-087 Engineering, D-088 Cloud/Systems, and D-090 proposal-only Automation verified; D-089 published at `140f05b`                                                      | Preserve the sealed proposal-only/no-I/O limits; D-091 phase-6 closeout is separate                       |
 | 8. Desktop UI                                  | Blocked   | Typed catalog/task/progress/attribution/cancellation presentation and control through narrow Tauri IPC                                                                 | Stable backend contracts plus the Blocked multi-agent UI plan                                             |
 | 9. End-to-end demonstrations                   | Blocked   | Bounded synthetic or separately approved demonstrations with exact attribution and no overclaiming                                                                     | Selected workflow gates plus the Blocked demonstration plan                                               |
 | 10. Architecture/security review               | Blocked   | Cross-phase ownership, isolation, cancellation, audit, privacy, portability, and rollback review                                                                       | Complete selected evidence plus the Blocked final-review plan                                             |
@@ -172,22 +172,26 @@ Release milestones additionally require `RELEASE_CHECKLIST.md` and
 4. Preserve D-090's exact
    [`2026-08-11-workflow-automation.md`](docs/plans/2026-08-11-workflow-automation.md)
    verified proposal/manual-dispatch boundary. Its complete valid marker and
-   `PASS WITH ADVISORIES` review are final. No next owner-selected Ready plan
-   exists.
-5. Keep bounded parallelism, durable memory/ARB-005, live research/retrieval,
+   `PASS WITH ADVISORIES` review are final.
+5. Treat D-091's exact
+   [`2026-08-11-bounded-agent-parallelism.md`](docs/plans/2026-08-11-bounded-agent-parallelism.md)
+   as verified complete with advisories under its complete, valid gate. Its same-thread fixture
+   proof does not permit a runtime/provider/thread/app-global/general-engine
+   change, and no successor plan is Ready.
+6. Keep durable memory/ARB-005, live research/retrieval,
    executable automation, provider, IPC, UI, every infrastructure/operations tool or live
    access path, repository effects, and device effects Blocked. Runtime tool
    proposals remain rejected and Native remains sole/default.
-6. Do not begin Stage B no-traffic provisioning, Stage C synthetic transport,
+7. Do not begin Stage B no-traffic provisioning, Stage C synthetic transport,
    Stage D real-content activation, or another High remediation automatically.
-7. Later work must collect D-062's exact Microsoft registration and token
+8. Later work must collect D-062's exact Microsoft registration and token
    evidence, D-063's exact Azure deployment evidence, and D-061 provider,
    disclosure, retention, and operational evidence under separate plans.
-8. Keep ARB-003, ARB-004, ARB-005, and ARB-008 blocked until separately
+9. Keep ARB-003, ARB-004, ARB-005, and ARB-008 blocked until separately
    approved capability increments are selected.
-9. Revisit ARB-006 only before public distribution or external contributions,
-   and ARB-007 only before release-candidate or public-distribution work.
-10. Do not add transport, credentials, execution, persistence, enterprise
+10. Revisit ARB-006 only before public distribution or external contributions,
+    and ARB-007 only before release-candidate or public-distribution work.
+11. Do not add transport, credentials, execution, persistence, enterprise
     controls, a license grant, signing, or notarization from this roadmap entry.
 
 Increment 4V is verified complete and published. D-058 and its project-memory
@@ -200,8 +204,9 @@ published-tree marker. D-086's fixture-based sequential workflow is verified
 complete with advisories and published at `3efd2c1`. D-087's fixture-only,
 proposal-only engineering-quality workflow is verified complete with advisories
 and published at `a5d7ba1`. D-088's two separate fixture-only infrastructure
-and systems operations workflows are verified complete with advisories. No
-later owner-approved plan is Ready.
+and systems operations workflows are verified complete with advisories. D-091
+is verified complete with advisories under a complete, valid gate. No later
+owner-approved plan is Ready.
 
 ## Rollback and reprioritization
 

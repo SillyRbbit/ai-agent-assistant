@@ -1,3 +1,10 @@
+use std::{
+    cell::RefCell,
+    collections::{BTreeMap, BTreeSet},
+    fmt,
+    rc::Rc,
+};
+
 use ai_agent_assistant_lib::agent::runtime::{
     AgentRuntime, RuntimeAvailability, RuntimeBoundaryStage, RuntimeCancellationOutcome,
     RuntimeCapabilities, RuntimeCapability, RuntimeDescriptor, RuntimeError,
@@ -17,7 +24,11 @@ pub enum MockMode {
     StartFailuresAt(u8, u8),
     StartFailuresAtThree(u8, u8, u8),
     UnexpectedStartStatusAt(u8, RuntimeRunStatus),
+    ReturnedIdentityMismatchAt(u8),
+    ReturnedIdentityMismatchWithCancelFailureOnceAt(u8),
+    DuplicateLiveIdentityAt(u8),
     CancelFailureAt(u8),
+    CancelFailureOnceAt(u8),
     CancelAlreadyTerminalAt(u8, RuntimeRunStatus),
     EventFailure,
     CapabilityContradiction,
@@ -27,14 +38,17 @@ pub struct MockAgentRuntime {
     mode: MockMode,
     starts: Rc<RefCell<Vec<MockRuntimeStart>>>,
     cancellations: Rc<RefCell<Vec<String>>>,
+    lifecycle: Rc<RefCell<MockRuntimeLifecycle>>,
 }
 
 impl MockAgentRuntime {
+    #[allow(dead_code)] // Not every integration-test crate uses the direct constructor.
     pub fn new(mode: MockMode) -> Self {
         Self {
             mode,
             starts: Rc::new(RefCell::new(Vec::new())),
             cancellations: Rc::new(RefCell::new(Vec::new())),
+            lifecycle: Rc::new(RefCell::new(MockRuntimeLifecycle::default())),
         }
     }
 
@@ -42,15 +56,18 @@ impl MockAgentRuntime {
     pub fn recording(mode: MockMode) -> (Self, MockRuntimeRecorder) {
         let starts = Rc::new(RefCell::new(Vec::new()));
         let cancellations = Rc::new(RefCell::new(Vec::new()));
+        let lifecycle = Rc::new(RefCell::new(MockRuntimeLifecycle::default()));
         (
             Self {
                 mode,
                 starts: Rc::clone(&starts),
                 cancellations: Rc::clone(&cancellations),
+                lifecycle: Rc::clone(&lifecycle),
             },
             MockRuntimeRecorder {
                 starts,
                 cancellations,
+                lifecycle,
             },
         )
     }
@@ -61,6 +78,7 @@ impl MockAgentRuntime {
 pub struct MockRuntimeRecorder {
     starts: Rc<RefCell<Vec<MockRuntimeStart>>>,
     cancellations: Rc<RefCell<Vec<String>>>,
+    lifecycle: Rc<RefCell<MockRuntimeLifecycle>>,
 }
 
 #[allow(dead_code)] // Used by orchestration contracts, not every importing test crate.
@@ -71,6 +89,56 @@ impl MockRuntimeRecorder {
 
     pub fn cancellations(&self) -> Vec<String> {
         self.cancellations.borrow().clone()
+    }
+
+    pub fn live_runs(&self) -> Vec<MockRuntimeRunRecord> {
+        self.lifecycle
+            .borrow()
+            .live_runs
+            .values()
+            .cloned()
+            .collect()
+    }
+
+    pub fn maximum_live_run_count(&self) -> usize {
+        self.lifecycle.borrow().maximum_live_run_count
+    }
+
+    pub fn terminal_dispositions(&self) -> Vec<MockRuntimeRunRecord> {
+        self.lifecycle.borrow().terminal_dispositions.clone()
+    }
+
+    pub fn nonterminal_drops(&self) -> Vec<MockRuntimeRunRecord> {
+        self.lifecycle.borrow().nonterminal_drops.clone()
+    }
+}
+
+#[derive(Default)]
+struct MockRuntimeLifecycle {
+    live_runs: BTreeMap<u8, MockRuntimeRunRecord>,
+    maximum_live_run_count: usize,
+    terminal_dispositions: Vec<MockRuntimeRunRecord>,
+    nonterminal_drops: Vec<MockRuntimeRunRecord>,
+    one_shot_cancel_failures: BTreeSet<u8>,
+    live_identities: BTreeMap<u8, RuntimeRunIdentity>,
+}
+
+#[allow(dead_code)] // Used by bounded-parallelism contracts, not every importing test crate.
+#[derive(Clone, Eq, PartialEq)]
+pub struct MockRuntimeRunRecord {
+    pub start_ordinal: u8,
+    pub run_id: String,
+    pub status: RuntimeRunStatus,
+}
+
+impl fmt::Debug for MockRuntimeRunRecord {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("MockRuntimeRunRecord")
+            .field("start_ordinal", &self.start_ordinal)
+            .field("run_id", &"[REDACTED]")
+            .field("status", &self.status)
+            .finish()
     }
 }
 
@@ -152,22 +220,68 @@ impl AgentRuntime for MockAgentRuntime {
             MockMode::StartFailure => {
                 Err(RuntimeError::BoundaryFailure(RuntimeBoundaryStage::Start))
             }
-            _ => Ok(MockAgentRun {
-                identity: request.identity(),
-                capabilities: self.describe().capabilities(),
-                mode: self.mode,
-                status: match self.mode {
+            _ => {
+                let requested_identity = request.identity();
+                let identity = match self.mode {
+                    MockMode::ReturnedIdentityMismatchAt(ordinal)
+                    | MockMode::ReturnedIdentityMismatchWithCancelFailureOnceAt(ordinal)
+                        if ordinal == start_ordinal =>
+                    {
+                        RuntimeTurnRequest::new(
+                            format!("mock-foreign-run-{start_ordinal}"),
+                            format!("mock-foreign-request-{start_ordinal}"),
+                            "fixture-only returned identity mismatch",
+                        )?
+                        .identity()
+                    }
+                    MockMode::DuplicateLiveIdentityAt(ordinal) if ordinal == start_ordinal => self
+                        .lifecycle
+                        .borrow()
+                        .live_identities
+                        .values()
+                        .next()
+                        .cloned()
+                        .ok_or(RuntimeError::BoundaryFailure(RuntimeBoundaryStage::Start))?,
+                    _ => requested_identity,
+                };
+                let status = match self.mode {
                     MockMode::UnexpectedStartStatusAt(ordinal, status)
                         if ordinal == start_ordinal =>
                     {
                         status
                     }
                     _ => RuntimeRunStatus::AwaitingStart,
-                },
-                next_sequence: 0,
-                start_ordinal,
-                cancellations: Rc::clone(&self.cancellations),
-            }),
+                };
+                let tracked_live = !status.is_terminal();
+                if tracked_live {
+                    let mut lifecycle = self.lifecycle.borrow_mut();
+                    lifecycle
+                        .live_identities
+                        .insert(start_ordinal, identity.clone());
+                    lifecycle.live_runs.insert(
+                        start_ordinal,
+                        MockRuntimeRunRecord {
+                            start_ordinal,
+                            run_id: identity.run_id().as_str().to_owned(),
+                            status,
+                        },
+                    );
+                    lifecycle.maximum_live_run_count = lifecycle
+                        .maximum_live_run_count
+                        .max(lifecycle.live_runs.len());
+                }
+                Ok(MockAgentRun {
+                    identity,
+                    capabilities: self.describe().capabilities(),
+                    mode: self.mode,
+                    status,
+                    next_sequence: 0,
+                    start_ordinal,
+                    cancellations: Rc::clone(&self.cancellations),
+                    lifecycle: Rc::clone(&self.lifecycle),
+                    tracked_live,
+                })
+            }
         }
     }
 }
@@ -180,6 +294,49 @@ pub struct MockAgentRun {
     next_sequence: u32,
     start_ordinal: u8,
     cancellations: Rc<RefCell<Vec<String>>>,
+    lifecycle: Rc<RefCell<MockRuntimeLifecycle>>,
+    tracked_live: bool,
+}
+
+impl MockAgentRun {
+    fn update_status(&mut self, status: RuntimeRunStatus) {
+        self.status = status;
+        if !self.tracked_live {
+            return;
+        }
+
+        let mut lifecycle = self.lifecycle.borrow_mut();
+        if status.is_terminal() {
+            lifecycle.live_identities.remove(&self.start_ordinal);
+            if let Some(mut record) = lifecycle.live_runs.remove(&self.start_ordinal) {
+                record.status = status;
+                lifecycle.terminal_dispositions.push(record);
+            }
+            self.tracked_live = false;
+        } else if let Some(record) = lifecycle.live_runs.get_mut(&self.start_ordinal) {
+            record.status = status;
+        }
+    }
+}
+
+impl Drop for MockAgentRun {
+    fn drop(&mut self) {
+        if !self.tracked_live {
+            return;
+        }
+
+        let mut lifecycle = self.lifecycle.borrow_mut();
+        lifecycle.live_identities.remove(&self.start_ordinal);
+        if let Some(mut record) = lifecycle.live_runs.remove(&self.start_ordinal) {
+            record.status = self.status;
+            if self.status.is_terminal() {
+                lifecycle.terminal_dispositions.push(record);
+            } else {
+                lifecycle.nonterminal_drops.push(record);
+            }
+        }
+        self.tracked_live = false;
+    }
 }
 
 impl RuntimeRun for MockAgentRun {
@@ -217,7 +374,7 @@ impl RuntimeRun for MockAgentRun {
             ));
         }
         if self.mode == MockMode::EventFailure && sequence == 1 {
-            self.status = RuntimeRunStatus::Failed;
+            self.update_status(RuntimeRunStatus::Failed);
             return Err(RuntimeError::BoundaryFailure(
                 RuntimeBoundaryStage::EventAcceptance,
             ));
@@ -227,13 +384,13 @@ impl RuntimeRun for MockAgentRun {
             UntrustedRuntimeEvent::ResponseStarted { response_id }
                 if self.status == RuntimeRunStatus::AwaitingStart =>
             {
-                self.status = RuntimeRunStatus::Streaming;
+                self.update_status(RuntimeRunStatus::Streaming);
                 RuntimeEventAcceptance::ResponseStarted { response_id }
             }
             UntrustedRuntimeEvent::OutputTextDelta { .. }
                 if !self.capabilities.supports(RuntimeCapability::StreamingText) =>
             {
-                self.status = RuntimeRunStatus::Failed;
+                self.update_status(RuntimeRunStatus::Failed);
                 return Err(RuntimeError::CapabilityUnavailable(
                     RuntimeCapability::StreamingText,
                 ));
@@ -248,7 +405,7 @@ impl RuntimeRun for MockAgentRun {
                     .capabilities
                     .supports(RuntimeCapability::UntrustedToolProposals) =>
             {
-                self.status = RuntimeRunStatus::Failed;
+                self.update_status(RuntimeRunStatus::Failed);
                 return Err(RuntimeError::CapabilityUnavailable(
                     RuntimeCapability::UntrustedToolProposals,
                 ));
@@ -261,13 +418,13 @@ impl RuntimeRun for MockAgentRun {
             UntrustedRuntimeEvent::ResponseCompleted
                 if self.status == RuntimeRunStatus::Streaming =>
             {
-                self.status = RuntimeRunStatus::Completed;
+                self.update_status(RuntimeRunStatus::Completed);
                 RuntimeEventAcceptance::ResponseCompleted
             }
             UntrustedRuntimeEvent::ResponseFailed { failure }
                 if self.status == RuntimeRunStatus::Streaming =>
             {
-                self.status = RuntimeRunStatus::Failed;
+                self.update_status(RuntimeRunStatus::Failed);
                 RuntimeEventAcceptance::ResponseFailed { failure }
             }
             _ => {
@@ -288,9 +445,25 @@ impl RuntimeRun for MockAgentRun {
                 RuntimeBoundaryStage::Cancellation,
             ));
         }
+        if matches!(
+            self.mode,
+            MockMode::CancelFailureOnceAt(ordinal)
+                | MockMode::ReturnedIdentityMismatchWithCancelFailureOnceAt(ordinal)
+                if ordinal == self.start_ordinal
+        ) && !self.status.is_terminal()
+            && self
+                .lifecycle
+                .borrow_mut()
+                .one_shot_cancel_failures
+                .insert(self.start_ordinal)
+        {
+            return Err(RuntimeError::BoundaryFailure(
+                RuntimeBoundaryStage::Cancellation,
+            ));
+        }
         if let MockMode::CancelAlreadyTerminalAt(ordinal, status) = self.mode {
             if ordinal == self.start_ordinal && !self.status.is_terminal() {
-                self.status = status;
+                self.update_status(status);
                 return Ok(RuntimeCancellationOutcome::AlreadyTerminal(status));
             }
         }
@@ -300,9 +473,8 @@ impl RuntimeRun for MockAgentRun {
             self.cancellations
                 .borrow_mut()
                 .push(self.identity.run_id().as_str().to_owned());
-            self.status = RuntimeRunStatus::Cancelled;
+            self.update_status(RuntimeRunStatus::Cancelled);
             Ok(RuntimeCancellationOutcome::Cancelled)
         }
     }
 }
-use std::{cell::RefCell, fmt, rc::Rc};

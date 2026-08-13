@@ -206,6 +206,7 @@ flowchart TD
     Orchestrator --> Engineering["Implemented sealed fixture workflow<br/>Coding then QA then Security siblings"]
     Orchestrator --> Operations["Implemented separate sealed fixture workflows<br/>Cloud or Systems then QA then Security"]
     Orchestrator --> Automation["Implemented sealed proposal lifecycle<br/>Workflow Automation"]
+    Orchestrator --> Parallel["Implemented sealed bounded-parallel selector<br/>same-thread event multiplexing"]
     Orchestrator --> Runtime["AgentRuntime<br/>implemented one-run boundary"]
     Runtime --> Native["NativeAgentRuntime<br/>sole/default; implemented and unwired"]
 ```
@@ -315,6 +316,33 @@ proposal sequence and take-once A-D dispatch token are separate sealed
 selectors. Template E, every tool/approval step, and every later automation
 workflow remain non-executable. All workflow arrows mean orchestrator-controlled
 sequencing at depth one, never specialist spawning.
+
+D-091 adds one mutually exclusive `BoundedParallel` selector with three sealed
+fixture-only/no-I/O graphs. It may retain multiple independent specialist
+`RuntimeRun` values and accept their events by exact task/run identity on one
+application thread. Stable catalog ordinals determine admission, dependency
+transfer, cancellation order, outcome projection, and Personal synthesis;
+completion timing never does. The exact bounds are depth one, default active
+two, hard active and total specialist children three, four tasks, five run
+attempts, zero automatic retries, eight events per run, 32 records per
+applicable runtime/generic/workflow/audit family, a 120-second root lease, and
+60-second child leases capped by the root deadline.
+
+Every admitted child has separate task, execution context, runtime-run,
+cancellation handle, output, policy/memory attribution, and task-memory state.
+Root cancellation and expiry sweep active children in ordinal order; incomplete
+cancellation remains closed and resumable, and rejected run identities stay
+quarantined until cleanup succeeds. `ContinuePartial`, `CancelDependentOnly`,
+and specialist-lane `FailFast` are application-selected policies. Public slots
+remain exactly succeeded, failed, cancelled, timed out, or skipped, and final
+synthesis must disclose source agents, statuses, finding IDs, failures, and
+unresolved issues.
+
+This is an unwired cooperative orchestration proof, not simultaneous CPU or
+provider work. There is no app-global capacity coordinator, provider session
+registry, hard preemption, worker, scheduler, durable queue, or general graph
+engine. Runtime traits and Native remain unchanged, and all prior selectors
+keep their one-active-child semantics.
 
 #### Per-agent governance foundation
 

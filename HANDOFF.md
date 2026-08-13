@@ -2,37 +2,60 @@
 
 Last updated: 2026-08-13
 
-## Current D-090 verified checkpoint
+## Current D-091 verified completion checkpoint
 
-Gate `agent-workflow-automation-proposals` is complete and valid. D-090 source and tests are
-implemented for the exact strict Personal -> Workflow Automation -> Personal
-proposal lifecycle, five immutable templates, A-D-only expiring take-once
-manual dispatch to existing fixture-only/no-I/O selectors in a fresh
-orchestrator, and proposal-only template E. Workflow Automation is `Initial`
-only for this selector; its generic route remains denied, tool profile remains
-empty, and memory remains disabled. Tool and approval steps are recognized and
-validated but never executable, and no approval request is created.
+Gate `agent-bounded-parallelism` is complete and valid. D-091 is verified
+complete with advisories for one
+sealed fixture-only/no-I/O `BoundedParallel` selector. It retains multiple
+independent depth-one specialist runs and accepts their events through exact
+task/run-addressed same-thread multiplexing; it adds no thread, async executor,
+provider concurrency, scheduler, distributed queue, or general workflow engine.
 
-Final source evidence is current: focused Workflow Automation tests pass 12/12,
-the public contract passes 18/18, strict all-target/all-feature Clippy passes,
-all-target Rust passes 393 tests with one intentionally ignored opt-in Hermes
-probe, and `npm run verify` passes with 124 frontend and 208 Rust library tests,
-all integration contracts, and frontend and Tauri release builds. Independent
-architecture, security, and code review is `PASS WITH ADVISORIES` with no
-blocker. Final documentation, repository, security, diff, session-end, and
-deterministic marker checks pass. No next owner-selected Ready plan exists, so
-next-increment readiness is `Blocked`.
+The three immutable scenarios are Research+Knowledge under `ContinuePartial`;
+Coding+Security followed by dependent QA under `CancelDependentOnly`; and
+Cloud+Systems followed by dependent Security under specialist-lane `FailFast`.
+All slots project `Succeeded`, `Failed`, `Cancelled`, `TimedOut`, or `Skipped`
+in catalog ordinal order. Personal synthesis must preserve exact source agents,
+statuses, finding IDs, failures, and unresolved issues. Root/child cancellation,
+cooperative deadlines, rejected-run quarantine, memory cleanup, and content-
+free attribution are deterministic and resumable.
+
+Exact bounds remain depth one, default active two, hard active and total child
+three, four tasks, five run attempts, zero automatic retries, eight events per
+run, 32 runtime/generic/workflow/audit records, a 120-second root lease, and
+60-second admitted-child leases. No runtime trait, Native implementation,
+provider, tool, policy permission, approval dispatch, persistence, I/O, IPC/UI,
+remote worker, or device effect changed.
+
+Implementation evidence passes: focused bounded-parallel library 41/41, public
+D-091 contract 41/41, Rust formatting, strict all-target/all-feature Clippy,
+481 all-target Rust tests with zero failures and one intentionally ignored
+opt-in Hermes probe, and complete `npm run verify` with 124 frontend and 249
+passed Rust library tests plus one intentionally ignored probe, integration,
+and release builds. Independent code,
+architecture, and security review is `PASS WITH ADVISORIES` with no completion
+blocker. Final documentation, repository, security, diff, and session-end
+checks pass after Prettier corrected only `ROADMAP.md` and the native roadmap.
+Deterministic finalization completed and status reports `complete`, `valid:
+true`, and `PASS WITH ADVISORIES`.
+
+The final quality result is `PASS WITH ADVISORIES`. Current advisories are
+same-thread/cooperative/per-orchestrator scope, the 5,188-line private
+lifecycle, six unused public error variants, the lexical fixture-claim filter's
+non-authorizing status, and the unchanged pre-existing legacy
+`start_runtime_run` cancellation-error drop risk. No owner-selected next plan
+exists, so next-increment readiness is `Blocked`.
 
 Exact resume prompt: "Read `AGENTS.md`, the required project-memory chain,
-D-090, `docs/plans/2026-08-11-workflow-automation.md`,
-`docs/increments/agent-workflow-automation-proposals.md`, and
-`docs/reviews/2026-08-13-agent-workflow-automation-proposals-post-increment-review.md`.
-Confirm the D-090 marker reports `status: complete` and `valid: true`, reconcile
-the working tree with this handoff, and preserve the settled `PASS WITH
-ADVISORIES` reviews. Do not begin another increment: no next owner-selected
-Ready plan exists. Keep tool execution, approval dispatch, template E
-execution, scheduling, persistence, UI/IPC, providers, and effects deferred.
-Do not commit or push without separate owner authorization."
+D-091, `docs/plans/2026-08-11-bounded-agent-parallelism.md`,
+`docs/increments/agent-bounded-parallelism.md`, and
+`docs/reviews/2026-08-13-agent-bounded-parallelism-post-increment-review.md`.
+Confirm the `agent-bounded-parallelism` marker remains `complete`, `valid:
+true`, and `PASS WITH ADVISORIES`, and reconcile the documented 30-path D-091
+change set. Stop because no next increment is owner-selected or Ready. Do not
+infer provider/thread/app-global concurrency, hard preemption, a general
+engine, tool/effect, IPC/UI, scheduling, or distributed infrastructure. Do not
+commit or push without separate owner authorization."
 
 ## Current state
 

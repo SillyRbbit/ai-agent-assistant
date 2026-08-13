@@ -4,6 +4,21 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Implemented D-091's sealed fixture-only/no-I/O bounded-parallel selector.
+  `AgentOrchestrator` may retain at most three independent depth-one specialist
+  runs and multiplex exact task/run-addressed events on one application thread.
+  Three immutable scenarios use explicit `ContinuePartial`,
+  `CancelDependentOnly`, or specialist-lane `FailFast` policy, stable catalog-
+  ordinal results, truthful Personal synthesis, cooperative deadlines,
+  resumable cancellation, rejected-run quarantine, isolated task memory, and
+  content-free attribution. Focused library and public contracts pass 41/41
+  each; strict Clippy, formatting, 481 all-target Rust tests with one ignored,
+  and `npm run verify` pass. Independent code, architecture, and security
+  review is `PASS WITH ADVISORIES`; final post-documentation checks pass and
+  the deterministic marker is complete and valid. No runtime trait, Native implementation,
+  thread/provider concurrency, general engine, tool/effect, persistence, I/O,
+  IPC/UI, scheduler, remote worker, or distributed infrastructure was added.
+
 - Implemented D-090's strict fixture-only Workflow Automation proposal
   boundary. One sealed Personal -> Workflow Automation -> Personal lifecycle
   validates five immutable typed templates; complete A-D proposals alone can

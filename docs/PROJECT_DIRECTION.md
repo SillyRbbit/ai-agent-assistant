@@ -215,6 +215,18 @@ approval step remain non-executable. The cooperative deadline is not hard
 preemption. No general engine, scheduling, persistence, executor, approval
 dispatch, provider, IPC/UI, external runtime, I/O, or effect is added.
 
+D-091 implements one sealed fixture-only/no-I/O bounded-parallel selector.
+`AgentOrchestrator` may retain multiple independent depth-one specialist runs
+and accept exact task/run-addressed events on one application thread. Three
+immutable scenarios use explicit `ContinuePartial`, `CancelDependentOnly`, or
+specialist-lane `FailFast`; catalog ordinals control dependency transfer,
+cancellation, outcome order, and truthful Personal synthesis. Bounds remain
+default active two, hard active and total child three, four tasks, five run
+attempts, zero retries, eight events per run, 32 applicable records, and
+cooperative 120-second root/60-second child leases. This is not provider or CPU
+concurrency, hard preemption, provider-session isolation, app-global capacity,
+a scheduler, or a general engine. Runtime traits and Native remain unchanged.
+
 `AgentOrchestrator`, `AgentRuntime`, `NativeAgentRuntime`, `AgentRegistry`,
 `ToolRegistry`, `PolicyEngine`, `ApprovalManager`, `AuditLogger`, `MemoryStore`,
 and `PlatformAdapter` remain application-owned authorities. The workflow-local

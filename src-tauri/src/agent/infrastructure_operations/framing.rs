@@ -257,6 +257,7 @@ fn push_failure_code(
         | AgentTaskFailureCode::RuntimeStateMismatch
         | AgentTaskFailureCode::RuntimeEventRejected
         | AgentTaskFailureCode::RuntimeEventLimitExceeded
+        | AgentTaskFailureCode::DeadlineExceeded
         | AgentTaskFailureCode::RuntimeReported(_) => unavailable,
     };
     push_unique_code(codes, value);

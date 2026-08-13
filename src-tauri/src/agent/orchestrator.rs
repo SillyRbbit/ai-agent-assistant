@@ -5,6 +5,7 @@
 //! not a provider, policy engine, approval manager, tool executor, audit log,
 //! memory store, scheduler, or UI boundary.
 
+mod bounded_parallel_workflow;
 mod infrastructure_operations_workflow;
 mod workflow_automation_dispatch;
 mod workflow_automation_proposal;
@@ -18,6 +19,7 @@ use std::{
 
 use thiserror::Error;
 
+use super::bounded_parallelism::BoundedParallelError;
 use super::definition::{AgentActivation, AgentId};
 use super::engineering_quality::{
     ChangeProposalQuality, CodingStageOutcome, EngineeringCapabilityAuditDisposition,
@@ -94,6 +96,7 @@ use crate::memory::{
     MemoryStoreError, MemoryWriteTarget, SharedMemoryProposalId, SharedMemoryProposalView,
     SharedMemoryReviewDecision, SharedMemoryReviewReceipt,
 };
+use bounded_parallel_workflow::BoundedParallelWorkflowState;
 use workflow_automation_proposal::WorkflowAutomationWorkflowState;
 
 #[cfg(target_os = "macos")]
@@ -132,6 +135,7 @@ pub enum AgentWorkflowSelection {
     CloudInfrastructure,
     SystemsOperations,
     WorkflowAutomation,
+    BoundedParallel,
 }
 
 static NEXT_WORKFLOW_SEQUENCE: AtomicU64 = AtomicU64::new(1);
@@ -794,6 +798,7 @@ pub struct AgentOrchestrator<R: AgentRuntime> {
     governance: AgentGovernanceService,
     tasks: BTreeMap<AgentTaskId, AgentTask>,
     runs: BTreeMap<AgentTaskId, ActiveRun<R::Run>>,
+    rejected_runtime_runs: Vec<R::Run>,
     root_task_id: Option<AgentTaskId>,
     active_child_task_id: Option<AgentTaskId>,
     child_outcome: Option<AgentTaskOutcome>,
@@ -810,6 +815,7 @@ pub struct AgentOrchestrator<R: AgentRuntime> {
     engineering_quality: Option<EngineeringQualityWorkflowState>,
     infrastructure_operations: Option<InfrastructureOperationsWorkflowState>,
     workflow_automation: Option<WorkflowAutomationWorkflowState>,
+    bounded_parallel: Option<BoundedParallelWorkflowState>,
     workflow_clock: workflow_automation_dispatch::WorkflowClock,
     manual_workflow_dispatch: Option<workflow_automation_dispatch::ManualWorkflowDispatchState>,
     selected_workflow: Option<AgentWorkflowSelection>,
@@ -851,6 +857,7 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             governance: AgentGovernanceService::built_in()?,
             tasks: BTreeMap::new(),
             runs: BTreeMap::new(),
+            rejected_runtime_runs: Vec::new(),
             root_task_id: None,
             active_child_task_id: None,
             child_outcome: None,
@@ -867,6 +874,7 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             engineering_quality: None,
             infrastructure_operations: None,
             workflow_automation: None,
+            bounded_parallel: None,
             workflow_clock: workflow_automation_dispatch::system_workflow_clock(),
             manual_workflow_dispatch: None,
             selected_workflow: None,
@@ -929,6 +937,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         target: MemoryWriteTarget,
         content: MemoryContent,
     ) -> AgentOrchestratorResult<MemoryRecordView> {
+        if self.bounded_parallel_tracks_task(context.task_id()) {
+            self.enforce_bounded_parallel_deadline_before_ingress(context.task_id())?;
+        }
         let attribution = self.live_attribution(context)?;
         let grant =
             MemoryAccessGrant::from_live_attribution(attribution, LiveMemoryAccessProof(()));
@@ -942,6 +953,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         context: &AgentExecutionContext,
         record_id: &MemoryRecordId,
     ) -> AgentOrchestratorResult<MemoryRecordView> {
+        if self.bounded_parallel_tracks_task(context.task_id()) {
+            self.ensure_bounded_parallel_lease_live_for_read(context.task_id())?;
+        }
         let attribution = self.live_attribution(context)?;
         let grant =
             MemoryAccessGrant::from_live_attribution(attribution, LiveMemoryAccessProof(()));
@@ -955,6 +969,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         context: &AgentExecutionContext,
         selection: &MemoryContextSelection,
     ) -> AgentOrchestratorResult<MemoryContextBundle> {
+        if self.bounded_parallel_tracks_task(context.task_id()) {
+            self.ensure_bounded_parallel_lease_live_for_read(context.task_id())?;
+        }
         let attribution = self.live_attribution(context)?;
         let grant =
             MemoryAccessGrant::from_live_attribution(attribution, LiveMemoryAccessProof(()));
@@ -968,6 +985,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         context: &AgentExecutionContext,
         content: MemoryContent,
     ) -> AgentOrchestratorResult<SharedMemoryProposalView> {
+        if self.bounded_parallel_tracks_task(context.task_id()) {
+            return Err(AgentOrchestratorError::BoundedParallelAuthorityDenied);
+        }
         let attribution = self.live_attribution(context)?;
         let grant =
             MemoryAccessGrant::from_live_attribution(attribution, LiveMemoryAccessProof(()));
@@ -1007,6 +1027,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         proposal_id: &SharedMemoryProposalId,
         expected_version: MemoryRecordVersion,
     ) -> AgentOrchestratorResult<()> {
+        if self.bounded_parallel_tracks_task(context.task_id()) {
+            return Err(AgentOrchestratorError::BoundedParallelAuthorityDenied);
+        }
         let attribution = self.live_attribution(context)?;
         let grant =
             MemoryAccessGrant::from_live_attribution(attribution, LiveMemoryAccessProof(()));
@@ -1021,6 +1044,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         record_id: &MemoryRecordId,
         expected_version: MemoryRecordVersion,
     ) -> AgentOrchestratorResult<()> {
+        if self.bounded_parallel_tracks_task(context.task_id()) {
+            self.enforce_bounded_parallel_deadline_before_ingress(context.task_id())?;
+        }
         let attribution = self.live_attribution(context)?;
         let grant =
             MemoryAccessGrant::from_live_attribution(attribution, LiveMemoryAccessProof(()));
@@ -1059,6 +1085,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         source: ApprovedDocumentSource,
         path: impl AsRef<Path>,
     ) -> AgentOrchestratorResult<ApprovedDocumentId> {
+        if self.bounded_parallel_tracks_task(context.task_id()) {
+            return Err(AgentOrchestratorError::BoundedParallelAuthorityDenied);
+        }
         let attribution = self.live_personal_root_attribution(context)?;
         self.documents
             .register_document(
@@ -1075,6 +1104,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         context: &AgentExecutionContext,
         path: impl AsRef<Path>,
     ) -> AgentOrchestratorResult<ApprovedRootId> {
+        if self.bounded_parallel_tracks_task(context.task_id()) {
+            return Err(AgentOrchestratorError::BoundedParallelAuthorityDenied);
+        }
         let attribution = self.live_personal_root_attribution(context)?;
         self.documents
             .register_root(
@@ -1091,6 +1123,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         root_id: &ApprovedRootId,
         relative_path: ApprovedRelativePath,
     ) -> AgentOrchestratorResult<ApprovedDocumentId> {
+        if self.bounded_parallel_tracks_task(context.task_id()) {
+            return Err(AgentOrchestratorError::BoundedParallelAuthorityDenied);
+        }
         let attribution = self.live_personal_root_attribution(context)?;
         self.documents
             .register_root_member(
@@ -1116,6 +1151,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         source_context: &AgentExecutionContext,
         proposal: DelegationProposal,
     ) -> AgentOrchestratorResult<DelegationAcceptance> {
+        if self.bounded_parallel_tracks_task(source_context.task_id()) {
+            return Err(AgentOrchestratorError::BoundedParallelAuthorityDenied);
+        }
         let attribution = self.live_attribution(source_context)?;
         if attribution.agent_id() != AgentId::PersonalAssistant {
             return Err(AgentOrchestratorError::UnauthorizedSource {
@@ -1522,6 +1560,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         operation: DocumentOperation,
         memory_selection: Option<MemoryContextSelection>,
     ) -> AgentOrchestratorResult<AgentExecutionContext> {
+        if self.bounded_parallel_tracks_task(source_context.task_id()) {
+            return Err(AgentOrchestratorError::BoundedParallelAuthorityDenied);
+        }
         self.ensure_workflow_selection_available(AgentWorkflowSelection::ApprovedDocument, true)?;
         let attribution = self.live_attribution(source_context)?;
         self.validate_document_task_after_attribution(source_context, &attribution)?;
@@ -1976,6 +2017,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         context: &AgentExecutionContext,
         proposal: AgentToolProposal,
     ) -> AgentOrchestratorResult<AgentToolGovernanceOutcome> {
+        if self.bounded_parallel_tracks_task(context.task_id()) {
+            return Err(AgentOrchestratorError::BoundedParallelAuthorityDenied);
+        }
         let attribution = self.live_attribution(context)?;
         self.governance
             .evaluate_tool(attribution, proposal)
@@ -1986,6 +2030,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         &mut self,
         task_id: &AgentTaskId,
     ) -> AgentOrchestratorResult<Option<ApprovalRequestView<'_>>> {
+        if self.bounded_parallel_tracks_task(task_id) {
+            return Err(AgentOrchestratorError::BoundedParallelAuthorityDenied);
+        }
         if !self.governance.has_pending_for_task(task_id) {
             return Ok(None);
         }
@@ -2001,6 +2048,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         &mut self,
         context: &AgentExecutionContext,
     ) -> AgentOrchestratorResult<ApprovalPresentation> {
+        if self.bounded_parallel_tracks_task(context.task_id()) {
+            return Err(AgentOrchestratorError::BoundedParallelAuthorityDenied);
+        }
         let attribution = self.live_attribution(context)?;
         self.governance
             .issue_presentation(&attribution)
@@ -2013,6 +2063,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         context: &AgentExecutionContext,
         outcome: TrustedApprovalSourceOutcome,
     ) -> AgentOrchestratorResult<AgentApprovalGovernanceOutcome> {
+        if self.bounded_parallel_tracks_task(context.task_id()) {
+            return Err(AgentOrchestratorError::BoundedParallelAuthorityDenied);
+        }
         let attribution = self.live_attribution(context)?;
         self.governance
             .resolve_source_outcome(&attribution, outcome)
@@ -2023,6 +2076,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         &mut self,
         context: &AgentExecutionContext,
     ) -> AgentOrchestratorResult<Option<AgentApprovalGovernanceOutcome>> {
+        if self.bounded_parallel_tracks_task(context.task_id()) {
+            return Err(AgentOrchestratorError::BoundedParallelAuthorityDenied);
+        }
         let attribution = self.live_attribution(context)?;
         self.governance
             .expire_due(&attribution)
@@ -2064,6 +2120,7 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
                 ));
             }
         }
+        self.enforce_bounded_parallel_deadline_before_ingress(task_id)?;
         let attribution = {
             let task = self
                 .tasks
@@ -2088,6 +2145,13 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         self.preflight_engineering_event_capacity(task_id, &event)?;
         self.preflight_infrastructure_operations_event_capacity(task_id, &event)?;
         self.preflight_workflow_automation_event_capacity(task_id, &event)?;
+        if let Err(error) = self.preflight_bounded_parallel_event_capacity(task_id, &event) {
+            if matches!(error, AgentOrchestratorError::OutputLimitExceeded) {
+                self.fail_active_task(task_id, AgentTaskFailureCode::RuntimeOutputInvalid)?;
+            }
+            return Err(error);
+        }
+        let prepared_bounded_parallel = self.prepare_bounded_parallel_terminal(task_id, &event)?;
         let prepared_workflow_automation =
             self.prepare_workflow_automation_terminal(task_id, &event)?;
         let prepared_infrastructure =
@@ -2124,6 +2188,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             if self.workflow_automation.is_some() {
                 self.enforce_workflow_automation_deadline_before_ingress()?;
             }
+            if self.bounded_parallel.is_some() {
+                self.enforce_bounded_parallel_deadline_before_ingress(task_id)?;
+            }
         }
 
         let result = {
@@ -2155,6 +2222,7 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         self.record_engineering_event_acceptance(task_id);
         self.record_infrastructure_operations_event_acceptance(task_id);
         self.record_workflow_automation_event_acceptance(task_id);
+        self.record_bounded_parallel_event_acceptance(task_id, &accepted)?;
 
         match &accepted {
             RuntimeEventAcceptance::ResponseStarted { .. } => {}
@@ -2165,7 +2233,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
                 }
             }
             RuntimeEventAcceptance::ResponseCompleted => {
-                if let Some(prepared) = prepared_workflow_automation {
+                if let Some(prepared) = prepared_bounded_parallel {
+                    self.apply_prepared_bounded_parallel_terminal(task_id, prepared)?;
+                } else if let Some(prepared) = prepared_workflow_automation {
                     let prior = self.workflow_automation_continuation_failure();
                     if let Err(error) =
                         self.apply_prepared_workflow_automation_terminal(task_id, prepared)
@@ -2212,7 +2282,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
                 }
             }
             RuntimeEventAcceptance::ResponseFailed { failure } => {
-                if let Some(prepared) = prepared_workflow_automation {
+                if let Some(prepared) = prepared_bounded_parallel {
+                    self.apply_prepared_bounded_parallel_terminal(task_id, prepared)?;
+                } else if let Some(prepared) = prepared_workflow_automation {
                     let prior = self.workflow_automation_continuation_failure();
                     if let Err(error) =
                         self.apply_prepared_workflow_automation_terminal(task_id, prepared)
@@ -3915,6 +3987,14 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
     ) -> AgentOrchestratorResult<AgentTaskCancellationOutcome> {
         self.enforce_manual_workflow_deadline_before_ingress()?;
         self.enforce_workflow_automation_deadline_before_ingress()?;
+        if self.bounded_parallel.is_some() {
+            let is_root = self.root_task_id.as_ref() == Some(task_id);
+            if !is_root || !self.bounded_parallel_cancellation_pending() {
+                self.enforce_bounded_parallel_deadline_before_ingress(task_id)?;
+            } else {
+                self.enforce_bounded_parallel_root_cancel_deadline_precedence()?;
+            }
+        }
         let task = self
             .tasks
             .get(task_id)
@@ -3932,6 +4012,46 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             self.refresh_manual_workflow_dispatch()?;
         }
         outcome
+    }
+
+    /// Retries cancellation of runtime runs that were rejected before they
+    /// could be bound to a trusted task identity.
+    ///
+    /// A rejected run is retained only when its runtime adapter refuses the
+    /// first cancellation attempt. No task, context, event, or workflow
+    /// transition is created for it, and no new run may start while cleanup is
+    /// pending.
+    pub fn retry_rejected_runtime_cleanup(&mut self) -> AgentOrchestratorResult<()> {
+        self.cleanup_rejected_runtime_runs()?;
+        if self.bounded_parallel_rejected_cleanup_pending() {
+            self.resume_bounded_parallel_cancellation()?;
+        }
+        Ok(())
+    }
+
+    fn cleanup_rejected_runtime_runs(&mut self) -> AgentOrchestratorResult<()> {
+        let pending = std::mem::take(&mut self.rejected_runtime_runs);
+        let mut retained = Vec::new();
+        for mut run in pending {
+            if run.status().is_terminal() {
+                continue;
+            }
+            match run.cancel() {
+                Ok(RuntimeCancellationOutcome::Cancelled)
+                | Ok(RuntimeCancellationOutcome::AlreadyTerminal(
+                    RuntimeRunStatus::Completed
+                    | RuntimeRunStatus::Failed
+                    | RuntimeRunStatus::Cancelled,
+                )) => {}
+                Ok(RuntimeCancellationOutcome::AlreadyTerminal(_)) | Err(_) => retained.push(run),
+            }
+        }
+        self.rejected_runtime_runs = retained;
+        if self.rejected_runtime_runs.is_empty() {
+            Ok(())
+        } else {
+            Err(AgentOrchestratorError::RuntimeCleanupPending)
+        }
     }
 
     #[must_use]
@@ -4800,6 +4920,13 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
     }
 
     fn complete_active_task(&mut self, task_id: &AgentTaskId) -> AgentOrchestratorResult<()> {
+        if self.bounded_parallel.as_ref().is_some_and(|workflow| {
+            self.root_task_id
+                .as_ref()
+                .is_some_and(|root| workflow.tracks(root, task_id))
+        }) {
+            return Err(AgentOrchestratorError::BoundedParallelStageMismatch);
+        }
         if self.workflow_automation.as_ref().is_some_and(|workflow| {
             self.root_task_id
                 .as_ref()
@@ -4878,6 +5005,13 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         task_id: &AgentTaskId,
         code: AgentTaskFailureCode,
     ) -> AgentOrchestratorResult<()> {
+        if self.bounded_parallel.as_ref().is_some_and(|workflow| {
+            self.root_task_id
+                .as_ref()
+                .is_some_and(|root| workflow.tracks(root, task_id))
+        }) {
+            return self.fail_bounded_parallel_task(task_id, code);
+        }
         if self.workflow_automation.as_ref().is_some_and(|workflow| {
             self.root_task_id
                 .as_ref()
@@ -5140,6 +5274,9 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         &mut self,
         root_task_id: &AgentTaskId,
     ) -> AgentOrchestratorResult<AgentTaskCancellationOutcome> {
+        if self.selected_workflow == Some(AgentWorkflowSelection::BoundedParallel) {
+            return self.cancel_bounded_parallel_root(root_task_id);
+        }
         let workflow_automation_cancel_stage = self.workflow_automation_root_cancellation_stage();
         self.preflight_workflow_automation_root_cancellation(workflow_automation_cancel_stage)?;
         let infrastructure_cancel_stage = self.infrastructure_root_cancel_stage();
@@ -5273,6 +5410,14 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         child_task_id: &AgentTaskId,
         root_is_cancelling: bool,
     ) -> AgentOrchestratorResult<AgentTaskCancellationOutcome> {
+        if self
+            .bounded_parallel
+            .as_ref()
+            .and_then(|workflow| workflow.ordinal_for_task(child_task_id))
+            .is_some()
+        {
+            return Err(AgentOrchestratorError::BoundedParallelCancellationHandleMismatch);
+        }
         if self
             .workflow_automation
             .as_ref()
@@ -5652,6 +5797,16 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         &mut self,
         task_id: &AgentTaskId,
     ) -> AgentOrchestratorResult<()> {
+        if self.bounded_parallel.as_ref().is_some_and(|workflow| {
+            self.root_task_id
+                .as_ref()
+                .is_some_and(|root| workflow.tracks(root, task_id))
+        }) {
+            return self.fail_bounded_parallel_task(
+                task_id,
+                AgentTaskFailureCode::RuntimeEventLimitExceeded,
+            );
+        }
         if self
             .research_knowledge
             .as_ref()
@@ -5775,6 +5930,63 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             run.cancel().map_err(AgentOrchestratorError::Runtime)?;
         }
         Err(AgentOrchestratorError::UnexpectedRuntimeStatus { status })
+    }
+
+    /// Starts a D-091 run and verifies that the adapter preserved the exact
+    /// application-owned request identity and did not reuse a live identity.
+    ///
+    /// This stricter boundary is intentionally scoped to the bounded-parallel
+    /// selector. Earlier selectors retain their verified runtime-start
+    /// behavior and therefore cannot acquire a D-091 quarantine they do not
+    /// own or resume.
+    fn start_bounded_parallel_runtime_run(
+        &mut self,
+        request: RuntimeTurnRequest,
+    ) -> AgentOrchestratorResult<R::Run> {
+        if !self.rejected_runtime_runs.is_empty() {
+            return Err(AgentOrchestratorError::RuntimeCleanupPending);
+        }
+        let expected_identity = request.identity();
+        let run = self.runtime.start(request).map_err(map_runtime_error)?;
+        let identity_mismatch = run.identity() != &expected_identity;
+        let duplicate_live_identity = self
+            .runs
+            .values()
+            .any(|active| active.run.identity() == run.identity());
+        if identity_mismatch || duplicate_live_identity {
+            return self
+                .reject_unbound_runtime_run(run, AgentOrchestratorError::RuntimeIdentityMismatch);
+        }
+        let status = run.status();
+        if status == RuntimeRunStatus::AwaitingStart {
+            return Ok(run);
+        }
+        self.reject_unbound_runtime_run(
+            run,
+            AgentOrchestratorError::UnexpectedRuntimeStatus { status },
+        )
+    }
+
+    fn reject_unbound_runtime_run(
+        &mut self,
+        mut run: R::Run,
+        rejection: AgentOrchestratorError,
+    ) -> AgentOrchestratorResult<R::Run> {
+        if run.status().is_terminal() {
+            return Err(rejection);
+        }
+        match run.cancel() {
+            Ok(RuntimeCancellationOutcome::Cancelled)
+            | Ok(RuntimeCancellationOutcome::AlreadyTerminal(
+                RuntimeRunStatus::Completed
+                | RuntimeRunStatus::Failed
+                | RuntimeRunStatus::Cancelled,
+            )) => Err(rejection),
+            Ok(RuntimeCancellationOutcome::AlreadyTerminal(_)) | Err(_) => {
+                self.rejected_runtime_runs.push(run);
+                Err(AgentOrchestratorError::RuntimeCleanupPending)
+            }
+        }
     }
 
     fn ensure_event_capacity(&self, additional: usize) -> AgentOrchestratorResult<()> {
@@ -5910,9 +6122,18 @@ impl<R: AgentRuntime> fmt::Debug for AgentOrchestrator<R> {
             .field("runtime_event_count", &self.runtime_event_count)
             .field("event_count", &self.events.len())
             .field(
+                "rejected_runtime_cleanup_pending",
+                &!self.rejected_runtime_runs.is_empty(),
+            )
+            .field(
                 "research_knowledge_selected",
                 &self.research_knowledge.is_some(),
             )
+            .field(
+                "bounded_parallel_selected",
+                &self.bounded_parallel.is_some(),
+            )
+            .field("selected_workflow", &self.selected_workflow)
             .finish()
     }
 }
@@ -6037,7 +6258,9 @@ fn delegation_error_code(error: &AgentOrchestratorError) -> AgentGovernanceError
         }
         AgentOrchestratorError::RuntimeUnavailable
         | AgentOrchestratorError::RuntimeUnhealthy
-        | AgentOrchestratorError::RuntimeCapabilityMissing { .. } => {
+        | AgentOrchestratorError::RuntimeCapabilityMissing { .. }
+        | AgentOrchestratorError::RuntimeIdentityMismatch
+        | AgentOrchestratorError::RuntimeCleanupPending => {
             AgentGovernanceErrorCode::ChildStartFailed
         }
         AgentOrchestratorError::Task(_)
@@ -6049,6 +6272,7 @@ fn delegation_error_code(error: &AgentOrchestratorError) -> AgentGovernanceError
         | AgentOrchestratorError::EngineeringQuality(_)
         | AgentOrchestratorError::InfrastructureOperations(_)
         | AgentOrchestratorError::WorkflowAutomation(_)
+        | AgentOrchestratorError::BoundedParallel(_)
         | AgentOrchestratorError::WorkflowIdentityExhausted
         | AgentOrchestratorError::RootAlreadyExists
         | AgentOrchestratorError::RootMissing
@@ -6089,6 +6313,13 @@ fn delegation_error_code(error: &AgentOrchestratorError) -> AgentGovernanceError
         | AgentOrchestratorError::InfrastructureOperationsStageMismatch
         | AgentOrchestratorError::InfrastructureOperationsJournalLimitExceeded
         | AgentOrchestratorError::InfrastructureOperationsEventLimitExceeded
+        | AgentOrchestratorError::BoundedParallelWorkflowMissing
+        | AgentOrchestratorError::BoundedParallelStageMismatch
+        | AgentOrchestratorError::BoundedParallelJournalLimitExceeded
+        | AgentOrchestratorError::BoundedParallelCancellationHandleMismatch
+        | AgentOrchestratorError::BoundedParallelCancellationPending
+        | AgentOrchestratorError::BoundedParallelDeadlineExceeded
+        | AgentOrchestratorError::BoundedParallelAuthorityDenied
         | AgentOrchestratorError::RuntimeEventLimitExceeded => {
             AgentGovernanceErrorCode::TaskMutationFailed
         }
@@ -6115,6 +6346,8 @@ pub enum AgentOrchestratorError {
     InfrastructureOperations(#[from] InfrastructureOperationsError),
     #[error("the workflow-automation boundary rejected the operation: {0}")]
     WorkflowAutomation(#[from] super::workflow_automation::WorkflowAutomationError),
+    #[error("the bounded-parallel boundary rejected the operation: {0}")]
+    BoundedParallel(#[from] BoundedParallelError),
     #[error("agent runtime rejected the operation: {0}")]
     Runtime(#[from] RuntimeError),
     #[error("the selected runtime is unavailable")]
@@ -6123,6 +6356,10 @@ pub enum AgentOrchestratorError {
     RuntimeUnhealthy,
     #[error("the selected runtime lacks a required capability: {capability:?}")]
     RuntimeCapabilityMissing { capability: RuntimeCapability },
+    #[error("the runtime returned a mismatched or duplicate live run identity")]
+    RuntimeIdentityMismatch,
+    #[error("a rejected runtime run is retained until cancellation cleanup succeeds")]
+    RuntimeCleanupPending,
     #[error("the bounded workflow identity source is exhausted")]
     WorkflowIdentityExhausted,
     #[error("this bounded orchestrator already owns a root task")]
@@ -6169,6 +6406,20 @@ pub enum AgentOrchestratorError {
     WorkflowAutomationJournalLimitExceeded,
     #[error("the Workflow Automation stage reserved its final event slot for a terminal event")]
     WorkflowAutomationEventLimitExceeded,
+    #[error("the bounded-parallel workflow state is missing")]
+    BoundedParallelWorkflowMissing,
+    #[error("the bounded-parallel workflow stage does not match the active task")]
+    BoundedParallelStageMismatch,
+    #[error("the bounded-parallel workflow journal reached its closed bound")]
+    BoundedParallelJournalLimitExceeded,
+    #[error("the bounded-parallel cancellation handle is stale or foreign")]
+    BoundedParallelCancellationHandleMismatch,
+    #[error("the bounded-parallel workflow is closed while cancellation is pending")]
+    BoundedParallelCancellationPending,
+    #[error("the bounded-parallel workflow deadline is exhausted")]
+    BoundedParallelDeadlineExceeded,
+    #[error("the bounded-parallel fixture workflow denies consequential authority")]
+    BoundedParallelAuthorityDenied,
     #[error("a manual workflow dispatch is already selected")]
     ManualWorkflowDispatchAlreadySelected,
     #[error("the manual workflow dispatch state is missing")]

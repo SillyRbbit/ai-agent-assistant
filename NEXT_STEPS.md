@@ -306,10 +306,34 @@ the public contract passes 18/18, strict Clippy passes, all-target Rust passes
 393 tests with one intentional ignored probe, and `npm run verify` passes with
 124 frontend and 208 Rust library tests plus release builds. Independent review
 is `PASS WITH ADVISORIES`; final documentation, repository, security, diff,
-session-end, and marker checks pass. No next owner-selected Ready plan exists,
-so next-increment readiness is `Blocked`. Do not add a general engine,
+session-end, and marker checks pass. Do not add a general engine,
 scheduler, persistence, tool
 execution, approval dispatch, provider, IPC/UI, or effect.
+
+### Completed: bounded agent parallelism
+
+**Status:** **Verified complete with advisories under a complete, valid gate**.
+D-091 and
+the exact
+[`2026-08-11-bounded-agent-parallelism.md`](docs/plans/2026-08-11-bounded-agent-parallelism.md)
+plan implement one unwired fixture-only/no-I/O `BoundedParallel` selector. It
+retains multiple independent depth-one runtime runs and multiplexes their
+events on the same application thread; it does not add threads, async/provider
+concurrency, or a general engine. Exact limits are default active two, hard
+active and total children three, four tasks, five runs, zero retries, eight
+events per run, global/workflow/audit caps of 32, a 120-second root lease, and
+60-second child leases. Scenario A uses Research plus Knowledge and
+`ContinuePartial`; B uses Coding plus Security followed by dependent QA and
+`CancelDependentOnly`; C uses Cloud plus Systems followed by dependent
+Security and specialist-lane `FailFast`; all finish with truthful Personal
+synthesis where the root remains live. Result order is catalog ordinal, not
+completion timing. Focused library and public contracts pass 41/41 each;
+all-target Rust passes 481 with one ignored; strict Clippy, formatting,
+`npm run verify`, independent reviews, post-documentation checks, and marker
+validation pass. Stop because no later owner-selected plan is Ready;
+runtime-trait, provider, thread/app-global
+concurrency, tool, I/O, IPC/UI, scheduling, persistence, remote/distributed,
+and effect work remain Blocked.
 
 ### Completed negative spike: Hermes ACP
 
