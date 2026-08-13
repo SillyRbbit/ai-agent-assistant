@@ -294,16 +294,20 @@ Final closeout checks pass:
 - `python3 .codex/hooks/session_end_gate.py`
 - post-increment report finalization/status workflow (`complete`, `valid: true`)
 
-Resume prompt: Read `AGENTS.md`, the required project-memory chain, D-088,
-`docs/plans/2026-08-11-infrastructure-systems-operations-workflow.md`, its
-increment record, and its post-increment review. Preserve the complete dirty
-D-088 worktree exactly; do not reset, clean, stash, commit, or push it. Confirm
-gate `agent-infrastructure-systems-operations-workflows` reports `status:
-complete` and `valid: true`. No later owner-approved plan is Ready. Stop for
-owner direction; do not add Terraform or platform commands, live access,
-credentials, tools, execution, approval dispatch, provider, IPC/UI,
-parallelism, Codex, Hermes, OpenClaw, or another workflow. Do not commit or push
-without separate owner authorization.
+Resume prompt: Read `AGENTS.md`, the required project-memory chain, D-088 and
+D-089, the D-088 increment/review, and
+`docs/plans/2026-08-12-agent-workflow-internals-decomposition.md`. Confirm the
+published D-088 marker was `complete` and `valid: true` at clean `3dccb81`; the
+later D-089 planning diff expectedly invalidates its live workspace fingerprint.
+The owner selected one
+behavior-preserving prerequisite before Workflow Automation: extract only the
+private D-088 lifecycle and split only its catalog/framing/validation internals.
+Run fresh reviews; if Ready, begin gate
+`agent-workflow-internals-decomposition` and implement no behavior change. Do
+not add Workflow Automation types or activation, a general engine, tools,
+policy, approval, execution, Terraform/platform access, credentials, provider,
+IPC/UI, parallelism, Codex, Hermes, or OpenClaw. Do not commit or push without
+separate owner authorization.
 
 The fake-only Cloudflare demo macOS Keychain proof is complete with advisories.
 Pinned macOS-only Security.framework bindings read exactly two fixed labels and
