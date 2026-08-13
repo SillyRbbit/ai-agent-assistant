@@ -254,6 +254,21 @@ shipping dispatcher or executor.
   shall disclose fixture/proposal-only input and no execution, derive
   `RequiredBeforeMutation` only when a patch is proposed, and create no
   approval request or execution authority.
+- **FR-039C**: Trusted application code shall select exactly one of two separate
+  fixture-only infrastructure/operations workflows from a live Personal root.
+  `AgentOrchestrator` alone shall create either Cloud Infrastructure or Systems
+  Operations, then QA and Security, as sequential depth-one siblings under
+  exact four-task, three-child, five-attempt, one-active-child, 32-event,
+  16-workflow/audit-record, and zero-retry limits. The selectors shall be
+  mutually exclusive with each other and every existing workflow.
+- **FR-039D**: Cloud and Systems outputs shall be strict bounded proposal-only
+  data preserving exact application-issued scenario, fixture, criterion,
+  evidence, predecessor, and result identity. Cloud shall accept only the
+  built-in synthetic Terraform/Azure decision fixture; Systems shall accept
+  only the built-in synthetic service/log/recovery fixture. QA and Security
+  shall remain advisory; consequential capabilities shall be denied and never
+  dispatched; final synthesis shall create no approval request or execution
+  authority.
 
 Only bootstrap metadata storage, a turn-bound volatile in-memory approval-audit
 adapter, and D-085's unwired workflow-local volatile memory and approved-
@@ -279,6 +294,16 @@ approval request, mutation, memory, persistence, Tauri/React consumer, IPC,
 provider, external runtime, or device behavior. Coding, QA, and Security are
 `Initial` only for that sealed workflow; generic routes and policy/memory
 profiles remain unchanged and execution remains `NotAttempted`.
+
+D-088 separately implements two unwired fixture-only/no-I/O selectors. The
+Cloud built-in is synthetic Terraform configuration plus Azure architecture
+and validation evidence; the Systems built-in is a synthetic service snapshot,
+sanitized log excerpt, recovery scenario, and validation evidence. It adds no
+Terraform/platform/OS command, live inventory or diagnostic, credential, tool,
+executor, approval dispatch, provider, IPC/UI, dependency, persistence,
+permission, external runtime, or effect. Cloud and Systems are `Initial` only
+for those sealed selectors; QA/Security remain advisory and all four roles stay
+tool-ineligible and memory-disabled.
 
 ### Permissions and integrations
 
@@ -380,6 +405,9 @@ The repository currently provides:
 - an unwired sealed fixture-only Personal-to-Coding-to-QA-to-Security-to-
   Personal proposal workflow with strict evidence provenance, typed partial
   results, closed capability denial, and no execution;
+- two unwired sealed fixture-only Personal-to-Cloud-or-Systems-to-QA-to-
+  Security-to-Personal proposal workflows with strict fixture provenance,
+  typed partial results, closed capability denial, and no I/O or execution;
 - no live model, gateway, tool execution, durable product persistence, integration,
   privileged permission, or durable audit path.
 

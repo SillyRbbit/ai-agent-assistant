@@ -185,6 +185,39 @@ production boundary exists.
       access, tool schema, executor, mutation, dependency, Tauri/React behavior,
       IPC, provider, external runtime, permission, or device effect.
 
+## Sealed infrastructure and systems operations workflows
+
+- [x] Trusted application code alone selects exactly one D-088 Cloud or Systems
+      workflow; both are mutually exclusive with every existing selector and no
+      specialist spawns or delegates.
+- [x] Cloud or Systems, QA, and Security are sequential depth-one siblings
+      under exact four-task, three-child, five-attempt, one-active-child,
+      32-event, 16-workflow/audit-record, and zero-retry limits.
+- [x] The Cloud built-in contains only synthetic Terraform configuration, Azure
+      architecture, and validation evidence. The Systems built-in contains only
+      a synthetic service snapshot, sanitized log, recovery scenario, and
+      validation evidence.
+- [x] Strict stage outputs preserve application-issued scenario/fixture/
+      criterion/evidence/predecessor/result provenance and reject unknown,
+      duplicate, malformed, oversized, reasoning-bearing, false-live,
+      false-execution, or identity-supplying output.
+- [x] QA cannot approve, fabricate execution, or treat `NotRun` as a pass.
+      Security remains evidence-bound or hypothetical and cannot authorize,
+      remediate, replace policy, or invent credential/platform evidence.
+- [x] Terraform/platform commands, live inventory/diagnostics, mutation,
+      service/process control, reboot/shutdown, configuration/package/patch,
+      privileged shell, VMware/backup mutation, credential access/rotation,
+      filesystem/network access, and other consequential capabilities are
+      denied inert data with no dispatcher.
+- [x] Cloud, Systems, QA, and Security remain tool-ineligible, memory-disabled,
+      and `NotAttempted`; no approval request or executable subject exists.
+- [x] String and credential-pattern guards are defense in depth only and never
+      substitute for trusted authorization, containment, credential handling,
+      or a separately approved live/effect plan.
+- [x] D-088 adds no tool, command, credential, live access, executor, approval
+      dispatch, provider, IPC/UI, dependency, permission, persistence, external
+      runtime, `AgentRuntime`/`NativeAgentRuntime` widening, or device effect.
+
 ## Tauri IPC review
 
 - [ ] Every command and event is narrow, typed, explicitly registered, and

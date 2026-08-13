@@ -270,7 +270,7 @@ fn complete_delegated_scenario_is_deterministic_across_fresh_instances(
 }
 
 #[test]
-fn generic_delegation_denies_initial_engineering_and_deferred_or_unknown_targets(
+fn generic_delegation_denies_all_five_active_governed_specialists_and_deferred_or_unknown_targets(
 ) -> Result<(), Box<dyn Error>> {
     let mut orchestrator = AgentOrchestrator::new(MockAgentRuntime::new(MockMode::Success))?;
     let root = orchestrator.start_root(ROOT_OBJECTIVE)?;
@@ -278,6 +278,8 @@ fn generic_delegation_denies_initial_engineering_and_deferred_or_unknown_targets
 
     for target in [
         AgentId::Coding,
+        AgentId::CloudInfrastructure,
+        AgentId::SystemsOperations,
         AgentId::QaValidation,
         AgentId::SecurityRisk,
     ] {
@@ -298,11 +300,8 @@ fn generic_delegation_denies_initial_engineering_and_deferred_or_unknown_targets
         assert_eq!(orchestrator.task_count(), 1);
     }
 
-    for target in [
-        AgentId::CloudInfrastructure,
-        AgentId::SystemsOperations,
-        AgentId::WorkflowAutomation,
-    ] {
+    {
+        let target = AgentId::WorkflowAutomation;
         let proposal = DelegationProposal::new(
             target,
             "Inspect supplied fixtures",

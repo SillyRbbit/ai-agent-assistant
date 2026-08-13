@@ -4,29 +4,29 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
-The owner-authorized D-087
+D-087's
 [`2026-08-11-engineering-quality-workflow.md`](docs/plans/2026-08-11-engineering-quality-workflow.md)
-is **verified complete with advisories**. No product plan is currently Active
-or Ready. D-087 implements one
-deterministic, fixture-only, proposal-only Rust sequence: Personal Assistant ->
-Coding -> QA & Validation -> Security & Risk -> Personal synthesis. The plan
-defines strict versioned results, exact four-task/five-run/one-active-child/
-zero-retry limits, truthful partial outcomes, content-free attribution, and
-closed denial of writes, path escape, package/dependency/test/formatter/Git/
-shell/credential/network actions. It adds no ToolRegistry schema, executor,
-approval request, repository access, IPC, UI, provider, or external runtime.
-Application-owned validation evidence can express only observed fixture facts
-or not-run checks; the sealed selector is mutually exclusive with existing
-paths; a conservative selected-text bound is proven against Native
-serialization; and approval status is
-application-derived as not applicable or required before mutation.
-Full source and repository verification through `npm run verify` passes. The
-quality result is `PASS WITH ADVISORIES`: consider bounded private orchestrator
-decomposition before another multi-specialist workflow, without introducing a
-general workflow engine. Gate `agent-engineering-quality-workflow` remains
-active only until the pending documentation/repository/security/diff and
-session-end checks are recorded and its completion marker is finalized. No
-later owner-approved plan is Ready; next-increment readiness is `Blocked`.
+is **verified complete with advisories and published at `a5d7ba1`**. Its valid
+completion marker preserves the sealed fixture-only, proposal-only Coding -> QA
+-> Security workflow with no tool, executor, approval request, repository
+access, IPC, provider, or effect.
+
+The owner-selected D-088
+[`2026-08-11-infrastructure-systems-operations-workflow.md`](docs/plans/2026-08-11-infrastructure-systems-operations-workflow.md)
+is **verified complete with advisories** under its complete, valid gate. It
+implements exactly two separate deterministic,
+fixture-only, proposal-only Rust selectors: Personal Assistant -> Cloud -> QA
+-> Security -> Personal synthesis and Personal Assistant -> Systems -> QA ->
+Security -> Personal synthesis. Each remains four-task, five-run, one-active-
+child, depth-one, and zero-retry. It adds no infrastructure/operations tool,
+Terraform or platform command, live inventory, credential, executor, approval
+request, IPC, provider, persistence, parallelism, or effect. Source validation
+passes, including 25/25 public D-088 contracts, 8/8 domain units, 11/11
+orchestrator units, 362 all-target Rust tests with one intentional ignored
+probe, and complete `npm run verify`. The two advisories are to decompose the
+large private workflow/orchestrator internals before another workflow or live-
+tool increment, and to keep string/credential guards defense-in-depth only.
+No later owner-approved Ready plan exists; next readiness is `Blocked`.
 
 The completed
 [`2026-08-11-research-knowledge-workflow.md`](docs/plans/2026-08-11-research-knowledge-workflow.md)

@@ -129,17 +129,17 @@ reviewed work.
 
 Role responsibility and activation posture are bounded as follows:
 
-| Role                       | Responsibility and non-authority boundary                                                                                                                                                                                            | Staged activation                                                  |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------ |
-| Personal Assistant         | User-facing classification, controlled delegation requests, progress communication, synthesis, and approval explanation; no unrestricted privileged tools.                                                                           | Initially catalog-eligible for the later deterministic first flow. |
-| Research Agent             | Evidence-backed internal or external research through separately governed tools; read-only by default and no implicit browser, network, file, or memory access.                                                                      | Initially catalog-eligible for the later deterministic first flow. |
-| Knowledge & Document Agent | Approved-file reading, comparison, extraction, organization, and preparation; no unrestricted crawling, access outside approved roots, or silent durable shared-memory writes.                                                       | Gated on the knowledge/document boundary and memory phase.         |
-| Coding Agent               | Repository inspection, explanation, planning, patch proposals, approved changes, and approved tests; no autonomous commit, push, dependency installation, or destructive commands.                                                   | Gated on the engineering phase.                                    |
-| QA & Validation Agent      | Test planning, acceptance and regression assessment, output/configuration validation, and approved safe validation tools; no self-approval and not `ApprovalManager`.                                                                | Gated on the engineering-quality phase.                            |
-| Security & Risk Agent      | Advisory threat modeling, secrets/policy review, security and change-risk analysis; not `PolicyEngine` and cannot authorize or execute remediation.                                                                                  | Gated on the engineering-security phase.                           |
-| Cloud Infrastructure Agent | Cloud architecture, Azure/AWS analysis, Terraform review, approved read-only inventory, and change planning; no autonomous apply, mutation, deletion, IAM change, or credential use.                                                 | Gated on the infrastructure phase.                                 |
-| Systems Operations Agent   | Approved read-only diagnostics and operational planning for supported systems, services, logs, patching, backup, and virtualization; no autonomous restart, shutdown, deletion, configuration/account change, or privileged shell.   | Gated on the infrastructure/operations phase.                      |
-| Workflow Automation Agent  | Typed workflow proposals and dependency/sequence composition; no arbitrary execution, bypass of `AgentOrchestrator`, `ToolRegistry`, `PolicyEngine`, `ApprovalManager`, or `AuditLogger`, recursive expansion, or self-modification. | Gated until typed workflows and their governance exist.            |
+| Role                       | Responsibility and non-authority boundary                                                                                                                                                                                            | Staged activation                                                                                           |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| Personal Assistant         | User-facing classification, controlled delegation requests, progress communication, synthesis, and approval explanation; no unrestricted privileged tools.                                                                           | Initially catalog-eligible for the later deterministic first flow.                                          |
+| Research Agent             | Evidence-backed internal or external research through separately governed tools; read-only by default and no implicit browser, network, file, or memory access.                                                                      | Initially catalog-eligible for the later deterministic first flow.                                          |
+| Knowledge & Document Agent | Approved-file reading, comparison, extraction, organization, and preparation; no unrestricted crawling, access outside approved roots, or silent durable shared-memory writes.                                                       | Gated on the knowledge/document boundary and memory phase.                                                  |
+| Coding Agent               | Repository inspection, explanation, planning, patch proposals, approved changes, and approved tests; no autonomous commit, push, dependency installation, or destructive commands.                                                   | Gated on the engineering phase.                                                                             |
+| QA & Validation Agent      | Test planning, acceptance and regression assessment, output/configuration validation, and approved safe validation tools; no self-approval and not `ApprovalManager`.                                                                | Gated on the engineering-quality phase.                                                                     |
+| Security & Risk Agent      | Advisory threat modeling, secrets/policy review, security and change-risk analysis; not `PolicyEngine` and cannot authorize or execute remediation.                                                                                  | Gated on the engineering-security phase.                                                                    |
+| Cloud Infrastructure Agent | D-088 synthetic Terraform-configuration and Azure-architecture fixture assessment and inert change planning; no live inventory, command, apply, mutation, deletion, IAM change, or credential use.                                   | `Initial` only for D-088's sealed Cloud fixture selector; every live capability remains separately gated.   |
+| Systems Operations Agent   | D-088 synthetic service-snapshot, sanitized-log, and recovery-scenario fixture assessment and inert operational planning; no live diagnostic, restart, shutdown, deletion, configuration/account change, or privileged shell.        | `Initial` only for D-088's sealed Systems fixture selector; every live capability remains separately gated. |
+| Workflow Automation Agent  | Typed workflow proposals and dependency/sequence composition; no arbitrary execution, bypass of `AgentOrchestrator`, `ToolRegistry`, `PolicyEngine`, `ApprovalManager`, or `AuditLogger`, recursive expansion, or self-modification. | Gated until typed workflows and their governance exist.                                                     |
 
 Catalog eligibility is closed application state, not operational evidence or
 authorization. The first increment wires no definition to a runtime, provider,
@@ -412,9 +412,14 @@ based, proposal-only engineering-quality portion: Coding, QA, and Security are
 sequential depth-one siblings created by the orchestrator; strict structured
 results preserve application fixture/evidence provenance; every consequential
 capability remains denied; and no approval request or execution path exists.
-Infrastructure/operations, automation, bounded parallelism, UI/provider wiring,
-live repository effects, and every other later phase remain gated. Neither
-D-086 nor D-087 makes this ADR general implementation authority.
+D-088 separately completes only two fixture-only/no-I/O infrastructure and
+systems operations selectors. Each creates its named specialist, QA, and
+Security as sequential depth-one siblings, preserves strict application-issued
+fixture/evidence provenance, denies consequential capabilities, and creates no
+approval request or execution path. Automation, bounded parallelism, UI/
+provider wiring, live repository or infrastructure effects, and every other
+later phase remain gated. D-086 through D-088 do not make this ADR general
+implementation authority.
 
 ## Preservation guarantees
 
@@ -450,6 +455,10 @@ D-086 nor D-087 makes this ADR general implementation authority.
   one fixed fixture-only, proposal-only sibling sequence. It changes no generic
   route, tool/policy/memory profile, approval/execution boundary,
   `AgentRuntime`, or `NativeAgentRuntime` behavior.
+- D-088 supplies the implemented exceptions for infrastructure and systems
+  operations: two separate fixed fixture-only/no-I/O sibling sequences. It
+  changes no generic route, tool/policy/memory authority, approval/execution
+  boundary, `AgentRuntime`, or `NativeAgentRuntime` behavior.
 
 ## Rollback
 

@@ -37,8 +37,8 @@ public behavior. `NativeAgentRuntime` remains sole/default and unchanged.
 
 The published D-084 baseline remains at `2687294`; D-085 remains published at
 `5e53f55` with its historical pure-`std` Unix document-open TOCTOU advisory.
-D-087 now implements one fixture-only, proposal-only engineering-quality
-workflow, and
+D-087's fixture-only, proposal-only engineering-quality workflow is published
+at `a5d7ba1`, and
 [`2026-08-11-engineering-quality-workflow.md`](docs/plans/2026-08-11-engineering-quality-workflow.md)
 is **verified complete with advisories** under gate
 `agent-engineering-quality-workflow`.
@@ -66,16 +66,45 @@ Full Rust formatting/check/strict-Clippy validation, focused contracts, the
 orchestrator units, 20 public D-087 contracts, and the 7 registry, 10
 governance, 22 generic orchestration, 10 memory/document, 18 D-086, 20 runtime,
 and 10 gateway contracts. Final documentation, repository, security, diff, and
-session-end checks pass. The post-increment report is complete and ready for
-deterministic marker finalization.
+session-end checks pass. Its deterministic completion marker is complete and
+valid on the clean published tree.
 
 No provider, live retrieval, network, filesystem discovery, durable memory,
 tool execution, dependency, Tauri/React wiring, IPC, UI, parallelism, general
 workflow engine, Hermes integration, or activation of Cloud, Systems
-Operations, or Workflow Automation was added. ARB-005, all repository effects,
-and every other later plan remain Blocked. The accepted advisory is to consider
-decomposing private orchestrator internals before another multi-specialist
-workflow, without introducing a general workflow engine.
+Operations, or Workflow Automation was added. The accepted advisory is to
+consider decomposing private orchestrator internals before another multi-
+specialist workflow, without introducing a general workflow engine.
+
+D-088 and
+[`2026-08-11-infrastructure-systems-operations-workflow.md`](docs/plans/2026-08-11-infrastructure-systems-operations-workflow.md)
+are **verified complete with advisories** under a complete, valid gate. They
+implement only two
+separate deterministic fixture-only/no-I/O selectors: Personal Assistant ->
+Cloud -> QA -> Security -> Personal synthesis and Personal Assistant -> Systems
+-> QA -> Security -> Personal synthesis. No Terraform/platform command, live
+inventory, credential, tool, executor, approval request, provider, IPC/UI,
+parallelism, or effect is authorized. Every live infrastructure/operations
+boundary, Workflow Automation, and ARB-005 remain Blocked.
+
+The Cloud built-in fixture contains synthetic Terraform configuration, Azure
+architecture, and validation evidence. The Systems built-in contains a
+synthetic service snapshot, sanitized log excerpt, recovery scenario, and
+validation evidence. Both use four tasks, five attempts, three sequential
+depth-one siblings, one active child, and zero retries. Cloud and Systems are
+`Initial` only for their separate unwired selectors; QA/Security remain
+advisory and all four specialists remain tool-ineligible and memory-disabled.
+Full source validation passes: domain units 8/8, orchestrator units 11/11,
+public D-088 contracts 25/25, 362 all-target Rust tests with one intentional
+ignored probe, and complete `npm run verify`, including 124 frontend and 195
+library tests plus the Tauri no-bundle release build.
+
+The quality result is `PASS WITH ADVISORIES`. Before another workflow or any
+live/tool increment, decompose the large private infrastructure module and
+orchestrator integration into smaller typed private components without adding
+a general engine. String and credential-pattern guards remain defense-in-depth
+only and cannot authorize any later live/effect path. No later owner-approved
+Ready plan exists, so next-increment readiness is `Blocked`.
 
 Hermes integration is **Deferred — evaluated transport and containment
 requirements not met**. Raw TUI-gateway stdio, managed `hermes serve`
@@ -226,22 +255,55 @@ changed.
 
 ## Current exact task
 
-D-087 is verified complete with advisories. Stop for separate owner direction;
-no later owner-approved plan is Ready. Do not change source, add a tool or
-executor, create a repository effect or approval dispatch, or begin another
-workflow. Do not commit or push without separate owner authorization.
+D-088's two sealed, fixture-only/no-I/O infrastructure and systems-operations
+workflows are **verified complete with advisories**. Gate
+`agent-infrastructure-systems-operations-workflows` is complete and valid.
+Cloud Infrastructure and Systems Operations are `Initial` only for their
+separate Personal Assistant -> specialist -> QA -> Security -> Personal
+workflows. They use immutable synthetic fixtures, strict bounded structured
+results, one active depth-one child at a time, and no retries. They do not run
+Terraform, cloud/platform/OS commands, inventory, diagnostics, shell,
+PowerShell, services, processes, logs, credentials, tools, providers,
+approvals, executors, IPC/UI, or effects. Denied consequential capabilities
+remain inert proposal data and every execution disposition is `NotAttempted`.
 
-Resume prompt: Read `AGENTS.md`, the project-memory chain, D-079 and D-082
-through D-087, the native multi-agent ADR/assessment and both roadmaps, the
-published D-086 evidence at `3efd2c1`, and
-`docs/plans/2026-08-11-engineering-quality-workflow.md` plus its increment and
-post-increment review. Inspect Git status and the complete diff, require gate
-`agent-engineering-quality-workflow` to report `status: complete` with
-`valid: true`, and preserve the frozen source. No later owner-approved plan is
-Ready. Do not add live repository access, file mutation,
-test/formatter/package/Git execution, an executor, provider, IPC, UI, Codex,
-Hermes, OpenClaw, or another agent workflow. Do not commit or push without
-separate owner authorization.
+The result contracts retain application-derived stage projections and exact
+partial-failure codes. Authoritative source evidence passes: infrastructure
+domain 8/8, orchestrator 11/11, public D-088 25/25, Rust formatting/check/strict
+Clippy, repository scan, diff hygiene, independent all-target Rust 362 passed
+with one intentional ignored probe, and final `npm run verify` including 124
+frontend and 195 library tests plus the Tauri no-bundle release build.
+
+The complete 27-path increment inventory is recorded in
+[`2026-08-12-agent-infrastructure-systems-operations-workflows-post-increment-review.md`](docs/reviews/2026-08-12-agent-infrastructure-systems-operations-workflows-post-increment-review.md).
+Runtime and contract paths are:
+
+- `src-tauri/src/agent/definition.rs`, `src-tauri/src/agent/infrastructure_operations.rs`,
+  `src-tauri/src/agent/mod.rs`, and `src-tauri/src/agent/orchestrator.rs`
+- `src-tauri/tests/agent_definition_registry_contract.rs`,
+  `src-tauri/tests/agent_governance_contract.rs`,
+  `src-tauri/tests/agent_infrastructure_operations_workflow_contract.rs`, and
+  `src-tauri/tests/agent_orchestration_contract.rs`
+
+Final closeout checks pass:
+
+- `npm run docs:check`
+- `npm run repository:check`
+- `npm run security:scan`
+- `git diff --check`
+- `python3 .codex/hooks/session_end_gate.py`
+- post-increment report finalization/status workflow (`complete`, `valid: true`)
+
+Resume prompt: Read `AGENTS.md`, the required project-memory chain, D-088,
+`docs/plans/2026-08-11-infrastructure-systems-operations-workflow.md`, its
+increment record, and its post-increment review. Preserve the complete dirty
+D-088 worktree exactly; do not reset, clean, stash, commit, or push it. Confirm
+gate `agent-infrastructure-systems-operations-workflows` reports `status:
+complete` and `valid: true`. No later owner-approved plan is Ready. Stop for
+owner direction; do not add Terraform or platform commands, live access,
+credentials, tools, execution, approval dispatch, provider, IPC/UI,
+parallelism, Codex, Hermes, OpenClaw, or another workflow. Do not commit or push
+without separate owner authorization.
 
 The fake-only Cloudflare demo macOS Keychain proof is complete with advisories.
 Pinned macOS-only Security.framework bindings read exactly two fixed labels and

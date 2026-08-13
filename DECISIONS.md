@@ -3393,6 +3393,175 @@ evidence. Cloud Infrastructure, Systems Operations, Workflow Automation,
 parallelism, provider/runtime wiring, IPC, UI, and all consequential actions
 remain separately Blocked.
 
+## D-088 - Add two fixture-only infrastructure and systems operations workflows
+
+Date: 2026-08-12
+Status: Accepted owner security and implementation decision
+
+Decision: Authorize one bounded implementation increment containing two
+separate deterministic, Rust-only, fixture-only, proposal-only workflows above
+the existing `AgentRuntime` port:
+
+```text
+Personal Assistant -> Cloud Infrastructure Agent -> QA & Validation Agent
+  -> Security & Risk Agent -> Personal Assistant synthesis
+
+Personal Assistant -> Systems Operations Agent -> QA & Validation Agent
+  -> Security & Risk Agent -> Personal Assistant synthesis
+```
+
+These are two closed application-service selectors, not one polymorphic route
+chosen by model output and not a general workflow engine. Trusted application
+code selects exactly one workflow from a live Personal Assistant root before
+root output begins. The two selectors are mutually exclusive with each other
+and with generic delegation, the approved-document route, D-086, and D-087.
+All three specialists in either workflow are sequential depth-one siblings of
+the Personal Assistant root. Only `AgentOrchestrator` creates them; specialists
+never delegate, spawn, or invoke one another.
+
+The public surfaces remain distinct:
+`CloudInfrastructureWorkflowRequest`/
+`CloudInfrastructureWorkflowAcceptance`/
+`CloudInfrastructureWorkflowResult` and
+`SystemsOperationsWorkflowRequest`/
+`SystemsOperationsWorkflowAcceptance`/
+`SystemsOperationsWorkflowResult`, with distinct result and event getters. One
+owned private `InfrastructureOperationsWorkflowState::{Cloud, Systems}` stores
+exactly one selected state. Private shared lifecycle helpers may prepare common
+QA, Security, synthesis, failure, and cancellation mechanics, but no generic
+public start path or generalized workflow engine exists.
+
+Each selected workflow may own exactly four tasks, three non-replenishing
+children, one active child, and five sequential runtime-run attempts: initial
+Personal, the selected Cloud or Systems specialist, QA, Security, and final
+Personal synthesis. Delegation depth remains one, active-child concurrency
+remains one, and automatic retries remain zero. The existing global runtime and
+orchestration event limits remain 32. The new workflow family has exact
+per-run, structured-event, attribution-record, input, result, list, and field
+limits fixed by its ExecPlan. Capacity and the complete successor input are
+prepared before a terminal event mutates state. A successor start failure is a
+typed partial outcome and never reverses an accepted terminal event or
+replenishes a task, run, event, child, or retry budget. Cancellation remains
+child-first and prevents every later specialist stage.
+
+The workflows accept only bounded immutable synthetic fixtures from one
+built-in application-owned catalog. A caller may select one closed typed Cloud
+or Systems scenario ID but cannot provide or alter trusted fixture kind,
+content, fixture/evidence/criterion IDs, or workflow identity. Public request
+fields are private, have no deserializer or general raw constructor, retain a
+catalog-issued sealed proof, and are revalidated against the canonical catalog
+snapshot before mutation. Cross-kind selection or any internal/test alteration
+fails preflight with zero mutation. The Cloud workflow accepts synthetic
+Terraform, Azure, AWS, architecture, and inventory-snapshot evidence. The
+Systems workflow accepts synthetic and sanitized operating-system, service,
+process, log, configuration, resource, VMware, backup, and recovery evidence.
+Fixture labels and opaque IDs grant no filesystem, account, provider, host,
+network, process, service, or virtualization authority.
+
+Runtime output is untrusted strict structured data and may reference only
+application-issued IDs. Unknown, duplicate, remapped, malformed, oversized,
+identity-supplying, authority-claiming, or reasoning-bearing content fails
+closed. Credential defense is deterministic defense in depth, not semantic
+secret detection: exact secret-named JSON fields are forbidden, and normalized
+ASCII lines are checked only for the ExecPlan's enumerated fake sentinel,
+token/bearer, PEM/private-key, AWS, Azure/ARM, and VMware credential prefixes.
+Debug, error, event, and attribution surfaces remain content-free and redacted.
+
+The Cloud workflow may produce only a versioned `InfrastructureAssessment`, an
+inert `ChangePlan`, exact fixture findings, limitations, unresolved questions,
+and proposed validation. It may describe static Terraform review, but it must
+record `terraform fmt`, `terraform validate`, provider inventory, and every
+external check as not run unless a future separately approved application tool
+supplies real evidence. `terraform apply`, plan/apply dispatch, resource
+creation/update/deletion, IAM or firewall changes, production access, cloud
+shell, credential use, secret rotation, Terraform state mutation, and backend
+reconfiguration are closed denied capability proposals and are never
+dispatched.
+
+The Systems workflow may produce only a versioned `OperationalAssessment`,
+evidence-bound or explicitly hypothetical `DiagnosticFinding` values, an inert
+diagnostic plan, remediation proposal, rollback considerations, limitations,
+and proposed validation. It may analyze only supplied fixtures. Live log,
+service, process, configuration, disk, memory, VMware, backup, or host
+inspection remains unavailable. Service restart/stop, reboot/shutdown, process
+termination, configuration mutation, package installation, patching,
+account/permission change, deletion, privileged shell, VMware mutation, backup
+mutation, and credential access are closed denied capability proposals and are
+never dispatched.
+
+QA & Validation and Security & Risk are reused as cross-cutting advisory roles
+through new exact instruction versions and infrastructure/operations-specific
+structured results. QA must reconcile every application-issued acceptance
+criterion exactly once against `ObservedFixture` or `NotRun` evidence, preserve
+provenance, and mark every unexecuted check as not run. It cannot approve,
+modify inputs, suppress a gap, or fabricate validation. Security findings must
+be evidence-bound or explicit hypotheses and must distinguish absent
+credential, dependency, provider, platform, audit, and rollback evidence. It
+cannot authorize, provide trusted policy or permission metadata, access a
+secret, or execute remediation. Neither role becomes `ApprovalManager` or
+`PolicyEngine`.
+
+Final Personal synthesis preserves the validated specialist, QA, Security,
+fixture, and partial-failure attribution. It must state that all operational
+inputs are synthetic fixtures, no Terraform/cloud/host/VMware command or live
+inventory ran, no credential was loaded, and no action occurred. The
+application derives a closed approval requirement as `NotApplicable` when no
+closed denied-effect capability is present or
+`RequiredBeforeConsequentialAction` when at least one is present. Free text,
+risk prose, or an agent flag cannot affect this derivation. No approval or
+governance subject is created, their audits do not change, and every execution
+disposition remains `NotAttempted` because this increment has no executable
+subject, executor, or effect. Approval status is not authorization and cannot
+be supplied by an agent or runtime.
+
+Cloud or Systems failure skips QA and Security and permits a truthful bounded
+Personal fallback. QA failure preserves the validated first-stage assessment
+and is followed by Security with an explicit QA-unavailable status; an
+incomplete or blocked QA conclusion forces partial synthesis. Security failure
+preserves the validated assessment and QA outcome and permits partial
+synthesis. Invalid raw output never reaches another stage. Root cancellation
+cancels any active-child governance subject, then the active child run/task,
+then any root governance subject, and finally the root; it starts no
+later stage, and produces no synthesis result. Cancellation first preflights
+governance resolution and identity/capacity without mutation. If governance
+terminalization succeeds and a later runtime cancellation fails, that approval
+remains terminally cancelled while the affected task/run stays live and safely
+retryable; no false workflow `Cancelled` event is emitted. Child cancellation
+precedes root cancellation. A child cancellation failure leaves child and root
+live; a later root cancellation failure cannot reverse an already cancelled
+child. No successor starts in a failure branch. Final Personal synthesis
+failure fails the root.
+
+Cloud Infrastructure and Systems Operations may move from `Deferred` to
+`Initial` only after their exact versioned instructions, strict contracts,
+sealed selectors, regression tests, and completion gate pass. `Initial` means
+non-authorizing eligibility only for these two unwired fixture workflows. QA
+and Security remain `Initial` only for the sealed workflows explicitly
+implemented for them. All four specialist policy profiles retain empty tool
+allowlists and `MemoryDisabledV1`; runtime tool proposals remain rejected and
+every execution disposition remains `NotAttempted`.
+
+This decision adds no schema to `ToolRegistry` and changes no `PolicyEngine`,
+`ApprovalManager`, executor, durable `AuditLogger`, `PlatformAdapter`, memory,
+document, credential, provider, process, shell, PowerShell, Terraform, Azure,
+AWS, VMware, service, logging, filesystem, network, IPC, React, Tauri
+capability, permission, dependency, persistence, or external-runtime boundary.
+Developer-machine availability of a binary or CLI is not product capability
+and supplies no workflow evidence. Native remains sole/default; Codex, Hermes,
+and OpenClaw are not integrated.
+
+Consequences: the exact infrastructure/systems-operations ExecPlan is Ready but
+not Active after recording its contracts, limits, files, tests, atomicity,
+cancellation, validation, rollback, and stop conditions. Implementation still
+requires the mandatory gate and fresh architecture and security review. Any
+live inventory, Terraform command, filesystem or platform diagnostic,
+credential, provider API/CLI, shell, process/service control, VMware operation,
+approval-to-execution path, parallelism, IPC, UI, or device effect requires a
+separate accepted decision and plan with exact registered schemas, containment,
+policy, approval subjects, restricted executor, audit, rollback, and
+target-platform evidence. Workflow Automation and every consequential action
+remain Blocked.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

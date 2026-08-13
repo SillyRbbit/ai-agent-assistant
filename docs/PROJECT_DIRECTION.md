@@ -184,10 +184,23 @@ approval request or execution subject. The path adds no live repository,
 filesystem, process, Git, package, network, tool, executor, mutation, memory,
 provider, IPC, UI, external runtime, or device authority.
 
-The catalog now marks Personal Assistant, Research, Knowledge, Coding, QA, and
-Security as non-authorizing `Initial`; Cloud, Systems Operations, and Workflow
-Automation remain Deferred. Coding, QA, and Security eligibility exists only
-for D-087's sealed unwired workflow. Registration,
+D-088 implements two further separate fixture-only/no-I/O application-service
+sequences: Personal Assistant -> Cloud Infrastructure -> QA -> Security ->
+Personal synthesis, and the corresponding Systems Operations sequence. The
+Cloud built-in contains synthetic Terraform configuration, Azure architecture,
+and validation evidence. The Systems built-in contains a synthetic service
+snapshot, sanitized log, recovery scenario, and validation evidence. Each uses
+four tasks, five attempts, one active depth-one child, and zero retries. Strict
+assessments, plans, QA, Security, and synthesis preserve application-issued
+provenance; consequential capabilities remain denied; no command, credential,
+live access, tool, executor, approval dispatch, provider, IPC/UI, dependency,
+or effect exists.
+
+The catalog now marks Personal Assistant, Research, Knowledge, Coding, QA,
+Security, Cloud, and Systems as non-authorizing `Initial`; Workflow Automation
+remains Deferred. Coding/QA/Security eligibility exists only for D-087 and the
+applicable D-088 cross-cutting stages; Cloud and Systems eligibility exists
+only for their separate D-088 sealed unwired selectors. Registration,
 activation, task creation, memory profile, or orchestration grants no tool,
 policy, approval, provider, execution, or device authority.
 

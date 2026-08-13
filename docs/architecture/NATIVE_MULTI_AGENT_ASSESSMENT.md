@@ -88,6 +88,26 @@ that D-084 published checkpoint.
 > was added. Earlier catalog/future statements below remain decision-time
 > evidence where this note records the superseding current state.
 
+> **Additive current-state note (D-088, 2026-08-12):** D-088 implements two
+> separately selected, Rust-only, fixture-only/no-I/O sequences: Personal
+> Assistant -> Cloud Infrastructure -> QA -> Security -> Personal synthesis,
+> and the corresponding Systems Operations sequence. The Cloud built-in
+> contains synthetic Terraform configuration, Azure architecture, and
+> validation evidence; the Systems built-in contains a synthetic service
+> snapshot, sanitized log, recovery scenario, and validation evidence. Each
+> workflow owns four tasks, three sequential depth-one children, five attempts,
+> one active child, 32 events, 16 workflow/audit records, and zero retries.
+> Strict assessment, plan, QA, Security, and synthesis results preserve exact
+> application-issued provenance. Consequential capabilities remain denied, QA
+> cannot approve, Security cannot authorize/remediate, and no approval request
+> or execution subject exists. Cloud and Systems are `Initial` only for their
+> separate sealed unwired selectors; QA/Security remain advisory and all four
+> roles remain tool-ineligible and memory-disabled. No command, credential,
+> live access, tool, executor, approval dispatch, provider, IPC/UI, dependency,
+> persistence, external runtime, or effect was added. String/credential guards
+> are defense-in-depth only. Earlier future statements below remain historical
+> checkpoint evidence where this note records current state.
+
 ## 1. Executive summary
 
 The recommended architecture is an application-owned orchestration layer above
@@ -554,9 +574,10 @@ current requirements.
 
 The first registry phase defined all nine roles with only Personal Assistant
 and Research `Initial`. D-085 later made Knowledge `Initial` for its exact
-routes, and D-087 now makes Coding, QA, and Security `Initial` only for its
-sealed fixture-only proposal workflow. Cloud, Systems Operations, and Workflow
-Automation remain `Deferred`. Every definition is application-owned,
+routes, and D-087 makes Coding, QA, and Security `Initial` for its sealed
+fixture-only proposal workflow. D-088 now makes Cloud and Systems `Initial`
+only for their separate fixture/no-I/O selectors and reuses QA/Security as
+advisory stages. Workflow Automation remains `Deferred`. Every definition is application-owned,
 immutable, privilege-free, and non-operational until a separate consumer
 exists. Catalog listing may show all nine and their exact state without
 presenting eligibility as a tool or live capability.
@@ -573,17 +594,17 @@ QA & Validation and Security & Risk deliberately appear in multiple groups.
 Catalog listing remains deterministic; functional grouping is
 documentation-only and never authorizes a route, tool, permission, or action.
 
-| Agent                      | Catalog disposition / activation prerequisite         |
-| -------------------------- | ----------------------------------------------------- |
-| Personal Assistant         | `Initial` for verified bounded workflows              |
-| Research Agent             | `Initial`; live retrieval remains gated               |
-| Knowledge & Document Agent | `Initial` only for D-085/D-086 sealed routes          |
-| Coding Agent               | `Initial` only for D-087 fixture/proposal workflow    |
-| QA & Validation Agent      | `Initial` only for D-087 fixture/proposal workflow    |
-| Security & Risk Agent      | `Initial` only for D-087 fixture/proposal workflow    |
-| Cloud Infrastructure Agent | `Deferred` on the infrastructure workflow             |
-| Systems Operations Agent   | `Deferred` on the infrastructure/operations workflow  |
-| Workflow Automation Agent  | `Deferred` on typed workflows and complete governance |
+| Agent                      | Catalog disposition / activation prerequisite            |
+| -------------------------- | -------------------------------------------------------- |
+| Personal Assistant         | `Initial` for verified bounded workflows                 |
+| Research Agent             | `Initial`; live retrieval remains gated                  |
+| Knowledge & Document Agent | `Initial` only for D-085/D-086 sealed routes             |
+| Coding Agent               | `Initial` only for D-087 fixture/proposal workflow       |
+| QA & Validation Agent      | `Initial` only for D-087 fixture/proposal workflow       |
+| Security & Risk Agent      | `Initial` only for D-087 fixture/proposal workflow       |
+| Cloud Infrastructure Agent | `Initial` only for D-088 sealed Cloud fixture workflow   |
+| Systems Operations Agent   | `Initial` only for D-088 sealed Systems fixture workflow |
+| Workflow Automation Agent  | `Deferred` on typed workflows and complete governance    |
 
 `Initial` is catalog eligibility for exact verified unwired workflows, not a
 claim that a role is operational today. Every `Deferred` state is closed and
@@ -635,16 +656,18 @@ uses only redacted or sanitized evidence and never exposes credential values.
 
 ### Infrastructure and operations
 
-**Cloud Infrastructure Agent — gated on the infrastructure workflow:** provides
-cloud architecture, Azure/AWS analysis, Terraform/IaC review, approved read-only
-inventory, and change planning. It cannot autonomously apply, modify, delete,
-change IAM, or use credentials.
+**Cloud Infrastructure Agent — `Initial` only for D-088's sealed fixture
+workflow:** provides bounded assessment and inert change planning over the
+application's synthetic Terraform/Azure fixture. It cannot inspect live
+inventory, run Terraform/cloud commands, apply, modify, delete, change IAM, or
+use credentials.
 
-**Systems Operations Agent — gated on the operations workflow:** provides
-Windows/Linux/macOS, VMware/virtualization, service/process/log, patching,
-backup, approved read-only diagnostic, and controlled operations analysis. It
-cannot autonomously restart, shut down, delete, change configuration/accounts,
-or execute a privileged shell.
+**Systems Operations Agent — `Initial` only for D-088's sealed fixture
+workflow:** provides bounded assessment and inert recovery planning over the
+application's synthetic service snapshot, sanitized log, and recovery fixture.
+It cannot inspect a live host, run diagnostics or platform commands, restart,
+shut down, delete, change configuration/accounts, or execute a privileged
+shell.
 
 QA & Validation and Security & Risk are cross-cutting roles in software,
 infrastructure, operations, document, and automation workflows. Cross-cutting
@@ -693,10 +716,10 @@ The near-term sequence is recorded in the authoritative root
 The
 [`Agent definition and registry`](../plans/2026-08-11-agent-definition-registry.md)
 plan is implemented and verified locally. That sentence and the original
-future-phase language record the assessment checkpoint. D-083 through D-087 now
+future-phase language record the assessment checkpoint. D-083 through D-088 now
 add the verified task/orchestrator, non-executing governance, volatile
-memory/approved-document, sealed fixture-only Research/Knowledge, and sealed
-fixture-only proposal Engineering foundations described in the additive notes
-above. Infrastructure/operations, automation, live repository effects,
-persistence, provider/runtime wiring, IPC/UI, and every other later phase
-remain separately gated.
+memory/approved-document, sealed fixture-only Research/Knowledge, sealed
+fixture-only proposal Engineering, and two sealed fixture-only/no-I/O Cloud/
+Systems foundations described in the additive notes above. Automation, live
+repository/infrastructure effects, persistence, provider/runtime wiring,
+IPC/UI, and every other later phase remain separately gated.

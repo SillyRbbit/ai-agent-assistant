@@ -150,6 +150,9 @@ This file is the ordered implementation queue. Work only on the first item marke
 - Research and Knowledge workflow:
   **Verified complete with advisories and published at `3efd2c1` under gate
   `agent-research-knowledge-workflow`.**
+- Fixture-only engineering quality workflow:
+  **Verified complete with advisories and published at `a5d7ba1` under D-087
+  and gate `agent-engineering-quality-workflow`.**
 
 ## Queue status
 
@@ -218,12 +221,12 @@ parallelism, or general workflow engine. Focused and complete validation pass.
 Every provider, UI, persistence, parallelism, repository-effect, and other
 specialist plan remains Blocked.
 
-### Verified complete: Fixture-only engineering quality workflow
+### Completed implementation: Fixture-only engineering quality workflow
 
-**Status:** **Verified complete with advisories under D-087**. The
+**Status:** **Verified complete with advisories and published at `a5d7ba1`
+under D-087**. The
 [`2026-08-11-engineering-quality-workflow.md`](docs/plans/2026-08-11-engineering-quality-workflow.md)
-is complete; no product plan is currently Active or Ready. It implements one
-sealed deterministic
+is complete. It implements one sealed deterministic
 Personal Assistant -> Coding -> QA & Validation -> Security & Risk -> Personal
 synthesis sequence over application-supplied synthetic repository fixtures.
 Strict `ChangeProposal`, `ValidationReport`, `RiskAssessment`, and final
@@ -244,8 +247,34 @@ routes remain closed, their tool profiles remain empty, and memory remains
 disabled. Complete validation and closeout pass. Independent review returns
 `PASS WITH ADVISORIES`: before another multi-specialist workflow, consider a bounded
 private orchestrator decomposition without introducing a general workflow
-engine. No later owner-approved plan is Ready, so next-increment readiness is
-`Blocked`.
+engine.
+
+### Verified implementation: Fixture-only infrastructure and systems operations workflows
+
+**Status:** **Verified complete with advisories under D-088**. The
+[`2026-08-11-infrastructure-systems-operations-workflow.md`](docs/plans/2026-08-11-infrastructure-systems-operations-workflow.md)
+implements two separate application-selected sequences: Personal Assistant ->
+Cloud -> QA -> Security -> Personal synthesis and Personal Assistant -> Systems
+-> QA -> Security -> Personal synthesis. Each uses immutable synthetic fixtures,
+strict structured results, four tasks, five run attempts, three sequential
+depth-one siblings, one active child, zero retries, prepared terminal
+transitions, truthful partial outcomes, child-first cancellation, content-free
+attribution, and exact fixture/evidence provenance.
+
+The implementation adds no tool or tool eligibility, Terraform/platform command,
+live inventory, credential, shell, process/service control, filesystem or
+network access, executor, approval request, durable audit, platform adapter,
+dependency, provider, IPC/UI, persistence, parallelism, external runtime, or
+effect. Cloud and Systems are `Initial` only for their separate sealed unwired
+workflows; all four specialist tool profiles and memory remain empty/disabled.
+The Cloud built-in is synthetic Terraform configuration plus Azure architecture
+and validation evidence. The Systems built-in is a synthetic service snapshot,
+sanitized log, recovery scenario, and validation evidence. Full source
+verification passes with `PASS WITH ADVISORIES`. Before another workflow or
+live/tool increment, decompose the large private module/orchestrator internals;
+string and credential guards remain defense-in-depth only. Workflow Automation
+and every live infrastructure, operations, or consequential-action boundary
+remain Blocked. No later owner-approved Ready plan exists.
 
 ### Completed negative spike: Hermes ACP
 

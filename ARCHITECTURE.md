@@ -204,7 +204,7 @@ flowchart TD
     Orchestrator --> Knowledge["Implemented document route<br/>Personal Assistant to Knowledge & Document"]
     Orchestrator --> ResearchKnowledge["Implemented sealed fixture workflow<br/>Research then Knowledge sibling"]
     Orchestrator --> Engineering["Implemented sealed fixture workflow<br/>Coding then QA then Security siblings"]
-    Orchestrator -. staged .-> Operations["Infrastructure & operations<br/>Cloud + Systems + QA + Security"]
+    Orchestrator --> Operations["Implemented separate sealed fixture workflows<br/>Cloud or Systems then QA then Security"]
     Orchestrator -. staged .-> Automation["Automation<br/>Workflow Automation"]
     Orchestrator --> Runtime["AgentRuntime<br/>implemented one-run boundary"]
     Runtime --> Native["NativeAgentRuntime<br/>sole/default; implemented and unwired"]
@@ -224,11 +224,14 @@ operational selection and task creation fail closed for deferred definitions.
 Neither registration, grouping, nor activation grants tools, routing, policy,
 memory, provider, or device authority.
 The catalog marks Personal Assistant, Research Agent, Knowledge & Document
-Agent, Coding Agent, QA & Validation Agent, and Security & Risk Agent `Initial`;
+Agent, Coding Agent, QA & Validation Agent, Security & Risk Agent, Cloud
+Infrastructure Agent, and Systems Operations Agent `Initial`;
 all nine definitions remain unwired and none is a shipping assistant. Knowledge
 eligibility applies only to D-085's separate approved-document route and
 D-086's sealed fixture workflow. Coding, QA, and Security eligibility applies
 only to D-087's sealed fixture-only proposal workflow. None grants a generic
+route. Cloud and Systems eligibility applies only to D-088's two separate
+sealed fixture-only/no-I/O selectors. None grants a generic
 delegation edge, tool, memory, or device capability. The embedded instruction
 sources are closed application-owned Rust assets rather than runtime-loaded
 files.
@@ -251,10 +254,15 @@ runs, and the same depth-one and 32-event limits. D-087's separately selected
 sealed engineering workflow uses four tasks, three non-replenishing sequential
 children, one active child, five runs, depth one, and the same global 32-event
 limit plus a 16-record workflow journal/audit. It owns task assignment,
+D-088's Cloud and Systems selectors each use the same four-task, three-child,
+five-attempt, one-active-child, depth-one, zero-retry boundary while remaining
+mutually exclusive separate workflows. It owns task assignment,
 exact live-context checks, the generic Personal Assistant-to-Research route,
 D-085's separate approved-document Personal Assistant-to-Knowledge route,
 D-086's fixed Research/Knowledge sequence, D-087's fixed Coding/QA/Security
 sequence, bounded output accumulation, result attribution, synthesis
+sequence, D-088's separate Cloud/QA/Security and Systems/QA/Security sequences,
+bounded output accumulation, result attribution, synthesis
 resumption, and child-first cancellation. It is not a
 runtime, provider, policy engine, tool registry, approval manager, or executor.
 It directly owns one workflow-local `MemoryStore` and `ApprovedDocumentReader`
@@ -300,7 +308,9 @@ Knowledge as a new depth-one sibling after validating the Research result.
 These allowlists are owned by the application/orchestrator. Registry membership,
 activation, or a memory profile grants no route. D-087 adds no generic Coding,
 QA, or Security route: only its exact application-selected sibling sequence is
-implemented. Later infrastructure/operations and automation workflows must add
+implemented. D-088 likewise adds no generic Cloud, Systems, QA, or Security
+route: only its two separate application-selected sibling sequences exist.
+Later automation workflows must add
 exact closed routes and finite task caps under separate plans. Their arrows
 mean orchestrator-controlled sequencing at depth one, never specialist
 spawning.
@@ -564,6 +574,55 @@ package/network access, registered tool, executor, approval request,
 dependency, Tauri/React consumer, IPC, provider, external runtime, permission,
 or device effect was added. `AgentRuntime` and `NativeAgentRuntime` remain
 unchanged and Native remains sole/default.
+
+#### Sealed fixture-only infrastructure and systems operations workflows
+
+**Current implemented Rust foundation; unwired, proposal-only, and no-I/O**:
+D-088 adds `agent::infrastructure_operations` and two distinct trusted
+application-service selectors. The Cloud selector creates Cloud Infrastructure
+-> QA & Validation -> Security & Risk; the Systems selector creates Systems
+Operations -> QA & Validation -> Security & Risk. Each specialist is a
+sequential depth-one sibling beneath the Personal root, followed by fresh
+Personal synthesis. Specialists never spawn, invoke one another, or select a
+workflow.
+
+The immutable Cloud built-in contains synthetic Terraform configuration, Azure
+architecture, and validation evidence. The immutable Systems built-in contains
+a synthetic service snapshot, sanitized log excerpt, recovery scenario, and
+validation evidence. Strict bounded `InfrastructureAssessment`, `ChangePlan`,
+`OperationalAssessment`, `DiagnosticFinding`, module-qualified QA/Security
+reports, and final synthesis preserve exact application-issued scenario,
+fixture, criterion, evidence, stage, task, run, predecessor, and result
+provenance. Evidence is only `ObservedFixture` or `NotRun`; no live command,
+provider response, host observation, credential check, or external test can be
+represented.
+
+Both selectors use exactly four tasks, three non-replenishing children, five
+runtime attempts, one active depth-one child, 32 runtime/generic events, 16
+workflow/audit records, and zero retries. Terminal parsing, remaining capacity,
+task output, successor input, and successor state are prepared before event
+acceptance. First-stage, QA, Security, synthesis, continuation-start, and
+cancellation failures preserve only validated predecessor results and produce
+truthful typed partial or terminal outcomes. Root cancellation is child-first
+and starts no successor.
+
+Terraform and platform commands, live inventory/diagnostics, cloud or system
+mutation, IAM/firewall/account changes, service/process control, reboot/
+shutdown, configuration/package/patch operations, privileged shell, VMware/
+backup mutation, credential access/rotation, filesystem/network access, and
+every other consequential capability are denied inert proposal data. QA cannot
+approve or fabricate execution; Security cannot authorize, remediate, replace
+policy, or claim missing credential/platform evidence. Final synthesis derives
+an approval requirement but creates no approval request or execution subject.
+
+Cloud and Systems are `Initial` only for their separate sealed unwired
+selectors. QA/Security remain advisory; all four policy profiles stay tool-
+ineligible and all four memory profiles remain disabled. No tool schema,
+command, credential, live access, executor, approval dispatch, provider, IPC/
+UI, dependency, persistence, permission, external runtime, or effect is added.
+String and credential-pattern guards are defense-in-depth validation only; they
+cannot authorize a future live/effect path. `AgentRuntime` and
+`NativeAgentRuntime` remain unchanged and Native remains sole/default.
 
 #### Hermes transport evaluation
 
@@ -915,6 +974,7 @@ reviewed repository ICNS byte-for-byte.
 | Selected UTF-8 text/Markdown document reading | Current, unwired and read-only | D-085 verified contracts; no IPC or provider                   |
 | Fixture-only Research/Knowledge workflow      | Current, unwired and sealed    | D-086 strict contracts; deterministic runtime events only      |
 | Fixture-only engineering quality workflow     | Current, unwired and sealed    | D-087 proposal contracts; no repository access or execution    |
+| Fixture-only Cloud and Systems workflows      | Current, unwired and sealed    | D-088 separate no-I/O selectors; no live access or execution   |
 | Live gateway and model-provider transport     | Planned                        | Blocked by O-006, per-provider O-007 evidence, and future plan |
 | Restricted tool execution                     | Planned                        | No dispatcher or executor exists                               |
 | Product memory and task persistence           | Planned                        | Phase 8 direction only                                         |

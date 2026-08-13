@@ -3,7 +3,7 @@
 Status: Subordinate staged roadmap; no implementation authority
 Authority: [`ROADMAP.md`](../../ROADMAP.md) remains the authoritative milestone
 roadmap
-Decision: D-082, D-083, D-084, D-085, D-086, D-087, and
+Decision: D-082, D-083, D-084, D-085, D-086, D-087, D-088, and
 [`ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md`](../adr/ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md)
 Last updated: 2026-08-12
 
@@ -19,9 +19,10 @@ store and approved-document reader are verified complete with advisories and
 published at `5e53f55`. D-086's exact fixture-based sequential
 Research/Knowledge workflow is verified complete with advisories and published
 at `3efd2c1`. D-087 implements one fixture-only, proposal-only engineering-
-quality workflow, verified complete with advisories,
-without adding a tool or effect. No executor, durable memory, Tauri
-consumer, or multi-agent UI exists.
+quality workflow, verified complete with advisories and published at `a5d7ba1`,
+without adding a tool or effect. D-088 implements two separate fixture-only
+Cloud and Systems workflows and is verified complete with advisories. No executor,
+durable memory, Tauri consumer, or multi-agent UI exists.
 
 `AgentOrchestrator`, `AgentRuntime`, `NativeAgentRuntime`, `AgentRegistry`,
 `ToolRegistry`, `PolicyEngine`, `ApprovalManager`, `AuditLogger`, `MemoryStore`,
@@ -62,8 +63,8 @@ to use a live model or tool.
 | Coding Agent               | `Initial`             | D-087's sealed fixture-only proposal workflow; live repository/change/test controls remain separately gated |
 | QA & Validation Agent      | `Initial`             | D-087's sealed fixture-only validation contract; it never becomes approval authority                        |
 | Security & Risk Agent      | `Initial`             | D-087's sealed fixture-only advisory contract; it never becomes policy or remediation authority             |
-| Cloud Infrastructure Agent | `Deferred`            | Infrastructure workflow plus separately approved read-only inventory and change-governance controls         |
-| Systems Operations Agent   | `Deferred`            | Operations workflow plus separately approved read-only diagnostics and platform controls                    |
+| Cloud Infrastructure Agent | `Initial`             | D-088 sealed Cloud fixture only; live inventory/change remains gated                                        |
+| Systems Operations Agent   | `Initial`             | D-088 sealed Systems fixture only; live diagnostics/platform control remains gated                          |
 | Workflow Automation Agent  | `Deferred`            | Typed workflow schema, validation, governance, approval, audit, and orchestrator coordination               |
 
 Catalog discovery lists all nine definitions and their exact state. Deferred
@@ -77,18 +78,18 @@ shell, cloud, memory, provider, or device right.
 The ten root-roadmap phases remain authoritative. The entries below explain the
 native catalog's staged work inside those phases.
 
-| Root phase | Staged native outcome                                                                                                                                                                | Status relationship                                                                   |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
-| 1          | Register all nine privilege-free definitions; mark only Personal Assistant and Research Agent `Initial`                                                                              | Verified and published at `f42a6c7`; catalog remains inert and unwired                |
-| 2-3        | Add task lifecycle, trusted context, limits, explicit delegation, result collection, cancellation, and the deterministic Personal-to-Research-to-Personal proof above `AgentRuntime` | Verified complete under D-083; foundation remains Rust-only and unwired               |
-| 4          | Bind D-084's non-executing per-agent profile/policy/approval/audit foundation; establish approved file/root and document-processing boundaries only in a separate later increment    | Governance verified and published at `2687294`                                        |
-| 5          | Add D-085's selected bounded volatile namespaces and approved `.txt`/`.md` Knowledge boundary; keep durable memory separate                                                          | Verified complete with advisories; published at `5e53f55`                             |
-| 5A         | Add D-086's exact fixture-only Personal-to-Research-to-Knowledge-to-Personal sequential workflow without widening generic delegation                                                 | Verified complete with advisories and published at `3efd2c1`                          |
-| 6          | Increase child concurrency only through explicit deterministic limits, cancellation, and resource bounds                                                                             | Blocked pending its own decision, Ready plan, and owner authorization                 |
-| 7          | Stage engineering-quality, infrastructure/operations, and automation workflows with each specialist separately enabled                                                               | D-087 Engineering workflow verified complete with advisories; other workflows Blocked |
-| 8          | Add typed catalog, task, progress, attribution, cancellation, and approval-explanation UI through narrow Tauri IPC                                                                   | Blocked on stable backend contracts                                                   |
-| 9          | Demonstrate only bounded synthetic or separately approved workflows without capability overclaiming                                                                                  | Blocked on the selected workflow's complete gates                                     |
-| 10         | Review architecture, security, privacy, cancellation, audit, portability, and rollback across completed phases                                                                       | Blocked until sufficient implementation evidence exists                               |
+| Root phase | Staged native outcome                                                                                                                                                                | Status relationship                                                     |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| 1          | Register all nine privilege-free definitions; mark only Personal Assistant and Research Agent `Initial`                                                                              | Verified and published at `f42a6c7`; catalog remains inert and unwired  |
+| 2-3        | Add task lifecycle, trusted context, limits, explicit delegation, result collection, cancellation, and the deterministic Personal-to-Research-to-Personal proof above `AgentRuntime` | Verified complete under D-083; foundation remains Rust-only and unwired |
+| 4          | Bind D-084's non-executing per-agent profile/policy/approval/audit foundation; establish approved file/root and document-processing boundaries only in a separate later increment    | Governance verified and published at `2687294`                          |
+| 5          | Add D-085's selected bounded volatile namespaces and approved `.txt`/`.md` Knowledge boundary; keep durable memory separate                                                          | Verified complete with advisories; published at `5e53f55`               |
+| 5A         | Add D-086's exact fixture-only Personal-to-Research-to-Knowledge-to-Personal sequential workflow without widening generic delegation                                                 | Verified complete with advisories and published at `3efd2c1`            |
+| 6          | Increase child concurrency only through explicit deterministic limits, cancellation, and resource bounds                                                                             | Blocked pending its own decision, Ready plan, and owner authorization   |
+| 7          | Stage engineering-quality, infrastructure/operations, and automation workflows with each specialist separately enabled                                                               | D-087 published; D-088 verified complete; automation Blocked            |
+| 8          | Add typed catalog, task, progress, attribution, cancellation, and approval-explanation UI through narrow Tauri IPC                                                                   | Blocked on stable backend contracts                                     |
+| 9          | Demonstrate only bounded synthetic or separately approved workflows without capability overclaiming                                                                                  | Blocked on the selected workflow's complete gates                       |
+| 10         | Review architecture, security, privacy, cancellation, audit, portability, and rollback across completed phases                                                                       | Blocked until sufficient implementation evidence exists                 |
 
 ## Delegation and sequencing invariants
 
@@ -162,6 +163,15 @@ Initial specialist work is planning or separately approved read-only evidence.
 No agent gains credentials, privileged shell, apply, modification, deletion,
 IAM, restart, shutdown, account, or configuration authority by role.
 
+D-088 selects two separate application-only fixture selectors, not this `or`
+branch as model-selected routing. Both remain sequential depth-one sibling
+workflows with one active child and no tool or effect. The Cloud built-in
+accepts only synthetic Terraform configuration, Azure architecture, and
+validation evidence; the Systems built-in accepts only a synthetic service
+snapshot, sanitized log excerpt, recovery scenario, and validation evidence.
+Terraform and platform commands, live inventory, diagnostics,
+credentials, and approval-to-execution remain outside the Ready plan.
+
 ### Workflow automation
 
 ```text
@@ -189,11 +199,13 @@ D-085 separately selects one combined volatile-memory and narrow
 approved-document Knowledge increment; it is verified complete with advisories
 and published at `5e53f55`. D-086's exact fixture-only Research/Knowledge
 workflow is verified complete with advisories and published at `3efd2c1`.
-D-087 and the engineering-quality plan now implement only the fixture-only,
-proposal-only Engineering workflow. It is verified complete with advisories.
-Durable
-memory, live retrieval, bounded parallelism, repository tools/effects, and
-every other later phase remain Blocked; no later owner-approved plan is Ready.
+D-087 and the engineering-quality plan implement only the published fixture-
+only, proposal-only Engineering workflow. D-088 implements two separate no-I/O
+fixture workflows and is verified complete with advisories.
+Durable memory, live retrieval, bounded parallelism, every live
+infrastructure/operations tool or effect, repository tools/effects, automation,
+and every other later phase remain Blocked. No later owner-approved Ready plan
+exists.
 
 | Area                                   | Plan                                                                                                                                      |
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |

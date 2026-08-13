@@ -1,6 +1,6 @@
 # Native agent governance matrices
 
-Status: Accepted D-084 implementation contract
+Status: Accepted D-084 contract with D-085 through D-088 current-state amendments
 Last updated: 2026-08-12
 
 These matrices are deterministic application configuration, not permissions
@@ -13,18 +13,20 @@ authorizes execution in this increment.
 | -------------------- | ------------------------------- | ----------------------------------------------- | ----------------- | ------------------------------------------ |
 | Personal Assistant   | `PersonalAssistantV1`           | `get_current_datetime@1`, `create_local_task@1` | Research only     | Catalog `Initial`; Rust-only/unwired       |
 | Research             | `ResearchReadOnlyV1`            | None                                            | None              | Catalog `Initial`; only bounded child flow |
-| Coding               | `CodingGovernedV1`              | None                                            | None              | Deferred                                   |
-| Cloud Infrastructure | `CloudInfrastructureGovernedV1` | None                                            | None              | Deferred                                   |
-| Systems Operations   | `SystemsOperationsGovernedV1`   | None                                            | None              | Deferred                                   |
-| Knowledge & Document | `KnowledgeDocumentsV1`          | None                                            | None              | Deferred                                   |
-| QA & Validation      | `QualityValidationAdvisoryV1`   | None                                            | None              | Deferred/advisory only                     |
-| Security & Risk      | `SecurityRiskAdvisoryV1`        | None                                            | None              | Deferred/advisory only                     |
+| Coding               | `CodingGovernedV1`              | None                                            | None              | `Initial`; D-087 fixture only              |
+| Cloud Infrastructure | `CloudInfrastructureGovernedV1` | None                                            | None              | `Initial`; D-088 Cloud fixture only        |
+| Systems Operations   | `SystemsOperationsGovernedV1`   | None                                            | None              | `Initial`; D-088 Systems fixture only      |
+| Knowledge & Document | `KnowledgeDocumentsV1`          | None                                            | None              | `Initial`; D-085/D-086 routes only         |
+| QA & Validation      | `QualityValidationAdvisoryV1`   | None                                            | None              | `Initial`; D-087/D-088 advisory only       |
+| Security & Risk      | `SecurityRiskAdvisoryV1`        | None                                            | None              | `Initial`; D-087/D-088 advisory only       |
 | Workflow Automation  | `WorkflowProposalOnlyV1`        | None                                            | None              | Deferred/proposal-only                     |
 
 `Initial` is non-authorizing metadata. Personal Assistant's eligibility only
 permits deterministic policy evaluation of existing schemas; it does not
-permit dispatch. Research has no current research tool. Deferred roles cannot
-enter governance because live task selection already fails closed.
+permit dispatch. Research has no current research tool. `Initial` specialist
+state permits only the exact sealed application-selected workflows named
+above; it grants no generic route, tool, memory, policy, approval, execution,
+credential, network, filesystem, process, cloud, or device authority.
 
 ## Tool-policy matrix
 
@@ -45,7 +47,7 @@ expired resolutions all retain `NotAttempted`.
 | -------------------------------------------------------- | -------------------- | --------------------------------------------------------------- | ------------- | -------------------------------- |
 | Personal Assistant root at depth 0                       | Research             | Allowed after registry/activation/state/depth/budget validation | `NotRequired` | `ChildCreated` or typed `Failed` |
 | Personal Assistant                                       | Personal Assistant   | Denied                                                          | `NotRequired` | `NotCreated`                     |
-| Personal Assistant                                       | Any other specialist | Audited denial or target Deferred after trusted attribution     | `NotRequired` | `NotCreated`                     |
+| Personal Assistant                                       | Any other specialist | Audited denial; no generic route                                | `NotRequired` | `NotCreated`                     |
 | Research                                                 | Any target           | Audited denial: unauthorized source/depth                       | `NotRequired` | `NotCreated`                     |
 | Any specialist                                           | Any target           | Audited denial                                                  | `NotRequired` | `NotCreated`                     |
 | Workflow Automation                                      | Any target           | Denied; proposal-only                                           | `NotRequired` | `NotCreated`                     |
@@ -53,6 +55,11 @@ expired resolutions all retain `NotAttempted`.
 
 Only the orchestrator may create a child. Delegation is not a tool and does
 not traverse tool schema, tool policy, or approval.
+
+Sealed D-085 through D-088 workflows are trusted application-service selectors,
+not generic delegation. D-088 creates either Cloud or Systems, then QA and
+Security, as sequential depth-one siblings. These exact child creations do not
+add a generic route and never traverse tool policy or approval.
 
 ## Authority matrix
 

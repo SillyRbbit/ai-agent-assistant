@@ -5,7 +5,8 @@ use ai_agent_assistant_lib::{
         definition::AgentId,
         governance::{
             AgentApprovalAuditDisposition, AgentExecutionDisposition, AgentGovernanceAction,
-            AgentGovernanceError, AgentPolicyReason, AgentToolGovernanceOutcome, AgentToolProposal,
+            AgentGovernanceError, AgentPolicyProfileId, AgentPolicyProfileRegistry,
+            AgentPolicyReason, AgentToolGovernanceOutcome, AgentToolProposal,
         },
         orchestrator::{AgentOrchestrator, AgentOrchestratorError, DelegationProposal},
         runtime::{RuntimeEventEnvelope, RuntimeResponseId, UntrustedRuntimeEvent},
@@ -17,6 +18,7 @@ use ai_agent_assistant_lib::{
         AgentToolGovernanceLifecycleState, MAX_AGENT_GOVERNANCE_RECORDS,
     },
     policy::types::{PolicyOutcome, PolicyReason},
+    tools::types::ToolSchema,
 };
 
 mod support;
@@ -263,6 +265,27 @@ fn specialist_profiles_deny_current_tools_without_execution() -> Result<(), Box<
             execution: AgentExecutionDisposition::NotAttempted,
         }
     );
+    Ok(())
+}
+
+#[test]
+fn d088_active_specialist_profiles_remain_empty_and_tool_ineligible() -> Result<(), Box<dyn Error>>
+{
+    let registry = AgentPolicyProfileRegistry::built_in()?;
+
+    for profile_id in [
+        AgentPolicyProfileId::CodingGovernedV1,
+        AgentPolicyProfileId::CloudInfrastructureGovernedV1,
+        AgentPolicyProfileId::SystemsOperationsGovernedV1,
+        AgentPolicyProfileId::QualityValidationAdvisoryV1,
+        AgentPolicyProfileId::SecurityRiskAdvisoryV1,
+    ] {
+        let profile = registry.get(profile_id)?;
+        assert_eq!(profile.id(), profile_id);
+        assert!(!profile.permits(ToolSchema::GetCurrentDatetimeV1));
+        assert!(!profile.permits(ToolSchema::CreateLocalTaskV1));
+    }
+
     Ok(())
 }
 

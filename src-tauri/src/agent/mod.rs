@@ -4,6 +4,7 @@ pub mod function_call_validation;
 pub mod gateway_protocol;
 pub mod gateway_request;
 pub mod governance;
+pub mod infrastructure_operations;
 pub mod native_runtime;
 pub mod orchestrator;
 pub mod registry;

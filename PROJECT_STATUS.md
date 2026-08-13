@@ -17,7 +17,7 @@ pass, as do complete Rust/repository validation and independent reviews.
 D-085 remains **verified complete with advisories and published at `5e53f55`**
 with its valid published-tree marker and narrow pure-`std` Unix document-open
 TOCTOU advisory. D-087 implements only one deterministic fixture-only,
-proposal-only engineering-quality workflow. Its exact
+proposal-only engineering-quality workflow, published at `a5d7ba1`. Its exact
 [`ExecPlan`](docs/plans/2026-08-11-engineering-quality-workflow.md) is
 **verified complete with advisories** under gate
 `agent-engineering-quality-workflow`. It uses application-owned
@@ -29,10 +29,27 @@ required-before-mutation approval status. Coding, QA & Validation, and Security
 routes, tool-ineligible policy profiles, and disabled memory remain unchanged.
 Full source checks and `npm run verify` pass. The advisory is to consider a
 bounded private orchestrator decomposition before another multi-specialist
-workflow without adding a general workflow engine. Durable memory/ARB-005, live
-research/retrieval, providers,
-repository tools/effects, IPC, UI, parallelism, and all other later workflows
-remain Blocked.
+workflow without adding a general workflow engine.
+
+D-088's exact
+[`infrastructure/systems ExecPlan`](docs/plans/2026-08-11-infrastructure-systems-operations-workflow.md)
+is **verified complete with advisories** under its complete, valid gate. It
+implements two separate sealed
+fixture-only/no-I/O sequences, one Cloud and one Systems, each followed by QA,
+Security, and Personal synthesis under four-task/five-run/one-active-child/
+zero-retry limits. It authorizes no Terraform/platform command, live inventory,
+credential, tool, executor, approval request, provider, IPC/UI, persistence,
+parallelism, or effect. Cloud Infrastructure and Systems Operations are
+`Initial` only for those separate unwired selectors; QA/Security remain
+advisory, and all four roles remain tool-ineligible and memory-disabled. Full
+source validation passes: D-088 25/25, domain 8/8, orchestrator 11/11, 362
+all-target Rust tests with one intentional ignored probe, and complete
+`npm run verify`. The quality result is `PASS WITH ADVISORIES`: decompose large
+private workflow/orchestrator internals before another workflow/live-tool
+increment, and never treat string/credential guards as authorization for a
+future live/effect path. Durable memory/ARB-005, live research/retrieval,
+providers, repository tools/effects, Workflow Automation, every live
+infrastructure/operations boundary, IPC, UI, and parallelism remain Blocked.
 
 The Rust core now carries nine exact policy-profile identities from sealed
 definitions through tasks, live execution contexts, delegation, governed tool
@@ -1435,12 +1452,15 @@ path was added.
 
 ## Next action
 
-D-087 is verified complete with advisories. Stop for separate owner direction;
-no later owner-approved plan is Ready, so next-increment readiness is
-`Blocked`. Durable memory/
-ARB-005, live retrieval, bounded parallelism, infrastructure/operations,
-automation, repository tools or effects, provider, IPC, UI, and device effects
-remain Blocked. Hermes remains Deferred/Blocked.
+D-087 is verified complete with advisories and published at `a5d7ba1`. D-088's
+two fixture-only infrastructure and systems operations workflows are verified
+complete with advisories under a complete, valid gate.
+No later owner-approved plan is Ready, so next-increment readiness is
+`Blocked`. Any live infrastructure/operations access, tool, command,
+credential, executor, approval dispatch,
+provider, IPC/UI, parallelism, or device effect remains Blocked. Durable memory/
+ARB-005, live retrieval, automation, and repository effects remain Blocked;
+Hermes remains Deferred/Blocked.
 
 All other product and remediation gates remain unchanged. ARB-002 remains
 decision-required under D-062's identity-evidence gates and D-066's OpenAI

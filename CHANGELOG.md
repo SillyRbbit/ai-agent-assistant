@@ -4,6 +4,21 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Implemented D-088's two separate sealed fixture-only/no-I/O workflows:
+  Personal Assistant -> Cloud Infrastructure -> QA & Validation -> Security &
+  Risk -> Personal synthesis, and the corresponding Systems Operations
+  sequence. The Cloud built-in contains synthetic Terraform configuration,
+  Azure architecture, and validation evidence; the Systems built-in contains a
+  synthetic service snapshot, sanitized log excerpt, recovery scenario, and
+  validation evidence. Strict bounded assessments, change/diagnostic plans,
+  QA, Security, synthesis, partial-failure, cancellation, provenance, denial,
+  event, and redacted attribution contracts pass. Cloud and Systems are
+  `Initial` only for their exact unwired selectors; all four specialists remain
+  tool-ineligible and memory-disabled. No command, credential, live access,
+  tool, executor, approval dispatch, provider, IPC/UI, dependency, or effect
+  was added. Full source, documentation, session, and deterministic marker
+  verification passes with `PASS WITH ADVISORIES`.
+
 - Implemented D-087's sealed fixture-only, proposal-only Personal Assistant ->
   Coding -> QA & Validation -> Security & Risk -> Personal synthesis workflow.
   Added strict bounded `ChangeProposal`, `ValidationReport`, `RiskAssessment`,

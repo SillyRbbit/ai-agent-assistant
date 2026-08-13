@@ -29,7 +29,13 @@ proposal-only Personal-to-Coding-to-QA-to-Security-to-Personal sequence. Its
 strict results preserve only application-issued fixture, criterion, proposal,
 QA, and evidence references; consequential capabilities are denied data, QA
 and Security remain advisory, and final approval requirement is derived without
-creating an approval request or execution subject. A successful terminal native or run-termination resolution
+creating an approval request or execution subject. D-088 adds two further
+separately selected fixture-only/no-I/O sequences: Cloud
+Infrastructure or Systems Operations followed by QA, Security, and Personal
+synthesis. Their immutable built-ins contain only synthetic Terraform/Azure or
+sanitized service/log/recovery evidence. Consequential capabilities remain
+denied data and no command, credential, live access, approval dispatch, or
+effect exists. A successful terminal native or run-termination resolution
 cannot leave the initial turn without one typed legacy audit receipt. Agent
 governance reserves one audit slot before downstream mutation and records
 execution only as `NotAttempted`. There is no live provider transport,
@@ -119,6 +125,29 @@ security path.
   when a patch is proposed; no approval request or execution authority exists.
   Coding, QA, and Security remain tool-ineligible, memory-disabled, and
   `NotAttempted` for execution.
+- Each D-088 selector is application-only and mutually exclusive with the other
+  selector and every prior workflow. Cloud or Systems, QA, and Security are
+  sequential depth-one siblings under four-task, three-child, five-attempt,
+  one-active-child, 32-event, 16-workflow/audit-record, and zero-retry limits.
+- Cloud accepts only the sealed synthetic Terraform-configuration/Azure-
+  architecture scenario. Systems accepts only the sealed synthetic service-
+  snapshot/sanitized-log/recovery scenario. Findings and stage transfers may
+  reference only application-issued scenario, fixture, criterion, evidence,
+  predecessor, and result identities.
+- Terraform/platform commands, live inventory/diagnostics, cloud or system
+  mutation, IAM/firewall/account changes, service/process control, reboot/
+  shutdown, configuration/package/patch operations, privileged shell, VMware/
+  backup mutation, credential access/rotation, filesystem/network access, and
+  every other consequential operation are denied inert proposal data.
+- QA cannot approve or treat `NotRun` as passing evidence. Security cannot
+  authorize, remediate, become policy, or claim unavailable credential/
+  platform evidence. Final synthesis creates no approval request or executable
+  subject. Cloud, Systems, QA, and Security remain tool-ineligible, memory-
+  disabled, and `NotAttempted` for execution.
+- D-088 string and credential-pattern guards are defense in depth only. They do
+  not prove secret absence and cannot authorize any later live, credential,
+  tool, command, or effect path; those require separate trusted containment and
+  governance.
 - Governance audit is closed, redacted, volatile, capped at 32 subjects, and
   never authorizes an action.
 - Untrusted content cannot grant permission or change policy.
@@ -298,6 +327,13 @@ Apply the dependency and supply-chain sections of `SECURITY_CHECKLIST.md` and
   registered tool, executor, approval request, mutation, persistence, IPC/UI,
   dependency, capability, permission, provider, external runtime, or
   `AgentRuntime`/`NativeAgentRuntime` widening. Native remains sole/default.
+- D-088 fixture content, sanitized log text, assessment/change/diagnostic plan,
+  criterion/evidence descriptions, and synthetic sentinels remain absent from
+  Debug, errors, events/audit, logs, SQLite, IPC, and automatic memory.
+- D-088 adds no Terraform/platform/OS command, live inventory or diagnostic,
+  credential lookup/use, tool, executor, approval request/dispatch, provider,
+  IPC/UI, dependency, permission, persistence, external runtime, or effect and
+  does not widen `AgentRuntime` or `NativeAgentRuntime`.
 
 ## GitHub automation boundary
 
