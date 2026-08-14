@@ -114,13 +114,39 @@ function submitMockRequest(request = "Prepare the board update"): void {
   fireEvent.change(screen.getByLabelText("Assistant request"), {
     target: { value: request },
   });
-  fireEvent.click(screen.getByRole("button", { name: "Send" }));
+
+  const submitButton =
+    screen.queryByRole("button", { name: "Send" }) ?? screen.getByRole("button", { name: "Stop" });
+  fireEvent.click(submitButton);
 }
 
 function finishMockStream(): void {
   act(() => {
     vi.advanceTimersByTime(MOCK_STREAM_INTERVAL_MS * 4);
   });
+}
+
+function getShellRegions(container: Element): {
+  readonly contentRegion: HTMLElement;
+  readonly mainRegion: HTMLElement;
+  readonly sidebarRegion: HTMLElement;
+} {
+  const mainRegion = container.querySelector('[data-scroll-region="application-main"]');
+  const contentRegion = container.querySelector('[data-scroll-region="application-content"]');
+  const sidebarRegion = container.querySelector('[data-scroll-region="application-sidebar"]');
+
+  if (
+    mainRegion === null ||
+    contentRegion === null ||
+    sidebarRegion === null ||
+    !(mainRegion instanceof HTMLElement) ||
+    !(contentRegion instanceof HTMLElement) ||
+    !(sidebarRegion instanceof HTMLElement)
+  ) {
+    throw new Error("Expected all root scrolling containers to be present.");
+  }
+
+  return { contentRegion, mainRegion, sidebarRegion };
 }
 
 afterEach(() => {
@@ -489,7 +515,8 @@ describe("App", () => {
 
   it("opens every page shell from the sidebar", () => {
     const harness = createMenuRouteHarness();
-    render(<App services={createServices(harness.source)} />);
+    const view = render(<App services={createServices(harness.source)} />);
+    const { contentRegion } = getShellRegions(view.container);
 
     for (const route of APP_ROUTES) {
       const item = NAVIGATION_ITEMS.find((candidate) => candidate.route === route);
@@ -500,11 +527,104 @@ describe("App", () => {
       openSidebarRoute(item.label);
       const expectedHeading = route === "permissions" ? "Permissions" : item.label;
       expect(screen.getByRole("heading", { level: 1, name: expectedHeading })).toBeInTheDocument();
+      expect(
+        contentRegion.contains(screen.getByRole("heading", { level: 1, name: expectedHeading })),
+      ).toBe(true);
       expect(screen.getByRole("button", { name: item.label })).toHaveAttribute(
         "aria-current",
         "page",
       );
     }
+  });
+
+  it("routes all pages into one primary content scroll container", () => {
+    const harness = createMenuRouteHarness();
+    const view = render(<App services={createServices(harness.source)} />);
+    const { contentRegion, mainRegion, sidebarRegion } = getShellRegions(view.container);
+
+    expect(mainRegion).toContainElement(contentRegion);
+    expect(contentRegion).toHaveClass("application-content");
+    expect(sidebarRegion).toHaveAttribute("data-scroll-region", "application-sidebar");
+    expect(
+      sidebarRegion.querySelector('[data-scroll-region="conversation-list-scroll"]'),
+    ).not.toBeNull();
+    expect(
+      sidebarRegion.querySelector('[data-scroll-region="primary-navigation-scroll"]'),
+    ).not.toBeNull();
+    expect(contentRegion.querySelector("section.page-stack")).toBeInTheDocument();
+
+    openSidebarRoute("Settings");
+    expect(contentRegion.querySelector("section.page-stack")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Settings" })).toBeInTheDocument();
+
+    const settingsSection = contentRegion.querySelector("section.page-stack");
+    expect(settingsSection).not.toBeNull();
+    expect(contentRegion.contains(settingsSection as HTMLElement)).toBe(true);
+  });
+
+  it("keeps long conversation content in the primary scroll region", () => {
+    vi.useFakeTimers();
+    const harness = createMenuRouteHarness();
+    const runHarness = createMockRunDriverHarness();
+    const view = render(
+      <App
+        services={createServices(
+          harness.source,
+          () => Promise.resolve(CONNECTED_APP_INFO),
+          runHarness.driver,
+        )}
+      />,
+    );
+    const { contentRegion } = getShellRegions(view.container);
+
+    submitMockRequest(
+      "First long request with repeated detail to emulate tall content.".repeat(20),
+    );
+    finishMockStream();
+
+    const transcripts = screen.getAllByRole("region", {
+      name: /^Conversation transcript:/u,
+    });
+    expect(transcripts).toHaveLength(1);
+    const conversationTranscript = transcripts[0];
+    if (conversationTranscript === undefined) {
+      throw new Error("Expected the active conversation transcript.");
+    }
+    expect(contentRegion.contains(conversationTranscript)).toBe(true);
+    expect(
+      within(conversationTranscript).getByText("Preparing mock response…"),
+    ).toBeInTheDocument();
+  });
+
+  it("keeps long lists inside the sidebar overflow owner", () => {
+    vi.useFakeTimers();
+    const harness = createMenuRouteHarness();
+    const view = render(<App services={createServices(harness.source)} />);
+    const { sidebarRegion } = getShellRegions(view.container);
+    const conversationList = sidebarRegion.querySelector(
+      '[data-scroll-region="conversation-list-scroll"]',
+    );
+    const primaryList = sidebarRegion.querySelector(
+      '[data-scroll-region="primary-navigation-scroll"]',
+    );
+
+    expect(conversationList).not.toBeNull();
+    expect(primaryList).not.toBeNull();
+
+    // create many conversations to ensure the list is structurally long-capable
+    for (let index = 0; index < 20; index += 1) {
+      submitMockRequest(`Request ${String(index)}`);
+      finishMockStream();
+      fireEvent.click(screen.getByRole("button", { name: "Reject" }));
+      if (index < 19) {
+        startNewConversation();
+      }
+    }
+
+    const conversationHistory = screen.getByRole("list", { name: "Conversation history" });
+    expect(within(conversationHistory).getAllByRole("button")).toHaveLength(20);
+    expect(conversationList?.closest("aside")).toBe(sidebarRegion);
+    expect(primaryList?.closest("aside")).toBe(sidebarRegion);
   });
 
   it("routes a new-request menu event to Conversations and clears the draft", async () => {
