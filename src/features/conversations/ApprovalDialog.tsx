@@ -7,12 +7,13 @@ interface ApprovalDialogProps {
 
 export function ApprovalDialog({ approval, onDecision }: ApprovalDialogProps) {
   return (
-    <div className="approval-backdrop">
+    <div className="approval-backdrop" data-scroll-region="approval-backdrop">
       <section
         aria-describedby="mock-approval-description"
         aria-labelledby="mock-approval-title"
         aria-modal="true"
         className="approval-dialog"
+        data-scroll-region="approval-dialog-scroll"
         role="dialog"
       >
         <div className="approval-dialog__header">

@@ -136,12 +136,20 @@ function ApplicationShell({ services }: ApplicationShellProps) {
         }}
       />
 
-      <main className="application-main" id="main-content" tabIndex={-1}>
+      <main
+        className="application-main"
+        data-scroll-region="application-main"
+        id="main-content"
+        role="main"
+        tabIndex={-1}
+      >
         <div className="application-toolbar">
           <p className="application-toolbar__location">{activeLabel ?? "Workspace"}</p>
           <CoreStatus connectionStatus={coreConnection.status} menuRouteStatus={menuRouteStatus} />
         </div>
-        <div className="application-content">{pages[state.activeRoute]}</div>
+        <div className="application-content" data-scroll-region="application-content">
+          {pages[state.activeRoute]}
+        </div>
       </main>
     </div>
   );

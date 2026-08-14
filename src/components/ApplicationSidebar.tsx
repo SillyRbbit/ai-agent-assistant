@@ -25,7 +25,7 @@ export function ApplicationSidebar({
   const newestFirstConversations = [...conversations].reverse();
 
   return (
-    <aside className="application-sidebar">
+    <aside className="application-sidebar" data-scroll-region="application-sidebar">
       <div className="application-brand">
         <picture className="application-brand__mark" aria-hidden="true">
           <source media="(prefers-color-scheme: dark)" srcSet={brandLogoDark} />
@@ -58,7 +58,11 @@ export function ApplicationSidebar({
         <p className="navigation-label" id="conversation-history-label">
           Conversations
         </p>
-        <ul aria-label="Conversation history" className="conversation-navigation__list">
+        <ul
+          aria-label="Conversation history"
+          className="conversation-navigation__list"
+          data-scroll-region="conversation-list-scroll"
+        >
           {newestFirstConversations.map((conversation) => (
             <li key={conversation.id}>
               <button
@@ -80,7 +84,7 @@ export function ApplicationSidebar({
 
       <nav className="primary-navigation" aria-label="Primary navigation">
         <p className="navigation-label">Workspace</p>
-        <ul>
+        <ul data-scroll-region="primary-navigation-scroll">
           {NAVIGATION_ITEMS.map((item) => (
             <li key={item.route}>
               <button
