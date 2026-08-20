@@ -513,10 +513,15 @@ describe("App", () => {
     expect(currentConversation).toBeEnabled();
   });
 
-  it("opens every page shell from the sidebar", () => {
+  it("opens all eight page shells in the shared scroll region and moves route focus", async () => {
     const harness = createMenuRouteHarness();
     const view = render(<App services={createServices(harness.source)} />);
-    const { contentRegion } = getShellRegions(view.container);
+    const { contentRegion, mainRegion } = getShellRegions(view.container);
+    const activeConversation = screen.getByRole("button", {
+      name: "Open conversation: New conversation",
+    });
+
+    expect(APP_ROUTES).toHaveLength(8);
 
     for (const route of APP_ROUTES) {
       const item = NAVIGATION_ITEMS.find((candidate) => candidate.route === route);
@@ -526,14 +531,23 @@ describe("App", () => {
 
       openSidebarRoute(item.label);
       const expectedHeading = route === "permissions" ? "Permissions" : item.label;
-      expect(screen.getByRole("heading", { level: 1, name: expectedHeading })).toBeInTheDocument();
-      expect(
-        contentRegion.contains(screen.getByRole("heading", { level: 1, name: expectedHeading })),
-      ).toBe(true);
+      const heading = await screen.findByRole("heading", { level: 1, name: expectedHeading });
+      expect(contentRegion).toContainElement(heading);
+      expect(mainRegion).toHaveFocus();
       expect(screen.getByRole("button", { name: item.label })).toHaveAttribute(
         "aria-current",
         "page",
       );
+      const routeAnnouncement = screen.getByText(item.label, {
+        selector: ".application-toolbar__location",
+      });
+      expect(routeAnnouncement).toHaveAttribute("aria-live", "polite");
+      expect(routeAnnouncement).toHaveAttribute("aria-atomic", "true");
+      if (route === "conversations") {
+        expect(activeConversation).toHaveAttribute("aria-current", "page");
+      } else {
+        expect(activeConversation).not.toHaveAttribute("aria-current");
+      }
     }
   });
 

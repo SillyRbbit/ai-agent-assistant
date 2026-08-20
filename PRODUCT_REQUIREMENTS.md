@@ -1,7 +1,7 @@
 # Cortexa product requirements
 
 Status: Authoritative normalized product requirements
-Last updated: 2026-08-13
+Last updated: 2026-08-20
 
 ## Purpose and authority
 
@@ -307,6 +307,16 @@ shipping dispatcher or executor.
   It shall not be represented as provider or CPU concurrency, hard preemption,
   provider-session isolation, an app-global capacity coordinator, scheduler,
   general workflow engine, or distributed execution.
+- **FR-039J**: The deterministic Command Center prototype shall remain a lazy,
+  frontend-owned `command-center-demo-v1` projection with one distinct
+  `AgentOrchestrator`, all nine exact agent roles, five view-only groups,
+  bounded closed scenarios, persistent simulated-data disclosure, and no
+  Rust-agent IPC or consequential control.
+- **FR-039K**: The Command Center graph shall have a synchronized grouped
+  structured view and relationship table, keyboard-operable selection and
+  viewport controls, ordinary page-wheel pass-through, feature-local filters,
+  reachable inspector/activity content, and no claim of live health, approval,
+  policy, execution, provider, tool, or telemetry state.
 
 Only bootstrap metadata storage, a turn-bound volatile in-memory approval-audit
 adapter, and D-085's unwired workflow-local volatile memory and approved-
@@ -465,6 +475,10 @@ The repository currently provides:
 - one unwired fixture-only/no-I/O bounded-parallel selector with three sealed
   same-thread event-multiplexed scenarios, explicit failure policy, stable
   ordinal outcomes, truthful synthesis, and no provider/session/thread work;
+- one frontend-only deterministic Command Center fixture projection with a lazy
+  route, exact architecture labels, structured alternative, and no Rust/Tauri
+  agent connection; its required real-browser/Tauri viewport/input/accessibility
+  matrix remains pending;
 - no live model, gateway, tool execution, durable product persistence, integration,
   privileged permission, or durable audit path.
 

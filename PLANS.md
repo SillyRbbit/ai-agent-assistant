@@ -4,6 +4,35 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
+The owner-approved
+[`2026-08-12-native-multi-agent-command-center-prototype.md`](docs/plans/2026-08-12-native-multi-agent-command-center-prototype.md)
+is **Active — source implemented; mandatory real-browser/Tauri validation
+pending** under gate `native-multi-agent-command-center-prototype`. The
+frontend-only working tree adds one lazy, deterministic, fixture-only Command
+Center route with one distinct `AgentOrchestrator`, all nine exact roles,
+five presentation groups, seven closed scenarios, a non-editable topology,
+synchronized structured alternative, inspector, and bounded activity. It adds
+only exact `@xyflow/react@12.11.3` and `lucide-react@1.33.0`, with 19
+reviewed transitives and zero production vulnerabilities. No Rust/Tauri/IPC/
+storage/capability/CSP path changes.
+
+Source-current focused tests pass 142/142, the full frontend suite passes
+211/211, and frontend formatting, lint, typecheck, and production build pass.
+Strict Rust checks and 481 all-target tests pass with one intentional Hermes
+probe ignored. Initial JS+CSS is 76,183 gzip bytes (+1,119 from baseline);
+the separate lazy Command Center JS+CSS is 86,350 gzip bytes, both within their
+approved budgets. Final current-tree `npm run verify`, including the Tauri
+release no-bundle build, passes. Independent review has no source blocker.
+
+The mandatory real-browser/Tauri viewport, input, focus, computed-overflow,
+contrast, reduced-motion, and resize matrix is **Not run** because the required
+Browser runtime tool is unavailable. A local Vite/Tauri launch succeeded, but
+macOS denied assistive access for deterministic navigation, resize, and
+screenshots; no browser tooling install was authorized. Required manual checks
+therefore block Complete status and no
+completion marker is claimed. Real multi-agent IPC/provider/runtime/tool work
+and every later milestone remain Blocked.
+
 D-087's
 [`2026-08-11-engineering-quality-workflow.md`](docs/plans/2026-08-11-engineering-quality-workflow.md)
 is **verified complete with advisories and published at `a5d7ba1`**. Its valid

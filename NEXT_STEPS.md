@@ -1,8 +1,27 @@
 # Next steps
 
-Last updated: 2026-08-13
+Last updated: 2026-08-20
 
 This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must close before later feature work begins.
+
+## Active validation-pending increment
+
+The deterministic multi-agent Command Center prototype has implemented source
+and passing automated evidence but is not Complete. The only current work is
+the approved plan's mandatory real-browser/Tauri matrix: required viewports,
+mouse wheel, trackpad, scrollbar, keyboard, touch where supported, browser
+zoom, resize, focus visibility/scrolling, light/dark contrast, reduced motion,
+horizontal overflow, final-item reachability, and sticky/obstruction checks.
+Those checks are **Not run** because the required Browser runtime tool is
+unavailable. A local Vite server and the existing Tauri debug app launched, but
+macOS denied assistive access required to navigate, resize, and capture the
+matrix; both processes were stopped. No browser tooling installation was
+authorized.
+
+Do not begin live IPC, provider/model/runtime/tool integration, a knowledge
+graph, command palette, another dependency, or any later milestone. After the
+matrix is executed with exact evidence, rerun the final completion gate and
+either close this increment or correct only a defect within its approved scope.
 
 ## Completed increments
 

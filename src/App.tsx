@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { lazy, Suspense, useEffect, useRef, type ReactNode } from "react";
 
 import { ApplicationStateProvider } from "./application/ApplicationStateProvider";
 import { NAVIGATION_ITEMS, type AppRoute } from "./application/navigation";
@@ -11,17 +11,21 @@ import {
 } from "./application/useMenuRouteSubscription";
 import { useApplicationDispatch, useApplicationState } from "./application/useApplicationState";
 import { ApplicationSidebar } from "./components/ApplicationSidebar";
+import { PageState } from "./components/PageState";
 import { ActivityPage } from "./features/activity/ActivityPage";
 import { ConversationWorkspace } from "./features/conversations/ConversationWorkspace";
 import { PermissionCenter } from "./features/permissions/PermissionCenter";
 import { SettingsPage } from "./features/settings/SettingsPage";
 import { PlaceholderPage } from "./features/shared/PlaceholderPage";
+import { PageHeader } from "./features/shared/PageHeader";
 import { TasksPage } from "./features/tasks/TasksPage";
 import { fetchAppInfo } from "./infrastructure/tauri/app-info-client";
 import {
   tauriMenuRouteSource,
   type MenuRouteSource,
 } from "./infrastructure/tauri/menu-route-client";
+
+const CommandCenterPage = lazy(() => import("./features/command-center/CommandCenterPage"));
 
 export interface AppServices {
   readonly appInfoLoader: AppInfoLoader;
@@ -47,12 +51,33 @@ export function App({ services = DEFAULT_APP_SERVICES }: AppProps) {
   );
 }
 
+function CommandCenterLoadingPage() {
+  return (
+    <section aria-busy="true" aria-labelledby="command-center-loading-title" className="page-stack">
+      <PageHeader
+        description="Preparing the deterministic multi-agent operations workspace."
+        eyebrow="Operations"
+        headingId="command-center-loading-title"
+        title="Command Center"
+      />
+      <PageState
+        description="Loading the local visual prototype."
+        icon="O"
+        title="Preparing Command Center"
+        tone="loading"
+      />
+    </section>
+  );
+}
+
 interface ApplicationShellProps {
   readonly services: AppServices;
 }
 
 function ApplicationShell({ services }: ApplicationShellProps) {
   const state = useApplicationState();
+  const mainContentRef = useRef<HTMLElement>(null);
+  const previousRouteRef = useRef(state.activeRoute);
   const dispatch = useApplicationDispatch();
   const coreConnection = useCoreConnection(services.appInfoLoader);
   const menuRouteStatus = useMenuRouteSubscription(services.menuRouteSource);
@@ -62,7 +87,19 @@ function ApplicationShell({ services }: ApplicationShellProps) {
     (conversation) => conversation.id === state.activeConversationId,
   );
 
+  useEffect(() => {
+    if (previousRouteRef.current !== state.activeRoute) {
+      previousRouteRef.current = state.activeRoute;
+      mainContentRef.current?.focus();
+    }
+  }, [state.activeRoute]);
+
   const pages: Readonly<Record<AppRoute, ReactNode>> = {
+    "command-center": (
+      <Suspense fallback={<CommandCenterLoadingPage />}>
+        <CommandCenterPage />
+      </Suspense>
+    ),
     activity: <ActivityPage events={state.activityEvents} />,
     conversations: (
       <ConversationWorkspace
@@ -140,11 +177,14 @@ function ApplicationShell({ services }: ApplicationShellProps) {
         className="application-main"
         data-scroll-region="application-main"
         id="main-content"
+        ref={mainContentRef}
         role="main"
         tabIndex={-1}
       >
         <div className="application-toolbar">
-          <p className="application-toolbar__location">{activeLabel ?? "Workspace"}</p>
+          <p aria-atomic="true" aria-live="polite" className="application-toolbar__location">
+            {activeLabel ?? "Workspace"}
+          </p>
           <CoreStatus connectionStatus={coreConnection.status} menuRouteStatus={menuRouteStatus} />
         </div>
         <div className="application-content" data-scroll-region="application-content">

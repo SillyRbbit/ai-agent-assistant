@@ -1,6 +1,55 @@
 # Handoff
 
-Last updated: 2026-08-13
+Last updated: 2026-08-20
+
+## Current Command Center validation checkpoint
+
+The approved deterministic multi-agent Command Center prototype is **Active —
+source implemented; mandatory real-browser/Tauri validation pending** under
+gate `native-multi-agent-command-center-prototype`. It adds one lazy
+frontend-only route with one distinct `AgentOrchestrator`, all nine exact
+roles, five view-only groups, seven closed deterministic scenarios, a
+non-editable graph, synchronized grouped structured view and relationship
+table, inspector, bounded activity, local search/filters, route focus/
+announcement behavior, and persistent
+`DEMO MODE · SIMULATED AGENT DATA` disclosure.
+
+Only exact `@xyflow/react@12.11.3` and `lucide-react@1.33.0` were added as
+direct production dependencies; 19 transitives were reviewed, production audit
+is zero, and five pre-existing development-only advisories remain unchanged.
+`@xyflow/react` is confined to the topology adapter. No Rust/Tauri/IPC/
+storage/capability/CSP source changed and no UI control has an effect.
+
+Source-current projection, page, viewport-adapter, App, and state tests pass
+64/64, 14/14, 5/5, 28/28, and 31/31: 142/142 focused. The full frontend suite
+passes 211/211 across 13 files. Frontend formatting, lint, typecheck, and
+production build pass; strict
+Rust checks and 481 all-target tests pass with zero failures and one intentional
+Hermes probe ignored. Initial JS+CSS is 76,183 gzip bytes, +1,119 from the
+75,064 baseline. The separate lazy Command Center JS+CSS is 86,350 gzip bytes.
+Both remain within the approved budgets.
+
+Final current-tree `npm run verify` passes after source and documentation
+synchronization, including the Tauri release no-bundle build.
+
+Independent review found no source blocker and reports `PASS WITH
+ADVISORIES`. The required real-browser/Tauri viewport, input, focus,
+computed-overflow, contrast, reduced-motion, and resize matrix is **Not run**
+because the Browser runtime tool is unavailable. A local Vite server and the
+existing Tauri debug app launched, but macOS denied assistive access required
+for deterministic navigation, resize, and screenshots; both processes were
+stopped. No browser tooling install was authorized. Do not claim manual
+geometry/native verification, do not mark
+the plan Complete, and do not finalize a completion marker until that evidence
+exists.
+
+Exact resume task: run only the active ExecPlan's M5 real-browser/Tauri matrix
+using already approved tooling or a separately authorized tooling ledger.
+Record each check as Passed, Failed, Not run, or Manual verification pending.
+If it passes, rerun the final post-documentation gate and closeout. If it finds
+a defect, correct only that defect within the approved prototype. Do not begin
+real agent IPC/provider/runtime/tool work, commit, or push without separate
+owner authorization.
 
 ## Current D-091 verified completion checkpoint
 
@@ -312,7 +361,7 @@ concise root instructions, master prompt, aligned reusable prompts, and D-065.
 No application, dependency, CI, hook, skill, deployment, or runtime path
 changed.
 
-## Current exact task
+## Historical D-088 exact task checkpoint
 
 D-088's two sealed, fixture-only/no-I/O infrastructure and systems-operations
 workflows are **verified complete with advisories**. Gate

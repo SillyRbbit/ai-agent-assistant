@@ -4,9 +4,9 @@ Status: Subordinate staged roadmap; no implementation authority
 Authority: [`ROADMAP.md`](../../ROADMAP.md) remains the authoritative milestone
 roadmap
 Decision: D-082, D-083, D-084, D-085, D-086, D-087, D-088, D-089, D-090,
-D-091, and
+D-091, the approved Command Center proposal/ExecPlan, and
 [`ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md`](../adr/ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md)
-Last updated: 2026-08-13
+Last updated: 2026-08-20
 
 ## Purpose
 
@@ -27,8 +27,10 @@ private decomposition is published at `140f05b`. D-090's strict typed proposal
 and A-D take-once manual sealed-dispatch boundary is verified and published.
 D-091 implements one sealed fixture-only/no-I/O same-thread event-multiplexed
 parallel selector and is verified complete with advisories under a complete,
-valid gate. No executor,
-durable memory, Tauri consumer, or multi-agent UI exists.
+valid gate. An Active frontend-only deterministic Command Center fixture
+projection now exists with mandatory real-browser/Tauri validation pending. No
+executor, durable memory, multi-agent Tauri consumer, authoritative/live
+multi-agent UI state, or agent control exists.
 
 `AgentOrchestrator`, `AgentRuntime`, `NativeAgentRuntime`, `AgentRegistry`,
 `ToolRegistry`, `PolicyEngine`, `ApprovalManager`, `AuditLogger`, `MemoryStore`,
@@ -84,18 +86,18 @@ shell, cloud, memory, provider, or device right.
 The ten root-roadmap phases remain authoritative. The entries below explain the
 native catalog's staged work inside those phases.
 
-| Root phase | Staged native outcome                                                                                                                                                                | Status relationship                                                     |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
-| 1          | Register all nine privilege-free definitions; mark only Personal Assistant and Research Agent `Initial`                                                                              | Verified and published at `f42a6c7`; catalog remains inert and unwired  |
-| 2-3        | Add task lifecycle, trusted context, limits, explicit delegation, result collection, cancellation, and the deterministic Personal-to-Research-to-Personal proof above `AgentRuntime` | Verified complete under D-083; foundation remains Rust-only and unwired |
-| 4          | Bind D-084's non-executing per-agent profile/policy/approval/audit foundation; establish approved file/root and document-processing boundaries only in a separate later increment    | Governance verified and published at `2687294`                          |
-| 5          | Add D-085's selected bounded volatile namespaces and approved `.txt`/`.md` Knowledge boundary; keep durable memory separate                                                          | Verified complete with advisories; published at `5e53f55`               |
-| 5A         | Add D-086's exact fixture-only Personal-to-Research-to-Knowledge-to-Personal sequential workflow without widening generic delegation                                                 | Verified complete with advisories and published at `3efd2c1`            |
-| 6          | Add D-091's exact fixture-only same-thread event-multiplexed selector with deterministic limits, cancellation, failure policy, ordering, and cleanup                                 | Verified complete with advisories; marker complete and valid            |
-| 7          | Stage engineering-quality, infrastructure/operations, and automation workflows with each specialist separately enabled                                                               | Completed: D-087/D-088/D-090 verified; D-089 published                  |
-| 8          | Add typed catalog, task, progress, attribution, cancellation, and approval-explanation UI through narrow Tauri IPC                                                                   | Blocked on stable backend contracts                                     |
-| 9          | Demonstrate only bounded synthetic or separately approved workflows without capability overclaiming                                                                                  | Blocked on the selected workflow's complete gates                       |
-| 10         | Review architecture, security, privacy, cancellation, audit, portability, and rollback across completed phases                                                                       | Blocked until sufficient implementation evidence exists                 |
+| Root phase | Staged native outcome                                                                                                                                                                | Status relationship                                                                   |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| 1          | Register all nine privilege-free definitions; mark only Personal Assistant and Research Agent `Initial`                                                                              | Verified and published at `f42a6c7`; catalog remains inert and unwired                |
+| 2-3        | Add task lifecycle, trusted context, limits, explicit delegation, result collection, cancellation, and the deterministic Personal-to-Research-to-Personal proof above `AgentRuntime` | Verified complete under D-083; foundation remains Rust-only and unwired               |
+| 4          | Bind D-084's non-executing per-agent profile/policy/approval/audit foundation; establish approved file/root and document-processing boundaries only in a separate later increment    | Governance verified and published at `2687294`                                        |
+| 5          | Add D-085's selected bounded volatile namespaces and approved `.txt`/`.md` Knowledge boundary; keep durable memory separate                                                          | Verified complete with advisories; published at `5e53f55`                             |
+| 5A         | Add D-086's exact fixture-only Personal-to-Research-to-Knowledge-to-Personal sequential workflow without widening generic delegation                                                 | Verified complete with advisories and published at `3efd2c1`                          |
+| 6          | Add D-091's exact fixture-only same-thread event-multiplexed selector with deterministic limits, cancellation, failure policy, ordering, and cleanup                                 | Verified complete with advisories; marker complete and valid                          |
+| 7          | Stage engineering-quality, infrastructure/operations, and automation workflows with each specialist separately enabled                                                               | Completed: D-087/D-088/D-090 verified; D-089 published                                |
+| 8          | Add typed catalog, task, progress, attribution, cancellation, and approval-explanation UI through narrow Tauri IPC                                                                   | Deterministic frontend fixture prototype validation pending; live IPC remains Blocked |
+| 9          | Demonstrate only bounded synthetic or separately approved workflows without capability overclaiming                                                                                  | Blocked on the selected workflow's complete gates                                     |
+| 10         | Review architecture, security, privacy, cancellation, audit, portability, and rollback across completed phases                                                                       | Blocked until sufficient implementation evidence exists                               |
 
 ## Delegation and sequencing invariants
 

@@ -1,4 +1,5 @@
 export const APP_ROUTES = [
+  "command-center",
   "conversations",
   "tasks",
   "memory",
@@ -18,6 +19,12 @@ export interface NavigationItem {
 }
 
 export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
+  {
+    description: "Inspect the deterministic multi-agent operations prototype.",
+    glyph: "O",
+    label: "Command Center",
+    route: "command-center",
+  },
   {
     description: "Plan requests and work with your local assistant.",
     glyph: "C",

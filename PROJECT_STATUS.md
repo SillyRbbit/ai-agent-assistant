@@ -1,8 +1,40 @@
 # Project status
 
-Last updated: 2026-08-13
+Last updated: 2026-08-20
 
 ## Current milestone
+
+The approved deterministic multi-agent Command Center prototype is **Active —
+source implemented; mandatory real-browser/Tauri validation pending**. The
+frontend working tree adds one lazy route with a versioned fixture projection,
+one distinct `AgentOrchestrator`, all nine exact agent roles, five
+presentation groups, seven closed scenarios, graph/structured alternatives,
+an inspector, bounded activity, local search/filters, and persistent
+`DEMO MODE · SIMULATED AGENT DATA` disclosure. It is presentation-only and
+crosses no IPC or trusted authority boundary.
+
+Only exact `@xyflow/react@12.11.3` and `lucide-react@1.33.0` were added as
+direct production dependencies. Their reviewed lockfile consequence is 19
+transitives; production audit is zero vulnerabilities and five pre-existing
+development-only advisories remain unchanged. Protected Rust/Tauri/IPC/storage/
+capability/CSP paths are unchanged.
+
+Source-current focused tests pass 142/142 and the frontend suite passes 211/211
+across 13 files. Frontend format, lint, typecheck, and build pass; strict Rust
+checks and 481 all-target tests pass with one intentional Hermes probe ignored.
+Initial JS+CSS is 76,183 gzip bytes (+1,119 from baseline), and the separate
+lazy Command Center JS+CSS is 86,350 gzip bytes, within both budgets.
+Final current-tree `npm run verify`, including the Tauri release no-bundle
+build, passes after source and documentation synchronization.
+
+The required real-browser/Tauri viewport and input matrix is **Not run** because
+the Browser runtime tool is unavailable in this session. The local Vite server
+and existing Tauri debug app launched, but macOS denied assistive access needed
+to execute the viewport matrix; no browser tooling installation was authorized.
+Computed geometry, wheel/trackpad/touch behavior,
+rendered focus/contrast, reduced motion, and dynamic resizing are therefore
+unverified. The increment remains Active with no completion marker; all live
+integration and later milestone work is Blocked.
 
 The D-086 fixture-only Research/Knowledge increment and
 [`2026-08-11-research-knowledge-workflow.md`](docs/plans/2026-08-11-research-knowledge-workflow.md)

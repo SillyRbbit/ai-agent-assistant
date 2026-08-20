@@ -67,7 +67,11 @@ export function ApplicationSidebar({
             <li key={conversation.id}>
               <button
                 aria-label={`Open conversation: ${conversation.title}`}
-                aria-current={conversation.id === activeConversationId ? "page" : undefined}
+                aria-current={
+                  activeRoute === "conversations" && conversation.id === activeConversationId
+                    ? "page"
+                    : undefined
+                }
                 className="conversation-navigation__item"
                 disabled={conversationNavigationDisabled}
                 onClick={() => {

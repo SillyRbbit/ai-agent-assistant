@@ -1,7 +1,7 @@
 # Cortexa architecture
 
 Status: Authoritative current-state architecture
-Last updated: 2026-08-13
+Last updated: 2026-08-20
 
 ## Reading this document
 
@@ -52,7 +52,7 @@ events, and tool results remain untrusted regardless of their source.
 ```mermaid
 flowchart TD
     App["App.tsx"] --> State["Application reducer/context"]
-    App --> Pages["Conversations, Tasks, Memory, Activity, Integrations, Permissions, Settings"]
+    App --> Pages["Command Center, Conversations, Tasks, Memory, Activity, Integrations, Permissions, Settings"]
     App --> InfoClient["Typed get_app_info client"]
     App --> MenuClient["Typed assistant-menu-route listener"]
     InfoClient --> IPC["Tauri invoke boundary"]
@@ -73,14 +73,21 @@ each other.
 - `src/application/` owns reducer-based volatile state, conversations, mock run
   lifecycle, provenance, mock results, and menu-route navigation.
 - `src/features/` renders conversations, mock approval, Activity, Tasks,
-  Permissions, Settings, and placeholders for Memory and Integrations.
+  Permissions, Settings, placeholders for Memory and Integrations, and a lazy
+  deterministic Command Center projection.
+- `src/features/command-center/` owns closed fixture projection/validation,
+  seven scenarios, feature-local presentation state, graph/structured
+  alternatives, inspector, and bounded activity. React Flow types stop at one
+  adapter; the feature does not consume Rust agent state.
 - `src/infrastructure/tauri/` narrows the app-info response and menu-route event.
 - Conversations, activity, approval state, tool results, and settings are not
   persisted by the WebView.
 
 **Mocked**: assistant streaming, context provenance, tool activity, approval,
-simulated tool results, final answers, Stop, Retry, and Activity are fixed local
-behaviors. They perform no model request or operating-system action.
+simulated tool results, final answers, Stop, Retry, Activity, and Command Center
+agent/task/workflow state are fixed local behaviors. They perform no model
+request, IPC agent request, or operating-system action. Command Center state is
+persistently labeled `DEMO MODE · SIMULATED AGENT DATA`.
 
 **Prohibited**: authorization, policy override, generic database access, raw
 provider calls, arbitrary command selection, and operating-system execution in
@@ -388,11 +395,13 @@ before content clone or mutation and never defaults to Personal Assistant.
 Persistence, data-bearing privileged actions, and device effects remain
 separately gated.
 
-The current baseline contains no multi-agent Tauri IPC, multi-agent React state,
-provider, live model, tool executor, platform adapter, durable audit, durable
-memory, or device action. The catalog, task, orchestrator, governance, volatile
-memory, approved-document, and sealed fixture-workflow foundations are Rust-only
-and unwired. The Tasks and Memory screens remain placeholders.
+The current baseline contains no multi-agent Tauri IPC, authoritative/live
+multi-agent React state, provider, live model, tool executor, platform adapter,
+durable audit, durable memory, or device action. A separate frontend-only
+`command-center-demo-v1` fixture projection visualizes the architecture but is
+not wired to the Rust catalog, tasks, orchestrator, workflows, governance, or
+runtime. Those foundations remain Rust-only and unwired. The Tasks and Memory
+screens remain placeholders.
 
 #### Volatile memory and approved-document Knowledge boundary
 
@@ -1047,6 +1056,7 @@ reviewed repository ICNS byte-for-byte.
 | Capability                                    | State                          | Evidence or gate                                               |
 | --------------------------------------------- | ------------------------------ | -------------------------------------------------------------- |
 | React workspace and navigation                | Current                        | Frontend tests and application source                          |
+| Deterministic Command Center projection       | Mocked, validation pending     | Frontend fixtures/tests; real-browser/Tauri M5 matrix not run  |
 | Assistant interaction                         | Mocked                         | Deterministic in-memory driver only                            |
 | App info and menu routing                     | Current                        | Narrow Tauri command/event                                     |
 | SQLite bootstrap metadata                     | Current                        | Storage tests and startup integration                          |

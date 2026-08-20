@@ -1,6 +1,7 @@
 # Security policy and development guardrails
 
 Status: Authoritative security policy
+Last updated: 2026-08-20
 
 Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
 identifies which security boundaries are current, mocked, planned, or
@@ -54,6 +55,23 @@ dispatcher, executor, durable or user-facing product memory, platform adapter,
 or durable audit. Current resolutions, memory, records, references, and receipts
 are volatile and non-authorizing and must not be mistaken for an end-to-end
 security path.
+
+The Active Command Center prototype is a separate untrusted WebView
+presentation boundary. Its `command-center-demo-v1` data is frontend-owned,
+closed, bounded, fixture-derived, redacted, and persistently labeled simulated.
+Search, filters, selection, graph viewport controls, inspector, and activity
+change only feature-local presentation state. They invoke no Tauri command,
+event listener, network, clipboard, storage, filesystem, provider, tool,
+approval, policy, audit, runtime, or device action. Fixture IDs are not trusted
+Rust identities.
+
+The owner approved exact `@xyflow/react@12.11.3` and
+`lucide-react@1.33.0` after direct/transitive, license, peer, bundle, and
+security review. Their lockfile consequence is 19 reviewed transitives;
+production audit reports zero vulnerabilities, while five pre-existing
+development-only advisories remain unchanged. React Flow types/imports stop at
+one feature adapter. No Rust/Tauri capability, CSP, IPC, permission, or native
+dependency changed.
 
 ## Non-negotiable invariants
 

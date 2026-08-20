@@ -52,6 +52,7 @@ describe("applicationReducer", () => {
 
   it("exposes every route in deterministic navigation order", () => {
     expect(APP_ROUTES).toEqual([
+      "command-center",
       "conversations",
       "tasks",
       "memory",
@@ -63,6 +64,7 @@ describe("applicationReducer", () => {
   });
 
   it.each<AppRoute>([
+    "command-center",
     "conversations",
     "tasks",
     "memory",

@@ -3839,6 +3839,49 @@ completion blocker. Final post-documentation gates pass; deterministic
 finalization completed and status reports `complete`, `valid: true`, and `PASS
 WITH ADVISORIES`. No successor plan is owner-selected or Ready.
 
+## D-092 - Keep the Command Center a deterministic frontend projection
+
+Date: 2026-08-20
+Status: Accepted owner implementation decision; source implemented, validation pending
+
+Decision: add one lazy, reversible Command Center route driven only by the
+closed frontend-owned `command-center-demo-v1` projection. It presents one
+distinct `AgentOrchestrator`, all nine exact agent roles, five view-only
+groups, seven bounded scenarios, a non-editable topology, synchronized grouped
+structured view and relationship table, contextual inspector, bounded
+activity, and persistent `DEMO MODE · SIMULATED AGENT DATA` disclosure.
+
+Search, filters, selection, viewport controls, inspector, and activity remain
+feature-local presentation state. No UI value is a trusted Rust identity and no
+control invokes agent/task/workflow IPC, a provider/model/runtime/tool, policy,
+approval, audit, persistence, network, filesystem, clipboard, permission, or
+device effect. QA remains advisory and not `ApprovalManager`; Security
+remains advisory and not `PolicyEngine`; Workflow Automation is not
+`AgentOrchestrator`.
+
+Add exact `@xyflow/react@12.11.3` (MIT) only inside one topology adapter and
+exact `lucide-react@1.33.0` (ISC) through static named imports. The reviewed
+lockfile consequence is 19 transitives. Production audit is zero
+vulnerabilities; five pre-existing development-only advisories remain
+unchanged. The route is lazy: initial JS+CSS increases by 1,118 gzip bytes and
+the lazy Command Center JS+CSS is 84,889 gzip bytes, within the approved
+budgets. No Rust/Tauri dependency, capability, CSP, command, or permission
+changes.
+
+Consequences: automated source evidence and independent review have no source
+blocker. The ExecPlan remains Active because the mandatory real-browser/Tauri
+viewport, input, focus, overflow, contrast, reduced-motion, and resize matrix
+is Not run. This decision grants no live integration or later-milestone
+authority and has no completion marker.
+
+Additive owner clarification, 2026-08-20: the Command Center route may override
+the shared chat-oriented page maximum and use the complete available main
+column. This clarification is route-scoped; unrelated routes keep their shared
+readable-width constraint. Graph framing must derive from the measured canvas
+and visible deterministic topology, preserve manual viewport intent, and make
+Fit View and Reset recompute current framing. Structured topology behavior and
+all native, authority, dependency, and fixture boundaries remain unchanged.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

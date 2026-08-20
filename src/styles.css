@@ -1342,7 +1342,8 @@ textarea:focus-visible {
 
 @media (max-width: 900px) {
   .application-shell {
-    grid-template-columns: 194px minmax(0, 1fr);
+    --app-sidebar-width: 194px;
+    grid-template-columns: var(--app-sidebar-width) minmax(0, 1fr);
   }
 
   .application-sidebar {

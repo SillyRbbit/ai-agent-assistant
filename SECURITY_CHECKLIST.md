@@ -1,7 +1,7 @@
 # Cortexa security checklist
 
 Status: Authoritative change and release security review checklist
-Last updated: 2026-08-13
+Last updated: 2026-08-20
 
 Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
@@ -285,6 +285,27 @@ production boundary exists.
       scheduler, general graph engine, tool, policy permission, approval
       dispatch, persistence, I/O, dependency, IPC/UI, remote/distributed
       infrastructure, or device effect.
+
+## Deterministic Command Center prototype
+
+- [x] Every displayed entity/event is closed, bounded, fixture-derived,
+      redacted, and persistently labeled simulated; fixture IDs have no trusted
+      Rust identity or authority.
+- [x] Search, filters, selection, graph controls, inspector, structured view,
+      and activity mutate only feature-local presentation state and expose no
+      consequential action.
+- [x] The feature invokes no Tauri command/listener, network, clipboard,
+      storage, filesystem, provider, model, tool, approval, policy, audit,
+      runtime, permission, or device path.
+- [x] `@xyflow/react@12.11.3` and `lucide-react@1.33.0` are the only new
+      direct production dependencies; 19 transitives, licenses, peers, lockfile
+      effects, production audit, and bundle budgets were reviewed.
+- [x] React Flow types/imports stop at one topology adapter and protected
+      Rust/Tauri/IPC/storage/capability/CSP paths are unchanged.
+- [ ] Required real-browser/Tauri viewport, input, focus, computed-overflow,
+      contrast, reduced-motion, and resize evidence is complete. **Not run:
+      Browser runtime tool unavailable; no browser tooling install
+      authorized.**
 
 ## Tauri IPC review
 
