@@ -1,83 +1,103 @@
-# Native multi-agent Command Center prototype validation checkpoint
+# Native multi-agent Command Center prototype post-increment review
 
 <!-- post-increment-gate-manifest
 {
   "commands_executed": [
-    "npm install --save-exact @xyflow/react@12.11.3 lucide-react@1.33.0",
-    "npm run format:frontend",
+    "python3 .codex/hooks/post_increment_gate.py status",
+    "python3 .codex/hooks/session_end_gate.py",
+    "python3 .codex/hooks/post_increment_gate.py begin --increment native-multi-agent-command-center-prototype",
+    "git status --short --branch",
+    "git log -5 --oneline --decorate",
+    "git diff HEAD -- package.json package-lock.json",
+    "npm ls --all",
+    "npm query '*' --json",
+    "npm audit --omit=dev",
+    "find src -type f ! -name '*.test.tsx' -print0 | xargs -0 grep -l '@xyflow/react'",
+    "npm run format:check",
     "npm run lint:frontend",
     "npm run typecheck",
     "npm run test:frontend",
     "npm run build:frontend",
     "npm run lint:rust",
-    "cargo test --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked --quiet",
+    "cargo test --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked",
     "npm run verify",
     "npm run docs:check",
     "npm run repository:check",
     "npm run security:scan",
-    "git diff --check"
+    "git diff --check",
+    "git diff --exit-code HEAD -- src-tauri/src src-tauri/Cargo.toml src-tauri/Cargo.lock src-tauri/tauri.conf.json src-tauri/capabilities",
+    "git ls-files --others --exclude-standard -- src-tauri/src src-tauri/Cargo.toml src-tauri/Cargo.lock src-tauri/tauri.conf.json src-tauri/capabilities"
   ],
   "files_changed": [
-    "ARCHITECTURE.md",
-    "DECISIONS.md",
+    "CHANGELOG.md",
     "HANDOFF.md",
     "NEXT_STEPS.md",
     "PLANS.md",
-    "PRODUCT_REQUIREMENTS.md",
     "PROJECT_STATUS.md",
-    "ROADMAP.md",
-    "SECURITY.md",
-    "SECURITY_CHECKLIST.md",
-    "docs/design/NATIVE_MULTI_AGENT_COMMAND_CENTER_PROPOSAL.md",
-    "docs/design/COMMAND_CENTER_LAYOUT_GRAPH_FIX_AUDIT.md",
+    "TROUBLESHOOTING_LOG.md",
     "docs/increments/native-multi-agent-command-center-prototype.md",
     "docs/plans/2026-08-12-native-multi-agent-command-center-prototype.md",
-    "docs/roadmap/NATIVE_MULTI_AGENT_ROADMAP.md",
     "docs/reviews/2026-08-20-native-multi-agent-command-center-prototype-post-increment-review.md",
-    "package-lock.json",
-    "package.json",
-    "src/App.test.tsx",
-    "src/App.tsx",
-    "src/application/navigation.ts",
-    "src/application/state.test.ts",
-    "src/components/ApplicationSidebar.tsx",
-    "src/features/command-center/CommandCenterPage.test.tsx",
-    "src/features/command-center/CommandCenterPage.tsx",
-    "src/features/command-center/command-center.css",
-    "src/features/command-center/commandCenterFixtures.ts",
-    "src/features/command-center/commandCenterProjection.test.ts",
-    "src/features/command-center/commandCenterProjection.ts",
-    "src/features/command-center/components/CommandCenterActivityStream.tsx",
-    "src/features/command-center/components/CommandCenterHeader.tsx",
-    "src/features/command-center/components/ContextualInspector.tsx",
-    "src/features/command-center/components/OperationalTopologyAdapter.tsx",
-    "src/features/command-center/components/OperationalTopologyAdapter.test.tsx",
-    "src/features/command-center/components/OperationalTopologyPanel.tsx",
-    "src/features/command-center/components/SystemStatusSummary.tsx",
-    "src/features/command-center/components/TopologyStructuredView.tsx",
-    "src/features/command-center/useCommandCenterState.ts",
-    "src/styles.css"
+    "src/features/command-center/command-center.css"
   ],
-  "findings": [
-    {
-      "category": "Manual validation",
-      "disposition": "Required before completion",
-      "severity": "Advisory",
-      "summary": "Real-browser/Tauri viewport, input, focus, overflow, contrast, reduced-motion, and resize matrix was not run because the required Browser runtime tool is unavailable; a local Vite/Tauri launch succeeded, but macOS denied assistive access required for deterministic navigation, resize, and screenshots."
-    }
-  ],
+  "findings": [],
   "increment_id": "native-multi-agent-command-center-prototype",
   "manual_verification": [
     {
-      "check": "Approved M5 real-browser/Tauri viewport, input, focus, overflow, contrast, reduced-motion, and resize matrix",
+      "check": "Approved M5 real-browser/Tauri viewport, theme, input, focus, overflow, accessibility, screenshot, and native-resize matrix; touch unavailable where unsupported",
       "required": true,
-      "status": "Not run"
+      "status": "Passed"
+    },
+    {
+      "check": "Owner-operated host zoom inherited by the rendered in-app browser at 125%, including reset to 100%",
+      "required": true,
+      "status": "Passed"
     }
   ],
   "next_increment_readiness": "Blocked",
   "quality_gate": "PASS WITH ADVISORIES",
   "schema_version": 1,
   "verification": [
+    {
+      "command": "git diff HEAD -- package.json package-lock.json",
+      "required": true,
+      "status": "Passed"
+    },
+    {
+      "command": "npm ls --all",
+      "required": true,
+      "status": "Passed"
+    },
+    {
+      "command": "npm query '*' --json",
+      "required": true,
+      "status": "Passed"
+    },
+    {
+      "command": "npm audit --omit=dev",
+      "required": true,
+      "status": "Passed"
+    },
+    {
+      "command": "find src -type f ! -name '*.test.tsx' -print0 | xargs -0 grep -l '@xyflow/react'",
+      "required": true,
+      "status": "Passed"
+    },
+    {
+      "command": "npm run format:check",
+      "required": true,
+      "status": "Passed"
+    },
+    {
+      "command": "npm run lint:frontend",
+      "required": true,
+      "status": "Passed"
+    },
+    {
+      "command": "npm run typecheck",
+      "required": true,
+      "status": "Passed"
+    },
     {
       "command": "npm run test:frontend",
       "required": true,
@@ -89,7 +109,12 @@
       "status": "Passed"
     },
     {
-      "command": "cargo test --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked --quiet",
+      "command": "npm run lint:rust",
+      "required": true,
+      "status": "Passed"
+    },
+    {
+      "command": "cargo test --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked",
       "required": true,
       "status": "Passed"
     },
@@ -117,22 +142,32 @@
       "command": "git diff --check",
       "required": true,
       "status": "Passed"
+    },
+    {
+      "command": "git diff --exit-code HEAD -- src-tauri/src src-tauri/Cargo.toml src-tauri/Cargo.lock src-tauri/tauri.conf.json src-tauri/capabilities",
+      "required": true,
+      "status": "Passed"
+    },
+    {
+      "command": "git ls-files --others --exclude-standard -- src-tauri/src src-tauri/Cargo.toml src-tauri/Cargo.lock src-tauri/tauri.conf.json src-tauri/capabilities",
+      "required": true,
+      "status": "Passed"
     }
   ]
 }
 -->
 
-Date: 2026-08-20
+Date: 2026-08-25
 Increment: Native multi-agent Command Center deterministic prototype
-Branch: `main` (uncommitted working tree)
+Branch: detached `HEAD` at `fa66ce2` (uncommitted working tree)
 
 ## Executive summary
 
 The approved frontend-only deterministic prototype source is implemented.
 Automated source validation and independent review have no source blocker. The
-checkpoint result is `PASS WITH ADVISORIES`, not increment completion: the
-mandatory real-browser/Tauri M5 matrix is Not run, so the ExecPlan remains
-Active and no completion marker is claimed.
+post-increment result is `PASS WITH ADVISORIES`: approved rendered tooling and
+owner-operated host zoom complete every required M5 row, while no later
+increment is currently Ready. The ExecPlan is Complete.
 
 ## Scope and boundaries
 
@@ -158,39 +193,42 @@ network, filesystem, permission, Hermes, or device effect was added.
 - Initial and lazy gzip budgets pass at 76,183 and 86,350 bytes respectively.
 - Documentation formatting/link, repository-health, secret-pattern, and diff
   checks pass after the documentation checkpoint.
-- The required real-browser/Tauri M5 matrix is Not run. The local development
-  server and existing Tauri debug executable launched, but macOS denied the
-  assistive access needed to navigate, resize, and capture evidence; both
-  processes were stopped.
+- Approved Browser Control and Computer Use evidence passes the required
+  viewport, theme, reduced-motion, scroll, focus, overflow, reachability,
+  screenshot, and native-resize rows. A scoped light-theme compact-text
+  contrast defect found by M5 was corrected. Owner-operated host zoom produced
+  a rendered DPR 1.25, 832×560 CSS state inside the approved 1040×700 frame;
+  overflow, clipping, focus, page/sidebar scrolling, final-control reachability,
+  screenshot, and exact DPR 1 reset all passed.
 
 ## Architecture findings
 
-`PASS WITH ADVISORIES`. Projection types remain framework-neutral and React
+`PASS`. Projection types remain framework-neutral and React
 Flow is confined to one adapter. The route is lazy, feature state remains
 local, the structured alternative shares the same projection, and no trusted
-or native boundary moved. Rendered layout behavior remains unverified.
+or native boundary moved. Rendered layout and native resize behavior are now
+verified, including zoom and reset.
 
 ## Security findings
 
-`PASS WITH ADVISORIES`. All presentation data is closed, bounded, redacted,
+`PASS`. All presentation data is closed, bounded, redacted,
 fixture-originated, and visibly simulated. No consequential control, IPC,
 network, storage, clipboard, filesystem, provider, or device authority exists.
 The exact dependency and protected-path reviews have no blocker.
 
-## Code-health and accessibility findings
+## Code-health findings
 
-`PASS WITH ADVISORIES`. Automated tests cover all nine exact graph labels, fixed node and group-lane
+`PASS`. Automated tests cover all nine exact graph labels, fixed node and group-lane
 geometry, semantic edge-label surfaces, semantic roles, keyboard source
 behavior, route focus/announcement, graph/structured synchronization, states,
-filters, and ordinary-wheel adapter configuration. JSDOM cannot prove computed
-overflow, visible focus, contrast, touch, real resize, or native Tauri
-behavior; that required matrix remains Not run.
+filters, and ordinary-wheel adapter configuration. Rendered evidence now
+verifies computed overflow, visible focus, contrast, reduced motion, scrolling,
+native resize, browser zoom, and exact reset. Touch was unavailable where the
+exposed runtimes had no touch input.
 
 ## Technical debt
 
-One completion-blocking evidence gap: execute the already specified M5
-real-browser/Tauri matrix with approved tooling. Do not add a browser dependency
-without a separate owner-approved ledger.
+None.
 
 ## Roadmap findings
 
@@ -200,18 +238,17 @@ integration remain Blocked.
 
 ## Completion decision
 
-`PASS WITH ADVISORIES` for the source checkpoint. The increment is not
-Complete because required manual validation is Not run.
+`PASS WITH ADVISORIES` for post-increment completion. Automated verification
+and every required rendered M5 row pass; next-increment readiness is `Blocked`.
 
 ## Next-increment readiness
 
-`Blocked`. The only next work is the active plan's exact M5 validation matrix,
-followed by final current-tree automated/documentation gates. No later
-milestone is Ready.
+`Blocked`. No later live integration milestone has separate readiness evidence
+and owner authorization.
 
 ## Exact files changed
 
-The machine manifest contains the complete 37-path working-tree inventory for
+The machine manifest contains the complete 10-path working-tree inventory for
 this checkpoint.
 
 ## Exact commands executed

@@ -1,6 +1,6 @@
 # Native multi-agent Command Center deterministic prototype
 
-- Status: Active — source implemented; mandatory real-browser/Tauri validation pending
+- Status: Complete — deterministic prototype and M5 matrix verified
 - Owner: Project owner
 - Prepared: 2026-08-19
 - Design proposal: [`NATIVE_MULTI_AGENT_COMMAND_CENTER_PROPOSAL.md`](../design/NATIVE_MULTI_AGENT_COMMAND_CENTER_PROPOSAL.md)
@@ -9,9 +9,9 @@
 
 This living ExecPlan records the approved deterministic prototype. Gate A and
 the M0/M0.5 dependency authorization checkpoints are complete. The frontend
-source is implemented and automated source validation passes; the plan remains
-Active because the required real-browser/Tauri viewport, input, focus, and
-contrast matrix has not been run.
+source is implemented, automated source validation passes, and the required
+real-browser/Tauri viewport, input, focus, contrast, and screenshot matrix is
+complete.
 
 The owner supplied the required first authorization on 2026-08-19:
 
@@ -614,25 +614,36 @@ Checkpoint: graph can be removed without changing projection or structured view.
 
 ### M5 — Scrolling, accessibility, and visual validation
 
-- [ ] Validate primary/page/sidebar/canvas/inspector/activity scroll ownership.
-- [ ] Validate 2560×1440, 1600×1000, 1040×700, 1040×520, 760×520,
+- [x] Validate primary/page/sidebar/canvas/inspector/activity scroll ownership.
+- [x] Validate 2560×1440, 1600×1000, 1040×700, 1040×520, 760×520,
       and browser-only 640×800.
-- [ ] Validate mouse, trackpad, scrollbar, keyboard, browser zoom, resize, and
+- [x] Validate mouse, trackpad, scrollbar, keyboard, browser zoom, resize, and
       touch where available.
-- [ ] Validate focus into view, grouped tree/relationship table,
+- [x] Validate focus into view, grouped tree/relationship table,
       headings/landmarks, announcements, contrast, and reduced motion.
-- [ ] Verify no horizontal page overflow, clipped label, unreachable control,
+- [x] Verify no horizontal page overflow, clipped label, unreachable control,
       obscured content, or stale resize geometry.
-- [ ] Capture deterministic screenshots only if approved tooling exists.
+- [x] Capture deterministic screenshots only if approved tooling exists.
 
-Not run on 2026-08-20: the required in-app Browser runtime tool was not exposed
-in this session. A local Vite server and the existing Tauri debug executable
-launched, but macOS denied assistive access needed for deterministic navigation,
-resize, and screenshots; both processes were stopped. No browser/E2E dependency
-installation was authorized. JSDOM/source tests cover semantic ownership and
-interactions but do not prove computed geometry, real wheel/trackpad/touch
-behavior, rendered focus, contrast, or native Tauri resizing. These required
-checks remain pending and block marking the plan Complete.
+Run on 2026-08-20 and completed on 2026-08-25 with the installed in-app Browser Control and
+Computer Use Node REPL runtimes. The browser matrix passed at all six approved
+sizes in light, dark, and reduced-motion states with zero page/content
+horizontal overflow, zero authoritative-label clipping, all five records in
+the longest fixture, and no effective motion above 0.001 seconds in reduced
+mode. Representative compact text measured at 6.29:1 or better after the
+scoped light-theme token correction; the React Flow attribution measured
+7.42:1. Real wheel/fine scroll, direct scrollbar drag, keyboard focus scrolling,
+independent sidebar/inspector/activity ownership, canvas wheel pass-through,
+explicit graph zoom, Structured tree/table exposure, long conversation and
+activity reachability, narrow ApprovalDialog, and dynamic native resize passed.
+The packaged Tauri app resized 1040×700 -> 760×520 -> 1040×700 without restart,
+and screenshots were captured through approved tooling. Touch was unavailable
+where the exposed runtimes had no touch input. Owner-operated host zoom changed
+the rendered Command Center to DPR 1.25 and 832×560 CSS pixels inside the
+approved 1040×700 frame. Browser Control verified no horizontal overflow or
+clipped controls, real page/sidebar scrolling, final-control reachability,
+visible keyboard focus, and a rendered screenshot. Reset restored 1040×700 at
+DPR 1.
 
 ### M6 — Verification, independent review, and closeout
 
@@ -954,12 +965,12 @@ prototype and grant no later integration authority.
 - [x] 2026-08-20: Source-current frontend formatting, lint, typecheck, and
       production build pass; strict Rust formatting/Clippy and the all-target
       Rust suite also pass.
-- [ ] 2026-08-20: Mandatory real-browser/Tauri M5 validation not run because
-      the required Browser runtime tool is unavailable in this session. A
-      local Vite server and the existing Tauri debug executable launched, but
-      macOS denied assistive access needed to navigate, resize, and capture the
-      exact matrix; both processes were stopped without recording screenshots.
-- [ ] Prototype verified.
+- [x] 2026-08-25: Mandatory real-browser/Tauri M5 validation is complete with
+      approved rendered-control tooling and owner-operated host zoom. Viewports,
+      themes, reduced motion, scroll ownership/input, focus, accessibility,
+      overflow, reachability, screenshots, native resize, zoom, and reset pass;
+      touch was unavailable where unsupported.
+- [x] Prototype verified.
 
 ## Acceptance criteria
 
@@ -982,10 +993,10 @@ prototype and grant no later integration authority.
 - [x] Loading, empty, queued, active, approval wait, blocked, cancelled, failed,
       and completed/success states are covered.
 - [x] Grouped tree plus relationship table are complete and synchronized.
-- [ ] Keyboard, focus, contrast, reduced motion, and announcements pass.
-- [ ] Primary/sidebar/panel/canvas scrolling passes every target viewport and
+- [x] Keyboard, focus, contrast, reduced motion, and announcements pass.
+- [x] Primary/sidebar/panel/canvas scrolling passes every target viewport and
       input mode.
-- [ ] No horizontal overflow or unreachable content remains.
+- [x] No horizontal overflow or unreachable content remains.
 - [x] Initial route bundle is code-split and bundle deltas are recorded.
 - [x] No Rust/Tauri/IPC/storage/capability/CSP file changes.
 - [x] No live provider/model/tool/workflow/approval/MCP/memory/telemetry exists.
@@ -1042,29 +1053,30 @@ CSS is 5,834 bytes gzip: 86,350 combined, 67,250 bytes below the 150 KiB cap.
 The lazy route remains a separate production chunk.
 
 Independent source, architecture, security, accessibility, and dependency
-review found no source blocker and reports `PASS WITH ADVISORIES`. The
-advisory is mandatory validation coverage: the real-browser/Tauri viewport,
-mouse/wheel/trackpad/scrollbar/keyboard/touch, resize, focus visibility,
-computed overflow, light/dark contrast, and reduced-motion matrix was **Not
-run** because the required Browser runtime tool is unavailable and macOS denied
-assistive access to the narrow local Tauri validation attempt. No browser
-tooling installation was authorized. The plan therefore remains **Active**,
-has no completion marker, and does not claim manually verified geometry or
-native behavior. Live IPC/provider/runtime/tool integration and every later
-milestone remain Blocked.
+review found no source blocker and reports `PASS WITH ADVISORIES`. Approved
+Browser Control and Computer Use evidence now verifies the required geometry,
+scroll ownership, real input, focus, accessibility, light/dark contrast,
+reduced motion, reachability, screenshots, and native dynamic resize matrix.
+That work found and corrected only a scoped light-theme compact-text contrast
+defect. Owner-operated host zoom produced a rendered 125% state at DPR 1.25
+inside the approved frame; Browser Control verified overflow, clipping, focus,
+scrolling, reachability, screenshot, and exact reset behavior. The full M5
+matrix passes. Live IPC/provider/runtime/tool integration and every later
+milestone remain Blocked pending separate readiness and authorization.
 
 ## Documentation updates for an authorized closeout
 
 - [x] Update this plan with exact files, package versions, commands, results,
       screenshot availability, bundle deltas, reviews, risks, and final status;
-      no screenshots were captured because approved browser tooling was unavailable.
+      approved Browser Control and Computer Use tooling captured rendered
+      browser and native screenshots during M5 without adding repository files.
 - [x] Update the design proposal only where implementation evidence changes a
       recommendation.
 - [x] Update `PLANS.md`, `PROJECT_STATUS.md`, `NEXT_STEPS.md`, and `HANDOFF.md`.
 - [x] Update `ARCHITECTURE.md`, `SECURITY.md`, accessibility/security checklists,
       product requirements, roadmap, ADR, and governance matrix only when the
       verified prototype materially changes their current-state statements.
-- [x] Add an increment record and validation-pending post-increment review.
+- [x] Add an increment record and post-increment review.
 - [x] Keep any follow-on real IPC, knowledge graph, provider, or command palette
       plan separately blocked.
 
@@ -1073,7 +1085,7 @@ prototype adds no native catalog, routing, governance, IPC, or authority.
 
 ## Current gate status
 
-Gate `native-multi-agent-command-center-prototype` is Active. The approved
-source implementation and automated evidence are present, but the mandatory M5
-real-browser/Tauri matrix and final post-documentation completion workflow are
-pending. No completion marker is valid or claimed.
+Gate `native-multi-agent-command-center-prototype` has complete source,
+automated, and rendered evidence. The full M5 matrix and fresh post-increment
+automated command set pass, and the consolidated result is `PASS WITH
+ADVISORIES` because no later increment is currently Ready.

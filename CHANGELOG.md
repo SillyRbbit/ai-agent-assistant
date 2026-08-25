@@ -4,6 +4,17 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Ran the deterministic Command Center's approved rendered M5 matrix through
+  installed Browser Control and Computer Use runtimes. Required browser/Tauri
+  sizes, light/dark and reduced motion, scroll ownership/input, focus,
+  accessibility, overflow, long-content reachability, screenshots, and native
+  dynamic resize passed. Corrected only the light-theme compact-text contrast
+  defect found by M5; sampled 10px text now measures at least 6.29:1 and React
+  Flow attribution 7.42:1. Owner-operated host zoom produced a rendered 125%
+  browser state at DPR 1.25 and 832×560 CSS pixels inside the approved 1040×700
+  frame; overflow, clipping, focus, scrolling, and final-control reachability
+  passed, and reset restored 1040×700 at DPR 1. The full M5 matrix now passes.
+
 - Implemented D-091's sealed fixture-only/no-I/O bounded-parallel selector.
   `AgentOrchestrator` may retain at most three independent depth-one specialist
   runs and multiplex exact task/run-addressed events on one application thread.

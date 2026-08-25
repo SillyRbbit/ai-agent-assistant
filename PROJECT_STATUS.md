@@ -1,11 +1,11 @@
 # Project status
 
-Last updated: 2026-08-20
+Last updated: 2026-08-25
 
 ## Current milestone
 
-The approved deterministic multi-agent Command Center prototype is **Active —
-source implemented; mandatory real-browser/Tauri validation pending**. The
+The approved deterministic multi-agent Command Center prototype is **verified
+complete**. The
 frontend working tree adds one lazy route with a versioned fixture projection,
 one distinct `AgentOrchestrator`, all nine exact agent roles, five
 presentation groups, seven closed scenarios, graph/structured alternatives,
@@ -27,14 +27,20 @@ lazy Command Center JS+CSS is 86,350 gzip bytes, within both budgets.
 Final current-tree `npm run verify`, including the Tauri release no-bundle
 build, passes after source and documentation synchronization.
 
-The required real-browser/Tauri viewport and input matrix is **Not run** because
-the Browser runtime tool is unavailable in this session. The local Vite server
-and existing Tauri debug app launched, but macOS denied assistive access needed
-to execute the viewport matrix; no browser tooling installation was authorized.
-Computed geometry, wheel/trackpad/touch behavior,
-rendered focus/contrast, reduced motion, and dynamic resizing are therefore
-unverified. The increment remains Active with no completion marker; all live
-integration and later milestone work is Blocked.
+Approved Browser Control and Computer Use runtimes now verify the required
+browser/Tauri viewports, light/dark and reduced-motion states, computed
+geometry, scroll ownership and inputs, rendered focus, accessibility structure,
+contrast, reachability, screenshots, and dynamic native resizing. M5 found and
+corrected one scoped light-theme compact-text contrast defect. Owner-operated
+host zoom produced a rendered 125% state at DPR 1.25 and 832×560 CSS pixels
+inside the approved 1040×700 frame. Browser Control verified no overflow,
+clipping, focus, scrolling, or reachability failure, and reset restored the
+1040×700 DPR 1 baseline. Touch was unavailable where unsupported. All live
+integration and later milestone work remains Blocked.
+
+Fresh post-increment automated verification and the full rendered matrix pass;
+the consolidated gate result is `PASS WITH ADVISORIES` because no later
+increment is currently Ready.
 
 The D-086 fixture-only Research/Knowledge increment and
 [`2026-08-11-research-knowledge-workflow.md`](docs/plans/2026-08-11-research-knowledge-workflow.md)

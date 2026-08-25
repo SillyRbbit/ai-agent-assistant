@@ -5,6 +5,8 @@
 }
 
 .command-center-page {
+  --text-muted: #46536b;
+  --text-subtle: #4d5870;
   --command-surface: color-mix(in srgb, var(--surface-strong) 88%, #11172a 12%);
   --command-surface-muted: color-mix(in srgb, var(--surface-muted) 91%, #11172a 9%);
   --command-border: color-mix(in srgb, var(--border) 78%, #6074d6 22%);
@@ -333,6 +335,11 @@
 .command-center-canvas .react-flow__attribution {
   color: var(--text-muted);
   background: color-mix(in srgb, var(--surface-strong) 82%, transparent);
+  opacity: 1;
+}
+
+.command-center-canvas .react-flow__attribution a {
+  color: inherit;
 }
 
 .command-center-canvas .react-flow__edge-path {
@@ -931,6 +938,8 @@
 
 @media (prefers-color-scheme: dark) {
   .command-center-page {
+    --text-muted: #b1bbce;
+    --text-subtle: #8994aa;
     --command-surface: #151c2c;
     --command-surface-muted: #101624;
     --command-border: #303c59;

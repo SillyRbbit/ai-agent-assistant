@@ -6,8 +6,8 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 The owner-approved
 [`2026-08-12-native-multi-agent-command-center-prototype.md`](docs/plans/2026-08-12-native-multi-agent-command-center-prototype.md)
-is **Active — source implemented; mandatory real-browser/Tauri validation
-pending** under gate `native-multi-agent-command-center-prototype`. The
+is **verified complete** under gate
+`native-multi-agent-command-center-prototype`. The
 frontend-only working tree adds one lazy, deterministic, fixture-only Command
 Center route with one distinct `AgentOrchestrator`, all nine exact roles,
 five presentation groups, seven closed scenarios, a non-editable topology,
@@ -24,14 +24,16 @@ the separate lazy Command Center JS+CSS is 86,350 gzip bytes, both within their
 approved budgets. Final current-tree `npm run verify`, including the Tauri
 release no-bundle build, passes. Independent review has no source blocker.
 
-The mandatory real-browser/Tauri viewport, input, focus, computed-overflow,
-contrast, reduced-motion, and resize matrix is **Not run** because the required
-Browser runtime tool is unavailable. A local Vite/Tauri launch succeeded, but
-macOS denied assistive access for deterministic navigation, resize, and
-screenshots; no browser tooling install was authorized. Required manual checks
-therefore block Complete status and no
-completion marker is claimed. Real multi-agent IPC/provider/runtime/tool work
-and every later milestone remain Blocked.
+Approved Browser Control and Computer Use runtimes now verify the mandatory
+browser/Tauri viewports, themes, reduced motion, scroll ownership and inputs,
+focus, accessibility, computed overflow, reachability, screenshots, and native
+resize. M5 found and corrected one scoped light-theme compact-text contrast
+defect. Owner-operated host zoom produced a rendered 125% state at DPR 1.25
+and 832×560 CSS pixels inside the approved 1040×700 frame. Browser Control
+verified no overflow, clipping, focus, scrolling, or reachability failure, and
+reset restored 1040×700 at DPR 1. The full M5 matrix passes and the consolidated
+gate report is `PASS WITH ADVISORIES`. Real multi-agent IPC/provider/runtime/tool work and every later
+milestone remain Blocked pending separate readiness and authorization.
 
 D-087's
 [`2026-08-11-engineering-quality-workflow.md`](docs/plans/2026-08-11-engineering-quality-workflow.md)

@@ -1,30 +1,30 @@
 # Next steps
 
-Last updated: 2026-08-20
+Last updated: 2026-08-25
 
 This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must close before later feature work begins.
 
-## Active validation-pending increment
+## Current completion checkpoint
 
-The deterministic multi-agent Command Center prototype has implemented source
-and passing automated evidence but is not Complete. The only current work is
-the approved plan's mandatory real-browser/Tauri matrix: required viewports,
-mouse wheel, trackpad, scrollbar, keyboard, touch where supported, browser
-zoom, resize, focus visibility/scrolling, light/dark contrast, reduced motion,
-horizontal overflow, final-item reachability, and sticky/obstruction checks.
-Those checks are **Not run** because the required Browser runtime tool is
-unavailable. A local Vite server and the existing Tauri debug app launched, but
-macOS denied assistive access required to navigate, resize, and capture the
-matrix; both processes were stopped. No browser tooling installation was
-authorized.
+The deterministic multi-agent Command Center prototype is verified complete.
+Approved Browser Control and Computer Use runtimes verify every required M5 viewport, theme,
+reduced-motion, scroll-ownership/input, focus, accessibility, overflow,
+reachability, screenshot, native-resize, and browser-zoom check. M5 found and
+corrected one scoped light-theme compact-text contrast defect. Owner-operated
+host zoom produced a rendered 125% state at DPR 1.25 with no overflow,
+clipping, focus, scrolling, or reachability failure; reset restored DPR 1.
+
+The fresh post-increment automated command set and manual matrix pass, and the
+consolidated gate result is `PASS WITH ADVISORIES` because no later increment
+is currently Ready.
 
 Do not begin live IPC, provider/model/runtime/tool integration, a knowledge
-graph, command palette, another dependency, or any later milestone. After the
-matrix is executed with exact evidence, rerun the final completion gate and
-either close this increment or correct only a defect within its approved scope.
+graph, command palette, another dependency, or any later milestone without a
+separately approved Ready increment.
 
 ## Completed increments
 
+- Native multi-agent Command Center deterministic prototype: **Verified complete**.
 - Increment 2A — core interfaces and deterministic mocks: **Verified complete**.
 - Increment 2B-0 — SQLite storage decision: **Complete**.
 - Increment 2B-1 — SQLite dependency and migration skeleton: **Verified complete**.

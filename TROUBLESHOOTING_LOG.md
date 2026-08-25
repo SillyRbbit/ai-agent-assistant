@@ -927,6 +927,12 @@ Run the same required gate command with explicitly approved elevated workspace
 permission. It created the active hermes-adr-transport-revision marker without
 changing the hook, reducing gate checks, or altering repository controls.
 
+The same sandbox restriction recurred on 2026-08-20 before Command Center M5
+closeout as `post-increment state directory is unsafe` because `.codex/state`
+did not yet exist and sandboxed directory creation failed inside the hook's
+safety guard. The exact elevated `begin` command succeeded and `status` then
+reported the expected active increment; no hook or permission check changed.
+
 ### Verify
 
 Run the post-increment gate status command. Expected: the increment is active
@@ -937,3 +943,43 @@ until its required review and closeout workflow writes a valid completion state.
 When a required repository hook can read but cannot atomically write its local
 state under a managed sandbox, inspect the state path and rerun that exact hook
 with explicit elevated permission. Do not bypass, edit, or disable the gate.
+
+## TS-019 - In-app Browser Control does not expose browser-chrome zoom
+
+Date: 2026-08-20
+Status: Resolved
+
+### Symptom
+
+The installed in-app Browser Control runtime can set exact rendered viewport
+sizes and operate page content, but Command/Control `+`, `=`, and `0` leave
+`innerWidth`, `devicePixelRatio`, and computed heading size unchanged. The
+packaged Tauri WebView also ignores its application zoom shortcut.
+
+### Cause
+
+The approved Browser Control surface sends input to the rendered page viewport;
+it does not expose the surrounding browser chrome or a browser zoom capability.
+The native WebView is not a substitute for the required real-browser zoom row.
+
+### Resolution
+
+Keep M5 and gate `native-multi-agent-command-center-prototype` Active. All other
+rendered browser/Tauri rows passed with approved tooling. Resume only when an
+approved rendered-control capability can exercise browser chrome; do not
+substitute standalone Playwright, source inspection, JSDOM, or CSS transforms.
+
+On 2026-08-25 the owner applied host zoom while Browser Control held the
+approved 1040×700 frame. The embedded page inherited the scale: Browser Control
+measured DPR 1.25 and an 832×560 CSS viewport, captured the rendered state, and
+verified no horizontal overflow or clipped controls, real page/sidebar
+scrolling, final-control reachability, and visible keyboard focus. Owner reset
+restored exactly 1040×700 at DPR 1. This resolved the M5 evidence gap without a
+source change or substitute rendering mechanism.
+
+### Verify
+
+At an approved viewport, apply real browser zoom through browser chrome and
+confirm that rendered scale changes while controls, labels, focus, scroll
+ownership, and horizontal overflow remain correct. Restore zoom to 100% before
+closeout.

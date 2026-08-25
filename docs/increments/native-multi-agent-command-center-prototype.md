@@ -1,8 +1,8 @@
 # Native multi-agent Command Center deterministic prototype
 
-Status: Active — source implemented; mandatory real-browser/Tauri validation pending
+Status: Verified complete
 Owner: Project owner
-Last updated: 2026-08-20
+Last updated: 2026-08-25
 
 ## Goal
 
@@ -91,28 +91,40 @@ Measured with the M0 ledger's reproducible `gzip -cn` method:
 
 The Command Center remains a separate lazy production chunk.
 
-## Required validation not run
+## Required validation partially complete
 
-The required Browser runtime tool is unavailable in this session. A local Vite
-server and the existing Tauri debug executable launched, but macOS denied the
-assistive access required for deterministic navigation, resizing, and
-screenshots; both processes were stopped. No browser/E2E tooling install was
-authorized. The real-browser/Tauri matrix for
-2560×1440, 1600×1000, 1040×700, 1040×520, 760×520, and browser-only 640×800,
-mouse wheel, trackpad, scrollbar, keyboard, touch where supported, browser
-zoom, resize, focus visibility/scrolling, computed overflow, light/dark
-contrast, reduced motion, final-item reachability, and obstruction is **Not
-run**.
+Installed Browser Control and Computer Use runtimes verified the browser matrix
+at 2560×1440, 1600×1000, 1040×700, 1040×520, 760×520, and browser-only 640×800
+in light, dark, and reduced-motion states. Computed horizontal overflow and
+authoritative-label clipping were zero. Page/sidebar/canvas/inspector/activity
+scroll ownership, coarse and fine scrolling, direct scrollbar drag, keyboard
+focus scrolling, explicit graph zoom, Structured tree/table exposure, long
+conversation/activity reachability, narrow ApprovalDialog, screenshots, and
+1040×700 -> 760×520 -> 1040×700 native resize passed. A scoped light-theme
+compact-text correction raised sampled 10px contrast to at least 6.29:1 and the
+React Flow attribution to 7.42:1. Reduced-motion effective timing remained at
+or below 0.00001 seconds.
 
-JSDOM/source evidence does not prove those rendered or native behaviors. This
-required pending evidence blocks Complete status and a completion marker.
+Owner-operated host zoom on 2026-08-25 changed the rendered Command Center to
+DPR 1.25 and 832×560 CSS pixels inside the approved 1040×700 frame. Browser
+Control verified no horizontal overflow or clipped controls, real page/sidebar
+scrolling, final-control reachability, visible keyboard focus, and a rendered
+screenshot. Reset restored 1040×700 at DPR 1. Touch was unavailable where the
+exposed runtimes had no touch input.
+
+The fresh post-increment command set passes, including 211/211 frontend tests,
+strict Clippy, 481 all-target Rust tests with one intentional ignored probe,
+zero production dependency vulnerabilities, and `npm run verify`. Under the
+repository gate policy, the completed manual matrix and automated evidence make
+the consolidated result `PASS WITH ADVISORIES` because no later increment is
+currently Ready.
 
 ## Review result
 
 Independent source, architecture, security, accessibility, and dependency
-review found no source blocker. The checkpoint result is `PASS WITH
-ADVISORIES`; the advisory is the mandatory unexecuted real-browser/Tauri
-matrix. No later or live integration increment is Ready.
+review found no source blocker. The consolidated post-increment result is
+`PASS WITH ADVISORIES`. No later or live integration increment is Ready without separate
+readiness evidence and owner authorization.
 
 ## Rollback
 

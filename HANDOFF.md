@@ -1,12 +1,11 @@
 # Handoff
 
-Last updated: 2026-08-20
+Last updated: 2026-08-25
 
 ## Current Command Center validation checkpoint
 
-The approved deterministic multi-agent Command Center prototype is **Active —
-source implemented; mandatory real-browser/Tauri validation pending** under
-gate `native-multi-agent-command-center-prototype`. It adds one lazy
+The approved deterministic multi-agent Command Center prototype is **verified
+complete** under gate `native-multi-agent-command-center-prototype`. It adds one lazy
 frontend-only route with one distinct `AgentOrchestrator`, all nine exact
 roles, five view-only groups, seven closed deterministic scenarios, a
 non-editable graph, synchronized grouped structured view and relationship
@@ -32,24 +31,28 @@ Both remain within the approved budgets.
 Final current-tree `npm run verify` passes after source and documentation
 synchronization, including the Tauri release no-bundle build.
 
-Independent review found no source blocker and reports `PASS WITH
-ADVISORIES`. The required real-browser/Tauri viewport, input, focus,
-computed-overflow, contrast, reduced-motion, and resize matrix is **Not run**
-because the Browser runtime tool is unavailable. A local Vite server and the
-existing Tauri debug app launched, but macOS denied assistive access required
-for deterministic navigation, resize, and screenshots; both processes were
-stopped. No browser tooling install was authorized. Do not claim manual
-geometry/native verification, do not mark
-the plan Complete, and do not finalize a completion marker until that evidence
-exists.
+Independent review found no source blocker. Installed Browser Control and Computer Use runtimes now verify the
+approved browser/Tauri sizes, light/dark and reduced-motion states, scroll
+ownership and inputs, focus, accessibility structure, overflow, reachability,
+screenshots, and native dynamic resize. M5 found and corrected one scoped
+light-theme compact-text contrast defect. On 2026-08-25, owner-operated host
+zoom changed the rendered Command Center to DPR 1.25 and 832×560 CSS pixels
+inside the approved 1040×700 frame. Browser Control verified no horizontal
+overflow or clipped controls, real page/sidebar scrolling, final-control
+reachability, visible keyboard focus, and a rendered screenshot. Reset restored
+1040×700 at DPR 1. Touch was unavailable where unsupported.
 
-Exact resume task: run only the active ExecPlan's M5 real-browser/Tauri matrix
-using already approved tooling or a separately authorized tooling ledger.
-Record each check as Passed, Failed, Not run, or Manual verification pending.
-If it passes, rerun the final post-documentation gate and closeout. If it finds
-a defect, correct only that defect within the approved prototype. Do not begin
-real agent IPC/provider/runtime/tool work, commit, or push without separate
-owner authorization.
+The fresh 2026-08-20 post-increment command set passes, including 211/211
+frontend tests, strict Clippy, 481 all-target Rust tests with one intentional
+ignored probe, production audit with zero vulnerabilities, and `npm run verify`.
+The required browser-zoom manual check now passes, so the consolidated
+post-increment result is `PASS WITH ADVISORIES` because no later increment is
+currently Ready.
+
+Exact resume task: inspect the valid Command Center completion marker and
+current roadmap, then perform readiness review only; do not begin real agent
+IPC/provider/runtime/tool work, commit, or push without separate owner
+authorization.
 
 ## Current D-091 verified completion checkpoint
 
