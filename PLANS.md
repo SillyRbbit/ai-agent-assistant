@@ -42,15 +42,18 @@ review evidence passes. Published correction
 target-Mac Rust, frontend, and documentation workflows. The result is `PASS
 WITH ADVISORIES` only for the separate dependency findings.
 
-No implementation plan is Ready. The already authorized PR #57 squash merge
-may proceed only after the final docs-only publication check is confirmed.
+Exact marker-bound closeout head `3a0ee66` passed its documentation workflow,
+and PR #57 squash-merged to `main` at `3987387`. Merged-main Documentation and
+CI runs pass every classified job. The completed plans and original reviews
+remain immutable historical evidence; this publication reconciliation changes
+only live project memory. No implementation plan is owner-selected or Ready.
 
 The prior owner-approved
 [`2026-08-11-multi-agent-end-to-end-demonstrations.md`](docs/plans/2026-08-11-multi-agent-end-to-end-demonstrations.md)
 is **verified complete with advisories** under the complete, valid gate
 `native-multi-agent-end-to-end-demonstrations` on branch
 `codex/native-multi-agent-end-to-end-demonstrations`, created from the verified
-`527f0f4` baseline. The bounded increment adds a canonical deterministic
+`527f0f4` baseline. The bounded increment added a canonical deterministic
 acceptance command, demonstration/fixture/acceptance evidence, one strengthened
 approval-resolution unit assertion, and one strengthened approved-document/
 shared-knowledge contract assertion. It changes no production behavior,
@@ -66,19 +69,21 @@ completion blocker. Demo 10 proves a task-bound typed rejection with
 injected. Native remains sole/default and unwired, and Hermes remains
 Deferred/Blocked.
 
-Fresh final validation on macOS 26.6 build 25G72 arm64 passes: the approval unit
+Fresh final validation on macOS 26.6 build 25G72 arm64 passed: the approval unit
 1/1, approved-document/shared-knowledge contract 1/1, canonical acceptance
 command 447/447, complete `npm run verify`, independent re-review, and final
 documentation/security/session checks. The closeout classification is `PASS
-WITH ADVISORIES`; the gate is complete and fingerprint-valid. No next plan is
-owner-selected or Ready, and no commit or push has occurred.
+WITH ADVISORIES`; the gate is complete and fingerprint-valid. At that closeout
+checkpoint, no next plan was owner-selected or Ready and no commit or push had
+occurred; the published PR #57 checkpoint above supersedes that publication
+state.
 
 The owner-approved
 [`2026-08-12-native-multi-agent-command-center-prototype.md`](docs/plans/2026-08-12-native-multi-agent-command-center-prototype.md)
 is **verified complete** under gate
-`native-multi-agent-command-center-prototype`. The
-frontend-only working tree adds one lazy, deterministic, fixture-only Command
-Center route with one distinct `AgentOrchestrator`, all nine exact roles,
+`native-multi-agent-command-center-prototype`. The frontend-only implementation
+added one lazy, deterministic, fixture-only Command Center route with one
+distinct `AgentOrchestrator`, all nine exact roles,
 five presentation groups, seven closed scenarios, a non-editable topology,
 synchronized structured alternative, inspector, and bounded activity. It adds
 only exact `@xyflow/react@12.11.3` and `lucide-react@1.33.0`, with 19

@@ -1,12 +1,12 @@
 # Next steps
 
-Last updated: 2026-08-25
+Last updated: 2026-08-26
 
 This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must close before later feature work begins.
 
-## Current closeout checkpoint
+## Current published checkpoint
 
-### Closeout: publish marker-bound docs before authorized PR #57 squash merge
+### PR #57 deterministic nine-agent acceptance is published
 
 The owner approved
 [`2026-08-25-pr57-linux-clippy-portability.md`](docs/plans/2026-08-25-pr57-linux-clippy-portability.md)
@@ -33,21 +33,26 @@ advisory gates. The completion result is `PASS WITH ADVISORIES`; the sole
 advisory is that no next implementation plan is owner-selected or Ready. The
 deterministic marker is complete and valid.
 
-No implementation increment is Ready. Publish the closeout documentation
-commit, require its applicable documentation check, and perform only the
-owner's already authorized squash merge of PR #57. PR #57 remains unmerged; do
-not start another increment automatically.
+Exact closeout head `3a0ee66` passed its documentation workflow. PR #57 is
+squash-merged to `main` at `3987387`. Merged-main Documentation run
+`32928154686` and CI run `32928154706` pass, including frontend, Linux Rust,
+target-Mac Rust, secret scan, zero-finding npm audit, and the unchanged accepted
+Rust advisory-baseline gate.
+
+No implementation increment is owner-selected or Ready. The publication task
+is closed; do not create another recursive closeout or start implementation
+automatically.
 
 ### Prior verified checkpoint: native multi-agent demonstrations
 
 The approved
 [`native multi-agent end-to-end demonstrations`](docs/plans/2026-08-11-multi-agent-end-to-end-demonstrations.md)
-increment has completed implementation and validation under gate
-`native-multi-agent-end-to-end-demonstrations`. It runs on branch
+increment was completed and validated under gate
+`native-multi-agent-end-to-end-demonstrations`. Its implementation branch was
 `codex/native-multi-agent-end-to-end-demonstrations` from baseline `527f0f4`.
-The bounded change adds one canonical deterministic acceptance command and two
-test-only assertion strengthenings. It adds no production behavior, dependency,
-IPC, provider, tool, executor, external I/O, or device effect.
+The bounded change added one canonical deterministic acceptance command and two
+test-only assertion strengthenings. It added no production behavior,
+dependency, IPC, provider, tool, executor, external I/O, or device effect.
 
 All twelve demonstrations pass under the owner-approved acceptance scope. Demo
 7 validates checkpoint denial and safe manual A-D dispatch as separate
@@ -58,14 +63,16 @@ absent combined chain remains an advisory.
 Demo 10 provides a task-bound typed rejection with `NotAttempted` execution
 while the root stays `Running`; it does not inject denial text into the runtime.
 
-On macOS 26.6 build 25G72 arm64, final source-current validation passes: the
+On macOS 26.6 build 25G72 arm64, final source-current validation passed: the
 approval unit 1/1, approved-document/shared-knowledge contract 1/1, canonical
 acceptance command 447/447, and complete `npm run verify`. The owner
 clarification and fresh independent re-review support `PASS WITH ADVISORIES`.
 Documentation, repository, security, diff, and session-end checks also pass. The
-gate is complete and fingerprint-valid. No next plan is owner-selected or Ready;
-next-increment readiness remains Blocked. Native remains sole/default and
-unwired, Hermes remains Deferred/Blocked, and no commit or push has occurred.
+gate is complete and fingerprint-valid. No next plan was owner-selected or
+Ready; next-increment readiness remained Blocked. Native remains sole/default
+and unwired, and Hermes remains Deferred/Blocked. At that closeout checkpoint,
+no commit or push had occurred; the published PR #57 checkpoint above
+supersedes that publication state.
 
 The prior deterministic multi-agent Command Center prototype is verified
 complete. Approved Browser Control and Computer Use runtimes verify every

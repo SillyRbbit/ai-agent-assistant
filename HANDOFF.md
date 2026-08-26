@@ -1,8 +1,8 @@
 # Handoff
 
-Last updated: 2026-08-25
+Last updated: 2026-08-26
 
-## Current PR #57 merge-remediation checkpoint
+## Current PR #57 published checkpoint
 
 The first of two owner-approved, sequential gates is **verified complete with
 advisories** under `pr57-linux-clippy-portability` and plan
@@ -38,27 +38,38 @@ baseline. The completion report is `PASS WITH ADVISORIES`; its sole advisory is
 that no next implementation plan is owner-selected or Ready. The deterministic
 marker is complete and valid.
 
-Both remediation gates are closed. No implementation work remains and no new
-plan is Ready. Publish only the closeout documents and require their applicable
-documentation check before performing the owner's separately authorized squash
-merge. PR #57 remains unmerged.
+Both remediation gates are closed. Exact closeout head
+`3a0ee66b12df531002f829f6905aff10744f4cee` passed Documentation run
+`32928080852`, job `98054873882`, in 25s. PR #57 then squash-merged to `main`
+at `3987387b7d203cb155a00c2718e1b1fe92585bdb` on 2026-08-26.
+
+Merged-main Documentation run `32928154686`, job `98055082288`, passed in 26s.
+Merged-main CI run `32928154706` passed classifier job `98055082289` in 10s,
+frontend job `98055114137` in 59s, Linux Rust job `98055114143` in 6m37s,
+target-Mac Rust job `98055114165` in 2m11s, and dependency/secret job
+`98055114221` in 4m20s. That final job passed secret scanning, the full
+zero-finding npm audit, and the unchanged accepted Rust advisory baseline.
+
+PR #57 is closed and published. No implementation work remains and no new plan
+is owner-selected or Ready. The publication reconciliation changes only live
+project memory and adds no product capability.
 
 Exact resume prompt: "Read `AGENTS.md`, the required project-memory chain, and
-the completed PR #57 portability and transitive-advisory plans and reviews.
-Confirm gate `pr57-transitive-advisory-remediation` remains complete and valid
-and exact remediation `c3cc49e` passed all classifier-selected checks. Publish
-only the closeout documents, wait for their applicable documentation check,
-and then perform only the already authorized squash merge. Start no new
-increment."
+the completed PR #57 demonstration, portability, transitive-advisory, and
+publication-closeout evidence. Confirm PR #57 remains merged at `3987387`, its
+merged-main Documentation and CI runs remain successful, and no implementation
+plan is owner-selected or Ready. Wait for explicit owner direction before
+starting another increment. Do not add provider, tool, IPC, device-effect,
+memory, document, cloud, systems, or Hermes capability."
 
-## Current native multi-agent demonstration checkpoint
+## Prior verified native multi-agent demonstration checkpoint
 
 The owner-approved
 [`2026-08-11-multi-agent-end-to-end-demonstrations.md`](docs/plans/2026-08-11-multi-agent-end-to-end-demonstrations.md)
-is **verified complete with advisories** under the complete, valid gate
-`native-multi-agent-end-to-end-demonstrations`. The active branch is
+was **verified complete with advisories** under the complete, valid gate
+`native-multi-agent-end-to-end-demonstrations`. The implementation branch was
 `codex/native-multi-agent-end-to-end-demonstrations`, created from verified
-baseline `527f0f4`. The bounded implementation adds the canonical
+baseline `527f0f4`. The bounded implementation added the canonical
 `test:agent-acceptance` command and strengthens only two test assertions: exact
 rejected-approval audit resolution and the approved-document/shared-knowledge
 proposal boundary. No production behavior, dependency, IPC, provider, tool,
@@ -81,7 +92,9 @@ security, diff, and session-end checks. Independent re-review supports `PASS
 WITH ADVISORIES` with no completion blocker. Gate status is `complete` and its
 workspace fingerprint is valid. No next plan is owner-selected or Ready;
 next-increment readiness remains Blocked. Native remains sole/default and
-unwired; Hermes remains Deferred/Blocked. No commit or push has occurred.
+unwired; Hermes remains Deferred/Blocked. At that closeout checkpoint, no
+commit or push had occurred; the published PR #57 checkpoint above supersedes
+that publication state.
 
 The consolidated
 [`post-increment review`](docs/reviews/2026-08-25-native-multi-agent-end-to-end-demonstrations-post-increment-review.md)
@@ -89,18 +102,8 @@ contains the exact 21-path inventory, command results, and architecture/
 security/code/debt findings. It records `PASS WITH ADVISORIES`, and the linked
 deterministic marker is complete and valid.
 
-Exact resume prompt: "Read `AGENTS.md`, the required project-memory chain,
-`docs/plans/2026-08-11-multi-agent-end-to-end-demonstrations.md`, and
-`docs/increments/native-multi-agent-end-to-end-demonstrations.md`, and the
-consolidated post-increment review. Reconcile the
-active `codex/native-multi-agent-end-to-end-demonstrations` branch with baseline
-`527f0f4`; confirm the focused 1/1 checks, 447/447 acceptance, and full
-verification pass. Preserve the owner's clarification that checkpoint denial
-and safe manual A-D dispatch are separate accepted Demo 7 demonstrations, with
-no approval-to-dispatch bridge and the absent combined chain retained as an
-advisory. Confirm the gate remains complete and fingerprint-valid. No next plan
-is Ready; wait for explicit owner direction. Do not wire a provider/tool/IPC
-path, commit, or push."
+That checkpoint's resume prompt is superseded by the current published-state
+prompt at the top of this file.
 
 ## Prior verified Command Center checkpoint
 
@@ -114,10 +117,12 @@ announcement behavior, and persistent
 `DEMO MODE · SIMULATED AGENT DATA` disclosure.
 
 Only exact `@xyflow/react@12.11.3` and `lucide-react@1.33.0` were added as
-direct production dependencies; 19 transitives were reviewed, production audit
-is zero, and five pre-existing development-only advisories remain unchanged.
-`@xyflow/react` is confined to the topology adapter. No Rust/Tauri/IPC/
-storage/capability/CSP source changed and no UI control has an effect.
+direct production dependencies. At the Command Center checkpoint, 19
+transitives were reviewed, the production audit was zero, and five
+pre-existing development-only advisories remained unchanged; PR #57's
+superseding transitive remediation resolved them. `@xyflow/react` is confined
+to the topology adapter. No Rust/Tauri/IPC/storage/capability/CSP source changed
+and no UI control has an effect.
 
 Source-current projection, page, viewport-adapter, App, and state tests pass
 64/64, 14/14, 5/5, 28/28, and 31/31: 142/142 focused. The full frontend suite

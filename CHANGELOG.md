@@ -4,6 +4,16 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Published the complete deterministic native nine-agent demonstration and both
+  bounded PR #57 merge remediations. Exact closeout head `3a0ee66` passed its
+  documentation workflow, and PR #57 squash-merged to `main` at `3987387`.
+  Merged-main Documentation and CI runs pass repository classification,
+  frontend, strict Linux Rust, target-Mac Rust, secret scanning, zero-finding
+  npm audit, and the unchanged accepted Cargo advisory-baseline gate. The
+  source, closeout, and remediation evidence remain unchanged; this
+  publication reconciliation adds no product, dependency, workflow, policy, or
+  authority change. No next implementation plan is owner-selected or Ready.
+
 - Prepared closeout for the second, separately gated PR #57 merge remediation
   for five newly
   reported development-only transitive package findings. The bounded plan
@@ -27,9 +37,10 @@ ADVISORIES` solely because no next implementation plan is owner-selected or
   `UnsupportedPlatform` denial. Focused tests, strict Clippy, all-target Rust,
   complete `npm run verify`, and independent review pass locally. Exact
   correction `6b26753` also passes Linux strict Clippy/all-target tests,
-  target-Mac Rust, frontend, and documentation workflows. The result is `PASS
-WITH ADVISORIES`; the separate npm advisory remediation has not started, and
-  PR #57 remains unmerged.
+  target-Mac Rust, frontend, and documentation workflows. At that checkpoint,
+  the result was `PASS WITH ADVISORIES` because the separate npm advisory
+  remediation had not started and PR #57 remained unmerged; the superseding
+  publication record above closes both conditions.
 
 - Added one deterministic native nine-agent demonstration and acceptance
   layer without changing production architecture. The canonical

@@ -1,15 +1,16 @@
 # Project status
 
-Last updated: 2026-08-25
+Last updated: 2026-08-26
 
 ## Current milestone
 
-PR #57's source remediation is verified at commit
-`c3cc49ee28444397ac957d7279ddcfb3ce608548` on
-`codex/native-multi-agent-end-to-end-demonstrations`. Its completed
-deterministic demonstration increment remains recorded below. Publication
-exposed two independent merge blockers, and the owner approved two sequential,
-separately gated remediations.
+PR #57's deterministic native nine-agent demonstration and acceptance suite is
+published on `main` at squash commit
+`3987387b7d203cb155a00c2718e1b1fe92585bdb`. The exact source remediation was
+`c3cc49ee28444397ac957d7279ddcfb3ce608548`, and exact marker-bound closeout
+head `3a0ee66b12df531002f829f6905aff10744f4cee` passed its documentation
+workflow before merge. The completed demonstration increment and two
+independent merge remediations remain recorded below.
 
 The first gate, `pr57-linux-clippy-portability`, is **verified complete with
 advisories**. Its attribute-only Rust correction aligns private compile scope
@@ -37,14 +38,15 @@ npm audit and the unchanged accepted Rust advisory baseline. The result is
 technical-debt finding remains. The sole advisory is readiness because no new
 implementation plan is owner-selected or Ready.
 
-Both PR #57 remediation gates are complete and valid. No new implementation
-plan is Ready. Publish the closeout documentation and require its applicable
-documentation check before the owner's authorized squash merge. PR #57 remains
-unmerged.
+Both PR #57 remediation gates are complete and valid. Merged-main Documentation
+run `32928154686` and CI run `32928154706` pass every classified job: repository
+policy, frontend, Linux Rust, target-Mac Rust, secret scan, zero-finding npm
+audit, and the unchanged accepted Rust advisory baseline. No new
+implementation plan is owner-selected or Ready.
 
 The owner-approved deterministic native multi-agent end-to-end demonstration
 increment is **verified complete with advisories** under the complete, valid gate
-`native-multi-agent-end-to-end-demonstrations`. Work is on branch
+`native-multi-agent-end-to-end-demonstrations`. The implementation branch was
 `codex/native-multi-agent-end-to-end-demonstrations` from verified baseline
 `527f0f4`. Its bounded source scope is one canonical acceptance command and two
 test-only assertion strengthenings; it adds no production behavior, dependency,
@@ -66,11 +68,12 @@ approval unit 1/1, approved-document/shared-knowledge contract 1/1, canonical
 acceptance command 447/447, full `npm run verify`, independent re-review, and
 final documentation/security/session checks. The closeout result is `PASS WITH
 ADVISORIES`; gate status is `complete` and its workspace fingerprint is valid.
-No next plan is owner-selected or Ready, and no commit or push has occurred.
+At that closeout checkpoint, no next plan was owner-selected or Ready and no
+commit or push had occurred; the published PR #57 checkpoint above supersedes
+that publication state.
 
 The prerequisite deterministic multi-agent Command Center prototype is **verified
-complete**. The
-frontend working tree adds one lazy route with a versioned fixture projection,
+complete**. Its frontend implementation added one lazy route with a versioned fixture projection,
 one distinct `AgentOrchestrator`, all nine exact agent roles, five
 presentation groups, seven closed scenarios, graph/structured alternatives,
 an inspector, bounded activity, local search/filters, and persistent
@@ -78,10 +81,11 @@ an inspector, bounded activity, local search/filters, and persistent
 crosses no IPC or trusted authority boundary.
 
 Only exact `@xyflow/react@12.11.3` and `lucide-react@1.33.0` were added as
-direct production dependencies. Their reviewed lockfile consequence is 19
-transitives; production audit is zero vulnerabilities and five pre-existing
-development-only advisories remain unchanged. Protected Rust/Tauri/IPC/storage/
-capability/CSP paths are unchanged.
+direct production dependencies. At the Command Center checkpoint, their
+reviewed lockfile consequence was 19 transitives, the production audit was zero,
+and five pre-existing development-only advisories remained unchanged; PR #57's
+superseding transitive remediation resolved them. Protected Rust/Tauri/IPC/
+storage/capability/CSP paths are unchanged.
 
 Source-current focused tests pass 142/142 and the frontend suite passes 211/211
 across 13 files. Frontend format, lint, typecheck, and build pass; strict Rust
