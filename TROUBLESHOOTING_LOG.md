@@ -1052,10 +1052,9 @@ tooling or that product runtime dependencies are affected.
 Gate `pr57-transitive-advisory-remediation` used the npm resolver with install
 scripts disabled to advance only those six nodes within their existing parent
 ranges. No override, direct dependency, parent-graph, audit-policy, or CI
-change was needed. Keep PR #57 unmerged until independent review, valid-marker,
-and exact-head final PR check evidence pass. Independent review,
-remediation-head checks, and marker finalization pass; the closeout-docs check
-remains pending before the already authorized squash merge.
+change was needed. The resolution required PR #57 to remain unmerged until
+independent review, a valid marker, and exact-head PR evidence passed. Those
+conditions and the later closeout-docs check passed before merge.
 
 Published remediation `c3cc49ee28444397ac957d7279ddcfb3ce608548` passes CI
 run `32923751481`: classifier job `98042347127` in 9s, target-Mac Rust job
@@ -1075,3 +1074,13 @@ manifest and install-script allowlist to remain unchanged, complete repository
 verification to pass, the exact published remediation head's dependency audit
 to pass, and the later closeout-docs head's applicable documentation check to
 pass before merge.
+
+### Publication result
+
+Exact closeout head `3a0ee66b12df531002f829f6905aff10744f4cee` passed
+Documentation run `32928080852`. PR #57 squash-merged to `main` at
+`3987387b7d203cb155a00c2718e1b1fe92585bdb`. Merged-main Documentation run
+`32928154686` and CI run `32928154706` both pass, including secret scanning,
+the zero-finding npm audit, and the unchanged accepted Rust advisory-baseline
+gate. TS-020 remains Resolved without an exception, override, parent upgrade,
+or policy change.

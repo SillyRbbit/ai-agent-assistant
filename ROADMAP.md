@@ -159,7 +159,7 @@ Release milestones additionally require `RELEASE_CHECKLIST.md` and
 
 ## Current queue
 
-The immediate owner-selected overlay
+The completed owner-selected overlay
 [`PR #57 transitive advisory remediation`](docs/plans/2026-08-25-pr57-transitive-advisory-remediation.md)
 is verified complete with advisories under the complete, valid gate
 `pr57-transitive-advisory-remediation`. It changes only six development-only
@@ -168,9 +168,10 @@ The exact resolver diff, scripts-disabled clean install, zero audits, and full
 local verification pass without a manifest or product change. Exact remediation
 `c3cc49e` also passes every classifier-selected PR check. The result is `PASS
 WITH ADVISORIES` solely because no next implementation plan is owner-selected
-or Ready. The deterministic marker is complete and valid. Only the already
-authorized squash merge remains after the closeout-docs check; the ordered
-architecture queue below is otherwise unchanged.
+or Ready. The deterministic marker is complete and valid. Exact closeout head
+`3a0ee66` passed its documentation workflow, PR #57 squash-merged at `3987387`,
+and merged-main Documentation and CI runs pass. The ordered architecture queue
+below is otherwise unchanged.
 
 1. Treat
    [`2026-08-11-multi-agent-end-to-end-demonstrations.md`](docs/plans/2026-08-11-multi-agent-end-to-end-demonstrations.md)
