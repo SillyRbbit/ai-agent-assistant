@@ -6,6 +6,24 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Current closeout checkpoint
 
+### Active: PR #57 Linux Clippy portability remediation
+
+The owner approved
+[`2026-08-25-pr57-linux-clippy-portability.md`](docs/plans/2026-08-25-pr57-linux-clippy-portability.md)
+as the first of two sequential merge-remediation increments. The exact private
+conditional-compilation correction is implemented locally. Focused tests,
+strict target-Mac Clippy, all-target Rust, complete `npm run verify`, and
+independent review pass. Gate `pr57-linux-clippy-portability` remains Active
+because the corrected commit still requires passing Linux and target-Mac Rust
+workflow evidence.
+
+Do not begin the separately approved transitive-advisory remediation until this
+gate closes. After both Rust jobs pass and the portability marker is complete
+and valid, the dependency remediation is the only next Ready work. Do not merge
+PR #57 until that second gate and every required PR check pass.
+
+### Prior verified checkpoint: native multi-agent demonstrations
+
 The approved
 [`native multi-agent end-to-end demonstrations`](docs/plans/2026-08-11-multi-agent-end-to-end-demonstrations.md)
 increment has completed implementation and validation under gate

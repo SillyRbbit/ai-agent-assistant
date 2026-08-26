@@ -2,9 +2,13 @@ use std::fmt;
 
 use thiserror::Error;
 
+#[cfg(any(test, target_os = "macos"))]
 const SERVICE_LABEL: &str = "io.cortexa.demo.cloudflare-access";
+#[cfg(any(test, target_os = "macos"))]
 const CLIENT_ID_ACCOUNT: &str = "client-id";
+#[cfg(any(test, target_os = "macos"))]
 const CLIENT_SECRET_ACCOUNT: &str = "client-secret";
+#[cfg(any(test, target_os = "macos"))]
 const MAX_CREDENTIAL_BYTES: usize = 512;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -56,6 +60,7 @@ pub fn probe_cloudflare_access_credentials(
     }
 }
 
+#[cfg(any(test, target_os = "macos"))]
 trait ReadOnlyCredentialSource {
     fn read(
         &self,
@@ -65,6 +70,7 @@ trait ReadOnlyCredentialSource {
     ) -> Result<FakeCredentialBytes, CloudflareAccessCredentialError>;
 }
 
+#[cfg(any(test, target_os = "macos"))]
 fn probe_with_reader(
     source: &impl ReadOnlyCredentialSource,
 ) -> Result<CloudflareAccessCredentialStatus, CloudflareAccessCredentialError> {
@@ -85,6 +91,7 @@ fn probe_with_reader(
     Ok(CloudflareAccessCredentialStatus::Available)
 }
 
+#[cfg(any(test, target_os = "macos"))]
 fn validate_secret(
     value: &FakeCredentialBytes,
     item: CloudflareAccessCredentialItem,
@@ -100,8 +107,10 @@ fn validate_secret(
     Ok(())
 }
 
+#[cfg(any(test, target_os = "macos"))]
 struct FakeCredentialBytes(Vec<u8>);
 
+#[cfg(any(test, target_os = "macos"))]
 impl FakeCredentialBytes {
     fn new(bytes: Vec<u8>) -> Self {
         Self(bytes)
@@ -112,6 +121,7 @@ impl FakeCredentialBytes {
     }
 }
 
+#[cfg(any(test, target_os = "macos"))]
 impl Drop for FakeCredentialBytes {
     fn drop(&mut self) {
         self.0.fill(0);

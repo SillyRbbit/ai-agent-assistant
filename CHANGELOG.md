@@ -4,6 +4,16 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Began the separately gated PR #57 Linux portability remediation. The bounded
+  Rust diff target-gates one test import, one private approval-source matcher,
+  and the private fake-only Cloudflare reader/validation seam while preserving
+  macOS behavior, cross-target unit coverage, and the public non-macOS
+  `UnsupportedPlatform` denial. Focused tests, strict Clippy, all-target Rust,
+  complete `npm run verify`, and independent interim review pass locally.
+  Remote Linux and target-Mac Rust evidence remains pending, so the gate stays
+  active and PR #57 remains unmerged. The separate npm advisory remediation has
+  not started.
+
 - Added one deterministic native nine-agent demonstration and acceptance
   layer without changing production architecture. The canonical
   `npm run test:agent-acceptance` command composes 249 Rust library tests with

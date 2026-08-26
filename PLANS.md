@@ -5,6 +5,21 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Current plan state
 
 The owner-approved
+[`2026-08-25-pr57-linux-clippy-portability.md`](docs/plans/2026-08-25-pr57-linux-clippy-portability.md)
+is **Active** under gate `pr57-linux-clippy-portability`. It is the first of two
+separately gated PR #57 merge remediations. The three-file Rust diff changes
+only private conditional-compilation visibility; public APIs, macOS behavior,
+approval identity, credential validation, non-macOS `UnsupportedPlatform`, and
+all authority boundaries remain unchanged.
+
+Local focused, strict Clippy, all-target Rust, full repository, and independent
+review evidence passes. Completion remains Blocked until the reviewed
+correction is published and both Linux and target-Mac Rust validation pass on
+that exact commit. The separately approved npm transitive-advisory remediation
+must not begin before this marker closes, and PR #57 must not merge until both
+increments and every required check pass.
+
+The prior owner-approved
 [`2026-08-11-multi-agent-end-to-end-demonstrations.md`](docs/plans/2026-08-11-multi-agent-end-to-end-demonstrations.md)
 is **verified complete with advisories** under the complete, valid gate
 `native-multi-agent-end-to-end-demonstrations` on branch

@@ -2,6 +2,48 @@
 
 Last updated: 2026-08-25
 
+## Current PR #57 Linux portability checkpoint
+
+The owner authorized two sequential, separately gated remediations needed to
+merge PR #57. The first is active under gate
+`pr57-linux-clippy-portability` and plan
+[`2026-08-25-pr57-linux-clippy-portability.md`](docs/plans/2026-08-25-pr57-linux-clippy-portability.md).
+It targets only private conditional-compilation visibility in the orchestrator
+test module, approval manager, and fake-only Cloudflare Keychain proof. The
+public non-macOS credential probe still returns `UnsupportedPlatform`; D-069,
+D-070, and D-084 remain unchanged.
+
+Local source-current evidence passes: Rust formatting; the 1/1 orchestrator
+approval regression; the 1/1 approval identity-substitution regression; 5/5
+Cloudflare private units; the 1/1 public redacted credential boundary; strict
+all-target/all-feature Clippy with warnings denied; all-target Rust tests; and
+complete `npm run verify`. The first full verification attempt stopped only on
+Prettier for the new increment record; formatting that file and rerunning from
+the start passed. Independent architecture, security, and code review found no
+source finding.
+
+The quality result remains `FAIL` and the gate remains active until an interim
+reviewed commit is published and both `Linux Rust validation` and `Target-Mac
+Rust validation` pass for that exact commit. PR #57's currently visible Rust
+results predate the correction and cannot close the gate.
+
+The second owner-approved increment is the separate npm transitive-advisory
+remediation. Current audit evidence reports `brace-expansion`, `js-yaml`,
+`nanoid`, `postcss`, and `undici` as four High and one Moderate development
+dependency findings; repository secret scanning passes. That increment must
+not begin until the portability gate closes, and PR #57 must not merge until
+both remediations and all required checks pass.
+
+Exact resume prompt: "Read `AGENTS.md`, the required project-memory chain,
+`docs/plans/2026-08-25-pr57-linux-clippy-portability.md`,
+`docs/increments/pr57-linux-clippy-portability.md`, and the active review.
+Confirm gate `pr57-linux-clippy-portability` remains active. Publish only the
+reviewed bounded correction under the existing owner authorization, then
+require Linux and target-Mac Rust validation to pass on that exact commit.
+Keep the npm advisory work separate, do not weaken Clippy or public fail-closed
+behavior, and do not merge PR #57. After both Rust jobs pass, synchronize final
+evidence and close this gate before beginning the dependency increment."
+
 ## Current native multi-agent demonstration checkpoint
 
 The owner-approved

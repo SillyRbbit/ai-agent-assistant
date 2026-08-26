@@ -6491,7 +6491,7 @@ pub enum AgentOrchestratorError {
 mod tests {
     use super::*;
     use crate::agent::definition::AgentDefinition;
-    use crate::agent::governance::{AgentApprovalAuditDisposition, AgentExecutionDisposition};
+    use crate::agent::governance::AgentApprovalAuditDisposition;
     use crate::agent::infrastructure_operations::{
         CloudScenarioId, InfrastructureOperationsFixtureCatalog, SystemsOperationsScenarioId,
     };
@@ -6502,6 +6502,8 @@ mod tests {
     #[cfg(unix)]
     use std::io::Write;
 
+    #[cfg(target_os = "macos")]
+    use crate::agent::governance::AgentExecutionDisposition;
     #[cfg(target_os = "macos")]
     use crate::approvals::decision_source::test_outcome_from_dialog_result;
     #[cfg(target_os = "macos")]

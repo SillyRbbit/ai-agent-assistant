@@ -4,6 +4,25 @@ Last updated: 2026-08-25
 
 ## Current milestone
 
+PR #57 is open from commit `28a0c46` on
+`codex/native-multi-agent-end-to-end-demonstrations`. Its completed
+deterministic demonstration increment remains recorded below. Publication
+exposed two independent merge blockers, and the owner approved two sequential,
+separately gated remediations.
+
+The active first gate is `pr57-linux-clippy-portability`. Its attribute-only
+Rust correction aligns private compile scope with existing macOS-only consumers
+while retaining Cloudflare private helpers in unit tests and preserving the
+public non-macOS `UnsupportedPlatform` result. Focused approval and credential
+tests, strict Clippy, all-target Rust tests, complete `npm run verify`, and
+independent interim review pass locally. Completion remains Blocked until both
+Linux and target-Mac Rust validation pass on the published correction.
+
+The approved second increment will remediate five vulnerable development
+transitives without entering this gate. Secret scanning passes, but the npm
+audit currently reports four High and one Moderate finding. PR #57 remains
+unmergeable until both increments close and every required check is green.
+
 The owner-approved deterministic native multi-agent end-to-end demonstration
 increment is **verified complete with advisories** under the complete, valid gate
 `native-multi-agent-end-to-end-demonstrations`. Work is on branch
