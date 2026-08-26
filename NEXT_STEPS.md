@@ -6,7 +6,7 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Current closeout checkpoint
 
-### Ready: PR #57 transitive development-dependency advisory remediation
+### Active: PR #57 transitive development-dependency advisory remediation
 
 The owner approved
 [`2026-08-25-pr57-linux-clippy-portability.md`](docs/plans/2026-08-25-pr57-linux-clippy-portability.md)
@@ -17,12 +17,20 @@ passes local focused/full verification and source-current Linux Rust,
 target-Mac Rust, frontend, and documentation workflows without lint
 suppression or behavior change.
 
-Begin only the separately approved npm transitive-advisory remediation under a
-new gate and ExecPlan. Resolve the five development-only vulnerable transitives
-within existing parent constraints where possible; do not add major upgrades,
-production behavior, or governance bypass. Require a zero-vulnerability npm
-audit, full repository validation, a valid completion marker, and all
-applicable PR checks before merging PR #57.
+The separately approved
+[`transitive-advisory remediation`](docs/plans/2026-08-25-pr57-transitive-advisory-remediation.md)
+is now Active under gate `pr57-transitive-advisory-remediation`. Resolve only
+the six vulnerable development-only lockfile entries within existing parent
+constraints; do not add major upgrades, manifest changes, production behavior,
+or governance bypass. Require a zero-vulnerability npm audit, full repository
+validation, a valid completion marker, and all applicable PR checks before
+merging PR #57.
+
+The exact resolver diff and scripts-disabled clean install now pass local
+graph, license, integrity, lifecycle, engine, full/production audit, and
+complete `npm run verify` checks. Independent security/code review passes;
+independent architecture review also passes. Exact-head CI remains pending. Do
+not start another increment or merge while this gate is Active.
 
 ### Prior verified checkpoint: native multi-agent demonstrations
 

@@ -73,6 +73,17 @@ development-only advisories remain unchanged. React Flow types/imports stop at
 one feature adapter. No Rust/Tauri capability, CSP, IPC, permission, or native
 dependency changed.
 
+PR #57's baseline full development audit reports five vulnerable indirect
+package-level findings—four High and one Moderate—across six lockfile nodes,
+while its production-only audit and repository secret scan pass. The active
+`pr57-transitive-advisory-remediation` gate advanced only those six
+development-only nodes within existing parent ranges. Exact graph, license,
+integrity, engine, lifecycle, clean-install, full/production zero-audit, and
+complete repository verification now pass locally with no manifest, override,
+install-script allowlist, audit-policy, application, or governance change.
+Treat the correction as pending until independent review, exact-head CI, and a
+valid completion marker also pass.
+
 ## Non-negotiable invariants
 
 - The WebView cannot execute a generic local action.

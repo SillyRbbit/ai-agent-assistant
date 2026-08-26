@@ -20,21 +20,27 @@ and independent architecture, security, and code review pass. CI run
 run `32921400102`, job `98035529472`, passes in 26s. The portability result is
 `PASS WITH ADVISORIES`.
 
-The only next Ready work is the separately approved npm transitive-advisory
-remediation. Current audit evidence reports `brace-expansion`, `js-yaml`,
-`nanoid`, `postcss`, and `undici` as four High and one Moderate development
-dependency findings; repository secret scanning passes. PR #57 remains
-unmerged and must not merge until that second gate and every applicable check
-pass.
+The second owner-approved gate is Active under
+`pr57-transitive-advisory-remediation` and
+[`2026-08-25-pr57-transitive-advisory-remediation.md`](docs/plans/2026-08-25-pr57-transitive-advisory-remediation.md).
+Baseline audit evidence reports `brace-expansion`, `js-yaml`, `nanoid`,
+`postcss`, and `undici` as four High and one Moderate development dependency
+findings across six lockfile nodes. The resolver advanced exactly those nodes
+to the approved in-range versions with no manifest, parent, major,
+install-policy, product, or governance change. A scripts-disabled clean
+install, exact graph/license/integrity/lifecycle inspection, both zero-finding
+npm audits, complete `npm run verify`, and independent security/code review
+pass. Independent architecture review also passes. Exact-head CI remains
+pending, and PR #57 remains unmerged.
 
 Exact resume prompt: "Read `AGENTS.md`, the required project-memory chain, and
-the completed `docs/plans/2026-08-25-pr57-linux-clippy-portability.md`. Confirm
-gate `pr57-linux-clippy-portability` is complete and fingerprint-valid. Begin
-only the separately approved PR #57 transitive-development-dependency advisory
-remediation under its own gate and plan. Use bounded lockfile resolution within
-existing parent constraints, preserve all governance and runtime behavior, run
-complete supply-chain and repository validation, and keep PR #57 unmerged
-until the second marker and every applicable PR check pass."
+the completed `docs/plans/2026-08-25-pr57-linux-clippy-portability.md` and active
+`docs/plans/2026-08-25-pr57-transitive-advisory-remediation.md`. Confirm gate
+`pr57-transitive-advisory-remediation` is active and follow its ExecPlan.
+Confirm the exact six-node lockfile diff, zero audits, complete verification,
+and independent reviews; publish only that reviewed scope and require every
+applicable exact-head PR check. Keep PR #57 unmerged until the second marker is
+complete and valid and all checks pass."
 
 ## Current native multi-agent demonstration checkpoint
 

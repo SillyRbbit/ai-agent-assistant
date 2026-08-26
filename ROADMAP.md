@@ -159,6 +159,15 @@ Release milestones additionally require `RELEASE_CHECKLIST.md` and
 
 ## Current queue
 
+The immediate owner-selected overlay is the Active
+[`PR #57 transitive advisory remediation`](docs/plans/2026-08-25-pr57-transitive-advisory-remediation.md)
+under gate `pr57-transitive-advisory-remediation`. It may change only six
+development-only transitive lockfile entries within existing parent ranges.
+The exact resolver diff, scripts-disabled clean install, zero audits, and full
+local verification pass without a manifest or product change. PR #57 must
+remain unmerged until this gate and every applicable exact-head check pass. The
+ordered architecture queue below remains otherwise unchanged.
+
 1. Treat
    [`2026-08-11-multi-agent-end-to-end-demonstrations.md`](docs/plans/2026-08-11-multi-agent-end-to-end-demonstrations.md)
    without adding production behavior or bridging Demo 7. Final focused checks,
@@ -215,7 +224,8 @@ and published at `a5d7ba1`. D-088's two separate fixture-only infrastructure
 and systems operations workflows are verified complete with advisories. D-091
 is verified complete with advisories under a complete, valid gate. The
 deterministic end-to-end demonstration increment is verified complete with
-advisories under a valid marker; no next owner-approved plan is Ready.
+advisories under a valid marker. Its first PR remediation is also complete; the
+second dependency-only remediation named above is Active.
 
 ## Rollback and reprioritization
 

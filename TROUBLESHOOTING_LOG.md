@@ -1009,3 +1009,55 @@ At an approved viewport, apply real browser zoom through browser chrome and
 confirm that rendered scale changes while controls, labels, focus, scroll
 ownership, and horizontal overflow remain correct. Restore zoom to 100% before
 closeout.
+
+## TS-020 - PR #57 audit reports new development-transitive advisories
+
+Date: 2026-08-25
+Status: Correction verified locally; remote verification pending
+
+### Symptom
+
+PR #57 CI run `32921400121`, dependency job `98035560426`, passes repository
+secret scanning and then fails `npm audit --audit-level=low`. A fresh local
+audit reproduces five vulnerable package-level findings across six lockfile
+nodes: four High and one Moderate.
+
+### Observed evidence
+
+- Both `brace-expansion` major lines, `js-yaml`, `nanoid`, `postcss`, and
+  `undici` are indirect development-only lockfile entries.
+- The production-only audit reports zero vulnerabilities.
+- Current parent ranges admit patched resolutions without a direct, parent, or
+  major upgrade: `brace-expansion@1.1.18` and `5.0.9`, `js-yaml@4.3.1`,
+  `nanoid@3.3.18`, `postcss@8.5.26`, and `undici@7.29.0`.
+- Repository secret scanning passes; this failure is advisory-registry
+  evidence, not a detected repository secret.
+
+The bounded resolver advanced exactly those six nodes. A scripts-disabled
+clean install now resolves every expected safe version without an invalid or
+extraneous package. Each changed node remains development-only, MIT,
+integrity-bound, engine-compatible, and without an install hook. Full and
+production-only npm audits report zero, and complete `npm run verify` passes.
+The manifest, parent graph, lockfile version, and existing install-script
+allowlist remain unchanged.
+
+### Cause
+
+The exact locked development-tool versions now fall inside current published
+npm advisory ranges. This does not establish that untrusted input exploited the
+tooling or that product runtime dependencies are affected.
+
+### Approved resolution boundary
+
+Gate `pr57-transitive-advisory-remediation` used the npm resolver with install
+scripts disabled to advance only those six nodes within their existing parent
+ranges. No override, direct dependency, parent-graph, audit-policy, or CI
+change was needed. Keep PR #57 unmerged until independent review,
+valid-marker, and exact-head final PR check evidence pass.
+
+### Verify
+
+Require `npm ls` to show the six exact safe resolutions with no invalid or
+extraneous package, full and production-only npm audits to report zero, the
+manifest and install-script allowlist to remain unchanged, complete repository
+verification to pass, and the exact final PR head's dependency audit to pass.

@@ -21,11 +21,17 @@ Linux Rust, target-Mac Rust, frontend, and documentation workflows. The result
 is `PASS WITH ADVISORIES` only because the separately scoped dependency gate
 remains.
 
-The approved second increment is now the only Ready work. It will remediate
-five vulnerable development transitives without changing production
-architecture or bypassing audit policy. Secret scanning passes, but the npm
-audit currently reports four High and one Moderate finding. PR #57 remains
-unmergeable until that increment closes and every applicable check is green.
+The approved second increment is now Active under
+`pr57-transitive-advisory-remediation`. It may remediate only six vulnerable
+development-transitive lockfile entries within existing parent constraints,
+without changing `package.json`, production architecture, install-script
+policy, or audit policy. Baseline audit evidence reports four High and one
+Moderate finding across six nodes. The exact in-range resolver diff, clean
+scripts-disabled install, metadata/graph proof, both zero-finding npm audits,
+complete `npm run verify`, and independent security/code review now pass
+locally. Independent architecture review also passes. Source-current PR checks
+remain pending. PR #57 remains unmergeable until this increment closes and
+every applicable exact-head check is green.
 
 The owner-approved deterministic native multi-agent end-to-end demonstration
 increment is **verified complete with advisories** under the complete, valid gate

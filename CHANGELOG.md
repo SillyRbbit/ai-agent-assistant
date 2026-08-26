@@ -4,6 +4,16 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Began the second, separately gated PR #57 merge remediation for five newly
+  reported development-only transitive package findings. The bounded plan
+  permits only six resolver-generated in-range lockfile updates across
+  `brace-expansion`, `js-yaml`, `nanoid`, `postcss`, and `undici`; it adds no
+  direct or parent dependency, major version, manifest, install-script policy,
+  product behavior, or governance change. The exact graph is now installed and
+  locally verified: all changed nodes remain dev-only/MIT/integrity-bound with
+  no install hook, both npm audits report zero, and complete `npm run verify`
+  passes. Exact-head CI and final closeout remain pending.
+
 - Completed the separately gated PR #57 Linux portability remediation. The bounded
   Rust diff target-gates one test import, one private approval-source matcher,
   and the private fake-only Cloudflare reader/validation seam while preserving
