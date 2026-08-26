@@ -4,19 +4,81 @@ Last updated: 2026-08-25
 
 This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must close before later feature work begins.
 
-## Current completion checkpoint
+## Current closeout checkpoint
 
-The deterministic multi-agent Command Center prototype is verified complete.
-Approved Browser Control and Computer Use runtimes verify every required M5 viewport, theme,
-reduced-motion, scroll-ownership/input, focus, accessibility, overflow,
-reachability, screenshot, native-resize, and browser-zoom check. M5 found and
-corrected one scoped light-theme compact-text contrast defect. Owner-operated
-host zoom produced a rendered 125% state at DPR 1.25 with no overflow,
-clipping, focus, scrolling, or reachability failure; reset restored DPR 1.
+### Closeout: publish marker-bound docs before authorized PR #57 squash merge
 
-The fresh post-increment automated command set and manual matrix pass, and the
+The owner approved
+[`2026-08-25-pr57-linux-clippy-portability.md`](docs/plans/2026-08-25-pr57-linux-clippy-portability.md)
+as the first of two sequential merge-remediation increments. Gate
+`pr57-linux-clippy-portability` is complete and valid with `PASS WITH
+ADVISORIES`. Exact correction `6b2675343db8518587068e7175ce0cec9d2f6107`
+passes local focused/full verification and source-current Linux Rust,
+target-Mac Rust, frontend, and documentation workflows without lint
+suppression or behavior change.
+
+The separately approved
+[`transitive-advisory remediation`](docs/plans/2026-08-25-pr57-transitive-advisory-remediation.md)
+is verified complete with advisories under the complete, valid gate
+`pr57-transitive-advisory-remediation`. It resolves only the six vulnerable
+development-only lockfile entries within existing parent constraints and adds
+no major upgrade, manifest change, production behavior, or governance bypass.
+
+The exact resolver diff and scripts-disabled clean install now pass local
+graph, license, integrity, install-hook, engine, full/production audit, and
+complete `npm run verify` checks. Independent security/code review passes;
+independent architecture review also passes. Published remediation `c3cc49e`
+passes every classifier-selected PR check, including the npm and accepted Cargo
+advisory gates. The completion result is `PASS WITH ADVISORIES`; the sole
+advisory is that no next implementation plan is owner-selected or Ready. The
+deterministic marker is complete and valid.
+
+No implementation increment is Ready. Publish the closeout documentation
+commit, require its applicable documentation check, and perform only the
+owner's already authorized squash merge of PR #57. PR #57 remains unmerged; do
+not start another increment automatically.
+
+### Prior verified checkpoint: native multi-agent demonstrations
+
+The approved
+[`native multi-agent end-to-end demonstrations`](docs/plans/2026-08-11-multi-agent-end-to-end-demonstrations.md)
+increment has completed implementation and validation under gate
+`native-multi-agent-end-to-end-demonstrations`. It runs on branch
+`codex/native-multi-agent-end-to-end-demonstrations` from baseline `527f0f4`.
+The bounded change adds one canonical deterministic acceptance command and two
+test-only assertion strengthenings. It adds no production behavior, dependency,
+IPC, provider, tool, executor, external I/O, or device effect.
+
+All twelve demonstrations pass under the owner-approved acceptance scope. Demo
+7 validates checkpoint denial and safe manual A-D dispatch as separate
+branches. D-090 deliberately allows zero executable tool steps, so its
+approval-checkpoint proposal branch cannot connect to its separate take-once
+manual dispatch for complete A-D fixture workflows. No bridge exists, and the
+absent combined chain remains an advisory.
+Demo 10 provides a task-bound typed rejection with `NotAttempted` execution
+while the root stays `Running`; it does not inject denial text into the runtime.
+
+On macOS 26.6 build 25G72 arm64, final source-current validation passes: the
+approval unit 1/1, approved-document/shared-knowledge contract 1/1, canonical
+acceptance command 447/447, and complete `npm run verify`. The owner
+clarification and fresh independent re-review support `PASS WITH ADVISORIES`.
+Documentation, repository, security, diff, and session-end checks also pass. The
+gate is complete and fingerprint-valid. No next plan is owner-selected or Ready;
+next-increment readiness remains Blocked. Native remains sole/default and
+unwired, Hermes remains Deferred/Blocked, and no commit or push has occurred.
+
+The prior deterministic multi-agent Command Center prototype is verified
+complete. Approved Browser Control and Computer Use runtimes verify every
+required M5 viewport, theme, reduced-motion, scroll-ownership/input, focus,
+accessibility, overflow, reachability, screenshot, native-resize, and
+browser-zoom check. M5 found and corrected one scoped light-theme compact-text
+contrast defect. Owner-operated host zoom produced a rendered 125% state at DPR
+1.25 with no overflow, clipping, focus, scrolling, or reachability failure;
+reset restored DPR 1.
+
+Its fresh post-increment automated command set and manual matrix pass, and the
 consolidated gate result is `PASS WITH ADVISORIES` because no later increment
-is currently Ready.
+was Ready at that checkpoint.
 
 Do not begin live IPC, provider/model/runtime/tool integration, a knowledge
 graph, command palette, another dependency, or any later milestone without a
@@ -174,6 +236,17 @@ separately approved Ready increment.
   and gate `agent-engineering-quality-workflow`.**
 
 ## Queue status
+
+### Verified complete: Native multi-agent end-to-end demonstrations
+
+**Status:** **Verified complete with advisories.** All twelve
+demonstrations pass under the owner-approved acceptance scope. Demo 7 validates
+checkpoint denial and safe manual A-D dispatch as separate branches; no bridge
+is implemented, and the absent combined chain remains an advisory. Final focused
+checks, 447/447 canonical acceptance, full `npm run verify`, independent
+re-review, and final documentation/security/session checks pass on macOS 26.6
+build 25G72 arm64. The gate is complete and fingerprint-valid. No next plan is
+owner-selected or Ready.
 
 ### Completed implementation: Agent definition and registry
 
@@ -349,10 +422,10 @@ synthesis where the root remains live. Result order is catalog ordinal, not
 completion timing. Focused library and public contracts pass 41/41 each;
 all-target Rust passes 481 with one ignored; strict Clippy, formatting,
 `npm run verify`, independent reviews, post-documentation checks, and marker
-validation pass. Stop because no later owner-selected plan is Ready;
-runtime-trait, provider, thread/app-global
-concurrency, tool, I/O, IPC/UI, scheduling, persistence, remote/distributed,
-and effect work remain Blocked.
+validation pass. At D-091 closeout no later owner-selected plan was Ready. The
+active deterministic evidence increment does not authorize any such expansion;
+runtime-trait, provider, thread/app-global concurrency, tool, I/O, IPC/UI,
+scheduling, persistence, remote/distributed, and effect work remain Blocked.
 
 ### Completed negative spike: Hermes ACP
 

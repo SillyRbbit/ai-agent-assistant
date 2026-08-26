@@ -741,6 +741,32 @@ by repository-health tests. Reapply the label after runner replacement, keep
 the service account unprivileged and credential-free, and preserve separate
 target-Mac verification for native behavior.
 
+### PR #57 recurrence: private macOS-only items fail strict Linux Clippy
+
+Date: 2026-08-25
+Status: Resolved
+
+PR #57 run `32917746165`, Linux job `98027487903`, reached the configured
+self-hosted runner after its missing `cortexa-ci` label was restored. Strict
+all-target Clippy then reported one test import plus private approval and
+Cloudflare credential helpers whose consumers exist only on macOS or in tests.
+The target-Mac job passed, confirming this was a cross-target compile-scope
+failure rather than a target-Mac behavior failure.
+
+The project owner approved a separate bounded remediation instead of reopening
+the completed D-093 gate. The correction target-gates only the private test
+import and approval matcher and retains the private Cloudflare seam under
+`cfg(test)` or macOS. It does not suppress Clippy, gate the public credential
+API, or change approval, Keychain, credential, error, dependency, permission,
+or execution behavior. Local focused tests, strict Clippy, all-target Rust, and
+complete repository verification pass. Published correction
+`6b2675343db8518587068e7175ce0cec9d2f6107` then passed CI run `32921400121`:
+Linux Rust job `98035560462` completed strict Clippy and all-target tests in
+6m55s, target-Mac job `98035560489` passed in 2m18s, and frontend job
+`98035560481` passed in 57s. Documentation run `32921400102`, job
+`98035529472`, passed in 26s. The remaining failed dependency job is a separate
+approved remediation and does not reopen this resolved portability recurrence.
+
 ## TS-017 - Certificate Assistant cannot create the Developer ID CSR
 
 Date: 2026-07-31
@@ -983,3 +1009,69 @@ At an approved viewport, apply real browser zoom through browser chrome and
 confirm that rendered scale changes while controls, labels, focus, scroll
 ownership, and horizontal overflow remain correct. Restore zoom to 100% before
 closeout.
+
+## TS-020 - PR #57 audit reports new development-transitive advisories
+
+Date: 2026-08-25
+Status: Resolved
+
+### Symptom
+
+PR #57 CI run `32921400121`, dependency job `98035560426`, passes repository
+secret scanning and then fails `npm audit --audit-level=low`. A fresh local
+audit reproduces five vulnerable package-level findings across six lockfile
+nodes: four High and one Moderate.
+
+### Observed evidence
+
+- Both `brace-expansion` major lines, `js-yaml`, `nanoid`, `postcss`, and
+  `undici` are indirect development-only lockfile entries.
+- The production-only audit reports zero vulnerabilities.
+- Current parent ranges admit patched resolutions without a direct, parent, or
+  major upgrade: `brace-expansion@1.1.18` and `5.0.9`, `js-yaml@4.3.1`,
+  `nanoid@3.3.18`, `postcss@8.5.26`, and `undici@7.29.0`.
+- Repository secret scanning passes; this failure is advisory-registry
+  evidence, not a detected repository secret.
+
+The bounded resolver advanced exactly those six nodes. A scripts-disabled
+clean install now resolves every expected safe version without an invalid or
+extraneous package. Each changed node remains development-only, MIT,
+integrity-bound, engine-compatible, and without an install hook. Full and
+production-only npm audits report zero, and complete `npm run verify` passes.
+The manifest, parent graph, lockfile version, and existing install-script
+allowlist remain unchanged.
+
+### Cause
+
+The exact locked development-tool versions now fall inside current published
+npm advisory ranges. This does not establish that untrusted input exploited the
+tooling or that product runtime dependencies are affected.
+
+### Approved resolution boundary
+
+Gate `pr57-transitive-advisory-remediation` used the npm resolver with install
+scripts disabled to advance only those six nodes within their existing parent
+ranges. No override, direct dependency, parent-graph, audit-policy, or CI
+change was needed. Keep PR #57 unmerged until independent review, valid-marker,
+and exact-head final PR check evidence pass. Independent review,
+remediation-head checks, and marker finalization pass; the closeout-docs check
+remains pending before the already authorized squash merge.
+
+Published remediation `c3cc49ee28444397ac957d7279ddcfb3ce608548` passes CI
+run `32923751481`: classifier job `98042347127` in 9s, target-Mac Rust job
+`98042378918` in 2m12s, Linux Rust job `98042378943` in 6m38s, frontend job
+`98042378946` in 1m10s, and dependency/secret job `98042378964` in 4m39s.
+Documentation run `32923751571`, job `98042347401`, passes in 27s. The
+dependency job passed repository secret scanning, the full npm audit, and the
+unchanged accepted Rust advisory-baseline gate. This resolves the audit failure
+without an exception, override, parent upgrade, or policy change. Deterministic
+closeout is complete and valid.
+
+### Verify
+
+Require `npm ls` to show the six exact safe resolutions with no invalid or
+extraneous package, full and production-only npm audits to report zero, the
+manifest and install-script allowlist to remain unchanged, complete repository
+verification to pass, the exact published remediation head's dependency audit
+to pass, and the later closeout-docs head's applicable documentation check to
+pass before merge.

@@ -2,7 +2,107 @@
 
 Last updated: 2026-08-25
 
-## Current Command Center validation checkpoint
+## Current PR #57 merge-remediation checkpoint
+
+The first of two owner-approved, sequential gates is **verified complete with
+advisories** under `pr57-linux-clippy-portability` and plan
+[`2026-08-25-pr57-linux-clippy-portability.md`](docs/plans/2026-08-25-pr57-linux-clippy-portability.md).
+Published correction `6b2675343db8518587068e7175ce0cec9d2f6107`
+changes only private conditional-compilation visibility in the orchestrator
+test module, approval manager, and fake-only Cloudflare Keychain proof. The
+public non-macOS credential probe still returns `UnsupportedPlatform`; D-069,
+D-070, and D-084 remain unchanged.
+
+Local focused checks, strict Clippy, all-target Rust, complete `npm run verify`,
+and independent architecture, security, and code review pass. CI run
+`32921400121` passes Linux Rust job `98035560462` in 6m55s, target-Mac Rust job
+`98035560489` in 2m18s, and frontend job `98035560481` in 57s. Documentation
+run `32921400102`, job `98035529472`, passes in 26s. The portability result is
+`PASS WITH ADVISORIES`.
+
+The second owner-approved gate is **verified complete with advisories** under
+the complete, valid gate
+`pr57-transitive-advisory-remediation` and
+[`2026-08-25-pr57-transitive-advisory-remediation.md`](docs/plans/2026-08-25-pr57-transitive-advisory-remediation.md).
+Baseline audit evidence reports `brace-expansion`, `js-yaml`, `nanoid`,
+`postcss`, and `undici` as four High and one Moderate development dependency
+findings across six lockfile nodes. The resolver advanced exactly those nodes
+to the approved in-range versions with no manifest, parent, major,
+install-policy, product, or governance change. A scripts-disabled clean
+install, exact graph/license/integrity/install-hook inspection, both zero-finding
+npm audits, complete `npm run verify`, and independent security/code review
+pass. Independent architecture review also passes. Published remediation
+`c3cc49ee28444397ac957d7279ddcfb3ce608548` passes every classifier-selected
+PR check, including npm audit and the unchanged accepted Rust advisory
+baseline. The completion report is `PASS WITH ADVISORIES`; its sole advisory is
+that no next implementation plan is owner-selected or Ready. The deterministic
+marker is complete and valid.
+
+Both remediation gates are closed. No implementation work remains and no new
+plan is Ready. Publish only the closeout documents and require their applicable
+documentation check before performing the owner's separately authorized squash
+merge. PR #57 remains unmerged.
+
+Exact resume prompt: "Read `AGENTS.md`, the required project-memory chain, and
+the completed PR #57 portability and transitive-advisory plans and reviews.
+Confirm gate `pr57-transitive-advisory-remediation` remains complete and valid
+and exact remediation `c3cc49e` passed all classifier-selected checks. Publish
+only the closeout documents, wait for their applicable documentation check,
+and then perform only the already authorized squash merge. Start no new
+increment."
+
+## Current native multi-agent demonstration checkpoint
+
+The owner-approved
+[`2026-08-11-multi-agent-end-to-end-demonstrations.md`](docs/plans/2026-08-11-multi-agent-end-to-end-demonstrations.md)
+is **verified complete with advisories** under the complete, valid gate
+`native-multi-agent-end-to-end-demonstrations`. The active branch is
+`codex/native-multi-agent-end-to-end-demonstrations`, created from verified
+baseline `527f0f4`. The bounded implementation adds the canonical
+`test:agent-acceptance` command and strengthens only two test assertions: exact
+rejected-approval audit resolution and the approved-document/shared-knowledge
+proposal boundary. No production behavior, dependency, IPC, provider, tool,
+executor, external I/O, or device-effect path changed.
+
+All twelve demonstrations pass under the owner-approved acceptance scope. Demo
+7 validates checkpoint denial and safe manual A-D dispatch as separate
+branches. Executable tool steps remain exactly zero, so a typed proposal
+containing an approval checkpoint cannot connect to the separate one-time
+manual dispatch of complete A-D fixture workflows. No approval-to-dispatch
+bridge exists, and the absent combined chain remains an explicit advisory. Demo
+10 resolves a pending approval to an exact task-bound typed `Rejected`
+decision with execution `NotAttempted`; the root task remains `Running`, and no
+denial text is injected into the runtime.
+
+The target is macOS 26.6 build 25G72 on arm64. Fresh final validation passes:
+approval unit 1/1, approved-document/shared-knowledge contract 1/1, canonical
+acceptance 447/447, complete `npm run verify`, documentation, repository,
+security, diff, and session-end checks. Independent re-review supports `PASS
+WITH ADVISORIES` with no completion blocker. Gate status is `complete` and its
+workspace fingerprint is valid. No next plan is owner-selected or Ready;
+next-increment readiness remains Blocked. Native remains sole/default and
+unwired; Hermes remains Deferred/Blocked. No commit or push has occurred.
+
+The consolidated
+[`post-increment review`](docs/reviews/2026-08-25-native-multi-agent-end-to-end-demonstrations-post-increment-review.md)
+contains the exact 21-path inventory, command results, and architecture/
+security/code/debt findings. It records `PASS WITH ADVISORIES`, and the linked
+deterministic marker is complete and valid.
+
+Exact resume prompt: "Read `AGENTS.md`, the required project-memory chain,
+`docs/plans/2026-08-11-multi-agent-end-to-end-demonstrations.md`, and
+`docs/increments/native-multi-agent-end-to-end-demonstrations.md`, and the
+consolidated post-increment review. Reconcile the
+active `codex/native-multi-agent-end-to-end-demonstrations` branch with baseline
+`527f0f4`; confirm the focused 1/1 checks, 447/447 acceptance, and full
+verification pass. Preserve the owner's clarification that checkpoint denial
+and safe manual A-D dispatch are separate accepted Demo 7 demonstrations, with
+no approval-to-dispatch bridge and the absent combined chain retained as an
+advisory. Confirm the gate remains complete and fingerprint-valid. No next plan
+is Ready; wait for explicit owner direction. Do not wire a provider/tool/IPC
+path, commit, or push."
+
+## Prior verified Command Center checkpoint
 
 The approved deterministic multi-agent Command Center prototype is **verified
 complete** under gate `native-multi-agent-command-center-prototype`. It adds one lazy
@@ -49,12 +149,12 @@ The required browser-zoom manual check now passes, so the consolidated
 post-increment result is `PASS WITH ADVISORIES` because no later increment is
 currently Ready.
 
-Exact resume task: inspect the valid Command Center completion marker and
+Historical resume task at that checkpoint: inspect the valid Command Center completion marker and
 current roadmap, then perform readiness review only; do not begin real agent
 IPC/provider/runtime/tool work, commit, or push without separate owner
 authorization.
 
-## Current D-091 verified completion checkpoint
+## Prior D-091 verified completion checkpoint
 
 Gate `agent-bounded-parallelism` is complete and valid. D-091 is verified
 complete with advisories for one
@@ -98,8 +198,9 @@ non-authorizing status, and the unchanged pre-existing legacy
 `start_runtime_run` cancellation-error drop risk. No owner-selected next plan
 exists, so next-increment readiness is `Blocked`.
 
-Exact resume prompt: "Read `AGENTS.md`, the required project-memory chain,
-D-091, `docs/plans/2026-08-11-bounded-agent-parallelism.md`,
+Historical exact resume prompt for D-091: "Read `AGENTS.md`, the required
+project-memory chain, D-091,
+`docs/plans/2026-08-11-bounded-agent-parallelism.md`,
 `docs/increments/agent-bounded-parallelism.md`, and
 `docs/reviews/2026-08-13-agent-bounded-parallelism-post-increment-review.md`.
 Confirm the `agent-bounded-parallelism` marker remains `complete`, `valid:

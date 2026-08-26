@@ -4,6 +4,52 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Prepared closeout for the second, separately gated PR #57 merge remediation
+  for five newly
+  reported development-only transitive package findings. The bounded plan
+  permits only six resolver-generated in-range lockfile updates across
+  `brace-expansion`, `js-yaml`, `nanoid`, `postcss`, and `undici`; it adds no
+  direct or parent dependency, major version, manifest, install-script policy,
+  product behavior, or governance change. The exact graph is now installed and
+  locally verified: all changed nodes remain dev-only/MIT/integrity-bound with
+  no install hook, both npm audits report zero, and complete `npm run verify`
+  passes. Exact remediation `c3cc49e` passes documentation, frontend, Linux
+  Rust, target-Mac Rust, secret/dependency, npm-audit, and accepted Cargo-audit
+  checks. Independent review finds no remaining dependency, security,
+  architecture, or code-health issue. The completion report is `PASS WITH
+ADVISORIES` solely because no next implementation plan is owner-selected or
+  Ready; the deterministic marker is complete and valid.
+
+- Completed the separately gated PR #57 Linux portability remediation. The bounded
+  Rust diff target-gates one test import, one private approval-source matcher,
+  and the private fake-only Cloudflare reader/validation seam while preserving
+  macOS behavior, cross-target unit coverage, and the public non-macOS
+  `UnsupportedPlatform` denial. Focused tests, strict Clippy, all-target Rust,
+  complete `npm run verify`, and independent review pass locally. Exact
+  correction `6b26753` also passes Linux strict Clippy/all-target tests,
+  target-Mac Rust, frontend, and documentation workflows. The result is `PASS
+WITH ADVISORIES`; the separate npm advisory remediation has not started, and
+  PR #57 remains unmerged.
+
+- Added one deterministic native nine-agent demonstration and acceptance
+  layer without changing production architecture. The canonical
+  `npm run test:agent-acceptance` command composes 249 Rust library tests with
+  the ten exact public agent contract binaries (198 tests): 447/447 pass. All
+  twelve demonstrations pass under the owner-approved scope. Workflow
+  Automation validates its non-executable checkpoint-denial and manual safe
+  dispatch branches separately; their absent connection remains an advisory,
+  and no approval-to-dispatch bridge was added. Strengthened the existing simulated macOS rejection test
+  to prove full live-root audit binding and the approved-document contract to
+  prove a Knowledge-authored proposal remains pending, unapproved, and absent
+  from synthesis. Added explicit demo, fixture, acceptance, governance,
+  failure, cancellation, and remaining-gap documentation. Complete
+  `npm run verify` passes with 211 frontend and 481 Rust tests plus one intentional
+  ignored Hermes probe. No agent, workflow, runtime, provider, tool, executor,
+  IPC/UI path, dependency, permission, or product/external operation was added;
+  the demonstrations perform no commit or push. Fresh independent review and
+  closeout pass with `PASS WITH ADVISORIES`; the deterministic completion marker
+  is complete and fingerprint-valid.
+
 - Ran the deterministic Command Center's approved rendered M5 matrix through
   installed Browser Control and Computer Use runtimes. Required browser/Tauri
   sizes, light/dark and reduced motion, scroll ownership/input, focus,

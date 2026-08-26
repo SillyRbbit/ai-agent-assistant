@@ -4,7 +4,71 @@ Last updated: 2026-08-25
 
 ## Current milestone
 
-The approved deterministic multi-agent Command Center prototype is **verified
+PR #57's source remediation is verified at commit
+`c3cc49ee28444397ac957d7279ddcfb3ce608548` on
+`codex/native-multi-agent-end-to-end-demonstrations`. Its completed
+deterministic demonstration increment remains recorded below. Publication
+exposed two independent merge blockers, and the owner approved two sequential,
+separately gated remediations.
+
+The first gate, `pr57-linux-clippy-portability`, is **verified complete with
+advisories**. Its attribute-only Rust correction aligns private compile scope
+with existing macOS-only consumers while retaining Cloudflare private helpers
+in unit tests and preserving the public non-macOS `UnsupportedPlatform`
+result. Focused tests, strict Clippy, all-target Rust, complete `npm run verify`,
+and independent review pass locally. The exact published head also passes
+Linux Rust, target-Mac Rust, frontend, and documentation workflows. The result
+is `PASS WITH ADVISORIES` only because the separately scoped dependency gate
+remained at that checkpoint; the completed second gate below resolves it.
+
+The approved second increment is **verified complete with advisories** under
+the complete, valid gate `pr57-transitive-advisory-remediation`. It remediates
+only six vulnerable development-transitive lockfile entries within existing
+parent constraints,
+without changing `package.json`, production architecture, install-script
+policy, or audit policy. Baseline audit evidence reports four High and one
+Moderate finding across six nodes. The exact in-range resolver diff, clean
+scripts-disabled install, metadata/graph proof, both zero-finding npm audits,
+complete `npm run verify`, and independent security/code review now pass
+locally. Independent architecture review also passes. Published remediation
+`c3cc49e` passes every classifier-selected source-current PR check, including
+npm audit and the unchanged accepted Rust advisory baseline. The result is
+`PASS WITH ADVISORIES`; no dependency, security, architecture, code-health, or
+technical-debt finding remains. The sole advisory is readiness because no new
+implementation plan is owner-selected or Ready.
+
+Both PR #57 remediation gates are complete and valid. No new implementation
+plan is Ready. Publish the closeout documentation and require its applicable
+documentation check before the owner's authorized squash merge. PR #57 remains
+unmerged.
+
+The owner-approved deterministic native multi-agent end-to-end demonstration
+increment is **verified complete with advisories** under the complete, valid gate
+`native-multi-agent-end-to-end-demonstrations`. Work is on branch
+`codex/native-multi-agent-end-to-end-demonstrations` from verified baseline
+`527f0f4`. Its bounded source scope is one canonical acceptance command and two
+test-only assertion strengthenings; it adds no production behavior, dependency,
+IPC, tool, executor, provider, external I/O, or device effect.
+
+All twelve demonstrations pass under the owner-approved acceptance scope. Demo
+7 validates checkpoint denial and safe manual take-once A-D dispatch as
+separate branches. D-090 intentionally fixes executable tool steps at zero, so
+a proposal containing an approval checkpoint cannot connect to the separate
+manual dispatch of complete A-D fixture workflows. No approval-to-dispatch
+bridge exists, and the absent combined chain remains an explicit advisory. Demo
+10 records an exact task-bound rejected approval with
+execution `NotAttempted`; the root remains `Running` and receives no
+runtime-text injection. `NativeAgentRuntime` remains sole/default and unwired,
+while Hermes remains Deferred/Blocked.
+
+The target host is macOS 26.6 build 25G72 on arm64. Fresh final checks pass: the
+approval unit 1/1, approved-document/shared-knowledge contract 1/1, canonical
+acceptance command 447/447, full `npm run verify`, independent re-review, and
+final documentation/security/session checks. The closeout result is `PASS WITH
+ADVISORIES`; gate status is `complete` and its workspace fingerprint is valid.
+No next plan is owner-selected or Ready, and no commit or push has occurred.
+
+The prerequisite deterministic multi-agent Command Center prototype is **verified
 complete**. The
 frontend working tree adds one lazy route with a versioned fixture projection,
 one distinct `AgentOrchestrator`, all nine exact agent roles, five
@@ -36,11 +100,12 @@ host zoom produced a rendered 125% state at DPR 1.25 and 832×560 CSS pixels
 inside the approved 1040×700 frame. Browser Control verified no overflow,
 clipping, focus, scrolling, or reachability failure, and reset restored the
 1040×700 DPR 1 baseline. Touch was unavailable where unsupported. All live
-integration and later milestone work remains Blocked.
+integration remains Blocked; the separately approved deterministic evidence
+increment above is verified complete under its valid marker.
 
 Fresh post-increment automated verification and the full rendered matrix pass;
 the consolidated gate result is `PASS WITH ADVISORIES` because no later
-increment is currently Ready.
+increment was Ready at that checkpoint.
 
 The D-086 fixture-only Research/Knowledge increment and
 [`2026-08-11-research-knowledge-workflow.md`](docs/plans/2026-08-11-research-knowledge-workflow.md)
@@ -138,7 +203,7 @@ probe, integration, and release builds.
 Independent code, architecture, security, and technical-debt review is `PASS
 WITH ADVISORIES`. Final documentation, repository, security, diff, and
 session-end checks pass; deterministic finalization completed and the marker is
-complete and valid. No owner-selected next plan is Ready.
+complete and valid. No owner-selected next plan was Ready at D-091 closeout.
 
 The Rust core now carries nine exact policy-profile identities from sealed
 definitions through tasks, live execution contexts, delegation, governed tool
@@ -581,6 +646,10 @@ signing, Keychain, credential, Cloudflare, traffic, or runtime behavior.
 
 ## Increment status
 
+- Native multi-agent end-to-end demonstrations — **verified complete with
+  advisories;
+  checkpoint denial and safe manual A-D dispatch accepted as separate Demo 7
+  evidence; marker complete and fingerprint-valid**.
 - Increment 1: smallest runnable Tauri application — **complete**.
 - Increment 1.1: Node.js 26/npm 11 compatibility — **complete**.
 - Increment 1.2: repository workflow and handoff system — **complete**.

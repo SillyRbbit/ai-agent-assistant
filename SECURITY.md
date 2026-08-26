@@ -67,11 +67,27 @@ Rust identities.
 
 The owner approved exact `@xyflow/react@12.11.3` and
 `lucide-react@1.33.0` after direct/transitive, license, peer, bundle, and
-security review. Their lockfile consequence is 19 reviewed transitives;
-production audit reports zero vulnerabilities, while five pre-existing
-development-only advisories remain unchanged. React Flow types/imports stop at
-one feature adapter. No Rust/Tauri capability, CSP, IPC, permission, or native
-dependency changed.
+security review. Their lockfile consequence is 19 reviewed transitives. At the
+Command Center checkpoint, the production audit reported zero vulnerabilities
+while five pre-existing development-only advisories remained unchanged; the
+superseding PR #57 remediation below resolves them. React Flow types/imports
+stop at one feature adapter. No Rust/Tauri capability, CSP, IPC, permission, or
+native dependency changed.
+
+PR #57's baseline full development audit reports five vulnerable indirect
+package-level findings—four High and one Moderate—across six lockfile nodes,
+while its production-only audit and repository secret scan pass. The completed
+`pr57-transitive-advisory-remediation` gate advanced only those six
+development-only nodes within existing parent ranges. Exact graph, license,
+integrity, engine, install-hook, clean-install, full/production zero-audit, and
+complete repository verification pass with no manifest, override,
+install-script allowlist, audit-policy, application, or governance change.
+Independent architecture/security/code review and every classifier-selected
+check on exact remediation `c3cc49e` also pass, including the unchanged
+accepted Cargo advisory baseline. The completion report is `PASS WITH
+ADVISORIES`; no dependency or security finding remains, and the sole advisory
+is that no next implementation plan is owner-selected or Ready. The
+deterministic marker is complete and valid.
 
 ## Non-negotiable invariants
 

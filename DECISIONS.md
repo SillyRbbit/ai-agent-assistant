@@ -3882,6 +3882,41 @@ and visible deterministic topology, preserve manual viewport intent, and make
 Fit View and Reset recompute current framing. Structured topology behavior and
 all native, authority, dependency, and fixture boundaries remain unchanged.
 
+Additive completion evidence, 2026-08-25: mandatory M5 rendered validation is
+complete on the approved real-browser and native Tauri matrix. Browser Control
+and Computer Use evidence covered the required viewport, resize, input, focus,
+overflow, light/dark, reduced-motion, scroll, and screenshot states. One
+contrast defect was corrected and revalidated. Manual browser zoom reached
+125% (`devicePixelRatio` 1.25) and was reset. Gate
+`native-multi-agent-command-center-prototype` is complete with a valid
+fingerprint and `PASS WITH ADVISORIES`. These results validate only the
+deterministic frontend projection and do not grant backend IPC, provider,
+runtime, tool, policy, approval, audit, persistence, or live-data authority.
+
+## D-093 - Accept separate safe branches for the deterministic Workflow Automation demonstration
+
+Date: 2026-08-25
+Status: Accepted owner clarification
+
+Decision: for the native multi-agent end-to-end demonstration increment,
+validate Workflow Automation's checkpoint-denial branch and the
+application-owned manual safe-dispatch branch separately. Treat the absent
+checkpoint-to-approval-to-manual-execution connection as a documented advisory,
+not a completion blocker. Do not add or imply an approval-to-dispatch bridge.
+
+This clarification aligns the acceptance scope with D-090's existing
+`MAX_WORKFLOW_EXECUTABLE_TOOL_STEPS == 0` boundary. Checkpoint/tool proposals
+remain non-executable and cannot issue a dispatch token. A complete A-D fixture
+proposal may still yield one process-local take-once token that application code
+maps only to an existing sealed selector. The two paths are not causally linked,
+and neither path grants Workflow Automation task creation, approval, policy,
+tool, execution, scheduling, persistence, provider, IPC, or device authority.
+
+Any future combined approval-to-manual-dispatch capability requires a separate
+owner-approved architecture decision, threat review, ExecPlan, and validation
+increment. This decision changes acceptance evidence only and authorizes no
+production implementation.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

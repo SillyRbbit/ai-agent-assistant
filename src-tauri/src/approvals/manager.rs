@@ -310,6 +310,7 @@ impl ApprovalSubjectKey {
         }
     }
 
+    #[cfg(target_os = "macos")]
     fn matches_source(
         &self,
         origin: &ApprovalOrigin,

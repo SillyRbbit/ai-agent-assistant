@@ -34,6 +34,8 @@ const SHARED_SENTINEL: &str = "SHARED_SENTINEL: reviewed context.";
 const PRIVATE_SENTINEL: &str = "PRIVATE_SENTINEL: personal only.";
 const ROOT_TASK_SENTINEL: &str = "ROOT_TASK_SENTINEL: root only.";
 const KNOWLEDGE_RESULT: &str = "The selected document contains one local evidence statement.";
+const KNOWLEDGE_PROPOSAL_SENTINEL: &str =
+    "KNOWLEDGE_PROPOSAL_SENTINEL: retain only after explicit application review.";
 const FINAL_SYNTHESIS: &str = "The approved document contains one bounded statement.";
 
 fn started(
@@ -456,6 +458,24 @@ fn selected_markdown_and_approved_shared_memory_flow_only_to_knowledge_and_synth
         MemoryWriteTarget::TaskTemporary,
         MemoryContent::new("KNOWLEDGE_TASK_SENTINEL: clean at terminal")?,
     )?;
+    let knowledge_proposal = orchestrator
+        .propose_shared_memory(&child, MemoryContent::new(KNOWLEDGE_PROPOSAL_SENTINEL)?)?;
+    assert_eq!(
+        knowledge_proposal.namespace(),
+        MemoryNamespace::ProposedShared
+    );
+    assert_eq!(
+        knowledge_proposal.proposer_agent_id(),
+        AgentId::KnowledgeDocument
+    );
+    assert_eq!(orchestrator.shared_memory_proposal_count(), 2);
+    assert_eq!(
+        orchestrator
+            .shared_memory_proposal(knowledge_proposal.id())?
+            .content()
+            .as_str(),
+        KNOWLEDGE_PROPOSAL_SENTINEL
+    );
     complete_run(
         &mut orchestrator,
         &child,
@@ -536,7 +556,12 @@ fn selected_markdown_and_approved_shared_memory_flow_only_to_knowledge_and_synth
         .contains("Knowledge & Document child outcome (untrusted"));
     assert!(starts[2].selected_text.contains(KNOWLEDGE_RESULT));
     assert!(starts[2].selected_text.contains(ROOT_OBJECTIVE));
-    for excluded in [DOCUMENT_SENTINEL, SHARED_SENTINEL, PRIVATE_SENTINEL] {
+    for excluded in [
+        DOCUMENT_SENTINEL,
+        SHARED_SENTINEL,
+        PRIVATE_SENTINEL,
+        KNOWLEDGE_PROPOSAL_SENTINEL,
+    ] {
         assert!(!starts[2].selected_text.contains(excluded));
     }
 
@@ -553,6 +578,20 @@ fn selected_markdown_and_approved_shared_memory_flow_only_to_knowledge_and_synth
     assert_eq!(
         orchestrator.root_task().map(|task| task.status()),
         Some(AgentTaskStatus::Completed)
+    );
+    assert_eq!(orchestrator.shared_memory_proposal_count(), 2);
+    let pending_knowledge = orchestrator.shared_memory_proposal(knowledge_proposal.id())?;
+    assert_eq!(
+        pending_knowledge.namespace(),
+        MemoryNamespace::ProposedShared
+    );
+    assert_eq!(
+        pending_knowledge.proposer_agent_id(),
+        AgentId::KnowledgeDocument
+    );
+    assert_eq!(
+        pending_knowledge.content().as_str(),
+        KNOWLEDGE_PROPOSAL_SENTINEL
     );
     assert!(matches!(
         orchestrator.events(),

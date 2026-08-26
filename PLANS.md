@@ -5,6 +5,75 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Current plan state
 
 The owner-approved
+[`2026-08-25-pr57-transitive-advisory-remediation.md`](docs/plans/2026-08-25-pr57-transitive-advisory-remediation.md)
+is **verified complete with advisories** under the complete, valid gate
+`pr57-transitive-advisory-remediation`. It is the
+second and final bounded PR #57 merge remediation. Scope is limited to six
+development-only transitive lockfile resolutions within existing parent
+constraints; `package.json`, production behavior, install-script policy,
+governance, and application architecture must remain unchanged. The gate began
+on clean published baseline `7b5b7e6` after the first remediation marker and
+its exact-head documentation workflow passed.
+
+The resolver changed exactly the six declared lockfile nodes. The manifest,
+parents, direct graph, install-script allowlist, lockfile version, and product
+source remain unchanged. A scripts-disabled clean install, exact metadata and
+installed-graph inspection, full and production-only zero-finding npm audits,
+complete `npm run verify`, and independent security/code review pass.
+Independent architecture review also passes. Published remediation `c3cc49e`
+passes every classifier-selected PR check, including the full npm audit and
+unchanged accepted Cargo advisory-baseline gate. The completion result is `PASS
+WITH ADVISORIES`; no dependency, security, architecture, code-health, or
+technical-debt finding remains. The sole advisory is readiness because no new
+implementation plan is owner-selected or Ready.
+
+The owner-approved
+[`2026-08-25-pr57-linux-clippy-portability.md`](docs/plans/2026-08-25-pr57-linux-clippy-portability.md)
+is **verified complete with advisories** under the complete, valid gate
+`pr57-linux-clippy-portability`. It is the first of two
+separately gated PR #57 merge remediations. The three-file Rust diff changes
+only private conditional-compilation visibility; public APIs, macOS behavior,
+approval identity, credential validation, non-macOS `UnsupportedPlatform`, and
+all authority boundaries remain unchanged.
+
+Local focused, strict Clippy, all-target Rust, full repository, and independent
+review evidence passes. Published correction
+`6b2675343db8518587068e7175ce0cec9d2f6107` also passes exact-head Linux Rust,
+target-Mac Rust, frontend, and documentation workflows. The result is `PASS
+WITH ADVISORIES` only for the separate dependency findings.
+
+No implementation plan is Ready. The already authorized PR #57 squash merge
+may proceed only after the final docs-only publication check is confirmed.
+
+The prior owner-approved
+[`2026-08-11-multi-agent-end-to-end-demonstrations.md`](docs/plans/2026-08-11-multi-agent-end-to-end-demonstrations.md)
+is **verified complete with advisories** under the complete, valid gate
+`native-multi-agent-end-to-end-demonstrations` on branch
+`codex/native-multi-agent-end-to-end-demonstrations`, created from the verified
+`527f0f4` baseline. The bounded increment adds a canonical deterministic
+acceptance command, demonstration/fixture/acceptance evidence, one strengthened
+approval-resolution unit assertion, and one strengthened approved-document/
+shared-knowledge contract assertion. It changes no production behavior,
+dependency, IPC, tool, executor, provider, or external-I/O boundary.
+
+All twelve demonstrations pass under the owner-approved acceptance scope. Demo
+7 validates checkpoint denial and safe manual take-once A-D dispatch as
+separate branches. D-090's exact
+zero-executable-tool-step invariant remains unchanged, no approval-to-dispatch
+bridge exists, and the absent combined chain is an advisory rather than a
+completion blocker. Demo 10 proves a task-bound typed rejection with
+`NotAttempted` execution while the root remains `Running`; no runtime text is
+injected. Native remains sole/default and unwired, and Hermes remains
+Deferred/Blocked.
+
+Fresh final validation on macOS 26.6 build 25G72 arm64 passes: the approval unit
+1/1, approved-document/shared-knowledge contract 1/1, canonical acceptance
+command 447/447, complete `npm run verify`, independent re-review, and final
+documentation/security/session checks. The closeout classification is `PASS
+WITH ADVISORIES`; the gate is complete and fingerprint-valid. No next plan is
+owner-selected or Ready, and no commit or push has occurred.
+
+The owner-approved
 [`2026-08-12-native-multi-agent-command-center-prototype.md`](docs/plans/2026-08-12-native-multi-agent-command-center-prototype.md)
 is **verified complete** under gate
 `native-multi-agent-command-center-prototype`. The
@@ -32,8 +101,9 @@ defect. Owner-operated host zoom produced a rendered 125% state at DPR 1.25
 and 832×560 CSS pixels inside the approved 1040×700 frame. Browser Control
 verified no overflow, clipping, focus, scrolling, or reachability failure, and
 reset restored 1040×700 at DPR 1. The full M5 matrix passes and the consolidated
-gate report is `PASS WITH ADVISORIES`. Real multi-agent IPC/provider/runtime/tool work and every later
-milestone remain Blocked pending separate readiness and authorization.
+gate report is `PASS WITH ADVISORIES`. Real multi-agent IPC/provider/runtime/
+tool work remains Blocked; the separately approved deterministic evidence
+increment above is verified complete under its valid marker.
 
 D-087's
 [`2026-08-11-engineering-quality-workflow.md`](docs/plans/2026-08-11-engineering-quality-workflow.md)
@@ -99,8 +169,8 @@ Focused library and public D-091 contracts pass 41/41 each; strict Clippy,
 formatting, 481 all-target Rust tests with one ignored, and complete
 `npm run verify` pass. Independent code, architecture, and security review is
 `PASS WITH ADVISORIES`. Final post-documentation checks pass and deterministic
-finalization reports a complete, valid marker. No successor plan is owner-
-selected or Ready.
+finalization reports a complete, valid marker. No successor plan was owner-
+selected or Ready at D-091 closeout.
 
 The completed
 [`2026-08-11-research-knowledge-workflow.md`](docs/plans/2026-08-11-research-knowledge-workflow.md)
@@ -627,6 +697,7 @@ condition is reached.
 
 | Plan                                            | Status   | Owner              | Last updated |
 | ----------------------------------------------- | -------- | ------------------ | ------------ |
+| Native multi-agent end-to-end demonstrations    | Active   | Project owner      | 2026-08-25   |
 | Increment 2B-1 SQLite migration skeleton        | Complete | Project maintainer | 2026-07-13   |
 | Increment 2C storage startup integration        | Complete | Project maintainer | 2026-07-13   |
 | Increment 2D menu-bar/window lifecycle          | Complete | Project maintainer | 2026-07-13   |
