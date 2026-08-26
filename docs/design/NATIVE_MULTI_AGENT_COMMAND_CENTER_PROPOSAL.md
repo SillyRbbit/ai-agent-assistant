@@ -1,9 +1,9 @@
 # Native multi-agent visual Command Center proposal
 
-- Status: Approved; frontend source implemented; real-browser/Tauri validation pending
+- Status: Verified complete; deterministic frontend source and M5 rendered validation passed
 - Owner: Project owner
 - Prepared: 2026-08-19
-- Companion active ExecPlan: [`2026-08-12-native-multi-agent-command-center-prototype.md`](../plans/2026-08-12-native-multi-agent-command-center-prototype.md)
+- Companion completed ExecPlan: [`2026-08-12-native-multi-agent-command-center-prototype.md`](../plans/2026-08-12-native-multi-agent-command-center-prototype.md)
 
 > This document began as design evidence and now records the approved
 > implementation checkpoint. It does not claim a live multi-agent capability:
@@ -78,6 +78,15 @@ deterministic navigation, resize, and screenshots; no browser tooling
 installation was authorized. The active ExecPlan therefore remains
 validation-pending and does not claim manually verified geometry or native
 behavior.
+
+**Superseding M5 evidence — 2026-08-25:** the unavailable-runtime condition
+above records the earlier M4 checkpoint and is no longer current. Browser
+Control and Computer Use later completed the approved real-browser and native
+Tauri viewport, resize, input, focus, overflow, light/dark, reduced-motion,
+scroll, and screenshot matrix. One contrast defect was corrected and
+revalidated. Manual browser zoom reached 125% (`devicePixelRatio` 1.25) and was
+reset. The ExecPlan and valid completion marker record `PASS WITH ADVISORIES`;
+the deterministic frontend-only and no-authority boundaries remain unchanged.
 
 ## 2. Gate A UI maturity baseline
 
@@ -199,21 +208,21 @@ typed Rust DTO and narrow Tauri command/event allowlist.
 
 ### Capability classification
 
-| Capability                                                                       | Classification                                                                  |
-| -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| Nine definition catalog and registry                                             | Implemented in Rust; unwired                                                    |
-| Root/child lifecycle, result collection, cancellation, attribution               | Implemented in Rust; unwired and bounded                                        |
-| Non-executing policy/approval/governance foundation                              | Implemented in Rust; unwired                                                    |
-| Sealed research, engineering, infrastructure, automation, and parallel scenarios | Fixture-only in Rust                                                            |
-| Product multi-agent activity feed                                                | Unavailable                                                                     |
-| React multi-agent catalog/task/workflow state                                    | Unavailable                                                                     |
-| Multi-agent Tauri IPC                                                            | Unavailable                                                                     |
-| Command Center                                                                   | Fixture-only frontend source implemented; real-browser/Tauri validation pending |
-| Operational graph, search, filters, inspector                                    | Unavailable                                                                     |
-| Knowledge graph                                                                  | Deferred                                                                        |
-| Real provider/model/tools/MCP/connectors                                         | Unavailable                                                                     |
-| Live telemetry, usage, token counts, agent health                                | Unavailable                                                                     |
-| Hermes runtime or transport                                                      | Deferred / NO GO                                                                |
+| Capability                                                                       | Classification                                                             |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| Nine definition catalog and registry                                             | Implemented in Rust; unwired                                               |
+| Root/child lifecycle, result collection, cancellation, attribution               | Implemented in Rust; unwired and bounded                                   |
+| Non-executing policy/approval/governance foundation                              | Implemented in Rust; unwired                                               |
+| Sealed research, engineering, infrastructure, automation, and parallel scenarios | Fixture-only in Rust                                                       |
+| Product multi-agent activity feed                                                | Unavailable                                                                |
+| React multi-agent catalog/task/workflow state                                    | Unavailable                                                                |
+| Multi-agent Tauri IPC                                                            | Unavailable                                                                |
+| Command Center                                                                   | Fixture-only frontend source and approved browser/Tauri M5 matrix verified |
+| Operational graph, search, filters, inspector                                    | Implemented as deterministic presentation-only controls                    |
+| Knowledge graph                                                                  | Deferred                                                                   |
+| Real provider/model/tools/MCP/connectors                                         | Unavailable                                                                |
+| Live telemetry, usage, token counts, agent health                                | Unavailable                                                                |
+| Hermes runtime or transport                                                      | Deferred / NO GO                                                           |
 
 ## 5. Original visual direction
 
@@ -266,18 +275,18 @@ animation was copied.
 
 ## 7. Proposed information architecture
 
-| Area                              | First-prototype recommendation                                             | Primary questions                                                   | Data/actions/accessibility                                                                                        |
-| --------------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| Command Center                    | Dedicated route implemented after Gate B/M0.5 approval; validation pending | What is represented? Who owns the selected work? What is simulated? | Deterministic typed projection; selection/search/filter/viewport controls only; structured tree/table alternative |
-| Conversations                     | Preserve unchanged                                                         | What does the user want and what did the mock return?               | Existing mock state and controls                                                                                  |
-| Agents                            | Represent inside Command Center, not a new route                           | What is each role, domain, availability, and authority?             | Agent nodes plus inspector and accessible list                                                                    |
-| Tasks                             | Preserve existing route; selected demo task may appear in Command Center   | What is assigned and in what state?                                 | Fixture-only work nodes; no task creation                                                                         |
-| Workflows                         | Represent selected scenario inside Command Center, not a new route         | What is the ordered flow and where is it blocked?                   | Fixture-only workflow/step projection; no execution                                                               |
-| Knowledge                         | Keep Memory route; defer dense graph                                       | What approved/proposed knowledge exists?                            | No truthful frontend data today; future separate projection                                                       |
-| Approvals                         | Keep existing conversation mock; depict demo checkpoint only               | Is a simulated work path waiting? Who would own the decision?       | Explicit `SIMULATED`; no approve action in Command Center                                                         |
-| Activity and audit                | Reuse current visual pattern in a Command Center panel                     | What deterministic event changed and who is attributed?             | Bounded fixture event list; never call it trusted audit evidence                                                  |
-| Usage                             | Do not add                                                                 | Is there trustworthy measured usage?                                | No; fake telemetry is prohibited                                                                                  |
-| Settings/Permissions/Integrations | Preserve existing routes                                                   | What local diagnostics and future boundaries exist?                 | Existing current/static/placeholder content                                                                       |
+| Area                              | First-prototype recommendation                                           | Primary questions                                                   | Data/actions/accessibility                                                                                        |
+| --------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Command Center                    | Dedicated route and required rendered validation complete                | What is represented? Who owns the selected work? What is simulated? | Deterministic typed projection; selection/search/filter/viewport controls only; structured tree/table alternative |
+| Conversations                     | Preserve unchanged                                                       | What does the user want and what did the mock return?               | Existing mock state and controls                                                                                  |
+| Agents                            | Represent inside Command Center, not a new route                         | What is each role, domain, availability, and authority?             | Agent nodes plus inspector and accessible list                                                                    |
+| Tasks                             | Preserve existing route; selected demo task may appear in Command Center | What is assigned and in what state?                                 | Fixture-only work nodes; no task creation                                                                         |
+| Workflows                         | Represent selected scenario inside Command Center, not a new route       | What is the ordered flow and where is it blocked?                   | Fixture-only workflow/step projection; no execution                                                               |
+| Knowledge                         | Keep Memory route; defer dense graph                                     | What approved/proposed knowledge exists?                            | No truthful frontend data today; future separate projection                                                       |
+| Approvals                         | Keep existing conversation mock; depict demo checkpoint only             | Is a simulated work path waiting? Who would own the decision?       | Explicit `SIMULATED`; no approve action in Command Center                                                         |
+| Activity and audit                | Reuse current visual pattern in a Command Center panel                   | What deterministic event changed and who is attributed?             | Bounded fixture event list; never call it trusted audit evidence                                                  |
+| Usage                             | Do not add                                                               | Is there trustworthy measured usage?                                | No; fake telemetry is prohibited                                                                                  |
+| Settings/Permissions/Integrations | Preserve existing routes                                                 | What local diagnostics and future boundaries exist?                 | Existing current/static/placeholder content                                                                       |
 
 The existing conversation interface remains the default familiar work surface.
 The Command Center complements it and is fully reversible.
@@ -1144,8 +1153,10 @@ Observed Gate A validation on 2026-08-19:
 
 Gate A and the read-only M0 ledger are historical completed checkpoints.
 Protected Rust/Tauri/IPC/storage paths remain unchanged. The companion ExecPlan
-is now Active with frontend source implemented and mandatory real-browser/Tauri
-validation pending.
+is verified complete: approved Browser Control and Computer Use evidence passed
+the required M5 viewport, theme, reduced-motion, input, focus, overflow,
+accessibility, browser-zoom, screenshot, and native-resize matrix after one
+scoped light-theme compact-text contrast correction.
 
 First owner authorization received on 2026-08-19 for the read-only Gate B M0 ledger:
 

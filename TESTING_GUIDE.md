@@ -1,7 +1,7 @@
 # Cortexa testing guide
 
 Status: Authoritative testing standard
-Last updated: 2026-07-18
+Last updated: 2026-08-25
 
 ## Testing principles
 
@@ -79,6 +79,31 @@ npm run test:integration
 Contract tests must prove both accepted and rejected values across trust
 boundaries. A test-only helper may synthesize a sealed native value only when
 production construction remains inaccessible and unchanged.
+
+### Native multi-agent acceptance suite
+
+The deterministic nine-agent architecture has one named local acceptance
+command:
+
+```bash
+npm run test:agent-acceptance
+```
+
+It composes the complete Rust library unit suite with the exact ten public
+definition, runtime, orchestration, governance, memory/document, sequential
+workflow, automation, infrastructure/operations, and bounded-parallel contract
+binaries. The executable matrix and current counts are in
+[`NATIVE_MULTI_AGENT_ACCEPTANCE.md`](docs/demos/NATIVE_MULTI_AGENT_ACCEPTANCE.md).
+
+This command proves application-owned contracts with deterministic fixtures.
+Workflow response contracts use the test-only `MockAgentRuntime`; governance
+and private units also exercise the unwired `NativeAgentRuntime` wrapper. The
+mock descriptor uses the sole closed `Native` runtime identity, but the command
+is not proof of a configured provider, live model, external operation, real
+tool execution, native dialog display, or connected UI. The complete 249/447
+evidence is macOS-specific because the approval-source unit is target-gated; a
+non-macOS run omits that unit. Run this as focused evidence; it does not replace
+`npm run verify` when the increment requires complete verification.
 
 ### Hook and repository-workflow tests
 

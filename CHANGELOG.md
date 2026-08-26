@@ -4,6 +4,25 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added one deterministic native nine-agent demonstration and acceptance
+  layer without changing production architecture. The canonical
+  `npm run test:agent-acceptance` command composes 249 Rust library tests with
+  the ten exact public agent contract binaries (198 tests): 447/447 pass. All
+  twelve demonstrations pass under the owner-approved scope. Workflow
+  Automation validates its non-executable checkpoint-denial and manual safe
+  dispatch branches separately; their absent connection remains an advisory,
+  and no approval-to-dispatch bridge was added. Strengthened the existing simulated macOS rejection test
+  to prove full live-root audit binding and the approved-document contract to
+  prove a Knowledge-authored proposal remains pending, unapproved, and absent
+  from synthesis. Added explicit demo, fixture, acceptance, governance,
+  failure, cancellation, and remaining-gap documentation. Complete
+  `npm run verify` passes with 211 frontend and 481 Rust tests plus one intentional
+  ignored Hermes probe. No agent, workflow, runtime, provider, tool, executor,
+  IPC/UI path, dependency, permission, or product/external operation was added;
+  the demonstrations perform no commit or push. Fresh independent review and
+  closeout pass with `PASS WITH ADVISORIES`; the deterministic completion marker
+  is complete and fingerprint-valid.
+
 - Ran the deterministic Command Center's approved rendered M5 matrix through
   installed Browser Control and Computer Use runtimes. Required browser/Tauri
   sizes, light/dark and reduced motion, scroll ownership/input, focus,

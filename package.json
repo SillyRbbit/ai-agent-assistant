@@ -29,6 +29,7 @@
     "test:frontend": "vitest run",
     "test:unit:watch": "vitest",
     "test:integration": "cargo test --manifest-path src-tauri/Cargo.toml --tests --locked",
+    "test:agent-acceptance": "cargo test --manifest-path src-tauri/Cargo.toml --lib --locked && cargo test --manifest-path src-tauri/Cargo.toml --locked --test agent_definition_registry_contract --test agent_runtime_contract --test agent_orchestration_contract --test agent_governance_contract --test agent_memory_document_contract --test agent_research_knowledge_workflow_contract --test agent_engineering_quality_workflow_contract --test agent_infrastructure_operations_workflow_contract --test agent_workflow_automation_contract --test agent_bounded_parallelism_contract",
     "docs:check": "prettier --check '**/*.{md,yml,yaml}' && python3 scripts/repository_health.py links",
     "security:scan": "python3 scripts/repository_health.py secrets",
     "repository:check": "python3 scripts/repository_health.py all",

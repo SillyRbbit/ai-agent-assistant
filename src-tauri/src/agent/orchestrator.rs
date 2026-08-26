@@ -7031,6 +7031,48 @@ mod tests {
             rejected_resolution.execution(),
             AgentExecutionDisposition::NotAttempted
         );
+        assert!(rejected
+            .pending_governance_approval(rejected_root.task_id())?
+            .is_none());
+        assert_eq!(
+            rejected
+                .task(rejected_root.task_id())
+                .map(AgentTask::status),
+            Some(AgentTaskStatus::Running)
+        );
+        let rejected_records = rejected.governance_audit_records();
+        assert_eq!(rejected_records.len(), 1);
+        assert!(matches!(
+            rejected_records.as_slice(),
+            [AgentGovernanceRecord::Tool(record)]
+                if record.action()
+                    == crate::agent::governance::AgentGovernanceAction::CreateLocalTask
+                    && record.lifecycle()
+                    == crate::audit::governance::AgentToolGovernanceLifecycleState::ApprovalResolved
+                    && record.policy()
+                        == crate::agent::governance::AgentPolicyAuditOutcome::Evaluated {
+                            outcome: crate::policy::types::PolicyOutcome::RequireApproval,
+                            reason: crate::agent::governance::AgentPolicyReason::Deterministic(
+                                crate::policy::types::PolicyReason::ReversibleRequiresApproval,
+                            ),
+                        }
+                    && record.attribution().agent_id() == AgentId::PersonalAssistant
+                    && record.attribution().task_id() == rejected_root.task_id()
+                    && record.attribution().root_task_id().task_id()
+                        == rejected_root.root_task_id().task_id()
+                    && record.attribution().parent_task_id().is_none()
+                    && record.attribution().runtime_id() == RuntimeId::Native
+                    && record.attribution().policy_profile_id()
+                        == rejected_root.policy_profile_id()
+                    && record.attribution().memory_profile_id()
+                        == rejected_root.memory_profile_id()
+                    && record.attribution().depth() == rejected_root.depth()
+                    && record.attribution().runtime_run_identity()
+                        == rejected_root.runtime_run_identity()
+                    && record.approval() == AgentApprovalAuditDisposition::Rejected
+                    && record.execution() == AgentExecutionDisposition::NotAttempted
+                    && record.error().is_none()
+        ));
         Ok(())
     }
 

@@ -1,7 +1,7 @@
 # Cortexa architecture
 
 Status: Authoritative current-state architecture
-Last updated: 2026-08-20
+Last updated: 2026-08-25
 
 ## Reading this document
 
@@ -1056,7 +1056,7 @@ reviewed repository ICNS byte-for-byte.
 | Capability                                    | State                          | Evidence or gate                                               |
 | --------------------------------------------- | ------------------------------ | -------------------------------------------------------------- |
 | React workspace and navigation                | Current                        | Frontend tests and application source                          |
-| Deterministic Command Center projection       | Mocked, validation pending     | Frontend fixtures/tests; real-browser/Tauri M5 matrix not run  |
+| Deterministic Command Center projection       | Current, validated fixture UI  | Frontend fixtures/tests plus passed browser/Tauri M5 matrix    |
 | Assistant interaction                         | Mocked                         | Deterministic in-memory driver only                            |
 | App info and menu routing                     | Current                        | Narrow Tauri command/event                                     |
 | SQLite bootstrap metadata                     | Current                        | Storage tests and startup integration                          |
@@ -1070,6 +1070,7 @@ reviewed repository ICNS byte-for-byte.
 | Fixture-only engineering quality workflow     | Current, unwired and sealed    | D-087 proposal contracts; no repository access or execution    |
 | Fixture-only Cloud and Systems workflows      | Current, unwired and sealed    | D-088 separate no-I/O selectors; no live access or execution   |
 | Typed Workflow Automation proposals           | Current, unwired and sealed    | D-090 A-D manual fixture dispatch; E/tools/approvals inert     |
+| Native multi-agent acceptance suite           | Current, deterministic/unwired | 249 library units + 198 public contracts; no product effects   |
 | Live gateway and model-provider transport     | Planned                        | Blocked by O-006, per-provider O-007 evidence, and future plan |
 | Restricted tool execution                     | Planned                        | No dispatcher or executor exists                               |
 | Product memory and task persistence           | Planned                        | Phase 8 direction only                                         |

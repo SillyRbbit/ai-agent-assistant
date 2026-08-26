@@ -1,7 +1,7 @@
 # Cortexa security checklist
 
 Status: Authoritative change and release security review checklist
-Last updated: 2026-08-20
+Last updated: 2026-08-25
 
 Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
@@ -302,10 +302,43 @@ production boundary exists.
       effects, production audit, and bundle budgets were reviewed.
 - [x] React Flow types/imports stop at one topology adapter and protected
       Rust/Tauri/IPC/storage/capability/CSP paths are unchanged.
-- [ ] Required real-browser/Tauri viewport, input, focus, computed-overflow,
-      contrast, reduced-motion, and resize evidence is complete. **Not run:
-      Browser runtime tool unavailable; no browser tooling install
-      authorized.**
+- [x] Required real-browser/Tauri viewport, input, focus, computed-overflow,
+      contrast, reduced-motion, browser-zoom, screenshot, and native-resize
+      evidence passed through the approved Browser Control and Computer Use
+      runtimes. One scoped light-theme compact-text contrast defect found by M5
+      was corrected and revalidated; touch was unavailable where unsupported.
+
+## Native multi-agent deterministic demonstrations
+
+- [x] Every demonstration discloses deterministic fixture data,
+      `MockAgentRuntime` versus the unwired `NativeAgentRuntime`, real governed
+      boundaries, simulated external results, and the absence of consequential
+      product or external-system effects.
+- [x] No provider/application network, live model, credential, production
+      document, repository, cloud account, host, service, tool executor, IPC
+      command, or new permission participates in the acceptance suite. Cargo is
+      locked but not offline, so a cold toolchain cache may fetch locked crates.
+- [x] The closed delegation matrix denies every specialist source; only
+      `AgentOrchestrator` creates tasks and all identity substitution/replay
+      cases fail closed.
+- [x] Workflow Automation retains zero executable tool steps. Non-executable
+      tool/checkpoint proposals and application-owned take-once manual fixture
+      dispatch remain separate and cannot create approval or execution
+      authority.
+- [x] QA remains advisory and cannot approve; Security remains advisory and
+      cannot authorize; unknown tools and destructive cloud/systems capability
+      requests remain denied and `NotAttempted`.
+- [x] The simulated macOS approval rejection is bound to the exact originating
+      Personal task/root, clears pending state, records
+      `ApprovalResolved`/`Rejected`/`NotAttempted`, and executes no action.
+- [x] Approved-document and memory fixtures exercise explicit grants,
+      isolation, cleanup, and versioned application review without silently
+      persisting shared knowledge.
+- [x] Audit evidence is bounded, redacted, attributed, process-local, and
+      non-authorizing; it is not represented as durable product audit.
+- [x] The suite contains no tracked screenshot because the backend workflows
+      have no connected UI; the separately validated Command Center remains a
+      simulated frontend projection rather than backend execution evidence.
 
 ## Tauri IPC review
 

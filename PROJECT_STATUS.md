@@ -4,7 +4,33 @@ Last updated: 2026-08-25
 
 ## Current milestone
 
-The approved deterministic multi-agent Command Center prototype is **verified
+The owner-approved deterministic native multi-agent end-to-end demonstration
+increment is **verified complete with advisories** under the complete, valid gate
+`native-multi-agent-end-to-end-demonstrations`. Work is on branch
+`codex/native-multi-agent-end-to-end-demonstrations` from verified baseline
+`527f0f4`. Its bounded source scope is one canonical acceptance command and two
+test-only assertion strengthenings; it adds no production behavior, dependency,
+IPC, tool, executor, provider, external I/O, or device effect.
+
+All twelve demonstrations pass under the owner-approved acceptance scope. Demo
+7 validates checkpoint denial and safe manual take-once A-D dispatch as
+separate branches. D-090 intentionally fixes executable tool steps at zero, so
+a proposal containing an approval checkpoint cannot connect to the separate
+manual dispatch of complete A-D fixture workflows. No approval-to-dispatch
+bridge exists, and the absent combined chain remains an explicit advisory. Demo
+10 records an exact task-bound rejected approval with
+execution `NotAttempted`; the root remains `Running` and receives no
+runtime-text injection. `NativeAgentRuntime` remains sole/default and unwired,
+while Hermes remains Deferred/Blocked.
+
+The target host is macOS 26.6 build 25G72 on arm64. Fresh final checks pass: the
+approval unit 1/1, approved-document/shared-knowledge contract 1/1, canonical
+acceptance command 447/447, full `npm run verify`, independent re-review, and
+final documentation/security/session checks. The closeout result is `PASS WITH
+ADVISORIES`; gate status is `complete` and its workspace fingerprint is valid.
+No next plan is owner-selected or Ready, and no commit or push has occurred.
+
+The prerequisite deterministic multi-agent Command Center prototype is **verified
 complete**. The
 frontend working tree adds one lazy route with a versioned fixture projection,
 one distinct `AgentOrchestrator`, all nine exact agent roles, five
@@ -36,11 +62,12 @@ host zoom produced a rendered 125% state at DPR 1.25 and 832×560 CSS pixels
 inside the approved 1040×700 frame. Browser Control verified no overflow,
 clipping, focus, scrolling, or reachability failure, and reset restored the
 1040×700 DPR 1 baseline. Touch was unavailable where unsupported. All live
-integration and later milestone work remains Blocked.
+integration remains Blocked; the separately approved deterministic evidence
+increment above is verified complete under its valid marker.
 
 Fresh post-increment automated verification and the full rendered matrix pass;
 the consolidated gate result is `PASS WITH ADVISORIES` because no later
-increment is currently Ready.
+increment was Ready at that checkpoint.
 
 The D-086 fixture-only Research/Knowledge increment and
 [`2026-08-11-research-knowledge-workflow.md`](docs/plans/2026-08-11-research-knowledge-workflow.md)
@@ -138,7 +165,7 @@ probe, integration, and release builds.
 Independent code, architecture, security, and technical-debt review is `PASS
 WITH ADVISORIES`. Final documentation, repository, security, diff, and
 session-end checks pass; deterministic finalization completed and the marker is
-complete and valid. No owner-selected next plan is Ready.
+complete and valid. No owner-selected next plan was Ready at D-091 closeout.
 
 The Rust core now carries nine exact policy-profile identities from sealed
 definitions through tasks, live execution contexts, delegation, governed tool
@@ -581,6 +608,10 @@ signing, Keychain, credential, Cloudflare, traffic, or runtime behavior.
 
 ## Increment status
 
+- Native multi-agent end-to-end demonstrations — **verified complete with
+  advisories;
+  checkpoint denial and safe manual A-D dispatch accepted as separate Demo 7
+  evidence; marker complete and fingerprint-valid**.
 - Increment 1: smallest runnable Tauri application — **complete**.
 - Increment 1.1: Node.js 26/npm 11 compatibility — **complete**.
 - Increment 1.2: repository workflow and handoff system — **complete**.
