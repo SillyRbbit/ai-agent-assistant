@@ -19,6 +19,7 @@
     "npm run security:scan",
     "git diff --check",
     "python3 .codex/hooks/session_end_gate.py",
+    "python3 .codex/hooks/post_increment_gate.py finalize --increment pr57-linux-clippy-portability --report docs/reviews/2026-08-25-pr57-linux-clippy-portability-post-increment-review.md",
     "python3 .codex/hooks/post_increment_gate.py status"
   ],
   "files_changed": [
@@ -30,26 +31,23 @@
     "TROUBLESHOOTING_LOG.md",
     "docs/increments/pr57-linux-clippy-portability.md",
     "docs/plans/2026-08-25-pr57-linux-clippy-portability.md",
-    "docs/reviews/2026-08-25-pr57-linux-clippy-portability-post-increment-review.md",
-    "src-tauri/src/agent/orchestrator.rs",
-    "src-tauri/src/approvals/manager.rs",
-    "src-tauri/src/credentials/cloudflare_access.rs"
+    "docs/reviews/2026-08-25-pr57-linux-clippy-portability-post-increment-review.md"
   ],
   "findings": [
     {
-      "blocks_completion": true,
-      "blocks_next_increment": true,
-      "category": "Portability",
+      "blocks_completion": false,
+      "blocks_next_increment": false,
+      "category": "Technical debt",
       "effort": "Small",
       "milestone": "Current pr57-linux-clippy-portability gate",
-      "risk": "The private compile-scope correction has not yet run on Linux; the old failed and target-Mac PR jobs predate the patch.",
+      "risk": "Resolved on the exact published correction: Linux strict Clippy and all-target tests and target-Mac validation all pass without suppression or behavior change.",
       "severity": "Medium",
-      "summary": "PORT-TD-01: source-current Linux and target-Mac CI evidence is pending."
+      "summary": "PORT-TD-01: source-current Linux and target-Mac CI evidence now passes."
     },
     {
       "blocks_completion": false,
       "blocks_next_increment": false,
-      "category": "Dependency health",
+      "category": "Technical debt",
       "effort": "Small",
       "milestone": "Separately approved next dependency-remediation gate",
       "risk": "Five vulnerable development transitives keep the independent dependency audit red and block PR #57 merge until remediated and revalidated.",
@@ -72,12 +70,12 @@
     {
       "check": "Linux Rust validation for the published remediation commit",
       "required": true,
-      "status": "Manual verification pending"
+      "status": "Passed"
     },
     {
       "check": "Target-Mac Rust validation for the published remediation commit",
       "required": true,
-      "status": "Manual verification pending"
+      "status": "Passed"
     },
     {
       "check": "Native application inspection (not required because no user-visible, Tauri, IPC, or runtime behavior changed)",
@@ -85,8 +83,8 @@
       "status": "Not run"
     }
   ],
-  "next_increment_readiness": "Blocked",
-  "quality_gate": "FAIL",
+  "next_increment_readiness": "Ready with advisories",
+  "quality_gate": "PASS WITH ADVISORIES",
   "schema_version": 1,
   "verification": [
     {
@@ -164,21 +162,24 @@ Branch: `codex/native-multi-agent-end-to-end-demonstrations`
 
 ## Executive summary
 
-The bounded attribute-only correction is implemented and passes all required
-local checks. Independent architecture, security, and code review found no
-source finding. The interim quality-gate result remains `FAIL` solely because
-the unpublished correction has not run on the required Linux and target-Mac
-runners.
+The bounded attribute-only correction is implemented and passes every required
+local and remote check. Independent architecture, security, and code review
+found no source finding. The final quality-gate result is `PASS WITH
+ADVISORIES`; only the separately scoped development-dependency remediation
+remains before PR #57 may merge.
 
 ## Scope and boundaries
 
-The exact three source paths change only private conditional-compilation
-visibility. Public APIs, target-Mac behavior, approval identity, credential
-labels, validation, redaction, zeroization, the public non-macOS
-`UnsupportedPlatform` result, dependencies, permissions, IPC, network, and
-execution authority remain unchanged. The 12-path inventory matches the active
-plan. The completed D-093 plan/report and recorded pre-gate validity are not
-rewritten.
+The exact three source paths in published correction `6b26753` change only
+private conditional-compilation visibility. Public APIs, target-Mac behavior,
+approval identity, credential labels, validation, redaction, zeroization, the
+public non-macOS `UnsupportedPlatform` result, dependencies, permissions, IPC,
+network, and execution authority remain unchanged. The overall 12-path
+increment inventory matches the active plan. Because remote Linux proof
+required publishing those three source paths before finalization, the complete
+Git change set at finalization is the nine documentation paths recorded by the
+machine manifest. The completed D-093 plan/report and recorded pre-gate
+validity are not rewritten.
 
 ## Verification results
 
@@ -192,8 +193,16 @@ rewritten.
   ignored.
 - Complete `npm run verify`: `Passed` after the first attempt stopped only on
   formatting in the new increment record and the formatted rerun passed.
-- Linux Rust validation at the corrected commit: `Manual verification pending`.
-- Target-Mac Rust validation at the corrected commit: `Manual verification pending`.
+- Published correction:
+  `6b2675343db8518587068e7175ce0cec9d2f6107`.
+- CI run `32921400121`, Linux Rust job `98035560462`: `Passed` in
+  6m55s, including strict Clippy and all-target tests.
+- CI run `32921400121`, target-Mac Rust job `98035560489`: `Passed` in
+  2m18s.
+- CI run `32921400121`, frontend job `98035560481`: `Passed` in 57s.
+- Documentation run `32921400102`, job `98035529472`: `Passed` in 26s.
+- Dependency job `98035560426`: expected `Failed` in 10s only on the five
+  separately scoped development transitive advisories; secret scanning passed.
 
 ## Architecture findings
 
@@ -202,23 +211,23 @@ not move ownership or authority. No architecture finding exists.
 
 ## Security findings
 
-`PASS` for interim publication. Approval source identity checks remain exact on
+`PASS`. Approval source identity checks remain exact on
 their sole macOS path. Credential helpers remain private, bounded, redacted,
 and zeroizing on macOS and in tests; non-macOS production remains fail-closed.
 No Critical, High, Medium, Low, or Advisory source finding exists.
 
 ## Code-health findings
 
-`PASS` for interim publication. The attributes match sole consumers, strict
+`PASS`. The attributes match sole consumers, strict
 Clippy remains enabled, and existing focused/adversarial tests cover the
 unchanged behavior. No additional behavior test is required for the
 compile-visibility-only correction.
 
 ## Technical debt
 
-- `PORT-TD-01` — Portability, Medium, small effort, current gate. Existing
-  target-conditional private-code debt is corrected locally but blocks
-  completion until source-current Linux and target-Mac jobs pass.
+- `PORT-TD-01` — Portability, Medium, small effort, current gate. Resolved: the
+  target-conditional private-code correction passes source-current Linux and
+  target-Mac jobs.
 - `DEP-TD-01` — Dependency health, Medium, small effort, next separately
   approved gate. Five development transitive findings block PR merge but do
   not authorize or broaden this portability increment.
@@ -227,24 +236,27 @@ No debt is introduced by the attribute-only correction.
 
 ## Roadmap findings
 
-Current increment readiness is `Blocked` only on source-current remote Rust
-evidence. The owner-approved dependency remediation becomes the sole next
-`Ready with advisories` work only after this gate closes.
+Current increment readiness is `Ready with advisories`. The owner-approved
+dependency remediation is the sole next work after this gate closes. No later
+feature increment is authorized.
 
 ## Completion decision
 
-`FAIL`
+`PASS WITH ADVISORIES`
 
-The result must remain `FAIL` while either required remote Rust check is
-pending. No completion marker is requested at this checkpoint.
+Every portability-specific check passes. Five development-only transitive
+advisories remain explicitly outside this increment; they block PR merge, not
+this bounded completion, and are the only approved next gate.
 
 ## Next-increment readiness
 
-`Blocked`. Publish the reviewed portability correction, require both remote
-Rust jobs to pass, then synchronize and finalize this gate. Only afterward may
-the separately approved npm transitive-advisory remediation begin.
+`Ready with advisories`. Begin only the separately approved npm
+transitive-advisory remediation after this marker is complete and valid. Keep
+PR #57 unmerged until that second gate and every applicable check pass.
 
 ## Exact files changed
+
+The post-increment finalizer's complete current Git change set is:
 
 1. `CHANGELOG.md`
 2. `HANDOFF.md`
@@ -255,11 +267,14 @@ the separately approved npm transitive-advisory remediation begin.
 7. `docs/increments/pr57-linux-clippy-portability.md`
 8. `docs/plans/2026-08-25-pr57-linux-clippy-portability.md`
 9. `docs/reviews/2026-08-25-pr57-linux-clippy-portability-post-increment-review.md`
-10. `src-tauri/src/agent/orchestrator.rs`
-11. `src-tauri/src/approvals/manager.rs`
-12. `src-tauri/src/credentials/cloudflare_access.rs`
+
+Published correction `6b26753` contains the other three overall increment
+paths: `src-tauri/src/agent/orchestrator.rs`,
+`src-tauri/src/approvals/manager.rs`, and
+`src-tauri/src/credentials/cloudflare_access.rs`.
 
 ## Exact commands executed
 
 The machine manifest records every required local command and current status.
-The required remote Linux and target-Mac checks remain explicitly pending.
+The exact published head passed Linux and target-Mac Rust validation; the
+separate npm dependency finding remains disclosed for the next gate.

@@ -4,24 +4,28 @@ Last updated: 2026-08-25
 
 ## Current milestone
 
-PR #57 is open from commit `28a0c46` on
+PR #57 is open at correction commit
+`6b2675343db8518587068e7175ce0cec9d2f6107` on
 `codex/native-multi-agent-end-to-end-demonstrations`. Its completed
 deterministic demonstration increment remains recorded below. Publication
 exposed two independent merge blockers, and the owner approved two sequential,
 separately gated remediations.
 
-The active first gate is `pr57-linux-clippy-portability`. Its attribute-only
-Rust correction aligns private compile scope with existing macOS-only consumers
-while retaining Cloudflare private helpers in unit tests and preserving the
-public non-macOS `UnsupportedPlatform` result. Focused approval and credential
-tests, strict Clippy, all-target Rust tests, complete `npm run verify`, and
-independent interim review pass locally. Completion remains Blocked until both
-Linux and target-Mac Rust validation pass on the published correction.
+The first gate, `pr57-linux-clippy-portability`, is **verified complete with
+advisories**. Its attribute-only Rust correction aligns private compile scope
+with existing macOS-only consumers while retaining Cloudflare private helpers
+in unit tests and preserving the public non-macOS `UnsupportedPlatform`
+result. Focused tests, strict Clippy, all-target Rust, complete `npm run verify`,
+and independent review pass locally. The exact published head also passes
+Linux Rust, target-Mac Rust, frontend, and documentation workflows. The result
+is `PASS WITH ADVISORIES` only because the separately scoped dependency gate
+remains.
 
-The approved second increment will remediate five vulnerable development
-transitives without entering this gate. Secret scanning passes, but the npm
+The approved second increment is now the only Ready work. It will remediate
+five vulnerable development transitives without changing production
+architecture or bypassing audit policy. Secret scanning passes, but the npm
 audit currently reports four High and one Moderate finding. PR #57 remains
-unmergeable until both increments close and every required check is green.
+unmergeable until that increment closes and every applicable check is green.
 
 The owner-approved deterministic native multi-agent end-to-end demonstration
 increment is **verified complete with advisories** under the complete, valid gate

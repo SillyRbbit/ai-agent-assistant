@@ -1,6 +1,6 @@
 # PR #57 Linux Clippy portability remediation
 
-Status: Active
+Status: Verified complete with advisories
 Owner: Project owner
 Date: 2026-08-25
 Gate ID: `pr57-linux-clippy-portability`
@@ -32,16 +32,24 @@ approval or execution behavior change, real credential ingestion, provider,
 network, IPC, permission, capability, or external effect is authorized. The
 separate npm advisory remediation may begin only after this increment closes.
 
-## Current status
+## Final status
 
-The exact attribute-only correction is implemented. Focused approval and
+The exact attribute-only correction is implemented and verified. Focused approval and
 credential tests, strict all-target/all-feature Clippy, all-target Rust tests,
 complete `npm run verify`, and independent interim architecture, security, and
 code review pass locally. The first full verification attempt stopped only on
 formatting in this new record; Prettier corrected it and the complete rerun
 passed.
 
-The gate remains active and quality remains `FAIL` only because the reviewed
-correction has not yet been published for the required Linux and target-Mac
-Rust validation. The separate npm advisory remediation has not started, and PR
-#57 remains unmerged.
+Published correction `6b2675343db8518587068e7175ce0cec9d2f6107`
+passes CI run `32921400121`: Linux Rust job `98035560462` in 6m55s,
+target-Mac Rust job `98035560489` in 2m18s, and frontend job `98035560481` in
+57s. Documentation run `32921400102`, job `98035529472`, passes in 26s. The
+quality result is `PASS WITH ADVISORIES`; the separate npm audit job remains
+red only for the five approved next-increment development transitives. That
+dependency remediation has not started, and PR #57 remains unmerged.
+
+The linked
+[`post-increment review`](../reviews/2026-08-25-pr57-linux-clippy-portability-post-increment-review.md)
+records the overall 12-path increment inventory, the exact nine-path
+finalization change set, and valid completion evidence.

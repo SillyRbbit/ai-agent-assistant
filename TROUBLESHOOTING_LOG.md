@@ -744,7 +744,7 @@ target-Mac verification for native behavior.
 ### PR #57 recurrence: private macOS-only items fail strict Linux Clippy
 
 Date: 2026-08-25
-Status: Correction implemented locally; remote verification pending
+Status: Resolved
 
 PR #57 run `32917746165`, Linux job `98027487903`, reached the configured
 self-hosted runner after its missing `cortexa-ci` label was restored. Strict
@@ -759,9 +759,13 @@ import and approval matcher and retains the private Cloudflare seam under
 `cfg(test)` or macOS. It does not suppress Clippy, gate the public credential
 API, or change approval, Keychain, credential, error, dependency, permission,
 or execution behavior. Local focused tests, strict Clippy, all-target Rust, and
-complete repository verification pass. Publish the reviewed correction and
-require both Linux and target-Mac Rust validation on that exact commit before
-marking the recurrence resolved.
+complete repository verification pass. Published correction
+`6b2675343db8518587068e7175ce0cec9d2f6107` then passed CI run `32921400121`:
+Linux Rust job `98035560462` completed strict Clippy and all-target tests in
+6m55s, target-Mac job `98035560489` passed in 2m18s, and frontend job
+`98035560481` passed in 57s. Documentation run `32921400102`, job
+`98035529472`, passed in 26s. The remaining failed dependency job is a separate
+approved remediation and does not reopen this resolved portability recurrence.
 
 ## TS-017 - Certificate Assistant cannot create the Developer ID CSR
 

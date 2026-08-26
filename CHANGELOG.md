@@ -4,15 +4,16 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
-- Began the separately gated PR #57 Linux portability remediation. The bounded
+- Completed the separately gated PR #57 Linux portability remediation. The bounded
   Rust diff target-gates one test import, one private approval-source matcher,
   and the private fake-only Cloudflare reader/validation seam while preserving
   macOS behavior, cross-target unit coverage, and the public non-macOS
   `UnsupportedPlatform` denial. Focused tests, strict Clippy, all-target Rust,
-  complete `npm run verify`, and independent interim review pass locally.
-  Remote Linux and target-Mac Rust evidence remains pending, so the gate stays
-  active and PR #57 remains unmerged. The separate npm advisory remediation has
-  not started.
+  complete `npm run verify`, and independent review pass locally. Exact
+  correction `6b26753` also passes Linux strict Clippy/all-target tests,
+  target-Mac Rust, frontend, and documentation workflows. The result is `PASS
+WITH ADVISORIES`; the separate npm advisory remediation has not started, and
+  PR #57 remains unmerged.
 
 - Added one deterministic native nine-agent demonstration and acceptance
   layer without changing production architecture. The canonical

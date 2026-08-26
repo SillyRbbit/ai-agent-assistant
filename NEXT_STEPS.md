@@ -6,21 +6,23 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Current closeout checkpoint
 
-### Active: PR #57 Linux Clippy portability remediation
+### Ready: PR #57 transitive development-dependency advisory remediation
 
 The owner approved
 [`2026-08-25-pr57-linux-clippy-portability.md`](docs/plans/2026-08-25-pr57-linux-clippy-portability.md)
-as the first of two sequential merge-remediation increments. The exact private
-conditional-compilation correction is implemented locally. Focused tests,
-strict target-Mac Clippy, all-target Rust, complete `npm run verify`, and
-independent review pass. Gate `pr57-linux-clippy-portability` remains Active
-because the corrected commit still requires passing Linux and target-Mac Rust
-workflow evidence.
+as the first of two sequential merge-remediation increments. Gate
+`pr57-linux-clippy-portability` is complete and valid with `PASS WITH
+ADVISORIES`. Exact correction `6b2675343db8518587068e7175ce0cec9d2f6107`
+passes local focused/full verification and source-current Linux Rust,
+target-Mac Rust, frontend, and documentation workflows without lint
+suppression or behavior change.
 
-Do not begin the separately approved transitive-advisory remediation until this
-gate closes. After both Rust jobs pass and the portability marker is complete
-and valid, the dependency remediation is the only next Ready work. Do not merge
-PR #57 until that second gate and every required PR check pass.
+Begin only the separately approved npm transitive-advisory remediation under a
+new gate and ExecPlan. Resolve the five development-only vulnerable transitives
+within existing parent constraints where possible; do not add major upgrades,
+production behavior, or governance bypass. Require a zero-vulnerability npm
+audit, full repository validation, a valid completion marker, and all
+applicable PR checks before merging PR #57.
 
 ### Prior verified checkpoint: native multi-agent demonstrations
 

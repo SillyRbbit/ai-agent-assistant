@@ -1,6 +1,6 @@
 # PR #57 Linux Clippy portability remediation
 
-Status: Active
+Status: Verified complete with advisories
 Owner: Project owner
 Last updated: 2026-08-25
 Gate ID: `pr57-linux-clippy-portability`
@@ -50,8 +50,8 @@ nine-agent demonstrations and the application UI remain unchanged.
 
 ## Existing behavior and constraints
 
-- PR #57 commit `28a0c46` passes documentation, frontend, and target-Mac Rust
-  validation.
+- PR #57 correction commit `6b2675343db8518587068e7175ce0cec9d2f6107`
+  passes documentation, frontend, Linux Rust, and target-Mac Rust validation.
 - Linux Rust validation run `32917746165`, job `98027487903`, fails only at
   strict all-target Clippy on target-conditional private items.
 - The public Cloudflare probe returns `UnsupportedPlatform` outside macOS and
@@ -67,8 +67,10 @@ nine-agent demonstrations and the application UI remain unchanged.
 - The worktree was clean at `28a0c46` when this gate began.
 - The prior `native-multi-agent-end-to-end-demonstrations` gate was complete
   and fingerprint-valid before `pr57-linux-clippy-portability` began.
-- Four PR checks pass. Linux Rust validation and the independent dependency
-  audit fail; the latter is outside this increment.
+- On the baseline, four PR checks passed while Linux Rust validation and the
+  independent dependency audit failed. The correction head now passes every
+  check applicable to this increment; only the separately scoped dependency
+  audit remains red.
 - Local `npm audit` reproduces five vulnerable transitive packages, but no
   dependency file is changed here.
 
@@ -126,8 +128,9 @@ contract, credential lifecycle, dependency, permission, or authority change.
 - [x] Apply only the three conditional-compilation corrections.
 - [x] Run focused macOS approval and credential tests plus strict local checks.
 - [x] Run complete local verification and independent reviews.
-- [ ] Publish an interim reviewed commit and obtain the exact Linux CI result.
-- [ ] Synchronize final evidence, finalize a valid marker, and publish closeout.
+- [x] Publish an interim reviewed commit and obtain the exact Linux CI result.
+- [x] Synchronize final evidence and finalize a valid marker. Closeout
+      publication follows under the existing owner authorization.
 
 ## Security and privacy considerations
 
@@ -219,32 +222,48 @@ stop without starting dependency remediation or merging PR #57.
 - 2026-08-25: Applied the attribute-only correction. Focused approval and
   credential tests, strict Clippy, all-target Rust, and complete `npm run
 verify` pass. Independent architecture, security, and code review found no
-  source finding. The gate remains active because Linux and target-Mac workflow
-  evidence on the unpublished correction is pending.
+  source finding.
+- 2026-08-25: Published reviewed correction
+  `6b2675343db8518587068e7175ce0cec9d2f6107`. CI run `32921400121` passed
+  Linux Rust job `98035560462` in 6m55s, target-Mac Rust job `98035560489` in
+  2m18s, and frontend job `98035560481` in 57s. Documentation run
+  `32921400102`, job `98035529472`, passed in 26s. Dependency job
+  `98035560426` failed only on the separately scoped five development
+  transitive advisories.
+- 2026-08-25: Final quality, documentation, repository, security, whitespace,
+  and session-end checks passed. The completion decision is `PASS WITH
+ADVISORIES`; the sole merge-blocking advisory is the separately approved
+  dependency remediation.
 
 ## Acceptance criteria
 
-- [ ] The diff changes only private conditional-compilation visibility and
+- [x] The diff changes only private conditional-compilation visibility and
       declared evidence files.
-- [ ] Public non-macOS credential probing still fails closed with
+- [x] Public non-macOS credential probing still fails closed with
       `UnsupportedPlatform`.
-- [ ] Target-Mac approval and credential behavior remains covered and passing.
-- [ ] Strict local Clippy, all-target tests, and complete verification pass.
-- [ ] Published Linux Rust validation passes with no warning suppression.
-- [ ] Security, architecture, code-health, debt, and readiness reviews contain
+- [x] Target-Mac approval and credential behavior remains covered and passing.
+- [x] Strict local Clippy, all-target tests, and complete verification pass.
+- [x] Published Linux Rust validation passes with no warning suppression.
+- [x] Security, architecture, code-health, debt, and readiness reviews contain
       no blocking finding.
-- [ ] The final report is `PASS` or `PASS WITH ADVISORIES` and the marker is
+- [x] The final report is `PASS WITH ADVISORIES` and the marker is
       complete and valid.
 
 ## Final results
 
-Pending implementation and validation.
+The exact three-file compile-scope correction is verified locally and on both
+required remote Rust targets. Linux strict Clippy and all-target tests pass
+without suppression, target-Mac behavior passes, and the public non-macOS
+credential boundary remains fail-closed. Independent review found no source,
+architecture, security, or code-health finding. The result is `PASS WITH
+ADVISORIES` because five development-only npm transitives remain for the next
+separately approved gate and still block PR #57 merge.
 
 ## Documentation updates
 
-- [ ] `HANDOFF.md`
-- [ ] `PROJECT_STATUS.md`
-- [ ] `NEXT_STEPS.md`
-- [ ] `DECISIONS.md`, if required
-- [ ] `CHANGELOG.md`
-- [ ] `TROUBLESHOOTING_LOG.md`
+- [x] `HANDOFF.md`
+- [x] `PROJECT_STATUS.md`
+- [x] `NEXT_STEPS.md`
+- [x] `DECISIONS.md` reviewed; no durable decision changed
+- [x] `CHANGELOG.md`
+- [x] `TROUBLESHOOTING_LOG.md`
