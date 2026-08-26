@@ -4,7 +4,8 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
-- Began the second, separately gated PR #57 merge remediation for five newly
+- Prepared closeout for the second, separately gated PR #57 merge remediation
+  for five newly
   reported development-only transitive package findings. The bounded plan
   permits only six resolver-generated in-range lockfile updates across
   `brace-expansion`, `js-yaml`, `nanoid`, `postcss`, and `undici`; it adds no
@@ -12,7 +13,12 @@ All notable repository changes are documented here. Entries distinguish verified
   product behavior, or governance change. The exact graph is now installed and
   locally verified: all changed nodes remain dev-only/MIT/integrity-bound with
   no install hook, both npm audits report zero, and complete `npm run verify`
-  passes. Exact-head CI and final closeout remain pending.
+  passes. Exact remediation `c3cc49e` passes documentation, frontend, Linux
+  Rust, target-Mac Rust, secret/dependency, npm-audit, and accepted Cargo-audit
+  checks. Independent review finds no remaining dependency, security,
+  architecture, or code-health issue. The completion report is `PASS WITH
+ADVISORIES` solely because no next implementation plan is owner-selected or
+  Ready; the deterministic marker is complete and valid.
 
 - Completed the separately gated PR #57 Linux portability remediation. The bounded
   Rust diff target-gates one test import, one private approval-source matcher,

@@ -20,7 +20,8 @@ and independent architecture, security, and code review pass. CI run
 run `32921400102`, job `98035529472`, passes in 26s. The portability result is
 `PASS WITH ADVISORIES`.
 
-The second owner-approved gate is Active under
+The second owner-approved gate is **verified complete with advisories** under
+the complete, valid gate
 `pr57-transitive-advisory-remediation` and
 [`2026-08-25-pr57-transitive-advisory-remediation.md`](docs/plans/2026-08-25-pr57-transitive-advisory-remediation.md).
 Baseline audit evidence reports `brace-expansion`, `js-yaml`, `nanoid`,
@@ -28,19 +29,27 @@ Baseline audit evidence reports `brace-expansion`, `js-yaml`, `nanoid`,
 findings across six lockfile nodes. The resolver advanced exactly those nodes
 to the approved in-range versions with no manifest, parent, major,
 install-policy, product, or governance change. A scripts-disabled clean
-install, exact graph/license/integrity/lifecycle inspection, both zero-finding
+install, exact graph/license/integrity/install-hook inspection, both zero-finding
 npm audits, complete `npm run verify`, and independent security/code review
-pass. Independent architecture review also passes. Exact-head CI remains
-pending, and PR #57 remains unmerged.
+pass. Independent architecture review also passes. Published remediation
+`c3cc49ee28444397ac957d7279ddcfb3ce608548` passes every classifier-selected
+PR check, including npm audit and the unchanged accepted Rust advisory
+baseline. The completion report is `PASS WITH ADVISORIES`; its sole advisory is
+that no next implementation plan is owner-selected or Ready. The deterministic
+marker is complete and valid.
+
+Both remediation gates are closed. No implementation work remains and no new
+plan is Ready. Publish only the closeout documents and require their applicable
+documentation check before performing the owner's separately authorized squash
+merge. PR #57 remains unmerged.
 
 Exact resume prompt: "Read `AGENTS.md`, the required project-memory chain, and
-the completed `docs/plans/2026-08-25-pr57-linux-clippy-portability.md` and active
-`docs/plans/2026-08-25-pr57-transitive-advisory-remediation.md`. Confirm gate
-`pr57-transitive-advisory-remediation` is active and follow its ExecPlan.
-Confirm the exact six-node lockfile diff, zero audits, complete verification,
-and independent reviews; publish only that reviewed scope and require every
-applicable exact-head PR check. Keep PR #57 unmerged until the second marker is
-complete and valid and all checks pass."
+the completed PR #57 portability and transitive-advisory plans and reviews.
+Confirm gate `pr57-transitive-advisory-remediation` remains complete and valid
+and exact remediation `c3cc49e` passed all classifier-selected checks. Publish
+only the closeout documents, wait for their applicable documentation check,
+and then perform only the already authorized squash merge. Start no new
+increment."
 
 ## Current native multi-agent demonstration checkpoint
 

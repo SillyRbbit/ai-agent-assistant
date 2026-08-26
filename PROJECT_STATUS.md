@@ -4,8 +4,8 @@ Last updated: 2026-08-25
 
 ## Current milestone
 
-PR #57 is open at correction commit
-`6b2675343db8518587068e7175ce0cec9d2f6107` on
+PR #57's source remediation is verified at commit
+`c3cc49ee28444397ac957d7279ddcfb3ce608548` on
 `codex/native-multi-agent-end-to-end-demonstrations`. Its completed
 deterministic demonstration increment remains recorded below. Publication
 exposed two independent merge blockers, and the owner approved two sequential,
@@ -19,19 +19,28 @@ result. Focused tests, strict Clippy, all-target Rust, complete `npm run verify`
 and independent review pass locally. The exact published head also passes
 Linux Rust, target-Mac Rust, frontend, and documentation workflows. The result
 is `PASS WITH ADVISORIES` only because the separately scoped dependency gate
-remains.
+remained at that checkpoint; the completed second gate below resolves it.
 
-The approved second increment is now Active under
-`pr57-transitive-advisory-remediation`. It may remediate only six vulnerable
-development-transitive lockfile entries within existing parent constraints,
+The approved second increment is **verified complete with advisories** under
+the complete, valid gate `pr57-transitive-advisory-remediation`. It remediates
+only six vulnerable development-transitive lockfile entries within existing
+parent constraints,
 without changing `package.json`, production architecture, install-script
 policy, or audit policy. Baseline audit evidence reports four High and one
 Moderate finding across six nodes. The exact in-range resolver diff, clean
 scripts-disabled install, metadata/graph proof, both zero-finding npm audits,
 complete `npm run verify`, and independent security/code review now pass
-locally. Independent architecture review also passes. Source-current PR checks
-remain pending. PR #57 remains unmergeable until this increment closes and
-every applicable exact-head check is green.
+locally. Independent architecture review also passes. Published remediation
+`c3cc49e` passes every classifier-selected source-current PR check, including
+npm audit and the unchanged accepted Rust advisory baseline. The result is
+`PASS WITH ADVISORIES`; no dependency, security, architecture, code-health, or
+technical-debt finding remains. The sole advisory is readiness because no new
+implementation plan is owner-selected or Ready.
+
+Both PR #57 remediation gates are complete and valid. No new implementation
+plan is Ready. Publish the closeout documentation and require its applicable
+documentation check before the owner's authorized squash merge. PR #57 remains
+unmerged.
 
 The owner-approved deterministic native multi-agent end-to-end demonstration
 increment is **verified complete with advisories** under the complete, valid gate

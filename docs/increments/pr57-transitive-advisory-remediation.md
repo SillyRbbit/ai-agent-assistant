@@ -1,6 +1,6 @@
 # PR #57 transitive development-dependency advisory remediation
 
-Status: Active
+Status: Verified complete with advisories
 Owner: Project owner
 Date: 2026-08-25
 Gate ID: `pr57-transitive-advisory-remediation`
@@ -33,14 +33,24 @@ runtime, provider, tool, approval, IPC, permission, network capability, or
 external effect is authorized. Do not merge PR #57 until this gate is complete
 and valid and every applicable exact-head check passes.
 
-## Current status
+## Final status
 
-The gate and plan are active. Baseline audit evidence reported five vulnerable
+Baseline audit evidence reported five vulnerable
 package-level findings across six lockfile nodes—four High and one Moderate—all
 indirect development transitives. The resolver advanced exactly those six
 nodes to the approved safe in-range versions with no manifest or parent change,
 package addition/removal, or install-policy change. A scripts-disabled clean
 install, exact graph and metadata inspection, full and production-only
 zero-finding audits, and complete `npm run verify` pass. Independent
-security/code and architecture reviews find no blocker. Exact-head PR checks
-remain pending, so the gate stays Active and PR #57 remains unmerged.
+security/code and architecture reviews find no blocker.
+
+Published remediation `c3cc49ee28444397ac957d7279ddcfb3ce608548`
+passes every classifier-selected check: documentation, frontend, Linux Rust,
+target-Mac Rust, dependency/secret audit, and the unchanged accepted Cargo
+advisory-baseline gate. The completion report result is `PASS WITH ADVISORIES`;
+the sole advisory is that no next implementation plan is owner-selected or
+Ready. The linked
+[`post-increment review`](../reviews/2026-08-25-pr57-transitive-advisory-remediation-post-increment-review.md)
+records the overall 12-path increment inventory, the exact 11-path finalization
+change set, and valid completion evidence. The gate is complete and valid. Only
+the separately authorized squash merge remains after the closeout-docs check.

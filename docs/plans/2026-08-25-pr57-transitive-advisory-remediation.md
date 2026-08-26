@@ -1,6 +1,6 @@
 # PR #57 transitive development-dependency advisory remediation
 
-Status: Active
+Status: Verified complete with advisories
 Owner: Project owner
 Last updated: 2026-08-25
 Gate ID: `pr57-transitive-advisory-remediation`
@@ -145,9 +145,9 @@ edit.
       zero audit findings, and complete repository behavior.
 - [x] Complete interim independent security, code-health, architecture, debt,
       and readiness reviews before publication.
-- [ ] Publish the reviewed remediation and require every applicable PR check to
+- [x] Publish the reviewed remediation and require every applicable PR check to
       pass on the exact head.
-- [ ] Synchronize final evidence and finalize a valid marker before merge.
+- [x] Synchronize final evidence and finalize a valid marker before merge.
 
 ## Security and privacy considerations
 
@@ -174,8 +174,10 @@ dependency workflow.
 - Run clean-lock synchronization evidence, frontend lint/tests/build, full Rust
   and repository verification, and the dependency-sensitive completion gate.
 - Publish only after independent supply-chain/security review, then require the
-  exact final PR head's dependency, frontend, Linux Rust, target-Mac Rust, and
-  documentation checks as classified by repository policy.
+  exact published remediation head's dependency, frontend, Linux Rust,
+  target-Mac Rust, and documentation checks as classified by repository
+  policy. Require the later closeout-docs head's applicable documentation
+  check before merge.
 
 ## Verification commands
 
@@ -265,6 +267,20 @@ test fails, or a final PR check is not green.
   passes against the clean installed graph. Independent architecture and
   security/code reviews pass with no remaining finding after two wording
   corrections. Exact-head CI remains pending.
+- 2026-08-25: Published reviewed remediation
+  `c3cc49ee28444397ac957d7279ddcfb3ce608548`. CI run `32923751481` passed
+  classifier job `98042347127` in 9s, target-Mac Rust job `98042378918` in
+  2m12s, Linux Rust job `98042378943` in 6m38s, frontend job `98042378946` in
+  1m10s, and dependency/secret-audit job `98042378964` in 4m39s. Documentation
+  run `32923751571`, job `98042347401`, passed in 27s. The dependency job
+  passed repository secret scanning, the full npm audit, and the unchanged
+  accepted Rust advisory-baseline gate.
+- 2026-08-25: The completion report is `PASS WITH ADVISORIES`; all local,
+  independent, and exact-remediation-head evidence passes with no remaining
+  dependency, security, architecture, or code-health finding. The sole
+  advisory is that no next implementation plan is owner-selected or Ready.
+  Final current-tree documentation, repository, security, whitespace, and
+  session-end checks pass. The deterministic marker is complete and valid.
 
 ## Acceptance criteria
 
@@ -278,26 +294,30 @@ test fails, or a final PR check is not green.
       unchanged or explicitly verified compatible.
 - [x] Complete local verification and independent security/architecture/code/
       debt/readiness reviews contain no blocking finding.
-- [ ] Every applicable PR check passes on the exact final published head.
-- [ ] The final report is `PASS` or `PASS WITH ADVISORIES` and the marker is
-      complete and valid before merge.
+- [x] Every applicable source check passes on the exact published remediation
+      head.
+- [x] The final report is `PASS WITH ADVISORIES` and the marker is complete and
+      valid before merge.
 
 ## Final results
 
-Implementation and local validation are complete. The resolver changed only
-the six declared development-only nodes, the manifest and parent graph remain
-unchanged, exact metadata and installed-graph checks pass, both npm audits
-report zero, and complete `npm run verify` passes. Independent review and
-exact-head remote checks are still pending, so the gate remains Active and no
-completion or merge claim is made.
+The resolver changed only the six declared development-only nodes. The manifest
+and parent graph remain unchanged; exact metadata and installed-graph checks,
+both zero-finding npm audits, complete `npm run verify`, and independent review
+pass. The exact published remediation head passes every classifier-selected PR
+check, including the unchanged accepted Rust advisory baseline. The completion
+report is `PASS WITH ADVISORIES`; the sole advisory is that no next
+implementation plan is owner-selected or Ready. The deterministic marker is
+complete and valid. Only the separately authorized squash merge remains after
+the closeout-docs check.
 
 ## Documentation updates
 
-- [ ] `HANDOFF.md`
-- [ ] `PROJECT_STATUS.md`
-- [ ] `NEXT_STEPS.md`
-- [ ] `ROADMAP.md`
-- [ ] `SECURITY.md`
-- [ ] `DECISIONS.md` reviewed; change only if required
-- [ ] `CHANGELOG.md`
-- [ ] `TROUBLESHOOTING_LOG.md`
+- [x] `HANDOFF.md`
+- [x] `PROJECT_STATUS.md`
+- [x] `NEXT_STEPS.md`
+- [x] `ROADMAP.md`
+- [x] `SECURITY.md`
+- [x] `DECISIONS.md` reviewed; no durable decision changed
+- [x] `CHANGELOG.md`
+- [x] `TROUBLESHOOTING_LOG.md`

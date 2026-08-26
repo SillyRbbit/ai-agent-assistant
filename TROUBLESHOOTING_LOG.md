@@ -1013,7 +1013,7 @@ closeout.
 ## TS-020 - PR #57 audit reports new development-transitive advisories
 
 Date: 2026-08-25
-Status: Correction verified locally; remote verification pending
+Status: Resolved
 
 ### Symptom
 
@@ -1052,12 +1052,26 @@ tooling or that product runtime dependencies are affected.
 Gate `pr57-transitive-advisory-remediation` used the npm resolver with install
 scripts disabled to advance only those six nodes within their existing parent
 ranges. No override, direct dependency, parent-graph, audit-policy, or CI
-change was needed. Keep PR #57 unmerged until independent review,
-valid-marker, and exact-head final PR check evidence pass.
+change was needed. Keep PR #57 unmerged until independent review, valid-marker,
+and exact-head final PR check evidence pass. Independent review,
+remediation-head checks, and marker finalization pass; the closeout-docs check
+remains pending before the already authorized squash merge.
+
+Published remediation `c3cc49ee28444397ac957d7279ddcfb3ce608548` passes CI
+run `32923751481`: classifier job `98042347127` in 9s, target-Mac Rust job
+`98042378918` in 2m12s, Linux Rust job `98042378943` in 6m38s, frontend job
+`98042378946` in 1m10s, and dependency/secret job `98042378964` in 4m39s.
+Documentation run `32923751571`, job `98042347401`, passes in 27s. The
+dependency job passed repository secret scanning, the full npm audit, and the
+unchanged accepted Rust advisory-baseline gate. This resolves the audit failure
+without an exception, override, parent upgrade, or policy change. Deterministic
+closeout is complete and valid.
 
 ### Verify
 
 Require `npm ls` to show the six exact safe resolutions with no invalid or
 extraneous package, full and production-only npm audits to report zero, the
 manifest and install-script allowlist to remain unchanged, complete repository
-verification to pass, and the exact final PR head's dependency audit to pass.
+verification to pass, the exact published remediation head's dependency audit
+to pass, and the later closeout-docs head's applicable documentation check to
+pass before merge.

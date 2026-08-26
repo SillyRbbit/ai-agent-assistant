@@ -6,7 +6,8 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 The owner-approved
 [`2026-08-25-pr57-transitive-advisory-remediation.md`](docs/plans/2026-08-25-pr57-transitive-advisory-remediation.md)
-is **Active** under gate `pr57-transitive-advisory-remediation`. It is the
+is **verified complete with advisories** under the complete, valid gate
+`pr57-transitive-advisory-remediation`. It is the
 second and final bounded PR #57 merge remediation. Scope is limited to six
 development-only transitive lockfile resolutions within existing parent
 constraints; `package.json`, production behavior, install-script policy,
@@ -19,7 +20,12 @@ parents, direct graph, install-script allowlist, lockfile version, and product
 source remain unchanged. A scripts-disabled clean install, exact metadata and
 installed-graph inspection, full and production-only zero-finding npm audits,
 complete `npm run verify`, and independent security/code review pass.
-Independent architecture review also passes. Exact-head CI remains pending.
+Independent architecture review also passes. Published remediation `c3cc49e`
+passes every classifier-selected PR check, including the full npm audit and
+unchanged accepted Cargo advisory-baseline gate. The completion result is `PASS
+WITH ADVISORIES`; no dependency, security, architecture, code-health, or
+technical-debt finding remains. The sole advisory is readiness because no new
+implementation plan is owner-selected or Ready.
 
 The owner-approved
 [`2026-08-25-pr57-linux-clippy-portability.md`](docs/plans/2026-08-25-pr57-linux-clippy-portability.md)
@@ -36,8 +42,8 @@ review evidence passes. Published correction
 target-Mac Rust, frontend, and documentation workflows. The result is `PASS
 WITH ADVISORIES` only for the separate dependency findings.
 
-PR #57 must not merge until the active dependency gate and every applicable
-exact-head check pass.
+No implementation plan is Ready. The already authorized PR #57 squash merge
+may proceed only after the final docs-only publication check is confirmed.
 
 The prior owner-approved
 [`2026-08-11-multi-agent-end-to-end-demonstrations.md`](docs/plans/2026-08-11-multi-agent-end-to-end-demonstrations.md)
