@@ -939,6 +939,29 @@ fn specialist_start_failures_consume_one_attempt_and_fall_back_without_retry(
 }
 
 #[test]
+fn rejected_research_run_blocks_fallback_until_explicit_cleanup() -> Result<(), Box<dyn Error>> {
+    let (runtime, recorder) =
+        MockAgentRuntime::recording(MockMode::ReturnedIdentityMismatchWithCancelFailureOnceAt(2));
+    let mut orchestrator = AgentOrchestrator::new(runtime)?;
+    let root = orchestrator.start_root(OBJECTIVE)?;
+
+    assert_eq!(
+        orchestrator.request_research_knowledge_workflow(&root, workflow_request()?),
+        Err(AgentOrchestratorError::RuntimeCleanupPending)
+    );
+    assert_eq!(recorder.starts().len(), 2);
+    assert_eq!(recorder.live_runs().len(), 1);
+    assert!(recorder.nonterminal_drops().is_empty());
+    assert!(orchestrator.current_context(root.task_id()).is_err());
+    assert!(orchestrator.research_knowledge_result().is_none());
+
+    orchestrator.retry_rejected_runtime_cleanup()?;
+    assert!(recorder.live_runs().is_empty());
+    assert!(recorder.nonterminal_drops().is_empty());
+    Ok(())
+}
+
+#[test]
 fn synthesis_start_failure_terminalizes_root_without_fabricating_result(
 ) -> Result<(), Box<dyn Error>> {
     let (runtime, recorder) = MockAgentRuntime::recording(MockMode::StartFailureAt(4));

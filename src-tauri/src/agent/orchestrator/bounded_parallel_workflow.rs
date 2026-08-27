@@ -2608,7 +2608,7 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
                 .ok_or(AgentOrchestratorError::BoundedParallelWorkflowMissing)?;
             state.task_to_ordinal.insert(task_id.clone(), ordinal);
         }
-        let started = self.start_bounded_parallel_runtime_run(runtime_request);
+        let started = self.start_runtime_run(runtime_request);
         match started {
             Ok(mut run) => {
                 let started_at = self.workflow_now();
@@ -3707,7 +3707,7 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
             task_id: root_id.clone(),
         });
         self.run_count = run_ordinal;
-        match self.start_bounded_parallel_runtime_run(runtime_request) {
+        match self.start_runtime_run(runtime_request) {
             Ok(run) => {
                 let context = {
                     let root = self

@@ -4,9 +4,19 @@ Last updated: 2026-08-26
 
 ## Current active prerequisite
 
+`runtime-start-containment-f01-f02` is verified complete with advisories. Every
+legacy and bounded-parallel runtime start now uses one application-owned exact
+returned-identity, duplicate-live rejection, quarantine, and explicit cleanup
+path. Focused contracts, strict Clippy, 490/490 executed all-target Rust tests
+with one intentional ignored Hermes probe, and complete `npm run verify` pass.
+Documentation, repository, security, diff, and session checks pass. The
+completion report is `PASS WITH ADVISORIES`, and the marker is complete and
+valid. The advisories are volatile orchestrator-lifetime ownership and the
+absence of a separately approved Ready F-07 plan.
+
 `ui-native-static-boundary-f12` is complete with passing static-boundary, repository, documentation, security, and diff checks. It adds only static repository-health enforcement for the exact current UI/native boundary; no Tauri configuration or behavior, capability, CSP configuration, or agent IPC changed.
 
-`documentation-reconciliation-f15` is complete with passing focused documentation-truth, repository, documentation, security, and diff checks. It corrects only F-15 documentation truthfulness and static repository-health coverage; F-12, F-01/F-02, F-07, F-08, and agent IPC remain separate unapproved work.
+`documentation-reconciliation-f15` is complete with passing focused documentation-truth, repository, documentation, security, and diff checks. It corrects only F-15 documentation truthfulness and static repository-health coverage; F-07, F-08, and agent IPC remain separate unapproved work.
 
 ## Current PR #57 published checkpoint
 
@@ -56,17 +66,17 @@ target-Mac Rust job `98055114165` in 2m11s, and dependency/secret job
 `98055114221` in 4m20s. That final job passed secret scanning, the full
 zero-finding npm audit, and the unchanged accepted Rust advisory baseline.
 
-PR #57 is closed and published. No implementation work remains and no new plan
-is owner-selected or Ready. The publication reconciliation changes only live
-project memory and adds no product capability.
+PR #57 is closed and published. The later F-15, F-12, and F-01/F-02
+prerequisites supersede its no-next-plan statement without changing its
+historical evidence.
 
 Exact resume prompt: "Read `AGENTS.md`, the required project-memory chain, and
-the completed PR #57 demonstration, portability, transitive-advisory, and
-publication-closeout evidence. Confirm PR #57 remains merged at `3987387`, its
-merged-main Documentation and CI runs remain successful, and no implementation
-plan is owner-selected or Ready. Wait for explicit owner direction before
-starting another increment. Do not add provider, tool, IPC, device-effect,
-memory, document, cloud, systems, or Hermes capability."
+the active `runtime-start-containment-f01-f02` plan, increment, and completion
+report. Confirm its marker is complete and valid and the workspace still
+matches it. Perform readiness review for a separate F-07 production/development
+CSP plan only. Do not begin F-07, F-08, agent IPC, UI integration, provider,
+model, network, credential, tool, approval dispatch, persistence, filesystem,
+or device-effect work without separate owner approval."
 
 ## Prior verified native multi-agent demonstration checkpoint
 

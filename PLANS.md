@@ -4,6 +4,15 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
+The owner-approved
+[`runtime-start-containment-f01-f02`](docs/plans/2026-08-26-runtime-start-containment-f01-f02.md)
+plan is verified complete with advisories under a complete, valid marker. It
+applies universal exact returned-runtime identity validation and rejected
+nonterminal-run cleanup ownership across existing sealed Rust workflows. It
+adds no IPC, UI, provider, model, dependency, network, tool, approval,
+persistence, permission, or device effect. Focused/full verification and
+independent review pass.
+
 The owner-approved [`ui-native-static-boundary-f12`](docs/plans/2026-08-26-ui-native-static-boundary-f12.md) is complete with passing static-boundary, repository, documentation, security, and diff checks. It enforces the current UI/native isolation baseline only; it does not change Tauri behavior or authorize agent IPC.
 
 The owner-approved [`documentation-reconciliation-f15`](docs/plans/2026-08-26-documentation-reconciliation-f15.md) is complete with passing focused documentation-truth, repository, documentation, security, and diff checks. It corrects only F-15 documentation drift and adds static repository-health coverage; no Rust/Tauri/CSP behavior, capability, dependency, provider, model, workflow, IPC, storage, credential, or frontend runtime behavior changed.

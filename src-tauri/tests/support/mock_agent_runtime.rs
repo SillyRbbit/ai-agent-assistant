@@ -24,6 +24,8 @@ pub enum MockMode {
     StartFailuresAt(u8, u8),
     StartFailuresAtThree(u8, u8, u8),
     UnexpectedStartStatusAt(u8, RuntimeRunStatus),
+    UnexpectedStartStatusWithCancelFailureAt(u8, RuntimeRunStatus),
+    UnexpectedStartStatusWithCancelAlreadyTerminalOnceAt(u8, RuntimeRunStatus, RuntimeRunStatus),
     ReturnedIdentityMismatchAt(u8),
     ReturnedIdentityMismatchWithCancelFailureOnceAt(u8),
     DuplicateLiveIdentityAt(u8),
@@ -246,10 +248,12 @@ impl AgentRuntime for MockAgentRuntime {
                 };
                 let status = match self.mode {
                     MockMode::UnexpectedStartStatusAt(ordinal, status)
-                        if ordinal == start_ordinal =>
-                    {
-                        status
-                    }
+                    | MockMode::UnexpectedStartStatusWithCancelFailureAt(ordinal, status)
+                    | MockMode::UnexpectedStartStatusWithCancelAlreadyTerminalOnceAt(
+                        ordinal,
+                        status,
+                        _,
+                    ) if ordinal == start_ordinal => status,
                     _ => RuntimeRunStatus::AwaitingStart,
                 };
                 let tracked_live = !status.is_terminal();
@@ -438,7 +442,12 @@ impl RuntimeRun for MockAgentRun {
     }
 
     fn cancel(&mut self) -> Result<RuntimeCancellationOutcome, RuntimeError> {
-        if matches!(self.mode, MockMode::CancelFailureAt(ordinal) if ordinal == self.start_ordinal)
+        if (matches!(self.mode, MockMode::CancelFailureAt(ordinal) if ordinal == self.start_ordinal)
+            || matches!(
+                self.mode,
+                MockMode::UnexpectedStartStatusWithCancelFailureAt(ordinal, _)
+                    if ordinal == self.start_ordinal
+            ))
             && !self.status.is_terminal()
         {
             return Err(RuntimeError::BoundaryFailure(
@@ -463,6 +472,21 @@ impl RuntimeRun for MockAgentRun {
         }
         if let MockMode::CancelAlreadyTerminalAt(ordinal, status) = self.mode {
             if ordinal == self.start_ordinal && !self.status.is_terminal() {
+                self.update_status(status);
+                return Ok(RuntimeCancellationOutcome::AlreadyTerminal(status));
+            }
+        }
+        if let MockMode::UnexpectedStartStatusWithCancelAlreadyTerminalOnceAt(ordinal, _, status) =
+            self.mode
+        {
+            if ordinal == self.start_ordinal
+                && !self.status.is_terminal()
+                && self
+                    .lifecycle
+                    .borrow_mut()
+                    .one_shot_cancel_failures
+                    .insert(self.start_ordinal)
+            {
                 self.update_status(status);
                 return Ok(RuntimeCancellationOutcome::AlreadyTerminal(status));
             }
