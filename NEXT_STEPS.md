@@ -6,6 +6,8 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Current active prerequisite
 
+The owner-approved [`ui-native-static-boundary-f12`](docs/increments/ui-native-static-boundary-f12.md) is complete with passing static-boundary, repository, documentation, security, and diff checks. It does not authorize a Tauri command, agent IPC, or F-07 CSP change.
+
 The owner-approved [`documentation-reconciliation-f15`](docs/increments/documentation-reconciliation-f15.md) is complete with passing focused documentation-truth, repository, documentation, security, and diff checks. It resolves F-15 documentation truthfulness only and does not make F-12, F-01/F-02, F-07, F-08, or agent IPC Ready.
 
 ## Current published checkpoint

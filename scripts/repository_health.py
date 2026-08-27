@@ -78,6 +78,30 @@ DOCUMENTATION_TRUTH_MARKERS = (
         "",
     ),
 )
+ALLOWED_TAURI_IMPORTS = {
+    "src/infrastructure/tauri/app-info-client.ts": "@tauri-apps/api/core",
+    "src/infrastructure/tauri/menu-route-client.ts": "@tauri-apps/api/event",
+}
+COMMAND_CENTER_PROHIBITED_TOKENS = (
+    "@tauri-apps/api",
+    "fetch(",
+    "WebSocket",
+    "EventSource",
+    "localStorage",
+    "sessionStorage",
+    "indexedDB",
+)
+EXPECTED_CAPABILITY_FILES = frozenset({"default.json"})
+EXPECTED_CAPABILITY_WINDOWS = ["main"]
+EXPECTED_CAPABILITY_PERMISSIONS = ["core:default"]
+EXPECTED_TAURI_CSP = {
+    "default-src": "'self'",
+    "connect-src": "'self' ipc: http://ipc.localhost ws://localhost:1420",
+    "font-src": "'self' data:",
+    "img-src": "'self' asset: http://asset.localhost data:",
+    "script-src": "'self' 'unsafe-inline'",
+    "style-src": "'self' 'unsafe-inline'",
+}
 
 SECRET_PATTERNS = (
     ("private-key", re.compile(r"-{5}BEGIN (?:EC |OPENSSH |RSA )?PRIVATE KEY-{5}")),
@@ -471,6 +495,68 @@ def documentation_truth_findings(root: Path) -> tuple[Finding, ...]:
     return tuple(findings)
 
 
+def ui_native_boundary_findings(root: Path) -> tuple[Finding, ...]:
+    findings: list[Finding] = []
+    source_root = root / "src"
+    for path in sorted((*source_root.rglob("*.ts"), *source_root.rglob("*.tsx"))):
+        if path.name.endswith((".test.ts", ".test.tsx")):
+            continue
+        relative_path = path.relative_to(root).as_posix()
+        text = read_text(path)
+        if text is None:
+            findings.append(Finding("ui-native-boundary", relative_path, "source file is not UTF-8 text"))
+            continue
+        if "@tauri-apps/api" in text:
+            expected_import = ALLOWED_TAURI_IMPORTS.get(relative_path)
+            exact_import = (
+                expected_import is not None
+                and re.search(
+                    rf"from\s+[\"']{re.escape(expected_import)}[\"']",
+                    text,
+                )
+                is not None
+            )
+            if expected_import is None or text.count("@tauri-apps/api") != 1 or not exact_import:
+                findings.append(Finding("ui-native-boundary", relative_path, "Tauri API import is outside the exact allowlist"))
+        if relative_path.startswith("src/features/command-center/"):
+            for token in COMMAND_CENTER_PROHIBITED_TOKENS:
+                if token in text:
+                    findings.append(Finding("ui-native-boundary", relative_path, f"Command Center contains prohibited boundary token {token!r}"))
+
+    lib_path = root / "src-tauri" / "src" / "lib.rs"
+    lib_text = read_text(lib_path)
+    if lib_text is None:
+        findings.append(Finding("ui-native-boundary", "src-tauri/src/lib.rs", "Tauri entrypoint is not UTF-8 text"))
+    else:
+        normalized_lib = re.sub(r"\s+", "", lib_text)
+        if "generate_handler![app_info::get_app_info]" not in normalized_lib:
+            findings.append(Finding("ui-native-boundary", "src-tauri/src/lib.rs", "invoke handler is not the exact app-info-only allowlist"))
+
+    capability_directory = root / "src-tauri" / "capabilities"
+    capability_files = {path.name for path in capability_directory.glob("*.json")}
+    if capability_files != EXPECTED_CAPABILITY_FILES:
+        findings.append(Finding("ui-native-boundary", "src-tauri/capabilities", "capability file allowlist changed"))
+    capability_path = capability_directory / "default.json"
+    try:
+        capability = json.loads(capability_path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        findings.append(Finding("ui-native-boundary", "src-tauri/capabilities/default.json", "capability configuration is invalid"))
+    else:
+        if capability.get("windows") != EXPECTED_CAPABILITY_WINDOWS or capability.get("permissions") != EXPECTED_CAPABILITY_PERMISSIONS:
+            findings.append(Finding("ui-native-boundary", "src-tauri/capabilities/default.json", "capability windows or permissions exceed the exact baseline"))
+
+    configuration_path = root / "src-tauri" / "tauri.conf.json"
+    try:
+        configuration = json.loads(configuration_path.read_text(encoding="utf-8"))
+        csp = configuration["app"]["security"]["csp"]
+    except (OSError, UnicodeError, json.JSONDecodeError, KeyError, TypeError):
+        findings.append(Finding("ui-native-boundary", "src-tauri/tauri.conf.json", "Tauri configuration or CSP is invalid"))
+    else:
+        if csp != EXPECTED_TAURI_CSP:
+            findings.append(Finding("ui-native-boundary", "src-tauri/tauri.conf.json", "production CSP differs from the reviewed F-12 baseline"))
+    return tuple(findings)
+
+
 def workflow_findings(root: Path) -> tuple[Finding, ...]:
     workflow_directory = root / ".github" / "workflows"
     if not workflow_directory.is_dir():
@@ -629,7 +715,7 @@ def workflow_findings(root: Path) -> tuple[Finding, ...]:
 
 def checks_for(command: str) -> tuple[str, ...]:
     if command == "all":
-        return ("links", "secrets", "generated", "license", "commands", "prompts", "documentation", "workflows")
+        return ("links", "secrets", "generated", "license", "commands", "prompts", "documentation", "ui-native-boundary", "workflows")
     return (command,)
 
 
@@ -651,6 +737,8 @@ def run_checks(root: Path, command: str) -> tuple[Finding, ...]:
             findings.extend(prompt_findings(root))
         elif check == "documentation":
             findings.extend(documentation_truth_findings(root))
+        elif check == "ui-native-boundary":
+            findings.extend(ui_native_boundary_findings(root))
         elif check == "workflows":
             findings.extend(workflow_findings(root))
         else:
@@ -662,7 +750,7 @@ def parse_arguments(arguments: Sequence[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "check",
-        choices=("all", "links", "secrets", "generated", "license", "commands", "prompts", "documentation", "workflows"),
+        choices=("all", "links", "secrets", "generated", "license", "commands", "prompts", "documentation", "ui-native-boundary", "workflows"),
     )
     return parser.parse_args(arguments)
 
