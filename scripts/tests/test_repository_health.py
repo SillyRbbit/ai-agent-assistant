@@ -82,19 +82,65 @@ def write_valid_workflows(root: Path) -> None:
 def write_valid_ui_native_boundary(root: Path) -> None:
     app_info = root / "src" / "infrastructure" / "tauri" / "app-info-client.ts"
     menu_route = root / "src" / "infrastructure" / "tauri" / "menu-route-client.ts"
+    projection_client = (
+        root
+        / "src"
+        / "infrastructure"
+        / "tauri"
+        / "research-knowledge-demo-projection-client.ts"
+    )
     command_center = root / "src" / "features" / "command-center" / "fixture.ts"
     lib = root / "src-tauri" / "src" / "lib.rs"
+    projection_rust = (
+        root / "src-tauri" / "src" / "research_knowledge_demo_projection.rs"
+    )
+    menu_action = root / "src-tauri" / "src" / "menu_bar" / "action.rs"
+    menu_adapter = root / "src-tauri" / "src" / "menu_bar" / "tauri_adapter.rs"
     capability = root / "src-tauri" / "capabilities" / "default.json"
     configuration = root / "src-tauri" / "tauri.conf.json"
     app_info.parent.mkdir(parents=True)
     command_center.parent.mkdir(parents=True)
     lib.parent.mkdir(parents=True)
     capability.parent.mkdir(parents=True)
-    app_info.write_text('import { invoke } from "@tauri-apps/api/core";\n', encoding="utf-8")
-    menu_route.write_text('import { listen } from "@tauri-apps/api/event";\n', encoding="utf-8")
+    app_info.write_text(
+        'import { invoke } from "@tauri-apps/api/core";\n'
+        'invoke<unknown>("get_app_info");\n',
+        encoding="utf-8",
+    )
+    menu_route.write_text(
+        'import { listen, type UnlistenFn } from "@tauri-apps/api/event";\n'
+        'export const ASSISTANT_MENU_ROUTE_EVENT = "assistant-menu-route";\n'
+        "listen<unknown>(ASSISTANT_MENU_ROUTE_EVENT, () => undefined);\n",
+        encoding="utf-8",
+    )
+    projection_client.write_text(
+        'import { invoke } from "@tauri-apps/api/core";\n'
+        'invoke<unknown>("get_research_knowledge_demo_projection");\n',
+        encoding="utf-8",
+    )
     command_center.write_text("export const fixture = true;\n", encoding="utf-8")
-    lib.write_text("tauri::generate_handler![app_info::get_app_info]\n", encoding="utf-8")
-    capability.write_text(json.dumps({"windows": ["main"], "permissions": ["core:default"]}), encoding="utf-8")
+    lib.write_text(
+        ".invoke_handler(tauri::generate_handler![\n"
+        "app_info::get_app_info,\n"
+        "research_knowledge_demo_projection::get_research_knowledge_demo_projection\n"
+        "])\n",
+        encoding="utf-8",
+    )
+    projection_rust.write_text(
+        "#[tauri::command]\n"
+        "pub(crate) fn get_research_knowledge_demo_projection() -> "
+        "Result<ResearchKnowledgeDemoProjection, "
+        "ResearchKnowledgeDemoProjectionError> { todo!() }\n",
+        encoding="utf-8",
+    )
+    menu_adapter.parent.mkdir(parents=True)
+    menu_action.write_text(
+        'pub const MENU_ROUTE_EVENT: &str = "assistant-menu-route";\n', encoding="utf-8"
+    )
+    menu_adapter.write_text("app.emit(MENU_ROUTE_EVENT, value);\n", encoding="utf-8")
+    capability.write_text(
+        json.dumps(health.EXPECTED_CAPABILITY_CONFIGURATION), encoding="utf-8"
+    )
     configuration.write_text(
         json.dumps(
             {
@@ -288,6 +334,171 @@ class RepositoryHealthTests(unittest.TestCase):
 
             self.assertTrue(any("Tauri API import" in finding.detail for finding in findings))
 
+    def test_ui_native_boundary_rejects_extra_tauri_import_symbols(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            client = root / "src" / "infrastructure" / "tauri" / "app-info-client.ts"
+            client.write_text(
+                'import { invoke, transformCallback } from "@tauri-apps/api/core";\n'
+                'invoke<unknown>("get_app_info");\n',
+                encoding="utf-8",
+            )
+
+            findings = health.ui_native_boundary_findings(root)
+
+            self.assertTrue(any("Tauri API import" in finding.detail for finding in findings))
+
+    def test_ui_native_boundary_rejects_invoke_arguments_or_an_extra_command(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            client = (
+                root
+                / "src"
+                / "infrastructure"
+                / "tauri"
+                / "research-knowledge-demo-projection-client.ts"
+            )
+            client.write_text(
+                'import { invoke } from "@tauri-apps/api/core";\n'
+                'invoke<unknown>("get_research_knowledge_demo_projection", { runId: "caller" });\n'
+                'invoke("future_command");\n',
+                encoding="utf-8",
+            )
+
+            findings = health.ui_native_boundary_findings(root)
+
+            self.assertTrue(any("exact no-argument" in finding.detail for finding in findings))
+
+    def test_ui_native_boundary_rejects_projection_command_arguments(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            projection = (
+                root / "src-tauri" / "src" / "research_knowledge_demo_projection.rs"
+            )
+            projection.write_text(
+                "#[tauri::command]\n"
+                "pub(crate) fn get_research_knowledge_demo_projection(run_id: String) -> "
+                "Result<ResearchKnowledgeDemoProjection, "
+                "ResearchKnowledgeDemoProjectionError> { todo!() }\n",
+                encoding="utf-8",
+            )
+
+            findings = health.ui_native_boundary_findings(root)
+
+            self.assertTrue(any("zero-argument" in finding.detail for finding in findings))
+
+    def test_ui_native_boundary_rejects_every_projection_rust_boundary_token(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            projection = (
+                root / "src-tauri" / "src" / "research_knowledge_demo_projection.rs"
+            )
+            baseline = projection.read_text(encoding="utf-8")
+            for token in health.PROJECTION_RUST_PROHIBITED_TOKENS:
+                with self.subTest(token=token):
+                    projection.write_text(
+                        f"{baseline}\n// {token}\n", encoding="utf-8"
+                    )
+
+                    findings = health.ui_native_boundary_findings(root)
+
+                    self.assertTrue(
+                        any(token in finding.detail for finding in findings),
+                        msg=token,
+                    )
+
+    def test_ui_native_boundary_rejects_every_projection_client_boundary_token(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            client = (
+                root
+                / "src"
+                / "infrastructure"
+                / "tauri"
+                / "research-knowledge-demo-projection-client.ts"
+            )
+            baseline = client.read_text(encoding="utf-8")
+            for token in health.PROJECTION_CLIENT_PROHIBITED_TOKENS:
+                with self.subTest(token=token):
+                    client.write_text(f"{baseline}\n// {token}\n", encoding="utf-8")
+
+                    findings = health.ui_native_boundary_findings(root)
+
+                    self.assertTrue(
+                        any(token in finding.detail for finding in findings),
+                        msg=token,
+                    )
+
+    def test_ui_native_boundary_rejects_extra_capability_keys(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            capability = root / "src-tauri" / "capabilities" / "default.json"
+            parsed = json.loads(capability.read_text(encoding="utf-8"))
+            parsed["remote"] = {"urls": ["https://example.invalid"]}
+            capability.write_text(json.dumps(parsed), encoding="utf-8")
+
+            findings = health.ui_native_boundary_findings(root)
+
+            self.assertTrue(any("complete exact baseline" in finding.detail for finding in findings))
+
+    def test_ui_native_boundary_rejects_nested_or_non_json_capability_files(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            nested = root / "src-tauri" / "capabilities" / "nested" / "future.toml"
+            nested.parent.mkdir()
+            nested.write_text('identifier = "future"\n', encoding="utf-8")
+
+            findings = health.ui_native_boundary_findings(root)
+
+            self.assertTrue(any("capability file allowlist" in finding.detail for finding in findings))
+
+    def test_ui_native_boundary_rejects_a_second_listener_or_emitter(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            menu_route = root / "src" / "infrastructure" / "tauri" / "menu-route-client.ts"
+            menu_route.write_text(
+                menu_route.read_text(encoding="utf-8")
+                + 'listen<unknown>("future-event", () => undefined);\n',
+                encoding="utf-8",
+            )
+            (root / "src-tauri" / "src" / "future.rs").write_text(
+                'app.emit("future-event", value);\n', encoding="utf-8"
+            )
+
+            findings = health.ui_native_boundary_findings(root)
+
+            self.assertTrue(any("sole exact event" in finding.detail for finding in findings))
+            self.assertTrue(any("sole menu-route" in finding.detail for finding in findings))
+
+    def test_ui_native_boundary_rejects_tauri_emitter_variants(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            future = root / "src-tauri" / "src" / "future.rs"
+            for emitter in (
+                "emit_to",
+                "emit_filter",
+                "emit_str",
+                "emit_str_to",
+                "emit_str_filter",
+            ):
+                with self.subTest(emitter=emitter):
+                    future.write_text(
+                        f'app.{emitter}("future-event", value);\n', encoding="utf-8"
+                    )
+
+                    findings = health.ui_native_boundary_findings(root)
+
+                    self.assertTrue(any("sole menu-route" in finding.detail for finding in findings))
+
     def test_ui_native_boundary_rejects_production_development_csp_confusion(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -328,6 +539,21 @@ class RepositoryHealthTests(unittest.TestCase):
             findings = health.ui_native_boundary_findings(root)
 
             self.assertTrue(any("asset CSP modification" in finding.detail for finding in findings))
+
+    def test_ui_native_boundary_rejects_plugins_and_extra_security_keys(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            configuration = root / "src-tauri" / "tauri.conf.json"
+            parsed = json.loads(configuration.read_text(encoding="utf-8"))
+            parsed["plugins"] = {"shell": {"open": True}}
+            parsed["app"]["security"]["headers"] = {"X-Future": "enabled"}
+            configuration.write_text(json.dumps(parsed), encoding="utf-8")
+
+            findings = health.ui_native_boundary_findings(root)
+
+            self.assertTrue(any("plugin configuration" in finding.detail for finding in findings))
+            self.assertTrue(any("security configuration keys" in finding.detail for finding in findings))
 
     def test_prompt_check_accepts_metadata_and_declared_placeholders(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

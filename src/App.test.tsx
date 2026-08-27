@@ -15,6 +15,10 @@ import type {
   AssistantMenuRouteListener,
   MenuRouteSource,
 } from "./infrastructure/tauri/menu-route-client";
+import type {
+  ResearchKnowledgeDemoProjection,
+  ResearchKnowledgeDemoProjectionLoader,
+} from "./infrastructure/tauri/research-knowledge-demo-projection-client";
 
 const CONNECTED_APP_INFO: AppInfo = {
   architecture: "aarch64",
@@ -24,6 +28,37 @@ const CONNECTED_APP_INFO: AppInfo = {
   target: "macos",
   version: "0.1.0",
 };
+
+const RUST_DEMO_PROJECTION: ResearchKnowledgeDemoProjection = {
+  schemaVersion: "research-knowledge-demo-projection-v1",
+  scenarioId: "research-knowledge-demo-v1",
+  disclosure: "DEMO MODE · SIMULATED AGENT DATA",
+  proofBoundary:
+    "Command Center, Conversations mock, and Rust acceptance workflows are separate deterministic proofs.",
+  fixtureProvenance: "application-owned-synthetic-fixture",
+  roles: [
+    { id: "personal-assistant", label: "Personal Assistant", state: "ready" },
+    { id: "research", label: "Research Agent", state: "ready" },
+    { id: "knowledge-document", label: "Knowledge & Document Agent", state: "ready" },
+  ],
+  simulatedOutcomes: ["succeeded", "failed", "cancelled"],
+};
+
+class ResizeObserverMock {
+  disconnect(): void {
+    return;
+  }
+
+  observe(): void {
+    return;
+  }
+
+  unobserve(): void {
+    return;
+  }
+}
+
+vi.stubGlobal("ResizeObserver", ResizeObserverMock);
 
 interface MenuRouteHarness {
   readonly emit: (route: AssistantMenuRoute) => void;
@@ -64,8 +99,15 @@ function createServices(
   menuRouteSource: MenuRouteSource,
   appInfoLoader: () => Promise<AppInfo> = () => Promise.resolve(CONNECTED_APP_INFO),
   mockRunDriver: MockRunDriver = browserMockRunDriver,
+  researchKnowledgeDemoProjectionLoader: ResearchKnowledgeDemoProjectionLoader = () =>
+    Promise.reject(new Error("Projection unavailable in this test.")),
 ): AppServices {
-  return { appInfoLoader, menuRouteSource, mockRunDriver };
+  return {
+    appInfoLoader,
+    menuRouteSource,
+    mockRunDriver,
+    researchKnowledgeDemoProjectionLoader,
+  };
 }
 
 interface MockRunDriverHarness {
@@ -703,6 +745,32 @@ describe("App", () => {
 
     expect(screen.getByRole("heading", { level: 1, name: "Tasks" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "No tasks yet" })).toBeInTheDocument();
+  });
+
+  it("wires the explicit Command Center projection refresh through application services", async () => {
+    const harness = createMenuRouteHarness();
+    const projectionLoader = vi.fn(() => Promise.resolve(RUST_DEMO_PROJECTION));
+    render(
+      <App
+        services={createServices(
+          harness.source,
+          () => Promise.resolve(CONNECTED_APP_INFO),
+          browserMockRunDriver,
+          projectionLoader,
+        )}
+      />,
+    );
+
+    openSidebarRoute("Command Center");
+    fireEvent.change(await screen.findByLabelText("Deterministic scenario"), {
+      target: { value: "research-knowledge-active" },
+    });
+    expect(projectionLoader).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole("button", { name: "Refresh Rust projection" }));
+
+    expect(await screen.findByText("research-knowledge-demo-projection-v1")).toBeVisible();
+    expect(projectionLoader).toHaveBeenCalledOnce();
   });
 
   it("shows typed Rust diagnostics in Settings", async () => {

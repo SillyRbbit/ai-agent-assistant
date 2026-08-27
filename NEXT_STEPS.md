@@ -4,7 +4,7 @@ Last updated: 2026-08-27
 
 This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must close before later feature work begins.
 
-## Current active prerequisite
+## Current verified prerequisite
 
 The owner-approved
 [`app-info-runtime-ipc-narrowing-f08`](docs/increments/app-info-runtime-ipc-narrowing-f08.md)
@@ -33,10 +33,22 @@ The owner-approved [`ui-native-static-boundary-f12`](docs/increments/ui-native-s
 
 The owner-approved [`documentation-reconciliation-f15`](docs/increments/documentation-reconciliation-f15.md) is complete with passing focused documentation-truth, repository, documentation, security, and diff checks. It resolves F-15 documentation truthfulness only and does not make F-08 or agent IPC Ready.
 
-No successor implementation plan is owner-selected or Ready. After F-08 has a
-valid completion marker, the smallest next action is a separate readiness
-review of the next dependency-ordered demo prerequisite. Do not begin agent IPC
-or interactive-demo integration automatically.
+The owner approved the first bounded successor:
+[`2026-08-27-research-knowledge-demo-projection-contract.md`](docs/plans/2026-08-27-research-knowledge-demo-projection-contract.md).
+Its argument-free, read-only Rust projection and explicit-refresh Command
+Center panel are verified complete with advisories without lifecycle control.
+Focused and complete verification, independent reviews, and target-Mac release
+evidence pass. Direct raw-debug accessibility binding and host/browser page
+zoom were unavailable, and non-required DMG packaging failed after the local
+`.app` was created; none changes the passing required no-bundle build or the
+read-only security result.
+
+No workflow start/cancel/event implementation or other interactive-demo
+integration is Ready or authorized. The smallest next action, if the owner
+chooses to continue, is a separate documentation/readiness run for one volatile
+lifecycle prerequisite; it must define closed start/cancel/event ownership,
+late-event rejection, cleanup, target-Mac gates, and rollback before any source
+approval.
 
 ## Current published checkpoint
 

@@ -4,6 +4,21 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Implemented the first bounded Rust-to-WebView Research -> Knowledge demo
+  boundary: one argument-free query returns an exact finite application-owned
+  synthetic projection, and only the selected Command Center scenario can
+  request it through an explicit refresh. Runtime narrowing, closed error copy,
+  late-reply rejection, exact F-12 allowlists, and focused cross-language/UI
+  tests pass. The frontend fixture graph remains separate. No workflow starts
+  or changes state, and no event, provider, model, network, credential, tool,
+  approval, persistence, filesystem, dependency, permission, background work,
+  or device effect was added. Focused tests, complete verification, independent
+  review, and target-Mac source-current release checks pass. Direct raw-debug
+  accessibility binding and host/browser page zoom were unavailable, and a
+  non-required bundle attempt failed at DMG packaging after creating the local
+  `.app`; the required release no-bundle build passes and nothing was
+  published. The completion result is `PASS WITH ADVISORIES`.
+
 - Runtime-narrowed the existing `get_app_info` WebView response from `unknown`
   to one exact six-field DTO. Missing, extra, empty, oversized, wrong-type,
   invalid-environment, or `secureCore: false` values fail closed, and native

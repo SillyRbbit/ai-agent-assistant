@@ -71,11 +71,89 @@
 .command-center-controls,
 .command-center-summary,
 .command-center-panel,
-.command-center-activity {
+.command-center-activity,
+.command-center-native-projection {
   border: 1px solid var(--command-border);
   border-radius: 16px;
   background: var(--command-surface);
   box-shadow: 0 12px 34px rgba(35, 45, 78, 0.07);
+}
+
+.command-center-native-projection {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+}
+
+.command-center-native-projection__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.command-center-native-projection__header h2,
+.command-center-native-projection__result h3 {
+  margin: 5px 0;
+}
+
+.command-center-native-projection__header p:not(.section-kicker),
+.command-center-native-projection__status {
+  margin: 0;
+  color: var(--command-text-subtle);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.command-center-native-projection__result {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.command-center-native-projection__result dl,
+.command-center-native-projection__result ul {
+  display: grid;
+  gap: 7px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.command-center-native-projection__result dt,
+.command-center-native-projection__result h3 {
+  color: var(--command-text-subtle);
+  font-size: 10px;
+  font-weight: 760;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.command-center-native-projection__result dd {
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+}
+
+.command-center-native-projection__result li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.command-center-native-projection__result small {
+  color: var(--command-text-subtle);
+}
+
+@container command-center (max-width: 720px) {
+  .command-center-native-projection__header {
+    display: grid;
+  }
+
+  .command-center-native-projection__result {
+    grid-template-columns: 1fr;
+  }
 }
 
 .command-center-controls {

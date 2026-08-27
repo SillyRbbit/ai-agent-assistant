@@ -289,7 +289,7 @@ production boundary exists.
       dispatch, persistence, I/O, dependency, IPC/UI, remote/distributed
       infrastructure, or device effect.
 
-## Deterministic Command Center prototype
+## Deterministic Command Center and read-only projection
 
 - [x] Every displayed entity/event is closed, bounded, fixture-derived,
       redacted, and persistently labeled simulated; fixture IDs have no trusted
@@ -297,14 +297,26 @@ production boundary exists.
 - [x] Search, filters, selection, graph controls, inspector, structured view,
       and activity mutate only feature-local presentation state and expose no
       consequential action.
-- [x] The feature invokes no Tauri command/listener, network, clipboard,
-      storage, filesystem, provider, model, tool, approval, policy, audit,
-      runtime, permission, or device path.
+- [x] Command Center fixture controls invoke no Tauri command/listener, network,
+      clipboard, storage, filesystem, provider, model, tool, approval, policy,
+      audit, runtime, permission, or device path. The separate
+      Research/Knowledge panel makes exactly one explicit argument-free,
+      read-only projection query and registers no event listener.
+- [x] Rust owns every projection identity and returns only a closed bounded
+      synthetic DTO. The WebView runtime-narrows the response, maps failures to
+      fixed unavailable copy, and cannot supply agent, task, run, profile,
+      runtime, or workflow identity.
+- [x] The projection starts no workflow and adds no provider, model, network,
+      credential, tool execution, approval dispatch, persistence, filesystem,
+      background autonomy, generic workflow engine, durable audit, or device
+      effect.
 - [x] `@xyflow/react@12.11.3` and `lucide-react@1.33.0` are the only new
       direct production dependencies; 19 transitives, licenses, peers, lockfile
       effects, production audit, and bundle budgets were reviewed.
-- [x] React Flow types/imports stop at one topology adapter and protected
-      Rust/Tauri/IPC/storage/capability/CSP paths are unchanged.
+- [x] React Flow types/imports stop at one topology adapter. The later
+      projection changes only the exact no-argument read-only command/client
+      boundary; storage, capability, CSP, permission, dependency, and event
+      boundaries remain unchanged and statically pinned.
 - [x] Required real-browser/Tauri viewport, input, focus, computed-overflow,
       contrast, reduced-motion, browser-zoom, screenshot, and native-resize
       evidence passed through the approved Browser Control and Computer Use

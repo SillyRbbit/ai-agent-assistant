@@ -5,6 +5,16 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Current plan state
 
 The owner-approved
+[`2026-08-27-research-knowledge-demo-projection-contract.md`](docs/plans/2026-08-27-research-knowledge-demo-projection-contract.md)
+is verified complete with advisories. It adds
+one argument-free, read-only projection of the sealed Research -> Knowledge
+fixture vocabulary. Explicit refresh cannot start or control a workflow, and
+the Command Center graph remains a separate frontend proof. A later separately
+approved lifecycle plan would be required for explicit user start,
+cancellation, events, and cleanup. No such successor plan is Ready or
+authorized.
+
+The owner-approved
 [`2026-08-27-app-info-runtime-ipc-narrowing-f08.md`](docs/plans/2026-08-27-app-info-runtime-ipc-narrowing-f08.md)
 is verified complete with advisories. The existing WebView app-info
 client now narrows `unknown` to one exact bounded DTO and renders only fixed

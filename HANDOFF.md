@@ -2,27 +2,40 @@
 
 Last updated: 2026-08-27
 
-## Current active prerequisite
+## Current verified prerequisite
 
-`app-info-runtime-ipc-narrowing-f08` is verified complete with advisories on
-branch `codex/f08-runtime-ipc-narrowing`. The
-existing `get_app_info` client now invokes as `unknown` and accepts only the
-exact six-field DTO with non-empty strings of at most 128 Unicode code points,
-the closed development/production environment, and `secureCore: true`.
-Malformed or insecure replies fail closed, and UI diagnostics use fixed copy
-without upstream error details.
+`research-knowledge-demo-projection-contract` is verified complete with
+advisories. One argument-free Tauri query returns only the application-owned
+synthetic v1 projection: fixed
+scenario/provenance, Personal Assistant, Research Agent, and Knowledge &
+Document Agent in `ready`, and the presentation-only `succeeded`, `failed`, and
+`cancelled` vocabulary. The client treats the reply as `unknown`, rejects any
+missing, extra, wrong, oversized, reordered, or forged content, and exposes one
+fixed unavailable error.
 
-Focused app-info/App tests pass 37/37, the full frontend suite passes 220/220,
-complete `npm run verify`, security scanning, repository checks, and diff
-checks pass. On the target Mac, the native app reports `Local core ready`; its
-Settings page reports `Rust core connected`, `get_app_info`, Cortexa 0.1.0,
-`macos · aarch64`, and the closed build environment. The direct native
-inspection used the available release app while `npm run tauri -- dev`
-separately launched the debug process; this evidence granularity is advisory.
-The completion report is
-[`2026-08-27-app-info-runtime-ipc-narrowing-f08-post-increment-review.md`](docs/reviews/2026-08-27-app-info-runtime-ipc-narrowing-f08-post-increment-review.md)
-with `PASS WITH ADVISORIES`; the completion marker is complete and valid. No
-successor implementation plan is owner-selected or Ready.
+The projection panel exists only in the selected Research and Knowledge
+scenario and invokes only after explicit refresh. It neither populates the
+fixture graph nor starts, cancels, approves, persists, or controls a workflow.
+Focused evidence passes 69 frontend tests, three Rust module tests, one exact
+public Rust contract, 32 repository-health tests, typecheck, formatting, and
+the narrowed F-12 guard. Complete `npm run verify` passes with 247 frontend
+tests, 252 Rust library tests, 242 Rust integration tests, one intentional
+ignored Hermes probe, the frontend production build, and the Tauri release
+no-bundle build. Independent architecture, security, and code review pass.
+
+Target-Mac source-current release evidence passes the exact ready state,
+light/dark, reduced-motion on/off, viewport, focus, scroll, topology zoom/reset,
+and 1040x700 -> 803x563 -> 1040x700 native resize. `npm run tauri -- dev`
+launches, but approved tooling cannot bind directly to the raw debug executable
+and cannot validate host/browser page zoom; both are `Not run` advisories. A
+non-required full bundle attempt produced the `.app` and then failed in DMG
+packaging; distribution is outside this increment, the required no-bundle build
+passes, and nothing was published. The consolidated result is `PASS WITH
+ADVISORIES`. No lifecycle successor is planned, Ready, or authorized.
+
+`app-info-runtime-ipc-narrowing-f08` remains verified complete with advisories
+and published on `main` at `5b462bc`; its exact fail-closed app-info contract is
+unchanged.
 
 `production-development-csp-separation-f07` is verified complete with
 advisories. Production no longer permits the fixed Vite WebSocket or inline
@@ -101,12 +114,13 @@ prerequisites supersede its no-next-plan statement without changing its
 historical evidence.
 
 Exact resume prompt: "Read `AGENTS.md`, the required project-memory chain, and
-the completed F-08 plan, increment, and post-increment report. Confirm the
-`app-info-runtime-ipc-narrowing-f08` marker is complete and valid and the
-workspace matches it. Review only the next dependency-ordered task; do not
-begin agent IPC, interactive demo integration, provider, model, network,
-credential, tool, approval dispatch, persistence, filesystem, background
-autonomy, or device-effect work without a separately approved Ready plan."
+`docs/plans/2026-08-27-research-knowledge-demo-projection-contract.md`.
+Confirm the `research-knowledge-demo-projection-contract` marker is complete
+and valid. Then review only whether a separate volatile lifecycle prerequisite
+is ready for documentation planning; do not begin a gate or source work. Do not
+add workflow start/cancel/events, provider, model, network, credential, tool,
+approval dispatch, persistence, filesystem, background autonomy, dependency,
+permission, or device effect without a separately approved Ready plan."
 
 ## Prior verified native multi-agent demonstration checkpoint
 

@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
+import type { ResearchKnowledgeDemoProjection } from "../../infrastructure/tauri/research-knowledge-demo-projection-client";
 import CommandCenterPage from "./CommandCenterPage";
 import {
   COMMAND_CENTER_AGENT_IDS,
@@ -23,6 +24,21 @@ class ResizeObserverMock {
 }
 
 vi.stubGlobal("ResizeObserver", ResizeObserverMock);
+
+const rustProjection: ResearchKnowledgeDemoProjection = {
+  schemaVersion: "research-knowledge-demo-projection-v1",
+  scenarioId: "research-knowledge-demo-v1",
+  disclosure: "DEMO MODE · SIMULATED AGENT DATA",
+  proofBoundary:
+    "Command Center, Conversations mock, and Rust acceptance workflows are separate deterministic proofs.",
+  fixtureProvenance: "application-owned-synthetic-fixture",
+  roles: [
+    { id: "personal-assistant", label: "Personal Assistant", state: "ready" },
+    { id: "research", label: "Research Agent", state: "ready" },
+    { id: "knowledge-document", label: "Knowledge & Document Agent", state: "ready" },
+  ],
+  simulatedOutcomes: ["succeeded", "failed", "cancelled"],
+};
 
 function openStructuredView(): void {
   fireEvent.click(screen.getByRole("button", { name: "Structured" }));
@@ -57,6 +73,42 @@ describe("CommandCenterPage", () => {
     );
     expect(screen.getByLabelText("Capability")).toBeDisabled();
     expect(document.body).not.toHaveTextContent(/\bLIVE\b/);
+  });
+
+  it("offers the separate Rust projection only in the active scenario and only on refresh", async () => {
+    const loader = vi.fn(() => Promise.resolve(rustProjection));
+    render(<CommandCenterPage projectionLoader={loader} />);
+
+    expect(screen.queryByRole("region", { name: "Read-only Rust demo projection" })).toBeNull();
+    for (const scenarioId of COMMAND_CENTER_SCENARIO_IDS.filter(
+      (id) => id !== "research-knowledge-active",
+    )) {
+      selectScenario(scenarioId);
+      expect(screen.queryByRole("region", { name: "Read-only Rust demo projection" })).toBeNull();
+    }
+
+    selectScenario("research-knowledge-active");
+    const panel = screen.getByRole("region", { name: "Read-only Rust demo projection" });
+    expect(loader).not.toHaveBeenCalled();
+    expect(panel).toHaveTextContent("DEMO MODE · SIMULATED AGENT DATA");
+    expect(panel).toHaveTextContent(
+      "Command Center, Conversations mock, and Rust acceptance workflows are separate deterministic proofs.",
+    );
+    expect(
+      within(panel).queryByRole("button", { name: /start|cancel|approve|execute/i }),
+    ).toBeNull();
+
+    fireEvent.click(within(panel).getByRole("button", { name: "Refresh Rust projection" }));
+
+    expect(
+      await within(panel).findByText(
+        "Read-only Rust projection received. No workflow was started.",
+      ),
+    ).toBeVisible();
+    expect(loader).toHaveBeenCalledOnce();
+
+    selectScenario("workflow-completed");
+    expect(screen.queryByRole("region", { name: "Read-only Rust demo projection" })).toBeNull();
   });
 
   it("renders every exact agent name and complete accessible label in graph nodes", () => {
