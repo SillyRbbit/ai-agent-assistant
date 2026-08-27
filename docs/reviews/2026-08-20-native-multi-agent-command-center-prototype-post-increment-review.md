@@ -29,16 +29,7 @@
     "git ls-files --others --exclude-standard -- src-tauri/src src-tauri/Cargo.toml src-tauri/Cargo.lock src-tauri/tauri.conf.json src-tauri/capabilities"
   ],
   "files_changed": [
-    "CHANGELOG.md",
-    "HANDOFF.md",
-    "NEXT_STEPS.md",
-    "PLANS.md",
-    "PROJECT_STATUS.md",
-    "TROUBLESHOOTING_LOG.md",
-    "docs/increments/native-multi-agent-command-center-prototype.md",
-    "docs/plans/2026-08-12-native-multi-agent-command-center-prototype.md",
-    "docs/reviews/2026-08-20-native-multi-agent-command-center-prototype-post-increment-review.md",
-    "src/features/command-center/command-center.css"
+    "docs/reviews/2026-08-20-native-multi-agent-command-center-prototype-post-increment-review.md"
   ],
   "findings": [],
   "increment_id": "native-multi-agent-command-center-prototype",
@@ -157,9 +148,9 @@
 }
 -->
 
-Date: 2026-08-25
+Date: 2026-08-26
 Increment: Native multi-agent Command Center deterministic prototype
-Branch: detached `HEAD` at `fa66ce2` (uncommitted working tree)
+Branch: `main` at `c57a426` (documentation-only gate reconciliation)
 
 ## Executive summary
 
@@ -168,6 +159,13 @@ Automated source validation and independent review have no source blocker. The
 post-increment result is `PASS WITH ADVISORIES`: approved rendered tooling and
 owner-operated host zoom complete every required M5 row, while no later
 increment is currently Ready. The ExecPlan is Complete.
+
+On 2026-08-26, this report received a documentation-only finalization
+reconciliation. The historical ten-path implementation checkpoint remains
+described below as evidence. The machine manifest instead lists this report as
+the sole current uncommitted path, which is the exact inventory required by the
+post-increment gate at finalization. No implementation, validation result, or
+historical conclusion was changed by this reconciliation.
 
 ## Scope and boundaries
 
@@ -248,11 +246,15 @@ and owner authorization.
 
 ## Exact files changed
 
-The machine manifest contains the complete 10-path working-tree inventory for
-this checkpoint.
+The current finalization inventory contains this report only. The historical
+implementation checkpoint had ten paths, as recorded in the original review
+evidence; that historic inventory is not the current Git change set and is not
+used by the post-increment-gate manifest.
 
 ## Exact commands executed
 
-The manifest records commands already executed. Final current-tree
-`npm run verify` passes after source and documentation synchronization.
-Documentation, repository, security, and diff checks pass at this checkpoint.
+The manifest records commands executed for the implementation checkpoint.
+Current documentation-only reconciliation also re-runs `npm run docs:check`,
+`npm run repository:check`, `npm run security:scan`, and `git diff --check`.
+Final current-tree `npm run verify` passes after source and documentation
+synchronization.
