@@ -4,6 +4,8 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
+The owner-approved [`documentation-reconciliation-f15`](docs/plans/2026-08-26-documentation-reconciliation-f15.md) is complete with passing focused documentation-truth, repository, documentation, security, and diff checks. It corrects only F-15 documentation drift and adds static repository-health coverage; no Rust/Tauri/CSP behavior, capability, dependency, provider, model, workflow, IPC, storage, credential, or frontend runtime behavior changed.
+
 The owner-approved
 [`2026-08-25-pr57-transitive-advisory-remediation.md`](docs/plans/2026-08-25-pr57-transitive-advisory-remediation.md)
 is **verified complete with advisories** under the complete, valid gate

@@ -155,6 +155,44 @@ class RepositoryHealthTests(unittest.TestCase):
 
             self.assertTrue(any("not-present" in finding.detail for finding in findings))
 
+    def test_documentation_truth_rejects_duplicate_requirement_and_stale_markers(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "PRODUCT_REQUIREMENTS.md").write_text(
+                "- **FR-020**: First requirement.\n"
+                "- **FR-020**: Duplicate requirement.\n"
+                "matrix remains pending\n",
+                encoding="utf-8",
+            )
+            (root / "ARCHITECTURE.md").write_text(
+                "src/infrastructure/tauri/ narrows the app-info response\n",
+                encoding="utf-8",
+            )
+
+            findings = health.documentation_truth_findings(root)
+
+            self.assertTrue(any("duplicate requirement identifier" in finding.detail for finding in findings))
+            self.assertTrue(any("stale current-state marker" in finding.detail for finding in findings))
+            self.assertTrue(any("required current-state marker is missing" in finding.detail for finding in findings))
+
+    def test_documentation_truth_accepts_current_markers_and_unique_requirements(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "PRODUCT_REQUIREMENTS.md").write_text(
+                "- **FR-019A**: Synthetic demo.\n"
+                "- **FR-020**: Tool identity.\n"
+                "matrix is complete and verified\n",
+                encoding="utf-8",
+            )
+            (root / "ARCHITECTURE.md").write_text(
+                "The app-info response is not yet runtime narrowed.\n"
+                "The current production CSP retains the\n"
+                "  development `ws://localhost:1420` allowance.\n",
+                encoding="utf-8",
+            )
+
+            self.assertEqual(health.documentation_truth_findings(root), ())
+
     def test_prompt_check_accepts_metadata_and_declared_placeholders(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

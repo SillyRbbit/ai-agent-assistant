@@ -28,6 +28,7 @@ WRITE_PERMISSION = re.compile(r"^\s*[a-z][a-z-]*:\s*write\s*$", re.MULTILINE)
 RUNNER_SELECTOR = re.compile(r"^\s*runs-on:\s*(?P<selector>.+?)\s*$", re.MULTILINE)
 PROMPT_PLACEHOLDER = re.compile(r"\{\{(?P<name>[A-Z][A-Z0-9_]*)\}\}")
 PROMPT_PATH_REFERENCE = re.compile(r"\bprompts/[A-Za-z0-9_./-]+\.md\b")
+REQUIREMENT_IDENTIFIER = re.compile(r"^\s*- \*\*(?P<identifier>FR-[0-9]+[A-Z]?)\*\*:", re.MULTILINE)
 EXPECTED_WORKFLOWS = frozenset({"ci.yml", "documentation.yml"})
 LINUX_RUNNER_SELECTOR = "[self-hosted, Linux, X64, cortexa-ci]"
 MACOS_RUNNER_SELECTOR = "[self-hosted, macOS, X64, cortexa-ci]"
@@ -59,6 +60,23 @@ ACTIVE_PROMPT_REFERENCE_PATHS = (
     "README.md",
     "SECURITY.md",
     "TESTING_GUIDE.md",
+)
+DOCUMENTATION_TRUTH_MARKERS = (
+    (
+        "PRODUCT_REQUIREMENTS.md",
+        "matrix is complete and verified",
+        "matrix remains pending",
+    ),
+    (
+        "ARCHITECTURE.md",
+        "The app-info response is not yet runtime narrowed",
+        "narrows the app-info response",
+    ),
+    (
+        "ARCHITECTURE.md",
+        "production CSP retains the\n  development `ws://localhost:1420` allowance",
+        "",
+    ),
 )
 
 SECRET_PATTERNS = (
@@ -421,6 +439,38 @@ def prompt_findings(root: Path) -> tuple[Finding, ...]:
     return tuple(findings)
 
 
+def documentation_truth_findings(root: Path) -> tuple[Finding, ...]:
+    product_requirements = root / "PRODUCT_REQUIREMENTS.md"
+    text = read_text(product_requirements)
+    if text is None:
+        return (
+            Finding("documentation", "PRODUCT_REQUIREMENTS.md", "requirements document is not UTF-8 text"),
+        )
+
+    findings: list[Finding] = []
+    seen_identifiers: set[str] = set()
+    for match in REQUIREMENT_IDENTIFIER.finditer(text):
+        identifier = match.group("identifier")
+        if identifier in seen_identifiers:
+            line = text.count("\n", 0, match.start()) + 1
+            findings.append(
+                Finding("documentation", "PRODUCT_REQUIREMENTS.md", f"duplicate requirement identifier {identifier!r}", line)
+            )
+        seen_identifiers.add(identifier)
+
+    for relative_path, required, prohibited in DOCUMENTATION_TRUTH_MARKERS:
+        path = root / relative_path
+        document_text = read_text(path)
+        if document_text is None:
+            findings.append(Finding("documentation", relative_path, "required current-state document is not UTF-8 text"))
+            continue
+        if required not in document_text:
+            findings.append(Finding("documentation", relative_path, f"required current-state marker is missing: {required!r}"))
+        if prohibited and prohibited in document_text:
+            findings.append(Finding("documentation", relative_path, f"stale current-state marker is present: {prohibited!r}"))
+    return tuple(findings)
+
+
 def workflow_findings(root: Path) -> tuple[Finding, ...]:
     workflow_directory = root / ".github" / "workflows"
     if not workflow_directory.is_dir():
@@ -579,7 +629,7 @@ def workflow_findings(root: Path) -> tuple[Finding, ...]:
 
 def checks_for(command: str) -> tuple[str, ...]:
     if command == "all":
-        return ("links", "secrets", "generated", "license", "commands", "prompts", "workflows")
+        return ("links", "secrets", "generated", "license", "commands", "prompts", "documentation", "workflows")
     return (command,)
 
 
@@ -599,6 +649,8 @@ def run_checks(root: Path, command: str) -> tuple[Finding, ...]:
             findings.extend(command_findings(root))
         elif check == "prompts":
             findings.extend(prompt_findings(root))
+        elif check == "documentation":
+            findings.extend(documentation_truth_findings(root))
         elif check == "workflows":
             findings.extend(workflow_findings(root))
         else:
@@ -610,7 +662,7 @@ def parse_arguments(arguments: Sequence[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "check",
-        choices=("all", "links", "secrets", "generated", "license", "commands", "prompts", "workflows"),
+        choices=("all", "links", "secrets", "generated", "license", "commands", "prompts", "documentation", "workflows"),
     )
     return parser.parse_args(arguments)
 
