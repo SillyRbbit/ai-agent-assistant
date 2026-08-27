@@ -4,11 +4,16 @@ Last updated: 2026-08-26
 
 ## Current active prerequisite
 
-`documentation-reconciliation-f15` is complete with passing focused
-documentation-truth, repository, documentation, security, and diff checks. It
-corrects F-15 documentation truthfulness and adds static repository-health
-coverage only; no Rust/Tauri/CSP behavior, capability, dependency, provider,
-model, workflow, IPC, storage, credential, or frontend runtime behavior changed.
+`runtime-start-containment-f01-f02` is verified complete with advisories. One
+universal Rust start boundary now validates exact application-created returned
+identity, rejects duplicate live identity, retains rejected nonterminal runs,
+blocks fallback while cleanup is pending, and permits explicit cleanup retry.
+Focused contracts, strict Clippy, 490/490 executed all-target Rust tests with one
+intentional ignored Hermes probe, and complete `npm run verify` pass. No runtime
+trait, IPC, UI, CSP, capability, dependency, provider, network, tool, approval,
+persistence, filesystem, or device-effect boundary changed. Final documentation
+and repository checks pass; the `PASS WITH ADVISORIES` completion marker is
+complete and valid.
 
 ## Current milestone
 

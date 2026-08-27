@@ -1699,6 +1699,32 @@ fn planner_start_failure_falls_back_once_and_chained_start_failure_closes_the_ro
 }
 
 #[test]
+fn rejected_planner_run_blocks_personal_fallback_until_explicit_cleanup(
+) -> Result<(), Box<dyn Error>> {
+    let (runtime, recorder) =
+        MockAgentRuntime::recording(MockMode::ReturnedIdentityMismatchWithCancelFailureOnceAt(2));
+    let mut orchestrator = AgentOrchestrator::new(runtime)?;
+    let request = WorkflowTemplateCatalog::built_in()
+        .proposal_request(WorkflowTemplateId::ResearchBriefV1)?;
+    let root = orchestrator.start_root(request.objective())?;
+
+    assert_eq!(
+        orchestrator.start_workflow_automation_proposal(&root, request),
+        Err(AgentOrchestratorError::RuntimeCleanupPending)
+    );
+    assert_eq!(recorder.starts().len(), 2);
+    assert_eq!(recorder.live_runs().len(), 1);
+    assert!(recorder.nonterminal_drops().is_empty());
+    assert!(orchestrator.current_context(root.task_id()).is_err());
+    assert!(orchestrator.workflow_automation_result().is_none());
+
+    orchestrator.retry_rejected_runtime_cleanup()?;
+    assert!(recorder.live_runs().is_empty());
+    assert!(recorder.nonterminal_drops().is_empty());
+    Ok(())
+}
+
+#[test]
 fn runtime_reported_cancellation_is_typed_and_never_issues_a_token() -> Result<(), Box<dyn Error>> {
     let mut planner_cancel = AgentOrchestrator::new(MockAgentRuntime::new(MockMode::Success))?;
     let (root, planner) = start_proposal(

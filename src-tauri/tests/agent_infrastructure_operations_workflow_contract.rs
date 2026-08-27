@@ -2668,6 +2668,49 @@ fn start_failures_preserve_exact_single_and_chained_continuation_snapshots(
 }
 
 #[test]
+fn rejected_cloud_run_blocks_personal_fallback_until_explicit_cleanup() -> Result<(), Box<dyn Error>>
+{
+    let (runtime, recorder) =
+        MockAgentRuntime::recording(MockMode::ReturnedIdentityMismatchWithCancelFailureOnceAt(2));
+    let mut orchestrator = AgentOrchestrator::new(runtime)?;
+    let request = InfrastructureOperationsFixtureCatalog::built_in()
+        .cloud_request(CloudScenarioId::TerraformDecisionBriefV1)?;
+    let root = orchestrator.start_root(request.objective())?;
+
+    assert_eq!(
+        orchestrator.start_cloud_infrastructure_workflow(&root, request),
+        Err(AgentOrchestratorError::RuntimeCleanupPending)
+    );
+    assert_eq!(recorder.starts().len(), 2);
+    assert_eq!(recorder.live_runs().len(), 1);
+    assert!(recorder.nonterminal_drops().is_empty());
+    assert!(orchestrator.current_context(root.task_id()).is_err());
+    assert!(orchestrator.cloud_infrastructure_result().is_none());
+
+    orchestrator.retry_rejected_runtime_cleanup()?;
+    assert!(recorder.live_runs().is_empty());
+    assert!(recorder.nonterminal_drops().is_empty());
+
+    let (runtime, recorder) =
+        MockAgentRuntime::recording(MockMode::ReturnedIdentityMismatchWithCancelFailureOnceAt(2));
+    let mut systems = AgentOrchestrator::new(runtime)?;
+    let request = InfrastructureOperationsFixtureCatalog::built_in()
+        .systems_request(SystemsOperationsScenarioId::SanitizedServiceRecoveryV1)?;
+    let root = systems.start_root(request.objective())?;
+    assert_eq!(
+        systems.start_systems_operations_workflow(&root, request),
+        Err(AgentOrchestratorError::RuntimeCleanupPending)
+    );
+    assert_eq!(recorder.starts().len(), 2);
+    assert_eq!(recorder.live_runs().len(), 1);
+    assert!(systems.current_context(root.task_id()).is_err());
+    systems.retry_rejected_runtime_cleanup()?;
+    assert!(recorder.live_runs().is_empty());
+    assert!(recorder.nonterminal_drops().is_empty());
+    Ok(())
+}
+
+#[test]
 fn every_remaining_start_failure_snapshot_is_typed_and_non_retrying() -> Result<(), Box<dyn Error>>
 {
     let mut systems = AgentOrchestrator::new(MockAgentRuntime::new(MockMode::StartFailureAt(2)))?;

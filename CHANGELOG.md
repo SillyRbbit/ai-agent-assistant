@@ -4,6 +4,15 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Hardened every existing Rust runtime-start path with one universal
+  application-owned containment boundary. Returned run/request identity must
+  exactly match the request, duplicate live identity fails closed, and rejected
+  nonterminal runs remain quarantined while new and fallback starts are blocked
+  until explicit cleanup succeeds. Added adversarial root, child, synthesis,
+  contradictory-disposition, permanent-failure, and sealed-workflow regression
+  coverage. No runtime trait, IPC, UI, provider, dependency, network, tool,
+  approval, persistence, filesystem, permission, or device effect was added.
+
 - Reconciled F-15 current-state documentation: unique synthetic-gateway
   requirement identity, completed Command Center matrix evidence, and accurate
   app-info/CSP boundary wording. Added static repository-health coverage for

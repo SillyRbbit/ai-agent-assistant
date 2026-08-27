@@ -1106,6 +1106,156 @@ fn stale_context_and_foreign_runtime_events_are_rejected_without_rebinding(
 }
 
 #[test]
+fn legacy_root_rejects_foreign_returned_identity_before_trusted_state() -> Result<(), Box<dyn Error>>
+{
+    let (runtime, recorder) = MockAgentRuntime::recording(MockMode::ReturnedIdentityMismatchAt(1));
+    let mut orchestrator = AgentOrchestrator::new(runtime)?;
+
+    assert_eq!(
+        orchestrator.start_root(ROOT_OBJECTIVE),
+        Err(AgentOrchestratorError::RuntimeIdentityMismatch)
+    );
+    assert_eq!(orchestrator.task_count(), 0);
+    assert_eq!(orchestrator.run_count(), 0);
+    assert!(orchestrator.events().is_empty());
+    assert!(recorder.live_runs().is_empty());
+    assert_eq!(recorder.cancellations().len(), 1);
+    assert!(recorder.nonterminal_drops().is_empty());
+    Ok(())
+}
+
+#[test]
+fn legacy_rejected_root_is_quarantined_and_blocks_restart_until_cleanup(
+) -> Result<(), Box<dyn Error>> {
+    let (runtime, recorder) =
+        MockAgentRuntime::recording(MockMode::ReturnedIdentityMismatchWithCancelFailureOnceAt(1));
+    let mut orchestrator = AgentOrchestrator::new(runtime)?;
+
+    assert_eq!(
+        orchestrator.start_root(ROOT_OBJECTIVE),
+        Err(AgentOrchestratorError::RuntimeCleanupPending)
+    );
+    assert_eq!(recorder.starts().len(), 1);
+    assert_eq!(recorder.live_runs().len(), 1);
+    assert!(recorder.nonterminal_drops().is_empty());
+    assert_eq!(
+        orchestrator.start_root(ROOT_OBJECTIVE),
+        Err(AgentOrchestratorError::RuntimeCleanupPending)
+    );
+    assert_eq!(recorder.starts().len(), 1);
+    assert_eq!(recorder.live_runs().len(), 1);
+
+    orchestrator.retry_rejected_runtime_cleanup()?;
+    assert!(recorder.live_runs().is_empty());
+    assert_eq!(recorder.cancellations().len(), 1);
+    let root = orchestrator.start_root(ROOT_OBJECTIVE)?;
+    assert_eq!(root.agent_id(), AgentId::PersonalAssistant);
+    assert_eq!(recorder.starts().len(), 2);
+    assert!(recorder.nonterminal_drops().is_empty());
+    Ok(())
+}
+
+#[test]
+fn contradictory_nonterminal_rejection_disposition_remains_quarantined(
+) -> Result<(), Box<dyn Error>> {
+    let (runtime, recorder) = MockAgentRuntime::recording(
+        MockMode::UnexpectedStartStatusWithCancelAlreadyTerminalOnceAt(
+            1,
+            RuntimeRunStatus::Streaming,
+            RuntimeRunStatus::AwaitingStart,
+        ),
+    );
+    let mut orchestrator = AgentOrchestrator::new(runtime)?;
+
+    assert_eq!(
+        orchestrator.start_root(ROOT_OBJECTIVE),
+        Err(AgentOrchestratorError::RuntimeCleanupPending)
+    );
+    assert_eq!(recorder.starts().len(), 1);
+    assert_eq!(recorder.live_runs().len(), 1);
+    assert_eq!(
+        recorder.live_runs()[0].status,
+        RuntimeRunStatus::AwaitingStart
+    );
+    assert!(recorder.cancellations().is_empty());
+    assert!(recorder.nonterminal_drops().is_empty());
+
+    orchestrator.retry_rejected_runtime_cleanup()?;
+    assert!(recorder.live_runs().is_empty());
+    assert_eq!(recorder.cancellations().len(), 1);
+    assert!(recorder.nonterminal_drops().is_empty());
+    Ok(())
+}
+
+#[test]
+fn permanent_rejection_cancellation_failure_stays_closed_and_owned() -> Result<(), Box<dyn Error>> {
+    let (runtime, recorder) = MockAgentRuntime::recording(
+        MockMode::UnexpectedStartStatusWithCancelFailureAt(1, RuntimeRunStatus::Streaming),
+    );
+    let mut orchestrator = AgentOrchestrator::new(runtime)?;
+
+    assert_eq!(
+        orchestrator.start_root(ROOT_OBJECTIVE),
+        Err(AgentOrchestratorError::RuntimeCleanupPending)
+    );
+    assert_eq!(
+        orchestrator.retry_rejected_runtime_cleanup(),
+        Err(AgentOrchestratorError::RuntimeCleanupPending)
+    );
+    assert_eq!(
+        orchestrator.retry_rejected_runtime_cleanup(),
+        Err(AgentOrchestratorError::RuntimeCleanupPending)
+    );
+    assert_eq!(recorder.starts().len(), 1);
+    assert_eq!(recorder.live_runs().len(), 1);
+    assert!(recorder.cancellations().is_empty());
+    assert!(recorder.terminal_dispositions().is_empty());
+    assert!(recorder.nonterminal_drops().is_empty());
+    Ok(())
+}
+
+#[test]
+fn legacy_child_and_synthesis_reject_foreign_returned_identity() -> Result<(), Box<dyn Error>> {
+    let (child_runtime, child_recorder) =
+        MockAgentRuntime::recording(MockMode::ReturnedIdentityMismatchAt(2));
+    let mut child_start = AgentOrchestrator::new(child_runtime)?;
+    let child_root = child_start.start_root(ROOT_OBJECTIVE)?;
+    assert_eq!(
+        child_start.request_delegation(&child_root, delegation()?),
+        Err(AgentOrchestratorError::RuntimeIdentityMismatch)
+    );
+    assert_eq!(
+        child_start.root_task().map(|task| task.status()),
+        Some(AgentTaskStatus::Failed)
+    );
+    assert!(child_recorder.live_runs().is_empty());
+    assert!(child_recorder.nonterminal_drops().is_empty());
+
+    let (synthesis_runtime, synthesis_recorder) =
+        MockAgentRuntime::recording(MockMode::ReturnedIdentityMismatchAt(3));
+    let mut synthesis_start = AgentOrchestrator::new(synthesis_runtime)?;
+    let root = synthesis_start.start_root(ROOT_OBJECTIVE)?;
+    let child = synthesis_start
+        .request_delegation(&root, delegation()?)?
+        .child_context()
+        .clone();
+    let child_id = child.task_id().clone();
+    synthesis_start.accept_runtime_event(&child_id, started(&child, 0, "research-response")?)?;
+    synthesis_start.accept_runtime_event(&child_id, delta(&child, 1, RESEARCH_RESULT)?)?;
+    assert_eq!(
+        synthesis_start.accept_runtime_event(&child_id, completed(&child, 2)),
+        Err(AgentOrchestratorError::RuntimeIdentityMismatch)
+    );
+    assert_eq!(
+        synthesis_start.root_task().map(|task| task.status()),
+        Some(AgentTaskStatus::Failed)
+    );
+    assert!(synthesis_recorder.live_runs().is_empty());
+    assert!(synthesis_recorder.nonterminal_drops().is_empty());
+    Ok(())
+}
+
+#[test]
 fn native_runtime_remains_the_default_orchestration_runtime() -> Result<(), Box<dyn Error>> {
     let mut orchestrator = AgentOrchestrator::native()?;
     let root = orchestrator.start_root("Native regression")?;

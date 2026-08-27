@@ -2,6 +2,18 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-08-26 — F-01/F-02 runtime-start containment
+
+**Observation:** Legacy runtime starts accepted adapter-returned identity without
+comparing it to the application request and could drop a rejected nonterminal
+run when cancellation failed.
+
+**Resolution:** Generalize the existing D-091 exact-identity and quarantine path
+to every runtime start. New contracts cover foreign identities, blocked
+fallback, one-shot and permanent cancellation failure, contradictory
+nonterminal dispositions, and explicit cleanup retry. No environment failure or
+external runtime was involved.
+
 ## 2026-08-26 — F-15 documentation reconciliation
 
 **Observation:** The native nine-agent architecture review identified duplicate

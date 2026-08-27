@@ -235,6 +235,10 @@ deterministic marker is complete and valid.
   root/synthesis run. Cancellation failure preserves closed resumable live
   state, and a rejected returned run remains quarantined until cleanup succeeds;
   no root terminal may conceal a live rejected run.
+- Every legacy and bounded-parallel runtime start validates the exact
+  application-created run/request identity and rejects duplicate live identity.
+  A rejected nonterminal run is retained for explicit cancellation cleanup, and
+  no new or fallback start proceeds while cleanup is pending.
 - Cooperative deadlines cannot preempt a synchronous runtime call already in
   flight. Per-orchestrator limits do not prove provider or app-global capacity,
   and distinct runtime-run identity does not prove provider-session isolation.

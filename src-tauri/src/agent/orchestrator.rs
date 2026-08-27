@@ -5920,26 +5920,14 @@ impl<R: AgentRuntime> AgentOrchestrator<R> {
         .map_err(AgentOrchestratorError::Runtime)
     }
 
-    fn start_runtime_run(&self, request: RuntimeTurnRequest) -> AgentOrchestratorResult<R::Run> {
-        let mut run = self.runtime.start(request).map_err(map_runtime_error)?;
-        let status = run.status();
-        if status == RuntimeRunStatus::AwaitingStart {
-            return Ok(run);
-        }
-        if !status.is_terminal() {
-            run.cancel().map_err(AgentOrchestratorError::Runtime)?;
-        }
-        Err(AgentOrchestratorError::UnexpectedRuntimeStatus { status })
-    }
-
-    /// Starts a D-091 run and verifies that the adapter preserved the exact
-    /// application-owned request identity and did not reuse a live identity.
+    /// Starts a runtime run only after verifying that the adapter preserved
+    /// the exact application-owned request identity and did not reuse a live
+    /// identity.
     ///
-    /// This stricter boundary is intentionally scoped to the bounded-parallel
-    /// selector. Earlier selectors retain their verified runtime-start
-    /// behavior and therefore cannot acquire a D-091 quarantine they do not
-    /// own or resume.
-    fn start_bounded_parallel_runtime_run(
+    /// Rejected nonterminal runs remain application-owned until cancellation
+    /// cleanup succeeds. No new or fallback run may start while that cleanup
+    /// is pending.
+    fn start_runtime_run(
         &mut self,
         request: RuntimeTurnRequest,
     ) -> AgentOrchestratorResult<R::Run> {

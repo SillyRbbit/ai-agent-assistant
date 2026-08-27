@@ -355,6 +355,13 @@ registry, hard preemption, worker, scheduler, durable queue, or general graph
 engine. Runtime traits and Native remain unchanged, and all prior selectors
 keep their one-active-child semantics.
 
+All runtime starts now share the same application-owned containment boundary:
+the returned run/request identity must exactly match `RuntimeTurnRequest`, a
+returned identity cannot duplicate a live run, and rejected nonterminal runs
+remain quarantined until cancellation cleanup succeeds. Quarantine blocks new
+and fallback starts. This is volatile lifecycle ownership only; it adds no
+external runtime, provider session, IPC, persistence, or background cleanup.
+
 #### Per-agent governance foundation
 
 **Current Rust foundation; not wired to the application**: D-084 adds nine

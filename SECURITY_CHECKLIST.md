@@ -264,6 +264,9 @@ production boundary exists.
       are explicit application-owned policies. Root and policy cancellation
       sweep in ordinal order and preserve closed resumable state on failure;
       rejected run identities remain quarantined until cleanup succeeds.
+- [x] Every runtime start validates exact application-created returned identity,
+      rejects duplicate live identity, and blocks all new or fallback starts
+      until rejected nonterminal-run cleanup succeeds.
 - [x] Outcomes are exactly succeeded, failed, cancelled, timed out, or skipped
       and are stored, transferred, cancelled, and synthesized in immutable
       catalog ordinal order rather than completion timing or map iteration.
