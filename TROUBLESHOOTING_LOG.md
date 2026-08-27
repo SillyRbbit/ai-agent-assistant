@@ -2,6 +2,16 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-08-26 — F-15 documentation reconciliation
+
+**Observation:** The native nine-agent architecture review identified duplicate
+`FR-020`, stale Command Center rendered-matrix wording, and architecture claims
+that exceeded current app-info/CSP source behavior.
+
+**Resolution:** Correct the factual documentation and enforce the affected
+markers with static repository-health tests. No runtime issue or target-Mac
+failure was involved.
+
 ## TS-001 — npm EBADENGINE on Node.js 26
 
 Date: 2026-06-18

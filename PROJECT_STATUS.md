@@ -2,6 +2,14 @@
 
 Last updated: 2026-08-26
 
+## Current active prerequisite
+
+`documentation-reconciliation-f15` is complete with passing focused
+documentation-truth, repository, documentation, security, and diff checks. It
+corrects F-15 documentation truthfulness and adds static repository-health
+coverage only; no Rust/Tauri/CSP behavior, capability, dependency, provider,
+model, workflow, IPC, storage, credential, or frontend runtime behavior changed.
+
 ## Current milestone
 
 PR #57's deterministic native nine-agent demonstration and acceptance suite is

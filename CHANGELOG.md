@@ -4,6 +4,11 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Reconciled F-15 current-state documentation: unique synthetic-gateway
+  requirement identity, completed Command Center matrix evidence, and accurate
+  app-info/CSP boundary wording. Added static repository-health coverage for
+  duplicate requirement identifiers and stale or missing current-state markers.
+
 - Published the complete deterministic native nine-agent demonstration and both
   bounded PR #57 merge remediations. Exact closeout head `3a0ee66` passed its
   documentation workflow, and PR #57 squash-merged to `main` at `3987387`.

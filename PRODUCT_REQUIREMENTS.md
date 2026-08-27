@@ -136,7 +136,7 @@ No use case permits unattended consequential external action in the MVP.
   constitute active-active multicloud or a three-cloud release requirement.
   External accounts shall use provider ID plus normalized issuer plus subject;
   email shall not identify or automatically link accounts.
-- **FR-020**: Synthetic demo evaluation shall target OpenAI only through a
+- **FR-019A**: Synthetic demo evaluation shall target OpenAI only through a
   future trusted gateway. Credentials remain server-owned; exact data-control
   evidence, disclosure, limits, and D-061 evidence remain mandatory before any
   real user content. D-067 selects Cloudflare Workers Free only for the internal
@@ -158,7 +158,7 @@ callback on `127.0.0.1` at `/oauth/callback`. D-064's Azure path remains
 historical configuration evidence only; D-066 supersedes it for a future
 synthetic demo and grants no provisioning or transport authority.
 
-FR-012 and live transport portions of FR-010 through FR-019 are planned; the
+FR-012 and live transport portions of FR-010 through FR-019A are planned; the
 transport-free request and validation contracts are current. No account,
 identity-provider, OAuth/OIDC, PKCE, token, gateway, or external-processing path
 is implemented. D-064 is a documentation contract, not product capability or
@@ -478,7 +478,7 @@ The repository currently provides:
 - one frontend-only deterministic Command Center fixture projection with a lazy
   route, exact architecture labels, structured alternative, and no Rust/Tauri
   agent connection; its required real-browser/Tauri viewport/input/accessibility
-  matrix remains pending;
+  matrix is complete and verified;
 - no live model, gateway, tool execution, durable product persistence, integration,
   privileged permission, or durable audit path.
 

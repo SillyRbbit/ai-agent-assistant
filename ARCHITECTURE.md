@@ -79,7 +79,9 @@ each other.
   seven scenarios, feature-local presentation state, graph/structured
   alternatives, inspector, and bounded activity. React Flow types stop at one
   adapter; the feature does not consume Rust agent state.
-- `src/infrastructure/tauri/` narrows the app-info response and menu-route event.
+- `src/infrastructure/tauri/` has a compile-time typed app-info response and a
+  narrowed menu-route event. The app-info response is not yet runtime narrowed;
+  F-08 tracks that required validation before connected UI work.
 - Conversations, activity, approval state, tool results, and settings are not
   persisted by the WebView.
 
@@ -101,8 +103,10 @@ the WebView.
 - `assistant-menu-route` is a closed native-to-WebView event for Open, New
   Request, and Tasks navigation.
 - The main window has only `core:default` capability permission.
-- The CSP and capability files contain no shell, filesystem, network, database,
-  or privileged macOS plugin permission.
+- The capability file contains no shell, filesystem, network, database, or
+  privileged macOS plugin permission. The current production CSP retains the
+  development `ws://localhost:1420` allowance; F-07 tracks its required
+  production/development separation before connected UI work.
 
 **Planned**: any future product command must be narrow, typed, locally
 validated, capability-scoped, and separately approved. A generic
