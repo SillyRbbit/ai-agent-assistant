@@ -4,16 +4,34 @@ Last updated: 2026-08-26
 
 ## Current active prerequisite
 
-`runtime-start-containment-f01-f02` is verified complete with advisories. One
-universal Rust start boundary now validates exact application-created returned
-identity, rejects duplicate live identity, retains rejected nonterminal runs,
-blocks fallback while cleanup is pending, and permits explicit cleanup retry.
-Focused contracts, strict Clippy, 490/490 executed all-target Rust tests with one
-intentional ignored Hermes probe, and complete `npm run verify` pass. No runtime
-trait, IPC, UI, CSP, capability, dependency, provider, network, tool, approval,
-persistence, filesystem, or device-effect boundary changed. Final documentation
-and repository checks pass; the `PASS WITH ADVISORIES` completion marker is
-complete and valid.
+`production-development-csp-separation-f07` is verified complete with
+advisories. Production `connect-src` now retains only bundled/IPC sources and
+production/development `script-src` is exactly `'self'`; a separate `devCsp`
+adds only `ws://localhost:1420`. Inline styles remain because current
+React/React Flow rendering uses element style attributes. Tauri's default
+asset-CSP modification remains enabled.
+
+The F-12 repository-health boundary now enforces both exact policies, rejects
+production/development confusion, missing development CSP, and disabled asset
+CSP modification, and preserves the exact command, capability, and frontend
+boundary checks. Focused repository tests pass 47/47 and complete `npm run
+verify` passes with 211 frontend tests, 249 Rust library tests, the full
+integration suite, one intentional ignored Hermes probe, and the Tauri release
+build.
+
+On the target Mac, `npm run tauri -- dev` launched successfully, Vite reported
+an HMR connection with no warning/error log, and the development Command Center
+rendered in the approved local browser. The raw debug executable was not
+enumerable by Computer Use, so that evidence is split rather than a direct
+debug-WebView accessibility inspection. The locally bundled release `.app` was
+inspected directly: it reported `Local core ready` and rendered all nine roles
+with the exact `DEMO MODE · SIMULATED AGENT DATA` disclosure. No Tauri command,
+event, capability, permission, IPC, dependency, provider, model, credential,
+tool, approval, persistence, filesystem, background, or device-effect boundary
+changed.
+
+`runtime-start-containment-f01-f02` remains verified complete with advisories
+under its complete, valid marker.
 
 ## Current milestone
 

@@ -4,6 +4,17 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Separated Tauri production and development CSPs. Production no longer permits
+  the fixed Vite WebSocket or inline scripts; development adds only
+  `ws://localhost:1420`, and Tauri's asset nonce/hash modification remains
+  enabled. Extended the F-12 static UI/native boundary guard with exact paired
+  policy checks and adversarial regression tests. Focused repository tests,
+  complete verification, target-Mac development/HMR evidence, and direct
+  release app-info/Command Center inspection pass. Inline styles remain for
+  current React/React Flow element-style compatibility. No IPC, capability,
+  permission, dependency, provider, model, tool, persistence, filesystem, or
+  device-effect boundary changed.
+
 - Hardened every existing Rust runtime-start path with one universal
   application-owned containment boundary. Returned run/request identity must
   exactly match the request, duplicate live identity fails closed, and rejected

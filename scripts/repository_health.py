@@ -74,8 +74,8 @@ DOCUMENTATION_TRUTH_MARKERS = (
     ),
     (
         "ARCHITECTURE.md",
+        "production CSP excludes development\n  WebSocket sources and inline-script execution",
         "production CSP retains the\n  development `ws://localhost:1420` allowance",
-        "",
     ),
 )
 ALLOWED_TAURI_IMPORTS = {
@@ -96,10 +96,18 @@ EXPECTED_CAPABILITY_WINDOWS = ["main"]
 EXPECTED_CAPABILITY_PERMISSIONS = ["core:default"]
 EXPECTED_TAURI_CSP = {
     "default-src": "'self'",
+    "connect-src": "'self' ipc: http://ipc.localhost",
+    "font-src": "'self' data:",
+    "img-src": "'self' asset: http://asset.localhost data:",
+    "script-src": "'self'",
+    "style-src": "'self' 'unsafe-inline'",
+}
+EXPECTED_TAURI_DEV_CSP = {
+    "default-src": "'self'",
     "connect-src": "'self' ipc: http://ipc.localhost ws://localhost:1420",
     "font-src": "'self' data:",
     "img-src": "'self' asset: http://asset.localhost data:",
-    "script-src": "'self' 'unsafe-inline'",
+    "script-src": "'self'",
     "style-src": "'self' 'unsafe-inline'",
 }
 
@@ -548,12 +556,18 @@ def ui_native_boundary_findings(root: Path) -> tuple[Finding, ...]:
     configuration_path = root / "src-tauri" / "tauri.conf.json"
     try:
         configuration = json.loads(configuration_path.read_text(encoding="utf-8"))
-        csp = configuration["app"]["security"]["csp"]
+        security = configuration["app"]["security"]
+        csp = security["csp"]
+        dev_csp = security["devCsp"]
     except (OSError, UnicodeError, json.JSONDecodeError, KeyError, TypeError):
         findings.append(Finding("ui-native-boundary", "src-tauri/tauri.conf.json", "Tauri configuration or CSP is invalid"))
     else:
         if csp != EXPECTED_TAURI_CSP:
-            findings.append(Finding("ui-native-boundary", "src-tauri/tauri.conf.json", "production CSP differs from the reviewed F-12 baseline"))
+            findings.append(Finding("ui-native-boundary", "src-tauri/tauri.conf.json", "production CSP differs from the reviewed F-07 baseline"))
+        if dev_csp != EXPECTED_TAURI_DEV_CSP:
+            findings.append(Finding("ui-native-boundary", "src-tauri/tauri.conf.json", "development CSP differs from the reviewed F-07 baseline"))
+        if security.get("dangerousDisableAssetCspModification", False) is not False:
+            findings.append(Finding("ui-native-boundary", "src-tauri/tauri.conf.json", "Tauri asset CSP modification is disabled"))
     return tuple(findings)
 
 

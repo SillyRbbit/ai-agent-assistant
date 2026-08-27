@@ -2,6 +2,22 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-08-26 — Transient Cargo incremental-cache write during F-07 verification
+
+**Symptom:** One `npm run verify` attempt reached strict Clippy and failed to
+create two `dep-graph.part.bin` files because Cargo's generated incremental
+working directories were absent.
+
+**Cause:** No persistent source, toolchain, capacity, or permission defect was
+reproduced. The exact Clippy command passed unchanged immediately afterward,
+indicating a transient generated incremental-cache working-directory race.
+
+**Resolution and verification:** No source, lockfile, toolchain, security
+setting, or cache deletion was used. The exact strict Clippy command passed,
+then a fresh complete `npm run verify` passed. If this recurs, inspect competing
+Cargo processes and the generated incremental directory before considering any
+bounded cache cleanup; do not weaken or skip strict Clippy.
+
 ## 2026-08-26 — F-01/F-02 runtime-start containment
 
 **Observation:** Legacy runtime starts accepted adapter-returned identity without
