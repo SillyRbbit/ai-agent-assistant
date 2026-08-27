@@ -9,11 +9,7 @@ export type CoreConnection =
   | { readonly info: AppInfo; readonly status: "ready" }
   | { readonly message: string; readonly status: "error" };
 
-function getErrorMessage(error: unknown): string {
-  if (error instanceof Error && error.message.trim().length > 0) {
-    return error.message;
-  }
-
+function getErrorMessage(): string {
   return "The Rust core did not return application information.";
 }
 
@@ -30,9 +26,9 @@ export function useCoreConnection(loader: AppInfoLoader): CoreConnection {
         if (isMounted) {
           setConnection({ info, status: "ready" });
         }
-      } catch (error: unknown) {
+      } catch {
         if (isMounted) {
-          setConnection({ message: getErrorMessage(error), status: "error" });
+          setConnection({ message: getErrorMessage(), status: "error" });
         }
       }
     };

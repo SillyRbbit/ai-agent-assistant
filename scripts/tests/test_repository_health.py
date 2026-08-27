@@ -196,7 +196,7 @@ class RepositoryHealthTests(unittest.TestCase):
                 encoding="utf-8",
             )
             (root / "ARCHITECTURE.md").write_text(
-                "src/infrastructure/tauri/ narrows the app-info response\n",
+                "The app-info response is not yet runtime narrowed.\n",
                 encoding="utf-8",
             )
 
@@ -216,7 +216,7 @@ class RepositoryHealthTests(unittest.TestCase):
                 encoding="utf-8",
             )
             (root / "ARCHITECTURE.md").write_text(
-                "The app-info response is not yet runtime narrowed.\n"
+                "src/infrastructure/tauri/ runtime-narrows the app-info response.\n"
                 "The production CSP excludes development\n"
                 "  WebSocket sources and inline-script execution.\n",
                 encoding="utf-8",

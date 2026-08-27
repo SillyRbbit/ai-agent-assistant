@@ -4,6 +4,15 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Runtime-narrowed the existing `get_app_info` WebView response from `unknown`
+  to one exact six-field DTO. Missing, extra, empty, oversized, wrong-type,
+  invalid-environment, or `secureCore: false` values fail closed, and native
+  rejection details no longer reach UI diagnostics. Focused tests, complete
+  verification, security scanning, and target-Mac native app-info smoke pass.
+  No command, event, Rust, capability, CSP, permission, dependency, agent IPC,
+  provider, execution, persistence, filesystem, network, or device effect was
+  added.
+
 - Separated Tauri production and development CSPs. Production no longer permits
   the fixed Vite WebSocket or inline scripts; development adds only
   `ws://localhost:1420`, and Tauri's asset nonce/hash modification remains

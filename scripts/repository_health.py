@@ -69,8 +69,8 @@ DOCUMENTATION_TRUTH_MARKERS = (
     ),
     (
         "ARCHITECTURE.md",
+        "runtime-narrows the app-info response",
         "The app-info response is not yet runtime narrowed",
-        "narrows the app-info response",
     ),
     (
         "ARCHITECTURE.md",

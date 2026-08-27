@@ -743,7 +743,10 @@ describe("App", () => {
     expect(
       await screen.findByRole("heading", { name: "Rust core unavailable" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("IPC unavailable")).toBeInTheDocument();
+    expect(
+      screen.getByText("The Rust core did not return application information."),
+    ).toBeInTheDocument();
+    expect(screen.queryByText("IPC unavailable")).not.toBeInTheDocument();
   });
 
   it("renders the Permission Center without a permission request control", () => {
