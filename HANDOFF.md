@@ -4,15 +4,25 @@ Last updated: 2026-08-26
 
 ## Current active prerequisite
 
-`runtime-start-containment-f01-f02` is verified complete with advisories. Every
-legacy and bounded-parallel runtime start now uses one application-owned exact
-returned-identity, duplicate-live rejection, quarantine, and explicit cleanup
-path. Focused contracts, strict Clippy, 490/490 executed all-target Rust tests
-with one intentional ignored Hermes probe, and complete `npm run verify` pass.
-Documentation, repository, security, diff, and session checks pass. The
-completion report is `PASS WITH ADVISORIES`, and the marker is complete and
-valid. The advisories are volatile orchestrator-lifetime ownership and the
-absence of a separately approved Ready F-07 plan.
+`production-development-csp-separation-f07` is verified complete with
+advisories. Production no longer permits the fixed Vite WebSocket or inline
+scripts; development adds only the fixed local Vite WebSocket, and inline styles
+remain for current React/React Flow element styles. The F-12 static boundary
+guard enforces both exact policies and rejects disabled Tauri asset-CSP
+modification.
+
+Focused tests pass 47/47 and complete `npm run verify` passes with 211 frontend
+tests, 249 Rust library tests, the full integration suite, one intentional
+ignored Hermes probe, and the Tauri release build. Target-Mac development
+launch, browser-rendered HMR/Command Center smoke, and direct native release
+app-info/Command Center inspection pass. Computer Use could not enumerate the
+raw debug executable, so direct debug-WebView accessibility/console inspection
+remains an evidence-granularity advisory. The completion report is `PASS WITH
+ADVISORIES`, and the marker is complete and valid.
+
+`runtime-start-containment-f01-f02` remains verified complete with advisories
+under its complete, valid marker. Its volatile external-runtime lifecycle
+advisory remains deferred and does not block F-08.
 
 `ui-native-static-boundary-f12` is complete with passing static-boundary, repository, documentation, security, and diff checks. It adds only static repository-health enforcement for the exact current UI/native boundary; no Tauri configuration or behavior, capability, CSP configuration, or agent IPC changed.
 
@@ -71,12 +81,13 @@ prerequisites supersede its no-next-plan statement without changing its
 historical evidence.
 
 Exact resume prompt: "Read `AGENTS.md`, the required project-memory chain, and
-the active `runtime-start-containment-f01-f02` plan, increment, and completion
-report. Confirm its marker is complete and valid and the workspace still
-matches it. Perform readiness review for a separate F-07 production/development
-CSP plan only. Do not begin F-07, F-08, agent IPC, UI integration, provider,
-model, network, credential, tool, approval dispatch, persistence, filesystem,
-or device-effect work without separate owner approval."
+the completed `production-development-csp-separation-f07` plan, increment, and
+post-increment report. Confirm its marker is complete and valid and the
+workspace still matches it. Perform a separate documentation/readiness review
+for F-08 app-info runtime IPC narrowing only. Do not begin F-08, agent IPC,
+interactive demo integration, provider, model, network, credential, tool,
+approval dispatch, persistence, filesystem, background autonomy, or
+device-effect work without a separately approved Ready plan."
 
 ## Prior verified native multi-agent demonstration checkpoint
 

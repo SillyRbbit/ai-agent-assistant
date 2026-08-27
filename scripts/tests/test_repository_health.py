@@ -95,7 +95,19 @@ def write_valid_ui_native_boundary(root: Path) -> None:
     command_center.write_text("export const fixture = true;\n", encoding="utf-8")
     lib.write_text("tauri::generate_handler![app_info::get_app_info]\n", encoding="utf-8")
     capability.write_text(json.dumps({"windows": ["main"], "permissions": ["core:default"]}), encoding="utf-8")
-    configuration.write_text(json.dumps({"app": {"security": {"csp": health.EXPECTED_TAURI_CSP}}}), encoding="utf-8")
+    configuration.write_text(
+        json.dumps(
+            {
+                "app": {
+                    "security": {
+                        "csp": health.EXPECTED_TAURI_CSP,
+                        "devCsp": health.EXPECTED_TAURI_DEV_CSP,
+                    }
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
 
 
 class RepositoryHealthTests(unittest.TestCase):
@@ -205,8 +217,8 @@ class RepositoryHealthTests(unittest.TestCase):
             )
             (root / "ARCHITECTURE.md").write_text(
                 "The app-info response is not yet runtime narrowed.\n"
-                "The current production CSP retains the\n"
-                "  development `ws://localhost:1420` allowance.\n",
+                "The production CSP excludes development\n"
+                "  WebSocket sources and inline-script execution.\n",
                 encoding="utf-8",
             )
 
@@ -275,6 +287,47 @@ class RepositoryHealthTests(unittest.TestCase):
             findings = health.ui_native_boundary_findings(root)
 
             self.assertTrue(any("Tauri API import" in finding.detail for finding in findings))
+
+    def test_ui_native_boundary_rejects_production_development_csp_confusion(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            configuration = root / "src-tauri" / "tauri.conf.json"
+            parsed = json.loads(configuration.read_text(encoding="utf-8"))
+            parsed["app"]["security"]["csp"]["connect-src"] += " ws://localhost:1420"
+            parsed["app"]["security"]["devCsp"]["script-src"] += " 'unsafe-inline'"
+            configuration.write_text(json.dumps(parsed), encoding="utf-8")
+
+            findings = health.ui_native_boundary_findings(root)
+
+            self.assertTrue(any("production CSP" in finding.detail for finding in findings))
+            self.assertTrue(any("development CSP" in finding.detail for finding in findings))
+
+    def test_ui_native_boundary_rejects_missing_development_csp(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            configuration = root / "src-tauri" / "tauri.conf.json"
+            parsed = json.loads(configuration.read_text(encoding="utf-8"))
+            del parsed["app"]["security"]["devCsp"]
+            configuration.write_text(json.dumps(parsed), encoding="utf-8")
+
+            findings = health.ui_native_boundary_findings(root)
+
+            self.assertTrue(any("invalid" in finding.detail for finding in findings))
+
+    def test_ui_native_boundary_rejects_disabled_asset_csp_modification(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            configuration = root / "src-tauri" / "tauri.conf.json"
+            parsed = json.loads(configuration.read_text(encoding="utf-8"))
+            parsed["app"]["security"]["dangerousDisableAssetCspModification"] = True
+            configuration.write_text(json.dumps(parsed), encoding="utf-8")
+
+            findings = health.ui_native_boundary_findings(root)
+
+            self.assertTrue(any("asset CSP modification" in finding.detail for finding in findings))
 
     def test_prompt_check_accepts_metadata_and_declared_placeholders(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

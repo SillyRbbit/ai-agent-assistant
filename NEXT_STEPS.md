@@ -7,19 +7,27 @@ This file is the ordered implementation queue. Work only on the first item marke
 ## Current active prerequisite
 
 The owner-approved
+[`production-development-csp-separation-f07`](docs/increments/production-development-csp-separation-f07.md)
+is verified complete with advisories. Production no longer permits the fixed
+Vite WebSocket or inline scripts, development adds only the fixed local Vite
+WebSocket, and the F-12 static guard enforces both exact policies plus Tauri's
+asset-CSP modification. Focused/full verification, target-Mac development and
+release smoke evidence, and consolidated review pass. The completion marker is
+complete and valid.
+
+The owner-approved
 [`runtime-start-containment-f01-f02`](docs/increments/runtime-start-containment-f01-f02.md)
-is verified complete with advisories. It resolves F-01/F-02 by applying exact
-returned-runtime identity validation and rejected-run quarantine to every
-existing start path. Focused/full verification and consolidated review pass;
-the completion marker is complete and valid.
+remains verified complete with advisories. It resolves F-01/F-02 by applying
+exact returned-runtime identity validation and rejected-run quarantine to
+every existing start path.
 
-The owner-approved [`ui-native-static-boundary-f12`](docs/increments/ui-native-static-boundary-f12.md) is complete with passing static-boundary, repository, documentation, security, and diff checks. It does not authorize a Tauri command, agent IPC, or F-07 CSP change.
+The owner-approved [`ui-native-static-boundary-f12`](docs/increments/ui-native-static-boundary-f12.md) is complete with passing static-boundary, repository, documentation, security, and diff checks. F-07 supersedes only its frozen CSP values while preserving its command, capability, and UI/native isolation checks.
 
-The owner-approved [`documentation-reconciliation-f15`](docs/increments/documentation-reconciliation-f15.md) is complete with passing focused documentation-truth, repository, documentation, security, and diff checks. It resolves F-15 documentation truthfulness only and does not make F-07, F-08, or agent IPC Ready.
+The owner-approved [`documentation-reconciliation-f15`](docs/increments/documentation-reconciliation-f15.md) is complete with passing focused documentation-truth, repository, documentation, security, and diff checks. It resolves F-15 documentation truthfulness only and does not make F-08 or agent IPC Ready.
 
-After F-01/F-02 closes, the smallest dependency-ordered next task is a separate
-documentation/readiness run for F-07 production/development CSP separation.
-No exact F-07 implementation plan is owner-approved or Ready.
+The smallest dependency-ordered next task is a separate documentation/readiness
+run for F-08 app-info runtime IPC narrowing. No exact F-08 implementation plan
+is owner-approved or Ready. Do not begin F-08 or agent IPC automatically.
 
 ## Current published checkpoint
 

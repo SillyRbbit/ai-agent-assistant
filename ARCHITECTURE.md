@@ -104,9 +104,11 @@ the WebView.
   Request, and Tasks navigation.
 - The main window has only `core:default` capability permission.
 - The capability file contains no shell, filesystem, network, database, or
-  privileged macOS plugin permission. The current production CSP retains the
-  development `ws://localhost:1420` allowance; F-07 tracks its required
-  production/development separation before connected UI work.
+  privileged macOS plugin permission. The production CSP excludes development
+  WebSocket sources and inline-script execution. Its separate development CSP
+  adds only `ws://localhost:1420` for the fixed local Vite server. Both retain
+  inline styles because current React/React Flow rendering uses element style
+  attributes; Tauri's default asset nonce/hash modification remains enabled.
 
 **Planned**: any future product command must be narrow, typed, locally
 validated, capability-scoped, and separately approved. A generic

@@ -5,6 +5,17 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Current plan state
 
 The owner-approved
+[`production-development-csp-separation-f07`](docs/plans/2026-08-26-production-development-csp-separation-f07.md)
+plan is verified complete with advisories. It removes the fixed development
+WebSocket from production, removes inline scripts from both policies, adds an
+exact development-only CSP, and updates the F-12 static protection atomically.
+Focused/full verification and target-Mac development/release smoke evidence
+pass. The retained inline-style allowance and split debug-process/browser
+evidence are explicit advisories. No IPC, capability, permission, dependency,
+provider, model, credential, tool, persistence, filesystem, background work,
+or device effect was added.
+
+The owner-approved
 [`runtime-start-containment-f01-f02`](docs/plans/2026-08-26-runtime-start-containment-f01-f02.md)
 plan is verified complete with advisories under a complete, valid marker. It
 applies universal exact returned-runtime identity validation and rejected
