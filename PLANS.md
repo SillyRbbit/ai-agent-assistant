@@ -5,6 +5,15 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Current plan state
 
 The owner-approved
+[`2026-08-27-app-info-runtime-ipc-narrowing-f08.md`](docs/plans/2026-08-27-app-info-runtime-ipc-narrowing-f08.md)
+is verified complete with advisories. The existing WebView app-info
+client now narrows `unknown` to one exact bounded DTO and renders only fixed
+failure copy. It adds no command, event, Rust, capability, dependency, agent
+IPC, provider, execution, persistence, network, filesystem, or device effect.
+Focused/full verification and target-Mac native smoke pass; no successor plan
+is Ready.
+
+The owner-approved
 [`production-development-csp-separation-f07`](docs/plans/2026-08-26-production-development-csp-separation-f07.md)
 plan is verified complete with advisories. It removes the fixed development
 WebSocket from production, removes inline scripts from both policies, adds an

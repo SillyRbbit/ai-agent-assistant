@@ -1,8 +1,28 @@
 # Handoff
 
-Last updated: 2026-08-26
+Last updated: 2026-08-27
 
 ## Current active prerequisite
+
+`app-info-runtime-ipc-narrowing-f08` is verified complete with advisories on
+branch `codex/f08-runtime-ipc-narrowing`. The
+existing `get_app_info` client now invokes as `unknown` and accepts only the
+exact six-field DTO with non-empty strings of at most 128 Unicode code points,
+the closed development/production environment, and `secureCore: true`.
+Malformed or insecure replies fail closed, and UI diagnostics use fixed copy
+without upstream error details.
+
+Focused app-info/App tests pass 37/37, the full frontend suite passes 220/220,
+complete `npm run verify`, security scanning, repository checks, and diff
+checks pass. On the target Mac, the native app reports `Local core ready`; its
+Settings page reports `Rust core connected`, `get_app_info`, Cortexa 0.1.0,
+`macos · aarch64`, and the closed build environment. The direct native
+inspection used the available release app while `npm run tauri -- dev`
+separately launched the debug process; this evidence granularity is advisory.
+The completion report is
+[`2026-08-27-app-info-runtime-ipc-narrowing-f08-post-increment-review.md`](docs/reviews/2026-08-27-app-info-runtime-ipc-narrowing-f08-post-increment-review.md)
+with `PASS WITH ADVISORIES`; the completion marker is complete and valid. No
+successor implementation plan is owner-selected or Ready.
 
 `production-development-csp-separation-f07` is verified complete with
 advisories. Production no longer permits the fixed Vite WebSocket or inline
@@ -81,13 +101,12 @@ prerequisites supersede its no-next-plan statement without changing its
 historical evidence.
 
 Exact resume prompt: "Read `AGENTS.md`, the required project-memory chain, and
-the completed `production-development-csp-separation-f07` plan, increment, and
-post-increment report. Confirm its marker is complete and valid and the
-workspace still matches it. Perform a separate documentation/readiness review
-for F-08 app-info runtime IPC narrowing only. Do not begin F-08, agent IPC,
-interactive demo integration, provider, model, network, credential, tool,
-approval dispatch, persistence, filesystem, background autonomy, or
-device-effect work without a separately approved Ready plan."
+the completed F-08 plan, increment, and post-increment report. Confirm the
+`app-info-runtime-ipc-narrowing-f08` marker is complete and valid and the
+workspace matches it. Review only the next dependency-ordered task; do not
+begin agent IPC, interactive demo integration, provider, model, network,
+credential, tool, approval dispatch, persistence, filesystem, background
+autonomy, or device-effect work without a separately approved Ready plan."
 
 ## Prior verified native multi-agent demonstration checkpoint
 

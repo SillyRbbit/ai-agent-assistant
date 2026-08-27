@@ -1,8 +1,18 @@
 # Project status
 
-Last updated: 2026-08-26
+Last updated: 2026-08-27
 
 ## Current active prerequisite
+
+F-08 app-info runtime IPC narrowing is verified complete with advisories. The
+WebView now treats the sole `get_app_info` result
+as `unknown`, accepts only the exact bounded six-field DTO with
+`secureCore: true`, and maps every rejection to fixed safe diagnostics. Focused
+tests pass 37/37, the full frontend suite passes 220/220, complete verification
+passes, and target-Mac native app-info smoke reports the expected closed values.
+No Rust command, Tauri configuration, dependency, permission, or agent boundary
+changed. Its completion report is `PASS WITH ADVISORIES` and its deterministic
+marker is complete and valid; no successor implementation plan is Ready.
 
 `production-development-csp-separation-f07` is verified complete with
 advisories. Production `connect-src` now retains only bundled/IPC sources and

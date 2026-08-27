@@ -1,10 +1,18 @@
 # Next steps
 
-Last updated: 2026-08-26
+Last updated: 2026-08-27
 
 This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must close before later feature work begins.
 
 ## Current active prerequisite
+
+The owner-approved
+[`app-info-runtime-ipc-narrowing-f08`](docs/increments/app-info-runtime-ipc-narrowing-f08.md)
+is verified complete with advisories. Its WebView client validates the
+existing app-info reply as one exact bounded DTO and shows only closed failure
+copy. Focused/full checks and target-Mac native smoke pass. No later agent IPC
+or interactive-demo capability is authorized. Its completion marker is
+complete and valid.
 
 The owner-approved
 [`production-development-csp-separation-f07`](docs/increments/production-development-csp-separation-f07.md)
@@ -25,9 +33,10 @@ The owner-approved [`ui-native-static-boundary-f12`](docs/increments/ui-native-s
 
 The owner-approved [`documentation-reconciliation-f15`](docs/increments/documentation-reconciliation-f15.md) is complete with passing focused documentation-truth, repository, documentation, security, and diff checks. It resolves F-15 documentation truthfulness only and does not make F-08 or agent IPC Ready.
 
-The smallest dependency-ordered next task is a separate documentation/readiness
-run for F-08 app-info runtime IPC narrowing. No exact F-08 implementation plan
-is owner-approved or Ready. Do not begin F-08 or agent IPC automatically.
+No successor implementation plan is owner-selected or Ready. After F-08 has a
+valid completion marker, the smallest next action is a separate readiness
+review of the next dependency-ordered demo prerequisite. Do not begin agent IPC
+or interactive-demo integration automatically.
 
 ## Current published checkpoint
 

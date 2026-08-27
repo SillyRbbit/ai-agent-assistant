@@ -1,6 +1,6 @@
 # F-08 app-info runtime IPC narrowing
 
-Status: Draft — not implementation-approved
+Status: Verified complete with advisories
 Owner: Project owner
 Last updated: 2026-08-27
 
@@ -49,6 +49,18 @@ capability, or policy decision is needed.
 
 ## Approval boundary
 
-This draft is documentation only. It does not authorize a gate, source edit,
-commit, push, merge, or later increment. Separate owner approval of a Ready
-plan is required before implementation.
+The owner separately approved the plan and then directed F-08 implementation
+to begin. That authority covers only this bounded increment; it does not
+authorize commit, push, merge, a later increment, or any agent IPC.
+
+## Progress and results
+
+- 2026-08-27: Owner approved the bounded plan and implementation. Gate
+  `app-info-runtime-ipc-narrowing-f08` began on clean baseline `07db88b`.
+- Implemented exact runtime narrowing, bounded non-empty strings, closed
+  environment and secure-core checks, fixed error copy, and adversarial tests.
+- Focused tests pass 37/37; complete verification, repository/security checks,
+  diff checks, and target-Mac native app-info smoke pass.
+- No command, event, Rust, capability, CSP, permission, dependency, agent IPC,
+  provider, execution, persistence, filesystem, network, or device effect
+  changed.

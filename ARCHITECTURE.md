@@ -79,9 +79,9 @@ each other.
   seven scenarios, feature-local presentation state, graph/structured
   alternatives, inspector, and bounded activity. React Flow types stop at one
   adapter; the feature does not consume Rust agent state.
-- `src/infrastructure/tauri/` has a compile-time typed app-info response and a
-  narrowed menu-route event. The app-info response is not yet runtime narrowed;
-  F-08 tracks that required validation before connected UI work.
+- `src/infrastructure/tauri/` runtime-narrows the app-info response from
+  `unknown` to one exact bounded six-field DTO and rejects insecure or malformed
+  responses. The menu-route event is also runtime narrowed.
 - Conversations, activity, approval state, tool results, and settings are not
   persisted by the WebView.
 
