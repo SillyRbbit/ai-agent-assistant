@@ -79,6 +79,25 @@ def write_valid_workflows(root: Path) -> None:
     )
 
 
+def write_valid_ui_native_boundary(root: Path) -> None:
+    app_info = root / "src" / "infrastructure" / "tauri" / "app-info-client.ts"
+    menu_route = root / "src" / "infrastructure" / "tauri" / "menu-route-client.ts"
+    command_center = root / "src" / "features" / "command-center" / "fixture.ts"
+    lib = root / "src-tauri" / "src" / "lib.rs"
+    capability = root / "src-tauri" / "capabilities" / "default.json"
+    configuration = root / "src-tauri" / "tauri.conf.json"
+    app_info.parent.mkdir(parents=True)
+    command_center.parent.mkdir(parents=True)
+    lib.parent.mkdir(parents=True)
+    capability.parent.mkdir(parents=True)
+    app_info.write_text('import { invoke } from "@tauri-apps/api/core";\n', encoding="utf-8")
+    menu_route.write_text('import { listen } from "@tauri-apps/api/event";\n', encoding="utf-8")
+    command_center.write_text("export const fixture = true;\n", encoding="utf-8")
+    lib.write_text("tauri::generate_handler![app_info::get_app_info]\n", encoding="utf-8")
+    capability.write_text(json.dumps({"windows": ["main"], "permissions": ["core:default"]}), encoding="utf-8")
+    configuration.write_text(json.dumps({"app": {"security": {"csp": health.EXPECTED_TAURI_CSP}}}), encoding="utf-8")
+
+
 class RepositoryHealthTests(unittest.TestCase):
     def test_links_accept_existing_targets_and_ignore_fenced_examples(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -192,6 +211,70 @@ class RepositoryHealthTests(unittest.TestCase):
             )
 
             self.assertEqual(health.documentation_truth_findings(root), ())
+
+    def test_ui_native_boundary_accepts_exact_current_baseline(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+
+            self.assertEqual(health.ui_native_boundary_findings(root), ())
+
+    def test_ui_native_boundary_rejects_prohibited_ui_and_native_broadening(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            (root / "src" / "features" / "command-center" / "fixture.ts").write_text(
+                'import { invoke } from "@tauri-apps/api/core";\nfetch("/api");\n',
+                encoding="utf-8",
+            )
+            (root / "src-tauri" / "src" / "lib.rs").write_text(
+                "tauri::generate_handler![app_info::get_app_info, future::command]\n",
+                encoding="utf-8",
+            )
+            (root / "src-tauri" / "capabilities" / "default.json").write_text(
+                json.dumps({"windows": ["main", "other"], "permissions": ["core:default", "shell:allow-open"]}),
+                encoding="utf-8",
+            )
+            (root / "src-tauri" / "tauri.conf.json").write_text(
+                json.dumps({"app": {"security": {"csp": {"default-src": "*"}}}}),
+                encoding="utf-8",
+            )
+
+            findings = health.ui_native_boundary_findings(root)
+
+            self.assertGreaterEqual(len(findings), 5)
+            self.assertTrue(any("Command Center" in finding.detail for finding in findings))
+            self.assertTrue(any("invoke handler" in finding.detail for finding in findings))
+            self.assertTrue(any("capability" in finding.detail for finding in findings))
+            self.assertTrue(any("CSP" in finding.detail for finding in findings))
+
+    def test_ui_native_boundary_rejects_every_command_center_boundary_token(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            command_center = root / "src" / "features" / "command-center" / "fixture.ts"
+            for token in health.COMMAND_CENTER_PROHIBITED_TOKENS:
+                command_center.write_text(f"// {token}\n", encoding="utf-8")
+
+                findings = health.ui_native_boundary_findings(root)
+
+                self.assertTrue(
+                    any(token in finding.detail for finding in findings),
+                    msg=token,
+                )
+
+    def test_ui_native_boundary_rejects_tauri_import_suffix(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            (root / "src" / "infrastructure" / "tauri" / "app-info-client.ts").write_text(
+                'import { invoke } from "@tauri-apps/api/core/extended";\n',
+                encoding="utf-8",
+            )
+
+            findings = health.ui_native_boundary_findings(root)
+
+            self.assertTrue(any("Tauri API import" in finding.detail for finding in findings))
 
     def test_prompt_check_accepts_metadata_and_declared_placeholders(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

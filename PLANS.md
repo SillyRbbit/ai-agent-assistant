@@ -4,6 +4,8 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
+The owner-approved [`ui-native-static-boundary-f12`](docs/plans/2026-08-26-ui-native-static-boundary-f12.md) is complete with passing static-boundary, repository, documentation, security, and diff checks. It enforces the current UI/native isolation baseline only; it does not change Tauri behavior or authorize agent IPC.
+
 The owner-approved [`documentation-reconciliation-f15`](docs/plans/2026-08-26-documentation-reconciliation-f15.md) is complete with passing focused documentation-truth, repository, documentation, security, and diff checks. It corrects only F-15 documentation drift and adds static repository-health coverage; no Rust/Tauri/CSP behavior, capability, dependency, provider, model, workflow, IPC, storage, credential, or frontend runtime behavior changed.
 
 The owner-approved

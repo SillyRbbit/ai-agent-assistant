@@ -4,6 +4,8 @@ Last updated: 2026-08-26
 
 ## Current active prerequisite
 
+`ui-native-static-boundary-f12` is complete with passing static-boundary, repository, documentation, security, and diff checks. It adds only static repository-health enforcement for the exact current UI/native boundary; no Tauri configuration or behavior, capability, CSP configuration, or agent IPC changed.
+
 `documentation-reconciliation-f15` is complete with passing focused documentation-truth, repository, documentation, security, and diff checks. It corrects only F-15 documentation truthfulness and static repository-health coverage; F-12, F-01/F-02, F-07, F-08, and agent IPC remain separate unapproved work.
 
 ## Current PR #57 published checkpoint
