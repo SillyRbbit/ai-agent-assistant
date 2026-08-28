@@ -2,6 +2,39 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-08-28 — Raw debug executable unavailable to approved UI binding
+
+**Observation:** `npm run tauri -- dev` compiled and launched the source-current
+debug executable, but approved Computer Use bundle binding repeatedly selected
+a stale bundled release `.app` instead of the raw debug process. A process check
+confirmed the development processes were stopped after inspection.
+
+**Disposition:** Do not use the stale release UI as evidence for current source.
+The source-current Vite browser fallback passed disclosure, selected-scenario
+mount/unmount, closed unavailable state without a Tauri bridge, structured
+table, focus, scroll, topology zoom/reset, dark theme, reduced-motion query,
+viewport overflow, and console checks. Native success/failure/cancellation,
+alternate native theme/reduced motion, page zoom, and native resize are `Not
+run` advisories; browser fallback is not a substitute for those checks.
+
+## 2026-08-28 — First connected-source verify stopped on increment formatting
+
+**Symptom:** The first `npm run verify` stopped at Prettier because the newly
+created connected-presentation increment record was not formatted.
+
+**Resolution:** Format only the declared documentation file, inspect its diff,
+and rerun the unchanged complete command. Subsequent complete verification
+passes. No product source, lint rule, test, build setting, or security control
+was changed to obtain the pass.
+
+## 2026-08-28 — Sandboxed npm audit could not resolve the registry
+
+**Symptom:** The sandboxed `npm audit --audit-level=low` attempt failed with
+`ENOTFOUND` and could not write its ordinary user-level npm log.
+
+**Resolution:** Repeat the same audit with approved network access. It passed
+with `found 0 vulnerabilities`; no dependency or lockfile changed.
+
 ## 2026-08-28 — Connected lifecycle failure is not current production behavior
 
 **Observation:** `ResearchKnowledgeDemoHost::new()` constructs only the success
@@ -9,11 +42,11 @@ script. The deterministic synthesis-failure path exists only through a private
 test-core constructor, while the Tauri adapter exposes no argument through
 which a WebView could select a script.
 
-**Disposition:** The connected-presentation planning increment proposes a
-private application-owned alternating completed-epoch schedule for a later
-source increment. It is not implemented or approved source behavior. Do not
-add a failure command, outcome parameter, test-event control, timer, or retry
-to make the failure visible.
+**Disposition at that planning checkpoint:** The connected-presentation plan
+proposed a private application-owned alternating completed-epoch schedule. The
+owner subsequently approved and locally verified that bounded source increment;
+the current implementation still adds no failure command, outcome parameter,
+test-event control, timer, or retry.
 
 ## 2026-08-28 — Lifecycle host cannot enter Tauri managed state
 

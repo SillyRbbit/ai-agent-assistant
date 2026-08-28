@@ -4,15 +4,19 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
-The owner-approved documentation-only
+The owner-approved source
 [`2026-08-28-research-knowledge-demo-connected-presentation.md`](docs/plans/2026-08-28-research-knowledge-demo-connected-presentation.md)
-is verified complete with advisories. It reconciles the current success-only
-production lifecycle host with private fixture-only failure proof and defines a
-proposed application-owned alternating terminal schedule for a future no-input
-Command Center connection. The resulting source plan is Ready with advisories,
-but source work still requires explicit owner approval and a fresh gate.
+is locally verified complete with advisories on a source-current uncommitted
+branch. It connects only a separately labelled prop-free lifecycle panel in the
+selected scenario to the existing four no-input commands. A private
+application-owned completed-run schedule alternates deterministic success and
+synthetic failure without a caller selector; cancellation consumes no outcome.
+Command responses alone commit presentation, while newer valid notifications
+only require recovery. F-12 pins the sole consumer and exact reviewed source.
+No next source plan is owner-selected or Ready; publication requires separate
+explicit authorization.
 
-The owner-approved documentation-only
+The earlier owner-approved documentation-only
 [`2026-08-28-research-knowledge-demo-lifecycle-tauri-adapter.md`](docs/plans/2026-08-28-research-knowledge-demo-lifecycle-tauri-adapter.md)
 is **verified complete with advisories** after the owner approved
 the narrowly scoped private approval-clock Send prerequisite. One mutex-owned
@@ -23,26 +27,28 @@ F-12 guards the exact boundary. Command Center connection and capability, CSP,
 dependency, provider, persistence, background, and device-effect changes remain
 out of scope. Complete automated and target-Mac startup verification pass;
 direct observation of the deliberately unconnected lifecycle event is `Not
-run`. No connected presentation plan is Ready.
+run`. At that checkpoint no connected presentation plan was Ready; the current
+completed source plan above supersedes only that historical readiness claim.
 
-The owner-approved
+The earlier owner-approved
 [`2026-08-27-research-knowledge-demo-volatile-lifecycle-core.md`](docs/plans/2026-08-27-research-knowledge-demo-volatile-lifecycle-core.md)
 is **verified complete with advisories** and published on `main` at `68de8a5`.
 It implements one manually stepped, process-local, volatile Rust host for the
 existing sealed Research -> Knowledge workflow and a public Rust-only contract
 needed for strict lint reachability. It keeps Tauri commands/events, React,
 timers/workers, and background autonomy out of the core, preserves F-01/F-02,
-and leaves F-07, F-08, and F-12 unchanged. No later IPC adapter or connected
-presentation plan is Ready or authorized.
+and leaves F-07, F-08, and F-12 unchanged. Its then-current no-adapter/no-panel
+claim is historical; the separately approved source plan above supersedes that
+readiness state without changing the core increment's evidence.
 
-The owner-approved
+At that projection checkpoint, the owner-approved
 [`2026-08-27-research-knowledge-demo-projection-contract.md`](docs/plans/2026-08-27-research-knowledge-demo-projection-contract.md)
 is verified complete with advisories. It adds
 one argument-free, read-only projection of the sealed Research -> Knowledge
 fixture vocabulary. Explicit refresh cannot start or control a workflow, and
-the Command Center graph remains a separate frontend proof. The later
-Rust-only lifecycle core above remains unwired and does not change the
-projection's read-only authority or connect it to the UI.
+the Command Center graph remains a separate frontend proof. Today's separately
+connected lifecycle panel does not change the projection query's read-only
+authority or populate or control the fixture graph.
 
 The owner-approved
 [`2026-08-27-app-info-runtime-ipc-narrowing-f08.md`](docs/plans/2026-08-27-app-info-runtime-ipc-narrowing-f08.md)

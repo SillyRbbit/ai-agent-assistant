@@ -7,7 +7,8 @@ const ADAPTER_SOURCE: &str = include_str!("../src/research_knowledge_demo_lifecy
 const ENTRYPOINT_SOURCE: &str = include_str!("../src/lib.rs");
 
 #[test]
-fn lifecycle_tauri_boundary_is_exact_no_input_and_content_free() -> Result<(), serde_json::Error> {
+fn lifecycle_tauri_boundary_is_exact_no_input_and_content_free(
+) -> Result<(), Box<dyn std::error::Error>> {
     fn assert_send_static<T: Send + 'static>() {}
     assert_send_static::<ResearchKnowledgeDemoHost>();
 
@@ -33,6 +34,10 @@ fn lifecycle_tauri_boundary_is_exact_no_input_and_content_free() -> Result<(), s
     assert!(!ADAPTER_SOURCE.contains("profile"));
     assert!(!ADAPTER_SOURCE.contains("runtime"));
     assert!(!ADAPTER_SOURCE.contains("objective"));
+    assert!(!ADAPTER_SOURCE.contains("fixture"));
+    assert!(!ADAPTER_SOURCE.contains("outcome"));
+    assert!(!ADAPTER_SOURCE.contains("script"));
+    assert!(!ADAPTER_SOURCE.contains("stage"));
     assert!(!ADAPTER_SOURCE.contains("std::fs"));
     assert!(!ADAPTER_SOURCE.contains("std::process"));
     assert!(!ADAPTER_SOURCE.contains("std::thread"));
@@ -42,6 +47,21 @@ fn lifecycle_tauri_boundary_is_exact_no_input_and_content_free() -> Result<(), s
     assert_eq!(
         host.start().map(|snapshot| snapshot.state()),
         Ok(ResearchKnowledgeDemoLifecycleState::Research)
+    );
+    host.advance()?;
+    host.advance()?;
+    assert_eq!(
+        host.advance()
+            .map(|transition| transition.snapshot().state()),
+        Ok(ResearchKnowledgeDemoLifecycleState::Succeeded)
+    );
+    host.start()?;
+    host.advance()?;
+    host.advance()?;
+    assert_eq!(
+        host.advance()
+            .map(|transition| transition.snapshot().state()),
+        Ok(ResearchKnowledgeDemoLifecycleState::Failed)
     );
     assert_eq!(
         serde_json::to_value(ResearchKnowledgeDemoLifecycleError::Unavailable)?,

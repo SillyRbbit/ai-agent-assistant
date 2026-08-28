@@ -1,6 +1,6 @@
 # Research/Knowledge connected-presentation ExecPlan
 
-Status: Ready with advisories
+Status: Verified complete with advisories
 Increment: `research-knowledge-demo-connected-presentation`
 Last updated: 2026-08-28
 
@@ -18,11 +18,16 @@ fixtures are one integrated system.
   fixtures, Native runtime, and envelopes. The Tauri adapter owns one
   mutex-held host and exposes only no-argument snapshot, start, advance, and
   cancel commands plus one notification-only snapshot event.
-- The client runtime-narrows exact snapshots, rejects stale/gapped events, and
-  requires explicit snapshot recovery. No React component consumes it.
-- The production host is success-only. Its deterministic synthesis-failure
-  script is private core-test evidence, so current code cannot truthfully show
-  a failed terminal run.
+- The client runtime-narrows exact snapshots and journal grammar. Command
+  responses are the sole presentation authority; malformed, stale, or duplicate
+  events are inert, and parser-valid newer notifications require explicit
+  snapshot recovery without committing their state.
+- One prop-free lifecycle panel creates and disposes that client only in the
+  selected Research and Knowledge scenario. Start, advance, and cancel remain
+  explicit no-input user actions.
+- The production host owns a private success -> synthesis-failure -> success
+  schedule. Only a returned terminal completion advances it; cancellation at
+  research, knowledge, or synthesis consumes no outcome.
 
 ## Prerequisite controls
 
@@ -141,9 +146,34 @@ filesystem access, or device effect is a stop condition. Pre-commit rollback
 restores only declared source/UI/static-test paths; post-commit rollback reverts
 only that bounded source increment. All state remains volatile.
 
-## Planning result
+## Final result
 
-This ExecPlan is Ready with advisories for a separately approved source
-increment. The alternating schedule is proposed future behavior, not current
-behavior or a durable architecture decision. Source implementation still needs
-explicit owner approval and a fresh gate.
+`PASS WITH ADVISORIES`. The alternating schedule is private application-owned
+source behavior, not a caller-selectable value or durable architecture decision.
+Focused and complete automated gates pass. Target-Mac startup and
+source-current browser fallback checks pass, but approved UI tooling could not
+bind to the raw debug executable; native lifecycle interaction and the
+unavailable native appearance/zoom/resize matrix are `Not run` advisories. No
+GitHub Actions run exists for the uncommitted state.
+
+## Progress
+
+- 2026-08-28: The owner explicitly approved the bounded source increment. A
+  fresh gate opened on the clean
+  `codex/research-knowledge-demo-connected-presentation` branch from
+  source-current `origin/main`.
+- 2026-08-28: Baseline focused Rust, frontend, and repository-health checks
+  passed before implementation. The private host schedule, selected-scenario
+  panel, closed error copy, and focused contract coverage are in progress.
+- 2026-08-28: No caller-selected value, IPC command/event, capability, CSP,
+  dependency, provider/model/network, tool, persistence, filesystem, timer,
+  worker, or device-effect surface has been added.
+- 2026-08-28: The selected-scenario panel, response-authoritative client,
+  private success/failure schedule, and exact F-12 sole-consumer/raw-Tauri
+  guards passed focused Rust, frontend, and repository-health checks.
+- 2026-08-28: Complete `npm run verify` passed with 28 hook, 76 repository, 313
+  frontend, 269 Rust library, and 244 Rust integration tests; one opt-in real
+  Hermes probe remains intentionally ignored. Builds passed without warnings.
+- 2026-08-28: Target-Mac development startup and source-current browser
+  fallback checks passed. Raw-debug native interaction and unavailable native
+  appearance/zoom/resize checks are `Not run`; nothing is published.

@@ -1,7 +1,7 @@
 # Cortexa product requirements
 
 Status: Authoritative normalized product requirements
-Last updated: 2026-08-20
+Last updated: 2026-08-28
 
 ## Purpose and authority
 
@@ -307,8 +307,9 @@ shipping dispatcher or executor.
   It shall not be represented as provider or CPU concurrency, hard preemption,
   provider-session isolation, an app-global capacity coordinator, scheduler,
   general workflow engine, or distributed execution.
-- **FR-039J**: The deterministic Command Center prototype shall remain a lazy,
-  frontend-owned `command-center-demo-v1` projection with one distinct
+- **FR-039J**: The deterministic Command Center fixture projection and its
+  controls shall remain a lazy, frontend-owned `command-center-demo-v1`
+  projection with one distinct
   `AgentOrchestrator`, all nine exact agent roles, five view-only groups,
   bounded closed scenarios, persistent simulated-data disclosure, and no
   Rust-agent IPC or consequential control.
@@ -325,15 +326,18 @@ explicit selected-record context, versioned shared review, selected lowercase
 `.txt`/`.md` reading, and one direct Personal Assistant-to-Knowledge
 deterministic task. It does not persist across its one-root orchestrator, expose
 a user-facing file or memory surface, or satisfy durable product-memory
-requirements. D-086 separately implements only the unwired fixture-only
-Personal-to-Research-to-Knowledge-to-Personal application-service sequence. Its
+requirements. D-086 separately implements only the sealed fixture-only
+Personal-to-Research-to-Knowledge-to-Personal application-service sequence. It
+has no generic or caller-selectable consumer; one fixed instance is consumed
+only by the no-input simulated demo host and panel described in the current
+baseline below. Its
 strict parsers cap every structured output envelope at 8,192 scalar values and
 16,384 bytes and the final answer itself at 2,048 scalars/8,192 bytes. Research
 and Knowledge inputs are capped at 26,624 bytes each, synthesis input at 36,864
 bytes, runtime and generic events at 32 each, and workflow events/audit records
 at 16 each. It adds no live research, provider, persistence, durable or generic
-audit, or user-facing behavior. Product persistence, durable or user-facing
-memory, task repositories, and durable audit remain planned.
+audit, or general agent UI. Product persistence, durable or user-facing memory,
+task repositories, and durable audit remain planned.
 
 D-087 separately implements only the unwired fixture-only, proposal-only
 Coding-to-QA-to-Security workflow. It adds no live repository/filesystem/
@@ -457,16 +461,19 @@ The repository currently provides:
 - SQLite migration and bootstrap metadata infrastructure;
 - transport-free gateway request, event, function-schema, policy, approval,
   cancellation, and in-memory approval-audit primitives;
-- an unwired workflow-local volatile memory and selected-document boundary,
+- a Rust-internal workflow-local volatile memory and selected-document boundary,
   including one deterministic Personal Assistant-to-Knowledge task, with no
   persistence, IPC, provider, or user-facing consumer;
-- an unwired sealed fixture-only Personal-to-Research-to-Knowledge-to-Personal
-  workflow with strict source provenance, typed partial results, child-first
-  cancellation, and content-free volatile workflow evidence;
-- an unwired manually stepped Rust-only lifecycle owner for one fixed instance
-  of that sealed Research/Knowledge workflow, with a no-input bounded snapshot
-  contract, deterministic success/failure/cancellation, late-step rejection,
-  and fail-closed cleanup/replacement quarantine;
+- a sealed fixture-only Personal-to-Research-to-Knowledge-to-Personal workflow
+  with strict source provenance, typed partial results, child-first
+  cancellation, and content-free volatile workflow evidence. It has no generic
+  or direct consumer; only the fixed demo-host instance below is connected;
+- a manually stepped, process-local lifecycle owner for one fixed instance of
+  that sealed Research/Knowledge workflow, exposed only through four no-input
+  Tauri commands, one non-authoritative notification, and one prop-free visibly
+  simulated panel in the selected Command Center scenario; it retains a closed
+  bounded snapshot, private success/failure schedule, cancellation and late
+  event rejection, and fail-closed cleanup/replacement quarantine;
 - an unwired sealed fixture-only Personal-to-Coding-to-QA-to-Security-to-
   Personal proposal workflow with strict evidence provenance, typed partial
   results, closed capability denial, and no execution;
@@ -479,10 +486,11 @@ The repository currently provides:
 - one unwired fixture-only/no-I/O bounded-parallel selector with three sealed
   same-thread event-multiplexed scenarios, explicit failure policy, stable
   ordinal outcomes, truthful synthesis, and no provider/session/thread work;
-- one frontend-only deterministic Command Center fixture projection with a lazy
-  route, exact architecture labels, structured alternative, and no Rust/Tauri
-  agent connection; its required real-browser/Tauri viewport/input/accessibility
-  matrix is complete and verified;
+- one frontend-owned deterministic Command Center fixture projection with a
+  lazy route, exact architecture labels, structured alternative, and IPC-free
+  fixture controls. Its required real-browser/Tauri viewport/input/accessibility
+  matrix is complete and verified; the separately rendered read-only projection
+  and lifecycle panels do not populate or control that fixture projection;
 - no live model, gateway, tool execution, durable product persistence, integration,
   privileged permission, or durable audit path.
 

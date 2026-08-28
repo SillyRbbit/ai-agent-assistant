@@ -1,9 +1,9 @@
 //! Volatile, manually stepped Research/Knowledge demo lifecycle.
 //!
 //! This module owns one application-selected synthetic D-086 workflow at a
-//! time. It is intentionally unwired to Tauri and React and performs no
-//! provider, model, network, tool, approval, persistence, filesystem, timer,
-//! thread, background, or device work.
+//! time. A narrow Tauri adapter may expose its content-free snapshots, but this
+//! owner performs no provider, model, network, tool, approval, persistence,
+//! filesystem, timer, thread, background, or device work.
 
 use std::{
     fmt,
@@ -30,7 +30,6 @@ use crate::agent::{
     task::{AgentExecutionContext, AgentTaskCancellationOutcome, AgentTaskId, AgentTaskStatus},
 };
 
-#[cfg(test)]
 use crate::agent::runtime::{RuntimeFailure, RuntimeFailureCode};
 
 const DISCLOSURE: &str = "DEMO MODE · SIMULATED AGENT DATA";
@@ -218,8 +217,16 @@ impl ResearchKnowledgeDemoLifecycleError {
 #[derive(Clone, Copy)]
 enum DemoScript {
     Success,
-    #[cfg(test)]
     SynthesisFailure,
+}
+
+impl DemoScript {
+    const fn following_completed_epoch(self) -> Self {
+        match self {
+            Self::Success => Self::SynthesisFailure,
+            Self::SynthesisFailure => Self::Success,
+        }
+    }
 }
 
 struct OwnedWorkflow<R: AgentRuntime> {
@@ -652,7 +659,6 @@ fn advance_synthesis<R: AgentRuntime>(
                 terminal: true,
             })
         }
-        #[cfg(test)]
         DemoScript::SynthesisFailure => {
             fail_stage(orchestrator, &context, "demo-synthesis-failure")?;
             if orchestrator.research_knowledge_result().is_some() {
@@ -718,7 +724,6 @@ fn complete_stage<R: AgentRuntime>(
     Ok(())
 }
 
-#[cfg(test)]
 fn fail_stage<R: AgentRuntime>(
     orchestrator: &mut AgentOrchestrator<R>,
     context: &AgentExecutionContext,
@@ -777,6 +782,7 @@ fn retry_owned_cleanup<R: AgentRuntime>(
 
 pub struct ResearchKnowledgeDemoHost {
     core: DemoHostCore<NativeAgentRuntime>,
+    next_script: DemoScript,
 }
 
 impl ResearchKnowledgeDemoHost {
@@ -784,6 +790,7 @@ impl ResearchKnowledgeDemoHost {
     pub fn new() -> Self {
         Self {
             core: DemoHostCore::new(NativeAgentRuntime, DemoScript::Success),
+            next_script: DemoScript::Success,
         }
     }
 
@@ -793,6 +800,7 @@ impl ResearchKnowledgeDemoHost {
         if NATIVE_DROP_QUARANTINE_ACTIVE.load(Ordering::Acquire) {
             return Err(ResearchKnowledgeDemoLifecycleError::CleanupPending);
         }
+        self.core.script = self.next_script;
         self.core.start()
     }
 
@@ -802,7 +810,15 @@ impl ResearchKnowledgeDemoHost {
         if NATIVE_DROP_QUARANTINE_ACTIVE.load(Ordering::Acquire) {
             return Err(ResearchKnowledgeDemoLifecycleError::CleanupPending);
         }
-        self.core.advance()
+        let transition = self.core.advance()?;
+        if matches!(
+            transition.snapshot().state(),
+            ResearchKnowledgeDemoLifecycleState::Succeeded
+                | ResearchKnowledgeDemoLifecycleState::Failed
+        ) {
+            self.next_script = self.next_script.following_completed_epoch();
+        }
+        Ok(transition)
     }
 
     pub fn cancel(
@@ -1031,6 +1047,15 @@ mod tests {
         }
     }
 
+    fn complete_native_epoch(
+        host: &mut ResearchKnowledgeDemoHost,
+    ) -> Result<ResearchKnowledgeDemoLifecycleSnapshot, ResearchKnowledgeDemoLifecycleError> {
+        host.start()?;
+        host.advance()?;
+        host.advance()?;
+        Ok(host.advance()?.snapshot().clone())
+    }
+
     #[test]
     fn native_host_completes_the_exact_manual_fixture_sequence(
     ) -> Result<(), ResearchKnowledgeDemoLifecycleError> {
@@ -1078,6 +1103,47 @@ mod tests {
                 ResearchKnowledgeDemoLifecycleEventKind::SynthesisStarted,
                 ResearchKnowledgeDemoLifecycleEventKind::Completed,
             ]
+        );
+        Ok(())
+    }
+
+    #[test]
+    fn native_host_alternates_only_after_completed_epochs(
+    ) -> Result<(), ResearchKnowledgeDemoLifecycleError> {
+        let _guard = lifecycle_test_guard();
+        let mut host = ResearchKnowledgeDemoHost::new();
+
+        host.start()?;
+        assert_eq!(
+            host.cancel()?.snapshot().state(),
+            ResearchKnowledgeDemoLifecycleState::Cancelled
+        );
+        assert_eq!(
+            complete_native_epoch(&mut host)?.state(),
+            ResearchKnowledgeDemoLifecycleState::Succeeded
+        );
+
+        host.start()?;
+        host.advance()?;
+        assert_eq!(
+            host.cancel()?.snapshot().state(),
+            ResearchKnowledgeDemoLifecycleState::Cancelled
+        );
+
+        host.start()?;
+        host.advance()?;
+        host.advance()?;
+        assert_eq!(
+            host.cancel()?.snapshot().state(),
+            ResearchKnowledgeDemoLifecycleState::Cancelled
+        );
+        assert_eq!(
+            complete_native_epoch(&mut host)?.state(),
+            ResearchKnowledgeDemoLifecycleState::Failed
+        );
+        assert_eq!(
+            complete_native_epoch(&mut host)?.state(),
+            ResearchKnowledgeDemoLifecycleState::Succeeded
         );
         Ok(())
     }

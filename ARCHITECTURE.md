@@ -1,7 +1,7 @@
 # Cortexa architecture
 
 Status: Authoritative current-state architecture
-Last updated: 2026-08-27
+Last updated: 2026-08-28
 
 ## Reading this document
 
@@ -55,7 +55,9 @@ flowchart TD
     App --> Pages["Command Center, Conversations, Tasks, Memory, Activity, Integrations, Permissions, Settings"]
     App --> InfoClient["Typed get_app_info client"]
     App --> DemoProjectionClient["Closed read-only demo projection client"]
-    LifecycleClient["Unconnected lifecycle client"] --> IPC
+    Pages --> LifecyclePanel["Selected-scenario simulated lifecycle panel"]
+    LifecyclePanel --> LifecycleClient["Closed lifecycle client"]
+    LifecycleClient --> IPC
     App --> MenuClient["Typed assistant-menu-route listener"]
     InfoClient --> IPC["Tauri invoke boundary"]
     DemoProjectionClient --> IPC
@@ -68,8 +70,10 @@ flowchart TD
 
 The React mock loop and the transport-free Rust gateway turn are not wired to
 each other. A separate Rust-owned `ResearchKnowledgeDemoHost` manually drives
-one application-owned sealed D-086 fixture through `NativeAgentRuntime`; it
-reaches only its narrow Tauri adapter and has no edge to React.
+one application-owned sealed D-086 fixture through `NativeAgentRuntime`; its
+narrow Tauri adapter reaches only the separately labelled lifecycle panel in
+the selected scenario. It has no edge to the fixture graph, Conversations,
+provider transport, tools, persistence, or device execution.
 
 ## React presentation layer
 
@@ -83,20 +87,22 @@ reaches only its narrow Tauri adapter and has no edge to React.
   deterministic Command Center projection.
 - `src/features/command-center/` owns closed fixture projection/validation,
   seven scenarios, feature-local presentation state, graph/structured
-  alternatives, inspector, and bounded activity. Only the selected Research and
-  Knowledge scenario may explicitly refresh a separate read-only Rust synthetic
-  projection; that result does not populate or control the fixture graph.
-  React Flow types stop at one adapter, and the feature does not consume Rust
-  agent lifecycle or runtime state.
+  alternatives, inspector, and bounded activity. Those fixture controls remain
+  IPC-free. Only the selected Research and Knowledge scenario may explicitly
+  refresh a separate read-only Rust synthetic projection, and it separately
+  mounts one prop-free simulated lifecycle panel. Neither native result
+  populates or controls the fixture graph. React Flow types stop at one adapter.
 - `src/infrastructure/tauri/` runtime-narrows the app-info response from
   `unknown` to one exact bounded six-field DTO. It separately narrows the
   synthetic demo-projection reply from `unknown` to one exact versioned DTO
   with fixed scenario, provenance, three ready roles, and three
   presentation-only outcomes. Rejected data maps to fixed application copy.
   The menu-route event is also runtime narrowed. A separate lifecycle client
-  accepts only the exact content-free lifecycle snapshot/event DTO and requires
-  explicit snapshot recovery after stale, gapped, malformed, or contradictory
-  data; no React component currently creates or consumes it.
+  accepts only the exact content-free lifecycle DTO and journal grammar.
+  Explicit command responses are the sole presentation authority; malformed,
+  older, and same-revision events do not mutate state, while every parser-valid
+  newer notification requires explicit snapshot recovery. The client
+  is created and disposed only with the selected-scenario lifecycle panel.
 - Conversations, activity, approval state, tool results, and settings are not
   persisted by the WebView.
 
@@ -125,7 +131,9 @@ the WebView.
 - `assistant-menu-route` is a closed native-to-WebView event for Open, New
   Request, and Tasks navigation.
 - `research-knowledge-demo-lifecycle-v1` is a fixed notification-only snapshot
-  event; it grants no authority and has no React consumer.
+  event. The lifecycle client listens only while its panel is mounted, but an
+  event never commits presentation state or proves an outcome; only an exact
+  command response can do so.
 - The main window has only `core:default` capability permission.
 - The capability file contains no shell, filesystem, network, database, or
   privileged macOS plugin permission. The production CSP excludes development
@@ -138,8 +146,8 @@ the WebView.
 validated, capability-scoped, and separately approved. A generic
 `execute_action`, SQL, shell, filesystem, provider, or tool-dispatch command is
 prohibited. No additional workflow/control IPC exists beyond the fixed
-simulated lifecycle adapter; no polling, runtime, provider, or agent-control
-IPC exists.
+simulated lifecycle adapter; no polling, provider, generic runtime-selectable,
+or general agent-control IPC exists.
 
 ## Trusted Rust core
 
@@ -148,14 +156,19 @@ modules are intentionally transport-free where runtime coordination is absent.
 
 ### Volatile Research/Knowledge demo lifecycle
 
-**Current, Tauri-adapted but React-unconnected**:
+**Current, Tauri-adapted and narrowly connected to one simulated panel**:
 `research_knowledge_demo_lifecycle` owns one manually stepped, process-local
-D-086 workflow. Its public Rust-only host accepts no
-caller data: production fixes the runtime, objective, sources, script,
-identities, and envelopes. `start`, `advance`, and `cancel` project only a
+D-086 workflow. Its public host accepts no
+caller data: production owns the runtime, objective, sources, private scripts
+and schedule, identities, and envelopes. `start`, `advance`, and `cancel` project only a
 versioned content-free lifecycle snapshot/transition with a Rust-issued epoch,
 monotonic revision, and eight-entry cap. Internal task/run/request/context,
 fixture content, results, and raw errors never cross the contract.
+
+Completed epochs use a private application-owned success -> synthesis-failure
+-> success schedule. Only a returned terminal completion advances the schedule;
+cancellation during research, knowledge, or synthesis consumes no slot. No UI
+or IPC value can select the script or outcome.
 
 The host retains the orchestrator through cancellation and rejected-run cleanup.
 An active cleanup failure blocks restart and is retried only by no-argument
@@ -164,9 +177,10 @@ process exit and a private process-wide atomic sentinel blocks replacement
 `start`, `advance`, and `cancel`. This sentinel is fail-closed only; it is not a
 lock, scheduler, concurrency coordinator, or future Tauri state design. One
 private Tauri state owns the host behind a mutex and exposes exactly four
-no-input commands plus a notification-only event. React has no lifecycle
-consumer, and no timer, thread, provider, tool, persistence, filesystem, or
-device effect exists.
+no-input commands plus a notification-only event. One prop-free panel consumes
+that fixed adapter only in the selected scenario; start, advance, and cancel
+remain explicit user actions. No timer, thread, provider, tool, persistence,
+filesystem, or device effect exists.
 
 ### Initial gateway turn and protocol
 
@@ -186,24 +200,27 @@ device effect exists.
   approval-audit adapter before a closed resolution-plus-receipt value leaves
   the turn.
 
-Every emitted value remains non-authorizing. There is no Tauri caller, live
-transport, provider adapter, runtime coordinator, continuation loop, dispatcher,
-or executor.
+Every emitted value remains non-authorizing. There is no direct or generic
+gateway Tauri caller, live transport, provider adapter, runtime coordinator,
+continuation loop, dispatcher, or executor. The sealed demo host reaches the
+turn only indirectly through `NativeAgentRuntime`.
 
 ### Runtime adapter direction
 
-**Current foundation; not wired to the application**: D-079's application-owned
-runtime foundation now exists in Rust. `AgentRuntime` constructs one bounded
-run from application-owned typed input. `RuntimeRun` exposes closed identity,
-status, bounded untrusted-event acceptance, typed failure, and exact idempotent
-cancellation. The repository still has no live application-session runtime
-consumer, runtime selector, provider transport, live model, Hermes adapter,
-OpenClaw adapter, or Tauri/UI consumer.
+**Current foundation; not generically or runtime-selectably wired**: D-079's
+application-owned runtime foundation now exists in Rust. `AgentRuntime`
+constructs one bounded run from application-owned typed input. `RuntimeRun`
+exposes closed identity, status, bounded untrusted-event acceptance, typed
+failure, and exact idempotent cancellation. The repository still has no live
+general application-session runtime consumer, runtime selector, provider
+transport, live model, Hermes adapter, or OpenClaw adapter. The sole Tauri/UI
+consumer is the sealed no-input Research -> Knowledge demo host and simulated
+panel described above.
 
 ```mermaid
 flowchart TD
-    Application["Application services<br/>not wired"] --> Contract["AgentRuntime<br/>implemented typed foundation"]
-    Contract --> Native["NativeAgentRuntime<br/>implemented; default/reference; test-only consumer"]
+    Application["Application services<br/>sealed demo host only"] --> Contract["AgentRuntime<br/>implemented typed foundation"]
+    Contract --> Native["NativeAgentRuntime<br/>default/reference; sealed demo consumer"]
     Contract -. future blocked .-> Hermes["HermesAgentRuntime<br/>not implemented"]
 ```
 
@@ -251,16 +268,18 @@ multi-agent application-service target below; it does not add current behavior.
 
 #### Native catalog, task, and bounded orchestration foundation
 
-**Current Rust foundation; not wired to the application**: D-082 established
+**Current Rust foundation; generic/catalog surface unwired**: D-082 established
 the native multi-agent ownership model and D-083 combined its former task and
 first-flow phases. The Rust core now contains the closed catalog, bounded task
 domain, and one deterministic application-owned orchestration service above the
-unchanged one-run runtime seam.
+unchanged one-run runtime seam. The sealed Research -> Knowledge demo host is
+the sole current Tauri/UI consumer and exposes no generic task or runtime
+selection.
 
 ```mermaid
 flowchart TD
     User["User"] -. "future caller" .-> Personal["Personal Assistant<br/>current inert definition"]
-    Personal --> Orchestrator["AgentOrchestrator<br/>implemented; unwired"]
+    Personal --> Orchestrator["AgentOrchestrator<br/>generic surface unwired; sealed demo only"]
     Orchestrator --> Research["Implemented generic route<br/>Personal Assistant to Research Agent"]
     Orchestrator --> Knowledge["Implemented document route<br/>Personal Assistant to Knowledge & Document"]
     Orchestrator --> ResearchKnowledge["Implemented sealed fixture workflow<br/>Research then Knowledge sibling"]
@@ -269,7 +288,7 @@ flowchart TD
     Orchestrator --> Automation["Implemented sealed proposal lifecycle<br/>Workflow Automation"]
     Orchestrator --> Parallel["Implemented sealed bounded-parallel selector<br/>same-thread event multiplexing"]
     Orchestrator --> Runtime["AgentRuntime<br/>implemented one-run boundary"]
-    Runtime --> Native["NativeAgentRuntime<br/>sole/default; implemented and unwired"]
+    Runtime --> Native["NativeAgentRuntime<br/>sole/default; sealed demo consumer"]
 ```
 
 Agent-role arrows show logical assignment/delegation, not component authority.
@@ -286,7 +305,9 @@ operational selection and task creation fail closed for deferred definitions.
 Neither registration, grouping, nor activation grants tools, routing, policy,
 memory, provider, or device authority.
 The catalog marks all nine definitions, including Workflow Automation,
-`Initial`; all remain unwired and none is a shipping assistant. Knowledge
+`Initial`; none is a direct or autonomous UI endpoint or a shipping assistant.
+The sealed demo host consumes only its fixed Personal, Research, and Knowledge
+roles through the orchestrator. Knowledge
 eligibility applies only to D-085's separate approved-document route and
 D-086's sealed fixture workflow. Coding, QA, and Security eligibility applies
 only to D-087's sealed fixture-only proposal workflow. None grants a generic
@@ -414,7 +435,7 @@ external runtime, provider session, IPC, persistence, or background cleanup.
 
 #### Per-agent governance foundation
 
-**Current Rust foundation; not wired to the application**: D-084 adds nine
+**Current Rust foundation; not generically or UI-control wired**: D-084 adds nine
 closed versioned policy profiles and captures the exact profile in each built-in
 definition, task, live execution context, delegation request, governed tool
 request, approval lifecycle, and governance record. `AgentDefinition` remains
@@ -456,23 +477,28 @@ before content clone or mutation and never defaults to Personal Assistant.
 Persistence, data-bearing privileged actions, and device effects remain
 separately gated.
 
-The current baseline contains no multi-agent Tauri IPC, authoritative/live
-multi-agent React state, provider, live model, tool executor, platform adapter,
-durable audit, durable memory, or device action. A separate frontend-only
-`command-center-demo-v1` fixture projection visualizes the architecture but is
-not wired to the Rust catalog, tasks, orchestrator, workflows, governance, or
-runtime. Those foundations remain Rust-only and unwired. The Tasks and Memory
-screens remain placeholders.
+The current baseline contains no generic or runtime-selectable multi-agent Tauri
+IPC, authoritative/live multi-agent React state, provider, live model, tool
+executor, platform adapter, durable audit, durable memory, or device action. A
+separate frontend-only `command-center-demo-v1` fixture projection visualizes
+the architecture but is not wired to the Rust catalog, tasks, orchestrator,
+workflows, governance, or runtime. Those generic/catalog surfaces remain
+Rust-only and unwired. The sole narrow exception is the sealed no-input
+Research -> Knowledge demo lifecycle described above; it reaches only its
+separately labelled simulated panel and does not populate the fixture
+projection. The Tasks and Memory screens remain placeholders.
 
 #### Volatile memory and approved-document Knowledge boundary
 
-**Current verified Rust foundation; unwired**: D-085 adds one application-owned
-`MemoryStore` and one
+**Current verified Rust foundation; no direct product surface**: D-085 adds one
+application-owned `MemoryStore` and one
 `ApprovedDocumentReader` directly owned by each one-root `AgentOrchestrator`.
 They are process-local, non-global, non-injectable application services with no
 thread, database, network, provider, clock, background index, or persistence.
 Dropping the orchestrator/store clears retained content; nothing crosses an
-orchestrator workflow or survives process exit.
+orchestrator workflow or survives process exit. The sealed demo host may use
+these services only inside its fixed D-086 workflow; no memory/document value or
+control crosses its lifecycle DTO.
 
 The closed memory namespaces are approved shared, agent-private,
 task-temporary, and proposed shared. Personal Assistant may read approved
@@ -536,8 +562,8 @@ the authoritative [`ROADMAP.md`](ROADMAP.md), and its subordinate
 
 #### Sealed fixture-only Research and Knowledge workflow
 
-**Current implemented Rust foundation; unwired and deterministic-test driven**:
-D-086 adds `agent::research_knowledge` and a closed
+**Current implemented Rust foundation; sealed and consumed only by the no-input
+demo host**: D-086 adds `agent::research_knowledge` and a closed
 `ResearchKnowledgeWorkflowRequest` for the versioned `research-knowledge-v1`
 application-service path inside `AgentOrchestrator`. Trusted application code
 selects the path from an exact live Personal Assistant root. The orchestrator
@@ -620,14 +646,17 @@ runtime, or execution authority. Neither events nor audit records contain the
 objective, fixture label/content, findings, summary, proposal, path, URL,
 output, or reasoning.
 
-Focused evidence passes 12 contract/parser units and 18 public workflow
+At the D-086 increment checkpoint itself, focused evidence passed 12
+contract/parser units and 18 public workflow
 contracts, including exact order and provenance, partial branches, terminal
 preparation failure with zero mutation, cancellation and cancellation failure,
 single and combined continuation-start failures, the runtime-event cap, and the
-unchanged sole/default Native construction path. No provider, live model,
-network, process, filesystem read, tool, executor, persistence, IPC, UI,
-dependency, capability, permission, Hermes/OpenClaw adapter, or runtime-contract
-widening is added.
+unchanged sole/default Native construction path. That increment itself added no
+provider, live model, network, process, filesystem read, tool, executor,
+persistence, IPC, UI, dependency, capability, permission, Hermes/OpenClaw
+adapter, or runtime-contract widening. The later bounded host/adapter/panel
+described above is its sole current product consumer and preserves those
+external non-goals.
 
 #### Sealed fixture-only engineering quality workflow
 
@@ -1119,7 +1148,7 @@ reviewed repository ICNS byte-for-byte.
 | React workspace and navigation                | Current                        | Frontend tests and application source                          |
 | Deterministic Command Center projection       | Current, validated fixture UI  | Frontend fixtures/tests plus passed browser/Tauri M5 matrix    |
 | Synthetic Rust demo projection                | Current, read-only/descriptive | Exact no-argument command, closed DTO, and static F-12 guard   |
-| Synthetic Rust demo lifecycle core            | Current, unwired/manual        | No-input Rust contract; sealed D-086 and Native runtime only   |
+| Synthetic Rust demo lifecycle                 | Current, sealed/manual UI      | Fixed no-input adapter and selected simulated panel only       |
 | Assistant interaction                         | Mocked                         | Deterministic in-memory driver only                            |
 | App info and menu routing                     | Current                        | Narrow Tauri command/event                                     |
 | SQLite bootstrap metadata                     | Current                        | Storage tests and startup integration                          |
@@ -1127,13 +1156,13 @@ reviewed repository ICNS byte-for-byte.
 | Function schema and policy binding            | Current, non-authorizing       | Phase 4B-4C and 4Q-4R                                          |
 | Approval presentation/resolution/cancellation | Current, disconnected          | Phase 4D-4E and 4S-4U                                          |
 | Approval audit adapter                        | Current, bound and volatile    | Phase 4H and 4V                                                |
-| Workflow-local volatile agent memory          | Current, unwired               | D-085 verified contracts; process-local only                   |
-| Selected UTF-8 text/Markdown document reading | Current, unwired and read-only | D-085 verified contracts; no IPC or provider                   |
-| Fixture-only Research/Knowledge workflow      | Current, unwired and sealed    | D-086 strict contracts; deterministic runtime events only      |
+| Workflow-local volatile agent memory          | Current, Rust-internal         | D-085 contracts; no memory value/control crosses demo IPC      |
+| Selected UTF-8 text/Markdown document reading | Current, internal/read-only    | D-085 contracts; no path/content crosses demo IPC              |
+| Fixture-only Research/Knowledge workflow      | Current, sealed/demo-host-only | D-086 contracts behind fixed no-input lifecycle host           |
 | Fixture-only engineering quality workflow     | Current, unwired and sealed    | D-087 proposal contracts; no repository access or execution    |
 | Fixture-only Cloud and Systems workflows      | Current, unwired and sealed    | D-088 separate no-I/O selectors; no live access or execution   |
 | Typed Workflow Automation proposals           | Current, unwired and sealed    | D-090 A-D manual fixture dispatch; E/tools/approvals inert     |
-| Native multi-agent acceptance suite           | Current, deterministic/unwired | 249 library units + 198 public contracts; no product effects   |
+| Native multi-agent acceptance suite           | Current, deterministic/unwired | 269 library units + 207 selected contracts; no product effects |
 | Live gateway and model-provider transport     | Planned                        | Blocked by O-006, per-provider O-007 evidence, and future plan |
 | Restricted tool execution                     | Planned                        | No dispatcher or executor exists                               |
 | Product memory and task persistence           | Planned                        | Phase 8 direction only                                         |
