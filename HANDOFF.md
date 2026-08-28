@@ -6,13 +6,14 @@ Last updated: 2026-08-28
 
 The owner-approved
 [`research-knowledge-demo-connected-presentation`](docs/increments/research-knowledge-demo-connected-presentation.md)
-is locally verified complete with advisories on
-`codex/research-knowledge-demo-connected-presentation` from source-current
-`origin/main` `b057032`. It is not committed or published. Only the selected
-Research and Knowledge scenario mounts a separate prop-free simulated lifecycle
-panel. Explicit no-input Start, Advance, and Cancel actions drive one
-application-owned process-local host; completed epochs privately alternate
-success -> synthesis failure -> success, while cancellation consumes no outcome.
+is published on `main` through [PR #71](https://github.com/SillyRbbit/ai-agent-assistant/pull/71).
+Exact reviewed head `c51bcc8047d08fe55743a95e3ce55f17224bbcb2` squash-merged
+at `d9c7c13191c4b29b210bcf4ab099f68db142dc37`; source-current `origin/main`
+resolves to that commit. Only the selected Research and Knowledge scenario
+mounts a separate prop-free simulated lifecycle panel. Explicit no-input Start,
+Advance, and Cancel actions drive one application-owned process-local host;
+completed epochs privately alternate success -> synthesis failure -> success,
+while cancellation consumes no outcome.
 
 The Command Center fixture graph/controls remain frontend-owned and IPC-free.
 The explicit-refresh read-only projection, the connected lifecycle panel, the
@@ -40,18 +41,20 @@ Target-Mac development startup and source-current browser fallback checks pass.
 Approved UI tooling could not bind to the raw source-current debug executable,
 so native success/failure/cancellation interaction, alternate native
 theme/reduced-motion, page zoom, and native resize are `Not run` advisories.
-No GitHub Actions run exists for this uncommitted branch state.
+The exact PR-head CI run `33169461766` and Documentation run `33169461836`
+passed. Exact merged-main Documentation run `33170215451` and CI run
+`33170215542` also passed every job, including policy, dependency/secret,
+target-Mac Rust, frontend, and Linux Rust validation.
 
 Closeout is `PASS WITH ADVISORIES` in
 [`2026-08-28-research-knowledge-demo-connected-presentation-post-increment-review.md`](docs/reviews/2026-08-28-research-knowledge-demo-connected-presentation-post-increment-review.md).
 
-Exact next prompt: Read `AGENTS.md`, the complete project-memory chain, the
-connected-presentation increment and ExecPlan, and its post-increment report.
-Confirm the valid completion marker and inspect the exact dirty branch diff. Do
-not implement another increment. If the owner explicitly authorizes
-commit/push/squash merge, publish only this verified increment with a
-Conventional Commit and inspect exact GitHub Actions for the published commit;
-otherwise stop after reporting status.
+Exact next prompt: Read `AGENTS.md`, the complete project-memory chain, this
+published checkpoint, and its original increment, ExecPlan, and post-increment
+report. Confirm `origin/main` is the recorded squash commit and the marker
+remains valid. No source increment is owner-selected or Ready. Do not implement
+UI, IPC, provider, runtime, tool, persistence, or other source work without a
+separately selected and owner-approved bounded plan.
 
 ## Prior verified prerequisite history
 

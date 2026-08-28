@@ -8,8 +8,9 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 The owner-approved
 [`research-knowledge-demo-connected-presentation`](docs/increments/research-knowledge-demo-connected-presentation.md)
-is locally verified complete with advisories on a source-current, uncommitted
-branch from `origin/main` `b057032`. One separately labelled prop-free panel in
+is published on `main` at squash commit `d9c7c13` through
+[PR #71](https://github.com/SillyRbbit/ai-agent-assistant/pull/71) from exact
+reviewed head `c51bcc8`. One separately labelled prop-free panel in
 the selected Research and Knowledge scenario uses only four fixed no-input
 commands and one non-authoritative notification. Explicit user actions alone
 start or step the process-local synthetic host. The UI cannot select any trusted
@@ -20,13 +21,14 @@ schedule.
 Complete local verification, independent architecture/security/code review,
 security scanning, zero-finding npm audit, and target-Mac startup/browser
 fallback evidence pass. Raw-debug native lifecycle interaction and unavailable
-native appearance/zoom/resize checks are `Not run` advisories. No GitHub Actions
-result exists because the increment has not been committed or published.
+native appearance/zoom/resize checks are `Not run` advisories. The exact
+PR-head and merged-main Documentation and CI workflows pass every classified
+job.
 
 No next source increment is owner-selected or **Ready**. The smallest next
-action is owner review of the exact diff and completion report. Commit, push,
-squash merge, and published-commit Actions inspection require separate explicit
-authorization and are not a new implementation increment.
+action is owner selection and approval of one bounded follow-on plan. The
+published simulated lifecycle is not authority for general agent UI, runtime,
+provider, tool, approval, persistence, filesystem, network, or device work.
 
 ## Prior verified prerequisites
 

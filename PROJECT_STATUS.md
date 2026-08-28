@@ -6,8 +6,9 @@ Last updated: 2026-08-28
 
 The owner-approved
 [`research-knowledge-demo-connected-presentation`](docs/increments/research-knowledge-demo-connected-presentation.md)
-is locally verified complete with advisories on a source-current branch from
-`origin/main` `b057032`; it is not committed or published. One selected-route,
+is verified complete with advisories and published on `main` through
+[PR #71](https://github.com/SillyRbbit/ai-agent-assistant/pull/71): exact
+reviewed head `c51bcc8` squash-merged at `d9c7c13`. One selected-route,
 prop-free panel connects the existing volatile Research -> Knowledge host
 through the unchanged four no-input commands and one fixed notification. Only
 explicit user actions start or step the lifecycle. Completed epochs privately
@@ -30,12 +31,11 @@ security scanning, zero-finding npm audit, and diff checks pass. Target-Mac
 development startup and source-current browser fallback checks pass. Native
 raw-debug lifecycle interaction and the unavailable native appearance/zoom/
 resize matrix are `Not run` advisories because approved tooling could not bind
-to the raw debug executable. No GitHub Actions result exists for the uncommitted
-state. Overall result: `PASS WITH ADVISORIES`.
+to the raw debug executable. Exact PR-head and merged-main Documentation and CI
+workflows pass every classified job. Overall result: `PASS WITH ADVISORIES`.
 
 No next source increment is selected or Ready. The smallest next action is
-owner review followed, only if explicitly authorized, by commit, push, squash
-merge, and exact published-commit GitHub Actions inspection.
+owner selection and approval of one bounded successor plan.
 
 ## Prior verified prerequisite history
 
