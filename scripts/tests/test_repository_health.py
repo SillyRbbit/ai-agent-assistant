@@ -97,6 +97,16 @@ def write_valid_ui_native_boundary(root: Path) -> None:
         / "research-knowledge-demo-lifecycle-client.ts"
     )
     command_center = root / "src" / "features" / "command-center" / "fixture.ts"
+    lifecycle_panel = (
+        root
+        / "src"
+        / "features"
+        / "command-center"
+        / "ResearchKnowledgeLifecyclePanel.tsx"
+    )
+    command_center_page = (
+        root / "src" / "features" / "command-center" / "CommandCenterPage.tsx"
+    )
     lib = root / "src-tauri" / "src" / "lib.rs"
     projection_rust = (
         root / "src-tauri" / "src" / "research_knowledge_demo_projection.rs"
@@ -129,18 +139,40 @@ def write_valid_ui_native_boundary(root: Path) -> None:
         encoding="utf-8",
     )
     lifecycle_client.write_text(
-        'import { invoke } from "@tauri-apps/api/core";\n'
-        'import { listen, type UnlistenFn } from "@tauri-apps/api/event";\n'
-        'export const RESEARCH_KNOWLEDGE_DEMO_LIFECYCLE_EVENT = "research-knowledge-demo-lifecycle-v1" as const;\n'
-        'invoke<unknown>("get_research_knowledge_demo_lifecycle_snapshot");\n'
-        'invoke<unknown>("start_research_knowledge_demo_lifecycle");\n'
-        'invoke<unknown>("advance_research_knowledge_demo_lifecycle");\n'
-        'invoke<unknown>("cancel_research_knowledge_demo_lifecycle");\n'
-        "listen<unknown>(RESEARCH_KNOWLEDGE_DEMO_LIFECYCLE_EVENT, () => undefined);\n"
-        "const unlisten: UnlistenFn = () => undefined;\n",
+        (
+            Path(__file__).resolve().parents[2]
+            / "src"
+            / "infrastructure"
+            / "tauri"
+            / "research-knowledge-demo-lifecycle-client.ts"
+        ).read_text(encoding="utf-8"),
         encoding="utf-8",
     )
     command_center.write_text("export const fixture = true;\n", encoding="utf-8")
+    lifecycle_panel.write_text(
+        (
+            Path(__file__).resolve().parents[2]
+            / "src"
+            / "features"
+            / "command-center"
+            / "ResearchKnowledgeLifecyclePanel.tsx"
+        ).read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
+    command_center_page.write_text(
+        'import { ResearchKnowledgeLifecyclePanel } from "./ResearchKnowledgeLifecyclePanel";\n'
+        "export function CommandCenterPage() {\n"
+        '  const state = { scenarioId: "research-knowledge-active" };\n'
+        "  return (\n"
+        "    <>\n"
+        '      {state.scenarioId === "research-knowledge-active" ? (\n'
+        "        <ResearchKnowledgeLifecyclePanel />\n"
+        "      ) : null}\n"
+        "    </>\n"
+        "  );\n"
+        "}\n",
+        encoding="utf-8",
+    )
     lib.write_text(
         ".invoke_handler(tauri::generate_handler![\n"
         "app_info::get_app_info,\n"
@@ -326,6 +358,459 @@ class RepositoryHealthTests(unittest.TestCase):
 
             self.assertEqual(health.ui_native_boundary_findings(root), ())
 
+    def test_ui_native_boundary_rejects_alternate_lifecycle_client_consumers(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            alternate = (
+                root / "src" / "features" / "command-center" / "AlternateConsumer.tsx"
+            )
+            consumers = (
+                'import "../../infrastructure/tauri/research-knowledge-demo-lifecycle-client";\n',
+                'void import("../../infrastructure/tauri/research-knowledge-demo-lifecycle-client");\n',
+                'export * from "../../infrastructure/tauri/research-knowledge-demo-lifecycle-client";\n',
+            )
+            for consumer in consumers:
+                with self.subTest(consumer=consumer):
+                    alternate.write_text(consumer, encoding="utf-8")
+
+                    findings = health.ui_native_boundary_findings(root)
+
+                    self.assertTrue(
+                        any("lifecycle client consumer" in finding.detail for finding in findings)
+                    )
+
+            javascript_consumer = (
+                root / "src" / "features" / "command-center" / "AlternateConsumer.jsx"
+            )
+            javascript_consumer.write_text(
+                'export * from "../../infrastructure/tauri/research-knowledge-demo-lifecycle-client";\n',
+                encoding="utf-8",
+            )
+
+            findings = health.ui_native_boundary_findings(root)
+
+            self.assertTrue(
+                any("lifecycle client consumer" in finding.detail for finding in findings)
+            )
+
+    def test_ui_native_boundary_rejects_raw_tauri_lifecycle_transport(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            alternate = (
+                root / "src" / "features" / "command-center" / "AlternateConsumer.tsx"
+            )
+            alternate.write_text(
+                "type RawTauri = Window & { readonly __TAURI_INTERNALS__: { "
+                "invoke(command: string): Promise<unknown> } };\n"
+                "void (window as RawTauri).__TAURI_INTERNALS__.invoke("
+                '"start_research_knowledge_demo_lifecycle");\n',
+                encoding="utf-8",
+            )
+
+            findings = health.ui_native_boundary_findings(root)
+
+            self.assertTrue(any("raw Tauri global" in finding.detail for finding in findings))
+            self.assertTrue(
+                any("sole exact client allowlist" in finding.detail for finding in findings)
+            )
+
+    def test_ui_native_boundary_rejects_lifecycle_panel_import_symbol_drift(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            panel = (
+                root
+                / "src"
+                / "features"
+                / "command-center"
+                / "ResearchKnowledgeLifecyclePanel.tsx"
+            )
+            baseline = panel.read_text(encoding="utf-8")
+            mutations = (
+                baseline.replace(
+                    "  RESEARCH_KNOWLEDGE_DEMO_LIFECYCLE_UNAVAILABLE,\n", "", 1
+                ),
+                baseline.replace(
+                    "  type ResearchKnowledgeDemoLifecycleSnapshot,\n",
+                    "  type ResearchKnowledgeDemoLifecycleSnapshot,\n"
+                    "  futureLifecycleSelector,\n",
+                    1,
+                ),
+            )
+            for mutation in mutations:
+                with self.subTest(mutation=mutation):
+                    panel.write_text(mutation, encoding="utf-8")
+
+                    findings = health.ui_native_boundary_findings(root)
+
+                    self.assertTrue(
+                        any("exact client-symbol allowlist" in finding.detail for finding in findings)
+                    )
+
+    def test_ui_native_boundary_rejects_alternate_lifecycle_panel_references(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            alternate = root / "src" / "features" / "command-center" / "index.ts"
+            references = (
+                'export { ResearchKnowledgeLifecyclePanel } from "./ResearchKnowledgeLifecyclePanel";\n',
+                'void import("./ResearchKnowledgeLifecyclePanel");\n',
+                "const Alternate = ResearchKnowledgeLifecyclePanel;\n",
+            )
+            for reference in references:
+                with self.subTest(reference=reference):
+                    alternate.write_text(reference, encoding="utf-8")
+
+                    findings = health.ui_native_boundary_findings(root)
+
+                    self.assertTrue(
+                        any("lifecycle panel reference" in finding.detail for finding in findings)
+                    )
+
+    def test_ui_native_boundary_rejects_panel_mount_or_scenario_broadening(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            page = (
+                root / "src" / "features" / "command-center" / "CommandCenterPage.tsx"
+            )
+            baseline = page.read_text(encoding="utf-8")
+            mutations = (
+                baseline.replace(
+                    'state.scenarioId === "research-knowledge-active"',
+                    'state.scenarioId !== "infrastructure-blocked"',
+                    1,
+                ),
+                baseline.replace(
+                    "<ResearchKnowledgeLifecyclePanel />",
+                    '<ResearchKnowledgeLifecyclePanel outcome="success" />',
+                    1,
+                ),
+                baseline.replace(
+                    'import { ResearchKnowledgeLifecyclePanel } from "./ResearchKnowledgeLifecyclePanel";',
+                    'import { ResearchKnowledgeLifecyclePanel as LifecyclePanel } from "./ResearchKnowledgeLifecyclePanel";',
+                    1,
+                ),
+            )
+            for mutation in mutations:
+                with self.subTest(mutation=mutation):
+                    page.write_text(mutation, encoding="utf-8")
+
+                    findings = health.ui_native_boundary_findings(root)
+
+                    self.assertTrue(
+                        any("selected-scenario zero-prop" in finding.detail for finding in findings)
+                    )
+
+    def test_ui_native_boundary_rejects_lifecycle_panel_props_and_selectors(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            panel = (
+                root
+                / "src"
+                / "features"
+                / "command-center"
+                / "ResearchKnowledgeLifecyclePanel.tsx"
+            )
+            baseline = panel.read_text(encoding="utf-8")
+            panel.write_text(
+                baseline.replace(
+                    "export function ResearchKnowledgeLifecyclePanel()",
+                    "export function ResearchKnowledgeLifecyclePanel(props: { outcome: string })",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+
+            findings = health.ui_native_boundary_findings(root)
+
+            self.assertTrue(any("zero-prop component" in finding.detail for finding in findings))
+
+            panel.write_text(baseline + '\nconst selectedOutcome = "success";\n', encoding="utf-8")
+            findings = health.ui_native_boundary_findings(root)
+
+            self.assertTrue(
+                any("caller-selectable lifecycle fixture" in finding.detail for finding in findings)
+            )
+
+    def test_ui_native_boundary_rejects_factory_disposal_and_operation_broadening(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            panel = (
+                root
+                / "src"
+                / "features"
+                / "command-center"
+                / "ResearchKnowledgeLifecyclePanel.tsx"
+            )
+            baseline = panel.read_text(encoding="utf-8")
+            mutations = (
+                (
+                    baseline
+                    + "\ncreateResearchKnowledgeDemoLifecycleClient(() => undefined);\n",
+                    "factory or disposal",
+                ),
+                (
+                    baseline
+                    + "\nconst factory = createResearchKnowledgeDemoLifecycleClient;\n",
+                    "factory or disposal",
+                ),
+                (baseline + "\nclient.dispose();\n", "factory or disposal"),
+                (baseline + "\nconst dispose = client.dispose;\n", "factory or disposal"),
+                (
+                    baseline.replace(
+                        "await client.start();",
+                        'await client.start({ outcome: "caller" });',
+                        1,
+                    ),
+                    "explicit switch dispatcher",
+                ),
+                (
+                    baseline + "\nconst startOperation = client.start;\n",
+                    "explicit switch dispatcher",
+                ),
+                (baseline + '\nclient["start"]();\n', "computed lifecycle operation"),
+            )
+            for mutation, expected_detail in mutations:
+                with self.subTest(expected_detail=expected_detail):
+                    panel.write_text(mutation, encoding="utf-8")
+
+                    findings = health.ui_native_boundary_findings(root)
+
+                    self.assertTrue(
+                        any(expected_detail in finding.detail for finding in findings)
+                    )
+
+    def test_ui_native_boundary_rejects_automatic_or_aliased_lifecycle_dispatch(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            panel = (
+                root
+                / "src"
+                / "features"
+                / "command-center"
+                / "ResearchKnowledgeLifecyclePanel.tsx"
+            )
+            baseline = panel.read_text(encoding="utf-8")
+            relocated_start = baseline.replace(
+                "        const current: ResearchKnowledgeDemoLifecycleSnapshot = await client.snapshot();",
+                "        const current: ResearchKnowledgeDemoLifecycleSnapshot = await client.snapshot();\n"
+                "        await client.start();",
+                1,
+            ).replace(
+                "        nextSnapshot = await client.start();",
+                "        nextSnapshot = {} as ResearchKnowledgeDemoLifecycleSnapshot;",
+                1,
+            )
+            mutations = (
+                (relocated_start, "explicit switch dispatcher"),
+                (
+                    baseline + '\nvoid invokeOperation("start");\n',
+                    "three-button explicit dispatcher allowlist",
+                ),
+                (
+                    baseline
+                    + '\nconst automaticDispatch = invokeOperation;\nautomaticDispatch("start");\n',
+                    "three-button explicit dispatcher allowlist",
+                ),
+                (
+                    baseline.replace(
+                        'invokeOperation("start")',
+                        'invokeOperation("cancel")',
+                        1,
+                    ),
+                    "three-button explicit dispatcher allowlist",
+                ),
+                (
+                    baseline
+                    + "\nconst { start: automaticStart } = client;\n"
+                    + "void automaticStart();\n",
+                    "aliased lifecycle operation",
+                ),
+                (
+                    baseline
+                    + '\nconst automaticStart = Reflect.get(client, "start");\n'
+                    + "void automaticStart();\n",
+                    "aliased lifecycle operation",
+                ),
+            )
+            for mutation, expected_detail in mutations:
+                with self.subTest(expected_detail=expected_detail):
+                    panel.write_text(mutation, encoding="utf-8")
+
+                    findings = health.ui_native_boundary_findings(root)
+
+                    self.assertTrue(
+                        any(expected_detail in finding.detail for finding in findings)
+                    )
+
+    def test_ui_native_boundary_digest_rejects_equivalent_operation_aliases(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            panel = (
+                root
+                / "src"
+                / "features"
+                / "command-center"
+                / "ResearchKnowledgeLifecyclePanel.tsx"
+            )
+            baseline = panel.read_text(encoding="utf-8")
+            mutations = (
+                "const transport = client; void transport[\"start\"]();",
+                "const launch = client?.start; void launch?.();",
+                "const launch = Object.values(client)[2] as () => Promise<unknown>; "
+                "void launch();",
+                'void Object.getOwnPropertyDescriptor(client, "start")?.value();',
+            )
+            for mutation in mutations:
+                with self.subTest(mutation=mutation):
+                    panel.write_text(
+                        baseline.replace(
+                            "    return () => {",
+                            f"    {mutation}\n    return () => {{",
+                            1,
+                        ),
+                        encoding="utf-8",
+                    )
+
+                    findings = health.ui_native_boundary_findings(root)
+
+                    self.assertTrue(
+                        any("exact reviewed F-12 digest" in finding.detail for finding in findings)
+                    )
+
+    def test_ui_native_boundary_rejects_snapshot_outside_mount_hydration(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            panel = (
+                root
+                / "src"
+                / "features"
+                / "command-center"
+                / "ResearchKnowledgeLifecyclePanel.tsx"
+            )
+            baseline = panel.read_text(encoding="utf-8")
+            panel.write_text(
+                baseline.replace(
+                    "        const current: ResearchKnowledgeDemoLifecycleSnapshot = await client.snapshot();",
+                    "        const current = client as unknown as ResearchKnowledgeDemoLifecycleSnapshot;",
+                    1,
+                ).replace(
+                    "  const invokeOperation = async",
+                    "  void lifecycleClient?.snapshot();\n"
+                    "  const invokeOperation = async",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+
+            findings = health.ui_native_boundary_findings(root)
+
+            self.assertTrue(
+                any("sole mount-time hydration" in finding.detail for finding in findings)
+            )
+
+    def test_ui_native_boundary_rejects_lifecycle_panel_button_drift(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            panel = (
+                root
+                / "src"
+                / "features"
+                / "command-center"
+                / "ResearchKnowledgeLifecyclePanel.tsx"
+            )
+            baseline = panel.read_text(encoding="utf-8")
+            mutations = (
+                baseline.replace(
+                    "</section>", '<button type="button">Retry</button></section>', 1
+                ),
+                baseline.replace(
+                    "Advance simulated lifecycle", "Choose failed outcome", 1
+                ),
+            )
+            for mutation in mutations:
+                with self.subTest(mutation=mutation):
+                    panel.write_text(mutation, encoding="utf-8")
+
+                    findings = health.ui_native_boundary_findings(root)
+
+                    self.assertTrue(
+                        any(
+                            "three-button explicit dispatcher allowlist" in finding.detail
+                            for finding in findings
+                        )
+                    )
+
+    def test_ui_native_boundary_rejects_every_lifecycle_panel_prohibited_surface(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            panel = (
+                root
+                / "src"
+                / "features"
+                / "command-center"
+                / "ResearchKnowledgeLifecyclePanel.tsx"
+            )
+            baseline = panel.read_text(encoding="utf-8")
+            prohibited = (
+                ("<form>", "form control"),
+                ("<input />", "form control"),
+                ("<select>", "form control"),
+                ("<textarea>", "form control"),
+                ("contentEditable={true}", "editable content"),
+                ("new URLSearchParams()", "route or query selector"),
+                ("useSearchParams()", "route or query selector"),
+                ("useParams()", "route or query selector"),
+                ("location.search", "route or query selector"),
+                ("setTimeout(() => undefined, 1)", "timer or background worker"),
+                ("setInterval(() => undefined, 1)", "timer or background worker"),
+                ("requestAnimationFrame(() => undefined)", "timer or background worker"),
+                ("requestIdleCallback(() => undefined)", "timer or background worker"),
+                ("queueMicrotask(() => undefined)", "timer or background worker"),
+                ('new Worker("fixture")', "timer or background worker"),
+                ('new SharedWorker("fixture")', "timer or background worker"),
+                ("new XMLHttpRequest()", "network, messaging, or storage API"),
+                ('globalThis["fetch"]("/future")', "network, messaging, or storage API"),
+                ('new BroadcastChannel("fixture")', "network, messaging, or storage API"),
+                ("window.postMessage({})", "network, messaging, or storage API"),
+                ("postMessage({})", "network, messaging, or storage API"),
+                ("navigator.sendBeacon()", "network, messaging, or storage API"),
+                ("sendBeacon()", "network, messaging, or storage API"),
+                ("navigator.storage", "network, messaging, or storage API"),
+                ('navigator["storage"]', "network, messaging, or storage API"),
+                ("caches.open()", "network, messaging, or storage API"),
+                ("document.cookie", "network, messaging, or storage API"),
+                ('document["cookie"]', "network, messaging, or storage API"),
+                ('const outcome = "success"', "caller-selectable lifecycle fixture"),
+                ('let script = "failure"', "caller-selectable lifecycle fixture"),
+                ('var stage = "research"', "caller-selectable lifecycle fixture"),
+                ('const selectedFixture = "caller"', "caller-selectable lifecycle fixture"),
+                ('const runId = "caller"', "caller-selectable lifecycle fixture"),
+                ('const selectedAgent = "caller"', "caller-selectable lifecycle fixture"),
+                ('const workflowName = "caller"', "caller-selectable lifecycle fixture"),
+                ('client["start"]()', "computed lifecycle operation"),
+            )
+            for source, expected_detail in prohibited:
+                with self.subTest(source=source):
+                    panel.write_text(f"{baseline}\n{source};\n", encoding="utf-8")
+
+                    findings = health.ui_native_boundary_findings(root)
+
+                    self.assertTrue(
+                        any(expected_detail in finding.detail for finding in findings),
+                        msg=source,
+                    )
+
     def test_ui_native_boundary_rejects_prohibited_ui_and_native_broadening(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -382,6 +867,28 @@ class RepositoryHealthTests(unittest.TestCase):
             findings = health.ui_native_boundary_findings(root)
 
             self.assertTrue(any("Tauri API import" in finding.detail for finding in findings))
+
+    def test_ui_native_boundary_rejects_tauri_plugin_import(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            panel = (
+                root
+                / "src"
+                / "features"
+                / "command-center"
+                / "ResearchKnowledgeLifecyclePanel.tsx"
+            )
+            panel.write_text(
+                panel.read_text(encoding="utf-8")
+                + '\nimport { open } from "@tauri-apps/plugin-shell";\n',
+                encoding="utf-8",
+            )
+
+            findings = health.ui_native_boundary_findings(root)
+
+            self.assertTrue(any("Tauri API import" in finding.detail for finding in findings))
+            self.assertTrue(any("Command Center" in finding.detail for finding in findings))
 
     def test_ui_native_boundary_rejects_extra_tauri_import_symbols(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -591,10 +1098,12 @@ class RepositoryHealthTests(unittest.TestCase):
             )
             client.write_text(
                 client.read_text(encoding="utf-8").replace(
-                    'invoke<unknown>("start_research_knowledge_demo_lifecycle");',
-                    'invoke<unknown>("start_research_knowledge_demo_lifecycle", { runId: "caller" });\n'
-                    'listen<unknown>("future-event", () => undefined);',
-                ),
+                    'invoke<unknown>("start_research_knowledge_demo_lifecycle")',
+                    'invoke<unknown>("start_research_knowledge_demo_lifecycle", '
+                    '{ runId: "caller" })',
+                    1,
+                )
+                + '\nvoid listen<unknown>("future-event", () => undefined);\n',
                 encoding="utf-8",
             )
 
@@ -602,6 +1111,42 @@ class RepositoryHealthTests(unittest.TestCase):
 
             self.assertTrue(any("no-argument command allowlist" in finding.detail for finding in findings))
             self.assertTrue(any("notification allowlist" in finding.detail for finding in findings))
+
+    def test_ui_native_boundary_rejects_lifecycle_invoke_or_listener_aliases(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            client = (
+                root
+                / "src"
+                / "infrastructure"
+                / "tauri"
+                / "research-knowledge-demo-lifecycle-client.ts"
+            )
+            baseline = client.read_text(encoding="utf-8")
+            mutations = (
+                (
+                    baseline
+                    + "\nconst alternateInvoke = invoke;\n"
+                    + 'alternateInvoke("future_command", { outcome: "failed" });\n',
+                    "no-argument command allowlist",
+                ),
+                (
+                    baseline
+                    + "\nconst alternateListen = listen;\n"
+                    + 'void alternateListen("future-event", () => undefined);\n',
+                    "notification allowlist",
+                ),
+            )
+            for mutation, expected_detail in mutations:
+                with self.subTest(expected_detail=expected_detail):
+                    client.write_text(mutation, encoding="utf-8")
+
+                    findings = health.ui_native_boundary_findings(root)
+
+                    self.assertTrue(
+                        any(expected_detail in finding.detail for finding in findings)
+                    )
 
     def test_ui_native_boundary_rejects_every_lifecycle_client_boundary_token(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -624,6 +1169,47 @@ class RepositoryHealthTests(unittest.TestCase):
                     self.assertTrue(
                         any(token in finding.detail for finding in findings),
                         msg=token,
+                    )
+
+    def test_ui_native_boundary_rejects_lifecycle_client_browser_surfaces(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            client = (
+                root
+                / "src"
+                / "infrastructure"
+                / "tauri"
+                / "research-knowledge-demo-lifecycle-client.ts"
+            )
+            baseline = client.read_text(encoding="utf-8")
+            prohibited = (
+                'globalThis["fetch"]("/future")',
+                "new XMLHttpRequest()",
+                'new BroadcastChannel("future")',
+                "window.postMessage({})",
+                "navigator.storage",
+                "caches.open()",
+                "document.cookie",
+                "requestAnimationFrame(() => undefined)",
+                'new Worker("future")',
+            )
+            for source in prohibited:
+                with self.subTest(source=source):
+                    client.write_text(f"{baseline}\n{source};\n", encoding="utf-8")
+
+                    findings = health.ui_native_boundary_findings(root)
+
+                    self.assertTrue(
+                        any(
+                            "prohibited" in finding.detail
+                            and (
+                                "network, messaging, or storage API" in finding.detail
+                                or "timer or background worker" in finding.detail
+                            )
+                            for finding in findings
+                        ),
+                        msg=source,
                     )
 
     def test_ui_native_boundary_rejects_every_lifecycle_rust_boundary_token(self) -> None:

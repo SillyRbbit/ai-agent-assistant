@@ -1,7 +1,7 @@
 # Security policy and development guardrails
 
 Status: Authoritative security policy
-Last updated: 2026-08-20
+Last updated: 2026-08-28
 
 Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
 identifies which security boundaries are current, mocked, planned, or
@@ -75,8 +75,9 @@ persistence, filesystem, background, audit, or device effect. Its volatile data
 is persistently labeled `DEMO MODE · SIMULATED AGENT DATA` and remains separate
 from both the frontend Command Center fixtures and Rust acceptance workflows.
 
-The separately implemented `ResearchKnowledgeDemoHost` remains React-unconnected
-and is exposed only through one narrow Tauri adapter. Its public production
+The separately implemented `ResearchKnowledgeDemoHost` is exposed only through
+one narrow Tauri adapter and one prop-free visibly simulated panel in the
+selected scenario. Its public production
 constructor and no-argument lifecycle methods
 cannot accept an agent, task, root, run, request, profile, runtime, workflow,
 objective, source, fixture, script, outcome, or runtime event. Every run still
@@ -88,11 +89,16 @@ mutating lifecycle operations. That sentinel is not synchronization or
 authorization for future IPC. Snapshots and errors are finite, bounded, and
 content-free. One mutex-owned Tauri state registers only no-argument
 snapshot/start/advance/cancel commands and emits one fixed notification-only
-snapshot event; its unconnected WebView client narrows `unknown`, rejects
-stale/gapped data, and requires explicit snapshot recovery. No React lifecycle
-consumer, provider, model, network, credential, tool, approval dispatch,
-persistence, filesystem, thread, timer, background work, or device effect was
-added.
+snapshot event. Its WebView client narrows `unknown`, enforces the exact DTO and
+journal grammar, and treats only validated command responses as presentation
+authority. Malformed, older, or same-revision events cannot mutate presentation;
+every parser-valid newer notification requires explicit snapshot recovery. Even
+though `core:default` includes WebView event emission, a forged
+grammar-valid event can at most fail the panel closed before its next explicit
+operation; it cannot render a lifecycle transition or outcome. No caller can
+select identity, fixture, script, or outcome, and no provider, model, network,
+credential, tool, approval dispatch, persistence, filesystem, thread, timer,
+background work, or device effect was added.
 
 The owner approved exact `@xyflow/react@12.11.3` and
 `lucide-react@1.33.0` after direct/transitive, license, peer, bundle, and

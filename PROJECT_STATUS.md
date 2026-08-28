@@ -2,15 +2,51 @@
 
 Last updated: 2026-08-28
 
-## Current verified prerequisite
+## Current verified increment
 
-The owner-approved documentation-only
+The owner-approved
+[`research-knowledge-demo-connected-presentation`](docs/increments/research-knowledge-demo-connected-presentation.md)
+is locally verified complete with advisories on a source-current branch from
+`origin/main` `b057032`; it is not committed or published. One selected-route,
+prop-free panel connects the existing volatile Research -> Knowledge host
+through the unchanged four no-input commands and one fixed notification. Only
+explicit user actions start or step the lifecycle. Completed epochs privately
+alternate deterministic success and synthetic synthesis failure; cancellation
+at research, knowledge, or synthesis consumes no outcome slot.
+
+Command responses alone can commit UI state. Notifications cannot render a
+transition or outcome; malformed, older, and same-revision events are inert,
+while every parser-valid newer event requires explicit recovery. The
+WebView cannot select an agent, task, run, profile, runtime, workflow, fixture,
+script, stage, or outcome. The Command Center fixture projection and controls
+remain frontend-owned and IPC-free, and the read-only projection, lifecycle
+panel, Conversations mock, and Rust acceptance workflows remain separate
+deterministic proofs.
+
+Full local verification passes with 28 hook, 76 repository, 313 frontend, 269
+Rust library, and 244 Rust integration tests; one opt-in real Hermes probe is
+intentionally ignored. Production frontend and Tauri no-bundle release builds,
+security scanning, zero-finding npm audit, and diff checks pass. Target-Mac
+development startup and source-current browser fallback checks pass. Native
+raw-debug lifecycle interaction and the unavailable native appearance/zoom/
+resize matrix are `Not run` advisories because approved tooling could not bind
+to the raw debug executable. No GitHub Actions result exists for the uncommitted
+state. Overall result: `PASS WITH ADVISORIES`.
+
+No next source increment is selected or Ready. The smallest next action is
+owner review followed, only if explicitly authorized, by commit, push, squash
+merge, and exact published-commit GitHub Actions inspection.
+
+## Prior verified prerequisite history
+
+The earlier owner-approved documentation-only
 [`research-knowledge-demo-connected-presentation-planning`](docs/increments/research-knowledge-demo-connected-presentation-planning.md)
 is verified complete with advisories. It added no source behavior. Its sole
-purpose was to reconcile the current production success-only lifecycle host
+purpose was to reconcile the then-current production success-only lifecycle host
 with private fixture-only synthesis-failure coverage and define whether a
-future UI can show a
-deterministic failure without caller-selected trusted outcome.
+future UI could show a deterministic failure without caller-selected trusted
+outcome. The separately approved current increment above supersedes that
+planning checkpoint without rewriting its historical evidence.
 
 The owner-approved
 [`research-knowledge-demo-volatile-lifecycle-core`](docs/increments/research-knowledge-demo-volatile-lifecycle-core.md)

@@ -1,6 +1,11 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import {
+  createResearchKnowledgeDemoLifecycleClient,
+  type ResearchKnowledgeDemoLifecycleClient,
+  type ResearchKnowledgeDemoLifecycleSnapshot,
+} from "../../infrastructure/tauri/research-knowledge-demo-lifecycle-client";
 import type { ResearchKnowledgeDemoProjection } from "../../infrastructure/tauri/research-knowledge-demo-projection-client";
 import CommandCenterPage from "./CommandCenterPage";
 import {
@@ -8,6 +13,14 @@ import {
   COMMAND_CENTER_DISCLOSURE,
   COMMAND_CENTER_SCENARIO_IDS,
 } from "./commandCenterProjection";
+
+vi.mock("../../infrastructure/tauri/research-knowledge-demo-lifecycle-client", () => ({
+  createResearchKnowledgeDemoLifecycleClient: vi.fn(),
+  RESEARCH_KNOWLEDGE_DEMO_LIFECYCLE_DISCLOSURE: "DEMO MODE · SIMULATED AGENT DATA",
+  RESEARCH_KNOWLEDGE_DEMO_LIFECYCLE_PROOF_BOUNDARY:
+    "Command Center, Conversations mock, and Rust acceptance workflows are separate deterministic proofs.",
+  RESEARCH_KNOWLEDGE_DEMO_LIFECYCLE_UNAVAILABLE: "Research/Knowledge demo lifecycle unavailable.",
+}));
 
 class ResizeObserverMock {
   disconnect(): void {
@@ -39,6 +52,44 @@ const rustProjection: ResearchKnowledgeDemoProjection = {
   ],
   simulatedOutcomes: ["succeeded", "failed", "cancelled"],
 };
+
+const idleLifecycleSnapshot: ResearchKnowledgeDemoLifecycleSnapshot = {
+  schemaVersion: "research-knowledge-demo-lifecycle-v1",
+  scenarioId: "research-knowledge-demo-v1",
+  disclosure: "DEMO MODE · SIMULATED AGENT DATA",
+  proofBoundary:
+    "Command Center, Conversations mock, and Rust acceptance workflows are separate deterministic proofs.",
+  fixtureProvenance: "application-owned-synthetic-fixture",
+  presentationEpoch: 0,
+  revision: 0,
+  state: "idle",
+  journal: [],
+};
+
+function createLifecycleClientDouble() {
+  const snapshot = vi.fn(() => Promise.resolve(idleLifecycleSnapshot));
+  const start = vi.fn(() => Promise.resolve(idleLifecycleSnapshot));
+  const advance = vi.fn(() => Promise.resolve(idleLifecycleSnapshot));
+  const cancel = vi.fn(() => Promise.resolve(idleLifecycleSnapshot));
+  const dispose = vi.fn();
+  const client: ResearchKnowledgeDemoLifecycleClient = {
+    current: idleLifecycleSnapshot,
+    recoveryRequired: false,
+    advance,
+    cancel,
+    dispose,
+    snapshot,
+    start,
+  };
+  return { advance, cancel, client, dispose, snapshot, start };
+}
+
+const createLifecycleClient = vi.mocked(createResearchKnowledgeDemoLifecycleClient);
+
+beforeEach(() => {
+  createLifecycleClient.mockReset();
+  createLifecycleClient.mockResolvedValue(createLifecycleClientDouble().client);
+});
 
 function openStructuredView(): void {
   fireEvent.click(screen.getByRole("button", { name: "Structured" }));
@@ -75,20 +126,31 @@ describe("CommandCenterPage", () => {
     expect(document.body).not.toHaveTextContent(/\bLIVE\b/);
   });
 
-  it("offers the separate Rust projection only in the active scenario and only on refresh", async () => {
+  it("mounts both separate Rust proofs only in the active scenario and disposes the lifecycle on exit", async () => {
     const loader = vi.fn(() => Promise.resolve(rustProjection));
+    const lifecycle = createLifecycleClientDouble();
+    createLifecycleClient.mockResolvedValueOnce(lifecycle.client);
     render(<CommandCenterPage projectionLoader={loader} />);
 
     expect(screen.queryByRole("region", { name: "Read-only Rust demo projection" })).toBeNull();
+    expect(
+      screen.queryByRole("region", { name: "Research/Knowledge simulated lifecycle" }),
+    ).toBeNull();
     for (const scenarioId of COMMAND_CENTER_SCENARIO_IDS.filter(
       (id) => id !== "research-knowledge-active",
     )) {
       selectScenario(scenarioId);
       expect(screen.queryByRole("region", { name: "Read-only Rust demo projection" })).toBeNull();
+      expect(
+        screen.queryByRole("region", { name: "Research/Knowledge simulated lifecycle" }),
+      ).toBeNull();
     }
 
     selectScenario("research-knowledge-active");
     const panel = screen.getByRole("region", { name: "Read-only Rust demo projection" });
+    const lifecyclePanel = screen.getByRole("region", {
+      name: "Research/Knowledge simulated lifecycle",
+    });
     expect(loader).not.toHaveBeenCalled();
     expect(panel).toHaveTextContent("DEMO MODE · SIMULATED AGENT DATA");
     expect(panel).toHaveTextContent(
@@ -97,6 +159,17 @@ describe("CommandCenterPage", () => {
     expect(
       within(panel).queryByRole("button", { name: /start|cancel|approve|execute/i }),
     ).toBeNull();
+    await waitFor(() => {
+      expect(lifecycle.snapshot).toHaveBeenCalledOnce();
+    });
+    expect(createLifecycleClient).toHaveBeenCalledOnce();
+    expect(lifecycle.start).not.toHaveBeenCalled();
+    expect(lifecycle.advance).not.toHaveBeenCalled();
+    expect(lifecycle.cancel).not.toHaveBeenCalled();
+    expect(lifecyclePanel).toHaveTextContent("DEMO MODE · SIMULATED AGENT DATA");
+    expect(lifecyclePanel).toHaveTextContent(
+      "Command Center, Conversations mock, and Rust acceptance workflows are separate deterministic proofs.",
+    );
 
     fireEvent.click(within(panel).getByRole("button", { name: "Refresh Rust projection" }));
 
@@ -109,6 +182,12 @@ describe("CommandCenterPage", () => {
 
     selectScenario("workflow-completed");
     expect(screen.queryByRole("region", { name: "Read-only Rust demo projection" })).toBeNull();
+    expect(
+      screen.queryByRole("region", { name: "Research/Knowledge simulated lifecycle" }),
+    ).toBeNull();
+    await waitFor(() => {
+      expect(lifecycle.dispose).toHaveBeenCalledOnce();
+    });
   });
 
   it("renders every exact agent name and complete accessible label in graph nodes", () => {

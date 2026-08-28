@@ -7,6 +7,8 @@ export const RESEARCH_KNOWLEDGE_DEMO_LIFECYCLE_DISCLOSURE =
   "DEMO MODE · SIMULATED AGENT DATA" as const;
 export const RESEARCH_KNOWLEDGE_DEMO_LIFECYCLE_PROOF_BOUNDARY =
   "Command Center, Conversations mock, and Rust acceptance workflows are separate deterministic proofs." as const;
+export const RESEARCH_KNOWLEDGE_DEMO_LIFECYCLE_UNAVAILABLE =
+  "Research/Knowledge demo lifecycle unavailable." as const;
 
 export type ResearchKnowledgeDemoLifecycleState =
   | "idle"
@@ -94,10 +96,72 @@ const TERMINAL_STATES = new Set<ResearchKnowledgeDemoLifecycleState>([
   "failed",
   "cancelled",
 ]);
+const JOURNAL_GRAMMAR: Readonly<
+  Record<
+    ResearchKnowledgeDemoLifecycleState,
+    readonly (readonly ResearchKnowledgeDemoLifecycleEventKind[])[]
+  >
+> = {
+  idle: [[]],
+  research: [["research-started"]],
+  knowledge: [["research-started", "research-completed", "knowledge-started"]],
+  synthesis: [
+    [
+      "research-started",
+      "research-completed",
+      "knowledge-started",
+      "knowledge-completed",
+      "synthesis-started",
+    ],
+  ],
+  succeeded: [
+    [
+      "research-started",
+      "research-completed",
+      "knowledge-started",
+      "knowledge-completed",
+      "synthesis-started",
+      "completed",
+    ],
+  ],
+  failed: [
+    [
+      "research-started",
+      "research-completed",
+      "knowledge-started",
+      "knowledge-completed",
+      "synthesis-started",
+      "failed",
+    ],
+  ],
+  cancelled: [
+    ["research-started", "cancelled"],
+    ["research-started", "research-completed", "knowledge-started", "cancelled"],
+    [
+      "research-started",
+      "research-completed",
+      "knowledge-started",
+      "knowledge-completed",
+      "synthesis-started",
+      "cancelled",
+    ],
+  ],
+  "cleanup-pending": [
+    ["cleanup-pending"],
+    ["research-started", "cleanup-pending"],
+    ["research-started", "research-completed", "knowledge-started", "cleanup-pending"],
+    [
+      "research-started",
+      "research-completed",
+      "knowledge-started",
+      "knowledge-completed",
+      "synthesis-started",
+      "cleanup-pending",
+    ],
+  ],
+};
 const MAX_JOURNAL_ENTRIES = 8;
 const MAX_PRESENTATION_EPOCH = 0xffff_ffff;
-const CLOSED_ERROR = "Research/Knowledge demo lifecycle unavailable.";
-
 function isRecord(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value);
 }
@@ -121,20 +185,14 @@ function isEventKind(value: unknown): value is ResearchKnowledgeDemoLifecycleEve
   );
 }
 
-function lastKindMatchesState(
+function journalMatchesState(
   state: ResearchKnowledgeDemoLifecycleState,
   journal: readonly ResearchKnowledgeDemoLifecycleEntry[],
 ): boolean {
-  if (state === "idle") return journal.length === 0;
-  const last = journal.at(-1)?.kind;
-  return (
-    (state === "research" && last === "research-started") ||
-    (state === "knowledge" && last === "knowledge-started") ||
-    (state === "synthesis" && last === "synthesis-started") ||
-    (state === "succeeded" && last === "completed") ||
-    (state === "failed" && last === "failed") ||
-    (state === "cancelled" && last === "cancelled") ||
-    (state === "cleanup-pending" && last === "cleanup-pending")
+  return JOURNAL_GRAMMAR[state].some(
+    (expected) =>
+      expected.length === journal.length &&
+      expected.every((kind, index) => journal[index]?.kind === kind),
   );
 }
 
@@ -169,7 +227,14 @@ export function parseResearchKnowledgeDemoLifecycleSnapshot(
     }
     journal.push(Object.freeze({ revision: index + 1, kind: entry["kind"] }));
   }
-  if (!lastKindMatchesState(value["state"], journal)) return undefined;
+  if (
+    !journalMatchesState(value["state"], journal) ||
+    (value["state"] === "idle"
+      ? value["presentationEpoch"] !== 0
+      : value["presentationEpoch"] === 0)
+  ) {
+    return undefined;
+  }
 
   return Object.freeze({
     schemaVersion: "research-knowledge-demo-lifecycle-v1",
@@ -212,14 +277,62 @@ function isDirectNotificationSuccessor(
   ) {
     return false;
   }
+  const allowedState =
+    (current.state === "research" &&
+      (candidate.state === "knowledge" ||
+        candidate.state === "cancelled" ||
+        candidate.state === "cleanup-pending")) ||
+    (current.state === "knowledge" &&
+      (candidate.state === "synthesis" ||
+        candidate.state === "cancelled" ||
+        candidate.state === "cleanup-pending")) ||
+    (current.state === "synthesis" &&
+      (candidate.state === "succeeded" ||
+        candidate.state === "failed" ||
+        candidate.state === "cancelled" ||
+        candidate.state === "cleanup-pending"));
+  if (!allowedState) return false;
   return current.journal.every((entry, index) => {
     const candidateEntry = candidate.journal[index];
     return candidateEntry?.revision === entry.revision && candidateEntry.kind === entry.kind;
   });
 }
 
+type LifecycleRequest = "snapshot" | "start" | "advance" | "cancel";
+
+function isExpectedOperationResponse(
+  request: LifecycleRequest,
+  basis: ResearchKnowledgeDemoLifecycleSnapshot | undefined,
+  candidate: ResearchKnowledgeDemoLifecycleSnapshot,
+): boolean {
+  if (request === "snapshot") return true;
+  if (basis === undefined) return false;
+  if (request === "start") {
+    return (
+      (basis.state === "idle" || TERMINAL_STATES.has(basis.state)) &&
+      candidate.presentationEpoch === basis.presentationEpoch + 1 &&
+      candidate.state === "research"
+    );
+  }
+  if (candidate.presentationEpoch !== basis.presentationEpoch) return false;
+  if (request === "advance") {
+    return (
+      isDirectNotificationSuccessor(basis, candidate) &&
+      ((basis.state === "research" && candidate.state === "knowledge") ||
+        (basis.state === "knowledge" && candidate.state === "synthesis") ||
+        (basis.state === "synthesis" &&
+          (candidate.state === "succeeded" || candidate.state === "failed")))
+    );
+  }
+  return (
+    isDirectNotificationSuccessor(basis, candidate) &&
+    (basis.state === "research" || basis.state === "knowledge" || basis.state === "synthesis") &&
+    candidate.state === "cancelled"
+  );
+}
+
 function closedError(): Error {
-  return new Error(CLOSED_ERROR);
+  return new Error(RESEARCH_KNOWLEDGE_DEMO_LIFECYCLE_UNAVAILABLE);
 }
 
 export async function createResearchKnowledgeDemoLifecycleClient(
@@ -231,9 +344,15 @@ export async function createResearchKnowledgeDemoLifecycleClient(
   let inFlight = false;
   let unlisten: UnlistenFn;
 
-  const acceptResponse = (value: unknown): ResearchKnowledgeDemoLifecycleSnapshot => {
+  const acceptResponse = (
+    request: LifecycleRequest,
+    basis: ResearchKnowledgeDemoLifecycleSnapshot | undefined,
+    value: unknown,
+  ): ResearchKnowledgeDemoLifecycleSnapshot => {
     const snapshot = parseResearchKnowledgeDemoLifecycleSnapshot(value);
-    if (snapshot === undefined) throw closedError();
+    if (snapshot === undefined || !isExpectedOperationResponse(request, basis, snapshot)) {
+      throw closedError();
+    }
     if (
       current !== undefined &&
       (snapshot.presentationEpoch < current.presentationEpoch ||
@@ -262,25 +381,21 @@ export async function createResearchKnowledgeDemoLifecycleClient(
       ) {
         return;
       }
-      if (!isDirectNotificationSuccessor(current, candidate)) {
-        recoveryRequired = true;
-        return;
-      }
-      current = candidate;
-      recoveryRequired = false;
-      onSnapshot(candidate);
+      recoveryRequired = true;
     });
   } catch {
     throw closedError();
   }
 
   const invokeSnapshot = async (
+    requestKind: LifecycleRequest,
     request: () => Promise<unknown>,
   ): Promise<ResearchKnowledgeDemoLifecycleSnapshot> => {
     if (disposed || inFlight) throw closedError();
     inFlight = true;
+    const basis = current;
     try {
-      return acceptResponse(await request());
+      return acceptResponse(requestKind, basis, await request());
     } catch {
       throw closedError();
     } finally {
@@ -296,11 +411,15 @@ export async function createResearchKnowledgeDemoLifecycleClient(
       return recoveryRequired;
     },
     snapshot: () =>
-      invokeSnapshot(() => invoke<unknown>("get_research_knowledge_demo_lifecycle_snapshot")),
-    start: () => invokeSnapshot(() => invoke<unknown>("start_research_knowledge_demo_lifecycle")),
+      invokeSnapshot("snapshot", () =>
+        invoke<unknown>("get_research_knowledge_demo_lifecycle_snapshot"),
+      ),
+    start: () =>
+      invokeSnapshot("start", () => invoke<unknown>("start_research_knowledge_demo_lifecycle")),
     advance: () =>
-      invokeSnapshot(() => invoke<unknown>("advance_research_knowledge_demo_lifecycle")),
-    cancel: () => invokeSnapshot(() => invoke<unknown>("cancel_research_knowledge_demo_lifecycle")),
+      invokeSnapshot("advance", () => invoke<unknown>("advance_research_knowledge_demo_lifecycle")),
+    cancel: () =>
+      invokeSnapshot("cancel", () => invoke<unknown>("cancel_research_knowledge_demo_lifecycle")),
     dispose: () => {
       if (disposed) return;
       disposed = true;

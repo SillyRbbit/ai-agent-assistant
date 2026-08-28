@@ -1,7 +1,7 @@
 # Cortexa project direction
 
 Status: Owner-approved repository-governance and planned-architecture direction
-Last updated: 2026-08-13
+Last updated: 2026-08-28
 Decision authority: D-078
 
 This document defines present project scope and future-facing architecture
@@ -58,8 +58,12 @@ component for evidence-backed reasons.
 
 ## Current runtime and native multi-agent direction
 
-The application-owned runtime foundation now exists in Rust but is not wired to
-Tauri, React, a provider, or a live model:
+The application-owned runtime foundation now exists in Rust but is not
+generically or caller-selectably wired to Tauri, React, a provider, or a live
+model. The sole current UI exception is one application-owned sealed synthetic
+Research -> Knowledge demo host behind four fixed no-input Tauri commands and
+one visibly simulated panel; callers cannot select its runtime, workflow,
+identity, fixture, script, or outcome:
 
 ```text
 AgentRuntime
@@ -115,16 +119,18 @@ Research; Knowledge & Document; Coding; QA & Validation; Security & Risk; Cloud
 Infrastructure; Systems Operations; and Workflow Automation. QA and Security
 are cross-cutting, but group membership grants no route or authority. The Rust
 core also contains the bounded `AgentTask`, trusted `AgentExecutionContext`,
-and `AgentOrchestrator` foundation accepted by D-083. These remain unwired and
-do not make any definition a shipping or autonomous assistant.
+and `AgentOrchestrator` foundation accepted by D-083. Those generic task and
+catalog surfaces remain unwired; the sealed no-input demo-host exception above
+does not make any definition a shipping or autonomous assistant.
 
 D-084 also implements a non-executing governance foundation above the same
-unwired task/runtime core. Nine exact policy profiles bind sealed definition,
+non-generically exposed task/runtime core. Nine exact policy profiles bind sealed definition,
 task, live runtime, approval, delegation, and volatile audit attribution. The
 Personal profile alone is eligible for the two existing local schemas; all
 specialists deny them. Approval never dispatches a tool, every execution result
-is `NotAttempted`, runtime tool proposals remain rejected, and no provider, IPC,
-UI, durable audit, executor, or device action exists.
+is `NotAttempted`, runtime tool proposals remain rejected, and the sealed
+demo-host exception exposes no governance control, provider, durable audit,
+executor, or device action.
 
 The generic deterministic orchestration phase keeps delegation depth,
 total-child budget per root, and active-child concurrency at one; the root is

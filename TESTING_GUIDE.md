@@ -1,7 +1,7 @@
 # Cortexa testing guide
 
 Status: Authoritative testing standard
-Last updated: 2026-08-25
+Last updated: 2026-08-28
 
 ## Testing principles
 
@@ -97,13 +97,32 @@ binaries. The executable matrix and current counts are in
 
 This command proves application-owned contracts with deterministic fixtures.
 Workflow response contracts use the test-only `MockAgentRuntime`; governance
-and private units also exercise the unwired `NativeAgentRuntime` wrapper. The
+and private units also exercise the `NativeAgentRuntime` wrapper, which product
+source uses only through the sealed no-input demo host. The
 mock descriptor uses the sole closed `Native` runtime identity, but the command
 is not proof of a configured provider, live model, external operation, real
-tool execution, native dialog display, or connected UI. The complete 249/447
+tool execution, native dialog display, or connected UI. The complete 269/476
 evidence is macOS-specific because the approval-source unit is target-gated; a
 non-macOS run omits that unit. Run this as focused evidence; it does not replace
 `npm run verify` when the increment requires complete verification.
+
+### Connected Research/Knowledge demo lifecycle
+
+The selected Command Center scenario separately mounts a fixed simulated
+lifecycle client. Its focused tests must cover exact DTO and journal grammar,
+requested-operation responses, response-only presentation authority,
+malformed/stale/duplicate/gapped/contradictory/late events, unsolicited valid
+terminal events, closed errors, explicit start/advance/cancel actions, private
+success/failure scheduling, cancellation without schedule consumption,
+mount/disposal, busy controls, accessibility, and the exact F-12 sole-consumer
+boundary. This panel is not evidence that the frontend fixture projection,
+Conversations mock, and Rust acceptance workflows are integrated.
+
+Target-Mac evidence must distinguish the source-current raw debug executable
+from any stale bundled release app. When approved tooling cannot bind to the
+raw debug process, record native interaction, alternate appearance/reduced
+motion, page zoom, and resize as `Not run`; a browser-rendered fallback can
+verify layout and disclosure but cannot substitute for native lifecycle proof.
 
 ### Hook and repository-workflow tests
 

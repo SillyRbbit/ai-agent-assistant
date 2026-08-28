@@ -59,8 +59,12 @@ start the next increment early.
   own plan and project-owner approval. ARB-002 remains unresolved.
 - Preserve verified native typed boundaries, deterministic mocks, contracts,
   tests, and decisions. `AgentRuntime` and the sole/default
-  `NativeAgentRuntime` foundation are implemented but not wired to Tauri,
-  React, a provider, or a live model. D-082 accepts native multi-agent
+  `NativeAgentRuntime` foundation are not generically or caller-selectably wired
+  to Tauri, React, a provider, or a live model. The sole current UI exception is
+  one application-owned sealed synthetic Research -> Knowledge demo host behind
+  four fixed no-input Tauri commands and one visibly simulated panel; it grants
+  no runtime-selection, provider, execution, persistence, or device authority.
+  D-082 accepts native multi-agent
   architecture above that runtime; only separately approved bounded plans may
   implement its phases. `HermesAgentRuntime` remains Deferred/Blocked and
   OpenClaw is evaluation-only. Keep external-framework types inside narrow

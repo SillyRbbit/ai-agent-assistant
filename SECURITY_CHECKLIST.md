@@ -1,7 +1,7 @@
 # Cortexa security checklist
 
 Status: Authoritative change and release security review checklist
-Last updated: 2026-08-25
+Last updated: 2026-08-28
 
 Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
@@ -299,9 +299,10 @@ production boundary exists.
       consequential action.
 - [x] Command Center fixture controls invoke no Tauri command/listener, network,
       clipboard, storage, filesystem, provider, model, tool, approval, policy,
-      audit, runtime, permission, or device path. The separate
-      Research/Knowledge panel makes exactly one explicit argument-free,
-      read-only projection query and registers no event listener.
+      audit, runtime, permission, or device path. In the selected scenario, a
+      separate projection panel makes one explicit argument-free read-only
+      query, and a separately labelled prop-free lifecycle panel owns the sole
+      fixed listener and no-input lifecycle client.
 - [x] Rust owns every projection identity and returns only a closed bounded
       synthetic DTO. The WebView runtime-narrows the response, maps failures to
       fixed unavailable copy, and cannot supply agent, task, run, profile,
@@ -340,16 +341,29 @@ production boundary exists.
 - [x] No Tauri command/event/state, frontend consumer, capability, CSP,
       permission, provider, model, network, credential, tool, approval dispatch,
       persistence, filesystem, timer, thread, worker, dependency, or device
-      effect changed.
-- [x] Target-Mac focused/full/static/security evidence passes. Rendered and IPC
-      checks are Not run because the core is deliberately unwired.
+      effect was added by the core increment.
+- [x] The connected presentation retains four no-input commands and one fixed
+      notification. Validated command responses alone can commit presentation;
+      malformed/older/same-revision events are inert, and every parser-valid
+      newer event requires explicit recovery without rendering its state.
+- [x] The private completed-run schedule is success -> failure -> repeat;
+      cancellation at every active stage consumes no outcome, and no selector
+      crosses IPC or the feature boundary.
+- [x] F-12 pins the sole client/panel, exact source digests, command/event token
+      locality, no-argument operations, and prohibited raw Tauri/browser
+      surfaces. It is a static regression guard, not runtime authorization.
+- [x] Target-Mac startup and browser fallback evidence pass. Source-current raw
+      debug lifecycle interaction, alternate native theme/reduced motion,
+      page zoom, and native resize are `Not run` because approved tooling could
+      not bind to the raw debug executable.
 
 ## Native multi-agent deterministic demonstrations
 
 - [x] Every demonstration discloses deterministic fixture data,
-      `MockAgentRuntime` versus the unwired `NativeAgentRuntime`, real governed
-      boundaries, simulated external results, and the absence of consequential
-      product or external-system effects.
+      `MockAgentRuntime` acceptance proofs versus the sealed no-input
+      `NativeAgentRuntime` demo host, real governed boundaries, simulated
+      external results, and the absence of consequential product or
+      external-system effects.
 - [x] No provider/application network, live model, credential, production
       document, repository, cloud account, host, service, tool executor, IPC
       command, or new permission participates in the acceptance suite. Cargo is
@@ -372,9 +386,10 @@ production boundary exists.
       persisting shared knowledge.
 - [x] Audit evidence is bounded, redacted, attributed, process-local, and
       non-authorizing; it is not represented as durable product audit.
-- [x] The suite contains no tracked screenshot because the backend workflows
-      have no connected UI; the separately validated Command Center remains a
-      simulated frontend projection rather than backend execution evidence.
+- [x] The native acceptance suite itself has no connected UI and is not
+      end-to-end product evidence. The separately connected sealed demo panel
+      has independent presentation evidence and does not connect the acceptance
+      workflows to the frontend fixture projection or real execution.
 
 ## Tauri IPC review
 

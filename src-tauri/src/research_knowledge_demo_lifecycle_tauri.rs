@@ -164,6 +164,33 @@ mod tests {
     }
 
     #[test]
+    fn no_input_completed_epochs_alternate_success_and_synthetic_failure(
+    ) -> Result<(), ResearchKnowledgeDemoLifecycleError> {
+        let state = ResearchKnowledgeDemoLifecycleTauriState::new();
+
+        let complete_epoch = || {
+            mutate_and_notify(&state, LifecycleOperation::Start, |_| Ok(()))?;
+            mutate_and_notify(&state, LifecycleOperation::Advance, |_| Ok(()))?;
+            mutate_and_notify(&state, LifecycleOperation::Advance, |_| Ok(()))?;
+            mutate_and_notify(&state, LifecycleOperation::Advance, |_| Ok(()))
+        };
+
+        assert_eq!(
+            complete_epoch()?.state(),
+            ResearchKnowledgeDemoLifecycleState::Succeeded
+        );
+        assert_eq!(
+            complete_epoch()?.state(),
+            ResearchKnowledgeDemoLifecycleState::Failed
+        );
+        assert_eq!(
+            complete_epoch()?.state(),
+            ResearchKnowledgeDemoLifecycleState::Succeeded
+        );
+        Ok(())
+    }
+
+    #[test]
     fn cancellation_is_committed_and_notified_without_replacing_the_host(
     ) -> Result<(), ResearchKnowledgeDemoLifecycleError> {
         let state = ResearchKnowledgeDemoLifecycleTauriState::new();

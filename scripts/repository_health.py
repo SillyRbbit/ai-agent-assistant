@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import subprocess
@@ -106,13 +107,104 @@ EXPECTED_TAURI_INVOKES = {
     ),
 }
 COMMAND_CENTER_PROHIBITED_TOKENS = (
-    "@tauri-apps/api",
+    "@tauri-apps/",
     "fetch(",
     "WebSocket",
     "EventSource",
     "localStorage",
     "sessionStorage",
     "indexedDB",
+)
+LIFECYCLE_CLIENT_MODULE_TOKEN = "research-knowledge-demo-lifecycle-client"
+LIFECYCLE_CLIENT_PATH = (
+    "src/infrastructure/tauri/research-knowledge-demo-lifecycle-client.ts"
+)
+LIFECYCLE_BROWSER_BOUNDARY_TOKENS = (
+    ("get_research_knowledge_demo_lifecycle_snapshot", 1),
+    ("start_research_knowledge_demo_lifecycle", 1),
+    ("advance_research_knowledge_demo_lifecycle", 1),
+    ("cancel_research_knowledge_demo_lifecycle", 1),
+    ("research-knowledge-demo-lifecycle-v1", 4),
+)
+PRODUCTION_TAURI_GLOBAL_TOKENS = ("__TAURI_INTERNALS__", "__TAURI__")
+LIFECYCLE_PANEL_PATH = (
+    "src/features/command-center/ResearchKnowledgeLifecyclePanel.tsx"
+)
+LIFECYCLE_PANEL_MODULE_TOKEN = "ResearchKnowledgeLifecyclePanel"
+EXPECTED_LIFECYCLE_PANEL_SHA256 = (
+    "13169f328f3dc3849ce49d1a4e0fae98e1277384ec01cb4f0a23fd66bdc5ee4a"
+)
+EXPECTED_LIFECYCLE_CLIENT_SHA256 = (
+    "e7dbb1a2674330e5da504b4308faa4e284387e880cc20f36276b34cbff20f0d4"
+)
+LIFECYCLE_PANEL_EXPECTED_IMPORTS = frozenset(
+    {
+        "createResearchKnowledgeDemoLifecycleClient",
+        "RESEARCH_KNOWLEDGE_DEMO_LIFECYCLE_DISCLOSURE",
+        "RESEARCH_KNOWLEDGE_DEMO_LIFECYCLE_PROOF_BOUNDARY",
+        "RESEARCH_KNOWLEDGE_DEMO_LIFECYCLE_UNAVAILABLE",
+        "type ResearchKnowledgeDemoLifecycleClient",
+        "type ResearchKnowledgeDemoLifecycleSnapshot",
+    }
+)
+LIFECYCLE_PANEL_EXPECTED_BUTTON_LABELS = (
+    "Start simulated lifecycle",
+    "Advance simulated lifecycle",
+    "Cancel simulated lifecycle",
+)
+LIFECYCLE_BROWSER_SURFACE_PATTERNS = (
+    (
+        re.compile(
+            r"\b(?:setTimeout|setInterval|requestAnimationFrame|requestIdleCallback|"
+            r"queueMicrotask|Worker|SharedWorker)\b"
+        ),
+        "timer or background worker",
+    ),
+    (
+        re.compile(
+            r"\bfetch\s*\(|"
+            r"\b(?:globalThis|window|self)\s*\[\s*[\"\']fetch[\"\']\s*\]\s*\(|"
+            r"\b(?:XMLHttpRequest|BroadcastChannel|postMessage|sendBeacon)\b|"
+            r"\bnavigator(?:\.storage|\s*\[\s*[\"\']storage[\"\']\s*\])|"
+            r"\bcaches\b|"
+            r"\bdocument(?:\.cookie|\s*\[\s*[\"\']cookie[\"\']\s*\])"
+        ),
+        "network, messaging, or storage API",
+    ),
+)
+LIFECYCLE_PANEL_PROHIBITED_PATTERNS = (
+    (re.compile(r"<(?:form|input|select|textarea)\b", re.IGNORECASE), "form control"),
+    (re.compile(r"\bcontentEditable\s*=", re.IGNORECASE), "editable content"),
+    (
+        re.compile(r"\b(?:URLSearchParams|useSearchParams|useParams)\b|\blocation\.search\b"),
+        "route or query selector",
+    ),
+    *LIFECYCLE_BROWSER_SURFACE_PATTERNS,
+    (
+        re.compile(
+            r"\b(?:const|let|var)\s+(?:selected|requested|chosen)?"
+            r"(?:agent|task|run|profile|runtime|workflow|objective|outcome|script|stage|fixture)"
+            r"(?:Id|Name|Key)?\b|"
+            r"\b(?:selected|requested|chosen)?"
+            r"(?:agent|task|run|profile|runtime|workflow|objective|outcome|script|stage|fixture)"
+            r"(?:Id|Name|Key)?\s*(?:=(?!=)|:)",
+            re.IGNORECASE,
+        ),
+        "caller-selectable lifecycle fixture",
+    ),
+    (
+        re.compile(r"\b(?:client|clientRef\.current)\s*\["),
+        "computed lifecycle operation",
+    ),
+    (
+        re.compile(
+            r"\{[^{}]*\}\s*=\s*(?:client|clientRef\.current)\b|"
+            r"\.\.\.\s*(?:client|clientRef\.current)\b|"
+            r"\bReflect\.get\s*\(\s*(?:client|clientRef\.current)\b",
+            re.DOTALL,
+        ),
+        "aliased lifecycle operation",
+    ),
 )
 EXPECTED_CAPABILITY_FILES = frozenset({"default.json"})
 EXPECTED_CAPABILITY_CONFIGURATION = {
@@ -598,19 +690,35 @@ def documentation_truth_findings(root: Path) -> tuple[Finding, ...]:
 def ui_native_boundary_findings(root: Path) -> tuple[Finding, ...]:
     findings: list[Finding] = []
     source_root = root / "src"
-    for path in sorted((*source_root.rglob("*.ts"), *source_root.rglob("*.tsx"))):
-        if path.name.endswith((".test.ts", ".test.tsx")):
+    production_sources: dict[str, str] = {}
+    source_paths = {
+        path
+        for pattern in ("*.ts", "*.tsx", "*.js", "*.jsx", "*.mjs", "*.cjs")
+        for path in source_root.rglob(pattern)
+    }
+    for path in sorted(source_paths):
+        if re.search(r"\.(?:test|spec)\.[cm]?[jt]sx?$", path.name):
             continue
         relative_path = path.relative_to(root).as_posix()
         text = read_text(path)
         if text is None:
             findings.append(Finding("ui-native-boundary", relative_path, "source file is not UTF-8 text"))
             continue
-        if "@tauri-apps/api" in text:
+        production_sources[relative_path] = text
+        for token in PRODUCTION_TAURI_GLOBAL_TOKENS:
+            if token in text:
+                findings.append(
+                    Finding(
+                        "ui-native-boundary",
+                        relative_path,
+                        f"production source contains prohibited raw Tauri global {token!r}",
+                    )
+                )
+        if "@tauri-apps/" in text:
             expected_imports = EXPECTED_TAURI_IMPORTS.get(relative_path)
             if (
                 expected_imports is None
-                or text.count("@tauri-apps/api") != len(expected_imports)
+                or text.count("@tauri-apps/") != len(expected_imports)
                 or any(text.count(expected_import) != 1 for expected_import in expected_imports)
             ):
                 findings.append(Finding("ui-native-boundary", relative_path, "Tauri API import is outside the exact allowlist"))
@@ -618,6 +726,331 @@ def ui_native_boundary_findings(root: Path) -> tuple[Finding, ...]:
             for token in COMMAND_CENTER_PROHIBITED_TOKENS:
                 if token in text:
                     findings.append(Finding("ui-native-boundary", relative_path, f"Command Center contains prohibited boundary token {token!r}"))
+
+    lifecycle_client_consumers = tuple(
+        relative_path
+        for relative_path, text in production_sources.items()
+        if LIFECYCLE_CLIENT_MODULE_TOKEN in text
+    )
+    if frozenset(lifecycle_client_consumers) != frozenset({LIFECYCLE_PANEL_PATH}):
+        findings.append(
+            Finding(
+                "ui-native-boundary",
+                "src",
+                "lifecycle client consumer differs from the sole exact Command Center panel allowlist",
+            )
+        )
+
+    for token, expected_count in LIFECYCLE_BROWSER_BOUNDARY_TOKENS:
+        token_paths = tuple(
+            relative_path
+            for relative_path, text in production_sources.items()
+            if token in text
+        )
+        if token_paths != (LIFECYCLE_CLIENT_PATH,) or production_sources.get(
+            LIFECYCLE_CLIENT_PATH, ""
+        ).count(token) != expected_count:
+            findings.append(
+                Finding(
+                    "ui-native-boundary",
+                    "src",
+                    f"lifecycle browser token {token!r} differs from the sole exact client allowlist",
+                )
+            )
+
+    lifecycle_panel_text = production_sources.get(LIFECYCLE_PANEL_PATH)
+    if lifecycle_panel_text is None:
+        findings.append(
+            Finding(
+                "ui-native-boundary",
+                LIFECYCLE_PANEL_PATH,
+                "required lifecycle panel is not UTF-8 text",
+            )
+        )
+    else:
+        lifecycle_panel_digest = hashlib.sha256(
+            lifecycle_panel_text.encode("utf-8")
+        ).hexdigest()
+        if lifecycle_panel_digest != EXPECTED_LIFECYCLE_PANEL_SHA256:
+            findings.append(
+                Finding(
+                    "ui-native-boundary",
+                    LIFECYCLE_PANEL_PATH,
+                    "lifecycle panel source differs from the exact reviewed F-12 digest",
+                )
+            )
+
+        panel_import_matches = re.findall(
+            r'import\s*\{(?P<symbols>[^}]*)\}\s*from\s*'
+            r'["\']\.\./\.\./infrastructure/tauri/'
+            r'research-knowledge-demo-lifecycle-client["\']\s*;?',
+            lifecycle_panel_text,
+            re.MULTILINE,
+        )
+        imported_symbols = tuple(
+            symbol.strip()
+            for match in panel_import_matches
+            for symbol in match.split(",")
+            if symbol.strip()
+        )
+        if (
+            len(panel_import_matches) != 1
+            or len(imported_symbols) != len(LIFECYCLE_PANEL_EXPECTED_IMPORTS)
+            or frozenset(imported_symbols) != LIFECYCLE_PANEL_EXPECTED_IMPORTS
+            or lifecycle_panel_text.count(LIFECYCLE_CLIENT_MODULE_TOKEN) != 1
+        ):
+            findings.append(
+                Finding(
+                    "ui-native-boundary",
+                    LIFECYCLE_PANEL_PATH,
+                    "lifecycle panel import differs from the exact client-symbol allowlist",
+                )
+            )
+
+        zero_prop_component = re.compile(
+            r"export\s+function\s+ResearchKnowledgeLifecyclePanel\s*\(\s*\)\s*\{"
+        )
+        if (
+            len(zero_prop_component.findall(lifecycle_panel_text)) != 1
+            or lifecycle_panel_text.count(LIFECYCLE_PANEL_MODULE_TOKEN) != 1
+        ):
+            findings.append(
+                Finding(
+                    "ui-native-boundary",
+                    LIFECYCLE_PANEL_PATH,
+                    "lifecycle panel is not the exact zero-prop component boundary",
+                )
+            )
+
+        factory_calls = tuple(
+            re.finditer(
+            r"\bcreateResearchKnowledgeDemoLifecycleClient\s*\(",
+            lifecycle_panel_text,
+            )
+        )
+        exact_dispose_helper = re.compile(
+            r"function\s+disposeLifecycleClient\s*\(\s*client\s*:\s*"
+            r"ResearchKnowledgeDemoLifecycleClient\s*,?\s*\)\s*:\s*void\s*\{\s*"
+            r"client\.dispose\s*\(\s*\)\s*;?\s*\}",
+            re.MULTILINE,
+        )
+        dispose_calls = re.findall(r"\.\s*dispose\s*\(", lifecycle_panel_text)
+        if (
+            len(factory_calls) != 1
+            or lifecycle_panel_text.count(
+                "createResearchKnowledgeDemoLifecycleClient"
+            )
+            != 2
+            or len(dispose_calls) != 1
+            or lifecycle_panel_text.count(".dispose") != 1
+            or len(exact_dispose_helper.findall(lifecycle_panel_text)) != 1
+        ):
+            findings.append(
+                Finding(
+                    "ui-native-boundary",
+                    LIFECYCLE_PANEL_PATH,
+                    "lifecycle panel factory or disposal differs from the exact one-client boundary",
+                )
+            )
+
+        operation_call_matches = tuple(
+            re.finditer(
+            r"\.\s*(snapshot|start|advance|cancel)\s*\((?P<arguments>[^)]*)\)",
+            lifecycle_panel_text,
+            )
+        )
+        operation_calls = tuple(
+            (match.group(1), match.group("arguments"))
+            for match in operation_call_matches
+        )
+        dispatcher = re.search(
+            r"const\s+invokeOperation\s*=\s*async\s*\(\s*requestedOperation\s*:\s*"
+            r"LifecycleOperation\s*\)\s*=>\s*\{(?P<body>.*?)\n\s*\};",
+            lifecycle_panel_text,
+            re.DOTALL,
+        )
+        normalized_dispatcher = (
+            "" if dispatcher is None else re.sub(r"\s+", "", dispatcher.group("body"))
+        )
+        expected_switch = (
+            'switch(requestedOperation){case"start":nextSnapshot=awaitclient.start();break;'
+            'case"advance":nextSnapshot=awaitclient.advance();break;'
+            'case"cancel":nextSnapshot=awaitclient.cancel();break;}'
+        )
+        if (
+            len(operation_calls) != 4
+            or sorted(operation for operation, _ in operation_calls)
+            != ["advance", "cancel", "snapshot", "start"]
+            or any(arguments.strip() for _, arguments in operation_calls)
+            or any(
+                lifecycle_panel_text.count(f"client.{operation}()") != 1
+                for operation in ("snapshot", "start", "advance", "cancel")
+            )
+            or any(
+                lifecycle_panel_text.count(f"client.{operation}") != 1
+                for operation in ("snapshot", "start", "advance", "cancel")
+            )
+            or dispatcher is None
+            or expected_switch not in normalized_dispatcher
+            or any(
+                not (
+                    dispatcher.start("body") <= match.start() < dispatcher.end("body")
+                )
+                for match in operation_call_matches
+                if match.group(1) in {"start", "advance", "cancel"}
+            )
+        ):
+            findings.append(
+                Finding(
+                    "ui-native-boundary",
+                    LIFECYCLE_PANEL_PATH,
+                    "lifecycle panel operations differ from the exact explicit switch dispatcher",
+                )
+            )
+
+        mount_starts = tuple(
+            re.finditer(
+                r"\buseEffect\s*\(\s*\(\s*\)\s*=>\s*\{",
+                lifecycle_panel_text,
+            )
+        )
+        mount_ends = tuple(
+            re.finditer(r"\}\s*,\s*\[\s*\]\s*\)\s*;", lifecycle_panel_text)
+        )
+        snapshot_calls = tuple(
+            match
+            for match in operation_call_matches
+            if match.group(1) == "snapshot"
+        )
+        if (
+            len(mount_starts) != 1
+            or len(mount_ends) != 1
+            or len(factory_calls) != 1
+            or len(snapshot_calls) != 1
+            or not (
+                mount_starts[0].start()
+                < factory_calls[0].start()
+                < snapshot_calls[0].start()
+                < mount_ends[0].end()
+            )
+            or dispatcher is None
+            or mount_ends[0].end() >= dispatcher.start()
+        ):
+            findings.append(
+                Finding(
+                    "ui-native-boundary",
+                    LIFECYCLE_PANEL_PATH,
+                    "lifecycle snapshot is not the sole mount-time hydration call",
+                )
+            )
+
+        button_openings = tuple(
+            re.finditer(r"<button\b", lifecycle_panel_text, re.IGNORECASE)
+        )
+        button_blocks: list[str] = []
+        for opening in button_openings:
+            closing_offset = lifecycle_panel_text.find("</button>", opening.end())
+            if closing_offset < 0:
+                break
+            button_blocks.append(
+                lifecycle_panel_text[opening.start() : closing_offset + len("</button>")]
+            )
+        expected_button_operations = ("start", "advance", "cancel")
+        buttons_are_exact = (
+            len(button_openings) == 3
+            and len(button_blocks) == 3
+            and lifecycle_panel_text.count("</button>") == 3
+            and len(re.findall(r"\binvokeOperation\s*\(", lifecycle_panel_text)) == 3
+            and lifecycle_panel_text.count("invokeOperation") == 4
+        )
+        if buttons_are_exact:
+            for block, operation, label in zip(
+                button_blocks,
+                expected_button_operations,
+                LIFECYCLE_PANEL_EXPECTED_BUTTON_LABELS,
+                strict=True,
+            ):
+                handler = re.compile(
+                    r"onClick\s*=\s*\{\s*\(\s*\)\s*=>\s*void\s+invokeOperation\s*"
+                    rf'\(\s*"{operation}"\s*\)\s*\}}'
+                )
+                if (
+                    len(handler.findall(block)) != 1
+                    or block.count("onClick") != 1
+                    or block.count('type="button"') != 1
+                    or block.count(label) != 1
+                ):
+                    buttons_are_exact = False
+                    break
+        if not buttons_are_exact:
+            findings.append(
+                Finding(
+                    "ui-native-boundary",
+                    LIFECYCLE_PANEL_PATH,
+                    "lifecycle panel controls differ from the exact three-button explicit dispatcher allowlist",
+                )
+            )
+
+        for pattern, category in LIFECYCLE_PANEL_PROHIBITED_PATTERNS:
+            if pattern.search(lifecycle_panel_text) is not None:
+                findings.append(
+                    Finding(
+                        "ui-native-boundary",
+                        LIFECYCLE_PANEL_PATH,
+                        f"lifecycle panel contains prohibited {category}",
+                    )
+                )
+
+    command_center_page_path = "src/features/command-center/CommandCenterPage.tsx"
+    command_center_page_text = production_sources.get(command_center_page_path)
+    panel_reference_paths = tuple(
+        relative_path
+        for relative_path, text in production_sources.items()
+        if LIFECYCLE_PANEL_MODULE_TOKEN in text
+    )
+    if frozenset(panel_reference_paths) != frozenset(
+        {command_center_page_path, LIFECYCLE_PANEL_PATH}
+    ):
+        findings.append(
+            Finding(
+                "ui-native-boundary",
+                "src/features/command-center",
+                "lifecycle panel reference differs from the sole exact Command Center page allowlist",
+            )
+        )
+    if command_center_page_text is None:
+        findings.append(
+            Finding(
+                "ui-native-boundary",
+                command_center_page_path,
+                "required Command Center page is not UTF-8 text",
+            )
+        )
+    else:
+        expected_panel_import = (
+            'import { ResearchKnowledgeLifecyclePanel } from '
+            '"./ResearchKnowledgeLifecyclePanel";'
+        )
+        selected_scenario = re.search(
+            r'\{\s*state\.scenarioId\s*===\s*"research-knowledge-active"\s*'
+            r"\?\s*\((?P<body>.*?)\)\s*:\s*null\s*\}",
+            command_center_page_text,
+            re.DOTALL,
+        )
+        if (
+            command_center_page_text.count(expected_panel_import) != 1
+            or command_center_page_text.count(LIFECYCLE_PANEL_MODULE_TOKEN) != 3
+            or command_center_page_text.count("<ResearchKnowledgeLifecyclePanel />") != 1
+            or selected_scenario is None
+            or "<ResearchKnowledgeLifecyclePanel />" not in selected_scenario.group("body")
+        ):
+            findings.append(
+                Finding(
+                    "ui-native-boundary",
+                    command_center_page_path,
+                    "lifecycle panel mount differs from the exact selected-scenario zero-prop boundary",
+                )
+            )
 
     for relative_path, expected_calls in EXPECTED_TAURI_INVOKES.items():
         client_text = read_text(root / relative_path)
@@ -631,8 +1064,10 @@ def ui_native_boundary_findings(root: Path) -> tuple[Finding, ...]:
             )
             continue
         invoke_calls = re.findall(r"\binvoke\s*(?:<[^>]+>)?\s*\(", client_text)
-        if len(invoke_calls) != len(expected_calls) or any(
-            client_text.count(expected_call) != 1 for expected_call in expected_calls
+        if (
+            len(invoke_calls) != len(expected_calls)
+            or len(re.findall(r"\binvoke\b", client_text)) != len(expected_calls) + 1
+            or any(client_text.count(expected_call) != 1 for expected_call in expected_calls)
         ):
             findings.append(
                 Finding(
@@ -655,7 +1090,7 @@ def ui_native_boundary_findings(root: Path) -> tuple[Finding, ...]:
                     )
                 )
 
-    lifecycle_client_path = "src/infrastructure/tauri/research-knowledge-demo-lifecycle-client.ts"
+    lifecycle_client_path = LIFECYCLE_CLIENT_PATH
     lifecycle_client_text = read_text(root / lifecycle_client_path)
     if lifecycle_client_text is None:
         findings.append(
@@ -666,6 +1101,17 @@ def ui_native_boundary_findings(root: Path) -> tuple[Finding, ...]:
             )
         )
     else:
+        lifecycle_client_digest = hashlib.sha256(
+            lifecycle_client_text.encode("utf-8")
+        ).hexdigest()
+        if lifecycle_client_digest != EXPECTED_LIFECYCLE_CLIENT_SHA256:
+            findings.append(
+                Finding(
+                    "ui-native-boundary",
+                    lifecycle_client_path,
+                    "lifecycle client source differs from the exact reviewed F-12 digest",
+                )
+            )
         for token in LIFECYCLE_CLIENT_PROHIBITED_TOKENS:
             if token in lifecycle_client_text:
                 findings.append(
@@ -675,11 +1121,21 @@ def ui_native_boundary_findings(root: Path) -> tuple[Finding, ...]:
                         f"lifecycle client contains prohibited boundary token {token!r}",
                     )
                 )
+        for pattern, category in LIFECYCLE_BROWSER_SURFACE_PATTERNS:
+            if pattern.search(lifecycle_client_text) is not None:
+                findings.append(
+                    Finding(
+                        "ui-native-boundary",
+                        lifecycle_client_path,
+                        f"lifecycle client contains prohibited {category}",
+                    )
+                )
         lifecycle_listeners = re.findall(
             r"\blisten\s*(?:<[^>]+>)?\s*\(", lifecycle_client_text
         )
         if (
             len(lifecycle_listeners) != 1
+            or len(re.findall(r"\blisten\b", lifecycle_client_text)) != 2
             or '"research-knowledge-demo-lifecycle-v1" as const' not in lifecycle_client_text
             or "listen<unknown>(RESEARCH_KNOWLEDGE_DEMO_LIFECYCLE_EVENT," not in lifecycle_client_text
         ):
@@ -705,6 +1161,7 @@ def ui_native_boundary_findings(root: Path) -> tuple[Finding, ...]:
         listener_calls = re.findall(r"\blisten\s*(?:<[^>]+>)?\s*\(", menu_route_text)
         if (
             len(listener_calls) != 1
+            or len(re.findall(r"\blisten\b", menu_route_text)) != 2
             or 'export const ASSISTANT_MENU_ROUTE_EVENT = "assistant-menu-route";' not in menu_route_text
             or "listen<unknown>(ASSISTANT_MENU_ROUTE_EVENT," not in menu_route_text
         ):
@@ -727,7 +1184,7 @@ def ui_native_boundary_findings(root: Path) -> tuple[Finding, ...]:
             or normalized_lib.count("generate_handler![") != 1
             or EXPECTED_INVOKE_HANDLER not in normalized_lib
         ):
-            findings.append(Finding("ui-native-boundary", "src-tauri/src/lib.rs", "invoke handler is not the exact two-command allowlist"))
+            findings.append(Finding("ui-native-boundary", "src-tauri/src/lib.rs", "invoke handler is not the exact command allowlist"))
 
     projection_rust_path = "src-tauri/src/research_knowledge_demo_projection.rs"
     projection_rust_text = read_text(root / projection_rust_path)

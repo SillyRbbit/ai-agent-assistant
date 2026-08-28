@@ -4,6 +4,22 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Implemented and locally verified the owner-approved connected Research ->
+  Knowledge simulated presentation. Only the selected scenario mounts one
+  prop-free panel over the existing four no-input commands and fixed
+  non-authoritative notification. Explicit actions manually drive a volatile
+  application-owned host; completed runs privately alternate deterministic
+  success and synthetic synthesis failure, while cancellation consumes no
+  outcome. Exact DTO/journal/operation validation, response-only presentation
+  authority, closed errors, late/forged-event rejection, disposal,
+  accessibility, and expanded F-12 sole-consumer/raw-Tauri/browser guards pass.
+  The fixture graph remains IPC-free and separate from the read-only projection,
+  lifecycle panel, Conversations mock, and Rust acceptance workflows. No
+  provider, model, network, credential, tool, approval dispatch, persistence,
+  filesystem, background work, dependency, capability, CSP, or device effect
+  was added. Raw-debug native lifecycle interaction and unavailable native
+  appearance/zoom/resize checks are `Not run` advisories; nothing is published.
+
 - Completed the owner-approved documentation-only plan for the smallest
   connected Research -> Knowledge lifecycle presentation with advisories. It
   reconciles the current success-only production host with private deterministic

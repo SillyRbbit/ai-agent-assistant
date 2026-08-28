@@ -30,6 +30,7 @@ import { ContextualInspector, type InspectorViewModel } from "./components/Conte
 import { OperationalTopologyPanel } from "./components/OperationalTopologyPanel";
 import { SystemStatusSummary } from "./components/SystemStatusSummary";
 import { ResearchKnowledgeDemoProjectionPanel } from "./components/ResearchKnowledgeDemoProjectionPanel";
+import { ResearchKnowledgeLifecyclePanel } from "./ResearchKnowledgeLifecyclePanel";
 import {
   TopologyStructuredView,
   type StructuredEdgeView,
@@ -493,9 +494,9 @@ export default function CommandCenterPage({
           <h1 id="command-center-page-title">Command Center</h1>
           <p>
             Inspect a bounded visual projection of the application-owned agent architecture. The
-            topology and activity remain frontend fixtures; the separate Rust projection is a
-            read-only query. Nothing starts, cancels, approves, executes, or connects to a provider
-            or model.
+            topology and activity remain frontend fixtures. Separate Rust panels provide one
+            read-only projection and one explicitly stepped volatile synthetic lifecycle. Nothing
+            connects to a provider, model, tool executor, durable audit, or device effect.
           </p>
         </div>
         <span className="command-center-demo-badge">
@@ -564,7 +565,10 @@ export default function CommandCenterPage({
       />
 
       {state.scenarioId === "research-knowledge-active" ? (
-        <ResearchKnowledgeDemoProjectionPanel loader={projectionLoader} />
+        <>
+          <ResearchKnowledgeDemoProjectionPanel loader={projectionLoader} />
+          <ResearchKnowledgeLifecyclePanel />
+        </>
       ) : null}
 
       <SystemStatusSummary

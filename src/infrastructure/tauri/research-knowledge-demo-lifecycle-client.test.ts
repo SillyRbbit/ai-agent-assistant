@@ -73,27 +73,63 @@ const failed = {
   state: "failed",
   journal: [...synthesis.journal, { revision: 6, kind: "failed" }],
 };
+const cancelledDuringResearch = {
+  ...fixed,
+  presentationEpoch: 1,
+  revision: 2,
+  state: "cancelled",
+  journal: [...research.journal, { revision: 2, kind: "cancelled" }],
+};
+const cancelledDuringKnowledge = {
+  ...fixed,
+  presentationEpoch: 1,
+  revision: 4,
+  state: "cancelled",
+  journal: [...knowledge.journal, { revision: 4, kind: "cancelled" }],
+};
+const cancelledDuringSynthesis = {
+  ...fixed,
+  presentationEpoch: 1,
+  revision: 6,
+  state: "cancelled",
+  journal: [...synthesis.journal, { revision: 6, kind: "cancelled" }],
+};
+const cleanupBeforeResearch = {
+  ...fixed,
+  presentationEpoch: 1,
+  revision: 1,
+  state: "cleanup-pending",
+  journal: [{ revision: 1, kind: "cleanup-pending" }],
+};
 
 function emit(payload: unknown): void {
   eventHandler?.({ event: RESEARCH_KNOWLEDGE_DEMO_LIFECYCLE_EVENT, id: 1, payload });
 }
 
 describe("parseResearchKnowledgeDemoLifecycleSnapshot", () => {
-  it.each([idle, research, knowledge, synthesis, succeeded, failed])(
-    "accepts and freezes an exact bounded snapshot",
-    (value) => {
-      const parsed = parseResearchKnowledgeDemoLifecycleSnapshot(value);
+  it.each([
+    idle,
+    research,
+    knowledge,
+    synthesis,
+    succeeded,
+    failed,
+    cancelledDuringResearch,
+    cancelledDuringKnowledge,
+    cancelledDuringSynthesis,
+    cleanupBeforeResearch,
+  ])("accepts and freezes an exact bounded snapshot", (value) => {
+    const parsed = parseResearchKnowledgeDemoLifecycleSnapshot(value);
 
-      expect(parsed).toEqual(value);
-      expect(parsed).not.toBe(value);
-      expect(Object.isFrozen(parsed)).toBe(true);
-      expect(Object.isFrozen(parsed?.journal)).toBe(true);
-      if (parsed?.journal[0] !== undefined) {
-        expect(parsed.journal[0]).not.toBe(value.journal[0]);
-        expect(Object.isFrozen(parsed.journal[0])).toBe(true);
-      }
-    },
-  );
+    expect(parsed).toEqual(value);
+    expect(parsed).not.toBe(value);
+    expect(Object.isFrozen(parsed)).toBe(true);
+    expect(Object.isFrozen(parsed?.journal)).toBe(true);
+    if (parsed?.journal[0] !== undefined) {
+      expect(parsed.journal[0]).not.toBe(value.journal[0]);
+      expect(Object.isFrozen(parsed.journal[0])).toBe(true);
+    }
+  });
 
   it.each([
     null,
@@ -113,6 +149,26 @@ describe("parseResearchKnowledgeDemoLifecycleSnapshot", () => {
     { ...research, journal: [{ revision: 1, kind: "provider-output" }] },
     { ...research, journal: [{ revision: 1, kind: "research-started", runId: "forged" }] },
     { ...research, state: "succeeded" },
+    { ...idle, presentationEpoch: 1 },
+    { ...research, presentationEpoch: 0 },
+    {
+      ...fixed,
+      presentationEpoch: 1,
+      revision: 2,
+      state: "succeeded",
+      journal: [
+        { revision: 1, kind: "research-started" },
+        { revision: 2, kind: "completed" },
+      ],
+    },
+    {
+      ...knowledge,
+      journal: [
+        { revision: 1, kind: "research-started" },
+        { revision: 2, kind: "knowledge-completed" },
+        { revision: 3, kind: "knowledge-started" },
+      ],
+    },
   ])("rejects malformed, widened, oversized, or forged native data", (value) => {
     expect(parseResearchKnowledgeDemoLifecycleSnapshot(value)).toBeUndefined();
   });
@@ -135,12 +191,7 @@ describe("createResearchKnowledgeDemoLifecycleClient", () => {
       .mockResolvedValueOnce(idle)
       .mockResolvedValueOnce(research)
       .mockResolvedValueOnce(knowledge)
-      .mockResolvedValueOnce({
-        ...knowledge,
-        revision: 4,
-        state: "cancelled",
-        journal: [...knowledge.journal, { revision: 4, kind: "cancelled" }],
-      });
+      .mockResolvedValueOnce(cancelledDuringKnowledge);
     const client = await createResearchKnowledgeDemoLifecycleClient(vi.fn());
 
     await client.snapshot();
@@ -158,8 +209,8 @@ describe("createResearchKnowledgeDemoLifecycleClient", () => {
     ]);
   });
 
-  it("accepts direct notifications and ignores stale or duplicate snapshots", async () => {
-    invokeMock.mockResolvedValueOnce(research);
+  it("keeps direct notifications non-authoritative until an explicit snapshot response", async () => {
+    invokeMock.mockResolvedValueOnce(research).mockResolvedValueOnce(knowledge);
     const onSnapshot = vi.fn();
     const client = await createResearchKnowledgeDemoLifecycleClient(onSnapshot);
     await client.snapshot();
@@ -167,6 +218,12 @@ describe("createResearchKnowledgeDemoLifecycleClient", () => {
     emit(research);
     emit(idle);
     emit(knowledge);
+
+    expect(client.current).toEqual(research);
+    expect(client.recoveryRequired).toBe(true);
+    expect(onSnapshot).toHaveBeenCalledOnce();
+
+    await client.snapshot();
 
     expect(client.current).toEqual(knowledge);
     expect(client.recoveryRequired).toBe(false);
@@ -201,6 +258,53 @@ describe("createResearchKnowledgeDemoLifecycleClient", () => {
     expect(client.current).toEqual(research);
     expect(client.recoveryRequired).toBe(false);
   });
+
+  it("rejects a shape-valid but impossible notification journal", async () => {
+    invokeMock.mockResolvedValueOnce(research);
+    const client = await createResearchKnowledgeDemoLifecycleClient(vi.fn());
+    await client.snapshot();
+
+    emit({
+      ...fixed,
+      presentationEpoch: 1,
+      revision: 2,
+      state: "succeeded",
+      journal: [
+        { revision: 1, kind: "research-started" },
+        { revision: 2, kind: "completed" },
+      ],
+    });
+
+    expect(client.current).toEqual(research);
+    expect(client.recoveryRequired).toBe(false);
+  });
+
+  it("marks parser-valid non-successor notifications for explicit recovery", async () => {
+    invokeMock.mockResolvedValueOnce(research);
+    const client = await createResearchKnowledgeDemoLifecycleClient(vi.fn());
+    await client.snapshot();
+
+    emit(succeeded);
+
+    expect(client.current).toEqual(research);
+    expect(client.recoveryRequired).toBe(true);
+  });
+
+  it.each([succeeded, failed, cancelledDuringSynthesis])(
+    "never commits an unsolicited grammar-valid terminal notification",
+    async (terminal) => {
+      invokeMock.mockResolvedValueOnce(synthesis);
+      const onSnapshot = vi.fn();
+      const client = await createResearchKnowledgeDemoLifecycleClient(onSnapshot);
+      await client.snapshot();
+
+      emit(terminal);
+
+      expect(client.current).toEqual(synthesis);
+      expect(client.recoveryRequired).toBe(true);
+      expect(onSnapshot).toHaveBeenCalledOnce();
+    },
+  );
 
   it("disposes the listener once and ignores later events", async () => {
     invokeMock.mockResolvedValueOnce(research);
@@ -270,9 +374,43 @@ describe("createResearchKnowledgeDemoLifecycleClient", () => {
       new Error("Research/Knowledge demo lifecycle unavailable."),
     );
 
+    invokeMock.mockResolvedValueOnce(succeeded);
+    await expect(client.advance()).rejects.toEqual(
+      new Error("Research/Knowledge demo lifecycle unavailable."),
+    );
+
     client.dispose();
     await expect(client.snapshot()).rejects.toEqual(
       new Error("Research/Knowledge demo lifecycle unavailable."),
     );
+  });
+
+  it("rejects parser-valid responses that contradict the requested operation", async () => {
+    invokeMock.mockResolvedValueOnce(idle).mockResolvedValueOnce(knowledge);
+    const client = await createResearchKnowledgeDemoLifecycleClient(vi.fn());
+    await client.snapshot();
+
+    await expect(client.start()).rejects.toEqual(
+      new Error("Research/Knowledge demo lifecycle unavailable."),
+    );
+
+    invokeMock.mockResolvedValueOnce(idle);
+    const secondClient = await createResearchKnowledgeDemoLifecycleClient(vi.fn());
+    await secondClient.snapshot();
+    invokeMock.mockResolvedValueOnce(research);
+    await secondClient.start();
+    invokeMock.mockResolvedValueOnce(synthesis);
+    await expect(secondClient.cancel()).rejects.toEqual(
+      new Error("Research/Knowledge demo lifecycle unavailable."),
+    );
+
+    invokeMock.mockResolvedValueOnce(research);
+    const thirdClient = await createResearchKnowledgeDemoLifecycleClient(vi.fn());
+    await thirdClient.snapshot();
+    invokeMock.mockResolvedValueOnce(cancelledDuringSynthesis);
+    await expect(thirdClient.cancel()).rejects.toEqual(
+      new Error("Research/Knowledge demo lifecycle unavailable."),
+    );
+    expect(thirdClient.current).toEqual(research);
   });
 });

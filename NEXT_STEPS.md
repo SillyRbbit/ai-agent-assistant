@@ -4,7 +4,31 @@ Last updated: 2026-08-28
 
 This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must close before later feature work begins.
 
-## Current verified prerequisite
+## Current verified increment and queue state
+
+The owner-approved
+[`research-knowledge-demo-connected-presentation`](docs/increments/research-knowledge-demo-connected-presentation.md)
+is locally verified complete with advisories on a source-current, uncommitted
+branch from `origin/main` `b057032`. One separately labelled prop-free panel in
+the selected Research and Knowledge scenario uses only four fixed no-input
+commands and one non-authoritative notification. Explicit user actions alone
+start or step the process-local synthetic host. The UI cannot select any trusted
+identity, fixture, script, stage, or outcome; command responses alone commit
+presentation; cancellation does not consume the private success/failure
+schedule.
+
+Complete local verification, independent architecture/security/code review,
+security scanning, zero-finding npm audit, and target-Mac startup/browser
+fallback evidence pass. Raw-debug native lifecycle interaction and unavailable
+native appearance/zoom/resize checks are `Not run` advisories. No GitHub Actions
+result exists because the increment has not been committed or published.
+
+No next source increment is owner-selected or **Ready**. The smallest next
+action is owner review of the exact diff and completion report. Commit, push,
+squash merge, and published-commit Actions inspection require separate explicit
+authorization and are not a new implementation increment.
+
+## Prior verified prerequisites
 
 The owner-approved
 [`app-info-runtime-ipc-narrowing-f08`](docs/increments/app-info-runtime-ipc-narrowing-f08.md)
@@ -53,7 +77,7 @@ ownership. Focused and complete target-Mac verification pass. It exposes no
 Tauri lifecycle IPC or connected UI and adds no timer, worker, or background
 autonomy.
 
-The owner-approved documentation-only
+The earlier owner-approved documentation-only
 [`lifecycle Tauri adapter ExecPlan`](docs/plans/2026-08-28-research-knowledge-demo-lifecycle-tauri-adapter.md)
 is **verified complete with advisories**. The owner approved the
 private `ApprovalClock: Send` prerequisite; the deterministic test clock now
@@ -66,9 +90,9 @@ pass; direct observation of the deliberately unconnected lifecycle event is
 [`connected-presentation planning increment`](docs/increments/research-knowledge-demo-connected-presentation-planning.md)
 is verified complete with advisories. Its resulting
 [`connected-presentation ExecPlan`](docs/plans/2026-08-28-research-knowledge-demo-connected-presentation.md)
-is Ready with advisories for only the bounded source slice. Source
-implementation remains unauthorized until the owner explicitly approves that
-plan and opens a fresh gate.
+was Ready with advisories for only the bounded source slice. The owner later
+approved that source increment and fresh gate; the current result is recorded
+above.
 
 ## Current published checkpoint
 

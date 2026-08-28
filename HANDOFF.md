@@ -2,25 +2,68 @@
 
 Last updated: 2026-08-28
 
-## Current verified prerequisite
+## Current verified increment
 
-The owner-approved documentation-only
+The owner-approved
+[`research-knowledge-demo-connected-presentation`](docs/increments/research-knowledge-demo-connected-presentation.md)
+is locally verified complete with advisories on
+`codex/research-knowledge-demo-connected-presentation` from source-current
+`origin/main` `b057032`. It is not committed or published. Only the selected
+Research and Knowledge scenario mounts a separate prop-free simulated lifecycle
+panel. Explicit no-input Start, Advance, and Cancel actions drive one
+application-owned process-local host; completed epochs privately alternate
+success -> synthesis failure -> success, while cancellation consumes no outcome.
+
+The Command Center fixture graph/controls remain frontend-owned and IPC-free.
+The explicit-refresh read-only projection, the connected lifecycle panel, the
+Conversations mock, and Rust acceptance workflows remain separate deterministic
+proofs. The exact disclosure is `DEMO MODE · SIMULATED AGENT DATA`. No live
+model, provider, backend-connected general agent UI, real tool execution,
+durable audit, persistence, filesystem access, background autonomy, or device
+effect exists.
+
+The WebView supplies no trusted identity, fixture, script, stage, or outcome.
+Four commands remain argument-free, events never commit presentation state,
+validated command responses are authoritative only for their calls, and every
+error closes to one fixed unavailable message. F-01 returned-runtime identity
+validation and F-02 rejected-run quarantine remain unchanged. F-12 pins the
+sole client/panel, exact reviewed source digests, command/event locality, and
+prohibited raw Tauri/browser surfaces; F-07 CSPs, capabilities, dependencies,
+and `src-tauri/src/agent/**` are unchanged.
+
+Complete `npm run verify` passes with 28 hook tests, 76 repository tests, 313
+frontend tests, 269 Rust library tests, 244 Rust integration tests, one
+intentional ignored opt-in Hermes probe, the production frontend build, and the
+Tauri release no-bundle build. `npm audit --audit-level=low` passes with zero
+vulnerabilities after one sandboxed DNS failure and an approved network retry.
+Target-Mac development startup and source-current browser fallback checks pass.
+Approved UI tooling could not bind to the raw source-current debug executable,
+so native success/failure/cancellation interaction, alternate native
+theme/reduced-motion, page zoom, and native resize are `Not run` advisories.
+No GitHub Actions run exists for this uncommitted branch state.
+
+Closeout is `PASS WITH ADVISORIES` in
+[`2026-08-28-research-knowledge-demo-connected-presentation-post-increment-review.md`](docs/reviews/2026-08-28-research-knowledge-demo-connected-presentation-post-increment-review.md).
+
+Exact next prompt: Read `AGENTS.md`, the complete project-memory chain, the
+connected-presentation increment and ExecPlan, and its post-increment report.
+Confirm the valid completion marker and inspect the exact dirty branch diff. Do
+not implement another increment. If the owner explicitly authorizes
+commit/push/squash merge, publish only this verified increment with a
+Conventional Commit and inspect exact GitHub Actions for the published commit;
+otherwise stop after reporting status.
+
+## Prior verified prerequisite history
+
+The earlier owner-approved documentation-only
 [`research-knowledge-demo-connected-presentation-planning`](docs/increments/research-knowledge-demo-connected-presentation-planning.md)
 is verified complete with advisories on
 `codex/research-knowledge-demo-connected-presentation-planning` from
 squash-merged `origin/main` `54e10b3`. Its source-aligned
 [`ExecPlan`](docs/plans/2026-08-28-research-knowledge-demo-connected-presentation.md)
-reconciles current success-only production behavior with private
-synthesis-failure fixture proof. Do not implement it unless the owner gives
-separate explicit source approval and a fresh gate is opened.
-
-Exact next prompt: Read `AGENTS.md`, the complete project-memory chain, and
-the connected-presentation ExecPlan. Confirm the validated completion marker
-and clean scope. If the owner explicitly approves implementation, run the
-fresh increment gate and implement only the declared no-input, volatile,
-selected-scenario source slice; otherwise stop. Do not add caller-selected
-identity or outcome, alternate IPC, network, persistence, tool execution, or
-background work.
+reconciled the then-current success-only production behavior with private
+synthesis-failure fixture proof. Its separate source approval and fresh gate
+were subsequently granted for the current increment above.
 
 Closeout is `PASS WITH ADVISORIES` in
 [`2026-08-28-research-knowledge-demo-connected-presentation-planning-post-increment-review.md`](docs/reviews/2026-08-28-research-knowledge-demo-connected-presentation-planning-post-increment-review.md).
