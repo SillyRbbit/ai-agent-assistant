@@ -5,6 +5,34 @@ Last updated: 2026-08-28
 ## Current verified increment
 
 The owner-approved documentation-only
+[`personal-assistant-v0-capability-planning`](docs/increments/personal-assistant-v0-capability-planning.md)
+increment is verified complete with advisories from clean synchronized `main`
+`41ff7141007c8c0a684a5e2434ecf81dd4707418`. It records D-094 and the exact
+[`Personal Assistant v0 program`](docs/plans/2026-08-28-personal-assistant-v0-program.md)
+without changing product source, dependencies, credentials, signing state,
+external resources, provider state, IPC, or behavior.
+
+The first usable v0 is Personal Assistant only: one foreground explicit text
+request at a time, bounded stream and final answer, terminal cancellation,
+closed errors, Rust-owned identity/configuration, and `empty@1`. A live fixed-
+fixture synthetic proof, real personal-prompt activation, and later action-
+taking/product work are separate milestones. Current source implements none of
+the live chain.
+
+[`V0-1 — sealed empty-tool turn and minimal host`](docs/plans/2026-08-28-personal-assistant-v0-empty-tool-turn.md)
+is the sole **Ready** plan and requires separate owner implementation approval
+plus a fresh gate. V0-2 through V0-14 are Blocked. The plans separately gate signed identity,
+local JWT validation, no-traffic Cloudflare state, an HTTPS dependency
+decision, fixed Rust transport, real demo credential transfer, authentication-
+only traffic, fake OpenAI mapping, disclosure-bound Tauri presentation,
+no-traffic provider state, live synthetic traffic, and real-content admission.
+Exact next prompt: read `AGENTS.md`, the complete
+memory/security/testing chain, D-094, the v0 program, and V0-1; confirm clean
+synchronized `main` and the planning marker; then ask the owner whether to
+approve only V0-1. Do not begin source, identity, credential, gateway,
+provider, transport, IPC, real-content, local-model, or product work.
+
+The owner-approved documentation-only
 [`ci-classification-engineering-guide-reconciliation`](docs/increments/ci-classification-engineering-guide-reconciliation.md)
 increment is verified complete with advisories from clean synchronized `main`
 `7390ea6`. It corrects one

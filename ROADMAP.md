@@ -1,7 +1,7 @@
 # Cortexa roadmap
 
 Status: Authoritative milestone roadmap
-Last updated: 2026-08-25
+Last updated: 2026-08-28
 
 ## Status model
 
@@ -20,19 +20,20 @@ verification record; this roadmap does not create new completion evidence.
 
 ## Product milestones
 
-| Milestone                                                             | Status               | Verified scope                                                                                                                                                   | Remaining gate                                                                                                                                                                |
-| --------------------------------------------------------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Phase 1 - runnable foundation                                         | Completed            | Tauri/React shell, toolchain, repository workflow                                                                                                                | None                                                                                                                                                                          |
-| Phase 2 - local application foundation                                | Completed            | Rust interfaces, SQLite bootstrap, macOS lifecycle, React shell, deterministic mock loop, integration hardening                                                  | None                                                                                                                                                                          |
-| Phase 3 - bounded mock product loop                                   | Completed            | Conversations, context provenance, simulated results, bounded final answer                                                                                       | None                                                                                                                                                                          |
-| Phase 4 - trusted proposal and approval boundaries                    | Completed through 4U | Closed gateway protocol and request, strict schemas, deterministic policy, exact approvals, native source boundary, cancellation, typed in-memory approval audit | Live transport, execution, and durable audit intentionally absent                                                                                                             |
-| Increment 4V - terminal approval-audit binding                        | Completed and merged | Exact 19-path scope passed local and hosted verification and was squash-merged through PR #23 at `6e6f91d`                                                       | Preserve verified boundaries; no later remediation is Ready                                                                                                                   |
-| Phase 5 - end-to-end policy, approval, audit, and restricted dispatch | Blocked              | Some transport-free primitives were completed in Phase 4                                                                                                         | D-062 identity evidence, D-063 Azure deployment and per-provider ZDR evidence, and separately approved coordinator, durable audit, dispatch, execution, and failure semantics |
-| Phase 6 - basic macOS tools                                           | Future               | Two strict schemas exist without implementations                                                                                                                 | Approve narrow adapters, permissions, tests, and rollback per tool                                                                                                            |
-| Phase 7 - permissions and onboarding                                  | Future               | Status-only Permission Center exists                                                                                                                             | Approve request flows, disclosure, revocation, and onboarding                                                                                                                 |
-| Phase 8 - memory and tasks                                            | Blocked              | Volatile mock conversations/tasks only; SQLite bootstrap exists                                                                                                  | Resolve ARB-005 through approved repositories, encryption, retention, review/delete, and recovery increments                                                                  |
-| Phase 9 - adversarial security validation                             | Future               | Per-increment security review exists                                                                                                                             | Complete threat model, abuse tests, red-team cases, and remediation                                                                                                           |
-| Phase 10 - production release                                         | Blocked              | Development and no-bundle builds verified; provisional claims stop at macOS 14+ on Apple Silicon                                                                 | Resolve O-003, O-008, O-009, signing, notarization, installer, update, support, and rollback                                                                                  |
+| Milestone                                                             | Status               | Verified scope                                                                                                                                                   | Remaining gate                                                                                                                                  |
+| --------------------------------------------------------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Phase 1 - runnable foundation                                         | Completed            | Tauri/React shell, toolchain, repository workflow                                                                                                                | None                                                                                                                                            |
+| Phase 2 - local application foundation                                | Completed            | Rust interfaces, SQLite bootstrap, macOS lifecycle, React shell, deterministic mock loop, integration hardening                                                  | None                                                                                                                                            |
+| Phase 3 - bounded mock product loop                                   | Completed            | Conversations, context provenance, simulated results, bounded final answer                                                                                       | None                                                                                                                                            |
+| Phase 4 - trusted proposal and approval boundaries                    | Completed through 4U | Closed gateway protocol and request, strict schemas, deterministic policy, exact approvals, native source boundary, cancellation, typed in-memory approval audit | Live transport, execution, and durable audit intentionally absent                                                                               |
+| Increment 4V - terminal approval-audit binding                        | Completed and merged | Exact 19-path scope passed local and hosted verification and was squash-merged through PR #23 at `6e6f91d`                                                       | Preserve verified boundaries; no later remediation is Ready                                                                                     |
+| Personal Assistant text-only v0                                       | Planned; V0-1 Ready  | D-094 fixes one foreground request, bounded stream/final, terminal cancel, closed errors, Rust-owned configuration, and empty tools                              | Separate V0-1 owner approval/fresh gate; V0-2..V0-14 auth, provider, HTTPS, Tauri, ZDR, operations, and target-Mac gates remain Blocked         |
+| Phase 5 - end-to-end policy, approval, audit, and restricted dispatch | Blocked              | Some transport-free primitives were completed in Phase 4                                                                                                         | Current identity/provider/hosting/ZDR decisions plus separately approved coordinator, durable audit, dispatch, execution, and failure semantics |
+| Phase 6 - basic macOS tools                                           | Future               | Two strict schemas exist without implementations                                                                                                                 | Approve narrow adapters, permissions, tests, and rollback per tool                                                                              |
+| Phase 7 - permissions and onboarding                                  | Future               | Status-only Permission Center exists                                                                                                                             | Approve request flows, disclosure, revocation, and onboarding                                                                                   |
+| Phase 8 - memory and tasks                                            | Blocked              | Volatile mock conversations/tasks only; SQLite bootstrap exists                                                                                                  | Resolve ARB-005 through approved repositories, encryption, retention, review/delete, and recovery increments                                    |
+| Phase 9 - adversarial security validation                             | Future               | Per-increment security review exists                                                                                                                             | Complete threat model, abuse tests, red-team cases, and remediation                                                                             |
+| Phase 10 - production release                                         | Blocked              | Development and no-bundle builds verified; provisional claims stop at macOS 14+ on Apple Silicon                                                                 | Resolve O-003, O-008, O-009, signing, notarization, installer, update, support, and rollback                                                    |
 
 ### Phase 4 acceptance boundary
 
@@ -45,10 +46,11 @@ D-060 separates pluggable identity-provider support, Azure-first portable cloud
 hosting, and future trusted AI model-provider support. D-062 selects Microsoft
 personal identity as the sole Phase 1 provider while leaving exact registration
 evidence and all implementation separately controlled. Google and Apple are
-deferred. D-063 selects Azure OpenAI as the Phase 1 synthetic-evaluation
-candidate while exact deployment and identity evidence remain open. D-061
-accepts O-007's product policy; each AI provider still
-requires independent ZDR, data-use, logging, region, and security evidence.
+deferred. D-066 superseded D-063's Azure synthetic candidate by selecting
+OpenAI for the internal synthetic demo, and D-067 selected Cloudflare Workers
+only for that same demo. Neither decision authorizes real personal content.
+D-061 accepts O-007's product policy; each AI provider still requires
+independent ZDR, data-use, logging, region, and security evidence.
 
 D-059 records the current High-severity disposition. It authorizes no missing
 capability: ARB-003, ARB-004, ARB-005, and ARB-008 remain blocked as future
@@ -60,14 +62,16 @@ candidate or public distribution work.
 
 ### Product rollout targets
 
-| State          | Target users and account model                                                                                                     | Identity and control boundary                                                                                                                                                                                             |
-| -------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Current        | Local deterministic engineering proof; no account or external processing                                                           | No gateway, networking, identity provider, credential path, or transmission                                                                                                                                               |
-| Phase 1 target | Individual consumers, consultants, IT professionals, small-business owners, and professional power users using personal workspaces | Microsoft personal identity through provider-neutral system-browser OAuth/OIDC with PKCE S256; no workforce tenants, persistent session, automatic email linking, enterprise administration, SCIM, or organization policy |
-| Phase 2 target | Business and enterprise organization accounts and team workspaces                                                                  | Entra workforce SSO, tenant-aware authorization, RBAC, group controls, administration, policy, and audit; SAML, SCIM, and other enterprise providers remain demand-driven                                                 |
+| State             | Target users and account model                                                                                                     | Identity and control boundary                                                                                                                                                                                             |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Current           | Local deterministic engineering proof; no account or external processing                                                           | No gateway, networking, identity provider, credential path, or transmission                                                                                                                                               |
+| Private v0 target | One owner using one volatile foreground Personal Assistant text request at a time                                                  | Topology unselected; requires separate synthetic proof, real owner auth and provider/hosting decision, D-061 ZDR/disclosure, and target-Mac gates                                                                         |
+| Phase 1 target    | Individual consumers, consultants, IT professionals, small-business owners, and professional power users using personal workspaces | Microsoft personal identity through provider-neutral system-browser OAuth/OIDC with PKCE S256; no workforce tenants, persistent session, automatic email linking, enterprise administration, SCIM, or organization policy |
+| Phase 2 target    | Business and enterprise organization accounts and team workspaces                                                                  | Entra workforce SSO, tenant-aware authorization, RBAC, group controls, administration, policy, and audit; SAML, SCIM, and other enterprise providers remain demand-driven                                                 |
 
-Both target phases retain D-061's verified-ZDR, data-minimization, disclosure,
-content-logging prohibition, and seven-day operational-metadata boundary. The
+The private v0 and both target phases retain D-061's verified-ZDR,
+data-minimization, disclosure, content-logging prohibition, and seven-day
+operational-metadata boundary. The
 table is roadmap direction, not implementation or release evidence.
 
 Cloud hosting is a separate boundary. Initial production targets one primary
@@ -158,6 +162,18 @@ Release milestones additionally require `RELEASE_CHECKLIST.md` and
 `SECURITY_CHECKLIST.md` to pass with target-platform evidence.
 
 ## Current queue
+
+The owner-approved documentation-only
+[`Personal Assistant v0 program`](docs/plans/2026-08-28-personal-assistant-v0-program.md)
+records D-094 from clean synchronized `main` `41ff714`. Its transport-free
+[`V0-1 empty-tool turn and minimal host`](docs/plans/2026-08-28-personal-assistant-v0-empty-tool-turn.md)
+is the sole **Ready** plan after the verified planning closeout and still
+requires separate owner implementation approval plus a fresh gate. V0-2 through V0-14 are
+Blocked across lifecycle, identity, JWT/JWKS, no-traffic provisioning, HTTPS,
+credential handoff, authentication/provider traffic, disclosure-bound Tauri,
+ZDR, and real-content decisions. No source, dependency, credential, signing
+state, external resource, provider traffic, or IPC is authorized by the
+program.
 
 The owner-approved sealed Research -> Knowledge connected presentation is
 published through PR #71 at `d9c7c13`. It is a visibly simulated,

@@ -3917,6 +3917,120 @@ owner-approved architecture decision, threat review, ExecPlan, and validation
 increment. This decision changes acceptance evidence only and authorizes no
 production implementation.
 
+## D-094 - Define the first usable Personal Assistant v0 as text-only and empty-tool
+
+Date: 2026-08-28
+Status: Accepted owner product and architecture planning decision; no implementation authority
+
+Decision: define the first genuinely usable Cortexa capability as one
+foreground, explicitly user-initiated Personal Assistant text request at a
+time. It may stream bounded text and produce one bounded final answer. Explicit
+cancellation is terminal and idempotent; failures are closed and redacted.
+
+Trusted Rust owns run, gateway-request, presentation, local support-correlation,
+agent, instruction, provider/model, tool-set, limit, deadline, cancellation,
+cleanup, and late-event policy. It validates and keeps gateway/provider
+identities private. The synthetic WebView contract supplies no text; a future
+real-content-v2 contract may eventually supply only one versioned bounded text
+request after separate admission. Either contract may return only a Rust-issued
+opaque presentation handle for polling or cancellation. Neither can select a
+trusted agent, task, run, request, response, profile, runtime, workflow,
+instruction, provider, model, tool set, endpoint, credential, data class,
+limit, outcome, retry, or fallback.
+
+Milestone 1 uses only `personal-assistant`, immutable synthetic instruction
+profile `personal-assistant-text-v0@1`, the already selected synthetic-only
+OpenAI-through-Cloudflare direction with `gpt-5.6-luna`, and `empty@1` with zero
+tools and zero function calls. A future real-content profile must be version 2
+and remains unselected. Every v0 lane has one model turn, one gateway request,
+no automatic retry or fallback, and no files, attachments, persistence,
+memory, scheduling, background autonomy, specialist delegation,
+policy/approval dispatch, durable audit claim, filesystem access, process
+launch, permission request, or device effect.
+
+Implementation must preserve three separate milestones:
+
+1. a live synthetic-text proof using only an application-owned fixed fixture;
+2. the first usable private assistant, enabled only after exact real-content
+   identity, ZDR, disclosure, logging, deletion, operations, and target-Mac
+   evidence; and
+3. any later action-taking or production product under new decisions.
+
+The synthetic proof is not a usable personal assistant. The private assistant
+is not an action-taking agent or production release. D-066/D-067 remain
+synthetic-demo-only selections; this decision does not extend OpenAI or
+Cloudflare to real prompts. D-068's long-lived demo service-token exception
+also remains synthetic-only. D-061, explicit real provider/hosting authority,
+and an approved non-demo owner-authentication decision remain real-content
+gates; `store: false` is not ZDR. D-062/D-064 remain planned production
+direction unless a later owner decision supersedes them.
+
+D-061/D-064 disclosure applies before **every first external boundary**, not
+only before model content. The V0-9 zero-body Access test therefore requires a
+distinct trusted-Rust, one-use
+`personal-assistant-access-auth-probe@1` acknowledgment after displaying the
+exact authentication-only network disclosure; no probe socket may open first.
+That acknowledgment cannot start model transport. The later synthetic provider
+request separately requires V0-11's
+`personal-assistant-synthetic-external-processing@1` visible WebView
+acknowledgment and Rust admission. Neither acknowledgment is durable or
+interchangeable.
+
+For the synthetic lane, D-061's maximum seven-day gateway-log limit covers
+Access authentication-request logs and Worker/runtime operational metadata.
+Cloudflare's mandatory account/admin audit trail is a separate control-plane
+record of operator/configuration actions, not runtime gateway request logging.
+The current documented 18-month retention is accepted for the synthetic lane
+only if the pre-traffic gate verifies that its fields contain no prompt,
+output, request body, authorization value, credential secret, or provider
+content and the disclosure continues to state Cloudflare operational
+retention. Any field/class/retention change stops Stage C. This classification
+does not authorize real prompts; V0-14 requires a fresh explicit outcome.
+
+The synthetic model disclosure also freezes the current documented maximums:
+OpenAI abuse-monitoring content up to 30 days, encrypted prompt-cache state up
+to 24 hours, Cloudflare Free-plan Access authentication metadata for 24 hours,
+and Cloudflare admin-action audit records for 18 months. It states that
+`store=false` is not ZDR. V0-12/V0-13 must reverify the exact account/project,
+endpoint/model eligibility, fields, and periods; any drift requires a new
+disclosure version and owner approval before traffic.
+
+Live configuration ownership is single and staged: V0-5 owns the exact
+issuer/AUD/JWKS and fixed desktop origin/path, V0-8 owns the expected service-
+token Client ID binding, V0-12 owns the provider secret, and only the exact
+server binding `PA_V0_TRAFFIC_ENABLED=true` admits a new request. Missing,
+malformed, or `false` denies. Setting it false or removing a route blocks new
+admission but is not represented as aborting an active request; owned
+desktop/Worker cancellation and deadline paths must tear down the original
+request.
+
+The current `InitialGatewayTurn` continues to advertise two fixed tool schemas
+for its existing verified path and must not be silently repurposed. The v0
+requires a distinct exact empty-tool turn. `NativeAgentRuntime` remains the
+sole/default runtime and `AgentRuntime::start` remains the sole runtime-start
+authority. A minimal application-owned Personal Assistant host may issue
+process-local identity and invoke that existing start boundary without
+creating an orchestrator task, delegation, memory path, inherent Native start,
+or second runtime API. Provider transport remains outside `AgentRuntime`, and
+the current `AgentOrchestrator`, agent memory, specialist workflows, Command
+Center projection, Conversations mock, sealed Research/Knowledge lifecycle,
+and acceptance workflows remain separate and unchanged.
+
+The exact dependency-ordered program is
+[`2026-08-28-personal-assistant-v0-program.md`](docs/plans/2026-08-28-personal-assistant-v0-program.md).
+Its fourteen independently approval-bound plans separate local profile/lifecycle,
+signed identity, local admission validation, no-traffic provisioning, HTTPS
+dependency/transport, credential transfer, authentication rehearsal, fake
+provider mapping, disclosure-bound Tauri presentation, provider provisioning,
+live synthetic traffic, and real-content admission. The validated planning
+closeout marks only V0-1 Ready for separate owner approval; every later plan
+remains Blocked.
+
+This decision adds no source, account, credential, signing state, Keychain
+item, Cloudflare/OpenAI resource, provider request, network path, Tauri IPC,
+disclosure UI, persistence, log, tool, device effect, release, or publication.
+Each increment still requires exact owner approval and a fresh gate.
+
 ## Open decisions
 
 | ID    | Topic                                                                                       | Required before                                      |

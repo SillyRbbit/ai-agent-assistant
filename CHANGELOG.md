@@ -4,6 +4,18 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Defined D-094 and a documentation-only Personal Assistant v0 program: one
+  foreground explicit text request, bounded streaming/final output, terminal
+  cancellation, closed errors, Rust-owned identity/configuration, and an empty
+  tool set. Fourteen exact dependency-ordered plans separate local contracts,
+  authentication, credentials, no-traffic provisioning, bounded transport,
+  disclosure-bound UI, a live synthetic OpenAI-through-Cloudflare proof,
+  private real-prompt admission, and any later action-taking/product scope.
+  The verified planning closeout marks only V0-1 Ready for separate owner
+  approval; all later identity, gateway, provider, HTTPS, Tauri, ZDR, and real-content work is Blocked. No
+  source, dependency, credential, signing state, external resource, provider
+  traffic, IPC, persistence, tool, or device behavior changed.
+
 - Reconciled the high-level engineering guide with the published risk-based CI
   classifier: isolated Rust tests remain narrow, while production Rust source
   and native examples select affected application jobs. Current-state records

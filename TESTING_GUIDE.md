@@ -124,6 +124,60 @@ raw debug process, record native interaction, alternate appearance/reduced
 motion, page zoom, and resize as `Not run`; a browser-rendered fallback can
 verify layout and disclosure but cannot substitute for native lifecycle proof.
 
+### Planned Personal Assistant v0 evidence separation
+
+D-094's Personal Assistant program must preserve separate evidence for each
+trust boundary. Transport-free Rust fixtures may prove the exact empty-tool
+profile, success/failure/cancellation, bounds, transactional rejection, and
+late-event behavior. V0-1 additionally tests exact returned runtime identity
+and initial status plus terminal cleanup versus run-and-lease quarantine for
+every rejected-start outcome. These fixtures do not prove signing, Keychain,
+TLS, Access, Worker, OpenAI, Tauri, WebView, or target-Mac behavior.
+
+Generated JWT/JWKS tests prove the local verifier only. A route-free control-
+plane inspection proves no-traffic configuration only. Fixed zero-content
+authentication probes prove Access/JWT behavior only, and their evidence keeps
+the Service Auth token-resource `id` distinct from JWT/binding `client_id`.
+Fake HTTP/OpenAI streams prove only the exact closed event grammar, private
+sequence origin/contiguity, identity consistency, intermediary handling,
+terminal mapping, and refusal/reasoning/tool rejection of the bounded adapter.
+None substitutes for the separately approved live synthetic Stage C rehearsal,
+and that rehearsal never authorizes real personal content.
+
+The authentication-only probe has its own exact terminal disclosure/version
+and one-use Rust admission. Tests prove absent/wrong/non-terminal acknowledgment
+performs zero network operations and cannot start model transport. Live evidence
+also distinguishes new-admission denial through
+`PA_V0_TRAFFIC_ENABLED=false` from owned abort of an already admitted request.
+Log evidence classifies Access/Worker runtime metadata (content-free, at most
+seven days) separately from the current 18-month Cloudflare admin-action audit
+trail and stops on content, secret, field, or retention drift.
+
+The synthetic-v1 Tauri contract must be tested before first transmission. Rust
+tests pin the no-text command, exact disclosure admission, private identity,
+single-flight host, journal/cursors, cancellation, and closed errors.
+TypeScript treats every reply as `unknown` and tests exact keys/types, Unicode
+scalar and UTF-8 bounds, sequences/transitions, prefix/final equality,
+single-flight 250 ms polling, route/visibility generations, focus, chronology,
+plain-text rendering, and explicit recovery. F-12 tests pin the sole Personal
+Assistant consumer and absence of Personal Assistant events, alternate
+bridge/network surfaces, storage, capability, CSP, or permission expansion;
+existing approved event boundaries remain unchanged.
+
+Target-Mac Stage C evidence records every required check as Passed, Failed, or
+Not run: signed identity, disclosure, fixed prompt, TLS/JWT, bounded streaming,
+closed failure, cancellation at practical phases, active deadlines, cleanup,
+late rejection, route-away/back, keyboard/focus, resize, 200% zoom, theme,
+reduced motion, scrolling, console/log redaction, new-admission flag, owned
+active abort, revocation,
+rollback, no permission prompt, and no device effect. Each explicit Start is
+one model request. There is no automatic preflight, retry, fallback, or second
+cancel request.
+
+Real-content-v2 requires distinct command/parser/profile/disclosure and fresh
+tests after D-061, non-demo authentication, and explicit provider/hosting
+authority. Synthetic-v1 evidence cannot be relabelled as real-content evidence.
+
 ### Hook and repository-workflow tests
 
 Location: `.codex/hooks/tests/test_*.py`.

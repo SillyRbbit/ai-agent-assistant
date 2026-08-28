@@ -437,6 +437,61 @@ production boundary exists.
       authorize provisioning, provisioning does not authorize traffic,
       synthetic traffic does not authorize real content, and no stage starts
       automatically.
+- [ ] D-094's synthetic version 1 accepts no caller text or trusted selector;
+      the fixed fixture, instruction, OpenAI/Cloudflare profile, model,
+      `empty@1`, limits, one request, zero retry, and no fallback are exact.
+- [ ] Synthetic start requires the exact current disclosure acknowledgment;
+      trusted Rust mints and consumes one volatile private admission before the
+      sole transport path may write a socket. The UI does not pre-check it.
+- [ ] Before V0-9's earlier zero-body authentication socket, the terminal shows
+      the exact `personal-assistant-access-auth-probe@1` disclosure, requires
+      exact interactive acknowledgment, and Rust consumes a distinct one-use
+      admission. Missing/wrong/non-terminal input opens no socket, and the token
+      cannot start model transport.
+- [ ] Synthetic-v1 and any future real-content-v2 command, handle, parser,
+      disclosure, instruction, data-class, and gateway profiles reject each
+      other. D-068's service token never authorizes personal content.
+- [ ] The Worker independently verifies the Access service-token application
+      JWT: RS256/key constraints, fixed JWKS endpoint, exact issuer/single AUD,
+      `type=app`, expected Client ID `common_name`, empty `sub`, required
+      integer `iat`/`exp`, optional bounded `nbf`, clock/lifetime bounds, and
+      closed refresh/cache limits.
+- [ ] Rust uses one reviewed direct HTTPS client only after a separate
+      dependency decision; fixed origin, TLS, redirects, proxies, bounded
+      incremental reads, active deadlines, original-request abort, cleanup
+      quarantine, and late-byte rejection are proved without WebView,
+      subprocess, transitive/private API, or TLS bypass.
+- [ ] Access authentication-only traffic, provider-secret provisioning, live
+      synthetic provider traffic, and real-content activation are separate
+      approvals with route/kill/revocation/deletion rollback between them.
+- [ ] V0-5 owns exact issuer/AUD/JWKS/origin configuration, V0-8 owns expected
+      service-token Client ID, and V0-12 owns the provider secret. Every binding
+      matches its owner before traffic; missing/malformed/drifted values deny.
+- [ ] The Service Auth policy uses the service-token resource `id` as
+      `token_id`; JWT `common_name`, the expected-client binding, and Keychain
+      use the distinct `client_id`. Separate sanitized fingerprints tie both to
+      one reviewed token record without comparing them for equality.
+- [ ] Every credential handoff names the exact authenticated UI, transient
+      buffers, pasteboard controls, cleanup owner, rotation/replacement
+      semantics, and revocation order; no value crosses shell, environment,
+      file, source, chat, screenshot, history, CI, test, or log.
+- [ ] The Responses adapter pins current event names/order, closed
+      event-specific keys, a private sequence origin plus contiguous
+      increments, response/message identity consistency, text/item/content
+      indices, intermediary handling, terminal failures, and
+      refusal/reasoning/tool rejection. Unknown provider material never becomes
+      a normalized frame.
+- [ ] `PA_V0_TRAFFIC_ENABLED=false` denies new admission. Route removal and the
+      flag are never claimed to abort an active request; active teardown uses
+      the owned desktop/Worker abort chain and retains cleanup ownership.
+- [ ] Application content logging is absent. Access, Worker, OpenAI, and
+      control-plane metadata sinks, retention, access, and deletion ownership
+      are recorded honestly; vendor metadata is not described as “no logging.”
+- [ ] Access authentication-request and Worker/runtime metadata are content-free
+      and retained at most seven days. Cloudflare's mandatory admin-action audit
+      trail is separately classified; its current 18-month synthetic-only
+      acceptance is reverified for no content/secret fields before Stage C and
+      does not authorize real-content processing.
 - [ ] The approved threat model and closed configuration specification are
       reviewed for the exact environment before Stage B, Stage C, or Stage D.
 - [ ] D-062's Microsoft personal-account boundary is implemented only after the
@@ -470,11 +525,11 @@ production boundary exists.
 - [ ] Every AI model provider is separately approved for retention, ZDR, data
       use, logging, region, and security. No provider inherits another
       provider's approval, and desktop clients receive no provider credential.
-- [ ] D-063's Azure OpenAI candidate is implemented only with an exact approved
-      Standard/Regional Central US deployment, managed identity,
-      least-privilege RBAC, foreground Responses, disabled storage and
-      background mode, strict custom functions, and no automatic provider
-      fallback.
+- [ ] D-063 is treated as historical and superseded for synthetic evaluation:
+      D-066/D-067 select OpenAI-through-Cloudflare only for the internal
+      synthetic demo. Real-content provider/hosting remains separately
+      unselected; the Azure items below remain future production-direction
+      gates, not current v0 evidence.
 - [ ] The gateway uses one dedicated non-shared user-assigned managed identity
       and only `Cognitive Services OpenAI User` at the exact Azure OpenAI
       resource scope; API-key fallback and broader runtime roles are absent.
