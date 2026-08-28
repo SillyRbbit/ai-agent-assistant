@@ -1220,3 +1220,36 @@ Require focused tests for absent metadata and explicit null/numeric metadata,
 then run strict Clippy, the gateway/runtime contract suites, complete
 repository verification, security scanning, and diff inspection. A rejected
 frame must terminal-fail transactionally and no later event may resume it.
+
+## TS-022 - Linux Clippy rejected macOS-only test imports
+
+Date: 2026-08-28
+Status: Resolved locally; corrected-head CI pending
+
+### Symptom
+
+PR #79 CI run `33217662961`, Linux Rust job `99004869413`, failed the
+warning-denied Clippy step with unused imports in the V0-1 gateway-request and
+Native-runtime test modules. Formatting passed and Rust tests were skipped
+after lint failed. The target-Mac Rust job `99004869430` passed Clippy and all
+tests.
+
+### Cause
+
+The imported symbols were used only by test helpers and assertions already
+guarded with `#[cfg(target_os = "macos")]`. They were therefore used on macOS
+but remained unused imports when the same test modules compiled on Linux.
+
+### Resolution
+
+Move only the macOS-only imports behind the same target guard as their
+consumers. Keep cross-platform imports unconditional. Add no lint allowance,
+test skip, production branch, dependency, or workflow change.
+
+### Verify
+
+Run formatting, focused gateway and Native tests, strict all-target/all-feature
+Clippy, agent acceptance, complete verification, audit/security/repository/docs
+checks, diff inspection, and the completion gate. Push only the verified
+correction, then require PR #79's corrected head to pass Linux Rust and every
+other required check before squash merge.

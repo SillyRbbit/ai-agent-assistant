@@ -4,6 +4,12 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Corrected V0-1 test-import portability after PR #79's target-Mac Rust job
+  passed but Linux warning-denied Clippy reported imports used only by macOS-
+  gated tests. The exact imports now share their consumers' existing target
+  guards. No production code, test body, workflow, dependency, lint policy,
+  capability, or runtime behavior changed.
+
 - Implemented V0-1's transport-free Personal Assistant prerequisite. A sealed
   application-owned synthetic request pins the exact instructions,
   OpenAI-through-Cloudflare model profile, lower closed limits, `empty@1`, zero
@@ -15,8 +21,10 @@ All notable repository changes are documented here. Entries distinguish verified
   success, failure, cancellation, limits, transactional rejection, and late
   events. There is no response ingress on the host and no Tauri, UI, provider,
   network, credential, persistence, tool, approval, audit, filesystem,
-  background, or device-effect path. The increment remains uncommitted and
-  unpublished pending owner review.
+  background, or device-effect path. The V0-1 source is committed at `a346946`
+  on PR #79; its import-only Linux Clippy portability correction is locally
+  verified, while corrected-head hosted checks and squash merge remain
+  pending.
 
 - Defined D-094 and a documentation-only Personal Assistant v0 program: one
   foreground explicit text request, bounded streaming/final output, terminal

@@ -5,13 +5,22 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Current plan state
 
 The owner-approved
+[`Personal Assistant v0 Linux Clippy portability correction`](docs/plans/2026-08-28-personal-assistant-v0-linux-clippy-portability.md)
+is locally verified complete with advisories and is the current bounded
+publication fix for PR #79. It changes only two Rust
+test-module import blocks so macOS-only imports share their consumers' existing
+target guards. It adds no lint allowance, test skip, behavior, dependency,
+workflow, or capability. The corrected PR head must pass all required checks
+before squash merge; no successor implementation is Ready.
+
+The owner-approved
 [`V0-1 — sealed empty-tool turn and minimal host`](docs/plans/2026-08-28-personal-assistant-v0-empty-tool-turn.md)
 is locally verified complete with advisories from synchronized `main` baseline
 `0b22ee7`. It implements only the transport-free Rust contract and no-input
 volatile host. It adds no user-text or response ingress, Tauri/WebView path,
 provider/network/credential state, persistence, tool, approval, audit,
-filesystem, background work, or device effect. The exact diff is uncommitted
-and unpublished pending owner review.
+filesystem, background work, or device effect. Its historical local closeout
+preceded commit `a346946` and PR #79.
 
 The dependency-ordered
 [`Personal Assistant v0 capability program`](docs/plans/2026-08-28-personal-assistant-v0-program.md)
@@ -842,6 +851,7 @@ condition is reached.
 | ------------------------------------------------ | -------- | ------------------ | ------------ |
 | Personal Assistant v0 capability program         | Complete | Project owner      | 2026-08-28   |
 | V0-1 empty-tool turn and minimal host            | Complete | Project owner      | 2026-08-28   |
+| V0-1 Linux Clippy portability correction         | Active   | Project owner      | 2026-08-28   |
 | V0-2 volatile lifecycle and presentation journal | Blocked  | Project owner      | 2026-08-28   |
 | V0-3 fake signed-client secret owner             | Blocked  | Project owner      | 2026-08-28   |
 | V0-4 local deny-only Access verifier             | Blocked  | Project owner      | 2026-08-28   |

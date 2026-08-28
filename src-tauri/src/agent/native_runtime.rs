@@ -666,10 +666,13 @@ enum WireGatewayFailureCode {
 #[cfg(test)]
 mod tests {
     use super::{NativeAgentRunError, NativeAgentRuntime, NativeTurn};
-    use crate::agent::gateway_protocol::{GatewayStreamStatus, GATEWAY_PROTOCOL_VERSION};
+    use crate::agent::gateway_protocol::GatewayStreamStatus;
+    #[cfg(target_os = "macos")]
+    use crate::agent::gateway_protocol::GATEWAY_PROTOCOL_VERSION;
+    #[cfg(target_os = "macos")]
+    use crate::agent::gateway_request::{InitialGatewayEvent, InitialGatewayTurnError};
     use crate::agent::gateway_request::{
-        InitialGatewayEvent, InitialGatewayTurn, InitialGatewayTurnError,
-        PersonalAssistantTextTurnError, INITIAL_GATEWAY_TOOL_SET_VERSION,
+        InitialGatewayTurn, PersonalAssistantTextTurnError, INITIAL_GATEWAY_TOOL_SET_VERSION,
     };
     use crate::agent::runtime::{
         AgentRuntime, RuntimeCancellationOutcome, RuntimeError, RuntimeEventAcceptance,

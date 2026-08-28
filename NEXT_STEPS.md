@@ -7,6 +7,21 @@ This file is the ordered implementation queue. Work only on the first item marke
 ## Current verified increment and queue state
 
 The owner-approved
+[`personal-assistant-v0-linux-clippy-portability`](docs/increments/personal-assistant-v0-linux-clippy-portability.md)
+correction is the active publication gate for
+[`PR #79`](https://github.com/SillyRbbit/ai-agent-assistant/pull/79). V0-1 was
+committed at `a346946`; its first PR run passed target-Mac Rust,
+classification, and documentation/policy, but Linux warning-denied Clippy
+reported imports whose consumers are macOS-only tests. The exact correction
+aligns those imports with the existing target guards and changes no production
+behavior, test body, dependency, workflow, or capability.
+
+No successor implementation is **Ready**. PR #79 may squash-merge only after
+the exact corrected head passes every required check. After merge, synchronize
+and confirm the exact `origin/main` squash commit before reassessing V0-2.
+V0-2 through V0-14 remain Blocked and may not start early.
+
+The owner-approved
 [`personal-assistant-v0-empty-tool-turn`](docs/increments/personal-assistant-v0-empty-tool-turn.md)
 increment is locally verified complete with advisories from clean synchronized
 `main` baseline `0b22ee79a24e11d7c67cbace111a502608b57591`. V0-1
@@ -18,12 +33,10 @@ cleanup/quarantine without I/O.
 V0-1 does not implement a working assistant. Streamed success/failure results
 remain fixture-only because the public host has no response ingress. There is
 no Tauri/WebView, provider, network, credential, persistence, memory, tool,
-approval, audit, filesystem, background, or device-effect path. The local
-increment is uncommitted and unpublished.
+approval, audit, filesystem, background, or device-effect path. Its historical
+local closeout preceded commit `a346946` and PR #79.
 
-No successor implementation is currently **Ready**. The next action is owner
-review and, only with separate authorization, publication of the exact V0-1
-diff. [`V0-2 — volatile Personal Assistant Rust session host`](docs/plans/2026-08-28-personal-assistant-v0-session-host.md)
+[`V0-2 — volatile Personal Assistant Rust session host`](docs/plans/2026-08-28-personal-assistant-v0-session-host.md)
 remains Blocked until V0-1 is published or otherwise accepted as the exact
 source baseline. V0-3 through V0-14 remain Blocked by their exact sequence:
 D-076/TS-017, JWT/JWKS validation, external authority, a direct-HTTPS

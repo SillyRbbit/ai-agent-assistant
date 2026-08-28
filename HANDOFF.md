@@ -5,6 +5,30 @@ Last updated: 2026-08-28
 ## Current verified increment
 
 The owner-approved
+[`personal-assistant-v0-linux-clippy-portability`](docs/increments/personal-assistant-v0-linux-clippy-portability.md)
+correction addresses PR #79's Linux warning-denied Clippy failure without
+changing behavior. The V0-1 source was committed at `a346946` and pushed to
+[`PR #79`](https://github.com/SillyRbbit/ai-agent-assistant/pull/79). Its first
+CI run passed target-Mac Rust, classification, and documentation/policy, while
+Linux Clippy found imports used only by macOS-gated tests. The correction gives
+those imports the same existing target guards; it adds no allowance, test skip,
+production branch, dependency, workflow, or capability change.
+
+Publication remains bound to PR #79. Squash merge requires the exact corrected
+head to pass Linux Rust, target-Mac Rust, frontend, dependency/secret,
+classification, and documentation checks. After merge, confirm the exact
+`origin/main` squash commit before considering V0-1 an authoritative clean
+baseline. V0-2 and all external work remain Blocked.
+
+Exact resume prompt: "Read `AGENTS.md`, the complete required project-memory
+and security/testing chain, the V0-1 plan/review, and the Linux Clippy
+portability plan/increment/review. Confirm the completion marker and exact PR
+#79 head, require every PR check to pass, then squash-merge only with owner
+authority. After merge, fetch and confirm the exact `origin/main` commit. Do
+not begin V0-2 or any identity, credential, gateway, provider, transport, IPC,
+persistence, tool, or external work."
+
+The owner-approved
 [`personal-assistant-v0-empty-tool-turn`](docs/increments/personal-assistant-v0-empty-tool-turn.md)
 increment is locally verified complete with advisories from clean synchronized
 `main` baseline `0b22ee79a24e11d7c67cbace111a502608b57591`. It adds
@@ -21,21 +45,14 @@ assistant or user-visible conversation. No Tauri/WebView, provider, model
 request, network, signed identity, credential, persistence, memory, tool,
 approval, audit, filesystem, background, or device-effect path was added.
 
-V0-1 is uncommitted and unpublished. The exact next action is owner review of
-the verified diff and, only if separately authorized, its Git publication.
+The historical V0-1 local closeout above preceded commit `a346946` and PR #79;
+the current publication state is recorded by the portability correction at the
+top of this handoff.
 [`V0-2 — volatile Personal Assistant Rust session host`](docs/plans/2026-08-28-personal-assistant-v0-session-host.md)
 remains **Blocked** until V0-1 is published or otherwise accepted as the exact
 source baseline. V0-3 through V0-14 remain Blocked by their recorded
 dependencies. Do not begin V0-2, identity, credential, gateway, provider,
 transport, IPC, real-content, local-model, or product work.
-
-Exact resume prompt: "Read `AGENTS.md`, `docs/governance/MASTER_PROMPT.md`, the
-complete required project-memory/security/testing chain, the V0-1 plan,
-increment record, and post-increment review. Confirm `main` and `origin/main`,
-validate the V0-1 completion marker and workspace fingerprint, and inspect the
-exact uncommitted V0-1 diff. Stop for explicit owner authority before any
-commit, push, PR, or merge. Do not begin V0-2 or any identity, credential,
-gateway, provider, transport, IPC, persistence, tool, or external work."
 
 The owner-approved documentation-only
 [`ci-classification-engineering-guide-reconciliation`](docs/increments/ci-classification-engineering-guide-reconciliation.md)

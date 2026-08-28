@@ -1115,12 +1115,14 @@ mod tests {
     #[cfg(target_os = "macos")]
     use super::AuditedApprovalResolution;
     use super::{
-        GatewayRequestError, InitialGatewayEvent, InitialGatewayRequest, InitialGatewayTurn,
-        InitialGatewayTurnError, PersonalAssistantFailureCode, PersonalAssistantTextEvent,
-        PersonalAssistantTextRequest, PersonalAssistantTextTurn, PersonalAssistantTextTurnError,
-        INITIAL_GATEWAY_TOOL_SET_ID, INITIAL_GATEWAY_TOOL_SET_VERSION,
-        PERSONAL_ASSISTANT_V0_INSTRUCTIONS, PERSONAL_ASSISTANT_V0_MAX_EVENTS,
+        GatewayRequestError, InitialGatewayRequest, PersonalAssistantFailureCode,
+        PersonalAssistantTextEvent, PersonalAssistantTextRequest, PersonalAssistantTextTurn,
+        PersonalAssistantTextTurnError, INITIAL_GATEWAY_TOOL_SET_ID,
+        INITIAL_GATEWAY_TOOL_SET_VERSION, PERSONAL_ASSISTANT_V0_INSTRUCTIONS,
+        PERSONAL_ASSISTANT_V0_MAX_EVENTS,
     };
+    #[cfg(target_os = "macos")]
+    use super::{InitialGatewayEvent, InitialGatewayTurn, InitialGatewayTurnError};
     use crate::agent::gateway_protocol::{
         GatewayStreamStatus, AGENT_RUN_DEADLINE, GATEWAY_CONNECT_TIMEOUT, GATEWAY_PROTOCOL_VERSION,
         GATEWAY_STREAM_IDLE_TIMEOUT, MAX_ASSISTANT_OUTPUT_CHARACTERS_PER_TURN,

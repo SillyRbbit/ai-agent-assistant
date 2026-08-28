@@ -5,6 +5,15 @@ Last updated: 2026-08-28
 ## Current verified increment
 
 The owner-approved
+[`personal-assistant-v0-linux-clippy-portability`](docs/increments/personal-assistant-v0-linux-clippy-portability.md)
+correction addresses the only failing check on V0-1 PR #79's first CI run.
+Target-Mac Rust passed; Linux warning-denied Clippy found imports used only by
+macOS-gated tests. The correction conditionally imports only those symbols and
+does not change production code paths, test bodies, dependencies, workflows,
+lint policy, or application capability. The exact corrected PR head must pass
+all required checks before squash merge.
+
+The owner-approved
 [`personal-assistant-v0-empty-tool-turn`](docs/increments/personal-assistant-v0-empty-tool-turn.md)
 increment is locally verified complete with advisories from clean synchronized
 `main` baseline `0b22ee79a24e11d7c67cbace111a502608b57591`. It adds
@@ -24,8 +33,10 @@ identity, credential, Access token, Worker, route, provider secret, persistence,
 memory, tool execution, durable audit, filesystem/device action, or traffic
 exists; D-061 ZDR and real-content authentication remain unresolved.
 
-V0-1 is uncommitted and unpublished. V0-2 through V0-14 remain Blocked and may
-not start early; no successor source increment is Ready.
+V0-1 was committed at `a346946` and pushed to PR #79. It is not an
+authoritative clean `main` baseline until the corrected head passes and the
+squash merge is confirmed. V0-2 through V0-14 remain Blocked and may not start
+early; no successor source increment is Ready.
 
 The owner-approved documentation-only
 [`ci-classification-engineering-guide-reconciliation`](docs/increments/ci-classification-engineering-guide-reconciliation.md)
