@@ -7,6 +7,32 @@ This file is the ordered implementation queue. Work only on the first item marke
 ## Current verified increment and queue state
 
 The owner-approved documentation-only
+[`personal-assistant-v0-capability-planning`](docs/increments/personal-assistant-v0-capability-planning.md)
+increment is verified complete with advisories and defines D-094 and the dependency-ordered
+[`Personal Assistant v0 program`](docs/plans/2026-08-28-personal-assistant-v0-program.md)
+from clean synchronized `main`
+`41ff7141007c8c0a684a5e2434ecf81dd4707418`. It changes no executable source,
+dependency, credential, signing state, external resource, provider state, IPC,
+or product behavior.
+
+The first usable v0 is one foreground, explicitly submitted Personal Assistant
+text request at a time with bounded stream/final output, terminal cancellation,
+closed errors, Rust-owned identity/configuration, and `empty@1`. The live
+synthetic proof, private real-prompt activation, and later action-taking/product
+scope are separate milestones. The current application implements none of the
+live path.
+
+The only **Ready** successor is
+[`V0-1 — sealed Personal Assistant empty-tool turn and minimal host`](docs/plans/2026-08-28-personal-assistant-v0-empty-tool-turn.md).
+It is transport-free, accepts no caller configuration, performs no I/O, and
+still requires separate owner implementation approval plus a fresh gate.
+V0-2 through V0-14 remain Blocked by their exact sequence: D-076/TS-017,
+JWT/JWKS validation, external authority, a direct-HTTPS dependency decision,
+credential transfer, authentication-only traffic, provider evidence,
+disclosure-bound F-12/Tauri work, D-061 ZDR, and unselected real-content
+identity/provider/hosting. Do not start V0-2 or any later plan early.
+
+The owner-approved documentation-only
 [`ci-classification-engineering-guide-reconciliation`](docs/increments/ci-classification-engineering-guide-reconciliation.md)
 increment is verified complete with advisories from clean synchronized `main`
 `7390ea6`. It has one

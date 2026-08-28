@@ -383,6 +383,80 @@ deterministic marker is complete and valid.
   changes. Exact copy and acknowledgement storage require separate Stage C
   approval and evidence.
 
+### D-094 Personal Assistant v0 boundary
+
+D-094 narrows the first usable capability to one volatile, foreground,
+explicitly user-initiated Personal Assistant text request with bounded streaming
+and one final answer. Its tool set is empty. It has no file, persistence,
+memory, scheduling, background, delegation, retry/fallback, approval dispatch,
+durable audit, or device-effect path.
+
+The dependency-ordered security boundary is:
+
+- an application-owned synthetic empty-tool request that pins complete
+  instructions, fixture, OpenAI/`gpt-5.6-luna`, features, limits, and a
+  data-class profile;
+- one Rust-owned process-local session with private identities, an opaque
+  presentation handle, deadlines, terminal cancellation, cleanup ownership,
+  and late-event rejection;
+- a signed-client/Keychain proof that remains blocked by D-076 and TS-017;
+- a Cloudflare Worker that independently validates Access JWT signature,
+  issuer, time claims, and exact audience before any body handling;
+- a synthetic-only OpenAI stream with fixed admission, no tools, no retry or
+  fallback, content-free application logs, a default-deny new-admission flag,
+  and bounded owned abort at both hops;
+- a three-command no-text synthetic-v1 start/poll/cancel Tauri boundary parsed
+  from `unknown`, with Rust-bound disclosure admission and no authoritative
+  WebView-forgeable event; and
+- a distinct real-content-v2 admission only after D-061, explicit
+  provider/hosting authority, and an approved non-demo authentication boundary
+  pass.
+
+The first external operation is V0-9's zero-body authentication probe, so it
+has a separate exact terminal disclosure and one-use Rust admission before any
+credential projection or socket. It cannot mint or consume the later model-
+transport admission. Live configuration is staged: V0-5 owns
+issuer/AUD/JWKS/origin, V0-8 owns expected Client ID, and V0-12 owns the
+provider secret. Only exact `PA_V0_TRAFFIC_ENABLED=true` admits a new request;
+false/missing denies but does not claim to abort an active request.
+
+The Cloudflare service-token resource `id` used by a Service Auth `token_id`
+selector is not the token `client_id` carried in JWT `common_name`, the Worker
+binding, and Keychain. V0-8 tracks separate sanitized fingerprints tied to one
+reviewed record and owns exact Dashboard/Keychain/pasteboard transfer and
+rotation cleanup. The provider adapter accepts only a current, bounded,
+contiguous Responses event grammar, keeps provider IDs private, rejects
+refusals/reasoning/tools outside that grammar, and never assumes an
+undocumented sequence-number origin.
+
+For the synthetic lane, Access authentication-request logs and Worker/runtime
+metadata are gateway logging and remain content-free with retention at most
+seven days. D-094 separately accepts Cloudflare's current 18-month mandatory
+admin-action audit retention only as control-plane metadata and only after a
+pre-traffic inspection proves no content or secret fields. Any drift blocks
+Stage C, and real prompts require a fresh V0-14 outcome.
+
+The exact synthetic disclosure names current documented retention rather than
+saying only “operational retention”: OpenAI abuse-monitoring content up to 30
+days, encrypted prompt-cache state up to 24 hours, Cloudflare Free-plan Access
+authentication metadata for 24 hours, and mandatory admin-action audit records
+for 18 months. It states `store=false` is not ZDR. V0-12/V0-13 must reverify
+these facts and version the disclosure on any change.
+
+Current source does not implement this chain. In particular, the current
+initial gateway request advertises two tools, no direct Rust HTTPS client
+exists, D-068 is synthetic-only, no Worker/provider path exists, and exact ZDR
+evidence is absent. The complete blocker and rollback record is
+[`2026-08-28-personal-assistant-v0-program.md`](docs/plans/2026-08-28-personal-assistant-v0-program.md).
+
+The transport-free empty-tool turn/minimal-host plan is the sole Ready plan
+after verified planning closeout and still requires separate owner approval.
+Any need for an unapproved dependency,
+WebView or subprocess networking,
+caller-selected trusted configuration, raw-content logging, persistent
+acknowledgement, missing JWT/ZDR evidence, accepted late event, incomplete
+cleanup, or unapproved external action fails closed and stops the program.
+
 ## Prohibited changes before an approved live-gateway increment
 
 Do not add:

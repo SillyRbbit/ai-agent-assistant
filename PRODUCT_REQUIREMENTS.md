@@ -496,6 +496,35 @@ The repository currently provides:
 
 This baseline is an engineering proof, not the complete user-ready MVP.
 
+## First usable v0 target
+
+D-094 defines a deliberately narrower private v0 before the controlled MVP.
+It is Personal Assistant only and permits one foreground, explicitly submitted
+text request at a time, bounded streamed text, one bounded final answer,
+terminal cancellation, and closed redacted failure.
+
+Trusted Rust owns every run/configuration identity and exposes no caller
+selector for agent, task, run, profile, runtime, workflow, instructions,
+provider/model, tools, endpoint, limits, retry, or fallback. The exact tool set
+is empty. The v0 has no files, persistence, memory, scheduling, background
+autonomy, specialist delegation, action execution, approval dispatch, durable
+audit, or device effect.
+
+The v0 is reached only after three truths remain separate:
+
+1. a live synthetic-text OpenAI-through-Cloudflare proof using a fixed
+   application-owned fixture and a no-text synthetic-v1 UI contract;
+2. separately activated private processing of explicitly submitted,
+   non-sensitive personal text through a distinct real-content-v2 contract only
+   after identity, provider/hosting, ZDR, disclosure, logging, deletion,
+   operations, and target-Mac gates pass; and
+3. later action-taking or production scope under new decisions.
+
+Only item 2 is the first usable v0. Its identity/provider/hosting topology is
+not yet selected; the synthetic service-token exception cannot be reused. The
+synthetic proof is not a personal assistant, and the v0 is not the complete MVP
+below. Current implementation evidence does not satisfy any live milestone.
+
 ## MVP target scope
 
 The first usable controlled macOS MVP should include:

@@ -2,7 +2,7 @@
 
 Status: Owner-approved repository-governance and planned-architecture direction
 Last updated: 2026-08-28
-Decision authority: D-078
+Decision authority: D-078 and D-094
 
 This document defines present project scope and future-facing architecture
 constraints. It is not implementation, readiness, release, or security evidence.
@@ -41,6 +41,25 @@ portable domain contracts without building speculative commercial
 infrastructure. Future publication should not require an avoidable rewrite, but
 publication requirements do not belong in the present implementation before
 their triggers occur.
+
+## First usable capability direction
+
+D-094 narrows the next usable product target to Personal Assistant only: one
+volatile foreground text request at a time, bounded streamed text and final
+answer, terminal cancellation, closed errors, Rust-owned identity and
+configuration, and no tools or device effects. A fixed synthetic live proof,
+private real-prompt activation, and any action-taking or production product are
+separate milestones.
+
+The transport-free empty-tool request/minimal-host prerequisite is the sole
+Ready plan after verified planning closeout and still requires separate owner
+approval plus a fresh gate. The selected synthetic-only
+OpenAI-through-Cloudflare lane remains blocked by signed identity, gateway
+admission, provider evidence, an absent direct Rust HTTPS client, Tauri/F-12
+work, disclosure, operations, and target-Mac evidence. The real-content
+identity/provider/hosting path is unselected and separately blocked by D-061.
+A local model is an unauthorized alternative and does not replace or extend
+this direction without a new decision.
 
 ## Native architecture preservation
 

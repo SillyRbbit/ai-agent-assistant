@@ -5,6 +5,29 @@ Last updated: 2026-08-28
 ## Current verified increment
 
 The owner-approved documentation-only
+[`personal-assistant-v0-capability-planning`](docs/increments/personal-assistant-v0-capability-planning.md)
+increment is verified complete with advisories from clean synchronized `main`
+`41ff7141007c8c0a684a5e2434ecf81dd4707418`. D-094 and the
+[`v0 program`](docs/plans/2026-08-28-personal-assistant-v0-program.md) define
+the first usable capability as one volatile foreground Personal Assistant text
+request at a time, bounded streamed text and final answer, explicit terminal
+cancellation, closed redacted errors, Rust-owned identity/configuration, and an
+empty tool set.
+
+No live path is implemented. The current Native initial turn still advertises
+two tools; no direct Rust HTTPS client, provider adapter, event pump, Personal
+Assistant Tauri host, or live conversation reducer exists. D-076/TS-017 blocks
+signed identity; no Access token, Worker, route, provider secret, or traffic
+exists; D-061 ZDR and real-content authentication remain unresolved.
+
+The exact transport-free
+[`V0-1 empty-tool turn and minimal host`](docs/plans/2026-08-28-personal-assistant-v0-empty-tool-turn.md)
+is the sole **Ready** plan and requires separate owner implementation approval
+plus a fresh gate. V0-2 through V0-14 are Blocked and may not start early. This
+planning increment changes no source, dependency, credential, cloud/provider state, signing state, IPC,
+product behavior, or external system.
+
+The owner-approved documentation-only
 [`ci-classification-engineering-guide-reconciliation`](docs/increments/ci-classification-engineering-guide-reconciliation.md)
 increment is verified complete with advisories from clean synchronized `main`
 `7390ea6`. It corrects only
