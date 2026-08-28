@@ -8,6 +8,7 @@ import tempfile
 import unittest
 from contextlib import redirect_stdout
 from pathlib import Path
+from unittest.mock import patch
 
 
 def load_module():
@@ -25,6 +26,8 @@ scope = load_module()
 
 
 class ChangeScopeTests(unittest.TestCase):
+    ALL_JOBS = scope.Scope(frontend=True, rust=True, audit=True)
+
     def test_documentation_only_skips_application_jobs(self) -> None:
         self.assertEqual(
             scope.classify(("README.md", "docs/guide.md", "prompts/README.md")),
@@ -44,10 +47,15 @@ class ChangeScopeTests(unittest.TestCase):
         )
 
     def test_rust_test_only_runs_rust(self) -> None:
-        self.assertEqual(
-            scope.classify(("src-tauri/tests/smoke.rs",)),
-            scope.Scope(frontend=False, rust=True, audit=False),
-        )
+        for path in (
+            "src-tauri/tests/smoke.rs",
+            "src-tauri/tests/future_isolated_contract.rs",
+        ):
+            with self.subTest(path=path):
+                self.assertEqual(
+                    scope.classify((path,)),
+                    scope.Scope(frontend=False, rust=True, audit=False),
+                )
 
     def test_tauri_ipc_change_runs_both_application_jobs(self) -> None:
         self.assertEqual(
@@ -60,6 +68,104 @@ class ChangeScopeTests(unittest.TestCase):
             scope.classify(("src-tauri/src/approvals/manager.rs",)),
             scope.Scope(frontend=True, rust=True, audit=True),
         )
+
+    def test_production_trust_boundary_families_run_every_job(self) -> None:
+        cases = (
+            ("credential", "src-tauri/src/credentials/cloudflare_access.rs"),
+            ("credential module", "src-tauri/src/credentials/mod.rs"),
+            ("filesystem document", "src-tauri/src/documents.rs"),
+            ("memory data", "src-tauri/src/memory.rs"),
+            (
+                "Tauri lifecycle command and event",
+                "src-tauri/src/research_knowledge_demo_lifecycle_tauri.rs",
+            ),
+            (
+                "Tauri projection",
+                "src-tauri/src/research_knowledge_demo_projection.rs",
+            ),
+            ("startup", "src-tauri/src/startup.rs"),
+            ("storage", "src-tauri/src/storage/store.rs"),
+            (
+                "agent lifecycle",
+                "src-tauri/src/research_knowledge_demo_lifecycle.rs",
+            ),
+            ("agent", "src-tauri/src/agent/runtime.rs"),
+            ("governance", "src-tauri/src/agent/governance.rs"),
+            ("policy", "src-tauri/src/policy/engine.rs"),
+            ("approval", "src-tauri/src/approvals/manager.rs"),
+            ("audit", "src-tauri/src/audit/approval.rs"),
+            ("tool", "src-tauri/src/tools/registry.rs"),
+            (
+                "native menu adapter",
+                "src-tauri/src/menu_bar/tauri_adapter.rs",
+            ),
+            (
+                "credential example",
+                "src-tauri/examples/cloudflare_access_keychain_probe.rs",
+            ),
+            (
+                "approval example",
+                "src-tauri/examples/native_approval_dialog.rs",
+            ),
+        )
+
+        for family, path in cases:
+            with self.subTest(family=family, path=path):
+                self.assertEqual(scope.classify((path,)), self.ALL_JOBS)
+
+    def test_current_production_rust_inventory_runs_every_job(self) -> None:
+        root = Path(__file__).resolve().parents[2]
+        paths = tuple(
+            path.relative_to(root).as_posix()
+            for directory in (
+                root / "src-tauri" / "src",
+                root / "src-tauri" / "examples",
+            )
+            for path in sorted(directory.rglob("*.rs"))
+        )
+
+        self.assertGreater(len(paths), 0)
+        for path in paths:
+            with self.subTest(path=path):
+                self.assertEqual(scope.classify((path,)), self.ALL_JOBS)
+
+    def test_future_production_rust_paths_fail_closed(self) -> None:
+        for path in (
+            "src-tauri/src/future_trust_boundary.rs",
+            "src-tauri/src/future_boundary/adapter.rs",
+            "src-tauri/examples/future_native_probe.rs",
+        ):
+            with self.subTest(path=path):
+                self.assertEqual(scope.classify((path,)), self.ALL_JOBS)
+
+    def test_production_rust_allowlist_accepts_only_exact_source_files(self) -> None:
+        self.assertEqual(scope.ISOLATED_PRODUCTION_RUST_ALLOWLIST, ())
+
+        invalid_entries = (
+            "src-tauri/src/**",
+            "src-tauri/src/storage/",
+            "src-tauri/src/storage/*.rs",
+            "src-tauri/examples/probe.rs",
+            "src-tauri/tests/contract.rs",
+            "src-tauri/src/not-rust.txt",
+        )
+        for entry in invalid_entries:
+            with self.subTest(entry=entry), patch.object(
+                scope, "ISOLATED_PRODUCTION_RUST_ALLOWLIST", (entry,)
+            ):
+                with self.assertRaisesRegex(
+                    RuntimeError, "allowlist entries must be exact"
+                ):
+                    scope.classify(("src-tauri/src/subject.rs",))
+
+        exact_path = "src-tauri/src/isolated_portable_math.rs"
+        with patch.object(
+            scope, "ISOLATED_PRODUCTION_RUST_ALLOWLIST", (exact_path,)
+        ):
+            self.assertEqual(
+                scope.classify((exact_path,)),
+                scope.Scope(frontend=False, rust=True, audit=False),
+            )
 
     def test_repository_policy_change_runs_only_audit(self) -> None:
         self.assertEqual(
@@ -149,6 +255,10 @@ class ChangeScopeTests(unittest.TestCase):
             paths = scope.changed_paths(root, "pull_request", base, head)
 
             self.assertEqual(paths, ("README.md", "src/main.ts"))
+            self.assertEqual(
+                scope.classify(paths),
+                scope.Scope(frontend=True, rust=False, audit=False),
+            )
 
     def test_push_uses_before_and_head_range(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

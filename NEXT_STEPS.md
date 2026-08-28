@@ -6,6 +6,25 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Current verified increment and queue state
 
+The owner-approved
+[`risk-based-ci-trust-boundary-classification`](docs/increments/risk-based-ci-trust-boundary-classification.md)
+increment is verified complete with advisories from synchronized `main`
+`3fc14e4`. All 67 current Rust production/example paths and synthetic future
+paths now fail closed to frontend, Rust, and audit jobs. The production
+exception allowlist remains empty and exact-source-only, while every required
+narrow class and event behavior remains covered and passing. No product,
+workflow, dependency, runner, permission, credential, IPC, provider,
+persistence, filesystem, or tool behavior changed.
+
+One sentence in `ENGINEERING_GUIDE.md` still groups examples with isolated
+Rust tests. It is a non-blocking documentation advisory outside this
+increment's owner-authorized file list. Remote Actions and target-Mac UI checks
+are `Not run` because the increment is unpublished and changes no product
+behavior. No next source or remediation increment is owner-selected or
+**Ready**. Credential, filesystem, document, memory, Tauri IPC, live-provider,
+persistence, and tool work remain blocked pending a separately selected and
+approved increment.
+
 The owner-approved documentation-only
 [`native-multi-agent-final-review-planning`](docs/increments/native-multi-agent-final-review-planning.md)
 and the separately approved read-only

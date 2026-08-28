@@ -37,6 +37,21 @@ RUST_PATTERNS = (
     "rust-toolchain.*",
 )
 
+# Production Rust is part of Cortexa's trusted core or a native trust-boundary
+# proof, so an unrecognized file in either tree must fail closed to the full CI
+# scope. A future production exception must be one exact reviewed Rust file;
+# broad patterns and directories are rejected. No production exception exists.
+PRODUCTION_RUST_TRUST_BOUNDARY_PATTERNS = (
+    "src-tauri/src/**",
+    "src-tauri/examples/**",
+)
+
+ISOLATED_PRODUCTION_RUST_ALLOWLIST: tuple[str, ...] = ()
+
+ISOLATED_RUST_ONLY_PATTERNS = (
+    "src-tauri/tests/**",
+)
+
 SECURITY_SENSITIVE_PATTERNS = (
     "src/infrastructure/tauri/**",
     "src-tauri/build.rs",
@@ -145,13 +160,40 @@ def validate_path(raw_path: str) -> str:
     return path.as_posix()
 
 
+def validate_isolated_production_rust_allowlist() -> None:
+    for raw_path in ISOLATED_PRODUCTION_RUST_ALLOWLIST:
+        path = validate_path(raw_path)
+        if (
+            path != raw_path
+            or not path.startswith("src-tauri/src/")
+            or not path.endswith(".rs")
+            or any(character in raw_path for character in "*?[")
+        ):
+            raise RuntimeError(
+                "isolated production Rust allowlist entries must be exact "
+                "src-tauri/src Rust file paths"
+            )
+
+
 def classify(paths: Sequence[str]) -> Scope:
+    validate_isolated_production_rust_allowlist()
     frontend = False
     rust = False
     audit = False
 
     for raw_path in paths:
         path = validate_path(raw_path)
+        if path in ISOLATED_PRODUCTION_RUST_ALLOWLIST:
+            rust = True
+            continue
+        if matches(path, PRODUCTION_RUST_TRUST_BOUNDARY_PATTERNS):
+            frontend = True
+            rust = True
+            audit = True
+            continue
+        if matches(path, ISOLATED_RUST_ONLY_PATTERNS):
+            rust = True
+            continue
         if matches(path, AUDIT_PATTERNS):
             audit = True
         if matches(path, CROSS_CUTTING_PATTERNS):
