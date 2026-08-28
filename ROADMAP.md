@@ -101,7 +101,7 @@ this root roadmap remains authoritative.
 | 7. Staged specialist workflows                 | Completed           | D-087 Engineering, D-088 Cloud/Systems, and D-090 proposal-only Automation verified; D-089 published at `140f05b`                                                                                                                                      | Preserve the sealed proposal-only/no-I/O limits; D-091 phase-6 closeout is separate                       |
 | 8. Desktop UI                                  | Prototype validated | Deterministic frontend-only Command Center fixture projection passed the approved M5 browser/Tauri matrix. One separately labelled sealed Research/Knowledge lifecycle panel uses fixed no-input IPC; generic catalog/task/progress UI remains Blocked | Preserve the verified prototype and narrow exception                                                      |
 | 9. End-to-end demonstrations                   | Completed           | Focused checks, 447/447 acceptance, full verification, independent review, and a valid marker; Demo 7's two branches remain separate                                                                                                                   | Preserve no bridge and the advisory                                                                       |
-| 10. Architecture/security review               | Blocked             | Cross-phase ownership, isolation, cancellation, audit, privacy, portability, and rollback review                                                                                                                                                       | Complete selected evidence plus the Blocked final-review plan                                             |
+| 10. Architecture/security review               | Completed           | Source-current cross-phase review at `181f851` found no Critical, High, Medium, or Low current defect; historical F-01/F-02, F-07, F-08, F-12, and F-15 are reconciled                                                                                 | Preserve the report; future remediation requires a separate approved plan                                 |
 
 The first usable engineering milestone is the completed deterministic
 Personal-to-Research contract. It is not a shipping/live assistant milestone.
@@ -171,9 +171,10 @@ or permit general agent IPC, provider, tool, approval, persistence, filesystem,
 network, or device work. No successor source plan is owner-selected or Ready.
 The verified-complete documentation-only
 [`native-multi-agent-final-review-planning`](docs/increments/native-multi-agent-final-review-planning.md)
-prepares a source-current read-only architecture/security review; it does not
-authorize source work, remediation, or the review itself. The resulting review
-plan is Ready with advisories and requires separate owner approval.
+and separately approved read-only
+[`native-multi-agent-final-review`](docs/increments/native-multi-agent-final-review.md)
+complete the source-current architecture/security review at `181f851`. Its
+advisories do not authorize source work or remediation.
 
 The completed owner-selected overlay
 [`PR #57 transitive advisory remediation`](docs/plans/2026-08-25-pr57-transitive-advisory-remediation.md)
