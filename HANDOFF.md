@@ -4,6 +4,32 @@ Last updated: 2026-08-28
 
 ## Current verified prerequisite
 
+The owner-approved documentation-only
+[`research-knowledge-demo-connected-presentation-planning`](docs/increments/research-knowledge-demo-connected-presentation-planning.md)
+is verified complete with advisories on
+`codex/research-knowledge-demo-connected-presentation-planning` from
+squash-merged `origin/main` `54e10b3`. Its source-aligned
+[`ExecPlan`](docs/plans/2026-08-28-research-knowledge-demo-connected-presentation.md)
+reconciles current success-only production behavior with private
+synthesis-failure fixture proof. Do not implement it unless the owner gives
+separate explicit source approval and a fresh gate is opened.
+
+Exact next prompt: Read `AGENTS.md`, the complete project-memory chain, and
+the connected-presentation ExecPlan. Confirm the validated completion marker
+and clean scope. If the owner explicitly approves implementation, run the
+fresh increment gate and implement only the declared no-input, volatile,
+selected-scenario source slice; otherwise stop. Do not add caller-selected
+identity or outcome, alternate IPC, network, persistence, tool execution, or
+background work.
+
+Closeout is `PASS WITH ADVISORIES` in
+[`2026-08-28-research-knowledge-demo-connected-presentation-planning-post-increment-review.md`](docs/reviews/2026-08-28-research-knowledge-demo-connected-presentation-planning-post-increment-review.md).
+The valid completion marker records the same result. `git diff --check`,
+`npm run docs:check`, `npm run repository:check`, `npm run security:scan`, and
+`python3 .codex/hooks/session_end_gate.py` passed. Target-Mac UI checks and
+source/test/build commands are `Not run` because this completed increment is
+documentation-only.
+
 `research-knowledge-demo-volatile-lifecycle-core` is verified complete with
 advisories and published on `main` at `68de8a5`. One no-input, manually
 stepped Rust host drives only the sealed D-086 Research -> Knowledge fixture

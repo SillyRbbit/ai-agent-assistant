@@ -75,8 +75,9 @@ persistence, filesystem, background, audit, or device effect. Its volatile data
 is persistently labeled `DEMO MODE · SIMULATED AGENT DATA` and remains separate
 from both the frontend Command Center fixtures and Rust acceptance workflows.
 
-The separately implemented `ResearchKnowledgeDemoHost` remains Rust-only and
-unwired. Its public production constructor and no-argument lifecycle methods
+The separately implemented `ResearchKnowledgeDemoHost` remains React-unconnected
+and is exposed only through one narrow Tauri adapter. Its public production
+constructor and no-argument lifecycle methods
 cannot accept an agent, task, root, run, request, profile, runtime, workflow,
 objective, source, fixture, script, outcome, or runtime event. Every run still
 passes through the orchestrator's exact returned-identity and duplicate-live
@@ -85,9 +86,13 @@ replacement; persistent Drop-time cleanup failure retains the owner until
 process exit and sets a private process-wide sentinel that denies all later
 mutating lifecycle operations. That sentinel is not synchronization or
 authorization for future IPC. Snapshots and errors are finite, bounded, and
-content-free. No Tauri command/event/state, provider, model, network,
-credential, tool, approval dispatch, persistence, filesystem, thread, timer,
-background work, or device effect was added.
+content-free. One mutex-owned Tauri state registers only no-argument
+snapshot/start/advance/cancel commands and emits one fixed notification-only
+snapshot event; its unconnected WebView client narrows `unknown`, rejects
+stale/gapped data, and requires explicit snapshot recovery. No React lifecycle
+consumer, provider, model, network, credential, tool, approval dispatch,
+persistence, filesystem, thread, timer, background work, or device effect was
+added.
 
 The owner approved exact `@xyflow/react@12.11.3` and
 `lucide-react@1.33.0` after direct/transitive, license, peer, bundle, and

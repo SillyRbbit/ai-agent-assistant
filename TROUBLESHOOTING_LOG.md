@@ -2,6 +2,19 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-08-28 — Connected lifecycle failure is not current production behavior
+
+**Observation:** `ResearchKnowledgeDemoHost::new()` constructs only the success
+script. The deterministic synthesis-failure path exists only through a private
+test-core constructor, while the Tauri adapter exposes no argument through
+which a WebView could select a script.
+
+**Disposition:** The connected-presentation planning increment proposes a
+private application-owned alternating completed-epoch schedule for a later
+source increment. It is not implemented or approved source behavior. Do not
+add a failure command, outcome parameter, test-event control, timer, or retry
+to make the failure visible.
+
 ## 2026-08-28 — Lifecycle host cannot enter Tauri managed state
 
 **Symptom:** Focused compilation of the approved lifecycle Tauri adapter failed

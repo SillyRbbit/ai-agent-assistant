@@ -55,6 +55,7 @@ flowchart TD
     App --> Pages["Command Center, Conversations, Tasks, Memory, Activity, Integrations, Permissions, Settings"]
     App --> InfoClient["Typed get_app_info client"]
     App --> DemoProjectionClient["Closed read-only demo projection client"]
+    LifecycleClient["Unconnected lifecycle client"] --> IPC
     App --> MenuClient["Typed assistant-menu-route listener"]
     InfoClient --> IPC["Tauri invoke boundary"]
     DemoProjectionClient --> IPC
@@ -66,9 +67,9 @@ flowchart TD
 ```
 
 The React mock loop and the transport-free Rust gateway turn are not wired to
-each other. A separate Rust-only `ResearchKnowledgeDemoHost` manually drives
-one application-owned sealed D-086 fixture through `NativeAgentRuntime`; it has
-no edge to React or Tauri IPC.
+each other. A separate Rust-owned `ResearchKnowledgeDemoHost` manually drives
+one application-owned sealed D-086 fixture through `NativeAgentRuntime`; it
+reaches only its narrow Tauri adapter and has no edge to React.
 
 ## React presentation layer
 
@@ -92,7 +93,10 @@ no edge to React or Tauri IPC.
   synthetic demo-projection reply from `unknown` to one exact versioned DTO
   with fixed scenario, provenance, three ready roles, and three
   presentation-only outcomes. Rejected data maps to fixed application copy.
-  The menu-route event is also runtime narrowed.
+  The menu-route event is also runtime narrowed. A separate lifecycle client
+  accepts only the exact content-free lifecycle snapshot/event DTO and requires
+  explicit snapshot recovery after stale, gapped, malformed, or contradictory
+  data; no React component currently creates or consumes it.
 - Conversations, activity, approval state, tool results, and settings are not
   persisted by the WebView.
 
@@ -112,11 +116,16 @@ the WebView.
 
 **Current**:
 
-- `get_app_info` and `get_research_knowledge_demo_projection` are the only
-  custom invoke commands. The latter is argument-free, application-owned,
-  volatile, read-only, and returns only the closed synthetic v1 projection.
+- `get_app_info`, `get_research_knowledge_demo_projection`, and four fixed
+  Research/Knowledge lifecycle commands are the only custom invoke commands.
+  The projection is argument-free, application-owned, volatile, read-only, and
+  returns only the closed synthetic v1 projection. Lifecycle snapshot, start,
+  advance, and cancel accept no caller values and return only the closed
+  content-free lifecycle snapshot/error.
 - `assistant-menu-route` is a closed native-to-WebView event for Open, New
   Request, and Tasks navigation.
+- `research-knowledge-demo-lifecycle-v1` is a fixed notification-only snapshot
+  event; it grants no authority and has no React consumer.
 - The main window has only `core:default` capability permission.
 - The capability file contains no shell, filesystem, network, database, or
   privileged macOS plugin permission. The production CSP excludes development
@@ -128,8 +137,9 @@ the WebView.
 **Planned**: any future product command must be narrow, typed, locally
 validated, capability-scoped, and separately approved. A generic
 `execute_action`, SQL, shell, filesystem, provider, or tool-dispatch command is
-prohibited. No workflow start, cancellation, event, polling, runtime, provider,
-or agent-control IPC exists.
+prohibited. No additional workflow/control IPC exists beyond the fixed
+simulated lifecycle adapter; no polling, runtime, provider, or agent-control
+IPC exists.
 
 ## Trusted Rust core
 
@@ -138,8 +148,9 @@ modules are intentionally transport-free where runtime coordination is absent.
 
 ### Volatile Research/Knowledge demo lifecycle
 
-**Current, unwired**: `research_knowledge_demo_lifecycle` owns one manually
-stepped, process-local D-086 workflow. Its public Rust-only host accepts no
+**Current, Tauri-adapted but React-unconnected**:
+`research_knowledge_demo_lifecycle` owns one manually stepped, process-local
+D-086 workflow. Its public Rust-only host accepts no
 caller data: production fixes the runtime, objective, sources, script,
 identities, and envelopes. `start`, `advance`, and `cancel` project only a
 versioned content-free lifecycle snapshot/transition with a Rust-issued epoch,
@@ -151,9 +162,11 @@ An active cleanup failure blocks restart and is retried only by no-argument
 `cancel`. If Drop-time cleanup persistently fails, the owner is retained until
 process exit and a private process-wide atomic sentinel blocks replacement
 `start`, `advance`, and `cancel`. This sentinel is fail-closed only; it is not a
-lock, scheduler, concurrency coordinator, or future Tauri state design. No
-Tauri command/event/state, React consumer, timer, thread, provider, tool,
-persistence, filesystem, or device effect exists.
+lock, scheduler, concurrency coordinator, or future Tauri state design. One
+private Tauri state owns the host behind a mutex and exposes exactly four
+no-input commands plus a notification-only event. React has no lifecycle
+consumer, and no timer, thread, provider, tool, persistence, filesystem, or
+device effect exists.
 
 ### Initial gateway turn and protocol
 
