@@ -4,28 +4,39 @@ Last updated: 2026-08-28
 
 ## Current verified increment
 
-The owner-approved documentation-only
-[`personal-assistant-v0-capability-planning`](docs/increments/personal-assistant-v0-capability-planning.md)
-increment is verified complete with advisories from clean synchronized `main`
-`41ff7141007c8c0a684a5e2434ecf81dd4707418`. D-094 and the
-[`v0 program`](docs/plans/2026-08-28-personal-assistant-v0-program.md) define
-the first usable capability as one volatile foreground Personal Assistant text
-request at a time, bounded streamed text and final answer, explicit terminal
-cancellation, closed redacted errors, Rust-owned identity/configuration, and an
-empty tool set.
+The owner-approved
+[`personal-assistant-v0-linux-clippy-portability`](docs/increments/personal-assistant-v0-linux-clippy-portability.md)
+correction addresses the only failing check on V0-1 PR #79's first CI run.
+Target-Mac Rust passed; Linux warning-denied Clippy found imports used only by
+macOS-gated tests. The correction conditionally imports only those symbols and
+does not change production code paths, test bodies, dependencies, workflows,
+lint policy, or application capability. The exact corrected PR head must pass
+all required checks before squash merge.
 
-No live path is implemented. The current Native initial turn still advertises
-two tools; no direct Rust HTTPS client, provider adapter, event pump, Personal
-Assistant Tauri host, or live conversation reducer exists. D-076/TS-017 blocks
-signed identity; no Access token, Worker, route, provider secret, or traffic
+The owner-approved
+[`personal-assistant-v0-empty-tool-turn`](docs/increments/personal-assistant-v0-empty-tool-turn.md)
+increment is locally verified complete with advisories from clean synchronized
+`main` baseline `0b22ee79a24e11d7c67cbace111a502608b57591`. It adds
+one sealed, fixed synthetic, transport-free `empty@1` Personal Assistant turn
+behind the sole Native `AgentRuntime::start` boundary and one no-input volatile
+host. Rust issues private correlation identities, validates the returned run
+identity and initial status exactly, owns one process lease, and terminal-
+cleans or quarantines every rejected run.
+
+This is not a live or user-visible assistant. The public host has no user-text
+or provider-frame ingress and exposes no content. Deterministic stream success,
+failure, cancellation, limits, transactional rejection, and late-event results
+are Rust fixtures only. The separate current Native initial turn still
+advertises two tools. No direct Rust HTTPS client, provider adapter, event pump,
+Personal Assistant Tauri/WebView host, live conversation reducer, signed
+identity, credential, Access token, Worker, route, provider secret, persistence,
+memory, tool execution, durable audit, filesystem/device action, or traffic
 exists; D-061 ZDR and real-content authentication remain unresolved.
 
-The exact transport-free
-[`V0-1 empty-tool turn and minimal host`](docs/plans/2026-08-28-personal-assistant-v0-empty-tool-turn.md)
-is the sole **Ready** plan and requires separate owner implementation approval
-plus a fresh gate. V0-2 through V0-14 are Blocked and may not start early. This
-planning increment changes no source, dependency, credential, cloud/provider state, signing state, IPC,
-product behavior, or external system.
+V0-1 was committed at `a346946` and pushed to PR #79. It is not an
+authoritative clean `main` baseline until the corrected head passes and the
+squash merge is confirmed. V0-2 through V0-14 remain Blocked and may not start
+early; no successor source increment is Ready.
 
 The owner-approved documentation-only
 [`ci-classification-engineering-guide-reconciliation`](docs/increments/ci-classification-engineering-guide-reconciliation.md)

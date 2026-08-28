@@ -7,6 +7,7 @@ pub mod documents;
 mod error;
 pub mod memory;
 pub mod menu_bar;
+mod personal_assistant_v0;
 pub mod policy;
 mod research_knowledge_demo_lifecycle;
 mod research_knowledge_demo_lifecycle_tauri;
@@ -17,6 +18,10 @@ pub mod tools;
 
 pub use app_info::{current_app_info, AppInfo};
 pub use error::AppError;
+pub use personal_assistant_v0::{
+    PersonalAssistantV0Cancellation, PersonalAssistantV0Error, PersonalAssistantV0Host,
+    PersonalAssistantV0Status,
+};
 pub use research_knowledge_demo_lifecycle::{
     ResearchKnowledgeDemoHost, ResearchKnowledgeDemoLifecycleEntry,
     ResearchKnowledgeDemoLifecycleError, ResearchKnowledgeDemoLifecycleEventKind,

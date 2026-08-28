@@ -205,6 +205,33 @@ gateway Tauri caller, live transport, provider adapter, runtime coordinator,
 continuation loop, dispatcher, or executor. The sealed demo host reaches the
 turn only indirectly through `NativeAgentRuntime`.
 
+### Personal Assistant v0 sealed turn and volatile host
+
+**Current, transport-free and unwired**: `agent::runtime` privately distinguishes
+the unchanged Initial request from one fixed Personal Assistant synthetic-v0
+profile. The latter accepts only Rust-issued correlation identities; it pins
+the application-owned fixture, exact instructions, provider/model profile,
+lower limits, `empty@1`, zero retries, and no fallback. `agent::gateway_request`
+owns its text-only transactional validator and rejects tools, retry metadata,
+unknown or late events, and scalar/byte/event limit violations.
+
+`NativeAgentRuntime` still exposes the sole `AgentRuntime::start` path and owns
+the Initial or Personal Assistant turn behind one private boxed enum. Existing
+Initial concrete frame/approval methods remain Initial-only and fail closed or
+safely no-op on the new profile. The private `personal_assistant_v0` module
+owns one public no-input volatile host. It issues predictable process-local
+correlation IDs, compares the complete returned runtime identity and exact
+initial status, holds one process-wide lease, and terminal-cleans or privately
+quarantines rejected ownership before replacement. Its public surface contains
+only closed status, request-byte length, and local cancellation; request bytes
+remain crate-private and response frames/content have no host ingress.
+
+The crate-private turn and Native shared-event tests prove deterministic
+success, failure, cancellation, limits, and late-event rejection. Those are
+fixture-only results. There is no Tauri/WebView consumer, event pump,
+transport, provider call, credential, persistence, tool execution, durable
+audit, filesystem access, background work, or device effect.
+
 ### Runtime adapter direction
 
 **Current foundation; not generically or runtime-selectably wired**: D-079's
@@ -213,9 +240,10 @@ constructs one bounded run from application-owned typed input. `RuntimeRun`
 exposes closed identity, status, bounded untrusted-event acceptance, typed
 failure, and exact idempotent cancellation. The repository still has no live
 general application-session runtime consumer, runtime selector, provider
-transport, live model, Hermes adapter, or OpenClaw adapter. The sole Tauri/UI
-consumer is the sealed no-input Research -> Knowledge demo host and simulated
-panel described above.
+transport, live model, Hermes adapter, or OpenClaw adapter. The sealed
+Research -> Knowledge demo remains the sole Tauri/UI runtime consumer; the
+Personal Assistant v0 host is a Rust-only no-input caller with no response
+ingress.
 
 ```mermaid
 flowchart TD
@@ -225,14 +253,15 @@ flowchart TD
 ```
 
 `NativeAgentRuntime` is the sole/default implementation. It constructs and owns
-exactly one unchanged `InitialGatewayTurn`; its concrete surface delegates the
-turn's exact request bytes, normalized-frame validation, policy and approval
-results, trusted macOS approval resolution, and audited run-termination cleanup.
-The common shared-event lane privately translates only closed lifecycle, text,
-and failure values through the unchanged gateway validator. Native does not
-claim shared tool-proposal capability because the existing tool lane produces
-governance-owned results. Concrete frames and shared runtime events cannot be
-mixed within one run.
+either the unchanged `InitialGatewayTurn` or the sealed Personal Assistant
+text-only turn behind a private boxed enum. Its Initial concrete surface still
+delegates the exact request bytes, normalized-frame validation, policy and
+approval results, trusted macOS approval resolution, and audited run-termination
+cleanup. The common shared-event lane privately translates only closed
+lifecycle, text, and failure values. Native does not claim shared tool-proposal
+capability because the Initial tool lane produces governance-owned results and
+the Personal Assistant profile rejects every tool. Concrete frames and shared
+runtime events cannot be mixed within one run.
 
 `RuntimeCapabilities` is a fixed closed representation. Capability declarations
 grant no permission. Run/request/response/tool-call identities, selected text,
@@ -1143,33 +1172,33 @@ reviewed repository ICNS byte-for-byte.
 
 ## Current and future capability matrix
 
-| Capability                                    | State                          | Evidence or gate                                                |
-| --------------------------------------------- | ------------------------------ | --------------------------------------------------------------- |
-| React workspace and navigation                | Current                        | Frontend tests and application source                           |
-| Deterministic Command Center projection       | Current, validated fixture UI  | Frontend fixtures/tests plus passed browser/Tauri M5 matrix     |
-| Synthetic Rust demo projection                | Current, read-only/descriptive | Exact no-argument command, closed DTO, and static F-12 guard    |
-| Synthetic Rust demo lifecycle                 | Current, sealed/manual UI      | Fixed no-input adapter and selected simulated panel only        |
-| Assistant interaction                         | Mocked                         | Deterministic in-memory driver only                             |
-| App info and menu routing                     | Current                        | Narrow Tauri command/event                                      |
-| SQLite bootstrap metadata                     | Current                        | Storage tests and startup integration                           |
-| Gateway request/protocol validation           | Current, transport-free        | Phase 4A and 4N-4P                                              |
-| Function schema and policy binding            | Current, non-authorizing       | Phase 4B-4C and 4Q-4R                                           |
-| Approval presentation/resolution/cancellation | Current, disconnected          | Phase 4D-4E and 4S-4U                                           |
-| Approval audit adapter                        | Current, bound and volatile    | Phase 4H and 4V                                                 |
-| Workflow-local volatile agent memory          | Current, Rust-internal         | D-085 contracts; no memory value/control crosses demo IPC       |
-| Selected UTF-8 text/Markdown document reading | Current, internal/read-only    | D-085 contracts; no path/content crosses demo IPC               |
-| Fixture-only Research/Knowledge workflow      | Current, sealed/demo-host-only | D-086 contracts behind fixed no-input lifecycle host            |
-| Fixture-only engineering quality workflow     | Current, unwired and sealed    | D-087 proposal contracts; no repository access or execution     |
-| Fixture-only Cloud and Systems workflows      | Current, unwired and sealed    | D-088 separate no-I/O selectors; no live access or execution    |
-| Typed Workflow Automation proposals           | Current, unwired and sealed    | D-090 A-D manual fixture dispatch; E/tools/approvals inert      |
-| Native multi-agent acceptance suite           | Current, deterministic/unwired | 269 library units + 207 selected contracts; no product effects  |
-| Personal Assistant v0 empty-tool text path    | Planned                        | D-094 program; transport-free V0-1 is the sole Ready plan       |
-| Live gateway and model-provider transport     | Planned                        | Blocked by auth, provider evidence, HTTPS, operations, and plan |
-| Restricted tool execution                     | Planned                        | No dispatcher or executor exists                                |
-| Product memory and task persistence           | Planned                        | Phase 8 direction only                                          |
-| Privileged macOS integrations                 | Planned or prohibited for MVP  | Separate permission and threat-model gates                      |
-| Generic shell or model-to-device execution    | Prohibited                     | `SECURITY.md`                                                   |
-| Signing, notarization, and production release | Planned                        | Phase 10 and `RELEASE_CHECKLIST.md`                             |
+| Capability                                    | State                           | Evidence or gate                                                |
+| --------------------------------------------- | ------------------------------- | --------------------------------------------------------------- |
+| React workspace and navigation                | Current                         | Frontend tests and application source                           |
+| Deterministic Command Center projection       | Current, validated fixture UI   | Frontend fixtures/tests plus passed browser/Tauri M5 matrix     |
+| Synthetic Rust demo projection                | Current, read-only/descriptive  | Exact no-argument command, closed DTO, and static F-12 guard    |
+| Synthetic Rust demo lifecycle                 | Current, sealed/manual UI       | Fixed no-input adapter and selected simulated panel only        |
+| Assistant interaction                         | Mocked                          | Deterministic in-memory driver only                             |
+| App info and menu routing                     | Current                         | Narrow Tauri command/event                                      |
+| SQLite bootstrap metadata                     | Current                         | Storage tests and startup integration                           |
+| Gateway request/protocol validation           | Current, transport-free         | Phase 4A and 4N-4P                                              |
+| Function schema and policy binding            | Current, non-authorizing        | Phase 4B-4C and 4Q-4R                                           |
+| Approval presentation/resolution/cancellation | Current, disconnected           | Phase 4D-4E and 4S-4U                                           |
+| Approval audit adapter                        | Current, bound and volatile     | Phase 4H and 4V                                                 |
+| Workflow-local volatile agent memory          | Current, Rust-internal          | D-085 contracts; no memory value/control crosses demo IPC       |
+| Selected UTF-8 text/Markdown document reading | Current, internal/read-only     | D-085 contracts; no path/content crosses demo IPC               |
+| Fixture-only Research/Knowledge workflow      | Current, sealed/demo-host-only  | D-086 contracts behind fixed no-input lifecycle host            |
+| Fixture-only engineering quality workflow     | Current, unwired and sealed     | D-087 proposal contracts; no repository access or execution     |
+| Fixture-only Cloud and Systems workflows      | Current, unwired and sealed     | D-088 separate no-I/O selectors; no live access or execution    |
+| Typed Workflow Automation proposals           | Current, unwired and sealed     | D-090 A-D manual fixture dispatch; E/tools/approvals inert      |
+| Native multi-agent acceptance suite           | Current, deterministic/unwired  | 303 library units + 207 selected contracts; no product effects  |
+| Personal Assistant v0 empty-tool text path    | Current, transport-free/unwired | V0-1 sealed request, Native branch, and volatile no-input host  |
+| Live gateway and model-provider transport     | Planned                         | Blocked by auth, provider evidence, HTTPS, operations, and plan |
+| Restricted tool execution                     | Planned                         | No dispatcher or executor exists                                |
+| Product memory and task persistence           | Planned                         | Phase 8 direction only                                          |
+| Privileged macOS integrations                 | Planned or prohibited for MVP   | Separate permission and threat-model gates                      |
+| Generic shell or model-to-device execution    | Prohibited                      | `SECURITY.md`                                                   |
+| Signing, notarization, and production release | Planned                         | Phase 10 and `RELEASE_CHECKLIST.md`                             |
 
 ## Planned first usable v0 boundary
 
@@ -1212,8 +1241,15 @@ widening the diagrammed contract for real content.
 No node in this v0 flow can select or execute a tool, access a file or memory,
 persist content, delegate, schedule, retry/fallback, run in the background, or
 cause a device effect. The current Conversations mock and Command Center remain
-separate deterministic frontend projections. None of this flow is implemented;
-the dependency-ordered plan is
+separate deterministic frontend projections. V0-1 now implements only the
+transport-free Rust prerequisite represented by the local host node: a sealed
+fixed synthetic request, an empty-tool Native runtime branch, bounded
+transactional event validation in crate-private tests, exact returned-runtime
+identity/status checks, and fail-closed rejected-run quarantine. The public
+host has no response-frame ingress and can project only its local starting and
+cancellation state. No WebView, Tauri, transport, authentication, gateway,
+provider, network, credential, persistence, or live-model edge in this diagram
+exists. The dependency-ordered program is
 [`2026-08-28-personal-assistant-v0-program.md`](docs/plans/2026-08-28-personal-assistant-v0-program.md).
 
 ## Approved future data flow

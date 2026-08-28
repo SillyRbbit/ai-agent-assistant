@@ -17,6 +17,8 @@ pub type RuntimeResult<T> = Result<T, RuntimeError>;
 
 pub const MAX_RUNTIME_OUTPUT_TEXT_BYTES: usize = MAX_ASSISTANT_OUTPUT_CHARACTERS_PER_TURN;
 
+pub(super) const PERSONAL_ASSISTANT_V0_SYNTHETIC_FIXTURE: &str = "Prepare a concise three-bullet board update from this synthetic status: planning is approved; implementation has not started; no external systems have changed.";
+
 /// Constructs one bounded runtime run from application-owned input.
 pub trait AgentRuntime {
     type Run: RuntimeRun;
@@ -247,6 +249,13 @@ impl fmt::Debug for RuntimeSelectedText {
 pub struct RuntimeTurnRequest {
     identity: RuntimeRunIdentity,
     selected_text: RuntimeSelectedText,
+    profile: RuntimeTurnProfile,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(super) enum RuntimeTurnProfile {
+    Initial,
+    PersonalAssistantV0Synthetic,
 }
 
 impl RuntimeTurnRequest {
@@ -258,6 +267,20 @@ impl RuntimeTurnRequest {
         Ok(Self {
             identity: RuntimeRunIdentity::new(run_id.into(), request_id.into())?,
             selected_text: RuntimeSelectedText::new(selected_text.into())?,
+            profile: RuntimeTurnProfile::Initial,
+        })
+    }
+
+    pub(crate) fn personal_assistant_v0_synthetic(
+        run_id: String,
+        request_id: String,
+    ) -> RuntimeResult<Self> {
+        Ok(Self {
+            identity: RuntimeRunIdentity::new(run_id, request_id)?,
+            selected_text: RuntimeSelectedText::new(
+                PERSONAL_ASSISTANT_V0_SYNTHETIC_FIXTURE.to_owned(),
+            )?,
+            profile: RuntimeTurnProfile::PersonalAssistantV0Synthetic,
         })
     }
 
@@ -281,8 +304,10 @@ impl RuntimeTurnRequest {
         self.identity.clone()
     }
 
-    pub(super) fn into_parts(self) -> (RuntimeRunIdentity, RuntimeSelectedText) {
-        (self.identity, self.selected_text)
+    pub(super) fn into_parts(
+        self,
+    ) -> (RuntimeRunIdentity, RuntimeSelectedText, RuntimeTurnProfile) {
+        (self.identity, self.selected_text, self.profile)
     }
 }
 
@@ -774,4 +799,74 @@ pub enum RuntimeError {
     CapabilityUnavailable(RuntimeCapability),
     #[error("runtime boundary failed during {0}")]
     BoundaryFailure(RuntimeBoundaryStage),
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{
+        RuntimeError, RuntimeInvalidRequest, RuntimeTurnProfile, RuntimeTurnRequest,
+        PERSONAL_ASSISTANT_V0_SYNTHETIC_FIXTURE,
+    };
+
+    #[test]
+    fn public_request_constructor_keeps_the_initial_profile() -> Result<(), RuntimeError> {
+        let request = RuntimeTurnRequest::new("runtime-run-1", "runtime-request-1", "Plan")?;
+        let (identity, selected_text, profile) = request.into_parts();
+
+        assert_eq!(profile, RuntimeTurnProfile::Initial);
+        assert_eq!(identity.run_id().as_str(), "runtime-run-1");
+        assert_eq!(identity.request_id().as_str(), "runtime-request-1");
+        assert_eq!(selected_text.as_str(), "Plan");
+        Ok(())
+    }
+
+    #[test]
+    fn personal_assistant_factory_accepts_only_identity_and_pins_fixture_and_profile(
+    ) -> Result<(), RuntimeError> {
+        let request = RuntimeTurnRequest::personal_assistant_v0_synthetic(
+            "pa-v0-run-0000000000000001".to_owned(),
+            "pa-v0-request-0000000000000001".to_owned(),
+        )?;
+        let debug = format!("{request:?}");
+        let (identity, selected_text, profile) = request.into_parts();
+
+        assert_eq!(profile, RuntimeTurnProfile::PersonalAssistantV0Synthetic);
+        assert_eq!(identity.run_id().as_str(), "pa-v0-run-0000000000000001");
+        assert_eq!(
+            identity.request_id().as_str(),
+            "pa-v0-request-0000000000000001"
+        );
+        assert_eq!(
+            selected_text.as_str(),
+            PERSONAL_ASSISTANT_V0_SYNTHETIC_FIXTURE
+        );
+        assert!(debug.contains("[REDACTED]"));
+        assert!(!debug.contains(PERSONAL_ASSISTANT_V0_SYNTHETIC_FIXTURE));
+        assert!(!debug.contains("pa-v0-run-0000000000000001"));
+        assert!(!debug.contains("pa-v0-request-0000000000000001"));
+        Ok(())
+    }
+
+    #[test]
+    fn personal_assistant_factory_rejects_invalid_and_oversize_identity() {
+        assert_eq!(
+            RuntimeTurnRequest::personal_assistant_v0_synthetic(
+                "bad run".to_owned(),
+                "valid-request".to_owned(),
+            ),
+            Err(RuntimeError::InvalidRequest(RuntimeInvalidRequest::RunId))
+        );
+        assert_eq!(
+            RuntimeTurnRequest::personal_assistant_v0_synthetic(
+                "valid-run".to_owned(),
+                "r".repeat(129),
+            ),
+            Err(RuntimeError::InvalidRequest(
+                RuntimeInvalidRequest::RequestId
+            ))
+        );
+
+        let exact = "r".repeat(128);
+        assert!(RuntimeTurnRequest::personal_assistant_v0_synthetic(exact.clone(), exact).is_ok());
+    }
 }

@@ -4,24 +4,33 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
-The owner-approved documentation-only
-[`Personal Assistant v0 capability program`](docs/plans/2026-08-28-personal-assistant-v0-program.md)
-defines D-094 from clean synchronized `main` `41ff714`. It separates a live
-synthetic OpenAI-through-Cloudflare text proof, later private real-prompt
-activation, and any action-taking/production product. The v0 is Personal
-Assistant only, one foreground text request at a time, bounded stream/final,
-terminal cancellation, closed errors, Rust-owned identity/configuration, and
-an empty tool set. It adds no current capability or external state.
+The owner-approved
+[`Personal Assistant v0 Linux Clippy portability correction`](docs/plans/2026-08-28-personal-assistant-v0-linux-clippy-portability.md)
+is locally verified complete with advisories and is the current bounded
+publication fix for PR #79. It changes only two Rust
+test-module import blocks so macOS-only imports share their consumers' existing
+target guards. It adds no lint allowance, test skip, behavior, dependency,
+workflow, or capability. The corrected PR head must pass all required checks
+before squash merge; no successor implementation is Ready.
 
-Fourteen independently approval-bound plans are ordered. Only
+The owner-approved
 [`V0-1 — sealed empty-tool turn and minimal host`](docs/plans/2026-08-28-personal-assistant-v0-empty-tool-turn.md)
-is **Ready** for separate owner approval after the completed documentation
-gate. V0-2 through V0-14 are Blocked. They separately gate volatile lifecycle, signed identity,
-JWT/JWKS validation, no-traffic Cloudflare state, an HTTPS dependency decision,
-fixed Rust transport, real demo credentials, authentication-only traffic, fake
-OpenAI mapping, disclosure-bound Tauri presentation, no-traffic provider state,
-live synthetic traffic, and real-prompt admission. No local-model alternative
-is authorized.
+is locally verified complete with advisories from synchronized `main` baseline
+`0b22ee7`. It implements only the transport-free Rust contract and no-input
+volatile host. It adds no user-text or response ingress, Tauri/WebView path,
+provider/network/credential state, persistence, tool, approval, audit,
+filesystem, background work, or device effect. Its historical local closeout
+preceded commit `a346946` and PR #79.
+
+The dependency-ordered
+[`Personal Assistant v0 capability program`](docs/plans/2026-08-28-personal-assistant-v0-program.md)
+continues to separate the live synthetic OpenAI-through-Cloudflare proof,
+private real-prompt activation, and action-taking/production product.
+[`V0-2`](docs/plans/2026-08-28-personal-assistant-v0-session-host.md)
+remains Blocked until V0-1 is published or otherwise accepted as the exact
+source baseline; V0-3 through V0-14 retain their exact later blockers. No
+local-model alternative is authorized and no successor implementation is
+Ready.
 
 The owner-approved documentation-only
 [`CI-classification engineering-guide reconciliation`](docs/plans/2026-08-28-ci-classification-engineering-guide-reconciliation.md)
@@ -841,7 +850,8 @@ condition is reached.
 | Plan                                             | Status   | Owner              | Last updated |
 | ------------------------------------------------ | -------- | ------------------ | ------------ |
 | Personal Assistant v0 capability program         | Complete | Project owner      | 2026-08-28   |
-| V0-1 empty-tool turn and minimal host            | Ready    | Project owner      | 2026-08-28   |
+| V0-1 empty-tool turn and minimal host            | Complete | Project owner      | 2026-08-28   |
+| V0-1 Linux Clippy portability correction         | Active   | Project owner      | 2026-08-28   |
 | V0-2 volatile lifecycle and presentation journal | Blocked  | Project owner      | 2026-08-28   |
 | V0-3 fake signed-client secret owner             | Blocked  | Project owner      | 2026-08-28   |
 | V0-4 local deny-only Access verifier             | Blocked  | Project owner      | 2026-08-28   |

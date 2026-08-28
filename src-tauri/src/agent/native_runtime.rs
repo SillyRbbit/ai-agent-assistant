@@ -1,7 +1,7 @@
 //! Native implementation of the application-owned runtime foundation.
 //!
 //! `NativeAgentRuntime` is the only implementation and therefore the default.
-//! It creates one unchanged [`InitialGatewayTurn`] per run and adds no provider,
+//! It creates one application-selected sealed turn per run and adds no provider,
 //! process, network, session registry, execution path, or fallback behavior.
 
 use std::fmt;
@@ -16,7 +16,8 @@ use super::gateway_protocol::{
 };
 use super::gateway_request::{
     AuditedApprovalResolution, GatewayRequestError, InitialGatewayEvent, InitialGatewayTurn,
-    InitialGatewayTurnError, InitialGatewayTurnResult,
+    InitialGatewayTurnError, InitialGatewayTurnResult, PersonalAssistantFailureCode,
+    PersonalAssistantTextEvent, PersonalAssistantTextTurn, PersonalAssistantTextTurnError,
 };
 use super::runtime::{
     AgentRuntime, RuntimeAvailability, RuntimeBoundaryStage, RuntimeCancellationOutcome,
@@ -24,7 +25,7 @@ use super::runtime::{
     RuntimeEventAcceptance, RuntimeEventEnvelope, RuntimeEventRejection, RuntimeFailure,
     RuntimeFailureCode, RuntimeHealth, RuntimeId, RuntimeInvalidRequest, RuntimeOutputText,
     RuntimeResponseId, RuntimeResult, RuntimeRun, RuntimeRunId, RuntimeRunStatus,
-    RuntimeTurnRequest, UntrustedRuntimeEvent,
+    RuntimeTurnProfile, RuntimeTurnRequest, UntrustedRuntimeEvent,
 };
 
 const NATIVE_CAPABILITIES: RuntimeCapabilities = RuntimeCapabilities::new(true, false);
@@ -45,13 +46,27 @@ impl AgentRuntime for NativeAgentRuntime {
     }
 
     fn start(&self, request: RuntimeTurnRequest) -> RuntimeResult<Self::Run> {
-        let (identity, selected_text) = request.into_parts();
-        let turn = InitialGatewayTurn::new(
-            identity.run_id().as_str(),
-            identity.request_id().as_str(),
-            selected_text.into_inner(),
-        )
-        .map_err(map_request_error)?;
+        let (identity, selected_text, profile) = request.into_parts();
+        let turn = match profile {
+            RuntimeTurnProfile::Initial => NativeTurn::Initial(Box::new(
+                InitialGatewayTurn::new(
+                    identity.run_id().as_str(),
+                    identity.request_id().as_str(),
+                    selected_text.into_inner(),
+                )
+                .map_err(map_request_error)?,
+            )),
+            RuntimeTurnProfile::PersonalAssistantV0Synthetic => {
+                NativeTurn::PersonalAssistant(Box::new(
+                    PersonalAssistantTextTurn::new(
+                        identity.run_id().as_str(),
+                        identity.request_id().as_str(),
+                        selected_text.into_inner(),
+                    )
+                    .map_err(map_personal_assistant_start_error)?,
+                ))
+            }
+        };
 
         Ok(NativeAgentRun {
             identity,
@@ -64,9 +79,47 @@ impl AgentRuntime for NativeAgentRuntime {
 
 pub struct NativeAgentRun {
     identity: super::runtime::RuntimeRunIdentity,
-    turn: InitialGatewayTurn,
+    turn: NativeTurn,
     lane: NativeInputLane,
     terminal_override: Option<RuntimeRunStatus>,
+}
+
+enum NativeTurn {
+    Initial(Box<InitialGatewayTurn>),
+    PersonalAssistant(Box<PersonalAssistantTextTurn>),
+}
+
+impl NativeTurn {
+    fn request_bytes(&self) -> &[u8] {
+        match self {
+            Self::Initial(turn) => turn.request_bytes(),
+            Self::PersonalAssistant(turn) => turn.request_bytes(),
+        }
+    }
+
+    fn status(&self) -> GatewayStreamStatus {
+        match self {
+            Self::Initial(turn) => turn.status(),
+            Self::PersonalAssistant(turn) => turn.status(),
+        }
+    }
+
+    fn cancel(&mut self) -> bool {
+        match self {
+            Self::Initial(turn) => turn.cancel(),
+            Self::PersonalAssistant(turn) => turn.cancel(),
+        }
+    }
+
+    fn accept_personal_assistant_frame(
+        &mut self,
+        frame: &[u8],
+    ) -> Result<PersonalAssistantTextEvent, PersonalAssistantTextTurnError> {
+        match self {
+            Self::Initial(_) => Err(PersonalAssistantTextTurnError::WrongProfile),
+            Self::PersonalAssistant(turn) => turn.accept_frame(frame),
+        }
+    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -77,7 +130,7 @@ enum NativeInputLane {
 }
 
 impl NativeAgentRun {
-    /// Returns the exact request owned and serialized by `InitialGatewayTurn`.
+    /// Returns the exact request owned and serialized by the selected sealed turn.
     #[must_use]
     pub fn request_bytes(&self) -> &[u8] {
         self.turn.request_bytes()
@@ -88,6 +141,9 @@ impl NativeAgentRun {
         &mut self,
         frame: &[u8],
     ) -> NativeAgentRunResult<Option<InitialGatewayEvent>> {
+        let NativeTurn::Initial(turn) = &mut self.turn else {
+            return Err(NativeAgentRunError::WrongProfile);
+        };
         if let Some(status) = self.terminal_override {
             return Err(NativeAgentRunError::Turn(
                 InitialGatewayTurnError::Protocol(GatewayProtocolError::StreamAlreadyTerminal {
@@ -99,16 +155,17 @@ impl NativeAgentRun {
             return Err(NativeAgentRunError::MixedInputSurface);
         }
         self.lane = NativeInputLane::ConcreteFrames;
-        self.turn
-            .accept_frame(frame)
-            .map_err(NativeAgentRunError::Turn)
+        turn.accept_frame(frame).map_err(NativeAgentRunError::Turn)
     }
 
     /// Uses the existing typed approval/audit termination path.
     pub fn cancel_pending_approval_for_run_termination(
         &mut self,
     ) -> InitialGatewayTurnResult<Option<AuditedApprovalResolution>> {
-        let result = self.turn.cancel_pending_approval_for_run_termination()?;
+        let result = match &mut self.turn {
+            NativeTurn::Initial(turn) => turn.cancel_pending_approval_for_run_termination()?,
+            NativeTurn::PersonalAssistant(_) => return Ok(None),
+        };
         if result.is_some() {
             self.terminal_override = Some(RuntimeRunStatus::Cancelled);
         }
@@ -121,7 +178,10 @@ impl NativeAgentRun {
         &mut self,
         outcome: TrustedApprovalSourceOutcome,
     ) -> InitialGatewayTurnResult<AuditedApprovalResolution> {
-        self.turn.resolve_approval_source_outcome(outcome)
+        match &mut self.turn {
+            NativeTurn::Initial(turn) => turn.resolve_approval_source_outcome(outcome),
+            NativeTurn::PersonalAssistant(_) => Err(InitialGatewayTurnError::WrongProfile),
+        }
     }
 }
 
@@ -129,6 +189,8 @@ pub type NativeAgentRunResult<T> = Result<T, NativeAgentRunError>;
 
 #[derive(Debug, thiserror::Error, Eq, PartialEq)]
 pub enum NativeAgentRunError {
+    #[error("native concrete frame operation is unavailable for this runtime profile")]
+    WrongProfile,
     #[error("native run cannot mix concrete frames and shared runtime events")]
     MixedInputSurface,
     #[error(transparent)]
@@ -186,11 +248,16 @@ impl RuntimeRun for NativeAgentRun {
             sequence,
             &event,
         )?;
-        let accepted = self
-            .turn
-            .accept_frame(&frame)
-            .map_err(map_turn_event_error)?;
-        map_event_acceptance(event, accepted)
+        if let NativeTurn::Initial(turn) = &mut self.turn {
+            let accepted = turn.accept_frame(&frame).map_err(map_turn_event_error)?;
+            map_event_acceptance(event, accepted)
+        } else {
+            let accepted = self
+                .turn
+                .accept_personal_assistant_frame(&frame)
+                .map_err(map_personal_assistant_event_error)?;
+            map_personal_assistant_event_acceptance(event, accepted)
+        }
     }
 
     fn cancel(&mut self) -> RuntimeResult<RuntimeCancellationOutcome> {
@@ -201,10 +268,12 @@ impl RuntimeRun for NativeAgentRun {
             return Ok(RuntimeCancellationOutcome::Cancelled);
         }
 
-        let pending = self
-            .turn
-            .cancel_pending_approval_for_run_termination()
-            .map_err(|_| RuntimeError::BoundaryFailure(RuntimeBoundaryStage::Cancellation))?;
+        let pending = match &mut self.turn {
+            NativeTurn::Initial(turn) => turn
+                .cancel_pending_approval_for_run_termination()
+                .map_err(|_| RuntimeError::BoundaryFailure(RuntimeBoundaryStage::Cancellation))?,
+            NativeTurn::PersonalAssistant(_) => None,
+        };
         if pending.is_some() {
             self.terminal_override = Some(RuntimeRunStatus::Cancelled);
             Ok(RuntimeCancellationOutcome::Cancelled)
@@ -276,6 +345,22 @@ fn map_request_error(error: GatewayRequestError) -> RuntimeError {
         }
         GatewayRequestError::ValidatorConfigurationFailed => {
             RuntimeError::BoundaryFailure(RuntimeBoundaryStage::NativeConfiguration)
+        }
+    }
+}
+
+fn map_personal_assistant_start_error(error: PersonalAssistantTextTurnError) -> RuntimeError {
+    match error {
+        PersonalAssistantTextTurnError::InvalidTrustedIdentity
+        | PersonalAssistantTextTurnError::WrongProfile
+        | PersonalAssistantTextTurnError::ProtocolViolation => {
+            RuntimeError::BoundaryFailure(RuntimeBoundaryStage::NativeConfiguration)
+        }
+        PersonalAssistantTextTurnError::SerializationFailed => {
+            RuntimeError::BoundaryFailure(RuntimeBoundaryStage::RequestSerialization)
+        }
+        PersonalAssistantTextTurnError::LimitExceeded => {
+            RuntimeError::BoundaryFailure(RuntimeBoundaryStage::Start)
         }
     }
 }
@@ -372,14 +457,71 @@ fn map_event_acceptance(
     }
 }
 
+fn map_personal_assistant_event_acceptance(
+    submitted: UntrustedRuntimeEvent,
+    accepted: PersonalAssistantTextEvent,
+) -> RuntimeResult<RuntimeEventAcceptance> {
+    match (submitted, accepted) {
+        (
+            UntrustedRuntimeEvent::ResponseStarted { response_id },
+            PersonalAssistantTextEvent::Started,
+        ) => Ok(RuntimeEventAcceptance::ResponseStarted { response_id }),
+        (
+            UntrustedRuntimeEvent::OutputTextDelta { .. },
+            PersonalAssistantTextEvent::TextDelta { delta },
+        ) => Ok(RuntimeEventAcceptance::OutputTextDelta {
+            delta: RuntimeOutputText::from_validated(delta.into_inner()),
+        }),
+        (
+            UntrustedRuntimeEvent::ResponseCompleted,
+            PersonalAssistantTextEvent::Completed { final_answer },
+        ) => {
+            drop(final_answer.into_inner());
+            Ok(RuntimeEventAcceptance::ResponseCompleted)
+        }
+        (
+            UntrustedRuntimeEvent::ResponseFailed { .. },
+            PersonalAssistantTextEvent::Failed { code },
+        ) => Ok(RuntimeEventAcceptance::ResponseFailed {
+            failure: RuntimeFailure::from_validated(
+                map_personal_assistant_failure_code(code),
+                false,
+                None,
+            ),
+        }),
+        _ => Err(RuntimeError::BoundaryFailure(
+            RuntimeBoundaryStage::EventAcceptance,
+        )),
+    }
+}
+
 fn map_turn_event_error(error: InitialGatewayTurnError) -> RuntimeError {
     match error {
+        InitialGatewayTurnError::WrongProfile => {
+            RuntimeError::BoundaryFailure(RuntimeBoundaryStage::GovernanceIsolation)
+        }
         InitialGatewayTurnError::Protocol(error) => map_protocol_error(error),
         InitialGatewayTurnError::FunctionCallValidation(_) => {
             RuntimeError::EventRejected(RuntimeEventRejection::InvalidContent)
         }
         InitialGatewayTurnError::Approval(_) | InitialGatewayTurnError::ApprovalAudit(_) => {
             RuntimeError::BoundaryFailure(RuntimeBoundaryStage::GovernanceIsolation)
+        }
+    }
+}
+
+fn map_personal_assistant_event_error(error: PersonalAssistantTextTurnError) -> RuntimeError {
+    match error {
+        PersonalAssistantTextTurnError::InvalidTrustedIdentity
+        | PersonalAssistantTextTurnError::SerializationFailed
+        | PersonalAssistantTextTurnError::WrongProfile => {
+            RuntimeError::BoundaryFailure(RuntimeBoundaryStage::NativeConfiguration)
+        }
+        PersonalAssistantTextTurnError::ProtocolViolation => {
+            RuntimeError::EventRejected(RuntimeEventRejection::InvalidContent)
+        }
+        PersonalAssistantTextTurnError::LimitExceeded => {
+            RuntimeError::EventRejected(RuntimeEventRejection::LimitExceeded)
         }
     }
 }
@@ -457,6 +599,22 @@ fn map_gateway_failure_code(code: GatewayFailureCode) -> RuntimeFailureCode {
     }
 }
 
+fn map_personal_assistant_failure_code(code: PersonalAssistantFailureCode) -> RuntimeFailureCode {
+    match code {
+        PersonalAssistantFailureCode::Unauthenticated => RuntimeFailureCode::Unauthenticated,
+        PersonalAssistantFailureCode::Forbidden => RuntimeFailureCode::Forbidden,
+        PersonalAssistantFailureCode::RateLimited => RuntimeFailureCode::RateLimited,
+        PersonalAssistantFailureCode::RequestRejected => RuntimeFailureCode::RequestRejected,
+        PersonalAssistantFailureCode::ProviderUnavailable => {
+            RuntimeFailureCode::ProviderUnavailable
+        }
+        PersonalAssistantFailureCode::ProviderTimeout => RuntimeFailureCode::ProviderTimeout,
+        PersonalAssistantFailureCode::ProtocolViolation => RuntimeFailureCode::ProtocolViolation,
+        PersonalAssistantFailureCode::LimitExceeded => RuntimeFailureCode::LimitExceeded,
+        PersonalAssistantFailureCode::Internal => RuntimeFailureCode::Internal,
+    }
+}
+
 #[derive(Serialize)]
 struct WireRuntimeEnvelope<'a> {
     protocol_version: u16,
@@ -503,4 +661,325 @@ enum WireGatewayFailureCode {
     LimitExceeded,
     Cancelled,
     Internal,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{NativeAgentRunError, NativeAgentRuntime, NativeTurn};
+    use crate::agent::gateway_protocol::GatewayStreamStatus;
+    #[cfg(target_os = "macos")]
+    use crate::agent::gateway_protocol::GATEWAY_PROTOCOL_VERSION;
+    #[cfg(target_os = "macos")]
+    use crate::agent::gateway_request::{InitialGatewayEvent, InitialGatewayTurnError};
+    use crate::agent::gateway_request::{
+        InitialGatewayTurn, PersonalAssistantTextTurnError, INITIAL_GATEWAY_TOOL_SET_VERSION,
+    };
+    use crate::agent::runtime::{
+        AgentRuntime, RuntimeCancellationOutcome, RuntimeError, RuntimeEventAcceptance,
+        RuntimeEventEnvelope, RuntimeEventRejection, RuntimeFailure, RuntimeFailureCode,
+        RuntimeOutputText, RuntimeResponseId, RuntimeRun, RuntimeRunStatus, RuntimeTurnRequest,
+        UntrustedRuntimeEvent, UntrustedRuntimeToolProposal,
+    };
+    use serde_json::json;
+
+    const RUN_ID: &str = "pa-v0-native-run-1";
+    const REQUEST_ID: &str = "pa-v0-native-request-1";
+
+    fn personal_assistant_request() -> Result<RuntimeTurnRequest, RuntimeError> {
+        RuntimeTurnRequest::personal_assistant_v0_synthetic(
+            RUN_ID.to_owned(),
+            REQUEST_ID.to_owned(),
+        )
+    }
+
+    fn envelope(
+        identity: &crate::agent::runtime::RuntimeRunIdentity,
+        sequence: u32,
+        event: UntrustedRuntimeEvent,
+    ) -> RuntimeEventEnvelope {
+        RuntimeEventEnvelope::for_identity(identity, sequence, event)
+    }
+
+    #[test]
+    fn native_runtime_routes_both_boxed_profiles_through_one_start_method(
+    ) -> Result<(), RuntimeError> {
+        let initial_request = RuntimeTurnRequest::new("initial-run", "initial-request", "Plan")?;
+        let initial = NativeAgentRuntime.start(initial_request)?;
+        assert!(matches!(initial.turn, NativeTurn::Initial(_)));
+
+        let personal = NativeAgentRuntime.start(personal_assistant_request()?)?;
+        assert!(matches!(personal.turn, NativeTurn::PersonalAssistant(_)));
+        assert_eq!(personal.status(), RuntimeRunStatus::AwaitingStart);
+        let body: serde_json::Value = serde_json::from_slice(personal.request_bytes())
+            .map_err(|_| RuntimeError::BoundaryFailure(super::RuntimeBoundaryStage::Start))?;
+        assert_eq!(body["request_kind"], "personal_assistant_text_v0");
+        assert_eq!(body["tool_set"]["tools"], json!([]));
+        Ok(())
+    }
+
+    #[test]
+    fn personal_assistant_shared_events_accept_text_lifecycle_and_closed_failure(
+    ) -> Result<(), RuntimeError> {
+        let request = personal_assistant_request()?;
+        let identity = request.identity();
+        let mut run = NativeAgentRuntime.start(request)?;
+
+        let started = run.accept_event(envelope(
+            &identity,
+            0,
+            UntrustedRuntimeEvent::ResponseStarted {
+                response_id: RuntimeResponseId::new("pa-provider-response-1")?,
+            },
+        ))?;
+        assert!(matches!(
+            started,
+            RuntimeEventAcceptance::ResponseStarted { response_id }
+                if response_id.as_str() == "pa-provider-response-1"
+        ));
+        assert_eq!(run.status(), RuntimeRunStatus::Streaming);
+
+        let delta = run.accept_event(envelope(
+            &identity,
+            1,
+            UntrustedRuntimeEvent::OutputTextDelta {
+                delta: RuntimeOutputText::new("Synthetic board update")?,
+            },
+        ))?;
+        assert!(matches!(
+            delta,
+            RuntimeEventAcceptance::OutputTextDelta { delta }
+                if delta.as_str() == "Synthetic board update"
+        ));
+        assert_eq!(
+            run.accept_event(envelope(
+                &identity,
+                2,
+                UntrustedRuntimeEvent::ResponseCompleted,
+            ))?,
+            RuntimeEventAcceptance::ResponseCompleted
+        );
+        assert_eq!(run.status(), RuntimeRunStatus::Completed);
+
+        let failure_request = RuntimeTurnRequest::personal_assistant_v0_synthetic(
+            "pa-v0-native-run-2".to_owned(),
+            "pa-v0-native-request-2".to_owned(),
+        )?;
+        let failure_identity = failure_request.identity();
+        let mut failed = NativeAgentRuntime.start(failure_request)?;
+        failed.accept_event(envelope(
+            &failure_identity,
+            0,
+            UntrustedRuntimeEvent::ResponseStarted {
+                response_id: RuntimeResponseId::new("pa-provider-response-2")?,
+            },
+        ))?;
+        let accepted = failed.accept_event(envelope(
+            &failure_identity,
+            1,
+            UntrustedRuntimeEvent::ResponseFailed {
+                failure: RuntimeFailure::new(RuntimeFailureCode::ProviderTimeout, false, None)?,
+            },
+        ))?;
+        assert!(matches!(
+            accepted,
+            RuntimeEventAcceptance::ResponseFailed { failure }
+                if failure.code() == RuntimeFailureCode::ProviderTimeout
+                    && !failure.retryable()
+                    && failure.retry_after_ms().is_none()
+        ));
+        assert_eq!(failed.status(), RuntimeRunStatus::Failed);
+        Ok(())
+    }
+
+    #[test]
+    fn personal_assistant_wrong_profile_and_governance_methods_fail_closed_without_mutation(
+    ) -> Result<(), RuntimeError> {
+        let request = personal_assistant_request()?;
+        let identity = request.identity();
+        let mut run = NativeAgentRuntime.start(request)?;
+
+        assert!(matches!(
+            run.accept_frame(b"{"),
+            Err(NativeAgentRunError::WrongProfile)
+        ));
+        assert_eq!(run.status(), RuntimeRunStatus::AwaitingStart);
+        assert!(run
+            .cancel_pending_approval_for_run_termination()
+            .map_err(|_| RuntimeError::BoundaryFailure(super::RuntimeBoundaryStage::Cancellation))?
+            .is_none());
+        assert_eq!(run.status(), RuntimeRunStatus::AwaitingStart);
+        assert!(matches!(
+            run.accept_event(envelope(
+                &identity,
+                0,
+                UntrustedRuntimeEvent::ResponseStarted {
+                    response_id: RuntimeResponseId::new("pa-provider-response-3")?,
+                },
+            ))?,
+            RuntimeEventAcceptance::ResponseStarted { .. }
+        ));
+
+        let initial = InitialGatewayTurn::new("initial-run", "initial-request", "Plan")
+            .map_err(|_| RuntimeError::BoundaryFailure(super::RuntimeBoundaryStage::Start))?;
+        let mut turn = NativeTurn::Initial(Box::new(initial));
+        assert_eq!(
+            turn.accept_personal_assistant_frame(b"{}"),
+            Err(PersonalAssistantTextTurnError::WrongProfile)
+        );
+        assert_eq!(turn.status(), GatewayStreamStatus::AwaitingStart);
+        Ok(())
+    }
+
+    #[test]
+    fn personal_assistant_shared_tool_retry_and_limit_rejections_are_terminal(
+    ) -> Result<(), RuntimeError> {
+        let request = personal_assistant_request()?;
+        let identity = request.identity();
+        let mut tool_run = NativeAgentRuntime.start(request)?;
+        let tool = UntrustedRuntimeToolProposal::new(
+            "call-1",
+            "create_local_task",
+            INITIAL_GATEWAY_TOOL_SET_VERSION,
+            "{}",
+        )?;
+        assert!(matches!(
+            tool_run.accept_event(envelope(
+                &identity,
+                0,
+                UntrustedRuntimeEvent::ToolProposal { proposal: tool },
+            )),
+            Err(RuntimeError::CapabilityUnavailable(_))
+        ));
+        assert_eq!(tool_run.status(), RuntimeRunStatus::Failed);
+
+        let retry_request = RuntimeTurnRequest::personal_assistant_v0_synthetic(
+            "pa-v0-native-run-4".to_owned(),
+            "pa-v0-native-request-4".to_owned(),
+        )?;
+        let retry_identity = retry_request.identity();
+        let mut retry_run = NativeAgentRuntime.start(retry_request)?;
+        retry_run.accept_event(envelope(
+            &retry_identity,
+            0,
+            UntrustedRuntimeEvent::ResponseStarted {
+                response_id: RuntimeResponseId::new("pa-provider-response-4")?,
+            },
+        ))?;
+        assert_eq!(
+            retry_run.accept_event(envelope(
+                &retry_identity,
+                1,
+                UntrustedRuntimeEvent::ResponseFailed {
+                    failure: RuntimeFailure::new(RuntimeFailureCode::ProviderTimeout, true, None,)?,
+                },
+            )),
+            Err(RuntimeError::EventRejected(
+                RuntimeEventRejection::InvalidContent
+            ))
+        );
+        assert_eq!(retry_run.status(), RuntimeRunStatus::Failed);
+
+        let limit_request = RuntimeTurnRequest::personal_assistant_v0_synthetic(
+            "pa-v0-native-run-5".to_owned(),
+            "pa-v0-native-request-5".to_owned(),
+        )?;
+        let limit_identity = limit_request.identity();
+        let mut limit_run = NativeAgentRuntime.start(limit_request)?;
+        limit_run.accept_event(envelope(
+            &limit_identity,
+            0,
+            UntrustedRuntimeEvent::ResponseStarted {
+                response_id: RuntimeResponseId::new("pa-provider-response-5")?,
+            },
+        ))?;
+        assert_eq!(
+            limit_run.accept_event(envelope(
+                &limit_identity,
+                1,
+                UntrustedRuntimeEvent::OutputTextDelta {
+                    delta: RuntimeOutputText::new("x".repeat(1_025))?,
+                },
+            )),
+            Err(RuntimeError::EventRejected(
+                RuntimeEventRejection::LimitExceeded
+            ))
+        );
+        assert_eq!(limit_run.status(), RuntimeRunStatus::Failed);
+        Ok(())
+    }
+
+    #[test]
+    fn personal_assistant_runtime_cancellation_is_exact_and_idempotent() -> Result<(), RuntimeError>
+    {
+        let mut run = NativeAgentRuntime.start(personal_assistant_request()?)?;
+        assert_eq!(run.cancel()?, RuntimeCancellationOutcome::Cancelled);
+        assert_eq!(run.status(), RuntimeRunStatus::Cancelled);
+        assert_eq!(
+            run.cancel()?,
+            RuntimeCancellationOutcome::AlreadyTerminal(RuntimeRunStatus::Cancelled)
+        );
+        assert!(run
+            .cancel_pending_approval_for_run_termination()
+            .map_err(|_| RuntimeError::BoundaryFailure(super::RuntimeBoundaryStage::Cancellation))?
+            .is_none());
+        assert_eq!(run.status(), RuntimeRunStatus::Cancelled);
+        Ok(())
+    }
+
+    #[cfg(target_os = "macos")]
+    #[test]
+    fn personal_assistant_rejects_native_approval_source_before_outcome_inspection(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        use crate::approvals::decision_source::test_outcome_from_dialog_result;
+        use rfd::MessageDialogResult;
+
+        let mut initial = NativeAgentRuntime.start(RuntimeTurnRequest::new(
+            "approval-seed-run",
+            "approval-seed-request",
+            "Plan",
+        )?)?;
+        let frame = |sequence, event| {
+            json!({
+                "protocol_version": GATEWAY_PROTOCOL_VERSION,
+                "run_id": "approval-seed-run",
+                "gateway_request_id": "approval-seed-request",
+                "sequence": sequence,
+                "event": event,
+            })
+            .to_string()
+            .into_bytes()
+        };
+        initial.accept_frame(&frame(
+            0,
+            json!({
+                "type": "response_started",
+                "provider_response_id": "approval-seed-response",
+            }),
+        ))?;
+        initial.accept_frame(&frame(
+            1,
+            json!({
+                "type": "function_call_completed",
+                "call_id": "approval-seed-call",
+                "name": "create_local_task",
+                "tool_contract_version": INITIAL_GATEWAY_TOOL_SET_VERSION,
+                "arguments_json": r#"{"title":"Synthetic task"}"#,
+            }),
+        ))?;
+        let presentation = match initial
+            .accept_frame(&frame(2, json!({ "type": "response_completed" })))?
+        {
+            Some(InitialGatewayEvent::ApprovalPresentationReady { presentation }) => presentation,
+            _ => return Err("expected approval presentation".into()),
+        };
+        let outcome = test_outcome_from_dialog_result(presentation, MessageDialogResult::Cancel);
+
+        let mut personal = NativeAgentRuntime.start(personal_assistant_request()?)?;
+        assert!(matches!(
+            personal.resolve_approval_source_outcome(outcome),
+            Err(InitialGatewayTurnError::WrongProfile)
+        ));
+        assert_eq!(personal.status(), RuntimeRunStatus::AwaitingStart);
+        Ok(())
+    }
 }
