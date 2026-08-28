@@ -24,6 +24,10 @@ import {
   tauriMenuRouteSource,
   type MenuRouteSource,
 } from "./infrastructure/tauri/menu-route-client";
+import {
+  fetchResearchKnowledgeDemoProjection,
+  type ResearchKnowledgeDemoProjectionLoader,
+} from "./infrastructure/tauri/research-knowledge-demo-projection-client";
 
 const CommandCenterPage = lazy(() => import("./features/command-center/CommandCenterPage"));
 
@@ -31,6 +35,7 @@ export interface AppServices {
   readonly appInfoLoader: AppInfoLoader;
   readonly menuRouteSource: MenuRouteSource;
   readonly mockRunDriver: MockRunDriver;
+  readonly researchKnowledgeDemoProjectionLoader: ResearchKnowledgeDemoProjectionLoader;
 }
 
 interface AppProps {
@@ -41,6 +46,7 @@ const DEFAULT_APP_SERVICES: AppServices = {
   appInfoLoader: fetchAppInfo,
   menuRouteSource: tauriMenuRouteSource,
   mockRunDriver: browserMockRunDriver,
+  researchKnowledgeDemoProjectionLoader: fetchResearchKnowledgeDemoProjection,
 };
 
 export function App({ services = DEFAULT_APP_SERVICES }: AppProps) {
@@ -97,7 +103,7 @@ function ApplicationShell({ services }: ApplicationShellProps) {
   const pages: Readonly<Record<AppRoute, ReactNode>> = {
     "command-center": (
       <Suspense fallback={<CommandCenterLoadingPage />}>
-        <CommandCenterPage />
+        <CommandCenterPage projectionLoader={services.researchKnowledgeDemoProjectionLoader} />
       </Suspense>
     ),
     activity: <ActivityPage events={state.activityEvents} />,

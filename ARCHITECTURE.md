@@ -1,7 +1,7 @@
 # Cortexa architecture
 
 Status: Authoritative current-state architecture
-Last updated: 2026-08-25
+Last updated: 2026-08-27
 
 ## Reading this document
 
@@ -54,9 +54,12 @@ flowchart TD
     App["App.tsx"] --> State["Application reducer/context"]
     App --> Pages["Command Center, Conversations, Tasks, Memory, Activity, Integrations, Permissions, Settings"]
     App --> InfoClient["Typed get_app_info client"]
+    App --> DemoProjectionClient["Closed read-only demo projection client"]
     App --> MenuClient["Typed assistant-menu-route listener"]
     InfoClient --> IPC["Tauri invoke boundary"]
+    DemoProjectionClient --> IPC
     IPC --> Info["Rust app_info command"]
+    IPC --> DemoProjection["Rust synthetic demo projection command"]
     Menu["macOS menu lifecycle"] --> MenuClient
     Startup["Rust startup"] --> Storage["SQLite bootstrap"]
     App --> Mock["Deterministic browser mock loop"]
@@ -77,11 +80,17 @@ each other.
   deterministic Command Center projection.
 - `src/features/command-center/` owns closed fixture projection/validation,
   seven scenarios, feature-local presentation state, graph/structured
-  alternatives, inspector, and bounded activity. React Flow types stop at one
-  adapter; the feature does not consume Rust agent state.
+  alternatives, inspector, and bounded activity. Only the selected Research and
+  Knowledge scenario may explicitly refresh a separate read-only Rust synthetic
+  projection; that result does not populate or control the fixture graph.
+  React Flow types stop at one adapter, and the feature does not consume Rust
+  agent lifecycle or runtime state.
 - `src/infrastructure/tauri/` runtime-narrows the app-info response from
-  `unknown` to one exact bounded six-field DTO and rejects insecure or malformed
-  responses. The menu-route event is also runtime narrowed.
+  `unknown` to one exact bounded six-field DTO. It separately narrows the
+  synthetic demo-projection reply from `unknown` to one exact versioned DTO
+  with fixed scenario, provenance, three ready roles, and three
+  presentation-only outcomes. Rejected data maps to fixed application copy.
+  The menu-route event is also runtime narrowed.
 - Conversations, activity, approval state, tool results, and settings are not
   persisted by the WebView.
 
@@ -89,7 +98,9 @@ each other.
 simulated tool results, final answers, Stop, Retry, Activity, and Command Center
 agent/task/workflow state are fixed local behaviors. They perform no model
 request, IPC agent request, or operating-system action. Command Center state is
-persistently labeled `DEMO MODE · SIMULATED AGENT DATA`.
+persistently labeled `DEMO MODE · SIMULATED AGENT DATA`. The separate Rust
+projection is also synthetic and descriptive; it does not start a run or prove
+that any displayed outcome occurred.
 
 **Prohibited**: authorization, policy override, generic database access, raw
 provider calls, arbitrary command selection, and operating-system execution in
@@ -99,7 +110,9 @@ the WebView.
 
 **Current**:
 
-- `get_app_info` is the only custom invoke command.
+- `get_app_info` and `get_research_knowledge_demo_projection` are the only
+  custom invoke commands. The latter is argument-free, application-owned,
+  volatile, read-only, and returns only the closed synthetic v1 projection.
 - `assistant-menu-route` is a closed native-to-WebView event for Open, New
   Request, and Tasks navigation.
 - The main window has only `core:default` capability permission.
@@ -113,7 +126,8 @@ the WebView.
 **Planned**: any future product command must be narrow, typed, locally
 validated, capability-scoped, and separately approved. A generic
 `execute_action`, SQL, shell, filesystem, provider, or tool-dispatch command is
-prohibited.
+prohibited. No workflow start, cancellation, event, polling, runtime, provider,
+or agent-control IPC exists.
 
 ## Trusted Rust core
 
@@ -1070,6 +1084,7 @@ reviewed repository ICNS byte-for-byte.
 | --------------------------------------------- | ------------------------------ | -------------------------------------------------------------- |
 | React workspace and navigation                | Current                        | Frontend tests and application source                          |
 | Deterministic Command Center projection       | Current, validated fixture UI  | Frontend fixtures/tests plus passed browser/Tauri M5 matrix    |
+| Synthetic Rust demo projection                | Current, read-only/descriptive | Exact no-argument command, closed DTO, and static F-12 guard   |
 | Assistant interaction                         | Mocked                         | Deterministic in-memory driver only                            |
 | App info and menu routing                     | Current                        | Narrow Tauri command/event                                     |
 | SQLite bootstrap metadata                     | Current                        | Storage tests and startup integration                          |

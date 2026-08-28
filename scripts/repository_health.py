@@ -78,9 +78,22 @@ DOCUMENTATION_TRUTH_MARKERS = (
         "production CSP retains the\n  development `ws://localhost:1420` allowance",
     ),
 )
-ALLOWED_TAURI_IMPORTS = {
-    "src/infrastructure/tauri/app-info-client.ts": "@tauri-apps/api/core",
-    "src/infrastructure/tauri/menu-route-client.ts": "@tauri-apps/api/event",
+EXPECTED_TAURI_IMPORTS = {
+    "src/infrastructure/tauri/app-info-client.ts": (
+        'import { invoke } from "@tauri-apps/api/core";'
+    ),
+    "src/infrastructure/tauri/menu-route-client.ts": (
+        'import { listen, type UnlistenFn } from "@tauri-apps/api/event";'
+    ),
+    "src/infrastructure/tauri/research-knowledge-demo-projection-client.ts": (
+        'import { invoke } from "@tauri-apps/api/core";'
+    ),
+}
+EXPECTED_TAURI_INVOKES = {
+    "src/infrastructure/tauri/app-info-client.ts": 'invoke<unknown>("get_app_info")',
+    "src/infrastructure/tauri/research-knowledge-demo-projection-client.ts": (
+        'invoke<unknown>("get_research_knowledge_demo_projection")'
+    ),
 }
 COMMAND_CENTER_PROHIBITED_TOKENS = (
     "@tauri-apps/api",
@@ -92,8 +105,50 @@ COMMAND_CENTER_PROHIBITED_TOKENS = (
     "indexedDB",
 )
 EXPECTED_CAPABILITY_FILES = frozenset({"default.json"})
-EXPECTED_CAPABILITY_WINDOWS = ["main"]
-EXPECTED_CAPABILITY_PERMISSIONS = ["core:default"]
+EXPECTED_CAPABILITY_CONFIGURATION = {
+    "$schema": "../gen/schemas/desktop-schema.json",
+    "identifier": "main-window",
+    "description": "Minimum Tauri core capability for the main application window.",
+    "windows": ["main"],
+    "permissions": ["core:default"],
+}
+EXPECTED_INVOKE_HANDLER = (
+    ".invoke_handler(tauri::generate_handler!["
+    "app_info::get_app_info,"
+    "research_knowledge_demo_projection::get_research_knowledge_demo_projection"
+    "])"
+)
+PROJECTION_RUST_PROHIBITED_TOKENS = (
+    "AgentOrchestrator",
+    "AgentRuntime",
+    "crate::agent",
+    "crate::approvals",
+    "crate::audit",
+    "crate::credentials",
+    "crate::documents",
+    "crate::memory",
+    "crate::policy",
+    "crate::storage",
+    "crate::tools",
+    "reqwest",
+    "rusqlite",
+    "serde::Deserialize",
+    "std::fs",
+    "std::net",
+    "std::process",
+    "tauri::State",
+    "tokio",
+)
+PROJECTION_CLIENT_PROHIBITED_TOKENS = (
+    "EventSource",
+    "WebSocket",
+    "emit(",
+    "fetch(",
+    "indexedDB",
+    "listen(",
+    "localStorage",
+    "sessionStorage",
+)
 EXPECTED_TAURI_CSP = {
     "default-src": "'self'",
     "connect-src": "'self' ipc: http://ipc.localhost",
@@ -515,21 +570,76 @@ def ui_native_boundary_findings(root: Path) -> tuple[Finding, ...]:
             findings.append(Finding("ui-native-boundary", relative_path, "source file is not UTF-8 text"))
             continue
         if "@tauri-apps/api" in text:
-            expected_import = ALLOWED_TAURI_IMPORTS.get(relative_path)
-            exact_import = (
-                expected_import is not None
-                and re.search(
-                    rf"from\s+[\"']{re.escape(expected_import)}[\"']",
-                    text,
-                )
-                is not None
-            )
-            if expected_import is None or text.count("@tauri-apps/api") != 1 or not exact_import:
+            expected_import = EXPECTED_TAURI_IMPORTS.get(relative_path)
+            if (
+                expected_import is None
+                or text.count("@tauri-apps/api") != 1
+                or text.count(expected_import) != 1
+            ):
                 findings.append(Finding("ui-native-boundary", relative_path, "Tauri API import is outside the exact allowlist"))
         if relative_path.startswith("src/features/command-center/"):
             for token in COMMAND_CENTER_PROHIBITED_TOKENS:
                 if token in text:
                     findings.append(Finding("ui-native-boundary", relative_path, f"Command Center contains prohibited boundary token {token!r}"))
+
+    for relative_path, expected_call in EXPECTED_TAURI_INVOKES.items():
+        client_text = read_text(root / relative_path)
+        if client_text is None:
+            findings.append(
+                Finding(
+                    "ui-native-boundary",
+                    relative_path,
+                    "required Tauri invoke client is not UTF-8 text",
+                )
+            )
+            continue
+        invoke_calls = re.findall(r"\binvoke\s*(?:<[^>]+>)?\s*\(", client_text)
+        if len(invoke_calls) != 1 or client_text.count(expected_call) != 1:
+            findings.append(
+                Finding(
+                    "ui-native-boundary",
+                    relative_path,
+                    "Tauri invoke is not the exact no-argument command allowlist",
+                )
+            )
+
+    projection_client_path = "src/infrastructure/tauri/research-knowledge-demo-projection-client.ts"
+    projection_client_text = read_text(root / projection_client_path)
+    if projection_client_text is not None:
+        for token in PROJECTION_CLIENT_PROHIBITED_TOKENS:
+            if token in projection_client_text:
+                findings.append(
+                    Finding(
+                        "ui-native-boundary",
+                        projection_client_path,
+                        f"projection client contains prohibited boundary token {token!r}",
+                    )
+                )
+
+    menu_route_path = "src/infrastructure/tauri/menu-route-client.ts"
+    menu_route_text = read_text(root / menu_route_path)
+    if menu_route_text is None:
+        findings.append(
+            Finding(
+                "ui-native-boundary",
+                menu_route_path,
+                "menu event client is not UTF-8 text",
+            )
+        )
+    else:
+        listener_calls = re.findall(r"\blisten\s*(?:<[^>]+>)?\s*\(", menu_route_text)
+        if (
+            len(listener_calls) != 1
+            or 'export const ASSISTANT_MENU_ROUTE_EVENT = "assistant-menu-route";' not in menu_route_text
+            or "listen<unknown>(ASSISTANT_MENU_ROUTE_EVENT," not in menu_route_text
+        ):
+            findings.append(
+                Finding(
+                    "ui-native-boundary",
+                    menu_route_path,
+                    "menu listener differs from the sole exact event allowlist",
+                )
+            )
 
     lib_path = root / "src-tauri" / "src" / "lib.rs"
     lib_text = read_text(lib_path)
@@ -537,11 +647,94 @@ def ui_native_boundary_findings(root: Path) -> tuple[Finding, ...]:
         findings.append(Finding("ui-native-boundary", "src-tauri/src/lib.rs", "Tauri entrypoint is not UTF-8 text"))
     else:
         normalized_lib = re.sub(r"\s+", "", lib_text)
-        if "generate_handler![app_info::get_app_info]" not in normalized_lib:
-            findings.append(Finding("ui-native-boundary", "src-tauri/src/lib.rs", "invoke handler is not the exact app-info-only allowlist"))
+        if (
+            normalized_lib.count(".invoke_handler(") != 1
+            or normalized_lib.count("generate_handler![") != 1
+            or EXPECTED_INVOKE_HANDLER not in normalized_lib
+        ):
+            findings.append(Finding("ui-native-boundary", "src-tauri/src/lib.rs", "invoke handler is not the exact two-command allowlist"))
+
+    projection_rust_path = "src-tauri/src/research_knowledge_demo_projection.rs"
+    projection_rust_text = read_text(root / projection_rust_path)
+    if projection_rust_text is None:
+        findings.append(
+            Finding(
+                "ui-native-boundary",
+                projection_rust_path,
+                "projection command source is not UTF-8 text",
+            )
+        )
+    else:
+        command_signature = re.compile(
+            r"#\[tauri::command\]\s*"
+            r"pub\(crate\)\s+fn\s+get_research_knowledge_demo_projection\s*"
+            r"\(\s*\)\s*->\s*Result\s*<\s*ResearchKnowledgeDemoProjection\s*,\s*"
+            r"ResearchKnowledgeDemoProjectionError\s*>",
+            re.MULTILINE,
+        )
+        if command_signature.search(projection_rust_text) is None:
+            findings.append(
+                Finding(
+                    "ui-native-boundary",
+                    projection_rust_path,
+                    "projection command is not the exact zero-argument closed-result signature",
+                )
+            )
+        for token in PROJECTION_RUST_PROHIBITED_TOKENS:
+            if token in projection_rust_text:
+                findings.append(
+                    Finding(
+                        "ui-native-boundary",
+                        projection_rust_path,
+                        f"projection command contains prohibited boundary token {token!r}",
+                    )
+                )
+
+    rust_emitters: list[str] = []
+    rust_source_root = root / "src-tauri" / "src"
+    for rust_path in sorted(rust_source_root.rglob("*.rs")):
+        rust_text = read_text(rust_path)
+        if rust_text is None:
+            continue
+        rust_emitters.extend(
+            rust_path.relative_to(root).as_posix()
+            for _ in re.finditer(
+                r"\.\s*(?:emit|emit_to|emit_filter|emit_str|emit_str_to|emit_str_filter)\s*\(",
+                rust_text,
+            )
+        )
+    if rust_emitters != ["src-tauri/src/menu_bar/tauri_adapter.rs"]:
+        findings.append(
+            Finding(
+                "ui-native-boundary",
+                "src-tauri/src",
+                "Rust event emission differs from the sole menu-route allowlist",
+            )
+        )
+    menu_action_path = "src-tauri/src/menu_bar/action.rs"
+    menu_action_text = read_text(root / menu_action_path)
+    menu_adapter_path = "src-tauri/src/menu_bar/tauri_adapter.rs"
+    menu_adapter_text = read_text(root / menu_adapter_path)
+    if (
+        menu_action_text is None
+        or 'pub const MENU_ROUTE_EVENT: &str = "assistant-menu-route";' not in menu_action_text
+        or menu_adapter_text is None
+        or ".emit(MENU_ROUTE_EVENT," not in menu_adapter_text
+    ):
+        findings.append(
+            Finding(
+                "ui-native-boundary",
+                "src-tauri/src/menu_bar",
+                "Rust menu-route event name or emitter differs from the exact baseline",
+            )
+        )
 
     capability_directory = root / "src-tauri" / "capabilities"
-    capability_files = {path.name for path in capability_directory.glob("*.json")}
+    capability_files = {
+        path.relative_to(capability_directory).as_posix()
+        for path in capability_directory.rglob("*")
+        if path.is_file()
+    }
     if capability_files != EXPECTED_CAPABILITY_FILES:
         findings.append(Finding("ui-native-boundary", "src-tauri/capabilities", "capability file allowlist changed"))
     capability_path = capability_directory / "default.json"
@@ -550,8 +743,8 @@ def ui_native_boundary_findings(root: Path) -> tuple[Finding, ...]:
     except (OSError, UnicodeError, json.JSONDecodeError):
         findings.append(Finding("ui-native-boundary", "src-tauri/capabilities/default.json", "capability configuration is invalid"))
     else:
-        if capability.get("windows") != EXPECTED_CAPABILITY_WINDOWS or capability.get("permissions") != EXPECTED_CAPABILITY_PERMISSIONS:
-            findings.append(Finding("ui-native-boundary", "src-tauri/capabilities/default.json", "capability windows or permissions exceed the exact baseline"))
+        if capability != EXPECTED_CAPABILITY_CONFIGURATION:
+            findings.append(Finding("ui-native-boundary", "src-tauri/capabilities/default.json", "capability configuration differs from the complete exact baseline"))
 
     configuration_path = root / "src-tauri" / "tauri.conf.json"
     try:
@@ -562,6 +755,10 @@ def ui_native_boundary_findings(root: Path) -> tuple[Finding, ...]:
     except (OSError, UnicodeError, json.JSONDecodeError, KeyError, TypeError):
         findings.append(Finding("ui-native-boundary", "src-tauri/tauri.conf.json", "Tauri configuration or CSP is invalid"))
     else:
+        if "plugins" in configuration:
+            findings.append(Finding("ui-native-boundary", "src-tauri/tauri.conf.json", "Tauri plugin configuration is outside the reviewed baseline"))
+        if set(security) != {"csp", "devCsp"}:
+            findings.append(Finding("ui-native-boundary", "src-tauri/tauri.conf.json", "Tauri security configuration keys differ from the complete exact baseline"))
         if csp != EXPECTED_TAURI_CSP:
             findings.append(Finding("ui-native-boundary", "src-tauri/tauri.conf.json", "production CSP differs from the reviewed F-07 baseline"))
         if dev_csp != EXPECTED_TAURI_DEV_CSP:

@@ -60,19 +60,31 @@ The Active Command Center prototype is a separate untrusted WebView
 presentation boundary. Its `command-center-demo-v1` data is frontend-owned,
 closed, bounded, fixture-derived, redacted, and persistently labeled simulated.
 Search, filters, selection, graph viewport controls, inspector, and activity
-change only feature-local presentation state. They invoke no Tauri command,
-event listener, network, clipboard, storage, filesystem, provider, tool,
-approval, policy, audit, runtime, or device action. Fixture IDs are not trusted
-Rust identities.
+change only feature-local presentation state. Those fixture controls invoke no
+Tauri command or event listener and reach no network, clipboard, storage,
+filesystem, provider, tool, approval, policy, audit, runtime, or device action.
+Fixture IDs are not trusted Rust identities.
+
+The separately rendered Research/Knowledge panel performs one explicit,
+argument-free read-only projection query. Rust owns the fixed synthetic
+projection identity and returns a closed bounded DTO; the WebView
+runtime-narrows every field and maps every rejection to fixed unavailable copy.
+The query starts no workflow, accepts no caller-selected identity, registers no
+event, and exposes no provider, model, network, credential, tool, approval,
+persistence, filesystem, background, audit, or device effect. Its volatile data
+is persistently labeled `DEMO MODE · SIMULATED AGENT DATA` and remains separate
+from both the frontend Command Center fixtures and Rust acceptance workflows.
 
 The owner approved exact `@xyflow/react@12.11.3` and
 `lucide-react@1.33.0` after direct/transitive, license, peer, bundle, and
-security review. Their lockfile consequence is 19 reviewed transitives. At the
-Command Center checkpoint, the production audit reported zero vulnerabilities
+security review. Their lockfile consequence is 19 reviewed transitives. At that
+frontend-only Command Center checkpoint, the production audit reported zero vulnerabilities
 while five pre-existing development-only advisories remained unchanged; the
 superseding PR #57 remediation below resolves them. React Flow types/imports
-stop at one feature adapter. No Rust/Tauri capability, CSP, IPC, permission, or
-native dependency changed.
+stop at one feature adapter. That checkpoint changed no Rust/Tauri capability,
+CSP, IPC, permission, or native dependency. The later read-only projection adds
+only the exact query described above; capabilities, CSP, permissions, and
+dependencies remain unchanged.
 
 PR #57's baseline full development audit reports five vulnerable indirect
 package-level findings—four High and one Moderate—across six lockfile nodes,

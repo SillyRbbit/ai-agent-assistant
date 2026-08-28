@@ -2,17 +2,40 @@
 
 Last updated: 2026-08-27
 
-## Current active prerequisite
+## Current verified prerequisite
 
-F-08 app-info runtime IPC narrowing is verified complete with advisories. The
-WebView now treats the sole `get_app_info` result
-as `unknown`, accepts only the exact bounded six-field DTO with
-`secureCore: true`, and maps every rejection to fixed safe diagnostics. Focused
-tests pass 37/37, the full frontend suite passes 220/220, complete verification
-passes, and target-Mac native app-info smoke reports the expected closed values.
-No Rust command, Tauri configuration, dependency, permission, or agent boundary
-changed. Its completion report is `PASS WITH ADVISORIES` and its deterministic
-marker is complete and valid; no successor implementation plan is Ready.
+The owner-approved
+[`research-knowledge-demo-projection-contract`](docs/plans/2026-08-27-research-knowledge-demo-projection-contract.md)
+is verified complete with advisories. One argument-free Tauri query
+constructs an exact application-owned synthetic v1 DTO with fixed scenario,
+provenance, three ready roles, three presentation-only outcomes, and the exact
+`DEMO MODE · SIMULATED AGENT DATA` disclosure. The WebView invokes as
+`unknown`, accepts only that complete bounded DTO, constructs fresh frozen
+values, and maps native, transport, and malformed replies to one fixed error.
+
+Only the selected Research and Knowledge Command Center scenario renders the
+panel, and only an explicit refresh requests the query. The existing topology,
+activity, Conversations mock, and Rust acceptance workflow remain separate
+deterministic proofs. Focused evidence passes 69 frontend tests, three Rust
+module tests, one exact public Rust contract, 32 repository-health tests,
+typecheck, formatting, and the exact F-12 boundary. Complete `npm run verify`
+passes with 247 frontend tests, 252 Rust library tests, 242 Rust integration
+tests, one intentional ignored Hermes probe, the frontend production build,
+and the Tauri release no-bundle build. Independent architecture, security, and
+code review pass with no blocking finding.
+
+Target-Mac source-current release evidence passes explicit refresh, exact
+content, light/dark, reduced-motion on/off, viewport, focus, scroll, topology
+zoom/reset, and 1040x700 -> 803x563 -> 1040x700 native resize. Direct binding
+to the raw debug executable and host/browser page zoom were unavailable and are
+`Not run`. A non-required full bundle attempt failed only at DMG packaging after
+creating the `.app`; distribution is outside scope and nothing was published.
+The completion result is `PASS WITH ADVISORIES`. No lifecycle successor has an
+approved plan or is Ready.
+
+F-08 app-info runtime IPC narrowing remains verified complete with advisories
+and published on `main` at `5b462bc`. Its exact six-field fail-closed app-info
+contract is unchanged.
 
 `production-development-csp-separation-f07` is verified complete with
 advisories. Production `connect-src` now retains only bundled/IPC sources and

@@ -1,6 +1,8 @@
 import { FlaskConical, SearchX } from "lucide-react";
 import { useMemo } from "react";
 
+import type { ResearchKnowledgeDemoProjectionLoader } from "../../infrastructure/tauri/research-knowledge-demo-projection-client";
+
 import "./command-center.css";
 import {
   COMMAND_CENTER_AGENT_IDS,
@@ -27,6 +29,7 @@ import { CommandCenterHeader } from "./components/CommandCenterHeader";
 import { ContextualInspector, type InspectorViewModel } from "./components/ContextualInspector";
 import { OperationalTopologyPanel } from "./components/OperationalTopologyPanel";
 import { SystemStatusSummary } from "./components/SystemStatusSummary";
+import { ResearchKnowledgeDemoProjectionPanel } from "./components/ResearchKnowledgeDemoProjectionPanel";
 import {
   TopologyStructuredView,
   type StructuredEdgeView,
@@ -255,7 +258,16 @@ function inspectorFromGroup(
   };
 }
 
-export default function CommandCenterPage() {
+interface CommandCenterPageProps {
+  readonly projectionLoader?: ResearchKnowledgeDemoProjectionLoader;
+}
+
+const unavailableProjectionLoader: ResearchKnowledgeDemoProjectionLoader = () =>
+  Promise.reject(new Error("Projection loader unavailable."));
+
+export default function CommandCenterPage({
+  projectionLoader = unavailableProjectionLoader,
+}: CommandCenterPageProps) {
   const { actions, state } = useCommandCenterState();
   const projection = useMemo(
     () => buildCommandCenterProjection(state.scenarioId),
@@ -480,8 +492,10 @@ export default function CommandCenterPage() {
           <p className="section-kicker">Operations · deterministic prototype</p>
           <h1 id="command-center-page-title">Command Center</h1>
           <p>
-            Inspect a bounded visual projection of the application-owned agent architecture. All
-            content is local frontend fixture data; nothing here executes, approves, or connects.
+            Inspect a bounded visual projection of the application-owned agent architecture. The
+            topology and activity remain frontend fixtures; the separate Rust projection is a
+            read-only query. Nothing starts, cancels, approves, executes, or connects to a provider
+            or model.
           </p>
         </div>
         <span className="command-center-demo-badge">
@@ -491,7 +505,10 @@ export default function CommandCenterPage() {
 
       <p aria-atomic="true" aria-live="polite" className="command-center-provenance">
         <strong>{projection.scenarioLabel}</strong>
-        <span>Projection {projection.version} · deterministic fixture · no backend connection</span>
+        <span>
+          Projection {projection.version} · deterministic frontend fixture · separate from native
+          proof
+        </span>
       </p>
 
       <CommandCenterHeader
@@ -545,6 +562,10 @@ export default function CommandCenterPage() {
         ]}
         viewMode={state.viewMode}
       />
+
+      {state.scenarioId === "research-knowledge-active" ? (
+        <ResearchKnowledgeDemoProjectionPanel loader={projectionLoader} />
+      ) : null}
 
       <SystemStatusSummary
         activeCount={projection.summary.activeCount}

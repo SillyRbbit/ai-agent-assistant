@@ -8,12 +8,17 @@ mod error;
 pub mod memory;
 pub mod menu_bar;
 pub mod policy;
+mod research_knowledge_demo_projection;
 mod startup;
 pub mod storage;
 pub mod tools;
 
 pub use app_info::{current_app_info, AppInfo};
 pub use error::AppError;
+pub use research_knowledge_demo_projection::{
+    current_research_knowledge_demo_projection, ResearchKnowledgeDemoProjection,
+    ResearchKnowledgeDemoProjectionError,
+};
 pub use tools::types::{PermissionKind, RiskClass};
 
 pub fn run() -> Result<(), AppError> {
@@ -24,7 +29,10 @@ pub fn run() -> Result<(), AppError> {
             Ok(())
         })
         .on_window_event(menu_bar::handle_window_event)
-        .invoke_handler(tauri::generate_handler![app_info::get_app_info])
+        .invoke_handler(tauri::generate_handler![
+            app_info::get_app_info,
+            research_knowledge_demo_projection::get_research_knowledge_demo_projection
+        ])
         .build(tauri::generate_context!())
         .map_err(AppError::from)?;
 
