@@ -9,6 +9,7 @@ pub mod memory;
 pub mod menu_bar;
 pub mod policy;
 mod research_knowledge_demo_lifecycle;
+mod research_knowledge_demo_lifecycle_tauri;
 mod research_knowledge_demo_projection;
 mod startup;
 pub mod storage;
@@ -30,6 +31,10 @@ pub use tools::types::{PermissionKind, RiskClass};
 
 pub fn run() -> Result<(), AppError> {
     let app = tauri::Builder::default()
+        .manage(
+            research_knowledge_demo_lifecycle_tauri::ResearchKnowledgeDemoLifecycleTauriState::new(
+            ),
+        )
         .setup(|app| {
             startup::initialize_tauri_app(app)?;
             menu_bar::initialize_tauri_app(app)?;
@@ -38,7 +43,11 @@ pub fn run() -> Result<(), AppError> {
         .on_window_event(menu_bar::handle_window_event)
         .invoke_handler(tauri::generate_handler![
             app_info::get_app_info,
-            research_knowledge_demo_projection::get_research_knowledge_demo_projection
+            research_knowledge_demo_projection::get_research_knowledge_demo_projection,
+            research_knowledge_demo_lifecycle_tauri::get_research_knowledge_demo_lifecycle_snapshot,
+            research_knowledge_demo_lifecycle_tauri::start_research_knowledge_demo_lifecycle,
+            research_knowledge_demo_lifecycle_tauri::advance_research_knowledge_demo_lifecycle,
+            research_knowledge_demo_lifecycle_tauri::cancel_research_knowledge_demo_lifecycle
         ])
         .build(tauri::generate_context!())
         .map_err(AppError::from)?;

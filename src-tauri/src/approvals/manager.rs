@@ -262,7 +262,7 @@ pub(super) struct ApprovalPresentationParts {
     pub(super) remaining: Duration,
 }
 
-trait ApprovalClock: fmt::Debug {
+trait ApprovalClock: fmt::Debug + Send {
     fn now(&self) -> Instant;
 
     fn checked_add(&self, instant: Instant, duration: Duration) -> Option<Instant> {
@@ -704,9 +704,8 @@ impl InMemoryApprovalManager {
 
 #[cfg(test)]
 mod tests {
-    use std::cell::Cell;
     use std::error::Error;
-    use std::rc::Rc;
+    use std::sync::{Arc, Mutex};
     use std::time::{Duration, Instant};
 
     use serde_json::json;
@@ -739,28 +738,35 @@ mod tests {
 
     #[derive(Clone, Debug)]
     struct TestClock {
-        now: Rc<Cell<Instant>>,
+        now: Arc<Mutex<Instant>>,
     }
 
     impl TestClock {
         fn new() -> Self {
             Self {
-                now: Rc::new(Cell::new(Instant::now())),
+                now: Arc::new(Mutex::new(Instant::now())),
             }
         }
 
         fn advance(&self, duration: Duration) -> bool {
-            let Some(next) = self.now.get().checked_add(duration) else {
+            let mut now = match self.now.lock() {
+                Ok(now) => now,
+                Err(poisoned) => poisoned.into_inner(),
+            };
+            let Some(next) = now.checked_add(duration) else {
                 return false;
             };
-            self.now.set(next);
+            *now = next;
             true
         }
     }
 
     impl ApprovalClock for TestClock {
         fn now(&self) -> Instant {
-            self.now.get()
+            *match self.now.lock() {
+                Ok(now) => now,
+                Err(poisoned) => poisoned.into_inner(),
+            }
         }
     }
 
@@ -777,6 +783,14 @@ mod tests {
         fn checked_add(&self, _instant: Instant, _duration: Duration) -> Option<Instant> {
             None
         }
+    }
+
+    #[test]
+    fn private_clock_contract_keeps_the_approval_manager_send() {
+        fn assert_send<T: Send>() {}
+
+        assert_send::<InMemoryApprovalManager>();
+        assert_send::<TestClock>();
     }
 
     fn registry() -> ToolRegistryResult<InMemoryToolRegistry> {

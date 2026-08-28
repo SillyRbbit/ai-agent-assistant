@@ -4,9 +4,22 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
+The owner-approved documentation-only
+[`2026-08-28-research-knowledge-demo-lifecycle-tauri-adapter.md`](docs/plans/2026-08-28-research-knowledge-demo-lifecycle-tauri-adapter.md)
+is **verified complete with advisories** after the owner approved
+the narrowly scoped private approval-clock Send prerequisite. One mutex-owned
+volatile host now backs four no-caller-input commands and one bounded
+notification event; an unconnected client validates and freezes the exact DTO,
+rejects concurrent/stale/gapped data, and requires explicit snapshot recovery.
+F-12 guards the exact boundary. Command Center connection and capability, CSP,
+dependency, provider, persistence, background, and device-effect changes remain
+out of scope. Complete automated and target-Mac startup verification pass;
+direct observation of the deliberately unconnected lifecycle event is `Not
+run`. No connected presentation plan is Ready.
+
 The owner-approved
 [`2026-08-27-research-knowledge-demo-volatile-lifecycle-core.md`](docs/plans/2026-08-27-research-knowledge-demo-volatile-lifecycle-core.md)
-is **verified complete with advisories** in the current uncommitted workspace.
+is **verified complete with advisories** and published on `main` at `68de8a5`.
 It implements one manually stepped, process-local, volatile Rust host for the
 existing sealed Research -> Knowledge workflow and a public Rust-only contract
 needed for strict lint reachability. It keeps Tauri commands/events, React,

@@ -4,6 +4,18 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Implemented and verified the owner-approved narrow Research -> Knowledge
+  lifecycle Tauri boundary. One application-owned
+  mutex-held volatile host backs four no-caller-input commands and one bounded
+  notification-only event. An unconnected client validates and freezes the
+  exact DTO and requires explicit recovery from gaps. The separately approved
+  private approval-clock Send prerequisite changes no public approval behavior,
+  and F-12 statically freezes the command, event, import, capability, and CSP
+  boundary. No React connection, provider, network, credential, tool,
+  persistence, filesystem, background work, dependency, or device effect was
+  added. Complete automated and target-Mac startup verification pass; direct
+  observation of the deliberately unconnected lifecycle event is `Not run`.
+
 - Implemented the owner-approved volatile Research -> Knowledge lifecycle core
   without adding IPC or UI: one no-input Rust host manually drives the sealed
   D-086 workflow through `NativeAgentRuntime`, exposes only closed bounded
