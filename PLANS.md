@@ -12,6 +12,9 @@ are verified complete with advisories. The final ExecPlan's source-current
 review at `181f851` found no Critical, High, Medium, or Low defect. It confirms
 the completed bounded remediation of F-01/F-02, F-07, F-08, F-12, and F-15;
 neither the plan nor its review grants remediation or source authority.
+The review documentation is published through
+[PR #74](https://github.com/SillyRbbit/ai-agent-assistant/pull/74) at `main`
+squash commit `d3edc7a`; its PR and merged-main Documentation runs passed.
 
 The owner-approved source
 [`2026-08-28-research-knowledge-demo-connected-presentation.md`](docs/plans/2026-08-28-research-knowledge-demo-connected-presentation.md)
