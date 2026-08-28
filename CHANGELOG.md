@@ -18,7 +18,9 @@ All notable repository changes are documented here. Entries distinguish verified
   provider, model, network, credential, tool, approval dispatch, persistence,
   filesystem, background work, dependency, capability, CSP, or device effect
   was added. Raw-debug native lifecycle interaction and unavailable native
-  appearance/zoom/resize checks are `Not run` advisories; nothing is published.
+  appearance/zoom/resize checks are `Not run` advisories. PR #71 squash-merged
+  the verified source head `c51bcc8` to `main` at `d9c7c13`; the exact PR-head
+  and merged-main Documentation and CI workflows pass.
 
 - Completed the owner-approved documentation-only plan for the smallest
   connected Research -> Knowledge lifecycle presentation with advisories. It

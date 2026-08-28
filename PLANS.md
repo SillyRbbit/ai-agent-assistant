@@ -6,15 +6,16 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 The owner-approved source
 [`2026-08-28-research-knowledge-demo-connected-presentation.md`](docs/plans/2026-08-28-research-knowledge-demo-connected-presentation.md)
-is locally verified complete with advisories on a source-current uncommitted
-branch. It connects only a separately labelled prop-free lifecycle panel in the
-selected scenario to the existing four no-input commands. A private
+is verified complete with advisories and published through
+[PR #71](https://github.com/SillyRbbit/ai-agent-assistant/pull/71) at `main`
+squash commit `d9c7c13`. It connects only a separately labelled prop-free
+lifecycle panel in the selected scenario to the existing four no-input commands. A private
 application-owned completed-run schedule alternates deterministic success and
 synthetic failure without a caller selector; cancellation consumes no outcome.
 Command responses alone commit presentation, while newer valid notifications
 only require recovery. F-12 pins the sole consumer and exact reviewed source.
-No next source plan is owner-selected or Ready; publication requires separate
-explicit authorization.
+PR-head and merged-main Documentation and CI workflows pass. No next source
+plan is owner-selected or Ready.
 
 The earlier owner-approved documentation-only
 [`2026-08-28-research-knowledge-demo-lifecycle-tauri-adapter.md`](docs/plans/2026-08-28-research-knowledge-demo-lifecycle-tauri-adapter.md)
