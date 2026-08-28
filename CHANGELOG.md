@@ -4,6 +4,14 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Reconciled the high-level engineering guide with the published risk-based CI
+  classifier: isolated Rust tests remain narrow, while production Rust source
+  and native examples select affected application jobs. Current-state records
+  now distinguish the historical local closeout from PR #76's squash merge at
+  `7390ea6` and its passing PR and merged-main Actions. No executable,
+  workflow, dependency, capability, CSP, permission, credential, IPC, provider,
+  persistence, filesystem, tool, or device behavior changed.
+
 - Closed the risk-based CI trust-boundary classification gap without changing
   product or workflow behavior. All current and future production Rust source
   and native-example paths now select frontend, Rust, and audit jobs by

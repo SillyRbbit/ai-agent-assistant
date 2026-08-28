@@ -6,6 +6,18 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Current verified increment and queue state
 
+The owner-approved documentation-only
+[`ci-classification-engineering-guide-reconciliation`](docs/increments/ci-classification-engineering-guide-reconciliation.md)
+increment is verified complete with advisories from clean synchronized `main`
+`7390ea6`. It has one
+bounded objective: make the engineering guide distinguish isolated Rust tests
+from production/native examples, then reconcile the current publication record
+for the classifier increment. It authorizes no product, classifier, workflow,
+runner, dependency, capability, CSP, permission, credential, IPC, provider,
+persistence, filesystem, or tool work. Documentation-only validation and the
+completion marker pass. No next source or remediation increment is
+owner-selected or **Ready**.
+
 The owner-approved
 [`risk-based-ci-trust-boundary-classification`](docs/increments/risk-based-ci-trust-boundary-classification.md)
 increment is verified complete with advisories from synchronized `main`
@@ -17,9 +29,10 @@ workflow, dependency, runner, permission, credential, IPC, provider,
 persistence, filesystem, or tool behavior changed.
 
 One sentence in `ENGINEERING_GUIDE.md` still groups examples with isolated
-Rust tests. It is a non-blocking documentation advisory outside this
-increment's owner-authorized file list. Remote Actions and target-Mac UI checks
-are `Not run` because the increment is unpublished and changes no product
+Rust tests; the active documentation-only reconciliation above corrects it.
+PR #76 squash-merged reviewed head `d322317` at `7390ea6`; its six PR checks
+and merged-main CI `33199321088` plus Documentation `33199321090` passed.
+Target-Mac UI remains `Not run` because the increment changes no product
 behavior. No next source or remediation increment is owner-selected or
 **Ready**. Credential, filesystem, document, memory, Tauri IPC, live-provider,
 persistence, and tool work remain blocked pending a separately selected and

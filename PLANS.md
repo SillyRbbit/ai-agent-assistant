@@ -4,6 +4,17 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
+The owner-approved documentation-only
+[`CI-classification engineering-guide reconciliation`](docs/plans/2026-08-28-ci-classification-engineering-guide-reconciliation.md)
+increment is verified complete with advisories from synchronized `main`
+`7390ea6`. It corrects only the
+stale high-level statement that grouped native examples with isolated Rust
+tests, and reconciles current-state publication evidence for the completed
+risk-based classifier increment. No classifier, workflow, runner, product,
+dependency, capability, CSP, permission, credential, IPC, provider,
+persistence, filesystem, or tool behavior changes. Documentation-only
+validation and the completion marker pass; no next source increment is Ready.
+
 The owner-selected
 [`risk-based CI trust-boundary classification`](docs/plans/2026-08-28-risk-based-ci-trust-boundary-classification.md)
 increment is verified complete with advisories from synchronized `main`
@@ -14,9 +25,11 @@ makes production Rust fail closed to frontend, Rust, and audit jobs, retains a
 narrow exact-path exception mechanism with no current production exception,
 and preserves existing narrow path/event classes. It changes no product source,
 workflow YAML, runner, dependency, capability, CSP, permission, credential,
-persistence, IPC implementation, provider, tool, or external state. One stale
-high-level `ENGINEERING_GUIDE.md` sentence is recorded as an out-of-scope
-documentation advisory; no next increment is owner-selected or Ready.
+persistence, IPC implementation, provider, tool, or external state. It was
+published through PR #76 at `main` `7390ea6`; all PR and merged-main CI and
+Documentation checks passed. The stale high-level `ENGINEERING_GUIDE.md`
+sentence is the active documentation-only reconciliation above; no next source
+increment is owner-selected or Ready.
 
 The owner-approved documentation-only
 [`native-multi-agent-final-review-planning`](docs/increments/native-multi-agent-final-review-planning.md)
