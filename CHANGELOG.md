@@ -4,6 +4,20 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Implemented V0-1's transport-free Personal Assistant prerequisite. A sealed
+  application-owned synthetic request pins the exact instructions,
+  OpenAI-through-Cloudflare model profile, lower closed limits, `empty@1`, zero
+  retries, and no fallback. The sole Native runtime start path now owns a
+  distinct boxed Personal Assistant turn, while a public no-input volatile host
+  issues private correlation identities, validates exact returned identity and
+  initial status, enforces one process-local lease, and quarantines rejected
+  runs until cleanup is proved. Bounded Rust fixtures cover deterministic
+  success, failure, cancellation, limits, transactional rejection, and late
+  events. There is no response ingress on the host and no Tauri, UI, provider,
+  network, credential, persistence, tool, approval, audit, filesystem,
+  background, or device-effect path. The increment remains uncommitted and
+  unpublished pending owner review.
+
 - Defined D-094 and a documentation-only Personal Assistant v0 program: one
   foreground explicit text request, bounded streaming/final output, terminal
   cancellation, closed errors, Rust-owned identity/configuration, and an empty

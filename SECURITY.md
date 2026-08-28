@@ -443,14 +443,27 @@ authentication metadata for 24 hours, and mandatory admin-action audit records
 for 18 months. It states `store=false` is not ZDR. V0-12/V0-13 must reverify
 these facts and version the disclosure on any change.
 
-Current source does not implement this chain. In particular, the current
-initial gateway request advertises two tools, no direct Rust HTTPS client
-exists, D-068 is synthetic-only, no Worker/provider path exists, and exact ZDR
-evidence is absent. The complete blocker and rollback record is
+Current source implements only V0-1's transport-free prerequisite: a sealed
+application-owned synthetic `empty@1` request, a distinct branch behind the
+sole Native runtime start boundary, bounded transactional Rust event
+validation, and a no-input volatile host that validates returned identity and
+initial status exactly. A rejected run is terminal-cleaned or retained with a
+process lease in a private fail-closed quarantine. Predictable host-issued IDs
+are local correlation, not authentication. The public host exposes no request
+or response content and no frame ingress.
+
+The current initial gateway request still separately advertises two tools. No
+direct Rust HTTPS client, Tauri/WebView Personal Assistant boundary, signed
+identity, credential, Worker/provider path, network request, persistence,
+execution, durable audit, or exact ZDR evidence exists. V0-1's success,
+failure, and stream outcomes remain fixture-only; its host can reach only local
+starting and cancellation projections until later approved transport work.
+The complete blocker and rollback record is
 [`2026-08-28-personal-assistant-v0-program.md`](docs/plans/2026-08-28-personal-assistant-v0-program.md).
 
-The transport-free empty-tool turn/minimal-host plan is the sole Ready plan
-after verified planning closeout and still requires separate owner approval.
+The transport-free empty-tool turn/minimal-host increment is locally complete
+and remains uncommitted and unpublished pending owner review. V0-2 remains
+Blocked until V0-1 is accepted as the exact source baseline.
 Any need for an unapproved dependency,
 WebView or subprocess networking,
 caller-selected trusted configuration, raw-content logging, persistent

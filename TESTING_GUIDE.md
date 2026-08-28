@@ -124,15 +124,18 @@ raw debug process, record native interaction, alternate appearance/reduced
 motion, page zoom, and resize as `Not run`; a browser-rendered fallback can
 verify layout and disclosure but cannot substitute for native lifecycle proof.
 
-### Planned Personal Assistant v0 evidence separation
+### Personal Assistant v0 evidence separation
 
-D-094's Personal Assistant program must preserve separate evidence for each
-trust boundary. Transport-free Rust fixtures may prove the exact empty-tool
-profile, success/failure/cancellation, bounds, transactional rejection, and
-late-event behavior. V0-1 additionally tests exact returned runtime identity
-and initial status plus terminal cleanup versus run-and-lease quarantine for
-every rejected-start outcome. These fixtures do not prove signing, Keychain,
-TLS, Access, Worker, OpenAI, Tauri, WebView, or target-Mac behavior.
+D-094's Personal Assistant program preserves separate evidence for each trust
+boundary. V0-1 transport-free Rust fixtures prove the exact empty-tool profile,
+success/failure/cancellation, bounds, transactional rejection, late-event
+behavior, exact returned runtime identity and initial status, and terminal
+cleanup versus run-and-lease quarantine for every rejected-start outcome. The
+public V0-1 host has no response-frame ingress, so its observable production
+path proves only fixed request construction, checked Native start ownership,
+closed status, and local cancellation. Fixture success/failure/stream results
+do not prove a user-visible session. Neither evidence class proves signing,
+Keychain, TLS, Access, Worker, OpenAI, Tauri, WebView, or target-Mac behavior.
 
 Generated JWT/JWKS tests prove the local verifier only. A route-free control-
 plane inspection proves no-traffic configuration only. Fixed zero-content

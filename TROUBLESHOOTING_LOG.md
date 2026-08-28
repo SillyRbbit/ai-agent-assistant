@@ -1186,3 +1186,37 @@ Documentation run `32928080852`. PR #57 squash-merged to `main` at
 the zero-finding npm audit, and the unchanged accepted Rust advisory-baseline
 gate. TS-020 remains Resolved without an exception, override, parent upgrade,
 or policy change.
+
+## TS-021 - Optional JSON parsing collapsed prohibited retry metadata
+
+Date: 2026-08-28
+Status: Resolved
+
+### Symptom
+
+The V0-1 Personal Assistant failure contract prohibits any
+`retry_after_ms` field because the sealed profile owns zero retries. The shared
+gateway event type represents that field as `Option`, so explicit
+`"retry_after_ms": null` deserialized to the same `None` value as an absent
+field and could not be distinguished by the typed event check alone.
+
+### Cause
+
+An optional typed field preserves value semantics but not JSON key-presence
+semantics. Reusing it as proof that a forbidden key was absent would have made
+the Personal Assistant protocol less strict than its closed wire contract.
+
+### Resolution
+
+The transport-free Personal Assistant turn now performs a bounded, local raw-
+JSON preflight before the shared validator. For `response_failed` events it
+rejects the presence of `retry_after_ms` regardless of whether the value is
+null, numeric, or another invalid shape. The shared gateway protocol and the
+existing Initial profile remain unchanged.
+
+### Verify
+
+Require focused tests for absent metadata and explicit null/numeric metadata,
+then run strict Clippy, the gateway/runtime contract suites, complete
+repository verification, security scanning, and diff inspection. A rejected
+frame must terminal-fail transactionally and no later event may resume it.

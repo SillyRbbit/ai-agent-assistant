@@ -1,9 +1,10 @@
 # V0-1 — sealed Personal Assistant empty-tool turn and volatile host
 
-Status: Ready; separate owner implementation approval and a fresh gate are required
+Status: Verified complete with advisories
 Owner: Henry Dang
 Last updated: 2026-08-28
 Depends on: D-094 and the verified CI trust-boundary classifier
+Baseline: `0b22ee79a24e11d7c67cbace111a502608b57591`
 
 ## Goal
 
@@ -136,6 +137,10 @@ The exact application-owned synthetic fixture is:
 ```text
 Prepare a concise three-bullet board update from this synthetic status: planning is approved; implementation has not started; no external systems have changed.
 ```
+
+The phrase `implementation has not started` is deliberately frozen synthetic
+fixture content. It describes neither this V0-1 repository increment nor
+current project status.
 
 The serialized JSON object has exactly this key/nesting grammar; angle-bracket
 values are the two validated identities issued by the V0-1 host or
@@ -464,18 +469,81 @@ mismatch without releasing the process lease.
 
 ## Acceptance criteria
 
-- [ ] Exact empty-tool v1 request and text-only stream contracts exist.
-- [ ] All trusted identity/configuration values are application-owned.
-- [ ] Returned runtime identity/status is exact and every rejected run is
+- [x] Exact empty-tool v1 request and text-only stream contracts exist.
+- [x] All trusted identity/configuration values are application-owned.
+- [x] Returned runtime identity/status is exact and every rejected run is
       terminal-cleaned or retained in quarantine with cleanup ownership.
-- [ ] Fixed synthetic success, failure, cancellation, limits, and late-event
+- [x] Fixed synthetic success, failure, cancellation, limits, and late-event
       rejection pass without I/O.
-- [ ] Existing behavior and the full completion gate pass.
-- [ ] Independent architecture and security review find no blocking issue.
+- [x] Existing behavior and the full completion gate pass.
+- [x] Independent architecture and security review find no blocking issue.
+
+## Progress
+
+- 2026-08-28: confirmed clean synchronized `main` at the exact baseline,
+  recorded pinned toolchains, and began the fresh V0-1 gate.
+- 2026-08-28: implemented only the sealed request/validator, private runtime
+  profile split, boxed Native branch, no-input host, focused tests, and exact
+  public contract test authorized by this plan.
+- 2026-08-28: addressed every independent architecture and security/code
+  review finding without widening scope.
+- 2026-08-28: completed focused, acceptance, repository-wide, security,
+  documentation, audit, build, session-end, and deterministic marker checks.
+
+## Discoveries
+
+- A typed optional JSON field cannot prove wire-key absence: explicit
+  `retry_after_ms: null` collapsed to `None`. The Personal Assistant turn now
+  performs a bounded key-presence preflight without changing the shared
+  gateway protocol or Initial profile.
+- Rejected-run cleanup status is cleanup proof only. It must never promote an
+  unaccepted run to a public Completed or Cancelled result.
+- Failed restart attempts must preserve the prior content-free terminal
+  summary until a replacement run is accepted.
+- The public host can truthfully prove fixed request/start/cancel ownership in
+  V0-1, but stream success/failure remains fixture-only until a later approved
+  host transport ingress exists.
+
+## Documentation checklist
+
+- [x] Architecture and security ownership match the implemented Rust boundary.
+- [x] Project status, handoff, queue, plan index, roadmap, changelog, testing,
+      troubleshooting, increment, and review records are reconciled.
+- [x] Every current capability claim distinguishes public-host evidence from
+      fixture-only evidence and lists the absent live/product boundaries.
+- [x] Later plans remain Blocked and no successor authority is inferred.
+
+## Implementation result
+
+V0-1 is locally complete from the exact clean synchronized baseline above. The
+implementation adds the sealed Personal Assistant request/validator, routes it
+through the sole Native runtime start boundary, and adds the public no-input
+volatile host with process lease, exact returned identity/status validation,
+closed status/cancellation, and fail-closed rejected-run quarantine. The
+existing Initial profile remains separately routed and passing.
+
+The public host deliberately has no response-frame ingress. Deterministic
+started/delta/completed/failed outcomes remain crate-private and Native runtime
+fixtures; they do not establish a working assistant, provider call, or
+user-visible conversation. No dependency, manifest, lockfile, Tauri/WebView,
+provider, network, credential, persistence, memory, tool, approval, audit,
+filesystem, background, or device-effect surface changed.
+
+During review, the implementation was tightened so a failed restart preserves
+the prior terminal summary until an accepted replacement, a rejected or
+identity-mismatched run can never be projected as Completed or Cancelled,
+explicit `retry_after_ms: null` is rejected by presence rather than collapsed
+into absence, and all wrong returned identities/statuses exercise the exact
+production-called checked-start helper. Independent architecture and
+security/code review report no remaining findings.
+
+The completion review records the exact focused/full validation results,
+manual diff inspection, `Not run` platform/external checks, and valid marker.
+The increment is uncommitted and unpublished pending separate owner authority.
 
 ## Readiness
 
-**Ready.** The planning report, independent architecture/readiness/security
-reviews, documentation checks, session-end gate, and completion marker pass.
-This status grants no source authority: the owner must separately approve V0-1
-implementation and a fresh gate must begin before any source edit.
+**Complete.** V0-1 meets its local acceptance criteria and completion gate.
+V0-2 remains Blocked until this exact V0-1 source baseline is published or the
+owner otherwise accepts it as the authoritative baseline. No successor
+implementation may begin from this status.

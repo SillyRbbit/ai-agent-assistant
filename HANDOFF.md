@@ -4,33 +4,38 @@ Last updated: 2026-08-28
 
 ## Current verified increment
 
-The owner-approved documentation-only
-[`personal-assistant-v0-capability-planning`](docs/increments/personal-assistant-v0-capability-planning.md)
-increment is verified complete with advisories from clean synchronized `main`
-`41ff7141007c8c0a684a5e2434ecf81dd4707418`. It records D-094 and the exact
-[`Personal Assistant v0 program`](docs/plans/2026-08-28-personal-assistant-v0-program.md)
-without changing product source, dependencies, credentials, signing state,
-external resources, provider state, IPC, or behavior.
+The owner-approved
+[`personal-assistant-v0-empty-tool-turn`](docs/increments/personal-assistant-v0-empty-tool-turn.md)
+increment is locally verified complete with advisories from clean synchronized
+`main` baseline `0b22ee79a24e11d7c67cbace111a502608b57591`. It adds
+only V0-1's transport-free Rust prerequisite: the sealed fixed synthetic
+`empty@1` request, a distinct boxed turn behind the sole
+`AgentRuntime::start` boundary, and a public no-input volatile host that owns
+private correlation identities, exact returned identity/status checks, the
+single process lease, cancellation, cleanup, and rejected-run quarantine.
 
-The first usable v0 is Personal Assistant only: one foreground explicit text
-request at a time, bounded stream and final answer, terminal cancellation,
-closed errors, Rust-owned identity/configuration, and `empty@1`. A live fixed-
-fixture synthetic proof, real personal-prompt activation, and later action-
-taking/product work are separate milestones. Current source implements none of
-the live chain.
+The host exposes no frame or user-text ingress and no response content.
+Deterministic success, failure, cancellation, limits, transactional rejection,
+and late-event behavior are crate-private/native fixture proofs, not a working
+assistant or user-visible conversation. No Tauri/WebView, provider, model
+request, network, signed identity, credential, persistence, memory, tool,
+approval, audit, filesystem, background, or device-effect path was added.
 
-[`V0-1 — sealed empty-tool turn and minimal host`](docs/plans/2026-08-28-personal-assistant-v0-empty-tool-turn.md)
-is the sole **Ready** plan and requires separate owner implementation approval
-plus a fresh gate. V0-2 through V0-14 are Blocked. The plans separately gate signed identity,
-local JWT validation, no-traffic Cloudflare state, an HTTPS dependency
-decision, fixed Rust transport, real demo credential transfer, authentication-
-only traffic, fake OpenAI mapping, disclosure-bound Tauri presentation,
-no-traffic provider state, live synthetic traffic, and real-content admission.
-Exact next prompt: read `AGENTS.md`, the complete
-memory/security/testing chain, D-094, the v0 program, and V0-1; confirm clean
-synchronized `main` and the planning marker; then ask the owner whether to
-approve only V0-1. Do not begin source, identity, credential, gateway,
-provider, transport, IPC, real-content, local-model, or product work.
+V0-1 is uncommitted and unpublished. The exact next action is owner review of
+the verified diff and, only if separately authorized, its Git publication.
+[`V0-2 — volatile Personal Assistant Rust session host`](docs/plans/2026-08-28-personal-assistant-v0-session-host.md)
+remains **Blocked** until V0-1 is published or otherwise accepted as the exact
+source baseline. V0-3 through V0-14 remain Blocked by their recorded
+dependencies. Do not begin V0-2, identity, credential, gateway, provider,
+transport, IPC, real-content, local-model, or product work.
+
+Exact resume prompt: "Read `AGENTS.md`, `docs/governance/MASTER_PROMPT.md`, the
+complete required project-memory/security/testing chain, the V0-1 plan,
+increment record, and post-increment review. Confirm `main` and `origin/main`,
+validate the V0-1 completion marker and workspace fingerprint, and inspect the
+exact uncommitted V0-1 diff. Stop for explicit owner authority before any
+commit, push, PR, or merge. Do not begin V0-2 or any identity, credential,
+gateway, provider, transport, IPC, persistence, tool, or external work."
 
 The owner-approved documentation-only
 [`ci-classification-engineering-guide-reconciliation`](docs/increments/ci-classification-engineering-guide-reconciliation.md)
