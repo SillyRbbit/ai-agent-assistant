@@ -1,6 +1,6 @@
 # Native multi-agent final architecture and security review ExecPlan
 
-Status: Ready with advisories; separate owner approval required before review
+Status: Verified complete with advisories
 Increment: `native-multi-agent-final-review`
 Owner: Project owner
 Last updated: 2026-08-28
@@ -110,3 +110,13 @@ an inverse patch. After publication, use a documentation-only revert PR; never
 reset, rebase, or rewrite historical evidence. The final review requires
 separate explicit owner approval after this plan is published. Any later
 remediation requires its own bounded plan and approval.
+
+## Final results
+
+Reviewed source-current `origin/main` at
+`181f85162e2b6bfb00c17dfdb7925eab2b92f3b9`. `PASS WITH ADVISORIES`: no
+Critical, High, Medium, or Low current architecture/security finding was found.
+F-01/F-02, F-07, F-08, F-12, and F-15 have current bounded evidence; the
+2026-08-26 findings remain historical. The only advisories are intentionally
+not-run target-Mac/rendered review checks and the Deferred/Blocked opt-in Hermes
+probe. Completion adds no remediation authority.

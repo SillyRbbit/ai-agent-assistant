@@ -8,13 +8,13 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 The owner-approved documentation-only
 [`native-multi-agent-final-review-planning`](docs/increments/native-multi-agent-final-review-planning.md)
-is verified complete with advisories. It prepares the exact read-only
-[`final architecture and security review ExecPlan`](docs/plans/2026-08-11-native-multi-agent-security-architecture-review.md)
-from the complete bounded native-phase evidence. It does not perform the
-review, change source, or authorize remediation. The final review is prepared
-as **Ready with advisories**, but it must not start until the owner separately
-approves that exact review scope. Its documentation-tier verification and
-completion marker are complete and valid.
+and the separately approved read-only
+[`native-multi-agent-final-review`](docs/increments/native-multi-agent-final-review.md)
+are verified complete with advisories. The source-current final review at
+`181f851` found no Critical, High, Medium, or Low current defect and confirms
+the completed F-01/F-02, F-07, F-08, F-12, and F-15 boundaries without
+rewriting historical evidence. It authorizes no remediation or source work.
+No next source increment is owner-selected or **Ready**.
 
 The owner-approved
 [`research-knowledge-demo-connected-presentation`](docs/increments/research-knowledge-demo-connected-presentation.md)
@@ -37,7 +37,7 @@ job.
 
 The published simulated lifecycle is not authority for general agent UI,
 runtime, provider, tool, approval, persistence, filesystem, network, or device
-work. The prepared review is read-only and does not change that boundary.
+work. The completed review is read-only and does not change that boundary.
 
 ## Prior verified prerequisites
 

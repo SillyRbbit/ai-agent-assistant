@@ -5,30 +5,29 @@ Last updated: 2026-08-28
 ## Current verified increment
 
 The owner-approved documentation-only
-[`native-multi-agent-final-review-planning`](docs/increments/native-multi-agent-final-review-planning.md)
-is verified complete with advisories on
-`codex/native-multi-agent-final-review-planning` from
-source-current `origin/main` `e3064f5`. It prepares an exact, read-only
-[`native multi-agent final architecture and security review ExecPlan`](docs/plans/2026-08-11-native-multi-agent-security-architecture-review.md)
-from source-current completed phase evidence. The review itself has not begun,
-does not authorize remediation or source work, and requires separate explicit
-owner approval after this planning increment. Preserve the distinction
-between current completion evidence for F-01/F-02, F-07, F-08, F-12, and F-15
-and the immutable 2026-08-26 historical review.
+[`native-multi-agent-final-review`](docs/increments/native-multi-agent-final-review.md)
+is verified complete with advisories on `codex/native-multi-agent-final-review`
+from source-current `origin/main` `181f851`. Its read-only
+[`architecture and security review`](docs/reviews/2026-08-28-native-multi-agent-final-architecture-security-review.md)
+found no Critical, High, Medium, or Low current defect. It confirms F-01/F-02,
+F-07, F-08, F-12, and F-15 have current bounded evidence; the 2026-08-26
+findings remain immutable historical evidence.
 
-The resulting review must label every conclusion Current, Mocked, Planned, or
-Prohibited and retain D-093's separate checkpoint-denial and manual-dispatch
-branches. It must treat the sealed Research -> Knowledge lifecycle panel,
+The resulting review labels every conclusion Current, Mocked, Planned, or
+Prohibited and retains D-093's separate checkpoint-denial and manual-dispatch
+branches. It treats the sealed Research -> Knowledge lifecycle panel,
 Command Center fixtures, Conversations mock, and Rust acceptance workflows as
 separate deterministic proofs; none grants general agent UI or external
 authority.
 
 Closeout is `PASS WITH ADVISORIES` in
-[`2026-08-28-native-multi-agent-final-review-planning-post-increment-review.md`](docs/reviews/2026-08-28-native-multi-agent-final-review-planning-post-increment-review.md).
-Documentation formatting/link, repository-health, security scan,
-protected-path, session-end, and diff checks pass. No target-Mac, rendered,
-source/test/build, or GitHub Actions check was required or run because this
-increment changes documentation only.
+[`2026-08-28-native-multi-agent-final-review-post-increment-review.md`](docs/reviews/2026-08-28-native-multi-agent-final-review-post-increment-review.md).
+Acceptance, frontend, TypeScript, complete verification, zero-finding npm
+audit, documentation/repository/security scans, protected-path, session-end,
+and diff checks pass. Target-Mac/rendered review checks are `Not run`; the
+Deferred/Blocked opt-in real Hermes executable probe remains intentionally
+ignored. The exact merged-main Documentation workflow for `181f851` passed;
+Application CI was not triggered for its documentation-only change.
 
 The owner-approved
 [`research-knowledge-demo-connected-presentation`](docs/increments/research-knowledge-demo-connected-presentation.md)
@@ -76,11 +75,10 @@ Closeout is `PASS WITH ADVISORIES` in
 [`2026-08-28-research-knowledge-demo-connected-presentation-post-increment-review.md`](docs/reviews/2026-08-28-research-knowledge-demo-connected-presentation-post-increment-review.md).
 
 Exact next prompt: Read `AGENTS.md`, the complete project-memory chain, the
-final-review planning increment and ExecPlan, and its post-increment report.
-Confirm its marker remains valid. The planned read-only final review is Ready
-with advisories but may not begin without separate explicit owner approval. Do
-not implement or remediate UI, IPC, provider, runtime, tool, persistence, or
-other source work.
+final native multi-agent review and its post-increment report. Confirm its
+marker remains valid. No next source or remediation increment is owner-selected
+or Ready. Do not implement or remediate UI, IPC, provider, runtime, tool,
+persistence, or other source work without a separately approved plan.
 
 ## Prior verified prerequisite history
 
