@@ -4,6 +4,25 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Implemented the owner-approved volatile Research -> Knowledge lifecycle core
+  without adding IPC or UI: one no-input Rust host manually drives the sealed
+  D-086 workflow through `NativeAgentRuntime`, exposes only closed bounded
+  content-free snapshots/transitions, and deterministically proves success,
+  failure, stage cancellation, late-step rejection, returned-identity
+  quarantine, cleanup retry, and process-wide replacement blocking after a
+  destructor cleanup failure. Complete verification passes; no agent internals,
+  Tauri/frontend/configuration, dependency, provider, network, tool, storage,
+  background, or device-effect surface changed.
+
+- Planned the next bounded Research -> Knowledge demo prerequisite without
+  changing runtime behavior: a manually stepped, process-local Rust lifecycle
+  host around the existing sealed D-086 workflow and `NativeAgentRuntime`. The
+  ready-with-advisories ExecPlan retains application-owned identities,
+  synthetic fixtures, cancellation, late-event rejection, and rejected-run
+  cleanup; it deliberately defers Tauri commands/events, React, timers/workers,
+  background autonomy, providers, effects, and all other external boundaries.
+  Separate owner source approval remains required.
+
 - Implemented the first bounded Rust-to-WebView Research -> Knowledge demo
   boundary: one argument-free query returns an exact finite application-owned
   synthetic projection, and only the selected Command Center scenario can

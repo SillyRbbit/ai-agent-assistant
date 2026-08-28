@@ -8,6 +8,7 @@ mod error;
 pub mod memory;
 pub mod menu_bar;
 pub mod policy;
+mod research_knowledge_demo_lifecycle;
 mod research_knowledge_demo_projection;
 mod startup;
 pub mod storage;
@@ -15,6 +16,12 @@ pub mod tools;
 
 pub use app_info::{current_app_info, AppInfo};
 pub use error::AppError;
+pub use research_knowledge_demo_lifecycle::{
+    ResearchKnowledgeDemoHost, ResearchKnowledgeDemoLifecycleEntry,
+    ResearchKnowledgeDemoLifecycleError, ResearchKnowledgeDemoLifecycleEventKind,
+    ResearchKnowledgeDemoLifecycleSnapshot, ResearchKnowledgeDemoLifecycleState,
+    ResearchKnowledgeDemoLifecycleTransition,
+};
 pub use research_knowledge_demo_projection::{
     current_research_knowledge_demo_projection, ResearchKnowledgeDemoProjection,
     ResearchKnowledgeDemoProjectionError,

@@ -66,7 +66,9 @@ flowchart TD
 ```
 
 The React mock loop and the transport-free Rust gateway turn are not wired to
-each other.
+each other. A separate Rust-only `ResearchKnowledgeDemoHost` manually drives
+one application-owned sealed D-086 fixture through `NativeAgentRuntime`; it has
+no edge to React or Tauri IPC.
 
 ## React presentation layer
 
@@ -133,6 +135,25 @@ or agent-control IPC exists.
 
 `src-tauri/src/lib.rs` assembles current startup and Tauri behavior. The trusted
 modules are intentionally transport-free where runtime coordination is absent.
+
+### Volatile Research/Knowledge demo lifecycle
+
+**Current, unwired**: `research_knowledge_demo_lifecycle` owns one manually
+stepped, process-local D-086 workflow. Its public Rust-only host accepts no
+caller data: production fixes the runtime, objective, sources, script,
+identities, and envelopes. `start`, `advance`, and `cancel` project only a
+versioned content-free lifecycle snapshot/transition with a Rust-issued epoch,
+monotonic revision, and eight-entry cap. Internal task/run/request/context,
+fixture content, results, and raw errors never cross the contract.
+
+The host retains the orchestrator through cancellation and rejected-run cleanup.
+An active cleanup failure blocks restart and is retried only by no-argument
+`cancel`. If Drop-time cleanup persistently fails, the owner is retained until
+process exit and a private process-wide atomic sentinel blocks replacement
+`start`, `advance`, and `cancel`. This sentinel is fail-closed only; it is not a
+lock, scheduler, concurrency coordinator, or future Tauri state design. No
+Tauri command/event/state, React consumer, timer, thread, provider, tool,
+persistence, filesystem, or device effect exists.
 
 ### Initial gateway turn and protocol
 
@@ -1085,6 +1106,7 @@ reviewed repository ICNS byte-for-byte.
 | React workspace and navigation                | Current                        | Frontend tests and application source                          |
 | Deterministic Command Center projection       | Current, validated fixture UI  | Frontend fixtures/tests plus passed browser/Tauri M5 matrix    |
 | Synthetic Rust demo projection                | Current, read-only/descriptive | Exact no-argument command, closed DTO, and static F-12 guard   |
+| Synthetic Rust demo lifecycle core            | Current, unwired/manual        | No-input Rust contract; sealed D-086 and Native runtime only   |
 | Assistant interaction                         | Mocked                         | Deterministic in-memory driver only                            |
 | App info and menu routing                     | Current                        | Narrow Tauri command/event                                     |
 | SQLite bootstrap metadata                     | Current                        | Storage tests and startup integration                          |

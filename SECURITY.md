@@ -75,6 +75,20 @@ persistence, filesystem, background, audit, or device effect. Its volatile data
 is persistently labeled `DEMO MODE · SIMULATED AGENT DATA` and remains separate
 from both the frontend Command Center fixtures and Rust acceptance workflows.
 
+The separately implemented `ResearchKnowledgeDemoHost` remains Rust-only and
+unwired. Its public production constructor and no-argument lifecycle methods
+cannot accept an agent, task, root, run, request, profile, runtime, workflow,
+objective, source, fixture, script, outcome, or runtime event. Every run still
+passes through the orchestrator's exact returned-identity and duplicate-live
+identity validation. Cleanup-pending state retains the orchestrator and blocks
+replacement; persistent Drop-time cleanup failure retains the owner until
+process exit and sets a private process-wide sentinel that denies all later
+mutating lifecycle operations. That sentinel is not synchronization or
+authorization for future IPC. Snapshots and errors are finite, bounded, and
+content-free. No Tauri command/event/state, provider, model, network,
+credential, tool, approval dispatch, persistence, filesystem, thread, timer,
+background work, or device effect was added.
+
 The owner approved exact `@xyflow/react@12.11.3` and
 `lucide-react@1.33.0` after direct/transitive, license, peer, bundle, and
 security review. Their lockfile consequence is 19 reviewed transitives. At that
