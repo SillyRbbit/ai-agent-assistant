@@ -4,6 +4,14 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Completed the owner-approved documentation-only plan for the smallest
+  connected Research -> Knowledge lifecycle presentation with advisories. It
+  reconciles the current success-only production host with private deterministic
+  failure evidence and proposes no-input, application-owned scheduling for a
+  future simulation-only UI. No product source, configuration, dependency,
+  capability, CSP, provider, network, credential, persistence, filesystem,
+  background work, or device effect changed.
+
 - Implemented and verified the owner-approved narrow Research -> Knowledge
   lifecycle Tauri boundary. One application-owned
   mutex-held volatile host backs four no-caller-input commands and one bounded

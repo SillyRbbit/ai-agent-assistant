@@ -62,9 +62,13 @@ four no-caller-input commands, one notification-only event, the unconnected
 runtime-narrowed client, and atomic F-12 guards pass focused and complete
 verification. Target-Mac startup and visual no-permission-prompt inspection
 pass; direct observation of the deliberately unconnected lifecycle event is
-`Not run`. No connected Command Center presentation plan is Ready. The next
-task is Blocked pending a separately owner-approved planning increment that
-must reconcile the still fixture-only failure proof before any UI connection.
+`Not run`. The owner-approved documentation-only
+[`connected-presentation planning increment`](docs/increments/research-knowledge-demo-connected-presentation-planning.md)
+is verified complete with advisories. Its resulting
+[`connected-presentation ExecPlan`](docs/plans/2026-08-28-research-knowledge-demo-connected-presentation.md)
+is Ready with advisories for only the bounded source slice. Source
+implementation remains unauthorized until the owner explicitly approves that
+plan and opens a fresh gate.
 
 ## Current published checkpoint
 

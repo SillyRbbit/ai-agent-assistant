@@ -5,6 +5,14 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Current plan state
 
 The owner-approved documentation-only
+[`2026-08-28-research-knowledge-demo-connected-presentation.md`](docs/plans/2026-08-28-research-knowledge-demo-connected-presentation.md)
+is verified complete with advisories. It reconciles the current success-only
+production lifecycle host with private fixture-only failure proof and defines a
+proposed application-owned alternating terminal schedule for a future no-input
+Command Center connection. The resulting source plan is Ready with advisories,
+but source work still requires explicit owner approval and a fresh gate.
+
+The owner-approved documentation-only
 [`2026-08-28-research-knowledge-demo-lifecycle-tauri-adapter.md`](docs/plans/2026-08-28-research-knowledge-demo-lifecycle-tauri-adapter.md)
 is **verified complete with advisories** after the owner approved
 the narrowly scoped private approval-clock Send prerequisite. One mutex-owned

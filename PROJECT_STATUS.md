@@ -4,6 +4,14 @@ Last updated: 2026-08-28
 
 ## Current verified prerequisite
 
+The owner-approved documentation-only
+[`research-knowledge-demo-connected-presentation-planning`](docs/increments/research-knowledge-demo-connected-presentation-planning.md)
+is verified complete with advisories. It added no source behavior. Its sole
+purpose was to reconcile the current production success-only lifecycle host
+with private fixture-only synthesis-failure coverage and define whether a
+future UI can show a
+deterministic failure without caller-selected trusted outcome.
+
 The owner-approved
 [`research-knowledge-demo-volatile-lifecycle-core`](docs/increments/research-knowledge-demo-volatile-lifecycle-core.md)
 is verified complete with advisories and published on `main` at `68de8a5`. One
