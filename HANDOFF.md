@@ -4,6 +4,48 @@ Last updated: 2026-08-28
 
 ## Current verified increment
 
+The owner-approved
+[`risk-based-ci-trust-boundary-classification`](docs/increments/risk-based-ci-trust-boundary-classification.md)
+repository-workflow increment is verified complete with advisories from clean,
+synchronized `main` `3fc14e4f17bb171957dc09241a868f3c6deb7cb1`. Its
+[`living plan`](docs/plans/2026-08-28-risk-based-ci-trust-boundary-classification.md)
+changes only the risk-based classifier, its regression tests, the testing
+guide, and required closeout memory/review records.
+
+At baseline, all eight owner-supplied paths returned
+`frontend=false rust=true audit=false`. The complete inventory found 65 Rust
+files under `src-tauri/src` and two under `src-tauri/examples`: 54 already
+selected all three jobs and 13 were under-classified. The final classifier
+routes all 67 current paths plus synthetic future production and example paths
+to frontend, Rust, and audit. `src-tauri/tests/**` remains Rust-only. The
+production exception allowlist is empty and rejects globs, directories,
+examples, tests, and non-Rust paths; only an exact normalized
+`src-tauri/src/*.rs` file could be deliberately reviewed later.
+
+Focused classifier tests pass 21/21 and repository tests pass 80/80. Complete
+`npm run verify` passes with 28 hook tests, 80 repository tests, 313 frontend
+tests, 269 Rust library tests, 244 Rust integration tests, one intentional
+ignored opt-in Hermes executable probe, the production frontend build, and the
+Tauri release no-bundle build. Documentation, repository, secret, session-end,
+and diff checks pass; the authorized npm audit retry reports zero
+vulnerabilities. No product source, dependency, lockfile, capability, CSP,
+permission, workflow, runner, credential, IPC, provider, persistence, or tool
+surface changed. Target-Mac UI checks and remote GitHub Actions are `Not run`.
+
+Independent architecture, security, code, and documentation review found no
+blocking defect. One broader sentence in `ENGINEERING_GUIDE.md` still groups
+examples with isolated Rust tests; that file is outside this increment's
+owner-authorized file list, so the discrepancy remains a non-blocking
+documentation advisory. Closeout is `PASS WITH ADVISORIES` in
+[`2026-08-28-risk-based-ci-trust-boundary-classification-post-increment-review.md`](docs/reviews/2026-08-28-risk-based-ci-trust-boundary-classification-post-increment-review.md).
+
+Exact next prompt: Read `AGENTS.md`, the complete project-memory chain, this
+increment's plan and post-increment review, and confirm its marker remains
+valid. No next source or remediation increment is owner-selected or Ready. Do
+not begin credential, filesystem, document, memory, Tauri IPC, provider,
+persistence, tool, publication, or other work without a separately approved
+bounded increment.
+
 The owner-approved documentation-only
 [`native-multi-agent-final-review`](docs/increments/native-multi-agent-final-review.md)
 is verified complete with advisories on `codex/native-multi-agent-final-review`
@@ -82,7 +124,7 @@ target-Mac Rust, frontend, and Linux Rust validation.
 Closeout is `PASS WITH ADVISORIES` in
 [`2026-08-28-research-knowledge-demo-connected-presentation-post-increment-review.md`](docs/reviews/2026-08-28-research-knowledge-demo-connected-presentation-post-increment-review.md).
 
-Exact next prompt: Read `AGENTS.md`, the complete project-memory chain, the
+Historical next prompt at that checkpoint: Read `AGENTS.md`, the complete project-memory chain, the
 published final native multi-agent review and its post-increment report. Confirm
 its marker remains valid. No next source or remediation increment is
 owner-selected or Ready. Do not implement or remediate UI, IPC, provider,

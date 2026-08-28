@@ -4,6 +4,20 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
+The owner-selected
+[`risk-based CI trust-boundary classification`](docs/plans/2026-08-28-risk-based-ci-trust-boundary-classification.md)
+increment is verified complete with advisories from synchronized `main`
+`3fc14e4`. It closes only the
+classifier gap that routes credential, document, memory, menu-bar, sealed-demo
+boundary, and native trust-boundary example changes to Rust alone. The plan
+makes production Rust fail closed to frontend, Rust, and audit jobs, retains a
+narrow exact-path exception mechanism with no current production exception,
+and preserves existing narrow path/event classes. It changes no product source,
+workflow YAML, runner, dependency, capability, CSP, permission, credential,
+persistence, IPC implementation, provider, tool, or external state. One stale
+high-level `ENGINEERING_GUIDE.md` sentence is recorded as an out-of-scope
+documentation advisory; no next increment is owner-selected or Ready.
+
 The owner-approved documentation-only
 [`native-multi-agent-final-review-planning`](docs/increments/native-multi-agent-final-review-planning.md)
 and the separately approved

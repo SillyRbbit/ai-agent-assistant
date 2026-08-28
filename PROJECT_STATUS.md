@@ -4,6 +4,30 @@ Last updated: 2026-08-28
 
 ## Current verified increment
 
+The owner-approved
+[`risk-based-ci-trust-boundary-classification`](docs/increments/risk-based-ci-trust-boundary-classification.md)
+increment is verified complete with advisories from synchronized `main`
+`3fc14e4f17bb171957dc09241a868f3c6deb7cb1`. Baseline reproduction found
+13 under-classified paths in the complete 65-source-file plus two-example Rust
+inventory, including every owner-supplied credential, document, memory,
+Research/Knowledge demo, menu adapter, and native-example path.
+
+All 67 current production/example Rust files and synthetic future paths now
+select frontend, Rust, and audit. The production Rust-only exception allowlist
+is empty and exact-source-only; isolated `src-tauri/tests/**`, documentation,
+frontend, audit-only, schedule, manual dispatch, deletion, unknown, and unsafe
+behavior remains exact. Focused tests pass 21/21, repository tests pass 80/80,
+complete verification and builds pass, and npm audit reports zero
+vulnerabilities. Target-Mac UI and remote Actions are `Not run` because product
+behavior is unchanged and this work is unpublished.
+
+No product, dependency, lockfile, capability, CSP, permission, workflow,
+runner, credential, IPC, provider, persistence, filesystem, or tool behavior
+changed. Independent review found no blocking defect. A stale broad sentence
+in `ENGINEERING_GUIDE.md` remains a documentation advisory because that file is
+outside the owner-authorized change list. Overall result: `PASS WITH
+ADVISORIES`. No next source or remediation increment is selected or Ready.
+
 The owner-approved documentation-only
 [`native-multi-agent-final-review`](docs/increments/native-multi-agent-final-review.md)
 is verified complete with advisories. Its source-current read-only review at

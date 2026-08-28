@@ -187,6 +187,16 @@ security-sensitive Rust, dependency, CI-workflow, deletion, unknown-path,
 scheduled-audit, and manual-dispatch behavior. Unknown non-documentation paths
 run both application jobs instead of being silently skipped.
 
+Every current production Rust path under `src-tauri/src/**` and native or
+trust-boundary example under `src-tauri/examples/**` selects frontend, Rust,
+and dependency/security audit jobs. This is the fail-closed default for future
+files in either tree. `src-tauri/tests/**` remains the isolated Rust-only test
+family. The production Rust exception allowlist is intentionally empty; any
+future exception requires a separately reviewed exact `src-tauri/src/*.rs`
+file path, focused regression coverage, and synchronized documentation.
+Examples and tests are not exception-eligible; wildcard and directory
+exceptions are rejected.
+
 After publication, inspect actual GitHub runs before claiming either registered
 runner passed. Linux Rust validation preserves portability; target-Mac Rust
 validation compiles and tests macOS-gated code but never replaces native menus,
@@ -348,7 +358,8 @@ tested examples, or another explicit policy requires them.
 | ---------------------------------------------------------- | ------------- | ------------- | ------------- | ---------------- |
 | Markdown, prompts, project memory, or governance only      | Yes           | No            | No            | No               |
 | React, TypeScript, CSS, brand assets, Vite, Vitest, ESLint | When mixed    | Yes           | No            | No               |
-| Rust tests, examples, or target-neutral isolated Rust      | When mixed    | No            | Yes           | No               |
+| Rust tests or deliberately allowlisted isolated Rust       | When mixed    | No            | Yes           | No               |
+| Production Rust or native/trust-boundary examples          | When mixed    | Yes           | Yes           | Yes              |
 | Tauri, IPC, policy, approval, storage, migration, security | When mixed    | Yes           | Yes           | Yes              |
 | JavaScript, Rust, or action dependency metadata            | When mixed    | Yes           | Yes           | Yes              |
 | CI workflow or executable CI-validation script             | When mixed    | Yes           | Yes           | Yes              |

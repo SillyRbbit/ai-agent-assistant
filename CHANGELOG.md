@@ -4,6 +4,19 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Closed the risk-based CI trust-boundary classification gap without changing
+  product or workflow behavior. All current and future production Rust source
+  and native-example paths now select frontend, Rust, and audit jobs by
+  default; the production Rust-only exception allowlist is empty and accepts
+  only exact reviewed source files. Table-driven tests cover every affected
+  family, the complete 67-file current inventory, future fail-closed paths,
+  preserved narrow classes, events, deletions, and unsafe paths. Focused,
+  repository, security, documentation, audit, complete verification, and
+  completion gates pass. Target-Mac UI and remote Actions are `Not run`; no
+  product source, dependency, lockfile, capability, CSP, permission, workflow,
+  runner, credential, IPC, provider, persistence, filesystem, or tool surface
+  changed.
+
 - Reconciled publication of the completed native multi-agent final review:
   [PR #74](https://github.com/SillyRbbit/ai-agent-assistant/pull/74) squash-
   merged `2572769` to `main` at `d3edc7a`, and its PR and merged-main
