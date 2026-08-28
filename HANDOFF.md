@@ -4,6 +4,21 @@ Last updated: 2026-08-28
 
 ## Current verified increment
 
+The owner-approved documentation-only
+[`ci-classification-engineering-guide-reconciliation`](docs/increments/ci-classification-engineering-guide-reconciliation.md)
+increment is verified complete with advisories from clean synchronized `main`
+`7390ea6`. It corrects one
+stale high-level `ENGINEERING_GUIDE.md` sentence so that production/native
+examples are no longer described as isolated Rust tests. It also records the
+observed publication evidence for the completed classifier increment. No
+product, classifier, workflow, dependency, capability, CSP, permission,
+credential, IPC, provider, persistence, filesystem, or tool behavior may
+change. Documentation, repository, secret, whitespace, session-end, and marker
+checks pass; target-Mac UI checks are `Not run`. Exact next prompt: Read
+`AGENTS.md`, the complete project-memory chain, this increment's plan and
+review, and confirm its marker remains valid. No next source or remediation
+increment is owner-selected or Ready.
+
 The owner-approved
 [`risk-based-ci-trust-boundary-classification`](docs/increments/risk-based-ci-trust-boundary-classification.md)
 repository-workflow increment is verified complete with advisories from clean,
@@ -30,13 +45,16 @@ Tauri release no-bundle build. Documentation, repository, secret, session-end,
 and diff checks pass; the authorized npm audit retry reports zero
 vulnerabilities. No product source, dependency, lockfile, capability, CSP,
 permission, workflow, runner, credential, IPC, provider, persistence, or tool
-surface changed. Target-Mac UI checks and remote GitHub Actions are `Not run`.
+surface changed. Target-Mac UI checks are `Not run`. The completed increment
+was later published through [PR #76](https://github.com/SillyRbbit/ai-agent-assistant/pull/76):
+reviewed head `d322317` squash-merged to `main` at `7390ea6`. All six PR checks
+and merged-main CI run `33199321088` plus Documentation run `33199321090`
+passed.
 
 Independent architecture, security, code, and documentation review found no
-blocking defect. One broader sentence in `ENGINEERING_GUIDE.md` still groups
-examples with isolated Rust tests; that file is outside this increment's
-owner-authorized file list, so the discrepancy remains a non-blocking
-documentation advisory. Closeout is `PASS WITH ADVISORIES` in
+blocking defect. The formerly stale high-level engineering-guide sentence is
+the separately approved documentation reconciliation recorded above. Closeout
+is `PASS WITH ADVISORIES` in
 [`2026-08-28-risk-based-ci-trust-boundary-classification-post-increment-review.md`](docs/reviews/2026-08-28-risk-based-ci-trust-boundary-classification-post-increment-review.md).
 
 Exact next prompt: Read `AGENTS.md`, the complete project-memory chain, this

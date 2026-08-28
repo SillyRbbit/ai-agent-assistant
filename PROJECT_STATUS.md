@@ -4,6 +4,18 @@ Last updated: 2026-08-28
 
 ## Current verified increment
 
+The owner-approved documentation-only
+[`ci-classification-engineering-guide-reconciliation`](docs/increments/ci-classification-engineering-guide-reconciliation.md)
+increment is verified complete with advisories from clean synchronized `main`
+`7390ea6`. It corrects only
+the stale engineering-guide wording that grouped production native examples
+with isolated Rust tests and records current publication evidence for the
+completed classifier increment. No application, classifier, workflow, runner,
+dependency, capability, CSP, permission, credential, IPC, provider,
+persistence, filesystem, or tool behavior changes. Documentation, repository,
+secret, whitespace, session-end, and marker checks pass; target-Mac UI checks
+are `Not run`. No next source or remediation increment is selected or Ready.
+
 The owner-approved
 [`risk-based-ci-trust-boundary-classification`](docs/increments/risk-based-ci-trust-boundary-classification.md)
 increment is verified complete with advisories from synchronized `main`
@@ -18,15 +30,17 @@ is empty and exact-source-only; isolated `src-tauri/tests/**`, documentation,
 frontend, audit-only, schedule, manual dispatch, deletion, unknown, and unsafe
 behavior remains exact. Focused tests pass 21/21, repository tests pass 80/80,
 complete verification and builds pass, and npm audit reports zero
-vulnerabilities. Target-Mac UI and remote Actions are `Not run` because product
-behavior is unchanged and this work is unpublished.
+vulnerabilities. Target-Mac UI is `Not run` because product behavior is
+unchanged. PR #76 squash-merged reviewed head `d322317` to `main` at
+`7390ea6`; its six PR checks and merged-main CI `33199321088` and Documentation
+`33199321090` runs passed.
 
 No product, dependency, lockfile, capability, CSP, permission, workflow,
 runner, credential, IPC, provider, persistence, filesystem, or tool behavior
-changed. Independent review found no blocking defect. A stale broad sentence
-in `ENGINEERING_GUIDE.md` remains a documentation advisory because that file is
-outside the owner-authorized change list. Overall result: `PASS WITH
-ADVISORIES`. No next source or remediation increment is selected or Ready.
+changed. Independent review found no blocking defect. The previously stale
+engineering-guide wording is the active documentation-only reconciliation
+above. Overall result: `PASS WITH ADVISORIES`. No next source or remediation
+increment is selected or Ready.
 
 The owner-approved documentation-only
 [`native-multi-agent-final-review`](docs/increments/native-multi-agent-final-review.md)

@@ -286,7 +286,8 @@ not replace the final local increment gate or target-platform evidence.
 - `.github/workflows/ci.yml` uses `scripts/ci_change_scope.py` to select
   frontend, Rust, and dependency-audit jobs from fixed Git comparisons.
 - Documentation-only paths do not start application CI. Frontend-only and Rust
-  test/example paths remain isolated. IPC, Tauri, policy, approval, storage,
+  test paths remain isolated. Production Rust source and native-example paths
+  select every affected application job. IPC, Tauri, policy, approval, storage,
   migration, dependency, security, CI-workflow, and executable validation
   paths select every affected application job.
 - Scheduled CI runs only the dependency audit. Manual CI dispatch runs all
