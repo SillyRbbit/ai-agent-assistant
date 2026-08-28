@@ -17,6 +17,13 @@ findings as current. The lifecycle panel, Command Center fixtures,
 Conversations mock, and Rust acceptance workflows remain separate deterministic
 proofs and do not grant general agent authority or external effects.
 
+The final review documentation is published through
+[PR #74](https://github.com/SillyRbbit/ai-agent-assistant/pull/74): exact
+reviewed head `2572769` squash-merged at `d3edc7a`. PR Documentation run
+`33182872135` and merged-main Documentation run `33182937577` passed;
+Application CI was not triggered because the publication changes documentation
+only. The final-review marker remains complete and valid.
+
 The owner-approved
 [`research-knowledge-demo-connected-presentation`](docs/increments/research-knowledge-demo-connected-presentation.md)
 is verified complete with advisories and published on `main` through

@@ -15,6 +15,10 @@ are verified complete with advisories. The source-current final review at
 the completed F-01/F-02, F-07, F-08, F-12, and F-15 boundaries without
 rewriting historical evidence. It authorizes no remediation or source work.
 No next source increment is owner-selected or **Ready**.
+Its publication is reconciled through [PR #74](https://github.com/SillyRbbit/ai-agent-assistant/pull/74):
+`2572769` squash-merged to `main` at `d3edc7a`, and both the PR Documentation
+run `33182872135` and merged-main Documentation run `33182937577` passed.
+Application CI was not triggered for the documentation-only publication.
 
 The owner-approved
 [`research-knowledge-demo-connected-presentation`](docs/increments/research-knowledge-demo-connected-presentation.md)

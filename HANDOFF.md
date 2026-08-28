@@ -29,6 +29,14 @@ Deferred/Blocked opt-in real Hermes executable probe remains intentionally
 ignored. The exact merged-main Documentation workflow for `181f851` passed;
 Application CI was not triggered for its documentation-only change.
 
+The final review documentation is published through
+[PR #74](https://github.com/SillyRbbit/ai-agent-assistant/pull/74): reviewed
+branch head `2572769` squash-merged to `main` at
+`d3edc7a5be5b008aa109ce2351488350d02be0e2`. PR Documentation run
+`33182872135` and merged-main Documentation run `33182937577` passed. No
+Application CI run was expected or triggered for this documentation-only
+publication. The completion marker remains complete and valid.
+
 The owner-approved
 [`research-knowledge-demo-connected-presentation`](docs/increments/research-knowledge-demo-connected-presentation.md)
 is published on `main` through [PR #71](https://github.com/SillyRbbit/ai-agent-assistant/pull/71).
@@ -75,10 +83,11 @@ Closeout is `PASS WITH ADVISORIES` in
 [`2026-08-28-research-knowledge-demo-connected-presentation-post-increment-review.md`](docs/reviews/2026-08-28-research-knowledge-demo-connected-presentation-post-increment-review.md).
 
 Exact next prompt: Read `AGENTS.md`, the complete project-memory chain, the
-final native multi-agent review and its post-increment report. Confirm its
-marker remains valid. No next source or remediation increment is owner-selected
-or Ready. Do not implement or remediate UI, IPC, provider, runtime, tool,
-persistence, or other source work without a separately approved plan.
+published final native multi-agent review and its post-increment report. Confirm
+its marker remains valid. No next source or remediation increment is
+owner-selected or Ready. Do not implement or remediate UI, IPC, provider,
+runtime, tool, persistence, or other source work without a separately approved
+plan.
 
 ## Prior verified prerequisite history
 

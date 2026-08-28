@@ -175,6 +175,9 @@ and separately approved read-only
 [`native-multi-agent-final-review`](docs/increments/native-multi-agent-final-review.md)
 complete the source-current architecture/security review at `181f851`. Its
 advisories do not authorize source work or remediation.
+The review documentation is published through
+[PR #74](https://github.com/SillyRbbit/ai-agent-assistant/pull/74) at `main`
+commit `d3edc7a`; both Documentation workflow runs passed.
 
 The completed owner-selected overlay
 [`PR #57 transitive advisory remediation`](docs/plans/2026-08-25-pr57-transitive-advisory-remediation.md)
