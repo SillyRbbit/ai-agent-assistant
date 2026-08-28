@@ -1,12 +1,12 @@
 # Project status
 
-Last updated: 2026-08-27
+Last updated: 2026-08-28
 
 ## Current verified prerequisite
 
 The owner-approved
 [`research-knowledge-demo-volatile-lifecycle-core`](docs/increments/research-knowledge-demo-volatile-lifecycle-core.md)
-is verified complete with advisories in the current uncommitted workspace. One
+is verified complete with advisories and published on `main` at `68de8a5`. One
 no-input, manually stepped Rust host drives the sealed D-086 Research ->
 Knowledge fixture through `NativeAgentRuntime`; closed content-free snapshots,
 transitions, errors, and an eight-entry journal project only lifecycle state.
@@ -21,8 +21,30 @@ one intentional ignored Hermes probe, the production frontend build, and the
 Tauri release no-bundle build. No `agent/**`, IPC, frontend, configuration,
 dependency, provider, model, network, tool, persistence, filesystem,
 background, or device-effect surface changed. Rendered and IPC checks are `Not
-run` because the core is deliberately unwired. No later Tauri adapter or
-connected presentation plan is Ready or authorized.
+run` because the core is deliberately unwired.
+
+The documentation-only
+[`lifecycle Tauri adapter ExecPlan`](docs/plans/2026-08-28-research-knowledge-demo-lifecycle-tauri-adapter.md)
+is verified complete with advisories. The owner approved the
+private approval-clock Send prerequisite, and the deterministic test clock now
+uses `Arc<Mutex<Instant>>` without changing public approval behavior. One
+mutex-owned volatile host backs four no-caller-input commands and one
+notification-only snapshot event. The initially unconnected client accepts only
+the exact frozen DTO, rejects concurrent/stale/gapped data, and recovers only
+through an explicit snapshot request. Focused evidence passes 7 approval tests,
+9 lifecycle-core tests, 5 adapter tests, 1 public contract, 30 client tests,
+strict typecheck/lint, and 61 repository/F-12 tests. Complete `npm run verify`
+passes with 28 hook tests, 61 repository tests, 277 frontend tests, 267 Rust
+library tests, 244 Rust integration tests, one intentional ignored Hermes probe,
+the production frontend build, and the Tauri release no-bundle build.
+
+The earlier
+[`FAIL` report](docs/reviews/2026-08-28-research-knowledge-demo-lifecycle-tauri-adapter-blocked-post-increment-review.md)
+remains historical evidence of the pre-approval blocker. Target-Mac development
+startup and visual no-permission-prompt inspection pass. Direct observation of
+the deliberately unconnected lifecycle commands/event is `Not run`. The final
+result is `PASS WITH ADVISORIES`; React/UI connection and capability/CSP/
+dependency changes remain outside this increment.
 
 The owner-approved
 [`research-knowledge-demo-projection-contract`](docs/plans/2026-08-27-research-knowledge-demo-projection-contract.md)

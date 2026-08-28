@@ -1,11 +1,11 @@
 # Handoff
 
-Last updated: 2026-08-27
+Last updated: 2026-08-28
 
 ## Current verified prerequisite
 
 `research-knowledge-demo-volatile-lifecycle-core` is verified complete with
-advisories in the current uncommitted workspace. One no-input, manually
+advisories and published on `main` at `68de8a5`. One no-input, manually
 stepped Rust host drives only the sealed D-086 Research -> Knowledge fixture
 through `NativeAgentRuntime`. It projects a closed content-free v1 snapshot,
 Rust-owned epoch/revision, and an eight-entry journal; deterministic unit and
@@ -60,8 +60,19 @@ not alter that historical projection evidence.
 [`2026-08-27-research-knowledge-demo-volatile-lifecycle-core.md`](docs/plans/2026-08-27-research-knowledge-demo-volatile-lifecycle-core.md)
 is the completed living source plan. Its exact evidence is summarized in the
 [`implementation increment`](docs/increments/research-knowledge-demo-volatile-lifecycle-core.md).
-No narrow Tauri lifecycle adapter or connected Command Center presentation
-plan is currently Ready or authorized.
+The separately documented
+[`lifecycle Tauri adapter ExecPlan`](docs/plans/2026-08-28-research-knowledge-demo-lifecycle-tauri-adapter.md)
+is verified complete with advisories. The owner approved the
+private approval-clock Send prerequisite, which now uses a Send-safe
+deterministic test clock without changing production approval semantics. One
+mutex-owned host, four no-caller-input commands, one notification-only event,
+an unconnected fail-closed client, and F-12 guards pass focused Rust, frontend,
+lint, typecheck, and repository tests. The earlier
+[`failure report`](docs/reviews/2026-08-28-research-knowledge-demo-lifecycle-tauri-adapter-blocked-post-increment-review.md)
+is retained as pre-approval history. Complete verification and target-Mac
+startup/no-permission-prompt inspection pass. Direct observation of the
+deliberately unconnected commands/event is `Not run`. The final result is `PASS
+WITH ADVISORIES`; no connected Command Center presentation plan is Ready.
 
 `app-info-runtime-ipc-narrowing-f08` remains verified complete with advisories
 and published on `main` at `5b462bc`; its exact fail-closed app-info contract is
@@ -143,15 +154,16 @@ PR #57 is closed and published. The later F-15, F-12, and F-01/F-02
 prerequisites supersede its no-next-plan statement without changing its
 historical evidence.
 
-Exact resume prompt: "Read `AGENTS.md`, the required project-memory chain, and
-`docs/plans/2026-08-27-research-knowledge-demo-volatile-lifecycle-core.md`.
-Confirm the `research-knowledge-demo-volatile-lifecycle-core` marker is complete
-and valid. Then review only whether a separate narrow Tauri lifecycle-adapter
-documentation plan is Ready; do not begin a gate or source implementation. Do
-not add lifecycle IPC/events, React connection, timers/workers, background
-autonomy, provider, model, network, credential, tool, approval dispatch,
-persistence, filesystem, dependency, permission, or device effect without a
-separately approved Ready plan."
+Exact resume prompt: "Read `AGENTS.md`, the required project-memory chain,
+`docs/plans/2026-08-28-research-knowledge-demo-lifecycle-tauri-adapter.md`, and
+`docs/increments/research-knowledge-demo-lifecycle-tauri-adapter.md`. Confirm
+the completion marker is complete and valid. Review the exact verified adapter
+boundary and wait for explicit owner approval before planning any connected
+presentation increment. That plan must reconcile the fixture-only failure proof
+without caller-selected trusted identity or outcome. Do not add a Command Center
+connection, timer/worker, background autonomy, provider, model, network,
+credential, tool, approval dispatch, persistence, filesystem, dependency,
+capability/CSP/permission change, or device effect."
 
 ## Prior verified native multi-agent demonstration checkpoint
 

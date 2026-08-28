@@ -2,6 +2,24 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-08-28 — Lifecycle host cannot enter Tauri managed state
+
+**Symptom:** Focused compilation of the approved lifecycle Tauri adapter failed
+before tests ran because `Mutex<ResearchKnowledgeDemoHost>` did not satisfy
+Tauri's `Send + Sync + 'static` managed-state bound.
+
+**Cause:** The host transitively owns the governance `InMemoryApprovalManager`,
+whose private `Box<dyn ApprovalClock>` is not `Send`. The production clock is
+Send-safe, but the private trait does not require `Send`, and its deterministic
+test clock uses `Rc<Cell<Instant>>`.
+
+**Resolution:** The owner approved the exact private prerequisite.
+`ApprovalClock` now requires `Send`; its deterministic test clock uses
+`Arc<Mutex<Instant>>`; compile-time assertions prove the approval manager and
+lifecycle host satisfy the required bounds. Approval-manager tests pass 7/7 and
+lifecycle-core tests pass 9/9 without a public approval or behavior change. No
+unsafe wrapper, thread-local host, worker, queue, or duplicate host was added.
+
 ## 2026-08-26 — Transient Cargo incremental-cache write during F-07 verification
 
 **Symptom:** One `npm run verify` attempt reached strict Clippy and failed to

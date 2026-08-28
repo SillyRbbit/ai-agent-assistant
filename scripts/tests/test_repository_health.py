@@ -89,10 +89,20 @@ def write_valid_ui_native_boundary(root: Path) -> None:
         / "tauri"
         / "research-knowledge-demo-projection-client.ts"
     )
+    lifecycle_client = (
+        root
+        / "src"
+        / "infrastructure"
+        / "tauri"
+        / "research-knowledge-demo-lifecycle-client.ts"
+    )
     command_center = root / "src" / "features" / "command-center" / "fixture.ts"
     lib = root / "src-tauri" / "src" / "lib.rs"
     projection_rust = (
         root / "src-tauri" / "src" / "research_knowledge_demo_projection.rs"
+    )
+    lifecycle_rust = (
+        root / "src-tauri" / "src" / "research_knowledge_demo_lifecycle_tauri.rs"
     )
     menu_action = root / "src-tauri" / "src" / "menu_bar" / "action.rs"
     menu_adapter = root / "src-tauri" / "src" / "menu_bar" / "tauri_adapter.rs"
@@ -118,11 +128,27 @@ def write_valid_ui_native_boundary(root: Path) -> None:
         'invoke<unknown>("get_research_knowledge_demo_projection");\n',
         encoding="utf-8",
     )
+    lifecycle_client.write_text(
+        'import { invoke } from "@tauri-apps/api/core";\n'
+        'import { listen, type UnlistenFn } from "@tauri-apps/api/event";\n'
+        'export const RESEARCH_KNOWLEDGE_DEMO_LIFECYCLE_EVENT = "research-knowledge-demo-lifecycle-v1" as const;\n'
+        'invoke<unknown>("get_research_knowledge_demo_lifecycle_snapshot");\n'
+        'invoke<unknown>("start_research_knowledge_demo_lifecycle");\n'
+        'invoke<unknown>("advance_research_knowledge_demo_lifecycle");\n'
+        'invoke<unknown>("cancel_research_knowledge_demo_lifecycle");\n'
+        "listen<unknown>(RESEARCH_KNOWLEDGE_DEMO_LIFECYCLE_EVENT, () => undefined);\n"
+        "const unlisten: UnlistenFn = () => undefined;\n",
+        encoding="utf-8",
+    )
     command_center.write_text("export const fixture = true;\n", encoding="utf-8")
     lib.write_text(
         ".invoke_handler(tauri::generate_handler![\n"
         "app_info::get_app_info,\n"
-        "research_knowledge_demo_projection::get_research_knowledge_demo_projection\n"
+        "research_knowledge_demo_projection::get_research_knowledge_demo_projection,\n"
+        "research_knowledge_demo_lifecycle_tauri::get_research_knowledge_demo_lifecycle_snapshot,\n"
+        "research_knowledge_demo_lifecycle_tauri::start_research_knowledge_demo_lifecycle,\n"
+        "research_knowledge_demo_lifecycle_tauri::advance_research_knowledge_demo_lifecycle,\n"
+        "research_knowledge_demo_lifecycle_tauri::cancel_research_knowledge_demo_lifecycle\n"
         "])\n",
         encoding="utf-8",
     )
@@ -131,6 +157,29 @@ def write_valid_ui_native_boundary(root: Path) -> None:
         "pub(crate) fn get_research_knowledge_demo_projection() -> "
         "Result<ResearchKnowledgeDemoProjection, "
         "ResearchKnowledgeDemoProjectionError> { todo!() }\n",
+        encoding="utf-8",
+    )
+    lifecycle_rust.write_text(
+        'const EVENT: &str = "research-knowledge-demo-lifecycle-v1";\n'
+        "#[tauri::command]\n"
+        "pub(crate) fn get_research_knowledge_demo_lifecycle_snapshot(\n"
+        "state: tauri::State<'_, ResearchKnowledgeDemoLifecycleTauriState>,\n"
+        ") -> Result<Snapshot, Error> { todo!() }\n"
+        "#[tauri::command]\n"
+        "pub(crate) fn start_research_knowledge_demo_lifecycle(\n"
+        "app: tauri::AppHandle,\n"
+        "state: tauri::State<'_, ResearchKnowledgeDemoLifecycleTauriState>,\n"
+        ") -> Result<Snapshot, Error> { app.emit(EVENT, value); todo!() }\n"
+        "#[tauri::command]\n"
+        "pub(crate) fn advance_research_knowledge_demo_lifecycle(\n"
+        "app: tauri::AppHandle,\n"
+        "state: tauri::State<'_, ResearchKnowledgeDemoLifecycleTauriState>,\n"
+        ") -> Result<Snapshot, Error> { app.emit(EVENT, value); todo!() }\n"
+        "#[tauri::command]\n"
+        "pub(crate) fn cancel_research_knowledge_demo_lifecycle(\n"
+        "app: tauri::AppHandle,\n"
+        "state: tauri::State<'_, ResearchKnowledgeDemoLifecycleTauriState>,\n"
+        ") -> Result<Snapshot, Error> { app.emit(EVENT, value); todo!() }\n",
         encoding="utf-8",
     )
     menu_adapter.parent.mkdir(parents=True)
@@ -476,7 +525,9 @@ class RepositoryHealthTests(unittest.TestCase):
             findings = health.ui_native_boundary_findings(root)
 
             self.assertTrue(any("sole exact event" in finding.detail for finding in findings))
-            self.assertTrue(any("sole menu-route" in finding.detail for finding in findings))
+            self.assertTrue(
+                any("exact menu and lifecycle allowlist" in finding.detail for finding in findings)
+            )
 
     def test_ui_native_boundary_rejects_tauri_emitter_variants(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -497,7 +548,105 @@ class RepositoryHealthTests(unittest.TestCase):
 
                     findings = health.ui_native_boundary_findings(root)
 
-                    self.assertTrue(any("sole menu-route" in finding.detail for finding in findings))
+                    self.assertTrue(
+                        any(
+                            "exact menu and lifecycle allowlist" in finding.detail
+                            for finding in findings
+                        )
+                    )
+
+    def test_ui_native_boundary_rejects_lifecycle_command_arguments(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            adapter = (
+                root
+                / "src-tauri"
+                / "src"
+                / "research_knowledge_demo_lifecycle_tauri.rs"
+            )
+            adapter.write_text(
+                adapter.read_text(encoding="utf-8").replace(
+                    "state: tauri::State<'_, ResearchKnowledgeDemoLifecycleTauriState>,\n)",
+                    "state: tauri::State<'_, ResearchKnowledgeDemoLifecycleTauriState>,\nrun_id: String,\n)",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+
+            findings = health.ui_native_boundary_findings(root)
+
+            self.assertTrue(any("no-caller-input" in finding.detail for finding in findings))
+
+    def test_ui_native_boundary_rejects_lifecycle_invoke_arguments_or_extra_listener(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            client = (
+                root
+                / "src"
+                / "infrastructure"
+                / "tauri"
+                / "research-knowledge-demo-lifecycle-client.ts"
+            )
+            client.write_text(
+                client.read_text(encoding="utf-8").replace(
+                    'invoke<unknown>("start_research_knowledge_demo_lifecycle");',
+                    'invoke<unknown>("start_research_knowledge_demo_lifecycle", { runId: "caller" });\n'
+                    'listen<unknown>("future-event", () => undefined);',
+                ),
+                encoding="utf-8",
+            )
+
+            findings = health.ui_native_boundary_findings(root)
+
+            self.assertTrue(any("no-argument command allowlist" in finding.detail for finding in findings))
+            self.assertTrue(any("notification allowlist" in finding.detail for finding in findings))
+
+    def test_ui_native_boundary_rejects_every_lifecycle_client_boundary_token(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            client = (
+                root
+                / "src"
+                / "infrastructure"
+                / "tauri"
+                / "research-knowledge-demo-lifecycle-client.ts"
+            )
+            baseline = client.read_text(encoding="utf-8")
+            for token in health.LIFECYCLE_CLIENT_PROHIBITED_TOKENS:
+                with self.subTest(token=token):
+                    client.write_text(f"{baseline}\n// {token}\n", encoding="utf-8")
+
+                    findings = health.ui_native_boundary_findings(root)
+
+                    self.assertTrue(
+                        any(token in finding.detail for finding in findings),
+                        msg=token,
+                    )
+
+    def test_ui_native_boundary_rejects_every_lifecycle_rust_boundary_token(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            adapter = (
+                root
+                / "src-tauri"
+                / "src"
+                / "research_knowledge_demo_lifecycle_tauri.rs"
+            )
+            baseline = adapter.read_text(encoding="utf-8")
+            for token in health.LIFECYCLE_RUST_PROHIBITED_TOKENS:
+                with self.subTest(token=token):
+                    adapter.write_text(f"{baseline}\n// {token}\n", encoding="utf-8")
+
+                    findings = health.ui_native_boundary_findings(root)
+
+                    self.assertTrue(
+                        any(token in finding.detail for finding in findings),
+                        msg=token,
+                    )
 
     def test_ui_native_boundary_rejects_production_development_csp_confusion(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

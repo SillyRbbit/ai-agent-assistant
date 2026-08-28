@@ -1,6 +1,6 @@
 # Next steps
 
-Last updated: 2026-08-27
+Last updated: 2026-08-28
 
 This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must close before later feature work begins.
 
@@ -45,7 +45,7 @@ read-only security result.
 
 The owner-approved
 [`volatile lifecycle core ExecPlan`](docs/plans/2026-08-27-research-knowledge-demo-volatile-lifecycle-core.md)
-is **verified complete with advisories** in the current uncommitted workspace.
+is **verified complete with advisories** and published on `main` at `68de8a5`.
 The manually stepped, process-local Rust host drives one sealed Research ->
 Knowledge workflow through the native/orchestrator boundary, exposes only a
 closed bounded content-free library contract, and retains F-01/F-02 cleanup
@@ -53,13 +53,18 @@ ownership. Focused and complete target-Mac verification pass. It exposes no
 Tauri lifecycle IPC or connected UI and adds no timer, worker, or background
 autonomy.
 
-No next source increment is **Ready** or authorized. The smallest possible next
-action, if the owner chooses to continue, is a separate documentation/readiness
-review for a narrow Tauri lifecycle adapter with one synchronized managed host,
-closed no-input commands/events, event-loss/reordering analysis, F-12 updates,
-and target-Mac evidence. Do not begin a gate or implementation from this
-description; connected Command Center presentation remains a later separate
-plan.
+The owner-approved documentation-only
+[`lifecycle Tauri adapter ExecPlan`](docs/plans/2026-08-28-research-knowledge-demo-lifecycle-tauri-adapter.md)
+is **verified complete with advisories**. The owner approved the
+private `ApprovalClock: Send` prerequisite; the deterministic test clock now
+uses Send-safe storage without changing approval behavior. One mutex-owned host,
+four no-caller-input commands, one notification-only event, the unconnected
+runtime-narrowed client, and atomic F-12 guards pass focused and complete
+verification. Target-Mac startup and visual no-permission-prompt inspection
+pass; direct observation of the deliberately unconnected lifecycle event is
+`Not run`. No connected Command Center presentation plan is Ready. The next
+task is Blocked pending a separately owner-approved planning increment that
+must reconcile the still fixture-only failure proof before any UI connection.
 
 ## Current published checkpoint
 

@@ -80,19 +80,29 @@ DOCUMENTATION_TRUTH_MARKERS = (
 )
 EXPECTED_TAURI_IMPORTS = {
     "src/infrastructure/tauri/app-info-client.ts": (
-        'import { invoke } from "@tauri-apps/api/core";'
+        'import { invoke } from "@tauri-apps/api/core";',
     ),
     "src/infrastructure/tauri/menu-route-client.ts": (
-        'import { listen, type UnlistenFn } from "@tauri-apps/api/event";'
+        'import { listen, type UnlistenFn } from "@tauri-apps/api/event";',
     ),
     "src/infrastructure/tauri/research-knowledge-demo-projection-client.ts": (
-        'import { invoke } from "@tauri-apps/api/core";'
+        'import { invoke } from "@tauri-apps/api/core";',
+    ),
+    "src/infrastructure/tauri/research-knowledge-demo-lifecycle-client.ts": (
+        'import { invoke } from "@tauri-apps/api/core";',
+        'import { listen, type UnlistenFn } from "@tauri-apps/api/event";',
     ),
 }
 EXPECTED_TAURI_INVOKES = {
-    "src/infrastructure/tauri/app-info-client.ts": 'invoke<unknown>("get_app_info")',
+    "src/infrastructure/tauri/app-info-client.ts": ('invoke<unknown>("get_app_info")',),
     "src/infrastructure/tauri/research-knowledge-demo-projection-client.ts": (
-        'invoke<unknown>("get_research_knowledge_demo_projection")'
+        'invoke<unknown>("get_research_knowledge_demo_projection")',
+    ),
+    "src/infrastructure/tauri/research-knowledge-demo-lifecycle-client.ts": (
+        'invoke<unknown>("get_research_knowledge_demo_lifecycle_snapshot")',
+        'invoke<unknown>("start_research_knowledge_demo_lifecycle")',
+        'invoke<unknown>("advance_research_knowledge_demo_lifecycle")',
+        'invoke<unknown>("cancel_research_knowledge_demo_lifecycle")',
     ),
 }
 COMMAND_CENTER_PROHIBITED_TOKENS = (
@@ -115,7 +125,11 @@ EXPECTED_CAPABILITY_CONFIGURATION = {
 EXPECTED_INVOKE_HANDLER = (
     ".invoke_handler(tauri::generate_handler!["
     "app_info::get_app_info,"
-    "research_knowledge_demo_projection::get_research_knowledge_demo_projection"
+    "research_knowledge_demo_projection::get_research_knowledge_demo_projection,"
+    "research_knowledge_demo_lifecycle_tauri::get_research_knowledge_demo_lifecycle_snapshot,"
+    "research_knowledge_demo_lifecycle_tauri::start_research_knowledge_demo_lifecycle,"
+    "research_knowledge_demo_lifecycle_tauri::advance_research_knowledge_demo_lifecycle,"
+    "research_knowledge_demo_lifecycle_tauri::cancel_research_knowledge_demo_lifecycle"
     "])"
 )
 PROJECTION_RUST_PROHIBITED_TOKENS = (
@@ -148,6 +162,29 @@ PROJECTION_CLIENT_PROHIBITED_TOKENS = (
     "listen(",
     "localStorage",
     "sessionStorage",
+)
+LIFECYCLE_CLIENT_PROHIBITED_TOKENS = (
+    "EventSource",
+    "WebSocket",
+    "emit(",
+    "fetch(",
+    "indexedDB",
+    "localStorage",
+    "sessionStorage",
+    "setInterval(",
+    "setTimeout(",
+)
+LIFECYCLE_RUST_PROHIBITED_TOKENS = (
+    "reqwest",
+    "rusqlite",
+    "serde::Deserialize",
+    "std::fs",
+    "std::net",
+    "std::process",
+    "std::thread",
+    "tauri_plugin",
+    "tokio",
+    "unsafe ",
 )
 EXPECTED_TAURI_CSP = {
     "default-src": "'self'",
@@ -570,11 +607,11 @@ def ui_native_boundary_findings(root: Path) -> tuple[Finding, ...]:
             findings.append(Finding("ui-native-boundary", relative_path, "source file is not UTF-8 text"))
             continue
         if "@tauri-apps/api" in text:
-            expected_import = EXPECTED_TAURI_IMPORTS.get(relative_path)
+            expected_imports = EXPECTED_TAURI_IMPORTS.get(relative_path)
             if (
-                expected_import is None
-                or text.count("@tauri-apps/api") != 1
-                or text.count(expected_import) != 1
+                expected_imports is None
+                or text.count("@tauri-apps/api") != len(expected_imports)
+                or any(text.count(expected_import) != 1 for expected_import in expected_imports)
             ):
                 findings.append(Finding("ui-native-boundary", relative_path, "Tauri API import is outside the exact allowlist"))
         if relative_path.startswith("src/features/command-center/"):
@@ -582,7 +619,7 @@ def ui_native_boundary_findings(root: Path) -> tuple[Finding, ...]:
                 if token in text:
                     findings.append(Finding("ui-native-boundary", relative_path, f"Command Center contains prohibited boundary token {token!r}"))
 
-    for relative_path, expected_call in EXPECTED_TAURI_INVOKES.items():
+    for relative_path, expected_calls in EXPECTED_TAURI_INVOKES.items():
         client_text = read_text(root / relative_path)
         if client_text is None:
             findings.append(
@@ -594,12 +631,14 @@ def ui_native_boundary_findings(root: Path) -> tuple[Finding, ...]:
             )
             continue
         invoke_calls = re.findall(r"\binvoke\s*(?:<[^>]+>)?\s*\(", client_text)
-        if len(invoke_calls) != 1 or client_text.count(expected_call) != 1:
+        if len(invoke_calls) != len(expected_calls) or any(
+            client_text.count(expected_call) != 1 for expected_call in expected_calls
+        ):
             findings.append(
                 Finding(
                     "ui-native-boundary",
                     relative_path,
-                    "Tauri invoke is not the exact no-argument command allowlist",
+                    "Tauri invoke differs from the exact no-argument command allowlist",
                 )
             )
 
@@ -615,6 +654,42 @@ def ui_native_boundary_findings(root: Path) -> tuple[Finding, ...]:
                         f"projection client contains prohibited boundary token {token!r}",
                     )
                 )
+
+    lifecycle_client_path = "src/infrastructure/tauri/research-knowledge-demo-lifecycle-client.ts"
+    lifecycle_client_text = read_text(root / lifecycle_client_path)
+    if lifecycle_client_text is None:
+        findings.append(
+            Finding(
+                "ui-native-boundary",
+                lifecycle_client_path,
+                "required lifecycle client is not UTF-8 text",
+            )
+        )
+    else:
+        for token in LIFECYCLE_CLIENT_PROHIBITED_TOKENS:
+            if token in lifecycle_client_text:
+                findings.append(
+                    Finding(
+                        "ui-native-boundary",
+                        lifecycle_client_path,
+                        f"lifecycle client contains prohibited boundary token {token!r}",
+                    )
+                )
+        lifecycle_listeners = re.findall(
+            r"\blisten\s*(?:<[^>]+>)?\s*\(", lifecycle_client_text
+        )
+        if (
+            len(lifecycle_listeners) != 1
+            or '"research-knowledge-demo-lifecycle-v1" as const' not in lifecycle_client_text
+            or "listen<unknown>(RESEARCH_KNOWLEDGE_DEMO_LIFECYCLE_EVENT," not in lifecycle_client_text
+        ):
+            findings.append(
+                Finding(
+                    "ui-native-boundary",
+                    lifecycle_client_path,
+                    "lifecycle listener differs from the sole exact notification allowlist",
+                )
+            )
 
     menu_route_path = "src/infrastructure/tauri/menu-route-client.ts"
     menu_route_text = read_text(root / menu_route_path)
@@ -690,6 +765,46 @@ def ui_native_boundary_findings(root: Path) -> tuple[Finding, ...]:
                     )
                 )
 
+    lifecycle_rust_path = "src-tauri/src/research_knowledge_demo_lifecycle_tauri.rs"
+    lifecycle_rust_text = read_text(root / lifecycle_rust_path)
+    if lifecycle_rust_text is None:
+        findings.append(
+            Finding(
+                "ui-native-boundary",
+                lifecycle_rust_path,
+                "lifecycle adapter source is not UTF-8 text",
+            )
+        )
+    else:
+        normalized_lifecycle_rust = re.sub(r"\s+", "", lifecycle_rust_text)
+        exact_signatures = (
+            "pub(crate)fnget_research_knowledge_demo_lifecycle_snapshot(state:tauri::State<'_,ResearchKnowledgeDemoLifecycleTauriState>,)",
+            "pub(crate)fnstart_research_knowledge_demo_lifecycle(app:tauri::AppHandle,state:tauri::State<'_,ResearchKnowledgeDemoLifecycleTauriState>,)",
+            "pub(crate)fnadvance_research_knowledge_demo_lifecycle(app:tauri::AppHandle,state:tauri::State<'_,ResearchKnowledgeDemoLifecycleTauriState>,)",
+            "pub(crate)fncancel_research_knowledge_demo_lifecycle(app:tauri::AppHandle,state:tauri::State<'_,ResearchKnowledgeDemoLifecycleTauriState>,)",
+        )
+        if (
+            lifecycle_rust_text.count("#[tauri::command]") != 4
+            or any(normalized_lifecycle_rust.count(signature) != 1 for signature in exact_signatures)
+            or lifecycle_rust_text.count("research-knowledge-demo-lifecycle-v1") != 1
+        ):
+            findings.append(
+                Finding(
+                    "ui-native-boundary",
+                    lifecycle_rust_path,
+                    "lifecycle adapter differs from the exact four no-caller-input command/event boundary",
+                )
+            )
+        for token in LIFECYCLE_RUST_PROHIBITED_TOKENS:
+            if token in lifecycle_rust_text:
+                findings.append(
+                    Finding(
+                        "ui-native-boundary",
+                        lifecycle_rust_path,
+                        f"lifecycle adapter contains prohibited boundary token {token!r}",
+                    )
+                )
+
     rust_emitters: list[str] = []
     rust_source_root = root / "src-tauri" / "src"
     for rust_path in sorted(rust_source_root.rglob("*.rs")):
@@ -703,12 +818,17 @@ def ui_native_boundary_findings(root: Path) -> tuple[Finding, ...]:
                 rust_text,
             )
         )
-    if rust_emitters != ["src-tauri/src/menu_bar/tauri_adapter.rs"]:
+    if rust_emitters != [
+        "src-tauri/src/menu_bar/tauri_adapter.rs",
+        "src-tauri/src/research_knowledge_demo_lifecycle_tauri.rs",
+        "src-tauri/src/research_knowledge_demo_lifecycle_tauri.rs",
+        "src-tauri/src/research_knowledge_demo_lifecycle_tauri.rs",
+    ]:
         findings.append(
             Finding(
                 "ui-native-boundary",
                 "src-tauri/src",
-                "Rust event emission differs from the sole menu-route allowlist",
+                "Rust event emission differs from the exact menu and lifecycle allowlist",
             )
         )
     menu_action_path = "src-tauri/src/menu_bar/action.rs"
