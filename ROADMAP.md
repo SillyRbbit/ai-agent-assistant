@@ -169,6 +169,11 @@ deterministic proofs. Exact PR-head and merged-main Documentation and CI
 workflows pass. This does not make the catalog/task/progress UI authoritative
 or permit general agent IPC, provider, tool, approval, persistence, filesystem,
 network, or device work. No successor source plan is owner-selected or Ready.
+The verified-complete documentation-only
+[`native-multi-agent-final-review-planning`](docs/increments/native-multi-agent-final-review-planning.md)
+prepares a source-current read-only architecture/security review; it does not
+authorize source work, remediation, or the review itself. The resulting review
+plan is Ready with advisories and requires separate owner approval.
 
 The completed owner-selected overlay
 [`PR #57 transitive advisory remediation`](docs/plans/2026-08-25-pr57-transitive-advisory-remediation.md)

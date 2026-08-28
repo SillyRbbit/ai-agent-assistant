@@ -4,6 +4,32 @@ Last updated: 2026-08-28
 
 ## Current verified increment
 
+The owner-approved documentation-only
+[`native-multi-agent-final-review-planning`](docs/increments/native-multi-agent-final-review-planning.md)
+is verified complete with advisories on
+`codex/native-multi-agent-final-review-planning` from
+source-current `origin/main` `e3064f5`. It prepares an exact, read-only
+[`native multi-agent final architecture and security review ExecPlan`](docs/plans/2026-08-11-native-multi-agent-security-architecture-review.md)
+from source-current completed phase evidence. The review itself has not begun,
+does not authorize remediation or source work, and requires separate explicit
+owner approval after this planning increment. Preserve the distinction
+between current completion evidence for F-01/F-02, F-07, F-08, F-12, and F-15
+and the immutable 2026-08-26 historical review.
+
+The resulting review must label every conclusion Current, Mocked, Planned, or
+Prohibited and retain D-093's separate checkpoint-denial and manual-dispatch
+branches. It must treat the sealed Research -> Knowledge lifecycle panel,
+Command Center fixtures, Conversations mock, and Rust acceptance workflows as
+separate deterministic proofs; none grants general agent UI or external
+authority.
+
+Closeout is `PASS WITH ADVISORIES` in
+[`2026-08-28-native-multi-agent-final-review-planning-post-increment-review.md`](docs/reviews/2026-08-28-native-multi-agent-final-review-planning-post-increment-review.md).
+Documentation formatting/link, repository-health, security scan,
+protected-path, session-end, and diff checks pass. No target-Mac, rendered,
+source/test/build, or GitHub Actions check was required or run because this
+increment changes documentation only.
+
 The owner-approved
 [`research-knowledge-demo-connected-presentation`](docs/increments/research-knowledge-demo-connected-presentation.md)
 is published on `main` through [PR #71](https://github.com/SillyRbbit/ai-agent-assistant/pull/71).
@@ -49,12 +75,12 @@ target-Mac Rust, frontend, and Linux Rust validation.
 Closeout is `PASS WITH ADVISORIES` in
 [`2026-08-28-research-knowledge-demo-connected-presentation-post-increment-review.md`](docs/reviews/2026-08-28-research-knowledge-demo-connected-presentation-post-increment-review.md).
 
-Exact next prompt: Read `AGENTS.md`, the complete project-memory chain, this
-published checkpoint, and its original increment, ExecPlan, and post-increment
-report. Confirm `origin/main` is the recorded squash commit and the marker
-remains valid. No source increment is owner-selected or Ready. Do not implement
-UI, IPC, provider, runtime, tool, persistence, or other source work without a
-separately selected and owner-approved bounded plan.
+Exact next prompt: Read `AGENTS.md`, the complete project-memory chain, the
+final-review planning increment and ExecPlan, and its post-increment report.
+Confirm its marker remains valid. The planned read-only final review is Ready
+with advisories but may not begin without separate explicit owner approval. Do
+not implement or remediate UI, IPC, provider, runtime, tool, persistence, or
+other source work.
 
 ## Prior verified prerequisite history
 

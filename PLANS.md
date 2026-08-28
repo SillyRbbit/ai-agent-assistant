@@ -4,6 +4,15 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
+The owner-approved documentation-only
+[`native-multi-agent-final-review-planning`](docs/increments/native-multi-agent-final-review-planning.md)
+is verified complete with advisories. It transforms the formerly blocked draft into the exact
+read-only [`final architecture and security review ExecPlan`](docs/plans/2026-08-11-native-multi-agent-security-architecture-review.md).
+The successor review is prepared as Ready with advisories, but separate owner
+approval is still required before it begins; neither this completed planning
+increment nor the plan grants remediation or source authority. Its
+documentation-tier verification and completion marker are complete and valid.
+
 The owner-approved source
 [`2026-08-28-research-knowledge-demo-connected-presentation.md`](docs/plans/2026-08-28-research-knowledge-demo-connected-presentation.md)
 is verified complete with advisories and published through
@@ -14,8 +23,8 @@ application-owned completed-run schedule alternates deterministic success and
 synthetic failure without a caller selector; cancellation consumes no outcome.
 Command responses alone commit presentation, while newer valid notifications
 only require recovery. F-12 pins the sole consumer and exact reviewed source.
-PR-head and merged-main Documentation and CI workflows pass. No next source
-plan is owner-selected or Ready.
+PR-head and merged-main Documentation and CI workflows pass. The current
+read-only review plan does not authorize a next source plan.
 
 The earlier owner-approved documentation-only
 [`2026-08-28-research-knowledge-demo-lifecycle-tauri-adapter.md`](docs/plans/2026-08-28-research-knowledge-demo-lifecycle-tauri-adapter.md)

@@ -6,7 +6,7 @@ roadmap
 Decision: D-082, D-083, D-084, D-085, D-086, D-087, D-088, D-089, D-090,
 D-091, the approved Command Center proposal/ExecPlan, and
 [`ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md`](../adr/ADR-NATIVE-MULTI-AGENT-ARCHITECTURE.md)
-Last updated: 2026-08-25
+Last updated: 2026-08-28
 
 ## Purpose
 
@@ -94,18 +94,18 @@ shell, cloud, memory, provider, or device right.
 The ten root-roadmap phases remain authoritative. The entries below explain the
 native catalog's staged work inside those phases.
 
-| Root phase | Staged native outcome                                                                                                                                                                | Status relationship                                                          |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
-| 1          | Register all nine privilege-free definitions; mark only Personal Assistant and Research Agent `Initial`                                                                              | Verified and published at `f42a6c7`; catalog remains inert and unwired       |
-| 2-3        | Add task lifecycle, trusted context, limits, explicit delegation, result collection, cancellation, and the deterministic Personal-to-Research-to-Personal proof above `AgentRuntime` | Verified complete under D-083; foundation remains Rust-only and unwired      |
-| 4          | Bind D-084's non-executing per-agent profile/policy/approval/audit foundation; establish approved file/root and document-processing boundaries only in a separate later increment    | Governance verified and published at `2687294`                               |
-| 5          | Add D-085's selected bounded volatile namespaces and approved `.txt`/`.md` Knowledge boundary; keep durable memory separate                                                          | Verified complete with advisories; published at `5e53f55`                    |
-| 5A         | Add D-086's exact fixture-only Personal-to-Research-to-Knowledge-to-Personal sequential workflow without widening generic delegation                                                 | Verified complete with advisories and published at `3efd2c1`                 |
-| 6          | Add D-091's exact fixture-only same-thread event-multiplexed selector with deterministic limits, cancellation, failure policy, ordering, and cleanup                                 | Verified complete with advisories; marker complete and valid                 |
-| 7          | Stage engineering-quality, infrastructure/operations, and automation workflows with each specialist separately enabled                                                               | Completed: D-087/D-088/D-090 verified; D-089 published                       |
-| 8          | Add typed catalog, task, progress, attribution, cancellation, and approval-explanation UI through narrow Tauri IPC                                                                   | Deterministic frontend fixture prototype validated; live IPC remains Blocked |
-| 9          | Demonstrate only bounded synthetic or separately approved workflows without capability overclaiming                                                                                  | Verified complete with advisories; marker complete and valid                 |
-| 10         | Review architecture, security, privacy, cancellation, audit, portability, and rollback across completed phases                                                                       | Blocked until sufficient implementation evidence exists                      |
+| Root phase | Staged native outcome                                                                                                                                                                | Status relationship                                                             |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------- |
+| 1          | Register all nine privilege-free definitions; mark only Personal Assistant and Research Agent `Initial`                                                                              | Verified and published at `f42a6c7`; catalog remains inert and unwired          |
+| 2-3        | Add task lifecycle, trusted context, limits, explicit delegation, result collection, cancellation, and the deterministic Personal-to-Research-to-Personal proof above `AgentRuntime` | Verified complete under D-083; foundation remains Rust-only and unwired         |
+| 4          | Bind D-084's non-executing per-agent profile/policy/approval/audit foundation; establish approved file/root and document-processing boundaries only in a separate later increment    | Governance verified and published at `2687294`                                  |
+| 5          | Add D-085's selected bounded volatile namespaces and approved `.txt`/`.md` Knowledge boundary; keep durable memory separate                                                          | Verified complete with advisories; published at `5e53f55`                       |
+| 5A         | Add D-086's exact fixture-only Personal-to-Research-to-Knowledge-to-Personal sequential workflow without widening generic delegation                                                 | Verified complete with advisories and published at `3efd2c1`                    |
+| 6          | Add D-091's exact fixture-only same-thread event-multiplexed selector with deterministic limits, cancellation, failure policy, ordering, and cleanup                                 | Verified complete with advisories; marker complete and valid                    |
+| 7          | Stage engineering-quality, infrastructure/operations, and automation workflows with each specialist separately enabled                                                               | Completed: D-087/D-088/D-090 verified; D-089 published                          |
+| 8          | Add typed catalog, task, progress, attribution, cancellation, and approval-explanation UI through narrow Tauri IPC                                                                   | Deterministic frontend fixture prototype validated; live IPC remains Blocked    |
+| 9          | Demonstrate only bounded synthetic or separately approved workflows without capability overclaiming                                                                                  | Verified complete with advisories; marker complete and valid                    |
+| 10         | Review architecture, security, privacy, cancellation, audit, portability, and rollback across completed phases                                                                       | Exact read-only plan is Ready with advisories; separate owner approval required |
 
 ## Delegation and sequencing invariants
 
@@ -246,7 +246,10 @@ is added, and the absent combined chain remains an advisory. Demo 10 records
 a task-bound typed rejection with execution `NotAttempted`; the root remains
 `Running` and receives no runtime text. Native remains sole/default and unwired,
 Hermes remains Deferred/Blocked. Fresh closeout passes, and the gate marker is
-complete and fingerprint-valid. No next plan is owner-selected or Ready.
+complete and fingerprint-valid. The documentation-only final-review planning
+increment is verified complete with advisories and prepares the exact Phase 10
+review as Ready with advisories; the review remains unstarted and requires
+separate explicit owner approval.
 
 Durable memory, live retrieval, every broader parallel/general-engine path, every live
 infrastructure/operations or repository tool/effect, executable automation,

@@ -4,6 +4,14 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Prepared the native multi-agent final architecture and security review as an
+  exact, read-only, source-current ExecPlan. It requires current validation of
+  F-01/F-02, F-07, F-08, F-12, and F-15, labels every conclusion by evidence
+  state, preserves D-093's separate denial and manual-dispatch proofs, and
+  requires separate owner approval before review execution. No source,
+  dependency, configuration, capability, CSP, provider, credential, network,
+  tool, persistence, filesystem, background, or device-effect path changed.
+
 - Implemented and locally verified the owner-approved connected Research ->
   Knowledge simulated presentation. Only the selected scenario mounts one
   prop-free panel over the existing four no-input commands and fixed

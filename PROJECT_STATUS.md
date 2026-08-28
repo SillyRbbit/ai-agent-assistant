@@ -2,7 +2,23 @@
 
 Last updated: 2026-08-28
 
-## Current verified increment
+## Current approved increment
+
+The owner-approved documentation-only
+[`native-multi-agent-final-review-planning`](docs/increments/native-multi-agent-final-review-planning.md)
+is verified complete with advisories. It prepares an exact, source-current, read-only
+[`final architecture and security review ExecPlan`](docs/plans/2026-08-11-native-multi-agent-security-architecture-review.md)
+for completed native multi-agent phases and the separately labelled sealed
+Research -> Knowledge presentation. It changes no product behavior and does
+not execute the review. The prepared review is Ready with advisories only after
+this increment and requires separate explicit owner approval. Its
+documentation-tier verification and completion marker are complete and valid.
+
+The review scope must revalidate the current disposition of F-01/F-02, F-07,
+F-08, F-12, and F-15 rather than treating the 2026-08-26 review's historical
+findings as current. The lifecycle panel, Command Center fixtures,
+Conversations mock, and Rust acceptance workflows remain separate deterministic
+proofs and do not grant general agent authority or external effects.
 
 The owner-approved
 [`research-knowledge-demo-connected-presentation`](docs/increments/research-knowledge-demo-connected-presentation.md)
@@ -34,8 +50,8 @@ resize matrix are `Not run` advisories because approved tooling could not bind
 to the raw debug executable. Exact PR-head and merged-main Documentation and CI
 workflows pass every classified job. Overall result: `PASS WITH ADVISORIES`.
 
-No next source increment is selected or Ready. The smallest next action is
-owner selection and approval of one bounded successor plan.
+No next source increment is selected or Ready. The prepared final review is
+read-only and requires separate owner approval before it starts.
 
 ## Prior verified prerequisite history
 
