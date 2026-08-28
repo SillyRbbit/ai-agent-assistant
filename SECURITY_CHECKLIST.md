@@ -323,6 +323,27 @@ production boundary exists.
       runtimes. One scoped light-theme compact-text contrast defect found by M5
       was corrected and revalidated; touch was unavailable where unsupported.
 
+## Volatile Research/Knowledge lifecycle core
+
+- [x] Public production construction and `start`, `advance`, `cancel`, and
+      `snapshot` accept no caller-selected identity, fixture, script, event, or
+      content; all trusted values remain application-owned.
+- [x] Every runtime start remains behind `AgentOrchestrator` F-01 validation.
+      Returned-identity cleanup faults retain F-02 ownership, block restart,
+      and retry only through no-argument cancellation.
+- [x] Persistent Drop-time cleanup failure retains the owner until process
+      exit and process-wide denies replacement start/advance/cancel. The
+      sentinel is not a concurrency coordinator or future IPC design.
+- [x] Lifecycle DTOs, errors, serialization, and Debug output are closed,
+      bounded, and content-free; no task/run/request/context, fixture evidence,
+      result, path, URL, or raw internal error is exposed.
+- [x] No Tauri command/event/state, frontend consumer, capability, CSP,
+      permission, provider, model, network, credential, tool, approval dispatch,
+      persistence, filesystem, timer, thread, worker, dependency, or device
+      effect changed.
+- [x] Target-Mac focused/full/static/security evidence passes. Rendered and IPC
+      checks are Not run because the core is deliberately unwired.
+
 ## Native multi-agent deterministic demonstrations
 
 - [x] Every demonstration discloses deterministic fixture data,

@@ -4,7 +4,30 @@ Last updated: 2026-08-27
 
 ## Current verified prerequisite
 
-`research-knowledge-demo-projection-contract` is verified complete with
+`research-knowledge-demo-volatile-lifecycle-core` is verified complete with
+advisories in the current uncommitted workspace. One no-input, manually
+stepped Rust host drives only the sealed D-086 Research -> Knowledge fixture
+through `NativeAgentRuntime`. It projects a closed content-free v1 snapshot,
+Rust-owned epoch/revision, and an eight-entry journal; deterministic unit and
+public-contract coverage proves success, synthesis failure, cancellation at all
+three stages, restart, late-step rejection, F-01 returned-identity quarantine,
+F-02 retry, and Drop-time replacement blocking. No `agent/**`, Tauri IPC,
+frontend, configuration, dependency, provider, model, network, tool,
+persistence, background, filesystem, or device-effect surface changed.
+
+Focused evidence passes 9/9 module tests, 1/1 public Rust contract, strict
+Clippy, and 468/468 sealed-agent acceptance tests. Complete `npm run verify`
+passes with 28 hook tests, 57 repository tests, 247 frontend tests, 261 Rust
+library tests, 243 Rust integration tests, one intentional ignored Hermes
+probe, the frontend production build, and the Tauri release no-bundle build.
+Independent architecture, security, code, technical-debt, readiness, and
+quality review pass with advisories. The process-wide Drop sentinel is a
+fail-closed replacement blocker, not a future concurrency coordinator. A later
+Tauri adapter must retain one synchronized managed host under a separate
+approved plan. Rendered/IPC/UI checks are `Not run` because this increment has
+no user-visible or Tauri boundary.
+
+`research-knowledge-demo-projection-contract` remains verified complete with
 advisories. One argument-free Tauri query returns only the application-owned
 synthetic v1 projection: fixed
 scenario/provenance, Personal Assistant, Research Agent, and Knowledge &
@@ -31,7 +54,14 @@ and cannot validate host/browser page zoom; both are `Not run` advisories. A
 non-required full bundle attempt produced the `.app` and then failed in DMG
 packaging; distribution is outside this increment, the required no-bundle build
 passes, and nothing was published. The consolidated result is `PASS WITH
-ADVISORIES`. No lifecycle successor is planned, Ready, or authorized.
+ADVISORIES`. The later Rust-only lifecycle prerequisite described above does
+not alter that historical projection evidence.
+
+[`2026-08-27-research-knowledge-demo-volatile-lifecycle-core.md`](docs/plans/2026-08-27-research-knowledge-demo-volatile-lifecycle-core.md)
+is the completed living source plan. Its exact evidence is summarized in the
+[`implementation increment`](docs/increments/research-knowledge-demo-volatile-lifecycle-core.md).
+No narrow Tauri lifecycle adapter or connected Command Center presentation
+plan is currently Ready or authorized.
 
 `app-info-runtime-ipc-narrowing-f08` remains verified complete with advisories
 and published on `main` at `5b462bc`; its exact fail-closed app-info contract is
@@ -114,13 +144,14 @@ prerequisites supersede its no-next-plan statement without changing its
 historical evidence.
 
 Exact resume prompt: "Read `AGENTS.md`, the required project-memory chain, and
-`docs/plans/2026-08-27-research-knowledge-demo-projection-contract.md`.
-Confirm the `research-knowledge-demo-projection-contract` marker is complete
-and valid. Then review only whether a separate volatile lifecycle prerequisite
-is ready for documentation planning; do not begin a gate or source work. Do not
-add workflow start/cancel/events, provider, model, network, credential, tool,
-approval dispatch, persistence, filesystem, background autonomy, dependency,
-permission, or device effect without a separately approved Ready plan."
+`docs/plans/2026-08-27-research-knowledge-demo-volatile-lifecycle-core.md`.
+Confirm the `research-knowledge-demo-volatile-lifecycle-core` marker is complete
+and valid. Then review only whether a separate narrow Tauri lifecycle-adapter
+documentation plan is Ready; do not begin a gate or source implementation. Do
+not add lifecycle IPC/events, React connection, timers/workers, background
+autonomy, provider, model, network, credential, tool, approval dispatch,
+persistence, filesystem, dependency, permission, or device effect without a
+separately approved Ready plan."
 
 ## Prior verified native multi-agent demonstration checkpoint
 

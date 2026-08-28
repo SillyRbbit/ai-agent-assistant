@@ -43,12 +43,23 @@ zoom were unavailable, and non-required DMG packaging failed after the local
 `.app` was created; none changes the passing required no-bundle build or the
 read-only security result.
 
-No workflow start/cancel/event implementation or other interactive-demo
-integration is Ready or authorized. The smallest next action, if the owner
-chooses to continue, is a separate documentation/readiness run for one volatile
-lifecycle prerequisite; it must define closed start/cancel/event ownership,
-late-event rejection, cleanup, target-Mac gates, and rollback before any source
-approval.
+The owner-approved
+[`volatile lifecycle core ExecPlan`](docs/plans/2026-08-27-research-knowledge-demo-volatile-lifecycle-core.md)
+is **verified complete with advisories** in the current uncommitted workspace.
+The manually stepped, process-local Rust host drives one sealed Research ->
+Knowledge workflow through the native/orchestrator boundary, exposes only a
+closed bounded content-free library contract, and retains F-01/F-02 cleanup
+ownership. Focused and complete target-Mac verification pass. It exposes no
+Tauri lifecycle IPC or connected UI and adds no timer, worker, or background
+autonomy.
+
+No next source increment is **Ready** or authorized. The smallest possible next
+action, if the owner chooses to continue, is a separate documentation/readiness
+review for a narrow Tauri lifecycle adapter with one synchronized managed host,
+closed no-input commands/events, event-loss/reordering analysis, F-12 updates,
+and target-Mac evidence. Do not begin a gate or implementation from this
+description; connected Command Center presentation remains a later separate
+plan.
 
 ## Current published checkpoint
 

@@ -5,6 +5,26 @@ Last updated: 2026-08-27
 ## Current verified prerequisite
 
 The owner-approved
+[`research-knowledge-demo-volatile-lifecycle-core`](docs/increments/research-knowledge-demo-volatile-lifecycle-core.md)
+is verified complete with advisories in the current uncommitted workspace. One
+no-input, manually stepped Rust host drives the sealed D-086 Research ->
+Knowledge fixture through `NativeAgentRuntime`; closed content-free snapshots,
+transitions, errors, and an eight-entry journal project only lifecycle state.
+Nine module tests and one public contract prove deterministic success, failure,
+stage cancellation, restart, late-step rejection, returned-identity quarantine,
+cleanup retry, and process-wide replacement blocking after persistent
+Drop-time cleanup failure.
+
+Complete target-Mac `npm run verify` passes with 28 hook tests, 57 repository
+tests, 247 frontend tests, 261 Rust library tests, 243 Rust integration tests,
+one intentional ignored Hermes probe, the production frontend build, and the
+Tauri release no-bundle build. No `agent/**`, IPC, frontend, configuration,
+dependency, provider, model, network, tool, persistence, filesystem,
+background, or device-effect surface changed. Rendered and IPC checks are `Not
+run` because the core is deliberately unwired. No later Tauri adapter or
+connected presentation plan is Ready or authorized.
+
+The owner-approved
 [`research-knowledge-demo-projection-contract`](docs/plans/2026-08-27-research-knowledge-demo-projection-contract.md)
 is verified complete with advisories. One argument-free Tauri query
 constructs an exact application-owned synthetic v1 DTO with fixed scenario,
@@ -30,8 +50,16 @@ zoom/reset, and 1040x700 -> 803x563 -> 1040x700 native resize. Direct binding
 to the raw debug executable and host/browser page zoom were unavailable and are
 `Not run`. A non-required full bundle attempt failed only at DMG packaging after
 creating the `.app`; distribution is outside scope and nothing was published.
-The completion result is `PASS WITH ADVISORIES`. No lifecycle successor has an
-approved plan or is Ready.
+The completion result is `PASS WITH ADVISORIES`. The subsequent
+Rust-only lifecycle core described above does not alter this historical
+projection evidence or connect it to IPC/UI lifecycle control.
+
+The approved planning increment
+[`research-knowledge-demo-volatile-lifecycle-core-planning`](docs/increments/research-knowledge-demo-volatile-lifecycle-core-planning.md)
+is the completed documentation prerequisite for the implemented source plan.
+Its historical no-source statement remains true for that earlier planning
+checkpoint; the separate source increment above supersedes current readiness
+without rewriting the planning record.
 
 F-08 app-info runtime IPC narrowing remains verified complete with advisories
 and published on `main` at `5b462bc`. Its exact six-field fail-closed app-info

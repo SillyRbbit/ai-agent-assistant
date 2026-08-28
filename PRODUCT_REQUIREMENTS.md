@@ -463,6 +463,10 @@ The repository currently provides:
 - an unwired sealed fixture-only Personal-to-Research-to-Knowledge-to-Personal
   workflow with strict source provenance, typed partial results, child-first
   cancellation, and content-free volatile workflow evidence;
+- an unwired manually stepped Rust-only lifecycle owner for one fixed instance
+  of that sealed Research/Knowledge workflow, with a no-input bounded snapshot
+  contract, deterministic success/failure/cancellation, late-step rejection,
+  and fail-closed cleanup/replacement quarantine;
 - an unwired sealed fixture-only Personal-to-Coding-to-QA-to-Security-to-
   Personal proposal workflow with strict evidence provenance, typed partial
   results, closed capability denial, and no execution;

@@ -5,14 +5,23 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Current plan state
 
 The owner-approved
+[`2026-08-27-research-knowledge-demo-volatile-lifecycle-core.md`](docs/plans/2026-08-27-research-knowledge-demo-volatile-lifecycle-core.md)
+is **verified complete with advisories** in the current uncommitted workspace.
+It implements one manually stepped, process-local, volatile Rust host for the
+existing sealed Research -> Knowledge workflow and a public Rust-only contract
+needed for strict lint reachability. It keeps Tauri commands/events, React,
+timers/workers, and background autonomy out of the core, preserves F-01/F-02,
+and leaves F-07, F-08, and F-12 unchanged. No later IPC adapter or connected
+presentation plan is Ready or authorized.
+
+The owner-approved
 [`2026-08-27-research-knowledge-demo-projection-contract.md`](docs/plans/2026-08-27-research-knowledge-demo-projection-contract.md)
 is verified complete with advisories. It adds
 one argument-free, read-only projection of the sealed Research -> Knowledge
 fixture vocabulary. Explicit refresh cannot start or control a workflow, and
-the Command Center graph remains a separate frontend proof. A later separately
-approved lifecycle plan would be required for explicit user start,
-cancellation, events, and cleanup. No such successor plan is Ready or
-authorized.
+the Command Center graph remains a separate frontend proof. The later
+Rust-only lifecycle core above remains unwired and does not change the
+projection's read-only authority or connect it to the UI.
 
 The owner-approved
 [`2026-08-27-app-info-runtime-ipc-narrowing-f08.md`](docs/plans/2026-08-27-app-info-runtime-ipc-narrowing-f08.md)
