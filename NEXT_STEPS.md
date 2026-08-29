@@ -13,6 +13,10 @@ handles, closed snapshots/updates, bounded chronological polling, deterministic
 deadline state, cancellation cleanup ownership, restart, and late-event
 rejection. Success, provider failure, and streaming remain application-owned
 fixture proofs; no production response ingress or external capability exists.
+Reviewed head `7fecf03` is published through
+[PR #81](https://github.com/SillyRbbit/ai-agent-assistant/pull/81), squash-
+merged to `main` at `1513bd8` after classification, documentation, frontend,
+Linux Rust, target-Mac Rust, and dependency/secret checks passed.
 
 No successor is **Ready**. V0-3 remains **Blocked** by D-076 and TS-017 and a
 separately accepted restart of the signed-identity lane. V0-4 and V0-6 remain

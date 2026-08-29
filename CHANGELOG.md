@@ -4,6 +4,11 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Reconciled V0-2 publication: reviewed head `7fecf03` squash-merged through
+  PR #81 to `main` at `1513bd8` after all required classification,
+  documentation, frontend, Linux Rust, target-Mac Rust, and dependency/secret
+  checks passed. No product behavior changed.
+
 - Implemented and locally verified V0-2's transport-free volatile Personal
   Assistant Rust session host. It adds Rust-issued opaque presentation handles,
   closed snapshots/updates, a 128-entry chronological journal with 16-update

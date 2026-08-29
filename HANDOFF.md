@@ -8,7 +8,10 @@ The owner-approved
 [`personal-assistant-v0-session-host`](docs/increments/personal-assistant-v0-session-host.md)
 increment is verified complete from clean synchronized baseline
 `8e382e813b42c1615e2319b369ca7561f164f0a3` on branch
-`codex/personal-assistant-v0-session-host`. V0-2 extends the sealed V0-1 host
+`codex/personal-assistant-v0-session-host` and was published through
+[`PR #81`](https://github.com/SillyRbbit/ai-agent-assistant/pull/81). Reviewed
+head `7fecf03` squash-merged to `main` at `1513bd8`; all six required PR checks
+passed. V0-2 extends the sealed V0-1 host
 with one Rust-issued opaque presentation handle, closed snapshots and updates,
 a bounded 128-entry chronological journal with 16-update pages, exact
 monotonic deadline sampling, resumable cancellation cleanup, restart, and
@@ -39,10 +42,10 @@ No successor is Ready. V0-3 remains Blocked by D-076 and TS-017 and requires a
 separately accepted restart of the signed-identity lane. V0-4 and V0-6 are
 technically separable future investigations but are not selected or approved.
 Exact resume prompt: "Read `AGENTS.md`, the complete required project-memory
-and security/testing chain, the V0-2 plan/increment/review, and verify the
-completion marker against the current workspace. Report V0-2 for owner review.
-Do not begin V0-3, credentials, signing, gateway, provider, transport, IPC,
-persistence, tool, or external work without a separately selected increment."
+and security/testing chain, the V0-2 plan/increment/review, and its publication
+reconciliation. Confirm `main` is synchronized at `1513bd8`. Do not begin V0-3,
+credentials, signing, gateway, provider, transport, IPC, persistence, tool, or
+external work without a separately selected increment."
 
 ## Historical V0-1 publication record
 

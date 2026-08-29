@@ -8,6 +8,9 @@ The owner-approved
 [`V0-2 — volatile Personal Assistant Rust session host`](docs/plans/2026-08-28-personal-assistant-v0-session-host.md)
 is locally verified complete with `PASS WITH ADVISORIES` from synchronized
 baseline `8e382e8`.
+It was published through [PR #81](https://github.com/SillyRbbit/ai-agent-assistant/pull/81):
+reviewed head `7fecf03` squash-merged to `main` at `1513bd8` with all six
+required checks passing.
 It adds no production transport, provider-frame ingress, Tauri/WebView,
 credential, persistence, dependency, or device authority. No successor is
 Ready: V0-3 remains Blocked by D-076/TS-017, and every later plan retains its
