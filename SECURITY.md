@@ -385,6 +385,9 @@ deterministic marker is complete and valid.
 
 ### D-094 Personal Assistant v0 boundary
 
+V0-1 is published at `dca584e`. V0-2 is Ready only for its local volatile
+lifecycle boundary; all external and persistent boundaries remain blocked.
+
 D-094 narrows the first usable capability to one volatile, foreground,
 explicitly user-initiated Personal Assistant text request with bounded streaming
 and one final answer. Its tool set is empty. It has no file, persistence,

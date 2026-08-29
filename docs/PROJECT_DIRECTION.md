@@ -51,9 +51,9 @@ configuration, and no tools or device effects. A fixed synthetic live proof,
 private real-prompt activation, and any action-taking or production product are
 separate milestones.
 
-The transport-free empty-tool request/minimal-host prerequisite is the sole
-Ready plan after verified planning closeout and still requires separate owner
-approval plus a fresh gate. The selected synthetic-only
+The transport-free empty-tool request/minimal-host prerequisite was
+squash-merged through PR #79 at `dca584e`. V0-2 is Ready for its separate gate.
+The selected synthetic-only
 OpenAI-through-Cloudflare lane remains blocked by signed identity, gateway
 admission, provider evidence, an absent direct Rust HTTPS client, Tauri/F-12
 work, disclosure, operations, and target-Mac evidence. The real-content

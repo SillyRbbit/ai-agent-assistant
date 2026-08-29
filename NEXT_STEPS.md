@@ -6,6 +6,9 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Current verified increment and queue state
 
+V0-1 is published at `dca584e`. V0-2 is Ready for its separately gated,
+transport-free Rust implementation; V0-3 through V0-14 remain Blocked.
+
 The owner-approved
 [`personal-assistant-v0-linux-clippy-portability`](docs/increments/personal-assistant-v0-linux-clippy-portability.md)
 correction is the active publication gate for

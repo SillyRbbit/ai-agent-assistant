@@ -20,6 +20,8 @@ verification record; this roadmap does not create new completion evidence.
 
 ## Product milestones
 
+V0-1 is published at `dca584e`; V0-2 is Ready for a separate owner-gated run.
+
 | Milestone                                                             | Status                        | Verified scope                                                                                                                                                   | Remaining gate                                                                                                                                  |
 | --------------------------------------------------------------------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | Phase 1 - runnable foundation                                         | Completed                     | Tauri/React shell, toolchain, repository workflow                                                                                                                | None                                                                                                                                            |

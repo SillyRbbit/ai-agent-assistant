@@ -851,8 +851,8 @@ condition is reached.
 | ------------------------------------------------ | -------- | ------------------ | ------------ |
 | Personal Assistant v0 capability program         | Complete | Project owner      | 2026-08-28   |
 | V0-1 empty-tool turn and minimal host            | Complete | Project owner      | 2026-08-28   |
-| V0-1 Linux Clippy portability correction         | Active   | Project owner      | 2026-08-28   |
-| V0-2 volatile lifecycle and presentation journal | Blocked  | Project owner      | 2026-08-28   |
+| V0-1 Linux Clippy portability correction         | Complete | Project owner      | 2026-08-28   |
+| V0-2 volatile lifecycle and presentation journal | Ready    | Project owner      | 2026-08-28   |
 | V0-3 fake signed-client secret owner             | Blocked  | Project owner      | 2026-08-28   |
 | V0-4 local deny-only Access verifier             | Blocked  | Project owner      | 2026-08-28   |
 | V0-5 Cloudflare no-traffic provisioning          | Blocked  | Project owner      | 2026-08-28   |
