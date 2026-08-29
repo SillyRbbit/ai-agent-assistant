@@ -16,6 +16,15 @@ credential, persistence, dependency, or device authority. No successor is
 Ready: V0-3 remains Blocked by D-076/TS-017, and every later plan retains its
 recorded dependencies and separate approval requirement.
 
+The owner-approved documentation-only
+[Xcode Developer ID recovery plan](docs/plans/2026-08-28-personal-assistant-v0-xcode-developer-id-recovery.md)
+is verified complete as planning evidence from baseline 9a48b25. It defines a
+future owner-operated Xcode-managed Developer ID Application path for V0-3's
+private, fake-only proof while explicitly excluding App Store publication,
+Apple access, certificate creation, Keychain changes, signing, product source,
+configuration, dependencies, and traffic. D-076 and TS-017 remain unresolved;
+the future operational plan is Blocked pending separate owner approval.
+
 ## Historical V0-1 plan state
 
 The owner-approved

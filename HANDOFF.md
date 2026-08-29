@@ -2,6 +2,31 @@
 
 Last updated: 2026-08-28
 
+## Current documentation-only increment
+
+The owner-approved
+[personal-assistant-v0-xcode-developer-id-recovery-planning](docs/increments/personal-assistant-v0-xcode-developer-id-recovery-planning.md)
+increment is verified complete from clean synchronized baseline
+9a48b25 on branch codex/v0-3-xcode-developer-id-recovery-planning. It adds
+only D-095 and a bounded future Xcode-managed Developer ID recovery plan for
+the private, fake-only V0-3 prerequisite. Documentation, repository-health,
+secret-scan, protected-path, whitespace, session-end, and completion-gate
+checks pass; Apple/Xcode/Keychain/certificate/signing/target-Mac checks are Not
+run because the increment performs no external action.
+
+The plan does not reopen D-076 or resolve TS-017. V0-3 remains Blocked: a
+future owner-operated increment must be separately approved before Apple access,
+certificate creation, Keychain change, signing, or private target-Mac evidence.
+It must stop on an entitlement, provisioning profile, configuration, source,
+dependency, filesystem-key, key-export, or real-credential need.
+
+Exact resume prompt: “Read AGENTS.md, the complete required project-memory and
+security/testing chain, D-072/D-075/D-076/D-095, TS-017, and the Xcode-managed
+Developer ID recovery plan. Confirm the recovery-planning marker is complete
+and main is synchronized. Do not open Xcode, access Apple services, create a
+certificate, change Keychain state, sign a build, or begin V0-3 without a
+separate owner-approved operational increment.”
+
 ## Current verified increment
 
 The owner-approved

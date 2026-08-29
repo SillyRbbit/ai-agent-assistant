@@ -26,6 +26,15 @@ Keychain, gateway, provider, network, transport, Tauri/WebView, persistence,
 tool, real-content, or external work without a separately selected and approved
 increment.
 
+The owner-approved documentation-only
+[Xcode Developer ID recovery planning increment](docs/increments/personal-assistant-v0-xcode-developer-id-recovery-planning.md)
+is verified complete with PASS WITH ADVISORIES from baseline 9a48b25. D-095 and
+its plan preserve private personal use without App Store publication, but do not
+reopen D-076, resolve TS-017, create an identity, or make V0-3 Ready. The
+smallest future action remains a separately owner-approved operational recovery
+increment; no Apple, Xcode, certificate, Keychain, signing, credential, source,
+configuration, or external work may start automatically.
+
 ## Historical V0-1 publication queue
 
 The following V0-1 publication record predates V0-2 completion.

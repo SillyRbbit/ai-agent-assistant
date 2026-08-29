@@ -473,6 +473,10 @@ The transport-free V0-2 session-host increment is published through
 head `7fecf03` squash-merged to `main` at `1513bd8` after all six required PR
 checks passed. V0-3 remains Blocked by D-076/TS-017 and a separately accepted
 restart of the signed-identity lane.
+D-095's Xcode-managed Developer ID recovery plan is documentation-only; it
+does not reopen that lane or authorize Apple access, certificate creation,
+Keychain changes, signing, credentials, App Store publication, notarization,
+distribution, source work, or network traffic.
 Any need for an unapproved dependency,
 WebView or subprocess networking,
 caller-selected trusted configuration, raw-content logging, persistent

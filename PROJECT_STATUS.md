@@ -2,6 +2,23 @@
 
 Last updated: 2026-08-28
 
+## Current documentation-only increment
+
+The owner-approved Xcode Developer ID recovery-planning increment is verified
+complete with PASS WITH ADVISORIES from clean synchronized baseline 9a48b25.
+It adds D-095 and one future owner-operated recovery plan only. The plan keeps
+private personal use distinct from App Store publication and retains the
+Developer ID Application model selected by D-072/D-075. It adds no Apple
+access, certificate, Keychain, signing, credential, App Store, notarization,
+distribution, source, configuration, dependency, provider, network, or runtime
+behavior.
+
+Documentation, repository-health, secret-scan, protected-path, whitespace, and
+session-end checks pass. Apple/Xcode/Keychain/certificate/signing/target-Mac
+checks are Not run by design. D-076 remains in force and TS-017 remains not
+determined; V0-3 is still Blocked pending a separately approved owner-operated
+execution increment and its private evidence.
+
 ## Current verified increment
 
 The owner-approved V0-2 volatile Personal Assistant Rust session host is

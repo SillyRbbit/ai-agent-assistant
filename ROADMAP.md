@@ -23,6 +23,12 @@ verification record; this roadmap does not create new completion evidence.
 V0-1 is published at `dca584e`; V0-2 is published through PR #81 at `1513bd8`
 with `PASS WITH ADVISORIES` from baseline `8e382e8`. No successor is Ready.
 
+D-095's documentation-only Xcode-managed Developer ID recovery plan is complete
+from baseline 9a48b25. It prepares a future private V0-3 prerequisite without
+App Store publication or an Apple/certificate/Keychain/signing action. It does
+not reopen D-076 or resolve TS-017, so V0-3 and every later source increment
+remain Blocked.
+
 | Milestone                                                             | Status                 | Verified scope                                                                                                                                                                  | Remaining gate                                                                                                                                  |
 | --------------------------------------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | Phase 1 - runnable foundation                                         | Completed              | Tauri/React shell, toolchain, repository workflow                                                                                                                               | None                                                                                                                                            |

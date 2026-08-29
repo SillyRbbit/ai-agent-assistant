@@ -4,6 +4,13 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added D-095 and a documentation-only Xcode-managed Developer ID recovery
+  plan for V0-3's private, fake-only signed-client prerequisite. It preserves
+  the outside-App-Store Developer ID selection and D-076's deferral; it adds
+  no Apple access, certificate, Keychain, signing, credential, source,
+  configuration, dependency, provider, network, publication, or runtime
+  behavior.
+
 - Reconciled V0-2 publication: reviewed head `7fecf03` squash-merged through
   PR #81 to `main` at `1513bd8` after all required classification,
   documentation, frontend, Linux Rust, target-Mac Rust, and dependency/secret
