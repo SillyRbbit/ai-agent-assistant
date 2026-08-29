@@ -1011,6 +1011,12 @@ to the existing credential module, public integration test, and status-only
 example. No manifest, entitlement, Tauri, IPC, startup, WebView, network, or
 runtime-consumer path is authorized.
 
+D-095 adds only a future Xcode-managed Developer ID recovery candidate for the
+same private, fake-only proof. It preserves D-072/D-075's outside-App-Store
+identity selection and D-076's deferral: no Xcode, Apple, certificate, signing,
+Keychain, entitlement, provisioning-profile, source, or runtime action has
+occurred or is authorized.
+
 **Phase 2 target**: organization accounts and team workspaces may add
 centralized administration, role-based access control, organization policy and
 audit, Microsoft Entra ID workforce SSO, tenant-aware token validation, and

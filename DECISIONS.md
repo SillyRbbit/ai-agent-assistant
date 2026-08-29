@@ -4044,3 +4044,74 @@ Each increment still requires exact owner approval and a fresh gate.
 O-007's policy decision is accepted in D-061. Provider-approved ZDR evidence,
 the required disclosure, and all deployment and security gates still block
 external transmission.
+
+## D-095 - Define an Xcode-managed Developer ID recovery candidate without reopening V0-3
+
+Date: 2026-08-28
+Status: Accepted owner documentation-planning decision; no external action authority
+
+## Context
+
+The private owner does not intend to publish Cortexa to the Mac App Store. That
+does not remove V0-3's need for a stable identity: its future fake-only
+Keychain proof must distinguish the owner-controlled application from an
+unsigned or unauthorized copy. D-075 already selected Developer ID Application
+for outside-App-Store use, but TS-017 left the manual Certificate Assistant CSR
+route unresolved and D-076 deferred the lane.
+
+## Decision
+
+Retain D-072 and D-075's stable Developer ID Application identity. Define one
+future, owner-operated **Xcode-managed Developer ID Application** recovery path
+as the candidate alternative to the failed manual Certificate Assistant CSR
+flow. The detailed boundary is
+[2026-08-28-personal-assistant-v0-xcode-developer-id-recovery.md](docs/plans/2026-08-28-personal-assistant-v0-xcode-developer-id-recovery.md).
+
+The candidate is for a private target-Mac proof only. It does not select App
+Store publication, distribution, notarization, a provisioning profile,
+entitlement, self-signed identity, app-specific ACL, cloud-managed certificate,
+or a different certificate class.
+
+## Rationale
+
+Apple documents Developer ID Application for Mac apps used independently of the
+Mac App Store and documents Xcode as a supported creation path. An ad-hoc
+signature has no signing identity, while a self-signed identity has no
+Apple-backed revocation and would supersede the selected D-072/D-075 model.
+
+## Consequences
+
+- D-076 remains a deferral. TS-017 remains not determined; neither is resolved
+  by this documentation decision.
+- A later operational increment must receive separate explicit owner approval
+  before opening Xcode, accessing Apple services, creating a certificate,
+  changing Keychain state, signing a build, or recording private target-Mac
+  evidence.
+- The separately approved recovery execution may prove only identity
+  availability, a non-exported owner-controlled private key, the fixed bundle
+  identifier, and one locally signed build using that identity.
+- The later V0-3 increment owns the fake-Keychain-item and
+  signed-versus-unsigned-or-unauthorized-copy proof. A separate manual gate
+  before V0-3 owns update/reinstall stability and
+  renewal/revocation/compromise/removal handling. Every increment records only
+  redacted evidence.
+- Stop and return for new approval if any entitlement, provisioning profile,
+  Tauri configuration, dependency, script, source change, filesystem key,
+  key export, or real credential is needed.
+
+## Alternatives considered
+
+- **Skip signing for personal use**: rejected. Personal use changes
+  distribution scope, not the future Keychain trust-boundary requirement.
+- **Ad-hoc signature**: rejected. It has no signing identity.
+- **Self-signed identity or app-specific ACL**: not selected. Either would
+  supersede D-072/D-075 and needs a separately approved security design.
+- **Repeat the failed Certificate Assistant CSR flow**: rejected by D-076 and
+  TS-017.
+- **Apple Support contact**: remains conditionally available under D-077 but is
+  not selected by this planning decision.
+
+## Supersedes or is superseded by
+
+This supplements D-072, D-075, and D-076. It does not supersede their identity
+selection or deferral, and it does not authorize V0-3.

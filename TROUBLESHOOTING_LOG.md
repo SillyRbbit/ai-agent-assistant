@@ -1054,6 +1054,18 @@ TS-017 remains unresolved, and any future contact requires another separately
 approved exact operational increment under D-077 and the existing assistance
 plan.
 
+### D-095 Xcode-managed recovery planning
+
+Date: 2026-08-28
+
+The owner selected a documentation-only candidate that retains the existing
+Developer ID Application decision for a private Mac proof while using Xcode's
+documented certificate-creation route rather than retrying Certificate
+Assistant. This is not evidence that Xcode avoids, explains, or resolves
+TS-017. No Xcode, Apple service, certificate, Keychain, signing, credential,
+or source action occurred. D-076 remains in force until a separately approved
+owner-operated execution increment produces sanitized target-Mac evidence.
+
 ## TS-018 - Sandboxed post-increment gate state write is denied
 
 Date: 2026-08-11
