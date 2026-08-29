@@ -4,6 +4,9 @@ Last updated: 2026-08-28
 
 ## Current verified increment
 
+V0-1 was squash-merged through PR #79 at `dca584e`. V0-2 is Ready but has not
+begun; no transport, IPC, provider, credential, persistence, or UI exists.
+
 The owner-approved
 [`personal-assistant-v0-linux-clippy-portability`](docs/increments/personal-assistant-v0-linux-clippy-portability.md)
 correction addresses the only failing check on V0-1 PR #79's first CI run.

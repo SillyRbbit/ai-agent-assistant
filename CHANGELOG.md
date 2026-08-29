@@ -4,6 +4,9 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Reconciled V0-1 publication at `dca584e` and marked V0-2 Ready. No runtime,
+  dependency, configuration, or external capability changed.
+
 - Corrected V0-1 test-import portability after PR #79's target-Mac Rust job
   passed but Linux warning-denied Clippy reported imports used only by macOS-
   gated tests. The exact imports now share their consumers' existing target

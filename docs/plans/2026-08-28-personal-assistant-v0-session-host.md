@@ -1,6 +1,6 @@
 # V0-2 — volatile Personal Assistant Rust session host
 
-Status: Blocked; V0-1 is not implemented or verified
+Status: Ready; V0-1 was published at `dca584e`
 Owner: Henry Dang
 Last updated: 2026-08-28
 Depends on: V0-1
@@ -216,5 +216,6 @@ outside the list.
 
 ## Readiness
 
-**Blocked.** Reassess only after V0-1 is verified and published or otherwise
-accepted as the exact source baseline.
+**Ready.** V0-1 was squash-merged through PR #79 at
+`dca584e6eec37023d27e5e63f4afba9ea8d3a976`. Implementation still requires its
+own owner-authorized gate.

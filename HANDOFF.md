@@ -4,6 +4,9 @@ Last updated: 2026-08-28
 
 ## Current verified increment
 
+V0-1 was squash-merged through PR #79 at `dca584e`. The owner-selected V0-2
+plan is Ready for its separate gate; no V0-2 source work has begun.
+
 The owner-approved
 [`personal-assistant-v0-linux-clippy-portability`](docs/increments/personal-assistant-v0-linux-clippy-portability.md)
 correction addresses PR #79's Linux warning-denied Clippy failure without

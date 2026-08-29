@@ -2,6 +2,11 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-08-28 — V0-2 readiness wording lagged V0-1 publication
+
+**Resolution:** Reconciled current-state records against the observed PR #79
+squash commit `dca584e`; no executable behavior changed.
+
 ## 2026-08-28 — Raw debug executable unavailable to approved UI binding
 
 **Observation:** `npm run tauri -- dev` compiled and launched the source-current
