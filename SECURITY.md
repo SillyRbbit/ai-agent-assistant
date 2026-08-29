@@ -468,9 +468,11 @@ transport work.
 The complete blocker and rollback record is
 [`2026-08-28-personal-assistant-v0-program.md`](docs/plans/2026-08-28-personal-assistant-v0-program.md).
 
-The transport-free V0-2 session-host increment is locally complete and remains
-uncommitted and unpublished pending owner review. V0-3 remains Blocked by
-D-076/TS-017 and a separately accepted restart of the signed-identity lane.
+The transport-free V0-2 session-host increment is published through
+[PR #81](https://github.com/SillyRbbit/ai-agent-assistant/pull/81): reviewed
+head `7fecf03` squash-merged to `main` at `1513bd8` after all six required PR
+checks passed. V0-3 remains Blocked by D-076/TS-017 and a separately accepted
+restart of the signed-identity lane.
 Any need for an unapproved dependency,
 WebView or subprocess networking,
 caller-selected trusted configuration, raw-content logging, persistent

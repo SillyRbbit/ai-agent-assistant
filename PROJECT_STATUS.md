@@ -6,8 +6,10 @@ Last updated: 2026-08-28
 
 The owner-approved V0-2 volatile Personal Assistant Rust session host is
 verified complete with `PASS WITH ADVISORIES` from clean synchronized baseline
-`8e382e813b42c1615e2319b369ca7561f164f0a3`. The source remains uncommitted and
-unpublished on `codex/personal-assistant-v0-session-host`.
+`8e382e813b42c1615e2319b369ca7561f164f0a3`. Reviewed head `7fecf03` was
+squash-merged through [PR #81](https://github.com/SillyRbbit/ai-agent-assistant/pull/81)
+to `main` at `1513bd8adcb655253be1b140b924d32072df4047`; all six required PR
+checks passed.
 
 The host accepts no user text or caller-selected identity/configuration. It
 issues one opaque presentation handle, owns one process-wide Native run,
