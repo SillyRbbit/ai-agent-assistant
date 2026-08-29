@@ -1172,33 +1172,33 @@ reviewed repository ICNS byte-for-byte.
 
 ## Current and future capability matrix
 
-| Capability                                    | State                           | Evidence or gate                                                |
-| --------------------------------------------- | ------------------------------- | --------------------------------------------------------------- |
-| React workspace and navigation                | Current                         | Frontend tests and application source                           |
-| Deterministic Command Center projection       | Current, validated fixture UI   | Frontend fixtures/tests plus passed browser/Tauri M5 matrix     |
-| Synthetic Rust demo projection                | Current, read-only/descriptive  | Exact no-argument command, closed DTO, and static F-12 guard    |
-| Synthetic Rust demo lifecycle                 | Current, sealed/manual UI       | Fixed no-input adapter and selected simulated panel only        |
-| Assistant interaction                         | Mocked                          | Deterministic in-memory driver only                             |
-| App info and menu routing                     | Current                         | Narrow Tauri command/event                                      |
-| SQLite bootstrap metadata                     | Current                         | Storage tests and startup integration                           |
-| Gateway request/protocol validation           | Current, transport-free         | Phase 4A and 4N-4P                                              |
-| Function schema and policy binding            | Current, non-authorizing        | Phase 4B-4C and 4Q-4R                                           |
-| Approval presentation/resolution/cancellation | Current, disconnected           | Phase 4D-4E and 4S-4U                                           |
-| Approval audit adapter                        | Current, bound and volatile     | Phase 4H and 4V                                                 |
-| Workflow-local volatile agent memory          | Current, Rust-internal          | D-085 contracts; no memory value/control crosses demo IPC       |
-| Selected UTF-8 text/Markdown document reading | Current, internal/read-only     | D-085 contracts; no path/content crosses demo IPC               |
-| Fixture-only Research/Knowledge workflow      | Current, sealed/demo-host-only  | D-086 contracts behind fixed no-input lifecycle host            |
-| Fixture-only engineering quality workflow     | Current, unwired and sealed     | D-087 proposal contracts; no repository access or execution     |
-| Fixture-only Cloud and Systems workflows      | Current, unwired and sealed     | D-088 separate no-I/O selectors; no live access or execution    |
-| Typed Workflow Automation proposals           | Current, unwired and sealed     | D-090 A-D manual fixture dispatch; E/tools/approvals inert      |
-| Native multi-agent acceptance suite           | Current, deterministic/unwired  | 303 library units + 207 selected contracts; no product effects  |
-| Personal Assistant v0 empty-tool text path    | Current, transport-free/unwired | V0-1 sealed request, Native branch, and volatile no-input host  |
-| Live gateway and model-provider transport     | Planned                         | Blocked by auth, provider evidence, HTTPS, operations, and plan |
-| Restricted tool execution                     | Planned                         | No dispatcher or executor exists                                |
-| Product memory and task persistence           | Planned                         | Phase 8 direction only                                          |
-| Privileged macOS integrations                 | Planned or prohibited for MVP   | Separate permission and threat-model gates                      |
-| Generic shell or model-to-device execution    | Prohibited                      | `SECURITY.md`                                                   |
-| Signing, notarization, and production release | Planned                         | Phase 10 and `RELEASE_CHECKLIST.md`                             |
+| Capability                                    | State                           | Evidence or gate                                                 |
+| --------------------------------------------- | ------------------------------- | ---------------------------------------------------------------- |
+| React workspace and navigation                | Current                         | Frontend tests and application source                            |
+| Deterministic Command Center projection       | Current, validated fixture UI   | Frontend fixtures/tests plus passed browser/Tauri M5 matrix      |
+| Synthetic Rust demo projection                | Current, read-only/descriptive  | Exact no-argument command, closed DTO, and static F-12 guard     |
+| Synthetic Rust demo lifecycle                 | Current, sealed/manual UI       | Fixed no-input adapter and selected simulated panel only         |
+| Assistant interaction                         | Mocked                          | Deterministic in-memory driver only                              |
+| App info and menu routing                     | Current                         | Narrow Tauri command/event                                       |
+| SQLite bootstrap metadata                     | Current                         | Storage tests and startup integration                            |
+| Gateway request/protocol validation           | Current, transport-free         | Phase 4A and 4N-4P                                               |
+| Function schema and policy binding            | Current, non-authorizing        | Phase 4B-4C and 4Q-4R                                            |
+| Approval presentation/resolution/cancellation | Current, disconnected           | Phase 4D-4E and 4S-4U                                            |
+| Approval audit adapter                        | Current, bound and volatile     | Phase 4H and 4V                                                  |
+| Workflow-local volatile agent memory          | Current, Rust-internal          | D-085 contracts; no memory value/control crosses demo IPC        |
+| Selected UTF-8 text/Markdown document reading | Current, internal/read-only     | D-085 contracts; no path/content crosses demo IPC                |
+| Fixture-only Research/Knowledge workflow      | Current, sealed/demo-host-only  | D-086 contracts behind fixed no-input lifecycle host             |
+| Fixture-only engineering quality workflow     | Current, unwired and sealed     | D-087 proposal contracts; no repository access or execution      |
+| Fixture-only Cloud and Systems workflows      | Current, unwired and sealed     | D-088 separate no-I/O selectors; no live access or execution     |
+| Typed Workflow Automation proposals           | Current, unwired and sealed     | D-090 A-D manual fixture dispatch; E/tools/approvals inert       |
+| Native multi-agent acceptance suite           | Current, deterministic/unwired  | 303 library units + 207 selected contracts; no product effects   |
+| Personal Assistant v0 volatile session path   | Current, transport-free/unwired | V0-1 sealed request/Native branch plus V0-2 bounded session host |
+| Live gateway and model-provider transport     | Planned                         | Blocked by auth, provider evidence, HTTPS, operations, and plan  |
+| Restricted tool execution                     | Planned                         | No dispatcher or executor exists                                 |
+| Product memory and task persistence           | Planned                         | Phase 8 direction only                                           |
+| Privileged macOS integrations                 | Planned or prohibited for MVP   | Separate permission and threat-model gates                       |
+| Generic shell or model-to-device execution    | Prohibited                      | `SECURITY.md`                                                    |
+| Signing, notarization, and production release | Planned                         | Phase 10 and `RELEASE_CHECKLIST.md`                              |
 
 ## Planned first usable v0 boundary
 
@@ -1241,15 +1241,18 @@ widening the diagrammed contract for real content.
 No node in this v0 flow can select or execute a tool, access a file or memory,
 persist content, delegate, schedule, retry/fallback, run in the background, or
 cause a device effect. The current Conversations mock and Command Center remain
-separate deterministic frontend projections. V0-1 now implements only the
-transport-free Rust prerequisite represented by the local host node: a sealed
-fixed synthetic request, an empty-tool Native runtime branch, bounded
-transactional event validation in crate-private tests, exact returned-runtime
-identity/status checks, and fail-closed rejected-run quarantine. The public
-host has no response-frame ingress and can project only its local starting and
-cancellation state. No WebView, Tauri, transport, authentication, gateway,
-provider, network, credential, persistence, or live-model edge in this diagram
-exists. The dependency-ordered program is
+separate deterministic frontend projections. V0-1 implements the sealed fixed
+synthetic request, empty-tool Native runtime branch, exact returned-runtime
+identity/status checks, and fail-closed rejected-run quarantine. V0-2 extends
+that same local host with Rust-issued presentation correlation, one bounded
+volatile chronological journal, closed snapshots/updates, monotonic
+connect/idle/provider/total deadline state, resumable cancellation cleanup,
+restart, and late-event rejection. Its deterministic success/failure/stream
+driver is test-only but crosses the real `RuntimeRun::accept_event` boundary;
+record bounds and transitions are production-private. The public host still has
+no response-frame or user-text ingress. No WebView, Tauri, transport,
+authentication, gateway, provider, network, credential, persistence, or live-
+model edge in this diagram exists. The dependency-ordered program is
 [`2026-08-28-personal-assistant-v0-program.md`](docs/plans/2026-08-28-personal-assistant-v0-program.md).
 
 ## Approved future data flow

@@ -19,8 +19,12 @@ pub mod tools;
 pub use app_info::{current_app_info, AppInfo};
 pub use error::AppError;
 pub use personal_assistant_v0::{
-    PersonalAssistantV0Cancellation, PersonalAssistantV0Error, PersonalAssistantV0Host,
-    PersonalAssistantV0Status,
+    PersonalAssistantV0CompletedSnapshot, PersonalAssistantV0CompletedUpdate,
+    PersonalAssistantV0Error, PersonalAssistantV0FailedSnapshot, PersonalAssistantV0FailedUpdate,
+    PersonalAssistantV0Failure, PersonalAssistantV0FailureCode, PersonalAssistantV0Host,
+    PersonalAssistantV0PresentationHandle, PersonalAssistantV0SequenceUpdate,
+    PersonalAssistantV0Snapshot, PersonalAssistantV0Start, PersonalAssistantV0TextDeltaUpdate,
+    PersonalAssistantV0TextSnapshot, PersonalAssistantV0Update, PersonalAssistantV0UpdateBatch,
 };
 pub use research_knowledge_demo_lifecycle::{
     ResearchKnowledgeDemoHost, ResearchKnowledgeDemoLifecycleEntry,

@@ -4,8 +4,50 @@ Last updated: 2026-08-28
 
 ## Current verified increment
 
-V0-1 was squash-merged through PR #79 at `dca584e`. The owner-selected V0-2
-plan is Ready for its separate gate; no V0-2 source work has begun.
+The owner-approved
+[`personal-assistant-v0-session-host`](docs/increments/personal-assistant-v0-session-host.md)
+increment is verified complete from clean synchronized baseline
+`8e382e813b42c1615e2319b369ca7561f164f0a3` on branch
+`codex/personal-assistant-v0-session-host`. V0-2 extends the sealed V0-1 host
+with one Rust-issued opaque presentation handle, closed snapshots and updates,
+a bounded 128-entry chronological journal with 16-update pages, exact
+monotonic deadline sampling, resumable cancellation cleanup, restart, and
+late-event rejection.
+
+The production host still has no user-text or provider-frame ingress. Success,
+provider failure, streaming, sequence, and late-event results are deterministic
+`cfg(test)` fixture proofs that cross the real Native `RuntimeRun::accept_event`
+boundary and the production-private record reducer. The public production path
+proves only fixed synthetic start, snapshot/poll, deadline-driven local
+terminalization, cancellation, cleanup ownership, and restart. No Tauri,
+WebView, provider, network, signed identity, credential, persistence, memory,
+tool, approval dispatch, durable audit, filesystem, background, or device
+effect was added.
+
+Focused checks pass 12/12 host tests, 26/26 existing runtime contracts, and 3/3
+public V0-2 contracts. Complete verification passes 28 hook tests, 80
+repository tests, 313 frontend tests, 302 Rust library tests, and 248 Rust
+integration tests (247 passed and one existing opt-in Hermes probe ignored),
+plus the production frontend and Tauri release no-bundle builds. Strict Clippy,
+npm audit (0 vulnerabilities), security, repository, documentation,
+session-end, and diff checks pass. Target-Mac UI and every external-system check
+are `Not run` because V0-2 exposes no such surface. Completion decision:
+`PASS WITH ADVISORIES` because optional platform/external checks are `Not run`
+and next-increment readiness is Blocked; there is no source finding.
+
+No successor is Ready. V0-3 remains Blocked by D-076 and TS-017 and requires a
+separately accepted restart of the signed-identity lane. V0-4 and V0-6 are
+technically separable future investigations but are not selected or approved.
+Exact resume prompt: "Read `AGENTS.md`, the complete required project-memory
+and security/testing chain, the V0-2 plan/increment/review, and verify the
+completion marker against the current workspace. Report V0-2 for owner review.
+Do not begin V0-3, credentials, signing, gateway, provider, transport, IPC,
+persistence, tool, or external work without a separately selected increment."
+
+## Historical V0-1 publication record
+
+V0-1 was squash-merged through PR #79 at `dca584e`. The text below records its
+historical publication sequence and is not the current V0-2 status.
 
 The owner-approved
 [`personal-assistant-v0-linux-clippy-portability`](docs/increments/personal-assistant-v0-linux-clippy-portability.md)

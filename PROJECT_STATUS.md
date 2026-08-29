@@ -4,8 +4,30 @@ Last updated: 2026-08-28
 
 ## Current verified increment
 
-V0-1 was squash-merged through PR #79 at `dca584e`. V0-2 is Ready but has not
-begun; no transport, IPC, provider, credential, persistence, or UI exists.
+The owner-approved V0-2 volatile Personal Assistant Rust session host is
+verified complete with `PASS WITH ADVISORIES` from clean synchronized baseline
+`8e382e813b42c1615e2319b369ca7561f164f0a3`. The source remains uncommitted and
+unpublished on `codex/personal-assistant-v0-session-host`.
+
+The host accepts no user text or caller-selected identity/configuration. It
+issues one opaque presentation handle, owns one process-wide Native run,
+projects closed Starting/Streaming/Cancelling/Completed/Failed/Cancelled
+snapshots, retains at most 128 chronological updates, returns at most 16 per
+page, samples fixed monotonic deadlines, and keeps ambiguous cleanup ownership
+quarantined. The production path exposes only synthetic start, snapshot/poll,
+cancel, deadline terminalization, and restart; it has no response-frame ingress.
+Success, provider failure, streaming, sequence, and late-event behavior remain
+deterministic fixture proofs through the real runtime acceptance boundary and
+production-private reducer.
+
+No Tauri/WebView, provider, model request, network, signed identity,
+credential, persistence, memory, tool, approval dispatch, durable audit,
+filesystem, background, or device action exists. Full local verification and
+builds pass with one existing opt-in Hermes executable test ignored. Target-Mac
+UI and external-system checks are `Not run`. V0-3 is Blocked by D-076/TS-017;
+no next source increment is Ready.
+
+## Historical V0-1 status
 
 The owner-approved
 [`personal-assistant-v0-linux-clippy-portability`](docs/increments/personal-assistant-v0-linux-clippy-portability.md)
