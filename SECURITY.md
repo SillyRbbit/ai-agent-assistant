@@ -385,8 +385,9 @@ deterministic marker is complete and valid.
 
 ### D-094 Personal Assistant v0 boundary
 
-V0-1 is published at `dca584e`. V0-2 is Ready only for its local volatile
-lifecycle boundary; all external and persistent boundaries remain blocked.
+V0-1 is published at `dca584e`. V0-2's local volatile lifecycle boundary is
+verified complete from baseline `8e382e8`; all external and persistent
+boundaries remain blocked.
 
 D-094 narrows the first usable capability to one volatile, foreground,
 explicitly user-initiated Personal Assistant text request with bounded streaming
@@ -446,27 +447,30 @@ authentication metadata for 24 hours, and mandatory admin-action audit records
 for 18 months. It states `store=false` is not ZDR. V0-12/V0-13 must reverify
 these facts and version the disclosure on any change.
 
-Current source implements only V0-1's transport-free prerequisite: a sealed
-application-owned synthetic `empty@1` request, a distinct branch behind the
-sole Native runtime start boundary, bounded transactional Rust event
-validation, and a no-input volatile host that validates returned identity and
-initial status exactly. A rejected run is terminal-cleaned or retained with a
-process lease in a private fail-closed quarantine. Predictable host-issued IDs
-are local correlation, not authentication. The public host exposes no request
-or response content and no frame ingress.
+Current source implements only V0-1 and V0-2's transport-free prerequisites: a
+sealed application-owned synthetic `empty@1` request, a distinct branch behind
+the sole Native runtime start boundary, exact returned identity/initial-status
+validation, and a no-input volatile session host. A rejected or ambiguously
+cleaned run remains owned with its process lease in private fail-closed
+quarantine. Predictable host-issued handles and failure correlations are local
+correlation, not authentication. The host exposes closed bounded snapshots and
+updates but no request/frame ingress. Deterministic success/failure/stream
+fixtures cross the real runtime event acceptance boundary and the same
+production-private reducer; they are not live-provider evidence.
 
 The current initial gateway request still separately advertises two tools. No
 direct Rust HTTPS client, Tauri/WebView Personal Assistant boundary, signed
 identity, credential, Worker/provider path, network request, persistence,
-execution, durable audit, or exact ZDR evidence exists. V0-1's success,
-failure, and stream outcomes remain fixture-only; its host can reach only local
-starting and cancellation projections until later approved transport work.
+execution, durable audit, or exact ZDR evidence exists. V0-2's success,
+failure, and stream outcomes remain fixture-only; production can reach only
+local start/poll/deadline/cancellation/restart projections until later approved
+transport work.
 The complete blocker and rollback record is
 [`2026-08-28-personal-assistant-v0-program.md`](docs/plans/2026-08-28-personal-assistant-v0-program.md).
 
-The transport-free empty-tool turn/minimal-host increment is locally complete
-and remains uncommitted and unpublished pending owner review. V0-2 remains
-Blocked until V0-1 is accepted as the exact source baseline.
+The transport-free V0-2 session-host increment is locally complete and remains
+uncommitted and unpublished pending owner review. V0-3 remains Blocked by
+D-076/TS-017 and a separately accepted restart of the signed-identity lane.
 Any need for an unapproved dependency,
 WebView or subprocess networking,
 caller-selected trusted configuration, raw-content logging, persistent

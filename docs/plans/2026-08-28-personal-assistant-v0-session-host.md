@@ -1,6 +1,6 @@
 # V0-2 — volatile Personal Assistant Rust session host
 
-Status: Ready; V0-1 was published at `dca584e`
+Status: Complete; verified with `PASS WITH ADVISORIES` from `8e382e8`
 Owner: Henry Dang
 Last updated: 2026-08-28
 Depends on: V0-1
@@ -209,13 +209,40 @@ outside the list.
 
 ## Acceptance criteria
 
-- [ ] One volatile Rust-owned session proves all closed lifecycle branches.
-- [ ] Cleanup failure cannot release or replace the active owner.
-- [ ] No untrusted surface can select a trusted identity or profile.
-- [ ] Focused, complete, security, and completion gates pass.
+- [x] One volatile Rust-owned session proves all closed lifecycle branches.
+- [x] Cleanup failure cannot release or replace the active owner.
+- [x] No untrusted surface can select a trusted identity or profile.
+- [x] Focused, complete, security, and completion gates pass.
 
 ## Readiness
 
-**Ready.** V0-1 was squash-merged through PR #79 at
-`dca584e6eec37023d27e5e63f4afba9ea8d3a976`. Implementation still requires its
-own owner-authorized gate.
+**Complete.** The owner-authorized gate began from synchronized baseline
+`8e382e813b42c1615e2319b369ca7561f164f0a3`. Focused contracts, strict Clippy,
+complete verification/builds, npm audit, security, repository, documentation,
+session-end, and diff checks pass. Architecture, security, code-health, and
+technical-debt review found no blocking or advisory defect. Target-Mac UI and
+external checks are `Not run` because the host remains Rust-only and unwired.
+
+## Progress
+
+- 2026-08-28: Began the owner-approved gate and confirmed clean synchronized
+  baseline `8e382e8` with pinned Node 26.3.0, npm 11.16.0, and Rust/Cargo 1.90.0.
+- 2026-08-28: Implemented the exact four-file source/plan slice, including
+  bounded closed DTOs, production-private reducer, fixture-only event driver,
+  monotonic deadlines, cancellation cleanup ownership, and quarantine.
+- 2026-08-28: Resolved four unexpected untracked ` 2` duplicates by moving
+  only those hash-verified files outside the repository with explicit owner
+  authorization; no tracked work changed.
+- 2026-08-28: Completed focused and repository-wide verification and synchronized
+  the required project-memory and closeout records.
+
+## Final results
+
+`PASS WITH ADVISORIES`. V0-2 is locally verified, uncommitted, and unpublished. Production
+exposes only fixed synthetic start plus handle-bound snapshot/update/cancel;
+success, provider failure, streaming, and late-event results remain
+application-owned test fixtures. No transport, Tauri/WebView, provider,
+credential, persistence, tool, filesystem, background, or device capability
+was added. The advisories are optional target-platform/external checks being
+`Not run` and next-increment readiness being Blocked; there is no source
+finding. V0-3 remains Blocked by D-076/TS-017; no successor is Ready.

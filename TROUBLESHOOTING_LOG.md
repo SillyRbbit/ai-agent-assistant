@@ -2,6 +2,27 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-08-28 — V0-2 duplicate artifacts appeared outside the approved diff
+
+**Symptom:** Four untracked files with a ` 2` suffix appeared during V0-2: one
+Rust duplicate plus three planning/review duplicates. Their presence made the
+active workspace ambiguous and prevented completion.
+
+**Resolution:** With explicit owner authorization, record each SHA-256 and move
+only those four untracked duplicates to
+`/private/tmp/cortexa-v0-2-duplicates-2026-08-28-01a04094`. Destination hashes
+matched exactly. No tracked file was overwritten, deleted, reset, cleaned, or
+stashed; the repository returned to the exact approved four-file source/plan
+diff before work resumed.
+
+## 2026-08-28 — V0-2 npm audit required approved network retry
+
+**Symptom:** The required sandboxed `npm audit --audit-level=low` failed with
+`ENOTFOUND registry.npmjs.org` and could not write its ordinary user npm log.
+
+**Resolution:** Repeat the exact command with approved network access. It
+passed with `found 0 vulnerabilities`; no dependency or lockfile changed.
+
 ## 2026-08-28 — V0-2 readiness wording lagged V0-1 publication
 
 **Resolution:** Reconciled current-state records against the observed PR #79

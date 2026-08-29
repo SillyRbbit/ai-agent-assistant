@@ -4,6 +4,17 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Implemented and locally verified V0-2's transport-free volatile Personal
+  Assistant Rust session host. It adds Rust-issued opaque presentation handles,
+  closed snapshots/updates, a 128-entry chronological journal with 16-update
+  pages, monotonic connect/idle/provider/total deadline sampling, resumable
+  cancellation cleanup, restart, and late-event rejection. Deterministic
+  success/failure/stream fixtures cross the real Native runtime acceptance
+  boundary and production-private reducer, but the production host has no
+  response-frame or user-text ingress. No Tauri, UI, provider, network,
+  credential, persistence, memory, tool, durable audit, filesystem, background,
+  dependency, permission, or device-effect path was added.
+
 - Reconciled V0-1 publication at `dca584e` and marked V0-2 Ready. No runtime,
   dependency, configuration, or external capability changed.
 

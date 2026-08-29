@@ -6,8 +6,25 @@ This file is the ordered implementation queue. Work only on the first item marke
 
 ## Current verified increment and queue state
 
-V0-1 is published at `dca584e`. V0-2 is Ready for its separately gated,
-transport-free Rust implementation; V0-3 through V0-14 remain Blocked.
+V0-2 is locally verified complete with `PASS WITH ADVISORIES` from clean
+synchronized baseline `8e382e813b42c1615e2319b369ca7561f164f0a3`. It adds only a volatile,
+transport-free Rust session/presentation owner around V0-1: opaque Rust-issued
+handles, closed snapshots/updates, bounded chronological polling, deterministic
+deadline state, cancellation cleanup ownership, restart, and late-event
+rejection. Success, provider failure, and streaming remain application-owned
+fixture proofs; no production response ingress or external capability exists.
+
+No successor is **Ready**. V0-3 remains **Blocked** by D-076 and TS-017 and a
+separately accepted restart of the signed-identity lane. V0-4 and V0-6 remain
+unselected technically separable investigations, and V0-5/V0-7 through V0-14
+retain their recorded dependencies. Do not begin signing, credential,
+Keychain, gateway, provider, network, transport, Tauri/WebView, persistence,
+tool, real-content, or external work without a separately selected and approved
+increment.
+
+## Historical V0-1 publication queue
+
+The following V0-1 publication record predates V0-2 completion.
 
 The owner-approved
 [`personal-assistant-v0-linux-clippy-portability`](docs/increments/personal-assistant-v0-linux-clippy-portability.md)

@@ -5,6 +5,17 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Current plan state
 
 The owner-approved
+[`V0-2 — volatile Personal Assistant Rust session host`](docs/plans/2026-08-28-personal-assistant-v0-session-host.md)
+is locally verified complete with `PASS WITH ADVISORIES` from synchronized
+baseline `8e382e8`.
+It adds no production transport, provider-frame ingress, Tauri/WebView,
+credential, persistence, dependency, or device authority. No successor is
+Ready: V0-3 remains Blocked by D-076/TS-017, and every later plan retains its
+recorded dependencies and separate approval requirement.
+
+## Historical V0-1 plan state
+
+The owner-approved
 [`Personal Assistant v0 Linux Clippy portability correction`](docs/plans/2026-08-28-personal-assistant-v0-linux-clippy-portability.md)
 is locally verified complete with advisories and is the current bounded
 publication fix for PR #79. It changes only two Rust
@@ -852,7 +863,7 @@ condition is reached.
 | Personal Assistant v0 capability program         | Complete | Project owner      | 2026-08-28   |
 | V0-1 empty-tool turn and minimal host            | Complete | Project owner      | 2026-08-28   |
 | V0-1 Linux Clippy portability correction         | Complete | Project owner      | 2026-08-28   |
-| V0-2 volatile lifecycle and presentation journal | Ready    | Project owner      | 2026-08-28   |
+| V0-2 volatile lifecycle and presentation journal | Complete | Project owner      | 2026-08-28   |
 | V0-3 fake signed-client secret owner             | Blocked  | Project owner      | 2026-08-28   |
 | V0-4 local deny-only Access verifier             | Blocked  | Project owner      | 2026-08-28   |
 | V0-5 Cloudflare no-traffic provisioning          | Blocked  | Project owner      | 2026-08-28   |

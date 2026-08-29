@@ -137,6 +137,18 @@ closed status, and local cancellation. Fixture success/failure/stream results
 do not prove a user-visible session. Neither evidence class proves signing,
 Keychain, TLS, Access, Worker, OpenAI, Tauri, WebView, or target-Mac behavior.
 
+V0-2 preserves that separation while adding a production-private bounded
+record reducer and public Rust-only start/snapshot/update/cancel surface.
+Focused evidence distinguishes the 12 module tests that use the private finite
+fixture driver from the 3 integration tests that observe only the compiled
+public host. Fixture events cross `RuntimeRun::accept_event`, exact
+identity/status checks, and the production-private reducer, but remain
+application-owned test data. Production still has no response-frame ingress,
+provider stream, Tauri command/event, or user-visible conversation. Deadline
+tests use a private monotonic manual clock; production uses `Instant` sampling
+without threads or timers, while active network-enforced deadlines remain V0-7
+scope.
+
 Generated JWT/JWKS tests prove the local verifier only. A route-free control-
 plane inspection proves no-traffic configuration only. Fixed zero-content
 authentication probes prove Access/JWT behavior only, and their evidence keeps
