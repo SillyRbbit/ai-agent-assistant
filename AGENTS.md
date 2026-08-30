@@ -129,7 +129,9 @@ python3 .codex/hooks/post_increment_gate.py begin --increment <increment>
 
 Before marking it complete, run the required session-end, quality, and
 post-increment gate workflow. A completion marker is valid only when its report
-and workspace fingerprint validate.
+and workspace fingerprint validate. A truthful `FAIL` must instead use the
+hook's terminal failed state: it writes no completion marker, cannot be promoted
+to complete, and grants no authority to begin a blocked successor.
 
 ## Documentation and response requirements
 

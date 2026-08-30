@@ -1,7 +1,7 @@
 # Security policy and development guardrails
 
 Status: Authoritative security policy
-Last updated: 2026-08-28
+Last updated: 2026-08-29
 
 Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
 identifies which security boundaries are current, mocked, planned, or
@@ -473,10 +473,51 @@ The transport-free V0-2 session-host increment is published through
 head `7fecf03` squash-merged to `main` at `1513bd8` after all six required PR
 checks passed. V0-3 remains Blocked by D-076/TS-017 and a separately accepted
 restart of the signed-identity lane.
-D-095's Xcode-managed Developer ID recovery plan is documentation-only; it
-does not reopen that lane or authorize Apple access, certificate creation,
-Keychain changes, signing, credentials, App Store publication, notarization,
-distribution, source work, or network traffic.
+D-095's Xcode-managed Developer ID recovery decision remains documentation-only
+and did not itself authorize external work. A later separately approved
+execution created one Xcode-listed Developer ID Application certificate record,
+but sanitized CLI checks found no usable signing identity. The owner later
+confirmed categorically that Keychain Access shows the certificate with a
+private key beneath it. After separate exact residual-risk acceptance and
+approval, one bounded sanitized default-user-Keychain query returned exactly one
+valid code-signing identity with the fixed Developer ID Application label
+prefix. Local pairing and current scoped identity visibility are observed, but
+the historical non-export criterion cannot Pass as written, its evidence
+standard is now truthfully governed by D-096, and a signed build is Not run. The owner
+reported no authorization prompt and no visible state change. No
+credential or fake generic-password Keychain item was created or read, and no
+entitlement, App Store publication, notarization, distribution, source,
+configuration, dependency, product-network, or runtime capability changed. The
+one-run approval is consumed; recovery remains stopped closed and V0-3 remains
+Blocked.
+The separately drafted
+[Developer ID present-use and local signing proof](docs/plans/2026-08-29-v0-developer-id-present-use-local-signing-proof.md)
+records the security-evidence correction accepted in D-096: pairing, identity-list, and signature
+evidence cannot retrospectively prove that the key was never exported or held
+exclusively, and the separate unqueried current extractability attribute remains
+`not_proven`. Prospective evidence may use bounded owner attestation of no known
+private-key export/copy/backup/share action, record that the reviewed workflow
+performs no private-key or standalone certificate-file export, and leave
+historical absence of export, non-extractability, and exclusive custody
+`not_proven`. Any present-use signing proof remains Blocked pending an exact
+closed-output no-argument sanitizer, static review, and separate one-attempt
+owner approval plus every other recorded gate. This documentation decision
+grants no private-key use or operational
+authority.
+
+Post-execution review found that the consumed identity wrapper resolved its
+account home through `pwd.getpwuid()` and therefore potentially
+`opendirectoryd`. A full account record, configured local or remote directory
+service, and OS-owned cache/socket/log state may have been involved even though
+the wrapper used only the home field and emitted no account value. Remote
+traffic is not proven. This boundary was not separately accepted before the run
+and remains Pending; the wrapper must not be rerun. Future wrappers must disclose
+or contain account-directory resolution. Separately, environment/cache routing
+does not confine executable npm lifecycle, Cargo build, or Tauri/frontend child
+effects; future signing remains Blocked until an exact reviewed no-new-
+dependency control detects or contains outside-root writes, undeclared network
+effects, and escaped children.
+
 Any need for an unapproved dependency,
 WebView or subprocess networking,
 caller-selected trusted configuration, raw-content logging, persistent
@@ -621,7 +662,20 @@ incident response, and rollback are in
   modify product source.
 - Hook input is untrusted JSON. Validate event type, booleans, repository root, bounded size, report schema, and every path before use. Reject absolute paths, traversal, symlink escapes, merge conflicts, stale fingerprints, and suspicious changed paths. The workspace fingerprint covers only paths that exist in the current snapshot; reviewed deletions remain mandatory report-inventory entries but contribute no content before or after commit. Removing a path that existed at finalization must invalidate the marker.
 - The script may invoke only fixed Git inspection commands. It must not use report content to construct shell commands.
-- `.codex/state/post_increment_gate.json` contains no secrets and is ignored. Its completion marker is not approval, authorization, trusted audit evidence, or proof that commands ran; the report and actual command output remain the evidence.
+- `.codex/state/post_increment_gate.json` contains no secrets and is ignored.
+  Passing state may contain a completion marker. Terminal failed state contains
+  exact `FAIL`, readiness, report/hash, HEAD, and workspace-fingerprint evidence
+  but no completion marker and cannot be promoted to complete. A valid failed
+  state lets the Stop hook end; in the checkout retaining the ignored state,
+  Blocked readiness denies a successor, and a non-Blocked successor still
+  requires a valid state, a clean workspace, and separate owner approval.
+- The ignored state is checkout-local governance evidence, not authentication
+  or a durable audit boundary. Its hashes detect ordinary unreclosed report or
+  workspace drift; a same-user process able to rewrite the state and repository
+  can forge those values. A fresh clone does not inherit the ignored state.
+  Neither passing nor failed state proves commands ran or grants approval,
+  authorization, signing, publication, or product authority; the report and
+  actual command output remain the evidence.
 - `stop_hook_active` must suppress a repeated continuation request. This loop guard does not waive the mandatory completion criteria.
 - In an emergency, disable the hook through `/hooks` or start a session with `codex --disable hooks`. Record the bypass and rerun the complete gate before marking an increment complete. Do not routinely bypass hook trust.
 

@@ -1,6 +1,6 @@
 ---
 name: post-increment-gate
-description: Run Cortexa's consolidated post-increment verification, engineering review, documentation sync, report generation, and deterministic completion marker before ending an implementation increment.
+description: Run Cortexa's consolidated post-increment verification, engineering review, documentation sync, report generation, and deterministic passing or terminal-failed disposition before ending an implementation increment.
 ---
 
 # Post-increment gate
@@ -64,6 +64,25 @@ Update the applicable `HANDOFF.md`, `PROJECT_STATUS.md`, `NEXT_STEPS.md`, `CHANG
      --report docs/reviews/YYYY-MM-DD-<increment>-post-increment-review.md
    ```
 
-6. Run `python3 .codex/hooks/post_increment_gate.py status` and require `status: complete` with `valid: true`.
+6. For `FAIL`, never call `finalize`. Freeze the truthful report, require
+   `next_increment_readiness: Blocked` whenever any finding blocks the next
+   increment, and run:
 
-The ignored completion marker is workflow state only. It grants no security, approval, audit, execution, or verification authority beyond the evidence validated from the report and current workspace.
+   ```bash
+   python3 .codex/hooks/post_increment_gate.py close-failed \
+     --increment <increment> \
+     --report docs/reviews/YYYY-MM-DD-<increment>-post-increment-review.md
+   ```
+
+7. Run `python3 .codex/hooks/post_increment_gate.py status`. A passing result
+   requires `status: complete` with `valid: true`. A truthful failed result
+   requires `status: failed`, `quality_gate: FAIL`, and `valid: true`; it has no
+   completion marker and grants no completion or successor authority.
+
+The ignored local state is checkout-local workflow evidence, not authentication
+or authorization. Its hashes detect unreclosed report or workspace drift but do
+not protect against a malicious same-user rewrite. A completion marker exists
+only for a passing result. A terminal-failed record preserves failure and lets
+the Stop hook end; it grants no security, approval, audit, execution,
+publication, or verification authority beyond the validated report and current
+workspace.

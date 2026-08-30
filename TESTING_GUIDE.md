@@ -462,9 +462,13 @@ Before ending implementation:
 6. Synchronize documentation with actual results.
 7. Run `python3 .codex/hooks/session_end_gate.py` and resolve conflicts or
    unexpected paths.
-8. Run `$quality-gate`, then `$post-increment-gate`, and require the expected
-   valid marker.
+8. Run `$quality-gate`, then `$post-increment-gate`. Require the expected valid
+   passing completion marker, or for a truthful `FAIL`, require a valid terminal
+   failed record with no completion marker.
 
 Flaky, skipped, ignored, quarantined, or environment-blocked tests are not
 passes. Record the limitation and keep the increment incomplete unless its plan
 explicitly permits the missing evidence.
+
+Terminal failure preserves the non-passing result; it does not convert a failed,
+not-run, skipped, ignored, quarantined, or pending requirement into a pass.

@@ -102,6 +102,10 @@ exactly `PASS`, `PASS WITH ADVISORIES`, or `FAIL`.
 
 Critical or High findings that block completion, failed required checks, merge conflicts, and pending required manual checks require `FAIL`. Do not automatically fix advisories or reorder the roadmap during the review.
 
+When `FAIL` is terminal, record it with `close-failed`, not `finalize`. The
+failed state has no completion marker, cannot transition to complete, and must
+retain `Blocked` next readiness whenever any finding blocks the next increment.
+
 The component reviews may be invoked independently through
 `$architecture-review`, `$security-review`, `$code-review`,
 `$technical-debt`, and `$readiness-review`. `$quality-gate` composes their

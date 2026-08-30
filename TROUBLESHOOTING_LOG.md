@@ -2,6 +2,75 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-08-29 — Required report heading check counted prose references
+
+**Observation:** The first D-097 `validate_failed_report` run rejected the
+otherwise exact report because the new required-section check counted a literal
+`` `## Scope and boundaries` `` mention in Technical debt as a second heading.
+
+**Resolution:** Count only complete Markdown heading lines, not substring
+mentions. Add a regression proving prose may name the section while missing and
+duplicate actual headings remain rejected. The final read-only failed-report
+validation Passed.
+
+## 2026-08-29 — Failed report stopped before truthful quality evaluation
+
+**Observation:** Three machine-manifest findings used categories outside the
+hook's closed allowlist, and the report omitted the template-required scope
+section. The hook therefore rejected report structure before it could reach the
+intended blocking-evidence result.
+
+**Resolution:** Map the findings to `Technical debt`, `Security`, and `Code
+health`, add `## Scope and boundaries`, and run the hook's validator read-only.
+It reached exactly `post-increment report contains blocking evidence`. That
+proved structural reconciliation only. D-097 later added a valid terminal
+failed record; the quality remains `FAIL`, and no completion marker exists.
+
+## 2026-08-29 — Failed increment has no terminal gate-state representation
+
+**Observation:** The active recovery increment has an immutable Failed privacy
+check. The gate schema accepts only `active` or a passing `complete`, and
+finalization rejects every report whose computed quality is `FAIL`.
+
+**Resolution:** The owner authorized D-097 inside the same active gate. Add an
+exact state-schema-v2 `failed` variant and `close-failed` command that validates
+computed `FAIL`, stores bounded report/workspace/HEAD/readiness evidence, writes
+no completion marker, forbids failed-to-complete promotion, and makes ordinary
+unreclosed drift fail closed. The local record is not authentication or durable
+audit. The current report remains `FAIL`/Blocked, so no successor or operational
+signing proof is authorized. No second gate began.
+
+## 2026-08-29 — Scoped identity wrapper omitted Open Directory disclosure
+
+**Observation:** The consumed wrapper used `pwd.getpwuid()` to resolve the
+account home. On macOS, that lookup may be served through `opendirectoryd`,
+transiently return a full account record, consult configured local or remote
+directory systems, and use OS cache/socket/log state. The wrapper used only the
+home field and emitted no account value; no evidence proves remote traffic.
+
+**Disposition:** Record the boundary additively as Manual verification pending.
+Do not repeat the consumed query. Future wrappers must disclose or contain
+account-directory resolution and test resolver failure/drift before execution.
+
+## 2026-08-29 — Developer ID “never exported” evidence is not locally provable
+
+**Observation:** The active recovery records treated a non-exported,
+owner-controlled private key as a pending yes/no proof. Apple documents that
+some Keychain certificates and keys can be exported. Current pairing, a valid-
+identity query, and even a successful signature establish present visibility or
+use, not historical absence of export, exclusive custody, or absence of a prior
+copy. The separate current-item extractability attribute was not queried and
+remains `not_proven`.
+
+**Disposition:** Preserve the historical gate and privacy failure, but do not
+mark that criterion Passed as written. Accepted D-096 and the
+[present-use/local-signing plan](docs/plans/2026-08-29-v0-developer-id-present-use-local-signing-proof.md)
+define the additive prospective evidence standard. It permits only bounded
+owner attestation, workflow-private-key-no-export, present-use evidence, and
+explicit `not_proven` categories; signing remains Blocked pending every recorded
+gate, an exact sanitizer, and separate one-attempt approval. Never attempt an
+export to test the claim.
+
 ## 2026-08-28 — V0-2 duplicate artifacts appeared outside the approved diff
 
 **Symptom:** Four untracked files with a ` 2` suffix appeared during V0-2: one
@@ -1065,6 +1134,48 @@ Assistant. This is not evidence that Xcode avoids, explains, or resolves
 TS-017. No Xcode, Apple service, certificate, Keychain, signing, credential,
 or source action occurred. D-076 remains in force until a separately approved
 owner-operated execution increment produces sanitized target-Mac evidence.
+
+### Xcode and Keychain show a Developer ID pair but CLI reports no usable identity
+
+Date: 2026-08-28
+Status: Blocked; cause not determined
+
+After exact owner confirmation, Xcode created and listed one Developer ID
+Application certificate record without a visible error. Sanitized
+metadata-only checks for the current macOS user found zero matching local
+certificates and zero usable code-signing identities. On 2026-08-29, the owner
+reported the approved closed category that Keychain Access shows the Developer
+ID Application certificate with a private key beneath it. This confirms local
+pairing without exposing an identifier or screenshot, but does not prove CLI
+usability, non-exported owner control, or signing.
+
+The macOS sign-in Apple Account differs from the Apple Developer account used
+in Xcode. That difference is not itself evidence of the cause: Xcode separately
+selects a developer account and team, while signing requires the corresponding
+private key to be available locally. A wrong Xcode account/team or a key
+unavailable to the current macOS user's Keychain could matter, but neither was
+established. No operator-initiated import, export, revocation, removal,
+alternate certificate, post-discrepancy account/Keychain mutation, or retry was
+attempted. At that point, the Keychain/CLI discrepancy remained unresolved.
+
+Later on 2026-08-29, the owner confirmed the target Mac remained personally
+controlled, accepted the exact documented OS trust-service and local process-
+metadata residual boundaries, acknowledged the identity-metadata scope, and
+approved one execution of the exact sanitized `keychain_identity_v1` wrapper.
+The single default-user-Keychain query returned
+`passed_one_label_matched_valid_codesigning_identity` and was not retried. This
+establishes current scoped visibility of one label-matched valid code-signing
+identity and supersedes the earlier zero result only for current visibility. It
+does not determine why the earlier checks differed, prove provenance,
+non-exportability or custody, complete a signed build, resolve TS-017, or
+authorize remediation. The owner separately reported
+`authorization_prompt=not_observed` and `state_changed=not_observed`.
+
+Private screenshots used during the session crossed the plan's intended
+identifier-free chat boundary. No identifier or signing material entered the
+repository, and future evidence must use sanitized categories or private owner
+attestation rather than screenshots. Any further discrepancy investigation
+requires a new documentation-only plan and separate owner approval.
 
 ## TS-018 - Sandboxed post-increment gate state write is denied
 

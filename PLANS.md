@@ -4,6 +4,70 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
+The separately owner-approved execution of the
+[Xcode Developer ID recovery plan](docs/plans/2026-08-28-personal-assistant-v0-xcode-developer-id-recovery.md)
+is Blocked from baseline `0931df6`. Xcode created one Developer ID Application
+certificate record. Sanitized CLI checks found no usable code-signing identity,
+while the owner later confirmed that Keychain Access shows the certificate with
+a private key beneath it. Local pairing is observed. A later separately
+approved exact `keychain_identity_v1` run returned
+`passed_one_label_matched_valid_codesigning_identity`, establishing current
+scoped identity visibility. Non-exported owner control, signing, and owner-only
+prompt/state observations were then assessed: the owner reported no prompt or
+visible state change, while the historical non-export criterion cannot Pass as
+written and signing remains Not run. The post-increment decision remains
+`FAIL`, and no completion marker is valid. The bounded
+follow-up selected by the owner was the documentation-only
+[sanitized Keychain-scoped identity discrepancy plan](docs/plans/2026-08-29-v0-keychain-scoped-identity-discrepancy.md).
+Its exact draft passed documentation-tier and embedded-Python syntax validation,
+then passed static architecture/security re-review after disclosure corrections.
+The owner subsequently accepted the exact residual boundaries, confirmed target-
+Mac control, and authorized the one passing run. That approval is consumed and
+authorizes no retry, prompt interaction, Keychain/Apple/Xcode mutation, or
+signing. The recovery gate is terminally `failed` / `FAIL` / `Blocked` without
+a completion marker, and V0-3 remains Blocked.
+
+The owner next authorized documentation drafting for
+[Developer ID present-use and local signing proof](docs/plans/2026-08-29-v0-developer-id-present-use-local-signing-proof.md).
+The draft records that current Keychain/signing evidence cannot prove historical
+absence of export or exclusive custody and leaves the unqueried current
+extractability attribute `not_proven`. The owner has now approved that bounded
+documentation plan, and D-096 accepts its prospective evidence standard without
+rewriting historical results. Its future no-argument sanitizer and one local
+timestamp-free signing run remain Proposed/Blocked until every recorded blocker
+is resolved, the exact sanitizer passes static review, and the owner separately
+accepts the operational residual boundaries and authorizes one attempt. This
+documentation decision starts no new gate and grants no Keychain, Apple,
+private-key, build, signing, cleanup, or V0-3 authority.
+Operational review also requires a no-caller-input expected-team source, exact
+fingerprint/leaf binding, a disposable clone for every writing command,
+closed host Git-config/filter-isolated preflight, explicit per-surface package-
+network/cache policy, implicit-install-audit suppression, exact zero-count
+audit parsing, process-group termination, bounded quiescence, and parent/name/
+root descriptor-bound cleanup. Those designs are not yet executable.
+
+Post-gate review added three explicit blockers without making operational
+execution Ready:
+the consumed `getpwuid` lookup's previously undisclosed `opendirectoryd`
+account-record/directory-service/cache/socket/log boundary remains Pending; the
+then-current hook could not encode a terminal `FAIL` despite the immutable privacy
+failure; and configured build/cache roots do not confine executable npm/Cargo/
+Tauri child writes, connections, or process escape. These findings authorize no
+rerun, build, or signing operation. D-097 later authorized only the exact
+same-active-gate terminal-failure recovery. Evidence-standard documentation
+reconciliation is now accepted under D-096; every successor and operational
+action remains Blocked.
+
+Final gate documentation sync mapped three unsupported report finding
+categories to the existing closed allowlist, restored the template's scope
+section, and marked the parent plan's old operation boundary historical. The
+hook's own read-only validator reached only the expected blocking-evidence
+result. D-097 and the later same-active-gate implementation now provide only a
+valid terminal failed state; they provide no completion or publication
+authority, and the stored readiness remains Blocked.
+The future signing plan also remains operationally Blocked until account-
+directory resolution is contained or separately disclosed and accepted.
+
 The owner-approved
 [`V0-2 — volatile Personal Assistant Rust session host`](docs/plans/2026-08-28-personal-assistant-v0-session-host.md)
 is locally verified complete with `PASS WITH ADVISORIES` from synchronized
@@ -16,14 +80,14 @@ credential, persistence, dependency, or device authority. No successor is
 Ready: V0-3 remains Blocked by D-076/TS-017, and every later plan retains its
 recorded dependencies and separate approval requirement.
 
-The owner-approved documentation-only
+The historical owner-approved documentation-only
 [Xcode Developer ID recovery plan](docs/plans/2026-08-28-personal-assistant-v0-xcode-developer-id-recovery.md)
-is verified complete as planning evidence from baseline 9a48b25. It defines a
-future owner-operated Xcode-managed Developer ID Application path for V0-3's
+is verified complete as planning evidence from baseline 9a48b25. It defined a
+later owner-operated Xcode-managed Developer ID Application path for V0-3's
 private, fake-only proof while explicitly excluding App Store publication,
 Apple access, certificate creation, Keychain changes, signing, product source,
-configuration, dependencies, and traffic. D-076 and TS-017 remain unresolved;
-the future operational plan is Blocked pending separate owner approval.
+configuration, dependencies, and traffic at planning closeout. D-076 and
+TS-017 remain unresolved after the blocked execution recorded above.
 
 ## Historical V0-1 plan state
 
