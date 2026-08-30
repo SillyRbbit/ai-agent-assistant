@@ -33,8 +33,9 @@ from common import (
 )
 
 REPORT_SCHEMA_VERSION = 1
-STATE_SCHEMA_VERSION = 2
+STATE_SCHEMA_VERSION = 3
 LEGACY_STATE_SCHEMA_VERSION = 1
+LEGACY_FAILED_STATE_SCHEMA_VERSION = 2
 # Retained for report-fixture and external read-only validator compatibility.
 SCHEMA_VERSION = REPORT_SCHEMA_VERSION
 STATE_RELATIVE_PATH = Path(".codex/state/post_increment_gate.json")
@@ -76,6 +77,100 @@ REQUIRED_REPORT_SECTIONS = (
     "## Exact commands executed",
 )
 
+# D-098 is a deliberately source-bound, one-time governance recovery. These
+# constants are not a general failed-gate override surface: callers cannot
+# select any of these identities, reports, paths, or outcomes.
+FAILED_DISPOSITION_INCREMENT_ID = "v0-xcode-developer-id-recovery-execution"
+FAILED_DISPOSITION_PREDECESSOR_REPORT_PATH = (
+    "docs/reviews/"
+    "2026-08-28-v0-xcode-developer-id-recovery-execution-post-increment-review.md"
+)
+FAILED_DISPOSITION_PREDECESSOR_REPORT_SHA256 = (
+    "712df03ac11cff026be4badad2c8d22a023377f40c99981b90937c95ae165087"
+)
+FAILED_DISPOSITION_PREDECESSOR_STATE_SHA256 = (
+    "dfa11a0784c10edffab71e0ae1859db397d47ec035801f69a249bdded8ff4dc3"
+)
+FAILED_DISPOSITION_PREDECESSOR_HEAD_COMMIT = (
+    "0931df66c389bdc13c705d1259706c4d3770761c"
+)
+FAILED_DISPOSITION_BASE_COMMIT = (
+    "a417e5f1c1c602b917ca27c65af71480e3db6a45"
+)
+FAILED_DISPOSITION_RECOVERY_ID = (
+    "v0-terminal-failed-successor-disposition-recovery"
+)
+FAILED_DISPOSITION_RECOVERY_REPORT_PATH = (
+    "docs/reviews/2026-08-29-v0-terminal-failed-successor-disposition-recovery-"
+    "post-increment-review.md"
+)
+FAILED_DISPOSITION_SUCCESSOR_INCREMENT_ID = (
+    "personal-assistant-v0-signing-security-prerequisite-planning"
+)
+FAILED_DISPOSITION_BLOCKING_FINDING_SHA256 = frozenset(
+    {
+        "68947bd7d76fcc7cca2e1d2c03e1756ca62b80779ee3d6cb5faaa3ba3a6f406d",
+        "06b43d394531f9abf3b65f03d1b2b79d9b47056b1a5c4aa5663b8bd4d24ff318",
+        "0574f237e81e652e5bca224046f99cf73667ae89469e360c264fd7a9052ec86e",
+    }
+)
+FAILED_DISPOSITION_RECOVERY_ALLOWED_PATHS = (
+    ".agents/skills/post-increment-gate/SKILL.md",
+    ".agents/skills/verified-increment/SKILL.md",
+    ".codex/hooks/post_increment_gate.py",
+    ".codex/hooks/tests/test_post_increment_gate.py",
+    "AGENTS.md",
+    "ARCHITECTURE.md",
+    "CHANGELOG.md",
+    "CODE_REVIEW.md",
+    "DECISIONS.md",
+    "ENGINEERING_GUIDE.md",
+    "HANDOFF.md",
+    "NEXT_STEPS.md",
+    "PLANS.md",
+    "PROJECT_STATUS.md",
+    "ROADMAP.md",
+    "SECURITY.md",
+    "TESTING_GUIDE.md",
+    "TROUBLESHOOTING_LOG.md",
+    "docs/increments/v0-terminal-failed-successor-disposition-recovery.md",
+    "docs/plans/2026-08-29-v0-terminal-failed-successor-disposition-recovery.md",
+    "docs/reviews/2026-08-29-v0-terminal-failed-successor-disposition-recovery-post-increment-review.md",
+    "docs/templates/POST_INCREMENT_REVIEW_TEMPLATE.md",
+)
+FAILED_DISPOSITION_SUCCESSOR_ALLOWED_PATHS = (
+    "ARCHITECTURE.md",
+    "CHANGELOG.md",
+    "DECISIONS.md",
+    "HANDOFF.md",
+    "NEXT_STEPS.md",
+    "PLANS.md",
+    "PROJECT_STATUS.md",
+    "ROADMAP.md",
+    "SECURITY.md",
+    "SECURITY_CHECKLIST.md",
+    "TESTING_GUIDE.md",
+    "TROUBLESHOOTING_LOG.md",
+    "docs/increments/personal-assistant-v0-signing-security-prerequisite-planning.md",
+    "docs/plans/2026-08-29-personal-assistant-v0-signing-security-prerequisite-planning.md",
+    "docs/reviews/2026-08-29-personal-assistant-v0-signing-security-prerequisite-planning-post-increment-review.md",
+)
+
+DISPOSITION_KEYS = frozenset(
+    {
+        "allowed_paths",
+        "baseline_commit",
+        "disposition_id",
+        "next_increment_readiness",
+        "predecessor_state_sha256",
+        "quality_gate",
+        "report_path",
+        "report_sha256",
+        "successor_increment_id",
+        "workspace_fingerprint",
+    }
+)
+
 
 @dataclass(frozen=True)
 class StopDecision:
@@ -93,6 +188,20 @@ def _hash_file(path: Path) -> bytes:
             "repository file could not be read", ExitCode.IO_ERROR
         ) from error
     return digest.digest()
+
+
+def _hash_bytes(payload: bytes) -> str:
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _finding_sha256(finding: dict[str, Any]) -> str:
+    payload = json.dumps(
+        finding,
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("utf-8")
+    return _hash_bytes(payload)
 
 
 def workspace_fingerprint(root: Path) -> str:
@@ -187,7 +296,46 @@ def read_state(root: Path) -> dict[str, Any] | None:
     return value
 
 
+def _validate_disposition(value: Any, label: str) -> dict[str, Any]:
+    if not isinstance(value, dict):
+        _fail(f"{label} must be a JSON object")
+    _require_exact_keys(value, DISPOSITION_KEYS, label)
+    if value.get("disposition_id") != FAILED_DISPOSITION_RECOVERY_ID:
+        _fail(f"{label} has an invalid disposition id")
+    if (
+        value.get("predecessor_state_sha256")
+        != FAILED_DISPOSITION_PREDECESSOR_STATE_SHA256
+    ):
+        _fail(f"{label} has an invalid predecessor state digest")
+    if value.get("report_path") != FAILED_DISPOSITION_RECOVERY_REPORT_PATH:
+        _fail(f"{label} has an invalid recovery report path")
+    if value.get("baseline_commit") != FAILED_DISPOSITION_BASE_COMMIT:
+        _fail(f"{label} has an invalid baseline commit")
+    if (
+        value.get("successor_increment_id")
+        != FAILED_DISPOSITION_SUCCESSOR_INCREMENT_ID
+    ):
+        _fail(f"{label} has an invalid successor increment")
+    if value.get("quality_gate") not in {"PASS", "PASS WITH ADVISORIES"}:
+        _fail(f"{label} has a non-passing recovery result")
+    if value.get("next_increment_readiness") not in {
+        "Ready",
+        "Ready with advisories",
+    }:
+        _fail(f"{label} has an invalid successor readiness")
+    for key in ("report_sha256", "workspace_fingerprint"):
+        digest = value.get(key)
+        if not isinstance(digest, str) or re.fullmatch(r"[0-9a-f]{64}", digest) is None:
+            _fail(f"{label} has an invalid evidence digest")
+    if value.get("allowed_paths") != list(
+        FAILED_DISPOSITION_SUCCESSOR_ALLOWED_PATHS
+    ):
+        _fail(f"{label} has an invalid successor path allowlist")
+    return value
+
+
 def validate_state(state_value: dict[str, Any]) -> None:
+    schema_version = state_value.get("schema_version")
     status_value = state_value.get("status")
     common_keys = {
         "baseline_fingerprint",
@@ -196,7 +344,23 @@ def validate_state(state_value: dict[str, Any]) -> None:
         "status",
     }
     if status_value == "active":
-        _require_exact_keys(state_value, frozenset(common_keys), "active gate state")
+        active_keys = set(common_keys)
+        if "predecessor_disposition" in state_value:
+            if schema_version != STATE_SCHEMA_VERSION:
+                _fail("predecessor lineage requires the current state schema")
+            active_keys.add("predecessor_disposition")
+            _validate_disposition(
+                state_value["predecessor_disposition"],
+                "predecessor disposition",
+            )
+            if (
+                state_value.get("increment_id")
+                != FAILED_DISPOSITION_SUCCESSOR_INCREMENT_ID
+            ):
+                _fail("predecessor lineage belongs to a different increment")
+        _require_exact_keys(
+            state_value, frozenset(active_keys), "active gate state"
+        )
     elif status_value in {"complete", "failed"}:
         evidence_keys = {
             "quality_gate",
@@ -207,11 +371,35 @@ def validate_state(state_value: dict[str, Any]) -> None:
         if status_value == "failed":
             evidence_keys.add("next_increment_readiness")
             evidence_keys.add("head_commit")
+        lineage_keys: set[str] = set()
+        if "successor_disposition" in state_value:
+            if status_value != "failed" or schema_version != STATE_SCHEMA_VERSION:
+                _fail("successor disposition is invalid for this gate state")
+            lineage_keys.add("successor_disposition")
+            _validate_disposition(
+                state_value["successor_disposition"], "successor disposition"
+            )
+            if state_value.get("increment_id") != FAILED_DISPOSITION_INCREMENT_ID:
+                _fail("successor disposition belongs to a different failed increment")
+        if "predecessor_disposition" in state_value:
+            if schema_version != STATE_SCHEMA_VERSION:
+                _fail("predecessor lineage requires the current state schema")
+            lineage_keys.add("predecessor_disposition")
+            _validate_disposition(
+                state_value["predecessor_disposition"],
+                "predecessor disposition",
+            )
+            if (
+                state_value.get("increment_id")
+                != FAILED_DISPOSITION_SUCCESSOR_INCREMENT_ID
+            ):
+                _fail("predecessor lineage belongs to a different increment")
         _require_exact_keys(
             state_value,
             frozenset(
                 common_keys
                 | evidence_keys
+                | lineage_keys
                 | ({"completion_marker"} if status_value == "complete" else set())
             ),
             f"{status_value} gate state",
@@ -244,11 +432,15 @@ def validate_state(state_value: dict[str, Any]) -> None:
     else:
         _fail("post-increment state has an unknown status")
 
-    supported_state_versions = {LEGACY_STATE_SCHEMA_VERSION, STATE_SCHEMA_VERSION}
-    if state_value.get("schema_version") not in supported_state_versions:
+    supported_state_versions = {
+        LEGACY_STATE_SCHEMA_VERSION,
+        LEGACY_FAILED_STATE_SCHEMA_VERSION,
+        STATE_SCHEMA_VERSION,
+    }
+    if schema_version not in supported_state_versions:
         _fail("post-increment state schema version is unsupported")
-    if status_value == "failed" and state_value["schema_version"] != STATE_SCHEMA_VERSION:
-        _fail("failed gate state requires the current state schema version")
+    if status_value == "failed" and schema_version == LEGACY_STATE_SCHEMA_VERSION:
+        _fail("failed gate state requires schema version 2 or later")
     validate_increment_id(state_value.get("increment_id"))
     baseline = state_value.get("baseline_fingerprint")
     if not isinstance(baseline, str) or not re.fullmatch(r"[0-9a-f]{64}", baseline):
@@ -319,6 +511,25 @@ def begin_gate(root: Path, increment_id: str) -> None:
             _fail("terminal failed gate evidence is invalid")
         if existing_state["increment_id"] == increment_id:
             _fail("this increment already has a valid terminal failure record")
+        disposition = existing_state.get("successor_disposition")
+        if disposition is not None:
+            if increment_id != disposition["successor_increment_id"]:
+                _fail("terminal disposition permits only its recorded successor")
+            if disposition["next_increment_readiness"] == "Blocked":
+                _fail("terminal disposition blocks the recorded successor")
+            if changed_paths(root):
+                _fail("recorded successor must begin from a clean workspace")
+            write_state(
+                root,
+                {
+                    "baseline_fingerprint": workspace_fingerprint(root),
+                    "increment_id": increment_id,
+                    "predecessor_disposition": disposition,
+                    "schema_version": STATE_SCHEMA_VERSION,
+                    "status": "active",
+                },
+            )
+            return
         if existing_state["next_increment_readiness"] == "Blocked":
             _fail("terminal failed gate evidence blocks the next increment")
         if changed_paths(root):
@@ -558,7 +769,7 @@ def _validate_report_evidence(
         computed_quality = "PASS WITH ADVISORIES" if has_advisory else "PASS"
     if manifest["quality_gate"] != computed_quality:
         _fail("declared quality-gate result does not match report evidence")
-    report_digest = hashlib.sha256(report_text.encode("utf-8")).hexdigest()
+    report_digest = _hash_file(report_path).hex()
     return manifest, report_path, report_digest
 
 
@@ -580,6 +791,260 @@ def validate_failed_report(
     return validated
 
 
+def _is_ancestor(root: Path, ancestor: str, descendant: str) -> bool:
+    try:
+        merge_base = _run_git(root, "merge-base", ancestor, descendant).decode(
+            "ascii"
+        ).strip()
+    except UnicodeDecodeError as error:
+        raise GateError("Git returned an invalid merge base") from error
+    return merge_base == ancestor
+
+
+def _validate_predecessor_report(root: Path) -> None:
+    report_path = _safe_report_path(
+        root,
+        FAILED_DISPOSITION_PREDECESSOR_REPORT_PATH,
+        FAILED_DISPOSITION_INCREMENT_ID,
+    )
+    report_text = _read_bounded_text(
+        report_path, MAX_REPORT_BYTES, "predecessor post-increment report"
+    )
+    if _hash_file(report_path).hex() != (
+        FAILED_DISPOSITION_PREDECESSOR_REPORT_SHA256
+    ):
+        _fail("predecessor post-increment report digest changed")
+    committed_report = _run_git(
+        root,
+        "show",
+        f"{FAILED_DISPOSITION_BASE_COMMIT}:"
+        f"{FAILED_DISPOSITION_PREDECESSOR_REPORT_PATH}",
+    )
+    if _hash_bytes(committed_report) != FAILED_DISPOSITION_PREDECESSOR_REPORT_SHA256:
+        _fail("published predecessor report digest does not match")
+
+    manifest = _extract_manifest(report_text)
+    if (
+        manifest.get("increment_id") != FAILED_DISPOSITION_INCREMENT_ID
+        or manifest.get("quality_gate") != "FAIL"
+        or manifest.get("next_increment_readiness") != "Blocked"
+    ):
+        _fail("predecessor report no longer preserves terminal blocked failure")
+    findings = manifest.get("findings")
+    if not isinstance(findings, list) or not all(
+        isinstance(finding, dict) for finding in findings
+    ):
+        _fail("predecessor report findings are invalid")
+    blocker_hashes = frozenset(
+        _finding_sha256(finding)
+        for finding in findings
+        if finding.get("blocks_next_increment") is True
+    )
+    if blocker_hashes != FAILED_DISPOSITION_BLOCKING_FINDING_SHA256:
+        _fail("predecessor blocking finding identities changed")
+
+
+def _validate_predecessor_state_for_disposition(
+    root: Path, state_value: dict[str, Any]
+) -> None:
+    expected_keys = frozenset(
+        {
+            "baseline_fingerprint",
+            "head_commit",
+            "increment_id",
+            "next_increment_readiness",
+            "quality_gate",
+            "report_path",
+            "report_sha256",
+            "schema_version",
+            "status",
+            "workspace_fingerprint",
+        }
+    )
+    _require_exact_keys(state_value, expected_keys, "predecessor failed gate state")
+    if state_value.get("schema_version") != LEGACY_FAILED_STATE_SCHEMA_VERSION:
+        _fail("predecessor failed gate state must remain schema version 2")
+    if (
+        state_value.get("increment_id") != FAILED_DISPOSITION_INCREMENT_ID
+        or state_value.get("status") != "failed"
+        or state_value.get("quality_gate") != "FAIL"
+        or state_value.get("next_increment_readiness") != "Blocked"
+        or state_value.get("report_path")
+        != FAILED_DISPOSITION_PREDECESSOR_REPORT_PATH
+        or state_value.get("report_sha256")
+        != FAILED_DISPOSITION_PREDECESSOR_REPORT_SHA256
+        or state_value.get("head_commit")
+        != FAILED_DISPOSITION_PREDECESSOR_HEAD_COMMIT
+    ):
+        _fail("predecessor failed gate evidence does not match D-098")
+    if "completion_marker" in state_value:
+        _fail("predecessor failed gate state must not have a completion marker")
+    raw_state_digest = _hash_file(state_path(root)).hex()
+    if raw_state_digest != FAILED_DISPOSITION_PREDECESSOR_STATE_SHA256:
+        _fail("predecessor failed gate state digest changed")
+
+
+def _disposed_predecessor_state_sha256(state_value: dict[str, Any]) -> str:
+    predecessor_state = dict(state_value)
+    predecessor_state.pop("successor_disposition", None)
+    predecessor_state["schema_version"] = LEGACY_FAILED_STATE_SCHEMA_VERSION
+    payload = (json.dumps(predecessor_state, indent=2, sort_keys=True) + "\n").encode(
+        "utf-8"
+    )
+    return _hash_bytes(payload)
+
+
+def _validate_recovery_report(
+    root: Path,
+) -> tuple[dict[str, Any], str]:
+    manifest, _, report_digest = validate_report(
+        root,
+        FAILED_DISPOSITION_RECOVERY_REPORT_PATH,
+        FAILED_DISPOSITION_RECOVERY_ID,
+    )
+    if manifest["next_increment_readiness"] == "Blocked":
+        _fail("recovery report does not admit its exact successor")
+    if any(
+        entry["required"] and entry["status"] != "Passed"
+        for entry in manifest["verification"]
+    ) or any(
+        entry["required"] and entry["status"] != "Passed"
+        for entry in manifest["manual_verification"]
+    ):
+        _fail("recovery report has incomplete required evidence")
+    if any(finding["blocks_next_increment"] for finding in manifest["findings"]):
+        _fail("recovery report contains a next-blocking finding")
+    return manifest, report_digest
+
+
+def _validate_disposed_failed_state(
+    root: Path, state_value: dict[str, Any]
+) -> bool:
+    try:
+        validate_state(state_value)
+        if has_merge_conflicts(root):
+            return False
+        if (
+            state_value.get("increment_id") != FAILED_DISPOSITION_INCREMENT_ID
+            or state_value.get("status") != "failed"
+            or state_value.get("quality_gate") != "FAIL"
+            or state_value.get("next_increment_readiness") != "Blocked"
+            or state_value.get("report_path")
+            != FAILED_DISPOSITION_PREDECESSOR_REPORT_PATH
+            or state_value.get("report_sha256")
+            != FAILED_DISPOSITION_PREDECESSOR_REPORT_SHA256
+            or state_value.get("head_commit")
+            != FAILED_DISPOSITION_PREDECESSOR_HEAD_COMMIT
+            or "completion_marker" in state_value
+        ):
+            return False
+        if (
+            _disposed_predecessor_state_sha256(state_value)
+            != FAILED_DISPOSITION_PREDECESSOR_STATE_SHA256
+        ):
+            return False
+        _validate_predecessor_report(root)
+        current_head = current_head_commit(root)
+        if not _is_ancestor(root, FAILED_DISPOSITION_BASE_COMMIT, current_head):
+            return False
+        disposition = _validate_disposition(
+            state_value["successor_disposition"], "successor disposition"
+        )
+        recovery_path = _safe_report_path(
+            root,
+            FAILED_DISPOSITION_RECOVERY_REPORT_PATH,
+            FAILED_DISPOSITION_RECOVERY_ID,
+        )
+        recovery_text = _read_bounded_text(
+            recovery_path, MAX_REPORT_BYTES, "disposition recovery report"
+        )
+        if _hash_file(recovery_path).hex() != disposition["report_sha256"]:
+            return False
+        if workspace_fingerprint(root) != disposition["workspace_fingerprint"]:
+            return False
+        repository_changes = changed_paths(root)
+        if repository_changes and set(repository_changes) != set(
+            FAILED_DISPOSITION_RECOVERY_ALLOWED_PATHS
+        ):
+            return False
+        if suspicious_changed_paths(repository_changes):
+            return False
+        manifest = _extract_manifest(recovery_text)
+        if (
+            manifest.get("increment_id") != FAILED_DISPOSITION_RECOVERY_ID
+            or manifest.get("quality_gate") != disposition["quality_gate"]
+            or manifest.get("next_increment_readiness")
+            != disposition["next_increment_readiness"]
+        ):
+            return False
+    except (GateError, KeyError):
+        return False
+    return True
+
+
+def record_failed_disposition(root: Path) -> None:
+    if has_merge_conflicts(root):
+        _fail("cannot record a failed disposition while merge conflicts exist")
+    state_value = read_state(root)
+    if state_value is None:
+        _fail("no post-increment gate state exists")
+    if "successor_disposition" in state_value:
+        if _validate_disposed_failed_state(root, state_value):
+            return
+        _fail("existing failed disposition evidence is invalid")
+
+    if current_head_commit(root) != FAILED_DISPOSITION_BASE_COMMIT:
+        _fail("failed disposition must be recorded from its exact baseline commit")
+    if not _is_ancestor(
+        root,
+        FAILED_DISPOSITION_PREDECESSOR_HEAD_COMMIT,
+        FAILED_DISPOSITION_BASE_COMMIT,
+    ):
+        _fail("predecessor failed HEAD is not an ancestor of the recovery baseline")
+    _validate_predecessor_state_for_disposition(root, state_value)
+    _validate_predecessor_report(root)
+
+    repository_changes = changed_paths(root)
+    if set(repository_changes) != set(FAILED_DISPOSITION_RECOVERY_ALLOWED_PATHS):
+        _fail("failed disposition change set does not match its exact allowlist")
+    if suspicious_changed_paths(repository_changes):
+        _fail("suspicious generated, credential, database, or build path detected")
+
+    manifest, report_digest = _validate_recovery_report(root)
+    disposition = {
+        "allowed_paths": list(FAILED_DISPOSITION_SUCCESSOR_ALLOWED_PATHS),
+        "baseline_commit": FAILED_DISPOSITION_BASE_COMMIT,
+        "disposition_id": FAILED_DISPOSITION_RECOVERY_ID,
+        "next_increment_readiness": manifest["next_increment_readiness"],
+        "predecessor_state_sha256": FAILED_DISPOSITION_PREDECESSOR_STATE_SHA256,
+        "quality_gate": manifest["quality_gate"],
+        "report_path": FAILED_DISPOSITION_RECOVERY_REPORT_PATH,
+        "report_sha256": report_digest,
+        "successor_increment_id": FAILED_DISPOSITION_SUCCESSOR_INCREMENT_ID,
+        "workspace_fingerprint": workspace_fingerprint(root),
+    }
+    disposed_state = dict(state_value)
+    disposed_state["schema_version"] = STATE_SCHEMA_VERSION
+    disposed_state["successor_disposition"] = disposition
+    write_state(root, disposed_state)
+    recorded_state = read_state(root)
+    if recorded_state is None or not _validate_disposed_failed_state(
+        root, recorded_state
+    ):
+        _fail("recorded failed disposition did not validate")
+
+
+def _validate_lineage_change_scope(
+    state_value: dict[str, Any], repository_changes: tuple[str, ...]
+) -> None:
+    disposition = state_value.get("predecessor_disposition")
+    if disposition is None:
+        return
+    allowed_paths = frozenset(disposition["allowed_paths"])
+    if not set(repository_changes).issubset(allowed_paths):
+        _fail("successor change set exceeds its recorded path allowlist")
+
+
 def finalize_gate(root: Path, increment_id: str, report_value: str) -> None:
     increment_id = validate_increment_id(increment_id)
     if has_merge_conflicts(root):
@@ -592,28 +1057,32 @@ def finalize_gate(root: Path, increment_id: str, report_value: str) -> None:
     if state_value["status"] == "failed":
         _fail("a terminally failed increment cannot be completed")
 
-    suspicious = suspicious_changed_paths(changed_paths(root))
+    repository_changes = changed_paths(root)
+    suspicious = suspicious_changed_paths(repository_changes)
     if suspicious:
         _fail("suspicious generated, credential, database, or build path detected")
+    _validate_lineage_change_scope(state_value, repository_changes)
 
     manifest, report_path, report_digest = validate_report(
         root, report_value, increment_id
     )
     relative_report = report_path.relative_to(root).as_posix()
-    write_state(
-        root,
-        {
-            "baseline_fingerprint": state_value["baseline_fingerprint"],
-            "completion_marker": COMPLETION_MARKER,
-            "increment_id": increment_id,
-            "quality_gate": manifest["quality_gate"],
-            "report_path": relative_report,
-            "report_sha256": report_digest,
-            "schema_version": STATE_SCHEMA_VERSION,
-            "status": "complete",
-            "workspace_fingerprint": workspace_fingerprint(root),
-        },
-    )
+    completed_state = {
+        "baseline_fingerprint": state_value["baseline_fingerprint"],
+        "completion_marker": COMPLETION_MARKER,
+        "increment_id": increment_id,
+        "quality_gate": manifest["quality_gate"],
+        "report_path": relative_report,
+        "report_sha256": report_digest,
+        "schema_version": STATE_SCHEMA_VERSION,
+        "status": "complete",
+        "workspace_fingerprint": workspace_fingerprint(root),
+    }
+    if "predecessor_disposition" in state_value:
+        completed_state["predecessor_disposition"] = state_value[
+            "predecessor_disposition"
+        ]
+    write_state(root, completed_state)
 
 
 def close_failed_gate(root: Path, increment_id: str, report_value: str) -> None:
@@ -638,32 +1107,41 @@ def close_failed_gate(root: Path, increment_id: str, report_value: str) -> None:
     ):
         _fail("terminal failure cannot be reclosed after HEAD changes")
 
-    suspicious = suspicious_changed_paths(changed_paths(root))
+    repository_changes = changed_paths(root)
+    suspicious = suspicious_changed_paths(repository_changes)
     if suspicious:
         _fail("suspicious generated, credential, database, or build path detected")
+    _validate_lineage_change_scope(state_value, repository_changes)
 
     manifest, report_path, report_digest = validate_failed_report(
         root, report_value, increment_id
     )
     relative_report = report_path.relative_to(root).as_posix()
-    write_state(
-        root,
-        {
-            "baseline_fingerprint": state_value["baseline_fingerprint"],
-            "head_commit": current_head_commit(root),
-            "increment_id": increment_id,
-            "next_increment_readiness": manifest["next_increment_readiness"],
-            "quality_gate": "FAIL",
-            "report_path": relative_report,
-            "report_sha256": report_digest,
-            "schema_version": STATE_SCHEMA_VERSION,
-            "status": "failed",
-            "workspace_fingerprint": workspace_fingerprint(root),
-        },
-    )
+    failed_state = {
+        "baseline_fingerprint": state_value["baseline_fingerprint"],
+        "head_commit": current_head_commit(root),
+        "increment_id": increment_id,
+        "next_increment_readiness": manifest["next_increment_readiness"],
+        "quality_gate": "FAIL",
+        "report_path": relative_report,
+        "report_sha256": report_digest,
+        "schema_version": STATE_SCHEMA_VERSION,
+        "status": "failed",
+        "workspace_fingerprint": workspace_fingerprint(root),
+    }
+    if "predecessor_disposition" in state_value:
+        failed_state["predecessor_disposition"] = state_value[
+            "predecessor_disposition"
+        ]
+    write_state(root, failed_state)
 
 
 def _validate_terminal_evidence(root: Path, state_value: dict[str, Any]) -> bool:
+    if (
+        state_value.get("status") == "failed"
+        and "successor_disposition" in state_value
+    ):
+        return _validate_disposed_failed_state(root, state_value)
     try:
         validate_state(state_value)
         if has_merge_conflicts(root):
@@ -674,7 +1152,7 @@ def _validate_terminal_evidence(root: Path, state_value: dict[str, Any]) -> bool
         report_text = _read_bounded_text(
             report_path, MAX_REPORT_BYTES, "post-increment report"
         )
-        report_digest = hashlib.sha256(report_text.encode("utf-8")).hexdigest()
+        report_digest = _hash_file(report_path).hex()
         if report_digest != state_value["report_sha256"]:
             return False
         if workspace_fingerprint(root) != state_value["workspace_fingerprint"]:
@@ -764,6 +1242,19 @@ def redacted_status(root: Path) -> dict[str, Any]:
             status_value["next_increment_readiness"] = state_value[
                 "next_increment_readiness"
             ]
+            if "successor_disposition" in state_value:
+                disposition = state_value["successor_disposition"]
+                status_value["successor_disposition"] = {
+                    "disposition_id": disposition["disposition_id"],
+                    "next_increment_readiness": disposition[
+                        "next_increment_readiness"
+                    ],
+                    "quality_gate": disposition["quality_gate"],
+                    "report_path": disposition["report_path"],
+                    "successor_increment_id": disposition[
+                        "successor_increment_id"
+                    ],
+                }
             status_value["valid"] = validate_failed_state(root, state_value)
         else:
             status_value["valid"] = validate_completed_state(root, state_value)
@@ -794,6 +1285,11 @@ def build_parser() -> argparse.ArgumentParser:
     failed_parser.add_argument("--increment", required=True)
     failed_parser.add_argument("--report", required=True)
 
+    subparsers.add_parser(
+        "record-failed-disposition",
+        help="record the exact D-098 cumulative-evidence disposition",
+    )
+
     subparsers.add_parser("status", help="print redacted gate state")
     return parser
 
@@ -817,6 +1313,12 @@ def main(argv: list[str] | None = None) -> int:
             print(
                 "post-increment-gate: recorded terminal failure for increment "
                 f"{arguments.increment}"
+            )
+        elif arguments.command == "record-failed-disposition":
+            record_failed_disposition(root)
+            print(
+                "post-increment-gate: recorded exact successor disposition for "
+                f"{FAILED_DISPOSITION_INCREMENT_ID}"
             )
         elif arguments.command == "status":
             json.dump(redacted_status(root), sys.stdout, sort_keys=True)

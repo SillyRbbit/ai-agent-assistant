@@ -2,6 +2,30 @@
 
 Last updated: 2026-08-29
 
+## D-098 exceptional governance recovery
+
+The owner authorized
+[`v0-terminal-failed-successor-disposition-recovery`](docs/plans/2026-08-29-v0-terminal-failed-successor-disposition-recovery.md)
+from clean synchronized `main` at
+`a417e5f1c1c602b917ca27c65af71480e3db6a45`. This is a narrowly bounded
+repository-governance recovery for the published D-097 record, not a normal
+successor increment. Its proposed argument-free
+`python3 .codex/hooks/post_increment_gate.py record-failed-disposition` command
+may record one exact schema-v3 lineage target:
+`personal-assistant-v0-signing-security-prerequisite-planning`.
+
+The tracked evidence freezes after required pre-disposition verification but
+before the argument-free record command. It therefore cannot claim that later
+transition ran; the ignored schema-v3 state and redacted `status` output are
+the sole post-freeze evidence. Nothing has been committed, published, or begun
+as a successor. The original state remains
+`failed` / `FAIL` / `Blocked` with no completion marker. D-098 carries the
+historical screenshot/privacy failure and Pending Open Directory disclosure
+only into the named documentation target; it does not clear or downgrade them.
+Executable build-script containment, operational signing, V0-3, and every
+Apple, Xcode, Keychain, credential, provider, network, and product action remain
+Blocked and outside this recovery.
+
 ## Current blocked recovery execution
 
 The owner-approved Xcode Developer ID recovery execution began from clean

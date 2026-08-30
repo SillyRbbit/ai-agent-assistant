@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import hashlib
 import io
 import json
 import subprocess
@@ -166,6 +167,215 @@ class PostIncrementGateTests(unittest.TestCase):
         )
         report_path.write_text(report, encoding="utf-8")
         return relative_report
+
+    def _write_named_report(
+        self,
+        *,
+        increment_id: str,
+        relative_report: str,
+        verification_status: str = "Passed",
+        manual_status: str = "Passed",
+        quality_gate: str = "PASS",
+        readiness: str = "Ready",
+        findings: list[dict[str, object]] | None = None,
+    ) -> str:
+        report_path = self.root / relative_report
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        report_path.write_text("placeholder\n", encoding="utf-8")
+        manifest = {
+            "commands_executed": ["test command"],
+            "files_changed": list(gate.changed_paths(self.root)),
+            "findings": findings or [],
+            "increment_id": increment_id,
+            "manual_verification": [
+                {
+                    "check": "Review the exact bounded recovery",
+                    "required": True,
+                    "status": manual_status,
+                }
+            ],
+            "next_increment_readiness": readiness,
+            "quality_gate": quality_gate,
+            "schema_version": 1,
+            "verification": [
+                {
+                    "command": "test command",
+                    "required": True,
+                    "status": verification_status,
+                }
+            ],
+        }
+        report = "\n".join(
+            [
+                "# Post-increment review",
+                "",
+                gate.MANIFEST_START.rstrip("\n"),
+                json.dumps(manifest, indent=2, sort_keys=True),
+                gate.MANIFEST_END.lstrip("\n"),
+                "",
+                "## Executive summary",
+                "Fixture summary.",
+                "",
+                "## Scope and boundaries",
+                "Fixture scope.",
+                "",
+                "## Verification results",
+                "Fixture verification.",
+                "",
+                "## Architecture findings",
+                "None.",
+                "",
+                "## Security findings",
+                "None.",
+                "",
+                "## Code-health findings",
+                "None.",
+                "",
+                "## Technical debt",
+                "None.",
+                "",
+                "## Roadmap findings",
+                "None.",
+                "",
+                "## Completion decision",
+                quality_gate,
+                "",
+                "## Next-increment readiness",
+                readiness,
+                "",
+                "## Exact files changed",
+                "See manifest.",
+                "",
+                "## Exact commands executed",
+                "See manifest.",
+                "",
+            ]
+        )
+        report_path.write_text(report, encoding="utf-8")
+        return relative_report
+
+    @staticmethod
+    def _finding_sha256(finding: dict[str, object]) -> str:
+        payload = json.dumps(
+            finding, ensure_ascii=False, separators=(",", ":"), sort_keys=True
+        ).encode("utf-8")
+        return hashlib.sha256(payload).hexdigest()
+
+    def _failed_disposition_blockers(self) -> list[dict[str, object]]:
+        summaries = (
+            "Post-commit readiness disposition is not yet implemented.",
+            "Historical screenshot handling remains failed evidence.",
+            "Historical Open Directory acceptance remains pending.",
+        )
+        blockers: list[dict[str, object]] = []
+        for summary in summaries:
+            finding = self._finding(
+                severity="Medium",
+                blocks_completion=False,
+                blocks_next_increment=True,
+            )
+            finding["summary"] = summary
+            blockers.append(finding)
+        return blockers
+
+    def _prepare_failed_disposition_fixture(
+        self,
+        *,
+        blockers: list[dict[str, object]] | None = None,
+        recovery_verification: str = "Passed",
+        recovery_manual: str = "Passed",
+        recovery_quality: str = "PASS WITH ADVISORIES",
+        recovery_readiness: str = "Ready with advisories",
+        recovery_findings: list[dict[str, object]] | None = None,
+    ) -> tuple[str, frozenset[str]]:
+        failed_increment = gate.FAILED_DISPOSITION_INCREMENT_ID
+        active_state = dict(gate.read_state(self.root))
+        active_state["increment_id"] = failed_increment
+        gate.write_state(self.root, active_state)
+
+        predecessor_blockers = blockers or self._failed_disposition_blockers()
+        (self.root / "change.txt").write_text(
+            "reviewed failed recovery\n", encoding="utf-8"
+        )
+        predecessor_report = self._write_named_report(
+            increment_id=failed_increment,
+            relative_report=gate.FAILED_DISPOSITION_PREDECESSOR_REPORT_PATH,
+            manual_status="Manual verification pending",
+            quality_gate="FAIL",
+            readiness="Blocked",
+            findings=predecessor_blockers,
+        )
+        gate.close_failed_gate(self.root, failed_increment, predecessor_report)
+
+        predecessor_state = dict(gate.read_state(self.root))
+        predecessor_state["schema_version"] = gate.LEGACY_FAILED_STATE_SCHEMA_VERSION
+        predecessor_state.pop("successor_disposition", None)
+        predecessor_state.pop("predecessor_disposition", None)
+        gate.write_state(self.root, predecessor_state)
+        self.failed_disposition_predecessor_report_sha256 = hashlib.sha256(
+            (self.root / predecessor_report).read_bytes()
+        ).hexdigest()
+        self.failed_disposition_predecessor_state_sha256 = hashlib.sha256(
+            gate.state_path(self.root).read_bytes()
+        ).hexdigest()
+        self.failed_disposition_predecessor_head_commit = predecessor_state[
+            "head_commit"
+        ]
+        self._git("add", "--all")
+        self._git("commit", "--quiet", "-m", "Publish failed fixture")
+        base_commit = (
+            subprocess.run(
+                ["git", "rev-parse", "HEAD"],
+                cwd=self.root,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            .stdout.strip()
+        )
+
+        for relative_path in gate.FAILED_DISPOSITION_RECOVERY_ALLOWED_PATHS:
+            if relative_path == gate.FAILED_DISPOSITION_RECOVERY_REPORT_PATH:
+                continue
+            path = self.root / relative_path
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("bounded governance recovery\n", encoding="utf-8")
+        self._write_named_report(
+            increment_id=gate.FAILED_DISPOSITION_RECOVERY_ID,
+            relative_report=gate.FAILED_DISPOSITION_RECOVERY_REPORT_PATH,
+            verification_status=recovery_verification,
+            manual_status=recovery_manual,
+            quality_gate=recovery_quality,
+            readiness=recovery_readiness,
+            findings=recovery_findings,
+        )
+        blocker_hashes = frozenset(
+            self._finding_sha256(finding) for finding in predecessor_blockers
+        )
+        fixture_constants = {
+            "FAILED_DISPOSITION_BASE_COMMIT": base_commit,
+            "FAILED_DISPOSITION_PREDECESSOR_REPORT_SHA256": self.failed_disposition_predecessor_report_sha256,
+            "FAILED_DISPOSITION_PREDECESSOR_STATE_SHA256": self.failed_disposition_predecessor_state_sha256,
+            "FAILED_DISPOSITION_PREDECESSOR_HEAD_COMMIT": self.failed_disposition_predecessor_head_commit,
+            "FAILED_DISPOSITION_BLOCKING_FINDING_SHA256": blocker_hashes,
+        }
+        for name, value in fixture_constants.items():
+            patcher = mock.patch.object(gate, name, value)
+            patcher.start()
+            self.addCleanup(patcher.stop)
+        return base_commit, blocker_hashes
+
+    def _record_failed_disposition(
+        self, base_commit: str, blocker_hashes: frozenset[str]
+    ) -> None:
+        self.assertEqual(gate.FAILED_DISPOSITION_BASE_COMMIT, base_commit)
+        if gate.FAILED_DISPOSITION_BLOCKING_FINDING_SHA256 == blocker_hashes:
+            gate.record_failed_disposition(self.root)
+            return
+        with mock.patch.object(
+            gate, "FAILED_DISPOSITION_BLOCKING_FINDING_SHA256", blocker_hashes
+        ):
+            gate.record_failed_disposition(self.root)
 
     def test_active_increment_without_report_requests_continuation(self) -> None:
         decision = gate.evaluate_stop_payload(self._stop_payload())
@@ -751,6 +961,477 @@ class PostIncrementGateTests(unittest.TestCase):
         with mock.patch.object(gate, "has_merge_conflicts", return_value=True):
             with self.assertRaises(gate.GateError):
                 gate.finalize_gate(self.root, "04g", report)
+
+    def test_failed_disposition_contract_is_exact_and_argument_free(self) -> None:
+        self.assertEqual(
+            gate.FAILED_DISPOSITION_INCREMENT_ID,
+            "v0-xcode-developer-id-recovery-execution",
+        )
+        self.assertEqual(
+            gate.FAILED_DISPOSITION_PREDECESSOR_REPORT_PATH,
+            "docs/reviews/2026-08-28-v0-xcode-developer-id-recovery-execution-post-increment-review.md",
+        )
+        self.assertEqual(
+            gate.FAILED_DISPOSITION_BASE_COMMIT,
+            "a417e5f1c1c602b917ca27c65af71480e3db6a45",
+        )
+        self.assertEqual(
+            gate.FAILED_DISPOSITION_RECOVERY_ID,
+            "v0-terminal-failed-successor-disposition-recovery",
+        )
+        self.assertEqual(
+            gate.FAILED_DISPOSITION_RECOVERY_REPORT_PATH,
+            "docs/reviews/2026-08-29-v0-terminal-failed-successor-disposition-recovery-post-increment-review.md",
+        )
+        self.assertEqual(
+            gate.FAILED_DISPOSITION_SUCCESSOR_INCREMENT_ID,
+            "personal-assistant-v0-signing-security-prerequisite-planning",
+        )
+        parsed = gate.build_parser().parse_args(["record-failed-disposition"])
+        self.assertEqual(parsed.command, "record-failed-disposition")
+        with (
+            mock.patch("sys.stderr", new=io.StringIO()),
+            self.assertRaises(SystemExit),
+        ):
+            gate.build_parser().parse_args(
+                ["record-failed-disposition", "--increment", "caller-selected"]
+            )
+
+    def test_record_failed_disposition_preserves_failure_and_writes_exact_v3(
+        self,
+    ) -> None:
+        base_commit, blocker_hashes = self._prepare_failed_disposition_fixture()
+        predecessor_state = dict(gate.read_state(self.root))
+
+        self._record_failed_disposition(base_commit, blocker_hashes)
+
+        state = gate.read_state(self.root)
+        self.assertEqual(
+            set(state),
+            {
+                "baseline_fingerprint",
+                "head_commit",
+                "increment_id",
+                "next_increment_readiness",
+                "quality_gate",
+                "report_path",
+                "report_sha256",
+                "schema_version",
+                "status",
+                "successor_disposition",
+                "workspace_fingerprint",
+            },
+        )
+        for key, value in predecessor_state.items():
+            if key == "schema_version":
+                continue
+            self.assertEqual(state[key], value)
+        self.assertEqual(state["schema_version"], gate.STATE_SCHEMA_VERSION)
+        self.assertEqual(state["status"], "failed")
+        self.assertEqual(state["quality_gate"], "FAIL")
+        self.assertEqual(state["next_increment_readiness"], "Blocked")
+        self.assertNotIn("completion_marker", state)
+        disposition = state["successor_disposition"]
+        self.assertEqual(
+            set(disposition),
+            {
+                "allowed_paths",
+                "baseline_commit",
+                "disposition_id",
+                "next_increment_readiness",
+                "predecessor_state_sha256",
+                "quality_gate",
+                "report_path",
+                "report_sha256",
+                "successor_increment_id",
+                "workspace_fingerprint",
+            },
+        )
+        self.assertEqual(disposition["baseline_commit"], base_commit)
+        self.assertEqual(
+            disposition["disposition_id"], gate.FAILED_DISPOSITION_RECOVERY_ID
+        )
+        self.assertEqual(disposition["quality_gate"], "PASS WITH ADVISORIES")
+        self.assertEqual(
+            disposition["next_increment_readiness"], "Ready with advisories"
+        )
+        self.assertEqual(
+            disposition["successor_increment_id"],
+            gate.FAILED_DISPOSITION_SUCCESSOR_INCREMENT_ID,
+        )
+        self.assertEqual(
+            disposition["allowed_paths"],
+            list(gate.FAILED_DISPOSITION_SUCCESSOR_ALLOWED_PATHS),
+        )
+        self.assertTrue(gate.validate_failed_state(self.root, state))
+
+    def test_v3_failed_disposition_requires_exact_state_and_nested_keys(self) -> None:
+        base_commit, blocker_hashes = self._prepare_failed_disposition_fixture()
+        self._record_failed_disposition(base_commit, blocker_hashes)
+        valid_state = dict(gate.read_state(self.root))
+
+        state = dict(valid_state)
+        state["unexpected"] = True
+        with self.assertRaises(gate.GateError):
+            gate.validate_state(state)
+
+        for missing_key in valid_state["successor_disposition"]:
+            with self.subTest(missing_key=missing_key):
+                state = dict(valid_state)
+                disposition = dict(valid_state["successor_disposition"])
+                disposition.pop(missing_key)
+                state["successor_disposition"] = disposition
+                with self.assertRaises(gate.GateError):
+                    gate.validate_state(state)
+
+        preserved_field_mutations: dict[str, object] = {
+            "baseline_fingerprint": "f" * 64,
+            "head_commit": "f" * 40,
+            "increment_id": "different-increment",
+            "next_increment_readiness": "Ready",
+            "quality_gate": "PASS",
+            "report_path": gate.FAILED_DISPOSITION_RECOVERY_REPORT_PATH,
+            "report_sha256": "f" * 64,
+            "schema_version": gate.LEGACY_FAILED_STATE_SCHEMA_VERSION,
+            "status": "complete",
+            "workspace_fingerprint": "f" * 64,
+        }
+        for preserved_key, mutation in preserved_field_mutations.items():
+            with self.subTest(preserved_key=preserved_key):
+                state = dict(valid_state)
+                state[preserved_key] = mutation
+                self.assertFalse(gate.validate_failed_state(self.root, state))
+
+        mutations = {
+            "alternate disposition": lambda value: value.update(
+                disposition_id="alternate-recovery"
+            ),
+            "alternate report": lambda value: value.update(
+                report_path="docs/reviews/2026-08-29-alternate-post-increment-review.md"
+            ),
+            "alternate base": lambda value: value.update(baseline_commit="0" * 40),
+            "alternate successor": lambda value: value.update(
+                successor_increment_id="alternate-successor"
+            ),
+            "failed recovery": lambda value: value.update(quality_gate="FAIL"),
+            "blocked recovery": lambda value: value.update(
+                next_increment_readiness="Blocked"
+            ),
+            "widened paths": lambda value: value.update(
+                allowed_paths=[*value["allowed_paths"], "src/unauthorized.ts"]
+            ),
+        }
+        for label, mutate in mutations.items():
+            with self.subTest(label=label):
+                state = dict(valid_state)
+                disposition = dict(valid_state["successor_disposition"])
+                mutate(disposition)
+                state["successor_disposition"] = disposition
+                with self.assertRaises(gate.GateError):
+                    gate.validate_state(state)
+
+    def test_legacy_v1_and_v2_states_remain_readable_after_v3(self) -> None:
+        active = dict(gate.read_state(self.root))
+        active["schema_version"] = gate.LEGACY_STATE_SCHEMA_VERSION
+        gate.validate_state(active)
+
+        base_commit, _ = self._prepare_failed_disposition_fixture()
+        failed = gate.read_state(self.root)
+        self.assertEqual(
+            failed["schema_version"], gate.LEGACY_FAILED_STATE_SCHEMA_VERSION
+        )
+        gate.validate_state(failed)
+        self.assertTrue(base_commit)
+
+    def test_recovery_report_failed_verification_is_rejected(self) -> None:
+        base_commit, blocker_hashes = self._prepare_failed_disposition_fixture(
+            recovery_verification="Failed",
+            recovery_quality="FAIL",
+            recovery_readiness="Blocked",
+        )
+        with self.assertRaises(gate.GateError):
+            self._record_failed_disposition(base_commit, blocker_hashes)
+        self.assertEqual(gate.read_state(self.root)["schema_version"], 2)
+
+    def test_recovery_report_pending_manual_evidence_is_rejected(self) -> None:
+        base_commit, blocker_hashes = self._prepare_failed_disposition_fixture(
+            recovery_manual="Manual verification pending",
+            recovery_quality="FAIL",
+            recovery_readiness="Blocked",
+        )
+        with self.assertRaises(gate.GateError):
+            self._record_failed_disposition(base_commit, blocker_hashes)
+
+    def test_recovery_report_blocked_readiness_is_rejected(self) -> None:
+        base_commit, blocker_hashes = self._prepare_failed_disposition_fixture(
+            recovery_quality="PASS WITH ADVISORIES",
+            recovery_readiness="Blocked",
+        )
+        with self.assertRaises(gate.GateError):
+            self._record_failed_disposition(base_commit, blocker_hashes)
+
+    def test_recovery_report_next_blocking_finding_is_rejected(self) -> None:
+        finding = self._finding(
+            severity="Medium", blocks_completion=False, blocks_next_increment=True
+        )
+        base_commit, blocker_hashes = self._prepare_failed_disposition_fixture(
+            recovery_quality="PASS WITH ADVISORIES",
+            recovery_readiness="Blocked",
+            recovery_findings=[finding],
+        )
+        with self.assertRaises(gate.GateError):
+            self._record_failed_disposition(base_commit, blocker_hashes)
+
+    def test_predecessor_requires_exact_three_blocker_digests(self) -> None:
+        expected = self._failed_disposition_blockers()
+        expected_hashes = frozenset(self._finding_sha256(item) for item in expected)
+        base_commit, _ = self._prepare_failed_disposition_fixture(
+            blockers=expected[:2]
+        )
+
+        with self.assertRaises(gate.GateError):
+            self._record_failed_disposition(base_commit, expected_hashes)
+
+    def test_predecessor_changed_or_extra_blocker_digest_is_rejected(self) -> None:
+        expected = self._failed_disposition_blockers()
+        expected_hashes = frozenset(self._finding_sha256(item) for item in expected)
+        changed = [dict(item) for item in expected]
+        changed[0]["summary"] = "Changed blocker identity."
+        changed.append(
+            self._finding(
+                severity="Medium",
+                blocks_completion=False,
+                blocks_next_increment=True,
+            )
+        )
+        base_commit, _ = self._prepare_failed_disposition_fixture(blockers=changed)
+
+        with self.assertRaises(gate.GateError):
+            self._record_failed_disposition(base_commit, expected_hashes)
+
+    def test_failed_disposition_rejects_original_or_recovery_report_tamper(
+        self,
+    ) -> None:
+        base_commit, blocker_hashes = self._prepare_failed_disposition_fixture()
+        predecessor = self.root / gate.FAILED_DISPOSITION_PREDECESSOR_REPORT_PATH
+        predecessor.write_text(
+            predecessor.read_text(encoding="utf-8") + "tampered\n", encoding="utf-8"
+        )
+
+        with self.assertRaises(gate.GateError):
+            self._record_failed_disposition(base_commit, blocker_hashes)
+
+    def test_failed_disposition_rejects_conflict_suspicious_and_inventory_drift(
+        self,
+    ) -> None:
+        base_commit, blocker_hashes = self._prepare_failed_disposition_fixture()
+        (self.root / ".env").write_text("SECRET=value\n", encoding="utf-8")
+
+        with self.assertRaises(gate.GateError):
+            self._record_failed_disposition(base_commit, blocker_hashes)
+        with mock.patch.object(gate, "has_merge_conflicts", return_value=True):
+            with self.assertRaises(gate.GateError):
+                self._record_failed_disposition(base_commit, blocker_hashes)
+        (self.root / ".env").unlink()
+        (self.root / "unexpected-recovery-file.md").write_text(
+            "inventory drift\n", encoding="utf-8"
+        )
+        with self.assertRaises(gate.GateError):
+            self._record_failed_disposition(base_commit, blocker_hashes)
+
+    def test_failed_disposition_is_one_shot_and_identical_retry_is_idempotent(
+        self,
+    ) -> None:
+        base_commit, blocker_hashes = self._prepare_failed_disposition_fixture()
+        self._record_failed_disposition(base_commit, blocker_hashes)
+        first_state = gate.read_state(self.root)
+
+        self._record_failed_disposition(base_commit, blocker_hashes)
+
+        self.assertEqual(gate.read_state(self.root), first_state)
+        report = self.root / gate.FAILED_DISPOSITION_RECOVERY_REPORT_PATH
+        report.write_text(
+            report.read_text(encoding="utf-8") + "changed retry\n", encoding="utf-8"
+        )
+        with self.assertRaises(gate.GateError):
+            self._record_failed_disposition(base_commit, blocker_hashes)
+        self.assertEqual(gate.read_state(self.root), first_state)
+
+    def test_failed_disposition_atomic_write_failure_preserves_v2_state(self) -> None:
+        base_commit, blocker_hashes = self._prepare_failed_disposition_fixture()
+        original_state = gate.read_state(self.root)
+
+        with mock.patch.object(
+            gate, "write_state", side_effect=gate.GateError("fixture write failure")
+        ):
+            with self.assertRaisesRegex(gate.GateError, "fixture write failure"):
+                self._record_failed_disposition(base_commit, blocker_hashes)
+
+        self.assertEqual(gate.read_state(self.root), original_state)
+
+    def test_failed_disposition_stop_and_status_fail_closed_on_drift(self) -> None:
+        base_commit, blocker_hashes = self._prepare_failed_disposition_fixture()
+        self._record_failed_disposition(base_commit, blocker_hashes)
+
+        self.assertFalse(gate.evaluate_stop_payload(self._stop_payload()).should_continue)
+        status = gate.redacted_status(self.root)
+        self.assertEqual(status["status"], "failed")
+        self.assertEqual(status["quality_gate"], "FAIL")
+        self.assertEqual(status["next_increment_readiness"], "Blocked")
+        self.assertTrue(status["valid"])
+        redacted_disposition = status["successor_disposition"]
+        self.assertEqual(
+            redacted_disposition["successor_increment_id"],
+            gate.FAILED_DISPOSITION_SUCCESSOR_INCREMENT_ID,
+        )
+        self.assertNotIn("report_sha256", redacted_disposition)
+        self.assertNotIn("workspace_fingerprint", redacted_disposition)
+        self.assertNotIn("predecessor_state_sha256", redacted_disposition)
+
+        changed_path = self.root / gate.FAILED_DISPOSITION_RECOVERY_REPORT_PATH
+        changed_path.write_text(
+            changed_path.read_text(encoding="utf-8") + "drift\n", encoding="utf-8"
+        )
+        self.assertFalse(gate.redacted_status(self.root)["valid"])
+        self.assertTrue(gate.evaluate_stop_payload(self._stop_payload()).should_continue)
+
+    def test_only_clean_exact_successor_can_consume_failed_disposition(self) -> None:
+        base_commit, blocker_hashes = self._prepare_failed_disposition_fixture()
+        self._record_failed_disposition(base_commit, blocker_hashes)
+
+        with mock.patch.object(gate, "FAILED_DISPOSITION_BASE_COMMIT", base_commit):
+            with self.assertRaises(gate.GateError):
+                gate.begin_gate(
+                    self.root, gate.FAILED_DISPOSITION_SUCCESSOR_INCREMENT_ID
+                )
+            with self.assertRaises(gate.GateError):
+                gate.begin_gate(self.root, "unrelated-increment")
+            with self.assertRaises(gate.GateError):
+                gate.begin_gate(self.root, gate.FAILED_DISPOSITION_INCREMENT_ID)
+
+        self._git("add", "--all")
+        self._git("commit", "--quiet", "-m", "Record exact disposition")
+        with mock.patch.object(gate, "FAILED_DISPOSITION_BASE_COMMIT", base_commit):
+            gate.begin_gate(
+                self.root, gate.FAILED_DISPOSITION_SUCCESSOR_INCREMENT_ID
+            )
+
+        state = gate.read_state(self.root)
+        self.assertEqual(state["status"], "active")
+        self.assertEqual(
+            state["increment_id"], gate.FAILED_DISPOSITION_SUCCESSOR_INCREMENT_ID
+        )
+        self.assertEqual(
+            state["predecessor_disposition"]["allowed_paths"],
+            list(gate.FAILED_DISPOSITION_SUCCESSOR_ALLOWED_PATHS),
+        )
+
+    def test_admitted_successor_enforces_nested_exact_path_allowlist(self) -> None:
+        base_commit, blocker_hashes = self._prepare_failed_disposition_fixture()
+        self._record_failed_disposition(base_commit, blocker_hashes)
+        self._git("add", "--all")
+        self._git("commit", "--quiet", "-m", "Record exact disposition")
+        with mock.patch.object(gate, "FAILED_DISPOSITION_BASE_COMMIT", base_commit):
+            gate.begin_gate(
+                self.root, gate.FAILED_DISPOSITION_SUCCESSOR_INCREMENT_ID
+            )
+        (self.root / "outside-allowlist.md").write_text(
+            "unapproved scope\n", encoding="utf-8"
+        )
+
+        with self.assertRaises(gate.GateError):
+            gate.finalize_gate(
+                self.root,
+                gate.FAILED_DISPOSITION_SUCCESSOR_INCREMENT_ID,
+                "docs/reviews/2026-08-29-personal-assistant-v0-signing-security-prerequisite-planning-post-increment-review.md",
+            )
+
+    def test_disposition_rejects_wrong_baseline_and_nonancestor_predecessor(
+        self,
+    ) -> None:
+        base_commit, blocker_hashes = self._prepare_failed_disposition_fixture()
+        with mock.patch.object(
+            gate, "FAILED_DISPOSITION_BASE_COMMIT", "f" * 40
+        ):
+            with self.assertRaises(gate.GateError):
+                gate.record_failed_disposition(self.root)
+        with mock.patch.object(gate, "_is_ancestor", return_value=False):
+            with self.assertRaises(gate.GateError):
+                self._record_failed_disposition(base_commit, blocker_hashes)
+
+    def test_disposition_rejects_raw_predecessor_state_digest_drift(self) -> None:
+        base_commit, blocker_hashes = self._prepare_failed_disposition_fixture()
+        state = dict(gate.read_state(self.root))
+        state["baseline_fingerprint"] = "f" * 64
+        gate.write_state(self.root, state)
+
+        with self.assertRaises(gate.GateError):
+            self._record_failed_disposition(base_commit, blocker_hashes)
+
+    def test_exact_successor_completion_preserves_disposition_lineage(self) -> None:
+        base_commit, blocker_hashes = self._prepare_failed_disposition_fixture()
+        self._record_failed_disposition(base_commit, blocker_hashes)
+        disposition = dict(gate.read_state(self.root)["successor_disposition"])
+        self._git("add", "--all")
+        self._git("commit", "--quiet", "-m", "Record exact disposition")
+        gate.begin_gate(
+            self.root, gate.FAILED_DISPOSITION_SUCCESSOR_INCREMENT_ID
+        )
+        (self.root / "ARCHITECTURE.md").write_text(
+            "bounded successor planning\n", encoding="utf-8"
+        )
+        report = self._write_named_report(
+            increment_id=gate.FAILED_DISPOSITION_SUCCESSOR_INCREMENT_ID,
+            relative_report=(
+                "docs/reviews/2026-08-29-personal-assistant-v0-signing-security-"
+                "prerequisite-planning-post-increment-review.md"
+            ),
+        )
+
+        gate.finalize_gate(
+            self.root,
+            gate.FAILED_DISPOSITION_SUCCESSOR_INCREMENT_ID,
+            report,
+        )
+
+        state = gate.read_state(self.root)
+        self.assertEqual(state["status"], "complete")
+        self.assertEqual(state["predecessor_disposition"], disposition)
+        self.assertTrue(gate.validate_completed_state(self.root, state))
+
+    def test_exact_successor_failure_preserves_disposition_lineage(self) -> None:
+        base_commit, blocker_hashes = self._prepare_failed_disposition_fixture()
+        self._record_failed_disposition(base_commit, blocker_hashes)
+        disposition = dict(gate.read_state(self.root)["successor_disposition"])
+        self._git("add", "--all")
+        self._git("commit", "--quiet", "-m", "Record exact disposition")
+        gate.begin_gate(
+            self.root, gate.FAILED_DISPOSITION_SUCCESSOR_INCREMENT_ID
+        )
+        (self.root / "SECURITY.md").write_text(
+            "bounded successor failure\n", encoding="utf-8"
+        )
+        report = self._write_named_report(
+            increment_id=gate.FAILED_DISPOSITION_SUCCESSOR_INCREMENT_ID,
+            relative_report=(
+                "docs/reviews/2026-08-29-personal-assistant-v0-signing-security-"
+                "prerequisite-planning-post-increment-review.md"
+            ),
+            manual_status="Manual verification pending",
+            quality_gate="FAIL",
+            readiness="Blocked",
+        )
+
+        gate.close_failed_gate(
+            self.root,
+            gate.FAILED_DISPOSITION_SUCCESSOR_INCREMENT_ID,
+            report,
+        )
+
+        state = gate.read_state(self.root)
+        self.assertEqual(state["status"], "failed")
+        self.assertEqual(state["predecessor_disposition"], disposition)
+        self.assertTrue(gate.validate_failed_state(self.root, state))
 
     def test_malformed_hook_input_fails_closed_with_exact_prompt(self) -> None:
         output = io.StringIO()

@@ -518,6 +518,21 @@ effects; future signing remains Blocked until an exact reviewed no-new-
 dependency control detects or contains outside-root writes, undeclared network
 effects, and escaped children.
 
+The owner-authorized D-098 repository-governance recovery uses synchronized
+baseline
+`a417e5f1c1c602b917ca27c65af71480e3db6a45`. Its proposed one-shot,
+argument-free `record-failed-disposition` path may record only exact schema-v3
+lineage from the published D-097 failure to the sole documentation successor
+`personal-assistant-v0-signing-security-prerequisite-planning`. It must preserve
+the original `failed` / `FAIL` / `Blocked` values and absence of a completion
+marker. It carries, rather than clears, the historical screenshot/privacy
+failure and the undisclosed `getpwuid`/`opendirectoryd` boundary. It cannot make
+build containment, private-key use, operational signing, V0-3, or any broader
+successor admissible. Its tracked report freezes before the transition and
+cannot attest its later result; only the ignored schema-v3 state and redacted
+`status` output may do so. No Apple, Xcode, Keychain, signing, credential,
+provider, network, or product action is authorized.
+
 Any need for an unapproved dependency,
 WebView or subprocess networking,
 caller-selected trusted configuration, raw-content logging, persistent
@@ -676,6 +691,13 @@ incident response, and rollback are in
   Neither passing nor failed state proves commands ran or grants approval,
   authorization, signing, publication, or product authority; the report and
   actual command output remain the evidence.
+- D-098's in-progress recovery may extend only the exact published D-097 failed
+  record with bounded one-shot lineage to the named documentation successor.
+  Until the argument-free record command and every required check actually
+  pass, the existing schema-v2 record remains authoritative. Even after a valid
+  disposition, the original `FAIL`/Blocked result, historical blockers, and
+  same-user/fresh-clone limitations remain; the lineage is not authentication,
+  approval, completion, operational-signing admission, or durable audit.
 - `stop_hook_active` must suppress a repeated continuation request. This loop guard does not waive the mandatory completion criteria.
 - In an emergency, disable the hook through `/hooks` or start a session with `codex --disable hooks`. Record the bypass and rerun the complete gate before marking an increment complete. Do not routinely bypass hook trust.
 

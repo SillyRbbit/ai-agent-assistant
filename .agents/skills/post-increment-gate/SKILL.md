@@ -56,7 +56,8 @@ Update the applicable `HANDOFF.md`, `PROJECT_STATUS.md`, `NEXT_STEPS.md`, `CHANG
 2. Include the exact machine manifest, every required section, complete changed-file inventory, and exact commands executed.
 3. Set the result to exactly `PASS`, `PASS WITH ADVISORIES`, or `FAIL` based on the recorded evidence.
 4. Review the complete report and diff before finalization.
-5. Only for `PASS` or `PASS WITH ADVISORIES`, run:
+5. Only for an ordinary active increment with `PASS` or
+   `PASS WITH ADVISORIES`, run:
 
    ```bash
    python3 .codex/hooks/post_increment_gate.py finalize \
@@ -78,6 +79,32 @@ Update the applicable `HANDOFF.md`, `PROJECT_STATUS.md`, `NEXT_STEPS.md`, `CHANG
    requires `status: complete` with `valid: true`. A truthful failed result
    requires `status: failed`, `quality_gate: FAIL`, and `valid: true`; it has no
    completion marker and grants no completion or successor authority.
+
+## J. Exact D-098 same-terminal-record recovery
+
+This exceptional path applies only to
+`v0-terminal-failed-successor-disposition-recovery` under D-098. It is not a
+new increment. Do not call `begin`, `finalize`, or `close-failed`, and do not
+modify the predecessor report or state by hand.
+
+1. Confirm `status` reports the exact valid D-097 predecessor as
+   `failed` / `FAIL` / `Blocked`.
+2. Confirm the complete diff is exactly the D-098 22-path allowlist and the
+   recovery report records every required command and manual gate.
+3. Require `PASS` or `PASS WITH ADVISORIES`, non-Blocked recovery readiness,
+   no next-blocking finding, and passing independent architecture, security,
+   code-health, and readiness review.
+4. Freeze the report, then run exactly once:
+
+   ```bash
+   python3 .codex/hooks/post_increment_gate.py record-failed-disposition
+   ```
+
+5. Run `status`. The predecessor must remain `failed` / `FAIL` / `Blocked`
+   without a completion marker, while its schema-v3 cumulative evidence names
+   only `personal-assistant-v0-signing-security-prerequisite-planning` as the
+   validated successor. Stop; do not begin it, commit, or publish
+   automatically.
 
 The ignored local state is checkout-local workflow evidence, not authentication
 or authorization. Its hashes detect unreclosed report or workspace drift but do

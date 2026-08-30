@@ -2,6 +2,42 @@
 
 Last updated: 2026-08-29
 
+## Active D-098 terminal-failed successor-disposition recovery
+
+The owner authorized one exceptional repository-governance recovery on branch
+`codex/v0-terminal-failed-successor-disposition-recovery` from clean
+synchronized baseline
+`a417e5f1c1c602b917ca27c65af71480e3db6a45`. The exact plan is
+[`2026-08-29-v0-terminal-failed-successor-disposition-recovery.md`](docs/plans/2026-08-29-v0-terminal-failed-successor-disposition-recovery.md).
+D-098 permits only a one-shot, argument-free
+`python3 .codex/hooks/post_increment_gate.py record-failed-disposition` path
+whose sole lineage target is
+`personal-assistant-v0-signing-security-prerequisite-planning`.
+
+The tracked recovery evidence freezes before the record command and therefore
+cannot truthfully state its later outcome. Inspect
+`python3 .codex/hooks/post_increment_gate.py status`: only a valid schema-v3
+disposition naming the exact successor establishes post-freeze admission. At
+tracked freeze the command is Not run; no tracked closeout edit follows it, no
+commit or publication occurred, and the documentation successor has not begun.
+The published D-097 result remains exact `failed` / `FAIL` / `Blocked` with no
+completion marker. The historical screenshot/privacy failure and Pending
+`getpwuid`/`opendirectoryd` disclosure are carried only to the named
+documentation successor; neither becomes Passed. Build-script containment,
+operational signing, V0-3, Apple, Xcode, Keychain, credential, provider,
+network, and product work remain Blocked.
+
+Exact resume prompt: “Read `AGENTS.md`, the complete required project-memory and
+security/testing chain, D-097 and D-098, the published D-097 failed report, and
+the active terminal-failed successor-disposition recovery plan. Confirm branch
+`codex/v0-terminal-failed-successor-disposition-recovery` still derives from
+`a417e5f1c1c602b917ca27c65af71480e3db6a45` and inspect the complete diff and
+ignored gate status. Preserve the original
+`failed` / `FAIL` / `Blocked` result and no completion marker. Do not begin
+`personal-assistant-v0-signing-security-prerequisite-planning`, and do not
+access Apple, Xcode, Keychain, use a private key, build for signing, sign, or
+perform any external or product action.”
+
 ## Current blocked recovery execution
 
 The owner-approved

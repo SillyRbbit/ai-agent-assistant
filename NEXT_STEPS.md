@@ -25,7 +25,32 @@ Do not create another certificate, change accounts or Keychains,
 import/export/revoke/remove material, repeat the scoped check, or sign under the
 closed approval.
 
-No successor is **Ready**. On 2026-08-29, the owner first authorized drafting the
+### Active exceptional governance recovery: D-098 exact-target disposition
+
+**Status:** Tracked pre-disposition evidence freezes from clean synchronized
+`main` at `a417e5f1c1c602b917ca27c65af71480e3db6a45`; it does not claim the later
+ignored-state transition ran. The owner authorized only
+[`v0-terminal-failed-successor-disposition-recovery`](docs/plans/2026-08-29-v0-terminal-failed-successor-disposition-recovery.md),
+an exact repository-governance recovery for the published D-097 record. Its
+argument-free `python3 .codex/hooks/post_increment_gate.py
+record-failed-disposition` operation is one-shot and may bind only
+`personal-assistant-v0-signing-security-prerequisite-planning` as the later
+documentation target.
+
+The recovery must preserve the original `failed` / `FAIL` / `Blocked` state,
+the historical screenshot/privacy failure, the Pending Open Directory boundary,
+and the absence of a completion marker. Those blockers may be carried only into
+the exact documentation successor; they are not passed, waived, or generalized
+into product authority. Build-script containment, operational signing, V0-3,
+and every Apple, Xcode, Keychain, credential, provider, network, or product
+action remain Blocked. This tracked text cannot establish post-freeze
+admission. Only `post_increment_gate.py status` reporting a valid schema-v3
+disposition can make the exact documentation successor Ready with advisories;
+even then it does not begin automatically and still requires separate owner
+approval plus a clean workspace.
+
+No product, operational, or other successor is **Ready**. On 2026-08-29, the
+owner first authorized drafting the
 [sanitized Keychain-scoped identity discrepancy plan](docs/plans/2026-08-29-v0-keychain-scoped-identity-discrepancy.md)
 under the then-active recovery gate. The exact draft passed documentation-tier
 and embedded-Python syntax validation. After static review corrected its OS,

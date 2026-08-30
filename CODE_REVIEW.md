@@ -106,6 +106,15 @@ When `FAIL` is terminal, record it with `close-failed`, not `finalize`. The
 failed state has no completion marker, cannot transition to complete, and must
 retain `Blocked` next readiness whenever any finding blocks the next increment.
 
+For the one D-098 recovery, review the unchanged predecessor report and v2
+state separately from the additive schema-v3 disposition. Require the exact
+allowlisted predecessor, baseline, recovery report, 22 changed paths, and sole
+successor; a passing recovery report; no next-blocking finding; an argument-free
+command; and no completion marker. Reject caller-selected identities, alternate
+paths or successors, predecessor mutation, generic override behavior,
+non-identical replay, dirty successor admission, or any call to `begin`,
+`finalize`, or `close-failed` during recovery.
+
 The component reviews may be invoked independently through
 `$architecture-review`, `$security-review`, `$code-review`,
 `$technical-debt`, and `$readiness-review`. `$quality-gate` composes their

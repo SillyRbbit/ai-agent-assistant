@@ -20,6 +20,20 @@ verification record; this roadmap does not create new completion evidence.
 
 ## Product milestones
 
+The owner-authorized D-098 terminal-failed successor-disposition recovery has a
+tracked pre-disposition evidence freeze from synchronized baseline
+`a417e5f1c1c602b917ca27c65af71480e3db6a45`. It is repository governance only:
+one proposed argument-free, one-shot disposition may add bounded schema-v3
+lineage from the published D-097 failure to
+`personal-assistant-v0-signing-security-prerequisite-planning`. It preserves
+the original `failed` / `FAIL` / `Blocked` result and no completion marker, and
+it carries the screenshot/privacy and Pending Open Directory evidence only to
+that exact documentation target. The tracked report necessarily records the
+later transition as Not run; only ignored schema-v3 state plus redacted
+`status` can evidence post-freeze admission. No successor begins automatically.
+Build containment, operational signing, V0-3, and all Apple, Keychain,
+external, or product work remain Blocked.
+
 V0-1 is published at `dca584e`; V0-2 is published through PR #81 at `1513bd8`
 with `PASS WITH ADVISORIES` from baseline `8e382e8`. No successor is Ready.
 
