@@ -32,7 +32,11 @@ from common import (
     workspace_path as _workspace_path,
 )
 
-SCHEMA_VERSION = 1
+REPORT_SCHEMA_VERSION = 1
+STATE_SCHEMA_VERSION = 2
+LEGACY_STATE_SCHEMA_VERSION = 1
+# Retained for report-fixture and external read-only validator compatibility.
+SCHEMA_VERSION = REPORT_SCHEMA_VERSION
 STATE_RELATIVE_PATH = Path(".codex/state/post_increment_gate.json")
 REPORTS_RELATIVE_PATH = Path("docs/reviews")
 COMPLETION_MARKER = "POST_INCREMENT_GATE_COMPLETE"
@@ -59,6 +63,7 @@ FINDING_CATEGORIES = frozenset(
 
 REQUIRED_REPORT_SECTIONS = (
     "## Executive summary",
+    "## Scope and boundaries",
     "## Verification results",
     "## Architecture findings",
     "## Security findings",
@@ -135,6 +140,16 @@ def workspace_fingerprint(root: Path) -> str:
     return digest.hexdigest()
 
 
+def current_head_commit(root: Path) -> str:
+    try:
+        commit = _run_git(root, "rev-parse", "HEAD").decode("ascii").strip()
+    except UnicodeDecodeError as error:
+        raise GateError("Git returned an invalid HEAD commit") from error
+    if re.fullmatch(r"(?:[0-9a-f]{40}|[0-9a-f]{64})", commit) is None:
+        _fail("Git returned an invalid HEAD commit")
+    return commit
+
+
 def state_path(root: Path) -> Path:
     return root / STATE_RELATIVE_PATH
 
@@ -182,36 +197,58 @@ def validate_state(state_value: dict[str, Any]) -> None:
     }
     if status_value == "active":
         _require_exact_keys(state_value, frozenset(common_keys), "active gate state")
-    elif status_value == "complete":
+    elif status_value in {"complete", "failed"}:
+        evidence_keys = {
+            "quality_gate",
+            "report_path",
+            "report_sha256",
+            "workspace_fingerprint",
+        }
+        if status_value == "failed":
+            evidence_keys.add("next_increment_readiness")
+            evidence_keys.add("head_commit")
         _require_exact_keys(
             state_value,
             frozenset(
                 common_keys
-                | {
-                    "completion_marker",
-                    "quality_gate",
-                    "report_path",
-                    "report_sha256",
-                    "workspace_fingerprint",
-                }
+                | evidence_keys
+                | ({"completion_marker"} if status_value == "complete" else set())
             ),
-            "completed gate state",
+            f"{status_value} gate state",
         )
-        if state_value.get("completion_marker") != COMPLETION_MARKER:
-            _fail("completed gate state has an invalid completion marker")
-        if state_value.get("quality_gate") not in {
-            "PASS",
-            "PASS WITH ADVISORIES",
-        }:
-            _fail("completed gate state has a non-passing result")
-        for key in ("report_path", "report_sha256", "workspace_fingerprint"):
-            if not isinstance(state_value.get(key), str) or not state_value[key]:
-                _fail("completed gate state has invalid evidence")
+        if status_value == "complete":
+            if state_value.get("completion_marker") != COMPLETION_MARKER:
+                _fail("completed gate state has an invalid completion marker")
+            if state_value.get("quality_gate") not in {
+                "PASS",
+                "PASS WITH ADVISORIES",
+            }:
+                _fail("completed gate state has a non-passing result")
+        else:
+            if state_value.get("quality_gate") != "FAIL":
+                _fail("failed gate state must preserve a FAIL result")
+            if state_value.get("next_increment_readiness") not in READINESS_RESULTS:
+                _fail("failed gate state has an invalid readiness result")
+            head_commit = state_value.get("head_commit")
+            if not isinstance(head_commit, str) or re.fullmatch(
+                r"(?:[0-9a-f]{40}|[0-9a-f]{64})", head_commit
+            ) is None:
+                _fail("failed gate state has an invalid HEAD commit")
+        report_path = state_value.get("report_path")
+        if not isinstance(report_path, str) or not report_path:
+            _fail(f"{status_value} gate state has invalid evidence")
+        for key in ("report_sha256", "workspace_fingerprint"):
+            value = state_value.get(key)
+            if not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{64}", value):
+                _fail(f"{status_value} gate state has invalid evidence")
     else:
         _fail("post-increment state has an unknown status")
 
-    if state_value.get("schema_version") != SCHEMA_VERSION:
+    supported_state_versions = {LEGACY_STATE_SCHEMA_VERSION, STATE_SCHEMA_VERSION}
+    if state_value.get("schema_version") not in supported_state_versions:
         _fail("post-increment state schema version is unsupported")
+    if status_value == "failed" and state_value["schema_version"] != STATE_SCHEMA_VERSION:
+        _fail("failed gate state requires the current state schema version")
     validate_increment_id(state_value.get("increment_id"))
     baseline = state_value.get("baseline_fingerprint")
     if not isinstance(baseline, str) or not re.fullmatch(r"[0-9a-f]{64}", baseline):
@@ -277,6 +314,15 @@ def begin_gate(root: Path, increment_id: str) -> None:
         if existing_state["increment_id"] == increment_id:
             return
         _fail("another increment is already active")
+    if existing_state is not None and existing_state["status"] == "failed":
+        if not validate_failed_state(root, existing_state):
+            _fail("terminal failed gate evidence is invalid")
+        if existing_state["increment_id"] == increment_id:
+            _fail("this increment already has a valid terminal failure record")
+        if existing_state["next_increment_readiness"] == "Blocked":
+            _fail("terminal failed gate evidence blocks the next increment")
+        if changed_paths(root):
+            _fail("terminal failed increment must have a clean workspace")
     if (
         existing_state is not None
         and existing_state["status"] == "complete"
@@ -290,7 +336,7 @@ def begin_gate(root: Path, increment_id: str) -> None:
         {
             "baseline_fingerprint": workspace_fingerprint(root),
             "increment_id": increment_id,
-            "schema_version": SCHEMA_VERSION,
+            "schema_version": STATE_SCHEMA_VERSION,
             "status": "active",
         },
     )
@@ -416,15 +462,16 @@ def _extract_manifest(report_text: str) -> dict[str, Any]:
     return manifest
 
 
-def validate_report(
+def _validate_report_evidence(
     root: Path, report_value: str, increment_id: str
 ) -> tuple[dict[str, Any], Path, str]:
     report_path = _safe_report_path(root, report_value, increment_id)
     report_text = _read_bounded_text(
         report_path, MAX_REPORT_BYTES, "post-increment report"
     )
+    report_lines = report_text.splitlines()
     for section in REQUIRED_REPORT_SECTIONS:
-        if report_text.count(section) != 1:
+        if sum(line == section for line in report_lines) != 1:
             _fail(f"post-increment report must contain exactly one {section} section")
 
     manifest = _extract_manifest(report_text)
@@ -445,7 +492,7 @@ def validate_report(
         ),
         "post-increment report manifest",
     )
-    if manifest["schema_version"] != SCHEMA_VERSION:
+    if manifest["schema_version"] != REPORT_SCHEMA_VERSION:
         _fail("post-increment report schema version is unsupported")
     if manifest["increment_id"] != increment_id:
         _fail("post-increment report increment does not match active state")
@@ -495,6 +542,10 @@ def validate_report(
         and finding["severity"] in {"Critical", "High"}
         for finding in findings
     )
+    if any(finding["blocks_next_increment"] for finding in findings) and manifest[
+        "next_increment_readiness"
+    ] != "Blocked":
+        _fail("next-increment readiness contradicts a blocking finding")
     if blocking_verification or blocking_manual or blocking_finding:
         computed_quality = "FAIL"
     else:
@@ -507,11 +558,26 @@ def validate_report(
         computed_quality = "PASS WITH ADVISORIES" if has_advisory else "PASS"
     if manifest["quality_gate"] != computed_quality:
         _fail("declared quality-gate result does not match report evidence")
-    if computed_quality == "FAIL":
-        _fail("post-increment report contains blocking evidence")
-
     report_digest = hashlib.sha256(report_text.encode("utf-8")).hexdigest()
     return manifest, report_path, report_digest
+
+
+def validate_report(
+    root: Path, report_value: str, increment_id: str
+) -> tuple[dict[str, Any], Path, str]:
+    validated = _validate_report_evidence(root, report_value, increment_id)
+    if validated[0]["quality_gate"] == "FAIL":
+        _fail("post-increment report contains blocking evidence")
+    return validated
+
+
+def validate_failed_report(
+    root: Path, report_value: str, increment_id: str
+) -> tuple[dict[str, Any], Path, str]:
+    validated = _validate_report_evidence(root, report_value, increment_id)
+    if validated[0]["quality_gate"] != "FAIL":
+        _fail("terminal failure requires a FAIL report")
+    return validated
 
 
 def finalize_gate(root: Path, increment_id: str, report_value: str) -> None:
@@ -523,6 +589,8 @@ def finalize_gate(root: Path, increment_id: str, report_value: str) -> None:
         _fail("no post-increment gate state exists")
     if state_value["increment_id"] != increment_id:
         _fail("increment does not match finalize request")
+    if state_value["status"] == "failed":
+        _fail("a terminally failed increment cannot be completed")
 
     suspicious = suspicious_changed_paths(changed_paths(root))
     if suspicious:
@@ -541,14 +609,61 @@ def finalize_gate(root: Path, increment_id: str, report_value: str) -> None:
             "quality_gate": manifest["quality_gate"],
             "report_path": relative_report,
             "report_sha256": report_digest,
-            "schema_version": SCHEMA_VERSION,
+            "schema_version": STATE_SCHEMA_VERSION,
             "status": "complete",
             "workspace_fingerprint": workspace_fingerprint(root),
         },
     )
 
 
-def validate_completed_state(root: Path, state_value: dict[str, Any]) -> bool:
+def close_failed_gate(root: Path, increment_id: str, report_value: str) -> None:
+    increment_id = validate_increment_id(increment_id)
+    if has_merge_conflicts(root):
+        _fail("cannot close a failed increment while merge conflicts exist")
+    state_value = read_state(root)
+    if state_value is None:
+        _fail("no post-increment gate state exists")
+    if state_value["increment_id"] != increment_id:
+        _fail("increment does not match close-failed request")
+    if state_value["status"] == "complete":
+        _fail("a completed increment cannot be changed to failed")
+    if (
+        state_value["status"] == "failed"
+        and state_value["report_path"] != report_value
+    ):
+        _fail("terminal failure may be reclosed only with the same report path")
+    if (
+        state_value["status"] == "failed"
+        and state_value["head_commit"] != current_head_commit(root)
+    ):
+        _fail("terminal failure cannot be reclosed after HEAD changes")
+
+    suspicious = suspicious_changed_paths(changed_paths(root))
+    if suspicious:
+        _fail("suspicious generated, credential, database, or build path detected")
+
+    manifest, report_path, report_digest = validate_failed_report(
+        root, report_value, increment_id
+    )
+    relative_report = report_path.relative_to(root).as_posix()
+    write_state(
+        root,
+        {
+            "baseline_fingerprint": state_value["baseline_fingerprint"],
+            "head_commit": current_head_commit(root),
+            "increment_id": increment_id,
+            "next_increment_readiness": manifest["next_increment_readiness"],
+            "quality_gate": "FAIL",
+            "report_path": relative_report,
+            "report_sha256": report_digest,
+            "schema_version": STATE_SCHEMA_VERSION,
+            "status": "failed",
+            "workspace_fingerprint": workspace_fingerprint(root),
+        },
+    )
+
+
+def _validate_terminal_evidence(root: Path, state_value: dict[str, Any]) -> bool:
     try:
         validate_state(state_value)
         if has_merge_conflicts(root):
@@ -566,9 +681,27 @@ def validate_completed_state(root: Path, state_value: dict[str, Any]) -> bool:
             return False
         if suspicious_changed_paths(changed_paths(root)):
             return False
+        if state_value["status"] == "failed":
+            manifest = _extract_manifest(report_text)
+            if manifest.get("quality_gate") != "FAIL" or manifest.get(
+                "next_increment_readiness"
+            ) != state_value["next_increment_readiness"]:
+                return False
     except GateError:
         return False
     return True
+
+
+def validate_completed_state(root: Path, state_value: dict[str, Any]) -> bool:
+    return state_value.get("status") == "complete" and _validate_terminal_evidence(
+        root, state_value
+    )
+
+
+def validate_failed_state(root: Path, state_value: dict[str, Any]) -> bool:
+    return state_value.get("status") == "failed" and _validate_terminal_evidence(
+        root, state_value
+    )
 
 
 def evaluate_stop_payload(payload: Any) -> StopDecision:
@@ -593,6 +726,10 @@ def evaluate_stop_payload(payload: Any) -> StopDecision:
             return StopDecision(should_continue=bool(changed_paths(root)))
         if state_value["status"] == "active":
             return StopDecision(should_continue=True)
+        if state_value["status"] == "failed":
+            return StopDecision(
+                should_continue=not validate_failed_state(root, state_value)
+            )
         return StopDecision(
             should_continue=not validate_completed_state(root, state_value)
         )
@@ -620,10 +757,16 @@ def redacted_status(root: Path) -> dict[str, Any]:
         "increment_id": state_value["increment_id"],
         "status": state_value["status"],
     }
-    if state_value["status"] == "complete":
+    if state_value["status"] in {"complete", "failed"}:
         status_value["quality_gate"] = state_value["quality_gate"]
         status_value["report_path"] = state_value["report_path"]
-        status_value["valid"] = validate_completed_state(root, state_value)
+        if state_value["status"] == "failed":
+            status_value["next_increment_readiness"] = state_value[
+                "next_increment_readiness"
+            ]
+            status_value["valid"] = validate_failed_state(root, state_value)
+        else:
+            status_value["valid"] = validate_completed_state(root, state_value)
     return status_value
 
 
@@ -644,6 +787,13 @@ def build_parser() -> argparse.ArgumentParser:
     finalize_parser.add_argument("--increment", required=True)
     finalize_parser.add_argument("--report", required=True)
 
+    failed_parser = subparsers.add_parser(
+        "close-failed",
+        help="validate a FAIL report and record terminal failure without completion",
+    )
+    failed_parser.add_argument("--increment", required=True)
+    failed_parser.add_argument("--report", required=True)
+
     subparsers.add_parser("status", help="print redacted gate state")
     return parser
 
@@ -662,6 +812,12 @@ def main(argv: list[str] | None = None) -> int:
         elif arguments.command == "finalize":
             finalize_gate(root, arguments.increment, arguments.report)
             print(f"post-increment-gate: completed increment {arguments.increment}")
+        elif arguments.command == "close-failed":
+            close_failed_gate(root, arguments.increment, arguments.report)
+            print(
+                "post-increment-gate: recorded terminal failure for increment "
+                f"{arguments.increment}"
+            )
         elif arguments.command == "status":
             json.dump(redacted_status(root), sys.stdout, sort_keys=True)
             sys.stdout.write("\n")

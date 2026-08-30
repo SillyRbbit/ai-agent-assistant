@@ -4115,3 +4115,207 @@ Apple-backed revocation and would supersede the selected D-072/D-075 model.
 
 This supplements D-072, D-075, and D-076. It does not supersede their identity
 selection or deferral, and it does not authorize V0-3.
+
+## Later execution evidence
+
+A separately approved execution on 2026-08-28 caused Xcode to create and list
+one Developer ID Application certificate record. Sanitized CLI checks found no
+usable code-signing identity. On 2026-08-29, the owner categorically confirmed
+that Keychain Access shows the certificate with a private key beneath it. That
+is owner-attested evidence that Keychain Access displayed local pairing, but it
+does not by itself verify certificate identity/validity, code-signing usability,
+non-exported owner control, or signing. After separate exact residual-risk
+acceptance and approval, one bounded sanitized default-user-Keychain query
+returned exactly one valid code-signing identity with the fixed Developer ID
+Application label prefix. That establishes current scoped identity visibility,
+not provenance, non-exportability, custody, a signed build, or TS-017's
+historical cause. The owner separately reported no authorization prompt and no
+visible state change. This evidence does not amend D-095, reopen D-076, resolve
+TS-017, or authorize V0-3, another query, certificate, Keychain change,
+import/export/revocation/removal, or signing.
+
+### 2026-08-29 evidence-standard planning note
+
+Later security review found that D-095's phrase “a non-exported
+owner-controlled private key” is not retrospectively provable from the selected
+pairing, identity-list, and signature evidence. Apple documents that some
+Keychain certificates and keys can be exported. Present pairing and signing can
+prove current owner-operated use, but not historical absence of export,
+exclusive custody, or absence of a prior copy; the separate current-item
+extractability attribute was not queried and remains `not_proven`.
+
+At drafting time, the proposed
+[Developer ID present-use and local signing proof](docs/plans/2026-08-29-v0-developer-id-present-use-local-signing-proof.md)
+did not itself amend this accepted decision. D-096 now additively governs
+prospective evidence with closed owner-attestation, workflow-private-key-no-
+export, present-use, and `not_proven` categories. D-072's stable signed-identity
+selection, D-075's Developer ID Application class, D-076's deferral, the
+historical privacy failure, and every separate operational approval remain
+unchanged.
+
+## D-096 - Use bounded present-use evidence without claiming historical private-key custody
+
+Date: 2026-08-29
+Status: Accepted owner documentation-only evidence decision; no operational authority
+
+## Context
+
+D-095 selected an Xcode-managed Developer ID Application recovery candidate
+and described a later proof of a “non-exported owner-controlled private key.”
+The subsequent recovery execution established local Keychain pairing and one
+currently valid scoped code-signing identity, but those observations cannot
+prove that the private key was never exported, copied, backed up, synchronized,
+or compromised. They also cannot prove exclusive custody. The separate current-
+item extractability attribute was not queried and remains `not_proven`; even a
+current non-extractable attribute would not disprove a prior copy.
+
+## Decision
+
+For prospective Developer ID evidence, replace only the unattainable proof
+interpretation with these closed categories:
+
+- `owner_attested_known_private_key_export=none_known | known | declined`;
+- `approved_workflow_private_key_export=not_performed`;
+- `technical_nonextractability=not_proven`;
+- `historical_absence_of_export=not_proven`;
+- `exclusive_custody=not_proven`; and
+- present-session use remains `not_run` until a separately approved bounded
+  signing proof actually succeeds.
+
+The owner accepts this evidence standard for future planning. This decision
+does not supply the owner attestation, establish present use, authorize private-
+key use, or convert any historical result to Passed. D-095's original text and
+the recovery record remain intact as historical evidence. The screenshot/chat
+privacy requirement remains Failed; the later-discovered
+`getpwuid`/`opendirectoryd` boundary remains Pending; the signed build remains
+Not run; and the active recovery result remains `FAIL`.
+
+## Rationale
+
+Present pairing, identity enumeration, and one eventual signature can establish
+current visibility or use, but not a negative fact about all prior copies or
+custody. Explicit `not_proven` categories and a bounded owner attestation are
+truthful, reviewable, and do not invite private-key export or broader Keychain
+inspection as substitute evidence.
+
+## Consequences
+
+- The evidence-standard documentation milestone in
+  [2026-08-29-v0-developer-id-present-use-local-signing-proof.md](docs/plans/2026-08-29-v0-developer-id-present-use-local-signing-proof.md)
+  is accepted.
+- At D-096 acceptance time, the future local signing milestone remained Blocked
+  by the unresolved terminal-failed-gate disposition, Pending Open Directory boundary, executable-build-
+  script containment, exact sanitizer and static review, expected-team and
+  signer binding, bounded cleanup, all manual gates, and a fresh explicit one-
+  attempt owner approval.
+- No Keychain, Apple, Xcode, build, signing, private-key, prompt, cleanup,
+  provider, network, source, dependency, configuration, hook, or external
+  operation is authorized by this decision.
+- No new increment or second post-increment gate began under D-096. At that
+  checkpoint, the active recovery gate remained `active` because then-current
+  tooling could not encode its truthful terminal `FAIL` result. D-097 later
+  resolves only that representation gap.
+
+## Supersedes or is superseded by
+
+This additively governs only prospective interpretation of D-095's historical
+“non-exported owner-controlled” evidence phrase. It does not rewrite or
+supersede D-072's stable signed identity, D-075's Developer ID Application
+class, D-076's deferral, D-095's recovery candidate, TS-017, the historical
+privacy failure, or any separate operational-approval requirement.
+
+## D-097 - Record truthful terminal gate failure without completion authority
+
+Date: 2026-08-29
+Status: Accepted owner same-active-gate governance implementation decision
+
+## Context
+
+The Xcode Developer ID recovery report truthfully computes `FAIL` because it
+contains immutable Failed evidence plus required Not run and Manual verification
+pending results. The v1 gate could encode only `active` or a passing `complete`
+state. Leaving the increment active forever caused a Stop-hook loop, while a
+passing marker would falsify evidence. The owner explicitly authorized one
+bounded recovery inside the existing active increment and prohibited a second
+increment.
+
+## Decision
+
+Add an exact state-schema-v2 `failed` variant and a `close-failed` command.
+`close-failed` accepts only a structurally valid report whose declared and
+computed result is exactly `FAIL`. It records the original baseline, current
+HEAD, report path and digest, workspace fingerprint, and exact next-increment
+readiness. It never writes `POST_INCREMENT_GATE_COMPLETE` or any other
+completion marker.
+
+The state machine is closed:
+
+- `active` plus a passing report may use `finalize` and become `complete`;
+- `active` plus an exact failing report may use `close-failed` and become
+  `failed`;
+- `failed` can be reclosed only for the same increment, baseline, report path,
+  and unchanged HEAD after complete revalidation of the revised report and
+  workspace;
+- `failed` can never use `finalize`, restart the same increment, or become
+  `complete`; and
+- `complete` can never use `close-failed`.
+
+A valid failed state lets the Stop hook end. Unreclosed report or workspace
+drift, conflicts, suspicious paths, or malformed state make it invalid and
+restore the Stop block. Any finding with `blocks_next_increment: true` forces
+readiness `Blocked`. In the checkout retaining the ignored state, a different
+increment can begin only from valid non-Blocked failed evidence, only after the
+workspace is clean, and only with separate owner approval. The current recovery
+report remains `Blocked`, so this decision does not make a successor Ready;
+repository policy and owner authority prohibit bypassing it from a fresh clone.
+
+Report schema remains v1. State schema becomes v2 while legacy v1 active and
+complete states remain readable. Existing passing refinalization behavior is
+preserved; the new prohibition is specifically failed-to-complete promotion.
+The hook now enforces the template-required `Scope and boundaries` section.
+
+## Security and operational limits
+
+The ignored state is checkout-local workflow evidence, not authentication,
+authorization, or durable audit. Its digests detect ordinary unreclosed drift,
+but a same-user process that can rewrite the state and repository can forge
+them, and a fresh clone does not inherit the ignored state. Readiness is
+admission evidence only and never substitutes for owner approval.
+
+This decision adds no product source, dependency, workflow, capability, CSP,
+permission, provider, credential, Keychain, Apple, signing, filesystem product
+effect, network, persistence, release, publication, or new increment authority.
+The historical privacy failure, pending Open Directory disposition, and every
+future signing blocker remain unchanged.
+
+## Consequences
+
+- The current increment can end truthfully as valid `failed`/`FAIL`/`Blocked`
+  without a completion marker.
+- Failed evidence remains visible and cannot be laundered into completion.
+- Reclosure after HEAD changes is deliberately rejected because the current
+  report inventory is relative to the working tree; any future post-commit
+  supersession needs a separate cumulative-evidence design.
+- A failed record remains valid after committing identical reviewed contents,
+  but its Blocked readiness still denies another gate.
+- Focused tests must cover exact state keys, PASS rejection, failed-to-complete
+  denial, Stop behavior, drift, conflicts, suspicious paths, readiness
+  consistency, clean successor admission, same-HEAD reclosure, post-commit
+  reclosure denial, legacy-state compatibility, and report sections.
+
+## Alternatives considered
+
+- Fabricate or downgrade failing evidence: rejected as false.
+- Leave the gate active indefinitely: rejected because it cannot represent the
+  observed terminal outcome.
+- Delete or bypass ignored state: rejected because it discards workflow
+  evidence and weakens the fail-closed process.
+- Start a second recovery increment: rejected by the owner's exact scope.
+- Add a general abandonment, override, or cumulative post-commit supersession
+  mechanism: deferred as broader than the smallest truthful recovery.
+
+## Supersedes or is superseded by
+
+This resolves only D-096's recorded terminal-failed-gate tooling blocker. It
+does not supersede D-072, D-075, D-076, D-095, D-096's evidence standard,
+TS-017, the recovery report's `FAIL`, or any product or operational gate.

@@ -1,7 +1,7 @@
 # Cortexa architecture
 
 Status: Authoritative current-state architecture
-Last updated: 2026-08-28
+Last updated: 2026-08-29
 
 ## Reading this document
 
@@ -46,6 +46,21 @@ There is no direct model-to-device or WebView-to-device execution path.
 
 Files, websites, clipboard data, contacts, calendar data, model output, gateway
 events, and tool results remain untrusted regardless of their source.
+
+The D-096 Developer ID present-use evidence standard and its local-signing plan
+govern a possible future disposable target-Mac proof; they are not a product
+architecture edge. They cannot establish historic private-key custody or non-
+extractability and grant the application, WebView, Rust runtime, or build system
+no Keychain or signing authority. The current topology remains unchanged.
+
+D-097 is also repository-governance state, not a product architecture edge.
+The local post-increment hook can now record exact terminal `failed` evidence
+without a completion marker. Its report and workspace hashes detect ordinary
+unreclosed drift only; they are not authentication, durable audit, or product
+authority. In the checkout retaining the ignored state, the current failed
+record is `FAIL`/Blocked and cannot admit a successor. A fresh clone does not
+inherit that state; repository policy and owner authority prohibit using one to
+bypass the recorded disposition.
 
 ## Current application topology
 
@@ -1011,11 +1026,23 @@ to the existing credential module, public integration test, and status-only
 example. No manifest, entitlement, Tauri, IPC, startup, WebView, network, or
 runtime-consumer path is authorized.
 
-D-095 adds only a future Xcode-managed Developer ID recovery candidate for the
-same private, fake-only proof. It preserves D-072/D-075's outside-App-Store
-identity selection and D-076's deferral: no Xcode, Apple, certificate, signing,
-Keychain, entitlement, provisioning-profile, source, or runtime action has
-occurred or is authorized.
+D-095 itself remains documentation-only and preserves D-072/D-075's
+outside-App-Store identity selection and D-076's deferral. A later separately
+approved recovery execution caused Xcode to create one Developer ID Application
+certificate record. Sanitized CLI checks reported no usable code-signing
+identity, while the owner later confirmed categorically that Keychain Access
+shows the certificate with a private key beneath it. After separate exact risk
+acceptance and approval, one sanitized default-user-Keychain check returned one
+label-matched valid code-signing identity. Local pairing and current scoped
+identity visibility are now observed, but non-exported owner control, a signed
+build, and the historical evidence-privacy requirement remain unproven, Not
+run, or Failed. The owner reported no authorization prompt and no visible state
+change. D-096 governs only prospective evidence through bounded attestation,
+workflow-no-export, present-use, and explicit `not_proven` categories; it
+changes no historical result. No entitlement, provisioning profile, source,
+runtime, credential, or product capability changed. V0-3 remains Blocked; the
+consumed diagnostic approval grants no retry, Apple/Keychain mutation, or
+signing authority.
 
 **Phase 2 target**: organization accounts and team workspaces may add
 centralized administration, role-based access control, organization policy and

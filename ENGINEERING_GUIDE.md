@@ -328,8 +328,9 @@ evidence even when the hosting plan cannot enforce them.
     technical-debt, and roadmap-readiness review against the complete diff.
 11. Synchronize project memory and write the increment and review records only
     after evidence is collected.
-12. Run `$post-increment-gate` and require a valid PASS or PASS WITH ADVISORIES
-    marker.
+12. Run `$post-increment-gate`. Require a valid PASS or PASS WITH ADVISORIES
+    completion marker, or record a truthful `FAIL` with the valid terminal
+    failed state and no completion marker.
 13. Stop. Do not begin the next increment, commit, or publish automatically.
 
 ## Code-review workflow
@@ -357,6 +358,14 @@ An increment is complete only when:
 - a post-increment report records exact files, commands, results, risks, and
   next readiness;
 - the gate reports the expected increment complete and valid.
+
+A terminally failed increment is not complete and does not satisfy this
+Definition of Done. Its valid failed record only preserves evidence and permits
+the Stop hook to end. In the checkout retaining the ignored state, a different
+increment may begin only when the failed report's readiness is not Blocked, the
+workspace is clean, and the owner has separately approved that work. A fresh
+clone does not inherit this enforcement and must not be used to bypass the
+recorded disposition.
 
 Publication is a separate operation. A verified uncommitted increment is not
 published until its commit and remote state are confirmed.

@@ -1,8 +1,93 @@
 # Project status
 
-Last updated: 2026-08-28
+Last updated: 2026-08-29
 
-## Current documentation-only increment
+## Current blocked recovery execution
+
+The owner-approved Xcode Developer ID recovery execution began from clean
+synchronized `main` at
+`0931df66c389bdc13c705d1259706c4d3770761c`. Xcode 26.6 created and listed one
+Developer ID Application certificate record after the owner privately
+confirmed Account Holder authority. Sanitized CLI checks reported zero matching
+certificates and zero usable code-signing identities for the current macOS
+user. The owner later confirmed categorically that Keychain Access shows the
+certificate with a private key beneath it. The owner then supplied the exact
+residual-risk confirmation and approved one `keychain_identity_v1` run. The
+single scoped query returned
+`passed_one_label_matched_valid_codesigning_identity`, establishing current
+visibility of one matching valid identity. Non-exported owner control and
+signing remain unconfirmed. The owner reported no authorization prompt and no
+visible state change.
+
+The increment stopped closed with `FAIL`; D-097 records a valid terminal failed
+state and its post-increment completion marker remains absent. No product
+source, dependency, configuration, entitlement, capability, GitHub Actions
+workflow, credential, fake Keychain item, signing, notarization,
+distribution, provider, network, filesystem, or device-effect path changed.
+The only executable source change is the repository governance hook and its
+focused tests under D-097.
+Private screenshots crossed the planned chat evidence boundary, but no private
+identifier or signing material entered Git. V0-3 remains Blocked, and no retry
+or further discrepancy/signing execution is approved.
+
+On 2026-08-29, the owner initially selected documentation drafting for a future
+sanitized, Keychain-scoped local-identity discrepancy check under the active
+recovery gate. The
+[draft plan](docs/plans/2026-08-29-v0-keychain-scoped-identity-discrepancy.md)
+defines closed output, bounded in-memory parsing, no raw evidence, exact stop
+conditions, and zero retries. Static review corrected disclosures for possible
+OS trust traffic/cache/log/state, local process-metadata visibility,
+identity-metadata scope, and the sole permitted quoted here-document. The owner
+later accepted those exact boundaries, confirmed personal control of the target
+Mac, and approved the single passing run recorded above. No raw identity data,
+signing, certificate/key mutation, source, or product capability was added.
+Post-correction static architecture/security review and every required
+documentation-tier check Passed before execution.
+The required stop-hook post-increment workflow reran full verification and all
+documentation/security gates successfully; npm audit reported 0
+vulnerabilities, and the one existing opt-in Hermes probe remained intentionally
+ignored. The historical non-export criterion cannot Pass as written, its
+prospective evidence standard is accepted under D-096, signing is Not run, and
+the historical screenshot/privacy failure remains Failed; therefore the result
+stays `FAIL` and no completion marker is finalized.
+
+The owner next authorized a documentation-only draft and then approved its
+evidence-standard milestone for the
+[Developer ID present-use and local signing proof](docs/plans/2026-08-29-v0-developer-id-present-use-local-signing-proof.md).
+The review found that current pairing, identity-list, and signature evidence
+cannot prove historical absence of export or exclusive custody; the separate
+current-item extractability attribute was not queried and remains `not_proven`.
+Accepted D-096 now governs those prospective claims with bounded owner
+attestation, `approved_workflow_private_key_export=not_performed`, future
+present-session key use, and fixed `not_proven` categories for technical non-
+extractability, historical absence of export, and exclusive custody. Only the
+evidence-standard documentation reconciliation was approved. The exact
+sanitizer, private-key use, build, signing, prompt, cleanup, and V0-3 remain
+Blocked and Not run. No new gate began.
+
+Latest post-gate review found that the consumed wrapper's `getpwuid` lookup may
+cross `opendirectoryd` account-record, local/remote directory-service, and OS
+cache/socket/log boundaries that were not separately disclosed before execution.
+No account field was emitted and remote traffic is not proven; acceptance is
+Pending and no rerun is authorized. The earlier hook could not represent a
+terminal `FAIL`; D-097 and its same-active-gate implementation now preserve the
+immutable result as valid `failed` / `FAIL` / `Blocked` without a completion
+marker. Representation is resolved, but Blocked readiness still denies a
+successor. Environment/cache routing also does not confine executable build
+scripts, which remains an additional operational-signing blocker.
+
+The final stop-hook recheck corrected report-only schema drift: three finding
+categories now use the hook's closed allowlist, the template-required scope
+section is present, and the parent plan's superseded operation boundary is
+explicitly historical. The hook's read-only validator now reaches only the
+expected blocking-evidence result. The later D-097 implementation adds only the
+terminal failed workflow state and focused gate tests. It changes no `FAIL`,
+Pending, Failed, or Not-run evidence and creates no completion or product
+authority. Future signing also remains Blocked until account-directory
+resolution is contained or separately disclosed and accepted in the exact
+sanitizer contract and successor readiness is truthfully unblocked.
+
+## Historical documentation-only planning increment
 
 The owner-approved Xcode Developer ID recovery-planning increment is verified
 complete with PASS WITH ADVISORIES from clean synchronized baseline 9a48b25.

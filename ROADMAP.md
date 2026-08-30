@@ -1,7 +1,7 @@
 # Cortexa roadmap
 
 Status: Authoritative milestone roadmap
-Last updated: 2026-08-28
+Last updated: 2026-08-29
 
 ## Status model
 
@@ -24,10 +24,39 @@ V0-1 is published at `dca584e`; V0-2 is published through PR #81 at `1513bd8`
 with `PASS WITH ADVISORIES` from baseline `8e382e8`. No successor is Ready.
 
 D-095's documentation-only Xcode-managed Developer ID recovery plan is complete
-from baseline 9a48b25. It prepares a future private V0-3 prerequisite without
-App Store publication or an Apple/certificate/Keychain/signing action. It does
-not reopen D-076 or resolve TS-017, so V0-3 and every later source increment
-remain Blocked.
+from baseline 9a48b25. A later separately approved execution from baseline
+`0931df6` created one Xcode-listed Developer ID Application certificate record,
+but sanitized CLI checks found no usable signing identity. The owner later
+confirmed that Keychain Access shows the certificate with a private key beneath
+it. Local pairing is observed, and one later separately approved exact scoped
+check returned `passed_one_label_matched_valid_codesigning_identity`. Current
+identity visibility is therefore established, but the historical non-export
+criterion cannot Pass as written. D-096 now accepts a truthful prospective
+evidence standard, while the signed build is Not run and the historical
+evidence-privacy requirement remains Failed. The owner reported no authorization
+prompt and no visible state change. The execution remains `FAIL`; D-076/TS-017's
+historical cause, V0-3, and every later source increment remain Blocked.
+D-097 now represents that result as a valid checkout-local terminal failed
+record with no completion marker. Its readiness remains Blocked, so the roadmap
+order and product capability are unchanged.
+
+The owner authorized and approved the documentation-only evidence milestone in the
+[present-use/local-signing plan](docs/plans/2026-08-29-v0-developer-id-present-use-local-signing-proof.md)
+after review found that the selected pairing, identity-list, and signature
+evidence cannot prove historical absence of export or exclusive custody and
+leaves the current extractability attribute unqueried/`not_proven`.
+D-096 accepts the evidence-standard documentation reconciliation; its exact
+sanitizer, one disposable local signature, and every later product step remain
+Blocked and Not run. The documentation decision starts no new gate and changes
+no milestone capability.
+
+Post-gate review additionally found an undisclosed historical
+`getpwuid`/`opendirectoryd` directory-service boundary, a missing terminal-
+failed gate representation, and no selected containment for executable npm/
+Cargo/Tauri build-script effects outside configured roots. D-097 resolves only
+the representation gap. The Pending directory boundary, current Blocked failed
+readiness, and build containment keep every successor and operational signing
+step Blocked; they do not change current product capability.
 
 | Milestone                                                             | Status                 | Verified scope                                                                                                                                                                  | Remaining gate                                                                                                                                  |
 | --------------------------------------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |

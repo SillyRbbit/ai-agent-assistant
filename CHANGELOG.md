@@ -4,6 +4,92 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added the owner-authorized D-097 terminal-failed recovery inside the existing
+  Xcode recovery gate. The repository hook now has an exact state-schema-v2
+  `failed` variant and `close-failed` command, accepts only computed `FAIL`,
+  writes no completion marker, forbids failed-to-complete promotion, validates
+  readiness against next-blocking findings, detects unreclosed report/workspace
+  drift, and blocks a successor from the current `Blocked` record. Focused tests
+  cover closed transitions, drift, report sections, legacy state, reclosure,
+  and clean successor admission. This changes no product source, dependency,
+  workflow, Apple, Keychain, signing, credential, network, release, or
+  publication behavior and starts no new increment.
+
+- Drafted and owner-approved the documentation-only evidence milestone in the bounded
+  [Developer ID present-use and local signing proof](docs/plans/2026-08-29-v0-developer-id-present-use-local-signing-proof.md).
+  Apple documentation and security/readiness review established that current
+  pairing, identity-list, and signature evidence cannot retrospectively prove
+  “never exported” or exclusive custody and leaves the unqueried current
+  extractability attribute `not_proven`. D-096 accepts bounded prospective
+  owner-attestation, workflow-no-export, present-use, and `not_proven`
+  categories, preserves the active `FAIL` gate and historical privacy failure,
+  and leaves one future disposable fixed-identifier local signing proof Blocked
+  pending all recorded security/governance gates, an exact sanitizer, and
+  separate one-attempt approval. No Keychain, Apple, build, signing, prompt, cleanup, product,
+  configuration, dependency, credential, or external operation ran.
+  The latest gate review also recorded an undisclosed historical
+  `getpwuid`/`opendirectoryd` directory-service boundary, the then-current hook's
+  inability to encode a terminal `FAIL`, and missing executable-build-script
+  containment as blockers. No query was repeated and no operational change was
+  made. D-097 later resolved only the gate representation gap.
+  Final gate documentation sync also corrected three report categories to the
+  hook's closed allowlist, added the template-required scope section, marked the
+  parent operation boundary historical, and verified read-only that the report
+  reached the expected blocking-evidence result. The later D-097 recovery
+  preserves `FAIL` as terminal failed/Blocked with no completion marker,
+  publication, or successor authority.
+
+- Executed the exact sanitized `keychain_identity_v1` discrepancy check once
+  after the owner confirmed target-Mac control, accepted the disclosed OS trust
+  traffic/cache/log/state and local process-metadata boundaries, acknowledged
+  the identity-metadata scope, and approved that single run. It returned
+  `passed_one_label_matched_valid_codesigning_identity` and emitted no private
+  path, account, label, fingerprint, raw output, private-key bytes, password
+  value, or provider credential. There was no retry, signing, certificate/key
+  mutation, source/configuration/dependency change, or product capability.
+  The owner subsequently reported no authorization prompt and no visible state
+  change. Non-exported owner control and a signed build remain pending or Not
+  run; the recovery gate stays `FAIL`/Blocked.
+
+- Drafted an exact documentation-only, Keychain-scoped identity discrepancy
+  check under the active failed recovery gate. The proposed local wrapper owns
+  the default-user-Keychain scope, captures bounded Security.framework output
+  in volatile memory, emits only closed categories, rejects parser drift, and
+  never retries. Because the installed `security` CLI has no documented offline
+  flag, execution was Blocked at drafting closeout pending explicit owner
+  resolution of possible OS trust-service traffic. No Keychain or Apple query, certificate/key
+  operation, signing, source, configuration, dependency, or external action ran
+  during this amendment. Embedded-Python syntax and all required
+  documentation-tier checks Passed without executing the wrapper. The required
+  post-increment review retained `FAIL` and, at that point, found three
+  unresolved disclosure gaps covering OS cache/log/state effects, local
+  process-metadata visibility, and overbroad identity-metadata wording; none was
+  silently remediated.
+  The owner later approved documentation-only correction, and the revised plan
+  now states each boundary without treating that approval as residual-risk
+  acceptance or execution authority.
+  Follow-up static review also added the missing target-Mac personal-control
+  gate and limited the redirection prohibition to allow only the exact quoted
+  here-document supplying the reviewed Python body.
+  The corrected draft then passed static architecture/security re-review,
+  manifest consistency, embedded-Python syntax, documentation, repository,
+  secret-scan, protected-path, and whitespace checks without execution.
+  Fresh full verification, npm audit, documentation, repository, security,
+  protected-path, whitespace, and session-end checks Passed; npm reported 0
+  vulnerabilities and the one existing opt-in Hermes probe remained ignored.
+  The gate therefore stayed active with `FAIL` and no completion marker.
+
+- Recorded the bounded Xcode Developer ID recovery execution. Xcode created one
+  Developer ID Application certificate record. Initial sanitized CLI checks
+  found no usable signing identity, while later owner-attested Keychain Access
+  evidence confirmed that the certificate has a private key beneath it. The
+  still-later exact scoped check established current label-matched valid
+  identity visibility, but non-exported owner control and signing remain
+  unproven. The execution stopped closed with no source, configuration,
+  dependency, entitlement, provider, network, publication, or runtime change.
+  No credential or fake generic-password Keychain item was created or read, and
+  V0-3 remains Blocked.
+
 - Added D-095 and a documentation-only Xcode-managed Developer ID recovery
   plan for V0-3's private, fake-only signed-client prerequisite. It preserves
   the outside-App-Store Developer ID selection and D-076's deferral; it adds

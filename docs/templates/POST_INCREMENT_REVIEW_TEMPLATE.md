@@ -69,10 +69,15 @@ Record the `$readiness-review` evidence. Do not reorder `NEXT_STEPS.md` without 
 ## Completion decision
 
 Use exactly `PASS`, `PASS WITH ADVISORIES`, or `FAIL`.
+Only a passing result may receive a completion marker. A truthful `FAIL` must be
+recorded with `close-failed`; it remains terminal failure evidence and never
+becomes completion.
 
 ## Next-increment readiness
 
 Use exactly `Ready`, `Ready with advisories`, or `Blocked` and state the exact next task.
+If any finding has `blocks_next_increment: true`, this value must be `Blocked`.
+Readiness never substitutes for explicit owner approval.
 
 ## Exact files changed
 
