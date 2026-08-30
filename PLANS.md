@@ -4,6 +4,23 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
+The active owner-authorized plan is the exceptional
+[`v0-terminal-failed-successor-disposition-recovery`](docs/plans/2026-08-29-v0-terminal-failed-successor-disposition-recovery.md)
+from clean synchronized baseline
+`a417e5f1c1c602b917ca27c65af71480e3db6a45`. D-098 permits only one bounded,
+argument-free `record-failed-disposition` operation that may add schema-v3
+lineage from the published D-097 failure to the exact later documentation target
+`personal-assistant-v0-signing-security-prerequisite-planning`. The original
+status, quality, and readiness remain `failed` / `FAIL` / `Blocked`; no
+completion marker may appear. The screenshot/privacy failure and Pending Open
+Directory boundary remain carried evidence for that exact target, while
+build-script containment, operational signing, V0-3, and all external/product
+work remain Blocked. The tracked report freezes only pre-transition evidence;
+it necessarily records the disposition command as Not run. Its post-freeze
+outcome is established only by the ignored schema-v3 state and redacted
+`status`, not by a later tracked edit. No commit, publication, or successor
+start is part of this recovery.
+
 The separately owner-approved execution of the
 [Xcode Developer ID recovery plan](docs/plans/2026-08-28-personal-assistant-v0-xcode-developer-id-recovery.md)
 is Blocked from baseline `0931df6`. Xcode created one Developer ID Application

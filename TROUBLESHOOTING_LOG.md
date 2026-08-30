@@ -2,6 +2,28 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-08-29 — Published Blocked failure cannot admit the exact documentation disposition
+
+**Observation:** D-097 truthfully published the Xcode recovery as `failed` /
+`FAIL` / `Blocked` with no completion marker. Its post-commit state cannot be
+reclosed, and ordinary successor admission rejects the Blocked record. A fresh
+clone is not an authorized bypass. The historical screenshot/privacy failure
+and undisclosed `getpwuid`/`opendirectoryd` boundary must remain visible, while
+the separate executable-build-script containment problem still blocks any
+operational signing proof.
+
+**Tracked-evidence disposition:** The owner authorized D-098 from synchronized
+baseline `a417e5f1c1c602b917ca27c65af71480e3db6a45`. The recovery is limited to
+one argument-free `record-failed-disposition` operation and one exact target,
+`personal-assistant-v0-signing-security-prerequisite-planning`. It must preserve
+the original status, quality, Blocked readiness, and absence of a completion
+marker while carrying the two historical blockers only to that documentation
+target. The tracked report freezes before the command and therefore records it
+as Not run; only valid ignored schema-v3 state and redacted `status` output can
+resolve the admission discrepancy after freeze. Do not infer that outcome from
+this tracked entry, begin the successor, rerun the consumed query, or perform
+Apple, Xcode, Keychain, build, signing, credential, external, or product work.
+
 ## 2026-08-29 — Required report heading check counted prose references
 
 **Observation:** The first D-097 `validate_failed_report` run rejected the

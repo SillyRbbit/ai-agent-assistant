@@ -4,6 +4,21 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added the owner-authorized D-098 exceptional terminal-failed
+  successor-disposition recovery from synchronized baseline `a417e5f`. The
+  bounded design permits only one argument-free `record-failed-disposition`
+  operation and one exact documentation target,
+  `personal-assistant-v0-signing-security-prerequisite-planning`. It preserves
+  the published D-097 state as `failed` / `FAIL` / `Blocked` with no completion
+  marker and carries the historical screenshot/privacy failure plus Pending
+  Open Directory disclosure without converting either to Passed. The tracked
+  recovery report freezes after pre-transition verification and necessarily
+  records the disposition command as Not run; only the ignored schema-v3 state
+  and redacted `status` output can evidence its post-freeze result. No commit or
+  publication occurred, and no successor begins automatically. Executable
+  build containment, operational signing, V0-3, Apple, Xcode, Keychain,
+  credential, provider, network, and product work remain Blocked.
+
 - Added the owner-authorized D-097 terminal-failed recovery inside the existing
   Xcode recovery gate. The repository hook now has an exact state-schema-v2
   `failed` variant and `close-failed` command, accepts only computed `FAIL`,

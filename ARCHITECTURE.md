@@ -62,6 +62,23 @@ record is `FAIL`/Blocked and cannot admit a successor. A fresh clone does not
 inherit that state; repository policy and owner authority prohibit using one to
 bypass the recorded disposition.
 
+D-098 implements one exceptional repository-governance recovery from clean
+synchronized baseline
+`a417e5f1c1c602b917ca27c65af71480e3db6a45`. Its exact one-shot design may add
+only bounded schema-v3 lineage from the published D-097 failure to
+`personal-assistant-v0-signing-security-prerequisite-planning` through the
+argument-free `record-failed-disposition` command. The original state remains
+`failed` / `FAIL` / `Blocked` with no completion marker. The historical
+screenshot failure and Pending Open Directory boundary remain carried evidence
+for that exact documentation-only target; they are not converted to passing
+results. The tracked evidence necessarily freezes before the argument-free
+transition; it therefore records that transition as Not run and delegates the
+sole post-freeze outcome to the ignored schema-v3 state plus redacted `status`
+output. Tracked text must not be used to infer whether that later transition
+ran. No successor begins automatically. Build-script containment, operational
+signing, V0-3, and every product or external-system edge remain Blocked, so the
+current product topology is unchanged.
+
 ## Current application topology
 
 ```mermaid

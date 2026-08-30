@@ -333,6 +333,29 @@ evidence even when the hosting plan cannot enforce them.
     failed state and no completion marker.
 13. Stop. Do not begin the next increment, commit, or publish automatically.
 
+### Exceptional D-098 terminal-record recovery
+
+D-098 authorizes one allowlisted recovery of the published D-097
+`failed` / `FAIL` / `Blocked` record. It is not an increment and does not use
+the normal step 6 gate transition. Do not call `begin`, `finalize`, or
+`close-failed` for this recovery. Preserve the predecessor report and all v2
+top-level evidence unchanged, implement only the exact approved path inventory,
+and prepare a separate passing recovery report with complete verification and
+manual evidence. Only after that evidence is frozen may the argument-free
+command run:
+
+```bash
+python3 .codex/hooks/post_increment_gate.py record-failed-disposition
+```
+
+The command may add only the schema-v3 `successor_disposition` lineage selected
+by D-098. It writes no completion marker and does not change the original
+quality or readiness. A later `begin` is allowed only for the exact recorded
+documentation successor, from a clean workspace, while carrying the validated
+lineage as `predecessor_disposition`. Publication and successor start remain
+separate owner-controlled actions. No other failed record or successor may use
+this exception without a new reviewed source change and durable decision.
+
 ## Code-review workflow
 
 Review findings before summaries and order them by severity. A review must
@@ -366,6 +389,11 @@ increment may begin only when the failed report's readiness is not Blocked, the
 workspace is clean, and the owner has separately approved that work. A fresh
 clone does not inherit this enforcement and must not be used to bypass the
 recorded disposition.
+
+The sole D-098 exception preserves that original Blocked readiness and attaches
+separately passing cumulative evidence for one exact successor. The recovery is
+successful only when its report and schema-v3 lineage validate; success is not
+increment completion and never creates a completion marker.
 
 Publication is a separate operation. A verified uncommitted increment is not
 published until its commit and remote state are confirmed.

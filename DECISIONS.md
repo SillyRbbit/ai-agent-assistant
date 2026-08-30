@@ -4319,3 +4319,110 @@ future signing blocker remain unchanged.
 This resolves only D-096's recorded terminal-failed-gate tooling blocker. It
 does not supersede D-072, D-075, D-076, D-095, D-096's evidence standard,
 TS-017, the recovery report's `FAIL`, or any product or operational gate.
+
+## D-098 - Permit one additive exact-target disposition of the published D-097 Blocked failure
+
+Date: 2026-08-29
+Status: Accepted owner exceptional same-terminal-record recovery implementation decision
+
+## Context
+
+D-097 truthfully closed the Xcode recovery record as valid
+`failed` / `FAIL` / `Blocked`. PR #84 later published the identical reviewed
+contents at `a417e5f1c1c602b917ca27c65af71480e3db6a45`. The original Failed,
+Pending, and Not-run evidence cannot be rewritten, and its Blocked readiness
+correctly denies another `begin`. D-097 intentionally deferred post-commit
+cumulative-evidence supersession, so a new planning gate cannot lawfully design
+its own admission path.
+
+The owner therefore authorizes one bounded source recovery against the same
+terminal record. It must not start a second increment, delete or replace the
+ignored state, alter the predecessor report, fabricate completion, or use a
+fresh checkout to bypass the recorded disposition.
+
+## Decision
+
+Add state schema v3 while retaining v1/v2 compatibility. Change only the
+top-level `schema_version` from 2 to 3, preserve every other v2 failed-state
+evidence field unchanged, and add one exact `successor_disposition` object with
+these closed keys:
+
+- `disposition_id`;
+- `predecessor_state_sha256`;
+- `report_path` and `report_sha256`;
+- `baseline_commit`;
+- `workspace_fingerprint`;
+- `successor_increment_id`;
+- `quality_gate`;
+- `next_increment_readiness`; and
+- `allowed_paths`.
+
+The hook exposes one argument-free `record-failed-disposition` command. Source
+constants bind it to the D-097 failed increment and report, baseline
+`a417e5f1c1c602b917ca27c65af71480e3db6a45`, recovery ID and report, exact
+22-path recovery inventory, and sole successor
+`personal-assistant-v0-signing-security-prerequisite-planning`. No caller may
+choose any identity, report, path, readiness, or successor.
+
+The two path contracts are distinct. The source-bound
+`FAILED_DISPOSITION_RECOVERY_ALLOWED_PATHS` is the exact 22-path change set
+required to record D-098. The `allowed_paths` stored inside
+`successor_disposition` is the separate exact 15-path ceiling for the later
+documentation successor; it is not the recovery inventory and cannot authorize
+changes during D-098.
+
+The command requires the predecessor structure and report digest to remain
+unchanged, the recovery report to compute `PASS` or
+`PASS WITH ADVISORIES`, every required automated and manual result to Pass,
+recovery readiness to be non-Blocked, no next-blocking finding, the complete
+diff to match the source-bound 22-path recovery inventory, and no conflict or
+suspicious path. It writes no
+completion marker and does not change the predecessor's `FAIL` or `Blocked`
+readiness. Exact replay may be idempotent; altered replay fails closed.
+
+If the disposition remains valid and the workspace is clean, a later `begin`
+may admit only the exact successor and must carry the validated lineage as
+`predecessor_disposition`. It does not start that successor automatically, and
+readiness never substitutes for separate owner approval.
+
+## Rationale
+
+An additive, exact-target lineage lets the repository acknowledge new passing
+governance evidence without laundering historical failure. An argument-free,
+source-allowlisted transition is smaller and safer than a generic waiver,
+abandonment, override, or caller-selected supersession interface. Carrying the
+lineage into the active successor prevents admission from silently discarding
+the failed predecessor.
+
+## Consequences
+
+- The recovery itself is not a new increment and must not call `begin`,
+  `finalize`, or `close-failed`.
+- A successful recovery report and schema-v3 state create no completion marker
+  and do not make the failed Xcode recovery complete.
+- Only the exact documentation-only signing-security prerequisite planning
+  successor can become admissible, and it remains a separate owner-controlled
+  action.
+- The historical screenshot/privacy failure, Pending Open Directory boundary,
+  Not-run signed build, D-076, TS-017, build-process containment, and every
+  Apple, Keychain, signing, credential, provider, product, and external gate
+  remain unchanged.
+- The ignored state remains same-user writable, checkout-local workflow
+  evidence rather than authentication, authorization, or durable audit.
+
+## Alternatives considered
+
+- Rewrite the original report or readiness: rejected as evidence laundering.
+- Mark the failed increment complete: rejected as false.
+- Delete the ignored state or use a fresh clone: rejected as bypass.
+- Add a generic failed-state override: rejected as excessive authority.
+- Begin the documentation successor directly: rejected because D-097 readiness
+  is Blocked.
+- Leave the queue permanently stranded: rejected because bounded additive
+  evidence can preserve the failure while admitting one exact planning task.
+
+## Supersedes or is superseded by
+
+D-098 additively implements only the cumulative-evidence design deferred by
+D-097. It does not supersede D-072, D-075, D-076, D-095, D-096, D-097's
+terminal failure, TS-017, or any operational prerequisite.

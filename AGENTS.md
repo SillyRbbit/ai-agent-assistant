@@ -133,6 +133,17 @@ and workspace fingerprint validate. A truthful `FAIL` must instead use the
 hook's terminal failed state: it writes no completion marker, cannot be promoted
 to complete, and grants no authority to begin a blocked successor.
 
+D-098 defines one exceptional recovery for the published D-097 record only.
+It is not a new increment and must not call `begin`, `finalize`, or
+`close-failed`. After the exact owner-approved allowlisted implementation and
+all required passing evidence are frozen, its argument-free
+`record-failed-disposition` command may attach one schema-v3 cumulative-evidence
+lineage to the existing `failed` / `FAIL` / `Blocked` record. The original
+report, result, readiness, and absence of a completion marker remain immutable.
+Only the exact recorded documentation successor may later call `begin`, from a
+clean workspace and with separate owner approval. This exception is not a
+generic waiver, abandonment, override, or failed-to-complete path.
+
 ## Documentation and response requirements
 
 Synchronize current project-memory documents only from observed evidence. Do

@@ -69,9 +69,12 @@ Record the `$readiness-review` evidence. Do not reorder `NEXT_STEPS.md` without 
 ## Completion decision
 
 Use exactly `PASS`, `PASS WITH ADVISORIES`, or `FAIL`.
-Only a passing result may receive a completion marker. A truthful `FAIL` must be
-recorded with `close-failed`; it remains terminal failure evidence and never
-becomes completion.
+Only a passing ordinary increment may receive a completion marker. A truthful
+`FAIL` must be recorded with `close-failed`; it remains terminal failure
+evidence and never becomes completion. The sole D-098 same-terminal-record
+recovery may have a passing recovery report but must instead use the
+argument-free `record-failed-disposition` command. It preserves the predecessor
+`failed` / `FAIL` / `Blocked` evidence and writes no completion marker.
 
 ## Next-increment readiness
 

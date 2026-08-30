@@ -472,3 +472,13 @@ explicitly permits the missing evidence.
 
 Terminal failure preserves the non-passing result; it does not convert a failed,
 not-run, skipped, ignored, quarantined, or pending requirement into a pass.
+
+The D-098 recovery additionally requires focused tests for exact schema-v3
+keys, v1/v2 compatibility, immutable predecessor evidence, exact allowlisted
+paths and identities, passing-report enforcement, blocked-evidence rejection,
+argument-free command parsing, idempotent exact replay, altered replay denial,
+report/state/workspace drift, conflict and suspicious-path rejection, redacted
+status, Stop behavior, no completion marker, and clean admission of only the
+recorded successor with `predecessor_disposition` lineage. Do not exercise the
+real transition until every focused and complete check passes and the recovery
+report is frozen.
