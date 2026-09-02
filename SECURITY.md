@@ -7,6 +7,25 @@ Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
 identifies which security boundaries are current, mocked, planned, or
 prohibited.
 
+## D-104 bootstrap trust-class boundary
+
+D-104 defines only a future documentation distinction between an identity-free,
+disposable ad-hoc sandbox-activation seal and P4's later Developer ID signer
+binding. The first class carries no Apple-issued identity, certificate, private
+key, Team ID, Keychain, provisioning, authentication, distribution, or product
+authority; it cannot prove any P4 predicate. It may remove only the historical
+signature-class circularity from a separately approved future static candidate
+review. It neither selects nor proves a containment primitive.
+
+Every D-102 predicate remains mandatory: exact pre-effect filesystem/network
+denial, bootstrap provenance, complete descendant membership across detachment,
+containment-wide termination, reaping, race-free quiescence, cleanup, and
+D-100-minimized evidence. Broad entitlements and any inferred, unavailable, or
+archived-only guarantee remain `contract_unproven`. No source, entitlement,
+build, process, target-Mac, Apple, signing, credential, provider, product, or
+state-changing external action is authorized. P3-3 and all operational
+successors remain Blocked.
+
 ## D-103 containment primitive selection boundary
 
 D-103 records a bounded negative static decision: no eligible candidate in the

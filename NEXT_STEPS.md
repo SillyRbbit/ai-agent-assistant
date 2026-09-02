@@ -2,6 +2,19 @@
 
 Last updated: 2026-09-02
 
+## Completed P3 documentation-only bootstrap-trust decision
+
+`personal-assistant-v0-containment-bootstrap-trust-decision` completed with
+`PASS WITH ADVISORIES`. D-104 may distinguish a future identity-free ad-hoc
+sandbox-activation seal from P4's later Developer ID signer binding. This can
+remove only the historical signature-class circularity from a future static
+candidate re-review; it cannot select a primitive or satisfy any remaining
+D-102 containment, lifecycle, bootstrap, cleanup, or evidence predicate.
+
+P3-3 remains Blocked. Do not build, probe, sign, add an entitlement or
+dependency, operate a target Mac, or access Apple, Xcode, Keychain,
+credentials, providers, or product systems. No successor is Ready.
+
 ## Completed P3-2 documentation-only primitive selection
 
 `personal-assistant-v0-containment-primitive-selection` completed with

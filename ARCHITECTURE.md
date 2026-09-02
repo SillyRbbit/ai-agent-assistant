@@ -3,6 +3,14 @@
 Status: Authoritative current-state architecture
 Last updated: 2026-09-02
 
+> Completed P3 bootstrap-trust documentation state (2026-09-02): D-104 separates
+> an identity-free ad-hoc sandbox-activation seal from P4's later Developer ID
+> signer binding. It changes only a future static-review eligibility
+> classification; it selects no primitive and grants no signing or entitlement
+> operation. The App Sandbox helper's bootstrap provenance, pre-effect control,
+> descendant membership, containment-wide termination, and quiescence remain
+> unproved. P3-3 and every operational successor remain Blocked.
+
 > Current P3-2 documentation state (2026-09-02): D-103 selects no eligible
 > build-child containment candidate from the frozen reviewed set. The publicly
 > documented App Sandbox/helper composition requires entitlements and an

@@ -2,6 +2,35 @@
 
 Last updated: 2026-09-02
 
+## Completed P3 containment bootstrap trust decision
+
+The owner-approved documentation-only
+[`personal-assistant-v0-containment-bootstrap-trust-decision`](docs/plans/2026-09-02-personal-assistant-v0-containment-bootstrap-trust-decision.md)
+gate completed with `PASS WITH ADVISORIES` on
+`codex/p3-containment-bootstrap-trust-decision` from clean
+synchronized `main` at `a6601f9920027dfcdc8dd43f99a27554fe0ac786`. Draft D-104
+distinguishes only a future identity-free ad-hoc sandbox-activation seal from
+P4's later Developer ID signer binding. It neither selects an App Sandbox
+candidate nor changes D-102's pre-effect effect, bootstrap, graph, terminal,
+cleanup, or evidence requirements.
+
+No source, dependency, configuration, entitlement, build, process, probe,
+target-Mac, Apple, Xcode, Keychain, certificate, private key, signing,
+credential, provider, product, or state-changing external operation is allowed.
+Preserve D-097 as `failed` / `FAIL` / `Blocked` with no completion marker and
+all historical Failed, Pending, and Not-run evidence. P3-3, P3-4, P3-5, P4,
+signing, V0-3, and every operational successor remain Blocked. No successor is
+Ready or may begin without a separately approved plan.
+
+Exact resume prompt: “Read AGENTS.md, the complete required project-memory and
+security/testing chain, D-097 through D-104, and the valid completed P3
+bootstrap-trust report. Preserve every historical Failed, Pending, and Not-run
+result. Report that D-104 adds only an identity distinction for a future static
+review and that no candidate or successor is Ready. Do not begin a gate, add or
+run a candidate, build, probe, sign, change entitlements, or operate Apple,
+Xcode, Keychain, credentials, providers, product code, or external systems
+without a separately approved bounded plan.”
+
 ## Completed P3-2 containment primitive selection
 
 The owner-approved documentation-only

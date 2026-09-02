@@ -4924,3 +4924,105 @@ or a malformed record is `boundary_failed` and stops without retry.
 D-103 applies D-102 to only the frozen P3-2 candidate set. It does not
 supersede D-072, D-075, D-076, D-095, D-096, D-097, D-098, D-099, D-100, D-101,
 D-102, TS-017, any historical evidence, or any operational prerequisite.
+
+## D-104 - Separate identity-free sandbox activation from later Developer ID signer binding
+
+Date: 2026-09-02
+Status: Accepted owner-authorized documentation-only bootstrap-trust decision
+
+## Context
+
+D-103 correctly rejected the only deep-review App Sandbox helper composition
+under its then-independent no-entitlement/no-prerequisite-signing eligibility
+rule. Its result remains correct for that frozen candidate set. The decision
+also records independent unresolved contracts: App Sandbox plus direct-child
+waiting, process events, and process groups does not establish D-102's complete
+application-owned descendant membership, containment-wide termination, or
+race-free quiescence after detachment or reparenting.
+
+Apple documents that an ad-hoc code signature is sealed without a signing
+identity, while App Sandbox relies on entitlements carried in a code signature.
+Apple's helper guidance also describes local ad-hoc signing during helper
+preparation before an embedded product replaces that identity. These sources
+support a narrow distinction between the mechanics of a disposable sandbox
+activation seal and P4's later Developer ID identity proof. They do not prove
+that the planned helper is a qualifying containment primitive or that its first
+build is safely bootstrapped.
+
+## Decision
+
+Define two conceptual, non-runtime, non-authorizing classes:
+
+- `sandbox_activation_adhoc_v1` is a future disposable local ad-hoc code seal
+  used solely to carry one exact reviewed App Sandbox helper entitlement set. It
+  contains no Developer ID, Apple-issued certificate, private key, Team ID,
+  Keychain, provisioning profile, Apple-account, authentication, distribution,
+  or product-identity authority.
+- `product_signer_binding_v1` is P4's later fixed Developer ID team, leaf, and
+  fingerprint binding with controlled private-key use. It cannot bootstrap P3,
+  and the bootstrap class is categorically inadmissible as P4 identity, custody,
+  provenance, signing-success, or release evidence.
+
+For a future separately owner-approved **static** candidate re-review only,
+the presence of the first class is no longer by itself equivalent to a
+Developer ID signing dependency or P4 circularity. This changes only that one
+eligibility classification. It does not select a candidate, authorize a
+`codesign` operation, or relax any D-102 effect-control, graph-ownership,
+terminal-cleanup, evidence, no-root, no-global-state, or no-new-dependency
+requirement.
+
+The future re-review must still fail closed unless authoritative current public
+contracts establish all remaining predicates. In particular, it must separately
+resolve the fixed helper bootstrap provenance without running an uncontained
+package/build-script graph or accepting an unreviewed prebuilt binary or new
+dependency. It must define an exact entitlement allowlist that excludes network
+client/server, arbitrary or user-selected file access, temporary exceptions,
+automation, Keychain groups, Mach lookup, device access, and every other
+authority not indispensable to the reviewed candidate. Absent, ambiguous,
+archived-only, or inferred support remains `contract_unproven`.
+
+## Consequences
+
+- D-103 remains an immutable bounded no-selection result for its frozen set.
+- P3-3, P3-4, P3-5, P4, signing, V0-3, and all operational successors remain
+  Blocked. No successor is Ready.
+- A later candidate re-review requires its own exact plan, public-source
+  register, architecture/security review, owner approval, and documentation
+  gate. It may conclude negatively.
+- No current source, dependency, configuration, capability, CSP, permission,
+  entitlement, build, process, target-Mac, Apple, Xcode, Keychain, certificate,
+  private-key, signing, credential, provider, product, or external state changes.
+- D-097 remains `failed` / `FAIL` / `Blocked` without a completion marker. Its
+  report/digests, Failed privacy finding, Pending Open Directory boundary, and
+  Not-run signing evidence remain unchanged.
+
+## Alternatives considered
+
+- Treat any code signature as P4 signing: rejected because official public
+  documentation distinguishes an ad-hoc seal from a signing identity.
+- Treat the narrow distinction as a qualifying App Sandbox design: rejected;
+  D-102 lifecycle, effect, and bootstrap requirements remain independently
+  unproved.
+- Permit a generic entitlement or signing exception: rejected as broader
+  authority and incompatible with the closed future-review boundary.
+- Use P4 Developer ID state to bootstrap P3: rejected as circular.
+- Add a helper, entitlement, dependency, build, or target-Mac experiment now:
+  rejected as operational work outside this documentation increment.
+
+## Official public source register
+
+- [Apple: `kSecCodeSignatureAdhoc`](https://developer.apple.com/documentation/security/seccodesignatureflags/adhoc)
+  — an ad-hoc signature is created without a signing identity.
+- [Apple: Configuring the macOS App Sandbox](https://developer.apple.com/documentation/xcode/configuring-the-macos-app-sandbox)
+  — App Sandbox is kernel-enforced and entitlement-configured.
+- [Apple: Embedding a command-line tool in a sandboxed app](https://developer.apple.com/documentation/xcode/embedding-a-helper-tool-in-a-sandboxed-app)
+  — the bounded helper-signature and inheritance guidance.
+- [Apple: Understanding the Code Signature](https://developer.apple.com/library/archive/documentation/Security/Conceptual/CodeSigningGuide/AboutCS/AboutCS.html)
+  — entitlements are sealed by code signatures and App Sandbox evaluates them.
+
+## Supersedes or is superseded by
+
+D-104 additively refines only the future P3 eligibility classification for the
+defined identity-free bootstrap class. It does not supersede D-072, D-075,
+D-076, D-095, D-096, D-097, D-098, D-099, D-100, D-101, D-102, D-103, TS-017,
+any historical evidence, or an operational prerequisite.

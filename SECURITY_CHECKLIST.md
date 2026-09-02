@@ -7,6 +7,23 @@ Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
 production boundary exists.
 
+## D-104 bootstrap trust-class decision
+
+- [x] `sandbox_activation_adhoc_v1` and `product_signer_binding_v1` are
+      distinct conceptual classes with no runtime or operational authority.
+- [x] The bootstrap class has no Developer ID, certificate, private key, Team
+      ID, Keychain, provisioning, authentication, distribution, or product
+      identity claim, and cannot satisfy P4.
+- [x] Any eligibility relief is limited to one future static-review
+      classification; D-103's historical no-selection result remains intact.
+- [x] D-102 effect, bootstrap, graph, terminal, cleanup, evidence, no-root,
+      no-global-state, and no-new-dependency requirements remain conjunctive.
+- [x] No broad network, filesystem, IPC, automation, Keychain, device, or
+      temporary-exception entitlement is permitted or implied.
+- [x] P3-3 through P3-5, P4, signing, V0-3, and operational successors remain
+      Blocked; no target-Mac or external action is represented as passed.
+- [x] D-097 and every historical Failed/Pending/Not-run fact remain unchanged.
+
 ## D-103 containment primitive selection
 
 - [x] Candidate identities are frozen; there is no catch-all or caller-selected
