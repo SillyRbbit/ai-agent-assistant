@@ -4,6 +4,18 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Completed with `PASS WITH ADVISORIES` the owner-approved documentation-only
+  classification for
+  `personal-assistant-v0-codeless-signing-fixture-classification` from clean
+  synchronized `main` at `89bcc91`. D-106 records
+  `not_eligible_or_unproven`: five rows are `documented` and eight are
+  `contract_unproven`. The fixed codeless candidate is materially distinct but
+  is not admitted, D-102 remains unchanged, and no successor is Ready. No
+  fixture, source, dependency, configuration, entitlement, build, or product/
+  signing/target-Mac operational process or state change occurred. The only
+  external contacts were approved read-only Git remote synchronization/checks
+  and reads of the three frozen first-party Apple public-documentation pages.
+
 - Completed the owner-approved documentation-only
   `personal-assistant-v0-app-sandbox-containment-rereview` from clean
   synchronized `main` at `e1b2ff5`. D-105 records

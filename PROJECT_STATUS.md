@@ -2,6 +2,29 @@
 
 Last updated: 2026-09-02
 
+## Completed codeless signing-fixture classification
+
+The owner approved the documentation-only
+[`personal-assistant-v0-codeless-signing-fixture-classification`](docs/plans/2026-09-02-personal-assistant-v0-codeless-signing-fixture-classification.md)
+increment from clean synchronized `main` at
+`89bcc915ad989927a9ec51e82531ff6823be1017`. It freezes one conceptual inert
+candidate and a closed current-Apple-contract question. D-106 records
+`not_eligible_or_unproven`: five rows are `documented` and eight remain
+`contract_unproven`. The only external contacts were approved read-only Git
+remote synchronization/checks and reads of the three frozen first-party Apple
+public-documentation pages. No fixture, source, dependency, build, or product/
+signing/target-Mac operational process or state change occurred.
+
+The exact documentation validation and completion gate passed with `PASS WITH
+ADVISORIES`; next-increment readiness is `Blocked`.
+
+No successor is Ready. Removing a build graph is not operational containment;
+D-102 remains binding for real builds, and the later `codesign` boundary plus
+D-100/D-101 remain unresolved. P3-3
+through P3-5, P4, operational signing, V0-3, and every product/external
+successor remain Blocked. D-097 through D-105 and all Failed/Pending/Not-run
+evidence remain intact.
+
 ## Completed P3 App Sandbox containment re-review
 
 The owner-approved documentation-only

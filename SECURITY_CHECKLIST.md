@@ -7,6 +7,38 @@ Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
 production boundary exists.
 
+## D-106 codeless signing-fixture classification
+
+- [x] The candidate identity and three-source register are fixed for one static
+      review; no alternate source, candidate, inference, or fallback enters the
+      result.
+- [x] The D-100 record is canonical compact JSON with factual outcome
+      `contract_unproven`; all fields meet D-100 bounds and contain no
+      target-derived or authorizing value.
+- [x] The record is privately bound once to this exact increment, candidate,
+      source register, and classification attempt; altered, duplicate, cross-
+      plan, pre-admission, or late records are `boundary_failed`.
+- [x] All thirteen rows are dispositioned exactly once: five `documented` and
+      eight `contract_unproven`; no reviewed row is represented as Not run or
+      boundary failed.
+- [x] The final governance result is exactly
+      `not_eligible_or_unproven`; it admits no candidate or successor.
+- [x] Removing a proposed build graph is not represented as implemented
+      containment or a D-102 waiver; D-102 remains binding for every build-
+      bearing path and the later signing-process boundary remains unresolved.
+- [x] Codeless evidence is prohibited from satisfying product signing,
+      hardened runtime, Gatekeeper, notarization, distribution, release,
+      custody, or V0-3 claims.
+- [x] D-097/D-098 and D-100 through D-105 remain unchanged, including every
+      Failed, Pending, Not-run, digest, and completion-marker fact.
+- [ ] An eligible candidate or operational successor exists; both remain
+      Blocked.
+- [x] The only external contacts were approved read-only Git remote
+      synchronization/checks and reads of the three frozen first-party Apple
+      public-documentation pages; no fixture, source, dependency, entitlement,
+      build, or product/signing/target-Mac operational process or state change
+      occurred.
+
 ## D-105 App Sandbox containment re-review
 
 - [x] The candidate and source corpus are frozen for one bounded attempt; D-103

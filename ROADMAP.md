@@ -18,6 +18,16 @@ Last updated: 2026-09-02
 contains the ordered execution queue. Completed plans and reviews are the
 verification record; this roadmap does not create new completion evidence.
 
+## Completed codeless signing-fixture classification
+
+The documentation-only classification is **Complete** with `PASS WITH
+ADVISORIES` as a bounded negative result. D-106 records
+`not_eligible_or_unproven`: five rows are documented and eight remain unproved.
+The candidate is not an implemented containment primitive and cannot establish
+product signing, hardened runtime, distribution, custody, or V0-3 readiness.
+No successor is **Ready**; all operational P3/P4/signing/product work remains
+**Blocked**.
+
 ## Completed P3 App Sandbox containment re-review
 
 The documentation-only re-review is **Complete** as a bounded negative result.

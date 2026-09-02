@@ -7,6 +7,36 @@ Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
 identifies which security boundaries are current, mocked, planned, or
 prohibited.
 
+## D-106 codeless signing-fixture classification boundary
+
+D-106 records `not_eligible_or_unproven` for exactly
+`repository_owned_codeless_bundle_signing_fixture_v1`. The frozen public-source
+review documents only candidate distinctness, codeless signature storage and
+resource sealing, the hardened-runtime nonclaim, preservation of operational
+boundaries, and the claim ceiling. Eight exact shape, repository-provenance,
+Developer ID-on-codeless, present-private-key-use, verification, identifier/
+designated-requirement, total no-build, and D-102 applicability-split contracts
+remain `contract_unproven`.
+
+The factual D-100 record is exact compact JSON with outcome
+`contract_unproven`; eligibility language is not evidence. Removing a proposed
+build graph is scope reduction, not containment, implementation evidence, or a
+D-102 waiver. D-102 remains fully applicable to every executable-generating or
+product-build path. Any later staging, hashing, verifier, sanitizer,
+`/usr/bin/codesign`, Keychain/Security framework, filesystem, process,
+deadline, cancellation, reaping, quiescence, late-result, effect, cleanup, and
+quarantine boundary remains unresolved and separately reviewable.
+
+The only external contacts were approved read-only Git remote synchronization/
+checks and reads of the three frozen first-party Apple public-documentation
+pages. No fixture, source, dependency, configuration, entitlement, or product/
+signing/target-Mac operational process or state change exists. D-096 present-session use remains
+`not_run`; the codeless
+class cannot prove a signed Cortexa application, hardened runtime, product
+identity, Gatekeeper, notarization, distribution, release, historical
+non-export, technical nonextractability, exclusive custody, or V0-3 readiness.
+D-097/D-098 and D-100 through D-105 remain unchanged. No successor is Ready.
+
 ## D-105 App Sandbox containment re-review boundary
 
 D-105 records `no_eligible_candidate_after_d104_rereview` for exactly

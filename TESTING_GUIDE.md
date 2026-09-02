@@ -16,6 +16,29 @@ Last updated: 2026-09-02
 - Never report a check as passed unless its command completed successfully in
   the current increment.
 
+## D-106 documentation-only codeless signing-fixture classification
+
+The `personal-assistant-v0-codeless-signing-fixture-classification` increment
+has no fixture, source, executable, dependency, build graph, signing process,
+Keychain operation, or target-Mac evidence to test. Review exactly
+`repository_owned_codeless_bundle_signing_fixture_v1` against the three fixed
+current Apple pages and all thirteen closed contract IDs.
+
+Passing the documentation increment requires one exact factual
+`evidence_privacy_v1` JSON record, every contract row once with a source-bounded
+disposition, the fail-closed governance result, preservation of D-096 and
+D-097 through D-105, and no product or operational claim. The recorded result
+is `not_eligible_or_unproven`: five rows are `documented`, eight are
+`contract_unproven`, and no candidate or successor is admitted.
+
+Minimum completion evidence is the exact fifteen-path documentation diff,
+formatting/link validation, repository health, secret scanning, protected-path
+and whitespace checks, independent architecture/security/code/debt/readiness
+review, session-end inventory, and the completion gate. `npm run verify`, npm
+audit, builds, fixture creation, `codesign`, `security`, Xcode, Keychain,
+signing, verification, target-Mac, provider, product, and external checks remain
+Not run by scope.
+
 ## D-105 documentation-only App Sandbox containment re-review
 
 The `personal-assistant-v0-app-sandbox-containment-rereview` increment has no

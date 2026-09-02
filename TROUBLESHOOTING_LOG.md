@@ -2,6 +2,28 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-09-02 — Codeless signing fixture is distinct but contract-insufficient
+
+**Observation:** The frozen Apple sources directly establish that a codeless
+bundle has no executable code, can hold a signature, and stores a no-Mach-O
+signature under `_CodeSignature` with hash-sealed resources. They do not
+establish eight exact candidate-shape, provenance, Developer ID, private-key-
+use, verification, identifier, no-build, and D-102 applicability predicates.
+The draft also initially presented governance consequences as D-100 evidence;
+those tokens were not valid factual evidence outcomes under D-100's semantics
+and length bound.
+
+**Disposition:** The D-100 record now uses exact canonical compact JSON with
+factual outcome `contract_unproven`, while D-106 separately records the
+governance result `not_eligible_or_unproven`. Five rows are `documented` and
+eight are `contract_unproven`. No candidate or successor is admitted. This is a
+bounded negative documentation result, not an operational failure or universal
+impossibility claim. The only external contacts were approved read-only Git
+remote synchronization/checks and reads of the three frozen first-party Apple
+public-documentation pages. No fixture, source, build, or product/signing/
+target-Mac operational process or state change occurred; all operational work
+remains Blocked.
+
 ## 2026-09-02 — D-104 does not make the App Sandbox candidate eligible
 
 **Observation:** Re-reviewing the exact additive v2 candidate against current
