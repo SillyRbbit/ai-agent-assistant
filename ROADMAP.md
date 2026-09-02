@@ -18,6 +18,14 @@ Last updated: 2026-09-02
 contains the ordered execution queue. Completed plans and reviews are the
 verification record; this roadmap does not create new completion evidence.
 
+## D-107 exact signer-binding decision
+
+The documentation-only D-110 decision is **Completed** with
+`PASS WITH ADVISORIES`. It selects `signer_binding_not_accepted`: no immutable expected
+Developer ID Application signer/certificate/public-key binding exists in the
+reviewed repository. No candidate or successor is **Ready**; all operational
+work remains **Blocked**.
+
 ## D-107 opaque identity-reference decision
 
 The documentation-only D-109 decision is **Completed** with

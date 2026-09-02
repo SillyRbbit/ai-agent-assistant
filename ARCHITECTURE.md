@@ -3,6 +3,13 @@
 Status: Authoritative current-state architecture
 Last updated: 2026-09-02
 
+> Exact signer-binding decision (2026-09-02): D-110 records
+> `signer_binding_not_accepted`. Current source establishes at most
+> certificate/private-key correspondence, not an immutable expected Developer
+> ID Application signer/certificate/public-key binding. This creates no signer
+> source, runtime interface, or Keychain/signing authority; D-107 remains
+> blocked.
+
 > Opaque identity-reference decision (2026-09-02): D-109 records
 > `reference_issuance_not_accepted` for the first remaining D-107 boundary.
 > Current repository source has no application-owned issuer for a no-input,

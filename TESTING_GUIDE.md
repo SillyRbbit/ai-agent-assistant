@@ -16,6 +16,23 @@ Last updated: 2026-09-02
 - Never report a check as passed unless its command completed successfully in
   the current increment.
 
+## D-110 documentation-only exact signer-binding decision
+
+The `d107-exact-signer-binding-contract-decision` increment has no signer
+source, certificate inspection, Keychain call, private-key operation, signing
+interface, build, or target-Mac proof. Review only whether repository evidence
+establishes an immutable expected Developer ID Application
+signer/certificate/public-key binding. Pairing, labels, fingerprints, filters,
+and ambient/default authority must not be treated as proof.
+
+Passing requires exactly one closed governance disposition, preservation of
+D-097, D-107 8/11, D-108 9/10, and D-109, a documentation-only diff, and
+Blocked readiness. Formatting/link validation, repository health, secret
+scanning, whitespace, independent review, session inventory, and the gate are
+required. Product verification, audit, builds, Apple/Xcode/Keychain/certificate/
+private-key/signing, target-Mac, provider, product, and external checks are Not
+run by scope.
+
 ## D-109 documentation-only opaque identity-reference decision
 
 The `d107-opaque-prebound-identity-contract-decision` increment implements no

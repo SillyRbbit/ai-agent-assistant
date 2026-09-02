@@ -7,6 +7,16 @@ Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
 identifies which security boundaries are current, mocked, planned, or
 prohibited.
 
+## D-110 exact signer-binding boundary
+
+D-110 selects `signer_binding_not_accepted`. A certificate/private-key pair,
+label, fingerprint, filter, default Keychain, search list, caller value, or
+ambient state is not an immutable application-owned expected Developer ID
+Application signer binding. No future implementation may substitute any such
+selector for trusted-Rust policy and adapter-private comparison over fixed
+application-owned material. This decision creates no signing/Keychain authority
+and leaves every other D-107 contract independently unproved.
+
 ## D-109 opaque identity-reference issuance boundary
 
 D-109 selects `reference_issuance_not_accepted` for exactly
