@@ -18,6 +18,14 @@ Last updated: 2026-09-01
 contains the ordered execution queue. Completed plans and reviews are the
 verification record; this roadmap does not create new completion evidence.
 
+## Completed build-child-containment planning
+
+P3 build-child-containment planning is **Complete** with `PASS WITH
+ADVISORIES` as a documentation-only milestone. It defines the future required
+policy and blocked evidence path, selects no target-Mac primitive, and runs no
+build or process. P3 operational proof, P4 signer binding, V0-3, and every
+Apple, Keychain, signing, external, or product action remain **Blocked**.
+
 ## Completed account-directory planning
 
 P2 account-directory boundary planning is **Complete** with

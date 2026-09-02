@@ -2,6 +2,23 @@
 
 Last updated: 2026-09-01
 
+## Completed build-child-containment planning
+
+The owner-approved documentation-only
+`personal-assistant-v0-build-child-containment-planning` increment completed
+with `PASS WITH ADVISORIES` from clean synchronized `main` at
+`b26e7b8f243b18533238654934704a6166c7f375`. It documents D-102's future
+fail-closed containment policy and closed review predicates only. No supported
+target-Mac no-new-dependency primitive has
+been selected or evidenced; output routing, process groups, and post-hoc
+observation remain insufficient. No build, child process, network, filesystem,
+Apple, Keychain, signing, credential, provider, product, or external-system
+action ran.
+
+Operational P3, P4 immutable signer binding, signing, V0-3, and all
+operational successors remain Blocked. D-097/D-098/D-099/D-100/D-101 and every
+historical Failed/Pending/Not-run result remain unchanged.
+
 ## Completed account-directory boundary planning
 
 The owner-approved exact documentation-only

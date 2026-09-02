@@ -5,6 +5,16 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Current plan state
 
 The most recently completed owner-approved plan is
+`personal-assistant-v0-build-child-containment-planning`. It is
+documentation-only and completed with `PASS WITH ADVISORIES`. It defines
+D-102's future fail-closed build-child containment policy without selecting or
+implementing a primitive. It preserves
+the operational blocker: no supported target-Mac no-new-dependency mechanism
+currently proves pre-effect outside-root-write/network denial and full
+detached-descendant containment. No build, probe, signing, or external action
+is authorized.
+
+The most recently completed owner-approved plan is
 [`personal-assistant-v0-account-directory-boundary-planning`](docs/plans/2026-09-01-personal-assistant-v0-account-directory-boundary-planning.md).
 It completed with `PASS WITH ADVISORIES` and is documentation-only. Accepted
 D-101 defines `ExplicitAccountResolutionPolicyV1::Prohibited`, requires
@@ -980,6 +990,7 @@ condition is reached.
 
 | Plan                                             | Status   | Owner              | Last updated |
 | ------------------------------------------------ | -------- | ------------------ | ------------ |
+| Personal Assistant v0 build-child containment    | Complete | Project owner      | 2026-09-01   |
 | Personal Assistant v0 account-directory boundary | Complete | Project owner      | 2026-09-01   |
 | Personal Assistant v0 evidence-privacy protocol  | Complete | Project owner      | 2026-09-01   |
 | Personal Assistant v0 signing-security map       | Complete | Project owner      | 2026-09-01   |

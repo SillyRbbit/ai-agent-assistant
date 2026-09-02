@@ -566,6 +566,25 @@ security/signing evidence. Necessary non-sensitive repository validation and
 governance metadata that are not derived from the inspected security target are
 separate from the three-field protocol record.
 
+D-102 defines documentation-only future build-child containment as a required
+pre-effect boundary, not a disposable output location or a post-execution
+observation. A future application-owned opaque, non-serializable,
+attempt-bound `ContainedBuildAttemptV1` may accept no caller/model/WebView/
+environment-selected executable, arguments, working directory, graph, retry,
+network policy, or cleanup target. It must freeze one reviewed transitive graph,
+use shell-free fixed executable identity and literal arguments, close inherited
+environment and descriptors, and constrain ambient host-data reads as well as
+writes. Before an effect, it must deny outside-root writes and undeclared
+network effects. Authoritative membership must survive fork, exec,
+reparenting, `setsid`, and `setpgid`; process groups alone cannot prove it.
+Terminal deadline/cancellation must own graph shutdown, direct-child reaping,
+pipe closure, and race-free quiescence. Descriptor-bound non-following cleanup
+must quarantine unresolved ownership and block retry/replacement. Each future
+check uses D-100's fixed categorical record; raw output, command lines, paths,
+host/process/account identifiers, traces, packets, and free text are
+prohibited. No target-Mac primitive is selected, no operational evidence exists,
+and P3/P4/signing remain Blocked.
+
 D-101 defines the accepted documentation-only application-resolution policy.
 Future trusted application code must not resolve an account, username, numeric
 UID/eUID, login/session/console user, home or standard directory, current/

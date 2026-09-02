@@ -7,6 +7,35 @@ Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
 production boundary exists.
 
+## D-102 build-child-containment planning
+
+- [x] D-102 documents a fixed application-owned no-input future containment
+      policy; it does not select or implement a primitive.
+- [x] The future contract freezes a reviewed transitive graph, fixed executable
+      identity/literal arguments, working directory, closed environment, and
+      closed descriptor inheritance; shell/generic-runner/fallback/retry paths
+      are prohibited.
+- [x] Both host-data reads and filesystem writes require confinement; output
+      routing, clean Git status, post-hoc scans, caches, logs, and process groups
+      alone cannot prove containment.
+- [x] Outside-root writes and undeclared network effects must be denied before
+      effect; post-effect observation can only diagnose failure.
+- [x] Authoritative descendant ownership survives fork, exec, reparenting,
+      `setsid`, and `setpgid`; terminal cancellation/deadline requires shutdown,
+      direct-child reaping, pipe closure, and race-free quiescence.
+- [x] Descriptor-bound non-following cleanup quarantines failure and blocks
+      retry/replacement; it cannot widen deletion authority or abandon ownership.
+- [x] The 32 predeclared D-100 check IDs are unique, bounded lowercase ASCII,
+      one-predicate records with `boundary_failed` in every allowed outcome set;
+      no raw process/build/host/path content is a future evidence field.
+- [x] D-097 failed/FAIL/Blocked, its Failed privacy finding, the Pending Open
+      Directory boundary, and Not-run signing results remain unchanged.
+- [ ] A supported no-new-dependency target-Mac primitive, controller, synthetic
+      proof, and disposable no-sign build proof exist; all are Blocked and Not run.
+- [x] No build, process, probe, filesystem/network effect, Apple, Keychain,
+      certificate, signing, credential, provider, product, or external action
+      occurred in this documentation increment.
+
 ## D-101 account-directory boundary planning
 
 - [x] The documented application policy is fixed and no-input; its operation-

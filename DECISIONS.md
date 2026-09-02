@@ -4732,3 +4732,88 @@ input, exact scope-provenance, and effect-suite proof gates identified by
 D-099's P2 documentation work. It does not supersede D-072, D-075, D-076,
 D-095, D-096, D-097, D-098, D-099, D-100, TS-017, any historical evidence, or
 any operational prerequisite.
+
+## D-102 - Require pre-effect build-child containment before a signing proof
+
+Date: 2026-09-01
+
+Status: Accepted — owner-authorized documentation-only governance decision
+
+## Context
+
+D-099 requires a fail-closed P3 executable-build-child prerequisite before a
+signing proof. The ordinary build graph reaches npm lifecycle hooks, Cargo build
+scripts, Vite/Tauri descendants, compilers, and linkers. Routing outputs or
+caches under a disposable root, clean Git status, post-hoc scans, and process-
+group shutdown do not stop an outside-root write, undeclared connection,
+ambient host-data read, or a descendant that escapes/reparents. Historical
+`sandbox-exec` research does not supply complete membership, shutdown/reaping,
+or effect control as a sole primitive. D-100 requires source-minimized closed
+evidence, and D-101's independent account-directory boundary remains Blocked.
+
+## Decision
+
+Adopt the conceptual documentation invariant
+`BuildChildContainmentPolicyV1::Required`. It is not a type, API, primitive,
+controller, command, configuration, or operational authorization. A future
+private `ContainedBuildAttemptV1` may be created only by trusted
+application-owned code in a separately approved plan. It is no-input, opaque,
+non-serializable, non-cloneable, attempt-bound, and cannot cross IPC,
+persistence, logs, tests, or evidence.
+
+The future boundary must freeze one reviewed transitive graph to its commit,
+lockfiles, and pinned toolchains; bind shell-free fixed absolute executables and
+literal arguments; close inherited environment and file descriptors; and admit
+no caller/model/WebView/environment-selected executable, task, run, profile,
+runtime, workflow, working directory, graph, retry, network policy, or cleanup
+target. It must constrain ambient host-data reads and filesystem writes. Before
+an effect, it must deny outside-root writes and undeclared network effects.
+Post-hoc observation never upgrades a failed or unproven boundary.
+
+Membership must cover every owned descendant across fork, exec, reparenting,
+`setsid`, and `setpgid`; a process group is only a shutdown adjunct. Fixed
+deadlines and cancellation are terminal. Every terminal path must terminate the
+owned graph, reap each direct child, close pipes, and await race-free quiescence;
+late effect/event acceptance fails closed. Cleanup must use descriptor-bound,
+non-following ownership. Cleanup failure preserves private quarantine until
+process exit and blocks retry/replacement without widening cleanup authority.
+
+Future evidence uses only the 32 predeclared `evidence_privacy_v1` source and
+contract categories in the P3 plan. It contains only a fixed ID, allowed closed
+outcome, and fixed predicate; raw output, command lines, paths, process/account/
+host identifiers, traces, packets, secrets, and free text are prohibited. An
+incomplete source inventory is `boundary_failed`; an absent, ambiguous, or
+unsupported contract is `contract_unproven`; neither grants authority.
+
+## Consequences
+
+- P3 remains Blocked until a later supported no-new-dependency target-Mac
+  primitive, controller, synthetic proof, and disposable no-sign build proof
+  each have separately approved plans and passing evidence.
+- P4 immutable signer binding, signing, V0-3, and every operational successor
+  remain Blocked. This documentation result cannot substitute for containment.
+- D-097 remains `failed` / `FAIL` / `Blocked` without a completion marker; its
+  Failed privacy finding, Pending Open Directory boundary, and Not-run signing
+  state are untouched.
+- No build, process, network, filesystem, Apple, Xcode, Keychain, certificate,
+  signing, credential, provider, product, dependency, or external action is
+  selected or authorized.
+
+## Alternatives considered
+
+- Treat output/caches/logs under a disposable root as containment: rejected;
+  they do not control reads, outside-root writes, connections, or descendants.
+- Use process groups as the authoritative child graph: rejected; descendants
+  can escape sessions/groups or reparent.
+- Use post-hoc scanning as proof: rejected; it observes after effect and may
+  miss effects.
+- Use `sandbox-exec` as the sole target-Mac primitive: rejected; it does not
+  establish all required membership, reaping, and effect contracts.
+- Add a dependency or perform an exploratory probe now: rejected; no primitive
+  selection or operational work was approved.
+
+## Supersedes or is superseded by
+
+D-102 implements only D-099's P3 documentation prerequisite. It does not
+supersede D-072, D-075, D-076, D-095, D-096, D-097, D-098, D-099, D-100, D-101,
+TS-017, any historical evidence, or any operational prerequisite.
