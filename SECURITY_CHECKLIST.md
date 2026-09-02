@@ -7,6 +7,34 @@ Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
 production boundary exists.
 
+## D-107 in-process key-use containment classification
+
+- [x] The exact candidate, source register, nineteen contract IDs, and outcomes
+      are frozen for one static review.
+- [x] The canonical D-100 result is `contract_unproven`; no target-derived or
+      authorizing value entered evidence.
+- [x] All nineteen rows are dispositioned exactly once: eight `documented` and
+      eleven `contract_unproven`.
+- [x] The governance result is exactly `not_eligible_or_unproven`; it admits no
+      candidate or successor.
+- [x] The candidate performs no identity lookup conceptually and cannot conceal
+      ambient/default Keychain scope behind a label or fingerprint filter.
+- [x] Private-key export, persistent references, debug output, caller input,
+      generic signing, fallback, and retry are prohibited.
+- [x] Lookup-time interaction suppression is not represented as prompt denial
+      for private-key use, and result rejection is not represented as hard
+      cancellation or quiescence.
+- [x] No direct application child/file/network request is represented as proof
+      that OS-managed effects are absent.
+- [x] The challenge class is prohibited from satisfying product signing,
+      stable identity, custody, containment, P4, or V0-3 claims.
+- [x] D-096 through D-106 and every historical Failed/Pending/Not-run fact
+      remain unchanged.
+- [ ] An eligible candidate or operational successor exists; both remain
+      Blocked.
+- [x] No operational Apple, Xcode, Keychain, private-key, signing, build,
+      target-Mac, provider, product, or state-changing external action ran.
+
 ## D-106 codeless signing-fixture classification
 
 - [x] The candidate identity and three-source register are fixed for one static

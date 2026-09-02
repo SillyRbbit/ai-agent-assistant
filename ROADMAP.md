@@ -18,6 +18,16 @@ Last updated: 2026-09-02
 contains the ordered execution queue. Completed plans and reviews are the
 verification record; this roadmap does not create new completion evidence.
 
+## Completed in-process key-use containment classification
+
+The documentation-only source review records D-107's bounded negative result:
+`not_eligible_or_unproven`, with eight documented and eleven unproved rows. The
+candidate is childless and fileless but is neither an implemented primitive nor
+a D-102 waiver. Exact identity provenance, prompt-free bounded key use, cleanup,
+platform effects, and the applicability split remain unresolved. No successor
+is **Ready**; all operational P3/P4/signing/product work remains **Blocked**.
+The documentation increment is **Complete** with `PASS WITH ADVISORIES`.
+
 ## Completed codeless signing-fixture classification
 
 The documentation-only classification is **Complete** with `PASS WITH

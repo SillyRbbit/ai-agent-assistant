@@ -2,6 +2,42 @@
 
 Last updated: 2026-09-02
 
+## In-process key-use containment classification result
+
+The owner approved branch
+`codex/p3-in-process-key-use-containment-classification`, the documentation-only
+[`personal-assistant-v0-key-use-containment-classification`](docs/plans/2026-09-02-personal-assistant-v0-key-use-containment-classification.md)
+plan, and its gate begin from clean synchronized `main` at
+`2287c1bfe999d733495ee78728f4dc7a653f393f`. D-107 records
+`not_eligible_or_unproven` for exactly
+`in_process_security_framework_ephemeral_challenge_proof_v1`: eight contract
+rows are `documented` and eleven are `contract_unproven`.
+
+The candidate removes a proposed child, build, bundle, artifact, filesystem
+write, and `codesign` operation from this narrow challenge class. It is not a
+D-102 containment primitive, product-signing proof, or V0-3 evidence. Exact
+D-101 identity provenance, signer binding, interaction denial, hard
+cancellation/quiescence, cleanup, platform effects, and the D-102 applicability
+split remain unresolved. No Apple, Xcode, Keychain, certificate, private-key,
+signing, build, target-Mac, provider, product, or state-changing external action
+ran. No candidate or successor is Ready.
+
+The exact fifteen-path documentation scope passed formatting/link,
+repository-health, secret-scan, protected-path, whitespace, session-inventory,
+architecture, security, code-health, technical-debt, readiness, quality, and
+post-increment validation. The gate completed validly with `PASS WITH
+ADVISORIES`; next-increment readiness is `Blocked`. The completion report is
+[`2026-09-02-personal-assistant-v0-key-use-containment-classification-post-increment-review.md`](docs/reviews/2026-09-02-personal-assistant-v0-key-use-containment-classification-post-increment-review.md).
+
+Exact resume prompt: “Read AGENTS.md, the complete required project-memory and
+security/testing chain, D-096 through D-107, and the completed in-process key-
+use containment classification report. Preserve the factual
+`contract_unproven` record, D-107 `not_eligible_or_unproven`, D-097’s immutable
+failure, and every Failed/Pending/Not-run fact. Report that no successor is
+Ready. Do not begin a gate, add or operate a candidate, access Apple/Xcode/
+Keychain, use a private key, sign, build, run a target-Mac check, or change
+product/external state without a separately approved bounded plan.”
+
 ## Completed codeless signing-fixture classification
 
 The owner approved branch
