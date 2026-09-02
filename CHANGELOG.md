@@ -5,6 +5,19 @@ All notable repository changes are documented here. Entries distinguish verified
 ## Unreleased
 
 - Completed the owner-approved documentation-only
+  `personal-assistant-v0-evidence-privacy-protocol-planning` increment from
+  clean synchronized `main` at `096cdbe` with `PASS WITH ADVISORIES`. D-100
+  defines a closed
+  `evidence_privacy_v1` record with plan-owned check IDs, closed outcomes,
+  exact bounded ASCII/canonical serialization, non-authorizing predicate
+  semantics, private once-only future plan/check/attempt binding, source
+  minimization, prohibited raw evidence, and stop-without-retry incident
+  handling. No evidence operation, parser, sanitizer, target-Mac operational,
+  Apple, Keychain, signing, build, credential, provider, network, product, or
+  external action is part of this increment. D-097/D-098/D-099 and all
+  historical Failed/Pending/Not-run evidence remain unchanged.
+
+- Completed the owner-approved documentation-only
   `personal-assistant-v0-signing-security-prerequisite-planning` successor
   under valid D-098 schema-v3 lineage with `PASS WITH ADVISORIES`. The bounded work documents future
   evidence privacy, account-directory, build-child-containment, and immutable

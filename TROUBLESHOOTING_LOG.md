@@ -2,6 +2,25 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-09-01 — P1 evidence privacy requires source minimization
+
+**Observation:** The historical D-097 privacy failure shows that a private
+screenshot or raw capture has already crossed the intended boundary before it
+can be summarized or redacted. Free-text observation and extensible report
+fields have the same uncontrolled-content problem.
+
+**Disposition:** D-100 defines `evidence_privacy_v1` as one fixed version, one
+future-plan-owned check ID, and one closed outcome. Future evidence must be
+minimized at its approved local source; screenshots, recordings, transcripts,
+raw output, target-derived sensitive identifiers/metadata, private paths,
+credentials, and content are prohibited. Static protocol literals are exact
+bounded ASCII and carry no standalone authority; a future consumer must bind
+one record privately to one plan/check/attempt and reject replay or late data.
+Unknown or unexpected evidence stops without retry and records only
+`boundary_failed`. This is documentation policy only: no sanitizer or operation
+exists, D-097 remains Failed/Blocked, Open Directory remains Pending, and
+signing remains Not run.
+
 ## 2026-09-01 — Exact D-098 documentation successor is completed
 
 **Observation:** A clean, synchronized `main` at

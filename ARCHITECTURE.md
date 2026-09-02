@@ -10,6 +10,13 @@ Last updated: 2026-09-01
 > account-directory, build-child-containment, and signer-contract prerequisites
 > only. It changes no product architecture edge and cannot resolve D-097,
 > authorize signing, or make an external-system capability available.
+>
+> The completed P1 evidence-privacy planning increment adds no architecture
+> edge. Its accepted `evidence_privacy_v1` record is repository-governance
+> documentation for future separately approved operations: one fixed protocol
+> version, one plan-owned check ID, and one closed outcome. No runtime, IPC,
+> filesystem, logging, screenshot, attachment, external-system, or device path
+> implements or consumes that record today.
 
 ## Reading this document
 

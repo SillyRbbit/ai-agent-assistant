@@ -4481,3 +4481,119 @@ external-system evidence.
 
 D-099 adds bounded planning guidance only. It does not supersede D-072, D-075,
 D-076, D-095, D-096, D-097, D-098, TS-017, or any operational prerequisite.
+
+## D-100 - Require closed source-minimized evidence for future security operations
+
+Date: 2026-09-01
+Status: Accepted owner-authorized documentation-only governance decision
+
+## Context
+
+D-099 identifies P1 privacy-safe categorical evidence as the first separate
+prerequisite before any later security or signing operation. The historical
+D-097 screenshot/privacy failure demonstrates that asking for a private capture
+and redacting or summarizing it later is not an adequate boundary. Free-text
+owner descriptions, copied command output, and arbitrary report fields can also
+carry identifiers or sensitive content even when no secret was intended.
+
+The repository needs a closed vocabulary before another plan can propose
+operational evidence. This decision defines that vocabulary only. It neither
+collects evidence nor implements a sanitizer or external operation.
+
+## Decision
+
+Define `evidence_privacy_v1` as a three-field documentation contract:
+
+- `protocol_version` is exactly `evidence_privacy_v1`;
+- `check_id` is one exact enum member owned by the separately approved future
+  plan; and
+- `outcome` is one exact enum member from that check's predeclared allowlist.
+
+There is no extension map, optional free-text note, arbitrary key, caller-
+selected identifier, timestamp, count, path, diagnostic, excerpt, or raw error.
+A future plan may use applicable closed outcomes such as `observed`,
+`not_observed`, `not_run`, `pending`, `unavailable`, and `boundary_failed`, or a
+narrower check-specific set. Every operational check's allowlist must include
+`boundary_failed`; the check and all other outcomes must be fixed and reviewed
+before any operation begins.
+
+`check_id` and `outcome` are repository-reviewed static lowercase ASCII tokens
+matching `[a-z][a-z0-9_]*` and bounded to 64 and 32 bytes respectively. Their
+spellings and allowlists are not target-derived; `check_id` is fixed before
+inspection, while only selection of one already allowed outcome may depend on
+the bounded predicate. A future serialized form is exactly one compact ASCII
+JSON record, at most 256 bytes, with exactly the three unique keys in declared
+order, string values only, and no leading/trailing whitespace or bytes.
+Comparison is exact, with no trimming, case folding, Unicode normalization,
+confusable mapping, or aliases.
+
+Each check represents one directly observable or deterministically established
+bounded predicate. Check/outcome names and semantics cannot claim approval,
+authorization, safety, readiness, broad verification, exclusivity, historical
+absence, or permission to proceed. The record has no standalone provenance,
+freshness, authentication, authorization, audit, or readiness meaning. A future
+trusted consumer must privately bind it to one separately approved plan, check,
+and attempt, accept it once within that attempt's fixed window, and reject
+duplicate, replayed, cross-plan, pre-admission, or late records.
+
+Evidence must be minimized at its source. Raw bytes may not cross the approved
+local inspection boundary and then be redacted for chat, Git, reports, logs,
+tests, screenshots, recordings, attachments, clipboard transfers, or ordinary
+CI. An automated boundary is compliant only when separately approved trusted
+local code discards raw data before returning the closed record. A manual check
+uses one prewritten question and one closed answer; it accepts no attachment,
+copied output, screenshot, recording, or explanatory free text. If either
+method cannot satisfy this rule, the check remains Not run.
+
+Unknown versions, checks, outcomes, keys, prompts, malformed records,
+ambiguity, unexpected output, or unapproved side effects fail closed. If
+prohibited evidence appears, stop without retry; do not copy, quote,
+retransmit, attach, or summarize it. Record only the applicable
+`boundary_failed` category, preserve historical truth without claiming that an
+immutable record was erased, and require a separate incident/disposition plan
+before related operational work resumes.
+
+## Consequences
+
+- Screenshots, recordings, transcripts, raw stdout/stderr, logs, traces,
+  diagnostic/exception text, raw/sensitive/dynamic/target-derived identifiers
+  or certificate/account metadata, fingerprints, serials, target-derived
+  labels, personal/private paths, credentials, secrets, and sensitive content
+  are prohibited evidence. Static repository-owned protocol literals and
+  necessary preexisting governance metadata not derived from the target remain
+  permitted documentation.
+- These prohibitions govern the payload/result of a separately approved
+  security or signing check. Necessary non-sensitive repository validation and
+  governance metadata that are not derived from the inspected security target
+  remain separate from the protocol record.
+- A passing P1 documentation closeout establishes only the protocol. No
+  sanitizer, operation, runtime, IPC, filesystem, Apple, Keychain, signing,
+  build, provider, product, or external-system boundary exists because of it.
+- D-097 remains `failed` / `FAIL` / `Blocked` without a completion marker; its
+  original report and digests remain unchanged, and its historical privacy
+  finding remains Failed. The Open Directory boundary remains Manual
+  verification pending, and signing remains Not run.
+- P2 account-directory, P3 executable-build-child containment, P4 immutable
+  signer binding, and every operational successor remain Proposed/Blocked.
+- Every future operational plan must bind its own exact check/outcome tables,
+  non-authorizing predicate semantics, private attempt/freshness context, threat
+  model, local minimization boundary, manual gates, stop conditions, review, and
+  separate owner approval.
+
+## Alternatives considered
+
+- Capture then redact: rejected because sensitive data already crossed the
+  intended boundary.
+- Owner-supplied screenshots or copied output: rejected because they recreate
+  the historical privacy failure and allow uncontrolled metadata.
+- Free-text attestations: rejected because their content and bounds are open.
+- A generic evidence object with optional fields: rejected because it creates
+  an extensible data channel.
+- Implement a sanitizer in this increment: rejected as executable and
+  operational work outside the approved documentation scope.
+
+## Supersedes or is superseded by
+
+D-100 implements only the P1 documentation protocol identified by D-099. It
+does not supersede D-072, D-075, D-076, D-095, D-096, D-097, D-098, D-099,
+TS-017, any historical evidence, or any operational prerequisite.

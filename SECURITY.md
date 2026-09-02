@@ -541,6 +541,31 @@ account-directory, P3 build-child-containment, and P4 immutable-signer
 prerequisites. A passing documentation closeout is not evidence of Keychain
 custody, signing, containment, Apple-system safety, or product authority.
 
+D-100 defines the documentation-only P1 protocol as a closed
+`evidence_privacy_v1` record: one fixed version, one future-plan-owned check ID,
+and one check-owned categorical outcome. It has no optional or free-text data
+channel. Sensitive evidence must be minimized at its approved local source;
+capturing raw data and redacting it later is prohibited. Screenshots,
+recordings, transcripts, raw output, logs, target-derived identifiers,
+account/certificate metadata, fingerprints, target-derived labels, private
+paths, credentials, and sensitive content cannot be evidence. Static
+repository-owned protocol literals remain permitted. Tokens are exact bounded
+lowercase ASCII, and any future serialization is one canonical bounded record.
+The record has no standalone authority; future trusted state must bind it once
+to one approved plan/check/attempt and reject duplicate, replayed, cross-plan,
+pre-admission, or late data. Each category represents one bounded predicate and
+cannot claim approval, safety, readiness, exclusivity, historical absence, or
+broader verification. A boundary failure emits only the applicable
+closed category, which every operational check must predeclare, stops without
+retry, and preserves historical truth. D-100 is policy documentation, not an
+implemented sanitizer, runtime, IPC, filesystem, logging, target-Mac, or
+external-system boundary.
+
+The D-100 payload prohibition applies to inspection-target or operation-derived
+security/signing evidence. Necessary non-sensitive repository validation and
+governance metadata that are not derived from the inspected security target are
+separate from the three-field protocol record.
+
 Any need for an unapproved dependency,
 WebView or subprocess networking,
 caller-selected trusted configuration, raw-content logging, persistent

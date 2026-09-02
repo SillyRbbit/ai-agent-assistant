@@ -2,6 +2,34 @@
 
 Last updated: 2026-09-01
 
+## Completed P1 evidence-privacy protocol planning
+
+The owner-approved documentation-only
+[`personal-assistant-v0-evidence-privacy-protocol-planning`](docs/plans/2026-09-01-personal-assistant-v0-evidence-privacy-protocol-planning.md)
+increment completed from clean synchronized `main` at
+`096cdbe0139832010749039149fb2e335cfa19fd` with `PASS WITH ADVISORIES`. D-100
+defines a closed future
+evidence record with one fixed version, one plan-owned check ID, and one closed
+outcome. It requires minimization before the chat/repository boundary and
+prohibits screenshots, recordings, transcripts, raw output, target-derived
+sensitive identifiers/metadata, private paths, credentials, and free-text
+evidence. Static tokens are bounded ASCII and non-authorizing; a future trusted
+consumer must bind one record privately to one plan/check/attempt and reject
+replay or late data.
+
+This planning closeout collected no operational evidence and changed no product or
+external system. Preserve D-097 as `failed` / `FAIL` / `Blocked` with no
+completion marker and preserve its original report and digests. Keep the
+historical privacy finding as Failed, the Open Directory boundary as Manual
+verification pending, and signing as Not run. P2–P4 and all
+operational successors remain Proposed/Blocked. Exact resume prompt: “Read
+D-100 and the completed P1 evidence-privacy protocol plan. Preserve
+D-097/D-098/D-099 and every Failed/Pending/Not-run result. Do not request or
+collect raw evidence or operate Apple, Xcode, Keychain, signing, build,
+credentials, provider, network, product, or external systems. Stop unless the
+owner separately selects and approves one bounded P2 documentation-planning
+increment.”
+
 ## Completed documentation-only signing-security prerequisite planning
 
 The owner approved implementation of

@@ -7,6 +7,39 @@ Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
 production boundary exists.
 
+## D-100 evidence-privacy protocol planning
+
+- [x] The protocol has exactly a fixed version, a future-plan-owned check ID,
+      and a check-owned closed outcome; it has no free-text or extension field.
+- [x] The documented future parser contract requires bounded lowercase ASCII,
+      exact comparison, one canonical bounded record, unique keys, and no
+      normalization/aliases; no parser exists in this increment.
+- [x] The documented future consumer contract treats the record as
+      non-authorizing, binds it privately to one plan/check/attempt, and rejects
+      duplicates, replay, substitution, pre-admission, and late arrival; no
+      consumer exists in this increment.
+- [x] Each check/outcome represents one bounded predicate and cannot claim
+      approval, authorization, safety, readiness, exclusivity, historical
+      absence, broad verification, or permission to proceed.
+- [x] Screenshots, recordings, attachments, transcripts, raw output, logs,
+      target-derived sensitive identifiers, metadata, private paths,
+      credentials, and content are prohibited evidence; static protocol
+      literals are distinct.
+- [x] Source minimization is mandatory; capture-then-redact is not accepted.
+- [x] Unknown or malformed evidence, prompts, ambiguity, unexpected output,
+      side effects, and boundary failure stop without retry.
+- [x] Every operational check predeclares `boundary_failed`; incident handling
+      never widens an outcome enum after execution starts.
+- [x] A failure records only `boundary_failed`, preserves historical truth, and
+      requires separate disposition before related operations resume.
+- [x] D-097/D-098/D-099 and the Failed privacy, Pending Open Directory, and
+      Not-run signing evidence remain unchanged.
+- [ ] A future operational plan implements and reviews its exact local
+      minimization boundary, check/outcome table, manual gates, and owner
+      approval; this documentation increment does not.
+- [x] P2 account-directory, P3 build-child containment, P4 signer binding, and
+      every operational successor remain Proposed/Blocked.
+
 ## D-099 documentation-only signing-security prerequisite planning
 
 - [x] The exact D-098 schema-v3 lineage admits only the named documentation
