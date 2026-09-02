@@ -18,6 +18,14 @@ Last updated: 2026-09-02
 contains the ordered execution queue. Completed plans and reviews are the
 verification record; this roadmap does not create new completion evidence.
 
+## Active dependency-security remediation
+
+The owner-approved `browserslist-4-28-7-security-remediation` is **Active** as
+a bounded PR #102 merge prerequisite. It may change only the existing
+development-only Browserslist lock resolution and four support entries required
+by 4.28.7. It changes no product milestone or authority. D-111 continues to
+block automatic product and operational successors.
+
 ## D-107 account and Keychain scope decision
 
 D-111 is **Completed** with `PASS WITH ADVISORIES`: no application-owned

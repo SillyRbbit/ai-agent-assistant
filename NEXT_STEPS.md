@@ -2,6 +2,18 @@
 
 Last updated: 2026-09-02
 
+## Active Browserslist 4.28.7 security remediation
+
+The owner explicitly approved the bounded
+`browserslist-4-28-7-security-remediation` increment after PR #102's required
+dependency audit identified the existing development-only transitive
+Browserslist 4.28.2. Resolve exactly Browserslist 4.28.7 and only the four
+support entries required by its raised dependency floors. Preserve
+`package.json`, parent packages, source, workflows, audit policy, and trust
+boundaries. Require a zero-finding npm audit, complete verification, a valid
+completion marker, and every applicable exact-head PR check before squash
+merge.
+
 ## Completed GUI conversation Return and Graph wheel interactions
 
 The separately approved `gui-conversation-enter-graph-wheel-zoom` increment is

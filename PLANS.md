@@ -4,6 +4,15 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
+The active owner-approved dependency-security plan is
+[`browserslist-4-28-7-security-remediation`](docs/plans/2026-09-02-browserslist-4-28-7-security-remediation.md).
+It is limited to resolving the existing development-only transitive
+Browserslist node from 4.28.2 to patched 4.28.7 plus only four support entries
+required by its raised in-range dependency floors. `package.json`, parent
+packages, application/native source, workflows, audit policy, permissions, and
+runtime authority remain unchanged. Readiness is `Ready with advisories`; the
+gate is active and PR #102 remains unmerged.
+
 The most recently completed owner-requested presentation plan is
 [`gui-conversation-enter-graph-wheel-zoom`](docs/plans/2026-09-02-gui-conversation-enter-graph-wheel-zoom.md).
 It completed with `PASS WITH ADVISORIES`: exact unmodified Return submits one
