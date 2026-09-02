@@ -2,6 +2,18 @@
 
 Last updated: 2026-09-02
 
+## D-107 exact signer-binding decision
+
+D-110 selects `signer_binding_not_accepted` for exactly
+`exact_signer_binding_contract`. Repository source has no immutable expected
+Developer ID Application signer/certificate/public-key binding. Identity
+pairing, labels, fingerprints, filters, or ambient/default authority are not
+proof. D-097, D-107 8/11, D-108 9/10, and D-109 remain unchanged.
+
+Ten contracts remain unproved. No candidate or successor is **Ready**. Do not
+implement or operate certificate, Keychain, signing, build, Apple/Xcode,
+target-Mac, provider, product, or external work without separate approval.
+
 ## D-107 opaque identity-reference decision
 
 D-109 selects `reference_issuance_not_accepted` for exactly

@@ -4,6 +4,13 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Completed with `PASS WITH ADVISORIES` the documentation-only D-110 exact
+  signer-binding decision. It selects `signer_binding_not_accepted`:
+  certificate/private-key correspondence, labels, fingerprints, filters, and
+  ambient Keychain state do not establish immutable expected signer binding.
+  No candidate or successor is Ready; no product, certificate, Keychain,
+  signing, build, target-Mac, provider, or external operation occurred.
+
 - Completed with `PASS WITH ADVISORIES` the documentation-only D-109 opaque
   identity-reference decision. It selects
   `reference_issuance_not_accepted`: present repository source

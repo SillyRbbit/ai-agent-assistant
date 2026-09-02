@@ -2,6 +2,20 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-09-02 — Identity correspondence does not establish expected signer binding
+
+**Observation:** D-107's native identity model can establish
+certificate/private-key correspondence, but repository source has no immutable
+expected Developer ID Application signer/certificate/public-key binding.
+Fixed labels, fingerprints, filters, and ambient/default Keychain state are
+selectors or metadata, not application-owned expected-signer provenance.
+
+**Disposition:** D-110 selects `signer_binding_not_accepted`. The result is
+limited to the reviewed repository state; it preserves D-097, D-107 8/11,
+D-108 9/10, D-109, all ten blockers, and Blocked readiness. No certificate,
+Keychain, private-key, signing, Apple/Xcode, build, target-Mac, provider,
+product, or external operation ran.
+
 ## 2026-09-02 — Opaque object shape does not establish identity provenance
 
 **Observation:** D-107 requires a separately proven application-owned,

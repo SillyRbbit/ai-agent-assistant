@@ -2,6 +2,26 @@
 
 Last updated: 2026-09-02
 
+## D-107 exact signer-binding decision
+
+D-110 selects `signer_binding_not_accepted`: the repository has no immutable
+expected Developer ID Application signer/certificate/public-key binding.
+Certificate/private-key correspondence, labels, fingerprints, filters, and
+ambient/default Keychain state are not substitutes. D-109's negative identity
+issuance result remains independently controlling.
+
+D-097, D-107's 8/11 record, D-108's 9/10 interpretation, and all ten blockers
+remain preserved. No candidate or successor is Ready. No certificate, Keychain,
+private-key, signing, Apple/Xcode, build, target-Mac, provider, product, or
+external action ran.
+
+Exact resume prompt: “Read AGENTS.md, the complete project-memory and
+security/testing chain, D-096 through D-110, and the completed D-110 review.
+Preserve D-097, D-107 8/11, D-108 9/10, D-109, and D-110. No successor is
+Ready. Do not operate identity, certificates, Keychain, signing, Apple/Xcode,
+build, target-Mac, provider, product, or external systems without a separately
+approved bounded plan.”
+
 ## D-107 opaque identity-reference decision
 
 The owner approved the documentation-only

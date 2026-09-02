@@ -5,6 +5,14 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Current plan state
 
 The most recently completed owner-approved documentation-only plan is
+[`d107-exact-signer-binding-contract-decision`](docs/plans/2026-09-02-d107-exact-signer-binding-contract-decision.md).
+D-110 selects `signer_binding_not_accepted`: current repository source has no
+immutable expected Developer ID Application signer/certificate/public-key
+binding. Correspondence, labels, fingerprints, filters, and ambient/default
+authority are not substitutes. No source or runtime boundary is added; all ten
+blockers remain unproved and no successor is Ready.
+
+The most recently completed owner-approved documentation-only plan is
 [`d107-opaque-prebound-identity-contract-decision`](docs/plans/2026-09-02-d107-opaque-prebound-identity-contract-decision.md).
 D-109 selects `reference_issuance_not_accepted` because current repository
 source contains no application-owned issuer for a no-input, attempt-bound opaque

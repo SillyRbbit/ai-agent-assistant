@@ -2,6 +2,22 @@
 
 Last updated: 2026-09-02
 
+## D-107 exact signer-binding decision
+
+The owner-approved documentation-only D-110 decision selects
+`signer_binding_not_accepted`: repository source has no immutable expected
+Developer ID Application signer/certificate/public-key binding. Identity
+pairing, labels, fingerprints, filters, or ambient/default Keychain state do
+not establish expected-signer provenance.
+
+No product/test source, dependency, configuration, certificate, Keychain,
+private-key, signing, build, target-Mac, provider, product, or external
+operation changed or ran. D-097, D-107's immutable 8/11 record, D-108's 9/10
+interpretation, D-109, and all ten blockers remain controlling.
+
+The exact fifteen-path documentation scope passed the required validation and
+completion gate with `PASS WITH ADVISORIES`.
+
 ## D-107 opaque identity-reference decision
 
 The owner-approved documentation-only

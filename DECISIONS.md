@@ -5720,3 +5720,73 @@ D-109 additively selects a negative governance disposition for only
 not supersede D-072, D-075, D-076, D-095, D-096, D-097, D-098, D-099, D-100,
 D-101, D-102, D-103, D-104, D-105, D-106, D-107, D-108, TS-017, historical
 evidence, or any operational prerequisite.
+
+## D-110 - Do not accept exact signer binding from the current repository record
+
+Date: 2026-09-02
+Status: Accepted owner-authorized documentation-only governance decision
+
+## Context
+
+D-107 records `exact_signer_binding_contract` as `contract_unproven`:
+an identity can establish certificate/private-key correspondence, but the
+repository has no immutable expected Developer ID Application class and
+certificate/public-key binding. D-109 separately records that the repository
+has no application-owned issuer for the prerequisite opaque identity reference.
+D-101 prohibits ambient/default account, home, path, Keychain, and search-list
+authority; D-108 grants no signer authority.
+
+This review is limited to whether existing repository evidence establishes the
+missing expected-signer contract without reading a certificate, using Keychain,
+or adding a configuration or runtime selection path.
+
+## Decision
+
+Define `ExactSignerBindingPolicyV1` for exactly the frozen D-107 candidate:
+
+| Condition                                                                                                                                                              | Disposition                   |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| Repository evidence establishes one immutable, application-owned expected Developer ID Application signer/certificate/public-key binding without a prohibited selector | `signer_binding_documented`   |
+| Repository evidence establishes no complete binding in the reviewed state                                                                                              | `signer_binding_not_accepted` |
+| A required fact is missing, ambiguous, contradictory, non-immutable, or drifted                                                                                        | `boundary_failed`             |
+
+Select exactly `signer_binding_not_accepted`.
+
+No current repository component owns an immutable expected Developer ID
+Application signer class or certificate/public-key binding. Native identity
+pairing, fixed labels, certificate subject/issuer metadata, fingerprints,
+default Keychain state, search lists, filters, and caller input prove neither
+expected-signer provenance nor resistance to substitution. This decision is
+governance documentation, not D-100 evidence or a runtime/Tauri interface.
+
+## Consequences
+
+- D-107's immutable factual 8/11 record, D-108's additive 9/10 interpretation,
+  and D-109's negative issuance result remain unchanged. This decision does not
+  lower the ten blocker count, admit a candidate, or make a successor Ready.
+- A future positive signer design requires separately approved trusted-Rust
+  policy ownership, an adapter-private comparison over fixed application-owned
+  material, no selector/lookup/default/fallback route, and independent proof of
+  every remaining D-107 contract.
+- No source, certificate, public key, fingerprint, serial, team/account value,
+  Keychain operation, signing, build, provider, target-Mac, or external effect
+  is created or disclosed.
+- D-097 and D-098 remain unchanged and controlling.
+
+## Alternatives considered
+
+- Treat certificate/private-key correspondence as expected signer binding:
+  rejected; it establishes correspondence, not expected identity.
+- Persist or configure a certificate label/fingerprint: rejected; it creates a
+  selector/identifier channel and does not establish issuer or scope authority.
+- Inspect target certificate/Keychain state: rejected as operational work
+  outside the approved documentation-only scope.
+- Claim universal impossibility: rejected; this negative result covers only the
+  reviewed repository state.
+
+## Supersedes or is superseded by
+
+D-110 additively selects a negative governance disposition for only
+`exact_signer_binding_contract`. It does not supersede D-072, D-075, D-076,
+D-095 through D-109, TS-017, historical evidence, or any operational
+prerequisite.

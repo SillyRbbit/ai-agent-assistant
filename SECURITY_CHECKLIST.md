@@ -7,6 +7,22 @@ Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
 production boundary exists.
 
+## D-110 exact signer-binding decision
+
+- [x] The decision covers only `exact_signer_binding_contract`; it creates no
+      signer source, selector, signing operation, or successor.
+- [x] Only `signer_binding_documented`, `signer_binding_not_accepted`, and
+      `boundary_failed` are allowed governance dispositions; none is D-100
+      evidence or a runtime value.
+- [x] Pairing, label, fingerprint, filter, default/search-list, caller, and
+      ambient authority are not treated as immutable expected-signer proof.
+- [x] D-097, D-101, D-107, D-108, D-109, and all ten blockers remain
+      independently controlling.
+- [ ] An eligible candidate or operational successor exists; both remain
+      Blocked.
+- [x] No certificate, Keychain, private-key, signing, Apple/Xcode, build,
+      target-Mac, provider, product, or external operation ran.
+
 ## D-109 opaque identity-reference decision
 
 - [x] The decision covers only `opaque_prebound_identity_contract`; it does
