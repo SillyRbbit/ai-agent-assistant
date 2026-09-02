@@ -4,6 +4,14 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added an explicit D-107 operational-scope wording reconciliation. The
+  published classification necessarily wrote documentation files and ran local
+  validation and gate processes. Its unqualified historical `process` and
+  `filesystem` absence language means only that no product/build/signing/
+  Keychain/target-Mac operational process or state-changing external action
+  ran. The D-107 decision, plan, increment, report, evidence totals, completion
+  result, and Blocked readiness remain unchanged.
+
 - Classified the owner-approved documentation-only candidate
   `in_process_security_framework_ephemeral_challenge_proof_v1` from clean
   synchronized `main` at `2287c1b`. D-107 records

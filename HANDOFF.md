@@ -2,6 +2,38 @@
 
 Last updated: 2026-09-02
 
+## D-107 operational-scope wording reconciliation
+
+The owner approved the documentation-only
+`d107-operational-scope-wording-reconciliation` increment from clean
+synchronized `main` at
+`80dab5bb6b1d9065399bc533c3d6c2bf3c84abfb`. It preserves the published D-107
+decision, plan, increment, review, report digest, evidence totals, completion
+result, and Blocked readiness.
+
+The clarification is exact: the D-107 increment wrote documentation files and
+ran local repository-validation and gate processes. It changed no product/test
+source, dependency, configuration, capability, entitlement, IPC, workflow,
+hook, or script path, and it ran no product-build, signing, Keychain/private-
+key, target-Mac, or state-changing external operation.
+
+The exact nine-path documentation scope passed formatting/link,
+repository-health, secret-scan, historical-evidence, protected-path,
+whitespace, session-inventory, architecture, security, code-health,
+technical-debt, readiness, quality, and post-increment validation. The gate
+completed validly with `PASS WITH ADVISORIES`; next-increment readiness remains
+`Blocked` because D-107 admits no candidate or successor.
+
+Exact resume prompt: “Read AGENTS.md, the complete required project-memory and
+security/testing chain, D-096 through D-107, the completed D-107 classification
+report, and the D-107 operational-scope wording reconciliation. Preserve all
+published D-107 evidence byte-for-byte. State that documentation writes and
+local validation/gate processes occurred, while no product/build/signing/
+Keychain/target-Mac operational process or state-changing external action ran.
+Report that no successor is Ready. Do not begin a gate or any product, Apple,
+Xcode, Keychain, private-key, signing, build, target-Mac, provider, or external
+work without a separately approved bounded plan.”
+
 ## In-process key-use containment classification result
 
 The owner approved branch

@@ -2,6 +2,19 @@
 
 Last updated: 2026-09-02
 
+## Completed D-107 operational-scope wording reconciliation
+
+The owner approved one documentation-only reconciliation from clean
+synchronized `main` at `80dab5b`. It does not reopen D-107 or authorize a new
+candidate. It records that documentation files were written and local
+validation/gate processes ran, while no product/build/signing/Keychain/target-
+Mac operational process or state-changing external action ran.
+
+This correction changes no D-107 result, evidence total, completion fact, or
+Blocked readiness. Its exact nine-path documentation scope and completion gate
+passed with `PASS WITH ADVISORIES`. No operational successor is Ready; do not
+start later work without a separately approved bounded plan.
+
 ## In-process key-use containment classification result
 
 `personal-assistant-v0-key-use-containment-classification` reviewed exactly
