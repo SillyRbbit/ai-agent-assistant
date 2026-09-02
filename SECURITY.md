@@ -7,6 +7,32 @@ Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
 identifies which security boundaries are current, mocked, planned, or
 prohibited.
 
+## Browserslist 4.28.7 supply-chain remediation
+
+PR #102's required audit reported GHSA-c83g-rgw3-j3cx / CVE-2026-73089 and
+GHSA-73wf-gq98-2v4g / CVE-2026-73088 against the existing development-only
+`browserslist@4.28.2` node. Both advisories affect releases through 4.28.6 and
+identify 4.28.7 as patched. The path remains
+`@vitejs/plugin-react@4.7.0` -> `@babel/core@7.29.7` ->
+`@babel/helper-compilation-targets@7.29.7` -> `browserslist@4.28.7`.
+
+The bounded npm resolution changes only Browserslist 4.28.7 and its raised
+support floors: `baseline-browser-mapping@2.10.44`,
+`caniuse-lite@1.0.30001806`, `electron-to-chromium@1.5.393`, and
+`node-releases@2.0.51`. Their licenses are MIT, Apache-2.0, CC-BY-4.0, ISC, and
+MIT respectively. Every moved node remains development-only, registry-
+resolved, SHA-512 integrity-bound, engine-compatible, and free of an install
+lifecycle hook.
+
+`update-browserslist-db@1.2.3`, `package.json`, the parent graph, lockfile
+topology, durable overrides, install-script allowlist, audit threshold,
+application/native source, workflows, and trust boundaries are unchanged. Full
+and production-only npm audits report zero vulnerabilities, complete local
+verification passes, and exact remediation CI run `33694943603` passes secret
+scanning, JavaScript audit, and the unchanged accepted Rust advisory-baseline
+gate. This is dependency evidence, not new product, provider, network,
+permission, execution, or device authority.
+
 ## D-111 account and Keychain scope boundary
 
 D-111 rejects default/search-list, account/home/path, environment, access-group

@@ -4,6 +4,51 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Completed the owner-approved PR #102 Browserslist security remediation with
+  `PASS WITH ADVISORIES`. The existing development-only transitive advances
+  from 4.28.2 to patched 4.28.7, and only its four required support entries
+  move to exact published floors. `update-browserslist-db@1.2.3`, the manifest,
+  parent graph, source, workflows, install policy, and trust boundaries remain
+  unchanged. Scripts-disabled clean install, exact graph/metadata inspection,
+  both zero-finding npm audits, full `npm run verify`, independent reviews, and
+  every classified check on remediation `8570034` pass. The sole advisory is
+  D-111's unchanged Blocked successor readiness.
+
+- Completed the owner-requested conversation Return and Command Center Graph
+  wheel interaction correction with `PASS WITH ADVISORIES`. Exact unmodified
+  Return submits one enabled, non-empty volatile mock request; modifier chords,
+  Shift+Return, IME/key-code-229 composition, empty drafts, and busy state do
+  not submit. Over the Graph, ordinary wheel up zooms in and wheel down zooms
+  out through the existing bounded manual viewport; outside the Graph, page
+  scrolling remains available. Focused 87-test and full 370-test frontend
+  suites, `npm run verify`, browser QA, freshly bundled native Tauri QA, and
+  protected Structured/native/dependency checks pass. No trust boundary or
+  technical debt was introduced.
+
+- Completed the owner-requested GUI responsive alignment correction with `PASS
+WITH ADVISORIES`: conversation history no longer absorbs spare sidebar height,
+  the local-first footer remains bottom-pinned, and compact through ultrawide
+  Graph layouts keep positive lane, label, and orchestrator-routing clearance.
+  Wide geometry is balanced and may fit at 150%; short canvases select dense
+  geometry from measured fit without the former 280-to-281-pixel cliff. The
+  369-test frontend suite, full `npm run verify`, repository/security checks,
+  exact 5120-pixel geometry contract, and rendered compact, desktop, Mac-class,
+  and ultrawide-class CSS-pixel checks pass. Structured, native, dependency,
+  and local-first authority boundaries remain unchanged.
+
+- Completed the owner-approved GUI operations workspace redesign with `PASS
+WITH ADVISORIES`: added a compact global header, collapsible navigation and
+  inspector, resizable activity dock, viewport-filling workspace, operational
+  Command Center overview, responsive Graph, and coordinated typed presentation
+  selection. Final cleanup preserves manual Graph intent, exposes every
+  relationship to keyboard users, supplies truthful lazy-loading panels,
+  corrects constrained-height and popover reachability, and aligns tooltips,
+  focus/Escape behavior, reduced motion, and event terminology. Canonical-agent
+  surfaces derive exactly nine roles and all fixture/synthetic data stays
+  disclosed. The 367-test frontend suite, full `npm run verify`, and the
+  requested rendered matrix pass. No dependency, route, Rust/Tauri boundary,
+  or protected Structured implementation changed.
+
 - Completed D-111 documentation-only account/Keychain-scope decision with
   `PASS WITH ADVISORIES`. Ambient/default/search-list behavior and disabled
   feature paths are not application-owned scope proof; no successor is Ready.

@@ -5818,3 +5818,60 @@ interpretation, D-109, and D-110. It does not reduce the ten blockers, admit a
 candidate, or make a successor Ready. No Keychain/account/directory/certificate/
 private-key/signing/Apple/Xcode/build/target-Mac/provider/product/external
 operation is authorized or performed.
+
+## D-112 - Give ordinary wheel gestures Graph-local zoom ownership
+
+Date: 2026-09-02
+Status: Accepted owner-authorized product interaction decision
+
+## Context
+
+FR-039K and the current Command Center help previously assigned ordinary wheel
+gestures over the Graph to page scrolling. The owner has now explicitly asked
+for mouse-wheel scroll up to zoom in and scroll down to zoom out. React Flow
+12.11.3 provides that direction and bounded zoom natively when both
+`zoomOnScroll` and `preventScrolling` are enabled.
+
+## Decision
+
+While the pointer is over the React Flow renderer, ordinary vertical wheel
+gestures control its existing bounded viewport: scroll up zooms in and scroll
+down zooms out. The renderer prevents the same gesture from simultaneously
+scrolling the page. Outside the Graph, the existing application-content scroll
+owner remains unchanged. Wheel panning stays disabled, toolbar zoom/Fit/Reset
+controls and keyboard selection remain available, and a wheel transform enters
+the existing manual-viewport mode.
+
+Update current FR-039K and visible help to match. Preserve dated historical
+plans, increments, reviews, and validation evidence that accurately described
+the former pass-through behavior at their time.
+
+## Consequences
+
+- This supersedes only FR-039K's ordinary page-wheel pass-through clause. It
+  extends D-092's feature-local presentation behavior without changing its
+  deterministic projection or authority boundary.
+- The Graph captures wheel scrolling only over its renderer; it does not add a
+  global listener or change page scrolling elsewhere.
+- React Flow's existing `minZoom`/`maxZoom`, zoom readout, manual-fit state,
+  dataset reframing, and explicit viewport controls remain authoritative.
+- No Structured behavior, canonical data, fixture semantics, dependency,
+  native/Tauri boundary, IPC, persistence, provider, network, permission,
+  approval, audit, execution, or device authority changes.
+
+## Alternatives considered
+
+- Keep page-wheel pass-through: rejected because it contradicts the owner's
+  requested direct manipulation.
+- Add a custom wheel listener or reverse the delta manually: rejected because
+  the installed React Flow implementation already supplies the requested
+  direction, zoom bounds, and renderer-local event ownership.
+- Enable wheel panning or remove explicit controls: rejected because neither is
+  requested and both would weaken the existing interaction and accessibility
+  contract.
+
+## Supersedes or is superseded by
+
+D-112 supersedes only the ordinary page-wheel pass-through phrase in current
+FR-039K. It does not supersede D-092, D-111, historical evidence, or any
+security, architecture, release, or operational prerequisite.

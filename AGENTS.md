@@ -155,6 +155,38 @@ Every final Codex response must include the advisory `Codex Recommendation`
 block defined in `MASTER_PROMPT.md`. The recommendation must describe the next
 proposed work and must not claim the active model changed.
 
+### Next Prompt(s)
+
+At the close of every repository task, after completing and validating the
+requested work or truthfully reporting any failed test, blocker, regression, or
+incomplete requirement, always end the final response—after the required
+`Codex Recommendation` block—with a section titled `Next Prompt(s)`. This
+requirement applies automatically even when the project owner does not request a
+next prompt. Derive the section from the repository's actual current state,
+roadmap, handoff and project-memory documentation, outstanding issues, test
+results, and the work just completed.
+
+Provide only one to three copy-and-paste-ready prompts, ordered by priority and
+dependency and labeled `Prompt 1`, `Prompt 2`, and `Prompt 3`, as applicable.
+Each prompt must be standalone for a new Codex session and include the
+objective, scope, relevant constraints, acceptance criteria, required
+validation, and applicable stop conditions. Tell the next session to inspect
+the repository before editing, preserve existing user changes, avoid unrelated
+modifications, and not repeat completed work.
+
+Make resolving any failed test, blocker, regression, or incomplete requirement
+that remains `Prompt 1`. When prompts depend on one another, explicitly require
+sequential completion and prohibit starting a later prompt until its predecessor
+is completed and verified. Provide only one prompt when only one meaningful
+next task exists, and do not invent work to fill the list. If no meaningful
+work remains, explicitly state that no next prompt is required.
+
+Keep every prompt aligned with Cortexa's current private, personal,
+demo-focused scope while preserving a clean path to future publication; do not
+prioritize productionization unless the roadmap or project owner requires it.
+Do not execute a next prompt automatically; wait for the project owner to
+submit or approve it.
+
 For complete rules, architecture ownership, code quality, security, validation,
 documentation, and stop conditions, follow
 [`docs/governance/MASTER_PROMPT.md`](docs/governance/MASTER_PROMPT.md).

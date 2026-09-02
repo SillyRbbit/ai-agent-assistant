@@ -7,21 +7,38 @@ import { OperationalTopologyAdapter } from "./OperationalTopologyAdapter";
 interface MockFlowProps {
   readonly edges: readonly {
     readonly ariaLabel?: string;
+    readonly className?: string;
+    readonly label?: string;
     readonly labelBgStyle?: { readonly fill?: string };
     readonly labelShowBg?: boolean;
+    readonly markerEnd?: { readonly type?: string };
   }[];
   readonly maxZoom: number;
   readonly minZoom: number;
   readonly nodes: readonly {
+    readonly data?: {
+      readonly isConnected?: boolean;
+      readonly isDimmed?: boolean;
+      readonly isSelected?: boolean;
+      readonly label?: string;
+    };
     readonly id: string;
     readonly position: { x: number; y: number };
-    readonly style?: { readonly height?: number; readonly width?: number };
+    readonly style?: {
+      readonly height?: number;
+      readonly width?: number;
+      readonly zIndex?: number;
+    };
   }[];
   readonly panOnDrag: boolean;
   readonly panOnScroll: boolean;
   readonly preventScrolling: boolean;
   readonly translateExtent: readonly [readonly [number, number], readonly [number, number]];
   readonly zoomOnScroll: boolean;
+  readonly onEdgeClick?: (event: unknown, edge: { readonly id: string }) => void;
+  readonly onMove?: (event: unknown, viewport: { x: number; y: number; zoom: number }) => void;
+  readonly onMoveStart?: (event: unknown) => void;
+  readonly onNodeClick?: (event: unknown, node: { readonly id: string }) => void;
 }
 
 const flowHarness = vi.hoisted(() => {
@@ -140,11 +157,50 @@ function resizeCanvas(width: number, height: number): void {
   flushFrames();
 }
 
-function renderTopology(selectedId: string | null = null): void {
+function expectDomainLaneClearance(): void {
+  const graphNodes = flowProps().nodes;
+  const orchestrator = graphNodes.find((node) => node.id === "demo-node:orchestrator");
+  const lanes = graphNodes.filter((node) => node.id.startsWith("demo-group:"));
+  const semanticNodes = graphNodes.filter((node) => !node.id.startsWith("demo-group:"));
+  if (orchestrator === undefined || lanes.length === 0) {
+    throw new Error("Expected orchestrator and domain lanes");
+  }
+
+  const orchestratorBottom = orchestrator.position.y + (orchestrator.style?.height ?? 104);
+  const firstLaneTop = Math.min(...lanes.map((lane) => lane.position.y));
+  expect(firstLaneTop - orchestratorBottom).toBeGreaterThanOrEqual(32);
+
+  for (let leftIndex = 0; leftIndex < lanes.length; leftIndex += 1) {
+    const left = lanes[leftIndex];
+    if (left === undefined) continue;
+    for (let rightIndex = leftIndex + 1; rightIndex < lanes.length; rightIndex += 1) {
+      const right = lanes[rightIndex];
+      if (right === undefined) continue;
+      const horizontalClearance = Math.max(
+        right.position.x - (left.position.x + (left.style?.width ?? 0)),
+        left.position.x - (right.position.x + (right.style?.width ?? 0)),
+      );
+      const verticalClearance = Math.max(
+        right.position.y - (left.position.y + (left.style?.height ?? 0)),
+        left.position.y - (right.position.y + (right.style?.height ?? 0)),
+      );
+      expect(Math.max(horizontalClearance, verticalClearance)).toBeGreaterThanOrEqual(8);
+    }
+  }
+
+  expect(lanes.every((lane) => lane.style?.zIndex === 1)).toBe(true);
+  expect(semanticNodes.every((node) => node.style?.zIndex === 2)).toBe(true);
+}
+
+function renderTopology(
+  selectedId: string | null = null,
+  scenario: Parameters<typeof buildCommandCenterProjection>[0] = "catalog-idle",
+): void {
   render(
     <OperationalTopologyAdapter
+      onClearSelection={vi.fn()}
       onSelect={vi.fn()}
-      projection={buildCommandCenterProjection("catalog-idle")}
+      projection={buildCommandCenterProjection(scenario)}
       selectedId={selectedId}
     />,
   );
@@ -207,16 +263,21 @@ describe("OperationalTopologyAdapter viewport contract", () => {
       minZoom: 0.5,
       panOnDrag: true,
       panOnScroll: false,
-      preventScrolling: false,
-      zoomOnScroll: false,
+      preventScrolling: true,
+      zoomOnScroll: true,
     });
+    expect(
+      screen.getByText(/scroll up to zoom in and scroll down to zoom out/i),
+    ).toBeInTheDocument();
     expect(flowProps().translateExtent[0][0]).toBeLessThan(flowProps().translateExtent[1][0]);
     expect(flowProps().translateExtent[0][1]).toBeLessThan(flowProps().translateExtent[1][1]);
     expect(flowProps().edges).not.toHaveLength(0);
     for (const edge of flowProps().edges) {
       expect(edge.ariaLabel).toBeTruthy();
-      expect(edge.labelShowBg).toBe(true);
+      expect(edge.label).toBeUndefined();
+      expect(edge.labelShowBg).toBe(false);
       expect(edge.labelBgStyle).toEqual({ fill: "var(--command-surface)" });
+      expect(edge.markerEnd?.type).toBe("arrow-closed");
     }
     const bounds = flowProps().nodes.reduce(
       (current, node) => ({
@@ -242,7 +303,9 @@ describe("OperationalTopologyAdapter viewport contract", () => {
     const semanticNodes = flowProps().nodes.filter((node) => !node.id.startsWith("demo-group:"));
     expect(semanticNodes).not.toHaveLength(0);
     for (const node of semanticNodes) {
-      expect(node.style).toEqual({ height: 88, width: 180 });
+      expect(node.style?.width).toBe(196);
+      expect(node.style?.height).toBeGreaterThanOrEqual(104);
+      expect(node.style?.height).toBeLessThanOrEqual(120);
     }
 
     const groupMembers = {
@@ -261,14 +324,17 @@ describe("OperationalTopologyAdapter viewport contract", () => {
         const member = flowProps().nodes.find((node) => node.id === "demo-node:agent:" + memberId);
         if (member === undefined) throw new Error("Expected agent node " + memberId);
         expect(member.position.x).toBeGreaterThanOrEqual(lane.position.x);
+        const memberWidth = member.style?.width ?? 196;
+        const memberHeight = member.style?.height ?? 104;
         expect(member.position.y).toBeGreaterThanOrEqual(lane.position.y + 24);
-        expect(member.position.x + 180).toBeLessThanOrEqual(lane.position.x + laneWidth);
-        expect(member.position.y + 88).toBeLessThanOrEqual(lane.position.y + laneHeight);
+        expect(member.position.x + memberWidth).toBeLessThanOrEqual(lane.position.x + laneWidth);
+        expect(member.position.y + memberHeight).toBeLessThanOrEqual(lane.position.y + laneHeight);
       }
     }
+    expectDomainLaneClearance();
   });
 
-  it("switches to the wide topology and automatically refits while in automatic mode", () => {
+  it("uses wide topology only when its content fits at a readable automatic zoom", () => {
     renderTopology();
     flushFrames();
     resizeCanvas(760, 520);
@@ -276,10 +342,159 @@ describe("OperationalTopologyAdapter viewport contract", () => {
 
     resizeCanvas(1400, 700);
 
+    expect(screen.getByRole("listbox")).toHaveAttribute("data-layout-mode", "workspace");
+    expect(flowHarness.fitView).toHaveBeenCalledTimes(1);
+    flowHarness.fitView.mockClear();
+
+    resizeCanvas(5120, 1100);
+
     expect(screen.getByRole("listbox")).toHaveAttribute("data-layout-mode", "wide");
     expect(flowHarness.fitView).toHaveBeenCalledTimes(1);
     const semanticNodes = flowProps().nodes.filter((node) => !node.id.startsWith("demo-group:"));
-    expect(Math.max(...semanticNodes.map((node) => node.position.x))).toBeGreaterThan(1500);
+    const agentRows = new Set(
+      semanticNodes
+        .filter((node) => node.id.startsWith("demo-node:agent:"))
+        .map((node) => node.position.y),
+    );
+    expect(agentRows.size).toBeGreaterThan(1);
+    const bounds = flowProps().nodes.reduce(
+      (current, node) => ({
+        maximumX: Math.max(current.maximumX, node.position.x + (node.style?.width ?? 196)),
+        maximumY: Math.max(current.maximumY, node.position.y + (node.style?.height ?? 120)),
+        minimumX: Math.min(current.minimumX, node.position.x),
+        minimumY: Math.min(current.minimumY, node.position.y),
+      }),
+      {
+        maximumX: Number.NEGATIVE_INFINITY,
+        maximumY: Number.NEGATIVE_INFINITY,
+        minimumX: Number.POSITIVE_INFINITY,
+        minimumY: Number.POSITIVE_INFINITY,
+      },
+    );
+    expect(
+      (bounds.maximumX - bounds.minimumX) / (bounds.maximumY - bounds.minimumY),
+    ).toBeLessThanOrEqual(3);
+    expect(flowHarness.fitView).toHaveBeenCalledWith(expect.objectContaining({ maxZoom: 1.5 }));
+    expectDomainLaneClearance();
+  });
+
+  it("keeps workspace domain labels clear of routing and adjacent lanes", () => {
+    renderTopology();
+    flushFrames();
+
+    resizeCanvas(1400, 700);
+
+    expect(screen.getByRole("listbox")).toHaveAttribute("data-layout-mode", "workspace");
+    expectDomainLaneClearance();
+  });
+
+  it("does not change layout at the former 1279 to 1280 pixel breakpoint", () => {
+    renderTopology();
+    flushFrames();
+    resizeCanvas(1279, 700);
+    const positionsAt1279 = flowProps().nodes.map((node) => ({
+      id: node.id,
+      position: node.position,
+    }));
+
+    resizeCanvas(1280, 700);
+
+    expect(screen.getByRole("listbox")).toHaveAttribute("data-layout-mode", "workspace");
+    expect(flowProps().nodes.map((node) => ({ id: node.id, position: node.position }))).toEqual(
+      positionsAt1279,
+    );
+  });
+
+  it("keeps the active workspace fit-capable when an inspector narrows the canvas", () => {
+    renderTopology(null, "research-knowledge-active");
+    flushFrames();
+    resizeCanvas(633, 351);
+
+    expect(screen.getByRole("listbox")).toHaveAttribute("data-layout-mode", "workspace");
+    const bounds = flowProps().nodes.reduce(
+      (current, node) => ({
+        maximumX: Math.max(current.maximumX, node.position.x + (node.style?.width ?? 196)),
+        maximumY: Math.max(current.maximumY, node.position.y + (node.style?.height ?? 120)),
+        minimumX: Math.min(current.minimumX, node.position.x),
+        minimumY: Math.min(current.minimumY, node.position.y),
+      }),
+      {
+        maximumX: Number.NEGATIVE_INFINITY,
+        maximumY: Number.NEGATIVE_INFINITY,
+        minimumX: Number.POSITIVE_INFINITY,
+        minimumY: Number.POSITIVE_INFINITY,
+      },
+    );
+    const fitZoom = Math.min(
+      1,
+      (633 - 48) / (bounds.maximumX - bounds.minimumX),
+      (351 - 48) / (bounds.maximumY - bounds.minimumY),
+    );
+    expect(fitZoom).toBeGreaterThanOrEqual(0.5);
+    expect(flowHarness.fitView).toHaveBeenCalledWith(
+      expect.objectContaining({ maxZoom: 1, minZoom: 0.5 }),
+    );
+  });
+
+  it("uses a readable landscape pack when the activity dock shortens the workspace", () => {
+    renderTopology(null, "research-knowledge-active");
+    flushFrames();
+    resizeCanvas(973, 260);
+
+    expect(screen.getByRole("listbox")).toHaveAttribute("data-layout-mode", "workspace");
+    const bounds = flowProps().nodes.reduce(
+      (current, node) => ({
+        maximumX: Math.max(current.maximumX, node.position.x + (node.style?.width ?? 196)),
+        maximumY: Math.max(current.maximumY, node.position.y + (node.style?.height ?? 120)),
+        minimumX: Math.min(current.minimumX, node.position.x),
+        minimumY: Math.min(current.minimumY, node.position.y),
+      }),
+      {
+        maximumX: Number.NEGATIVE_INFINITY,
+        maximumY: Number.NEGATIVE_INFINITY,
+        minimumX: Number.POSITIVE_INFINITY,
+        minimumY: Number.POSITIVE_INFINITY,
+      },
+    );
+    const fitZoom = Math.min(
+      1,
+      (973 - 16) / (bounds.maximumX - bounds.minimumX),
+      (260 - 16) / (bounds.maximumY - bounds.minimumY),
+    );
+    expect(fitZoom).toBeGreaterThanOrEqual(0.54);
+    expect(flowHarness.fitView).toHaveBeenCalledWith(
+      expect.objectContaining({ maxZoom: 1, minZoom: 0.5, padding: "8px" }),
+    );
+    expectDomainLaneClearance();
+  });
+
+  it("stays fit-capable immediately above the former fixed dense-layout cutoff", () => {
+    renderTopology(null, "research-knowledge-active");
+    flushFrames();
+    resizeCanvas(973, 281);
+
+    expect(screen.getByRole("listbox")).toHaveAttribute("data-layout-mode", "workspace");
+    const bounds = flowProps().nodes.reduce(
+      (current, node) => ({
+        maximumX: Math.max(current.maximumX, node.position.x + (node.style?.width ?? 196)),
+        maximumY: Math.max(current.maximumY, node.position.y + (node.style?.height ?? 120)),
+        minimumX: Math.min(current.minimumX, node.position.x),
+        minimumY: Math.min(current.minimumY, node.position.y),
+      }),
+      {
+        maximumX: Number.NEGATIVE_INFINITY,
+        maximumY: Number.NEGATIVE_INFINITY,
+        minimumX: Number.POSITIVE_INFINITY,
+        minimumY: Number.POSITIVE_INFINITY,
+      },
+    );
+    const fitZoom = Math.min(
+      1,
+      (973 - 48) / (bounds.maximumX - bounds.minimumX),
+      (281 - 48) / (bounds.maximumY - bounds.minimumY),
+    );
+    expect(fitZoom).toBeGreaterThanOrEqual(0.5);
+    expectDomainLaneClearance();
   });
 
   it("preserves manual viewport state across resize until Fit or Reset resumes auto framing", () => {
@@ -296,6 +511,7 @@ describe("OperationalTopologyAdapter viewport contract", () => {
     expect(flowHarness.fitView).not.toHaveBeenCalled();
 
     fireEvent.click(screen.getByRole("button", { name: "Fit view" }));
+    flushFrames();
     expect(flowHarness.fitView).toHaveBeenCalledTimes(1);
     resizeCanvas(840, 560);
     expect(flowHarness.fitView).toHaveBeenCalledTimes(2);
@@ -303,6 +519,79 @@ describe("OperationalTopologyAdapter viewport contract", () => {
     fireEvent.click(screen.getByRole("button", { name: "Reset view" }));
     expect(flowHarness.fitView).toHaveBeenCalledTimes(3);
     expect(flowHarness.setViewport).not.toHaveBeenCalled();
+  });
+
+  it("keeps automatic framing when a node click opens an inspector and narrows the canvas", () => {
+    renderTopology(null, "research-knowledge-active");
+    flushFrames();
+    resizeCanvas(973, 435);
+    flowHarness.fitView.mockClear();
+
+    flowProps().onMoveStart?.({ type: "pointerdown" });
+    act(() => {
+      flowProps().onNodeClick?.({ type: "click" }, { id: "demo-node:agent:coding" });
+    });
+    resizeCanvas(633, 435);
+
+    expect(screen.getByRole("listbox")).toHaveAttribute("data-layout-mode", "workspace");
+    expect(flowHarness.fitView).toHaveBeenCalledOnce();
+  });
+
+  it("pins world positions when manual interaction crosses a responsive layout threshold", () => {
+    renderTopology();
+    flushFrames();
+    resizeCanvas(1180, 620);
+    expect(screen.getByRole("listbox")).toHaveAttribute("data-layout-mode", "workspace");
+    const initialOrchestratorPosition = flowProps().nodes.find(
+      (node) => node.id === "demo-node:orchestrator",
+    )?.position;
+    flowHarness.fitView.mockClear();
+
+    fireEvent.click(screen.getByRole("button", { name: "Zoom in" }));
+    resizeCanvas(5120, 1100);
+
+    expect(screen.getByRole("listbox")).toHaveAttribute("data-layout-mode", "workspace");
+    expect(
+      flowProps().nodes.find((node) => node.id === "demo-node:orchestrator")?.position,
+    ).toEqual(initialOrchestratorPosition);
+    expect(flowHarness.fitView).not.toHaveBeenCalled();
+    expect(flowHarness.setViewport).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole("button", { name: "Fit view" }));
+    flushFrames();
+    expect(screen.getByRole("listbox")).toHaveAttribute("data-layout-mode", "wide");
+    expect(flowHarness.fitView).toHaveBeenCalledOnce();
+  });
+
+  it("reports viewport zoom without treating normal viewport updates as dataset changes", () => {
+    renderTopology();
+    flushFrames();
+    resizeCanvas(900, 560);
+    flowHarness.fitView.mockClear();
+
+    act(() => {
+      flowProps().onMove?.(null, { x: 12, y: 18, zoom: 0.82 });
+    });
+
+    expect(screen.getByRole("status", { name: "Topology zoom level" })).toHaveTextContent("82%");
+    expect(flowHarness.fitView).not.toHaveBeenCalled();
+    resizeCanvas(920, 580);
+    expect(flowHarness.fitView).toHaveBeenCalledOnce();
+  });
+
+  it("pins and reports the manual viewport after a wheel zoom transform", () => {
+    renderTopology();
+    flushFrames();
+    resizeCanvas(900, 560);
+    flowHarness.fitView.mockClear();
+
+    act(() => {
+      flowProps().onMove?.({ type: "wheel" }, { x: 24, y: 12, zoom: 1.12 });
+    });
+    expect(screen.getByRole("status", { name: "Topology zoom level" })).toHaveTextContent("112%");
+    resizeCanvas(940, 580);
+
+    expect(flowHarness.fitView).not.toHaveBeenCalled();
   });
 
   it("reframes changed topology content even after a manual viewport interaction", () => {
@@ -331,7 +620,7 @@ describe("OperationalTopologyAdapter viewport contract", () => {
     expect(flowHarness.fitView).toHaveBeenCalledTimes(1);
   });
 
-  it("centers selected context with bounded zoom without taking wheel ownership", () => {
+  it("centers selected context with bounded zoom while retaining canvas wheel ownership", () => {
     const projection = buildCommandCenterProjection("catalog-idle");
     renderTopology(projection.nodes[0]?.id ?? null);
     flushFrames();
@@ -345,6 +634,205 @@ describe("OperationalTopologyAdapter viewport contract", () => {
     expect(flowHarness.fitView).toHaveBeenCalledWith(
       expect.objectContaining({ maxZoom: 1.1, minZoom: 0.5, padding: "72px" }),
     );
-    expect(flowProps()).toMatchObject({ panOnScroll: false, preventScrolling: false });
+    expect(flowProps()).toMatchObject({
+      panOnScroll: false,
+      preventScrolling: true,
+      zoomOnScroll: true,
+    });
+  });
+
+  it("uses directed non-color edge treatments and keeps unrelated context visible", () => {
+    const projection = buildCommandCenterProjection("research-knowledge-active");
+    const researchNode = projection.nodes.find((node) => node.agentId === "research");
+    if (researchNode === undefined) throw new Error("Expected Research Agent node");
+    renderTopology(researchNode.id, "research-knowledge-active");
+    flushFrames();
+    resizeCanvas(1040, 620);
+
+    const semanticNodes = flowProps().nodes.filter((node) => !node.id.startsWith("demo-group:"));
+    const selected = semanticNodes.find((node) => node.id === researchNode.id);
+    const connected = semanticNodes.filter((node) => node.data?.isConnected);
+    const dimmed = semanticNodes.filter((node) => node.data?.isDimmed);
+    expect(selected?.data?.isSelected).toBe(true);
+    expect(connected.length).toBeGreaterThan(0);
+    expect(dimmed.length).toBeGreaterThan(0);
+
+    const treatments = new Set(
+      flowProps().edges.map(
+        (edge) =>
+          edge.className?.match(/command-center-edge--(hierarchy|dependency|review|outcome)/)?.[1],
+      ),
+    );
+    expect(treatments).toEqual(new Set(["hierarchy", "dependency", "outcome"]));
+    for (const edge of flowProps().edges) {
+      expect(edge.markerEnd?.type).toBe("arrow-closed");
+      expect(edge.ariaLabel).toContain(" to ");
+    }
+
+    fireEvent.click(screen.getByLabelText("Show relationship legend"));
+    const legend = screen.getByText("Visible relationships").parentElement;
+    expect(legend).toHaveTextContent("Delegates");
+    expect(legend).toHaveTextContent("Depends On");
+    expect(legend).toHaveTextContent("Result Flow");
+  });
+
+  it("offers every visible relationship through a keyboard-operable selection list", () => {
+    const projection = buildCommandCenterProjection("research-knowledge-active");
+    const onSelect = vi.fn();
+    render(
+      <OperationalTopologyAdapter onSelect={onSelect} projection={projection} selectedId={null} />,
+    );
+    flushFrames();
+    resizeCanvas(1040, 620);
+
+    fireEvent.click(screen.getByLabelText("Show relationship legend"));
+    expect(screen.getByRole("list", { name: "Visible relationship selection" })).toBeVisible();
+    for (const edge of projection.edges) {
+      const source = projection.nodes.find((node) => node.id === edge.source);
+      const target = projection.nodes.find((node) => node.id === edge.target);
+      if (source === undefined || target === undefined) {
+        throw new Error("Expected relationship endpoints");
+      }
+      const kindLabel = edge.kind
+        .split("-")
+        .map((part) => `${part.slice(0, 1).toUpperCase()}${part.slice(1)}`)
+        .join(" ");
+      const button = screen.getByRole("button", {
+        name: `Inspect relationship ${source.label}, ${kindLabel}, ${target.label}`,
+      });
+      button.focus();
+      fireEvent.click(button);
+      expect(onSelect).toHaveBeenLastCalledWith(edge.id);
+      expect(button).toHaveFocus();
+    }
+    expect(onSelect).toHaveBeenCalledTimes(projection.edges.length);
+  });
+
+  it("returns pointer node and edge selection focus to the outer composite listbox", () => {
+    const projection = buildCommandCenterProjection("research-knowledge-active");
+    const onSelect = vi.fn();
+    render(
+      <OperationalTopologyAdapter onSelect={onSelect} projection={projection} selectedId={null} />,
+    );
+    flushFrames();
+    resizeCanvas(1040, 620);
+    const canvas = screen.getByRole("listbox", { name: /Simulated operational topology/ });
+    const node = projection.nodes.find((candidate) => candidate.kind === "agent");
+    const edge = projection.edges[0];
+    if (node === undefined || edge === undefined) throw new Error("Expected graph selection data");
+
+    act(() => {
+      flowProps().onNodeClick?.({ type: "click" }, { id: node.id });
+    });
+
+    expect(canvas).toHaveFocus();
+    expect(canvas).toHaveAttribute(
+      "aria-activedescendant",
+      `command-center-topology-${node.id.replaceAll(/[^a-zA-Z0-9_-]/g, "-")}`,
+    );
+    expect(onSelect).toHaveBeenLastCalledWith(node.id);
+
+    act(() => {
+      flowProps().onEdgeClick?.({ type: "click" }, { id: edge.id });
+    });
+    expect(canvas).toHaveFocus();
+    expect(onSelect).toHaveBeenLastCalledWith(edge.id);
+  });
+
+  it("shows only the exact selected relationship label on the canvas", () => {
+    const projection = buildCommandCenterProjection("research-knowledge-active");
+    const selectedEdge = projection.edges.find((edge) => edge.kind === "depends-on");
+    if (selectedEdge === undefined) throw new Error("Expected dependency edge");
+
+    renderTopology(selectedEdge.id, "research-knowledge-active");
+    flushFrames();
+    resizeCanvas(1040, 620);
+
+    const labeled = flowProps().edges.filter((edge) => edge.label !== undefined);
+    expect(labeled).toHaveLength(1);
+    expect(labeled[0]).toMatchObject({ label: "Depends On", labelShowBg: true });
+  });
+
+  it("uses expanded node height for long labels while preserving the full label", () => {
+    const projection = buildCommandCenterProjection("catalog-idle");
+    const firstNode = projection.nodes[0];
+    if (firstNode === undefined) throw new Error("Expected graph node");
+    const longLabel = "A deliberately long canonical-style topology label";
+    const longProjection = {
+      ...projection,
+      nodes: [{ ...firstNode, label: longLabel }, ...projection.nodes.slice(1)],
+    };
+
+    render(
+      <OperationalTopologyAdapter
+        onSelect={vi.fn()}
+        projection={longProjection}
+        selectedId={firstNode.id}
+      />,
+    );
+    flushFrames();
+    resizeCanvas(1040, 620);
+
+    const node = flowProps().nodes.find((candidate) => candidate.id === firstNode.id);
+    expect(node?.style).toEqual({ height: 120, width: 196, zIndex: 2 });
+    expect(node?.data?.label).toBe(longLabel);
+  });
+
+  it("distinguishes filtered-empty, invalid, and stale-selection states", () => {
+    const projection = buildCommandCenterProjection("catalog-idle");
+    const reset = vi.fn();
+    const clear = vi.fn();
+    const { rerender } = render(
+      <OperationalTopologyAdapter
+        filtersActive
+        onClearSelection={clear}
+        onResetFilters={reset}
+        onSelect={vi.fn()}
+        projection={projection}
+        selectedId={projection.nodes[0]?.id ?? null}
+        visibleEdges={[]}
+        visibleNodes={[]}
+      />,
+    );
+
+    expect(screen.getByRole("heading", { name: "No graph results" })).toBeInTheDocument();
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("region", { name: /Simulated operational topology/ }),
+    ).not.toHaveAttribute("aria-activedescendant");
+    expect(screen.getByRole("toolbar", { name: "Topology viewport" })).toBeInTheDocument();
+    expect(screen.getByRole("status", { name: "Topology zoom level" })).toHaveTextContent("N/A");
+    expect(screen.getByRole("button", { name: "Zoom in" })).toBeDisabled();
+    expect(screen.getByLabelText("Show relationship legend")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Reset filters" }));
+    expect(reset).toHaveBeenCalledOnce();
+
+    const visibleNode = projection.nodes[1];
+    if (visibleNode === undefined) throw new Error("Expected visible graph node");
+    rerender(
+      <OperationalTopologyAdapter
+        onClearSelection={clear}
+        onSelect={vi.fn()}
+        projection={projection}
+        selectedId={projection.nodes[0]?.id ?? null}
+        visibleEdges={[]}
+        visibleNodes={[visibleNode]}
+      />,
+    );
+    expect(screen.getByText(/Selected entity is no longer available/)).toBeInTheDocument();
+    const staleClearButton = screen.getAllByRole("button", { name: "Clear selection" }).at(-1);
+    if (staleClearButton === undefined) throw new Error("Expected stale-selection clear control");
+    fireEvent.click(staleClearButton);
+    expect(clear).toHaveBeenCalledOnce();
+
+    rerender(
+      <OperationalTopologyAdapter
+        onSelect={vi.fn()}
+        projection={{ ...projection, nodes: [visibleNode, visibleNode] }}
+        selectedId={null}
+      />,
+    );
+    expect(screen.getByRole("heading", { name: "Invalid graph data" })).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toHaveTextContent("Duplicate graph node identifier");
   });
 });

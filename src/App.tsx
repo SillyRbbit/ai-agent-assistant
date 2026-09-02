@@ -1,4 +1,17 @@
-import { lazy, Suspense, useEffect, useRef, type ReactNode } from "react";
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
+import { createPortal } from "react-dom";
+import { PanelRightClose } from "lucide-react";
 
 import { ApplicationStateProvider } from "./application/ApplicationStateProvider";
 import { NAVIGATION_ITEMS, type AppRoute } from "./application/navigation";
@@ -10,8 +23,21 @@ import {
   type MenuRouteConnectionStatus,
 } from "./application/useMenuRouteSubscription";
 import { useApplicationDispatch, useApplicationState } from "./application/useApplicationState";
+import { ApplicationActivityDock } from "./components/ApplicationActivityDock";
+import { ApplicationHeader } from "./components/ApplicationHeader";
+import { ApplicationInspector } from "./components/ApplicationInspector";
 import { ApplicationSidebar } from "./components/ApplicationSidebar";
 import { PageState } from "./components/PageState";
+import {
+  ACTIVITY_PANEL_MIN_HEIGHT,
+  applicationShellReducer,
+  createApplicationShellState,
+} from "./components/applicationShellState";
+import {
+  ApplicationWorkspacePanelsContext,
+  type ApplicationWorkspacePanels,
+  useApplicationWorkspacePanels,
+} from "./components/applicationWorkspacePanels";
 import { ActivityPage } from "./features/activity/ActivityPage";
 import { ConversationWorkspace } from "./features/conversations/ConversationWorkspace";
 import { PermissionCenter } from "./features/permissions/PermissionCenter";
@@ -57,22 +83,93 @@ export function App({ services = DEFAULT_APP_SERVICES }: AppProps) {
   );
 }
 
-function CommandCenterLoadingPage() {
+export function CommandCenterLoadingPage() {
+  const workspacePanels = useApplicationWorkspacePanels();
+  const inspectorHeaderPortal =
+    workspacePanels?.inspectorHeaderTarget === null ||
+    workspacePanels?.inspectorHeaderTarget === undefined
+      ? null
+      : createPortal(
+          <div className="application-panel-header">
+            <div>
+              <span className="application-panel-header__eyebrow">Command Center loading</span>
+              <h2 id="application-inspector-title">Preparing Command Center</h2>
+            </div>
+            <button
+              aria-label="Close workspace inspector"
+              className="application-panel-header__button"
+              data-application-inspector-close="true"
+              onClick={workspacePanels.closeInspector}
+              title="Close workspace inspector"
+              type="button"
+            >
+              <PanelRightClose aria-hidden="true" />
+            </button>
+          </div>,
+          workspacePanels.inspectorHeaderTarget,
+        );
+  const inspectorBodyPortal =
+    workspacePanels?.inspectorBodyTarget === null ||
+    workspacePanels?.inspectorBodyTarget === undefined
+      ? null
+      : createPortal(
+          <div aria-busy="true" className="application-panel-empty">
+            <strong>No Command Center selection available yet</strong>
+            <p>
+              The deterministic frontend fixture workspace is still loading. No live runtime data is
+              available here.
+            </p>
+          </div>,
+          workspacePanels.inspectorBodyTarget,
+        );
+  const activitySummaryPortal =
+    workspacePanels?.activitySummaryTarget === null ||
+    workspacePanels?.activitySummaryTarget === undefined
+      ? null
+      : createPortal(
+          <>Deterministic fixture activity loading</>,
+          workspacePanels.activitySummaryTarget,
+        );
+  const activityBodyPortal =
+    workspacePanels?.activityBodyTarget === null ||
+    workspacePanels?.activityBodyTarget === undefined
+      ? null
+      : createPortal(
+          <div aria-busy="true" className="application-panel-empty application-panel-empty--inline">
+            <strong>No Command Center fixture activity available yet</strong>
+            <p>
+              Bounded presentation events appear after the deterministic frontend fixture loads;
+              this panel is not live telemetry.
+            </p>
+          </div>,
+          workspacePanels.activityBodyTarget,
+        );
+
   return (
-    <section aria-busy="true" aria-labelledby="command-center-loading-title" className="page-stack">
-      <PageHeader
-        description="Preparing the deterministic multi-agent operations workspace."
-        eyebrow="Operations"
-        headingId="command-center-loading-title"
-        title="Command Center"
-      />
-      <PageState
-        description="Loading the local visual prototype."
-        icon="O"
-        title="Preparing Command Center"
-        tone="loading"
-      />
-    </section>
+    <>
+      <section
+        aria-busy="true"
+        aria-labelledby="command-center-loading-title"
+        className="page-stack"
+      >
+        <PageHeader
+          description="Preparing the deterministic multi-agent operations workspace."
+          eyebrow="Operations"
+          headingId="command-center-loading-title"
+          title="Command Center"
+        />
+        <PageState
+          description="Loading the local visual prototype."
+          icon="O"
+          title="Preparing Command Center"
+          tone="loading"
+        />
+      </section>
+      {inspectorHeaderPortal}
+      {inspectorBodyPortal}
+      {activitySummaryPortal}
+      {activityBodyPortal}
+    </>
   );
 }
 
@@ -82,8 +179,20 @@ interface ApplicationShellProps {
 
 function ApplicationShell({ services }: ApplicationShellProps) {
   const state = useApplicationState();
+  const applicationContentRef = useRef<HTMLDivElement>(null);
   const mainContentRef = useRef<HTMLElement>(null);
+  const inspectorToggleRef = useRef<HTMLButtonElement>(null);
+  const inspectorReturnFocusRef = useRef<HTMLElement | null>(null);
   const previousRouteRef = useRef(state.activeRoute);
+  const [activityBodyTarget, setActivityBodyTarget] = useState<HTMLDivElement | null>(null);
+  const [activitySummaryTarget, setActivitySummaryTarget] = useState<HTMLSpanElement | null>(null);
+  const [inspectorBodyTarget, setInspectorBodyTarget] = useState<HTMLDivElement | null>(null);
+  const [inspectorHeaderTarget, setInspectorHeaderTarget] = useState<HTMLDivElement | null>(null);
+  const [shellState, shellDispatch] = useReducer(
+    applicationShellReducer,
+    window.innerHeight,
+    createApplicationShellState,
+  );
   const dispatch = useApplicationDispatch();
   const coreConnection = useCoreConnection(services.appInfoLoader);
   const menuRouteStatus = useMenuRouteSubscription(services.menuRouteSource);
@@ -96,9 +205,76 @@ function ApplicationShell({ services }: ApplicationShellProps) {
   useEffect(() => {
     if (previousRouteRef.current !== state.activeRoute) {
       previousRouteRef.current = state.activeRoute;
+      inspectorReturnFocusRef.current = inspectorToggleRef.current;
+      if (applicationContentRef.current !== null) {
+        applicationContentRef.current.scrollTop = 0;
+      }
       mainContentRef.current?.focus();
     }
   }, [state.activeRoute]);
+
+  useEffect(() => {
+    const handleViewportResize = () => {
+      shellDispatch({ height: window.innerHeight, type: "viewport-resized" });
+    };
+
+    window.addEventListener("resize", handleViewportResize);
+    return () => {
+      window.removeEventListener("resize", handleViewportResize);
+    };
+  }, []);
+
+  const openInspector = useCallback((returnFocus?: HTMLElement | null) => {
+    if (returnFocus !== undefined && returnFocus !== null) {
+      inspectorReturnFocusRef.current = returnFocus;
+    }
+    shellDispatch({ type: "inspector-opened" });
+  }, []);
+
+  const closeInspector = useCallback(() => {
+    shellDispatch({ type: "inspector-closed" });
+    const returnFocus = inspectorReturnFocusRef.current ?? inspectorToggleRef.current;
+    window.requestAnimationFrame(() => {
+      returnFocus?.focus();
+      if (returnFocus !== null && document.activeElement !== returnFocus) {
+        inspectorToggleRef.current?.focus();
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!shellState.inspectorExpanded) return;
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      if (document.querySelector('[role="dialog"][aria-modal="true"]') !== null) return;
+      event.preventDefault();
+      event.stopPropagation();
+      closeInspector();
+    };
+    window.addEventListener("keydown", handleEscape, true);
+    return () => {
+      window.removeEventListener("keydown", handleEscape, true);
+    };
+  }, [closeInspector, shellState.inspectorExpanded]);
+
+  const workspacePanels = useMemo<ApplicationWorkspacePanels>(
+    () => ({
+      activityBodyTarget,
+      activitySummaryTarget,
+      closeInspector,
+      inspectorBodyTarget,
+      inspectorHeaderTarget,
+      openInspector,
+    }),
+    [
+      activityBodyTarget,
+      activitySummaryTarget,
+      closeInspector,
+      inspectorBodyTarget,
+      inspectorHeaderTarget,
+      openInspector,
+    ],
+  );
 
   const pages: Readonly<Record<AppRoute, ReactNode>> = {
     "command-center": (
@@ -160,44 +336,109 @@ function ApplicationShell({ services }: ApplicationShellProps) {
   };
 
   const activeLabel = NAVIGATION_ITEMS.find((item) => item.route === state.activeRoute)?.label;
+  const shellClassName = [
+    "application-shell",
+    shellState.navigationExpanded ? "" : "application-shell--navigation-collapsed",
+    shellState.inspectorExpanded ? "application-shell--inspector-expanded" : "",
+    shellState.activityExpanded ? "application-shell--activity-expanded" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const shellStyle = {
+    "--application-activity-height": `${String(shellState.activityHeight)}px`,
+  } as CSSProperties;
 
   return (
-    <div className="application-shell">
-      <ApplicationSidebar
-        activeConversationId={state.activeConversationId}
-        activeRoute={state.activeRoute}
-        conversationNavigationDisabled={state.activeRun !== null || state.activeApproval !== null}
-        conversations={state.conversations}
-        onNavigate={(route) => {
-          dispatch({ route, type: "navigate" });
-        }}
-        onNewConversation={() => {
-          dispatch({ type: "new-conversation-requested" });
-        }}
-        onSelectConversation={(conversationId) => {
-          dispatch({ conversationId, type: "conversation-selected" });
-        }}
-      />
+    <ApplicationWorkspacePanelsContext.Provider value={workspacePanels}>
+      <div className={shellClassName} style={shellStyle}>
+        <ApplicationHeader
+          activeLabel={activeLabel ?? "Workspace"}
+          activityExpanded={shellState.activityExpanded}
+          coreStatus={
+            <CoreStatus
+              connectionStatus={coreConnection.status}
+              menuRouteStatus={menuRouteStatus}
+            />
+          }
+          inspectorExpanded={shellState.inspectorExpanded}
+          inspectorToggleRef={inspectorToggleRef}
+          navigationExpanded={shellState.navigationExpanded}
+          onToggleActivity={() => {
+            shellDispatch({ type: "toggle-activity" });
+          }}
+          onToggleInspector={() => {
+            if (shellState.inspectorExpanded) {
+              closeInspector();
+            } else {
+              openInspector(inspectorToggleRef.current);
+            }
+          }}
+          onToggleNavigation={() => {
+            shellDispatch({ type: "toggle-navigation" });
+          }}
+        />
 
-      <main
-        className="application-main"
-        data-scroll-region="application-main"
-        id="main-content"
-        ref={mainContentRef}
-        role="main"
-        tabIndex={-1}
-      >
-        <div className="application-toolbar">
-          <p aria-atomic="true" aria-live="polite" className="application-toolbar__location">
-            {activeLabel ?? "Workspace"}
-          </p>
-          <CoreStatus connectionStatus={coreConnection.status} menuRouteStatus={menuRouteStatus} />
-        </div>
-        <div className="application-content" data-scroll-region="application-content">
-          {pages[state.activeRoute]}
-        </div>
-      </main>
-    </div>
+        <ApplicationSidebar
+          activeConversationId={state.activeConversationId}
+          activeRoute={state.activeRoute}
+          conversationNavigationDisabled={state.activeRun !== null || state.activeApproval !== null}
+          conversations={state.conversations}
+          expanded={shellState.navigationExpanded}
+          onNavigate={(route) => {
+            dispatch({ route, type: "navigate" });
+          }}
+          onNewConversation={() => {
+            dispatch({ type: "new-conversation-requested" });
+          }}
+          onSelectConversation={(conversationId) => {
+            dispatch({ conversationId, type: "conversation-selected" });
+          }}
+        />
+
+        <main
+          className="application-main"
+          data-scroll-region="application-main"
+          id="main-content"
+          ref={mainContentRef}
+          role="main"
+          tabIndex={-1}
+        >
+          <div
+            className="application-content"
+            data-scroll-owner="route-content"
+            data-scroll-region="application-content"
+            ref={applicationContentRef}
+          >
+            {pages[state.activeRoute]}
+          </div>
+        </main>
+
+        <ApplicationInspector
+          bodyOutletRef={setInspectorBodyTarget}
+          customContent={state.activeRoute === "command-center"}
+          expanded={shellState.inspectorExpanded}
+          headerOutletRef={setInspectorHeaderTarget}
+          onClose={closeInspector}
+        />
+
+        <ApplicationActivityDock
+          bodyOutletRef={setActivityBodyTarget}
+          customContent={state.activeRoute === "command-center"}
+          events={state.activityEvents}
+          expanded={shellState.activityExpanded}
+          height={shellState.activityHeight}
+          maximumHeight={shellState.activityMaxHeight}
+          minimumHeight={ACTIVITY_PANEL_MIN_HEIGHT}
+          onResize={(height) => {
+            shellDispatch({ height, type: "activity-resized" });
+          }}
+          onToggle={() => {
+            shellDispatch({ type: "toggle-activity" });
+          }}
+          summaryOutletRef={setActivitySummaryTarget}
+        />
+      </div>
+    </ApplicationWorkspacePanelsContext.Provider>
   );
 }
 
@@ -219,7 +460,7 @@ function CoreStatus({ connectionStatus, menuRouteStatus }: CoreStatusProps) {
   return (
     <p className={`application-toolbar__status application-toolbar__status--${state}`}>
       <span aria-hidden="true" />
-      {label}
+      <span className="application-toolbar__status-label visually-hidden-at-compact">{label}</span>
     </p>
   );
 }

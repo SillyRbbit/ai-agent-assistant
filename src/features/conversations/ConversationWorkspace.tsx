@@ -54,6 +54,12 @@ export function ConversationWorkspace({
   toolResults,
 }: ConversationWorkspaceProps) {
   const isBusy = runStatus !== "idle";
+  const canSubmit = !isBusy && composerDraft.trim().length > 0;
+  const submitComposer = () => {
+    if (canSubmit) {
+      onSubmit();
+    }
+  };
 
   return (
     <section aria-labelledby="conversations-page-title" className="page-stack conversation-page">
@@ -128,7 +134,7 @@ export function ConversationWorkspace({
           className="composer-shell"
           onSubmit={(event) => {
             event.preventDefault();
-            onSubmit();
+            submitComposer();
           }}
         >
           <label htmlFor="assistant-request">Assistant request</label>
@@ -139,6 +145,22 @@ export function ConversationWorkspace({
               onChange={(event) => {
                 onComposerDraftChange(event.currentTarget.value);
               }}
+              onKeyDown={(event) => {
+                if (
+                  event.key !== "Enter" ||
+                  event.altKey ||
+                  event.ctrlKey ||
+                  event.metaKey ||
+                  event.shiftKey ||
+                  event.nativeEvent.isComposing ||
+                  (event.nativeEvent as { readonly keyCode?: number }).keyCode === 229
+                ) {
+                  return;
+                }
+
+                event.preventDefault();
+                submitComposer();
+              }}
               placeholder="Describe what you need help with…"
               rows={3}
               value={composerDraft}
@@ -148,7 +170,7 @@ export function ConversationWorkspace({
                 Stop
               </button>
             ) : (
-              <button disabled={isBusy || composerDraft.trim().length === 0} type="submit">
+              <button disabled={!canSubmit} type="submit">
                 Send
               </button>
             )}

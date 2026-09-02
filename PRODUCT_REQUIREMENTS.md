@@ -315,9 +315,11 @@ shipping dispatcher or executor.
   Rust-agent IPC or consequential control.
 - **FR-039K**: The Command Center graph shall have a synchronized grouped
   structured view and relationship table, keyboard-operable selection and
-  viewport controls, ordinary page-wheel pass-through, feature-local filters,
-  reachable inspector/activity content, and no claim of live health, approval,
-  policy, execution, provider, tool, or telemetry state.
+  viewport controls, bounded canvas-local ordinary-wheel zoom with scroll up
+  zooming in and scroll down zooming out, page-scroll ownership outside the
+  graph, feature-local filters, reachable inspector/activity content, and no
+  claim of live health, approval, policy, execution, provider, tool, or
+  telemetry state.
 
 Only bootstrap metadata storage, a turn-bound volatile in-memory approval-audit
 adapter, and D-085's unwired workflow-local volatile memory and approved-

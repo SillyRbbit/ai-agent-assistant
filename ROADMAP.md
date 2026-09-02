@@ -18,6 +18,15 @@ Last updated: 2026-09-02
 contains the ordered execution queue. Completed plans and reviews are the
 verification record; this roadmap does not create new completion evidence.
 
+## Completed dependency-security remediation
+
+The owner-approved `browserslist-4-28-7-security-remediation` is **Completed**
+with `PASS WITH ADVISORIES`. The existing development-only Browserslist lock
+resolution is patched at 4.28.7 with only its four required support-floor
+movements; exact-head CI is green. It changes no product milestone or
+authority. D-112 remains in force, and D-111 continues to block automatic
+product and operational successors.
+
 ## D-107 account and Keychain scope decision
 
 D-111 is **Completed** with `PASS WITH ADVISORIES`: no application-owned
