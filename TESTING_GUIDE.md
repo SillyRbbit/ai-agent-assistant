@@ -16,6 +16,14 @@ Last updated: 2026-09-02
 - Never report a check as passed unless its command completed successfully in
   the current increment.
 
+## D-111 documentation-only account and Keychain scope decision
+
+Review only whether repository evidence proves application-owned scope without
+ambient account/home/path/default/search-list authority. Passing requires the
+closed negative result, preserved D-097 through D-110, documentation checks,
+and Blocked readiness. System, build, audit, and external checks are Not run by
+scope.
+
 ## D-110 documentation-only exact signer-binding decision
 
 The `d107-exact-signer-binding-contract-decision` increment has no signer

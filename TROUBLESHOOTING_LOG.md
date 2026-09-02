@@ -2,6 +2,15 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-09-02 — Ambient Keychain behavior does not establish owned scope
+
+**Observation:** File-based default/search-list behavior, access-group
+terminology, and disabled feature paths do not prove one application-owned
+identity scope.
+
+**Disposition:** D-111 selects `scope_contract_not_accepted`; all remaining
+blockers and Blocked readiness remain unchanged. No system operation ran.
+
 ## 2026-09-02 — Identity correspondence does not establish expected signer binding
 
 **Observation:** D-107's native identity model can establish

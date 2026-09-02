@@ -7,6 +7,13 @@ Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
 identifies which security boundaries are current, mocked, planned, or
 prohibited.
 
+## D-111 account and Keychain scope boundary
+
+D-111 rejects default/search-list, account/home/path, environment, access-group
+labels, disabled features, and fallback as application-owned identity-scope
+proof. It creates no Keychain authority; all other D-107 contracts remain
+unproved.
+
 ## D-110 exact signer-binding boundary
 
 D-110 selects `signer_binding_not_accepted`. A certificate/private-key pair,

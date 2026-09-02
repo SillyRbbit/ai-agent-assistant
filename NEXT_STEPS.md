@@ -2,6 +2,12 @@
 
 Last updated: 2026-09-02
 
+## D-107 account and Keychain scope decision
+
+D-111 selects `scope_contract_not_accepted`; current repository source has no
+application-owned identity scope without ambient account/home/path/default/
+search-list authority. All ten blockers remain. No successor is **Ready**.
+
 ## D-107 exact signer-binding decision
 
 D-110 selects `signer_binding_not_accepted` for exactly

@@ -3,6 +3,11 @@
 Status: Authoritative current-state architecture
 Last updated: 2026-09-02
 
+> Account/Keychain-scope decision: D-111 selects
+> `scope_contract_not_accepted`; current source has no application-owned
+> identity scope excluding account/home/path/default/search-list authority.
+> No runtime or Keychain edge is added; D-107 remains Blocked.
+
 > Exact signer-binding decision (2026-09-02): D-110 records
 > `signer_binding_not_accepted`. Current source establishes at most
 > certificate/private-key correspondence, not an immutable expected Developer

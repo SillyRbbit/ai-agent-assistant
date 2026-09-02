@@ -4,6 +4,10 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
+The most recently completed plan is
+[`d107-account-keychain-scope-contract-decision`](docs/plans/2026-09-02-d107-account-keychain-scope-contract-decision.md).
+D-111 is a negative scope result; no runtime boundary or successor is added.
+
 The most recently completed owner-approved documentation-only plan is
 [`d107-exact-signer-binding-contract-decision`](docs/plans/2026-09-02-d107-exact-signer-binding-contract-decision.md).
 D-110 selects `signer_binding_not_accepted`: current repository source has no

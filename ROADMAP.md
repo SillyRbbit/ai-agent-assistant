@@ -18,6 +18,12 @@ Last updated: 2026-09-02
 contains the ordered execution queue. Completed plans and reviews are the
 verification record; this roadmap does not create new completion evidence.
 
+## D-107 account and Keychain scope decision
+
+D-111 is **Completed** with `PASS WITH ADVISORIES`: no application-owned
+identity scope exists in the reviewed repository. All operational work remains
+**Blocked**.
+
 ## D-107 exact signer-binding decision
 
 The documentation-only D-110 decision is **Completed** with
