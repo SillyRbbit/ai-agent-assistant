@@ -2,6 +2,28 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-09-02 — D-104 does not make the App Sandbox candidate eligible
+
+**Observation:** Re-reviewing the exact additive v2 candidate against current
+first-party Apple documentation removes only the former Developer ID
+circularity classification. The sources establish narrow sandbox, entitlement,
+helper, signature, direct-child, file-handle, process-event, and process-group
+semantics. They do not establish D-102's complete bootstrap, effect-denial,
+graph-ownership, shutdown, quiescence, cleanup, or platform-effect conjunction.
+
+**Disposition:** D-105 records
+`no_eligible_candidate_after_d104_rereview`. All 22 contracts remain
+`contract_unproven`, and all ten P3-3 implementation-source checks remain
+`not_run`. This is a valid negative documentation result, not a universal
+impossibility claim or operational failure. No source, dependency, entitlement,
+build, process, probe, target-Mac, Apple, signing, credential, provider,
+product, or state-changing external action ran. P3-3 remains Blocked.
+
+During closeout, the first `docs:check` and `repository:check` runs each found
+the same three Apple method URLs parsed as local targets because of URL
+parentheses. Correcting only those URL forms preserved the frozen sources and
+claims; the required checks were then rerun.
+
 ## 2026-09-02 — P3 bootstrap signature must not be conflated with P4 identity
 
 **Observation:** D-103's frozen App Sandbox helper review correctly rejected

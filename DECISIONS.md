@@ -5026,3 +5026,129 @@ D-104 additively refines only the future P3 eligibility classification for the
 defined identity-free bootstrap class. It does not supersede D-072, D-075,
 D-076, D-095, D-096, D-097, D-098, D-099, D-100, D-101, D-102, D-103, TS-017,
 any historical evidence, or an operational prerequisite.
+
+## D-105 - Select no App Sandbox containment candidate after the D-104 re-review
+
+Date: 2026-09-02
+Status: Accepted owner-authorized documentation-only bounded negative decision
+
+## Context
+
+D-104 permits one future static review to separate an identity-free
+`sandbox_activation_adhoc_v1` seal from P4's later
+`product_signer_binding_v1` proof. It changes no other D-102 predicate and does
+not revise D-103's frozen `app_sandbox_build_helper_plus_libsystem_supervision_v1`
+result.
+
+The separately approved re-review froze exactly one additive candidate,
+`app_sandbox_build_helper_plus_libsystem_supervision_v2`: a conceptual
+application-owned host with App Sandbox enabled and no inherit entitlement; a
+directly spawned helper with exactly App Sandbox plus inherit; the D-104
+identity-free conceptual seal; and `posix_spawn`, direct-child `waitpid`, known-
+PID `kqueue` `EVFILT_PROC`, `setpgid`, and process-group signaling as narrow
+supervision adjuncts. Every other entitlement and authority is absent.
+
+Current first-party Apple documentation supports narrow App Sandbox, helper,
+signature, direct-child, file-handle, process-event, and process-group facts.
+It does not establish the complete conjunction required by D-102. Archived
+manuals may support only narrow historical semantics and cannot establish
+current macOS 14+ availability. Silence, inference, post-hoc observation, and
+one contract's evidence cannot pass another contract.
+
+## Decision
+
+The closed result is:
+
+```text
+no_eligible_candidate_after_d104_rereview
+```
+
+Every D-102 contract remains independently unproved:
+
+| Contract ID                          | Disposition         | Reason                                                                                      |
+| ------------------------------------ | ------------------- | ------------------------------------------------------------------------------------------- |
+| `containment_primitive_contract`     | `contract_unproven` | The public App Sandbox contract does not establish the complete frozen-candidate boundary.  |
+| `fixed_build_graph_contract`         | `contract_unproven` | The helper recipe presupposes build/sign/embed work and does not contain its first graph.   |
+| `executable_identity_contract`       | `contract_unproven` | Every transitive executable byte identity and literal argument is not fixed by contract.    |
+| `working_directory_binding_contract` | `contract_unproven` | One exact application-owned working directory is not bound for the complete graph.          |
+| `descriptor_inheritance_contract`    | `contract_unproven` | Closure of every undeclared inherited descriptor before launch is not established.          |
+| `filesystem_read_scope_contract`     | `contract_unproven` | Every ambient host-data read by the build and toolchain graph is not denied before effect.  |
+| `filesystem_root_contract`           | `contract_unproven` | Exact repository, toolchain, dependency, cache, and output roots are not established.       |
+| `outside_root_write_contract`        | `contract_unproven` | Container access does not establish exact-root pre-effect outside-write denial.             |
+| `declared_network_scope_contract`    | `contract_unproven` | TCP/UDP entitlement facts do not close inherited descriptors or total permitted scope.      |
+| `undeclared_network_contract`        | `contract_unproven` | IPv4, IPv6, DNS, Unix-socket, and relevant Mach-service denial is not jointly established.  |
+| `descendant_membership_contract`     | `contract_unproven` | Direct-child/PID/group APIs do not own every detached or reparented descendant.             |
+| `group_shutdown_contract`            | `contract_unproven` | Mutable group membership and signaling do not guarantee complete graph termination.         |
+| `direct_child_reap_contract`         | `contract_unproven` | Narrow direct-child wait semantics do not establish the candidate's complete reap contract. |
+| `terminal_quiescence_contract`       | `contract_unproven` | Race-free graph quiescence and rejection of all late effects are not established.           |
+| `pipe_closure_contract`              | `contract_unproven` | Closing one handle does not establish closure of every copied/inherited descriptor.         |
+| `process_metadata_effect_contract`   | `contract_unproven` | Process metadata content, visibility, logging, caching, and lifetime are not bounded.       |
+| `cleanup_binding_contract`           | `contract_unproven` | No complete descriptor-rooted, non-following recursive cleanup contract exists.             |
+| `cleanup_failure_contract`           | `contract_unproven` | Private quarantine and retry blocking require a controller that does not exist.             |
+| `platform_cache_effect_contract`     | `contract_unproven` | OS and toolchain cache destinations, contents, and lifetime are not bounded.                |
+| `platform_log_effect_contract`       | `contract_unproven` | Sandbox and unified-log effects are possible and not completely bounded.                    |
+| `platform_socket_effect_contract`    | `contract_unproven` | Inherited, resolver, Unix, Mach/XPC, and other socket effects are not completely bounded.   |
+| `platform_network_effect_contract`   | `contract_unproven` | OS-managed resolver, trust, signature, container, and network traffic is not bounded.       |
+
+The repository contains no P3-3 controller source. Therefore
+`caller_selected_process_source_review`, `shell_launch_source_review`,
+`inherited_environment_source_review`, `unreviewed_spawn_source_review`,
+`retry_fallback_source_review`, `raw_child_output_source_review`,
+`deadline_enforcement_source_review`, `cancellation_terminal_source_review`,
+`late_effect_rejection_source_review`, and `cleanup_ownership_source_review`
+all remain `not_run`.
+
+This is a valid fail-closed documentation result, not an operational failure
+and not a universal impossibility claim. It selects no primitive and admits no
+successor. P3-3, P3-4, P3-5, P4, signing, V0-3, and every product or external
+operation remain Blocked. A future candidate would require a new bounded plan,
+new owner approval, and authoritative evidence for every D-102 predicate; it
+cannot be substituted into this frozen attempt.
+
+## Consequences
+
+- D-104's identity distinction remains correct but insufficient for candidate
+  eligibility.
+- No source, dependency, configuration, capability, CSP, permission,
+  entitlement, helper, build, process, target-Mac, Apple, Xcode, Keychain,
+  certificate, private-key, signing, credential, provider, product, or
+  state-changing external action is authorized or evidenced.
+- D-097 remains `failed` / `FAIL` / `Blocked` with its original report and
+  digests and no completion marker. The historical screenshot/privacy finding
+  remains Failed, the Open Directory boundary remains Pending, and signing
+  evidence remains Not run.
+- D-098's schema-v3 successor disposition and D-099 through D-104 remain valid
+  and unchanged.
+
+## Alternatives considered
+
+- Infer full containment from App Sandbox enforcement: rejected because the
+  specific bootstrap, graph, terminal, cleanup, and platform-effect contracts
+  remain unproved.
+- Treat absent network entitlements as proof of no network effect: rejected;
+  the documented TCP/UDP initiation boundary does not close inherited sockets,
+  DNS, Unix/Mach IPC, or OS-managed traffic.
+- Treat direct-child wait, known-PID events, or process groups as complete
+  graph ownership: rejected because detachment, reparenting, mutable membership,
+  quiescence, and late effects remain unresolved.
+- Run a build, probe, trace, packet capture, signature operation, or target-Mac
+  experiment: rejected as outside the documentation-only scope and insufficient
+  to prove universal pre-effect guarantees.
+- Add a broader entitlement, privileged mechanism, dependency, VM, service, or
+  residual-risk waiver: rejected as outside the approved boundary.
+
+## Official public source register
+
+The frozen source register and permitted narrow claims are recorded in
+[`docs/plans/2026-09-02-personal-assistant-v0-app-sandbox-containment-rereview.md`](docs/plans/2026-09-02-personal-assistant-v0-app-sandbox-containment-rereview.md).
+It includes current Apple App Sandbox, helper, file-access, network-entitlement,
+App Groups, Foundation/Dispatch/System API, logging, and cache documentation,
+plus explicitly bounded archived POSIX/manual references. No target-derived or
+private evidence entered the review.
+
+## Supersedes or is superseded by
+
+D-105 additively applies D-102 and D-104 to only the frozen v2 candidate. It
+does not supersede D-072, D-075, D-076, D-095, D-096, D-097, D-098, D-099,
+D-100, D-101, D-102, D-103, D-104, TS-017, any historical evidence, or any
+operational prerequisite.

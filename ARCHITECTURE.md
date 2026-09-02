@@ -3,6 +3,14 @@
 Status: Authoritative current-state architecture
 Last updated: 2026-09-02
 
+> Completed P3 App Sandbox containment re-review (2026-09-02): D-105 records
+> `no_eligible_candidate_after_d104_rereview` for the exact additive v2
+> candidate. D-104 removes only the Developer ID circularity classification;
+> all 22 D-102 containment contracts remain `contract_unproven`, and all ten
+> P3-3 source checks remain `not_run`. This documentation result adds no runtime
+> edge, entitlement, helper, controller, build, process, or target-Mac/external
+> action. P3-3 and every operational successor remain Blocked.
+
 > Completed P3 bootstrap-trust documentation state (2026-09-02): D-104 separates
 > an identity-free ad-hoc sandbox-activation seal from P4's later Developer ID
 > signer binding. It changes only a future static-review eligibility

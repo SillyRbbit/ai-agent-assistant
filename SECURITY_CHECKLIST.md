@@ -7,6 +7,31 @@ Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
 production boundary exists.
 
+## D-105 App Sandbox containment re-review
+
+- [x] The candidate and source corpus are frozen for one bounded attempt; D-103
+      v1 remains immutable and no catch-all or alternate candidate exists.
+- [x] D-104 changes only the Developer ID circularity classification and does
+      not prove containment, bootstrap, target availability, or P4 identity.
+- [x] All 22 D-102 contracts are recorded exactly once as
+      `contract_unproven`; no absent, archived-only, ambiguous, or inferred
+      guarantee passes.
+- [x] All ten P3-3 implementation-source checks remain `not_run` because no
+      controller source exists.
+- [x] Network-client/server and every broader filesystem, IPC, automation,
+      Keychain, app-group, Mach, device, or temporary-exception entitlement are
+      absent from the frozen candidate and not silently added as relief.
+- [x] The result is exactly `no_eligible_candidate_after_d104_rereview`; it
+      selects no primitive, accepts no residual risk, and claims no universal
+      impossibility.
+- [x] D-097 through D-104 and every historical Failed/Pending/Not-run fact
+      remain unchanged.
+- [ ] A fully eligible primitive and separately approved P3-3 controller plan
+      exist; both remain Blocked.
+- [x] No source, dependency, entitlement, build, process, probe, target-Mac,
+      Apple, Xcode, Keychain, signing, credential, provider, product, or
+      state-changing external action occurred.
+
 ## D-104 bootstrap trust-class decision
 
 - [x] `sandbox_activation_adhoc_v1` and `product_signer_binding_v1` are

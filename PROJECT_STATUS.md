@@ -2,6 +2,23 @@
 
 Last updated: 2026-09-02
 
+## Completed P3 App Sandbox containment re-review
+
+The owner-approved documentation-only
+[`personal-assistant-v0-app-sandbox-containment-rereview`](docs/plans/2026-09-02-personal-assistant-v0-app-sandbox-containment-rereview.md)
+increment began from clean synchronized `main` at
+`e1b2ff5c06a4c5bc6ad7fc19b63968668fff4923`. Accepted D-105 records
+`no_eligible_candidate_after_d104_rereview`. The sole D-104 change removes the
+Developer ID circularity classification for the exact v2 static candidate;
+all 22 D-102 contracts remain `contract_unproven`, and all ten P3-3 source
+checks remain `not_run`.
+
+No runtime, primitive, controller, source, dependency, configuration,
+entitlement, helper, build, process, target-Mac, Apple, Keychain, signing,
+credential, provider, product, or external state changed. P3-3 through P3-5,
+P4, V0-3, and every operational successor remain Blocked. D-097 through D-104
+and every historical Failed/Pending/Not-run result remain intact.
+
 ## Completed P3 containment bootstrap trust decision
 
 The owner-approved documentation-only
