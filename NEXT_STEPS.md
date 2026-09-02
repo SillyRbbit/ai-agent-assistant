@@ -1,6 +1,14 @@
 # Next steps
 
-Last updated: 2026-08-29
+Last updated: 2026-09-01
+
+## Completed documentation-only increment
+
+`personal-assistant-v0-signing-security-prerequisite-planning` completed with
+`PASS WITH ADVISORIES` under valid D-098 schema-v3 lineage and the exact
+fifteen documentation paths. It preserves D-097 while mapping future privacy,
+Open Directory, build-child-containment, and immutable signer-contract
+prerequisites. No operational signing or product successor is Ready.
 
 This file is the ordered implementation queue. Work only on the first item marked **Ready**. A verification-pending increment must close before later feature work begins.
 
@@ -25,7 +33,7 @@ Do not create another certificate, change accounts or Keychains,
 import/export/revoke/remove material, repeat the scoped check, or sign under the
 closed approval.
 
-### Active exceptional governance recovery: D-098 exact-target disposition
+### Predecessor exceptional governance recovery: D-098 exact-target disposition
 
 **Status:** Tracked pre-disposition evidence freezes from clean synchronized
 `main` at `a417e5f1c1c602b917ca27c65af71480e3db6a45`; it does not claim the later
@@ -76,8 +84,9 @@ The documentation reconciliation is accepted; it is not a successor increment
 or new gate. Operational Keychain use, building, signing, prompting, and
 cleanup remain **Blocked** pending the unresolved gate and security blockers,
 an exact statically reviewed sanitizer, and a new one-attempt owner approval.
-No new gate has begun. The recovery gate is terminally failed with Blocked
-successor readiness and no completion marker.
+At this historical point, no new gate had begun. The predecessor recovery gate
+remains terminally failed with Blocked successor readiness and no completion
+marker.
 The future sanitizer is additionally blocked on a no-caller-input expected-team
 binding, exact fingerprint/leaf signer binding, disposable-clone isolation for
 all writing commands plus closed host-config-isolated preflight, per-surface

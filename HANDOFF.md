@@ -1,8 +1,27 @@
 # Handoff
 
-Last updated: 2026-08-29
+Last updated: 2026-09-01
 
-## Active D-098 terminal-failed successor-disposition recovery
+## Completed documentation-only signing-security prerequisite planning
+
+The owner approved implementation of
+[`personal-assistant-v0-signing-security-prerequisite-planning`](docs/plans/2026-08-29-personal-assistant-v0-signing-security-prerequisite-planning.md)
+on 2026-09-01 with `PASS WITH ADVISORIES`. The valid completion state retains
+D-098 schema-v3 `predecessor_disposition` lineage. The exact fifteen-path
+documentation ceiling was enforced at closeout. This increment maps future evidence privacy,
+account-directory, build-child-containment, and immutable signer-contract work;
+it may not run or authorize any of it.
+
+Preserve D-097 `failed` / `FAIL` / `Blocked` with no completion marker, the
+Failed screenshot/privacy finding, Pending Open Directory boundary, and Not-run
+signing evidence. No Apple, Xcode, Keychain, certificate, private-key, build,
+signing, credential, provider, network, product, branch, or publication action
+is allowed. Exact resume prompt: “Read D-099 and the completed signing-security
+prerequisite plan. Preserve D-097/D-098 evidence and keep all operational work
+Blocked unless the owner separately selects and approves one bounded P1–P4
+successor. Do not operate a target-Mac or external system.”
+
+## Predecessor D-098 terminal-failed successor-disposition recovery
 
 The owner authorized one exceptional repository-governance recovery on branch
 `codex/v0-terminal-failed-successor-disposition-recovery` from clean
@@ -19,7 +38,8 @@ cannot truthfully state its later outcome. Inspect
 `python3 .codex/hooks/post_increment_gate.py status`: only a valid schema-v3
 disposition naming the exact successor establishes post-freeze admission. At
 tracked freeze the command is Not run; no tracked closeout edit follows it, no
-commit or publication occurred, and the documentation successor has not begun.
+commit or publication occurred at its tracked-evidence freeze, and the
+documentation successor had not begun at that time.
 The published D-097 result remains exact `failed` / `FAIL` / `Blocked` with no
 completion marker. The historical screenshot/privacy failure and Pending
 `getpwuid`/`opendirectoryd` disclosure are carried only to the named

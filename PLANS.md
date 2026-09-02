@@ -4,7 +4,15 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
-The active owner-authorized plan is the exceptional
+The latest completed owner-approved plan is
+[`personal-assistant-v0-signing-security-prerequisite-planning`](docs/plans/2026-08-29-personal-assistant-v0-signing-security-prerequisite-planning.md).
+It is documentation-only, completed with `PASS WITH ADVISORIES`, carries valid D-098 schema-v3 lineage, and changed
+only the exact fifteen recorded documentation paths. Its closed outcome maps
+future evidence privacy, account-directory, build-child-containment, and
+immutable signer-contract prerequisites. It cannot alter the D-097 failure,
+authorize operational signing, or create a product/external-system edge.
+
+The predecessor exceptional recovery plan is
 [`v0-terminal-failed-successor-disposition-recovery`](docs/plans/2026-08-29-v0-terminal-failed-successor-disposition-recovery.md)
 from clean synchronized baseline
 `a417e5f1c1c602b917ca27c65af71480e3db6a45`. D-098 permits only one bounded,

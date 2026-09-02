@@ -1,11 +1,26 @@
 # Cortexa security checklist
 
 Status: Authoritative change and release security review checklist
-Last updated: 2026-08-28
+Last updated: 2026-09-01
 
 Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
 production boundary exists.
+
+## D-099 documentation-only signing-security prerequisite planning
+
+- [x] The exact D-098 schema-v3 lineage admits only the named documentation
+      increment and its fifteen-path closeout ceiling.
+- [x] D-097 remains `failed` / `FAIL` / `Blocked` without a completion marker;
+      the historical screenshot/privacy failure remains Failed and the Open
+      Directory boundary remains Manual verification pending.
+- [x] The plan distinguishes P1 privacy evidence, P2 account-directory scope,
+      P3 executable-build-child containment, and P4 immutable signer binding.
+- [ ] No target-Mac, Apple, Keychain, certificate, private-key, signing, build,
+      provider, credential, network, or product operation is represented as
+      passed by this documentation increment.
+- [ ] Any future operational plan has its own owner approval, exact threat
+      model, no-caller-input contract, redaction review, and target-Mac gates.
 
 ## Scope and threat model
 

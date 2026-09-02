@@ -2,6 +2,22 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-09-01 — Exact D-098 documentation successor is completed
+
+**Observation:** A clean, synchronized `main` at
+`7fd4812fb02de7fee19e53a50b8f7bf96bd38709` had valid D-098 schema-v3 state.
+The predecessor reconstructed to the immutable D-097 v2 digest, retained
+`failed` / `FAIL` / `Blocked`, and had no completion marker. The disposition
+admitted only `personal-assistant-v0-signing-security-prerequisite-planning`.
+
+**Disposition:** Begin only that exact documentation increment. Preserve the
+historical screenshot/privacy finding as Failed and the
+`getpwuid`/`opendirectoryd` boundary as Manual verification pending. Do not
+rerun the consumed query or perform any Apple, Keychain, signing, build,
+credential, provider, network, product, or external-system operation. Future
+privacy, directory, build-child-containment, and signer-contract work is
+documented as separate Proposed/Blocked prerequisites, not resolved evidence.
+
 ## 2026-08-29 — Published Blocked failure cannot admit the exact documentation disposition
 
 **Observation:** D-097 truthfully published the Xcode recovery as `failed` /
