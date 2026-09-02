@@ -5,6 +5,15 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Current plan state
 
 The latest completed owner-approved plan is
+[`personal-assistant-v0-evidence-privacy-protocol-planning`](docs/plans/2026-09-01-personal-assistant-v0-evidence-privacy-protocol-planning.md).
+It completed with `PASS WITH ADVISORIES`. It is documentation-only and defines
+`evidence_privacy_v1`: a fixed version, one plan-owned check ID, and one closed
+outcome, with exact bounds, non-authorizing semantics, private future attempt
+binding, source minimization, and stop-without-retry behavior. It collected no
+evidence, changed no product or external system, and leaves D-097/D-098/D-099,
+P2–P4, and all operational work unchanged.
+
+The predecessor completed owner-approved plan is
 [`personal-assistant-v0-signing-security-prerequisite-planning`](docs/plans/2026-08-29-personal-assistant-v0-signing-security-prerequisite-planning.md).
 It is documentation-only, completed with `PASS WITH ADVISORIES`, carries valid D-098 schema-v3 lineage, and changed
 only the exact fifteen recorded documentation paths. Its closed outcome maps
@@ -961,6 +970,8 @@ condition is reached.
 
 | Plan                                             | Status   | Owner              | Last updated |
 | ------------------------------------------------ | -------- | ------------------ | ------------ |
+| Personal Assistant v0 evidence-privacy protocol  | Complete | Project owner      | 2026-09-01   |
+| Personal Assistant v0 signing-security map       | Complete | Project owner      | 2026-09-01   |
 | Personal Assistant v0 capability program         | Complete | Project owner      | 2026-08-28   |
 | V0-1 empty-tool turn and minimal host            | Complete | Project owner      | 2026-08-28   |
 | V0-1 Linux Clippy portability correction         | Complete | Project owner      | 2026-08-28   |
@@ -977,7 +988,7 @@ condition is reached.
 | V0-12 no-traffic provider provisioning           | Blocked  | Project owner      | 2026-08-28   |
 | V0-13 live synthetic Stage C rehearsal           | Blocked  | Project owner      | 2026-08-28   |
 | V0-14 private real-prompt admission decision     | Blocked  | Project owner      | 2026-08-28   |
-| Native multi-agent end-to-end demonstrations     | Active   | Project owner      | 2026-08-25   |
+| Native multi-agent end-to-end demonstrations     | Complete | Project owner      | 2026-08-25   |
 | Increment 2B-1 SQLite migration skeleton         | Complete | Project maintainer | 2026-07-13   |
 | Increment 2C storage startup integration         | Complete | Project maintainer | 2026-07-13   |
 | Increment 2D menu-bar/window lifecycle           | Complete | Project maintainer | 2026-07-13   |

@@ -2,6 +2,23 @@
 
 Last updated: 2026-09-01
 
+## Completed evidence-privacy protocol planning
+
+The owner-approved exact documentation-only
+[`personal-assistant-v0-evidence-privacy-protocol-planning`](docs/plans/2026-09-01-personal-assistant-v0-evidence-privacy-protocol-planning.md)
+increment completed from clean synchronized `main` at
+`096cdbe0139832010749039149fb2e335cfa19fd` with `PASS WITH ADVISORIES`. D-100
+defines a future closed
+`evidence_privacy_v1` record and requires source minimization before any chat,
+Git, report, or log boundary. The plan contains no evidence operation,
+parser, sanitizer, runtime, IPC, filesystem, product, or external-system
+change.
+
+D-097/D-098/D-099 remain intact, including D-097's original report and digests.
+The historical screenshot/privacy finding is still Failed, the Open Directory
+boundary is still Manual verification pending, and signing is still Not run.
+P2–P4 and every operational successor remain Proposed/Blocked.
+
 ## Completed signing-security prerequisite planning
 
 On 2026-09-01, the owner approved implementation of the exact

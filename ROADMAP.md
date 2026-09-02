@@ -18,6 +18,16 @@ Last updated: 2026-09-01
 contains the ordered execution queue. Completed plans and reviews are the
 verification record; this roadmap does not create new completion evidence.
 
+## Completed evidence-privacy planning
+
+P1 evidence-privacy protocol planning is **Complete** with
+`PASS WITH ADVISORIES` as a documentation-only milestone. It defines a closed
+future evidence vocabulary and source-minimization rule, but it did not collect
+evidence, implement a parser/sanitizer, change product capability, or advance an
+operational milestone. P2
+account-directory, P3 build-child containment, P4 immutable signer binding,
+V0-3, and every external operation remain **Blocked**.
+
 ## Completed documentation planning
 
 The owner-approved

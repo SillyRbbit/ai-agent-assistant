@@ -16,6 +16,33 @@ Last updated: 2026-09-01
 - Never report a check as passed unless its command completed successfully in
   the current increment.
 
+## D-100 documentation-only evidence-protocol review
+
+The `personal-assistant-v0-evidence-privacy-protocol-planning` increment has no
+runtime, parser, sanitizer, or target-Mac behavior to test. Review the proposed
+`evidence_privacy_v1` contract as a closed table: fixed declared check IDs plus
+their exact allowed outcomes pass; unknown version/check/outcome, extra key,
+free text, target-derived identifier, private path, numeric/raw output,
+screenshot, attachment, recording, transcript, log, or copied GUI/terminal text
+fails the documentation contract. An operational check table that omits
+`boundary_failed` also fails.
+So do duplicate keys, multiple records, non-ASCII/confusable/case/whitespace
+variants, overlength tokens, records over 256 bytes, and duplicate, replayed,
+cross-plan, pre-admission, or late delivery. Outcome semantics such as
+`approved`, `authorized`, `safe`, `ready`, `verified`, `exclusive`, or
+`non_exported` fail because categories may describe only one bounded predicate.
+Future consumers must test once-only private plan/check/attempt binding; the
+three exposed fields alone carry no provenance or authority.
+
+Minimum evidence is the exact fifteen-path documentation diff, preservation of
+D-097/D-098/D-099 and all historical Failed/Pending/Not-run states,
+documentation formatting/link validation, repository health, secret scanning,
+protected-path proof, whitespace checking, independent review, and the
+repository completion gate. Apple, Xcode, Keychain, certificate, signing,
+build, credential, provider, network, filesystem, and product-runtime checks
+remain Not run. A passing documentation review does not prove executable
+enforcement.
+
 ## D-099 documentation-only evidence
 
 The `personal-assistant-v0-signing-security-prerequisite-planning` increment

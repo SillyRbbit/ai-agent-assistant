@@ -2,6 +2,20 @@
 
 Last updated: 2026-09-01
 
+## Completed P1 documentation-only increment
+
+`personal-assistant-v0-evidence-privacy-protocol-planning` completed with
+`PASS WITH ADVISORIES`. It defines P1's closed categorical evidence vocabulary
+without collecting evidence or changing product/external behavior. The
+completion establishes only the documentation protocol; it does not clear
+D-097, accept the Pending Open Directory boundary, prove signing, implement a
+parser/sanitizer, or make P2–P4 or an operational successor Ready.
+
+No successor is **Ready**. The smallest next action, only if separately selected
+and approved by the owner, is a bounded documentation-only P2 account-directory
+boundary plan. It must not rerun the consumed query or access Apple, Xcode,
+Keychain, signing, credentials, provider, network, product, or external systems.
+
 ## Completed documentation-only increment
 
 `personal-assistant-v0-signing-security-prerequisite-planning` completed with
