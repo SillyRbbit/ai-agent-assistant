@@ -7,6 +7,14 @@ Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
 production boundary exists.
 
+## D-111 account and Keychain scope decision
+
+- [x] Only `account_keychain_scope_contract` is reviewed.
+- [x] Default/search-list, account/home/path, labels, disabled features, and
+      fallback are not treated as scope proof.
+- [ ] An eligible candidate or successor exists; both remain Blocked.
+- [x] No Keychain, account, signing, build, target-Mac, or external operation ran.
+
 ## D-110 exact signer-binding decision
 
 - [x] The decision covers only `exact_signer_binding_contract`; it creates no

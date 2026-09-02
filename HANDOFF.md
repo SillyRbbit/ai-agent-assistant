@@ -2,6 +2,14 @@
 
 Last updated: 2026-09-02
 
+## D-107 account and Keychain scope decision
+
+D-111 selects `scope_contract_not_accepted`. No application-owned identity
+scope excludes account/home/path/default/search-list/environment/fallback
+authority in the reviewed repository. D-097 through D-110 remain preserved, all
+ten blockers remain, and no successor is Ready. No system or external operation
+ran.
+
 ## D-107 exact signer-binding decision
 
 D-110 selects `signer_binding_not_accepted`: the repository has no immutable

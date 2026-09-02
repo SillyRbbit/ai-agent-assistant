@@ -4,6 +4,10 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Completed D-111 documentation-only account/Keychain-scope decision with
+  `PASS WITH ADVISORIES`. Ambient/default/search-list behavior and disabled
+  feature paths are not application-owned scope proof; no successor is Ready.
+
 - Completed with `PASS WITH ADVISORIES` the documentation-only D-110 exact
   signer-binding decision. It selects `signer_binding_not_accepted`:
   certificate/private-key correspondence, labels, fingerprints, filters, and

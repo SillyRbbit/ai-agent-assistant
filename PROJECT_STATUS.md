@@ -2,6 +2,12 @@
 
 Last updated: 2026-09-02
 
+## D-107 account and Keychain scope decision
+
+D-111 selects `scope_contract_not_accepted`. No product or system operation
+occurred. D-097 through D-110, all ten blockers, and Blocked readiness remain
+unchanged.
+
 ## D-107 exact signer-binding decision
 
 The owner-approved documentation-only D-110 decision selects

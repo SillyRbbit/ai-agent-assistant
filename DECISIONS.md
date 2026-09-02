@@ -5790,3 +5790,31 @@ D-110 additively selects a negative governance disposition for only
 `exact_signer_binding_contract`. It does not supersede D-072, D-075, D-076,
 D-095 through D-109, TS-017, historical evidence, or any operational
 prerequisite.
+
+## D-111 - Do not accept account and Keychain scope from the current repository record
+
+Date: 2026-09-02
+Status: Accepted owner-authorized documentation-only governance decision
+
+## Decision
+
+D-107 records `account_keychain_scope_contract` as `contract_unproven`:
+file-based queries use ambient default/search-list behavior, while access-group
+scope is unproved and the related data-protection-Keychain feature is disabled.
+D-101 prohibits account/home/path resolution; D-109 and D-110 provide no
+identity issuer or signer binding.
+
+Define `AccountKeychainScopePolicyV1` with only
+`scope_contract_documented`, `scope_contract_not_accepted`, and
+`boundary_failed`. Select exactly `scope_contract_not_accepted`. Current
+repository source has no application-owned identity scope that excludes account,
+home, path, default/search-list, environment, profile, caller, or fallback
+authority. Fixed labels, access-group names, disabled features, opaque
+references, and absence of a visible prompt are not scope proof.
+
+This is governance documentation, not D-100 evidence or an implemented
+interface. It preserves D-097, D-107's 8/11 factual record, D-108's 9/10
+interpretation, D-109, and D-110. It does not reduce the ten blockers, admit a
+candidate, or make a successor Ready. No Keychain/account/directory/certificate/
+private-key/signing/Apple/Xcode/build/target-Mac/provider/product/external
+operation is authorized or performed.
