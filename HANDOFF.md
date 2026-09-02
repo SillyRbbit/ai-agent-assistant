@@ -2,6 +2,33 @@
 
 Last updated: 2026-09-01
 
+## Completed P2 account-directory boundary planning
+
+The owner-approved documentation-only
+[`personal-assistant-v0-account-directory-boundary-planning`](docs/plans/2026-09-01-personal-assistant-v0-account-directory-boundary-planning.md)
+increment completed with `PASS WITH ADVISORIES` from clean synchronized `main`
+at `5bf37681a2554094575f17025f47b7cf2b6b5d36`. Accepted documentation decision
+D-101 prohibits explicit application account/home/path resolution and requires
+independent authoritative input, exact scope-provenance, and effect-suite proof
+gates. A future application wrapper must be opaque, no-input, process-private,
+and attempt-bound while the platform reference remains adapter-private. Cleanup
+is attempted on every terminal path; failure remains privately quarantined
+until process exit and blocks replacement/retry/reuse. This policy does not
+establish operational P2 containment, claim control over OS-internal effects,
+or provide an acceptance fallback.
+
+No query, API, Keychain, signing, network, product, or external operation ran or
+is authorized. Preserve D-097, its report/digests/findings and missing
+completion marker, the historical Open Directory finding as Manual verification
+pending, and signing as Not run. P3/P4 and every operational successor remain
+Proposed/Blocked. No successor may begin from this uncommitted workspace. Exact
+resume prompt: “Review the completed
+`personal-assistant-v0-account-directory-boundary-planning` fifteen-path
+documentation change and valid gate. If the owner explicitly authorizes
+publication, commit and push it without beginning a successor; only after clean
+synchronized main and separate owner approval may an exact documentation-only
+P3 build-child-containment plan be drafted.”
+
 ## Completed P1 evidence-privacy protocol planning
 
 The owner-approved documentation-only

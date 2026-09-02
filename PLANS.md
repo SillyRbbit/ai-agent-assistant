@@ -4,7 +4,17 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
-The latest completed owner-approved plan is
+The most recently completed owner-approved plan is
+[`personal-assistant-v0-account-directory-boundary-planning`](docs/plans/2026-09-01-personal-assistant-v0-account-directory-boundary-planning.md).
+It completed with `PASS WITH ADVISORIES` and is documentation-only. Accepted
+D-101 defines `ExplicitAccountResolutionPolicyV1::Prohibited`, requires
+independent input, exact scope-provenance, and one-predicate effect gates, and
+permits only a future application-owned opaque no-input wrapper over an adapter-
+private platform reference. It runs no operation, establishes no operational
+containment, provides no acceptance fallback, and leaves historical evidence
+plus P3/P4/operational work unchanged.
+
+The previously completed owner-approved plan is
 [`personal-assistant-v0-evidence-privacy-protocol-planning`](docs/plans/2026-09-01-personal-assistant-v0-evidence-privacy-protocol-planning.md).
 It completed with `PASS WITH ADVISORIES`. It is documentation-only and defines
 `evidence_privacy_v1`: a fixed version, one plan-owned check ID, and one closed
@@ -970,6 +980,7 @@ condition is reached.
 
 | Plan                                             | Status   | Owner              | Last updated |
 | ------------------------------------------------ | -------- | ------------------ | ------------ |
+| Personal Assistant v0 account-directory boundary | Complete | Project owner      | 2026-09-01   |
 | Personal Assistant v0 evidence-privacy protocol  | Complete | Project owner      | 2026-09-01   |
 | Personal Assistant v0 signing-security map       | Complete | Project owner      | 2026-09-01   |
 | Personal Assistant v0 capability program         | Complete | Project owner      | 2026-08-28   |

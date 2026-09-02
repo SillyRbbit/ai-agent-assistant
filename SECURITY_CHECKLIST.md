@@ -7,6 +7,45 @@ Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
 production boundary exists.
 
+## D-101 account-directory boundary planning
+
+- [x] The documented application policy is fixed and no-input; its operation-
+      specific opaque capability wrapper is process-private, non-serializable,
+      attempt-bound, and never reused.
+- [x] Caller, WebView, model, runtime, environment, account record, command
+      output, or path cannot select the future scope.
+- [x] The documented future adapter contract prohibits directory/passwd/account
+      lookup, numeric UID/eUID-to-account derivation, login/session/console-user,
+      home/standard/current/temporary/configuration-directory, search-list,
+      shell/environment, subprocess/path, and generic filesystem resolution.
+- [x] Exact scope provenance must establish one fixed application credential
+      domain and reject ambient current-user/login/default-Keychain/default-
+      search-list/current-directory/environment authority.
+- [x] The adapter privately owns any platform-issued reference; its wrapper has
+      no generic enumerate/read/write/delete/sign authority. Cleanup is attempted
+      on every terminal path; failure retains private ownership until process
+      exit and blocks replacement/retry/reuse/exposure.
+- [x] Static application-source guarantees are separated from unproven
+      OS-internal directory/cache/log/socket/trust/network effects.
+- [x] Directory/account-record, cache, log, socket, trust-service, process-
+      metadata, and network effects each have a separate one-predicate D-100
+      review; none substitutes for another.
+- [x] Platform-contract ambiguity blocks; runtime observation cannot prove
+      universal absence and owner acceptance is not an automatic fallback.
+- [x] Explicit application resolution, application input, and ambient/default
+      scope are non-waivable under D-101; later exact acceptance can disposition
+      only separately disclosed OS-internal uncertainty.
+- [x] Future review categories use D-100, are non-authorizing, and include
+      `boundary_failed` for every check.
+- [x] The twelve unique check IDs and six outcome tokens meet D-100 lowercase-
+      ASCII grammar and 64/32-byte bounds; the longest canonical three-field
+      record remains within 256 bytes.
+- [x] The consumed query remains prohibited and the historical Open Directory
+      finding remains Manual verification pending.
+- [ ] A future implementation selects a supported platform API and enforces the
+      exact contract with focused tests; this documentation increment does not.
+- [x] P3/P4 and every operational successor remain Proposed/Blocked.
+
 ## D-100 evidence-privacy protocol planning
 
 - [x] The protocol has exactly a fixed version, a future-plan-owned check ID,

@@ -18,6 +18,15 @@ Last updated: 2026-09-01
 contains the ordered execution queue. Completed plans and reviews are the
 verification record; this roadmap does not create new completion evidence.
 
+## Completed account-directory planning
+
+P2 account-directory boundary planning is **Complete** with
+`PASS WITH ADVISORIES` as a documentation-only milestone. It defines an
+application-resolution policy and proof gates, but selects no platform API,
+accepts no OS-internal residual effect, leaves the historical finding Pending,
+and advances no operational milestone. P3 build-child containment, P4 signer
+binding, V0-3, and every operational/external action remain **Blocked**.
+
 ## Completed evidence-privacy planning
 
 P1 evidence-privacy protocol planning is **Complete** with

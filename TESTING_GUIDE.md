@@ -16,6 +16,38 @@ Last updated: 2026-09-01
 - Never report a check as passed unless its command completed successfully in
   the current increment.
 
+## D-101 documentation-only account-directory review
+
+The `personal-assistant-v0-account-directory-boundary-planning` increment has
+no resolver, platform adapter, API, Keychain handle, subprocess, parser, or
+target-Mac behavior to test. Review the future policy as a closed table. The
+application-owned no-input `Prohibited` policy and P1-compatible review tables
+pass documentation review only when independent input, exact scope-provenance,
+directory/account-record, cache, log, socket, trust-service, process-metadata,
+and network predicates are all present. Account/passwd/Open Directory/directory-service,
+numeric UID/eUID-to-account, login/session/console-user, home/standard/current/
+temporary/configuration-directory, search-list, shell/environment resolution,
+account-derived path materialization, caller-selected or ambient/default scope,
+subprocess/path fallback, incomplete source/dependency inventory, ambiguous
+platform contracts, missing `boundary_failed`, raw evidence, and inferred
+acceptance fail the contract. A generic, serializable, reusable, cross-attempt,
+IPC/log/persistence-visible capability fails. Cleanup failure must retain
+private ownership until process exit; replacement, retry, reuse, exposure, or
+early ownership loss fails.
+
+Table review also requires unique lowercase-ASCII check IDs and lowercase-ASCII
+outcomes matching `[a-z][a-z0-9_]*`, D-100's 64-byte check-ID and 32-byte outcome
+limits, mandatory `boundary_failed`, and a canonical three-field record no
+larger than 256 bytes. Duplicate/malformed/overlength literals fail.
+
+Runtime observation, tracing, packet capture, or “nothing visible” cannot prove
+the universal absence of OS-internal effects. Minimum evidence is the exact
+fifteen-path documentation diff, preserved D-097/D-098/D-099/D-100 evidence,
+format/link validation, repository health, secret scanning, protected-path and
+whitespace checks, independent review, and the repository completion gate. All
+account-directory, Apple, Keychain, signing, network, and product-runtime checks
+remain Not run.
+
 ## D-100 documentation-only evidence-protocol review
 
 The `personal-assistant-v0-evidence-privacy-protocol-planning` increment has no

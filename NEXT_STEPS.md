@@ -2,6 +2,22 @@
 
 Last updated: 2026-09-01
 
+## Completed P2 documentation-only increment
+
+`personal-assistant-v0-account-directory-boundary-planning` completed with
+`PASS WITH ADVISORIES`. It defines P2's application-resolution policy and proof
+gates without selecting an API, running a query, accepting residual effects, or
+changing product/external behavior. It establishes only documentation; every
+operational predicate is Not run, the historical Pending finding is unresolved,
+and P3/P4 plus every operational successor remain Blocked.
+
+No successor is **Ready**. After this completed change is owner-reviewed,
+published, and reconciled to clean synchronized `main`, the smallest possible
+next action is a separately approved documentation-only P3 build-child-
+containment plan. No P3 plan exists yet, and drafting one must not run a build,
+spawn a child process, access a credential/provider/external system, or begin an
+implementation gate.
+
 ## Completed P1 documentation-only increment
 
 `personal-assistant-v0-evidence-privacy-protocol-planning` completed with
@@ -10,11 +26,6 @@ without collecting evidence or changing product/external behavior. The
 completion establishes only the documentation protocol; it does not clear
 D-097, accept the Pending Open Directory boundary, prove signing, implement a
 parser/sanitizer, or make P2–P4 or an operational successor Ready.
-
-No successor is **Ready**. The smallest next action, only if separately selected
-and approved by the owner, is a bounded documentation-only P2 account-directory
-boundary plan. It must not rerun the consumed query or access Apple, Xcode,
-Keychain, signing, credentials, provider, network, product, or external systems.
 
 ## Completed documentation-only increment
 

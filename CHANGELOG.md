@@ -5,6 +5,17 @@ All notable repository changes are documented here. Entries distinguish verified
 ## Unreleased
 
 - Completed the owner-approved documentation-only
+  `personal-assistant-v0-account-directory-boundary-planning` increment from
+  clean synchronized `main` at `5bf3768` with `PASS WITH ADVISORIES`. Accepted
+  D-101 defines an application-level prohibition on explicit account/home/path
+  resolution plus independent input, exact scope-provenance, and one-predicate
+  effect gates. The architecture inventory now accurately records the existing
+  disconnected fixed-label fake-only Keychain reader. No platform API or
+  runtime control was added; every operational predicate remains Not run, the
+  consumed query remains prohibited, the historical finding remains Pending,
+  and P3/P4 plus every operational successor remain Blocked.
+
+- Completed the owner-approved documentation-only
   `personal-assistant-v0-evidence-privacy-protocol-planning` increment from
   clean synchronized `main` at `096cdbe` with `PASS WITH ADVISORIES`. D-100
   defines a closed

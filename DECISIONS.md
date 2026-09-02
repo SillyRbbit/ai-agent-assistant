@@ -4597,3 +4597,138 @@ before related operational work resumes.
 D-100 implements only the P1 documentation protocol identified by D-099. It
 does not supersede D-072, D-075, D-076, D-095, D-096, D-097, D-098, D-099,
 TS-017, any historical evidence, or any operational prerequisite.
+
+## D-101 - Prohibit explicit account-directory resolution in future signing-security checks
+
+Date: 2026-09-01
+Status: Accepted owner-authorized documentation-only governance decision
+
+## Context
+
+The consumed `keychain_identity_v1` wrapper called `pwd.getpwuid()` to derive an
+account home before constructing a default-Keychain path. Post-execution review
+found that the lookup may have invoked `opendirectoryd`, materialized a full
+account record, consulted configured local or remote directory systems, and
+used OS-owned cache/socket/log state. The wrapper emitted no account field and
+remote traffic is not proven, but the boundary was not separately disclosed or
+accepted. It remains Manual verification pending, and the consumed query must
+not run again.
+
+D-099 permits P2 to choose either a contained future design or a separately
+approved exact residual-risk acceptance. D-100 now supplies the required closed
+evidence policy. The smallest security-first P2 decision is to prohibit
+explicit resolution at the application boundary and separately require
+platform-effect evidence. The application policy alone does not establish
+operational account-directory containment or control over operating-system
+internals.
+
+## Decision
+
+Adopt the conceptual documentation invariant
+`ExplicitAccountResolutionPolicyV1::Prohibited` for any future signing-security
+checker. It is an application-resolution policy, not a claim of OS-level
+containment, implemented type, runtime DTO, platform API selection, or
+operational authorization.
+
+Future trusted application code:
+
+- takes no account, user, home, path, Keychain, profile, runtime, task, run,
+  workflow, caller, WebView, model, environment, or command-output identity;
+- does not call or wrap account/passwd databases, Open Directory, directory-
+  service clients, numeric UID/eUID-to-account derivation, login/session/
+  console-user resolution, home/standard/current/temporary/configuration-
+  directory derivation, search-list resolution, shell expansion, account
+  environment values, or constructed account paths;
+- does not materialize an account-home or Keychain path in argv, environment,
+  logs, errors, events, evidence, tests, or ordinary CI;
+- uses no subprocess, search-list enumeration, generic filesystem authority,
+  path fallback, or retry; and
+- may proceed only through one in-process application-owned, unexported,
+  non-serializable, attempt-bound, operation-specific opaque no-input wrapper
+  over an adapter-private platform-issued reference whose supported static
+  contracts are reviewed before implementation; the wrapper cannot cross IPC,
+  persistence, logs, or evidence, grants no generic enumerate/read/write/
+  delete/sign authority, and cannot be reused across attempts. Cleanup is
+  attempted on every terminal path. Success destroys the native reference;
+  failure retains the wrapper and reference in private adapter-owned quarantine
+  until process exit and blocks replacement, retry, reuse, exposure, or early
+  ownership loss.
+
+Trusted application code owns the fixed policy and operation-specific wrapper;
+the target-gated platform adapter privately owns and destroys any native
+reference. Authoritative static evidence must establish three independent
+contracts: the selected API requires no application-supplied account identity
+or home/path resolution; exact scope provenance is one fixed application
+credential domain rather than ambient current-user, login-session, default-
+Keychain, default-search-list, current-directory, or environment authority; and
+the selected operation excludes account-record acquisition plus account/passwd,
+Open Directory, or directory-service resolution.
+
+The exact cache, log, socket, trust-service, process-metadata, and possible-
+network effects each require their own one-predicate D-100 disposition from the
+P2 plan. An absent, ambiguous, unsupported, or deprecated-without-a-supported-
+replacement contract produces only `contract_unproven`; private policy state,
+not that non-authorizing evidence token, keeps the successor Blocked. Runtime
+observation, tracing, packet capture, log inspection, or absence of visible
+effects cannot prove that undocumented OS internals never use those resources.
+
+The explicit application-resolution prohibition and the no-application-input
+and exact-scope-provenance contracts are non-waivable under D-101. A later
+separate exact decision and owner approval may disposition only specifically
+disclosed OS-internal effect uncertainty; it cannot authorize caller,
+environment, account, home, or path input, explicit resolution, ambient/default
+scope, fallback, retry, or reuse. Under the containment path, operational P2
+remains Blocked unless every input, provenance, directory, cache, log, socket,
+trust-service, process-metadata, and network predicate is satisfied.
+
+There is no automatic fallback to owner acceptance. Any future proposal to
+accept residual OS-internal effects requires a separate documentation decision,
+exact disclosure, and separate owner approval. It cannot alter the historical
+finding or authorize a rerun.
+
+Future review evidence uses only the D-100 `evidence_privacy_v1` tables recorded
+in the P2 plan. Every check remains non-authorizing, contains
+`boundary_failed`, and is privately bound to one plan/check/attempt. Source
+review additionally requires a fixed commit and complete predeclared adapter,
+reachable-helper, wrapper, FFI, and dependency-source inventory. No P2 evidence
+is collected in this increment.
+
+## Consequences
+
+- The P2 documentation policy can pass without pretending that it closes the
+  operational P2 boundary, that a suitable API exists, or that OS-internal
+  effects are absent.
+- Future implementation remains Blocked pending every exact input, provenance,
+  platform-effect, and source predicate, an exact adapter plan, focused tests,
+  security review, and owner approval.
+- The historical `getpwuid`/`opendirectoryd` finding remains Manual verification
+  pending; D-097 remains `failed` / `FAIL` / `Blocked` without a completion
+  marker, and its report/digests/findings remain unchanged.
+- No Apple, Xcode, Keychain, Security.framework, certificate, signing, build,
+  credential, provider, network, product, or external-system action is
+  authorized.
+- P3 build-child containment, P4 immutable signer binding, V0-3, and every
+  operational successor remain Proposed/Blocked.
+
+## Alternatives considered
+
+- Reuse `getpwuid` with better disclosure: rejected for this containment path;
+  it still materializes account-directory state.
+- Read `HOME`, username, shell state, or a caller-supplied path: rejected as
+  mutable or caller/environment-selected authority.
+- Construct a conventional account/Keychain path: rejected because it requires
+  account identity and creates filesystem/path authority.
+- Use a subprocess or default search-list enumeration: rejected because it
+  broadens process, path, and metadata boundaries.
+- Treat no visible runtime effect as proof: rejected because observation cannot
+  establish universal absence of undocumented OS behavior.
+- Accept residual effects in this decision: rejected because the owner approved
+  planning only, not residual-risk acceptance or operation.
+
+## Supersedes or is superseded by
+
+D-101 implements only the application-resolution prohibition and independent
+input, exact scope-provenance, and effect-suite proof gates identified by
+D-099's P2 documentation work. It does not supersede D-072, D-075, D-076,
+D-095, D-096, D-097, D-098, D-099, D-100, TS-017, any historical evidence, or
+any operational prerequisite.

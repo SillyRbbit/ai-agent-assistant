@@ -566,6 +566,34 @@ security/signing evidence. Necessary non-sensitive repository validation and
 governance metadata that are not derived from the inspected security target are
 separate from the three-field protocol record.
 
+D-101 defines the accepted documentation-only application-resolution policy.
+Future trusted application code must not resolve an account, username, numeric
+UID/eUID, login/session/console user, home or standard directory, current/
+temporary/configuration directory, search list, or Keychain filesystem path;
+read account/home environment values; use a caller-selected scope; invoke a
+directory-service client; or fall back to a subprocess or path. The application
+may own only an opaque no-input, process-private, non-serializable, attempt-
+bound, operation-specific wrapper over an adapter-private platform-issued
+reference. The wrapper grants no generic enumerate/read/write/delete/sign
+authority. Cleanup is attempted on every terminal path; success destroys the
+reference, while failure retains the wrapper/reference in private adapter-owned
+quarantine until process exit and blocks replacement, retry, reuse, exposure,
+or early ownership loss.
+
+Independent authoritative static input and exact scope-provenance contracts
+are mandatory and non-waivable under D-101. Provenance must bind one fixed
+application credential domain and reject ambient current-user/login/default-
+Keychain/default-search-list/current-directory/environment selection. Separate
+one-predicate reviews must cover account-record/directory resolution, every
+cache read/mutation, log emission, socket/IPC effect, trust evaluation/service,
+process-metadata path, and network effect caused by the selected operation. The
+application policy alone does not establish operational P2 containment. Source
+review can prove only the absence of prohibited application paths, not the
+absence of OS-internal effects. Ambiguous or unsupported contracts stay
+unavailable. A separately approved future disposition may address only exact
+OS-internal uncertainty; it cannot waive application resolution, input,
+provenance, or fallback rules.
+
 Any need for an unapproved dependency,
 WebView or subprocess networking,
 caller-selected trusted configuration, raw-content logging, persistent
