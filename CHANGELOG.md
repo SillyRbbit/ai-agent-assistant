@@ -5,6 +5,15 @@ All notable repository changes are documented here. Entries distinguish verified
 ## Unreleased
 
 - Completed the owner-approved documentation-only
+  `personal-assistant-v0-build-child-containment-planning` increment from clean
+  synchronized `main` at `b26e7b8` with `PASS WITH ADVISORIES`. D-102 defines
+  the fail-closed future build-child policy and preserves the operational blocker:
+  no supported target-Mac no-new-dependency mechanism currently proves
+  pre-effect outside-root-write/network denial and complete detached-descendant
+  ownership. No source, build, process, filesystem, network, Apple, Keychain,
+  signing, credential, provider, or external action ran.
+
+- Completed the owner-approved documentation-only
   `personal-assistant-v0-account-directory-boundary-planning` increment from
   clean synchronized `main` at `5bf3768` with `PASS WITH ADVISORIES`. Accepted
   D-101 defines an application-level prohibition on explicit account/home/path

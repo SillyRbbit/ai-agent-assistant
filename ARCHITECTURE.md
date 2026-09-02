@@ -18,6 +18,14 @@ Last updated: 2026-09-01
 > filesystem, logging, screenshot, attachment, external-system, or device path
 > implements or consumes that record today.
 >
+> The active P3 build-child-containment planning increment adds no architecture
+> edge. Its only purpose is to define the future application-owned containment
+> policy, closed evidence predicates, and stop conditions for build descendants.
+> No containment primitive, controller, build, process, network, filesystem,
+> credential, or target-Mac operation exists or is selected. Operational P3
+> remains Blocked until a supported no-new-dependency target-Mac mechanism proves
+> pre-effect filesystem/network control and detached-descendant ownership.
+>
 > The completed P2 account-directory planning increment also adds no architecture
 > edge. D-101 defines an application-level prohibition on explicit account,
 > home, and path resolution plus independent input, exact-provenance, and

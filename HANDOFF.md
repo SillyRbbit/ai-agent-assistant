@@ -2,6 +2,38 @@
 
 Last updated: 2026-09-01
 
+## Completed P3 build-child-containment planning
+
+The owner-approved documentation-only
+`personal-assistant-v0-build-child-containment-planning` increment from clean
+synchronized `main` at `b26e7b8f243b18533238654934704a6166c7f375` completed
+with `PASS WITH ADVISORIES`. It changed only its fifteen declared
+project-memory, plan, increment, and review files. It must define D-102's
+future fail-closed build-child-containment policy, a closed D-100 review table,
+and a dependency-ordered blocked path through primitive selection, controller
+implementation, target-Mac synthetic proof, and a later disposable no-sign
+build proof.
+
+No build, child process, probe, network, filesystem-effect test, Apple, Xcode,
+Keychain, certificate, signing, credential, provider, or product action is
+authorized. Output routing, process groups, clean Git status, post-hoc scans,
+and deprecated `sandbox-exec` cannot be presented as sufficient containment.
+Operational P3, P4, signing, and every product/external successor remain
+Blocked. Preserve D-097 `failed` / `FAIL` / `Blocked` without a completion
+marker, the Failed privacy finding, the Pending Open Directory boundary, and
+Not-run signing.
+
+The P3 documentation closeout is complete; its sole advisory is that no
+supported no-new-dependency target-Mac containment primitive, controller, or
+proof exists. P3-2, P4, signing, and every product/external successor remain
+Blocked. Do not infer that the passing documentation result grants operational
+authority.
+
+Exact resume prompt: “Read AGENTS.md, the full project-memory chain, D-099
+through D-102, and the valid completed P3 report. Do not begin, build, probe,
+or perform Apple/signing/external work. Report that no operational successor is
+Ready unless the owner separately selects and approves one bounded plan.”
+
 ## Completed P2 account-directory boundary planning
 
 The owner-approved documentation-only

@@ -2,6 +2,24 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-09-01 — Build output routing is not build-child containment
+
+**Observation:** The ordinary verification/build graph reaches npm lifecycle
+scripts, Cargo build scripts, Vite/Tauri descendants, compilers, and linkers.
+Routing `dist`, Cargo target, caches, or logs beneath a disposable root and
+killing a process group does not prevent outside-root writes, undeclared
+connections, reads of ambient host data, or a descendant that detaches with a
+new session.
+
+**Disposition:** The owner-approved P3 documentation increment records D-102's
+future fail-closed policy only. No supported target-Mac no-new-dependency
+primitive is selected. A later operational path must establish pre-effect
+filesystem/network control, authoritative descendant membership across
+reparenting/session escape, bounded quiescence, descriptor-bound cleanup, and
+D-100-minimized evidence. Post-hoc scans, clean Git status, output routing,
+process groups, and deprecated `sandbox-exec` alone cannot pass. No build,
+probe, process, network, signing, or external operation ran.
+
 ## 2026-09-01 — Explicit account resolution is not acceptable future containment
 
 **Observation:** The consumed wrapper needed only a Keychain scope but called

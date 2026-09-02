@@ -16,6 +16,39 @@ Last updated: 2026-09-01
 - Never report a check as passed unless its command completed successfully in
   the current increment.
 
+## D-102 documentation-only build-child-containment review
+
+The `personal-assistant-v0-build-child-containment-planning` increment has no
+containment primitive, controller, build, child, process, target-Mac probe, or
+operational evidence to test. Review the future policy as a closed table. It
+passes documentation review only if the fixed no-input application-owned
+attempt, transitive graph, executable/argument/working-directory identity,
+closed environment/descriptors, host-data read scope, filesystem root,
+pre-effect outside-root-write denial, declared/undeclared network control,
+descendant membership, deadline/cancellation, reaping, quiescence, pipes,
+descriptor-bound cleanup, quarantine, and D-100-minimized evidence requirements
+are separately present.
+
+Caller-selected launch authority, shell/generic runners, inherited ambient
+authority, unreviewed spawn/retry/fallback, raw child output, post-terminal
+effects, output routing as proof, process groups as membership proof, post-hoc
+scans as passing evidence, escaped/unreaped descendants, broad/following
+cleanup, abandoned cleanup ownership, incomplete source inventory, ambiguous
+contracts, missing `boundary_failed`, duplicate/overlength/non-ASCII IDs, or
+raw/free-text evidence fail the documentation contract. The 32 predeclared
+records retain D-100's lowercase ASCII and 64/32-byte token bounds and a
+canonical three-field record below 256 bytes. `contract_unproven` is
+non-authorizing and keeps the successor Blocked.
+
+Minimum evidence is the exact fifteen-path documentation diff, preservation of
+D-097/D-098/D-099/D-100/D-101 evidence, documentation formatting/link
+validation, repository health, secret scanning, protected-path and whitespace
+checks, independent architecture/security/code/debt/readiness review, and the
+completion gate. Build, npm/Cargo/Tauri/Vite, child/process, filesystem/network,
+Apple, Xcode, Keychain, certificate, signing, credential, provider, and
+product-runtime checks remain Not run. A passing documentation review does not
+prove containment or authorize P3-2.
+
 ## D-101 documentation-only account-directory review
 
 The `personal-assistant-v0-account-directory-boundary-planning` increment has
