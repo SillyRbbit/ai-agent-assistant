@@ -4,6 +4,25 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Completed with `PASS WITH ADVISORIES` the owner-approved documentation-only
+  D-108 applicability decision for exactly
+  `in_process_security_framework_ephemeral_challenge_proof_v1`. D-102's
+  build-child subject is split only while the frozen candidate has no build,
+  candidate-launched helper, child, subprocess or external executable, artifact,
+  application- or Rust-dependency-authored filesystem/network/socket/IPC API,
+  application- or Rust-dependency-selected dynamic/JIT/plugin/external-code
+  load, `codesign`, or product signing. Any definitive trigger makes D-102 fully
+  mandatory; ambiguity or drift records `boundary_failed` and also makes D-102
+  mandatory.
+  Historical D-107 remains 8 documented / 11 unproved; the additive current
+  interpretation is 9/10. Platform effects and ten total contracts remain
+  unproved, the candidate is unadmitted, and no successor is Ready. No product/
+  test source, dependency, configuration, capability, entitlement,
+  IPC, workflow, hook, or script path changed. Documentation files were written,
+  local validation/gate processes ran, and the approved read-only Git refresh
+  contacted the remote. No product-build, signing, Keychain/private-key,
+  target-Mac operational process or state-changing external action occurred.
+
 - Added an explicit D-107 operational-scope wording reconciliation. The
   published classification necessarily wrote documentation files and ran local
   validation and gate processes. Its unqualified historical `process` and

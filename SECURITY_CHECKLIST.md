@@ -7,6 +7,44 @@ Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
 production boundary exists.
 
+## D-108 D-102 non-build applicability decision
+
+- [x] The policy is fixed to
+      `in_process_security_framework_ephemeral_challenge_proof_v1`; it is not a
+      generic classifier, waiver, or caller-selected `not_applicable` route.
+- [x] The closed governance dispositions are exactly
+      `split_documented_for_frozen_non_build_class`, `split_not_accepted`, and
+      `boundary_failed`; they are not serialized as D-100 evidence tokens.
+- [x] The accepted disposition applies only to D-102's build-child subject and
+      only while every no-build/no-candidate-launched-helper/child/subprocess/
+      external-executable/no-artifact/no-application-or-Rust-dependency-
+      filesystem-network-IPC/dynamic-code exclusion remains exact.
+- [x] Any build, package, compiler, linker, lifecycle script, helper, child,
+      subprocess, external executable, artifact, staged/generated file,
+      application- or Rust-dependency-authored/selected/requested filesystem/
+      network/socket/IPC API, `codesign`, product signing, code-signature or
+      product-signature verification, notarization, distribution, release,
+      application- or Rust-dependency-selected dynamic-loader/JIT/plugin/
+      external code, or caller-selected authority makes D-102 fully mandatory.
+      Ambiguity or drift records `boundary_failed` and also makes D-102
+      mandatory.
+- [x] OS-managed Keychain, `securityd`, directory, cache, log, IPC, trust,
+      revocation, process-metadata, and network effects remain independently
+      `contract_unproven`; no-child scope is not no-effect proof.
+- [x] Historical D-107 remains byte-for-byte unchanged at 8 documented / 11
+      unproved; the additive current interpretation is 9/10 only.
+- [x] Ten independent D-107 contracts, the overall factual D-100
+      `contract_unproven` outcome, and `not_eligible_or_unproven` governance
+      result continue to block the candidate.
+- [ ] An eligible candidate or operational successor exists; both remain
+      Blocked.
+- [x] Documentation files were written, local validation/gate processes ran,
+      and the approved read-only Git refresh contacted the remote. No product/
+      test source, dependency, configuration, capability, entitlement, IPC,
+      workflow, hook, or script path changed, and no product-build, signing,
+      Keychain/private-key, target-Mac operational process or state-changing
+      external action occurred.
+
 ## D-107 in-process key-use containment classification
 
 - [x] The exact candidate, source register, nineteen contract IDs, and outcomes

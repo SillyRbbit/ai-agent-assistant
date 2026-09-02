@@ -16,6 +16,38 @@ Last updated: 2026-09-02
 - Never report a check as passed unless its command completed successfully in
   the current increment.
 
+## D-108 documentation-only D-102 applicability decision
+
+The `d102-non-build-proof-applicability-decision` increment implements no
+runtime classifier, containment primitive, identity source, Keychain call,
+private-key operation, product build, product child, product-runtime filesystem
+operation, product signing, or target-Mac proof. Test the documentation policy
+as a closed table.
+
+The positive row must match only the exact frozen D-107 candidate with every
+no-build/no-candidate-launched-helper/child/subprocess/external-executable/
+no-artifact/no-application-or-Rust-dependency-filesystem-network-socket-IPC-
+API/no-application-or-Rust-dependency-dynamic-loader-JIT-plugin-external-code/
+no-`codesign` exclusion intact. A negative policy decision may return
+`split_not_accepted`. A definitive excluded feature makes the candidate
+outside the class and D-102 fully mandatory without a split disposition;
+ambiguity or drift returns `boundary_failed` and also makes D-102 mandatory.
+
+Passing documentation review requires historical D-107 to remain unchanged at
+8 documented / 11 unproved, the additive D-108 current interpretation to say
+9/10 only, and the ten remaining contracts plus every successor to stay
+Blocked. The long governance disposition is not a D-100 evidence outcome;
+D-107's overall factual `contract_unproven` record remains unchanged.
+
+Minimum evidence is the exact fifteen-path documentation diff, protected
+D-096-through-D-107 evidence, formatting/link validation, repository health,
+secret scanning, whitespace checking, independent architecture/security/code/
+debt/readiness review, session inventory, and the completion gate. `npm run
+verify`, npm audit, builds, Apple/Xcode/Keychain/private-key/signing,
+target-Mac, provider, product, and state-changing external-system operational
+checks remain Not run by scope. The approved read-only Git refresh is recorded
+separately.
+
 ## D-107 documentation-only in-process key-use classification
 
 The `personal-assistant-v0-key-use-containment-classification` increment has no

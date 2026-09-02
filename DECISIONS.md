@@ -5462,3 +5462,158 @@ D-107 additively classifies only
 source register. It does not supersede D-072, D-075, D-076, D-095, D-096,
 D-097, D-098, D-099, D-100, D-101, D-102, D-103, D-104, D-105, D-106,
 TS-017, historical evidence, or any operational prerequisite.
+
+## D-108 - Split D-102 only for the frozen non-build proof class
+
+Date: 2026-09-02
+Status: Accepted owner-authorized documentation-only security-governance decision
+
+## Context
+
+D-102 defines a fail-closed future policy for a build-bearing child-process
+graph. D-107 froze a materially distinct conceptual in-process challenge with
+no build, helper, child, subprocess, executable, bundle, artifact, filesystem
+write, `codesign`, product-signing operation, or direct application-owned
+network request. D-107 correctly kept
+`d102_applicability_split_contract` unproved because no accepted decision
+defined whether that exact non-build class was outside D-102's subject.
+
+The owner authorized reconsideration of exactly that constraint. This decision
+must prevent both category error and waiver laundering: a build-child policy
+need not be presented as implemented for a class with no build or child, but
+removing those elements cannot weaken D-102 wherever any of them exists.
+
+## Decision
+
+Define `D102ApplicabilityPolicyV1` as a documentation policy for exactly:
+
+```text
+in_process_security_framework_ephemeral_challenge_proof_v1
+```
+
+It has only these human-readable governance dispositions:
+
+| Condition                                                                                             | Disposition                                   |
+| ----------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| The exact frozen candidate retains every exclusion and only D-102's build-child subject is classified | `split_documented_for_frozen_non_build_class` |
+| The bounded policy question is answered negatively without candidate drift                            | `split_not_accepted`                          |
+| A required fact is missing, ambiguous, contradictory, or the candidate/policy boundary drifts         | `boundary_failed`                             |
+
+Select exactly `split_documented_for_frozen_non_build_class`.
+
+This is not a D-100 factual evidence record. The selected governance token
+exceeds D-100's 32-byte outcome bound and must not be serialized into
+`evidence_privacy_v1`. D-107's exact factual record remains unchanged with
+outcome `contract_unproven`.
+
+The split is limited to D-102's build-child subject and exists only while all
+of these exclusions remain exact:
+
+- no product build, package, compiler, linker, lifecycle script, or build graph;
+- no helper, child, subprocess, shell, external executable, or detached
+  descendant;
+- no executable, bundle, staged file, generated file, signature artifact, or
+  other artifact generation;
+- no application- or Rust-dependency-authored, selected, or requested
+  filesystem/path API access, read, write, mutation, mapping, or file-loading
+  operation; OS-managed access internal to the fixed system-framework
+  operations remains separately unproved;
+- no `codesign`, code signing, product signing, code-signature or
+  product-signature verification, notarization, distribution, or release
+  operation;
+- no application- or Rust-dependency-authored, selected, or requested network,
+  socket, or IPC API operation; OS-managed effects internal to the frozen
+  Security framework/RNG operations remain separately unproved;
+- no application- or Rust-dependency-selected or requested dynamic-loader call,
+  module, plug-in, JIT-generated code, or external code path; OS loader behavior
+  for the fixed linked system frameworks remains separately unproved;
+- no direct application operation beyond the frozen sequence of one fixed-
+  domain fresh 32-byte challenge generation, one data-signature creation, and
+  one paired-public-key verification;
+- no caller-, model-, WebView-, environment-, current-directory-, account-,
+  home-, path-, runtime-, profile-, task-, run-, workflow-, or agent-selected
+  shape or identity; and
+- no ambiguity, unmodeled effect, fallback, retry, substitution, scope
+  expansion, or implementation drift.
+
+If a definitive excluded feature is present, the candidate is outside the
+frozen non-build class and D-102 is fully mandatory without a split
+disposition. If any required fact is missing, ambiguous, contradictory, or
+drifted, the disposition is `boundary_failed` and D-102 is also fully
+mandatory. There is no generic `not_applicable` state, caller-selected
+classification, score, compensating control, inferred acceptance,
+residual-risk acceptance, or fallback.
+
+D-102 is neither waived, satisfied, replaced, nor weakened. It remains fully
+binding for every product-signing, executable-generating, artifact-generating,
+build-bearing, helper, child, subprocess, or `codesign` path.
+
+The split does not disposition operating-system effects. Keychain database,
+`securityd`, directory, cache, log, IPC, trust, revocation, process-metadata,
+and possible OS-managed network effects remain independently
+`contract_unproven` under `platform_effect_contract`. No-child and no-direct-
+network scope are not no-effect proof.
+
+Historical D-107 remains byte-for-byte unchanged with eight `documented` and
+eleven `contract_unproven` rows. D-108 permits only this additive current
+interpretation:
+
+| Contract                            | Current additive disposition | Reason                                                                                                                                         |
+| ----------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `d102_applicability_split_contract` | `documented`                 | D-102's subject is build-child containment; the exact frozen non-build class is separately classified with automatic fail-closed reattachment. |
+
+The current prospective totals are therefore `documented=9` and
+`contract_unproven=10`. The ten unproved rows are
+`opaque_prebound_identity_contract`, `exact_signer_binding_contract`,
+`account_keychain_scope_contract`, `private_key_nonexport_contract`,
+`fixed_algorithm_contract`, `interaction_denial_contract`,
+`hard_deadline_cancellation_contract`, `late_result_rejection_contract`,
+`cleanup_quarantine_contract`, and `platform_effect_contract`.
+
+Every D-107 row remains conjunctive. The governance result remains exactly
+`not_eligible_or_unproven`; the candidate is not admitted and no successor is
+Ready.
+
+## Consequences
+
+- D-102 remains mandatory for P3, P4 product signing, every product build,
+  every executable-, artifact-, helper-, child-, subprocess-, or `codesign`-
+  bearing path, and every application- or Rust-dependency-requested filesystem
+  path operation in a proof candidate. OS-managed downstream effects remain
+  governed separately by `platform_effect_contract`.
+- D-108 creates no runtime classifier, containment primitive, identity source,
+  signing interface, architecture edge, evidence parser, or operational
+  authority.
+- D-096 present-session use and operational signing remain `not_run`.
+- D-101 and all ten listed contracts remain Blocked and unproved.
+- A later design change cannot inherit this split; it must first pass the exact
+  exclusion test, and ambiguity restores full D-102 applicability.
+- D-097 remains `failed` / `FAIL` / `Blocked` with its original report,
+  digests, Failed privacy finding, Pending Open Directory boundary, Not-run
+  signing, and absent completion marker. D-098 remains valid and non-reusable.
+- D-103 through D-107 remain immutable bounded records. P3-3 through P3-5, P4,
+  signing, V0-3, and every operational successor remain Blocked.
+
+## Alternatives considered
+
+- Keep the split unresolved: valid and fail-closed, but rejected because it
+  conflates D-102's build-child subject with an exactly non-build conceptual
+  class without improving any remaining boundary.
+- Mark D-102 generally `not_applicable`: rejected as an unsafe waiver and an
+  unbounded bypass route.
+- Treat no child as containment proof: rejected because scope reduction does
+  not satisfy D-102 for any build-bearing path.
+- Treat no direct application network call as no platform effect: rejected
+  because OS-managed Keychain, security, trust, cache, log, IPC, and network
+  effects remain unresolved.
+- Shorten and emit the selected disposition as D-100 evidence: rejected because
+  this is an internal governance decision, not one bounded external or target
+  predicate; the existing factual record remains the truthful output.
+
+## Supersedes or is superseded by
+
+D-108 additively dispositions only D-107's
+`d102_applicability_split_contract` for the exact frozen conceptual candidate.
+It does not supersede or weaken D-072, D-075, D-076, D-095, D-096, D-097,
+D-098, D-099, D-100, D-101, D-102, D-103, D-104, D-105, D-106, D-107,
+TS-017, historical evidence, or any operational prerequisite.

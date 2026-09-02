@@ -7,6 +7,42 @@ Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
 identifies which security boundaries are current, mocked, planned, or
 prohibited.
 
+## D-108 D-102 non-build applicability boundary
+
+D-108 accepts exactly the governance disposition
+`split_documented_for_frozen_non_build_class` for
+`in_process_security_framework_ephemeral_challenge_proof_v1`. This means only
+that D-102's build-child subject is not invoked by the frozen conceptual class
+while that class contains no build, helper, child, subprocess, external
+executable, bundle, artifact, staged or generated file, application- or Rust-
+dependency-authored/selected/requested filesystem/network/socket/IPC API,
+`codesign`, product-signing operation, or application- or Rust-dependency-
+selected dynamic-loader/JIT/plugin/external-code path. Its only direct
+application operations are the frozen fresh 32-byte challenge generation, one
+data-signature creation, and one paired-public-key verification. OS-managed
+access, IPC, network, or loader effects internal to those fixed operations are
+not accepted by this split and remain separately unproved.
+
+This is not a waiver, satisfaction, replacement, residual-risk acceptance, or
+generic `not_applicable` result. Any named trigger, caller/model/WebView/
+environment-selected authority, unmodeled effect, fallback, retry, or
+substitution definitively leaves the frozen class and makes D-102 fully
+mandatory. Ambiguity, missing facts, contradiction, scope expansion, or
+implementation drift records `boundary_failed` and also makes D-102 mandatory.
+D-102 remains fully binding for every product-signing, executable-generating,
+artifact-generating, build-bearing, helper, child, subprocess, or `codesign`
+path.
+
+Absence of an application child or direct application network request does not
+prove absence of Keychain database, `securityd`, directory, cache, log, IPC,
+trust, revocation, process-metadata, or OS-managed network effects. Those
+remain independently `contract_unproven` under `platform_effect_contract`.
+Ten D-107 contracts, including that platform-effect contract, remain unproved;
+the existing factual D-100 record remains `contract_unproven`, and the long
+D-108 governance disposition is not a D-100 evidence token. Historical D-107
+remains 8 documented / 11 unproved; the additive current interpretation is
+9/10. The candidate and every successor remain Blocked.
+
 ## D-107 in-process key-use containment classification boundary
 
 D-107 records `not_eligible_or_unproven` for exactly
