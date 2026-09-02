@@ -1,7 +1,7 @@
 # Cortexa roadmap
 
 Status: Authoritative milestone roadmap
-Last updated: 2026-08-29
+Last updated: 2026-09-01
 
 ## Status model
 
@@ -18,6 +18,16 @@ Last updated: 2026-08-29
 contains the ordered execution queue. Completed plans and reviews are the
 verification record; this roadmap does not create new completion evidence.
 
+## Completed documentation planning
+
+The owner-approved
+`personal-assistant-v0-signing-security-prerequisite-planning` increment is
+complete with `PASS WITH ADVISORIES` under valid D-098 schema-v3 lineage. It is
+documentation-only and cannot change product milestones. It maps separately approvable future privacy,
+account-directory, build-child-containment, and immutable signer-contract
+prerequisites while preserving D-097 Failed/Pending/Not-run evidence. No
+operational signing or product successor is Ready.
+
 ## Product milestones
 
 The owner-authorized D-098 terminal-failed successor-disposition recovery has a
@@ -30,7 +40,9 @@ the original `failed` / `FAIL` / `Blocked` result and no completion marker, and
 it carries the screenshot/privacy and Pending Open Directory evidence only to
 that exact documentation target. The tracked report necessarily records the
 later transition as Not run; only ignored schema-v3 state plus redacted
-`status` can evidence post-freeze admission. No successor begins automatically.
+`status` can evidence post-freeze admission. No successor begins automatically;
+the later separately owner-approved exact successor is active as recorded in
+the preceding documentation-planning section.
 Build containment, operational signing, V0-3, and all Apple, Keychain,
 external, or product work remain Blocked.
 

@@ -1,7 +1,7 @@
 # Cortexa testing guide
 
 Status: Authoritative testing standard
-Last updated: 2026-08-28
+Last updated: 2026-09-01
 
 ## Testing principles
 
@@ -15,6 +15,20 @@ Last updated: 2026-08-28
   expiry, and late outcomes where those states exist.
 - Never report a check as passed unless its command completed successfully in
   the current increment.
+
+## D-099 documentation-only evidence
+
+The `personal-assistant-v0-signing-security-prerequisite-planning` increment
+has no runtime contract or target-Mac operation to test. Its minimum
+evidence is the exact active schema-v3 lineage, a diff restricted to D-098's
+fifteen documentation paths, documentation formatting/link validation,
+repository health, secret scanning, protected-path proof, whitespace checking,
+and independent documentation/architecture/security/readiness review.
+
+Apple, Xcode, Keychain, certificate, signing, build, provider, credential,
+network, filesystem, and product-runtime checks are Not run by design. They
+must remain Not run rather than being inferred from predecessor evidence or a
+passing documentation closeout.
 
 ## Test layers
 

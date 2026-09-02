@@ -4426,3 +4426,58 @@ the failed predecessor.
 D-098 additively implements only the cumulative-evidence design deferred by
 D-097. It does not supersede D-072, D-075, D-076, D-095, D-096, D-097's
 terminal failure, TS-017, or any operational prerequisite.
+
+## D-099 - Limit the admitted signing-security successor to prerequisite documentation
+
+Date: 2026-09-01
+Status: Accepted owner-authorized documentation-only implementation decision
+
+## Context
+
+The valid D-098 schema-v3 disposition carries the published D-097 terminal
+failure into exactly one admitted successor:
+`personal-assistant-v0-signing-security-prerequisite-planning`. Its fifteen-path
+allowlist admits a narrow documentation closeout but does not clear the Failed
+screenshot/privacy finding, the Pending `getpwuid`/`opendirectoryd` boundary,
+the Not-run signed build, or any operational signing blocker.
+
+## Decision
+
+Use the admitted successor only to document four separately approvable future
+prerequisites: P1 privacy-safe categorical evidence, P2 an account-directory
+boundary disposition or contained resolver, P3 fail-closed executable
+build-child containment/observation, and P4 an application-owned immutable
+signer contract with a no-argument closed-output sanitizer. Each is Proposed or
+Blocked until its own exact plan, review, manual gates, and owner approval.
+
+The current increment may alter only D-098's exact fifteen documentation paths.
+It must retain `predecessor_disposition` lineage, preserve every predecessor
+status and digest claim, and state that a documentation completion marker, if
+earned, applies only to this plan. It never constitutes Keychain custody,
+private-key safety, signing, build containment, Apple-system, product, or
+external-system evidence.
+
+## Consequences
+
+- No Apple, Xcode, Keychain, certificate, private-key, signing, build,
+  credential, provider, network, product, Git publication, or external action
+  is authorized.
+- The completed planning record may make no operational successor Ready.
+- Future operational work stops on a prompt, selector ambiguity, raw-evidence
+  leak, unaccepted directory boundary, unproven child containment, or missing
+  immutable signer binding; it cannot retry or downgrade the historical record.
+
+## Alternatives considered
+
+- Treating current identity visibility as signing readiness: rejected; it is
+  not historical custody, signer binding, or an operational proof.
+- Using this documentation increment to rerun or resolve prior evidence:
+  rejected; the original query approval is consumed and the failures are
+  immutable.
+- Broadening the allowlist to implement a sanitizer or product capability:
+  rejected; that would exceed D-098 and needs a separate approved increment.
+
+## Supersedes or is superseded by
+
+D-099 adds bounded planning guidance only. It does not supersede D-072, D-075,
+D-076, D-095, D-096, D-097, D-098, TS-017, or any operational prerequisite.

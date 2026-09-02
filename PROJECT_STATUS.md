@@ -1,8 +1,24 @@
 # Project status
 
-Last updated: 2026-08-29
+Last updated: 2026-09-01
 
-## D-098 exceptional governance recovery
+## Completed signing-security prerequisite planning
+
+On 2026-09-01, the owner approved implementation of the exact
+[`personal-assistant-v0-signing-security-prerequisite-planning`](docs/plans/2026-08-29-personal-assistant-v0-signing-security-prerequisite-planning.md)
+documentation successor. It completed with `PASS WITH ADVISORIES` under valid
+D-098 schema-v3 lineage and the exact fifteen documentation paths. The plan
+documents future privacy, account-directory, build-child-containment, and
+immutable signer-contract prerequisites only. It changes no product capability
+or external state.
+
+D-097 remains `failed` / `FAIL` / `Blocked` without a completion marker. The
+historical screenshot/privacy failure remains Failed; the Open Directory
+boundary remains Manual verification pending; the signed build remains Not run.
+Apple, Xcode, Keychain, certificate, private-key, signing, build, credential,
+provider, network, and product work remain out of scope and Blocked.
+
+## Predecessor D-098 exceptional governance recovery
 
 The owner authorized
 [`v0-terminal-failed-successor-disposition-recovery`](docs/plans/2026-08-29-v0-terminal-failed-successor-disposition-recovery.md)
@@ -17,8 +33,8 @@ may record one exact schema-v3 lineage target:
 The tracked evidence freezes after required pre-disposition verification but
 before the argument-free record command. It therefore cannot claim that later
 transition ran; the ignored schema-v3 state and redacted `status` output are
-the sole post-freeze evidence. Nothing has been committed, published, or begun
-as a successor. The original state remains
+the sole post-freeze evidence. At that freeze, nothing had been committed,
+published, or begun as a successor. The original state remains
 `failed` / `FAIL` / `Blocked` with no completion marker. D-098 carries the
 historical screenshot/privacy failure and Pending Open Directory disclosure
 only into the named documentation target; it does not clear or downgrade them.
@@ -87,7 +103,7 @@ present-session key use, and fixed `not_proven` categories for technical non-
 extractability, historical absence of export, and exclusive custody. Only the
 evidence-standard documentation reconciliation was approved. The exact
 sanitizer, private-key use, build, signing, prompt, cleanup, and V0-3 remain
-Blocked and Not run. No new gate began.
+Blocked and Not run. At that historical point, no new gate had begun.
 
 Latest post-gate review found that the consumed wrapper's `getpwuid` lookup may
 cross `opendirectoryd` account-record, local/remote directory-service, and OS

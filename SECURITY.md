@@ -1,7 +1,7 @@
 # Security policy and development guardrails
 
 Status: Authoritative security policy
-Last updated: 2026-08-29
+Last updated: 2026-09-01
 
 Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
 identifies which security boundaries are current, mocked, planned, or
@@ -532,6 +532,14 @@ successor admissible. Its tracked report freezes before the transition and
 cannot attest its later result; only the ignored schema-v3 state and redacted
 `status` output may do so. No Apple, Xcode, Keychain, signing, credential,
 provider, network, or product action is authorized.
+
+The completed exact D-098 successor is documentation-only. It preserves the
+historical screenshot/privacy failure as Failed and the
+`getpwuid`/`opendirectoryd` boundary as Manual verification pending. It may
+describe, but not operate, the separately approvable P1 evidence-privacy, P2
+account-directory, P3 build-child-containment, and P4 immutable-signer
+prerequisites. A passing documentation closeout is not evidence of Keychain
+custody, signing, containment, Apple-system safety, or product authority.
 
 Any need for an unapproved dependency,
 WebView or subprocess networking,

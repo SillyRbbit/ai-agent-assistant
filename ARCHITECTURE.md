@@ -1,7 +1,15 @@
 # Cortexa architecture
 
 Status: Authoritative current-state architecture
-Last updated: 2026-08-29
+Last updated: 2026-09-01
+
+> Current documentation state (2026-09-01): the separately owner-approved
+> `personal-assistant-v0-signing-security-prerequisite-planning` increment is
+> complete with `PASS WITH ADVISORIES` under valid D-098 schema-v3 lineage. It
+> documents future privacy,
+> account-directory, build-child-containment, and signer-contract prerequisites
+> only. It changes no product architecture edge and cannot resolve D-097,
+> authorize signing, or make an external-system capability available.
 
 ## Reading this document
 
@@ -75,7 +83,9 @@ results. The tracked evidence necessarily freezes before the argument-free
 transition; it therefore records that transition as Not run and delegates the
 sole post-freeze outcome to the ignored schema-v3 state plus redacted `status`
 output. Tracked text must not be used to infer whether that later transition
-ran. No successor begins automatically. Build-script containment, operational
+ran. No successor begins automatically; the later separately owner-approved
+exact documentation successor is active as recorded above. Build-script
+containment, operational
 signing, V0-3, and every product or external-system edge remain Blocked, so the
 current product topology is unchanged.
 

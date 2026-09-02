@@ -4,6 +4,16 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Completed the owner-approved documentation-only
+  `personal-assistant-v0-signing-security-prerequisite-planning` successor
+  under valid D-098 schema-v3 lineage with `PASS WITH ADVISORIES`. The bounded work documents future
+  evidence privacy, account-directory, build-child-containment, and immutable
+  signing-contract prerequisites. It preserves D-097 as `failed` / `FAIL` /
+  `Blocked` without a completion marker; the screenshot/privacy failure remains
+  Failed, the Open Directory boundary remains Pending, and signing remains Not
+  run. No product, Apple, Keychain, signing, build, credential, provider,
+  network, or external action is part of this increment.
+
 - Added the owner-authorized D-098 exceptional terminal-failed
   successor-disposition recovery from synchronized baseline `a417e5f`. The
   bounded design permits only one argument-free `record-failed-disposition`
