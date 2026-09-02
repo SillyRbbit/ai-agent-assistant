@@ -1,6 +1,27 @@
 # Next steps
 
-Last updated: 2026-09-01
+Last updated: 2026-09-02
+
+## Completed P3-2 documentation-only primitive selection
+
+`personal-assistant-v0-containment-primitive-selection` completed with
+`PASS WITH ADVISORIES` from clean synchronized `main` at `355e1ef`. D-103
+records exactly **no eligible candidate in the reviewed set**. The publicly
+documented App Sandbox/helper route requires entitlements and an entitlement-
+bearing code signature, both prohibited by P3-2's independent eligibility rule;
+that signature class is not equated with P4's later signer proof. The route also
+does not supply complete public detached-descendant ownership/quiescence
+contracts.
+The frozen negative controls and privileged/virtualized classes fail D-102 or
+the approved scope.
+
+No successor is **Ready**. P3-3 remains Blocked and cannot be planned as an
+implementation under D-103. The smallest possible future action is a separately
+owner-selected documentation decision that either changes one of D-102/P3-2's
+eligibility constraints or admits a newly identified candidate with an exact
+architecture and security review. This entry neither proposes nor authorizes
+such a change. Do not build, probe, add an entitlement or dependency, sign, or
+operate an external system.
 
 ## Completed P3 documentation-only increment
 
@@ -13,9 +34,9 @@ child, probe, credential/provider, or external action.
 
 It preserves D-097 Failed/Pending/Not-run evidence and does not make
 operational P3, P4 immutable signer binding, signing, V0-3, or any
-product/external successor Ready. No successor is **Ready**. A future P3-2
-primitive-selection plan requires separate owner selection and approval and
-must not be inferred from this documentation result.
+product/external successor Ready. At that closeout, a future P3-2 plan required
+separate approval; D-103 now records that later bounded review's negative
+selection. No operational successor is **Ready**.
 
 ## Completed P2 documentation-only increment
 

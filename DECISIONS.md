@@ -4817,3 +4817,110 @@ unsupported contract is `contract_unproven`; neither grants authority.
 D-102 implements only D-099's P3 documentation prerequisite. It does not
 supersede D-072, D-075, D-076, D-095, D-096, D-097, D-098, D-099, D-100, D-101,
 TS-017, any historical evidence, or any operational prerequisite.
+
+## D-103 - Select no build-child containment primitive from the frozen P3-2 candidate set
+
+Date: 2026-09-02
+
+Status: Accepted — owner-authorized documentation-only negative selection
+
+## Context
+
+D-102 requires one supported target-Mac primitive to deny unsafe filesystem and
+network effects before they occur while retaining authoritative ownership of
+the complete build descendant graph through detachment and reparenting. The
+owner approved a static authoritative-source review of one frozen candidate
+set. The review ran no build, primitive, child, probe, target-Mac inspection,
+Apple operation, or signing action. Approved read-only public documentation
+access was the sole external contact; no authenticated or state-changing
+external-system operation ran.
+
+The only plausible deep-review candidate combined an application-owned App
+Sandbox build helper with closed public supervision primitives: `posix_spawn`,
+`waitpid`, `kqueue` `EVFILT_PROC`, `setpgid`, and process-group signaling. Apple
+documents App Sandbox as entitlement-configured and documents helper
+inheritance through entitlement-bearing app/helper code signatures; Developer
+ID distribution additionally uses Developer ID signing. The review does not
+equate development/ad hoc signing with P4's later Developer ID signer-binding
+proof. Any prerequisite signing state or new entitlement nevertheless fails the
+approved independent P3-2 eligibility rule. The reviewed direct-child wait/
+reap, known-PID event observation, and mutable process-group contracts also do
+not establish complete application-owned descendant membership, containment-
+wide termination, and race-free quiescence across detachment or reparenting.
+
+The fixed negative controls remain insufficient: deprecated/private
+`sandbox-exec` profiles do not supply the full lifecycle or exact network
+contract; process groups neither deny effects nor establish durable graph
+membership; and post-hoc output-root scans occur after effects. Privileged
+system/Endpoint/Network Extension and virtual-machine/container classes require
+entitlements, signing, privilege, user/global state, or guest resources in the
+reviewed extension/VM routes. No exact supported OS-shipped macOS 14+ container
+candidate contract was identified, so that branch remains
+`contract_unproven`.
+
+## Decision
+
+Select **no eligible candidate in the reviewed set**. This is a bounded
+negative decision, not a claim that macOS has no possible containment
+mechanism. It does not admit a candidate outside the frozen set, weaken a D-102
+predicate, accept residual risk, or authorize P3-3.
+
+The frozen set is:
+
+- deep review:
+  `app_sandbox_build_helper_plus_libsystem_supervision_v1`;
+- negative controls: `sandbox_exec_supervisor_v1`,
+  `posix_process_group_supervisor_v1`, and
+  `output_root_posthoc_scan_v1`; and
+- scope eligibility only: `privileged_system_extension_v1` and
+  `virtual_machine_or_container_v1`.
+
+Every D-102 eligibility predicate is conjunctive. Missing, ambiguous,
+deprecated, conflicting, inferred, or merely empirical evidence remains
+`contract_unproven`. The ten P3-3 implementation-source review checks remain
+`not_run` because no controller source exists. Static public citations and
+closed dispositions carry no runtime, product, signing, or successor authority.
+Only the App Sandbox composition entered the D-100 contract review. The
+negative controls retain D-102's prior exclusions and the scope-only classes
+failed the independent eligibility screen; neither is represented as a D-100
+candidate attempt. The one static attempt privately binds candidate, check,
+and attempt identity. Unexpected source, provenance loss, target-derived data,
+or a malformed record is `boundary_failed` and stops without retry.
+
+## Consequences
+
+- P3-2 closes truthfully as a negative documentation selection; it does not
+  establish operational containment.
+- P3-3, P3-4, P3-5, P4, signing, V0-3, and every product or external successor
+  remain Blocked. No successor is Ready.
+- A future proposal must first obtain separate owner approval to change an
+  eligibility constraint or introduce a new candidate and architecture. It may
+  not silently add an entitlement, signing dependency, privilege, dependency,
+  VM/container, system extension, external resource, or residual-risk waiver.
+- D-097 remains `failed` / `FAIL` / `Blocked` without a completion marker. Its
+  report and digests, historical Failed privacy finding, Pending Open Directory
+  boundary, and Not-run signing results remain unchanged.
+- No source, dependency, lockfile, configuration, capability, CSP, permission,
+  entitlement, workflow, hook, build, process, filesystem, network, Apple,
+  Keychain, signing, credential, provider, product, or external state changes.
+
+## Alternatives considered
+
+- Accept App Sandbox helper signing as harmless setup: rejected because it is
+  the circular authority that P3 is meant to protect before signing.
+- Combine App Sandbox with wait, kqueue, or process groups and infer full graph
+  ownership: rejected because no reviewed public contract establishes it.
+- Use Endpoint Security, Network Extension, or another system extension:
+  rejected because it changes privilege, entitlement, signing, user-approval,
+  and persistent system-state boundaries.
+- Use a VM or container: rejected because the reviewed VM route adds an
+  entitlement, guest image, and storage, while no exact qualifying container
+  contract was identified. Neither branch satisfies this frozen review.
+- Relax one mandatory contract or accept residual risk: rejected; outside this
+  approved increment and incompatible with D-102.
+
+## Supersedes or is superseded by
+
+D-103 applies D-102 to only the frozen P3-2 candidate set. It does not
+supersede D-072, D-075, D-076, D-095, D-096, D-097, D-098, D-099, D-100, D-101,
+D-102, TS-017, any historical evidence, or any operational prerequisite.

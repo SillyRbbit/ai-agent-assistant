@@ -1,7 +1,7 @@
 # Cortexa roadmap
 
 Status: Authoritative milestone roadmap
-Last updated: 2026-09-01
+Last updated: 2026-09-02
 
 ## Status model
 
@@ -17,6 +17,14 @@ Last updated: 2026-09-01
 `PROJECT_STATUS.md` contains detailed capability evidence. `NEXT_STEPS.md`
 contains the ordered execution queue. Completed plans and reviews are the
 verification record; this roadmap does not create new completion evidence.
+
+## Completed P3-2 containment primitive selection
+
+P3-2 is **Complete** with `PASS WITH ADVISORIES` as a documentation-only
+bounded negative selection. D-103 finds no eligible candidate in the frozen
+reviewed set without claiming universal impossibility. No primitive or
+operational proof exists. P3-3, P3-4, P3-5, P4, signing, V0-3, and every
+product/external action remain **Blocked**. No successor is **Ready**.
 
 ## Completed build-child-containment planning
 

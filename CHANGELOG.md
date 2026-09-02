@@ -5,6 +5,19 @@ All notable repository changes are documented here. Entries distinguish verified
 ## Unreleased
 
 - Completed the owner-approved documentation-only
+  `personal-assistant-v0-containment-primitive-selection` static review from
+  clean synchronized `main` at `355e1ef` with `PASS WITH ADVISORIES`. D-103
+  selects no eligible candidate in the frozen reviewed set. The App Sandbox
+  helper composition fails the no-entitlement/signing/no-circular-dependency
+  gate and lacks complete public detached-descendant lifecycle contracts; all
+  negative-control, privileged, and virtualized candidates also fail D-102 or
+  the approved scope. P3-3 and every operational successor remain Blocked. No
+  source, dependency, configuration, entitlement, build, process, target-Mac,
+  authenticated Apple, signing, credential, provider, product, or state-changing
+  external action ran; approved public documentation reads were the sole
+  external contact.
+
+- Completed the owner-approved documentation-only
   `personal-assistant-v0-build-child-containment-planning` increment from clean
   synchronized `main` at `b26e7b8` with `PASS WITH ADVISORIES`. D-102 defines
   the fail-closed future build-child policy and preserves the operational blocker:

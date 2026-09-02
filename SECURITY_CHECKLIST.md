@@ -1,11 +1,47 @@
 # Cortexa security checklist
 
 Status: Authoritative change and release security review checklist
-Last updated: 2026-09-01
+Last updated: 2026-09-02
 
 Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
 production boundary exists.
+
+## D-103 containment primitive selection
+
+- [x] Candidate identities are frozen; there is no catch-all or caller-selected
+      alternative.
+- [x] Every D-102 eligibility rule is conjunctive; no score, compensating
+      control, empirical inference, or residual-risk acceptance is permitted.
+- [x] The App Sandbox helper candidate is rejected because it requires
+      entitlement/signing state prohibited independently by P3-2; that signature
+      class is not equated with P4's later signer proof. It also lacks complete
+      public detached-descendant membership, shutdown, and quiescence contracts.
+- [x] `sandbox-exec`, process-group supervision, and output-root/post-hoc scans
+      remain fixed negative controls and are not containment proof.
+- [x] Privileged system/Endpoint/Network Extension routes are rejected for
+      entitlement, signing, privilege, or persistent-state expansion; the VM
+      route also requires an entitlement and guest resources. The container
+      branch remains `contract_unproven` because no exact qualifying contract
+      was identified.
+- [x] All ten P3-3 implementation-source checks remain `not_run`; absent or
+      ambiguous mandatory contracts remain `contract_unproven`.
+- [x] Only the deep-review candidate enters one private candidate/check/attempt-
+      bound D-100 review; negative controls retain prior exclusions and scope-
+      only classes remain outside the D-100 attempt.
+- [x] Unexpected source/provenance state, target-derived data, or malformed
+      evidence is `boundary_failed` and stops without retry.
+- [x] Public source citations and categorical dispositions contain no target-
+      derived sensitive data and grant no operational authority.
+- [x] The decision says only “no eligible candidate in the reviewed set”; it
+      does not claim universal impossibility or admit an unreviewed candidate.
+- [x] D-097 and every historical Failed/Pending/Not-run fact remain unchanged.
+- [ ] A fully eligible primitive and separately approved P3-3 controller plan
+      exist; both remain Blocked.
+- [x] No source, dependency, entitlement, build, process, probe, target-Mac,
+      Apple, Keychain, signing, credential, provider, product, or external
+      state change occurred; approved read-only public documentation access was
+      the sole external contact.
 
 ## D-102 build-child-containment planning
 

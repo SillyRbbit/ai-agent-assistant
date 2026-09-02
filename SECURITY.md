@@ -1,11 +1,47 @@
 # Security policy and development guardrails
 
 Status: Authoritative security policy
-Last updated: 2026-09-01
+Last updated: 2026-09-02
 
 Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
 identifies which security boundaries are current, mocked, planned, or
 prohibited.
+
+## D-103 containment primitive selection boundary
+
+D-103 records a bounded negative static decision: no eligible candidate in the
+frozen P3-2 reviewed set. The publicly documented App Sandbox/helper composition
+requires entitlements and entitlement-bearing app/helper code signatures.
+Developer ID distribution separately uses Developer ID signing; this review
+does not equate development/ad hoc signing with P4's later signer proof. Either
+a new entitlement or any prerequisite signing state independently fails the
+approved P3-2 eligibility gate. The reviewed `waitpid`, `kqueue` `EVFILT_PROC`,
+`setpgid`, and process-group contracts do not establish complete application-
+owned membership, containment-wide termination, direct-child reaping plus
+graph-wide quiescence across detachment/reparenting, or D-102's exact pre-effect
+filesystem/network boundary.
+
+Deprecated/private `sandbox-exec`, mutable process groups, and post-hoc scans
+remain negative controls. Endpoint Security, Network Extension, system
+extensions, and virtual machines cannot be substituted silently: the reviewed
+routes require privilege, entitlements, signing, user/global state, or guest
+resources. No exact supported OS-shipped macOS 14+ container candidate contract
+was identified. Missing or ambiguous public contracts remain
+`contract_unproven`; static citations and categorical dispositions are not
+runtime evidence or authority.
+
+Only the App Sandbox composition entered one privately candidate/check/attempt-
+bound D-100 contract review. Negative controls retain D-102's existing
+exclusions and the scope-only classes failed the independent eligibility
+screen. Unexpected sources, incomplete provenance, target-derived data, or
+malformed evidence is `boundary_failed` and stops without retry.
+
+No source, entitlement, dependency, process, probe, target-Mac, Apple, signing,
+or state-changing external operation is part of this decision. Approved read-
+only public documentation access was the sole external contact. P3-3 and every
+operational successor remain Blocked. D-097's Failed privacy finding, Pending
+Open Directory boundary, Not-run signing state, original report/digests, and
+missing completion marker remain unchanged.
 
 ## Security model
 

@@ -5,6 +5,17 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Current plan state
 
 The most recently completed owner-approved plan is
+[`personal-assistant-v0-containment-primitive-selection`](docs/plans/2026-09-02-personal-assistant-v0-containment-primitive-selection.md).
+It completed with `PASS WITH ADVISORIES` as a documentation-only authoritative
+source review. D-103 selects no eligible candidate in the frozen reviewed set;
+it does not claim universal impossibility. The App Sandbox helper candidate is
+entitlement/signing-circular and lacks complete public detached-descendant
+lifecycle contracts. All other frozen candidates fail D-102 or the approved
+scope. P3-3 and every operational successor remain Blocked, and no build,
+probe, target-Mac, signing, source, dependency, configuration, or external
+action is authorized.
+
+The preceding completed owner-approved plan is
 `personal-assistant-v0-build-child-containment-planning`. It is
 documentation-only and completed with `PASS WITH ADVISORIES`. It defines
 D-102's future fail-closed build-child containment policy without selecting or
@@ -14,7 +25,7 @@ currently proves pre-effect outside-root-write/network denial and full
 detached-descendant containment. No build, probe, signing, or external action
 is authorized.
 
-The most recently completed owner-approved plan is
+An earlier completed owner-approved plan is
 [`personal-assistant-v0-account-directory-boundary-planning`](docs/plans/2026-09-01-personal-assistant-v0-account-directory-boundary-planning.md).
 It completed with `PASS WITH ADVISORIES` and is documentation-only. Accepted
 D-101 defines `ExplicitAccountResolutionPolicyV1::Prohibited`, requires
@@ -990,6 +1001,7 @@ condition is reached.
 
 | Plan                                             | Status   | Owner              | Last updated |
 | ------------------------------------------------ | -------- | ------------------ | ------------ |
+| P3-2 containment primitive selection             | Complete | Project owner      | 2026-09-02   |
 | Personal Assistant v0 build-child containment    | Complete | Project owner      | 2026-09-01   |
 | Personal Assistant v0 account-directory boundary | Complete | Project owner      | 2026-09-01   |
 | Personal Assistant v0 evidence-privacy protocol  | Complete | Project owner      | 2026-09-01   |

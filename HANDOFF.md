@@ -1,6 +1,40 @@
 # Handoff
 
-Last updated: 2026-09-01
+Last updated: 2026-09-02
+
+## Completed P3-2 containment primitive selection
+
+The owner-approved documentation-only
+[`personal-assistant-v0-containment-primitive-selection`](docs/plans/2026-09-02-personal-assistant-v0-containment-primitive-selection.md)
+increment completed from clean synchronized `main` at
+`355e1efcdd2c5d651dd1609959581e7184b61b60` with `PASS WITH ADVISORIES`.
+Accepted D-103 records exactly **no eligible candidate in the reviewed set**.
+The only deep-review candidate, an App Sandbox helper plus public libSystem
+supervision, requires entitlements and an entitlement-bearing code signature,
+independently violating P3-2 eligibility without equating that signature class
+with P4's later signer proof. It also lacks complete public contracts for
+application-owned detached-descendant membership, containment-wide termination,
+and race-free quiescence. Fixed negative controls and privileged or virtualized
+classes also fail D-102 or the approved scope.
+
+No primitive, controller, build, child, probe, target-Mac inspection, source,
+dependency, configuration, entitlement, Apple, Xcode, Keychain, certificate,
+signing, credential, provider, product, or authenticated/state-changing external
+action ran. Preserve D-097 as `failed` / `FAIL` / `Blocked` with no completion
+marker, its original report and digests, the historical Failed screenshot/
+privacy finding, the Pending Open Directory boundary, and every Not-run signing
+result. Approved read-only public documentation access was the sole external
+contact. P3-3, P3-4, P3-5, P4, signing, V0-3, and every operational successor
+remain Blocked; no successor is Ready.
+
+Exact resume prompt: “Read AGENTS.md, the complete required project-memory and
+security/testing chain, D-097 through D-103, and the valid completed P3-2
+report. Preserve every historical Failed, Pending, and Not-run result. Report
+that D-103 selected no eligible candidate in the frozen reviewed set and that
+no successor is Ready. Do not begin a gate, add or run a candidate, build,
+probe, sign, change entitlements, or operate Apple, Xcode, Keychain,
+credentials, providers, product code, or external systems without a separately
+approved bounded plan that changes the blocked architecture constraints.”
 
 ## Completed P3 build-child-containment planning
 
@@ -23,16 +57,18 @@ Blocked. Preserve D-097 `failed` / `FAIL` / `Blocked` without a completion
 marker, the Failed privacy finding, the Pending Open Directory boundary, and
 Not-run signing.
 
-The P3 documentation closeout is complete; its sole advisory is that no
-supported no-new-dependency target-Mac containment primitive, controller, or
-proof exists. P3-2, P4, signing, and every product/external successor remain
-Blocked. Do not infer that the passing documentation result grants operational
-authority.
+At that P3-1 closeout, its sole advisory was that no supported no-new-dependency
+target-Mac containment primitive, controller, or proof existed and P3-2 was
+Blocked. D-103 later completed the bounded P3-2 static review with no eligible
+candidate in its frozen set. P3-3, P4, signing, and every product/external
+successor remain Blocked. Do not infer operational authority from either
+passing documentation result.
 
-Exact resume prompt: “Read AGENTS.md, the full project-memory chain, D-099
-through D-102, and the valid completed P3 report. Do not begin, build, probe,
-or perform Apple/signing/external work. Report that no operational successor is
-Ready unless the owner separately selects and approves one bounded plan.”
+Historical resume prompt at P3-1 closeout: “Read AGENTS.md, the full project-
+memory chain, D-099 through D-102, and the valid completed P3 report. Do not
+begin, build, probe, or perform Apple/signing/external work. Report that no
+operational successor is Ready unless the owner separately selects and approves
+one bounded plan.” The current resume prompt is the P3-2 prompt above.
 
 ## Completed P2 account-directory boundary planning
 

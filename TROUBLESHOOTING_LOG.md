@@ -2,6 +2,28 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-09-02 — Frozen P3-2 set has no eligible containment primitive
+
+**Observation:** Apple documents App Sandbox as entitlement-configured and
+documents sandboxed embedded helpers as entitlement-bound and signed. That
+makes the only plausible frozen candidate fail P3-2's independent no-new-
+entitlement/no-prerequisite-signing rule; it does not equate that signature
+class with P4's later signer proof. Public direct-child waiting/reaping, known-
+PID event observation, and mutable process-group contracts also do not establish
+D-102's complete application-owned graph membership and terminal quiescence
+after detachment or reparenting.
+
+**Disposition:** D-103 selects no eligible candidate in the reviewed set.
+Deprecated/private `sandbox-exec`, process groups, and post-hoc scans remain
+negative controls. Privileged extensions and the reviewed VM route are scope-
+ineligible because they add entitlement, signing, privilege, persistent-state,
+or guest-resource boundaries; no exact qualifying container contract was
+identified. This is a bounded documentation result, not a universal
+impossibility claim or operational failure. P3-3 remains Blocked; no build,
+probe, source, entitlement, target-Mac, authenticated Apple, signing, or state-
+changing external action ran. Approved read-only public documentation access
+was the sole external contact.
+
 ## 2026-09-01 — Build output routing is not build-child containment
 
 **Observation:** The ordinary verification/build graph reaches npm lifecycle
