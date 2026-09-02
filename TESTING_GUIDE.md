@@ -16,6 +16,31 @@ Last updated: 2026-09-02
 - Never report a check as passed unless its command completed successfully in
   the current increment.
 
+## D-104 documentation-only bootstrap trust-class review
+
+The `personal-assistant-v0-containment-bootstrap-trust-decision` increment has
+no helper, signature, entitlement, primitive, controller, build, child,
+target-Mac probe, or operational evidence to test. Review only the closed
+distinction between `sandbox_activation_adhoc_v1` and P4's
+`product_signer_binding_v1`. Passing means the distinction is bounded,
+non-substitutable, sourced from official public documentation, and changes only
+a future static-review classification.
+
+It fails if it treats an ad-hoc seal as Developer ID evidence, P4 identity,
+containment, target availability, helper-bootstrap proof, or permission to add
+an entitlement or run a signing command. It also fails if D-102 pre-effect,
+graph, terminal, cleanup, evidence, no-root, no-global-state, or
+no-new-dependency requirements are weakened, or if P3-3 is described as Ready.
+Absent or ambiguous public contracts remain `contract_unproven`; all operational
+and target-Mac checks remain Not run.
+
+Minimum evidence is the exact fifteen-path documentation diff, authoritative
+public-source register, D-097 through D-103 preservation, formatting/link
+validation, repository health, secret scanning, protected-path and whitespace
+checks, independent review, and the completion gate. `npm run verify`, builds,
+process/probe checks, Apple/Xcode/Keychain/signing/provider/product checks, and
+all external operations remain Not run by scope.
+
 ## D-103 documentation-only containment primitive selection review
 
 The `personal-assistant-v0-containment-primitive-selection` increment has no

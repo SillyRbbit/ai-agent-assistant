@@ -2,6 +2,21 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-09-02 — P3 bootstrap signature must not be conflated with P4 identity
+
+**Observation:** D-103's frozen App Sandbox helper review correctly rejected
+entitlement-bearing signing as a P3-2 prerequisite. Official public Apple
+documentation distinguishes an ad-hoc code seal, which has no signing identity,
+from Developer ID identity binding. That distinction alone does not prove that
+a sandbox helper, its bootstrap, or its descendants satisfy D-102.
+
+**Disposition:** D-104 permits only a future static candidate re-review to
+consider a narrowly defined identity-free sandbox-activation seal separately
+from P4. D-102's pre-effect effect control, bootstrap provenance, descendant
+membership, termination, reaping, quiescence, cleanup, and evidence predicates
+remain mandatory and unproved. No signing, entitlement, build, probe,
+target-Mac, Apple, Keychain, or external action has run; P3-3 remains Blocked.
+
 ## 2026-09-02 — Frozen P3-2 set has no eligible containment primitive
 
 **Observation:** Apple documents App Sandbox as entitlement-configured and

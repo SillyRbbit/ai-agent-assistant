@@ -18,6 +18,15 @@ Last updated: 2026-09-02
 contains the ordered execution queue. Completed plans and reviews are the
 verification record; this roadmap does not create new completion evidence.
 
+## Completed P3 containment bootstrap-trust decision
+
+The owner-approved documentation-only bootstrap-trust decision is **Complete**
+with `PASS WITH ADVISORIES`.
+It evaluates only whether a future identity-free ad-hoc sandbox-activation seal
+is categorically distinct from P4's Developer ID signer binding. It neither
+selects a primitive nor relaxes D-102's containment contracts. P3-3 through
+P3-5, P4, signing, V0-3, and every operational successor remain **Blocked**.
+
 ## Completed P3-2 containment primitive selection
 
 P3-2 is **Complete** with `PASS WITH ADVISORIES` as a documentation-only

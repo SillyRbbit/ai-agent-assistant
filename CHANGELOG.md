@@ -5,6 +5,16 @@ All notable repository changes are documented here. Entries distinguish verified
 ## Unreleased
 
 - Completed the owner-approved documentation-only
+  `personal-assistant-v0-containment-bootstrap-trust-decision` increment from
+  clean synchronized `main` at `a6601f9`. Draft D-104 distinguishes a future
+  identity-free sandbox-activation seal from P4's later Developer ID signer
+  binding, without selecting a primitive or altering any D-102 containment
+  predicate. No source, dependency, configuration, entitlement, build, process,
+  target-Mac, Apple, Keychain, signing, credential, provider, product, or
+  state-changing external action ran. The decision closed with `PASS WITH
+ADVISORIES`; P3-3 and all operational successors remain Blocked.
+
+- Completed the owner-approved documentation-only
   `personal-assistant-v0-containment-primitive-selection` static review from
   clean synchronized `main` at `355e1ef` with `PASS WITH ADVISORIES`. D-103
   selects no eligible candidate in the frozen reviewed set. The App Sandbox

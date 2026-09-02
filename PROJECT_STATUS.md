@@ -2,6 +2,25 @@
 
 Last updated: 2026-09-02
 
+## Completed P3 containment bootstrap trust decision
+
+The owner-approved documentation-only
+`personal-assistant-v0-containment-bootstrap-trust-decision` increment completed
+with `PASS WITH ADVISORIES` from clean synchronized `main` at
+`a6601f9920027dfcdc8dd43f99a27554fe0ac786`.
+Draft D-104 distinguishes only a future identity-free ad-hoc sandbox-activation
+seal from P4's later Developer ID signer binding. It does not select a
+containment primitive, authorize signing or entitlements, alter D-102, or
+establish any operational evidence. The helper bootstrap, pre-effect effect
+control, complete descendant ownership, terminal shutdown, reaping, and
+quiescence remain unproved.
+
+No runtime, source, dependency, configuration, build, process, target-Mac,
+Apple, Keychain, certificate, private-key, signing, credential, provider,
+product, or external state has changed. P3-3 through P3-5, P4, signing, V0-3,
+and every operational successor remain Blocked. D-097/D-098/D-099/D-100/D-101/
+D-102/D-103 and all historical Failed/Pending/Not-run evidence remain intact.
+
 ## Completed P3-2 containment primitive selection
 
 The owner-approved documentation-only

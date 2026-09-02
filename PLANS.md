@@ -5,6 +5,15 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Current plan state
 
 The most recently completed owner-approved plan is
+[`personal-assistant-v0-containment-bootstrap-trust-decision`](docs/plans/2026-09-02-personal-assistant-v0-containment-bootstrap-trust-decision.md).
+It completed with `PASS WITH ADVISORIES` as documentation-only evidence. Its
+narrow D-104 question is whether a future
+identity-free ad-hoc sandbox-activation seal may be reviewed separately from
+P4's later Developer ID signer binding. It selects no primitive, changes no
+containment requirement, and authorizes no signing, entitlement, build, or
+external action. P3-3 and all operational successors remain Blocked.
+
+The most recently completed owner-approved plan is
 [`personal-assistant-v0-containment-primitive-selection`](docs/plans/2026-09-02-personal-assistant-v0-containment-primitive-selection.md).
 It completed with `PASS WITH ADVISORIES` as a documentation-only authoritative
 source review. D-103 selects no eligible candidate in the frozen reviewed set;
@@ -1001,6 +1010,7 @@ condition is reached.
 
 | Plan                                             | Status   | Owner              | Last updated |
 | ------------------------------------------------ | -------- | ------------------ | ------------ |
+| P3 containment bootstrap trust decision          | Complete | Project owner      | 2026-09-02   |
 | P3-2 containment primitive selection             | Complete | Project owner      | 2026-09-02   |
 | Personal Assistant v0 build-child containment    | Complete | Project owner      | 2026-09-01   |
 | Personal Assistant v0 account-directory boundary | Complete | Project owner      | 2026-09-01   |
