@@ -2,6 +2,92 @@
 
 Last updated: 2026-09-02
 
+## GUI conversation Return and Graph wheel interactions
+
+Status: **Verified complete with advisories.** Exact unmodified Return sends one
+enabled, non-empty conversation request through the existing deterministic,
+volatile mock path. Shift/Alt/Control/Meta Return, IME composition, WebKit key
+code 229, empty drafts, and busy state retain the draft and do not submit.
+
+Ordinary wheel input over the Graph renderer now maps up to zoom in and down to
+zoom out, uses the existing bounded viewport/readout and manual-mode state, and
+does not pan. The renderer prevents the same wheel gesture from moving the page;
+outside it, page scrolling remains available. Current FR-039K and visible help
+match D-112's narrow supersession of the former ordinary-wheel pass-through
+policy.
+
+The focused interaction set passes 87 tests, all 22 frontend files and 370
+tests pass, and full `npm run verify` passes. Browser interaction QA confirms
+multiline insertion, exact Return send, both wheel directions, local capture,
+and outside-canvas page scroll; a freshly bundled native Tauri application
+confirms plain Return send and both wheel directions. Structured is byte-
+identical at SHA-256
+`ab939aa56d5b5c66fb39ce201ef40aa53422c4112015b9035b418c43dec06c0a`,
+and native/dependency paths have no diff. No trust boundary or new technical
+debt was introduced. D-111 still leaves all ten product/operational blockers
+unresolved, so next-increment readiness remains `Blocked` with no selected
+successor.
+
+## GUI responsive alignment correction
+
+Status: **Verified complete with advisories.** The owner-reported sidebar gap
+and Graph alignment defects are corrected. Conversation history now remains
+content-bounded beneath its heading, only the local-first footer consumes spare
+sidebar height, and the Graph maintains positive domain-lane, cross-row, and
+orchestrator-routing clearance in compact, workspace, dense, and wide modes.
+Wide screens use a balanced two-row domain arrangement at up to 150% automatic
+fit; dense selection is based on measured fit rather than a fixed height
+breakpoint.
+
+Rendered browser checks passed at 760x520, 1280x720, 1678x1038, and the
+controller's 4096x1440 ultrawide limit. At 1678x1038, the conversation-to-
+Workspace and footer gaps were 12 pixels, lane/orchestrator clearances were 8
+and 42 world-space CSS pixels, all labels fit, and document overflow was zero.
+At ultrawide class, fit was 150%, the balanced topology aspect was 2.63, and
+scaled clearances were 12 and 63 screen pixels. The exact 5120-pixel canvas path
+passed focused geometry tests. These are display-sized browser checks, not a
+claim of physical post-fix Mac, monitor, native Tauri, or hardware-DPR testing.
+
+The full `npm run verify` gate passes, including hook and repository tests,
+frontend and Rust formatting/lint/tests, frontend builds, the Tauri no-bundle
+release build, and all 369 frontend tests. Secret scan, diff hygiene, and
+protected-path checks also pass. Structured remains byte-identical at SHA-256
+`ab939aa56d5b5c66fb39ce201ef40aa53422c4112015b9035b418c43dec06c0a`.
+No Rust, Tauri, IPC, capability, dependency, persistence, networking, provider,
+or device-authority boundary changed. The consolidated result is `PASS WITH
+ADVISORIES`; D-111 and its ten blockers keep next-increment readiness
+`Blocked`.
+
+## GUI operations workspace redesign
+
+Status: **Verified complete with advisories.** The owner-approved frontend
+increment now provides a compact global header, collapsible navigation,
+viewport-filling route workspace, contextual inspector, resizable activity
+dock, operational Command Center overview, and responsive full-workspace Graph.
+Typed presentation selection coordinates canonical agents, topology entities,
+tasks, and deterministic fixture events without collapsing their entity types
+or adding runtime authority.
+
+All canonical-agent surfaces derive exactly nine unique roles from the current
+canonical configuration. The orchestrator remains separate. Frontend fixtures
+and the sealed native synthetic proof remain explicitly disclosed; absent live
+runtime, provider, tool, timing, cost, and status data is shown as unavailable.
+The protected Structured implementation is byte-identical at SHA-256
+`ab939aa56d5b5c66fb39ce201ef40aa53422c4112015b9035b418c43dec06c0a`,
+and `get_app_info`, route navigation, approvals, settings, and existing mock
+state retain passing regression coverage.
+
+The five requested desktop sizes, practical 125%/150% effective sizes, all
+panel combinations, rapid resize, Graph fit/manual preservation, route changes
+with panels open, keyboard/focus/Escape behavior, and Structured mode passed
+rendered review. `npm run verify` and the 367-test frontend suite pass. The
+consolidated result is `PASS WITH ADVISORIES` in
+[`2026-09-02-gui-operations-workspace-redesign-post-increment-review.md`](docs/reviews/2026-09-02-gui-operations-workspace-redesign-post-increment-review.md).
+
+No dependency, Rust, Tauri command, IPC, capability, persistence, provider,
+network, or device-authority boundary changed. D-111 and its ten operational
+blockers remain controlling; this UI increment makes no successor Ready.
+
 ## D-107 account and Keychain scope decision
 
 D-111 selects `scope_contract_not_accepted`. No product or system operation

@@ -2,6 +2,55 @@
 
 Last updated: 2026-09-02
 
+## Completed GUI conversation Return and Graph wheel interactions
+
+The separately approved `gui-conversation-enter-graph-wheel-zoom` increment is
+complete with `PASS WITH ADVISORIES`. Preserve exact unmodified-Return mock
+submission; modifier, multiline, composition, empty, and busy guards; bounded
+Graph-local up/in and down/out wheel zoom; and outside-Graph page scrolling.
+Focused 87-test, full 370-test, repository, security, browser, freshly bundled
+native Tauri, Structured, and protected-path evidence passes.
+
+Before the next material shell, Graph, or conversation-input change, add a
+separately approved automated real-browser interaction harness. Before the next
+material Command Center feature, consider bounded Graph-composition extraction.
+Expanded legend wording remains optional minor polish. These are carried
+nonblocking advisories, not approved successor work.
+
+## Completed GUI responsive alignment correction
+
+The separately approved `gui-responsive-alignment-correction` is complete with
+`PASS WITH ADVISORIES`. Preserve its content-bounded conversation history,
+bottom-pinned local-first footer, balanced ultrawide Graph geometry, positive
+domain-lane and orchestrator clearance, label-safe stacking, and fit-derived
+dense layout selection. Full `npm run verify`, the 369-test frontend suite, and
+rendered compact, desktop, Mac-class, and ultrawide-class CSS-pixel viewport
+checks pass; Structured remains byte-identical and native/dependency paths
+remain unchanged.
+
+Before another material shell or Graph layout change, add a separately approved
+automated real-browser responsive harness. Before another material Command
+Center feature, consider a bounded Graph-composition extraction. These are
+nonblocking advisories, not approved successor work.
+
+## Completed GUI operations workspace redesign
+
+The owner-approved `gui-operations-workspace-redesign` increment is complete
+with `PASS WITH ADVISORIES`. Do not repeat the shell, Command Center, Graph,
+inspector, or activity redesign. Preserve the actual nine-role canonical
+configuration, explicit fixture/synthetic provenance, existing native and IPC
+boundaries, and the byte-identical Structured implementation.
+
+The correction above carries forward the redesign's responsive-harness and
+Graph-composition advisories. A future minor polish may also make the expanded
+relationship-legend label neutral. These are nonblocking advisories, not
+approved successor work.
+
+No later task begins automatically. D-111 still says no successor is **Ready**,
+and its ten product/operational blockers remain unchanged. Any further work
+requires an owner-selected, separately approved bounded plan and readiness
+review; do not promote a historical suggestion into an authorized next task.
+
 ## D-107 account and Keychain scope decision
 
 D-111 selects `scope_contract_not_accepted`; current repository source has no

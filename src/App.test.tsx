@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { App, type AppServices } from "./App";
+import { App, CommandCenterLoadingPage, type AppServices } from "./App";
 import { APP_ROUTES, NAVIGATION_ITEMS, type AssistantMenuRoute } from "./application/navigation";
 import { MOCK_STREAM_INTERVAL_MS } from "./application/mockAssistantRun";
 import {
@@ -10,6 +10,7 @@ import {
   type MockRunEvent,
   type MockRunEventListener,
 } from "./application/mockRunDriver";
+import { ApplicationWorkspacePanelsContext } from "./components/applicationWorkspacePanels";
 import type { AppInfo } from "./infrastructure/tauri/app-info-client";
 import type {
   AssistantMenuRouteListener,
@@ -196,6 +197,58 @@ afterEach(() => {
 });
 
 describe("App", () => {
+  it("keeps Command Center loading outlets truthful, named, and closable", () => {
+    const inspector = document.createElement("aside");
+    const inspectorHeaderTarget = document.createElement("div");
+    const inspectorBodyTarget = document.createElement("div");
+    inspector.setAttribute("aria-labelledby", "application-inspector-title");
+    inspector.append(inspectorHeaderTarget, inspectorBodyTarget);
+
+    const activity = document.createElement("section");
+    const activityTitle = document.createElement("h2");
+    const activitySummaryTarget = document.createElement("span");
+    const activityBodyTarget = document.createElement("div");
+    activityTitle.id = "application-activity-title";
+    activityTitle.textContent = "Activity";
+    activity.setAttribute("aria-labelledby", activityTitle.id);
+    activity.append(activityTitle, activitySummaryTarget, activityBodyTarget);
+    document.body.append(inspector, activity);
+
+    const closeInspector = vi.fn();
+    try {
+      const view = render(
+        <ApplicationWorkspacePanelsContext.Provider
+          value={{
+            activityBodyTarget,
+            activitySummaryTarget,
+            closeInspector,
+            inspectorBodyTarget,
+            inspectorHeaderTarget,
+            openInspector: () => undefined,
+          }}
+        >
+          <CommandCenterLoadingPage />
+        </ApplicationWorkspacePanelsContext.Provider>,
+      );
+
+      expect(
+        within(inspector).getByRole("heading", { name: "Preparing Command Center" }),
+      ).toHaveAttribute("id", "application-inspector-title");
+      expect(inspector).toHaveTextContent("No Command Center selection available yet");
+      expect(inspector).toHaveTextContent("No live runtime data is available here");
+      expect(activity).toHaveTextContent("Deterministic fixture activity loading");
+      expect(activity).toHaveTextContent("No Command Center fixture activity available yet");
+      expect(activity).toHaveTextContent("not live telemetry");
+
+      fireEvent.click(within(inspector).getByRole("button", { name: "Close workspace inspector" }));
+      expect(closeInspector).toHaveBeenCalledOnce();
+      view.unmount();
+    } finally {
+      inspector.remove();
+      activity.remove();
+    }
+  });
+
   it("renders the conversation workspace and requires a non-empty request", () => {
     const harness = createMenuRouteHarness();
     const { container } = render(<App services={createServices(harness.source)} />);
@@ -219,6 +272,52 @@ describe("App", () => {
     ).toHaveAttribute("aria-current", "page");
     expect(screen.getByLabelText("Assistant request")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
+  });
+
+  it("sends with Return while preserving multiline and composition input", () => {
+    vi.useFakeTimers();
+    const harness = createMenuRouteHarness();
+    const runHarness = createMockRunDriverHarness();
+    const start = vi.spyOn(runHarness.driver, "start");
+    render(
+      <App
+        services={createServices(
+          harness.source,
+          () => Promise.resolve(CONNECTED_APP_INFO),
+          runHarness.driver,
+        )}
+      />,
+    );
+    const composer = screen.getByLabelText("Assistant request");
+
+    expect(fireEvent.keyDown(composer, { code: "Enter", key: "Enter" })).toBe(false);
+    expect(start).not.toHaveBeenCalled();
+    expect(screen.queryByRole("button", { name: "Stop" })).not.toBeInTheDocument();
+
+    fireEvent.change(composer, { target: { value: "First line" } });
+    expect(fireEvent.keyDown(composer, { code: "Enter", key: "Enter", shiftKey: true })).toBe(true);
+    expect(screen.queryByRole("button", { name: "Stop" })).not.toBeInTheDocument();
+    expect(composer).toHaveValue("First line");
+
+    expect(fireEvent.keyDown(composer, { code: "Enter", isComposing: true, key: "Enter" })).toBe(
+      true,
+    );
+    expect(fireEvent.keyDown(composer, { code: "Enter", key: "Enter", keyCode: 229 })).toBe(true);
+    for (const modifier of [{ altKey: true }, { ctrlKey: true }, { metaKey: true }]) {
+      expect(fireEvent.keyDown(composer, { code: "Enter", key: "Enter", ...modifier })).toBe(true);
+    }
+    expect(screen.queryByRole("button", { name: "Stop" })).not.toBeInTheDocument();
+    expect(composer).toHaveValue("First line");
+
+    expect(fireEvent.keyDown(composer, { code: "Enter", key: "Enter" })).toBe(false);
+    fireEvent.keyDown(composer, { code: "Enter", key: "Enter" });
+
+    const transcript = screen.getByRole("region", {
+      name: "Conversation transcript: First line",
+    });
+    expect(start).toHaveBeenCalledOnce();
+    expect(within(transcript).getAllByText("First line")).toHaveLength(1);
+    expect(screen.getByRole("button", { name: "Stop" })).toBeInTheDocument();
   });
 
   it("renders an empty current-session Activity view", () => {
@@ -293,7 +392,8 @@ describe("App", () => {
     expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
 
     openSidebarRoute("Activity");
-    expect(screen.getByText("Mock run stopped")).toBeInTheDocument();
+    const main = screen.getByRole("main");
+    expect(within(main).getByText("Mock run stopped")).toBeInTheDocument();
   });
 
   it("shows a bounded failure and retries without duplicating the user message", () => {
@@ -389,7 +489,7 @@ describe("App", () => {
       expect(screen.getByRole("article", { name: "Mock final answer" })).toBeInTheDocument();
       expect(screen.queryByText(/Mock approval recorded/)).not.toBeInTheDocument();
     } else {
-      expect(screen.getByText(new RegExp(outcome))).toBeInTheDocument();
+      expect(screen.getAllByText(new RegExp(outcome))).not.toHaveLength(0);
       expect(screen.queryByRole("article", { name: "Mock tool result" })).not.toBeInTheDocument();
       expect(screen.queryByRole("article", { name: "Mock final answer" })).not.toBeInTheDocument();
     }
@@ -618,6 +718,327 @@ describe("App", () => {
     expect(contentRegion.contains(settingsSection as HTMLElement)).toBe(true);
   });
 
+  it("resets only the route-content scroll owner when navigation changes routes", async () => {
+    const harness = createMenuRouteHarness();
+    const view = render(<App services={createServices(harness.source)} />);
+    const { contentRegion, mainRegion } = getShellRegions(view.container);
+
+    contentRegion.scrollTop = 160;
+    const transcript = screen.getByRole("region", {
+      name: "Conversation transcript: New conversation",
+    });
+    transcript.scrollTop = 28;
+
+    openSidebarRoute("Command Center");
+    await screen.findByRole("heading", { level: 1, name: "Command Center" });
+
+    expect(contentRegion.scrollTop).toBe(0);
+    expect(transcript.scrollTop).toBe(28);
+    expect(mainRegion).toHaveFocus();
+  });
+
+  it("exposes independently collapsible shell regions without changing route behavior", async () => {
+    const harness = createMenuRouteHarness();
+    const view = render(<App services={createServices(harness.source)} />);
+    const shell = view.container.querySelector(".application-shell");
+    const sidebar = view.container.querySelector("#application-sidebar");
+    const inspector = view.container.querySelector("#application-inspector");
+    const activity = view.container.querySelector("#application-activity-dock");
+
+    expect(shell).not.toBeNull();
+    expect(sidebar).toHaveAttribute("data-expanded", "true");
+    expect(inspector).toHaveAttribute("hidden");
+    expect(activity).not.toHaveAttribute("hidden");
+
+    const navigationToggle = screen.getByRole("button", { name: "Collapse navigation" });
+    expect(navigationToggle).toHaveAttribute("aria-controls", "application-sidebar");
+    expect(navigationToggle).toHaveAttribute("aria-expanded", "true");
+    fireEvent.click(navigationToggle);
+
+    const navigationExpand = screen.getByRole("button", { name: "Expand navigation" });
+    expect(navigationExpand).toHaveAttribute("aria-expanded", "false");
+    expect(sidebar).toHaveAttribute("data-expanded", "false");
+    expect(shell).toHaveClass("application-shell--navigation-collapsed");
+    expect(screen.queryByRole("list", { name: "Conversation history" })).toBeNull();
+    expect(
+      screen.queryByRole("button", { name: "Open conversation: New conversation" }),
+    ).toBeNull();
+    expect(view.container.querySelector(".application-brand__mark")).toBeNull();
+    expect(screen.getByRole("img", { name: "Cortexa" })).toHaveAttribute(
+      "src",
+      expect.stringContaining("favicon"),
+    );
+    for (const item of NAVIGATION_ITEMS) {
+      const routeButton = screen.getByRole("button", { name: item.label });
+      const tooltipId = routeButton.getAttribute("aria-describedby");
+      expect(tooltipId).toBe(`navigation-tooltip-${item.route}`);
+      expect(view.container.querySelector(`#${tooltipId ?? "missing"}`)).toHaveAttribute(
+        "role",
+        "tooltip",
+      );
+    }
+
+    const inspectorToggle = screen.getByRole("button", { name: "Show workspace inspector" });
+    expect(inspectorToggle).toHaveAttribute("aria-controls", "application-inspector");
+    expect(inspectorToggle).toHaveAttribute("aria-expanded", "false");
+    fireEvent.click(inspectorToggle);
+    expect(inspector).not.toHaveAttribute("hidden");
+    expect(shell).toHaveClass("application-shell--inspector-expanded");
+
+    fireEvent.click(screen.getByRole("button", { name: "Close workspace inspector" }));
+    expect(inspector).toHaveAttribute("hidden");
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: "Show workspace inspector" })).toHaveFocus();
+    });
+
+    openSidebarRoute("Settings");
+    expect(await screen.findByRole("heading", { level: 1, name: "Settings" })).toBeInTheDocument();
+    expect(view.container.querySelector("#main-content")).toHaveFocus();
+    expect(sidebar).toHaveAttribute("data-expanded", "false");
+  });
+
+  it("resizes the activity dock with keyboard and pointer input within its bounds", () => {
+    const harness = createMenuRouteHarness();
+    const view = render(<App services={createServices(harness.source)} />);
+    const shell = view.container.querySelector(".application-shell");
+
+    const activityToggle = screen.getByRole("button", { name: "Show activity panel" });
+    expect(activityToggle).toHaveAttribute("aria-controls", "application-activity-dock");
+    expect(activityToggle).toHaveAttribute("aria-expanded", "false");
+    fireEvent.click(activityToggle);
+
+    const separator = screen.getByRole("separator", { name: "Resize activity panel" });
+    const maximumHeight = Number(separator.getAttribute("aria-valuemax"));
+    expect(separator).toHaveAttribute("aria-orientation", "horizontal");
+    expect(separator).toHaveAttribute("aria-valuemin", "144");
+    expect(separator).toHaveAttribute("aria-valuenow", "216");
+    expect(shell).toHaveClass("application-shell--activity-expanded");
+    expect(shell).toHaveStyle("--application-activity-height: 216px");
+    expect(screen.getByRole("button", { name: "Collapse activity panel" })).toHaveAttribute(
+      "aria-controls",
+      "application-activity-content",
+    );
+    expect(view.container.querySelector("#application-activity-content")).not.toHaveAttribute(
+      "hidden",
+    );
+
+    fireEvent.keyDown(separator, { key: "ArrowUp" });
+    expect(separator).toHaveAttribute("aria-valuenow", "232");
+    expect(shell).toHaveStyle("--application-activity-height: 232px");
+
+    fireEvent.keyDown(separator, { key: "Home" });
+    expect(separator).toHaveAttribute("aria-valuenow", "144");
+    fireEvent.keyDown(separator, { key: "End" });
+    expect(separator).toHaveAttribute("aria-valuenow", String(maximumHeight));
+
+    fireEvent.pointerDown(separator, { button: 0, clientY: 300, pointerId: 7 });
+    fireEvent.pointerMove(window, { clientY: 400, pointerId: 7 });
+    const pointerHeight = Math.max(144, maximumHeight - 100);
+    expect(separator).toHaveAttribute("aria-valuenow", String(pointerHeight));
+    fireEvent.pointerUp(window, { clientY: 400, pointerId: 7 });
+    fireEvent.pointerMove(window, { clientY: 100, pointerId: 7 });
+    expect(separator).toHaveAttribute("aria-valuenow", String(pointerHeight));
+
+    fireEvent.click(screen.getByRole("button", { name: "Collapse activity panel" }));
+    expect(screen.queryByRole("separator", { name: "Resize activity panel" })).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Show activity panel" }));
+    expect(screen.getByRole("separator", { name: "Resize activity panel" })).toHaveAttribute(
+      "aria-valuenow",
+      String(pointerHeight),
+    );
+  });
+
+  it("opens the Command Center shell inspector from a typed selection without stealing focus", async () => {
+    const harness = createMenuRouteHarness();
+    const view = render(<App services={createServices(harness.source)} />);
+    openSidebarRoute("Command Center");
+    await screen.findByLabelText("Deterministic scenario");
+    const contextSummary = screen.getByText("Operational context").closest("summary");
+    if (contextSummary === null) throw new Error("Expected Operational context summary");
+    fireEvent.click(contextSummary);
+    const roster = screen.getByRole("list", { name: "Canonical agent roster" });
+    const researchAgent = within(roster).getByRole("button", {
+      name: /Inspect Research Agent, canonical agent definition/,
+    });
+    researchAgent.focus();
+
+    fireEvent.click(researchAgent);
+
+    const inspector = view.container.querySelector("#application-inspector");
+    expect(inspector).not.toHaveAttribute("hidden");
+    expect(view.container.querySelector(".application-shell")).toHaveClass(
+      "application-shell--inspector-expanded",
+    );
+    expect(
+      within(inspector as HTMLElement).getByRole("heading", { name: "Research Agent" }),
+    ).toBeInTheDocument();
+    expect(inspector).toHaveTextContent("Canonical agent definition");
+    expect(inspector).toHaveTextContent("DEMO MODE · SIMULATED AGENT DATA");
+    expect(researchAgent).toHaveFocus();
+    expect(view.container.querySelector("#main-content .command-center-inspector")).toBeNull();
+
+    fireEvent.keyDown(window, { key: "Escape" });
+
+    expect(inspector).toHaveAttribute("hidden");
+    await waitFor(() => {
+      expect(researchAgent).toHaveFocus();
+    });
+  });
+
+  it("leaves inspector state and dialog focus untouched when Escape belongs to an aria-modal approval", () => {
+    vi.useFakeTimers();
+    const harness = createMenuRouteHarness();
+    const view = render(<App services={createServices(harness.source)} />);
+    fireEvent.click(screen.getByRole("button", { name: "Show workspace inspector" }));
+    submitMockRequest();
+    finishMockStream();
+    const approval = screen.getByRole("dialog", { name: "Create a mock local task" });
+    const approve = within(approval).getByRole("button", { name: "Approve mock" });
+    approve.focus();
+
+    fireEvent.keyDown(window, { key: "Escape" });
+
+    expect(view.container.querySelector("#application-inspector")).not.toHaveAttribute("hidden");
+    expect(approval).toBeInTheDocument();
+    expect(approve).toHaveFocus();
+  });
+
+  it("selects Command Center fixture activity in the shared shell and clears it coherently", async () => {
+    const harness = createMenuRouteHarness();
+    const view = render(<App services={createServices(harness.source)} />);
+    openSidebarRoute("Command Center");
+    fireEvent.change(await screen.findByLabelText("Deterministic scenario"), {
+      target: { value: "research-knowledge-active" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Show activity panel" }));
+    const dock = view.container.querySelector("#application-activity-dock");
+    if (!(dock instanceof HTMLElement)) throw new Error("Expected the shared activity dock");
+    const eventButton = within(dock).getByRole("button", {
+      name: "Inspect deterministic event Research fixture started",
+    });
+    eventButton.focus();
+
+    fireEvent.click(eventButton);
+
+    const inspector = view.container.querySelector("#application-inspector");
+    if (!(inspector instanceof HTMLElement)) throw new Error("Expected the shared inspector");
+    expect(inspector).not.toHaveAttribute("hidden");
+    expect(
+      within(inspector).getByRole("heading", { name: "Research fixture started" }),
+    ).toBeInTheDocument();
+    expect(inspector).toHaveTextContent("Fixture activity event");
+    expect(inspector).toHaveTextContent("StatusUnavailable in fixture data");
+    expect(inspector).toHaveTextContent(
+      "The Research presentation lane entered its running state.",
+    );
+    expect(dock).toHaveTextContent("SourceUnavailable in fixture data");
+    expect(dock).toHaveTextContent("Actiontask started");
+    expect(dock).toHaveTextContent("TargetUnavailable in fixture data");
+    expect(dock).toHaveTextContent("StatusUnavailable in fixture data");
+    expect(dock).toHaveTextContent("Associated agentResearch Agent");
+    expect(dock).toHaveTextContent("TaskResearch findings");
+    expect(dock).toHaveTextContent("WorkflowBounded parallel analysis");
+    expect(dock).toHaveTextContent("SIMULATED TIME");
+    expect(eventButton.querySelector("div, p, dl")).toBeNull();
+    expect(eventButton).toHaveFocus();
+    expect(view.container.querySelector("#main-content .command-center-activity")).toBeNull();
+    const inspectorContent = inspector.querySelector(
+      '[data-scroll-owner="application-inspector-content"]',
+    );
+    expect(inspectorContent?.querySelector("[data-scroll-owner]")).toBeNull();
+    expect(
+      dock
+        .querySelector('[data-scroll-owner="application-activity-content"]')
+        ?.querySelector("[data-scroll-owner]"),
+    ).toBeNull();
+
+    const toolbar = screen.getByRole("toolbar", { name: "Topology viewport" });
+    const clearSelection = within(toolbar).getByRole("button", { name: "Clear selection" });
+    expect(clearSelection).toBeEnabled();
+    fireEvent.click(clearSelection);
+    expect(
+      within(inspector).getByRole("heading", { name: "Nothing selected" }),
+    ).toBeInTheDocument();
+    expect(clearSelection).toBeDisabled();
+  });
+
+  it("unmounts Command Center panel content on route exit and restores truthful fallbacks", async () => {
+    const harness = createMenuRouteHarness();
+    const view = render(<App services={createServices(harness.source)} />);
+    openSidebarRoute("Command Center");
+    await screen.findByRole("heading", { level: 1, name: "Command Center" });
+    fireEvent.click(screen.getByRole("button", { name: "Show workspace inspector" }));
+    fireEvent.click(screen.getByRole("button", { name: "Show activity panel" }));
+    expect(view.container.querySelector("#application-inspector")).toHaveTextContent(
+      "AgentOrchestrator",
+    );
+    expect(view.container.querySelector("#application-activity-dock")).toHaveTextContent(
+      "simulated fixture events",
+    );
+
+    openSidebarRoute("Settings");
+    await screen.findByRole("heading", { level: 1, name: "Settings" });
+
+    const inspector = view.container.querySelector("#application-inspector");
+    const activity = view.container.querySelector("#application-activity-dock");
+    expect(inspector).toHaveTextContent("Workspace inspector");
+    expect(inspector).toHaveTextContent("No inspectable workspace item selected");
+    expect(inspector).not.toHaveTextContent("AgentOrchestrator");
+    expect(activity).toHaveTextContent("No current-session mock events");
+    expect(activity).not.toHaveTextContent("simulated fixture events");
+  });
+
+  it("describes generic shell activity as incomplete current-session mock data", () => {
+    const harness = createMenuRouteHarness();
+    const view = render(<App services={createServices(harness.source)} />);
+    submitMockRequest();
+    fireEvent.click(screen.getByRole("button", { name: "Show activity panel" }));
+
+    const activity = view.container.querySelector("#application-activity-dock");
+    expect(activity).toHaveTextContent("current-session mock event");
+    expect(activity).toHaveTextContent("TimeUnavailable");
+    expect(activity).toHaveTextContent("SourceDeterministic frontend mock loop");
+    expect(activity).toHaveTextContent("Actionrun started");
+    expect(activity).toHaveTextContent("Runmock-run-1");
+    expect(activity).toHaveTextContent("StatusUnavailable in current-session event data");
+  });
+
+  it("keeps regional scroll owners outside the route content owner", () => {
+    const harness = createMenuRouteHarness();
+    const view = render(<App services={createServices(harness.source)} />);
+    const { contentRegion, mainRegion, sidebarRegion } = getShellRegions(view.container);
+
+    fireEvent.click(screen.getByRole("button", { name: "Show workspace inspector" }));
+    fireEvent.click(screen.getByRole("button", { name: "Show activity panel" }));
+
+    const inspectorOwner = view.container.querySelector(
+      '[data-scroll-owner="application-inspector-content"]',
+    );
+    const activityOwner = view.container.querySelector(
+      '[data-scroll-owner="application-activity-content"]',
+    );
+
+    expect(contentRegion).toHaveAttribute("data-scroll-owner", "route-content");
+    expect(mainRegion).toContainElement(contentRegion);
+    expect(mainRegion).not.toContainElement(inspectorOwner as HTMLElement);
+    expect(mainRegion).not.toContainElement(activityOwner as HTMLElement);
+    expect(sidebarRegion).not.toContainElement(contentRegion);
+    expect(inspectorOwner).not.toContainElement(contentRegion);
+    expect(activityOwner).not.toContainElement(contentRegion);
+  });
+
+  it("keeps the compact core status available to assistive technology", () => {
+    const harness = createMenuRouteHarness();
+    const view = render(<App services={createServices(harness.source)} />);
+    const statusLabel = view.container.querySelector(".application-toolbar__status-label");
+
+    expect(statusLabel).not.toBeNull();
+    expect(statusLabel).toHaveClass("visually-hidden-at-compact");
+    expect(statusLabel).not.toHaveAttribute("hidden");
+    expect(statusLabel).not.toHaveAttribute("aria-hidden");
+    expect(statusLabel).toHaveTextContent(/Connecting|Local core ready/u);
+  });
+
   it("keeps long conversation content in the primary scroll region", () => {
     vi.useFakeTimers();
     const harness = createMenuRouteHarness();
@@ -766,6 +1187,9 @@ describe("App", () => {
       target: { value: "research-knowledge-active" },
     });
     expect(projectionLoader).not.toHaveBeenCalled();
+    const contextSummary = screen.getByText("Operational context").closest("summary");
+    if (contextSummary === null) throw new Error("Expected operational context disclosure");
+    fireEvent.click(contextSummary);
 
     fireEvent.click(screen.getByRole("button", { name: "Refresh Rust projection" }));
 

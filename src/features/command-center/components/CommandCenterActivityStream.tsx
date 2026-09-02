@@ -1,22 +1,13 @@
 import { Activity, GitBranch, Search } from "lucide-react";
 
+import {
+  commandCenterEventSeverityLabel,
+  COMMAND_CENTER_EVENT_FIELD_UNAVAILABLE,
+  type CommandCenterEventPresentation,
+} from "../commandCenterEventPresentation";
 import { COMMAND_CENTER_DISCLOSURE } from "../commandCenterProjection";
 
-export interface ActivityViewEvent {
-  readonly agentLabel: string | null;
-  readonly demoOrigin: string;
-  readonly detail: string;
-  readonly id: string;
-  readonly kind: string;
-  readonly ordinal: number;
-  readonly redaction: string;
-  readonly relatedLabels: readonly string[];
-  readonly severity: string;
-  readonly summary: string;
-  readonly taskLabel: string | null;
-  readonly timestamp: string;
-  readonly workflowLabel: string | null;
-}
+export type ActivityViewEvent = CommandCenterEventPresentation;
 
 interface CommandCenterActivityStreamProps {
   readonly eventKind: string;
@@ -27,9 +18,13 @@ interface CommandCenterActivityStreamProps {
   readonly onEventKindChange: (value: string) => void;
   readonly onFollowSelectedPathChange: (value: boolean) => void;
   readonly onSearchChange: (value: string) => void;
+  readonly onSelectEvent?: ((id: string) => void) | undefined;
   readonly onSeverityChange: (value: string) => void;
   readonly search: string;
+  readonly selectedEventId?: string | null | undefined;
+  readonly severities: readonly string[];
   readonly severity: string;
+  readonly workspace?: boolean | undefined;
 }
 
 function readable(value: string): string {
@@ -45,26 +40,38 @@ export function CommandCenterActivityStream({
   onEventKindChange,
   onFollowSelectedPathChange,
   onSearchChange,
+  onSelectEvent,
   onSeverityChange,
   search,
+  selectedEventId,
+  severities,
   severity,
+  workspace = false,
 }: CommandCenterActivityStreamProps) {
   return (
     <section
-      aria-labelledby="command-center-activity-title"
-      className="command-center-activity"
+      aria-label={workspace ? "Deterministic fixture activity" : undefined}
+      aria-labelledby={workspace ? undefined : "command-center-activity-title"}
+      className={`command-center-activity${workspace ? " command-center-activity--workspace" : ""}`}
       data-scroll-region="command-center-activity"
     >
-      <header className="command-center-activity__header">
-        <div>
-          <h2 id="command-center-activity-title">Structured fixture activity</h2>
-          <p>
-            Bounded, pre-redacted presentation records. Not authoritative audit. ·{" "}
-            {COMMAND_CENTER_DISCLOSURE}
-          </p>
-        </div>
-        <Activity aria-hidden="true" size={18} />
-      </header>
+      {workspace ? (
+        <p className="command-center-activity__workspace-provenance">
+          Bounded, pre-redacted deterministic fixture records. Not authoritative audit. ·{" "}
+          {COMMAND_CENTER_DISCLOSURE}
+        </p>
+      ) : (
+        <header className="command-center-activity__header">
+          <div>
+            <h2 id="command-center-activity-title">Structured fixture activity</h2>
+            <p>
+              Bounded, pre-redacted presentation records. Not authoritative audit. ·{" "}
+              {COMMAND_CENTER_DISCLOSURE}
+            </p>
+          </div>
+          <Activity aria-hidden="true" size={18} />
+        </header>
+      )}
 
       <div className="command-center-activity__controls">
         <label className="command-center-field command-center-field--search">
@@ -92,10 +99,11 @@ export function CommandCenterActivityStream({
             value={severity}
           >
             <option value="all">All severities</option>
-            <option value="info">Info</option>
-            <option value="success">Success</option>
-            <option value="warning">Warning</option>
-            <option value="danger">Error</option>
+            {severities.map((value) => (
+              <option key={value} value={value}>
+                {commandCenterEventSeverityLabel(value)}
+              </option>
+            ))}
           </select>
         </label>
         <label className="command-center-field">
@@ -140,57 +148,145 @@ export function CommandCenterActivityStream({
             aria-label="Simulated command center activity"
             className="command-center-activity__list"
           >
-            {events.map((event) => (
-              <li className="command-center-event" key={event.id}>
-                <span
-                  className="command-center-event__ordinal"
-                  aria-label={`Step ${String(event.ordinal).padStart(2, "0")}`}
+            {events.map((event) => {
+              const associatedAgent =
+                event.associatedAgentLabel ?? COMMAND_CENTER_EVENT_FIELD_UNAVAILABLE;
+              const task = event.taskLabel ?? COMMAND_CENTER_EVENT_FIELD_UNAVAILABLE;
+              const workflow = event.workflowLabel ?? COMMAND_CENTER_EVENT_FIELD_UNAVAILABLE;
+              const relatedEntities =
+                event.relatedEntityLabels.length === 0
+                  ? COMMAND_CENTER_EVENT_FIELD_UNAVAILABLE
+                  : event.relatedEntityLabels.join(" → ");
+              const eventContents = (
+                <>
+                  <span
+                    className="command-center-event__ordinal"
+                    aria-label={`Step ${String(event.ordinal).padStart(2, "0")}`}
+                  >
+                    {String(event.ordinal).padStart(2, "0")}
+                  </span>
+                  <span className="command-center-event__copy">
+                    <strong>{event.summary}</strong>
+                    <small>{readable(event.eventKind)} · deterministic fixture event</small>
+                    {workspace ? (
+                      <span className="command-center-event__workspace-summary">
+                        <span>
+                          <b>Source</b>
+                          <span>{event.sourceLabel}</span>
+                        </span>
+                        <span>
+                          <b>Action</b>
+                          <span>{readable(event.eventKind)}</span>
+                        </span>
+                        <span>
+                          <b>Target</b>
+                          <span>{event.targetLabel}</span>
+                        </span>
+                        <span>
+                          <b>Severity</b>
+                          <span>{commandCenterEventSeverityLabel(event.severity)}</span>
+                        </span>
+                        <span>
+                          <b>Status</b>
+                          <span>{event.statusLabel}</span>
+                        </span>
+                        <span>
+                          <b>Associated agent</b>
+                          <span>{associatedAgent}</span>
+                        </span>
+                        <span>
+                          <b>Task</b>
+                          <span>{task}</span>
+                        </span>
+                        <span>
+                          <b>Workflow</b>
+                          <span>{workflow}</span>
+                        </span>
+                        <span>
+                          <b>Related entities</b>
+                          <span>{relatedEntities}</span>
+                        </span>
+                      </span>
+                    ) : null}
+                    {workspace ? (
+                      <span className="command-center-event__description">{event.description}</span>
+                    ) : null}
+                  </span>
+                  <time dateTime={event.simulatedAt}>
+                    {event.timeLabel} · {event.simulatedAt}
+                  </time>
+                </>
+              );
+              return (
+                <li
+                  className={`command-center-event${selectedEventId === event.eventId ? " command-center-event--selected" : ""}`}
+                  key={event.eventId}
                 >
-                  {String(event.ordinal).padStart(2, "0")}
-                </span>
-                <div className="command-center-event__copy">
-                  <strong>{event.summary}</strong>
-                  <small>
-                    {readable(event.kind)} · {event.agentLabel ?? "Application boundary"}
-                    {event.workflowLabel === null ? "" : ` · ${event.workflowLabel}`}
-                  </small>
-                  <details>
-                    <summary>View bounded detail</summary>
-                    <p>{event.detail}</p>
-                    <dl className="command-center-event__facts">
-                      <div>
-                        <dt>Fixture event ID</dt>
-                        <dd>{event.id}</dd>
-                      </div>
-                      <div>
-                        <dt>Task</dt>
-                        <dd>{event.taskLabel ?? "Unavailable in fixture"}</dd>
-                      </div>
-                      <div>
-                        <dt>Workflow</dt>
-                        <dd>{event.workflowLabel ?? "Unavailable in fixture"}</dd>
-                      </div>
-                      <div>
-                        <dt>Related path</dt>
-                        <dd>
-                          {event.relatedLabels.length === 0
-                            ? "Unavailable in fixture"
-                            : event.relatedLabels.join(" → ")}
-                        </dd>
-                      </div>
-                      <div>
-                        <dt>Origin and redaction</dt>
-                        <dd>
-                          {readable(event.demoOrigin)} · {readable(event.redaction)} ·{" "}
-                          {readable(event.severity)}
-                        </dd>
-                      </div>
-                    </dl>
-                  </details>
-                </div>
-                <time dateTime={event.timestamp}>SIMULATED TIME · {event.timestamp}</time>
-              </li>
-            ))}
+                  {workspace && onSelectEvent !== undefined ? (
+                    <button
+                      aria-label={`Inspect deterministic event ${event.summary}`}
+                      aria-pressed={selectedEventId === event.eventId}
+                      className="command-center-event__select"
+                      onClick={() => {
+                        onSelectEvent(event.eventId);
+                      }}
+                      type="button"
+                    >
+                      {eventContents}
+                    </button>
+                  ) : (
+                    eventContents
+                  )}
+                  <div className="command-center-event__detail">
+                    <details>
+                      <summary>View bounded detail</summary>
+                      {workspace ? null : <p>{event.description}</p>}
+                      <dl className="command-center-event__facts">
+                        <div>
+                          <dt>Fixture event ID</dt>
+                          <dd>{event.eventId}</dd>
+                        </div>
+                        <div>
+                          <dt>Source</dt>
+                          <dd>{event.sourceLabel}</dd>
+                        </div>
+                        <div>
+                          <dt>Target</dt>
+                          <dd>{event.targetLabel}</dd>
+                        </div>
+                        <div>
+                          <dt>Status</dt>
+                          <dd>{event.statusLabel}</dd>
+                        </div>
+                        <div>
+                          <dt>Associated agent</dt>
+                          <dd>{associatedAgent}</dd>
+                        </div>
+                        <div>
+                          <dt>Task</dt>
+                          <dd>{task}</dd>
+                        </div>
+                        <div>
+                          <dt>Workflow</dt>
+                          <dd>{workflow}</dd>
+                        </div>
+                        <div>
+                          <dt>Related entities</dt>
+                          <dd>{relatedEntities}</dd>
+                        </div>
+                        <div>
+                          <dt>Origin and redaction</dt>
+                          <dd>
+                            {readable(event.demoOrigin)} · {readable(event.redaction)} ·{" "}
+                            {commandCenterEventSeverityLabel(event.severity)}
+                          </dd>
+                        </div>
+                      </dl>
+                    </details>
+                  </div>
+                </li>
+              );
+            })}
           </ol>
         )}
       </div>

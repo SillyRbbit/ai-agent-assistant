@@ -2,6 +2,185 @@
 
 Last updated: 2026-09-02
 
+## GUI conversation Return and Graph wheel interactions
+
+The owner-approved `gui-conversation-enter-graph-wheel-zoom` presentation
+increment is verified complete with advisories on `main`, from the intentionally
+uncommitted GUI workspace at baseline
+`ada57ce1d4f52470fce2f760138a5cf8f25399df`. Exact unmodified Return now sends
+one enabled, non-empty conversation request through the existing volatile mock
+form action. Shift, Alt, Control, or Meta Return; IME composition; WebKit key
+code 229; empty drafts; and busy state do not submit. Shift+Return remains a
+newline.
+
+Ordinary mouse-wheel gestures over the React Flow renderer now zoom the Graph:
+up zooms in and down zooms out. The renderer alone prevents the corresponding
+page scroll, `panOnScroll` stays disabled, existing min/max bounds and zoom
+readout remain authoritative, and wheel movement enters the same manual
+viewport mode as other user-directed movement. Scrolling outside the Graph
+continues to move the page. D-112 supersedes only the former ordinary-wheel
+pass-through clause in current FR-039K; D-092, D-111, historical evidence,
+Structured behavior, and trust boundaries remain unchanged.
+
+The focused frontend set passes 87 tests and the complete frontend suite passes
+22 files and 370 tests. Full `npm run verify`, formatting, lint, type checking,
+frontend builds, repository/security checks, and diff hygiene pass. Browser QA
+confirmed Shift+Return multiline input, exact Return submission, both wheel
+directions, Graph-local scroll capture, and outside-Graph page scrolling. A
+freshly bundled native Tauri application independently confirmed plain Return
+submission and both wheel directions. Structured remains byte-identical at
+SHA-256
+`ab939aa56d5b5c66fb39ce201ef40aa53422c4112015b9035b418c43dec06c0a`;
+`src-tauri/`, `package.json`, and `package-lock.json` have no diff. No IPC,
+dependency, persistence, provider, network, permission, approval, audit,
+execution, or device-authority boundary changed.
+
+The consolidated result is `PASS WITH ADVISORIES` in
+[`2026-09-02-gui-conversation-enter-graph-wheel-zoom-post-increment-review.md`](docs/reviews/2026-09-02-gui-conversation-enter-graph-wheel-zoom-post-increment-review.md).
+No debt was introduced. Carried advisories are the absence of automated real-
+browser interaction coverage, the large Graph presentation composition, and
+the mildly stale expanded-legend wording. D-111 and its ten product/operational
+blockers remain controlling; next-increment readiness is `Blocked` and no
+successor is selected. No branch, commit, push, merge, release, or publication
+was requested.
+
+Exact resume prompt: “Read AGENTS.md and the complete required project-memory,
+then read the completed GUI operations workspace redesign, GUI responsive
+alignment correction, and GUI conversation Return/Graph wheel plans, increment
+records, and post-increment reviews. Reconcile the intentionally uncommitted
+main workspace and confirm the
+`gui-conversation-enter-graph-wheel-zoom` completion marker remains complete
+and valid. Preserve exact plain-Return mock submission, modifier/IME multiline
+guards, canvas-local wheel zoom, outside-canvas page scrolling, the corrected
+responsive shell and Graph geometry, actual nine-role canonical configuration,
+fixture/synthetic disclosures, existing Tauri/IPC boundaries, and byte-
+identical Structured view. Do not begin another implementation: D-111 keeps
+every successor Blocked. Wait for an owner-selected, separately approved
+bounded plan and readiness review. Do not branch, commit, push, merge, release,
+or publish without explicit owner direction.”
+
+## GUI responsive alignment correction
+
+The owner-approved `gui-responsive-alignment-correction` is verified complete
+with advisories on `main`, from the intentionally uncommitted, validated GUI
+redesign workspace at baseline
+`ada57ce1d4f52470fce2f760138a5cf8f25399df`. The correction removes the tall
+blank band between Conversations and Workspace by bounding conversation-history
+growth and leaving only the local-first footer to consume remaining sidebar
+height.
+
+Graph geometry now provides at least eight world-space CSS pixels between every
+pair of domain lanes and at least 32 below AgentOrchestrator. Group lanes paint
+below semantic nodes, wide screens use a balanced two-row domain arrangement at
+up to 150% automatic fit, and short canvases choose dense geometry from measured
+fit rather than the former fixed 280-pixel cutoff. This also closes the reviewed
+cross-row lane overlap and the 280-to-281-pixel fit discontinuity. Automatic
+fit, manual viewport preservation, keyboard/pointer selection, fixture
+provenance, and configuration-derived canonical entities remain intact.
+
+Rendered CSS-pixel browser checks passed at 760x520, 1280x720, 1678x1038, and
+the controller's 4096x1440 ultrawide limit, including Mac-to-ultrawide-to-Mac
+resize behavior. The 1678x1038 view measured 12 pixels from conversation history
+to Workspace, a 12-pixel footer inset, eight-pixel lane clearance, 42-pixel
+orchestrator clearance, fully fitting labels, and zero document overflow. The
+ultrawide-class view fit at 150% with two agent rows, a 2.63 topology aspect,
+fully fitting labels, and zero document overflow. The exact 5120-pixel canvas
+path passed the focused geometry test. This evidence does not claim a post-fix
+run on the owner's physical monitors, native Tauri window, or hardware DPR.
+
+The full `npm run verify` gate passed, including hook and repository tests,
+frontend and Rust formatting/lint/tests, frontend builds, and the Tauri
+no-bundle release build. Documentation, secret, whitespace, session-inventory,
+Structured, and protected-path checks passed. The frontend suite passed 22
+files and 369 tests. Structured is byte-identical at SHA-256
+`ab939aa56d5b5c66fb39ce201ef40aa53422c4112015b9035b418c43dec06c0a`;
+`src-tauri/`, `package.json`, and `package-lock.json` have no diff. No backend,
+IPC, capability, dependency, permission, persistence, provider, network,
+execution, audit, or device-authority boundary changed.
+
+The complete 42-path intentionally uncommitted workspace and quality evidence
+are recorded in
+[`2026-09-02-gui-responsive-alignment-correction-post-increment-review.md`](docs/reviews/2026-09-02-gui-responsive-alignment-correction-post-increment-review.md).
+It preserves the 39-path redesign and owner-provided `AGENTS.md` change, adds
+only the bounded correction and its closeout records, and contains no screenshot
+or personal-path artifact. What works is the corrected sidebar and Graph across
+the checked layout classes. Nothing is partially implemented or known broken.
+Nonblocking debt remains for an automated real-browser responsive harness and a
+future bounded extraction from the large Graph adapter/stylesheet. No branch,
+commit, push, merge, release, or publication was requested.
+
+D-111 and its ten product/operational blockers remain controlling, so next-
+increment readiness is `Blocked` and no successor begins automatically.
+
+Exact resume prompt: “Read AGENTS.md and the complete required project-memory,
+then read the completed GUI operations workspace redesign and GUI responsive
+alignment correction plans, increment records, and post-increment reviews.
+Reconcile the intentionally uncommitted main workspace and confirm the
+`gui-responsive-alignment-correction` completion marker remains complete and
+valid. Preserve the corrected sidebar flow, CSS-pixel/ResizeObserver Graph
+geometry, actual nine-role canonical configuration, fixture and synthetic
+disclosures, existing Tauri/IPC boundaries, and byte-identical Structured view.
+Do not repeat or extend either GUI increment, modify protected paths, or begin
+product, signing, provider, runtime, external-system, or further implementation
+work. D-111 keeps every successor Blocked. Do not branch, commit, push, merge,
+release, or publish without explicit owner direction; wait for a separately
+approved bounded plan and readiness review.”
+
+## GUI operations workspace redesign
+
+The owner-approved `gui-operations-workspace-redesign` increment is verified
+complete with advisories on `main`, from baseline
+`ada57ce1d4f52470fce2f760138a5cf8f25399df`. The uncommitted presentation
+change adds a compact global header, collapsible navigation, a viewport-filling
+workspace, a contextual inspector, a resizable activity dock, an operational
+Command Center overview, and a responsive React Flow topology. One typed,
+scenario-bound presentation selection coordinates the overview, Graph,
+inspector, and fixture activity without adding domain or execution authority.
+
+Prompt 6 corrected the reproduced low-height Graph collapse, hidden filter and
+relationship controls, the 1279-to-1280 layout/zoom discontinuity, pointer-only
+relationship inspection, composite focus mismatch, cold-loading blank shell
+outlets, lifecycle static-boundary proof regression, compact tooltip gap, and
+inconsistent event terminology. The final rendered matrix covers 1280x720,
+1366x768, 1440x900, 1920x1080, and 2560x1440; practical 125% and 150% effective
+sizes; all four panel combinations; rapid resize; all eight routes with panels
+open; Graph manual/automatic fit; and Structured mode. A clean browser run had
+no warnings or errors. `npm run verify`, the 367-test frontend suite,
+repository health, secret scan, diff hygiene, session inventory, and manual
+checks passed.
+
+Exactly nine canonical roles appear on canonical-agent surfaces. The separate
+orchestrator, tasks, workflows, checkpoints, and events remain distinct.
+Fixture and synthetic evidence remains visibly disclosed, and unsupported live
+runtime, provider, tool, cost, timing, and status facts remain unavailable.
+`TopologyStructuredView.tsx` is byte-identical at SHA-256
+`ab939aa56d5b5c66fb39ce201ef40aa53422c4112015b9035b418c43dec06c0a`;
+`get_app_info` and existing routes retain passing regression coverage. No Rust,
+Tauri command, IPC, capability, dependency, model networking, persistence, or
+device authority changed.
+
+The complete 39-path inventory and quality evidence are in
+[`2026-09-02-gui-operations-workspace-redesign-post-increment-review.md`](docs/reviews/2026-09-02-gui-operations-workspace-redesign-post-increment-review.md).
+`AGENTS.md` is present in that inventory because of a preserved owner-provided
+instruction change; the redesign did not author or reinterpret it. Remaining
+advisories are the lack of an automated real-browser responsive harness, the
+size of the Command Center page/adapter/stylesheet, and mildly stale expanded
+legend wording. Nothing is partially implemented or known broken. The working
+tree remains intentionally uncommitted; no branch, commit, push, publication,
+or release was requested.
+
+The D-111 account/Keychain-scope result and its ten operational blockers remain
+controlling. No successor becomes Ready from this frontend work.
+
+Exact resume prompt: “Read AGENTS.md and the complete required project-memory,
+the completed GUI operations workspace plan, increment record, and post-
+increment review. Preserve the verified GUI redesign, its explicit fixture and
+synthetic disclosures, the actual nine-role canonical configuration, existing
+Tauri/IPC boundaries, and byte-identical Structured view. Do not repeat this
+redesign. No successor is Ready; do not begin product, signing, provider,
+runtime, external-system, or further implementation work without a separately
+approved bounded plan and readiness review.”
+
 ## D-107 account and Keychain scope decision
 
 D-111 selects `scope_contract_not_accepted`. No application-owned identity

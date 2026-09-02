@@ -2,6 +2,87 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-09-02 — Textarea Return did not submit and Graph wheel bypassed zoom
+
+**Observation:** The conversation composer used only form submission from its
+Send button, so Return in the textarea inserted a newline and required a mouse
+click. The React Flow Graph explicitly disabled both `zoomOnScroll` and
+`preventScrolling`, assigning ordinary wheel gestures to page scrolling even
+when the pointer was over the canvas. A first keyboard correction also allowed
+Alt/Control/Meta Return to send, exceeding the requested plain-Return contract.
+
+**Disposition:** The composer now routes only exact unmodified, non-composing
+Return through the existing guarded form action; Shift and every other modifier
+retain native textarea behavior, and WebKit key code 229 fails safe. React Flow
+now enables bounded wheel zoom and canvas-local scroll prevention while keeping
+`panOnScroll` disabled and the existing manual viewport transition. Browser QA
+confirmed Shift+Return insertion, Return send, up/in and down/out direction,
+Graph-local capture, and outside-Graph page scroll. A freshly bundled native
+Tauri app independently confirmed Return send and both wheel directions.
+Focused 87-test and full 370-test frontend suites plus `npm run verify` pass.
+
+## 2026-09-02 — Sidebar flex growth and Graph lane geometry misaligned tall displays
+
+**Observation:** Owner screenshots at MacBook Pro and 5120x1440 ultrawide
+classes showed Workspace navigation pushed down by a large blank sidebar band,
+adjacent dashed domain containers touching or overlapping, and the orchestrator
+relationship line crossing the domain-heading band. The sidebar's
+`.conversation-navigation` used positive flex growth and consumed every spare
+pixel. Normal lane padding exceeded the inter-column gap by four pixels, the
+orchestrator bottom shared the first lane's top coordinate, and the wide layout
+placed every domain in one shallow row. Review also found dense lane rows
+overlapped by 24 world pixels and a fixed 280-pixel cutoff selected an unfit
+layout at 281 pixels.
+
+**Disposition:** Conversation history is content-bounded and independently
+scrollable while the local-first footer alone uses `margin-top: auto`. Graph
+geometry now provides at least eight world-space CSS pixels between every lane
+pair and at least 32 below AgentOrchestrator, paints semantic nodes above group
+lanes, balances ultrawide domains across two agent rows, and allows 150%
+ultrawide automatic fit. Dense rows have positive vertical separation and are
+selected by measured fit, eliminating the height cliff. Pairwise compact,
+workspace, dense, and wide regression tests pass. Rendered browser checks at
+760x520, 1280x720, 1678x1038, and the controller's 4096x1440 ultrawide limit
+show fitting labels and no document overflow; exact 5120-pixel geometry is
+covered by the adapter test. No DPR conversion, native path, or trust boundary
+changed.
+
+## 2026-09-02 — Constrained-height Graph and relationship controls collapsed or clipped
+
+**Observation:** Prompt 6 reproduced the Graph with the inspector and activity
+dock open at effective 125% and 150% sizes. At 1024x576 the React Flow parent
+fell to approximately 579x12, and at 853x480 it reached 441x0 and emitted three
+parent-dimension warnings. The Graph Filters popover extended beneath the
+activity dock. A separate fixed 1280px breakpoint changed a 1279px workspace
+fit at 100% to a 1280px wide-layout fit at 64%. The first keyboard relationship
+selector draft also let the clipped Graph panel hide its final controls.
+
+**Disposition:** At constrained heights, the activity-expanded Graph now uses a
+760px natural page within the existing `.application-content` scroll owner;
+the canvas measures 579x485 at 1024x576 and 441x485 at 853x480. Filters are
+viewport/dock-bounded and internally scrollable. Wide layout now activates only
+when measured topology bounds plus fit gutters support a full-readable fit, so
+1279px and 1280px remain workspace mode at 100% while 2560x1440 uses wide mode
+at 100%. The relationship legend is panel-bounded with its own scroll region;
+the first and tenth relationship controls are fully reachable by pointer and
+keyboard. Clean reload and constrained resize produced zero console warnings
+or errors.
+
+## 2026-09-02 — Integrated QA exposed lazy-panel and lifecycle-proof regressions
+
+**Observation:** A cold lazy transition to Command Center could mark shell
+panels as custom before page portals mounted, leaving an already-open inspector
+unnamed and both panels blank. Separately, reusing a hoisted native-proof JSX
+fragment preserved runtime behavior but failed the exact F-12 repository check,
+which requires the sole lifecycle panel inside the literal selected-scenario
+conditional.
+
+**Disposition:** The Suspense fallback now portals truthful, busy, non-live
+inspector and activity states and retains the inspector close action. The reused
+native-proof fragment now contains the exact
+`research-knowledge-active` conditional and the sole zero-prop lifecycle mount.
+Focused loading/lifecycle tests and `npm run repository:check` pass.
+
 ## 2026-09-02 — Ambient Keychain behavior does not establish owned scope
 
 **Observation:** File-based default/search-list behavior, access-group
