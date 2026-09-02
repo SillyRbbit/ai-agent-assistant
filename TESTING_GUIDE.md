@@ -16,6 +16,25 @@ Last updated: 2026-09-02
 - Never report a check as passed unless its command completed successfully in
   the current increment.
 
+## D-109 documentation-only opaque identity-reference decision
+
+The `d107-opaque-prebound-identity-contract-decision` increment implements no
+identity source, Keychain call, private-key operation, signing interface, Tauri
+contract, build, or target-Mac proof. Review only whether current repository
+source establishes an application-owned issuer of a no-input, attempt-bound
+opaque signing-identity reference without lookup, enumeration, selection,
+fallback, default/search-list, account, home, or path authority.
+
+Passing the documentation review requires selecting exactly one closed
+governance disposition, preserving D-097, D-107's factual 8/11 record, and
+D-108's additive 9/10 interpretation, retaining Blocked readiness, and making
+no product or operational claim. The selected result is
+`reference_issuance_not_accepted`. Formatting/link validation, repository
+health, secret scanning, whitespace checking, independent review, session
+inventory, and the completion gate are required. Product verification, npm
+audit, builds, Apple/Xcode/Keychain/private-key/signing, target-Mac, provider,
+product, and external checks remain Not run by scope.
+
 ## D-108 documentation-only D-102 applicability decision
 
 The `d102-non-build-proof-applicability-decision` increment implements no

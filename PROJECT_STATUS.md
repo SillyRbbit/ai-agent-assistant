@@ -2,6 +2,26 @@
 
 Last updated: 2026-09-02
 
+## D-107 opaque identity-reference decision
+
+The owner-approved documentation-only
+[`d107-opaque-prebound-identity-contract-decision`](docs/plans/2026-09-02-d107-opaque-prebound-identity-contract-decision.md)
+began from clean synchronized `main` at
+`51a80f60cf8d803b3c22945d0719a671382ee090`. D-109 selects
+`reference_issuance_not_accepted`: current repository source has no
+application-owned issuer for a no-input, attempt-bound opaque signing-identity
+reference without lookup, enumeration, selection, fallback, default/search-list,
+account, home, or path authority.
+
+No product/test source, dependency, configuration, Keychain, Security
+framework, certificate/private-key, signing, build, target-Mac, provider,
+product, or external operation changed or ran. D-107's immutable 8/11 factual
+record and D-108's additive 9/10 interpretation remain unchanged. Ten
+contracts block the candidate; no operational successor is Ready.
+
+The exact fifteen-path documentation scope passed the required validation and
+completion gate with `PASS WITH ADVISORIES`.
+
 ## D-102 non-build applicability decision
 
 The owner-approved documentation-only

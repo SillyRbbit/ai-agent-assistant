@@ -2,6 +2,21 @@
 
 Last updated: 2026-09-02
 
+## D-107 opaque identity-reference decision
+
+D-109 selects `reference_issuance_not_accepted` for exactly
+`opaque_prebound_identity_contract`. Current repository source has no
+application-owned issuer for a no-input, attempt-bound opaque signing-identity
+reference without lookup, enumeration, selection, fallback, default/search-list,
+account, home, or path authority. This is a bounded negative source result, not
+a universal impossibility claim.
+
+Historical D-107 remains 8/11 and D-108's additive interpretation remains
+9/10. Ten contracts remain unproved. No candidate or successor is **Ready**.
+Do not implement or operate identity, Keychain, signing, build, Apple/Xcode,
+target-Mac, provider, product, or external-system work without a separately
+approved bounded plan.
+
 ## D-102 non-build applicability decision
 
 The owner-approved documentation-only

@@ -2,6 +2,22 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-09-02 — Opaque object shape does not establish identity provenance
+
+**Observation:** D-107 requires a separately proven application-owned,
+no-input, attempt-bound opaque signing-identity reference. Current repository
+source contains only a distinct fixed-label Cloudflare credential reader; it
+does not issue, bind, or own a signing identity. No current component provides
+the required issuer without lookup, enumeration, selection, fallback, or
+ambient default/search-list/account/home/path authority.
+
+**Disposition:** D-109 selects
+`reference_issuance_not_accepted`. This is a bounded repository-state result,
+not a universal impossibility claim. D-107's factual `contract_unproven` row,
+D-108's 9/10 additive interpretation, all remaining blockers, and Blocked
+readiness remain unchanged. No Keychain, certificate, private-key, signing,
+Apple/Xcode, build, target-Mac, provider, product, or external operation ran.
+
 ## 2026-09-02 — D-102 lacked a closed disposition for an exact non-build proof class
 
 **Observation:** D-107 froze an in-process, childless, fileless conceptual

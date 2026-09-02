@@ -5617,3 +5617,106 @@ D-108 additively dispositions only D-107's
 It does not supersede or weaken D-072, D-075, D-076, D-095, D-096, D-097,
 D-098, D-099, D-100, D-101, D-102, D-103, D-104, D-105, D-106, D-107,
 TS-017, historical evidence, or any operational prerequisite.
+
+## D-109 - Do not accept opaque identity-reference issuance from the current repository record
+
+Date: 2026-09-02
+Status: Accepted owner-authorized documentation-only governance decision
+
+## Context
+
+D-107 freezes exactly
+`in_process_security_framework_ephemeral_challenge_proof_v1` and records
+`opaque_prebound_identity_contract` as `contract_unproven`. The required
+future shape is stricter than a native opaque object: trusted Rust would need
+one application-owned, no-input, operation-specific, attempt-bound opaque
+identity reference that is neither selected by a caller nor obtained by lookup,
+enumeration, default/search-list, account, home, path, environment, profile,
+runtime, task, run, workflow, agent, fallback, or retry.
+
+D-101 separately prohibits explicit account-directory resolution and ambient
+identity authority. D-108 classifies only D-102's build-child subject for the
+exact non-build candidate; it provides no identity source, signer binding, or
+platform-effect proof. The current Rust
+`src-tauri/src/credentials/cloudflare_access.rs` reader has two fixed
+generic-password labels for a separate Cloudflare credential proof. It does not
+issue, bind, retain, or destroy a signing identity, and must not be repurposed
+as identity provenance evidence.
+
+This repository-only review asks one narrow governance question: can the
+current accepted repository record establish the required opaque identity-
+reference issuer without operational evidence or a new implementation?
+
+## Decision
+
+Define `OpaquePreboundIdentityReferencePolicyV1` as a documentation policy
+for exactly the frozen D-107 candidate. It has only these governance
+dispositions:
+
+| Condition                                                                                                                          | Disposition                       |
+| ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| Current accepted source establishes the entire fixed no-input issuance and ownership boundary without a prohibited selection route | `reference_issuance_documented`   |
+| Current accepted source establishes that no such issuer exists in the reviewed repository state                                    | `reference_issuance_not_accepted` |
+| A required fact is missing, ambiguous, contradictory, or the candidate/contract boundary drifts                                    | `boundary_failed`                 |
+
+Select exactly `reference_issuance_not_accepted`.
+
+No current repository component issues an application-domain, attempt-bound
+opaque signing-identity reference without lookup, enumeration, selection,
+fallback, or ambient authority. A native object being opaque does not identify
+who selected it, what credential domain applies, whether an ambient default or
+search list was consulted, or whether the reference is bound to one attempt.
+The fixed-label Cloudflare credential reader establishes none of those facts.
+
+The long human-readable disposition is governance documentation, not a D-100
+`evidence_privacy_v1` outcome and not a runtime, Tauri, or WebView result.
+D-107's canonical factual record stays exactly `contract_unproven`.
+
+## Consequences
+
+- Historical D-107 remains byte-for-byte unchanged with eight
+  `documented` and eleven `contract_unproven` rows. D-108's additive
+  prospective interpretation remains nine documented and ten unproved rows.
+- The current `opaque_prebound_identity_contract` row remains unproved.
+  `reference_issuance_not_accepted` does not add a documented row, lower the
+  blocker count, admit the candidate, or make a successor Ready.
+- No future design may substitute a fixed label, certificate filter,
+  fingerprint, default Keychain, search list, account, home, path,
+  environment, caller, model, WebView, runtime, profile, agent, task, run,
+  workflow, generic selector, fallback, or retry for an application-owned
+  issuer.
+- A future positive design needs separate owner authorization and independently
+  reviewed contracts for trusted-Rust ownership, adapter-private issuance,
+  reference non-export, attempt binding, exact signer binding, account/Keychain
+  scope, private-key non-export, fixed algorithm, interaction denial,
+  cancellation, late-result rejection, cleanup/quarantine, and platform
+  effects.
+- This decision creates no source implementation, credential, Keychain access,
+  certificate/private-key operation, signing operation, Tauri interface,
+  persistence, build, provider, target-Mac action, or external-system effect.
+- D-097 remains `failed` / `FAIL` / `Blocked` with its original report,
+  digests, Failed privacy finding, Pending Open Directory boundary, Not-run
+  signing, and absent completion marker. D-098 remains valid and non-reusable.
+
+## Alternatives considered
+
+- Treat `SecIdentity` opacity as prebinding: rejected because opacity is not
+  provenance, scope, issuer ownership, or attempt binding.
+- Treat fixed credential labels as a signing-identity selector: rejected
+  because the existing reader is a separate Cloudflare credential proof and
+  would still not establish signer provenance or no-ambient authority.
+- Add a certificate label, fingerprint, default Keychain, or search-list
+  filter: rejected because each is selection/ambient authority, not an
+  application-owned issuer.
+- Implement an issuer or inspect Keychain state: rejected as product/system
+  work outside this documentation-only authorization.
+- Claim universal impossibility: rejected because the result is limited to the
+  current reviewed repository state.
+
+## Supersedes or is superseded by
+
+D-109 additively selects a negative governance disposition for only
+`opaque_prebound_identity_contract` in the frozen D-107 candidate. It does
+not supersede D-072, D-075, D-076, D-095, D-096, D-097, D-098, D-099, D-100,
+D-101, D-102, D-103, D-104, D-105, D-106, D-107, D-108, TS-017, historical
+evidence, or any operational prerequisite.

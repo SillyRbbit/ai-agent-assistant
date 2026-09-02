@@ -2,6 +2,36 @@
 
 Last updated: 2026-09-02
 
+## D-107 opaque identity-reference decision
+
+The owner approved the documentation-only
+`d107-opaque-prebound-identity-contract-decision` from clean synchronized
+`main` at `51a80f60cf8d803b3c22945d0719a671382ee090`. D-109 selects the
+closed governance disposition `reference_issuance_not_accepted`: present
+repository source contains no application-owned issuer for one no-input,
+attempt-bound opaque signing-identity reference without lookup, enumeration,
+selection, fallback, default/search-list, account, home, or path authority.
+Opacity is not provenance.
+
+D-107's immutable factual 8 documented / 11 unproved record and D-108's
+additive 9/10 interpretation remain unchanged. All ten remaining blockers,
+including platform effects, continue to block the candidate and every
+successor. No Keychain, Security framework, certificate, private-key, signing,
+Apple, Xcode, build, target-Mac, provider, product, or external operation ran.
+
+The exact fifteen-path documentation scope passed formatting/link,
+repository-health, secret-scan, protected-history, protected-path, whitespace,
+session-inventory, architecture, security, code-health, technical-debt,
+readiness, quality, and post-increment validation with `PASS WITH ADVISORIES`.
+
+Exact resume prompt: “Read AGENTS.md and the complete required project-memory,
+security/testing, D-096 through D-109, and completion-review chain. Preserve
+D-097’s terminal failure, D-107’s immutable 8/11 record, D-108’s additive
+9/10 result, and D-109’s negative identity-issuance decision. No candidate or
+successor is Ready. Do not begin or operate identity, Keychain, signing, build,
+Apple/Xcode, target-Mac, provider, product, or external work without a
+separately approved bounded plan.”
+
 ## D-102 non-build proof applicability decision
 
 The owner approved reconsideration of exactly

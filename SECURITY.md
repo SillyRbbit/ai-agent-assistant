@@ -7,6 +7,23 @@ Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
 identifies which security boundaries are current, mocked, planned, or
 prohibited.
 
+## D-109 opaque identity-reference issuance boundary
+
+D-109 selects `reference_issuance_not_accepted` for exactly
+`opaque_prebound_identity_contract`. Repository source does not contain an
+application-owned issuer of one no-input, attempt-bound opaque signing-identity
+reference that avoids lookup, enumeration, selection, fallback,
+default/search-list, account, home, and path authority. An opaque native
+reference proves neither selection provenance nor permitted scope.
+
+No later source may turn fixed labels, a certificate filter, a fingerprint, a
+default Keychain, a search list, environment state, or a caller-provided value
+into a substitute issuer. Any future positive design needs separately approved
+contracts for trusted-Rust ownership, private adapter issuance, non-export,
+attempt binding, cleanup/quarantine, and all remaining D-107 rows. This
+decision creates no Keychain, certificate, private-key, signing, Tauri, or
+runtime authority. Platform effects remain independently unproved.
+
 ## D-108 D-102 non-build applicability boundary
 
 D-108 accepts exactly the governance disposition
