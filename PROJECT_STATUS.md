@@ -2,6 +2,37 @@
 
 Last updated: 2026-09-02
 
+## D-102 non-build applicability decision
+
+The owner-approved documentation-only
+[`d102-non-build-proof-applicability-decision`](docs/plans/2026-09-02-d102-non-build-proof-applicability-decision.md)
+increment began from clean synchronized `main` at
+`04fd0bc5cfbdbb25ebdb9b3f24940dd5d36b2bc3`. D-108 accepts a build-child
+subject split only for the exact frozen no-build/no-candidate-launched-helper/
+child/subprocess/external-executable/no-artifact/no-application-or-Rust-
+dependency-filesystem-network-IPC/dynamic-code D-107 concept.
+
+D-102 is neither waived nor satisfied. It becomes fully mandatory on every
+named build, candidate-launched process, artifact, application- or Rust-
+dependency-authored filesystem/network/socket/IPC API, application- or Rust-
+dependency-selected dynamic/JIT/plugin/external-code load, product-signing,
+caller-selected, ambiguous, or drifted path. Ambiguity and drift also record
+`boundary_failed`. OS-managed platform effects remain independently unproved.
+Historical D-107 remains 8 documented / 11 unproved; the additive current
+interpretation is 9/10. Ten contracts still block the candidate, and no
+operational successor is Ready.
+
+The exact fifteen-path documentation scope passed all required checks and the
+completion gate with `PASS WITH ADVISORIES`; next-increment readiness remains
+`Blocked`.
+
+Documentation files are written and local validation/gate processes run. The
+approved read-only Git refresh contacted the remote. No product/test source,
+dependency, configuration, capability, entitlement, IPC, workflow, hook, or
+script path changes, and no product-build, signing, Keychain/private-key,
+target-Mac operational process or state-changing external action is part of
+this increment.
+
 ## Completed D-107 operational-scope wording reconciliation
 
 The owner approved one documentation-only accuracy correction from clean

@@ -5,6 +5,21 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Current plan state
 
 The most recently completed owner-approved documentation-only plan is
+[`d102-non-build-proof-applicability-decision`](docs/plans/2026-09-02-d102-non-build-proof-applicability-decision.md).
+It reconsiders exactly `d102_applicability_split_contract` for the frozen D-107
+concept. D-108 accepts a split only for D-102's build-child subject while the
+candidate remains exactly no-build, no-candidate-launched-helper/child/
+subprocess/external-executable, no-artifact, no-application-or-Rust-dependency-
+authored filesystem/network/socket/IPC API, no-application-or-Rust-dependency-
+selected dynamic/JIT/plugin/external-code load, and no-`codesign`. A definitive
+trigger makes D-102 fully mandatory; ambiguity or drift records
+`boundary_failed` and also makes D-102 mandatory. Ten contracts, including
+`platform_effect_contract`, remain unproved; historical D-107 remains 8/11 and
+the additive current interpretation is 9/10. The candidate and every successor
+remain Blocked. The exact documentation checks and completion gate passed with
+`PASS WITH ADVISORIES`.
+
+The preceding completed owner-approved documentation-only plan is
 [`d107-operational-scope-wording-reconciliation`](docs/plans/2026-09-02-d107-operational-scope-wording-reconciliation.md).
 It preserves all published D-107 evidence while clarifying that documentation
 files were written and local validation/gate processes ran. No product/test

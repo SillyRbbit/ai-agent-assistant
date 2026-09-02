@@ -3,6 +3,22 @@
 Status: Authoritative current-state architecture
 Last updated: 2026-09-02
 
+> D-102 non-build applicability decision (2026-09-02): D-108 documents a
+> policy split only for the exact conceptual
+> `in_process_security_framework_ephemeral_challenge_proof_v1` class while its
+> no-build, no-candidate-launched-helper/child/subprocess/external-executable,
+> no-artifact, no-application-or-Rust-dependency filesystem/network/socket/IPC
+> API, no-application-or-Rust-dependency dynamic/JIT/plugin/external-code load,
+> and no-`codesign` shape remains exact. This is not an architecture edge or
+> runtime classifier. Any such definitive excluded feature makes D-102 fully
+> mandatory; ambiguity or drift records `boundary_failed` and also makes D-102
+> fully mandatory.
+> OS-managed Keychain, `securityd`, cache, log, IPC, trust, revocation,
+> process-metadata, and network effects remain independently unproved. The
+> additive current interpretation is 9 documented / 10 unproved contracts;
+> historical D-107 remains 8/11, the candidate is unadmitted, and no successor
+> is Ready.
+
 > In-process key-use containment classification (2026-09-02): D-107 records
 > `not_eligible_or_unproven` for exactly
 > `in_process_security_framework_ephemeral_challenge_proof_v1`. Eight source

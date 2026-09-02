@@ -2,6 +2,28 @@
 
 Last updated: 2026-09-02
 
+## D-102 non-build applicability decision
+
+The owner-approved documentation-only
+`d102-non-build-proof-applicability-decision` records D-108's exact
+`split_documented_for_frozen_non_build_class` governance disposition. It
+applies only to D-102's build-child subject for the frozen D-107 conceptual
+candidate while every no-build/no-candidate-launched-process/no-artifact/
+no-application-or-Rust-dependency-filesystem-network-IPC/dynamic-code
+exclusion remains exact. It is not a D-102 waiver or operational evidence.
+
+Historical D-107 remains 8 documented / 11 unproved; the additive current
+interpretation is 9/10. Ten identity, signer, export-reachability, algorithm,
+interaction, cancellation, late-result, cleanup, and platform-effect contracts
+remain unproved. No candidate or successor is **Ready**. Do not implement or
+operate the candidate, access Apple/Xcode/Keychain, use a private key, sign,
+build, launch a product/helper process, or contact a product/external system
+without a separately approved bounded plan. Any boundary drift makes D-102
+fully mandatory.
+
+The exact documentation checks and completion gate passed with `PASS WITH
+ADVISORIES`; next-increment readiness is `Blocked`.
+
 ## Completed D-107 operational-scope wording reconciliation
 
 The owner approved one documentation-only reconciliation from clean

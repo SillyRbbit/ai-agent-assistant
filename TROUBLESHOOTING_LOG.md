@@ -2,6 +2,28 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-09-02 — D-102 lacked a closed disposition for an exact non-build proof class
+
+**Observation:** D-107 froze an in-process, childless, fileless conceptual
+challenge proof but correctly left `d102_applicability_split_contract`
+unproved. D-102 governs build-child graphs and supplied no generic waiver or
+`not_applicable` result. Treating scope reduction as containment would weaken
+the policy, while applying build-child predicates to a class with no build or
+child would conflate distinct subjects. The approved positive governance token
+also exceeds D-100's 32-byte outcome limit.
+
+**Disposition:** D-108 defines a documentation-only, exact-candidate split with
+three closed governance dispositions and fail-closed reattachment triggers. A
+definitive build, candidate-launched process, artifact, application- or Rust-
+dependency-authored filesystem/network/socket/IPC API, application- or Rust-
+dependency-selected dynamic/JIT/plugin/external-code load, product-signing, or
+caller-selected feature makes D-102 mandatory. Ambiguity or drift records
+`boundary_failed` and also makes D-102 mandatory. The long governance token is
+not serialized as D-100 evidence. OS-managed downstream effects remain
+independently unproved. Historical D-107 stays 8/11; only the additive current
+interpretation is 9/10. Ten blockers remain, the candidate is not admitted,
+and no successor is Ready.
+
 ## 2026-09-02 — D-107 scope wording conflated repository work with operational effects
 
 **Observation:** Post-publication review found unqualified `process` and

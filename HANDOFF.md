@@ -2,6 +2,43 @@
 
 Last updated: 2026-09-02
 
+## D-102 non-build proof applicability decision
+
+The owner approved reconsideration of exactly
+`d102_applicability_split_contract` from clean synchronized `main` at
+`04fd0bc5cfbdbb25ebdb9b3f24940dd5d36b2bc3`. D-108 selects
+`split_documented_for_frozen_non_build_class` only for the exact conceptual
+`in_process_security_framework_ephemeral_challenge_proof_v1` shape. This is a
+documentation-level subject split, not containment, implementation, a waiver,
+or a generic `not_applicable` result.
+
+Any build, candidate-launched helper/child/subprocess/external executable,
+artifact, application- or Rust-dependency-authored filesystem/network/socket/
+IPC API, application- or Rust-dependency-selected dynamic/JIT/plugin/external-
+code load, `codesign`, product signing, caller-selected authority, ambiguity,
+or drift makes D-102 fully mandatory. Ambiguity or drift also records
+`boundary_failed`. OS-managed Keychain, `securityd`, cache, log, IPC, trust,
+revocation, process-metadata, and network effects remain independently
+unproved. Historical D-107 remains byte-for-byte unchanged at 8 documented /
+11 unproved; the additive current interpretation is 9/10. Ten contracts remain
+unproved, the candidate remains unadmitted, and no successor is Ready.
+
+The exact fifteen-path documentation scope passed formatting/link,
+repository-health, secret-scan, protected-history, protected-path, whitespace,
+session-inventory, architecture, security, code-health, technical-debt,
+readiness, quality, and post-increment validation. The gate completed validly
+with `PASS WITH ADVISORIES`; next-increment readiness remains `Blocked`.
+
+Exact resume prompt: “Read AGENTS.md, the complete required project-memory and
+security/testing chain, D-096 through D-108, and the completed D-108 review.
+Preserve historical D-107 at 8 documented / 11 unproved and treat D-108's 9/10
+as additive current interpretation only. D-102 remains mandatory on every
+reattachment trigger; platform effects and nine other contracts remain unproved.
+Report that no candidate or successor is Ready. Do not begin a gate, change
+source, build, launch a product/helper process, access Apple/Xcode/Keychain,
+use a private key, sign, operate the target Mac, or change product/external
+state without a separately approved bounded plan.”
+
 ## D-107 operational-scope wording reconciliation
 
 The owner approved the documentation-only

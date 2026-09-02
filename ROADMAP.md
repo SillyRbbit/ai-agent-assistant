@@ -18,6 +18,25 @@ Last updated: 2026-09-02
 contains the ordered execution queue. Completed plans and reviews are the
 verification record; this roadmap does not create new completion evidence.
 
+## D-102 non-build applicability decision
+
+The documentation-only D-108 decision is **Completed** with `PASS WITH
+ADVISORIES`. It accepts an applicability split only for D-102's build-child
+subject and only for the exact
+frozen D-107 no-build/no-candidate-launched-process/no-artifact/no-application-
+or-Rust-dependency-filesystem-network-IPC/dynamic-code concept. It does not
+implement or admit that candidate. Any build, candidate-launched process,
+artifact, application- or Rust-dependency-authored filesystem/network/socket/
+IPC API, application- or Rust-dependency-selected dynamic/JIT/plugin/external-
+code load, product-signing, or caller-selected authority makes D-102 fully
+mandatory. Ambiguity or drift records `boundary_failed` and also makes D-102
+mandatory.
+
+Historical D-107 remains 8 documented / 11 unproved; the additive current
+interpretation is 9/10. Platform effects and nine other contracts remain
+unproved, so the total still contains ten blockers. No successor is **Ready**;
+P3, P4, signing, V0-3, and all operational work remain **Blocked**.
+
 ## Completed in-process key-use containment classification
 
 The documentation-only source review records D-107's bounded negative result:
