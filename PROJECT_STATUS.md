@@ -2,6 +2,33 @@
 
 Last updated: 2026-09-02
 
+## Browserslist 4.28.7 security remediation
+
+Status: **Verified complete with advisories.** PR #102 remediation
+`8570034397e273af660a95af5a62e56f74ddc142` resolves both High Browserslist
+advisories by moving the existing development-only node from 4.28.2 to the
+first patched release, 4.28.7. Exactly four existing support entries move to
+the new required floors: `baseline-browser-mapping@2.10.44`,
+`caniuse-lite@1.0.30001806`, `electron-to-chromium@1.5.393`, and
+`node-releases@2.0.51`. `update-browserslist-db@1.2.3`, `package.json`, parent
+packages, lockfile topology, source, workflows, audit policy, and install-
+script allowlist are unchanged.
+
+Scripts-disabled clean install, exact graph/metadata/lifecycle inspection,
+full and production-only zero-finding npm audits, complete `npm run verify`,
+repository/security checks, and independent architecture/security/code/debt
+reviews pass. Every classifier-selected check on the exact remediation head is
+green in CI run `33694943603` and Documentation run `33694943605`, including
+Linux Rust, target-Mac Rust, frontend, secret scanning, JavaScript audit, and
+the unchanged accepted Rust advisory-baseline gate.
+
+No UI or native behavior changed. The verified Return submission, Graph wheel
+zoom, responsive shell, D-112, Structured view, and every IPC, persistence,
+provider, permission, approval, execution, and device-authority boundary remain
+unchanged. The result is `PASS WITH ADVISORIES`; the sole advisory is that
+D-111 leaves all ten product/operational blockers unresolved and no successor
+Ready.
+
 ## GUI conversation Return and Graph wheel interactions
 
 Status: **Verified complete with advisories.** Exact unmodified Return sends one

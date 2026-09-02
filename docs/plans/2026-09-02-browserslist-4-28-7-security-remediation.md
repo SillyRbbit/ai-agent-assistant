@@ -1,6 +1,6 @@
 # Browserslist 4.28.7 security remediation
 
-Status: In progress
+Status: Verified complete with advisories
 Owner: Project owner
 Last updated: 2026-09-02
 Gate ID: `browserslist-4-28-7-security-remediation`
@@ -135,11 +135,11 @@ source remain unchanged. Any contrary discovery stops the increment.
       every lockfile movement
 - [x] Verify the exact installed graph, metadata, zero audits, and complete
       repository behavior
-- [ ] Complete independent architecture, security, code, debt, and readiness
+- [x] Complete independent architecture, security, code, debt, and readiness
       reviews
-- [ ] Publish the remediation and require every applicable exact-head PR check
+- [x] Publish the remediation and require every applicable exact-head PR check
       to pass
-- [ ] Synchronize final evidence and finalize a valid completion marker before
+- [x] Synchronize final evidence and finalize a valid completion marker before
       squash merge
 
 ## Security and privacy considerations
@@ -249,6 +249,22 @@ remains nonzero, a required test fails, or any final PR check is not green.
 - 2026-09-02: Scripts-disabled `npm ci`, exact graph inspection, metadata and
   lifecycle review, full and production-only zero-finding npm audits, protected-
   path guards, diff hygiene, and complete `npm run verify` pass locally.
+- 2026-09-02: Independent architecture and security reviews pass with no
+  finding. Code review has no Critical, High, Medium, or Low finding; its sole
+  interim advisory was the intentionally pending closeout synchronization,
+  which this final documentation resolves. Technical-debt review finds no debt
+  introduced. Readiness remains Blocked only because D-111 selects no successor.
+- 2026-09-02: Published remediation
+  `8570034397e273af660a95af5a62e56f74ddc142`. CI run `33694943603` passes
+  classifier `100461696363` in 27s, Linux Rust `100461917260` in 5m21s,
+  target-Mac Rust `100461917294` in 2m45s, dependency/secret audit
+  `100461917273` in 3m45s, and frontend `100461917319` in 1m14s.
+  Documentation run `33694943605`, job `100461695987`, passes in 30s.
+- 2026-09-02: Final current-state, security, troubleshooting, plan, increment,
+  and consolidated-review records are synchronized. Documentation, repository,
+  secret, diff, and session checks pass, and the completion marker is complete
+  and valid. Only the final closeout-head checks and already authorized squash
+  merge remain; neither is a successor increment.
 
 ## Acceptance criteria
 
@@ -260,28 +276,32 @@ remains nonzero, a required test fails, or any final PR check is not green.
       license-reviewed, and free of a new lifecycle script
 - [x] Installed graph is valid and full/production npm audits report zero
       vulnerabilities
-- [ ] Complete local verification and independent reviews have no blocking
+- [x] Complete local verification and independent reviews have no blocking
       finding
-- [ ] Every applicable PR check passes on the exact published remediation and
-      final closeout heads
-- [ ] Final report passes and the completion marker is complete and valid
+- [x] Every applicable PR check passes on the exact published remediation head
+- [x] Final report passes and the completion marker is complete and valid
       before squash merge
 
 ## Final results
 
-The bounded lockfile implementation and complete local verification pass.
-Independent reviews, publication, exact-head CI, final documentation, and gate
-finalization remain pending.
+The exact five-node development-only lockfile remediation, both zero-finding
+npm audits, complete local verification, independent reviews, and every
+classifier-selected exact-remediation-head check pass. No dependency, security,
+architecture, code-health, or introduced-debt finding remains. The consolidated
+result is `PASS WITH ADVISORIES`; the sole advisory is D-111's unchanged
+Blocked successor readiness. The deterministic marker is complete and valid.
+Only final closeout-head checks and the separately authorized PR #102 squash
+merge remain.
 
 ## Documentation updates
 
-- [ ] `HANDOFF.md`
-- [ ] `PROJECT_STATUS.md`
-- [ ] `NEXT_STEPS.md`
-- [ ] `PLANS.md`
-- [ ] `ROADMAP.md`
-- [ ] `SECURITY.md`
-- [ ] `DECISIONS.md` reviewed; no durable decision expected
-- [ ] `CHANGELOG.md`
-- [ ] `TROUBLESHOOTING_LOG.md`
-- [ ] Consolidated post-increment review
+- [x] `HANDOFF.md`
+- [x] `PROJECT_STATUS.md`
+- [x] `NEXT_STEPS.md`
+- [x] `PLANS.md`
+- [x] `ROADMAP.md`
+- [x] `SECURITY.md`
+- [x] `DECISIONS.md` reviewed; no durable decision changed
+- [x] `CHANGELOG.md`
+- [x] `TROUBLESHOOTING_LOG.md`
+- [x] Consolidated post-increment review

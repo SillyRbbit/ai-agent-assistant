@@ -2,6 +2,61 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## TS-023 - PR #102 audit reported Browserslist advisories
+
+Date: 2026-09-02
+Status: Resolved
+
+### Symptom
+
+PR #102 CI passed repository policy, documentation, frontend, Linux Rust, and
+target-Mac Rust validation but failed `npm audit --audit-level=low` on the
+existing development-only `browserslist@4.28.2` transitive. The audit reported
+GHSA-c83g-rgw3-j3cx / CVE-2026-73089 and GHSA-73wf-gq98-2v4g /
+CVE-2026-73088, both patched in 4.28.7.
+
+### Cause
+
+The lockfile still selected a release within the newly published affected
+range through the existing Vite/Babel tooling path. This was not a product
+runtime dependency, detected exploit, repository secret, or authorization-
+boundary change.
+
+### Resolver guard and recovery
+
+The first
+`npm update --package-lock-only --ignore-scripts browserslist baseline-browser-mapping caniuse-lite electron-to-chromium node-releases`
+attempt selected unauthorized Browserslist 4.28.8, refreshed the four support
+nodes beyond the required floors, and moved `update-browserslist-db` to 1.3.2.
+The scope guard stopped and fully reversed that generated delta. A subsequent
+`--no-save` exact-package attempt did not replace npm's broad lock selection and
+was also discarded.
+
+Temporary exact resolver inputs then constrained
+`npm install --package-lock-only --ignore-scripts` to Browserslist 4.28.7 and
+its four published minimums. The inputs were removed immediately. Final
+`package.json` is byte-identical to baseline, and a scripts-disabled clean
+install validates the normal parent ranges without an override. The final lock
+diff contains exactly five existing top-level nodes, no addition/removal or
+nested topology, and retains `update-browserslist-db@1.2.3`.
+
+### Resolution and verification
+
+The resolved versions are `browserslist@4.28.7`,
+`baseline-browser-mapping@2.10.44`, `caniuse-lite@1.0.30001806`,
+`electron-to-chromium@1.5.393`, and `node-releases@2.0.51`. Exact graph,
+metadata, license, engine, integrity, and lifecycle checks pass. Both full and
+production-only npm audits report zero vulnerabilities, complete
+`npm run verify` passes, and PR #102 CI run `33694943603` passes dependency/
+secret job `100461917273` plus every other classified job.
+
+### Verify
+
+Require a scripts-disabled clean install, exact `npm ls` output for all six
+Browserslist-related nodes, full and production-only zero-finding audits, an
+unchanged `package.json`, a five-node-only lock diff, complete repository
+verification, a valid completion marker, and exact-head CI before merge.
+
 ## 2026-09-02 — Textarea Return did not submit and Graph wheel bypassed zoom
 
 **Observation:** The conversation composer used only form submission from its

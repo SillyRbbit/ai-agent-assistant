@@ -2,17 +2,19 @@
 
 Last updated: 2026-09-02
 
-## Active Browserslist 4.28.7 security remediation
+## Completed Browserslist 4.28.7 security remediation
 
-The owner explicitly approved the bounded
-`browserslist-4-28-7-security-remediation` increment after PR #102's required
-dependency audit identified the existing development-only transitive
-Browserslist 4.28.2. Resolve exactly Browserslist 4.28.7 and only the four
-support entries required by its raised dependency floors. Preserve
-`package.json`, parent packages, source, workflows, audit policy, and trust
-boundaries. Require a zero-finding npm audit, complete verification, a valid
-completion marker, and every applicable exact-head PR check before squash
-merge.
+The separately approved `browserslist-4-28-7-security-remediation` increment
+is complete with `PASS WITH ADVISORIES`. Exact remediation
+`8570034397e273af660a95af5a62e56f74ddc142` and all classifier-selected checks
+pass. Preserve Browserslist 4.28.7, the four exact required support floors,
+`update-browserslist-db@1.2.3`, the byte-identical manifest, and the unchanged
+product/trust boundaries.
+
+Require the final closeout head's applicable checks, then perform only the
+already authorized PR #102 squash merge. This publication remainder is not a
+new increment. No dependency, product, or operational successor is selected or
+Ready; D-111 remains controlling after merge.
 
 ## Completed GUI conversation Return and Graph wheel interactions
 

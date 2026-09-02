@@ -2,6 +2,63 @@
 
 Last updated: 2026-09-02
 
+## PR #102 Browserslist 4.28.7 security remediation checkpoint
+
+The owner-approved `browserslist-4-28-7-security-remediation` increment is
+verified complete with advisories from clean GUI publication baseline
+`e396529246f96a376fdd959a6ffadb71e996bce4`. Published remediation
+`8570034397e273af660a95af5a62e56f74ddc142` advances only the existing
+development-only `browserslist` resolution from 4.28.2 to patched 4.28.7 and
+the four support entries required by its raised floors:
+`baseline-browser-mapping@2.10.44`, `caniuse-lite@1.0.30001806`,
+`electron-to-chromium@1.5.393`, and `node-releases@2.0.51`.
+`update-browserslist-db` remains 1.2.3.
+
+An initial broad npm resolution selected unauthorized Browserslist 4.28.8,
+newer support data, and `update-browserslist-db@1.3.2`. The scope guard stopped
+and fully reversed that delta. The exact npm-generated resolution used only
+temporary resolver inputs, which were removed immediately; final
+`package.json` is byte-for-byte identical to baseline, and the lockfile has no
+durable override, addition, removal, nested topology, or unrelated movement.
+Every moved node remains development-only, registry-resolved, SHA-512
+integrity-bound, license-reviewed, engine-compatible, and free of an install
+lifecycle hook.
+
+Scripts-disabled clean installation, exact dependency-graph and lifecycle
+inspection, full and production-only npm audits with zero vulnerabilities,
+protected-path checks, and complete `npm run verify` pass. Independent
+architecture, security, code, technical-debt, and readiness reviews contain no
+blocking finding. CI run `33694943603` passes classifier job `100461696363` in
+27s, Linux Rust `100461917260` in 5m21s, target-Mac Rust `100461917294` in
+2m45s, dependency/secret audit `100461917273` in 3m45s, and frontend
+`100461917319` in 1m14s. Documentation run `33694943605`, job
+`100461695987`, passes in 30s.
+
+The consolidated result is `PASS WITH ADVISORIES` in
+[`2026-09-02-browserslist-4-28-7-security-remediation-post-increment-review.md`](docs/reviews/2026-09-02-browserslist-4-28-7-security-remediation-post-increment-review.md),
+and the deterministic completion marker is complete and valid for the final
+11-document closeout workspace. The overall remediation contains those 11
+documents plus the published lockfile. No dependency, security, architecture,
+code-health, or introduced-debt finding remains. The sole advisory is D-111:
+all ten product/operational blockers remain and no successor is Ready.
+
+Only the already authorized publication sequence remains: require every
+applicable check on the final closeout head, then squash-merge PR #102. This
+checkpoint supersedes older current-state wording that described the GUI work
+as uncommitted or unpublished; it does not rewrite the dated GUI evidence,
+D-112 interactions, Structured behavior, or any trust boundary.
+
+Exact resume prompt: “Read AGENTS.md and the complete required project memory,
+then read the Browserslist 4.28.7 remediation plan, increment record, and post-
+increment review. Confirm the completion marker is complete and valid and the
+final PR #102 head passes every applicable check. If PR #102 is still open,
+perform only the already authorized squash merge; if it is merged, verify the
+merged state and stop. Preserve Browserslist 4.28.7, its four exact support
+floors, update-browserslist-db 1.2.3, the unchanged manifest and trust
+boundaries, and the verified GUI/D-112 behavior. D-111 keeps every successor
+Blocked; do not begin another increment without separate owner selection and
+approval.”
+
 ## GUI conversation Return and Graph wheel interactions
 
 The owner-approved `gui-conversation-enter-graph-wheel-zoom` presentation

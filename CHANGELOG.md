@@ -4,6 +4,16 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Completed the owner-approved PR #102 Browserslist security remediation with
+  `PASS WITH ADVISORIES`. The existing development-only transitive advances
+  from 4.28.2 to patched 4.28.7, and only its four required support entries
+  move to exact published floors. `update-browserslist-db@1.2.3`, the manifest,
+  parent graph, source, workflows, install policy, and trust boundaries remain
+  unchanged. Scripts-disabled clean install, exact graph/metadata inspection,
+  both zero-finding npm audits, full `npm run verify`, independent reviews, and
+  every classified check on remediation `8570034` pass. The sole advisory is
+  D-111's unchanged Blocked successor readiness.
+
 - Completed the owner-requested conversation Return and Command Center Graph
   wheel interaction correction with `PASS WITH ADVISORIES`. Exact unmodified
   Return submits one enabled, non-empty volatile mock request; modifier chords,

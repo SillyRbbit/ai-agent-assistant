@@ -1,6 +1,6 @@
 # Browserslist 4.28.7 security remediation
 
-Status: In progress
+Status: Verified complete with advisories
 Owner: Project owner
 Date: 2026-09-02
 Gate ID: `browserslist-4-28-7-security-remediation`
@@ -34,12 +34,20 @@ approval, execution, or device authority may change. Do not merge PR #102 until
 this gate is complete and valid and every applicable check passes on the exact
 head.
 
-## Outcome
+## Final status
 
-Local implementation is complete. The npm-generated lockfile moves exactly the
-five authorized development-only entries, preserves `update-browserslist-db`
-1.2.3 and a byte-identical `package.json`, and passes a scripts-disabled clean
-install, exact graph and lifecycle inspection, full and production-only zero-
-finding npm audits, protected-path guards, and complete `npm run verify`.
-Independent review, exact-head PR checks, final documentation, and gate
-finalization remain pending.
+The npm-generated lockfile moves exactly the five authorized development-only
+entries, preserves `update-browserslist-db` 1.2.3 and a byte-identical
+`package.json`, and passes a scripts-disabled clean install, exact graph and
+lifecycle inspection, full and production-only zero-finding npm audits,
+protected-path guards, and complete `npm run verify`. Independent architecture,
+security, code, debt, and readiness reviews have no blocking finding.
+
+Published remediation `8570034397e273af660a95af5a62e56f74ddc142` passes
+every classifier-selected PR check in CI run `33694943603` and Documentation
+run `33694943605`. The linked
+[`post-increment review`](../reviews/2026-09-02-browserslist-4-28-7-security-remediation-post-increment-review.md)
+records exact evidence and a `PASS WITH ADVISORIES` result. The sole advisory is
+D-111's unchanged Blocked successor readiness. The gate is complete and valid;
+only final closeout-head checks and the separately authorized squash merge
+remain.
