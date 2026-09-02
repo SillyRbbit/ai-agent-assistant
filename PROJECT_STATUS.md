@@ -2,6 +2,22 @@
 
 Last updated: 2026-09-02
 
+## Completed D-107 operational-scope wording reconciliation
+
+The owner approved one documentation-only accuracy correction from clean
+synchronized `main` at
+`80dab5bb6b1d9065399bc533c3d6c2bf3c84abfb`. The published D-107 historical
+record is unchanged. Documentation files were written and local repository-
+validation and gate processes ran during D-107. No product/test source,
+dependency, configuration, capability, entitlement, IPC, workflow, hook, or
+script path changed, and no product-build, signing, Keychain/private-key,
+target-Mac, or state-changing external operation ran.
+
+The exact nine-path reconciliation passed its documentation validation and
+completion gate with `PASS WITH ADVISORIES`. D-107 remains
+`not_eligible_or_unproven` with eight `documented` and eleven
+`contract_unproven` rows and Blocked successor readiness.
+
 ## In-process key-use containment classification result
 
 The owner-approved documentation-only
@@ -11,11 +27,13 @@ review began from clean synchronized `main` at
 `not_eligible_or_unproven` for the exact frozen in-process challenge candidate:
 eight rows are `documented` and eleven are `contract_unproven`.
 
-No runtime, source, dependency, configuration, capability, entitlement, IPC,
-build, process, filesystem, Keychain/private-key operation, target-Mac check,
-or product/external state changed. The result creates no current architecture
-edge and does not waive D-101 or D-102. P3-3 through P3-5, P4, signing, V0-3,
-and every operational successor remain Blocked. No successor is Ready.
+No product/test source, dependency, configuration, capability, entitlement,
+IPC, workflow, hook, or script path changed. No product-build, signing,
+Keychain/private-key, target-Mac, or state-changing external operation ran.
+Documentation files were written and local validation/gate processes ran as
+recorded. The result creates no current architecture edge and does not waive
+D-101 or D-102. P3-3 through P3-5, P4, signing, V0-3, and every operational
+successor remain Blocked. No successor is Ready.
 
 The exact documentation validation and completion gate passed with `PASS WITH
 ADVISORIES`; next-increment readiness is `Blocked`.

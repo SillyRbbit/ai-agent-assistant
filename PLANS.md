@@ -5,15 +5,26 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Current plan state
 
 The most recently completed owner-approved documentation-only plan is
+[`d107-operational-scope-wording-reconciliation`](docs/plans/2026-09-02-d107-operational-scope-wording-reconciliation.md).
+It preserves all published D-107 evidence while clarifying that documentation
+files were written and local validation/gate processes ran. No product/test
+source, dependency, configuration, capability, entitlement, IPC, workflow,
+hook, or script path changed, and no product-build, signing, Keychain/private-
+key, target-Mac, or state-changing external operation ran. D-107 and Blocked
+successor readiness remain unchanged. The exact documentation checks and gate
+passed with `PASS WITH ADVISORIES`.
+
+The preceding completed owner-approved documentation-only plan is
 [`personal-assistant-v0-key-use-containment-classification`](docs/plans/2026-09-02-personal-assistant-v0-key-use-containment-classification.md).
 It freezes exactly `in_process_security_framework_ephemeral_challenge_proof_v1`
 and records D-107's bounded source result `not_eligible_or_unproven`: eight rows
 are `documented` and eleven are `contract_unproven`. No identity lookup,
-private-key operation, build, process, filesystem, target-Mac check, or product/
-external action ran. The candidate is not admitted, does not waive D-101 or
-D-102, and makes no successor Ready. Documentation validation and the
-completion workflow passed with `PASS WITH ADVISORIES`; next-increment
-readiness is `Blocked`.
+private-key operation, product build or signing, target-Mac operational check,
+or state-changing external action ran. Documentation files were written and
+local validation/gate processes ran as recorded. The candidate is not admitted,
+does not waive D-101 or D-102, and makes no successor Ready. Documentation
+validation and the completion workflow passed with `PASS WITH ADVISORIES`;
+next-increment readiness is `Blocked`.
 
 The preceding completed owner-approved plan is
 [`personal-assistant-v0-codeless-signing-fixture-classification`](docs/plans/2026-09-02-personal-assistant-v0-codeless-signing-fixture-classification.md).

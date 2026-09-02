@@ -2,6 +2,23 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-09-02 — D-107 scope wording conflated repository work with operational effects
+
+**Observation:** Post-publication review found unqualified `process` and
+`filesystem` absence language in four D-107 documents. Required-chain review
+found one equivalent current summary in `PLANS.md`, bringing the complete
+inventory to five. Read literally, that wording conflicts with the documented
+facts that repository documentation was written and local validation and gate
+processes ran.
+
+**Disposition:** Preserve the published D-107 decision, plan, increment, review,
+report digest, evidence totals, result, and Blocked readiness. Add one explicit
+reconciliation and update only mutable current-state summaries: repository
+documentation writes and local validation/gate processes occurred, while no
+product/build/signing/Keychain/target-Mac operational process or state-changing
+external action ran. This is a documentation-accuracy correction, not new
+operational evidence or authority.
+
 ## 2026-09-02 — In-process challenge primitives do not establish the complete key-use boundary
 
 **Observation:** Current Apple documentation and the pinned Rust crate establish
