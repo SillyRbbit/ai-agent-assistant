@@ -16,6 +16,28 @@ Last updated: 2026-09-02
 - Never report a check as passed unless its command completed successfully in
   the current increment.
 
+## D-107 documentation-only in-process key-use classification
+
+The `personal-assistant-v0-key-use-containment-classification` increment has no
+runtime primitive, identity source, Keychain call, private-key operation,
+signature, build, process, filesystem effect, or target-Mac evidence to test.
+Review exactly `in_process_security_framework_ephemeral_challenge_proof_v1`
+against the frozen source register and all nineteen closed contract IDs.
+
+Passing the documentation increment requires one exact factual
+`evidence_privacy_v1` record, each row once with a source-bounded disposition,
+the fail-closed governance result, preservation of D-096 through D-106, and no
+product or operational claim. The recorded result is
+`not_eligible_or_unproven`: eight rows are `documented`, eleven are
+`contract_unproven`, and no candidate or successor is admitted.
+
+Minimum completion evidence is the exact fifteen-path documentation diff,
+formatting/link validation, repository health, secret scanning, protected-path
+and whitespace checks, independent architecture/security/code/debt/readiness
+review, session inventory, and the completion gate. `npm run verify`, npm
+audit, builds, Apple/Xcode/Keychain/private-key/signing, target-Mac, provider,
+product, and external checks remain Not run by scope.
+
 ## D-106 documentation-only codeless signing-fixture classification
 
 The `personal-assistant-v0-codeless-signing-fixture-classification` increment

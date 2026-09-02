@@ -7,6 +7,35 @@ Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
 identifies which security boundaries are current, mocked, planned, or
 prohibited.
 
+## D-107 in-process key-use containment classification boundary
+
+D-107 records `not_eligible_or_unproven` for exactly
+`in_process_security_framework_ephemeral_challenge_proof_v1`. The review
+documents candidate distinctness, pinned dependency provenance, a narrow safe
+primitive surface, fresh-challenge and single-sign capabilities, paired-key
+verification, D-100 evidence minimization, and the claim/history ceiling.
+Eleven complete-boundary contracts remain `contract_unproven`.
+
+No future operation may search an ambient/default Keychain, accept an identity,
+label, certificate, path, account, algorithm, challenge, or result from a
+caller, or expose a generic signing oracle. A permissible design would require
+one separately proven opaque application-domain identity reference, one fixed
+algorithm, one fresh application-owned challenge, one sign, one verify, closed
+errors, no prompt, hard cancellation, late-use rejection, terminal ownership,
+and D-100-minimized evidence.
+
+The pinned safe crate's ability to return an external key representation and to
+debug identity/key objects is outside the candidate and must remain unreachable
+from any later source. The current review does not prove that prohibition in an
+implementation. It also does not prove absence of Keychain database,
+`securityd`, trust, cache, log, IPC, process-metadata, or OS-managed network
+effects.
+
+Eliminating a child and filesystem artifact is scope reduction, not a D-102
+containment proof or waiver. Data-signature verification is not code signing.
+D-096 through D-106 remain unchanged, no operational check ran, and no
+successor is Ready.
+
 ## D-106 codeless signing-fixture classification boundary
 
 D-106 records `not_eligible_or_unproven` for exactly

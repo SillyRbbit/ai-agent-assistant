@@ -4,6 +4,16 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Classified the owner-approved documentation-only candidate
+  `in_process_security_framework_ephemeral_challenge_proof_v1` from clean
+  synchronized `main` at `2287c1b`. D-107 records
+  `not_eligible_or_unproven`: eight rows are `documented` and eleven are
+  `contract_unproven`. The childless, fileless concept is distinct but cannot
+  prove a D-101-compliant identity source, prompt-free and bounded private-key
+  use, cleanup, platform effects, or a D-102 applicability split. No source,
+  dependency, configuration, build, process, Keychain/private-key operation,
+  target-Mac check, or product/external state changed. No successor is Ready.
+
 - Completed with `PASS WITH ADVISORIES` the owner-approved documentation-only
   classification for
   `personal-assistant-v0-codeless-signing-fixture-classification` from clean

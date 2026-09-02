@@ -2,6 +2,24 @@
 
 Last updated: 2026-09-02
 
+## In-process key-use containment classification result
+
+The owner-approved documentation-only
+[`personal-assistant-v0-key-use-containment-classification`](docs/plans/2026-09-02-personal-assistant-v0-key-use-containment-classification.md)
+review began from clean synchronized `main` at
+`2287c1bfe999d733495ee78728f4dc7a653f393f`. D-107 records
+`not_eligible_or_unproven` for the exact frozen in-process challenge candidate:
+eight rows are `documented` and eleven are `contract_unproven`.
+
+No runtime, source, dependency, configuration, capability, entitlement, IPC,
+build, process, filesystem, Keychain/private-key operation, target-Mac check,
+or product/external state changed. The result creates no current architecture
+edge and does not waive D-101 or D-102. P3-3 through P3-5, P4, signing, V0-3,
+and every operational successor remain Blocked. No successor is Ready.
+
+The exact documentation validation and completion gate passed with `PASS WITH
+ADVISORIES`; next-increment readiness is `Blocked`.
+
 ## Completed codeless signing-fixture classification
 
 The owner approved the documentation-only

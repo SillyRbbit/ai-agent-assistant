@@ -2,6 +2,26 @@
 
 Last updated: 2026-09-02
 
+## In-process key-use containment classification result
+
+`personal-assistant-v0-key-use-containment-classification` reviewed exactly
+`in_process_security_framework_ephemeral_challenge_proof_v1`. D-107 records
+`not_eligible_or_unproven`: eight rows are `documented`, while eleven identity,
+scope, signer, export-reachability, algorithm, interaction, cancellation,
+late-result, cleanup, platform-effect, and D-102-split contracts remain
+`contract_unproven`.
+
+The candidate is materially distinct and removes the proposed build/child/file
+surface only for a narrow in-memory liveness proof. It is not a D-102
+containment primitive, does not sign Cortexa, and cannot advance P3, P4, or
+V0-3. No successor is **Ready**. Do not implement or operate the candidate,
+access Apple/Xcode/Keychain, use a private key, sign, build, or contact a
+product/external system without a separately approved bounded plan. D-096
+through D-106 and all historical Failed/Pending/Not-run evidence remain intact.
+
+The exact documentation validation and completion gate passed with `PASS WITH
+ADVISORIES`; next-increment readiness is `Blocked`.
+
 ## Completed codeless signing-fixture classification
 
 `personal-assistant-v0-codeless-signing-fixture-classification` completed the

@@ -5296,3 +5296,169 @@ D-106 additively classifies only
 three-source register. It does not supersede D-072, D-075, D-076, D-095,
 D-096, D-097, D-098, D-099, D-100, D-101, D-102, D-103, D-104, D-105,
 TS-017, historical evidence, or any operational prerequisite.
+
+## D-107 - Do not admit the frozen in-process key-use candidate from the current contract record
+
+Date: 2026-09-02
+Status: Accepted owner-authorized documentation-only source classification
+
+## Context
+
+D-096 permits only a future bounded present-session private-key-use claim.
+D-100 requires closed source-minimized evidence, D-101 prohibits explicit
+account/home/path and ambient/default Keychain authority, and D-102 requires
+pre-effect containment for every build-bearing path. D-103 and D-105 are
+bounded negative reviews of frozen build-child candidates. D-106 rejects a
+codeless bundle candidate that still depended on a filesystem artifact and a
+future `codesign` process.
+
+The owner selected one materially different containment-by-elimination
+candidate for a static source review. The question is whether an in-process,
+childless, fileless cryptographic liveness proof can be classified separately
+from product code signing without weakening any existing prerequisite.
+
+## Decision
+
+Freeze exactly:
+
+```text
+in_process_security_framework_ephemeral_challenge_proof_v1
+```
+
+The conceptual candidate is one foreground, explicit-owner-action,
+single-attempt, no-input trusted-Rust operation. It may use only one separately
+proven, application-owned, attempt-bound opaque `SecIdentity` reference. It
+would create a fixed-domain 32-byte fresh challenge, perform exactly one
+signature with one fixed algorithm, verify exactly once against the retained
+identity's paired public key, and expose only one closed D-100 record.
+
+It has no build, helper, child, subprocess, bundle, artifact, filesystem write,
+timestamp request, network request, persistent reference, generic signing
+interface, caller-selected value, fallback, or retry. Identity, key,
+certificate, challenge, signature, attribute, and native-error values remain
+adapter-private. This is a conceptual boundary, not implemented behavior or
+operational authority.
+
+The exact factual D-100 record is:
+
+```text
+{"protocol_version":"evidence_privacy_v1","check_id":"in_process_key_use_candidate_classification","outcome":"contract_unproven"}
+```
+
+The closed source record is:
+
+| Contract                                  | Disposition         | Bounded reason                                                                                                                                                                                                                          |
+| ----------------------------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `candidate_identity_contract`             | `documented`        | The no-child, no-artifact data-signature class is distinct from D-103/D-105 build-bearing candidates, D-106's bundle/`codesign` candidate, and product code signing.                                                                    |
+| `pinned_dependency_provenance_contract`   | `documented`        | `security-framework` 3.7.0 and `security-framework-sys` 2.17.0 are pinned with registry checksums at the reviewed baseline.                                                                                                             |
+| `safe_wrapper_surface_contract`           | `documented`        | Safe public methods exist for identity-to-certificate/private-key, CSPRNG fill, one signature, certificate-to-public-key, and verification; this does not establish algorithm preflight, interaction denial, lifecycle, or effects.     |
+| `opaque_prebound_identity_contract`       | `contract_unproven` | `SecIdentity` is opaque, but no current component issues the required no-input, application-domain, attempt-bound reference without lookup, enumeration, or fallback.                                                                   |
+| `exact_signer_binding_contract`           | `contract_unproven` | Identity pairing proves certificate/key correspondence only; no immutable expected Developer ID Application class and certificate/public-key binding exists.                                                                            |
+| `account_keychain_scope_contract`         | `contract_unproven` | File-based queries use ambient search-list/default behavior, while access-group scope is not proved for the existing Developer ID identity or current disabled data-protection-keychain feature path.                                   |
+| `private_key_nonexport_contract`          | `contract_unproven` | The intended path need not export bytes, but Apple and the safe crate expose external representation and no implementation inventory proves export is unreachable.                                                                      |
+| `fresh_challenge_contract`                | `documented`        | Apple defines `SecRandomCopyBytes` as cryptographically secure with mandatory status checking; the candidate freezes a 32-byte, domain-separated, one-attempt shape without claiming runtime freshness or guaranteed zeroization today. |
+| `fixed_algorithm_contract`                | `contract_unproven` | The exact Developer ID key type and permitted algorithm are not frozen, and the safe crate lacks a safe wrapper for algorithm-support preflight.                                                                                        |
+| `single_use_sign_contract`                | `documented`        | Apple defines one signature over supplied data and the pinned safe wrapper performs one underlying signing call without internal retry; later trusted Rust must still enforce one invocation.                                           |
+| `paired_public_key_verification_contract` | `documented`        | Apple defines an identity as a certificate/private-key pair, exposes the certificate public key, and defines same-data/signature/algorithm verification; no trust, revocation, or product-signing claim follows.                        |
+| `interaction_denial_contract`             | `contract_unproven` | Lookup-time skip/context controls do not establish that private-key retrieval and signing on an already-held file-based identity cannot display UI.                                                                                     |
+| `hard_deadline_cancellation_contract`     | `contract_unproven` | Keychain lookup is documented as blocking, and the synchronous identity/sign/verify APIs expose no timeout or cancellation parameter.                                                                                                   |
+| `late_result_rejection_contract`          | `contract_unproven` | No attempt host exists, and rejecting a late application result would not prove that late private-key use stopped.                                                                                                                      |
+| `cleanup_quarantine_contract`             | `contract_unproven` | Reference release, failure quarantine, process-wide retry denial, bounded cleanup, and buffer lifecycle are not implemented or fully sourced.                                                                                           |
+| `evidence_minimization_contract`          | `documented`        | D-100 supplies the exact fixed three-field, non-authorizing, source-minimized record and failure behavior for this classification only.                                                                                                 |
+| `platform_effect_contract`                | `contract_unproven` | Keychain database, `securityd`, trust/revocation, cache, log, IPC, process-metadata, and possible OS-managed network effects remain undispositioned.                                                                                    |
+| `d102_applicability_split_contract`       | `contract_unproven` | The candidate removes its own child and artifact, but D-102 contains no accepted waiver or `not_applicable` result for this proof class.                                                                                                |
+| `claim_ceiling_history_contract`          | `documented`        | D-096 fixes the present-attempt ceiling, data signing remains distinct from code signing, and D-097 through D-106 remain unchanged.                                                                                                     |
+
+Totals are `documented=8`, `contract_unproven=11`, `not_run=0`, and
+`boundary_failed=0`. All sources were available and all rows were reviewed, so
+the last two dispositions do not apply. Because every row is conjunctive, the
+governance result is exactly `not_eligible_or_unproven`. The candidate is not
+admitted and no successor is Ready.
+
+The available sources establish narrower facts. Apple documents secure random
+bytes, opaque identity/private-key references, data-signature creation, and
+public-key verification. The pinned safe Rust crate exposes corresponding
+operations. Apple also documents Keychain lookup as blocking and distinguishes
+lookup-time interaction controls. These facts do not establish the missing
+full boundary, and source silence is not upgraded by inference.
+
+This is a bounded negative classification, not a claim that an in-process
+design is impossible. Eliminating a child and artifact is scope reduction, not
+D-102 containment. D-102 remains unchanged for every product, executable-
+generating, artifact-generating, or otherwise build-bearing path.
+
+## Consequences
+
+- D-096 present-session use and operational signing remain `not_run`.
+- D-101 remains Blocked; no identity source, residual-effect acceptance, or
+  platform-operation authorization exists.
+- D-102 remains fully binding for product signing and every build-bearing path.
+- A future successful challenge could establish only that one already-bound
+  opaque key reference signed one application-owned challenge during one
+  approved attempt and that its paired public key verified the signature.
+- It cannot establish a signed Cortexa application, stable client identity,
+  Developer ID code-signature validity, trust/revocation, hardened runtime,
+  Gatekeeper, notarization, distribution, technical nonextractability,
+  historical non-export, exclusive custody, absence of compromise, or V0-3.
+- D-097 remains `failed` / `FAIL` / `Blocked` with its original report and
+  digests, Failed privacy finding, Pending Open Directory boundary, Not-run
+  signing, and absent completion marker. D-098 remains valid and non-reusable.
+- D-103, D-105, and D-106 remain immutable bounded negative decisions.
+- P3-3 through P3-5, P4, signing, V0-3, and every operational successor remain
+  Blocked. No successor is Ready.
+
+## Alternatives considered
+
+- Query the default/login Keychain and filter by label or fingerprint: rejected
+  because ambient scope and target-derived selection violate D-101.
+- Treat `kSecUseAuthenticationUISkip` as proof that signing cannot prompt:
+  rejected because the documented control applies to item lookup, not the
+  complete private-key-use operation.
+- Put a blocking call on a worker and discard a late result: rejected because
+  result rejection is not cancellation or quiescence of private-key use.
+- Use raw `security-framework-sys` calls to fill wrapper gaps: rejected because
+  application Rust forbids unsafe code and no lint relaxation is authorized.
+- Treat no direct child/file/network request as absence of OS-managed effects:
+  rejected because direct call shape does not prove operating-system internals.
+- Substitute the challenge for app signing: rejected because data signing and
+  code signing prove different claims.
+
+## Frozen source register
+
+Repository sources are the baseline `src-tauri/Cargo.toml`,
+`src-tauri/Cargo.lock`, and checksum-resolved `security-framework` 3.7.0
+`Cargo.toml`, `identity.rs`, `item.rs`, `key.rs`, `random.rs`, and
+`os/macos/certificate.rs` plus `security-framework-sys` 2.17.0 `certificate.rs`
+and `key.rs`.
+
+Current public sources are limited to:
+
+- [Apple: Code Signing Services](https://developer.apple.com/documentation/security/code-signing-services)
+- [Apple: Randomization Services](https://developer.apple.com/documentation/security/randomization-services)
+- [Apple: SecRandomCopyBytes](https://developer.apple.com/documentation/security/secrandomcopybytes%28_%3A_%3A_%3A%29)
+- [Apple: Identities](https://developer.apple.com/documentation/security/identities)
+- [Apple: kSecClassIdentity](https://developer.apple.com/documentation/security/ksecclassidentity)
+- [Apple: Parsing an Identity](https://developer.apple.com/documentation/security/parsing-an-identity)
+- [Apple: SecItemCopyMatching](https://developer.apple.com/documentation/security/secitemcopymatching%28_%3A_%3A%29)
+- [Apple: kSecAttrAccessGroup](https://developer.apple.com/documentation/security/ksecattraccessgroup)
+- [Apple: kSecMatchSearchList](https://developer.apple.com/documentation/security/ksecmatchsearchlist)
+- [Apple: kSecUseAuthenticationUI](https://developer.apple.com/documentation/security/ksecuseauthenticationui)
+- [Apple: kSecUseAuthenticationUISkip](https://developer.apple.com/documentation/security/ksecuseauthenticationuiskip)
+- [Apple: kSecUseAuthenticationContext](https://developer.apple.com/documentation/security/ksecuseauthenticationcontext)
+- [Apple: LAContext interactionNotAllowed](https://developer.apple.com/documentation/localauthentication/lacontext/interactionnotallowed)
+- [Apple: SecKeyIsAlgorithmSupported](https://developer.apple.com/documentation/security/seckeyisalgorithmsupported%28_%3A_%3A_%3A%29)
+- [Apple: SecKeyCreateSignature](https://developer.apple.com/documentation/security/seckeycreatesignature%28_%3A_%3A_%3A_%3A%29)
+- [Apple: SecCertificateCopyKey](https://developer.apple.com/documentation/security/seccertificatecopykey%28_%3A%29)
+- [Apple: SecKeyVerifySignature](https://developer.apple.com/documentation/security/seckeyverifysignature%28_%3A_%3A_%3A_%3A_%3A%29)
+- [Apple: SecKeyCopyExternalRepresentation](https://developer.apple.com/documentation/security/seckeycopyexternalrepresentation%28_%3A_%3A%29)
+- [Apple TN3137: On Mac keychain APIs and implementations](https://developer.apple.com/documentation/technotes/tn3137-on-mac-keychains)
+
+No target-derived or private evidence entered the classification.
+
+## Supersedes or is superseded by
+
+D-107 additively classifies only
+`in_process_security_framework_ephemeral_challenge_proof_v1` against the frozen
+source register. It does not supersede D-072, D-075, D-076, D-095, D-096,
+D-097, D-098, D-099, D-100, D-101, D-102, D-103, D-104, D-105, D-106,
+TS-017, historical evidence, or any operational prerequisite.

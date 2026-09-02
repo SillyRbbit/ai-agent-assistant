@@ -4,7 +4,18 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
-The most recently completed owner-approved plan is
+The most recently completed owner-approved documentation-only plan is
+[`personal-assistant-v0-key-use-containment-classification`](docs/plans/2026-09-02-personal-assistant-v0-key-use-containment-classification.md).
+It freezes exactly `in_process_security_framework_ephemeral_challenge_proof_v1`
+and records D-107's bounded source result `not_eligible_or_unproven`: eight rows
+are `documented` and eleven are `contract_unproven`. No identity lookup,
+private-key operation, build, process, filesystem, target-Mac check, or product/
+external action ran. The candidate is not admitted, does not waive D-101 or
+D-102, and makes no successor Ready. Documentation validation and the
+completion workflow passed with `PASS WITH ADVISORIES`; next-increment
+readiness is `Blocked`.
+
+The preceding completed owner-approved plan is
 [`personal-assistant-v0-codeless-signing-fixture-classification`](docs/plans/2026-09-02-personal-assistant-v0-codeless-signing-fixture-classification.md).
 It freezes exactly `repository_owned_codeless_bundle_signing_fixture_v1` for a
 documentation-only current-Apple-contract classification. D-106 records

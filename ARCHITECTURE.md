@@ -3,6 +3,17 @@
 Status: Authoritative current-state architecture
 Last updated: 2026-09-02
 
+> In-process key-use containment classification (2026-09-02): D-107 records
+> `not_eligible_or_unproven` for exactly
+> `in_process_security_framework_ephemeral_challenge_proof_v1`. Eight source
+> rows are `documented`; eleven remain `contract_unproven`. The candidate is
+> materially distinct because it proposes no build, helper, child, bundle,
+> artifact, filesystem write, or `codesign` process, but it is not a D-102
+> containment primitive and creates no current architecture edge. Exact
+> non-ambient identity provenance, signer binding, interaction denial, hard
+> cancellation, cleanup, platform effects, and the D-102 applicability split
+> remain unresolved. No operational successor is Ready.
+
 > Completed codeless signing-fixture classification (2026-09-02): D-106
 > records `not_eligible_or_unproven` for exactly
 > `repository_owned_codeless_bundle_signing_fixture_v1`. Five static rows are

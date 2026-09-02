@@ -2,6 +2,33 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-09-02 — In-process challenge primitives do not establish the complete key-use boundary
+
+**Observation:** Current Apple documentation and the pinned Rust crate establish
+random-byte, opaque key-reference, data-signature, and verification primitives.
+They do not jointly establish one D-101-compliant application credential-domain
+identity, immutable Developer ID binding, prompt-free signing, hard
+cancellation, terminal cleanup, platform-effect bounds, or a D-102
+applicability split. The first drafted increment identifier was 67 characters;
+the gate rejected it before state changed because identifiers are limited to 64.
+
+**Disposition:** The semantically equivalent 56-character identifier
+`personal-assistant-v0-key-use-containment-classification` was used without
+changing the candidate or scope. D-107 records `not_eligible_or_unproven` with
+eight `documented` and eleven `contract_unproven` rows. No operational action
+ran. The result is a bounded negative source classification, not proof of
+universal impossibility, and no successor is Ready. The first finalization
+attempt also failed closed because the report used the unsupported combined
+finding category `Security architecture`; changing only that schema value to
+the accepted `Security` category preserved the finding and readiness result.
+The next finalization attempt failed closed on a duplicate identical gate-status
+entry in the machine-readable command list. Deduplicating that list preserved
+both status observations in prose and changed no evidence or readiness result.
+The following attempt failed closed because the report schema requires every
+verification command identifier in the command inventory even when its status
+is `Not run`. Adding those identifiers satisfied the schema without executing
+the checks or changing their truthful `Not run` status.
+
 ## 2026-09-02 — Codeless signing fixture is distinct but contract-insufficient
 
 **Observation:** The frozen Apple sources directly establish that a codeless
