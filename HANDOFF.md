@@ -2,6 +2,37 @@
 
 Last updated: 2026-09-02
 
+## Completed P3 App Sandbox containment re-review
+
+The owner-approved documentation-only
+[`personal-assistant-v0-app-sandbox-containment-rereview`](docs/plans/2026-09-02-personal-assistant-v0-app-sandbox-containment-rereview.md)
+increment began from clean synchronized `main` at
+`e1b2ff5c06a4c5bc6ad7fc19b63968668fff4923`. D-105 records the closed result
+`no_eligible_candidate_after_d104_rereview` for exactly
+`app_sandbox_build_helper_plus_libsystem_supervision_v2`. D-104 removes only
+the Developer ID circularity classification. Every one of D-102's 22
+contracts remains `contract_unproven`, and all ten P3-3 implementation-source
+checks remain `not_run`.
+
+No product/test source, dependency, configuration, entitlement, helper, build,
+process, probe, target-Mac, Apple, Xcode, Keychain, certificate, private key,
+signing, credential, provider, product, or state-changing external action ran.
+D-097 remains `failed` / `FAIL` / `Blocked` with its original report/digests
+and no completion marker; the screenshot/privacy finding remains Failed, the
+Open Directory boundary remains Pending, and signing remains Not run. P3-3
+through P3-5, P4, V0-3, and every operational successor remain Blocked. No
+successor is Ready.
+
+Exact resume prompt: “Read AGENTS.md, the complete required project-memory and
+security/testing chain, D-097 through D-105, and the valid completed P3 App
+Sandbox containment re-review report. Preserve every historical Failed,
+Pending, and Not-run result. Report that D-105 selected no eligible candidate
+after the bounded D-104 re-review, with all 22 contracts unproved and all ten
+source checks Not run. Do not begin a gate, introduce or run another candidate,
+build, probe, sign, change entitlements, or operate Apple, Xcode, Keychain,
+credentials, providers, product code, or external systems without a separately
+approved bounded plan.”
+
 ## Completed P3 containment bootstrap trust decision
 
 The owner-approved documentation-only

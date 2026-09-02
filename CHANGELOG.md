@@ -5,6 +5,16 @@ All notable repository changes are documented here. Entries distinguish verified
 ## Unreleased
 
 - Completed the owner-approved documentation-only
+  `personal-assistant-v0-app-sandbox-containment-rereview` from clean
+  synchronized `main` at `e1b2ff5`. D-105 records
+  `no_eligible_candidate_after_d104_rereview`: the sole D-104 change removes
+  only the Developer ID circularity classification, while all 22 D-102
+  contracts remain `contract_unproven` and all ten P3-3 source checks remain
+  `not_run`. No source, dependency, configuration, entitlement, build, process,
+  target-Mac, Apple, signing, credential, provider, product, or state-changing
+  external action ran. P3-3 and every operational successor remain Blocked.
+
+- Completed the owner-approved documentation-only
   `personal-assistant-v0-containment-bootstrap-trust-decision` increment from
   clean synchronized `main` at `a6601f9`. Draft D-104 distinguishes a future
   identity-free sandbox-activation seal from P4's later Developer ID signer

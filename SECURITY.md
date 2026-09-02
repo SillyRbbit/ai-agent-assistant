@@ -7,6 +7,25 @@ Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
 identifies which security boundaries are current, mocked, planned, or
 prohibited.
 
+## D-105 App Sandbox containment re-review boundary
+
+D-105 records `no_eligible_candidate_after_d104_rereview` for exactly
+`app_sandbox_build_helper_plus_libsystem_supervision_v2`. D-104 removes only
+the prior Developer ID circularity classification. Current Apple documentation
+does not jointly establish the frozen candidate's bootstrap provenance, fixed
+graph and executable identity, closed environment/descriptors, exact
+filesystem/network denial, detached-descendant ownership, complete shutdown,
+reaping, race-free quiescence, pipe closure, descriptor-bound cleanup,
+quarantine, or bounded platform effects. All 22 D-102 contracts therefore
+remain `contract_unproven`; all ten absent P3-3 source checks remain `not_run`.
+
+The negative decision is not a residual-risk acceptance, operational failure,
+or universal impossibility claim. It adds no authority, source, dependency,
+configuration, entitlement, helper, build, process, target-Mac, Apple, signing,
+credential, provider, product, or external action. P3-3 and every operational
+successor remain Blocked. D-097 through D-104 and every historical Failed,
+Pending, and Not-run fact remain unchanged.
+
 ## D-104 bootstrap trust-class boundary
 
 D-104 defines only a future documentation distinction between an identity-free,

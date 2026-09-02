@@ -2,6 +2,22 @@
 
 Last updated: 2026-09-02
 
+## Completed P3 App Sandbox containment re-review
+
+`personal-assistant-v0-app-sandbox-containment-rereview` completed as a bounded
+documentation-only negative review. D-105 records
+`no_eligible_candidate_after_d104_rereview`: all 22 D-102 contracts remain
+`contract_unproven`, and all ten P3-3 source checks remain `not_run`. The exact
+v2 candidate is frozen; D-103's v1 result and D-097 through D-104 remain
+unchanged.
+
+No successor is **Ready**. P3-3 and every operational successor remain Blocked.
+A future proposal would need a newly identified, narrowly specified candidate
+and authoritative evidence for every D-102 predicate under a separately
+approved documentation plan. Do not build, probe, sign, add an entitlement or
+dependency, operate a target Mac, or access Apple, Xcode, Keychain,
+credentials, providers, product code, or external systems.
+
 ## Completed P3 documentation-only bootstrap-trust decision
 
 `personal-assistant-v0-containment-bootstrap-trust-decision` completed with

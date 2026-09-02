@@ -16,6 +16,32 @@ Last updated: 2026-09-02
 - Never report a check as passed unless its command completed successfully in
   the current increment.
 
+## D-105 documentation-only App Sandbox containment re-review
+
+The `personal-assistant-v0-app-sandbox-containment-rereview` increment has no
+primitive, controller, implementation source, helper, entitlement, build,
+child, target-Mac probe, or operational evidence to test. Review exactly
+`app_sandbox_build_helper_plus_libsystem_supervision_v2` under only D-104's
+identity-class change. Passing this documentation review requires all 22 D-102
+contract rows to appear once with a closed source-bound disposition, all ten
+P3-3 source checks to remain `not_run`, and one fail-closed decision.
+
+The review fails if it infers a complete boundary from App Sandbox, treats an
+ad-hoc seal as P4 evidence, generalizes direct-child/PID/group APIs into graph
+ownership, treats absent network entitlements as proof against inherited or
+OS-managed effects, uses archived pages as current availability proof, changes
+the frozen corpus/candidate, admits residual risk, or makes P3-3 Ready. The
+recorded bounded result is `no_eligible_candidate_after_d104_rereview`; all 22
+contracts remain `contract_unproven` and all ten source checks remain
+`not_run`.
+
+Minimum evidence is the exact fifteen-path documentation diff, authoritative
+public-source register, D-097 through D-104 preservation, formatting/link
+validation, repository health, secret scanning, protected-path and whitespace
+checks, independent architecture/security/code/debt/readiness review, and the
+completion gate. `npm run verify`, builds, process/probe checks, and Apple/
+Xcode/Keychain/signing/provider/product/external checks remain Not run by scope.
+
 ## D-104 documentation-only bootstrap trust-class review
 
 The `personal-assistant-v0-containment-bootstrap-trust-decision` increment has
