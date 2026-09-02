@@ -3,6 +3,14 @@
 Status: Authoritative current-state architecture
 Last updated: 2026-09-02
 
+> Opaque identity-reference decision (2026-09-02): D-109 records
+> `reference_issuance_not_accepted` for the first remaining D-107 boundary.
+> Current repository source has no application-owned issuer for a no-input,
+> attempt-bound opaque signing-identity reference without lookup, enumeration,
+> selection, fallback, default/search-list, account, home, or path authority.
+> Object opacity is not provenance. This adds no architecture edge, identity
+> source, Keychain operation, or runtime interface; D-107 remains blocked.
+
 > D-102 non-build applicability decision (2026-09-02): D-108 documents a
 > policy split only for the exact conceptual
 > `in_process_security_framework_ephemeral_challenge_proof_v1` class while its

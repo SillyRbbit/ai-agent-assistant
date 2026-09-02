@@ -18,6 +18,19 @@ Last updated: 2026-09-02
 contains the ordered execution queue. Completed plans and reviews are the
 verification record; this roadmap does not create new completion evidence.
 
+## D-107 opaque identity-reference decision
+
+The documentation-only D-109 decision is **Completed** with
+`PASS WITH ADVISORIES`. Its closed result is
+`reference_issuance_not_accepted`: the reviewed repository has no
+application-owned issuer for a no-input, attempt-bound opaque signing-identity
+reference without lookup, enumeration, selection, fallback, or ambient/default
+authority. Object opacity is not provenance.
+
+D-107 remains 8 documented / 11 unproved and D-108's additive prospective
+interpretation remains 9/10. No candidate or successor is **Ready**; P3, P4,
+signing, V0-3, and all operational work remain **Blocked**.
+
 ## D-102 non-build applicability decision
 
 The documentation-only D-108 decision is **Completed** with `PASS WITH

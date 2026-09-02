@@ -7,6 +7,27 @@ Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
 production boundary exists.
 
+## D-109 opaque identity-reference decision
+
+- [x] The decision covers only `opaque_prebound_identity_contract`; it does
+      not create or admit an identity source, signing operation, or successor.
+- [x] The three governance dispositions are fixed:
+      `reference_issuance_documented`,
+      `reference_issuance_not_accepted`, and `boundary_failed`; none is a
+      D-100 evidence token or runtime outcome.
+- [x] The selected negative disposition is based only on repository source:
+      no application-owned, no-input, attempt-bound identity-reference issuer
+      exists without lookup, enumeration, selection, fallback, or ambient
+      account/home/path/default/search-list authority.
+- [x] Opaque object shape, fixed credential labels, filters, fingerprints, and
+      default Keychain behavior are not treated as provenance proof.
+- [x] D-101 and all remaining D-107 contracts, including platform effects,
+      remain independently controlling and unproved.
+- [ ] An eligible candidate or operational successor exists; both remain
+      Blocked.
+- [x] No product/test source, Keychain, private-key, certificate, signing,
+      build, target-Mac, Apple/Xcode, provider, or external operation ran.
+
 ## D-108 D-102 non-build applicability decision
 
 - [x] The policy is fixed to

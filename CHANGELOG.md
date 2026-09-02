@@ -4,6 +4,17 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Completed with `PASS WITH ADVISORIES` the documentation-only D-109 opaque
+  identity-reference decision. It selects
+  `reference_issuance_not_accepted`: present repository source
+  contains no application-owned issuer for a no-input, attempt-bound opaque
+  signing identity without lookup, enumeration, selection, fallback, or
+  ambient/default authority. D-107's factual 8/11 record and D-108's
+  prospective 9/10 interpretation remain unchanged; no candidate or successor
+  is Ready. No product/test source, dependency, configuration, Keychain,
+  certificate/private-key, signing, build, target-Mac, provider, or external
+  operation occurred.
+
 - Completed with `PASS WITH ADVISORIES` the owner-approved documentation-only
   D-108 applicability decision for exactly
   `in_process_security_framework_ephemeral_challenge_proof_v1`. D-102's

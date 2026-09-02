@@ -5,6 +5,15 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Current plan state
 
 The most recently completed owner-approved documentation-only plan is
+[`d107-opaque-prebound-identity-contract-decision`](docs/plans/2026-09-02-d107-opaque-prebound-identity-contract-decision.md).
+D-109 selects `reference_issuance_not_accepted` because current repository
+source contains no application-owned issuer for a no-input, attempt-bound opaque
+signing-identity reference without lookup, enumeration, selection, fallback,
+or ambient/default authority. This adds no source or runtime boundary. D-107
+remains 8/11, D-108 remains 9/10 prospectively, all ten blockers remain
+unproved, and no successor is Ready.
+
+The most recently completed owner-approved documentation-only plan is
 [`d102-non-build-proof-applicability-decision`](docs/plans/2026-09-02-d102-non-build-proof-applicability-decision.md).
 It reconsiders exactly `d102_applicability_split_contract` for the frozen D-107
 concept. D-108 accepts a split only for D-102's build-child subject while the
