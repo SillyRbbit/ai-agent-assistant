@@ -2,6 +2,40 @@
 
 Last updated: 2026-09-02
 
+## Completed codeless signing-fixture classification
+
+The owner approved branch
+`codex/p3-codeless-signing-fixture-classification`, the exact documentation-only
+[`personal-assistant-v0-codeless-signing-fixture-classification`](docs/plans/2026-09-02-personal-assistant-v0-codeless-signing-fixture-classification.md)
+plan, and its gate begin from clean synchronized `main` at
+`89bcc915ad989927a9ec51e82531ff6823be1017`. The plan freezes
+`repository_owned_codeless_bundle_signing_fixture_v1`. D-106 records the
+closed result `not_eligible_or_unproven`: five contract rows are `documented`
+and eight are `contract_unproven`. No candidate or successor is admitted.
+
+The only external contacts were approved read-only Git remote synchronization/
+checks and reads of the three frozen first-party Apple public-documentation
+pages. No fixture, source, dependency, configuration, build, or product/
+signing/target-Mac operational process or state change occurred. D-097
+through D-105 remain unchanged. Operational P3, P4, signing, V0-3, and every
+successor remain Blocked.
+
+The exact fifteen-path documentation scope passed formatting/link,
+repository-health, secret-scan, protected-path, whitespace, session-inventory,
+architecture, security, code-health, technical-debt, readiness, quality, and
+post-increment validation. The gate completed validly with `PASS WITH
+ADVISORIES`; next-increment readiness is `Blocked`. The completion report is
+[`2026-09-02-personal-assistant-v0-codeless-signing-fixture-classification-post-increment-review.md`](docs/reviews/2026-09-02-personal-assistant-v0-codeless-signing-fixture-classification-post-increment-review.md).
+
+Exact resume prompt: “Read AGENTS.md, the complete required project-memory and
+security/testing chain, D-096 through D-106, and the completed codeless-signing-
+fixture classification report. Preserve the factual `contract_unproven` record,
+the `not_eligible_or_unproven` governance result, and every historical Failed,
+Pending, and Not-run fact. Report that no successor is Ready. Do not begin a
+gate, add a source or candidate, create a fixture, build, execute a process,
+access Apple/Xcode/Keychain, use a private key, sign, verify, operate the target
+Mac, or contact an external system without a separately approved bounded plan.”
+
 ## Completed P3 App Sandbox containment re-review
 
 The owner-approved documentation-only

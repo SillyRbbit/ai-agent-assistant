@@ -5,6 +5,19 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Current plan state
 
 The most recently completed owner-approved plan is
+[`personal-assistant-v0-codeless-signing-fixture-classification`](docs/plans/2026-09-02-personal-assistant-v0-codeless-signing-fixture-classification.md).
+It freezes exactly `repository_owned_codeless_bundle_signing_fixture_v1` for a
+documentation-only current-Apple-contract classification. D-106 records
+`not_eligible_or_unproven`: five rows are `documented` and eight are
+`contract_unproven`. The source record does not admit the candidate or a
+successor. It creates no fixture, changes no source, runs no product/build/
+signing process, uses no Keychain or private key, performs no signing, and does
+not make P3-3, P4, V0-3, or any operational successor Ready.
+
+It completed with `PASS WITH ADVISORIES`; the exact documentation checks and
+completion gate passed, and next-increment readiness is `Blocked`.
+
+The preceding completed owner-approved plan is
 [`personal-assistant-v0-app-sandbox-containment-rereview`](docs/plans/2026-09-02-personal-assistant-v0-app-sandbox-containment-rereview.md).
 It records D-105's bounded documentation result,
 `no_eligible_candidate_after_d104_rereview`. D-104 removes only the Developer

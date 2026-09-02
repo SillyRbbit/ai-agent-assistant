@@ -3,6 +3,19 @@
 Status: Authoritative current-state architecture
 Last updated: 2026-09-02
 
+> Completed codeless signing-fixture classification (2026-09-02): D-106
+> records `not_eligible_or_unproven` for exactly
+> `repository_owned_codeless_bundle_signing_fixture_v1`. Five static rows are
+> `documented`; eight exact shape, provenance, Developer ID, private-key-use,
+> verification, identifier, no-build, and D-102-split contracts remain
+> `contract_unproven`. The candidate is materially distinct because it proposes
+> no executable build graph, but it is not an implemented containment primitive
+> and is not admitted. No fixture, signing adapter, controller, runtime process,
+> or OS edge exists. `present_use_codeless_fixture_v1` remains categorically distinct
+> from and inadmissible as `product_bundle_signing_proof_v1`. No successor is
+> Ready. The documentation increment completed with `PASS WITH ADVISORIES`;
+> every operational successor remains Blocked.
+
 > Completed P3 App Sandbox containment re-review (2026-09-02): D-105 records
 > `no_eligible_candidate_after_d104_rereview` for the exact additive v2
 > candidate. D-104 removes only the Developer ID circularity classification;

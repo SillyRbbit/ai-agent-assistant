@@ -2,6 +2,26 @@
 
 Last updated: 2026-09-02
 
+## Completed codeless signing-fixture classification
+
+`personal-assistant-v0-codeless-signing-fixture-classification` completed the
+static review of exactly
+`repository_owned_codeless_bundle_signing_fixture_v1`. D-106 records
+`not_eligible_or_unproven`: five rows are `documented`, while eight exact
+shape, provenance, Developer ID, private-key-use, verification, identifier,
+no-build, and D-102-split contracts remain `contract_unproven`.
+
+The exact documentation validation and completion gate passed with `PASS WITH
+ADVISORIES`; next-increment readiness is `Blocked`. No successor is **Ready**.
+This is a bounded negative source result, not
+implemented containment or a universal impossibility claim. Do not
+create the fixture, change source or dependencies, build, execute a process,
+access Apple/Xcode/Keychain, use a private key, sign, verify, operate the target
+Mac, or contact an external system. D-097 through D-105 and all historical
+Failed/Pending/Not-run evidence remain unchanged. P3-3 through P3-5, P4,
+operational signing, V0-3, and every product or external successor remain
+**Blocked**.
+
 ## Completed P3 App Sandbox containment re-review
 
 `personal-assistant-v0-app-sandbox-containment-rereview` completed as a bounded

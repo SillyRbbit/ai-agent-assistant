@@ -5152,3 +5152,147 @@ D-105 additively applies D-102 and D-104 to only the frozen v2 candidate. It
 does not supersede D-072, D-075, D-076, D-095, D-096, D-097, D-098, D-099,
 D-100, D-101, D-102, D-103, D-104, TS-017, any historical evidence, or any
 operational prerequisite.
+
+## D-106 - Do not admit the frozen codeless signing fixture from the current contract record
+
+Date: 2026-09-02
+Status: Accepted owner-authorized documentation-only bounded classification
+
+## Context
+
+D-096 permits a later separately approved signature to establish only
+present-session identity use. Technical nonextractability, historical absence
+of export, and exclusive custody remain `not_proven`. Its existing operational
+plan still targets an executable Cortexa application bundle with product
+identifier, designated-requirement, and hardened-runtime evidence.
+
+D-102 requires fail-closed containment before a signing proof. D-103 and D-105
+selected no candidate from their respective frozen build-bearing candidate
+sets without claiming universal impossibility. The owner separately approved a
+static review of one materially different conceptual candidate:
+`repository_owned_codeless_bundle_signing_fixture_v1`. It proposes fixed
+repository data with one `Contents/Info.plist` and at most one inert resource,
+no executable, and no fixture-generation, build, download, installation,
+entitlement, launch, or distribution path. It removes a proposed build graph
+rather than containing one.
+
+The frozen current Apple source register documents that a codeless bundle has
+no executable code and can hold a signature, and that a bundle without Mach-O
+stores signature material under `_CodeSignature` with hash-sealed resources.
+It does not directly establish the complete exact candidate shape and source
+workflow, Developer ID Application signing for this exact codeless class,
+attempt-fresh present-private-key-use semantics, exact codeless verification,
+non-product identifier/designated-requirement semantics, total absence of a
+fixture-preparation graph, or a D-102 applicability split.
+
+## Decision
+
+The closed factual D-100 record is:
+
+```text
+{"protocol_version":"evidence_privacy_v1","check_id":"codeless_signing_fixture_classification","outcome":"contract_unproven"}
+```
+
+The closed governance result is:
+
+```text
+not_eligible_or_unproven
+```
+
+The factual record is privately bound once to this exact increment, candidate,
+three-source register, and classification attempt. An altered, duplicate,
+cross-plan, pre-admission, or late record is `boundary_failed` and stops without
+retry.
+
+The thirteen contract dispositions are:
+
+| Contract ID                                  | Disposition         | Reason                                                                                                                                                       |
+| -------------------------------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `candidate_identity_contract`                | `documented`        | The codeless class is materially distinct from D-103/D-105's build-bearing app/helper candidates.                                                            |
+| `codeless_bundle_shape_contract`             | `contract_unproven` | Standard locations and the codeless class do not establish every exact plist, mode, nested-item, link, resource-fork, and extended-attribute constraint.     |
+| `repository_owned_construction_contract`     | `contract_unproven` | No exact fixture bytes or reviewed source workflow establish repository-only provenance without fixture-generation, build, download, or install executables. |
+| `codeless_signature_storage_contract`        | `documented`        | TN3126 directly places a no-Mach-O bundle signature under `_CodeSignature` and documents resource hash sealing.                                              |
+| `developer_id_codeless_sign_contract`        | `contract_unproven` | Separate codeless and Developer ID guidance does not directly establish Developer ID Application signing for the exact codeless class.                       |
+| `private_key_use_semantics_contract`         | `contract_unproven` | No fixed source defines the attempt-fresh, replay-resistant present-private-key-use claim for this exact signature.                                          |
+| `codeless_verification_semantics_contract`   | `contract_unproven` | The complete verification procedure and closed valid claims for a Developer-ID-signed codeless bundle are absent.                                            |
+| `identifier_binding_semantics_contract`      | `contract_unproven` | General bundle-ID and designated-requirement guidance does not establish exact codeless Developer ID behavior or non-product equivalence.                    |
+| `hardened_runtime_nonclaim_contract`         | `documented`        | A codeless bundle has no executable, while hardened-runtime signing guidance applies to a main executable; no Cortexa runtime proof can result.              |
+| `no_build_graph_contract`                    | `contract_unproven` | The concept has no frozen bytes or reviewed source workflow proving that fixture generation/build/download/install are absent.                               |
+| `d102_applicability_split_contract`          | `contract_unproven` | D-102 has no general waiver or `not_applicable` result, and the later signing executable/effect boundary remains.                                            |
+| `operational_boundary_preservation_contract` | `documented`        | D-096 and D-100 through D-105 retain all signer, account, evidence, process, effect, cleanup, and operational blockers.                                      |
+| `claim_ceiling_contract`                     | `documented`        | The source and decision record prohibits product-signing, hardened-runtime, distribution, release, custody, and V0-3 claims.                                 |
+
+Totals are `documented=5`, `contract_unproven=8`, `not_run=0`, and
+`boundary_failed=0`. The sources were available and all rows were reviewed, so
+the last two dispositions do not apply. Because every row had to be
+`documented` for a positive result, the candidate is not admitted. There is no
+score, compensating control, inference, alternate source, candidate
+substitution, retry, residual-risk acceptance, or automatic successor.
+
+This is a bounded source result, not a claim that codeless Developer ID signing
+is impossible. Candidate distinctness alone is insufficient. Removing a build
+graph would be scope reduction, not containment and not a waiver. No D-102 row
+becomes Passed or Not applicable; D-102 remains unchanged for every
+executable-generating, generated-artifact, product-build, or otherwise build-
+bearing path.
+
+The future `codesign`, verifier, sanitizer, Keychain/Security framework,
+filesystem-copy, process, output, deadline, cancellation, reaping, quiescence,
+late-result, platform-effect, cleanup, and quarantine boundaries remain
+unresolved. D-100 and D-101 remain mandatory.
+
+## Consequences
+
+- The only external contacts were approved read-only Git remote
+  synchronization/checks and reads of the three frozen first-party Apple
+  public-documentation pages. No fixture, source, dependency, configuration,
+  entitlement, build, or product/signing/target-Mac operational process or
+  state change exists or is authorized.
+- D-096 present-session use and signing remain `not_run`; its executable
+  product-bundle proof is not replaced or narrowed.
+- The candidate cannot prove a signed Cortexa application, hardened runtime,
+  product identity, Gatekeeper, notarization, distribution, release,
+  historical non-export, technical nonextractability, exclusive custody, or
+  V0-3 readiness.
+- D-103 and D-105 remain immutable bounded negative decisions for their frozen
+  candidates. All 22 D-105 contracts remain `contract_unproven`, and all ten
+  controller-source checks remain `not_run`.
+- D-097 remains `failed` / `FAIL` / `Blocked` with its original report,
+  digests, Failed privacy finding, Pending Open Directory boundary, Not-run
+  signing evidence, and absent completion marker. D-098 remains a valid,
+  immutable, non-reusable schema-v3 disposition that never converts D-097 to
+  complete.
+- P3-3 through P3-5, P4, signing, V0-3, and every operational successor remain
+  Blocked. No successor is Ready.
+
+## Alternatives considered
+
+- Combine the codeless-signing and Developer ID pages into an unstated exact
+  guarantee: rejected as inference.
+- Use another Apple source after the source register was frozen: rejected as
+  candidate/source drift; it requires a new bounded plan and approval.
+- Treat the conceptual shape or repository ownership as implementation proof:
+  rejected because no fixture bytes or source workflow exists.
+- Treat absence of a product build as a D-102 waiver: rejected because D-102
+  remains controlling and later signing still executes a child with account,
+  filesystem, process, effect, and cleanup boundaries.
+- Create or sign a fixture to answer the static question: rejected as
+  operational work outside the approved scope and insufficient to repair the
+  missing public contracts.
+
+## Official public source register
+
+- [Apple: Placing content in a bundle](https://developer.apple.com/documentation/bundleresources/placing-content-in-a-bundle)
+- [Apple TN3126: Inside Code Signing: Hashes](https://developer.apple.com/documentation/technotes/tn3126-inside-code-signing-hashes)
+- [Apple: Creating distribution-signed code for macOS](https://developer.apple.com/documentation/xcode/creating-distribution-signed-code-for-the-mac/)
+
+The source corpus is closed. No target-derived or private evidence entered the
+classification.
+
+## Supersedes or is superseded by
+
+D-106 additively classifies only
+`repository_owned_codeless_bundle_signing_fixture_v1` against the frozen
+three-source register. It does not supersede D-072, D-075, D-076, D-095,
+D-096, D-097, D-098, D-099, D-100, D-101, D-102, D-103, D-104, D-105,
+TS-017, historical evidence, or any operational prerequisite.
