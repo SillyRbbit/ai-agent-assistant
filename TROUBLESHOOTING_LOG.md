@@ -2,6 +2,23 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## 2026-09-01 — Explicit account resolution is not acceptable future containment
+
+**Observation:** The consumed wrapper needed only a Keychain scope but called
+`pwd.getpwuid()`, potentially materializing a full account record and invoking
+configured local or remote directory services plus OS cache/socket/log state.
+Using only the home field did not contain that boundary, and rerunning the query
+cannot repair the incomplete historical disclosure.
+
+**Disposition:** Accepted D-101 defines a documentation-only application-
+resolution prohibition plus independent authoritative input, exact scope-
+provenance, and one-predicate effect gates. A future application-owned opaque
+no-input capability cannot substitute for any gate. Application source can be
+reviewed for prohibited calls, but that does not prove the absence of OS-
+internal effects. Ambiguity stays blocked, owner acceptance is a separate
+decision rather than fallback, the historical finding remains Pending, and no
+query or external operation ran.
+
 ## 2026-09-01 — P1 evidence privacy requires source minimization
 
 **Observation:** The historical D-097 privacy failure shows that a private

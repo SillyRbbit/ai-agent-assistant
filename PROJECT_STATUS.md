@@ -2,6 +2,23 @@
 
 Last updated: 2026-09-01
 
+## Completed account-directory boundary planning
+
+The owner-approved exact documentation-only
+[`personal-assistant-v0-account-directory-boundary-planning`](docs/plans/2026-09-01-personal-assistant-v0-account-directory-boundary-planning.md)
+increment completed with `PASS WITH ADVISORIES` from clean synchronized `main`
+at `5bf37681a2554094575f17025f47b7cf2b6b5d36`. Accepted D-101 defines the future
+`ExplicitAccountResolutionPolicyV1::Prohibited` application invariant and
+separate authoritative input, exact scope-provenance, and effect-suite proof
+gates. The policy alone does not establish operational account-directory
+containment. All
+operational predicates are Not run; no implementation or external action
+exists.
+
+The historical `getpwuid`/`opendirectoryd` finding remains Manual verification
+pending and the consumed query remains prohibited. D-097/D-098/D-099/D-100 are
+unchanged. P3/P4 and every operational successor remain Proposed/Blocked.
+
 ## Completed evidence-privacy protocol planning
 
 The owner-approved exact documentation-only

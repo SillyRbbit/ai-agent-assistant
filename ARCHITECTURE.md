@@ -17,6 +17,15 @@ Last updated: 2026-09-01
 > version, one plan-owned check ID, and one closed outcome. No runtime, IPC,
 > filesystem, logging, screenshot, attachment, external-system, or device path
 > implements or consumes that record today.
+>
+> The completed P2 account-directory planning increment also adds no architecture
+> edge. D-101 defines an application-level prohibition on explicit account,
+> home, and path resolution plus independent input, exact-provenance, and
+> effect-suite proof gates. A future capability would be application-owned,
+> no-input, process-private, and opaque. No platform API, capability, Rust
+> adapter, IPC,
+> filesystem, directory service, or target-Mac behavior implements or satisfies
+> those gates today.
 
 ## Reading this document
 
@@ -1191,14 +1200,18 @@ cross-session selector, vector database, embedding service, or semantic index.
 
 ### Platform adapters
 
-**Current**: macOS-specific code is limited to menu/window lifecycle and the
-disconnected native approval source. Non-macOS menu lifecycle adapters are
-no-ops where required for compilation.
+**Current**: macOS-specific code includes menu/window lifecycle, the
+disconnected native approval source, and the disconnected fixed-service/fixed-
+account fake-only Security.framework Keychain reader described above. The
+reader is not a generic platform adapter and has no product credential consumer
+or P2 signing-security role. Non-macOS menu lifecycle adapters are no-ops where
+required for compilation.
 
 **Current absence**: the legacy generic platform scaffold was deleted in
 Increment 4M. There are no calendar, reminders, contacts, file, clipboard,
-notification, secret-store, local-authentication, Accessibility, screen-capture,
-Apple Events, or microphone adapters.
+notification, production secret-store, local-authentication, Accessibility,
+screen-capture, Apple Events, or microphone adapters. There is no generic
+`PlatformAdapter` or application-wide credential-store authority.
 
 ### SQLite storage
 
