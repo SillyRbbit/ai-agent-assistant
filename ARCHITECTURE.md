@@ -1,7 +1,20 @@
 # Cortexa architecture
 
 Status: Authoritative current-state architecture
-Last updated: 2026-09-01
+Last updated: 2026-09-02
+
+> Current P3-2 documentation state (2026-09-02): D-103 selects no eligible
+> build-child containment candidate from the frozen reviewed set. The publicly
+> documented App Sandbox/helper composition requires entitlements and an
+> entitlement-bearing code signature, independently violating P3-2 eligibility
+> without equating that signature class with P4's later signer proof. The
+> reviewed public process contracts do not establish complete application-owned
+> descendant membership, containment-wide termination, and race-free
+> quiescence after detachment or reparenting. Negative controls and
+> privileged/virtualized classes also fail D-102 or the approved scope. This
+> adds no architecture edge, primitive, controller, entitlement, dependency,
+> build, process, or external
+> operation. P3-3 and every operational successor remain Blocked.
 
 > Current documentation state (2026-09-01): the separately owner-approved
 > `personal-assistant-v0-signing-security-prerequisite-planning` increment is
@@ -18,7 +31,7 @@ Last updated: 2026-09-01
 > filesystem, logging, screenshot, attachment, external-system, or device path
 > implements or consumes that record today.
 >
-> The active P3 build-child-containment planning increment adds no architecture
+> The completed P3 build-child-containment planning increment adds no architecture
 > edge. Its only purpose is to define the future application-owned containment
 > policy, closed evidence predicates, and stop conditions for build descendants.
 > No containment primitive, controller, build, process, network, filesystem,

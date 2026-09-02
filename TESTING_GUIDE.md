@@ -1,7 +1,7 @@
 # Cortexa testing guide
 
 Status: Authoritative testing standard
-Last updated: 2026-09-01
+Last updated: 2026-09-02
 
 ## Testing principles
 
@@ -15,6 +15,41 @@ Last updated: 2026-09-01
   expiry, and late outcomes where those states exist.
 - Never report a check as passed unless its command completed successfully in
   the current increment.
+
+## D-103 documentation-only containment primitive selection review
+
+The `personal-assistant-v0-containment-primitive-selection` increment has no
+primitive, controller, implementation source, build, child, target-Mac probe,
+or operational evidence to test. Review the exact frozen candidates and
+conjunctive eligibility rules as a closed documentation table. Passing means
+only that authoritative public contracts were bounded truthfully and that the
+result says “no eligible candidate in the reviewed set.” It does not prove
+containment or authorize a successor.
+
+The App Sandbox helper composition fails if entitlement/signing circularity is
+ignored or if direct-child wait, known-PID observation, process groups, or broad
+network entitlements are generalized into complete graph/effect control.
+Deprecated/private mechanisms, post-hoc evidence, privileged/global-state
+extensions, the VM entitlement/guest-resource expansion, an unproven container
+contract, a catch-all candidate, weighted scoring, compensating controls,
+empirical inference, or residual-risk acceptance fail the review contract.
+Missing or ambiguous public guarantees are `contract_unproven`; P3-3 source
+checks are `not_run`.
+
+Only the deep-review candidate enters one privately bound candidate/check/
+attempt review. Negative controls retain D-102's prior exclusion evidence and
+scope-only classes are screened before D-100 contract review. Unexpected
+source/provenance material, target-derived data, or malformed evidence is
+`boundary_failed` and stops without retry. Archived platform manuals may
+support only their narrow API semantics and cannot prove current target
+availability.
+
+Minimum evidence is the exact fifteen-path documentation diff, bounded official
+source register, D-097 through D-102 preservation, formatting/link validation,
+repository health, secret scanning, protected-path and whitespace checks,
+independent architecture/security/code/debt/readiness review, and the
+completion gate. `npm run verify`, build/process/probe checks, and Apple/Xcode/
+Keychain/signing/provider/product/external checks remain Not run by scope.
 
 ## D-102 documentation-only build-child-containment review
 

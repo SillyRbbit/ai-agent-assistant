@@ -1,6 +1,26 @@
 # Project status
 
-Last updated: 2026-09-01
+Last updated: 2026-09-02
+
+## Completed P3-2 containment primitive selection
+
+The owner-approved documentation-only
+[`personal-assistant-v0-containment-primitive-selection`](docs/plans/2026-09-02-personal-assistant-v0-containment-primitive-selection.md)
+increment completed with `PASS WITH ADVISORIES` from clean synchronized `main`
+at `355e1efcdd2c5d651dd1609959581e7184b61b60`. D-103 records no eligible
+candidate in the frozen reviewed set. The plausible App Sandbox helper
+composition fails the no-entitlement/signing/no-circular-dependency gate and
+the reviewed public contracts do not prove complete detached-descendant
+membership, containment-wide termination, and terminal quiescence. All other
+frozen candidates fail D-102 or scope eligibility.
+
+No runtime, primitive, controller, source, dependency, configuration,
+entitlement, build, process, target-Mac, Apple, Keychain, signing, credential,
+provider, product, or external state changed. Approved read-only public
+documentation access was the sole external contact. P3-3 through P3-5, P4,
+signing, V0-3, and every operational successor remain Blocked. D-097/D-098/
+D-099/D-100/D-101/D-102 and every historical Failed/Pending/Not-run result
+remain intact.
 
 ## Completed build-child-containment planning
 
