@@ -4,8 +4,8 @@ Last updated: 2026-09-03
 
 ## V0-6 HTTPS dependency publication reconciliation
 
-Status: **Verified complete with advisories; owner review pending; product
-transport remains Blocked.** PR #107 preserved reviewed head
+Status: **Published through PR #108; product transport remains Blocked.** PR
+#107 preserved reviewed head
 `471167a506bc8bbb7d53f989fda900679b6de15c`. GitHub Actions run
 `33735613542` attempt 1 passed its substantive policy steps but was cancelled
 during post-job Node setup; its single owner-authorized rerun, attempt 2,
@@ -29,7 +29,18 @@ is selected or active. Two normalized-finalizer launch requests were rejected
 before process execution; after one separately authorized successful finalizer,
 a read-only review found stale pre-finalization wording. This exact eight-file
 same-increment correction was independently reviewed and re-finalized once
-under separate owner authorization. The current marker is complete and valid.
+under separate owner authorization. Immediately before this closeout began, the
+predecessor marker was complete and valid.
+
+The corrected reconciliation was reviewed at
+`eb2c06b6098c34ae489517126df4820ff7ec6b82` and squash-merged through PR #108
+as `7382739e040a1b01693eda76a56e1b38848de24c`. Both commits have tree
+`724e8dc3fc43f2f658afe13f4e1d16ac8b36b0aa`, and their repository diff is
+empty. Frozen owner-supplied publication evidence records successful PR
+workflow run `33760912732` and successful post-merge run `33761044946`; this
+closeout did not re-query either external run. Publication does not promote a
+successor or add product, transport, credential, signing, provider, network,
+execution, or external-system authority.
 
 ## V0-6 HTTPS dependency decision
 

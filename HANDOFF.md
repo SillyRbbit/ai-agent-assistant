@@ -2,7 +2,7 @@
 
 Last updated: 2026-09-03
 
-## V0-6 HTTPS dependency publication reconciliation checkpoint
+## Published V0-6 HTTPS dependency publication reconciliation checkpoint
 
 From clean synchronized baseline
 `6c3615c507b58a771f696ebb7bfdb5bd13d1d1b7`, the owner-approved
@@ -60,24 +60,38 @@ shortened gate ID and report path, and the exact finalizer succeeded once. A
 read-only review found that valid marker bound documents which still described
 the prior pre-finalization state. The owner authorized this exact eight-file
 same-increment correction and one re-execution of the finalizer. The corrected
-report and workspace now have a complete, valid marker. No operational
-successor is selected or Ready.
+predecessor report and workspace had a complete, valid marker immediately
+before this PR #108 closeout began. No operational successor is selected or
+Ready.
+
+The corrected result was reviewed at
+`eb2c06b6098c34ae489517126df4820ff7ec6b82` and squash-merged through PR #108
+as `7382739e040a1b01693eda76a56e1b38848de24c`. Both commits share exact tree
+`724e8dc3fc43f2f658afe13f4e1d16ac8b36b0aa`, and their repository diff is
+empty. Frozen owner-supplied publication evidence records successful PR
+workflow run `33760912732` and successful post-merge run `33761044946`; this
+closeout did not contact GitHub or re-query either run. Publication adds no
+product, transport, credential, signing, provider, network, execution, or
+external-system authority.
 
 Exact resume prompt: “Read `AGENTS.md`,
 `docs/governance/MASTER_PROMPT.md`, and the complete required project-memory
-and security/testing chain. Inspect the completed uncommitted
-`codex/personal-assistant-v0-https-dependency-publication-reconciliation`
-branch, its exact eight-file documentation diff, valid completion report and
-marker, and preserved finalizer chronology. Confirm PR #107, reviewed head
-`471167a506bc8bbb7d53f989fda900679b6de15c`, run `33735613542` attempts 1 and
-2, squash commit
-`499bdfe840f26270c8a458c2e0725e1fec13defe`, identical-tree evidence, and
-historical preservation. Confirm D-118 remains `no_eligible_client`, no
-dependency or transport is selected, V0-3/V0-7 remain `Blocked`, and no
-successor is promoted. Inspect before acting, preserve existing user changes,
-avoid unrelated modifications, and do not repeat completed verification or
-access external systems. Report Accept or exact revisions; do not edit,
-commit, push, merge, or begin V0-7.”
+and security/testing chain. Inspect actual Git state before acting. Preserve PR
+#108, reviewed head `eb2c06b6098c34ae489517126df4820ff7ec6b82`, successful
+PR workflow run `33760912732`, squash commit
+`7382739e040a1b01693eda76a56e1b38848de24c`, successful post-merge run
+`33761044946`, common tree `724e8dc3fc43f2f658afe13f4e1d16ac8b36b0aa`,
+and all prior V0-6 history. If the current documentation closeout branch is not
+yet published, inspect only
+`codex/personal-assistant-v0-pr108-publication-closeout` and
+`docs/plans/2026-09-03-personal-assistant-v0-pr108-publication-closeout.md`, and
+review or publish it only with separate owner authorization. If `main` already
+contains its tree, treat it as closed and do not create another publication
+reconciliation merely to restate the merge. Confirm D-118 remains
+`no_eligible_client`, no dependency or transport is selected, V0-3/V0-7 and
+all operational successors remain `Blocked`, and no successor is promoted.
+Preserve existing user changes, avoid unrelated modifications, do not repeat
+completed verification, and do not access external systems or begin V0-7.”
 
 ## D-107 late-result rejection decision checkpoint
 
