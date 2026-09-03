@@ -1,6 +1,32 @@
 # Project status
 
-Last updated: 2026-09-02
+Last updated: 2026-09-03
+
+## V0-6 HTTPS dependency decision
+
+Status: **Verified complete with advisories; product transport remains
+Blocked.** Accepted D-118 records `no_eligible_client` for the five exact
+variants in the frozen V0-6 comparison. Each fails at least one mandatory
+criterion under the current hard cancellation and cleanup contract, so no
+dependency or transport is selected. Current production source still has no
+direct HTTP/TLS client or Personal Assistant response ingress; transitive lock
+nodes convey no authority or target-Mac proof.
+
+The exact fifteen-file documentation scope, formatting/link validation,
+repository policy, secret scanning, complete `npm run verify`, diff hygiene,
+decision/protected-path checks, independent reviews, session inventory, and
+completion gate pass. Candidate build/runtime, `cargo-audit`, target-Mac
+transport/TLS/socket/cancellation, credentials, signing, provider, gateway,
+and external product-system checks are `Not run`. One optional unfiltered all-
+target metadata diagnostic failed due an uncached Android-only crate; scoped
+macOS/Linux evidence passed and remains controlling.
+
+No client, dependency, manifest, lockfile, source, credential, signing state,
+provider, socket, traffic, or external system changed. V0-3 remains paused and
+`Blocked`. V0-7 remains `Blocked` by its prerequisites, absence of an eligible
+client, separate source authority, and its fake-only versus hermetic actual-
+client TLS/socket-test discrepancy. D-107's ten blockers and `Blocked`
+operational readiness are unchanged.
 
 ## D-107 late-result rejection decision
 

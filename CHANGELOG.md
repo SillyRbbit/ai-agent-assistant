@@ -4,6 +4,16 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Completed the documentation-only V0-6 direct Rust HTTPS dependency decision
+  with `PASS WITH ADVISORIES`. Accepted D-118 records `no_eligible_client`:
+  all five exact variants across reqwest, explicit Hyper, and ureq fail at
+  least one mandatory criterion under the current hard cancellation and
+  cleanup contract. No dependency or transport is selected, no product state
+  changed, and the result is not a universal Rust HTTPS impossibility claim.
+  Candidate build/runtime and target-Mac transport checks remain `Not run`.
+  V0-3, V0-7, the live synthetic-text milestone, and D-107 operational
+  readiness remain `Blocked`.
+
 - Added the owner-approved documentation-only D-107 late-result rejection
   assessment and proposed D-117. Current source has no private-key attempt host
   or result ingress, so the closed disposition is

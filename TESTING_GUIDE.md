@@ -1,7 +1,7 @@
 # Cortexa testing guide
 
 Status: Authoritative testing standard
-Last updated: 2026-09-02
+Last updated: 2026-09-03
 
 ## Testing principles
 
@@ -15,6 +15,31 @@ Last updated: 2026-09-02
   expiry, and late outcomes where those states exist.
 - Never report a check as passed unless its command completed successfully in
   the current increment.
+
+## D-118 documentation-only HTTPS dependency decision
+
+V0-6 validates a frozen evidence matrix and exact documentation scope; it does
+not test a production client. Passing requires all five variants to have at
+least one documented failed mandatory row before selecting
+`no_eligible_client`, exact preservation of source/manifests/lockfiles and
+earlier decisions, and truthful recording of scratch isolation and every
+operational `Not run` item.
+
+Run formatting/link validation, repository policy, secret scanning, complete
+`npm run verify`, diff hygiene, exact fifteen-path and protected-path checks,
+append-only D-118 validation, independent architecture/security/
+documentation/code-health/debt/readiness review, session inventory, and the
+post-increment gate. Candidate compilation/execution, `cargo-audit`, target-Mac
+TLS/socket/DNS/cancellation behavior, credentials, signing, provider traffic,
+and product-system checks remain `Not run`.
+
+A future V0-7 plan may use a deterministic fake seam for application state, but
+fixture-only tests cannot establish the selected client's real TLS, routing,
+header/buffer limits, socket abort, or cleanup behavior. Any renewed transport
+proposal must require hermetic loopback actual-client HTTP/TLS integration
+tests with synthetic values and zero external traffic. Test resolver or trust
+injection must not become production authority and cannot repair a production
+DNS cancellation gap.
 
 ## Proposed D-117 documentation-only late-result rejection decision
 

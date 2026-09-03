@@ -2,6 +2,35 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## V0-6 frozen HTTPS candidates cannot prove DNS cancellation quiescence
+
+Date: 2026-09-03
+Status: Closed as accepted D-118 `no_eligible_client`; V0-7 remains Blocked
+
+### Observation
+
+Five frozen variants across reqwest, explicit Hyper, and ureq can return
+control on a timer, but each hostname-based path ultimately starts blocking
+operating-system DNS work that cannot be aborted or boundedly joined. Reqwest
+0.13.4 also lacks exact pre-retention response-header and read-buffer caps.
+
+### Disposition
+
+Do not select a dependency or transport. A timeout return, dropped future,
+detached worker, or rejected late result is not cleanup or quiescence. The
+frozen source and isolated resolver corpus is complete enough for this scoped
+negative decision; the result is not a universal Rust HTTPS impossibility
+claim. V0-3, V0-7, and the live synthetic-text milestone remain `Blocked`.
+
+### Avoid repeating
+
+Do not repeat the same public-evidence retrieval or hypothetical resolution
+without a new approved plan and a materially changed architecture, candidate,
+or security requirement. Transitive `reqwest`, `hyper`, and `tokio` lock nodes
+do not confer authority. Any later proposal must address hard cancellation,
+owned cleanup/quiescence, and hermetic actual-client TLS/socket tests before
+source or dependency work can be considered.
+
 ## Existing late-event rejection does not establish a private-key late-result boundary
 
 Date: 2026-09-02

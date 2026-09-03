@@ -1,11 +1,28 @@
 # Cortexa security checklist
 
 Status: Authoritative change and release security review checklist
-Last updated: 2026-09-02
+Last updated: 2026-09-03
 
 Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
 production boundary exists.
+
+## D-118 V0-6 HTTPS dependency decision
+
+- [x] The accepted closed result is exactly `no_eligible_client`; no dependency
+      or transport is selected.
+- [x] All five frozen variants have at least one primary-source-documented
+      failed mandatory criterion; missing runtime evidence was not promoted to
+      positive proof.
+- [x] Timeout return and late-result rejection are not treated as abort,
+      cleanup, ownership accounting, or quiescence for started DNS work.
+- [x] Hypothetical resolver graphs and transitive lockfile nodes remain
+      non-authorizing inventory; no resolver artifact entered the repository.
+- [x] Candidate build/runtime, target-Mac TLS/socket/cancellation, credential,
+      signing, provider, gateway, and product-system checks remain `Not run`.
+- [ ] An eligible HTTPS client or V0-7 transport successor exists; both remain
+      `Blocked` under the current hard cancellation contract and recorded
+      prerequisites.
 
 ## Proposed D-117 late-result rejection decision
 
