@@ -4,6 +4,25 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Completed the owner-approved documentation-only
+  `personal-assistant-v0-https-dependency-publication-reconciliation` with
+  `PASS WITH ADVISORIES`. Reviewed head
+  `471167a506bc8bbb7d53f989fda900679b6de15c` retained the exact fifteen-file
+  V0-6 decision scope and was squash-merged through PR #107 to `main` at
+  `499bdfe840f26270c8a458c2e0725e1fec13defe` with an identical tree. GitHub
+  Actions run `33735613542` was cancelled on its first attempt during post-job
+  Node setup after every substantive step passed; its one authorized rerun
+  passed the applicable Documentation job. GitHub reported no checks explicitly
+  configured as branch-protection requirements, so this records applicable
+  check evidence rather than universal enforcement. D-118 remains
+  `no_eligible_client`; V0-3, V0-7, and every operational successor remain
+  `Blocked`. Two finalizer launch requests were rejected before process
+  execution; after explicit owner authorization, the exact normalized finalizer
+  succeeded. A read-only review then found the documents still described the
+  pre-finalization state. This owner-authorized same-increment correction
+  preserves that history and re-finalizes the corrected eight-file workspace;
+  the resulting marker is complete and valid.
+
 - Completed the documentation-only V0-6 direct Rust HTTPS dependency decision
   with `PASS WITH ADVISORIES`. Accepted D-118 records `no_eligible_client`:
   all five exact variants across reqwest, explicit Hyper, and ureq fail at

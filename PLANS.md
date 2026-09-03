@@ -5,13 +5,30 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Current plan state
 
 The most recently completed owner-approved documentation-only plan is
+[`Personal Assistant V0 HTTPS dependency publication reconciliation`](docs/plans/2026-09-03-personal-assistant-v0-https-dependency-publication-reconciliation.md).
+It records that reviewed head `471167a506bc8bbb7d53f989fda900679b6de15c`
+was published through PR #107 as squash commit
+`499bdfe840f26270c8a458c2e0725e1fec13defe` with an identical tree. The first
+attempt of GitHub Actions run `33735613542` was cancelled during post-job
+cleanup; its one authorized rerun passed the applicable Documentation job.
+GitHub reported no checks explicitly configured as branch-protection
+requirements. This reconciliation changes no architecture, decision, or
+readiness. Two normalized-finalizer launch requests were rejected before
+process execution; one later succeeded under explicit owner authorization. A
+read-only review found its documents still described pre-finalization state,
+and this owner-authorized same-increment correction plus one re-finalization
+produced the current complete, valid marker. Its exact eight-file result awaits
+owner review; no successor becomes active automatically.
+
+The underlying completed owner-approved documentation-only plan is
 [`V0-6 — direct Rust HTTPS dependency decision`](docs/plans/2026-08-28-personal-assistant-v0-https-dependency-decision.md).
 It completed with **PASS WITH ADVISORIES** and accepted D-118's closed
 `no_eligible_client` disposition after comparing five exact variants across
-three frozen families. No dependency or transport is selected. The exact
-fifteen-file documentation result awaits owner review and publication; no
-successor becomes active automatically. V0-3 and V0-7 remain `Blocked`, and no
-operational successor is Ready.
+three frozen families. No dependency or transport is selected, no successor
+becomes active automatically, V0-3 and V0-7 remain `Blocked`, and no
+operational successor is Ready. The decision was published through PR #107 at
+`499bdfe840f26270c8a458c2e0725e1fec13defe`; its original plan, increment,
+decision, and completion review remain historical evidence.
 
 The preceding completed owner-approved documentation-only plan is
 [`d107-late-result-rejection-contract-decision`](docs/plans/2026-09-02-d107-late-result-rejection-contract-decision.md).

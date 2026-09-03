@@ -2,22 +2,34 @@
 
 Last updated: 2026-09-03
 
-## Owner review: completed V0-6 HTTPS dependency decision
+## Owner review: completed V0-6 publication reconciliation
 
-The owner-approved
-[`V0-6 — direct Rust HTTPS dependency decision`](docs/plans/2026-08-28-personal-assistant-v0-https-dependency-decision.md)
-is verified complete with **PASS WITH ADVISORIES** and awaits owner review of
-the uncommitted exact fifteen-file result. Accepted D-118 records
-`no_eligible_client`; no dependency or transport was selected. All five frozen
-variants fail at least one mandatory criterion under the current hard
-cancellation and cleanup contract.
+The owner-approved documentation-only
+[`V0-6 HTTPS dependency publication reconciliation`](docs/plans/2026-09-03-personal-assistant-v0-https-dependency-publication-reconciliation.md)
+is verified complete with **PASS WITH ADVISORIES** over its uncommitted exact
+eight-file result. It records PR #107, reviewed head
+`471167a506bc8bbb7d53f989fda900679b6de15c`, GitHub Actions run
+`33735613542`'s cancelled first attempt and successful single rerun, and squash
+commit `499bdfe840f26270c8a458c2e0725e1fec13defe`. GitHub reported no checks
+explicitly configured as branch-protection requirements; the applicable
+`Documentation and repository policy` job passed. The reviewed head and squash
+commit have identical trees, and `main` was clean and synchronized at the
+squash commit afterward.
+
+Accepted D-118 remains `no_eligible_client`; no client, dependency, or
+transport is selected. All five frozen variants fail at least one mandatory
+criterion under the current hard cancellation and cleanup contract.
 
 V0-3 remains paused and `Blocked` without waiver. V0-7 remains `Blocked` by
 V0-3, V0-5, separate source authority, the absence of an eligible client, and
 its fake-only versus hermetic actual-client TLS/socket-test discrepancy. No
-operational successor is Ready. Owner review of this documentation result is
-the only current queue item; publication and any later architecture or
-constraint reconsideration require separate approval.
+operational successor is Ready. Two normalized-finalizer launch requests were
+rejected before process execution. The exact finalizer later succeeded under
+explicit owner authorization; after a read-only review found stale
+pre-finalization wording, this separately authorized same-increment correction
+and one re-finalization produced the current complete, valid marker. Owner
+review is the only current queue item; commit, publication, and any later
+architecture or constraint reconsideration require separate approval.
 
 ## Completed D-107 late-result rejection decision
 
@@ -147,8 +159,10 @@ approved successor work.
 No later task begins automatically. D-111 still says no D-107 operational
 successor is **Ready**, and its ten product/operational blockers remain
 unchanged. V0-6 is now completed with accepted D-118
-`no_eligible_client`; owner review of that uncommitted documentation result is
-the only current queue item, and no D-107 or product successor is promoted.
+`no_eligible_client` and published through PR #107 at
+`499bdfe840f26270c8a458c2e0725e1fec13defe`; owner review of the completed,
+uncommitted exact eight-file publication reconciliation above is the only
+current queue item. No D-107 or product successor is promoted.
 
 ## D-107 account and Keychain scope decision
 
