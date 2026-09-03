@@ -21,7 +21,15 @@ All notable repository changes are documented here. Entries distinguish verified
   succeeded. A read-only review then found the documents still described the
   pre-finalization state. This owner-authorized same-increment correction
   preserves that history and re-finalizes the corrected eight-file workspace;
-  the resulting marker is complete and valid.
+  the resulting marker is complete and valid. The corrected result was reviewed
+  at `eb2c06b6098c34ae489517126df4820ff7ec6b82` and squash-merged through PR
+  #108 as `7382739e040a1b01693eda76a56e1b38848de24c`; both commits share tree
+  `724e8dc3fc43f2f658afe13f4e1d16ac8b36b0aa` and have an empty repository
+  diff. Frozen owner-supplied publication evidence records successful PR
+  workflow run `33760912732` and successful post-merge run `33761044946`; this
+  closeout did not re-query either external run. D-118, Blocked operational
+  readiness, all ten D-107 blockers, and every security boundary remain
+  unchanged.
 
 - Completed the documentation-only V0-6 direct Rust HTTPS dependency decision
   with `PASS WITH ADVISORIES`. Accepted D-118 records `no_eligible_client`:

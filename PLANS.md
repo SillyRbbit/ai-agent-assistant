@@ -4,7 +4,18 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
-The most recently completed owner-approved documentation-only plan is
+The current terminal documentation plan is
+[`Personal Assistant V0 PR #108 publication closeout`](docs/plans/2026-09-03-personal-assistant-v0-pr108-publication-closeout.md).
+It records PR #108 and its frozen publication evidence in the five live
+project-memory records without changing D-118, readiness, history, or any
+security boundary. The live records do not encode this closeout's own transient
+branch or publication state as a roadmap queue item: actual Git state determines
+whether it still needs separately authorized review/publication or is already
+closed. A later session must not create another publication reconciliation
+merely to restate a merge. No operational successor becomes active
+automatically.
+
+The immediately preceding completed owner-approved documentation-only plan is
 [`Personal Assistant V0 HTTPS dependency publication reconciliation`](docs/plans/2026-09-03-personal-assistant-v0-https-dependency-publication-reconciliation.md).
 It records that reviewed head `471167a506bc8bbb7d53f989fda900679b6de15c`
 was published through PR #107 as squash commit
@@ -17,8 +28,14 @@ readiness. Two normalized-finalizer launch requests were rejected before
 process execution; one later succeeded under explicit owner authorization. A
 read-only review found its documents still described pre-finalization state,
 and this owner-authorized same-increment correction plus one re-finalization
-produced the current complete, valid marker. Its exact eight-file result awaits
-owner review; no successor becomes active automatically.
+produced the complete, valid marker. The corrected result was reviewed at
+`eb2c06b6098c34ae489517126df4820ff7ec6b82` and squash-merged through PR #108
+as `7382739e040a1b01693eda76a56e1b38848de24c`. Both commits share tree
+`724e8dc3fc43f2f658afe13f4e1d16ac8b36b0aa`, and their repository diff is
+empty. Frozen owner-supplied publication evidence records successful PR
+workflow run `33760912732` and successful post-merge run `33761044946`; this
+closeout did not re-query either run. No successor becomes active
+automatically.
 
 The underlying completed owner-approved documentation-only plan is
 [`V0-6 — direct Rust HTTPS dependency decision`](docs/plans/2026-08-28-personal-assistant-v0-https-dependency-decision.md).
@@ -54,8 +71,9 @@ byte-for-byte. It changes no contract outcome: D-107 remains 8/11, D-108's
 additive view remains 9/10, all ten blockers remain unproved, and next-
 increment readiness remains `Blocked`. The exact fifteen-path validation and
 gate passed with `PASS WITH ADVISORIES`. At that reconciliation checkpoint no
-successor was selected or active; the separately approved D-117 assessment
-above is now the most recent completed documentation plan.
+successor was selected or active. The separately approved D-117 assessment
+later became the most recent completed documentation plan at that time; the
+V0-6 plans above subsequently superseded it in plan recency.
 
 This reconciliation does not retroactively validate predecessor reports or
 markers and grants no Keychain, certificate, private-key, signing, Apple/Xcode,

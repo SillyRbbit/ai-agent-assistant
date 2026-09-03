@@ -2,12 +2,12 @@
 
 Last updated: 2026-09-03
 
-## Owner review: completed V0-6 publication reconciliation
+## Published V0-6 publication reconciliation
 
 The owner-approved documentation-only
 [`V0-6 HTTPS dependency publication reconciliation`](docs/plans/2026-09-03-personal-assistant-v0-https-dependency-publication-reconciliation.md)
-is verified complete with **PASS WITH ADVISORIES** over its uncommitted exact
-eight-file result. It records PR #107, reviewed head
+was verified complete with **PASS WITH ADVISORIES** over its exact eight-file
+result. It records PR #107, reviewed head
 `471167a506bc8bbb7d53f989fda900679b6de15c`, GitHub Actions run
 `33735613542`'s cancelled first attempt and successful single rerun, and squash
 commit `499bdfe840f26270c8a458c2e0725e1fec13defe`. GitHub reported no checks
@@ -26,10 +26,18 @@ its fake-only versus hermetic actual-client TLS/socket-test discrepancy. No
 operational successor is Ready. Two normalized-finalizer launch requests were
 rejected before process execution. The exact finalizer later succeeded under
 explicit owner authorization; after a read-only review found stale
-pre-finalization wording, this separately authorized same-increment correction
-and one re-finalization produced the current complete, valid marker. Owner
-review is the only current queue item; commit, publication, and any later
-architecture or constraint reconsideration require separate approval.
+pre-finalization wording, a separately authorized same-increment correction and
+one re-finalization produced the complete, valid marker.
+
+The corrected result was reviewed at
+`eb2c06b6098c34ae489517126df4820ff7ec6b82` and squash-merged through PR #108
+as `7382739e040a1b01693eda76a56e1b38848de24c`. Both commits share tree
+`724e8dc3fc43f2f658afe13f4e1d16ac8b36b0aa`; their repository diff is empty.
+Frozen owner-supplied publication evidence records successful PR workflow run
+`33760912732` and successful post-merge run `33761044946`; no external run was
+re-queried for this closeout. No operational successor is selected, Ready, or
+active. Any later architecture or constraint reconsideration requires a
+separate owner-approved plan.
 
 ## Completed D-107 late-result rejection decision
 
@@ -160,9 +168,10 @@ No later task begins automatically. D-111 still says no D-107 operational
 successor is **Ready**, and its ten product/operational blockers remain
 unchanged. V0-6 is now completed with accepted D-118
 `no_eligible_client` and published through PR #107 at
-`499bdfe840f26270c8a458c2e0725e1fec13defe`; owner review of the completed,
-uncommitted exact eight-file publication reconciliation above is the only
-current queue item. No D-107 or product successor is promoted.
+`499bdfe840f26270c8a458c2e0725e1fec13defe`; its exact eight-file publication
+reconciliation was subsequently published through PR #108 at
+`7382739e040a1b01693eda76a56e1b38848de24c`. No D-107 or product successor is
+promoted, and no operational queue item is selected automatically.
 
 ## D-107 account and Keychain scope decision
 
