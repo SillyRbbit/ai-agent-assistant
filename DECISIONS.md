@@ -6264,3 +6264,166 @@ waived or superseded. D-118 closes only the V0-6 documentation decision.
 D-118 accepts the exact V0-6 `no_eligible_client` disposition. It does not
 accept or supersede proposed D-113 through D-117, change D-076 or D-096 through
 D-112, waive any V0 prerequisite, or authorize V0-7.
+
+## D-119 - Reserve a closed post-v0 selectable connection-profile catalog
+
+Date: 2026-09-03
+Status: Accepted documentation-only architecture direction; no profile
+admitted and no implementation authority
+
+## Context
+
+The current Personal Assistant synthetic-v1 contract and reserved
+`real-content-v2` contract are fixed and nonselectable under D-094. The owner
+wants a later personal application to offer explicit local and cloud connection
+choices, including separately bounded authentication methods, while keeping
+provider, model, endpoint, credential, disclosure, and lifecycle authority out
+of the WebView and model.
+
+Current official primary-source evidence confirms that the applicable external
+provider-authentication families below are documented, with material provider-
+specific limits. The local/no-auth entry has no provider authentication or
+applicable vendor source and remains a repository-evidence-only candidate whose
+engine, model, artifact, and no-egress properties are unproved. The external
+evidence does not establish Cortexa eligibility, credential custody,
+retention/ZDR, an approved HTTPS client, provider access, or implementation
+readiness. D-118 still selects `no_eligible_client`.
+
+The owner accepted the exact
+[`selectable connection-profile architecture decision`](docs/plans/2026-09-03-personal-assistant-v0-selectable-connection-profile-architecture-decision.md)
+from baseline `01dbb1fdce10c197033c1a88dbeeb53afb0a21cd`. Every applicable
+external-provider entry in the official primary-source register was revalidated
+on 2026-09-03 through unauthenticated read-only public documentation before this
+decision was recorded; the local/no-auth entry remained repository-evidence-
+only.
+
+## Decision
+
+Select `closed_catalog_direction_selected`.
+
+Accept a future Rust-owned, versioned, closed connection-profile catalog
+direction with exactly these ten catalog-schema V1 candidates inside a
+distinct post-v0 `personal-assistant-selectable-connection-profile-v3`
+contract:
+
+1. `local_no_auth`
+2. `google_gemini_oauth`
+3. `google_gemini_api_key`
+4. `direct_openai_api_key`
+5. `direct_openai_workload_identity`
+6. `azure_openai_entra`
+7. `azure_openai_api_key`
+8. `anthropic_api_key`
+9. `mistral_api_key`
+10. `aws_bedrock_identity`
+
+Every entry is `candidate_blocked`. Direct OpenAI and Azure OpenAI are separate
+provider boundaries. ChatGPT login or subscription access is not OpenAI API
+OAuth, authorization, or billing. Deliberately omitted vendor mechanisms are
+excluded from this catalog version, not declared unsupported.
+
+The blocked catalog exposes no selection handle. Only a separately approved
+future catalog version may issue a Rust-owned, opaque, process- and catalog-
+generation-bound handle for a fully admitted post-v0 profile. User choice
+remains untrusted intent. Trusted Rust must resolve one immutable atomic
+provider/auth/model/endpoint/credential/disclosure/lifecycle tuple; the caller
+cannot supply or override trusted provider, authentication, model, endpoint,
+account, project, tenant, region, profile, runtime, agent, task, workflow,
+instructions, limits, or run identity.
+
+There is no implicit default, environment inference, ambient credential chain,
+auto-connect, retry, auth downgrade, provider fallback, or local/cloud
+fallback. A future run starts only from explicit foreground user action and
+binds one immutable Rust-owned snapshot. Authorization success never starts
+model transport: prompt transmission requires a fresh explicit foreground
+action and a separate one-use model-processing disclosure/admission.
+
+Any future OAuth profile must use the system browser and authorization-code
+flow with PKCE S256, unpredictable state, OIDC nonce when applicable, an exact
+redirect, minimal scopes, one attempt, one callback/code, bounded deadlines,
+terminal cancellation, volatile attempt state, cleanup ownership, and
+late-result rejection. Provider authentication is not Cortexa user identity.
+ChatGPT or other consumer sessions, browser cookies, CLI sessions, environment
+variables, shared credential files, metadata services, and SDK default chains
+are not admissible authority.
+
+Under D-060, the gateway owns every credential-bearing OAuth state item,
+authorization result, provider token, and its cleanup. Trusted desktop Rust may
+own only bounded nonsecret coordination state and the separately governed
+Cortexa gateway token. Desktop ownership of provider-authentication material is
+permitted only after separately accepted direct/native-custody reconciliation;
+until then the profile remains blocked.
+
+D-060 continues to require gateway ownership of every production AI-provider
+credential, while D-021 additionally controls the current OpenAI/gateway
+contract. A future direct/native credential design needs separately accepted
+reconciliation of every applicable controlling decision—at minimum D-060, plus
+D-021 for the current OpenAI/gateway contract. D-061 continues to require exact provider-approved
+external-processing and ZDR evidence for the provider, account or organization,
+project, endpoint, model, and region, plus disclosure and lifecycle evidence.
+D-062 remains the sole planned Cortexa Phase-1 identity direction. Provider
+choice does not select or replace `NativeAgentRuntime`.
+
+Atomic runtime pairing does not merge D-060's independently required Cortexa
+identity, hosting/transport, and provider approvals.
+
+## Consequences
+
+- No current catalog, selector, profile handle, provider adapter, local engine,
+  authentication flow, credential store, network client, Tauri contract, or UI
+  is created.
+- D-118 remains `no_eligible_client`; V0-3, V0-7, the live synthetic-text
+  milestone, and every operational successor remain `Blocked`.
+- The sealed synthetic-v1 and reserved `real-content-v2` contracts remain
+  fixed, nonselectable, and unchanged under D-094.
+- Each profile needs its own separately approved evidence and implementation
+  sequence. Missing, stale, ambiguous, contradictory, or drifted evidence
+  fails closed and leaves the profile unavailable.
+- Cancellation, local result rejection, or local state disposal must not be
+  described as remote, browser, OS, DNS/TLS, credential-source, provider, or
+  local-engine quiescence. Uncertain cleanup remains owned and quarantined.
+- The approved credential-owning boundary zeroizes sensitive verifier, code,
+  and token material no longer needed for bounded cleanup while retaining
+  bounded nonsecret attempt, generation, terminal tombstone, and quarantine
+  ownership until cleanup is proved or a closed bounded terminal disposition
+  applies. Under D-060 that credential-bearing owner is the gateway unless a
+  separately accepted direct/native-custody reconciliation says otherwise.
+- All future DTOs and errors must be closed, bounded, versioned, redacted, and
+  free of credentials and caller-selected trusted configuration.
+
+## Preservation
+
+Historical D-096 through D-118 remain unchanged. D-118 is not superseded.
+D-107 remains eight documented of eleven and D-108 remains additively nine of
+ten; all ten identity, signer, scope, non-export, algorithm, interaction,
+cancellation, late-result, cleanup, and platform-effect blockers remain
+unproved. D-113 through D-117 remain Proposed and non-controlling. D-021,
+D-060 through D-068, D-079 through D-081, D-094, the sole/default Native
+runtime, empty tools, and all no-device-effect boundaries remain controlling.
+
+## Alternatives considered
+
+- Add an open provider, auth, endpoint, model, plugin, or
+  `openai_compatible` escape hatch: rejected because it transfers trusted
+  configuration authority outside the closed Rust catalog.
+- Treat consumer subscriptions or existing sign-in sessions as API authority:
+  rejected because product login, API authorization, and billing are distinct
+  boundaries.
+- Admit a subset of profiles now: rejected because no candidate satisfies all
+  transport, credential, retention, cancellation, cleanup, and operational
+  prerequisites.
+- Fold this direction into synthetic-v1 or `real-content-v2`: rejected because
+  it would weaken D-094 and conflate deterministic proof with future personal
+  processing.
+
+## Supersedes or is superseded by
+
+D-119 narrowly supersedes D-094 only insofar as D-094 could be read as a
+permanent product-wide prohibition on a separately approved post-v0
+`personal-assistant-selectable-connection-profile-v3` selector. It does not
+change synthetic-v1 or `real-content-v2`, and it does not supersede D-021,
+D-060 through D-068, D-079 through D-081, D-096 through D-118, or any security
+or readiness prerequisite. This accepted documentation direction grants no
+source, dependency, transport, credential, authentication, provider, local-
+model, persistence, signing, provisioning, product, or external-system
+authority.

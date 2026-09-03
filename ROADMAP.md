@@ -18,6 +18,22 @@ Last updated: 2026-09-03
 contains the ordered execution queue. Completed plans and reviews are the
 verification record; this roadmap does not create new completion evidence.
 
+## Selectable connection-profile architecture direction
+
+The documentation-only D-119 decision is **Completed** with **PASS WITH
+ADVISORIES** and a valid completion marker. The owner accepted
+`closed_catalog_direction_selected`, reserving a closed catalog direction only
+for a distinct post-v0
+`personal-assistant-selectable-connection-profile-v3`. All ten catalog-schema
+V1 candidates remain `candidate_blocked`, and no blocked entry has a selection
+handle. The future v3 product milestone is **Blocked/Future**, not Ready or
+Active.
+
+This decision does not change the fixed synthetic-v1 or reserved
+`real-content-v2` contracts, select a provider or local model, or authorize
+source. D-118 remains `no_eligible_client`; V0-3, V0-7, the live synthetic-text
+milestone, and every operational successor remain **Blocked**.
+
 ## V0-6 direct Rust HTTPS dependency decision
 
 The documentation-only V0-6 decision is **Completed** with `PASS WITH

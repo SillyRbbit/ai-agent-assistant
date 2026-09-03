@@ -146,6 +146,18 @@ No use case permits unattended consequential external action in the MVP.
   service token for at most 30 days, stored only in macOS Keychain and accessed
   only by trusted Rust. This exception is non-production and does not change
   the 15-minute production gateway access-token maximum.
+- **FR-020B (planned post-v0 direction)**: A future
+  `personal-assistant-selectable-connection-profile-v3` may present only the
+  exact application-owned catalog candidates accepted by D-119. Every current
+  candidate remains `candidate_blocked`, and the blocked catalog exposes no
+  selection handle. After separate admission, a caller may submit only an
+  opaque Rust-issued, process- and catalog-generation-bound intent handle;
+  trusted Rust shall resolve one immutable atomic provider/auth/model/endpoint/
+  credential/disclosure/lifecycle tuple. There shall be no caller-supplied
+  trusted configuration, implicit default, ambient credential discovery,
+  auth downgrade, provider fallback, or local/cloud fallback. Direct OpenAI
+  and Azure OpenAI shall remain separate. This planned requirement does not
+  alter the fixed synthetic-v1 or reserved `real-content-v2` contracts.
 
 Phase 1 gateway activation shall use D-064's four independent stages. An
 approved threat model and closed configuration do not authorize resource
@@ -526,6 +538,12 @@ Only item 2 is the first usable v0. Its identity/provider/hosting topology is
 not yet selected; the synthetic service-token exception cannot be reused. The
 synthetic proof is not a personal assistant, and the v0 is not the complete MVP
 below. Current implementation evidence does not satisfy any live milestone.
+
+D-119 additionally reserves a distinct post-v0 selectable connection-profile
+direction. It does not add selection to this v0: synthetic-v1 and
+`real-content-v2` remain fixed and nonselectable, and all ten local/cloud
+catalog candidates remain `candidate_blocked` with no handle or product
+surface.
 
 ## MVP target scope
 

@@ -4,6 +4,18 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Completed with `PASS WITH ADVISORIES` the documentation-only D-119
+  `closed_catalog_direction_selected` disposition for a distinct post-v0
+  selectable connection-profile architecture. The closed catalog records
+  exactly ten Rust-owned local/cloud provider-authentication candidates, all
+  `candidate_blocked`; Direct OpenAI and Azure OpenAI remain separate, and
+  ChatGPT login/subscription is not OpenAI API authority or billing. The
+  blocked catalog exposes no handle and creates no current catalog, UI, IPC,
+  authentication, credential, provider, local-model, network, dependency, or
+  runtime behavior. D-118 remains `no_eligible_client`; synthetic-v1 and
+  `real-content-v2` remain fixed, and V0-3/V0-7 and every operational successor
+  remain `Blocked`.
+
 - Completed the owner-approved documentation-only
   `personal-assistant-v0-https-dependency-publication-reconciliation` with
   `PASS WITH ADVISORIES`. Reviewed head
