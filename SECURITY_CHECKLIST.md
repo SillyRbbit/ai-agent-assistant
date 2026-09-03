@@ -7,6 +7,55 @@ Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
 production boundary exists.
 
+## Proposed D-116 hard-deadline and cancellation decision
+
+- [x] The historical closed result and proposed durable disposition are
+      `deadline_contract_not_accepted`; synchronous API
+      completion is not represented as a cancellable operation.
+- [x] Timers, dropped futures, workers, termination, and late-result rejection
+      are not treated as proof that private-key use stopped or cleanup quiesced.
+- [ ] The D-107 hard-deadline/cancellation contract is proved; it remains
+      unproved and `Blocked`.
+
+## Proposed D-115 interaction-denial decision
+
+- [x] The historical closed result and proposed durable disposition are
+      `interaction_denial_not_accepted`.
+- [x] Lookup controls and no-observed-prompt evidence are not treated as proof
+      of prompt-free retrieval or signing with an already-held identity.
+- [ ] The D-107 interaction-denial contract is proved; it remains unproved and
+      `Blocked`.
+
+## Proposed D-114 fixed-algorithm decision
+
+- [x] The historical closed result and proposed durable disposition are
+      `algorithm_contract_not_accepted`.
+- [x] No default, query, capability result, caller value, fallback, retry, or
+      error path is treated as immutable trusted algorithm policy.
+- [ ] The D-107 fixed-algorithm contract is proved; it remains unproved and
+      `Blocked`.
+
+## Proposed D-113 private-key non-export decision
+
+- [x] The historical closed result and proposed durable disposition are
+      `nonexport_contract_not_accepted`.
+- [x] Opaque references and a non-exporting happy path are not treated as a
+      complete reachability proof across code, tests, errors, logs, debug,
+      serialization, persistence, and DTOs.
+- [ ] The D-107 private-key non-export contract is proved; it remains unproved
+      and `Blocked`.
+
+## Post-D-111 reconciliation invariants
+
+- [x] The four historical triplets and unrelated GUI D-112 remain immutable.
+- [x] D-107 remains 8/11, D-108 remains 9/10 additively, and all ten contracts
+      remain blockers.
+- [x] No predecessor report or marker is retroactively validated.
+- [x] Repository-only validation and the required no-bundle compilation ran
+      locally; no target-Mac identity, Keychain, certificate, private-key,
+      signing, Apple/Xcode, launched-product/device-effect, provider, or
+      external-system operational check ran.
+
 ## D-111 account and Keychain scope decision
 
 - [x] Only `account_keychain_scope_contract` is reviewed.

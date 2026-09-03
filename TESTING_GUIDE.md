@@ -16,6 +16,26 @@ Last updated: 2026-09-02
 - Never report a check as passed unless its command completed successfully in
   the current increment.
 
+## Proposed D-113 through D-116 documentation-only lineage reconciliation
+
+The `d107-post-d111-decision-lineage-reconciliation` increment tests current
+documentation consistency, not the historical execution of its four
+predecessors. Passing requires all twelve historical plan/increment/review files
+and GUI D-112 to remain byte-identical, proposed D-113 through D-116 to be unique and
+ordered, the change set to equal the exact fifteen-path allowlist, and every
+current-memory record to preserve D-107 8/11, D-108's additive 9/10, all ten
+unproved contracts, and `Blocked` readiness.
+
+Run Markdown formatting/link validation, repository policy, secret scanning,
+complete `npm run verify`, diff hygiene, exact-path and protected-path checks,
+independent architecture/security/code/debt/readiness review, session
+inventory, and the post-increment gate. Current passing checks cannot
+retroactively prove predecessor commands, recover predecessor gate markers, or
+establish any operational contract. `npm audit`, app launch, target-Mac
+identity/signing/launched-product/device-effect operation, Keychain,
+certificate, private-key, Apple/Xcode, provider, product, and external-system
+checks are Not run by scope.
+
 ## D-111 documentation-only account and Keychain scope decision
 
 Review only whether repository evidence proves application-owned scope without

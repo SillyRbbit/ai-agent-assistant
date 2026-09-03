@@ -2,6 +2,45 @@
 
 Last updated: 2026-09-02
 
+## D-107 post-D-111 decision-lineage reconciliation checkpoint
+
+The owner-approved `d107-post-d111-decision-lineage-reconciliation` is
+verified complete with `PASS WITH ADVISORIES` on clean linked-worktree branch
+`codex/d107-post-d111-decision-lineage-reconciliation` from local synchronized
+baseline `5770c90a3601eee41883a2934863f9c2a2c3e2f3`. The original checkout and
+all 30 untracked ` 2.*` files remain untouched. No fetch or other external-
+system operation ran. The completion report and valid local gate marker cover
+exactly the fifteen authorized documentation paths; no publication is
+authorized.
+
+Proposed D-113 through D-116 are the non-colliding durable entries for the already
+published negative private-key non-export, fixed-algorithm,
+interaction-denial, and hard-deadline/cancellation results. Their four
+historical plan/increment/review triplets and GUI D-112 remain byte-for-byte
+historical evidence. This reconciliation does not validate predecessor
+commands or markers retroactively.
+
+Historical D-107 remains eight documented / eleven unproved, D-108's additive
+interpretation remains nine documented / ten unproved, and the exact ten
+blockers remain: `opaque_prebound_identity_contract`,
+`exact_signer_binding_contract`, `account_keychain_scope_contract`,
+`private_key_nonexport_contract`, `fixed_algorithm_contract`,
+`interaction_denial_contract`, `hard_deadline_cancellation_contract`,
+`late_result_rejection_contract`, `cleanup_quarantine_contract`, and
+`platform_effect_contract`. Readiness remains `Blocked`; late-result rejection
+has not begun and no successor is selected.
+
+Exact resume prompt: “Read AGENTS.md, the complete required project-memory and
+security/testing chain, and the D-107 post-D-111 reconciliation plan, increment,
+and report. Inspect the isolated branch and confirm the gate is complete and
+valid; preserve the original checkout, all four historical triplets, and GUI
+D-112 byte-for-byte. Review only the exact fifteen-file documentation result:
+D-113 through D-116 remain Proposed, all ten blockers remain, and readiness is
+Blocked. Do not access Keychain, certificates, private keys, signing,
+Apple/Xcode, providers, product systems, or external systems; do not commit,
+push, merge, accept a proposed decision, or begin a successor without separate
+owner direction.”
+
 ## PR #102 Browserslist 4.28.7 security remediation checkpoint
 
 The owner-approved `browserslist-4-28-7-security-remediation` increment is
@@ -42,22 +81,14 @@ documents plus the published lockfile. No dependency, security, architecture,
 code-health, or introduced-debt finding remains. The sole advisory is D-111:
 all ten product/operational blockers remain and no successor is Ready.
 
-Only the already authorized publication sequence remains: require every
-applicable check on the final closeout head, then squash-merge PR #102. This
-checkpoint supersedes older current-state wording that described the GUI work
-as uncommitted or unpublished; it does not rewrite the dated GUI evidence,
-D-112 interactions, Structured behavior, or any trust boundary.
-
-Exact resume prompt: “Read AGENTS.md and the complete required project memory,
-then read the Browserslist 4.28.7 remediation plan, increment record, and post-
-increment review. Confirm the completion marker is complete and valid and the
-final PR #102 head passes every applicable check. If PR #102 is still open,
-perform only the already authorized squash merge; if it is merged, verify the
-merged state and stop. Preserve Browserslist 4.28.7, its four exact support
-floors, update-browserslist-db 1.2.3, the unchanged manifest and trust
-boundaries, and the verified GUI/D-112 behavior. D-111 keeps every successor
-Blocked; do not begin another increment without separate owner selection and
-approval.”
+PR #102 was squash-merged into `main` as
+`9b1e367f35e58c2615403c4aebe02edee2b77ef9`; current `main` descends from that
+commit and contains the reviewed Browserslist 4.28.7 remediation.
+`8570034397e273af660a95af5a62e56f74ddc142` remains pre-squash branch evidence
+and is not a `main` ancestor. Older pending-merge or unpublished instructions,
+including dated GUI wording below, are historical only and must not be
+executed. This does not rewrite their evidence, D-112 interactions, Structured
+behavior, or any trust boundary.
 
 ## GUI conversation Return and Graph wheel interactions
 

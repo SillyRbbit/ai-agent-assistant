@@ -18,6 +18,23 @@ Last updated: 2026-09-02
 contains the ordered execution queue. Completed plans and reviews are the
 verification record; this roadmap does not create new completion evidence.
 
+## D-107 post-D-111 decision-lineage reconciliation
+
+The documentation-only reconciliation is **Completed** with `PASS WITH
+ADVISORIES`. Proposed D-113 through D-116
+provide non-colliding durable numbers for four published negative results:
+private-key non-export, fixed algorithm, interaction denial, and hard deadline/
+cancellation. They preserve the historical artifacts and unrelated GUI D-112,
+do not retroactively validate predecessor gates, and do not change any D-107
+outcome.
+
+Historical D-107 remains 8 documented / 11 unproved and D-108's additive
+interpretation remains 9/10. All ten contracts remain blockers, no candidate is
+admitted, and P3, P4, signing, V0-3, and every operational successor remain
+**Blocked**. Late-result rejection has not begun and requires separate owner
+selection and approval. The proposals themselves remain **Proposed** pending
+owner acceptance.
+
 ## Completed dependency-security remediation
 
 The owner-approved `browserslist-4-28-7-security-remediation` is **Completed**

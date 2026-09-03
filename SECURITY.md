@@ -7,6 +7,42 @@ Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
 identifies which security boundaries are current, mocked, planned, or
 prohibited.
 
+## Proposed D-116 hard-deadline and cancellation boundary
+
+D-116 proposes `deadline_contract_not_accepted`. Synchronous lookup, sign, and
+verify APIs expose no hard deadline or cancellation parameter; a timer, dropped
+future, worker, or late-result filter does not stop an in-flight private-key
+operation or prove cleanup and quiescence. The D-107 row remains unproved.
+
+## Proposed D-115 interaction-denial boundary
+
+D-115 proposes `interaction_denial_not_accepted`. Lookup-time interaction
+controls and absence of an observed prompt do not prove that retrieval or use
+of an already-held identity cannot display UI. Result rejection is not prompt
+prevention. The D-107 row remains unproved.
+
+## Proposed D-114 fixed-algorithm boundary
+
+D-114 proposes `algorithm_contract_not_accepted`. The current record contains
+no immutable application-owned Developer ID key-type/algorithm pair and no
+safe preflight boundary. Library defaults, capability results, inputs,
+fallbacks, and errors cannot select the algorithm. The D-107 row remains
+unproved.
+
+## Proposed D-113 private-key non-export boundary
+
+D-113 proposes `nonexport_contract_not_accepted`. A non-exporting happy path or
+opaque native reference does not prove private-key bytes and external
+representations are unreachable across production, helper, test, error, log,
+debug, serialization, persistence, and DTO surfaces. The D-107 row remains
+unproved.
+
+These four additive proposals reconcile historical numbering only if accepted.
+They do not retroactively validate predecessor reports or markers, change
+D-107 8/11 or D-108 9/10, or reduce the exact ten unproved contracts. Readiness
+remains `Blocked`; no Keychain, certificate, private-key, signing, provider,
+product, target-Mac, or external-system authority is created.
+
 ## Browserslist 4.28.7 supply-chain remediation
 
 PR #102's required audit reported GHSA-c83g-rgw3-j3cx / CVE-2026-73089 and
