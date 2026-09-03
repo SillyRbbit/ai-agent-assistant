@@ -1,8 +1,8 @@
 # Cortexa project direction
 
 Status: Owner-approved repository-governance and planned-architecture direction
-Last updated: 2026-08-28
-Decision authority: D-078 and D-094
+Last updated: 2026-09-03
+Decision authority: D-078, D-094, and D-119
 
 This document defines present project scope and future-facing architecture
 constraints. It is not implementation, readiness, release, or security evidence.
@@ -60,6 +60,14 @@ work, disclosure, operations, and target-Mac evidence. The real-content
 identity/provider/hosting path is unselected and separately blocked by D-061.
 A local model is an unauthorized alternative and does not replace or extend
 this direction without a new decision.
+
+D-119 now reserves only a distinct post-v0
+`personal-assistant-selectable-connection-profile-v3` direction. Its closed
+catalog-schema V1 records ten local/cloud provider-authentication candidates,
+all `candidate_blocked`, and exposes no selection handle. It does not add a
+selector to synthetic-v1 or `real-content-v2`, remove the existing synthetic
+OpenAI-through-Cloudflare direction, choose a provider or local model, or grant
+credential, transport, source, or product authority.
 
 ## Native architecture preservation
 
@@ -340,5 +348,7 @@ reached.
 - D-086 authorizes only the implemented fixed fixture-based Research and
   Knowledge sibling sequence and leaves generic delegation and runtime authority
   unchanged.
+- D-119 reserves a closed post-v0 selectable connection-profile direction
+  while keeping every catalog candidate blocked and both V0 contracts fixed.
 - `ARCHITECTURE.md`, `PROJECT_STATUS.md`, and `NEXT_STEPS.md` distinguish current
   capability, verified state, and authorized queue order.

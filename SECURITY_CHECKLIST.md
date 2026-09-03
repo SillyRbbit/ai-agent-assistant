@@ -7,6 +7,25 @@ Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
 production boundary exists.
 
+## D-119 selectable connection-profile documentation decision
+
+- [x] The accepted disposition is exactly
+      `closed_catalog_direction_selected`; it grants documentation direction
+      only.
+- [x] The catalog has exactly ten closed provider/authentication candidates,
+      and every candidate remains `candidate_blocked`.
+- [x] Direct OpenAI and Azure OpenAI remain separate, while ChatGPT login or
+      subscription is rejected as OpenAI API OAuth, authorization, or billing.
+- [x] The blocked catalog exposes no selection handle, default, fallback,
+      ambient credential discovery, or caller-selected trusted configuration.
+- [x] D-060 catalog-wide credential custody, D-021's current OpenAI/gateway
+      contract, D-061 exact external-processing evidence, D-062 identity,
+      D-094 fixed V0 contracts, D-118, and all D-107 blockers remain
+      controlling.
+- [ ] A selectable profile, auth flow, credential path, local engine, HTTPS
+      transport, IPC/UI contract, or provider integration exists; all remain
+      `Blocked` and require separate approval.
+
 ## D-118 V0-6 HTTPS dependency decision
 
 - [x] The accepted closed result is exactly `no_eligible_client`; no dependency

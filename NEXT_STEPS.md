@@ -2,6 +2,25 @@
 
 Last updated: 2026-09-03
 
+## Selectable connection-profile architecture decision
+
+The completed owner-approved documentation increment records D-119's accepted
+`closed_catalog_direction_selected` direction for a distinct post-v0
+`personal-assistant-selectable-connection-profile-v3`. The catalog-schema V1
+register contains exactly ten local/cloud provider-authentication candidates,
+all `candidate_blocked`, and the blocked catalog exposes no selection handle.
+It creates no current selector, auth, credential, provider, transport,
+local-model, runtime, IPC, or UI behavior.
+
+The immediate action is owner review of this completed uncommitted exact
+sixteen-file documentation result. No source successor is selected. D-118
+remains `no_eligible_client`; V0-3, V0-7, the live synthetic-text milestone,
+and every operational successor remain `Blocked`. Any profile admission,
+transport reconsideration, credential design, local-model choice, or product
+implementation requires a separate owner-approved plan after this result is
+reviewed and, if authorized, published. Completion is **PASS WITH ADVISORIES**
+with a valid marker; operational readiness remains `Blocked`.
+
 ## Published V0-6 publication reconciliation
 
 The owner-approved documentation-only

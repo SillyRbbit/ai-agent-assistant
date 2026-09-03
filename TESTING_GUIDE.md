@@ -16,6 +16,23 @@ Last updated: 2026-09-03
 - Never report a check as passed unless its command completed successfully in
   the current increment.
 
+## D-119 documentation-only connection-profile decision
+
+Current validation proves only documentation consistency: formatting and link
+checks, repository policy, security scanning, complete verification, diff
+hygiene, exact sixteen-path scope, protected-path preservation, append-only
+D-119 lineage, and independent architecture/security/code-health/debt/readiness
+review. The catalog assertion must find exactly ten unique kinds and allowed
+provider/authentication pairs, only `candidate_blocked` availability, no
+open/custom escape hatch, strict Direct OpenAI/Azure OpenAI separation, explicit
+ChatGPT authority rejection, and unchanged D-118, D-094, V0, and D-107 states.
+
+Future Rust/TypeScript catalog, opaque-handle, auth, credential, provider,
+transport, local-model, stream, cancellation, cleanup, late-result, and
+target-Mac tests are `Not run` and cannot be inferred from this documentation
+increment. Fixture tests from existing runtimes or demos do not prove any of
+those future boundaries.
+
 ## D-118 documentation-only HTTPS dependency decision
 
 V0-6 validates a frozen evidence matrix and exact documentation scope; it does

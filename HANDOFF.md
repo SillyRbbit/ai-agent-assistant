@@ -2,6 +2,50 @@
 
 Last updated: 2026-09-03
 
+## Completed selectable connection-profile architecture decision
+
+From clean synchronized baseline
+`01dbb1fdce10c197033c1a88dbeeb53afb0a21cd`, the owner approved the exact
+documentation-only
+[`selectable connection-profile architecture decision`](docs/plans/2026-09-03-personal-assistant-v0-selectable-connection-profile-architecture-decision.md).
+Branch `codex/personal-assistant-v0-selectable-connection-profile-architecture-decision`
+completed under gate `pa-v0-selectable-connection-profile-decision` with
+**PASS WITH ADVISORIES** and a valid completion marker. The first proposed
+73-character gate ID was rejected by the repository's 64-character bound before
+state changed; the owner approved the corrected ID.
+
+Current official primary-source authentication evidence remained consistent,
+and the owner accepted `closed_catalog_direction_selected`. D-119 therefore
+reserves only a distinct post-v0
+`personal-assistant-selectable-connection-profile-v3` direction with ten
+catalog-schema V1 candidates, all `candidate_blocked`. The blocked catalog has
+no selection handle. Direct OpenAI and Azure OpenAI remain separate, and
+ChatGPT login/subscription is not OpenAI API OAuth, authorization, or billing.
+
+No current product capability changed. D-118 remains `no_eligible_client`;
+synthetic-v1 and `real-content-v2` remain fixed and nonselectable; V0-3, V0-7,
+the live synthetic-text milestone, all ten D-107 blockers, and every
+operational successor remain `Blocked`. No source, dependency, auth,
+credential, provider, network, local-model, Tauri, persistence, signing, or
+external-system authority exists. Documentation, repository, security,
+complete verification, exact-scope, preservation, independent review, session,
+quality, report, and post-increment gates passed. Operational checks remained
+`Not run`. The first sandboxed finalizer validated the report but could not
+write ignored state; the identical authorized rerun completed it, and the
+corrected report was revalidated and rebound once. Owner review and any
+publication remain pending.
+
+Exact resume prompt: “Inspect the completed uncommitted
+`codex/personal-assistant-v0-selectable-connection-profile-architecture-decision`
+branch and its valid completion marker. Review only the exact sixteen-file
+documentation diff for D-119's accepted
+`closed_catalog_direction_selected` direction, exactly ten
+`candidate_blocked` entries, post-v0 v3/catalog-schema V1 separation, D-094
+and D-118 preservation, all ten D-107 blockers, truthful source evidence, and
+unchanged security boundaries. Preserve existing changes and report Accept or
+exact required revisions. Do not edit, commit, push, merge, begin a successor,
+access credentials/providers, or implement product source.”
+
 ## Published V0-6 HTTPS dependency publication reconciliation checkpoint
 
 From clean synchronized baseline

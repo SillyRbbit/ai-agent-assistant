@@ -4,7 +4,20 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
-The current terminal documentation plan is
+The current completed owner-approved documentation-only plan is
+[`Personal Assistant V0 selectable connection-profile architecture decision`](docs/plans/2026-09-03-personal-assistant-v0-selectable-connection-profile-architecture-decision.md).
+It records D-119's accepted `closed_catalog_direction_selected` disposition for
+only a distinct post-v0 `personal-assistant-selectable-connection-profile-v3`
+direction. Its catalog-schema V1 contains exactly ten candidates and all remain
+`candidate_blocked`; the blocked catalog exposes no handle. No source,
+dependency, credential, auth, provider, local-model, transport, runtime, Tauri,
+or product authority is granted. D-118 remains `no_eligible_client`; V0-3,
+V0-7, the live synthetic-text milestone, and every operational successor
+remain `Blocked`. The exact sixteen-file result completed with **PASS WITH
+ADVISORIES** and a valid marker; owner review and any publication remain
+separately gated.
+
+The immediately preceding terminal documentation plan is
 [`Personal Assistant V0 PR #108 publication closeout`](docs/plans/2026-09-03-personal-assistant-v0-pr108-publication-closeout.md).
 It records PR #108 and its frozen publication evidence in the five live
 project-memory records without changing D-118, readiness, history, or any
@@ -13,7 +26,8 @@ branch or publication state as a roadmap queue item: actual Git state determines
 whether it still needs separately authorized review/publication or is already
 closed. A later session must not create another publication reconciliation
 merely to restate a merge. No operational successor becomes active
-automatically.
+automatically. It remains historical publication evidence and is not an active
+queue item.
 
 The immediately preceding completed owner-approved documentation-only plan is
 [`Personal Assistant V0 HTTPS dependency publication reconciliation`](docs/plans/2026-09-03-personal-assistant-v0-https-dependency-publication-reconciliation.md).
@@ -1208,6 +1222,7 @@ condition is reached.
 
 | Plan                                             | Status   | Owner              | Last updated |
 | ------------------------------------------------ | -------- | ------------------ | ------------ |
+| Selectable connection-profile architecture       | Complete | Project owner      | 2026-09-03   |
 | P3 App Sandbox containment re-review             | Complete | Project owner      | 2026-09-02   |
 | P3 containment bootstrap trust decision          | Complete | Project owner      | 2026-09-02   |
 | P3-2 containment primitive selection             | Complete | Project owner      | 2026-09-02   |

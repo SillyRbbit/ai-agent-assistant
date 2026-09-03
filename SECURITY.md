@@ -7,6 +7,36 @@ Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
 identifies which security boundaries are current, mocked, planned, or
 prohibited.
 
+## D-119 closed post-v0 connection-profile direction
+
+D-119 accepts a documentation direction, not an operational profile. Exactly
+ten application-owned provider/authentication candidates exist in the closed
+catalog record and every one is `candidate_blocked`. The blocked catalog has no
+selection handle. Only a separately approved future catalog may issue an
+opaque Rust-owned handle for a fully admitted entry and atomically bind its
+provider, auth, model, endpoint, credential owner, disclosure, limits,
+cancellation, cleanup, late-result, and lifecycle policy. Raw authority fields
+and secrets must never cross IPC.
+
+Direct OpenAI and Azure OpenAI are distinct security boundaries. ChatGPT and
+other consumer logins, subscriptions, cookies, CLI sessions, environment
+variables, shared credential files, metadata services, and ambient SDK chains
+are not provider API authority. Any future OAuth flow requires the system
+browser, authorization code with PKCE S256, unpredictable state, OIDC nonce
+when applicable, one exact redirect, minimal scope, one bounded attempt, and
+closed replay, cancellation, cleanup, and late-result handling. Provider auth
+does not replace Cortexa identity. Authentication admission and model-
+processing disclosure/admission remain separate explicit user actions.
+
+D-060 catalog-wide gateway credential custody, D-021's current OpenAI/gateway
+contract, and D-061 exact provider-approved external-processing/ZDR evidence
+remain controlling. Any direct/native credential design requires separately
+accepted reconciliation of every applicable decision. No fallback is allowed.
+Cancellation or local result disposal does not prove the browser, provider,
+network, credential source, OS, or local engine stopped. D-118 remains
+`no_eligible_client`; no credential, auth, provider, network, local-model,
+transport, persistence, signing, or device authority is granted.
+
 ## D-118 V0-6 direct Rust HTTPS dependency decision
 
 D-118 accepts `no_eligible_client` for the five exact variants in the frozen

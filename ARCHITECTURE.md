@@ -3,6 +3,18 @@
 Status: Authoritative current-state architecture
 Last updated: 2026-09-03
 
+> Selectable connection-profile direction (D-119, 2026-09-03): the owner
+> accepted `closed_catalog_direction_selected` for a distinct post-v0
+> `personal-assistant-selectable-connection-profile-v3` architecture. Its
+> catalog-schema V1 contains exactly ten Rust-owned candidates, all
+> `candidate_blocked`; the blocked catalog exposes no selection handle. Direct
+> OpenAI and Azure OpenAI remain separate, and ChatGPT login/subscription is not
+> OpenAI API OAuth, authorization, or billing. The current synthetic-v1 and
+> reserved `real-content-v2` contracts remain fixed and nonselectable. No
+> catalog, UI, IPC, authentication, credential, provider, local-model, network,
+> dependency, or runtime edge exists, D-118 remains `no_eligible_client`, and
+> V0-3/V0-7 and every operational successor remain `Blocked`.
+
 > V0-6 HTTPS dependency decision (D-118, 2026-09-03): the frozen comparison
 > selected `no_eligible_client`. No direct Rust HTTPS dependency, client,
 > adapter, socket, response ingress, or transport edge exists. Every evaluated
@@ -1097,6 +1109,24 @@ D-060; approval of one does not approve another.
 Increment 4K. No HTTP client, provider SDK, gateway origin, model name,
 authentication, credential loader, or live Responses request exists.
 
+**Reserved post-v0 direction; not current capability**: D-119 accepts only a
+closed architecture direction for a future
+`personal-assistant-selectable-connection-profile-v3`. Its catalog-schema V1
+has exactly ten blocked provider/authentication pairs: local/no-auth; Google
+Gemini OAuth and API key; Direct OpenAI API key and eligible workload identity;
+Azure OpenAI Entra and API key; Anthropic API key; Mistral API key; and one
+future explicit nonambient AWS Bedrock identity. Direct OpenAI and Azure OpenAI
+are distinct end to end. The blocked catalog issues no handle. A future
+separately admitted entry may receive only a Rust-issued opaque process- and
+catalog-generation-bound handle; Rust must resolve the complete immutable
+provider/auth/model/endpoint/credential/disclosure/lifecycle tuple. There is no
+default, fallback, ambient credential discovery, or caller-selected trusted
+configuration. D-060 catalog-wide credential custody, D-021's current OpenAI/
+gateway contract, D-061 exact external-processing evidence, D-062 Cortexa
+identity, D-094's fixed V0 contracts, D-118, and all cancellation, cleanup, and
+late-result boundaries remain controlling. Any direct/native credential design
+requires separately accepted reconciliation of every applicable decision.
+
 **Identity-provider boundary**: D-062 selects Microsoft personal identity as
 the sole Phase 1 provider for consumer and prosumer individual accounts. The
 planned flow uses the system browser, OAuth 2.0 Authorization Code Flow, PKCE
@@ -1406,6 +1436,7 @@ reviewed repository ICNS byte-for-byte.
 | Typed Workflow Automation proposals           | Current, unwired and sealed     | D-090 A-D manual fixture dispatch; E/tools/approvals inert       |
 | Native multi-agent acceptance suite           | Current, deterministic/unwired  | 303 library units + 207 selected contracts; no product effects   |
 | Personal Assistant v0 volatile session path   | Current, transport-free/unwired | V0-1 sealed request/Native branch plus V0-2 bounded session host |
+| Post-v0 selectable connection-profile catalog | Planned and Blocked             | D-119 direction only; ten blocked candidates and no handle       |
 | Live gateway and model-provider transport     | Planned                         | Blocked by auth, provider evidence, HTTPS, operations, and plan  |
 | Restricted tool execution                     | Planned                         | No dispatcher or executor exists                                 |
 | Product memory and task persistence           | Planned                         | Phase 8 direction only                                           |

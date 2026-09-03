@@ -2,6 +2,25 @@
 
 Last updated: 2026-09-03
 
+## Selectable connection-profile architecture decision
+
+Status: **Documentation direction accepted; product capability remains
+Blocked.** The owner selected D-119's
+`closed_catalog_direction_selected` disposition for a distinct post-v0
+`personal-assistant-selectable-connection-profile-v3`. Its catalog-schema V1
+records exactly ten Rust-owned candidates, all `candidate_blocked`, and the
+blocked catalog exposes no selection handle.
+
+No catalog, selector, opaque handle, auth flow, credential path, provider
+client, local engine, HTTP client, Tauri IPC, or UI exists. Direct OpenAI and
+Azure OpenAI remain separate; ChatGPT login/subscription is not OpenAI API
+authority. D-118 remains `no_eligible_client`, D-094's synthetic-v1 and
+`real-content-v2` contracts remain fixed, V0-3/V0-7 and the live synthetic-text
+milestone remain `Blocked`, and all ten D-107 blockers remain unproved. The
+exact sixteen-file documentation increment completed with **PASS WITH
+ADVISORIES** and a valid marker; it grants no operational or successor
+authority. Owner review and any publication remain pending.
+
 ## V0-6 HTTPS dependency publication reconciliation
 
 Status: **Published through PR #108; product transport remains Blocked.** PR
