@@ -16,6 +16,34 @@ Last updated: 2026-09-02
 - Never report a check as passed unless its command completed successfully in
   the current increment.
 
+## Proposed D-117 documentation-only late-result rejection decision
+
+Test repository and source claims only. The decision must expose exactly
+`late_result_rejection_documented`,
+`late_result_rejection_not_accepted`, and `boundary_failed`; current source
+selects only the negative result, while missing, ambiguous, contradictory,
+unbounded, or drifted facts fail closed.
+
+Passing requires proof that no private-key attempt host or result ingress was
+mistakenly inferred; agent-runtime, Personal Assistant fixture, sealed demo,
+gateway, approval, and orchestration tests remain domain-specific. Verify the
+exact fifteen-path documentation inventory, append-only D-117 decision,
+preserved D-096 through D-116 and GUI D-112, D-107 8/11, D-108 additive 9/10,
+the exact ten blockers, protected paths, and `Blocked` readiness.
+
+Run Markdown formatting/link validation, repository policy, secret scanning,
+diff hygiene, exact-scope and preservation checks, independent architecture,
+security, documentation, code-health, debt, and readiness review, session
+inventory, and the post-increment gate. Product verification, application
+tests/builds, npm audit, Keychain, certificate, private-key, signing,
+Apple/Xcode, target-Mac identity/signing/launched-product/device-effect,
+provider, product, network, and external-system checks are Not run by scope.
+
+Future adversarial result-ingress cases in the plan are requirements for a
+separately approved source design only. They are Not run and do not select a
+worker, process, channel, callback, async runtime, cleanup design, restart, or
+persistence model.
+
 ## Proposed D-113 through D-116 documentation-only lineage reconciliation
 
 The `d107-post-d111-decision-lineage-reconciliation` increment tests current

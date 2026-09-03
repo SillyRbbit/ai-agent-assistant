@@ -18,6 +18,21 @@ Last updated: 2026-09-02
 contains the ordered execution queue. Completed plans and reviews are the
 verification record; this roadmap does not create new completion evidence.
 
+## D-107 late-result rejection decision
+
+The documentation-only `d107-late-result-rejection-contract-decision` is
+**Completed** with `PASS WITH ADVISORIES`. Current source supports only
+`late_result_rejection_not_accepted`, so D-117 is **Proposed**, negative, and
+non-controlling. The work creates no private-key attempt host, result ingress,
+runtime interface, cancellation, cleanup, signing, or platform capability.
+
+Historical D-107 remains 8/11 and D-108 remains additively 9/10. All ten
+contracts remain blockers, the candidate remains unadmitted, and P3, P4,
+signing, V0-3, and every operational successor remain **Blocked**. Completion
+of the documentation increment does not accept D-113 through D-117 or select a
+successor. Owner review of proposed D-117 is next; no plan becomes active
+automatically.
+
 ## D-107 post-D-111 decision-lineage reconciliation
 
 The documentation-only reconciliation is **Completed** with `PASS WITH
@@ -31,9 +46,10 @@ outcome.
 Historical D-107 remains 8 documented / 11 unproved and D-108's additive
 interpretation remains 9/10. All ten contracts remain blockers, no candidate is
 admitted, and P3, P4, signing, V0-3, and every operational successor remain
-**Blocked**. Late-result rejection has not begun and requires separate owner
-selection and approval. The proposals themselves remain **Proposed** pending
-owner acceptance.
+**Blocked**. At that reconciliation checkpoint, late-result rejection had not
+begun; it later began only as the separately owner-approved documentation
+assessment above. The proposals themselves remain **Proposed** pending owner
+acceptance.
 
 ## Completed dependency-security remediation
 

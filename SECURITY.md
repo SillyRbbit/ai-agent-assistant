@@ -7,6 +7,29 @@ Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
 identifies which security boundaries are current, mocked, planned, or
 prohibited.
 
+## Proposed D-117 late-result rejection boundary
+
+D-117 proposes `late_result_rejection_not_accepted`. Current source contains no
+private-key attempt host or ownership-bound result ingress, so it cannot prove
+that trusted Rust rejects post-terminal results before further
+application-owned mutation. Missing, ambiguous, contradictory, unbounded, or
+drifted evidence fails closed as `boundary_failed`.
+
+Any future positive proof would require one Rust-issued non-reusable opaque
+attempt handle and monotonic epoch, one serialized result-admission and
+terminalization point, exact ownership-bound correlation, monotonic terminal
+state, bounded retained state, closed redacted errors, and rejection before
+any additional application-owned state, evidence, UI, IPC, readiness,
+follow-on operation, or external dispatch. These are future evidence
+requirements, not current capability or a selected mechanism.
+
+Agent-runtime, fixture, demo, gateway, approval, and orchestration event
+rejection remains non-transferable. Result rejection or disposal does not stop
+or undo synchronous private-key use, prevent interaction, release uncertain
+operation ownership, prove cleanup/quiescence, or establish absence of
+OS-managed effects. D-107 remains 8/11, D-108 remains additively 9/10, all ten
+contracts remain unproved, and readiness remains `Blocked`.
+
 ## Proposed D-116 hard-deadline and cancellation boundary
 
 D-116 proposes `deadline_contract_not_accepted`. Synchronous lookup, sign, and

@@ -2,15 +2,52 @@
 
 Last updated: 2026-09-02
 
+## Completed D-107 late-result rejection decision
+
+The owner-approved documentation-only assessment selects
+`late_result_rejection_not_accepted` and proposes D-117. Current source has no
+private-key attempt host or result ingress. Existing agent-runtime, Personal
+Assistant fixture, sealed demo, gateway, approval, and orchestration event
+checks remain separate proofs and cannot satisfy this contract.
+
+The reconciliation predecessor was accepted and squash-merged at
+`787255354995f941980138adc3d69beef104ff07`; publication did not accept proposed
+D-113 through D-116. This increment likewise does not accept proposed D-117.
+Historical D-107 remains 8/11, D-108 remains additively 9/10, and the exact ten
+blockers remain:
+
+1. `opaque_prebound_identity_contract`
+2. `exact_signer_binding_contract`
+3. `account_keychain_scope_contract`
+4. `private_key_nonexport_contract`
+5. `fixed_algorithm_contract`
+6. `interaction_denial_contract`
+7. `hard_deadline_cancellation_contract`
+8. `late_result_rejection_contract`
+9. `cleanup_quarantine_contract`
+10. `platform_effect_contract`
+
+The documentation increment is complete with `PASS WITH ADVISORIES`; owner
+review of proposed D-117 is next. Readiness remains `Blocked`. Do not select
+cleanup/quarantine, platform effects, or any operational successor
+automatically.
+
+The reconciliation section immediately below is source-current: it records the
+accepted squash merge while retaining the fact that late-result rejection had
+not begun at that checkpoint. Its former owner-review, publication, and “do not
+begin late-result rejection” instructions are superseded and no longer appear
+as current queue instructions.
+
 ## Completed D-107 post-D-111 decision-lineage reconciliation
 
-The owner-approved documentation reconciliation is complete with `PASS WITH
-ADVISORIES` on its isolated branch. Proposed D-113 through D-116 provide
+The owner-approved documentation reconciliation was completed with `PASS WITH
+ADVISORIES`, accepted, and squash-merged into `main` as
+`787255354995f941980138adc3d69beef104ff07`. Proposed D-113 through D-116 provide
 non-colliding entries for four published negative results without changing
 their historical triplets or unrelated GUI D-112. Exact-path, historical-byte,
 documentation, repository, security, complete-verification, independent-review,
-session, and post-increment checks pass. Owner review is next; no acceptance,
-publication, or successor is authorized.
+session, and post-increment checks passed. Publication did not accept the four
+proposals or authorize an operational successor.
 
 All ten contracts remain unproved:
 
@@ -26,9 +63,9 @@ All ten contracts remain unproved:
 10. `platform_effect_contract`
 
 Historical D-107 remains 8/11 and D-108's additive interpretation remains
-9/10. Readiness is `Blocked`; do not begin late-result rejection or any
-operational successor without separate owner approval after this reconciliation
-is validated and, if authorized later, published.
+9/10. At that reconciliation checkpoint, late-result rejection had not begun.
+It later began only as the separately owner-approved documentation assessment
+above; every operational successor remains `Blocked`.
 
 ## Completed Browserslist 4.28.7 security remediation
 

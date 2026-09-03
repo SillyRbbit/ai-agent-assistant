@@ -2,6 +2,34 @@
 
 Last updated: 2026-09-02
 
+## D-107 late-result rejection decision
+
+Status: **Verified complete with advisories; proposed-decision acceptance and
+operational readiness Blocked.** Current source contains no private-key attempt
+host or result ingress for the frozen D-107 candidate. The closed assessment
+therefore selects `late_result_rejection_not_accepted`; missing, ambiguous,
+contradictory, unbounded, or drifted evidence selects `boundary_failed`.
+
+Existing agent-runtime, Personal Assistant fixture, sealed demo, gateway,
+approval, and orchestration late-event checks remain scoped to their own
+domains. They cannot establish private-key result rejection, cancellation,
+interaction denial, cleanup/quiescence, or absence of platform effects.
+Proposed D-117 adds only governance vocabulary and remains non-controlling.
+
+Historical D-107 remains eight documented / eleven unproved and D-108 remains
+additively nine documented / ten unproved. All ten blockers remain, the
+candidate remains unadmitted, and no operational successor is Ready. No
+product source, Keychain, certificate, private-key, signing, provider,
+target-Mac, product-system, or state-changing external-system action occurred.
+Read-only Git synchronization with `origin` was the sole external contact used
+to verify the explicitly requested clean synchronized baseline.
+
+The exact fifteen-path documentation inventory, formatting/link validation,
+repository policy, secret scanning, diff hygiene, historical and protected-
+path preservation, independent reviews, session inventory, and deterministic
+completion gate pass. The result is `PASS WITH ADVISORIES`; the sole advisory
+is the inherited ten-contract gap that blocks every operational successor.
+
 ## D-107 post-D-111 decision-lineage reconciliation
 
 Status: **Verified complete with advisories; proposed-decision acceptance and

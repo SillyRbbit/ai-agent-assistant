@@ -5,13 +5,31 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Current plan state
 
 The most recently completed owner-approved documentation-only plan is
+[`d107-late-result-rejection-contract-decision`](docs/plans/2026-09-02-d107-late-result-rejection-contract-decision.md).
+It assesses only whether current source proves a private-key late-result
+boundary and selects the closed negative result
+`late_result_rejection_not_accepted`. Proposed D-117 remains non-controlling;
+the plan adds no attempt host, runtime value, IPC, cancellation, cleanup, or
+platform authority. Historical D-107 remains 8/11, D-108 remains additively
+9/10, all ten blockers remain unproved, and next-increment readiness remains
+`Blocked`. Its exact fifteen-path documentation and completion gate pass with
+`PASS WITH ADVISORIES`; no plan becomes active automatically.
+
+The preceding decision-lineage reconciliation was accepted and squash-merged
+as `787255354995f941980138adc3d69beef104ff07`. Its D-113 through D-116 entries
+remain Proposed and non-controlling; publication did not accept them or
+validate their predecessor gates.
+
+The preceding completed owner-approved documentation-only plan is
 [`d107-post-d111-decision-lineage-reconciliation`](docs/plans/2026-09-02-d107-post-d111-decision-lineage-reconciliation.md).
 It adds non-colliding proposed D-113 through D-116 for four already published negative
 D-107 contract results while preserving all historical triplets and GUI D-112
 byte-for-byte. It changes no contract outcome: D-107 remains 8/11, D-108's
 additive view remains 9/10, all ten blockers remain unproved, and next-
 increment readiness remains `Blocked`. The exact fifteen-path validation and
-gate pass with `PASS WITH ADVISORIES`; no successor is selected or active.
+gate passed with `PASS WITH ADVISORIES`. At that reconciliation checkpoint no
+successor was selected or active; the separately approved D-117 assessment
+above is now the most recent completed documentation plan.
 
 This reconciliation does not retroactively validate predecessor reports or
 markers and grants no Keychain, certificate, private-key, signing, Apple/Xcode,
