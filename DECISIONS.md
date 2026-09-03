@@ -6109,3 +6109,88 @@ D-116 is the non-colliding proposed durable entry for the published negative
 disposition for `hard_deadline_cancellation_contract` and maps its provisional
 D-114 predecessor to proposed D-115. As a proposal, it does not supersede or
 control D-096 through D-115, their historical artifacts, or any prerequisite.
+
+## D-117 - Do not accept late-result rejection from the current repository record
+
+Date: 2026-09-02
+Status: Proposed by the owner-authorized documentation-only assessment
+
+## Context
+
+D-107 records `late_result_rejection_contract` as `contract_unproven`. The
+current repository source review, consistent with proposed D-116, finds that
+the reviewed synchronous identity, sign, and verify APIs expose no hard
+deadline or cancellation parameter. The current repository also contains no
+private-key attempt host or ownership-bound result ingress for the frozen
+D-107 candidate.
+
+Agent-runtime terminal filtering, Personal Assistant test-only fixture ingress,
+the sealed Research/Knowledge demo, gateway stream handling, approval
+outcomes, and orchestration terminal checks are bounded proofs for their own
+domains. None proves application-owned admission or rejection of a private-key
+result, and discarding an application-visible result would not prove that the
+underlying synchronous operation stopped.
+
+## Decision
+
+Propose `LateResultRejectionPolicyV1` as conceptual governance documentation
+with exactly `late_result_rejection_documented`,
+`late_result_rejection_not_accepted`, and `boundary_failed`. The proposed
+durable disposition for current source is exactly
+`late_result_rejection_not_accepted`.
+
+A future positive assessment would require trusted Rust alone to issue one
+non-reusable opaque attempt handle and monotonic epoch, serialize result
+admission with terminalization at one linearization point, admit at most one
+ownership-bound result for the exact live attempt and phase, and reject every
+unknown, malformed, foreign, prior-epoch, duplicate, cancelled, failed,
+completed, locally expired, or otherwise post-terminal result before any
+additional application-owned mutation or dispatch. Caller- or result-supplied
+identity, handle, epoch, timestamp, or correlation data cannot be authority.
+
+Rejection may not reverse terminal state, emit success or D-100 evidence,
+retry, fall back, start a replacement, release uncertain operation ownership,
+or establish cleanup. Retained state and rejected result material require
+separate bounded ownership and disposal proof, and sensitive result content
+must remain adapter-private with closed redacted errors. Missing, ambiguous,
+contradictory, unbounded, or drifted facts select `boundary_failed`.
+
+This is not D-100 evidence, a Rust/Tauri/WebView interface, runtime state,
+product behavior, a selected concurrency mechanism, or a universal
+impossibility claim.
+
+## Consequences
+
+- The D-107 row remains `contract_unproven`; historical D-107 remains eight
+  documented / eleven unproved and D-108's additive interpretation remains
+  nine documented / ten unproved.
+- All ten blockers and `Blocked` readiness remain unchanged. The candidate is
+  unadmitted, and proposed D-113 through D-116 remain non-controlling.
+- Result rejection remains independent of interaction denial, hard
+  cancellation, cleanup/quarantine, and platform effects. It cannot prove the
+  synchronous operation stopped, undo prior or in-flight private-key use,
+  prevent prompts, prove cleanup/quiescence, or establish absence of
+  OS-managed Keychain, securityd, trust, revocation, cache, log, IPC, network,
+  or process-metadata effects.
+- No private-key attempt host, identity, result ingress, worker, process,
+  channel, callback, runtime, source interface, provider, product, target-Mac,
+  signing, cleanup, or external-system authority is created.
+
+## Alternatives considered
+
+- Treat agent, fixture, demo, gateway, approval, or orchestration late-event
+  tests as private-key proof: rejected because their inputs, owners, and
+  effects are different boundaries.
+- Treat a timer, dropped future or receiver, ignored callback, worker
+  termination, or discarded result as cancellation or cleanup: rejected
+  because the synchronous operation and its OS effects can remain active.
+- Select a worker, process, channel, callback, async runtime, FFI, cleanup
+  design, or target experiment: rejected as source or operational work outside
+  this documentation-only authorization.
+
+## Supersedes or is superseded by
+
+D-117 is the proposed closed negative record for
+`late_result_rejection_contract` and follows proposed D-116 without accepting
+it. As a proposal, D-117 does not supersede or control D-096 through D-116,
+their historical artifacts, unrelated GUI D-112, or any prerequisite.

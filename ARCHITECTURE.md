@@ -3,6 +3,18 @@
 Status: Authoritative current-state architecture
 Last updated: 2026-09-02
 
+> Proposed D-117 late-result rejection decision (2026-09-02): current source
+> contains no private-key attempt host or result-ingress owner for the frozen
+> D-107 candidate, so it cannot prove a complete application-owned late-result
+> boundary. Agent-runtime, Personal Assistant fixture, sealed demo, gateway,
+> approval, and orchestration rejection checks remain proof only for their own
+> domains. Proposed `LateResultRejectionPolicyV1` therefore selects
+> `late_result_rejection_not_accepted`; unknown or drifted evidence fails closed
+> as `boundary_failed`. This adds no runtime, IPC, identity, signing, cleanup,
+> or platform edge. Historical D-107 remains 8/11, D-108 remains additively
+> 9/10, all ten contracts remain unproved, and every operational successor
+> remains `Blocked`.
+
 > Post-D-111 decision-lineage reconciliation (2026-09-02): proposed D-113
 > through D-116 supply non-colliding durable entries for the already published negative results for private-
 > key non-export, fixed algorithm, interaction denial, and hard deadline/

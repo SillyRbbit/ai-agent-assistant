@@ -7,6 +7,23 @@ Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
 production boundary exists.
 
+## Proposed D-117 late-result rejection decision
+
+- [x] The closed current-source result is
+      `late_result_rejection_not_accepted`; there is no private-key attempt host
+      or ownership-bound result ingress.
+- [x] Governance exposes only `late_result_rejection_documented`,
+      `late_result_rejection_not_accepted`, and `boundary_failed`; none is a
+      D-100 value, runtime state, or universal impossibility claim.
+- [x] Agent-runtime, Personal Assistant fixture, sealed demo, gateway,
+      approval, and orchestration late-event tests are not transferred to the
+      private-key boundary.
+- [x] Result rejection and disposal are not treated as hard cancellation,
+      interaction denial, cleanup, quiescence, ownership release, or absence
+      of platform effects.
+- [ ] The D-107 late-result rejection contract is proved; it remains unproved
+      and `Blocked`.
+
 ## Proposed D-116 hard-deadline and cancellation decision
 
 - [x] The historical closed result and proposed durable disposition are

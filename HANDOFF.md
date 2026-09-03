@@ -2,16 +2,62 @@
 
 Last updated: 2026-09-02
 
-## D-107 post-D-111 decision-lineage reconciliation checkpoint
+## D-107 late-result rejection decision checkpoint
 
-The owner-approved `d107-post-d111-decision-lineage-reconciliation` is
+The owner-approved documentation-only
+`d107-late-result-rejection-contract-decision` is verified complete with `PASS
+WITH ADVISORIES` on isolated branch
+`codex/d107-late-result-rejection-contract-decision` from clean synchronized
+baseline `787255354995f941980138adc3d69beef104ff07`. The source assessment
+selects `late_result_rejection_not_accepted`: no private-key attempt host or
+result ingress exists, and existing agent, fixture, demo, gateway, approval,
+and orchestration checks cannot be transferred to that boundary. Proposed
+D-117 remains negative, non-controlling, and pending owner acceptance.
+
+The completion report covers exactly the fifteen authorized documentation
+paths. Documentation formatting/link validation, repository policy, secret
+scanning, diff hygiene, append-only decision and historical preservation,
+protected-path checks, independent reviews, session inventory, and the
+deterministic completion gate pass. The local completion marker is complete
+and valid for this exact workspace. No application test/build or operational
+system check ran because the owner-approved plan is documentation-tier only.
+
+The predecessor reconciliation was accepted and squash-merged into `main` as
+`787255354995f941980138adc3d69beef104ff07`. Its prepublication branch,
+baseline, no-fetch, and no-publication wording below remains historical
+closeout evidence, not current instruction. Publication did not accept
+proposed D-113 through D-116 or validate their predecessor gates.
+
+Historical D-107 remains eight documented / eleven unproved, D-108 remains
+additively nine documented / ten unproved, and all ten contracts remain
+blockers. Late-result rejection does not prove hard cancellation, interaction
+denial, cleanup/quiescence, or absence of platform effects. The candidate and
+every operational successor remain `Blocked`.
+
+Exact resume prompt: “Read AGENTS.md, the complete required project-memory and
+security/testing chain, and the D-107 late-result rejection plan, increment,
+and report. Inspect only the exact fifteen-file documentation change on
+`codex/d107-late-result-rejection-contract-decision`; preserve D-096 through
+D-116, GUI D-112, all ten blockers, and Blocked readiness. Confirm proposed
+D-117 selects `late_result_rejection_not_accepted` without treating fixture
+events, result disposal, or application-side rejection as cancellation,
+cleanup, quiescence, interaction denial, or absence of OS effects. Do not
+access Keychain, certificates, private keys, signing, Apple/Xcode, providers,
+product systems, or external systems. Do not commit, push, merge, accept the
+proposal, or begin a successor without separate owner direction.”
+
+## D-107 post-D-111 decision-lineage reconciliation historical checkpoint
+
+The owner-approved `d107-post-d111-decision-lineage-reconciliation` was
 verified complete with `PASS WITH ADVISORIES` on clean linked-worktree branch
 `codex/d107-post-d111-decision-lineage-reconciliation` from local synchronized
 baseline `5770c90a3601eee41883a2934863f9c2a2c3e2f3`. The original checkout and
-all 30 untracked ` 2.*` files remain untouched. No fetch or other external-
-system operation ran. The completion report and valid local gate marker cover
-exactly the fifteen authorized documentation paths; no publication is
-authorized.
+all 30 untracked ` 2.*` files remained untouched. No fetch or other external-
+system operation ran at that checkpoint. Its completion report and valid local
+gate marker cover exactly the fifteen authorized documentation paths. The
+increment was later accepted and squash-merged into `main` as
+`787255354995f941980138adc3d69beef104ff07`; publication did not accept its
+proposed decisions.
 
 Proposed D-113 through D-116 are the non-colliding durable entries for the already
 published negative private-key non-export, fixed-algorithm,
@@ -27,10 +73,12 @@ blockers remain: `opaque_prebound_identity_contract`,
 `private_key_nonexport_contract`, `fixed_algorithm_contract`,
 `interaction_denial_contract`, `hard_deadline_cancellation_contract`,
 `late_result_rejection_contract`, `cleanup_quarantine_contract`, and
-`platform_effect_contract`. Readiness remains `Blocked`; late-result rejection
-has not begun and no successor is selected.
+`platform_effect_contract`. Readiness remains `Blocked`. At that checkpoint,
+late-result rejection had not begun; the separately approved documentation
+assessment above is now the most recent completed documentation plan and
+selects no operational successor.
 
-Exact resume prompt: “Read AGENTS.md, the complete required project-memory and
+Historical resume prompt (do not execute): “Read AGENTS.md, the complete required project-memory and
 security/testing chain, and the D-107 post-D-111 reconciliation plan, increment,
 and report. Inspect the isolated branch and confirm the gate is complete and
 valid; preserve the original checkout, all four historical triplets, and GUI

@@ -2,6 +2,30 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## Existing late-event rejection does not establish a private-key late-result boundary
+
+Date: 2026-09-02
+Status: Documented as proposed D-117; acceptance pending
+
+### Observation
+
+Current source contains no private-key attempt host or ownership-bound result
+ingress for the frozen D-107 candidate. Existing agent-runtime, Personal
+Assistant fixture, sealed demo, gateway, approval, and orchestration tests
+reject late or foreign events only within their own domains.
+
+### Disposition
+
+The repository-only assessment selects
+`late_result_rejection_not_accepted`; missing, ambiguous, contradictory,
+unbounded, or drifted evidence selects `boundary_failed`. Proposed D-117 does
+not treat result disposal as cancellation or cleanup, and it cannot establish
+that synchronous private-key use stopped or that OS-managed effects were
+absent. D-107 remains 8/11, D-108 remains additively 9/10, all ten blockers
+remain, and readiness stays `Blocked`. No signing, product, target-Mac, or
+operational external-system check ran; read-only Git synchronization with
+`origin` was the sole external contact.
+
 ## TS-024 - Post-D-111 D-107 decisions lacked durable canonical lineage
 
 Date: 2026-09-02

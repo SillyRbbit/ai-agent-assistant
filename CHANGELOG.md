@@ -4,6 +4,20 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added the owner-approved documentation-only D-107 late-result rejection
+  assessment and proposed D-117. Current source has no private-key attempt host
+  or result ingress, so the closed disposition is
+  `late_result_rejection_not_accepted`; application-owned rejection cannot be
+  treated as cancellation, cleanup, quiescence, interaction denial, or absence
+  of OS effects. This changes no D-107 row or product boundary: historical
+  D-107 remains 8/11, D-108 remains additively 9/10, all ten blockers remain,
+  and operational readiness stays `Blocked`. No source, Keychain, certificate,
+  private-key, signing, provider, product, target-Mac, or external-system
+  authority was added. The exact fifteen-path documentation inventory,
+  documentation/repository/security checks, preservation checks, independent
+  reviews, session inventory, and completion gate pass with `PASS WITH
+ADVISORIES`; D-117 remains Proposed.
+
 - Added a proposed reconciliation of the post-D-111 D-107 decision lineage
   without changing historical evidence. Proposed D-113 through D-116 provide
   non-colliding entries for the published negative
