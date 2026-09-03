@@ -2,7 +2,7 @@
 
 Last updated: 2026-09-03
 
-## Selectable connection-profile architecture decision
+## Published selectable connection-profile architecture decision
 
 Status: **Documentation direction accepted; product capability remains
 Blocked.** The owner selected D-119's
@@ -19,7 +19,20 @@ authority. D-118 remains `no_eligible_client`, D-094's synthetic-v1 and
 milestone remain `Blocked`, and all ten D-107 blockers remain unproved. The
 exact sixteen-file documentation increment completed with **PASS WITH
 ADVISORIES** and a valid marker; it grants no operational or successor
-authority. Owner review and any publication remain pending.
+authority. Reviewed head `7929a31574acb4e50c515ed056994107402bbbbe` was
+squash-merged through PR #110 as
+`0e1eb218f67006b332865684ac6b8e316549a546`. Both commits share exact tree
+`e459009dff1b3b0577563a5486614780b32d1f64`, and their repository diff is
+empty. Frozen owner-supplied publication evidence records successful PR
+workflow run `33800792820` and successful post-merge workflow run
+`33803004332`; this closeout did not contact GitHub or independently re-query
+either run.
+
+The documentation-only publication closeout makes this live state stable and
+does not queue another reconciliation for its own eventual merge. Actual Git
+state remains authoritative. Publication and CI add no profile, provider,
+credential, transport, local-model, network, signing, execution, product, or
+external-system authority.
 
 ## V0-6 HTTPS dependency publication reconciliation
 

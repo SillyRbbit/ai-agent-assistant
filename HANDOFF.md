@@ -2,7 +2,7 @@
 
 Last updated: 2026-09-03
 
-## Completed selectable connection-profile architecture decision
+## Published selectable connection-profile architecture decision
 
 From clean synchronized baseline
 `01dbb1fdce10c197033c1a88dbeeb53afb0a21cd`, the owner approved the exact
@@ -32,19 +32,42 @@ complete verification, exact-scope, preservation, independent review, session,
 quality, report, and post-increment gates passed. Operational checks remained
 `Not run`. The first sandboxed finalizer validated the report but could not
 write ignored state; the identical authorized rerun completed it, and the
-corrected report was revalidated and rebound once. Owner review and any
-publication remain pending.
+corrected report was revalidated and rebound once.
 
-Exact resume prompt: “Inspect the completed uncommitted
-`codex/personal-assistant-v0-selectable-connection-profile-architecture-decision`
-branch and its valid completion marker. Review only the exact sixteen-file
-documentation diff for D-119's accepted
-`closed_catalog_direction_selected` direction, exactly ten
-`candidate_blocked` entries, post-v0 v3/catalog-schema V1 separation, D-094
-and D-118 preservation, all ten D-107 blockers, truthful source evidence, and
-unchanged security boundaries. Preserve existing changes and report Accept or
-exact required revisions. Do not edit, commit, push, merge, begin a successor,
-access credentials/providers, or implement product source.”
+The accepted result was reviewed at
+`7929a31574acb4e50c515ed056994107402bbbbe` and squash-merged through PR #110
+as `0e1eb218f67006b332865684ac6b8e316549a546`. Both commits share exact tree
+`e459009dff1b3b0577563a5486614780b32d1f64`; their repository diff is empty.
+Frozen owner-supplied publication evidence records successful PR workflow run
+`33800792820` and successful post-merge workflow run `33803004332`; this
+closeout did not contact GitHub or independently re-query either run.
+Publication adds no product, transport, credential, provider, local-model,
+network, execution, signing, or external-system authority.
+
+The documentation-only
+[`PR #110 publication closeout`](docs/plans/2026-09-03-personal-assistant-v0-pr110-publication-closeout.md)
+keeps the live records publication-stable. Actual Git state determines whether
+that closeout still requires separately authorized review or publication; its
+own transient branch state is not a roadmap queue item and must not trigger
+another reconciliation merely to restate a merge.
+
+Exact resume prompt: “Read `AGENTS.md`,
+`docs/governance/MASTER_PROMPT.md`, and the complete required project-memory
+and security/testing chain. Inspect actual Git state before acting. Preserve PR
+#110, reviewed head `7929a31574acb4e50c515ed056994107402bbbbe`, successful
+PR workflow run `33800792820`, squash commit
+`0e1eb218f67006b332865684ac6b8e316549a546`, successful post-merge run
+`33803004332`, and common tree
+`e459009dff1b3b0577563a5486614780b32d1f64`. If the exact PR #110 publication
+closeout is not yet published, review or publish it only with separate owner
+authorization; if `main` already contains its tree, treat it as closed and do
+not create another publication reconciliation merely to restate that merge.
+Preserve D-119, all ten `candidate_blocked` entries, D-094, D-118
+`no_eligible_client`, all ten D-107 blockers, D-113 through D-117 as Proposed
+and non-controlling, and every `Blocked` security boundary. No operational
+successor is selected or Ready. Preserve existing user changes, avoid unrelated
+work, do not repeat completed verification, and do not access external systems
+or begin a successor.”
 
 ## Published V0-6 HTTPS dependency publication reconciliation checkpoint
 
