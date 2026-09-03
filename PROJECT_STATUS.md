@@ -2,6 +2,26 @@
 
 Last updated: 2026-09-02
 
+## D-107 post-D-111 decision-lineage reconciliation
+
+Status: **Verified complete with advisories; proposed-decision acceptance and
+operational readiness Blocked.** Proposed D-113 through D-116 supply
+non-colliding records for the already published
+negative dispositions for `private_key_nonexport_contract`,
+`fixed_algorithm_contract`, `interaction_denial_contract`, and
+`hard_deadline_cancellation_contract`. Their provisional historical numbering
+is retained in four immutable plan/increment/review triplets; GUI D-112 remains
+the unrelated Graph-local wheel decision.
+
+No positive security contract is established. Historical D-107 remains eight
+documented / eleven unproved and D-108's additive interpretation remains nine
+documented / ten unproved. All ten blockers remain, the D-107 candidate is
+unadmitted, and no product or operational successor is Ready. The current work
+adds documentation evidence only and authorizes no source, Keychain,
+certificate, private-key, signing, provider, target-Mac, product, or external-
+system action. Exact-path, immutable-history, complete repository verification,
+independent-review, session, and completion-gate checks pass.
+
 ## Browserslist 4.28.7 security remediation
 
 Status: **Verified complete with advisories.** PR #102 remediation

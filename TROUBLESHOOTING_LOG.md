@@ -2,6 +2,47 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## TS-024 - Post-D-111 D-107 decisions lacked durable canonical lineage
+
+Date: 2026-09-02
+Status: Documented with proposed lineage; acceptance pending
+
+### Symptom
+
+Four published documentation-only contract decisions changed only their
+plan/increment/review triplets. None added its claimed result to
+`DECISIONS.md` or reconciled current project memory. The private-key triplet
+called itself D-112, which later became the unrelated GUI wheel decision; the
+fixed-algorithm, interaction-denial, and hard-deadline triplets inherited
+noncanonical predecessor numbers. The private-key plan also promised an exact
+fifteen-file closeout but its commit and report contain only three files; the
+other plans did not freeze their promised inventory. All four reports record
+no findings despite those limitations.
+
+### Cause
+
+Each closeout used the ignored single-slot gate record as its local completion
+mechanism but omitted the durable decision and current-memory updates. Later
+gate activity cannot recover or independently validate overwritten marker
+history. A syntactically valid historical report and digest are not proof of
+unrecorded commands or missing documentation changes.
+
+### Proposed reconciliation
+
+If accepted, proposed D-113 through D-116 would additively reconcile the four
+already selected negative dispositions without changing the historical
+triplets or GUI D-112. Every D-107 row, the 8/11 historical record, D-108's
+additive 9/10 interpretation, all ten blockers, and `Blocked` readiness would
+remain unchanged. The proposal does not retroactively validate any historical
+report or marker and adds no operational authority.
+
+### Verify
+
+Require exact byte/hash comparison for all twelve historical artifacts, an
+append-only check for GUI D-112, the exact fifteen-path current change set,
+full documentation/repository/security/verification checks, independent
+reviews, and a new valid completion marker for only this reconciliation.
+
 ## TS-023 - PR #102 audit reported Browserslist advisories
 
 Date: 2026-09-02

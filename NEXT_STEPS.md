@@ -2,6 +2,34 @@
 
 Last updated: 2026-09-02
 
+## Completed D-107 post-D-111 decision-lineage reconciliation
+
+The owner-approved documentation reconciliation is complete with `PASS WITH
+ADVISORIES` on its isolated branch. Proposed D-113 through D-116 provide
+non-colliding entries for four published negative results without changing
+their historical triplets or unrelated GUI D-112. Exact-path, historical-byte,
+documentation, repository, security, complete-verification, independent-review,
+session, and post-increment checks pass. Owner review is next; no acceptance,
+publication, or successor is authorized.
+
+All ten contracts remain unproved:
+
+1. `opaque_prebound_identity_contract`
+2. `exact_signer_binding_contract`
+3. `account_keychain_scope_contract`
+4. `private_key_nonexport_contract`
+5. `fixed_algorithm_contract`
+6. `interaction_denial_contract`
+7. `hard_deadline_cancellation_contract`
+8. `late_result_rejection_contract`
+9. `cleanup_quarantine_contract`
+10. `platform_effect_contract`
+
+Historical D-107 remains 8/11 and D-108's additive interpretation remains
+9/10. Readiness is `Blocked`; do not begin late-result rejection or any
+operational successor without separate owner approval after this reconciliation
+is validated and, if authorized later, published.
+
 ## Completed Browserslist 4.28.7 security remediation
 
 The separately approved `browserslist-4-28-7-security-remediation` increment
@@ -11,10 +39,11 @@ pass. Preserve Browserslist 4.28.7, the four exact required support floors,
 `update-browserslist-db@1.2.3`, the byte-identical manifest, and the unchanged
 product/trust boundaries.
 
-Require the final closeout head's applicable checks, then perform only the
-already authorized PR #102 squash merge. This publication remainder is not a
-new increment. No dependency, product, or operational successor is selected or
-Ready; D-111 remains controlling after merge.
+PR #102 was squash-merged into `main` as
+`9b1e367f35e58c2615403c4aebe02edee2b77ef9`; current `main` descends from it.
+`8570034397e273af660a95af5a62e56f74ddc142` is pre-squash branch evidence and
+is not a `main` ancestor. Do not repeat the already completed merge. No
+dependency, product, or operational successor is selected or Ready.
 
 ## Completed GUI conversation Return and Graph wheel interactions
 
@@ -109,13 +138,14 @@ no-application-or-Rust-dependency-filesystem-network-IPC/dynamic-code
 exclusion remains exact. It is not a D-102 waiver or operational evidence.
 
 Historical D-107 remains 8 documented / 11 unproved; the additive current
-interpretation is 9/10. Ten identity, signer, export-reachability, algorithm,
-interaction, cancellation, late-result, cleanup, and platform-effect contracts
-remain unproved. No candidate or successor is **Ready**. Do not implement or
-operate the candidate, access Apple/Xcode/Keychain, use a private key, sign,
-build, launch a product/helper process, or contact a product/external system
-without a separately approved bounded plan. Any boundary drift makes D-102
-fully mandatory.
+interpretation is 9/10. The exact ten blockers are the identity, signer,
+account/Keychain scope, export-reachability, algorithm, interaction,
+cancellation, late-result, cleanup, and platform-effect contracts listed
+above. No candidate or successor is **Ready**. Do not implement or operate the
+candidate, access Apple/Xcode/Keychain, use a private key, sign, build, launch a
+product/helper process, or contact a product/external system without a
+separately approved bounded plan. Any boundary drift makes D-102 fully
+mandatory.
 
 The exact documentation checks and completion gate passed with `PASS WITH
 ADVISORIES`; next-increment readiness is `Blocked`.

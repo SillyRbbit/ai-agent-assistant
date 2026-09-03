@@ -4,6 +4,19 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
+The most recently completed owner-approved documentation-only plan is
+[`d107-post-d111-decision-lineage-reconciliation`](docs/plans/2026-09-02-d107-post-d111-decision-lineage-reconciliation.md).
+It adds non-colliding proposed D-113 through D-116 for four already published negative
+D-107 contract results while preserving all historical triplets and GUI D-112
+byte-for-byte. It changes no contract outcome: D-107 remains 8/11, D-108's
+additive view remains 9/10, all ten blockers remain unproved, and next-
+increment readiness remains `Blocked`. The exact fifteen-path validation and
+gate pass with `PASS WITH ADVISORIES`; no successor is selected or active.
+
+This reconciliation does not retroactively validate predecessor reports or
+markers and grants no Keychain, certificate, private-key, signing, Apple/Xcode,
+provider, product, target-Mac, or external-system authority.
+
 The most recently completed owner-approved dependency-security plan is
 [`browserslist-4-28-7-security-remediation`](docs/plans/2026-09-02-browserslist-4-28-7-security-remediation.md).
 It completed with `PASS WITH ADVISORIES`: the existing development-only
@@ -47,11 +60,11 @@ backend, IPC, dependency, persistence, provider, networking, or execution
 authority changed. The full repository gate and rendered matrix pass with
 `PASS WITH ADVISORIES`. D-111 and Blocked successor readiness remain unchanged.
 
-The most recently completed plan is
+An earlier completed owner-approved documentation-only plan is
 [`d107-account-keychain-scope-contract-decision`](docs/plans/2026-09-02-d107-account-keychain-scope-contract-decision.md).
 D-111 is a negative scope result; no runtime boundary or successor is added.
 
-The most recently completed owner-approved documentation-only plan is
+An earlier completed owner-approved documentation-only plan is
 [`d107-exact-signer-binding-contract-decision`](docs/plans/2026-09-02-d107-exact-signer-binding-contract-decision.md).
 D-110 selects `signer_binding_not_accepted`: current repository source has no
 immutable expected Developer ID Application signer/certificate/public-key
@@ -59,7 +72,7 @@ binding. Correspondence, labels, fingerprints, filters, and ambient/default
 authority are not substitutes. No source or runtime boundary is added; all ten
 blockers remain unproved and no successor is Ready.
 
-The most recently completed owner-approved documentation-only plan is
+An earlier completed owner-approved documentation-only plan is
 [`d107-opaque-prebound-identity-contract-decision`](docs/plans/2026-09-02-d107-opaque-prebound-identity-contract-decision.md).
 D-109 selects `reference_issuance_not_accepted` because current repository
 source contains no application-owned issuer for a no-input, attempt-bound opaque
@@ -68,7 +81,7 @@ or ambient/default authority. This adds no source or runtime boundary. D-107
 remains 8/11, D-108 remains 9/10 prospectively, all ten blockers remain
 unproved, and no successor is Ready.
 
-The most recently completed owner-approved documentation-only plan is
+An earlier completed owner-approved documentation-only plan is
 [`d102-non-build-proof-applicability-decision`](docs/plans/2026-09-02-d102-non-build-proof-applicability-decision.md).
 It reconsiders exactly `d102_applicability_split_contract` for the frozen D-107
 concept. D-108 accepts a split only for D-102's build-child subject while the

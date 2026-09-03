@@ -3,6 +3,16 @@
 Status: Authoritative current-state architecture
 Last updated: 2026-09-02
 
+> Post-D-111 decision-lineage reconciliation (2026-09-02): proposed D-113
+> through D-116 supply non-colliding durable entries for the already published negative results for private-
+> key non-export, fixed algorithm, interaction denial, and hard deadline/
+> cancellation. They add no architecture edge and do not convert any D-107 row
+> from `contract_unproven`. Historical D-107 remains 8/11 and D-108's additive
+> interpretation remains 9/10. All ten identity, signer, scope, non-export,
+> algorithm, interaction, cancellation, late-result, cleanup, and platform-
+> effect contracts remain unproved; the candidate and every operational
+> successor remain `Blocked`.
+
 > Account/Keychain-scope decision: D-111 selects
 > `scope_contract_not_accepted`; current source has no application-owned
 > identity scope excluding account/home/path/default/search-list authority.

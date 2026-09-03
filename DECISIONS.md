@@ -5875,3 +5875,237 @@ the former pass-through behavior at their time.
 D-112 supersedes only the ordinary page-wheel pass-through phrase in current
 FR-039K. It does not supersede D-092, D-111, historical evidence, or any
 security, architecture, release, or operational prerequisite.
+
+## D-113 - Do not accept private-key non-export from the current repository record
+
+Date: 2026-09-02
+Status: Proposed by the owner-authorized additive documentation-only reconciliation
+
+## Context
+
+D-107 records `private_key_nonexport_contract` as `contract_unproven`.
+The historical private-key non-export plan, increment, and review published at
+`238fc5a` selected `nonexport_contract_not_accepted`, but their final result
+provisionally called itself D-112. Canonical D-112 is the unrelated Graph-local
+wheel decision above. The historical triplet remains immutable evidence; this
+entry supplies the first non-colliding durable decision number after D-112.
+
+The present repository has a reachable safe API for an external key
+representation and does not contain a complete production, helper, test,
+error, log, debug, serialization, persistence, or DTO reachability inventory
+proving that private-key bytes and external representations cannot escape.
+
+## Decision
+
+Propose `PrivateKeyNonExportPolicyV1` as conceptual governance documentation
+with exactly `nonexport_contract_documented`,
+`nonexport_contract_not_accepted`, and `boundary_failed`. The proposed durable
+disposition is exactly
+`nonexport_contract_not_accepted` for the current repository record.
+
+This is a closed negative governance disposition, not a D-100 evidence value,
+Rust/Tauri/WebView interface, runtime result, or universal impossibility claim.
+Missing, ambiguous, contradictory, or drifted facts remain fail-closed as
+`boundary_failed`.
+
+## Consequences
+
+- The corresponding D-107 row remains `contract_unproven`. Historical D-107
+  remains eight documented / eleven unproved, and D-108's additive current
+  interpretation remains nine documented / ten unproved.
+- All ten blockers remaining under D-108's additive interpretation and
+  `Blocked` readiness remain unchanged. No candidate or successor is admitted.
+- This record does not retroactively validate the historical report, recover a
+  historical gate marker, or prove that its recorded commands ran.
+- No private-key wrapper, export control, certificate, Keychain access, signing
+  operation, source interface, provider, product, target-Mac identity/signing/
+  device authority, or external-system authority is created.
+
+## Alternatives considered
+
+- Treat a non-exporting happy path or opaque native reference as complete
+  non-export proof: rejected because reachable alternate representations and
+  unreviewed boundaries remain.
+- Edit or renumber the historical triplet or GUI D-112: rejected because both
+  are immutable historical evidence.
+- Inspect a target identity or private key: rejected as operational work outside
+  this documentation-only authorization.
+
+## Supersedes or is superseded by
+
+D-113 is the non-colliding proposed durable entry for the published negative
+disposition for `private_key_nonexport_contract`. As a proposal, it does not
+supersede or control D-096 through D-112, their historical artifacts, or any
+prerequisite.
+
+## D-114 - Do not accept a fixed algorithm from the current repository record
+
+Date: 2026-09-02
+Status: Proposed by the owner-authorized additive documentation-only reconciliation
+
+## Context
+
+D-107 records `fixed_algorithm_contract` as `contract_unproven`. The historical
+fixed-algorithm triplet published at `ada57ce` selected
+`algorithm_contract_not_accepted` and referred to the private-key result as
+D-112. This proposal maps that provisional predecessor to D-113; GUI D-112
+remains unrelated and unchanged.
+
+The exact Developer ID key type and permitted algorithm are not immutable in
+the current application-owned record, and the reviewed safe wrapper exposes no
+support-preflight boundary that proves the fixed pair before any attempt.
+
+## Decision
+
+Propose `FixedAlgorithmPolicyV1` as conceptual governance documentation with
+exactly `algorithm_contract_documented`,
+`algorithm_contract_not_accepted`, and `boundary_failed`. The proposed durable
+disposition is exactly
+`algorithm_contract_not_accepted` for the current repository record.
+
+No input, query, library default, capability result, error, fallback, retry, or
+substitute may select, alter, or replace the future application-owned fixed
+pair. A bounded capability result may verify support for a key-type/algorithm
+pair already fixed by application-owned policy, but it cannot choose or modify
+that pair, trigger a retry or fallback, or substitute another pair. The
+disposition is not D-100 evidence, a runtime value, or a universal impossibility
+claim; missing or drifted facts fail closed as `boundary_failed`.
+
+## Consequences
+
+- The D-107 row remains `contract_unproven`; D-107 stays 8/11 and D-108 stays
+  9/10 under its additive interpretation.
+- All ten blockers and `Blocked` readiness remain unchanged. Accepted earlier
+  evidence remains controlling; D-113 remains a proposal.
+- This entry neither validates the historical report/marker nor authorizes an
+  algorithm preflight, identity operation, signing attempt, source change,
+  target-Mac identity/signing/device action, provider, product, or external-
+  system work.
+
+## Alternatives considered
+
+- Infer the algorithm from a library default, key object, identity pairing, or
+  intended signing call: rejected because none is immutable trusted policy.
+- Renumber the historical files: rejected because their provisional lineage is
+  historical evidence.
+- Query a real identity for supported algorithms: rejected as operational work.
+
+## Supersedes or is superseded by
+
+D-114 is the non-colliding proposed durable entry for the published negative
+disposition for `fixed_algorithm_contract` and maps its historical predecessor
+reference to proposed D-113. As a proposal, it does not supersede or control
+D-096 through D-113, their historical artifacts, or any prerequisite.
+
+## D-115 - Do not accept interaction denial from the current repository record
+
+Date: 2026-09-02
+Status: Proposed by the owner-authorized additive documentation-only reconciliation
+
+## Context
+
+D-107 records `interaction_denial_contract` as `contract_unproven`. The
+historical interaction-denial triplet published at `38af59a` selected
+`interaction_denial_not_accepted` and referred to fixed-algorithm D-113. That
+provisional predecessor is mapped by this proposal to D-114.
+
+Lookup-time skip/context controls and an observed absence of prompts do not
+guarantee that retrieving or using an already-held private-key identity cannot
+display UI. Current source contains no complete pre-use, adapter-private,
+caller-independent prompt-denial boundary.
+
+## Decision
+
+Propose `InteractionDenialPolicyV1` as conceptual governance documentation with
+exactly `interaction_denial_documented`,
+`interaction_denial_not_accepted`, and `boundary_failed`. The proposed durable
+disposition is exactly
+`interaction_denial_not_accepted` for the current repository record.
+
+The result is not D-100 evidence, a runtime value, or universal impossibility.
+Missing, ambiguous, contradictory, or drifted facts select `boundary_failed`.
+Result rejection, lookup controls, and no-observed-prompt evidence cannot be
+substituted for complete interaction denial.
+
+## Consequences
+
+- The D-107 row remains `contract_unproven`; the immutable 8/11 record and
+  D-108's additive 9/10 interpretation do not change.
+- All ten blockers, D-113 through D-114, and `Blocked` readiness remain.
+- This decision does not validate the historical report/marker or authorize
+  Keychain, private-key, signing, UI-suppression, source, target-Mac identity/
+  signing/device action, provider, product, or external-system work.
+
+## Alternatives considered
+
+- Treat lookup-time interaction controls or absence of an observed prompt as
+  complete denial: rejected because key-use UI remains unproved.
+- Treat a rejected result as prompt prevention: rejected because rejection
+  occurs after the potentially interactive operation.
+- Run a target identity experiment: rejected as operational work.
+
+## Supersedes or is superseded by
+
+D-115 is the non-colliding proposed durable entry for the published negative
+disposition for `interaction_denial_contract` and maps its provisional D-113
+predecessor to proposed D-114. As a proposal, it does not supersede or control
+D-096 through D-114, their historical artifacts, or any prerequisite.
+
+## D-116 - Do not accept hard deadline and cancellation from the current repository record
+
+Date: 2026-09-02
+Status: Proposed by the owner-authorized additive documentation-only reconciliation
+
+## Context
+
+D-107 records `hard_deadline_cancellation_contract` as `contract_unproven`.
+The historical hard-deadline triplet published at `5770c90` selected
+`deadline_contract_not_accepted` and referred to interaction-denial D-114.
+That provisional predecessor is mapped by this proposal to D-115.
+
+The reviewed synchronous lookup, sign, and verify APIs expose no deadline or
+cancellation parameter. A timer, dropped future, worker, or late-result filter
+does not stop an in-flight private-key operation or establish cleanup and
+quiescence ownership.
+
+## Decision
+
+Propose `HardDeadlineCancellationPolicyV1` as conceptual governance
+documentation with exactly `deadline_contract_documented`,
+`deadline_contract_not_accepted`, and `boundary_failed`. The proposed durable
+disposition is exactly
+`deadline_contract_not_accepted` for the current repository record.
+
+Trusted Rust would need to own one hard attempt deadline, cancellation state,
+terminal cleanup, no-fallback policy, and proof that the operation itself
+stops. Current evidence does not establish that contract. This disposition is
+not D-100 evidence, a runtime value, or a universal impossibility claim;
+missing or drifted facts fail closed as `boundary_failed`.
+
+## Consequences
+
+- The D-107 row remains `contract_unproven`; D-107 stays 8/11 and D-108's
+  additive interpretation stays 9/10.
+- All ten blockers and `Blocked` readiness remain. In particular,
+  `late_result_rejection_contract`, `cleanup_quarantine_contract`, and
+  `platform_effect_contract` are still independently unproved.
+- This record does not validate the historical report/marker or authorize a
+  worker, timeout, cancellation adapter, private-key/signing operation, source
+  change, target-Mac identity/signing/device action, provider, product, or
+  external-system work.
+
+## Alternatives considered
+
+- Treat a UI timer, dropped future, detached worker, or late-result rejection
+  as hard cancellation: rejected because the synchronous operation can remain
+  active.
+- Treat process termination as accepted cleanup: rejected because no approved
+  process/containment design or quiescence proof exists.
+- Run an operational timing experiment: rejected as target/system work.
+
+## Supersedes or is superseded by
+
+D-116 is the non-colliding proposed durable entry for the published negative
+disposition for `hard_deadline_cancellation_contract` and maps its provisional
+D-114 predecessor to proposed D-115. As a proposal, it does not supersede or
+control D-096 through D-115, their historical artifacts, or any prerequisite.

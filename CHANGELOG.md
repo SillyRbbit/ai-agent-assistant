@@ -4,6 +4,17 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Added a proposed reconciliation of the post-D-111 D-107 decision lineage
+  without changing historical evidence. Proposed D-113 through D-116 provide
+  non-colliding entries for the published negative
+  private-key non-export, fixed-algorithm, interaction-denial, and hard-
+  deadline/cancellation dispositions. The four historical triplets and GUI
+  D-112 remain byte-identical. No D-107 row changed: historical 8/11 and
+  D-108's additive 9/10 remain, all ten blockers remain unproved, and readiness
+  remains `Blocked`. This is documentation-only governance repair with no
+  source, credential, signing, provider, product, target-Mac, or external
+  authority.
+
 - Completed the owner-approved PR #102 Browserslist security remediation with
   `PASS WITH ADVISORIES`. The existing development-only transitive advances
   from 4.28.2 to patched 4.28.7, and only its four required support entries
