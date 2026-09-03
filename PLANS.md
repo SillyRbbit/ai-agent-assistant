@@ -4,18 +4,33 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
-The current completed owner-approved documentation-only plan is
-[`Personal Assistant V0 selectable connection-profile architecture decision`](docs/plans/2026-09-03-personal-assistant-v0-selectable-connection-profile-architecture-decision.md).
-It records D-119's accepted `closed_catalog_direction_selected` disposition for
-only a distinct post-v0 `personal-assistant-selectable-connection-profile-v3`
-direction. Its catalog-schema V1 contains exactly ten candidates and all remain
+The current documentation-only
+[`Personal Assistant V0 PR #110 publication closeout`](docs/plans/2026-09-03-personal-assistant-v0-pr110-publication-closeout.md)
+records the already completed publication of the
+[`selectable connection-profile architecture decision`](docs/plans/2026-09-03-personal-assistant-v0-selectable-connection-profile-architecture-decision.md).
+Reviewed head `7929a31574acb4e50c515ed056994107402bbbbe` was squash-merged
+through PR #110 as `0e1eb218f67006b332865684ac6b8e316549a546`; both
+commits share tree `e459009dff1b3b0577563a5486614780b32d1f64`. Frozen
+owner-supplied publication evidence records successful PR workflow run
+`33800792820` and successful post-merge run `33803004332`; the closeout does
+not contact GitHub or re-query them.
+
+D-119 remains `closed_catalog_direction_selected` only for a distinct post-v0
+`personal-assistant-selectable-connection-profile-v3` direction. Its
+catalog-schema V1 contains exactly ten candidates and all remain
 `candidate_blocked`; the blocked catalog exposes no handle. No source,
 dependency, credential, auth, provider, local-model, transport, runtime, Tauri,
 or product authority is granted. D-118 remains `no_eligible_client`; V0-3,
-V0-7, the live synthetic-text milestone, and every operational successor
-remain `Blocked`. The exact sixteen-file result completed with **PASS WITH
-ADVISORIES** and a valid marker; owner review and any publication remain
-separately gated.
+V0-7, the live synthetic-text milestone, and every operational successor remain
+`Blocked`. The underlying exact sixteen-file result remains **PASS WITH
+ADVISORIES** with a valid marker.
+
+The five live records do not encode the closeout's own transient branch,
+owner-review, or publication state as a roadmap queue item. Actual Git state
+determines whether it still needs separately authorized review/publication or
+is already closed; a later session must not create another publication
+reconciliation merely to restate a merge. No operational successor becomes
+active automatically.
 
 The immediately preceding terminal documentation plan is
 [`Personal Assistant V0 PR #108 publication closeout`](docs/plans/2026-09-03-personal-assistant-v0-pr108-publication-closeout.md).

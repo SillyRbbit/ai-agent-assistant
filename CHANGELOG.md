@@ -4,6 +4,20 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Recorded the completed publication of the accepted D-119 selectable
+  connection-profile architecture direction. Reviewed head
+  `7929a31574acb4e50c515ed056994107402bbbbe` was squash-merged through PR #110
+  as `0e1eb218f67006b332865684ac6b8e316549a546`; both commits share exact tree
+  `e459009dff1b3b0577563a5486614780b32d1f64`. Frozen owner-supplied evidence
+  records successful PR workflow run `33800792820` and successful post-merge
+  workflow run `33803004332`; this documentation closeout did not contact
+  GitHub or independently re-query them. D-119 remains documentation direction
+  only, all ten catalog entries remain `candidate_blocked`, D-118 remains
+  `no_eligible_client`, and V0-3, V0-7, the live synthetic-text milestone, all
+  ten D-107 blockers, and every operational successor remain `Blocked`.
+  Publication creates no source, credential, provider, transport, local-model,
+  signing, product, or external-system authority.
+
 - Completed with `PASS WITH ADVISORIES` the documentation-only D-119
   `closed_catalog_direction_selected` disposition for a distinct post-v0
   selectable connection-profile architecture. The closed catalog records

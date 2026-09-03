@@ -2,7 +2,7 @@
 
 Last updated: 2026-09-03
 
-## Selectable connection-profile architecture decision
+## Published selectable connection-profile architecture decision
 
 The completed owner-approved documentation increment records D-119's accepted
 `closed_catalog_direction_selected` direction for a distinct post-v0
@@ -12,14 +12,28 @@ all `candidate_blocked`, and the blocked catalog exposes no selection handle.
 It creates no current selector, auth, credential, provider, transport,
 local-model, runtime, IPC, or UI behavior.
 
-The immediate action is owner review of this completed uncommitted exact
-sixteen-file documentation result. No source successor is selected. D-118
-remains `no_eligible_client`; V0-3, V0-7, the live synthetic-text milestone,
-and every operational successor remain `Blocked`. Any profile admission,
-transport reconsideration, credential design, local-model choice, or product
-implementation requires a separate owner-approved plan after this result is
-reviewed and, if authorized, published. Completion is **PASS WITH ADVISORIES**
-with a valid marker; operational readiness remains `Blocked`.
+The accepted exact sixteen-file result was reviewed at
+`7929a31574acb4e50c515ed056994107402bbbbe` and squash-merged through PR #110
+as `0e1eb218f67006b332865684ac6b8e316549a546`. Both commits share exact tree
+`e459009dff1b3b0577563a5486614780b32d1f64`, and their repository diff is
+empty. Frozen owner-supplied publication evidence records successful PR
+workflow run `33800792820` and successful post-merge workflow run
+`33803004332`; this closeout did not contact GitHub or independently re-query
+either run.
+
+No source successor is selected. D-118 remains `no_eligible_client`; V0-3,
+V0-7, the live synthetic-text milestone, and every operational successor remain
+`Blocked`. Any profile admission, transport reconsideration, credential design,
+local-model choice, or product implementation requires a separate
+owner-approved plan. Completion remains **PASS WITH ADVISORIES** with a valid
+marker; operational readiness remains `Blocked`.
+
+The documentation-only
+[`PR #110 publication closeout`](docs/plans/2026-09-03-personal-assistant-v0-pr110-publication-closeout.md)
+records this already completed publication in stable live memory. Actual Git
+state determines whether the closeout itself still needs separately authorized
+review or publication; the live records do not queue another reconciliation
+merely to restate its eventual merge.
 
 ## Published V0-6 publication reconciliation
 
