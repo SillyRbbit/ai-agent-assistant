@@ -1,11 +1,31 @@
 # Security policy and development guardrails
 
 Status: Authoritative security policy
-Last updated: 2026-09-02
+Last updated: 2026-09-03
 
 Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
 identifies which security boundaries are current, mocked, planned, or
 prohibited.
+
+## D-118 V0-6 direct Rust HTTPS dependency decision
+
+D-118 accepts `no_eligible_client` for the five exact variants in the frozen
+V0-6 comparison. No dependency or transport is selected. Every hostname-based
+variant reaches blocking operating-system DNS work that cannot be aborted or
+boundedly joined after start. Returning a timeout, dropping a future, or
+rejecting a late result cannot establish cleanup or quiescence while that work
+may survive. Reqwest 0.13.4 also cannot impose exact response-header and
+read-buffer caps before retention.
+
+The hypothetical lock graphs and their transitive packages are supply-chain
+inventory only; they grant no dependency, feature, source, runtime, or network
+authority. The frozen evidence supports this scoped negative decision, not a
+universal claim that Rust HTTPS is impossible. V0-3 and V0-7 remain `Blocked`.
+A later V0-7 proposal must also replace its contradictory fake-only proof with
+hermetic actual-client TLS, routing, bound, cancellation, and socket-cleanup
+tests while keeping production trust and routing non-injectable. Any changed
+architecture or reconsideration of the hard cancellation requirement needs a
+separate owner-approved plan.
 
 ## Proposed D-117 late-result rejection boundary
 

@@ -1,6 +1,52 @@
 # Handoff
 
-Last updated: 2026-09-02
+Last updated: 2026-09-03
+
+## V0-6 HTTPS dependency decision completion checkpoint
+
+From clean synchronized `main` at
+`6c3615c507b58a771f696ebb7bfdb5bd13d1d1b7`, the owner-approved
+documentation-only V0-6 increment is verified complete with **PASS WITH
+ADVISORIES** on branch
+`codex/personal-assistant-v0-https-dependency-decision`. D-118 accepts the
+closed disposition `no_eligible_client`: every one of the five exact variants
+across the three frozen client families fails at least one mandatory criterion.
+No dependency or transport is selected.
+
+The common decisive gap is blocking operating-system DNS work that cannot be
+aborted or boundedly joined after it starts under the current hard cancellation
+and cleanup contract. Reqwest 0.13.4 also lacks exact pre-retention header/read-
+buffer bounds. Candidate builds and runtime checks were prohibited and remain
+`Not run`; this result is scoped to the frozen evidence and is not a universal
+Rust HTTPS impossibility claim.
+
+The completion report and valid local gate marker cover exactly fifteen
+documentation paths. Documentation, repository, security, complete
+verification, exact-scope, protected-path, independent-review, session, and
+post-increment checks pass. One optional unfiltered all-target metadata
+diagnostic failed because an Android-only crate was not cached; the controlling
+macOS/Linux scoped resolver checks passed. `cargo-audit` was unavailable and
+was not installed. No source, manifest, lockfile, dependency, credential,
+signing, provider, gateway, product, or operational external state changed.
+
+V0-3 remains paused and `Blocked`. V0-7 and the live synthetic-text milestone
+remain `Blocked`; V0-7 also retains its fake-only versus hermetic actual-client
+TLS/socket-test discrepancy. D-107 stays historical 8/11, D-108 stays
+additively 9/10, proposed D-113 through D-117 remain non-controlling, and all
+ten D-107 blockers remain.
+
+Exact resume prompt: “Read `AGENTS.md`,
+`docs/governance/MASTER_PROMPT.md`, and the complete required project-memory
+and security/testing chain. Inspect the completed uncommitted
+`codex/personal-assistant-v0-https-dependency-decision` branch and its valid
+completion-gate state. Review only the exact fifteen-file documentation diff,
+accepted D-118 `no_eligible_client` decision, frozen evidence summary, and
+Passed/Failed/Not-run reporting. Confirm no dependency or transport is selected
+and V0-3/V0-7 remain Blocked. Inspect before acting, preserve existing user
+changes, avoid unrelated modifications, and do not repeat public-evidence
+retrieval or resolver work. Report Accept or exact revisions; do not edit,
+commit, push, merge, begin V0-7, or access signing, provider, product, or other
+operational external systems.”
 
 ## D-107 late-result rejection decision checkpoint
 
@@ -928,9 +974,11 @@ are `Not run` because V0-2 exposes no such surface. Completion decision:
 `PASS WITH ADVISORIES` because optional platform/external checks are `Not run`
 and next-increment readiness is Blocked; there is no source finding.
 
-No successor is Ready. V0-3 remains Blocked by D-076 and TS-017 and requires a
-separately accepted restart of the signed-identity lane. V0-4 and V0-6 are
-technically separable future investigations but are not selected or approved.
+At that V0-2 checkpoint, no successor was Ready. V0-3 remained Blocked by
+D-076 and TS-017 and required a separately accepted restart of the signed-
+identity lane. V0-4 and V0-6 were technically separable future investigations
+but were not selected or approved. Accepted D-118 now closes only V0-6 with
+`no_eligible_client`; it does not change V0-3 or authorize a successor.
 Exact resume prompt: "Read `AGENTS.md`, the complete required project-memory
 and security/testing chain, the V0-2 plan/increment/review, and its publication
 reconciliation. Confirm `main` is synchronized at `1513bd8`. Do not begin V0-3,

@@ -6194,3 +6194,73 @@ D-117 is the proposed closed negative record for
 `late_result_rejection_contract` and follows proposed D-116 without accepting
 it. As a proposal, D-117 does not supersede or control D-096 through D-116,
 their historical artifacts, unrelated GUI D-112, or any prerequisite.
+
+## D-118 - V0-6 has no eligible direct Rust HTTPS client under the current hard cancellation contract
+
+Date: 2026-09-03
+Status: Accepted by the owner in the documentation-only V0-6 dependency decision
+
+## Context
+
+V0-6 evaluated five exact variants across three frozen direct Rust HTTPS client
+families: reqwest 0.13.4 with platform, static WebPKI, or native TLS; an
+explicit Hyper 1.11.1/Tokio 1.53.1/Rustls 0.23.43/WebPKI stack; and ureq 3.4.0
+with Rustls/WebPKI. The frozen public-source, registry, license, advisory, and
+isolated hypothetical resolver corpus is complete enough for a negative
+decision. Candidate code was not built or executed, and no target-Mac socket,
+TLS, cancellation, credential, provider, or product-system check ran.
+
+Every frozen hostname-based design reaches operating-system DNS through
+blocking work that cannot be aborted or boundedly joined after it starts. It
+can outlive the applicable 10-second connect and 120-second run/total ceilings
+and terminal cancellation. Reqwest 0.13.4 also lacks exact pre-retention
+response header and read-buffer caps.
+
+## Decision
+
+Record V0-6 as `no_eligible_client`. Select no dependency or transport. Reqwest
+0.13.4 with platform, static WebPKI, or native TLS; the explicit Hyper
+1.11.1/Tokio 1.53.1/Rustls 0.23.43/WebPKI stack; and ureq 3.4.0 with
+Rustls/WebPKI are all ineligible under the current conjunctive evidence matrix.
+
+The common DNS behavior violates bounded cleanup, complete work ownership and
+accounting, and quiescence and would force an ambiguous, potentially unbounded
+quarantine that blocks safe restart. A returned timeout or rejected late result
+does not prove the underlying work stopped.
+
+## Consequences
+
+- V0-7, the live synthetic-text milestone, and every transport successor remain
+  `Blocked`. V0-3 remains paused and `Blocked`.
+- No source, manifest, lockfile, dependency, credential, signing, provider,
+  network, product, or external-system authority is granted.
+- A future attempt requires a separately approved plan that either changes the
+  architecture or explicitly reconsiders the hard cancellation constraint;
+  neither change is authorized here.
+- The finding is scoped to the frozen candidates and current contract. It is
+  not a universal claim that Rust HTTPS is impossible.
+- V0-7 also retains its independent fake-only versus hermetic actual-client
+  TLS/socket-test discrepancy and all other recorded prerequisites.
+
+## Preservation
+
+Historical D-107 remains eight documented / eleven unproved, D-108 remains
+additively nine documented / ten unproved, D-113 through D-117 remain Proposed
+and non-controlling, all ten D-107 blockers remain, and no prior decision is
+waived or superseded. D-118 closes only the V0-6 documentation decision.
+
+## Alternatives considered
+
+- Select a candidate despite a failed mandatory row: rejected because the
+  evidence matrix is conjunctive and fail closed.
+- Treat timeout return or late-result filtering as cleanup: rejected because
+  started resolver work can survive both.
+- Introduce a custom resolver, hard-coded address, helper/process-kill design,
+  or fourth client family: rejected as a different architecture or candidate
+  outside the frozen V0-6 authority.
+
+## Supersedes or is superseded by
+
+D-118 accepts the exact V0-6 `no_eligible_client` disposition. It does not
+accept or supersede proposed D-113 through D-117, change D-076 or D-096 through
+D-112, waive any V0 prerequisite, or authorize V0-7.

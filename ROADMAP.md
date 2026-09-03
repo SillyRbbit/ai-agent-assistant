@@ -1,7 +1,7 @@
 # Cortexa roadmap
 
 Status: Authoritative milestone roadmap
-Last updated: 2026-09-02
+Last updated: 2026-09-03
 
 ## Status model
 
@@ -18,6 +18,20 @@ Last updated: 2026-09-02
 contains the ordered execution queue. Completed plans and reviews are the
 verification record; this roadmap does not create new completion evidence.
 
+## V0-6 direct Rust HTTPS dependency decision
+
+The documentation-only V0-6 decision is **Completed** with `PASS WITH
+ADVISORIES`. D-118 accepts `no_eligible_client` after all five exact variants
+across three frozen families failed at least one mandatory criterion. No
+candidate, dependency, implementation, network path, or external authority is
+selected.
+
+V0-3 remains **Blocked** and unwaived. V0-7 and all later transport milestones
+remain **Blocked** pending their recorded prerequisites, an eligible design,
+separate implementation authority, and V0-7's required fake-only versus
+hermetic actual-client TLS/socket-test reconciliation. D-107's ten operational
+blockers are unchanged; V0-6 is not a signing or D-107 operational successor.
+
 ## D-107 late-result rejection decision
 
 The documentation-only `d107-late-result-rejection-contract-decision` is
@@ -30,8 +44,9 @@ Historical D-107 remains 8/11 and D-108 remains additively 9/10. All ten
 contracts remain blockers, the candidate remains unadmitted, and P3, P4,
 signing, V0-3, and every operational successor remain **Blocked**. Completion
 of the documentation increment does not accept D-113 through D-117 or select a
-successor. Owner review of proposed D-117 is next; no plan becomes active
-automatically.
+successor. Proposed D-117 remains pending and non-controlling. V0-6 is now
+**Completed** with accepted D-118 `no_eligible_client`; it changes no D-107
+result or successor readiness.
 
 ## D-107 post-D-111 decision-lineage reconciliation
 

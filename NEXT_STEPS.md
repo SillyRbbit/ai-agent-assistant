@@ -1,6 +1,23 @@
 # Next steps
 
-Last updated: 2026-09-02
+Last updated: 2026-09-03
+
+## Owner review: completed V0-6 HTTPS dependency decision
+
+The owner-approved
+[`V0-6 — direct Rust HTTPS dependency decision`](docs/plans/2026-08-28-personal-assistant-v0-https-dependency-decision.md)
+is verified complete with **PASS WITH ADVISORIES** and awaits owner review of
+the uncommitted exact fifteen-file result. Accepted D-118 records
+`no_eligible_client`; no dependency or transport was selected. All five frozen
+variants fail at least one mandatory criterion under the current hard
+cancellation and cleanup contract.
+
+V0-3 remains paused and `Blocked` without waiver. V0-7 remains `Blocked` by
+V0-3, V0-5, separate source authority, the absence of an eligible client, and
+its fake-only versus hermetic actual-client TLS/socket-test discrepancy. No
+operational successor is Ready. Owner review of this documentation result is
+the only current queue item; publication and any later architecture or
+constraint reconsideration require separate approval.
 
 ## Completed D-107 late-result rejection decision
 
@@ -27,10 +44,11 @@ blockers remain:
 9. `cleanup_quarantine_contract`
 10. `platform_effect_contract`
 
-The documentation increment is complete with `PASS WITH ADVISORIES`; owner
-review of proposed D-117 is next. Readiness remains `Blocked`. Do not select
-cleanup/quarantine, platform effects, or any operational successor
-automatically.
+The documentation increment is complete with `PASS WITH ADVISORIES`; proposed
+D-117 remains pending and non-controlling. D-107 operational readiness remains
+`Blocked`. The separately selected V0-6 documentation plan above does not
+accept D-117 or select cleanup/quarantine, platform effects, or an operational
+successor.
 
 The reconciliation section immediately below is source-current: it records the
 accepted squash merge while retaining the fact that late-result rejection had
@@ -126,10 +144,11 @@ Graph-composition advisories. A future minor polish may also make the expanded
 relationship-legend label neutral. These are nonblocking advisories, not
 approved successor work.
 
-No later task begins automatically. D-111 still says no successor is **Ready**,
-and its ten product/operational blockers remain unchanged. Any further work
-requires an owner-selected, separately approved bounded plan and readiness
-review; do not promote a historical suggestion into an authorized next task.
+No later task begins automatically. D-111 still says no D-107 operational
+successor is **Ready**, and its ten product/operational blockers remain
+unchanged. V0-6 is now completed with accepted D-118
+`no_eligible_client`; owner review of that uncommitted documentation result is
+the only current queue item, and no D-107 or product successor is promoted.
 
 ## D-107 account and Keychain scope decision
 
@@ -454,10 +473,11 @@ Reviewed head `7fecf03` is published through
 merged to `main` at `1513bd8` after classification, documentation, frontend,
 Linux Rust, target-Mac Rust, and dependency/secret checks passed.
 
-No successor is **Ready**. V0-3 remains **Blocked** by D-076 and TS-017 and a
-separately accepted restart of the signed-identity lane. V0-4 and V0-6 remain
-unselected technically separable investigations, and V0-5/V0-7 through V0-14
-retain their recorded dependencies. Do not begin signing, credential,
+At that V0-2 checkpoint, no successor was **Ready**. V0-3 remained **Blocked**
+by D-076 and TS-017 and a separately accepted restart of the signed-identity
+lane; V0-4 and V0-6 were unselected technically separable investigations.
+Accepted D-118 now closes only V0-6 with `no_eligible_client`; V0-5/V0-7
+through V0-14 retain their recorded dependencies. Do not begin signing, credential,
 Keychain, gateway, provider, network, transport, Tauri/WebView, persistence,
 tool, real-content, or external work without a separately selected and approved
 increment.

@@ -5,13 +5,22 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 ## Current plan state
 
 The most recently completed owner-approved documentation-only plan is
+[`V0-6 — direct Rust HTTPS dependency decision`](docs/plans/2026-08-28-personal-assistant-v0-https-dependency-decision.md).
+It completed with **PASS WITH ADVISORIES** and accepted D-118's closed
+`no_eligible_client` disposition after comparing five exact variants across
+three frozen families. No dependency or transport is selected. The exact
+fifteen-file documentation result awaits owner review and publication; no
+successor becomes active automatically. V0-3 and V0-7 remain `Blocked`, and no
+operational successor is Ready.
+
+The preceding completed owner-approved documentation-only plan is
 [`d107-late-result-rejection-contract-decision`](docs/plans/2026-09-02-d107-late-result-rejection-contract-decision.md).
 It assesses only whether current source proves a private-key late-result
 boundary and selects the closed negative result
 `late_result_rejection_not_accepted`. Proposed D-117 remains non-controlling;
 the plan adds no attempt host, runtime value, IPC, cancellation, cleanup, or
 platform authority. Historical D-107 remains 8/11, D-108 remains additively
-9/10, all ten blockers remain unproved, and next-increment readiness remains
+9/10, all ten blockers remain unproved, and D-107 operational readiness remains
 `Blocked`. Its exact fifteen-path documentation and completion gate pass with
 `PASS WITH ADVISORIES`; no plan becomes active automatically.
 
@@ -1178,7 +1187,7 @@ condition is reached.
 | V0-3 fake signed-client secret owner             | Blocked  | Project owner      | 2026-08-28   |
 | V0-4 local deny-only Access verifier             | Blocked  | Project owner      | 2026-08-28   |
 | V0-5 Cloudflare no-traffic provisioning          | Blocked  | Project owner      | 2026-08-28   |
-| V0-6 direct Rust HTTPS dependency decision       | Blocked  | Project owner      | 2026-08-28   |
+| V0-6 direct Rust HTTPS dependency decision       | Complete | Project owner      | 2026-09-03   |
 | V0-7 fixed-origin Rust transport                 | Blocked  | Project owner      | 2026-08-28   |
 | V0-8 real demo credential ingestion              | Blocked  | Project owner      | 2026-08-28   |
 | V0-9 Access authentication-only rehearsal        | Blocked  | Project owner      | 2026-08-28   |

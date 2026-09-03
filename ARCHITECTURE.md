@@ -1,7 +1,21 @@
 # Cortexa architecture
 
 Status: Authoritative current-state architecture
-Last updated: 2026-09-02
+Last updated: 2026-09-03
+
+> V0-6 HTTPS dependency decision (D-118, 2026-09-03): the frozen comparison
+> selected `no_eligible_client`. No direct Rust HTTPS dependency, client,
+> adapter, socket, response ingress, or transport edge exists. Every evaluated
+> hostname-based variant delegates DNS to blocking operating-system work that
+> cannot be aborted or boundedly joined after start under the current hard
+> cancellation and cleanup contract; reqwest 0.13.4 also lacks exact
+> pre-retention response header/read-buffer bounds. Transitive lockfile nodes
+> remain inventory only. V0-3 and V0-7 remain `Blocked`, and V0-7 also retains
+> its fake-only versus hermetic actual-client TLS/socket-test discrepancy. This
+> negative result is scoped to the frozen candidates, is not a universal Rust
+> HTTPS impossibility claim, and creates no source, dependency, transport,
+> credential, signing, provider, network, product, or external-system
+> authority.
 
 > Proposed D-117 late-result rejection decision (2026-09-02): current source
 > contains no private-key attempt host or result-ingress owner for the frozen
