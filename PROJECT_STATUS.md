@@ -2,6 +2,35 @@
 
 Last updated: 2026-09-03
 
+## V0-6 HTTPS dependency publication reconciliation
+
+Status: **Verified complete with advisories; owner review pending; product
+transport remains Blocked.** PR #107 preserved reviewed head
+`471167a506bc8bbb7d53f989fda900679b6de15c`. GitHub Actions run
+`33735613542` attempt 1 passed its substantive policy steps but was cancelled
+during post-job Node setup; its single owner-authorized rerun, attempt 2,
+passed. GitHub reported no branch-protection checks explicitly configured as
+required; the applicable `Documentation and repository policy` job passed.
+
+PR #107 squash-merged at
+`499bdfe840f26270c8a458c2e0725e1fec13defe`. Its tree is identical to the
+reviewed head, the authorized retry changed no repository content, and local
+`HEAD`, local `main`, and the locally recorded `origin/main` were clean and
+synchronized at the squash commit afterward.
+
+The exact eight-file publication reconciliation changes current-state
+documentation only and preserves the original V0-6 fifteen-file plan,
+increment, decision, completion review, and recorded Passed, Failed, Pending,
+and `Not run` evidence as historical facts. Accepted D-118 remains
+`no_eligible_client`; no client, dependency, or transport is selected. V0-3,
+V0-7, and the live synthetic-text milestone remain `Blocked`. All ten D-107
+blockers and `Blocked` operational readiness remain unchanged, and no successor
+is selected or active. Two normalized-finalizer launch requests were rejected
+before process execution; after one separately authorized successful finalizer,
+a read-only review found stale pre-finalization wording. This exact eight-file
+same-increment correction was independently reviewed and re-finalized once
+under separate owner authorization. The current marker is complete and valid.
+
 ## V0-6 HTTPS dependency decision
 
 Status: **Verified complete with advisories; product transport remains

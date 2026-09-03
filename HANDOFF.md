@@ -2,16 +2,29 @@
 
 Last updated: 2026-09-03
 
-## V0-6 HTTPS dependency decision completion checkpoint
+## V0-6 HTTPS dependency publication reconciliation checkpoint
 
-From clean synchronized `main` at
+From clean synchronized baseline
 `6c3615c507b58a771f696ebb7bfdb5bd13d1d1b7`, the owner-approved
-documentation-only V0-6 increment is verified complete with **PASS WITH
-ADVISORIES** on branch
-`codex/personal-assistant-v0-https-dependency-decision`. D-118 accepts the
-closed disposition `no_eligible_client`: every one of the five exact variants
-across the three frozen client families fails at least one mandatory criterion.
-No dependency or transport is selected.
+documentation-only V0-6 decision completed with **PASS WITH ADVISORIES** at
+reviewed branch head `471167a506bc8bbb7d53f989fda900679b6de15c`. PR #107
+squash-merged that exact tree to `main` as
+`499bdfe840f26270c8a458c2e0725e1fec13defe` on 2026-09-03. Local Git confirms
+the reviewed head and squash commit have the identical tree
+`0d9d21379e45ecd8379b3a92f6e5a57d94cd10d3`, and `HEAD`, local `main`, and
+the locally recorded `origin/main` were synchronized at the squash commit when
+this reconciliation began.
+
+GitHub Actions run `33735613542` was cancelled on attempt 1 during post-job
+Node setup after all substantive Documentation steps passed. The one
+owner-authorized rerun, attempt 2, passed the complete applicable
+`Documentation and repository policy` job. GitHub reported no checks explicitly
+configured as branch-protection requirements; this evidence therefore does not
+claim universal required-check enforcement.
+
+D-118 remains accepted with the closed disposition `no_eligible_client`: every
+one of the five exact variants across the three frozen client families fails at
+least one mandatory criterion. No dependency or transport is selected.
 
 The common decisive gap is blocking operating-system DNS work that cannot be
 aborted or boundedly joined after it starts under the current hard cancellation
@@ -20,14 +33,16 @@ buffer bounds. Candidate builds and runtime checks were prohibited and remain
 `Not run`; this result is scoped to the frozen evidence and is not a universal
 Rust HTTPS impossibility claim.
 
-The completion report and valid local gate marker cover exactly fifteen
-documentation paths. Documentation, repository, security, complete
+The historical V0-6 plan, increment, and post-increment review remain unchanged
+prepublication evidence. Their completion report and valid marker cover exactly
+fifteen documentation paths. Documentation, repository, security, complete
 verification, exact-scope, protected-path, independent-review, session, and
-post-increment checks pass. One optional unfiltered all-target metadata
+post-increment checks passed. One optional unfiltered all-target metadata
 diagnostic failed because an Android-only crate was not cached; the controlling
 macOS/Linux scoped resolver checks passed. `cargo-audit` was unavailable and
-was not installed. No source, manifest, lockfile, dependency, credential,
-signing, provider, gateway, product, or operational external state changed.
+was not installed. Publication and this reconciliation changed no source,
+manifest, lockfile, dependency, credential, signing, provider, gateway,
+product, or operational external state.
 
 V0-3 remains paused and `Blocked`. V0-7 and the live synthetic-text milestone
 remain `Blocked`; V0-7 also retains its fake-only versus hermetic actual-client
@@ -35,18 +50,34 @@ TLS/socket-test discrepancy. D-107 stays historical 8/11, D-108 stays
 additively 9/10, proposed D-113 through D-117 remain non-controlling, and all
 ten D-107 blockers remain.
 
+The separately approved publication reconciliation is complete with **PASS
+WITH ADVISORIES** on branch
+`codex/personal-assistant-v0-https-dependency-publication-reconciliation`. Its
+exact eight-file documentation scope records only the already observed
+publication state. Two launch requests for the normalized finalizer were
+rejected before process execution. The owner then explicitly authorized the
+shortened gate ID and report path, and the exact finalizer succeeded once. A
+read-only review found that valid marker bound documents which still described
+the prior pre-finalization state. The owner authorized this exact eight-file
+same-increment correction and one re-execution of the finalizer. The corrected
+report and workspace now have a complete, valid marker. No operational
+successor is selected or Ready.
+
 Exact resume prompt: “Read `AGENTS.md`,
 `docs/governance/MASTER_PROMPT.md`, and the complete required project-memory
 and security/testing chain. Inspect the completed uncommitted
-`codex/personal-assistant-v0-https-dependency-decision` branch and its valid
-completion-gate state. Review only the exact fifteen-file documentation diff,
-accepted D-118 `no_eligible_client` decision, frozen evidence summary, and
-Passed/Failed/Not-run reporting. Confirm no dependency or transport is selected
-and V0-3/V0-7 remain Blocked. Inspect before acting, preserve existing user
-changes, avoid unrelated modifications, and do not repeat public-evidence
-retrieval or resolver work. Report Accept or exact revisions; do not edit,
-commit, push, merge, begin V0-7, or access signing, provider, product, or other
-operational external systems.”
+`codex/personal-assistant-v0-https-dependency-publication-reconciliation`
+branch, its exact eight-file documentation diff, valid completion report and
+marker, and preserved finalizer chronology. Confirm PR #107, reviewed head
+`471167a506bc8bbb7d53f989fda900679b6de15c`, run `33735613542` attempts 1 and
+2, squash commit
+`499bdfe840f26270c8a458c2e0725e1fec13defe`, identical-tree evidence, and
+historical preservation. Confirm D-118 remains `no_eligible_client`, no
+dependency or transport is selected, V0-3/V0-7 remain `Blocked`, and no
+successor is promoted. Inspect before acting, preserve existing user changes,
+avoid unrelated modifications, and do not repeat completed verification or
+access external systems. Report Accept or exact revisions; do not edit,
+commit, push, merge, or begin V0-7.”
 
 ## D-107 late-result rejection decision checkpoint
 
