@@ -2,9 +2,9 @@
 
 Last updated: 2026-09-03
 
-## D-120 fixed local private-lane direction
+## Published D-120 fixed local private-lane direction
 
-Status: **Documentation direction accepted; local capability and every
+Status: **Documentation direction published; local capability and every
 operational successor remain Blocked.** The exact sixteen-file documentation
 increment completed with **PASS WITH ADVISORIES** and a valid marker. From
 synchronized baseline
@@ -29,6 +29,20 @@ post-v0 direction with exactly ten `candidate_blocked` entries and no handle;
 V0-3/V0-7 remain Blocked. D-107 remains eight of eleven, D-108 remains
 additively nine of ten, all ten blockers remain unproved, and D-113 through
 D-117 remain Proposed/non-controlling.
+
+The accepted exact sixteen-file result was reviewed at
+`5538922dc99e56b3edc1811be8690c28732086ce` and squash-merged through PR #112
+as `a86df64984862beb427e6c3cabfdd8b4c9202509`. Both commits share exact tree
+`17961831e50ee8eb8d4a5651a22a36726439ee50`; their repository diff is empty.
+Frozen owner-supplied publication evidence records successful PR workflow run
+`33823804426` and successful post-merge workflow run `33823928634`; this
+closeout did not contact GitHub or independently re-query either run.
+
+The documentation-only publication closeout makes this live state stable and
+does not queue another reconciliation for its own eventual merge. Actual Git
+state remains authoritative. Publication and CI add no engine, model, artifact,
+profile, dependency, filesystem, transport, local-model, network, signing,
+execution, product, or external-system authority.
 
 Any future local candidate remains unavailable pending separate proof of
 Cortexa owner authentication; exact artifact provenance and acquisition;

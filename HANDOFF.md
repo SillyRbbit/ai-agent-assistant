@@ -2,7 +2,7 @@
 
 Last updated: 2026-09-03
 
-## D-120 fixed local private-lane decision
+## Published D-120 fixed local private-lane decision
 
 From clean synchronized baseline
 `51be9ba91ba69c9c96dfb3bbfd4509d3177e902a`, the owner approved the exact
@@ -24,7 +24,15 @@ The exact sixteen-file documentation result completed with **PASS WITH
 ADVISORIES**. Documentation, repository, security, complete verification,
 exact-scope, preservation, independent-review, session, quality,
 report-validation, and post-increment gates passed, and the completion marker
-is valid. The branch remains uncommitted for owner review.
+is valid.
+
+The accepted result was reviewed at
+`5538922dc99e56b3edc1811be8690c28732086ce` and squash-merged through PR #112
+as `a86df64984862beb427e6c3cabfdd8b4c9202509`. Both commits share exact tree
+`17961831e50ee8eb8d4a5651a22a36726439ee50`; their repository diff is empty.
+Frozen owner-supplied publication evidence records successful PR workflow run
+`33823804426` and successful post-merge workflow run `33823928634`; this
+closeout did not contact GitHub or independently re-query either run.
 
 Synthetic-v1 remains the fixed blocked OpenAI-through-Cloudflare proof.
 Historical V0-14 remains Blocked with its recorded V0-13 dependency. D-118
@@ -38,23 +46,35 @@ remain mandatory. All ten D-107 blockers remain unproved.
 No product/test source, dependency, model selection or installation,
 product/model-artifact filesystem boundary or operation, Tauri/UI, credential,
 provider, signing, product, network, or external-system work is authorized or
-performed. The immediate next action is completion review of this exact
-uncommitted documentation increment; do not begin the local engine/artifact
-evidence plan automatically.
+performed.
+
+The documentation-only
+[`PR #112 publication closeout`](docs/plans/2026-09-03-personal-assistant-v0-pr112-publication-closeout.md)
+records the completed publication in five live records. Those records do not
+encode the closeout's own transient branch, review, or publication state as a
+roadmap queue item. Actual Git state determines whether the closeout itself
+still needs separately authorized review or publication; once its tree is on
+`main`, do not create another reconciliation merely to restate that merge. No
+successor starts automatically.
 
 Exact resume prompt: “Read `AGENTS.md`,
-`docs/governance/MASTER_PROMPT.md`, the complete required project-memory and
-security/testing chain, and the D-120 plan, increment, and review. Inspect the
-repository and active completion-gate state first. Review only the exact
-sixteen-file documentation diff for the accepted
-`fixed_local_v2_planning_selected` disposition, append-only D-120, preserved
-synthetic-v1 and historical V0-14, D-118 `no_eligible_client`, D-119's exactly
-ten `candidate_blocked` entries, all ten D-107 blockers, operational Blocked
-readiness, and the no-egress/artifact/cancellation/cleanup/late-result
-boundaries. Preserve existing changes and report Accept or exact revisions. Do
-not edit, commit, push, merge, begin a successor, select or install a model, or
-access credentials, providers, signing systems, product systems, or other
-external systems.”
+`docs/governance/MASTER_PROMPT.md`, and the complete required project-memory
+and security/testing chain. Inspect actual Git and gate state before acting.
+Preserve PR #112, reviewed head
+`5538922dc99e56b3edc1811be8690c28732086ce`, successful PR workflow
+`33823804426`, squash commit
+`a86df64984862beb427e6c3cabfdd8b4c9202509`, successful post-merge workflow
+`33823928634`, and common tree
+`17961831e50ee8eb8d4a5651a22a36726439ee50`. If the exact PR #112 publication
+closeout is not yet published, review or publish it only with separate owner
+authorization; if `main` already contains its tree, treat it as closed and do
+not create another publication reconciliation. Preserve D-120, synthetic-v1,
+historical V0-14, D-118 `no_eligible_client`, all ten D-119
+`candidate_blocked` entries, all ten D-107 blockers, and every `Blocked`
+security boundary. Only after the closeout is closed may a separately approved
+documentation task draft the fixed local-v2 engine/artifact evidence plan. Do
+not select or install a model, implement source, access external systems, or
+begin a successor without exact owner authority.”
 
 ## Published selectable connection-profile architecture decision
 

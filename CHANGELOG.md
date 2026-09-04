@@ -4,6 +4,21 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Published the accepted D-120 documentation-only
+  `fixed_local_v2_planning_selected` direction through PR #112. Reviewed head
+  `5538922dc99e56b3edc1811be8690c28732086ce` was squash-merged as
+  `a86df64984862beb427e6c3cabfdd8b4c9202509`; both commits share exact tree
+  `17961831e50ee8eb8d4a5651a22a36726439ee50` and have an empty repository
+  diff. Frozen owner-supplied publication evidence records successful PR
+  workflow run `33823804426` and successful post-merge workflow run
+  `33823928634`; this documentation closeout did not contact GitHub or
+  independently re-query either run. D-120 remains evidence-planning order
+  only: no engine, model, artifact, dependency, profile, source, filesystem,
+  transport, Tauri/UI, credential, provider, or product authority was added.
+  Synthetic-v1, historical V0-14, D-118 `no_eligible_client`, all ten D-119
+  `candidate_blocked` entries, V0-3/V0-7, all ten D-107 blockers, and every
+  operational `Blocked` boundary remain unchanged.
+
 - Completed with `PASS WITH ADVISORIES` and a valid completion marker D-120's documentation-only
   `fixed_local_v2_planning_selected` direction. One separately approved
   documentation plan may assess a fixed, nonselectable local/no-auth

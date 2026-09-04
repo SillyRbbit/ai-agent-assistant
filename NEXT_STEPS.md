@@ -2,7 +2,7 @@
 
 Last updated: 2026-09-03
 
-## D-120 fixed local private-lane decision
+## Published D-120 fixed local private-lane decision
 
 The owner-approved documentation-only increment selects
 `fixed_local_v2_planning_selected`. D-120 permits one new, separately approved
@@ -17,15 +17,28 @@ remains unchanged and Blocked with its recorded V0-13 dependency. D-118 remains
 `candidate_blocked` entries and no handle; V0-3/V0-7, all ten D-107 blockers,
 and every operational successor remain Blocked.
 
-The exact sixteen-file D-120 documentation increment is complete with **PASS
-WITH ADVISORIES** and a valid completion marker; independent review accepted
-the corrected result. The immediate action is owner review of this uncommitted
-branch. Only after separate acceptance and publication may the smallest
-permitted follow-up draft the bounded local engine/artifact evidence-plan
-ExecPlan. Do not begin that plan, select or install a model, change source or
-dependencies, request filesystem or network authority, or treat local/no-auth
-as Cortexa owner authentication, privacy proof, profile admission, or
-operational readiness.
+The exact sixteen-file D-120 documentation increment completed with **PASS WITH
+ADVISORIES** and a valid completion marker. The accepted result was reviewed at
+`5538922dc99e56b3edc1811be8690c28732086ce` and squash-merged through PR #112
+as `a86df64984862beb427e6c3cabfdd8b4c9202509`. Both commits share exact tree
+`17961831e50ee8eb8d4a5651a22a36726439ee50` and have an empty repository diff.
+Frozen owner-supplied publication evidence records successful PR workflow run
+`33823804426` and successful post-merge workflow run `33823928634`; this
+closeout did not contact GitHub or independently re-query either run.
+
+The documentation-only
+[`PR #112 publication closeout`](docs/plans/2026-09-03-personal-assistant-v0-pr112-publication-closeout.md)
+keeps these five live records publication-stable. Actual Git state determines
+whether the closeout itself still requires separately authorized review or
+publication; its transient state is not a roadmap queue item and must not
+trigger another reconciliation merely to restate a later merge.
+
+Only after that closeout is closed may the smallest separately approved
+follow-up draft the bounded local engine/artifact evidence-plan ExecPlan. Do not
+begin that plan, select or install a model, change source or dependencies,
+request filesystem or network authority, or treat local/no-auth as Cortexa
+owner authentication, privacy proof, profile admission, or operational
+readiness.
 
 ## Published selectable connection-profile architecture decision
 
