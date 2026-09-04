@@ -3,10 +3,22 @@
 Status: Authoritative current-state architecture
 Last updated: 2026-09-03
 
+> Fixed local candidate evidence result (D-121, 2026-09-03): the owner accepted
+> `candidate_not_eligible_or_unproven` for exactly
+> `fixed_local_v2_llamacpp_0_3_0_qwen2_5_1_5b_q4km_cpu_v1`. The fifteen-row
+> conjunctive matrix contains fourteen `contract_unproven` rows, one target-Mac
+> `not_run` row, and no `boundary_failed` row. Pinned ggml source retains a
+> compiled public dynamic-loader surface even with `GGML_BACKEND_DL=OFF`, which
+> conflicts with the accepted static CPU-only, no-dynamic-loading topology. No
+> candidate, engine, model, artifact, dependency, filesystem boundary, adapter,
+> or runtime edge is selected or admitted. The result adds no architecture edge
+> and leaves every operational successor `Blocked`.
+
 > Fixed local private-lane direction (D-120, 2026-09-03): the owner accepted
 > `fixed_local_v2_planning_selected`. D-094's fixed, nonselectable
-> `real-content-v2` may now have one additive local/no-auth engine/artifact
-> evidence plan proposed before V0-13. The remote synthetic-v1 lane remains
+> `real-content-v2` could have one additive local/no-auth engine/artifact
+> evidence plan before V0-13; that plan later produced D-121's negative result
+> above. The remote synthetic-v1 lane remains
 > fixed and Blocked; historical V0-14 remains unchanged and Blocked with its
 > recorded V0-13 dependency. No local engine, model, artifact, dependency,
 > filesystem, containment, Tauri/UI, or runtime edge exists. Fixed local-v2 is
@@ -1447,7 +1459,7 @@ reviewed repository ICNS byte-for-byte.
 | Typed Workflow Automation proposals           | Current, unwired and sealed     | D-090 A-D manual fixture dispatch; E/tools/approvals inert       |
 | Native multi-agent acceptance suite           | Current, deterministic/unwired  | 303 library units + 207 selected contracts; no product effects   |
 | Personal Assistant v0 volatile session path   | Current, transport-free/unwired | V0-1 sealed request/Native branch plus V0-2 bounded session host |
-| Fixed local real-content-v2 evidence lane     | Planned and Blocked             | D-120 planning order only; no engine, artifact, or source edge   |
+| Fixed local real-content-v2 evidence lane     | Assessed; operationally Blocked | D-121 rejects the frozen candidate; no runtime or source edge    |
 | Post-v0 selectable connection-profile catalog | Planned and Blocked             | D-119 direction only; ten blocked candidates and no handle       |
 | Live gateway and model-provider transport     | Planned                         | Blocked by auth, provider evidence, HTTPS, operations, and plan  |
 | Restricted tool execution                     | Planned                         | No dispatcher or executor exists                                 |
@@ -1504,6 +1516,13 @@ mandatory and Blocked. Any future local path must prove complete no-external-
 processing and no-DNS/socket/network-egress behavior, artifact provenance,
 native-code secret isolation, hard cancellation, cleanup through positive
 quiescence, and pre-mutation late-result rejection under separate decisions.
+
+D-121 records the first such plan's accepted
+`candidate_not_eligible_or_unproven` result. The exact frozen llama.cpp/Qwen
+candidate is unavailable: pinned source retains a compiled public dynamic-
+loader surface, fourteen matrix rows remain `contract_unproven`, and the
+target-Mac row is `not_run`. The result adds no engine, model, artifact,
+dependency, filesystem, adapter, or runtime edge and selects no replacement.
 
 No node in this v0 flow can select or execute a tool, access a file or memory,
 persist content, delegate, schedule, retry/fallback, run in the background, or

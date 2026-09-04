@@ -6574,3 +6574,81 @@ D-094 synthetic-v1; D-066 through D-068; D-118; D-119; or the existing V0-14
 plan. Any operational capability, engine/model selection, artifact boundary,
 dependency, filesystem access, Tauri/UI contract, credential, provider, source
 implementation, or successor start requires a separate owner-approved plan.
+
+## D-121 - Do not admit the frozen llama.cpp and Qwen local-v2 candidate from current static evidence
+
+Date: 2026-09-03
+Status: Accepted documentation-only static-evidence decision; no candidate admitted and no implementation authority
+
+### Context
+
+D-120 permits one separately approved documentation assessment of a fixed,
+nonselectable local/no-auth candidate for `real-content-v2`. The owner accepted
+the immutable envelope
+`fixed_local_v2_llamacpp_0_3_0_qwen2_5_1_5b_q4km_cpu_v1`: llama.cpp `v0.3.0`
+at full commit `c1d0e7a004015f23bc0233470b747b596f29b264`, official Qwen2.5 1.5B
+Instruct Q4_K_M GGUF at revision
+`91cad51170dc346986eccefdc2dd33a9da36ead9`, one static in-process CPU-only
+topology, a sanitized macOS 14 arm64 target class, `pre_provisioned` acquisition,
+and one closed official-source allowlist.
+
+The full static assessment preserved that envelope and its evidence boundary.
+It retrieved no source archive, package, binary, model byte, artifact redirect,
+credential, or operational evidence; built and executed nothing; and did not
+inspect the target Mac. Isolated dependency resolution was not run because the
+envelope names no Rust/package binding and the pinned source already fails a
+mandatory topology criterion.
+
+### Decision
+
+Select `candidate_not_eligible_or_unproven`.
+
+The exact engine release/commit and model revision/filename/publisher digest and
+size metadata match the accepted envelope, but none of the fifteen conjunctive
+matrix rows is fully documented: fourteen are `contract_unproven`, the target-
+Mac row is `not_run`, and no row is `boundary_failed`.
+
+Pinned ggml source always compiles `ggml-backend-dl.cpp` and
+`ggml-backend-reg.cpp` into the core library. Setting `GGML_BACKEND_DL=OFF`
+changes whether selected backends are modules; it does not remove the dynamic-
+loader implementation or the public `ggml_backend_load`,
+`ggml_backend_load_all`, and `ggml_backend_load_all_from_path` entry points.
+The loader can open an explicit path, scan executable/current directories, and
+honor `GGML_BACKEND_PATH`. That reachable capability conflicts with the
+accepted no-dynamic-loading topology. No downstream source patch is authorized.
+
+The evidence also does not establish a complete target build/dependency graph,
+model conversion provenance and exact embedded manifest, same-byte artifact
+verification, acquisition/removal ownership, complete no-egress or native-TCB
+containment, bounded resources, hard deadlines and bounded joins, positive
+cleanup quiescence, pre-mutation late-result rejection, Cortexa owner
+authentication, personal-data lifecycle, exact target compatibility, or any
+target-Mac result. Load/decode callbacks are cooperative partial mechanisms,
+not proof of the required cancellation and cleanup contract.
+
+### Consequences
+
+The frozen candidate remains unavailable and is not selected, admitted,
+installed, or implementation-ready. No replacement, fallback, source patch,
+artifact acquisition, filesystem boundary, target-Mac plan, Rust/TypeScript
+source work, Tauri/UI work, owner-authentication work, personal prompt, or
+operational successor may begin from this decision. A future reconsideration
+requires a separately owner-approved architecture or candidate plan; it may not
+silently mutate this envelope or reuse its negative evidence as positive proof.
+
+### Preservation
+
+D-094 synthetic-v1, historical V0-14, D-118 `no_eligible_client`, D-119's
+exactly ten `candidate_blocked` entries and no handle, D-120, V0-3/V0-7, all
+ten D-107 blockers, D-113 through D-117 Proposed/non-controlling status, the
+sole/default Native runtime, empty tools, explicit foreground action,
+volatility, no fallback, no-egress, no device effect, and every operational
+`Blocked` boundary remain unchanged. Fixed local-v2 is not D-119
+`local_no_auth` admission. D-060/D-061 continue to control cloud paths, and
+D-062/D-094 owner authentication remains separately mandatory and Blocked.
+
+### Supersedes or is superseded by
+
+D-121 dispositions only the exact D-120-authorized frozen candidate assessment.
+It does not supersede D-060, D-061, D-062, D-094, D-107, D-118, D-119, D-120,
+synthetic-v1, historical V0-14, or any security, testing, or readiness gate.

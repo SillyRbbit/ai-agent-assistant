@@ -2,6 +2,57 @@
 
 Last updated: 2026-09-03
 
+## Completed D-121 fixed local candidate static assessment
+
+From baseline `355d42ac8bb9a5ed663f57895675df688507ce9f`, the owner approved
+and began the documentation-only
+[`fixed local engine and artifact evidence plan`](docs/plans/2026-09-03-personal-assistant-v0-fixed-local-engine-artifact-evidence-plan.md)
+under gate `personal-assistant-v0-fixed-local-engine-artifact-evidence-plan`.
+The owner accepted the immutable
+`fixed_local_v2_llamacpp_0_3_0_qwen2_5_1_5b_q4km_cpu_v1` envelope, separately
+authorized its frozen-allowlist static assessment, and then accepted the
+matching evidence tuple, fifteen-row matrix, closed
+`candidate_not_eligible_or_unproven` disposition, and exact D-121 wording.
+
+The tuple records one `documented`, eight `contract_unproven`, and one
+`not_run` result. The matrix contains fourteen `contract_unproven` rows, one
+target-Mac `not_run` row, and zero `boundary_failed` rows. Pinned ggml source
+always compiles its backend loader and registry; `GGML_BACKEND_DL=OFF` does not
+remove the public `ggml_backend_load*` entry points or POSIX loader
+implementation. This conflicts with the frozen no-dynamic-loading topology.
+Model provenance, artifact identity and same-byte loading, complete no-egress/
+native-TCB containment, resources, cancellation and bounded join, cleanup/
+quiescence, late-result rejection, owner authentication, personal-data
+lifecycle, and target compatibility also remain unproved or unrun.
+
+The exact sixteen-file documentation increment completed with **PASS WITH
+ADVISORIES**. Documentation, repository, security, complete verification,
+exact-scope, preservation, independent-review, session, quality,
+report-validation, and post-increment gates passed, and the completion marker
+is valid.
+
+No candidate, substitute, fallback, engine, model, artifact, dependency,
+filesystem boundary, target-Mac plan, source work, Tauri/UI work, owner-
+authentication work, personal prompt, or operational successor is selected or
+authorized. D-094 synthetic-v1, historical V0-14, D-118
+`no_eligible_client`, D-119's exactly ten `candidate_blocked` entries and no
+handle, D-120, V0-3/V0-7, all ten D-107 blockers, D-113 through D-117
+Proposed/non-controlling status, and every security boundary remain unchanged.
+
+Exact resume prompt: “Read `AGENTS.md`,
+`docs/governance/MASTER_PROMPT.md`, and the complete required project-memory
+and security/testing chain. Inspect actual Git and gate state before acting.
+Review only the completed sixteen-file documentation result for
+`personal-assistant-v0-fixed-local-engine-artifact-evidence-plan`, including
+D-121's accepted `candidate_not_eligible_or_unproven` disposition, the matching
+ten-component tuple, fourteen `contract_unproven` matrix rows, one target-Mac
+`not_run` matrix row, and zero `boundary_failed` matrix rows. Preserve the
+frozen candidate as unavailable, every Blocked boundary, D-118, D-119, D-120,
+and all ten D-107 blockers. Do not edit, commit, push, merge, select a
+replacement, acquire an artifact, inspect the target Mac, implement source,
+begin a successor, or access external systems. Report Accept or exact revisions
+and stop.”
+
 ## Published D-120 fixed local private-lane decision
 
 From clean synchronized baseline
@@ -17,8 +68,8 @@ Repository evidence remained consistent, so D-120 accepts
 `fixed_local_v2_planning_selected`. A later separately approved documentation
 plan may assess one exact fixed/nonselectable local/no-auth `real-content-v2`
 engine, model/artifact, dependency, acquisition, and containment boundary before
-V0-13. That later plan does not exist and is not active or implementation
-authority.
+V0-13. D-120 itself created no such plan or implementation authority; the
+separately approved plan later completed with the D-121 negative result above.
 
 The exact sixteen-file documentation result completed with **PASS WITH
 ADVISORIES**. Documentation, repository, security, complete verification,
@@ -57,7 +108,7 @@ still needs separately authorized review or publication; once its tree is on
 `main`, do not create another reconciliation merely to restate that merge. No
 successor starts automatically.
 
-Exact resume prompt: “Read `AGENTS.md`,
+Historical resume prompt superseded by D-121 (do not execute): “Read `AGENTS.md`,
 `docs/governance/MASTER_PROMPT.md`, and the complete required project-memory
 and security/testing chain. Inspect actual Git and gate state before acting.
 Preserve PR #112, reviewed head

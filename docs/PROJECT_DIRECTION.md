@@ -2,7 +2,7 @@
 
 Status: Owner-approved repository-governance and planned-architecture direction
 Last updated: 2026-09-03
-Decision authority: D-078, D-094, D-119, and D-120
+Decision authority: D-078, D-094, D-119, D-120, and D-121
 
 This document defines present project scope and future-facing architecture
 constraints. It is not implementation, readiness, release, or security evidence.
@@ -69,18 +69,25 @@ selector to synthetic-v1 or `real-content-v2`, remove the existing synthetic
 OpenAI-through-Cloudflare direction, choose a provider or local model, or grant
 credential, transport, source, or product authority.
 
-D-120 now additively permits one separately approved documentation plan to
+D-120 additively permits one separately approved documentation plan to
 assess an exact fixed, nonselectable local/no-auth `real-content-v2` engine,
 model/artifact, dependency, acquisition, and containment boundary before V0-13.
 It does not select a local model, admit D-119's local candidate, alter the
 remote synthetic-v1 proof, or reclassify historical V0-14 and its recorded
-V0-13 dependency. The evidence plan does not yet exist and no source,
-filesystem, dependency, Tauri/UI, credential, provider, transport, or
-operational authority is granted. Local/no-auth means only no model-provider
-authentication; Cortexa owner authentication, complete no-egress and artifact
-proof, local-data controls, cancellation, cleanup/quarantine, late-result
-rejection, target-Mac evidence, empty tools, and no fallback remain mandatory
-and Blocked.
+V0-13 dependency.
+
+D-121 records the first such evidence plan's accepted
+`candidate_not_eligible_or_unproven` result for exactly
+`fixed_local_v2_llamacpp_0_3_0_qwen2_5_1_5b_q4km_cpu_v1`. Its pinned engine
+retains a compiled public dynamic-loader surface that conflicts with the frozen
+no-dynamic-loading topology; fourteen matrix rows remain `contract_unproven`,
+the target-Mac row is `not_run`, and no row is `boundary_failed`. The candidate
+remains unavailable, and no replacement, model, artifact, source, filesystem,
+dependency, Tauri/UI, credential, provider, transport, or operational authority
+is granted. Local/no-auth means only no model-provider authentication; Cortexa
+owner authentication, complete no-egress and artifact proof, local-data
+controls, cancellation, cleanup/quarantine, late-result rejection, target-Mac
+evidence, empty tools, and no fallback remain mandatory and Blocked.
 
 ## Native architecture preservation
 
@@ -366,5 +373,8 @@ reached.
 - D-120 reserves only an additive fixed local-v2 evidence-planning sequence
   before V0-13; it admits no profile, model, artifact, dependency, source, or
   operational capability.
+- D-121 rejects the exact first frozen local-v2 candidate as
+  `candidate_not_eligible_or_unproven`; it selects no replacement and preserves
+  every operational Blocked boundary.
 - `ARCHITECTURE.md`, `PROJECT_STATUS.md`, and `NEXT_STEPS.md` distinguish current
   capability, verified state, and authorized queue order.

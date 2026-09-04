@@ -4,15 +4,39 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
-The published completed owner-approved documentation-only plan is
+The current owner-approved documentation-only plan is
+[`Personal Assistant V0 fixed local engine and artifact evidence plan`](docs/plans/2026-09-03-personal-assistant-v0-fixed-local-engine-artifact-evidence-plan.md).
+It records D-121's accepted `candidate_not_eligible_or_unproven` disposition
+for exactly
+`fixed_local_v2_llamacpp_0_3_0_qwen2_5_1_5b_q4km_cpu_v1`. Its matching tuple
+contains one `documented`, eight `contract_unproven`, and one `not_run` result;
+its fifteen-row conjunctive matrix contains fourteen `contract_unproven`, one
+target-Mac `not_run`, and no `boundary_failed` row. The frozen candidate remains
+unavailable because the pinned engine retains a compiled public dynamic-loader
+surface and the other mandatory contracts remain incomplete. No substitute,
+fallback, artifact, dependency, filesystem boundary, target-Mac plan, source
+work, or operational successor is selected or Ready.
+
+The exact sixteen-file documentation result is **PASS WITH ADVISORIES** with a
+valid completion marker. The only current action is owner review; no successor
+is admitted or queued.
+
+D-120, synthetic-v1, historical V0-14, D-118 `no_eligible_client`, D-119's
+exactly ten `candidate_blocked` entries and no handle, V0-3/V0-7, all ten
+D-107 blockers, and every operational Blocked boundary remain unchanged. The
+current result grants no model, provider, credential, signing, network,
+filesystem, Tauri/UI, product, or external-system authority.
+
+The preceding published completed owner-approved documentation-only plan is
 [`Personal Assistant V0 fixed local private-lane decision`](docs/plans/2026-09-03-personal-assistant-v0-fixed-local-private-lane-decision.md).
 It selects D-120's `fixed_local_v2_planning_selected` disposition from baseline
 `51be9ba91ba69c9c96dfb3bbfd4509d3177e902a`. The decision permits only one
 new separately approved documentation plan to assess a fixed/nonselectable
 local/no-auth `real-content-v2` engine, model/artifact, dependency, acquisition,
 and containment boundary before V0-13. The exact sixteen-file result is **PASS
-WITH ADVISORIES** with a valid completion marker. No successor plan is created
-or active.
+WITH ADVISORIES** with a valid completion marker. D-120 itself created no
+successor; the separately approved evidence plan above later completed with
+D-121's negative result.
 
 Synthetic-v1, historical V0-14, D-118 `no_eligible_client`, D-119's exactly ten
 `candidate_blocked` entries, V0-3/V0-7, all ten D-107 blockers, and every
@@ -1271,6 +1295,7 @@ condition is reached.
 
 | Plan                                             | Status   | Owner              | Last updated |
 | ------------------------------------------------ | -------- | ------------------ | ------------ |
+| Fixed local engine/artifact evidence             | Complete | Project owner      | 2026-09-03   |
 | Fixed local private-lane decision                | Complete | Project owner      | 2026-09-03   |
 | Selectable connection-profile architecture       | Complete | Project owner      | 2026-09-03   |
 | P3 App Sandbox containment re-review             | Complete | Project owner      | 2026-09-02   |

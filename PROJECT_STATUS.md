@@ -2,6 +2,41 @@
 
 Last updated: 2026-09-03
 
+## D-121 fixed local candidate static evidence result
+
+Status: **Documentation assessment complete; candidate unavailable and every
+operational successor Blocked.** The owner accepted
+`candidate_not_eligible_or_unproven` for exactly
+`fixed_local_v2_llamacpp_0_3_0_qwen2_5_1_5b_q4km_cpu_v1`. The matching tuple
+preserves the accepted identity envelope and records one `documented`, eight
+`contract_unproven`, and one `not_run` result. The fifteen-row conjunctive
+matrix contains fourteen `contract_unproven` rows, one target-Mac `not_run`
+row, and zero `boundary_failed` rows.
+
+Pinned ggml source retains the backend loader and registry in the core build;
+`GGML_BACKEND_DL=OFF` does not remove the public `ggml_backend_load*` entry
+points or POSIX loading implementation. This conflicts with the frozen static
+CPU-only, no-dynamic-loading topology. Exact build closure, model conversion
+provenance and embedded manifest, same-byte verification/loading, acquisition
+and removal, complete no-egress/native-TCB containment, resource limits, hard
+deadlines and bounded joins, positive cleanup quiescence, pre-mutation late-
+result rejection, owner authentication, personal-data lifecycle, and exact
+target compatibility also remain unproved or unrun.
+
+Current product source remains unchanged and still contains no local inference
+engine, model artifact, local provider adapter, Personal Assistant Tauri route,
+or production response ingress. No candidate, replacement, fallback, artifact,
+dependency, filesystem boundary, target-Mac plan, source work, personal prompt,
+or operational successor is selected. D-094 synthetic-v1, historical V0-14,
+D-118 `no_eligible_client`, D-119's exactly ten `candidate_blocked` entries and
+no handle, D-120, V0-3/V0-7, all ten D-107 blockers, D-113 through D-117
+Proposed/non-controlling status, and every security boundary remain unchanged.
+
+The exact sixteen-file documentation increment completed with **PASS WITH
+ADVISORIES** and a valid completion marker after documentation, repository,
+security, complete verification, exact-scope, preservation, independent-review,
+session, quality, report-validation, and post-increment gates passed.
+
 ## Published D-120 fixed local private-lane direction
 
 Status: **Documentation direction published; local capability and every
@@ -12,7 +47,9 @@ synchronized baseline
 `fixed_local_v2_planning_selected`. D-120 permits only a separately approved
 documentation plan to assess one exact fixed/nonselectable local/no-auth
 `real-content-v2` engine, model/artifact, dependency, acquisition, and
-containment boundary before V0-13. It does not create or begin that plan.
+containment boundary before V0-13. D-120 itself did not create or begin that
+plan; the separately approved assessment later completed with D-121's negative
+result above.
 
 Current source still has no local inference engine or dependency, model
 artifact, local provider adapter, Personal Assistant Tauri route, or production

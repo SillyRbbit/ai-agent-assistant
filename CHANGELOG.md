@@ -4,6 +4,20 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Completed the documentation-only D-121 static assessment of exactly
+  `fixed_local_v2_llamacpp_0_3_0_qwen2_5_1_5b_q4km_cpu_v1`. The accepted closed
+  result is `candidate_not_eligible_or_unproven`: fourteen of fifteen
+  conjunctive rows remain `contract_unproven`, the target-Mac row is `not_run`,
+  and no row is `boundary_failed`. Pinned ggml source retains a compiled public
+  dynamic-loader surface that conflicts with the frozen no-dynamic-loading
+  topology. No candidate, replacement, fallback, artifact, dependency,
+  filesystem boundary, target-Mac plan, source change, or operational successor
+  is selected or authorized. D-120, synthetic-v1, historical V0-14, D-118
+  `no_eligible_client`, all ten D-119 `candidate_blocked` entries, all ten D-107
+  blockers, and every operational `Blocked` boundary remain unchanged. The
+  exact sixteen-file documentation result completed with **PASS WITH
+  ADVISORIES** and a valid completion marker.
+
 - Published the accepted D-120 documentation-only
   `fixed_local_v2_planning_selected` direction through PR #112. Reviewed head
   `5538922dc99e56b3edc1811be8690c28732086ce` was squash-merged as

@@ -7,6 +7,29 @@ Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
 production boundary exists.
 
+## D-121 fixed local candidate static evidence decision
+
+- [x] The accepted disposition is exactly
+      `candidate_not_eligible_or_unproven` for the unchanged frozen candidate.
+- [x] The conjunctive matrix records exactly fourteen `contract_unproven`, one
+      target-Mac `not_run`, and zero `boundary_failed` rows.
+- [x] `GGML_BACKEND_DL=OFF` is not treated as removing the pinned core loader,
+      public `ggml_backend_load*` API, or native dynamic-loading reachability.
+- [x] Cooperative load/decode callbacks are not treated as hard deadlines,
+      bounded joins, cleanup, quiescence, or late-result rejection proof.
+- [x] Publisher metadata is not treated as same-byte artifact verification,
+      exact embedded manifest, conversion provenance, acquisition/removal
+      ownership, or target compatibility.
+- [x] D-120, synthetic-v1, historical V0-14, D-118, all ten D-119
+      `candidate_blocked` entries, all ten D-107 blockers, D-113 through D-117,
+      and every Blocked security boundary remain unchanged.
+- [x] No replacement, fallback, source patch, artifact, dependency, filesystem
+      boundary, target-Mac plan, implementation, personal prompt, or operational
+      successor is selected or authorized.
+- [ ] An eligible fixed local-v2 engine/model candidate exists; none is
+      selected, and all operational work remains `Blocked` pending a separate
+      owner-approved plan and complete evidence.
+
 ## D-120 fixed local private-lane documentation decision
 
 - [x] The accepted disposition is exactly

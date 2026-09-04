@@ -2,6 +2,33 @@
 
 Last updated: 2026-09-03
 
+## Completed D-121 fixed local candidate evidence decision
+
+The owner accepted `candidate_not_eligible_or_unproven` for exactly
+`fixed_local_v2_llamacpp_0_3_0_qwen2_5_1_5b_q4km_cpu_v1`. The matching tuple
+records one `documented`, eight `contract_unproven`, and one `not_run` result.
+The frozen static matrix has fourteen `contract_unproven` rows, one target-Mac
+`not_run` row, and no `boundary_failed` row. Pinned ggml source retains a
+compiled public dynamic-loader surface despite `GGML_BACKEND_DL=OFF`, which
+independently conflicts with the accepted no-dynamic-loading topology. The
+remaining artifact, provenance, containment, resource, cancellation, cleanup,
+late-result, owner-authentication, data-lifecycle, and target-compatibility
+contracts also do not satisfy the positive disposition.
+
+The candidate remains unavailable. No replacement, fallback, source patch,
+artifact acquisition, filesystem boundary, target-Mac plan, implementation, or
+operational successor is selected or Ready. D-094 synthetic-v1, historical
+V0-14, D-118 `no_eligible_client`, D-119's exactly ten `candidate_blocked`
+entries and no handle, D-120, V0-3/V0-7, all ten D-107 blockers, D-113 through
+D-117 Proposed/non-controlling status, and every `Blocked` boundary remain
+unchanged. The next action is owner review of this completed documentation
+increment; any candidate reconsideration requires a separate approved plan.
+
+The exact sixteen-file result completed with **PASS WITH ADVISORIES** and a
+valid completion marker. All required documentation, repository, security,
+complete verification, exact-scope, preservation, independent-review,
+session, quality, report-validation, and post-increment gates passed.
+
 ## Published D-120 fixed local private-lane decision
 
 The owner-approved documentation-only increment selects
@@ -33,12 +60,11 @@ whether the closeout itself still requires separately authorized review or
 publication; its transient state is not a roadmap queue item and must not
 trigger another reconciliation merely to restate a later merge.
 
-Only after that closeout is closed may the smallest separately approved
-follow-up draft the bounded local engine/artifact evidence-plan ExecPlan. Do not
-begin that plan, select or install a model, change source or dependencies,
-request filesystem or network authority, or treat local/no-auth as Cortexa
-owner authentication, privacy proof, profile admission, or operational
-readiness.
+That closeout later closed, and the separately approved engine/artifact
+evidence plan completed with the D-121 negative result above. D-120 itself did
+not select or install a model, change source or dependencies, request
+filesystem or network authority, or treat local/no-auth as Cortexa owner
+authentication, privacy proof, profile admission, or operational readiness.
 
 ## Published selectable connection-profile architecture decision
 
