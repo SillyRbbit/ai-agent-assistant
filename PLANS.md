@@ -4,7 +4,23 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
-The current documentation-only
+The current completed owner-approved documentation-only plan is
+[`Personal Assistant V0 fixed local private-lane decision`](docs/plans/2026-09-03-personal-assistant-v0-fixed-local-private-lane-decision.md).
+It selects D-120's `fixed_local_v2_planning_selected` disposition from baseline
+`51be9ba91ba69c9c96dfb3bbfd4509d3177e902a`. The decision permits only one
+new separately approved documentation plan to assess a fixed/nonselectable
+local/no-auth `real-content-v2` engine, model/artifact, dependency, acquisition,
+and containment boundary before V0-13. The exact sixteen-file result is **PASS
+WITH ADVISORIES** with a valid completion marker. No successor plan is created
+or active.
+
+Synthetic-v1, historical V0-14, D-118 `no_eligible_client`, D-119's exactly ten
+`candidate_blocked` entries, V0-3/V0-7, all ten D-107 blockers, and every
+operational Blocked boundary remain unchanged. No engine, model, artifact,
+dependency, filesystem, transport, Tauri/UI, credential, provider, signing,
+product, or external-system authority exists.
+
+The preceding completed documentation-only
 [`Personal Assistant V0 PR #110 publication closeout`](docs/plans/2026-09-03-personal-assistant-v0-pr110-publication-closeout.md)
 records the already completed publication of the
 [`selectable connection-profile architecture decision`](docs/plans/2026-09-03-personal-assistant-v0-selectable-connection-profile-architecture-decision.md).
@@ -1237,6 +1253,7 @@ condition is reached.
 
 | Plan                                             | Status   | Owner              | Last updated |
 | ------------------------------------------------ | -------- | ------------------ | ------------ |
+| Fixed local private-lane decision                | Complete | Project owner      | 2026-09-03   |
 | Selectable connection-profile architecture       | Complete | Project owner      | 2026-09-03   |
 | P3 App Sandbox containment re-review             | Complete | Project owner      | 2026-09-02   |
 | P3 containment bootstrap trust decision          | Complete | Project owner      | 2026-09-02   |

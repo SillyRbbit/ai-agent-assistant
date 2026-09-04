@@ -2,6 +2,43 @@
 
 Last updated: 2026-09-03
 
+## D-120 fixed local private-lane direction
+
+Status: **Documentation direction accepted; local capability and every
+operational successor remain Blocked.** The exact sixteen-file documentation
+increment completed with **PASS WITH ADVISORIES** and a valid marker. From
+synchronized baseline
+`51be9ba91ba69c9c96dfb3bbfd4509d3177e902a`, the owner selected
+`fixed_local_v2_planning_selected`. D-120 permits only a separately approved
+documentation plan to assess one exact fixed/nonselectable local/no-auth
+`real-content-v2` engine, model/artifact, dependency, acquisition, and
+containment boundary before V0-13. It does not create or begin that plan.
+
+Current source still has no local inference engine or dependency, model
+artifact, local provider adapter, Personal Assistant Tauri route, or production
+response ingress. The transport-free host and deterministic fixtures remain
+non-transferable evidence for engine behavior. No product/test source,
+dependency, product/model-artifact filesystem boundary, model, credential,
+provider, network, signing, Tauri/UI, product, or operational/external-system
+state changed.
+
+Synthetic-v1 remains the fixed blocked OpenAI-through-Cloudflare proof.
+Historical V0-14 remains unchanged and Blocked with its recorded V0-13
+dependency. D-118 remains `no_eligible_client`; D-119 remains a distinct
+post-v0 direction with exactly ten `candidate_blocked` entries and no handle;
+V0-3/V0-7 remain Blocked. D-107 remains eight of eleven, D-108 remains
+additively nine of ten, all ten blockers remain unproved, and D-113 through
+D-117 remain Proposed/non-controlling.
+
+Any future local candidate remains unavailable pending separate proof of
+Cortexa owner authentication; exact artifact provenance and acquisition;
+complete no-external-processing and no-DNS/socket/network-egress behavior;
+native-code secret isolation; bounded streaming/resources; terminal
+cancellation; cleanup ownership through positive quiescence; late-result
+rejection; local-data disclosure/deletion; and target-Mac behavior. Local/no-
+auth is not privacy, owner identity, profile admission, or operational
+readiness.
+
 ## Published selectable connection-profile architecture decision
 
 Status: **Documentation direction accepted; product capability remains

@@ -16,6 +16,42 @@ Last updated: 2026-09-03
 - Never report a check as passed unless its command completed successfully in
   the current increment.
 
+## D-120 documentation-only fixed local private-lane decision
+
+Completed validation for this documentation-only decision covers only
+documentation consistency: formatting and link checks, repository policy,
+secret scanning, complete verification, diff hygiene, exact sixteen-path
+scope, protected-path preservation, append-only D-120 lineage, unchanged D-119
+catalog identifiers and D-107 blocker identifiers, historical V0/D-118/D-119
+artifact preservation, independent architecture/security/documentation/code-
+health/debt/readiness review, session inventory, report validation, and the
+post-increment marker.
+
+The decision assertion must find exactly one appended D-120 selecting
+`fixed_local_v2_planning_selected`; preserve the complete pre-D-120 decision
+bytes; and confirm synthetic-v1, fixed/nonselectable `real-content-v2`,
+historical V0-14, D-118 `no_eligible_client`, D-119's exactly ten
+`candidate_blocked` entries and no handle, V0-3/V0-7, D-107 8/11, additive
+D-108 9/10, all ten blockers, and D-113 through D-117 Proposed/non-controlling
+status.
+
+Future engine, model/artifact, dependency, filesystem, no-egress, secret-
+reachability, resource, streaming, cancellation, bounded-join, cleanup,
+quarantine, late-result, local-data, Tauri/UI, accessibility, and target-Mac
+tests are `Not run` and cannot be inferred from this decision. Required later
+tests include exact artifact/digest/provenance/license and rejection cases; no
+DNS/socket/network activity across the complete lifecycle; no Keychain,
+credential, signing, or unrelated secret reachability; explicit-action and
+single-flight bounds; incremental/multibyte stream bounds; cancellation at
+every practical engine phase; positive quiescence before retry/replacement/
+restart; indefinite ownership until quiescence or process termination; and
+pre-mutation rejection of malformed, foreign, stale, duplicate, out-of-order,
+oversized, and post-terminal results.
+
+Existing runtime, Personal Assistant fixture, sealed demo, gateway, approval,
+and orchestration tests remain non-transferable. Target-Mac observation alone
+cannot prove absence of hidden source/dependency egress or secret reachability.
+
 ## D-119 documentation-only connection-profile decision
 
 Current validation proves only documentation consistency: formatting and link

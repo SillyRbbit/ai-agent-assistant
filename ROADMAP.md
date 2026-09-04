@@ -18,6 +18,25 @@ Last updated: 2026-09-03
 contains the ordered execution queue. Completed plans and reviews are the
 verification record; this roadmap does not create new completion evidence.
 
+## Fixed local private-lane direction
+
+The documentation-only D-120 decision is **Completed** with **PASS WITH
+ADVISORIES** and a valid completion marker. The owner accepted
+`fixed_local_v2_planning_selected`, allowing one new separately approved
+documentation plan to assess a fixed, nonselectable local/no-auth
+`real-content-v2` engine, model/artifact, dependency, acquisition, and
+containment boundary before V0-13. The future evidence plan remains
+**Future/Blocked** because it does not yet exist and has no implementation or
+operational authority.
+
+Synthetic-v1 remains fixed and **Blocked**. Historical V0-14 remains unchanged
+and **Blocked** with its recorded V0-13 dependency. D-118 remains
+`no_eligible_client`; all ten D-119 candidates remain `candidate_blocked` with
+no handle; V0-3/V0-7, all ten D-107 blockers, and every operational successor
+remain **Blocked**. D-120 changes only documentation evidence order and does
+not select a model, admit a profile, or create a source, filesystem, transport,
+Tauri/UI, credential, provider, or product milestone.
+
 ## Selectable connection-profile architecture direction
 
 The documentation-only D-119 decision is **Completed** with **PASS WITH
