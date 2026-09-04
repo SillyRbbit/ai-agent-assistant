@@ -4,7 +4,7 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
-The current completed owner-approved documentation-only plan is
+The published completed owner-approved documentation-only plan is
 [`Personal Assistant V0 fixed local private-lane decision`](docs/plans/2026-09-03-personal-assistant-v0-fixed-local-private-lane-decision.md).
 It selects D-120's `fixed_local_v2_planning_selected` disposition from baseline
 `51be9ba91ba69c9c96dfb3bbfd4509d3177e902a`. The decision permits only one
@@ -19,6 +19,24 @@ Synthetic-v1, historical V0-14, D-118 `no_eligible_client`, D-119's exactly ten
 operational Blocked boundary remain unchanged. No engine, model, artifact,
 dependency, filesystem, transport, Tauri/UI, credential, provider, signing,
 product, or external-system authority exists.
+
+Reviewed head `5538922dc99e56b3edc1811be8690c28732086ce` was
+squash-merged through PR #112 as
+`a86df64984862beb427e6c3cabfdd8b4c9202509`; both commits share exact tree
+`17961831e50ee8eb8d4a5651a22a36726439ee50` and have an empty repository diff.
+Frozen owner-supplied publication evidence records successful PR workflow run
+`33823804426` and successful post-merge workflow run `33823928634`; this
+closeout does not contact GitHub or independently re-query them.
+
+The documentation-only
+[`Personal Assistant V0 PR #112 publication closeout`](docs/plans/2026-09-03-personal-assistant-v0-pr112-publication-closeout.md)
+records the completed publication in five live records without changing D-120,
+history, readiness, or any security boundary. The live records do not encode
+the closeout's own transient branch, owner-review, or publication state as a
+roadmap queue item. Actual Git state determines whether it still needs
+separately authorized review/publication or is already closed; a later session
+must not create another publication reconciliation merely to restate a merge.
+No operational successor becomes active automatically.
 
 The preceding completed documentation-only
 [`Personal Assistant V0 PR #110 publication closeout`](docs/plans/2026-09-03-personal-assistant-v0-pr110-publication-closeout.md)
