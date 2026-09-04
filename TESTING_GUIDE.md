@@ -16,6 +16,37 @@ Last updated: 2026-09-03
 - Never report a check as passed unless its command completed successfully in
   the current increment.
 
+## D-121 documentation-only fixed local candidate evidence decision
+
+Validation for D-121 proves documentation consistency only. Passing requires
+the exact sixteen-path scope; append-only exact D-121 wording; the unchanged
+frozen candidate ID; a matching ten-component tuple; exactly fifteen matrix
+rows with fourteen `contract_unproven`, one target-Mac `not_run`, and zero
+`boundary_failed`; and exactly one accepted
+`candidate_not_eligible_or_unproven` disposition.
+
+Preservation checks must keep synthetic-v1, historical V0-14, D-118/D-119/
+D-120 and their artifacts, all ten D-119 `candidate_blocked` entries and no
+handle, D-107 8/11, additive D-108 9/10, all ten D-107 blocker identifiers,
+D-113 through D-117 Proposed/non-controlling status, protected source,
+dependencies, configuration, workflows, hooks, and every `Blocked` boundary
+unchanged.
+
+Run formatting/link validation, repository policy, secret scanning, complete
+`npm run verify`, diff hygiene, exact-scope and protected-path checks,
+append-only decision and preservation assertions, independent architecture,
+security, documentation, code-health, debt, quality, and readiness review,
+session inventory, report validation, and the post-increment finalizer.
+
+Source/archive, package, binary, model-byte, artifact-redirect, dependency-
+resolution, candidate build/load/inference, target-Mac,
+product/model-artifact filesystem, runtime no-egress, resource,
+cancellation/join, cleanup/quiescence, late-result, owner-authentication,
+personal-data, credential, provider, signing, product, and operational
+external-system checks are `Not run`. The allowlisted static source/metadata
+assessment ran but did not prove those contracts. Existing fixtures and a
+passing documentation gate cannot satisfy them.
+
 ## D-120 documentation-only fixed local private-lane decision
 
 Completed validation for this documentation-only decision covers only

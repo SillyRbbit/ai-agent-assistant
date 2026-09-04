@@ -7,6 +7,38 @@ Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
 identifies which security boundaries are current, mocked, planned, or
 prohibited.
 
+## D-121 fixed local candidate static evidence decision
+
+D-121 selects `candidate_not_eligible_or_unproven` for exactly
+`fixed_local_v2_llamacpp_0_3_0_qwen2_5_1_5b_q4km_cpu_v1`. The accepted source
+identity and custody boundary remained intact, so no matrix row is
+`boundary_failed`. Fourteen of fifteen conjunctive rows remain
+`contract_unproven`, and the target-Mac row is `not_run`.
+
+The pinned ggml build always includes `ggml-backend-dl.cpp` and
+`ggml-backend-reg.cpp`. `GGML_BACKEND_DL=OFF` does not remove public
+`ggml_backend_load*` entry points, explicit-path and directory/environment
+search, or the POSIX dynamic-loader implementation. This violates the accepted
+no-dynamic-loading topology and cannot be repaired or waived within this
+increment. Same-process filesystem, environment, memory, and dynamic-code
+reachability therefore also remains outside an accepted containment proof.
+
+The candidate is neither selected nor admitted. No downstream patch,
+substitution, fallback, artifact acquisition, filesystem boundary, target-Mac
+plan, Rust/TypeScript source, Tauri/UI, owner-authentication, personal-prompt,
+or operational successor is authorized. Model conversion provenance and exact
+manifest, same-byte verification/loading, acquisition/removal ownership,
+complete no-egress and native-TCB containment, bounded resources, hard
+deadlines and joins, positive cleanup quiescence, pre-mutation late-result
+rejection, owner authentication, personal-data lifecycle, and target
+compatibility remain unproved or unrun.
+
+D-094 synthetic-v1, historical V0-14, D-118 `no_eligible_client`, D-119's
+exactly ten `candidate_blocked` entries and no handle, D-120, V0-3/V0-7, all
+ten D-107 blockers, D-113 through D-117 Proposed/non-controlling status, empty
+tools, explicit foreground action, volatility, no fallback, no-egress, no
+device effect, and every operational `Blocked` boundary remain controlling.
+
 ## D-120 fixed local private-lane direction
 
 D-120 authorizes documentation evidence planning only. A separately approved
@@ -15,6 +47,8 @@ topology before V0-13. No engine, model, artifact, dependency, filesystem,
 transport, Tauri/UI, credential, provider, source, or operational authority is
 created. Fixed local-v2 is not admission of D-119's local candidate; all ten
 catalog entries remain `candidate_blocked`, and no handle or selector exists.
+The first separately approved assessment later completed with D-121's negative
+result; D-120 is not reusable authority to patch or replace that candidate.
 
 Local/no-auth means only no model-provider authentication or external inference
 connection. It does not satisfy, defer, replace, or waive D-062/D-094 Cortexa

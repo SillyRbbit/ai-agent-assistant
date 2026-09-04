@@ -173,6 +173,18 @@ No use case permits unattended consequential external action in the MVP.
   until exact artifact provenance, native-code containment, personal-data
   handling, and complete no-external-processing and no-DNS/socket/network-
   egress evidence pass under separate approvals.
+  D-121 records `candidate_not_eligible_or_unproven` for exactly
+  `fixed_local_v2_llamacpp_0_3_0_qwen2_5_1_5b_q4km_cpu_v1`. That candidate
+  shall remain unavailable and shall not be patched, substituted, installed,
+  acquired, or treated as implementation evidence. A future separately
+  approved candidate or architecture plan must independently satisfy every
+  FR-020C boundary, including no dynamic loading, complete no-egress and
+  native-TCB containment, exact artifact identity and provenance, bounded
+  resources, terminal cancellation with bounded join, cleanup through positive
+  quiescence, pre-mutation late-result rejection, Cortexa owner authentication,
+  personal-data lifecycle controls, and target-Mac evidence. This negative
+  disposition creates no selector, D-119 admission, source authority, or
+  operational capability.
 
 Phase 1 gateway activation shall use D-064's four independent stages. An
 approved threat model and closed configuration do not authorize resource
@@ -568,6 +580,11 @@ local-data disclosure and deletion, artifact provenance, no egress, bounded
 resources and streaming, cancellation, cleanup/quarantine, late-result
 rejection, target-Mac evidence, empty tools, and no fallback all remain
 conjunctive gates.
+
+D-121 records `candidate_not_eligible_or_unproven` for the first exact frozen
+local-v2 candidate. It selects no engine or model for product use and does not
+authorize a replacement, artifact acquisition, target-Mac plan, source work, or
+personal prompt. Every conjunctive gate above remains unsatisfied and Blocked.
 
 ## MVP target scope
 

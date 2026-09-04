@@ -18,6 +18,27 @@ Last updated: 2026-09-03
 contains the ordered execution queue. Completed plans and reviews are the
 verification record; this roadmap does not create new completion evidence.
 
+## Fixed local engine and artifact evidence result
+
+The documentation-only D-121 assessment is **Completed** with the accepted
+`candidate_not_eligible_or_unproven` disposition for exactly
+`fixed_local_v2_llamacpp_0_3_0_qwen2_5_1_5b_q4km_cpu_v1`. Its matching tuple
+contains one `documented`, eight `contract_unproven`, and one `not_run` result.
+Fourteen of fifteen mandatory matrix rows remain `contract_unproven`; the
+target-Mac matrix row is `not_run`, and no row is `boundary_failed`. The pinned
+engine's compiled public dynamic-loader surface conflicts with the frozen no-
+dynamic-loading topology.
+
+The candidate and every operational local-v2 milestone remain **Blocked**. No
+replacement candidate, fallback, artifact acquisition, target-Mac plan, source
+increment, or product milestone is selected. D-120's planning direction,
+synthetic-v1, historical V0-14, D-118, all ten D-119 candidates, V0-3/V0-7,
+all ten D-107 blockers, and every existing security boundary remain unchanged.
+
+The exact sixteen-file documentation result is **Completed** with **PASS WITH
+ADVISORIES** and a valid completion marker. Owner review is the only current
+action; no operational roadmap item became Ready.
+
 ## Fixed local private-lane direction
 
 The documentation-only D-120 decision is **Completed** with **PASS WITH
@@ -25,9 +46,9 @@ ADVISORIES** and a valid completion marker. The owner accepted
 `fixed_local_v2_planning_selected`, allowing one new separately approved
 documentation plan to assess a fixed, nonselectable local/no-auth
 `real-content-v2` engine, model/artifact, dependency, acquisition, and
-containment boundary before V0-13. The future evidence plan remains
-**Future/Blocked** because it does not yet exist and has no implementation or
-operational authority.
+containment boundary before V0-13. That separately approved documentation plan
+later completed as the D-121 negative assessment above; it created no
+implementation or operational authority.
 
 Synthetic-v1 remains fixed and **Blocked**. Historical V0-14 remains unchanged
 and **Blocked** with its recorded V0-13 dependency. D-118 remains
