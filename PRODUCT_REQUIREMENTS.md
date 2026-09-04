@@ -158,6 +158,21 @@ No use case permits unattended consequential external action in the MVP.
   auth downgrade, provider fallback, or local/cloud fallback. Direct OpenAI
   and Azure OpenAI shall remain separate. This planned requirement does not
   alter the fixed synthetic-v1 or reserved `real-content-v2` contracts.
+- **FR-020C (planned fixed private-v2 evidence direction)**: D-120 permits one
+  separately approved documentation plan to assess whether the fixed,
+  nonselectable `real-content-v2` can use one application-owned local/no-auth
+  engine, model/artifact, dependency, acquisition, and containment boundary
+  before V0-13. This direction shall not create a selector, admit a D-119
+  catalog entry, or alter synthetic-v1 or historical V0-14. Any future local
+  lane shall remain one explicit foreground request with Rust-owned identity
+  and configuration, empty tools, bounded streaming, terminal cancellation,
+  cleanup ownership through positively proved quiescence, pre-mutation late-
+  result rejection, no retry/fallback, and no device effect. Local/no-auth
+  means no model-provider authentication; it shall not waive D-062/D-094
+  Cortexa owner authentication. Local processing shall remain unavailable
+  until exact artifact provenance, native-code containment, personal-data
+  handling, and complete no-external-processing and no-DNS/socket/network-
+  egress evidence pass under separate approvals.
 
 Phase 1 gateway activation shall use D-064's four independent stages. An
 approved threat model and closed configuration do not authorize resource
@@ -544,6 +559,15 @@ direction. It does not add selection to this v0: synthetic-v1 and
 `real-content-v2` remain fixed and nonselectable, and all ten local/cloud
 catalog candidates remain `candidate_blocked` with no handle or product
 surface.
+
+D-120 additively permits only a separately approved documentation evidence plan
+for one fixed local/no-auth `real-content-v2` topology before V0-13. It does not
+select an engine or model, admit D-119's local candidate, change historical
+V0-14, or authorize personal-prompt processing. Cortexa owner authentication,
+local-data disclosure and deletion, artifact provenance, no egress, bounded
+resources and streaming, cancellation, cleanup/quarantine, late-result
+rejection, target-Mac evidence, empty tools, and no fallback all remain
+conjunctive gates.
 
 ## MVP target scope
 

@@ -7,6 +7,44 @@ Use this checklist with `SECURITY.md`. Mark an item not applicable only with a
 short reason grounded in the actual diff. A plan or test fixture does not prove a
 production boundary exists.
 
+## D-120 fixed local private-lane documentation decision
+
+- [x] The accepted disposition is exactly
+      `fixed_local_v2_planning_selected`; it grants documentation evidence-
+      planning order only.
+- [x] Synthetic-v1, historical V0-14, D-118 `no_eligible_client`, D-119's
+      exactly ten `candidate_blocked` entries and no handle, V0-3/V0-7, and all
+      ten D-107 blockers remain unchanged and Blocked.
+- [x] Fixed local-v2 remains one application-owned, nonselectable
+      `real-content-v2` topology and is not D-119 catalog admission.
+- [x] Local/no-auth means only no model-provider authentication; D-062/D-094
+      Cortexa owner authentication remains separately mandatory and Blocked,
+      with no OS-login inference or direct/native custody exception.
+- [x] D-060 gateway custody remains controlling for every cloud/provider
+      credential and credential-bearing OAuth result. D-061 remains controlling
+      for every external provider.
+- [x] A future local candidate must prove no external processing and no DNS,
+      socket, or network egress whatsoever across the complete engine,
+      model/artifact, dependency, acquisition/update, telemetry, crash,
+      cache/support, and runtime lifecycle; target-Mac non-observation alone is
+      insufficient.
+- [x] In-process native code becomes part of the trusted computing base but
+      gains no policy, configuration, identity, or authorization authority; any
+      unexcluded network or secret reachability keeps it Blocked pending
+      separately accepted containment.
+- [x] Artifact provenance, digest, license/rights, exact parser and hardware,
+      no arbitrary path, and no runtime download/update/repair/replacement or
+      fallback remain mandatory future gates.
+- [x] Explicit foreground action, one request, Rust-owned identities and
+      configuration, empty tools, bounded streaming/resources, zero retry or
+      fallback, terminal cancellation, bounded join, cleanup ownership through
+      positive quiescence, and pre-mutation late-result rejection remain
+      mandatory.
+- [ ] An engine, model, artifact, dependency, filesystem boundary, no-egress
+      proof, containment proof, Personal Assistant Tauri/UI contract, or target-
+      Mac local inference result exists; all remain `Blocked` and require
+      separate owner-approved decisions and plans.
+
 ## D-119 selectable connection-profile documentation decision
 
 - [x] The accepted disposition is exactly

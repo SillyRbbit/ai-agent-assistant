@@ -4,6 +4,17 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Completed with `PASS WITH ADVISORIES` and a valid completion marker D-120's documentation-only
+  `fixed_local_v2_planning_selected` direction. One separately approved
+  documentation plan may assess a fixed, nonselectable local/no-auth
+  `real-content-v2` engine, model/artifact, dependency, acquisition, and
+  containment boundary before V0-13. This does not create that plan, admit
+  D-119's local candidate, select or install a model, or add source,
+  filesystem, transport, Tauri/UI, credential, provider, or product authority.
+  Synthetic-v1, historical V0-14, D-118 `no_eligible_client`, all ten D-119
+  `candidate_blocked` entries, V0-3/V0-7, all ten D-107 blockers, and every
+  operational `Blocked` boundary remain unchanged.
+
 - Recorded the completed publication of the accepted D-119 selectable
   connection-profile architecture direction. Reviewed head
   `7929a31574acb4e50c515ed056994107402bbbbe` was squash-merged through PR #110

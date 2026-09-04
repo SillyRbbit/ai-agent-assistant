@@ -2,6 +2,60 @@
 
 Last updated: 2026-09-03
 
+## D-120 fixed local private-lane decision
+
+From clean synchronized baseline
+`51be9ba91ba69c9c96dfb3bbfd4509d3177e902a`, the owner approved the exact
+documentation-only
+[`fixed local private-lane decision`](docs/plans/2026-09-03-personal-assistant-v0-fixed-local-private-lane-decision.md).
+Branch `codex/personal-assistant-v0-fixed-local-private-lane-decision` began
+gate `pa-v0-fixed-local-private-lane-decision` after confirming that the
+approved plan was the only workspace change and that the completed predecessor
+artifacts remained untouched.
+
+Repository evidence remained consistent, so D-120 accepts
+`fixed_local_v2_planning_selected`. A later separately approved documentation
+plan may assess one exact fixed/nonselectable local/no-auth `real-content-v2`
+engine, model/artifact, dependency, acquisition, and containment boundary before
+V0-13. That later plan does not exist and is not active or implementation
+authority.
+
+The exact sixteen-file documentation result completed with **PASS WITH
+ADVISORIES**. Documentation, repository, security, complete verification,
+exact-scope, preservation, independent-review, session, quality,
+report-validation, and post-increment gates passed, and the completion marker
+is valid. The branch remains uncommitted for owner review.
+
+Synthetic-v1 remains the fixed blocked OpenAI-through-Cloudflare proof.
+Historical V0-14 remains Blocked with its recorded V0-13 dependency. D-118
+remains `no_eligible_client`; D-119 remains a distinct post-v0 catalog with
+exactly ten `candidate_blocked` entries and no handle; V0-3/V0-7 and every
+operational successor remain Blocked. D-062/D-094 owner authentication, empty
+tools, explicit foreground action, no fallback, no-egress, artifact provenance,
+bounded streaming, cancellation, cleanup/quarantine, and late-result rejection
+remain mandatory. All ten D-107 blockers remain unproved.
+
+No product/test source, dependency, model selection or installation,
+product/model-artifact filesystem boundary or operation, Tauri/UI, credential,
+provider, signing, product, network, or external-system work is authorized or
+performed. The immediate next action is completion review of this exact
+uncommitted documentation increment; do not begin the local engine/artifact
+evidence plan automatically.
+
+Exact resume prompt: “Read `AGENTS.md`,
+`docs/governance/MASTER_PROMPT.md`, the complete required project-memory and
+security/testing chain, and the D-120 plan, increment, and review. Inspect the
+repository and active completion-gate state first. Review only the exact
+sixteen-file documentation diff for the accepted
+`fixed_local_v2_planning_selected` disposition, append-only D-120, preserved
+synthetic-v1 and historical V0-14, D-118 `no_eligible_client`, D-119's exactly
+ten `candidate_blocked` entries, all ten D-107 blockers, operational Blocked
+readiness, and the no-egress/artifact/cancellation/cleanup/late-result
+boundaries. Preserve existing changes and report Accept or exact revisions. Do
+not edit, commit, push, merge, begin a successor, select or install a model, or
+access credentials, providers, signing systems, product systems, or other
+external systems.”
+
 ## Published selectable connection-profile architecture decision
 
 From clean synchronized baseline

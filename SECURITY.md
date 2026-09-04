@@ -7,6 +7,72 @@ Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
 identifies which security boundaries are current, mocked, planned, or
 prohibited.
 
+## D-120 fixed local private-lane direction
+
+D-120 authorizes documentation evidence planning only. A separately approved
+plan may assess one fixed, nonselectable local/no-auth `real-content-v2`
+topology before V0-13. No engine, model, artifact, dependency, filesystem,
+transport, Tauri/UI, credential, provider, source, or operational authority is
+created. Fixed local-v2 is not admission of D-119's local candidate; all ten
+catalog entries remain `candidate_blocked`, and no handle or selector exists.
+
+Local/no-auth means only no model-provider authentication or external inference
+connection. It does not satisfy, defer, replace, or waive D-062/D-094 Cortexa
+owner authentication, which remains independently mandatory and Blocked. It
+creates no provider credential or direct/native custody exception; D-060 keeps
+every cloud/provider credential and credential-bearing OAuth result gateway-
+owned. D-061 remains controlling for every external provider.
+
+“Local” is not privacy evidence. Provider ZDR can become inapplicable only
+after the exact complete engine, model/artifact, dependency,
+acquisition/update, telemetry, crash, cache/support, and runtime lifecycle
+proves no external processing and no DNS, socket, or network egress whatsoever,
+including prompt, output, derived content, identifying/model/artifact metadata,
+telemetry, licensing, updates, crash/support traffic, embeddings, and fallback.
+Target-Mac non-observation is required but cannot substitute for source,
+feature, and dependency proof. Ambiguity keeps the lane Blocked.
+
+An in-process engine and every native dependency become part of Cortexa's
+trusted computing base but gain no policy, configuration, identity, or
+authorization authority. The exact source and feature graph must exclude
+network access and Keychain, environment-secret, account-state, default-
+credential-chain, gateway-token, provider-credential, certificate, private-key,
+signing-material, and unrelated secret-memory reachability. Failure to exclude
+either network or secret access leaves the candidate Blocked pending a
+separately accepted containment or isolation architecture. A helper process,
+localhost service, WebView request, provider SDK, plugin, dynamic runtime, or
+hidden updater is not an implicit remedy or D-118 bypass.
+
+Model artifacts remain untrusted. Before any filesystem authority, a later plan
+must freeze the exact engine, model, quantization, tokenizer, prompt template,
+format, version, cryptographic digest, provenance, license/use rights, size,
+parser, target hardware, permissions, corruption/mismatch handling, removal,
+and no-arbitrary-path policy. No network acquisition, runtime download, repair,
+update, replacement, or fallback is authorized. Absent a separately accepted
+acquisition boundary, evaluation is limited to one exact pre-provisioned or
+bundled artifact.
+
+Every future lane remains one explicit foreground action and one process-wide
+request with an immutable Rust-owned identity/configuration snapshot, empty
+tools, bounded input/events/output/queues/resources, zero retry/fallback,
+terminal idempotent cancellation, and closed redacted errors. Cancellation must
+close ingress at one serialized point, signal only the original work, and stop
+or boundedly join every engine, native callback, accelerator, buffer, mapping,
+and support owner. Cleanup ambiguity retains private Rust ownership and denies
+retry, replacement, fallback, and restart until quiescence is positively
+proved. If proof never arrives, ownership remains until process termination; no
+deadline, UI terminal state, dropped future, or late-result filter releases it.
+Every malformed, foreign, stale-generation, duplicate, out-of-order,
+oversized, or post-terminal result is rejected before any state, UI, IPC, log,
+evidence, persistence, retry, or follow-on dispatch.
+
+Synthetic-v1, historical V0-14, D-118 `no_eligible_client`, V0-3/V0-7, all ten
+D-107 blockers, empty tools, no fallback, volatility, and no-device-effect
+boundaries remain unchanged and Blocked. Local personal-text classification,
+visible local-processing disclosure, bounded volatile handling, content-free
+logs, cache/temp/crash policy, deletion/removal, incident response, and target-
+Mac evidence remain mandatory under separate approvals.
+
 ## D-119 closed post-v0 connection-profile direction
 
 D-119 accepts a documentation direction, not an operational profile. Exactly

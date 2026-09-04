@@ -3,6 +3,17 @@
 Status: Authoritative current-state architecture
 Last updated: 2026-09-03
 
+> Fixed local private-lane direction (D-120, 2026-09-03): the owner accepted
+> `fixed_local_v2_planning_selected`. D-094's fixed, nonselectable
+> `real-content-v2` may now have one additive local/no-auth engine/artifact
+> evidence plan proposed before V0-13. The remote synthetic-v1 lane remains
+> fixed and Blocked; historical V0-14 remains unchanged and Blocked with its
+> recorded V0-13 dependency. No local engine, model, artifact, dependency,
+> filesystem, containment, Tauri/UI, or runtime edge exists. Fixed local-v2 is
+> not D-119 catalog admission: all ten entries remain `candidate_blocked`, and
+> the blocked catalog exposes no handle. Operational readiness remains
+> `Blocked`.
+
 > Selectable connection-profile direction (D-119, 2026-09-03): the owner
 > accepted `closed_catalog_direction_selected` for a distinct post-v0
 > `personal-assistant-selectable-connection-profile-v3` architecture. Its
@@ -1436,6 +1447,7 @@ reviewed repository ICNS byte-for-byte.
 | Typed Workflow Automation proposals           | Current, unwired and sealed     | D-090 A-D manual fixture dispatch; E/tools/approvals inert       |
 | Native multi-agent acceptance suite           | Current, deterministic/unwired  | 303 library units + 207 selected contracts; no product effects   |
 | Personal Assistant v0 volatile session path   | Current, transport-free/unwired | V0-1 sealed request/Native branch plus V0-2 bounded session host |
+| Fixed local real-content-v2 evidence lane     | Planned and Blocked             | D-120 planning order only; no engine, artifact, or source edge   |
 | Post-v0 selectable connection-profile catalog | Planned and Blocked             | D-119 direction only; ten blocked candidates and no handle       |
 | Live gateway and model-provider transport     | Planned                         | Blocked by auth, provider evidence, HTTPS, operations, and plan  |
 | Restricted tool execution                     | Planned                         | No dispatcher or executor exists                                 |
@@ -1481,6 +1493,17 @@ Milestone 2 may accept bounded owner text only through a separate real-v2
 contract after an explicit identity/provider/hosting decision and D-061
 evidence. D-094 does not authorize reusing the synthetic service token or
 widening the diagrammed contract for real content.
+
+D-120 additively permits one separately approved documentation plan to assess a
+fixed local/no-auth engine, model/artifact, dependency, acquisition, and
+containment boundary for milestone 2 before V0-13. That planning-order change
+does not modify the diagrammed remote proof, reclassify historical V0-14, admit
+D-119's local candidate, or create a local edge. Local/no-auth means only no
+model-provider authentication: D-062/D-094 Cortexa owner authentication remains
+mandatory and Blocked. Any future local path must prove complete no-external-
+processing and no-DNS/socket/network-egress behavior, artifact provenance,
+native-code secret isolation, hard cancellation, cleanup through positive
+quiescence, and pre-mutation late-result rejection under separate decisions.
 
 No node in this v0 flow can select or execute a tool, access a file or memory,
 persist content, delegate, schedule, retry/fallback, run in the background, or

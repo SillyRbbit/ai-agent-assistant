@@ -2,6 +2,31 @@
 
 Last updated: 2026-09-03
 
+## D-120 fixed local private-lane decision
+
+The owner-approved documentation-only increment selects
+`fixed_local_v2_planning_selected`. D-120 permits one new, separately approved
+documentation plan to assess a fixed, nonselectable local/no-auth
+`real-content-v2` engine, model/artifact, dependency, acquisition, and
+containment boundary before V0-13. It does not create that plan or make any
+source or operational successor Ready.
+
+The remote synthetic-v1 lane remains fixed and Blocked. Historical V0-14
+remains unchanged and Blocked with its recorded V0-13 dependency. D-118 remains
+`no_eligible_client`; D-119 remains a distinct post-v0 catalog with exactly ten
+`candidate_blocked` entries and no handle; V0-3/V0-7, all ten D-107 blockers,
+and every operational successor remain Blocked.
+
+The exact sixteen-file D-120 documentation increment is complete with **PASS
+WITH ADVISORIES** and a valid completion marker; independent review accepted
+the corrected result. The immediate action is owner review of this uncommitted
+branch. Only after separate acceptance and publication may the smallest
+permitted follow-up draft the bounded local engine/artifact evidence-plan
+ExecPlan. Do not begin that plan, select or install a model, change source or
+dependencies, request filesystem or network authority, or treat local/no-auth
+as Cortexa owner authentication, privacy proof, profile admission, or
+operational readiness.
+
 ## Published selectable connection-profile architecture decision
 
 The completed owner-approved documentation increment records D-119's accepted

@@ -2,7 +2,7 @@
 
 Status: Owner-approved repository-governance and planned-architecture direction
 Last updated: 2026-09-03
-Decision authority: D-078, D-094, and D-119
+Decision authority: D-078, D-094, D-119, and D-120
 
 This document defines present project scope and future-facing architecture
 constraints. It is not implementation, readiness, release, or security evidence.
@@ -68,6 +68,19 @@ all `candidate_blocked`, and exposes no selection handle. It does not add a
 selector to synthetic-v1 or `real-content-v2`, remove the existing synthetic
 OpenAI-through-Cloudflare direction, choose a provider or local model, or grant
 credential, transport, source, or product authority.
+
+D-120 now additively permits one separately approved documentation plan to
+assess an exact fixed, nonselectable local/no-auth `real-content-v2` engine,
+model/artifact, dependency, acquisition, and containment boundary before V0-13.
+It does not select a local model, admit D-119's local candidate, alter the
+remote synthetic-v1 proof, or reclassify historical V0-14 and its recorded
+V0-13 dependency. The evidence plan does not yet exist and no source,
+filesystem, dependency, Tauri/UI, credential, provider, transport, or
+operational authority is granted. Local/no-auth means only no model-provider
+authentication; Cortexa owner authentication, complete no-egress and artifact
+proof, local-data controls, cancellation, cleanup/quarantine, late-result
+rejection, target-Mac evidence, empty tools, and no fallback remain mandatory
+and Blocked.
 
 ## Native architecture preservation
 
@@ -350,5 +363,8 @@ reached.
   unchanged.
 - D-119 reserves a closed post-v0 selectable connection-profile direction
   while keeping every catalog candidate blocked and both V0 contracts fixed.
+- D-120 reserves only an additive fixed local-v2 evidence-planning sequence
+  before V0-13; it admits no profile, model, artifact, dependency, source, or
+  operational capability.
 - `ARCHITECTURE.md`, `PROJECT_STATUS.md`, and `NEXT_STEPS.md` distinguish current
   capability, verified state, and authorized queue order.

@@ -6427,3 +6427,150 @@ or readiness prerequisite. This accepted documentation direction grants no
 source, dependency, transport, credential, authentication, provider, local-
 model, persistence, signing, provisioning, product, or external-system
 authority.
+
+## D-120 - Reserve a fixed local private-lane evidence sequence for real-content-v2
+
+Date: 2026-09-03
+Status: Accepted documentation-only architecture and sequencing decision; no
+profile admitted and no implementation authority
+
+## Context
+
+D-094 fixes synthetic-v1 as the OpenAI-through-Cloudflare synthetic proof and
+reserves a distinct, fixed, nonselectable `real-content-v2` for the first usable
+private assistant. D-118 finds no eligible client among its five frozen HTTPS
+variants under the current hard-cancellation contract. D-119 separately
+reserves a post-v0 selectable catalog whose exactly ten entries remain
+`candidate_blocked` and whose blocked catalog exposes no handle.
+
+Current source has no local inference engine, model artifact, local provider
+adapter, Personal Assistant Tauri route, or production response ingress. The
+existing transport-free host and deterministic fixture ingress prove only their
+own bounded local lifecycle. They do not prove an engine, artifact, no-egress,
+cancellation, cleanup, late-result, or target-Mac boundary.
+
+The owner approved the exact
+[`fixed local private-lane decision`](docs/plans/2026-09-03-personal-assistant-v0-fixed-local-private-lane-decision.md)
+from baseline `51be9ba91ba69c9c96dfb3bbfd4509d3177e902a`. Repository
+evidence remained consistent, so the selected closed disposition is
+`fixed_local_v2_planning_selected`.
+
+## Decision
+
+Reserve an additive planning lane in which D-094's fixed, nonselectable
+`real-content-v2` may later use one application-owned local/no-auth topology,
+and allow its separately approved engine/artifact evidence planning to precede
+completion of the blocked remote synthetic-v1 lane. Synthetic-v1, D-066 through
+D-068, V0-3, V0-7, V0-13, and D-118 remain unchanged and Blocked for their
+remote path. The existing V0-14 plan remains historical and Blocked with its
+recorded V0-13 dependency; D-120 only permits a new local-v2 evidence plan to
+be proposed earlier. The local lane neither completes nor replaces the remote
+proof. D-119 remains a distinct post-v0 selectable-v3 direction with exactly
+ten `candidate_blocked` entries and no handle; fixed local-v2 is not catalog
+admission. D-060 credential custody and D-061 external-processing evidence
+remain controlling for every cloud provider. D-062 and D-094's separate
+non-demo Cortexa owner-authentication gate remains mandatory and Blocked. Provider
+ZDR becomes inapplicable to local-v2 only after the complete later engine,
+model/artifact, dependency, acquisition/update, telemetry, crash,
+cache/support, and runtime lifecycle proves no external provider processing and
+no network egress of prompt, output, derived content, or identifying metadata;
+local personal-data handling, disclosure, logs, cache/temp/crash policy,
+deletion, lifecycle, cancellation, cleanup/quarantine, late-result rejection,
+target-Mac, empty-tool, no-fallback, and no-device-effect requirements remain.
+This decision selects no engine, model, artifact, dependency, filesystem
+boundary, runtime, transport, Tauri/UI contract, credential, provider, or source
+implementation and grants documentation planning authority only.
+
+## Consequences
+
+- A separately approved documentation plan may now evaluate one exact fixed
+  local-v2 engine, model/artifact, dependency, acquisition, and containment
+  boundary without waiting for V0-13. This decision does not create that plan,
+  make it active, or make any source or operational increment Ready.
+- Local/no-auth means no model-provider authentication or external inference
+  connection. It does not satisfy, defer, replace, or waive Cortexa owner
+  authentication. D-062 and D-094's non-demo owner-authentication gate remains
+  independently mandatory and Blocked; no OS-login inference or direct/native
+  credential-custody exception exists.
+- D-060 keeps every cloud/provider credential and credential-bearing OAuth
+  result gateway-owned. Local-v2 creates no provider credential or authority,
+  and no cloud profile inherits authority from it.
+- The no-egress condition is conjunctive and fail closed: the exact complete
+  engine, model/artifact, dependency, acquisition/update, telemetry, crash,
+  cache/support, and runtime lifecycle must prove no external processing and no
+  DNS, socket, or network egress whatsoever, including prompts, outputs,
+  derived content, identifying/model/artifact metadata, telemetry, license or
+  update traffic, crash/support traffic, embeddings, and fallback. Target-Mac
+  non-observation alone is not universal source-level proof.
+- An in-process engine and every native dependency become part of the trusted
+  computing base but gain no policy, configuration, identity, or authorization
+  authority. If the exact source/feature graph cannot exclude network access
+  or Keychain, environment-secret, account-state, default-credential-chain,
+  gateway-token, provider-credential, certificate, private-key, signing-
+  material, and unrelated secret-memory reachability, the candidate remains
+  Blocked pending a separately accepted containment or isolation architecture.
+- Model artifacts remain untrusted. A future plan must freeze exact engine,
+  model, quantization, tokenizer, prompt template, format, version, digest,
+  provenance, license/rights, size, parser, and target hardware. No arbitrary
+  path, network acquisition, runtime download, repair, update, replacement, or
+  fallback is authorized; absent a separately accepted acquisition boundary,
+  evaluation is limited to one exact pre-provisioned or bundled artifact.
+- Cleanup ambiguity retains private Rust ownership and denies retry,
+  replacement, fallback, and restart until quiescence is positively proved. If
+  proof never arrives, ownership remains until process termination. No
+  deadline, UI terminal state, dropped future, or late-result filter releases
+  it.
+- Every future lane remains one explicit foreground action and one process-wide
+  request with immutable Rust-owned identities/configuration, empty tools,
+  bounded streaming, zero automatic retry/fallback, terminal idempotent
+  cancellation, bounded join, closed redacted errors, and rejection of every
+  malformed, foreign, stale, duplicate, or post-terminal result before any
+  mutation or dispatch.
+- Provider ZDR may eventually be recorded inapplicable only for a proven fully
+  local lifecycle. Local personal-text classification, visible local-processing
+  disclosure, volatile handling, content-free logs, cache/temp/crash policy,
+  deletion/removal, incident response, and target-Mac evidence remain required.
+
+## Preservation
+
+D-094 synthetic-v1 and the remote V0-3/V0-7/V0-13 sequence remain unchanged
+and Blocked. Historical V0-14 remains unchanged and Blocked with its recorded
+V0-13 dependency; a future local-v2 evidence plan is additive, not a
+reclassification of V0-14. D-118 remains `no_eligible_client` for its frozen
+variants and current contract. D-119 remains a distinct post-v0 direction with
+exactly ten blocked candidates and no selector or handle.
+
+Historical D-107 remains eight documented of eleven and D-108 remains
+additively nine of ten. All ten identity, signer, scope, non-export, algorithm,
+interaction, hard-cancellation, late-result, cleanup, and platform-effect
+blockers remain unproved; D-113 through D-117 remain Proposed and non-
+controlling. Their signing evidence is not transferable to local inference.
+The sole/default Native runtime, empty tools, explicit foreground action,
+volatility, no fallback, no device effect, and every current security boundary
+remain controlling.
+
+## Alternatives considered
+
+- Retain the remote-first sequence: rejected because D-118 blocks the current
+  HTTPS direction while repository evidence permits a narrower documentation
+  assessment of a truly offline fixed local-v2 topology without weakening the
+  remote lane.
+- Admit D-119's local candidate or create a selector: rejected because D-119 is
+  post-v0, every entry remains blocked, and fixed v2 must remain nonselectable.
+- Treat “local” as proof of privacy, cancellation, artifact safety, or no
+  egress: rejected because each property requires exact source, dependency,
+  artifact, lifecycle, and target-Mac evidence.
+- Replace or remove synthetic-v1: rejected because this decision is additive
+  and does not supersede the synthetic proof or its decisions.
+
+## Supersedes or is superseded by
+
+D-120 additively amends D-094 only for the ordering of one separately approved
+local-v2 documentation evidence plan. It additively clarifies D-060 and D-061
+only for a future path that proves the complete zero-external-processing and
+zero-DNS/socket/network-egress condition above. It does not supersede D-060 or D-061
+for any external/cloud path; D-062 or D-094's Cortexa owner-authentication gate;
+D-094 synthetic-v1; D-066 through D-068; D-118; D-119; or the existing V0-14
+plan. Any operational capability, engine/model selection, artifact boundary,
+dependency, filesystem access, Tauri/UI contract, credential, provider, source
+implementation, or successor start requires a separate owner-approved plan.
