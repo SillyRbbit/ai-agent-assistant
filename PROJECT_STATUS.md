@@ -1,8 +1,8 @@
 # Project status
 
-Last updated: 2026-09-03
+Last updated: 2026-09-04
 
-## D-121 fixed local candidate static evidence result
+## Published D-121 fixed local candidate static evidence result
 
 Status: **Documentation assessment complete; candidate unavailable and every
 operational successor Blocked.** The owner accepted
@@ -36,6 +36,20 @@ The exact sixteen-file documentation increment completed with **PASS WITH
 ADVISORIES** and a valid completion marker after documentation, repository,
 security, complete verification, exact-scope, preservation, independent-review,
 session, quality, report-validation, and post-increment gates passed.
+
+The accepted result was reviewed at
+`5bae216e73938f6ee995c665ee110a9553e15843` and squash-merged through PR #114
+as `da765c39ad85de32445da03c1d3c250be12c110d`. Both commits share exact tree
+`042380ed7daa2844dcba21340028500dffca3bfb`; their repository diff is empty.
+Frozen owner-supplied publication evidence records successful PR workflow run
+`33914562230` and successful post-merge workflow run `33914722128`; this
+closeout did not contact GitHub or independently re-query either run.
+
+The documentation-only publication closeout makes this six-record live state
+stable and does not queue another reconciliation for its own eventual merge.
+Actual Git state remains authoritative. Publication and CI add no engine,
+model, artifact, profile, dependency, filesystem, transport, credential,
+provider, signing, execution, product, or external-system authority.
 
 ## Published D-120 fixed local private-lane direction
 

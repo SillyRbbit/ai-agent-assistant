@@ -1,8 +1,8 @@
 # Next steps
 
-Last updated: 2026-09-03
+Last updated: 2026-09-04
 
-## Completed D-121 fixed local candidate evidence decision
+## Published D-121 fixed local candidate evidence decision
 
 The owner accepted `candidate_not_eligible_or_unproven` for exactly
 `fixed_local_v2_llamacpp_0_3_0_qwen2_5_1_5b_q4km_cpu_v1`. The matching tuple
@@ -21,13 +21,29 @@ operational successor is selected or Ready. D-094 synthetic-v1, historical
 V0-14, D-118 `no_eligible_client`, D-119's exactly ten `candidate_blocked`
 entries and no handle, D-120, V0-3/V0-7, all ten D-107 blockers, D-113 through
 D-117 Proposed/non-controlling status, and every `Blocked` boundary remain
-unchanged. The next action is owner review of this completed documentation
-increment; any candidate reconsideration requires a separate approved plan.
+unchanged. No replacement or operational successor is selected or Ready; any
+candidate reconsideration requires a separate approved plan.
 
 The exact sixteen-file result completed with **PASS WITH ADVISORIES** and a
 valid completion marker. All required documentation, repository, security,
 complete verification, exact-scope, preservation, independent-review,
 session, quality, report-validation, and post-increment gates passed.
+
+The accepted result was reviewed at
+`5bae216e73938f6ee995c665ee110a9553e15843` and squash-merged through PR #114
+as `da765c39ad85de32445da03c1d3c250be12c110d`. Both commits share exact tree
+`042380ed7daa2844dcba21340028500dffca3bfb` and have an empty repository diff.
+Frozen owner-supplied publication evidence records successful PR workflow run
+`33914562230` and successful post-merge workflow run `33914722128`; this
+closeout did not contact GitHub or independently re-query either run.
+
+The documentation-only
+[`PR #114 publication closeout`](docs/plans/2026-09-04-personal-assistant-v0-pr114-publication-closeout.md)
+keeps these six live records publication-stable. Actual Git state determines
+whether the closeout itself still requires separately authorized review or
+publication; its transient state is not a roadmap queue item and must not
+trigger another reconciliation merely to restate a later merge. No operational
+successor becomes active automatically.
 
 ## Published D-120 fixed local private-lane decision
 

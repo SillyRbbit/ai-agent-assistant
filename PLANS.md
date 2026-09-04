@@ -4,7 +4,7 @@ Use an execution plan for work that spans multiple modules, changes a trust boun
 
 ## Current plan state
 
-The current owner-approved documentation-only plan is
+The most recently published owner-approved documentation-only decision plan is
 [`Personal Assistant V0 fixed local engine and artifact evidence plan`](docs/plans/2026-09-03-personal-assistant-v0-fixed-local-engine-artifact-evidence-plan.md).
 It records D-121's accepted `candidate_not_eligible_or_unproven` disposition
 for exactly
@@ -18,7 +18,13 @@ fallback, artifact, dependency, filesystem boundary, target-Mac plan, source
 work, or operational successor is selected or Ready.
 
 The exact sixteen-file documentation result is **PASS WITH ADVISORIES** with a
-valid completion marker. The only current action is owner review; no successor
+valid completion marker. It was reviewed at
+`5bae216e73938f6ee995c665ee110a9553e15843` and squash-merged through PR #114
+as `da765c39ad85de32445da03c1d3c250be12c110d`; both commits share exact tree
+`042380ed7daa2844dcba21340028500dffca3bfb` and have an empty repository diff.
+Frozen owner-supplied publication evidence records successful PR workflow run
+`33914562230` and successful post-merge workflow run `33914722128`; this
+closeout does not contact GitHub or independently re-query them. No successor
 is admitted or queued.
 
 D-120, synthetic-v1, historical V0-14, D-118 `no_eligible_client`, D-119's
@@ -26,6 +32,16 @@ exactly ten `candidate_blocked` entries and no handle, V0-3/V0-7, all ten
 D-107 blockers, and every operational Blocked boundary remain unchanged. The
 current result grants no model, provider, credential, signing, network,
 filesystem, Tauri/UI, product, or external-system authority.
+
+The documentation-only
+[`Personal Assistant V0 PR #114 publication closeout`](docs/plans/2026-09-04-personal-assistant-v0-pr114-publication-closeout.md)
+records the completed publication in six live records without changing D-121,
+history, readiness, or any security boundary. The live records do not encode
+the closeout's own transient branch, owner-review, or publication state as a
+roadmap queue item. Actual Git state determines whether it still needs
+separately authorized review/publication or is already closed; a later session
+must not create another publication reconciliation merely to restate a merge.
+No operational successor becomes active automatically.
 
 The preceding published completed owner-approved documentation-only plan is
 [`Personal Assistant V0 fixed local private-lane decision`](docs/plans/2026-09-03-personal-assistant-v0-fixed-local-private-lane-decision.md).

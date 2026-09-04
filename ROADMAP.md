@@ -1,7 +1,7 @@
 # Cortexa roadmap
 
 Status: Authoritative milestone roadmap
-Last updated: 2026-09-03
+Last updated: 2026-09-04
 
 ## Status model
 
@@ -18,7 +18,7 @@ Last updated: 2026-09-03
 contains the ordered execution queue. Completed plans and reviews are the
 verification record; this roadmap does not create new completion evidence.
 
-## Fixed local engine and artifact evidence result
+## Published fixed local engine and artifact evidence result
 
 The documentation-only D-121 assessment is **Completed** with the accepted
 `candidate_not_eligible_or_unproven` disposition for exactly
@@ -36,8 +36,18 @@ synthetic-v1, historical V0-14, D-118, all ten D-119 candidates, V0-3/V0-7,
 all ten D-107 blockers, and every existing security boundary remain unchanged.
 
 The exact sixteen-file documentation result is **Completed** with **PASS WITH
-ADVISORIES** and a valid completion marker. Owner review is the only current
-action; no operational roadmap item became Ready.
+ADVISORIES** and a valid completion marker. It was reviewed at
+`5bae216e73938f6ee995c665ee110a9553e15843` and squash-merged through PR #114
+as `da765c39ad85de32445da03c1d3c250be12c110d`; both commits share exact tree
+`042380ed7daa2844dcba21340028500dffca3bfb`. Frozen owner-supplied publication
+evidence records successful PR workflow `33914562230` and successful post-
+merge workflow `33914722128`; this closeout did not contact GitHub or re-query
+either run. No operational roadmap item became Ready.
+
+The live roadmap does not track this publication closeout's own transient
+review or merge state. Actual Git state remains authoritative, and another
+reconciliation must not be created merely to restate the closeout's eventual
+merge. No successor starts automatically.
 
 ## Fixed local private-lane direction
 
