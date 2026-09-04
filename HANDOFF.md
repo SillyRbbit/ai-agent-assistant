@@ -1,5 +1,58 @@
 # Handoff
 
+## Current deterministic Graph planning — 2026-09-04
+
+The owner selected a documentation-only plan for a private deterministic Graph
+demo with an automated real-browser harness as the first implementation
+prerequisite. See the [ExecPlan](docs/plans/2026-09-04-deterministic-graph-demo-planning.md)
+and [planning review](docs/reviews/2026-09-04-deterministic-graph-demo-planning-post-increment-review.md).
+Documentation quality review: **PASS WITH ADVISORIES**; implementation readiness
+is **Blocked**. Documentation, repository, security, whitespace, session,
+preservation and independent reviews passed. Final completion is authoritative
+only when the planning gate reports `complete` with `valid: true`.
+
+Baseline: clean `main` at `172d1e961ce8d8ef82dc6d204d1120cef0b758f3`, locally
+aligned with `origin/main`. The PR114 closeout was already complete and valid;
+it was not repeated. Other visible same-checkout tasks were idle; no concurrent
+writer was observed. The exact planning scope is six additive live-memory
+documents plus the new plan, increment and review. It leaves nine uncommitted
+documentation paths; passing checks do not make the tree clean.
+
+No harness, demo, source, dependency, lockfile or accepted decision changed.
+The proposed finite native result and one shared lifecycle/Graph owner require
+a separately accepted presentation exception. All historical decisions, frozen
+publication/candidate evidence and blocked operational lanes remain unchanged.
+
+Next dependency: owner Git disposition for the nine planning documents, then
+M0's exact browser toolchain/acquisition decision and M1 approval. Do not begin
+material Graph work before M1 is verified; M2, necessary polish and rehearsal
+remain sequential and separately approved. This entry governs the newly
+selected planning lane; the older evidence below remains historical.
+
+### Exact next approval prompt
+
+```text
+Inspect Cortexa before editing: reread root/applicable AGENTS.md, required
+governance/current-state documents and
+docs/plans/2026-09-04-deterministic-graph-demo-planning.md. Verify actual branch,
+HEAD, working tree, concurrent writers and read-only gate status. Preserve all
+user changes; stop on overlap, an unclean baseline or invalid evidence. Do not
+repeat completed planning or PR114 closeout and do not create publication
+reconciliation. After the owner has separately resolved the nine-document Git
+disposition into a clean baseline, perform only M0's read-only browser-toolchain
+decision. Identify an exact runner version, browser engine/revision/executable,
+Node compatibility, license/security evidence, acquisition source, lockfile
+impact and proposed installation commands. Use authoritative evidence; do not
+assume a package/browser is present. Return the exact M1 inventory and a concrete
+owner approval prompt for acquisition and harness implementation, including its
+browser matrix, npm run test:browser, npm run verify, security and session/gate
+checks. Stop on missing evidence or scope drift. Do not edit files, install,
+download, implement, begin a gate, create branches, commit, publish, or execute
+M1/M2. The native Graph integration requires verified M1 completion and separate
+acceptance of the presentation exception; keep Structured, other alternatives,
+Conversations and all live operational lanes unchanged.
+```
+
 Last updated: 2026-09-04
 
 ## Published D-121 fixed local candidate static assessment

@@ -4,6 +4,16 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Prepared a documentation-only deterministic Graph demo ExecPlan with an
+  automated real-browser harness as the first implementation prerequisite.
+  The plan specifies a proposed exact synthetic native brief, one shared
+  lifecycle/Graph owner, separate provenance, sequential integration/polish/
+  rehearsal milestones, inventories, estimates and approval stops. Documentation
+  checks and independent reviews passed; no implementation is approved. The six
+  memory updates and three
+  planning artifacts preserve source, dependencies, accepted decisions and
+  historical publication/blocked-lane evidence. PR114 closeout was not repeated.
+
 - Published the completed documentation-only D-121 static assessment through
   PR #114. Reviewed head `5bae216e73938f6ee995c665ee110a9553e15843`
   was squash-merged as `da765c39ad85de32445da03c1d3c250be12c110d`;

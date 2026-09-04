@@ -1,5 +1,35 @@
 # Cortexa roadmap
 
+## Current deterministic Graph planning — 2026-09-04
+
+The owner selected a documentation-only plan for a private deterministic Graph
+demo with an automated real-browser harness as the first implementation
+prerequisite. See the [ExecPlan](docs/plans/2026-09-04-deterministic-graph-demo-planning.md)
+and [planning review](docs/reviews/2026-09-04-deterministic-graph-demo-planning-post-increment-review.md).
+Documentation quality review: **PASS WITH ADVISORIES**; implementation readiness
+is **Blocked**. Documentation, repository, security, whitespace, session,
+preservation and independent reviews passed. Final completion is authoritative
+only when the planning gate reports `complete` with `valid: true`.
+
+Baseline: clean `main` at `172d1e961ce8d8ef82dc6d204d1120cef0b758f3`, locally
+aligned with `origin/main`. The PR114 closeout was already complete and valid;
+it was not repeated. Other visible same-checkout tasks were idle; no concurrent
+writer was observed. The exact planning scope is six additive live-memory
+documents plus the new plan, increment and review. It leaves nine uncommitted
+documentation paths; passing checks do not make the tree clean.
+
+No harness, demo, source, dependency, lockfile or accepted decision changed.
+The proposed finite native result and one shared lifecycle/Graph owner require
+a separately accepted presentation exception. All historical decisions, frozen
+publication/candidate evidence and blocked operational lanes remain unchanged.
+
+Planning content is complete with advisories. M1 browser
+harness implementation is Blocked by exact toolchain/acquisition approval and
+the clean-baseline requirement. M2 integration also requires the proposed
+presentation exception; M3 polish and M4 rehearsal depend sequentially on the
+verified predecessor. Estimated remaining work is 23–43 engineering hours plus
+approval/acquisition delays and newly exposed defects; no live-provider claim.
+
 Status: Authoritative milestone roadmap
 Last updated: 2026-09-04
 
