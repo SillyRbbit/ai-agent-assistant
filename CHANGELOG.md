@@ -4,7 +4,15 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
-- Completed the documentation-only D-121 static assessment of exactly
+- Published the completed documentation-only D-121 static assessment through
+  PR #114. Reviewed head `5bae216e73938f6ee995c665ee110a9553e15843`
+  was squash-merged as `da765c39ad85de32445da03c1d3c250be12c110d`;
+  both commits share exact tree
+  `042380ed7daa2844dcba21340028500dffca3bfb` and have an empty repository
+  diff. Frozen owner-supplied publication evidence records successful PR
+  workflow `33914562230` and successful post-merge workflow `33914722128`;
+  this documentation closeout did not contact GitHub or independently re-query
+  either run. The assessment covers exactly
   `fixed_local_v2_llamacpp_0_3_0_qwen2_5_1_5b_q4km_cpu_v1`. The accepted closed
   result is `candidate_not_eligible_or_unproven`: fourteen of fifteen
   conjunctive rows remain `contract_unproven`, the target-Mac row is `not_run`,

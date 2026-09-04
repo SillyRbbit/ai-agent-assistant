@@ -1,8 +1,8 @@
 # Handoff
 
-Last updated: 2026-09-03
+Last updated: 2026-09-04
 
-## Completed D-121 fixed local candidate static assessment
+## Published D-121 fixed local candidate static assessment
 
 From baseline `355d42ac8bb9a5ed663f57895675df688507ce9f`, the owner approved
 and began the documentation-only
@@ -31,6 +31,14 @@ exact-scope, preservation, independent-review, session, quality,
 report-validation, and post-increment gates passed, and the completion marker
 is valid.
 
+The accepted result was reviewed at
+`5bae216e73938f6ee995c665ee110a9553e15843` and squash-merged through PR #114
+as `da765c39ad85de32445da03c1d3c250be12c110d`. Both commits share exact tree
+`042380ed7daa2844dcba21340028500dffca3bfb`; their repository diff is empty.
+Frozen owner-supplied publication evidence records successful PR workflow run
+`33914562230` and successful post-merge workflow run `33914722128`; this
+closeout did not contact GitHub or independently re-query either run.
+
 No candidate, substitute, fallback, engine, model, artifact, dependency,
 filesystem boundary, target-Mac plan, source work, Tauri/UI work, owner-
 authentication work, personal prompt, or operational successor is selected or
@@ -39,19 +47,33 @@ authorized. D-094 synthetic-v1, historical V0-14, D-118
 handle, D-120, V0-3/V0-7, all ten D-107 blockers, D-113 through D-117
 Proposed/non-controlling status, and every security boundary remain unchanged.
 
+The documentation-only
+[`PR #114 publication closeout`](docs/plans/2026-09-04-personal-assistant-v0-pr114-publication-closeout.md)
+records this completed publication in six live records. Those records do not
+encode the closeout's own transient branch, review, or publication state as a
+roadmap queue item. Actual Git state determines whether the closeout itself
+still needs separately authorized review or publication; once its tree is on
+`main`, do not create another reconciliation merely to restate that merge. No
+successor starts automatically.
+
 Exact resume prompt: “Read `AGENTS.md`,
 `docs/governance/MASTER_PROMPT.md`, and the complete required project-memory
 and security/testing chain. Inspect actual Git and gate state before acting.
-Review only the completed sixteen-file documentation result for
-`personal-assistant-v0-fixed-local-engine-artifact-evidence-plan`, including
-D-121's accepted `candidate_not_eligible_or_unproven` disposition, the matching
-ten-component tuple, fourteen `contract_unproven` matrix rows, one target-Mac
-`not_run` matrix row, and zero `boundary_failed` matrix rows. Preserve the
-frozen candidate as unavailable, every Blocked boundary, D-118, D-119, D-120,
-and all ten D-107 blockers. Do not edit, commit, push, merge, select a
-replacement, acquire an artifact, inspect the target Mac, implement source,
-begin a successor, or access external systems. Report Accept or exact revisions
-and stop.”
+Preserve PR #114, reviewed head
+`5bae216e73938f6ee995c665ee110a9553e15843`, successful PR workflow
+`33914562230`, squash commit
+`da765c39ad85de32445da03c1d3c250be12c110d`, successful post-merge workflow
+`33914722128`, common tree
+`042380ed7daa2844dcba21340028500dffca3bfb`, D-121's exact
+`candidate_not_eligible_or_unproven` disposition, every Blocked boundary,
+D-118, D-119, D-120, and all ten D-107 blockers. Treat workflow outcomes as
+frozen owner-supplied evidence and do not re-query external systems. If the
+exact nine-file `personal-assistant-v0-pr114-publication-closeout` workspace is
+complete and uncommitted, review it and report Accept or exact revisions; if
+its tree is already published, do not create another reconciliation merely to
+restate that merge. Do not begin a successor, select or install a model,
+acquire an artifact, inspect the target Mac, implement source, or access an
+operational system.”
 
 ## Published D-120 fixed local private-lane decision
 
