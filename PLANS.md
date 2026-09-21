@@ -1,5 +1,20 @@
 # Execution plans
 
+## PR #116 post-merge documentation closeout — 2026-09-21
+
+Active bounded plan:
+[PR116 post-merge closeout](docs/plans/2026-09-21-pr116-post-merge-closeout.md).
+PR #116 is merged at `b5b7af701570e906caa8b8637806a589c28bfb74`; its
+24-path result and successful applicable post-merge checks close the earlier
+publication lane. The reconciliation and cleanup plans/reviews below remain
+immutable historical evidence, not instructions to repeat implementation.
+
+This successor changes exactly six current-state documents plus its plan and
+[review](docs/reviews/2026-09-21-pr116-post-merge-closeout-post-increment-review.md).
+It preserves PR #117's inherited changes, the native GUI advisory, all existing
+worktrees, and parked D-125/M1/M2. After local completion gates, publish only the
+documentation PR and stop before merging it. No policy decision is changed.
+
 ## Active demo cleanup main reconciliation — 2026-09-21
 
 The owner-approved active plan is

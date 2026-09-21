@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-09-21 — PR #116 merged and documentation closeout
+
+- Recorded PR #116's squash merge at
+  `b5b7af701570e906caa8b8637806a589c28bfb74`: exactly 24 paths, retaining
+  the 13 completed Command Center UI changes and Structured-view deletion.
+- Confirmed PR #117's dependency/Rust audit changes remain inherited unchanged.
+  Post-merge Documentation `35565877482` and CI `35565877539` succeeded;
+  classification/frontend passed and audit/Linux/target-Mac jobs were skipped.
+- Added an eight-path documentation-only closeout with superseding current-state
+  entries. Preserved historical plans/reviews, the pending native GUI advisory,
+  terminal-failed dependency evidence and parked D-125/M1/M2 state.
+
 ## 2026-09-20 demo cleanup publication candidate
 
 - Remove Structured view, its mode selector, narrow fallback and exclusive
