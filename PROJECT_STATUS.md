@@ -1,5 +1,26 @@
 # Project status
 
+## Active dependency and Rust audit unblock — 2026-09-20
+
+Status: **Implementation and required local validation complete; final
+completion record pending.**
+
+The isolated branch codex/dependency-and-rust-audit-unblock starts at remote
+main f176c36cc701b5a296162331cfcb2600b2157663. Its exact package bytes resolve
+Vitest and @vitest/mocker at 4.1.11, baseline-browser-mapping at 2.11.0, and
+js-yaml at 4.3.2. The Cargo audit gate keeps the two accepted quick-xml 0.39.4
+vulnerabilities and eight current warnings, and no longer requires ten GTK
+maintenance advisories withdrawn by RustSec. D-127 records the narrow current
+supersession without claiming GTK 0.18.2 is vulnerability-free.
+
+The clean install, exact dependency tree, 370 frontend tests, repository and
+hook suites, full and production npm audits, current pinned Cargo audit and
+exact gate, secret scan, and complete verification all passed. Product
+capabilities and trust boundaries are unchanged. PR #116, the original
+dirty checkout, both earlier isolated worktrees, seven unpublished commits, the
+native GUI advisory, and parked D-125/M1/M2 state remain preserved. Completion
+and publication remain conditional on the exact report and final gate.
+
 ## Current deterministic Graph planning — 2026-09-04
 
 The owner selected a documentation-only plan for a private deterministic Graph

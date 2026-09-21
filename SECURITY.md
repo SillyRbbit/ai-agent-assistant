@@ -1,11 +1,29 @@
 # Security policy and development guardrails
 
 Status: Authoritative security policy
-Last updated: 2026-09-03
+Last updated: 2026-09-20
 
 Use `SECURITY_CHECKLIST.md` for change and release review. `ARCHITECTURE.md`
 identifies which security boundaries are current, mocked, planned, or
 prohibited.
+
+## D-127 exact dependency and Cargo audit baseline
+
+D-127 keeps the dependency audit fail closed while reconciling it to current
+advisory data. The JavaScript development/test graph resolves Vitest and its
+matching package family at 4.1.11, baseline-browser-mapping at 2.11.0, and
+js-yaml at 4.3.2. Product runtime dependencies and permissions are unchanged.
+
+The Cargo gate continues to accept exactly RUSTSEC-2026-0194 and
+RUSTSEC-2026-0195 for quick-xml 0.39.4 plus eight exact current warnings.
+RUSTSEC-2024-0411 through RUSTSEC-2024-0420 are no longer accepted because
+RustSec withdrew them after gtk3-rs resumed maintenance. Their withdrawal is
+not proof that GTK 0.18.2 is vulnerability-free. If any withdrawn advisory
+reappears, or any other finding changes, the exact gate rejects it.
+
+No ignore flag, advisory exception file, automatic synchronization, workflow
+permission, runtime network path, credential access, product capability, or
+device authority is added.
 
 ## D-121 fixed local candidate static evidence decision
 
@@ -1164,7 +1182,7 @@ Apply the dependency and supply-chain sections of `SECURITY_CHECKLIST.md` and
   for dependency, security-sensitive, workflow, scheduled, and manually
   dispatched validation. The
   Cargo result fails on any finding outside D-025's exact two-vulnerability
-  `quick-xml 0.39.4` baseline and D-046's exact 18-warning lockfile baseline.
+  `quick-xml 0.39.4` baseline and D-127's exact eight-warning lockfile baseline.
   Accepted findings remain unresolved and visible; the gate does not declare
   them fixed or generally safe.
 - The tracked secret-pattern scan is defense in depth, not proof that a

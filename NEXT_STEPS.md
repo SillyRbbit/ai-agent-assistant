@@ -1,5 +1,20 @@
 # Next steps
 
+## Active combined dependency and Rust audit unblock — 2026-09-20
+
+The required clean install, exact dependency inspection, full and production
+npm audits, pinned live Cargo audit and exact repository gate, complete tests,
+secret scan, and complete verification passed. Finish only
+[the combined audit plan](docs/plans/2026-09-20-dependency-and-rust-audit-unblock.md)
+by freezing the exact 16-path report and completing documentation, repository,
+scope, independent-review, session, quality, and post-increment gates. Any
+validation failure or path beyond the exact ceiling stops the increment.
+
+After a valid passing local result, commit and push only
+codex/dependency-and-rust-audit-unblock, open one PR into main, and inspect every
+exact-head CI job. Do not merge or update PR #116. Do not begin D-125, M1, M2,
+or another dependency/Cargo remediation successor.
+
 ## Current deterministic Graph planning — 2026-09-04
 
 The owner selected a documentation-only plan for a private deterministic Graph

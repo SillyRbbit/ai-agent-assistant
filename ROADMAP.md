@@ -1,5 +1,18 @@
 # Cortexa roadmap
 
+## Active audit unblock publication lane — 2026-09-20
+
+The immediate bounded lane is the exact 16-path combined dependency and Rust
+audit successor. Its implementation, clean install, dependency inspection, npm
+and Cargo audits, tests, builds, and complete verification passed. It may
+publish one separate PR into main only after exact scope and all documentation,
+session, quality, and post-increment gates pass.
+
+This lane does not reorder the deterministic Graph roadmap, resume D-125/M1/M2,
+or grant product capability. PR #116 remains a separate completed cleanup with
+its native GUI advisory retained. Merge of either PR remains owner-controlled
+and outside this increment.
+
 ## Current deterministic Graph planning — 2026-09-04
 
 The owner selected a documentation-only plan for a private deterministic Graph

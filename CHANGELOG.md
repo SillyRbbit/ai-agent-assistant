@@ -4,6 +4,16 @@ All notable repository changes are documented here. Entries distinguish verified
 
 ## Unreleased
 
+- Implemented the bounded dependency-and-Rust-audit-unblock successor on an
+  isolated branch from remote main. The package files are byte-identical to the
+  previously validated candidate: Vitest and its matching package family are
+  4.1.11, baseline-browser-mapping is 2.11.0, and js-yaml is 4.3.2. D-127 keeps
+  the two quick-xml vulnerabilities and exact eight current Rust warnings while
+  removing only the ten GTK advisories withdrawn by RustSec after gtk3-rs
+  resumed maintenance. Focused tests reject each withdrawn advisory if it
+  reappears. Product runtime, Cargo dependencies, workflows, permissions,
+  PR #116, and the preserved terminal-failed predecessor remain unchanged.
+
 - Prepared a documentation-only deterministic Graph demo ExecPlan with an
   automated real-browser harness as the first implementation prerequisite.
   The plan specifies a proposed exact synthetic native brief, one shared

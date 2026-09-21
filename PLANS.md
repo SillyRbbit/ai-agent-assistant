@@ -1,5 +1,21 @@
 # Execution plans
 
+## Active dependency and Rust audit unblock — 2026-09-20
+
+The owner-approved active plan is
+[dependency and Rust audit unblock](docs/plans/2026-09-20-dependency-and-rust-audit-unblock.md).
+It is an exact 16-path successor from remote main that combines the already
+validated JavaScript dependency bytes with the smallest current RustSec
+warning-baseline correction and focused tests. It does not reopen the preserved
+terminal failed dependency increment or alter PR #116.
+
+The plan preserves the two quick-xml vulnerabilities, eight current warning
+tuples, product runtime, Cargo graph, workflows, hooks, skills, harnesses, and
+all parked D-125/M1/M2 work. All required implementation, dependency, audit,
+test, build, and complete verification checks passed. Publication remains
+conditional on the exact report and post-increment completion; merge remains
+outside scope.
+
 ## Current deterministic Graph planning — 2026-09-04
 
 The owner selected a documentation-only plan for a private deterministic Graph
