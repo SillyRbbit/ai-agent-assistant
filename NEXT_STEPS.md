@@ -1,5 +1,14 @@
 # Next steps
 
+## Documentation organization closeout — 2026-09-21
+
+The [bounded organization task](docs/plans/2026-09-21-documentation-organization.md)
+passed its applicable checks. Leave the changes uncommitted for owner review;
+validate its ordinary completion record before any separately authorized follow-up.
+Do not repeat completed cleanup/publication work or begin another increment.
+This task changes navigation and one guide location, not roadmap priorities.
+D-125/M1/M2 remain parked and native GUI verification remains advisory.
+
 ## PR #116 publication complete; documentation review next — 2026-09-21
 
 PR #116 merged as `b5b7af701570e906caa8b8637806a589c28bfb74` with its

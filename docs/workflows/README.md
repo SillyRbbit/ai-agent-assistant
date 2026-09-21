@@ -2,6 +2,11 @@
 
 These runbooks keep development reproducible across assistant sessions.
 
+Start with [Using a coding assistant](ASSISTANT_USAGE.md) for repository setup,
+session workflow, and review guidance. Repository-relative command examples
+assume the checkout root. See the [documentation index](../README.md) for other
+categories.
+
 | Workflow             | Use                                              |
 | -------------------- | ------------------------------------------------ |
 | `START_SESSION.md`   | Begin a new thread or task                       |

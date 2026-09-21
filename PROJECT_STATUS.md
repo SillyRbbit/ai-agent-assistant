@@ -1,5 +1,15 @@
 # Project status
 
+## Documentation navigation — 2026-09-21
+
+The [documentation index](docs/README.md) groups existing authoritative records,
+guides and historical evidence without changing their status. The assistant
+usage guide now lives at `docs/workflows/ASSISTANT_USAGE.md`; its contents and
+the checker's validation rules are unchanged. Root authority files retain their
+locations. This is an isolated uncommitted organization task, not new product or
+governance behavior. Native GUI smoke remains pending; D-125/M1/M2 remain parked.
+See the [bounded plan](docs/plans/2026-09-21-documentation-organization.md).
+
 ## Current state after PR #116 merge — 2026-09-21
 
 PR #116 is merged at `b5b7af701570e906caa8b8637806a589c28bfb74`.
