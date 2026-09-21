@@ -24,8 +24,8 @@ import { SystemStatusSummary } from "./SystemStatusSummary";
 interface CommandCenterOverviewProps {
   readonly model: CommandCenterOverviewViewModel;
   readonly onSelect: (id: TopologyNodeId) => void;
-  readonly onSelectEvent?: ((id: CommandCenterEventId) => void) | undefined;
-  readonly selectedEventId?: CommandCenterEventId | null | undefined;
+  readonly onSelectEvent: (id: CommandCenterEventId) => void;
+  readonly selectedEventId: CommandCenterEventId | null;
   readonly selectedId: string | null;
 }
 
@@ -256,7 +256,6 @@ export function CommandCenterOverview({
           ) : (
             <ol aria-label="Recent deterministic activity" className="command-center-recent-list">
               {model.recentActivity.map((event) => {
-                const selectionTargetId = event.selectionTargetId;
                 const taskLabel = event.taskLabel ?? COMMAND_CENTER_EVENT_FIELD_UNAVAILABLE;
                 const workflowLabel = event.workflowLabel ?? COMMAND_CENTER_EVENT_FIELD_UNAVAILABLE;
                 const relatedLabels =
@@ -289,35 +288,17 @@ export function CommandCenterOverview({
 
                 return (
                   <li key={event.eventId}>
-                    {onSelectEvent === undefined && selectionTargetId === null ? (
-                      <div className="command-center-overview-row command-center-recent-row">
-                        {content}
-                      </div>
-                    ) : (
-                      <button
-                        aria-label={
-                          onSelectEvent === undefined
-                            ? `Inspect context for deterministic event ${event.summary}`
-                            : `Inspect deterministic event ${event.summary}`
-                        }
-                        aria-pressed={
-                          onSelectEvent === undefined
-                            ? selectedId === selectionTargetId
-                            : selectedEventId === event.eventId
-                        }
-                        className="command-center-overview-row command-center-recent-row"
-                        onClick={() => {
-                          if (onSelectEvent !== undefined) {
-                            onSelectEvent(event.eventId);
-                          } else if (selectionTargetId !== null) {
-                            onSelect(selectionTargetId);
-                          }
-                        }}
-                        type="button"
-                      >
-                        {content}
-                      </button>
-                    )}
+                    <button
+                      aria-label={`Inspect deterministic event ${event.summary}`}
+                      aria-pressed={selectedEventId === event.eventId}
+                      className="command-center-overview-row command-center-recent-row"
+                      onClick={() => {
+                        onSelectEvent(event.eventId);
+                      }}
+                      type="button"
+                    >
+                      {content}
+                    </button>
                   </li>
                 );
               })}

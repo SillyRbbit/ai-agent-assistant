@@ -59,7 +59,6 @@ export interface CommandCenterViewState {
   readonly search: string;
   readonly selection: CommandCenterPresentationSelection | null;
   readonly status: string;
-  readonly viewMode: "graph" | "structured";
 }
 
 type CommandCenterViewAction =
@@ -73,12 +72,10 @@ type CommandCenterViewAction =
   | Readonly<{ type: "follow-selected-path-changed"; value: boolean }>
   | Readonly<{ type: "graph-filters-cleared" }>
   | Readonly<{ type: "graph-relationship-focus-changed"; value: GraphRelationshipFocus }>
-  | Readonly<{ type: "reset" }>
   | Readonly<{ type: "scenario-changed"; value: CommandCenterScenarioId }>
   | Readonly<{ type: "search-changed"; value: string }>
   | Readonly<{ type: "selection-changed"; value: CommandCenterPresentationSelection | null }>
-  | Readonly<{ type: "status-changed"; value: string }>
-  | Readonly<{ type: "view-mode-changed"; value: "graph" | "structured" }>;
+  | Readonly<{ type: "status-changed"; value: string }>;
 
 function initialSelectionForScenario(
   scenarioId: CommandCenterScenarioId,
@@ -105,7 +102,6 @@ export const INITIAL_COMMAND_CENTER_VIEW_STATE: CommandCenterViewState = Object.
   search: "",
   selection: initialSelectionForScenario(DEFAULT_COMMAND_CENTER_SCENARIO_ID),
   status: "all",
-  viewMode: "graph",
 });
 
 function commandCenterViewReducer(
@@ -142,14 +138,11 @@ function commandCenterViewReducer(
       };
     case "graph-relationship-focus-changed":
       return { ...state, graphRelationshipFocus: action.value };
-    case "reset":
-      return { ...INITIAL_COMMAND_CENTER_VIEW_STATE, viewMode: state.viewMode };
     case "scenario-changed":
       return {
         ...INITIAL_COMMAND_CENTER_VIEW_STATE,
         scenarioId: action.value,
         selection: initialSelectionForScenario(action.value),
-        viewMode: state.viewMode,
       };
     case "search-changed":
       return { ...state, search: action.value };
@@ -159,34 +152,16 @@ function commandCenterViewReducer(
         : { ...state, selection: action.value };
     case "status-changed":
       return { ...state, status: action.value };
-    case "view-mode-changed":
-      return { ...state, viewMode: action.value };
   }
-}
-
-function initializeCommandCenterViewState(
-  initialState: CommandCenterViewState,
-): CommandCenterViewState {
-  if (typeof window.matchMedia === "function" && window.matchMedia("(max-width: 640px)").matches) {
-    return { ...initialState, viewMode: "structured" };
-  }
-  return initialState;
 }
 
 export function useCommandCenterState() {
-  const [state, dispatch] = useReducer(
-    commandCenterViewReducer,
-    INITIAL_COMMAND_CENTER_VIEW_STATE,
-    initializeCommandCenterViewState,
-  );
+  const [state, dispatch] = useReducer(commandCenterViewReducer, INITIAL_COMMAND_CENTER_VIEW_STATE);
 
   return {
     actions: {
       clearGraphFilters: () => {
         dispatch({ type: "graph-filters-cleared" });
-      },
-      reset: () => {
-        dispatch({ type: "reset" });
       },
       select: (value: CommandCenterPresentationSelection | null) => {
         dispatch({ type: "selection-changed", value });
@@ -226,9 +201,6 @@ export function useCommandCenterState() {
       },
       setStatus: (value: string) => {
         dispatch({ type: "status-changed", value });
-      },
-      setViewMode: (value: "graph" | "structured") => {
-        dispatch({ type: "view-mode-changed", value });
       },
     },
     state,

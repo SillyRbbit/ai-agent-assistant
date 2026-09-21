@@ -1,4 +1,4 @@
-import { FlaskConical, PanelRightClose, SearchX } from "lucide-react";
+import { FlaskConical } from "lucide-react";
 import { useMemo } from "react";
 import { createPortal } from "react-dom";
 
@@ -15,7 +15,6 @@ import {
   type CommandCenterEvent,
   type CommandCenterProjection,
   type CommandCenterScenarioId,
-  type InspectorProjection,
   type TopologyEdge,
   type TopologyEdgeKind,
   type TopologyGroup,
@@ -39,22 +38,14 @@ import {
 import { CommandCenterHeader } from "./components/CommandCenterHeader";
 import { CommandCenterOverview } from "./components/CommandCenterOverview";
 import {
-  ContextualInspector,
   WorkspaceContextualInspectorBody,
   WorkspaceContextualInspectorHeader,
-  type InspectorViewModel,
   type WorkspaceInspectorSection,
   type WorkspaceInspectorViewModel,
 } from "./components/ContextualInspector";
 import { OperationalTopologyPanel } from "./components/OperationalTopologyPanel";
 import { ResearchKnowledgeDemoProjectionPanel } from "./components/ResearchKnowledgeDemoProjectionPanel";
 import { ResearchKnowledgeLifecyclePanel } from "./ResearchKnowledgeLifecyclePanel";
-import {
-  TopologyStructuredView,
-  type StructuredEdgeView,
-  type StructuredGroupView,
-  type StructuredNodeView,
-} from "./components/TopologyStructuredView";
 import {
   type CommandCenterPresentationSelection,
   type GraphRelationshipFocus,
@@ -219,100 +210,6 @@ function recentActivityFor(
     )
     .map((event) => `Step ${String(event.ordinal).padStart(2, "0")} · ${event.summary}`)
     .slice(-6);
-}
-
-function inspectorFromProjection(
-  inspector: InspectorProjection,
-  node: TopologyNode,
-  domain: string,
-  events: readonly CommandCenterEvent[],
-  nodeLabels: ReadonlyMap<string, string>,
-): InspectorViewModel {
-  return {
-    approval: node.approval,
-    assignment: inspector.assignment ?? "No current assignment in this fixture state.",
-    authorityBoundary: inspector.authorityBoundary,
-    availability: node.availability,
-    demoOrigin: node.demoOrigin,
-    dependencies: inspector.dependencyIds.map((id) => nodeLabels.get(id) ?? id),
-    domain,
-    facts: inspector.facts,
-    findings: inspector.findings,
-    health: node.health,
-    id: node.id,
-    inputs: inspector.inputs,
-    kind: node.kind,
-    label: inspector.title,
-    outputs: inspector.outputs,
-    recentActivity: recentActivityFor(node, events),
-    responsibility: inspector.responsibility,
-    status: node.status,
-    trust: node.trust,
-    unresolved: inspector.unresolvedIssues,
-  };
-}
-
-function inspectorFromEdge(
-  edge: TopologyEdge,
-  source: TopologyNode,
-  target: TopologyNode,
-): InspectorViewModel {
-  return {
-    approval: "not-required",
-    assignment: `${source.label} → ${target.label}`,
-    authorityBoundary:
-      "This is a read-only fixture relationship. It cannot route or authorize work.",
-    availability: "preview-only",
-    demoOrigin: edge.demoOrigin,
-    dependencies: [source.label],
-    domain: "Relationship",
-    facts: [
-      { label: "Source", value: source.label },
-      { label: "Target", value: target.label },
-      { label: "Direction", value: `${source.label} → ${target.label}` },
-    ],
-    findings: [`${readable(edge.kind)} relationship is present in the selected fixture.`],
-    health: "not-measured",
-    id: edge.id,
-    inputs: [`${source.label} · ${readable(source.status)}`],
-    kind: "edge",
-    label: edge.label,
-    outputs: [`${target.label} · ${readable(target.status)}`],
-    recentActivity: [],
-    responsibility: `Explains the deterministic ${readable(edge.kind)} direction between two presentation entities.`,
-    status: edge.status,
-    trust: "presentation-fixture",
-    unresolved: [],
-  };
-}
-
-function inspectorFromGroup(
-  group: TopologyGroup,
-  members: readonly TopologyNode[],
-): InspectorViewModel {
-  return {
-    approval: "not-required",
-    assignment: `${String(members.length)} fixed catalog role${members.length === 1 ? "" : "s"}`,
-    authorityBoundary:
-      "Presentation grouping grants no route, policy, approval, tool, or runtime authority.",
-    availability: "preview-only",
-    demoOrigin: group.demoOrigin,
-    dependencies: [],
-    domain: group.label,
-    facts: [{ label: "Fixed membership", value: members.map((member) => member.label).join(", ") }],
-    findings: members.map((member) => member.label),
-    health: "not-measured",
-    id: group.id,
-    inputs: [],
-    kind: "domain-group",
-    label: group.label,
-    outputs: [],
-    recentActivity: [],
-    responsibility: group.description,
-    status: members.some((member) => ACTIVE_STATUSES.has(member.status)) ? "running" : "idle",
-    trust: "presentation-fixture",
-    unresolved: [],
-  };
 }
 
 function nodeEntityType(node: TopologyNode): string {
@@ -563,7 +460,7 @@ export default function CommandCenterPage({
     if (selection === null) return;
     const returnFocus = captureSelectionFocus();
     actions.select(selection);
-    if (state.viewMode === "graph") workspacePanels?.openInspector(returnFocus);
+    workspacePanels?.openInspector(returnFocus);
   };
   const selectFixtureEvent = (entityId: string) => {
     const event = projection.events.find((candidate) => candidate.id === entityId);
@@ -731,55 +628,6 @@ export default function CommandCenterPage({
     [agentLabels, currentSelection, nodeLabels, projection.events, selectedPath, state],
   );
 
-  const selectedInspector = useMemo(() => {
-    if (currentSelection === null || currentSelection.type === "fixture-event") return null;
-    if (currentSelection.type === "topology-node") {
-      const node = projection.nodes.find((candidate) => candidate.id === currentSelection.entityId);
-      if (node === undefined || !visibleNodeIds.has(node.id)) return null;
-      return inspectorFromProjection(
-        node.inspector,
-        node,
-        node.groupId === null
-          ? "Application boundary"
-          : (groupLabels.get(node.groupId) ?? "Unknown"),
-        projection.events,
-        nodeLabels,
-      );
-    }
-    if (currentSelection.type === "topology-edge") {
-      const edge = projection.edges.find((candidate) => candidate.id === currentSelection.entityId);
-      const inspectorVisibleEdges = state.viewMode === "graph" ? graphVisibleEdges : visibleEdges;
-      if (
-        edge === undefined ||
-        !inspectorVisibleEdges.some((candidate) => candidate.id === edge.id)
-      ) {
-        return null;
-      }
-      const source = projection.nodes.find((candidate) => candidate.id === edge.source);
-      const target = projection.nodes.find((candidate) => candidate.id === edge.target);
-      return source === undefined || target === undefined
-        ? null
-        : inspectorFromEdge(edge, source, target);
-    }
-    const group = projection.groups.find((candidate) => candidate.id === currentSelection.entityId);
-    return group === undefined || !visibleNodes.some((candidate) => candidate.groupId === group.id)
-      ? null
-      : inspectorFromGroup(
-          group,
-          projection.nodes.filter((candidate) => candidate.groupId === group.id),
-        );
-  }, [
-    currentSelection,
-    groupLabels,
-    nodeLabels,
-    projection,
-    graphVisibleEdges,
-    state.viewMode,
-    visibleEdges,
-    visibleNodeIds,
-    visibleNodes,
-  ]);
-
   const workspaceInspector = useMemo<WorkspaceInspectorViewModel | null>(() => {
     if (currentSelection === null) return null;
     if (currentSelection.type === "fixture-event") {
@@ -832,30 +680,6 @@ export default function CommandCenterPage({
     visibleNodes,
   ]);
 
-  const structuredGroups: readonly StructuredGroupView[] = projection.groups.map((group) => ({
-    description: group.description,
-    id: group.id,
-    label: group.label,
-  }));
-  const structuredNodes: readonly StructuredNodeView[] = visibleNodes.map((node) => ({
-    groupId: node.groupId,
-    id: node.id,
-    kind: node.kind,
-    label: node.label,
-    status: node.status,
-  }));
-  const structuredEdges: readonly StructuredEdgeView[] = visibleEdges.map((edge) => ({
-    id: edge.id,
-    kind: edge.kind,
-    label: edge.label,
-    sourceId: edge.source,
-    sourceLabel:
-      projection.nodes.find((candidate) => candidate.id === edge.source)?.label ?? edge.source,
-    status: edge.status,
-    targetId: edge.target,
-    targetLabel:
-      projection.nodes.find((candidate) => candidate.id === edge.target)?.label ?? edge.target,
-  }));
   const activityEventKinds = [...new Set(projection.events.map((event) => event.kind))];
   const activitySeverities = [...new Set(projection.events.map((event) => event.severity))];
   const activityEvents: readonly ActivityViewEvent[] = filteredEvents.flatMap((event) => {
@@ -883,7 +707,6 @@ export default function CommandCenterPage({
         })),
       ]}
       capabilityUnavailable
-      compact={state.viewMode === "graph"}
       demoOrigin={state.demoOrigin}
       demoOriginOptions={[
         { id: "all", label: "All fixture origins" },
@@ -911,7 +734,7 @@ export default function CommandCenterPage({
       onGraphRelationshipFocusChange={(value) => {
         if (isGraphRelationshipFocus(value)) actions.setGraphRelationshipFocus(value);
       }}
-      onReset={state.viewMode === "graph" ? actions.clearGraphFilters : actions.reset}
+      onReset={actions.clearGraphFilters}
       onScenarioChange={(value) => {
         if (COMMAND_CENTER_SCENARIO_IDS.includes(value as CommandCenterScenarioId)) {
           actions.setScenarioId(value as CommandCenterScenarioId);
@@ -919,7 +742,6 @@ export default function CommandCenterPage({
       }}
       onSearchChange={actions.setSearch}
       onStatusChange={actions.setStatus}
-      onViewModeChange={actions.setViewMode}
       scenarioId={state.scenarioId}
       scenarioOptions={COMMAND_CENTER_FIXTURE_CATALOG.map(({ id, label }) => ({ id, label }))}
       search={state.search}
@@ -928,7 +750,6 @@ export default function CommandCenterPage({
         { id: "all", label: "All statuses" },
         ...STATUS_OPTIONS.map((id) => ({ id, label: readable(id) })),
       ]}
-      viewMode={state.viewMode}
     />
   );
   const nativeProofPanels = (
@@ -948,39 +769,13 @@ export default function CommandCenterPage({
       onClearSelection={() => {
         actions.select(null);
       }}
-      onResetFilters={state.viewMode === "graph" ? actions.clearGraphFilters : actions.reset}
+      onResetFilters={actions.clearGraphFilters}
       onSelect={selectTopology}
       projection={projection}
       selectedId={selectedTopologyId}
       selectionPresent={currentSelection !== null}
-      structuredView={
-        <TopologyStructuredView
-          edges={structuredEdges}
-          groups={structuredGroups}
-          nodes={structuredNodes}
-          onSelect={selectTopology}
-          selectedId={selectedTopologyId}
-        />
-      }
-      viewMode={state.viewMode}
-      visibleEdges={state.viewMode === "graph" ? graphVisibleEdges : visibleEdges}
+      visibleEdges={graphVisibleEdges}
       visibleNodes={visibleNodes}
-    />
-  );
-  const activityStream = (
-    <CommandCenterActivityStream
-      eventKind={state.activityEventKind}
-      eventKinds={activityEventKinds}
-      events={activityEvents}
-      followPathDisabled={currentSelection === null}
-      followSelectedPath={state.followSelectedPath}
-      onEventKindChange={actions.setActivityEventKind}
-      onFollowSelectedPathChange={actions.setFollowSelectedPath}
-      onSearchChange={actions.setActivitySearch}
-      onSeverityChange={actions.setActivitySeverity}
-      search={state.activitySearch}
-      severity={state.activitySeverity}
-      severities={activitySeverities}
     />
   );
   const workspaceActivityStream = (
@@ -999,7 +794,6 @@ export default function CommandCenterPage({
       selectedEventId={selectedEventId}
       severities={activitySeverities}
       severity={state.activitySeverity}
-      workspace
     />
   );
   const inspectorHeaderPortal =
@@ -1007,30 +801,11 @@ export default function CommandCenterPage({
     workspacePanels?.inspectorHeaderTarget === undefined
       ? null
       : createPortal(
-          state.viewMode === "graph" ? (
-            <WorkspaceContextualInspectorHeader
-              onClose={workspacePanels.closeInspector}
-              selection={workspaceInspector}
-              selectionUnavailable={currentSelection !== null && workspaceInspector === null}
-            />
-          ) : (
-            <div className="application-panel-header">
-              <div>
-                <span className="application-panel-header__eyebrow">Structured view</span>
-                <h2 id="application-inspector-title">Inline inspector active</h2>
-              </div>
-              <button
-                aria-label="Close workspace inspector"
-                className="application-panel-header__button"
-                data-application-inspector-close="true"
-                onClick={workspacePanels.closeInspector}
-                title="Close workspace inspector"
-                type="button"
-              >
-                <PanelRightClose aria-hidden="true" />
-              </button>
-            </div>
-          ),
+          <WorkspaceContextualInspectorHeader
+            onClose={workspacePanels.closeInspector}
+            selection={workspaceInspector}
+            selectionUnavailable={currentSelection !== null && workspaceInspector === null}
+          />,
           workspacePanels.inspectorHeaderTarget,
         );
   const inspectorBodyPortal =
@@ -1038,20 +813,13 @@ export default function CommandCenterPage({
     workspacePanels?.inspectorBodyTarget === undefined
       ? null
       : createPortal(
-          state.viewMode === "graph" ? (
-            <WorkspaceContextualInspectorBody
-              onClearSelection={() => {
-                actions.select(null);
-              }}
-              selection={workspaceInspector}
-              selectionUnavailable={currentSelection !== null && workspaceInspector === null}
-            />
-          ) : (
-            <div className="application-panel-empty">
-              <strong>Structured view keeps its inline inspector</strong>
-              <p>Inspect the selected fixture entity beside the structured topology.</p>
-            </div>
-          ),
+          <WorkspaceContextualInspectorBody
+            onClearSelection={() => {
+              actions.select(null);
+            }}
+            selection={workspaceInspector}
+            selectionUnavailable={currentSelection !== null && workspaceInspector === null}
+          />,
           workspacePanels.inspectorBodyTarget,
         );
   const activitySummaryPortal =
@@ -1059,34 +827,20 @@ export default function CommandCenterPage({
     workspacePanels?.activitySummaryTarget === undefined
       ? null
       : createPortal(
-          state.viewMode === "graph" ? (
-            <>{activityEvents.length} simulated fixture events</>
-          ) : (
-            <>Fixture activity remains inline</>
-          ),
+          <>{activityEvents.length} simulated fixture events</>,
           workspacePanels.activitySummaryTarget,
         );
   const activityBodyPortal =
     workspacePanels?.activityBodyTarget === null ||
     workspacePanels?.activityBodyTarget === undefined
       ? null
-      : createPortal(
-          state.viewMode === "graph" ? (
-            workspaceActivityStream
-          ) : (
-            <div className="application-panel-empty application-panel-empty--inline">
-              <strong>Structured fixture activity remains in the page</strong>
-              <p>The protected Structured composition retains its own bounded activity stream.</p>
-            </div>
-          ),
-          workspacePanels.activityBodyTarget,
-        );
+      : createPortal(workspaceActivityStream, workspacePanels.activityBodyTarget);
 
   return (
     <>
       <section
         aria-labelledby="command-center-page-title"
-        className={`page-stack command-center-page command-center-page--${state.viewMode}`}
+        className="page-stack command-center-page command-center-page--graph"
       >
         <header className="command-center-page__header">
           <div>
@@ -1112,62 +866,34 @@ export default function CommandCenterPage({
           </span>
         </p>
 
-        {state.viewMode === "graph" ? (
-          <div className="command-center-graph-shell">
-            {filterControls}
-            <div className="command-center-graph-workspace">
-              <div className="command-center-workbench command-center-workbench--graph">
-                {topologyPanel}
-              </div>
+        <div className="command-center-graph-shell">
+          {filterControls}
+          <div className="command-center-graph-workspace">
+            <div className="command-center-workbench command-center-workbench--graph">
+              {topologyPanel}
+            </div>
 
-              <details className="command-center-graph-context">
-                <summary>
-                  <span>Operational context</span>
-                  <span>
-                    {overview.activeWork.length} simulated active · {overview.attention.length}{" "}
-                    attention · runtime unavailable
-                  </span>
-                </summary>
-                <div className="command-center-graph-context__body">
-                  <CommandCenterOverview
-                    model={overview}
-                    onSelect={selectTopology}
-                    onSelectEvent={selectFixtureEvent}
-                    selectedEventId={selectedEventId}
-                    selectedId={selectedTopologyId}
-                  />
-                  {nativeProofPanels}
-                </div>
-              </details>
-            </div>
+            <details className="command-center-graph-context">
+              <summary>
+                <span>Operational context</span>
+                <span>
+                  {overview.activeWork.length} simulated active · {overview.attention.length}{" "}
+                  attention · runtime unavailable
+                </span>
+              </summary>
+              <div className="command-center-graph-context__body">
+                <CommandCenterOverview
+                  model={overview}
+                  onSelect={selectTopology}
+                  onSelectEvent={selectFixtureEvent}
+                  selectedEventId={selectedEventId}
+                  selectedId={selectedTopologyId}
+                />
+                {nativeProofPanels}
+              </div>
+            </details>
           </div>
-        ) : (
-          <>
-            <CommandCenterOverview
-              model={overview}
-              onSelect={selectTopology}
-              selectedId={selectedTopologyId}
-            />
-            {filterControls}
-            {nativeProofPanels}
-            <div className="command-center-workbench">
-              {visibleNodes.length === 0 ? (
-                <section className="command-center-panel command-center-empty" role="status">
-                  <SearchX aria-hidden="true" />
-                  <h2>No matching topology entities</h2>
-                  <p>The current local filters hide every bounded fixture entity.</p>
-                  <button className="command-center-button" onClick={actions.reset} type="button">
-                    Reset filters
-                  </button>
-                </section>
-              ) : (
-                topologyPanel
-              )}
-              <ContextualInspector selection={selectedInspector} />
-            </div>
-            {activityStream}
-          </>
-        )}
+        </div>
       </section>
       {inspectorHeaderPortal}
       {inspectorBodyPortal}

@@ -50,6 +50,7 @@ const GRAPH_HELP_ID = "command-center-topology-help";
 const NODE_WIDTH = 196;
 const NODE_MIN_HEIGHT = 104;
 const NODE_MAX_HEIGHT = 120;
+const AGENT_NODE_HEIGHT = NODE_MAX_HEIGHT;
 const DOMAIN_LANE_PADDING = 14;
 const DOMAIN_LANE_VERTICAL_PADDING = 24;
 const DOMAIN_LANE_BOTTOM_PADDING = 16;
@@ -70,7 +71,7 @@ const COMPACT_GROUP_COLUMN_GAP = 36;
 const COMPACT_GROUP_SLOT_WIDTH = NODE_WIDTH * 2 + COMPACT_GROUP_MEMBER_GAP;
 const COMPACT_AGENT_GAP = NODE_WIDTH + COMPACT_GROUP_MEMBER_GAP;
 const COMPACT_GROUP_START_Y = 180;
-const COMPACT_GROUP_ROW_GAP = NODE_MAX_HEIGHT + DOMAIN_LANE_VERTICAL_PADDING * 2 + 14;
+const COMPACT_GROUP_ROW_GAP = AGENT_NODE_HEIGHT + DOMAIN_LANE_VERTICAL_PADDING * 2 + 14;
 const COMPACT_WORK_ROW_GAP = NODE_MAX_HEIGHT + 26;
 const COMPACT_WORK_NODE_GAP = 18;
 const LANDSCAPE_COLUMN_GAP = 12;
@@ -232,8 +233,9 @@ function OperationalNode({ data }: NodeProps<OperationalFlowNode>) {
 
 const NODE_TYPES = { operational: OperationalNode };
 
-function nodeHeight(label: string): number {
-  return label.length > 22 ? NODE_MAX_HEIGHT : NODE_MIN_HEIGHT;
+function nodeHeight(node: TopologyNode): number {
+  if (node.kind === "agent") return AGENT_NODE_HEIGHT;
+  return node.label.length > 22 ? NODE_MAX_HEIGHT : NODE_MIN_HEIGHT;
 }
 
 function visualNodeOrder(left: TopologyNode, right: TopologyNode): number {
@@ -398,7 +400,7 @@ function buildWorkspacePositions(
     members.forEach((member, memberIndex) => {
       positions.set(member.id, {
         x,
-        y: COMPACT_GROUP_START_Y + memberIndex * (NODE_MAX_HEIGHT + 12),
+        y: COMPACT_GROUP_START_Y + memberIndex * (AGENT_NODE_HEIGHT + 12),
       });
     });
   });
@@ -412,7 +414,7 @@ function buildWorkspacePositions(
         left.id.localeCompare(right.id),
     );
   const workColumnCount = 5;
-  const workStartY = COMPACT_GROUP_START_Y + maximumGroupMembers * (NODE_MAX_HEIGHT + 12) + 16;
+  const workStartY = COMPACT_GROUP_START_Y + maximumGroupMembers * (AGENT_NODE_HEIGHT + 12) + 16;
   for (let startIndex = 0; startIndex < workNodes.length; startIndex += workColumnCount) {
     const rowNodes = workNodes.slice(startIndex, startIndex + workColumnCount);
     const rowIndex = Math.floor(startIndex / workColumnCount);
@@ -458,7 +460,7 @@ function positionedTopologyBounds(
 ): Rect {
   if (nodes.length === 0) return { height: 0, width: 0, x: 0, y: 0 };
   const positionedNodes = nodes.map((node) => ({
-    height: nodeHeight(node.label),
+    height: nodeHeight(node),
     position: positions.get(node.id) ?? node.position,
   }));
   const minimumX = Math.min(...positionedNodes.map((node) => node.position.x));
@@ -772,8 +774,9 @@ function OperationalTopologyCanvas({
         const minimumX = Math.min(...members.map((member) => member.position.x));
         const maximumX = Math.max(...members.map((member) => member.position.x));
         const minimumY = Math.min(...members.map((member) => member.position.y));
-        const maximumY = Math.max(...members.map((member) => member.position.y));
-        const maximumHeight = Math.max(...members.map((member) => nodeHeight(member.label)));
+        const maximumBottom = Math.max(
+          ...members.map((member) => member.position.y + nodeHeight(member)),
+        );
         const groupIsSelected = selectedGroup?.id === group.id;
         const groupIsConnected =
           !groupIsSelected && members.some((member) => contextualNodeIdSet.has(member.id));
@@ -804,11 +807,7 @@ function OperationalTopologyCanvas({
             selectable: false,
             style: {
               height:
-                maximumY -
-                minimumY +
-                maximumHeight +
-                DOMAIN_LANE_VERTICAL_PADDING +
-                domainLaneBottomPadding,
+                maximumBottom - minimumY + DOMAIN_LANE_VERTICAL_PADDING + domainLaneBottomPadding,
               pointerEvents: "none",
               width: maximumX - minimumX + NODE_WIDTH + domainLaneHorizontalPadding * 2,
               zIndex: 1,
@@ -853,7 +852,7 @@ function OperationalTopologyCanvas({
         id: node.id,
         position: node.position,
         selectable: false,
-        style: { height: nodeHeight(node.label), width: NODE_WIDTH, zIndex: 2 },
+        style: { height: nodeHeight(node), width: NODE_WIDTH, zIndex: 2 },
         type: "operational" as const,
       })),
     ],

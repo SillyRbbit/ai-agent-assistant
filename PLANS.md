@@ -1,5 +1,18 @@
 # Execution plans
 
+## Active demo cleanup main reconciliation — 2026-09-21
+
+The owner-approved active plan is
+[demo cleanup main reconciliation](docs/plans/2026-09-21-demo-cleanup-main-reconciliation.md).
+It integrates the completed cleanup with the merged audit-unblock history using
+one two-parent merge, five additive memory-document resolutions, byte-identical
+UI content, and a new reconciliation report. It permits no implementation,
+dependency, audit-policy, native, workflow, hook, skill, harness, or D-125/M1/M2
+change. Publication updates PR #116 only after all required checks pass and
+stops before merge. Required local install, audit, test, build, repository, and
+actual desktop/narrow browser verification passed; ordinary completion and
+exact-head CI remain publication gates.
+
 ## Active dependency and Rust audit unblock — 2026-09-20
 
 The owner-approved active plan is
@@ -15,6 +28,17 @@ all parked D-125/M1/M2 work. All required implementation, dependency, audit,
 test, build, and complete verification checks passed. Publication remains
 conditional on the exact report and post-increment completion; merge remains
 outside scope.
+
+## 2026-09-20 demo cleanup publication
+
+Verified candidate: [demo-cleanup-publication](docs/plans/2026-09-20-demo-cleanup-publication.md).
+The owner approves extraction of the completed 13-file UI cleanup onto verified
+remote main with seven additive memory updates and one plan/report pair.
+Candidate validation, ordinary gates, commit, push and PR creation are in
+scope; merging and all historical harness/admission work are excluded.
+See the [candidate report](docs/reviews/2026-09-20-demo-cleanup-publication-post-increment-review.md)
+for passing candidate checks, the native GUI advisory and final disposition.
+Ordinary gate completion remains authoritative for publication.
 
 ## Current deterministic Graph planning — 2026-09-04
 

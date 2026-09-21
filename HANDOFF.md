@@ -1,5 +1,36 @@
 # Handoff
 
+## Demo cleanup main reconciliation — 2026-09-21
+
+PR #117 merged the combined dependency and Rust audit unblock into `main` as
+`ba1336e92734585adcd336ea0a33b9e89a320716`. PR #116 remains the completed
+demo cleanup rooted at `92c2e19eb71b08ad7a2996f83e034afe9babd52a`.
+
+The owner authorized one bounded reconciliation successor on
+`codex/demo-cleanup-main-reconciliation`. It merges the verified current main
+into the cleanup history, preserves all 13 UI blobs byte-for-byte, keeps both
+predecessor records as historical evidence, and adds only the new reconciliation
+plan/report pair. The exact ceiling is 24 PR-relative paths.
+
+No runtime, dependency, audit baseline, native code, workflow, hook, skill,
+permission, or governance behavior changes. D-125/M1/M2 remain parked. Clean
+installation, exact dependency inspection, npm and Cargo audits, focused and
+full verification, secret scanning, and actual 2487px/1280px browser Fit View
+checks passed. Native GUI smoke remains advisory; browser evidence does not
+establish native WebView behavior. Publication requires a valid ordinary
+completion record and successful new exact-head CI, then stops before merge.
+
+### Next prompt
+
+```text
+Inspect PR #116 and current remote main before acting. Confirm the reconciled
+head, exact 24-path scope, valid completion marker, preserved 13 UI blobs,
+successful exact-head CI and retained native GUI advisory. Preserve every
+checkout and do not repeat implementation or resume D-125/M1/M2. Report merge
+readiness and stop on drift, failed or pending checks, conflicts, or new review
+findings. Do not merge without separate explicit owner authorization.
+```
+
 ## Combined dependency and Rust audit unblock — 2026-09-20
 
 The owner authorized one isolated successor from remote main at
@@ -26,6 +57,45 @@ complete verification checks passed after one in-scope plan-format repair.
 Completion remains authoritative only after the exact 16-path report and
 post-increment record validate. Then create one successor commit and PR and
 require successful exact-head CI. Stop before merge or any PR #116 update.
+
+## 2026-09-20 demo cleanup publication
+
+The owner selected the bounded
+[publication plan](docs/plans/2026-09-20-demo-cleanup-publication.md).
+Branch: `codex/demo-cleanup-publication`; base:
+`f176c36cc701b5a296162331cfcb2600b2157663`, verified remote main.
+The isolated candidate contains the existing 13 UI-file changes and nine
+publication-documentation paths. The original main checkout at
+`87d52a6d22a589605f485cf7b9765bae39da4f00`, its seven unpublished commits,
+43 changed paths and local gate evidence remain separate and preserved.
+
+Structured view is removed, group titles are plain, and all nine agent cards
+have equal heights with common standard row edges. Graph controls and
+workspace interactions remain. No implementation was repeated.
+Local D-125/M1/M2 work remains parked and unaccepted. Earlier queue entries
+below remain historical; this explicit owner task controls only publication.
+
+Admission, 21 baseline tests, 191 affected candidate tests, lint, typecheck,
+production build, desktop/narrow browser checks, documentation, repository,
+security, whitespace and session checks passed. See the
+[candidate report](docs/reviews/2026-09-20-demo-cleanup-publication-post-increment-review.md).
+Quality: PASS WITH ADVISORIES. Native GUI smoke remains advisory and is not
+inferred from browser checks. Exact 22-path scope and original-checkout
+preservation passed. Gate completion requires complete/valid status.
+After that, commit/push/PR are authorized; stop before merge. PR identity and
+remote checks must be inspected from actual GitHub state, not inferred here.
+
+### Next prompt
+
+```text
+Inspect the demo-cleanup-publication candidate and actual PR state before
+editing. Preserve the original ai-agent-assistant checkout, unpublished
+commits and all user changes. Read the candidate plan/report and verify exact
+22-path scope, local completion evidence and applicable PR checks. Do not
+repeat completed implementation, resume D-125/M1/M2, modify unrelated files
+or merge without explicit owner authorization. Report remaining review or
+validation blockers; stop on failed checks, drift or missing evidence.
+```
 
 ## Current deterministic Graph planning — 2026-09-04
 

@@ -1,5 +1,20 @@
 # Next steps
 
+## Active demo cleanup main reconciliation — 2026-09-21
+
+Complete only the owner-approved
+[main reconciliation](docs/plans/2026-09-21-demo-cleanup-main-reconciliation.md).
+Preserve the 13 UI blobs from `92c2e19eb71b08ad7a2996f83e034afe9babd52a`
+and inherit the audit-unblock merge `ba1336e92734585adcd336ea0a33b9e89a320716`
+unchanged. The exact PR-relative ceiling is the original 22 cleanup paths plus
+the new reconciliation plan/report pair.
+
+All required install, dependency, audit, focused/full verification, secret, and
+actual desktop/narrow browser checks passed. Finish the ordinary completion
+gates, publish the result as a fast-forward update to PR #116, inspect every new
+exact-head job, and stop before merge. Keep native GUI smoke advisory. Do not
+begin D-125, M1, M2, product work, or another dependency/audit successor.
+
 ## Active combined dependency and Rust audit unblock — 2026-09-20
 
 The required clean install, exact dependency inspection, full and production
@@ -14,6 +29,20 @@ After a valid passing local result, commit and push only
 codex/dependency-and-rust-audit-unblock, open one PR into main, and inspect every
 exact-head CI job. Do not merge or update PR #116. Do not begin D-125, M1, M2,
 or another dependency/Cargo remediation successor.
+
+## 2026-09-20 bounded cleanup publication
+
+Complete only the owner-approved
+[demo cleanup publication](docs/plans/2026-09-20-demo-cleanup-publication.md).
+The isolated 22-path candidate passed its required local checks with a native
+GUI advisory. After valid ordinary gate completion, commit, push and open a
+PR into main. Stop before merge. PR review is Ready with advisories; passing
+local results do not substitute for applicable remote checks or merge approval.
+
+Preserve the original checkout and unpublished history. D-125/M1/M2 remain
+parked and unaccepted, and no functional successor or live Personal Assistant
+connection is authorized. Historical queue instructions below do not reopen
+those lanes for this separately approved cleanup.
 
 ## Current deterministic Graph planning — 2026-09-04
 

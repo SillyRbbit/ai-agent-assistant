@@ -1,5 +1,25 @@
 # Project status
 
+## Active demo cleanup main reconciliation — 2026-09-21
+
+Status: **Required local verification passed; ordinary completion and remote
+exact-head CI remain before merge review.**
+
+Current remote main is the merged dependency-and-Rust-audit result at
+`ba1336e92734585adcd336ea0a33b9e89a320716`. PR #116 retains the completed
+Command Center cleanup at `92c2e19eb71b08ad7a2996f83e034afe9babd52a`.
+The reconciliation successor combines those histories without altering the 13
+UI blobs or the inherited dependency and Cargo audit changes.
+
+The current diff remains presentation cleanup plus additive publication
+evidence. Clean install, exact dependency inspection, zero-vulnerability npm
+audits, the unchanged accepted Cargo advisory baseline, 191 focused frontend
+tests, full `npm run verify`, secret scanning, and actual 2487px/1280px Fit View
+checks passed. No trust boundary, runtime, provider, credential, permission,
+native capability, or device authority changes. D-125/M1/M2 remain parked.
+Native GUI smoke remains a truthful advisory and exact-head CI remains required
+before a separate merge-readiness decision.
+
 ## Active dependency and Rust audit unblock — 2026-09-20
 
 Status: **Implementation and required local validation complete; final
@@ -20,6 +40,29 @@ capabilities and trust boundaries are unchanged. PR #116, the original
 dirty checkout, both earlier isolated worktrees, seven unpublished commits, the
 native GUI advisory, and parked D-125/M1/M2 state remain preserved. Completion
 and publication remain conditional on the exact report and final gate.
+
+## 2026-09-20 isolated demo cleanup candidate
+
+The existing deterministic Command Center now has one graph presentation,
+plain group headers and nine equal-height agent cards. Card widths,
+orchestrator sizing, graph renderer and shared interactions remain.
+This is presentation cleanup, not a connected native Graph or live assistant.
+
+The owner-approved candidate starts at verified remote main
+`f176c36cc701b5a296162331cfcb2600b2157663` on
+`codex/demo-cleanup-publication`. Its exact scope is 13 UI changes and nine
+documentation paths. Admission, 21 baseline tests, 191 affected candidate
+tests, lint, typecheck, build, desktop/narrow browser, documentation,
+repository, security, whitespace, scope/preservation and session checks passed.
+Quality: PASS WITH ADVISORIES, as recorded in the
+[publication report](docs/reviews/2026-09-20-demo-cleanup-publication-post-increment-review.md).
+Native GUI smoke remains advisory. The ordinary gate must validate before
+commit/push/PR; this report does not claim remote checks or merge completion.
+
+Seven unpublished local harness commits and unfinished D-125 work remain in
+the original checkout. Their historical failures and blocked outcomes are not
+rehabilitated by this separate candidate. M1/M2 and live operational work
+remain parked or blocked.
 
 ## Current deterministic Graph planning — 2026-09-04
 
