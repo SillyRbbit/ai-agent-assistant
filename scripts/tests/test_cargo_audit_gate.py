@@ -20,6 +20,33 @@ def load_module():
 gate = load_module()
 
 
+EXPECTED_ACCEPTED_WARNINGS = frozenset(
+    {
+        ("RUSTSEC-2024-0370", "proc-macro-error", "1.0.4"),
+        ("RUSTSEC-2024-0429", "glib", "0.18.5"),
+        ("RUSTSEC-2025-0075", "unic-char-range", "0.9.0"),
+        ("RUSTSEC-2025-0080", "unic-common", "0.9.0"),
+        ("RUSTSEC-2025-0081", "unic-char-property", "0.9.0"),
+        ("RUSTSEC-2025-0098", "unic-ucd-version", "0.9.0"),
+        ("RUSTSEC-2025-0100", "unic-ucd-ident", "0.9.0"),
+        ("RUSTSEC-2026-0190", "anyhow", "1.0.102"),
+    }
+)
+
+WITHDRAWN_GTK_WARNINGS = (
+    ("RUSTSEC-2024-0411", "gdkwayland-sys", "0.18.2"),
+    ("RUSTSEC-2024-0412", "gdk", "0.18.2"),
+    ("RUSTSEC-2024-0413", "atk", "0.18.2"),
+    ("RUSTSEC-2024-0414", "gdkx11-sys", "0.18.2"),
+    ("RUSTSEC-2024-0415", "gtk", "0.18.2"),
+    ("RUSTSEC-2024-0416", "atk-sys", "0.18.2"),
+    ("RUSTSEC-2024-0417", "gdkx11", "0.18.2"),
+    ("RUSTSEC-2024-0418", "gdk-sys", "0.18.2"),
+    ("RUSTSEC-2024-0419", "gtk3-macros", "0.18.2"),
+    ("RUSTSEC-2024-0420", "gtk-sys", "0.18.2"),
+)
+
+
 def entry(advisory_id: str, package: str = "quick-xml", version: str = "0.39.4"):
     return {
         "advisory": {"id": advisory_id},
@@ -42,6 +69,9 @@ def accepted_warnings():
 
 
 class CargoAuditGateTests(unittest.TestCase):
+    def test_accepted_warning_set_is_exact(self) -> None:
+        self.assertEqual(gate.ACCEPTED_WARNINGS, EXPECTED_ACCEPTED_WARNINGS)
+
     def test_accepts_clean_success(self) -> None:
         self.assertEqual(gate.validate_report(report(), 0), ())
 
@@ -87,6 +117,26 @@ class CargoAuditGateTests(unittest.TestCase):
         findings = gate.validate_report(payload, 0)
 
         self.assertTrue(any("RUSTSEC-2099-0002" in finding for finding in findings))
+
+    def test_rejects_each_withdrawn_gtk_warning_if_it_reappears(self) -> None:
+        for advisory_id, package, version in WITHDRAWN_GTK_WARNINGS:
+            with self.subTest(advisory_id=advisory_id):
+                payload = report(
+                    warnings={
+                        "informational": accepted_warnings()
+                        + [entry(advisory_id, package, version)]
+                    }
+                )
+
+                findings = gate.validate_report(payload, 0)
+
+                self.assertTrue(
+                    any(
+                        f"unexpected warning {advisory_id} in {package} {version}"
+                        in finding
+                        for finding in findings
+                    )
+                )
 
     def test_rejects_changed_warning_package_version(self) -> None:
         warnings = accepted_warnings()

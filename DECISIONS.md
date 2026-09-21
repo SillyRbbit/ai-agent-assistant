@@ -6652,3 +6652,67 @@ D-062/D-094 owner authentication remains separately mandatory and Blocked.
 D-121 dispositions only the exact D-120-authorized frozen candidate assessment.
 It does not supersede D-060, D-061, D-062, D-094, D-107, D-118, D-119, D-120,
 synthetic-v1, historical V0-14, or any security, testing, or readiness gate.
+
+## D-127 - Reconcile the exact Cargo audit warning baseline to current RustSec data
+
+Date: 2026-09-20
+Status: Accepted
+
+### Context
+
+D-046 accepted an exact visible Cargo advisory baseline, and D-057 preserved
+that fail-closed model in the current dependency-audit workflow. The baseline
+contains two quick-xml 0.39.4 vulnerabilities and eighteen warnings, including
+RUSTSEC-2024-0411 through RUSTSEC-2024-0420 for gtk3-rs crates at 0.18.2.
+
+RustSec commit b266fb89baa88c73c6aaa53e0e87509c80bdf962 marked those ten
+advisories withdrawn on 2026-08-14. Its recorded reason is that the gtk3-rs
+repository was unarchived, README maintenance warnings were removed, and
+development resumed. Current cargo-audit 0.22.2 output omits withdrawn
+advisories and reports only eight current warnings for Cortexa's lockfile. The
+existing exact gate therefore fails because it requires findings that RustSec
+no longer emits.
+
+The same CI job is also blocked earlier by three JavaScript advisories in
+development tooling. The separately validated remediation resolves Vitest and
+its matching package family at 4.1.11, baseline-browser-mapping at 2.11.0, and
+js-yaml at 4.3.2 without changing product runtime dependencies.
+
+### Decision
+
+Keep the exact fail-closed Cargo audit design. Preserve RUSTSEC-2026-0194 and
+RUSTSEC-2026-0195 for quick-xml 0.39.4 as the exact accepted vulnerability set.
+Replace the historical eighteen-warning current baseline with the exact eight
+warnings reported by current RustSec data:
+
+- RUSTSEC-2024-0370, proc-macro-error 1.0.4;
+- RUSTSEC-2024-0429, glib 0.18.5;
+- RUSTSEC-2025-0075, unic-char-range 0.9.0;
+- RUSTSEC-2025-0080, unic-common 0.9.0;
+- RUSTSEC-2025-0081, unic-char-property 0.9.0;
+- RUSTSEC-2025-0098, unic-ucd-version 0.9.0;
+- RUSTSEC-2025-0100, unic-ucd-ident 0.9.0; and
+- RUSTSEC-2026-0190, anyhow 1.0.102.
+
+Remove only RUSTSEC-2024-0411 through RUSTSEC-2024-0420 from the accepted
+warning set. If any withdrawn ID reappears, the gate rejects it as unexpected.
+Do not add ignores, an audit configuration exception, caller-selected findings,
+or automatic synchronization with advisory data.
+
+### Consequences
+
+- Any new, missing, version-drifted, malformed, or exit-status-inconsistent
+  finding continues to fail closed.
+- The two accepted quick-xml vulnerabilities and eight current warnings remain
+  visible remediation debt; this decision does not waive or resolve them.
+- RustSec's withdrawal records resumed project maintenance. It does not prove
+  that Cortexa's locked GTK 0.18.2 crates are vulnerability-free.
+- The JavaScript changes affect development/test tooling only and add no
+  product runtime, credential, permission, network, IPC, or device authority.
+
+### Supersedes or is superseded by
+
+D-127 supersedes only the current applicability of D-046's and D-057's
+eighteen-warning tuple set. Their historical evidence, fail-closed audit design,
+workflow trust controls, and D-025's exact two-vulnerability baseline remain
+unchanged.

@@ -1,5 +1,32 @@
 # Handoff
 
+## Combined dependency and Rust audit unblock — 2026-09-20
+
+The owner authorized one isolated successor from remote main at
+f176c36cc701b5a296162331cfcb2600b2157663. The exact plan is
+[dependency and Rust audit unblock](docs/plans/2026-09-20-dependency-and-rust-audit-unblock.md).
+Ordinary gate admission succeeded on branch
+codex/dependency-and-rust-audit-unblock.
+
+The two package files were transferred byte-for-byte from the preserved valid
+terminal-failed dependency worktree after both source blobs matched remote
+main. The implementation updates only the approved JavaScript development/test
+graph, removes the ten withdrawn GTK advisories from the exact accepted-warning
+set, preserves the two quick-xml vulnerabilities and eight current warnings,
+and adds focused regression coverage.
+
+PR #116 remains open at head 92c2e19eb71b08ad7a2996f83e034afe9babd52a
+with its exact 22-file cleanup scope and unchanged native GUI advisory. The
+original dirty checkout, its seven unpublished commits, the cleanup worktree,
+and the terminal-failed dependency worktree remain preserved. D-125, M1, and M2
+remain parked.
+
+All required local install, dependency, test, audit, secret, build, Tauri, and
+complete verification checks passed after one in-scope plan-format repair.
+Completion remains authoritative only after the exact 16-path report and
+post-increment record validate. Then create one successor commit and PR and
+require successful exact-head CI. Stop before merge or any PR #116 update.
+
 ## Current deterministic Graph planning — 2026-09-04
 
 The owner selected a documentation-only plan for a private deterministic Graph
