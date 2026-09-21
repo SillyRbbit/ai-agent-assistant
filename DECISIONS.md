@@ -1,5 +1,24 @@
 # Decision log
 
+## 2026-09-20 — Publish the bounded demo cleanup
+
+Status: Accepted by the owner for this exact publication task.
+
+The owner approves publishing the completed Structured removal, plain group
+headers and equal agent-card heights through an isolated PR into main.
+For this cleanup only, this supersedes historical directions to retain
+Structured view or finish the proposed harness before changing presentation.
+The existing graph, deterministic fixtures and shared interactions remain.
+
+The exact [22-path plan](docs/plans/2026-09-20-demo-cleanup-publication.md)
+starts from verified remote main. Exclude all seven unpublished local harness
+commits and unfinished D-125 changes; preserve them in the original checkout.
+This is no historical acceptance, failure recovery or permission to resume
+M1/M2. Ordinary existing gates apply in the isolated worktree without gate
+changes. Commit, push and PR creation require passing candidate validation;
+merge is explicitly outside this task. No live connection, provider, runtime,
+credential, permission, dependency or native-code change is authorized.
+
 Record durable technical and workflow decisions here. Do not delete prior decisions; mark them superseded and add the replacement decision.
 
 ## D-001 — Use Tauri 2 with React, TypeScript, Vite, and Rust

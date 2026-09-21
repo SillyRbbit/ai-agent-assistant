@@ -1,5 +1,16 @@
 # Execution plans
 
+## 2026-09-20 demo cleanup publication
+
+Verified candidate: [demo-cleanup-publication](docs/plans/2026-09-20-demo-cleanup-publication.md).
+The owner approves extraction of the completed 13-file UI cleanup onto verified
+remote main with seven additive memory updates and one plan/report pair.
+Candidate validation, ordinary gates, commit, push and PR creation are in
+scope; merging and all historical harness/admission work are excluded.
+See the [candidate report](docs/reviews/2026-09-20-demo-cleanup-publication-post-increment-review.md)
+for passing candidate checks, the native GUI advisory and final disposition.
+Ordinary gate completion remains authoritative for publication.
+
 ## Current deterministic Graph planning — 2026-09-04
 
 The owner selected a documentation-only plan for a private deterministic Graph

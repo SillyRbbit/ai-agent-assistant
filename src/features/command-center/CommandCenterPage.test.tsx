@@ -99,8 +99,14 @@ beforeEach(() => {
   createLifecycleClient.mockResolvedValue(createLifecycleClientDouble().client);
 });
 
-function openStructuredView(): void {
-  fireEvent.click(screen.getByRole("button", { name: "Structured" }));
+// React Flow node wrappers remain unmeasured in JSDOM; inspect their explicit labels.
+// Rendered visibility and viewport behavior are covered by the browser smoke check.
+function graphNode(name: RegExp): HTMLElement {
+  const node = Array.from(document.querySelectorAll<HTMLElement>(".command-center-node")).find(
+    (candidate) => name.test(candidate.getAttribute("aria-label") ?? ""),
+  );
+  if (node === undefined) throw new Error(`Expected graph node ${String(name)}`);
+  return node;
 }
 
 function selectScenario(label: string): void {
@@ -169,22 +175,14 @@ describe("CommandCenterPage", () => {
     expect(screen.getByTestId("test-shell-inspector")).toHaveTextContent("AgentOrchestrator");
     expect(screen.getByTestId("test-shell-activity")).toHaveTextContent("simulated fixture events");
 
-    openStructuredView();
-    expect(page).toHaveClass("command-center-page--structured");
-    expect(page?.querySelector(".command-center-graph-shell")).toBeNull();
-    expect(page?.querySelector(".command-center-graph-context")).toBeNull();
-    expect(page?.querySelector(".command-center-inspector")).not.toBeNull();
-    expect(page?.querySelector(".command-center-activity")).not.toBeNull();
+    expect(screen.queryByRole("button", { name: "Structured" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Graph" })).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Topology representation")).not.toBeInTheDocument();
   });
 
   it("provides tooltips for graph controls that become icon-only", () => {
     const { container } = renderCommandCenter();
 
-    expect(screen.getByRole("button", { name: "Graph" })).toHaveAttribute("title", "Graph view");
-    expect(screen.getByRole("button", { name: "Structured" })).toHaveAttribute(
-      "title",
-      "Structured view",
-    );
     expect(container.querySelector(".command-center-graph-filters > summary")).toHaveAttribute(
       "title",
       "Filters",
@@ -399,46 +397,30 @@ describe("CommandCenterPage", () => {
     }
   });
 
-  it("keeps all nine exact agents available in the synchronized structured view", () => {
+  it("keeps all nine agents available through graph filters", () => {
     renderCommandCenter();
-    openStructuredView();
-
     const agentSelect = screen.getByLabelText<HTMLSelectElement>("Agent");
-    const agentOptionValues = Array.from(agentSelect.options).map((option) => option.value);
     for (const agentId of COMMAND_CENTER_AGENT_IDS) {
-      expect(agentOptionValues).toContain(agentId);
       fireEvent.change(agentSelect, { target: { value: agentId } });
       expect(agentSelect).toHaveValue(agentId);
+      const label = agentSelect.selectedOptions[0]?.label;
+      if (label === undefined) throw new Error("Expected selected agent option");
+      expect(graphNode(new RegExp(`^${label}, agent,`))).toBeInTheDocument();
     }
     fireEvent.change(agentSelect, { target: { value: "all" } });
-
-    expect(screen.getByRole("heading", { name: "Relationship table" })).toBeInTheDocument();
-    expect(screen.getByRole("columnheader", { name: "Relationship" })).toBeInTheDocument();
-    expect(
-      screen.queryByRole("listbox", { name: /Simulated operational topology/ }),
-    ).not.toBeInTheDocument();
+    expect(document.querySelectorAll(".command-center-node")).toHaveLength(10);
+    expect(screen.queryByRole("heading", { name: "Relationship table" })).not.toBeInTheDocument();
   });
 
-  it("synchronizes structured selection with the read-only inspector", () => {
+  it("synchronizes graph selection with the read-only workspace inspector", () => {
     renderCommandCenter();
-    openStructuredView();
-
-    const researchAgent = screen
-      .getAllByRole("button", { name: /Research Agent/ })
-      .find((button) => button.classList.contains("command-center-entity-button"));
-    if (researchAgent === undefined) throw new Error("Expected the structured Research Agent row");
-    fireEvent.click(researchAgent);
-    const inspector = screen.getByRole("complementary", { name: "Contextual inspector" });
+    fireEvent.click(graphNode(/^Research Agent, agent,/));
+    const inspector = screen.getByTestId("test-shell-inspector");
     expect(within(inspector).getByRole("heading", { name: "Research Agent" })).toBeInTheDocument();
     expect(inspector).toHaveTextContent("Advisory analysis only");
     expect(inspector).toHaveTextContent("deterministic fixture");
     expect(inspector).toHaveTextContent("Bounded deterministic fixture data");
     expect(inspector).toHaveTextContent("Advisory presentation finding");
-    expect(inspector).toHaveTextContent("Available only in this fixture");
-
-    fireEvent.click(screen.getByRole("button", { name: /Intelligence/ }));
-    expect(within(inspector).getByRole("heading", { name: "Intelligence" })).toBeInTheDocument();
-    expect(inspector).toHaveTextContent("Presentation grouping grants no route");
   });
 
   it("clears Graph filters without resetting scenario, selection, or activity state", () => {
@@ -481,7 +463,7 @@ describe("CommandCenterPage", () => {
     ).toBeInTheDocument();
   });
 
-  it("focuses only existing Graph relationship families without changing Structured rows", () => {
+  it("focuses only existing graph relationship families", () => {
     renderCommandCenter();
     selectScenario("research-knowledge-active");
 
@@ -504,23 +486,6 @@ describe("CommandCenterPage", () => {
     expect(relationshipFocus).toHaveValue("dependencies");
     fireEvent.change(relationshipFocus, { target: { value: "untrusted-webview-value" } });
     expect(relationshipFocus).toHaveValue("dependencies");
-
-    openStructuredView();
-    expect(screen.queryByLabelText("Relationship focus")).not.toBeInTheDocument();
-    const relationshipSection = screen
-      .getByRole("heading", { name: "Relationship table" })
-      .closest("section");
-    if (relationshipSection === null) throw new Error("Expected Structured relationship table");
-    expect(
-      within(relationshipSection).getByRole("button", {
-        name: /Assigns independent Research work/,
-      }),
-    ).toBeInTheDocument();
-    expect(
-      within(relationshipSection).getAllByRole("button", {
-        name: /Returns source-attributed findings/,
-      }),
-    ).toHaveLength(2);
   });
 
   it("shows blocked and cancellation fixtures truthfully with bounded activity", () => {
@@ -607,36 +572,15 @@ describe("CommandCenterPage", () => {
 
   it("covers queued, active, approval-wait, and completed fixture states", () => {
     renderCommandCenter();
-    openStructuredView();
-
     selectScenario("research-queued");
-    expect(
-      screen
-        .getAllByRole("button", { name: /Research analysis.*queued/ })
-        .some((button) => button.classList.contains("command-center-entity-button")),
-    ).toBe(true);
-
+    expect(graphNode(/^Research analysis, task, queued/)).toBeInTheDocument();
     selectScenario("research-knowledge-active");
-    expect(
-      screen
-        .getAllByRole("button", { name: /Research findings.*running/ })
-        .some((button) => button.classList.contains("command-center-entity-button")),
-    ).toBe(true);
-    expect(
-      screen
-        .getAllByRole("button", { name: /Knowledge findings.*running/ })
-        .some((button) => button.classList.contains("command-center-entity-button")),
-    ).toBe(true);
-
+    expect(graphNode(/^Research findings, task, running/)).toBeInTheDocument();
+    expect(graphNode(/^Knowledge findings, task, running/)).toBeInTheDocument();
     selectScenario("engineering-waiting-approval");
     expect(
-      screen
-        .getAllByRole("button", {
-          name: /Application approval checkpoint.*waiting approval/,
-        })
-        .some((button) => button.classList.contains("command-center-entity-button")),
-    ).toBe(true);
-
+      graphNode(/^Application approval checkpoint, approval checkpoint, waiting approval/),
+    ).toBeInTheDocument();
     selectScenario("workflow-completed");
     fireEvent.change(screen.getByLabelText("Severity"), { target: { value: "success" } });
     expect(
@@ -664,9 +608,8 @@ describe("CommandCenterPage", () => {
     expect(activity).not.toHaveTextContent("Knowledge fixture started");
 
     fireEvent.change(screen.getByLabelText("Agent"), { target: { value: "all" } });
-    openStructuredView();
     activity = screen.getByRole("list", { name: "Simulated command center activity" });
-    fireEvent.click(screen.getByRole("button", { name: /Research findings.*running/ }));
+    fireEvent.click(graphNode(/^Research findings, task, running/));
     const beforeFollowCount = activity.querySelectorAll("li").length;
     fireEvent.click(screen.getByRole("button", { name: "Follow selected path" }));
     expect(activity.querySelectorAll("li").length).toBeGreaterThan(0);
@@ -767,26 +710,6 @@ describe("CommandCenterPage", () => {
     expect(workspaceActivity).toHaveTextContent("Associated agentQA & Validation Agent");
   });
 
-  it("retains Structured Recent Activity's topology-context selection", () => {
-    renderCommandCenter();
-    selectScenario("engineering-waiting-approval");
-    openStructuredView();
-    const recentActivity = screen.getByRole("list", { name: "Recent deterministic activity" });
-    const qaEvent = within(recentActivity).getByRole("button", {
-      name: "Inspect context for deterministic event QA advisory review complete",
-    });
-
-    fireEvent.click(qaEvent);
-
-    expect(qaEvent).toHaveAttribute("aria-pressed", "true");
-    expect(
-      within(screen.getByRole("complementary", { name: "Contextual inspector" })).getByRole(
-        "heading",
-        { name: "QA advisory review" },
-      ),
-    ).toBeInTheDocument();
-  });
-
   it("resets an event selection to the next scenario's bounded orchestrator selection", () => {
     renderCommandCenter();
     selectScenario("research-knowledge-active");
@@ -826,63 +749,50 @@ describe("CommandCenterPage", () => {
     expect(Array.from(severity.options).map((option) => option.value)).not.toContain("danger");
   });
 
-  it("follows agent, relationship, and group paths without dropping attributed activity", () => {
+  it("follows agent and relationship paths while retaining domain-filtered activity", () => {
     renderCommandCenter();
     selectScenario("engineering-waiting-approval");
-    openStructuredView();
-
     const activity = screen.getByRole("list", { name: "Simulated command center activity" });
     const follow = screen.getByRole("button", { name: "Follow selected path" });
-
     fireEvent.change(screen.getByLabelText("Search simulated topology"), {
       target: { value: "Coding proposal retained" },
     });
-    const searchedCodingAgent = screen
-      .getAllByRole("button", { name: /Coding Agent/ })
-      .find((button) => button.classList.contains("command-center-entity-button"));
-    expect(searchedCodingAgent).toBeDefined();
-    fireEvent.change(screen.getByLabelText("Search simulated topology"), {
-      target: { value: "" },
-    });
-
-    const codingAgent = screen
-      .getAllByRole("button", { name: /Coding Agent/ })
-      .find((button) => button.classList.contains("command-center-entity-button"));
-    if (codingAgent === undefined) throw new Error("Expected the structured Coding Agent row");
-    fireEvent.click(codingAgent);
-    expect(screen.getByRole("complementary", { name: "Contextual inspector" })).toHaveTextContent(
+    expect(graphNode(/^Coding Agent, agent,/)).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText("Search simulated topology"), { target: { value: "" } });
+    fireEvent.click(graphNode(/^Coding Agent, agent,/));
+    expect(screen.getByTestId("test-shell-inspector")).toHaveTextContent(
       "Coding proposal retained",
     );
     fireEvent.click(follow);
     expect(activity).toHaveTextContent("Coding proposal retained");
-
     fireEvent.click(follow);
-    fireEvent.click(screen.getByRole("button", { name: /Assigned to Coding Agent/ }));
+    fireEvent.click(screen.getByLabelText("Show relationship legend"));
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: /Inspect relationship Coding proposal, Owns Task, Coding Agent/,
+      }),
+    );
     fireEvent.click(follow);
     expect(activity).toHaveTextContent("Coding proposal retained");
-
     fireEvent.click(follow);
-    fireEvent.click(screen.getByRole("button", { name: /Engineering.*Proposal preparation/ }));
-    fireEvent.click(follow);
+    fireEvent.change(screen.getByLabelText("Domain"), { target: { value: "engineering" } });
     expect(activity).toHaveTextContent("Coding proposal retained");
     expect(activity).toHaveTextContent("QA advisory review complete");
   });
 
-  it("synchronizes relationship selection and exposes bounded provenance details", () => {
+  it("synchronizes graph relationship selection and bounded provenance details", () => {
     renderCommandCenter();
-    openStructuredView();
-
-    const relationship = screen.getByRole("button", { name: /Owns the bounded root lifecycle/ });
+    fireEvent.click(screen.getByLabelText("Show relationship legend"));
+    const relationship = screen.getByRole("button", {
+      name: /Inspect relationship AgentOrchestrator, Orchestrates, Personal Assistant/,
+    });
     fireEvent.click(relationship);
     expect(relationship).toHaveAttribute("aria-pressed", "true");
-
-    const inspector = screen.getByRole("complementary", { name: "Contextual inspector" });
+    const inspector = screen.getByTestId("test-shell-inspector");
     expect(inspector).toHaveTextContent("Source");
     expect(inspector).toHaveTextContent("AgentOrchestrator");
     expect(inspector).toHaveTextContent("Personal Assistant");
-
-    const details = screen.getByText("View bounded detail");
-    fireEvent.click(details);
+    fireEvent.click(screen.getByText("View bounded detail"));
     expect(screen.getByText("Fixture event ID")).toBeInTheDocument();
     expect(screen.getByText("presentation safe", { exact: false })).toBeInTheDocument();
   });
@@ -911,7 +821,7 @@ describe("CommandCenterPage", () => {
     expect(screen.getByTestId("test-shell-inspector")).toHaveTextContent("AgentOrchestrator");
   });
 
-  it("defaults to the structured alternative at browser-only narrow width", () => {
+  it("retains the graph without a mode selector at narrow width and after state changes", () => {
     const previousMatchMedia = window.matchMedia;
     Object.defineProperty(window, "matchMedia", {
       configurable: true,
@@ -926,10 +836,22 @@ describe("CommandCenterPage", () => {
 
     try {
       renderCommandCenter();
-      expect(screen.getByRole("heading", { name: "Relationship table" })).toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: "Structured" })).not.toBeInTheDocument();
+      expect(screen.queryByLabelText("Topology representation")).not.toBeInTheDocument();
       expect(
-        screen.queryByRole("listbox", { name: /Simulated operational topology/ }),
-      ).not.toBeInTheDocument();
+        screen.getByRole("listbox", { name: /Simulated operational topology/ }),
+      ).toBeInTheDocument();
+      selectScenario("research-queued");
+      fireEvent.change(screen.getByLabelText("Search simulated topology"), {
+        target: { value: "no match" },
+      });
+      const reset = screen.getAllByRole("button", { name: "Reset filters" })[0];
+      if (reset === undefined) throw new Error("Expected reset filters control");
+      fireEvent.click(reset);
+      expect(
+        screen.getByRole("listbox", { name: /Simulated operational topology/ }),
+      ).toBeInTheDocument();
+      expect(document.querySelector(".command-center-structured")).toBeNull();
     } finally {
       Object.defineProperty(window, "matchMedia", {
         configurable: true,

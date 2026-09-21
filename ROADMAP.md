@@ -1,5 +1,18 @@
 # Cortexa roadmap
 
+## 2026-09-20 owner-approved cleanup publication
+
+The immediate bounded task is the
+[cleanup-only PR](docs/plans/2026-09-20-demo-cleanup-publication.md):
+publish existing Structured removal and graph alignment corrections after
+candidate validation, then stop before merge. This supersedes the earlier
+presentation prerequisite only for this explicitly approved cleanup.
+
+Keep unpublished D-125/M1/M2 work parked at its actual outcomes. A future
+Personal Assistant request/response connection still needs a separate bounded
+proposal and approval. No graph expansion, external frameworks, voice,
+productionization or live integration follows from publication.
+
 ## Current deterministic Graph planning — 2026-09-04
 
 The owner selected a documentation-only plan for a private deterministic Graph

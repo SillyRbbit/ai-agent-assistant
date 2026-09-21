@@ -1,5 +1,19 @@
 # Next steps
 
+## 2026-09-20 bounded cleanup publication
+
+Complete only the owner-approved
+[demo cleanup publication](docs/plans/2026-09-20-demo-cleanup-publication.md).
+The isolated 22-path candidate passed its required local checks with a native
+GUI advisory. After valid ordinary gate completion, commit, push and open a
+PR into main. Stop before merge. PR review is Ready with advisories; passing
+local results do not substitute for applicable remote checks or merge approval.
+
+Preserve the original checkout and unpublished history. D-125/M1/M2 remain
+parked and unaccepted, and no functional successor or live Personal Assistant
+connection is authorized. Historical queue instructions below do not reopen
+those lanes for this separately approved cleanup.
+
 ## Current deterministic Graph planning — 2026-09-04
 
 The owner selected a documentation-only plan for a private deterministic Graph

@@ -388,6 +388,64 @@ describe("OperationalTopologyAdapter viewport contract", () => {
     expectDomainLaneClearance();
   });
 
+  it("uses one agent height and common workspace row edges", () => {
+    renderTopology();
+    flushFrames();
+    resizeCanvas(1400, 700);
+
+    const nodes = flowProps().nodes;
+    const requireNode = (id: string) => {
+      const node = nodes.find((candidate) => candidate.id === id);
+      if (node === undefined) throw new Error(`Expected graph node ${id}`);
+      return node;
+    };
+    const primaryIds = [
+      "demo-node:agent:personal-assistant",
+      "demo-node:agent:research",
+      "demo-node:agent:coding",
+      "demo-node:agent:cloud-infrastructure",
+      "demo-node:agent:security-risk",
+    ];
+    const secondaryIds = [
+      "demo-node:agent:workflow-automation",
+      "demo-node:agent:knowledge-document",
+      "demo-node:agent:qa-validation",
+      "demo-node:agent:systems-operations",
+    ];
+    const twoMemberLaneIds = [
+      "demo-group:core",
+      "demo-group:intelligence",
+      "demo-group:engineering",
+      "demo-group:infrastructure",
+    ];
+    const agents = nodes.filter((node) => node.id.startsWith("demo-node:agent:"));
+    const primaryNodes = primaryIds.map(requireNode);
+    const secondaryNodes = secondaryIds.map(requireNode);
+    const nodeBottom = (node: (typeof nodes)[number]) =>
+      node.position.y + (node.style?.height ?? 0);
+
+    expect(agents).toHaveLength(9);
+    expect(new Set(agents.map((node) => node.style?.width))).toEqual(new Set([196]));
+    expect(new Set(agents.map((node) => node.style?.height))).toEqual(new Set([120]));
+    expect(requireNode("demo-node:orchestrator").style?.height).toBe(104);
+    expect(new Set(primaryNodes.map((node) => node.position.y))).toEqual(new Set([180]));
+    expect(new Set(primaryNodes.map(nodeBottom))).toEqual(new Set([300]));
+    expect(new Set(secondaryNodes.map((node) => node.position.y))).toEqual(new Set([312]));
+    expect(new Set(secondaryNodes.map(nodeBottom))).toEqual(new Set([432]));
+    expect(
+      Math.min(...secondaryNodes.map((node) => node.position.y)) -
+        Math.max(...primaryNodes.map(nodeBottom)),
+    ).toBe(12);
+    expect(
+      new Set(
+        twoMemberLaneIds.map((id) => {
+          const lane = requireNode(id);
+          return lane.position.y + (lane.style?.height ?? 0);
+        }),
+      ).size,
+    ).toBe(1);
+  });
+
   it("does not change layout at the former 1279 to 1280 pixel breakpoint", () => {
     renderTopology();
     flushFrames();

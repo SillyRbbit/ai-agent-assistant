@@ -37,8 +37,6 @@ describe("OperationalTopologyPanel Graph boundary", () => {
         onSelect={vi.fn()}
         projection={projection}
         selectedId={null}
-        structuredView={<p>Structured sentinel</p>}
-        viewMode="graph"
         visibleEdges={[]}
         visibleNodes={[failedNode]}
       />,
@@ -51,8 +49,6 @@ describe("OperationalTopologyPanel Graph boundary", () => {
         onSelect={vi.fn()}
         projection={projection}
         selectedId={null}
-        structuredView={<p>Structured sentinel</p>}
-        viewMode="graph"
         visibleEdges={[]}
         visibleNodes={[recoveredNode]}
       />,

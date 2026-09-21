@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-09-20 demo cleanup publication candidate
+
+- Remove Structured view, its mode selector, narrow fallback and exclusive
+  composition while retaining the existing React Flow graph.
+- Replace group-heading rectangles with plain titles and retain dashed bounds.
+- Give all nine agent cards a shared 120px height at unchanged widths; align
+  standard row tops and bottoms with a consistent gap. Keep the orchestrator
+  independent and Governance a one-card group.
+- Isolate this publication from local unpublished harness/admission history.
+  Candidate verification is recorded in the
+  [publication report](docs/reviews/2026-09-20-demo-cleanup-publication-post-increment-review.md).
+
 All notable repository changes are documented here. Entries distinguish verified work from implementation awaiting target-platform checks.
 
 ## Unreleased

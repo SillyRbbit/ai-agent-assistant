@@ -1,5 +1,4 @@
 import { Network } from "lucide-react";
-import type { ReactNode } from "react";
 
 import {
   COMMAND_CENTER_DISCLOSURE,
@@ -20,8 +19,6 @@ export interface OperationalTopologyPanelProps {
   readonly projection: CommandCenterProjection;
   readonly selectedId: string | null;
   readonly selectionPresent?: boolean | undefined;
-  readonly structuredView: ReactNode;
-  readonly viewMode: "graph" | "structured";
   readonly visibleEdges?: readonly TopologyEdge[] | undefined;
   readonly visibleNodes?: readonly TopologyNode[] | undefined;
 }
@@ -36,8 +33,6 @@ export function OperationalTopologyPanel({
   projection,
   selectedId,
   selectionPresent,
-  structuredView,
-  viewMode,
   visibleEdges,
   visibleNodes,
 }: OperationalTopologyPanelProps) {
@@ -48,9 +43,7 @@ export function OperationalTopologyPanel({
   return (
     <section
       aria-labelledby="command-center-topology-title"
-      className={`command-center-panel${
-        viewMode === "graph" ? " command-center-panel--graph" : ""
-      }`}
+      className="command-center-panel command-center-panel--graph"
     >
       <header className="command-center-panel__header">
         <div>
@@ -63,25 +56,21 @@ export function OperationalTopologyPanel({
         <Network aria-hidden="true" size={18} />
       </header>
 
-      {viewMode === "graph" ? (
-        <GraphRenderBoundary resetKey={graphResetKey}>
-          <OperationalTopologyAdapter
-            activeNodeId={activeNodeId}
-            filtersActive={filtersActive}
-            onClearSelection={onClearSelection}
-            onEscape={onEscape}
-            onResetFilters={onResetFilters}
-            onSelect={onSelect}
-            projection={projection}
-            selectedId={selectedId}
-            selectionPresent={selectionPresent}
-            visibleEdges={visibleEdges}
-            visibleNodes={visibleNodes}
-          />
-        </GraphRenderBoundary>
-      ) : (
-        structuredView
-      )}
+      <GraphRenderBoundary resetKey={graphResetKey}>
+        <OperationalTopologyAdapter
+          activeNodeId={activeNodeId}
+          filtersActive={filtersActive}
+          onClearSelection={onClearSelection}
+          onEscape={onEscape}
+          onResetFilters={onResetFilters}
+          onSelect={onSelect}
+          projection={projection}
+          selectedId={selectedId}
+          selectionPresent={selectionPresent}
+          visibleEdges={visibleEdges}
+          visibleNodes={visibleNodes}
+        />
+      </GraphRenderBoundary>
     </section>
   );
 }

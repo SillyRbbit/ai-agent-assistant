@@ -18,13 +18,12 @@ interface CommandCenterActivityStreamProps {
   readonly onEventKindChange: (value: string) => void;
   readonly onFollowSelectedPathChange: (value: boolean) => void;
   readonly onSearchChange: (value: string) => void;
-  readonly onSelectEvent?: ((id: string) => void) | undefined;
+  readonly onSelectEvent: (id: string) => void;
   readonly onSeverityChange: (value: string) => void;
   readonly search: string;
-  readonly selectedEventId?: string | null | undefined;
+  readonly selectedEventId: string | null;
   readonly severities: readonly string[];
   readonly severity: string;
-  readonly workspace?: boolean | undefined;
 }
 
 function readable(value: string): string {
@@ -46,32 +45,17 @@ export function CommandCenterActivityStream({
   selectedEventId,
   severities,
   severity,
-  workspace = false,
 }: CommandCenterActivityStreamProps) {
   return (
     <section
-      aria-label={workspace ? "Deterministic fixture activity" : undefined}
-      aria-labelledby={workspace ? undefined : "command-center-activity-title"}
-      className={`command-center-activity${workspace ? " command-center-activity--workspace" : ""}`}
+      aria-label="Deterministic fixture activity"
+      className="command-center-activity command-center-activity--workspace"
       data-scroll-region="command-center-activity"
     >
-      {workspace ? (
-        <p className="command-center-activity__workspace-provenance">
-          Bounded, pre-redacted deterministic fixture records. Not authoritative audit. ·{" "}
-          {COMMAND_CENTER_DISCLOSURE}
-        </p>
-      ) : (
-        <header className="command-center-activity__header">
-          <div>
-            <h2 id="command-center-activity-title">Structured fixture activity</h2>
-            <p>
-              Bounded, pre-redacted presentation records. Not authoritative audit. ·{" "}
-              {COMMAND_CENTER_DISCLOSURE}
-            </p>
-          </div>
-          <Activity aria-hidden="true" size={18} />
-        </header>
-      )}
+      <p className="command-center-activity__workspace-provenance">
+        Bounded, pre-redacted deterministic fixture records. Not authoritative audit. ·{" "}
+        {COMMAND_CENTER_DISCLOSURE}
+      </p>
 
       <div className="command-center-activity__controls">
         <label className="command-center-field command-center-field--search">
@@ -168,49 +152,45 @@ export function CommandCenterActivityStream({
                   <span className="command-center-event__copy">
                     <strong>{event.summary}</strong>
                     <small>{readable(event.eventKind)} · deterministic fixture event</small>
-                    {workspace ? (
-                      <span className="command-center-event__workspace-summary">
-                        <span>
-                          <b>Source</b>
-                          <span>{event.sourceLabel}</span>
-                        </span>
-                        <span>
-                          <b>Action</b>
-                          <span>{readable(event.eventKind)}</span>
-                        </span>
-                        <span>
-                          <b>Target</b>
-                          <span>{event.targetLabel}</span>
-                        </span>
-                        <span>
-                          <b>Severity</b>
-                          <span>{commandCenterEventSeverityLabel(event.severity)}</span>
-                        </span>
-                        <span>
-                          <b>Status</b>
-                          <span>{event.statusLabel}</span>
-                        </span>
-                        <span>
-                          <b>Associated agent</b>
-                          <span>{associatedAgent}</span>
-                        </span>
-                        <span>
-                          <b>Task</b>
-                          <span>{task}</span>
-                        </span>
-                        <span>
-                          <b>Workflow</b>
-                          <span>{workflow}</span>
-                        </span>
-                        <span>
-                          <b>Related entities</b>
-                          <span>{relatedEntities}</span>
-                        </span>
+                    <span className="command-center-event__workspace-summary">
+                      <span>
+                        <b>Source</b>
+                        <span>{event.sourceLabel}</span>
                       </span>
-                    ) : null}
-                    {workspace ? (
-                      <span className="command-center-event__description">{event.description}</span>
-                    ) : null}
+                      <span>
+                        <b>Action</b>
+                        <span>{readable(event.eventKind)}</span>
+                      </span>
+                      <span>
+                        <b>Target</b>
+                        <span>{event.targetLabel}</span>
+                      </span>
+                      <span>
+                        <b>Severity</b>
+                        <span>{commandCenterEventSeverityLabel(event.severity)}</span>
+                      </span>
+                      <span>
+                        <b>Status</b>
+                        <span>{event.statusLabel}</span>
+                      </span>
+                      <span>
+                        <b>Associated agent</b>
+                        <span>{associatedAgent}</span>
+                      </span>
+                      <span>
+                        <b>Task</b>
+                        <span>{task}</span>
+                      </span>
+                      <span>
+                        <b>Workflow</b>
+                        <span>{workflow}</span>
+                      </span>
+                      <span>
+                        <b>Related entities</b>
+                        <span>{relatedEntities}</span>
+                      </span>
+                    </span>
+                    <span className="command-center-event__description">{event.description}</span>
                   </span>
                   <time dateTime={event.simulatedAt}>
                     {event.timeLabel} · {event.simulatedAt}
@@ -222,25 +202,20 @@ export function CommandCenterActivityStream({
                   className={`command-center-event${selectedEventId === event.eventId ? " command-center-event--selected" : ""}`}
                   key={event.eventId}
                 >
-                  {workspace && onSelectEvent !== undefined ? (
-                    <button
-                      aria-label={`Inspect deterministic event ${event.summary}`}
-                      aria-pressed={selectedEventId === event.eventId}
-                      className="command-center-event__select"
-                      onClick={() => {
-                        onSelectEvent(event.eventId);
-                      }}
-                      type="button"
-                    >
-                      {eventContents}
-                    </button>
-                  ) : (
-                    eventContents
-                  )}
+                  <button
+                    aria-label={`Inspect deterministic event ${event.summary}`}
+                    aria-pressed={selectedEventId === event.eventId}
+                    className="command-center-event__select"
+                    onClick={() => {
+                      onSelectEvent(event.eventId);
+                    }}
+                    type="button"
+                  >
+                    {eventContents}
+                  </button>
                   <div className="command-center-event__detail">
                     <details>
                       <summary>View bounded detail</summary>
-                      {workspace ? null : <p>{event.description}</p>}
                       <dl className="command-center-event__facts">
                         <div>
                           <dt>Fixture event ID</dt>
