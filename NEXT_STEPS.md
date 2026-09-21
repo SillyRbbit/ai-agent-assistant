@@ -1,5 +1,24 @@
 # Next steps
 
+## PR #116 publication complete; documentation review next — 2026-09-21
+
+PR #116 merged as `b5b7af701570e906caa8b8637806a589c28bfb74` with its
+exact 24-path reconciled cleanup. Applicable post-merge Documentation and CI
+checks succeeded; conditionally skipped audit/Rust jobs are not fresh passes.
+The earlier publication instructions below are historical, not pending work.
+
+Complete only the eight-path
+[post-merge documentation closeout](docs/plans/2026-09-21-pr116-post-merge-closeout.md),
+validate its ordinary completion evidence, and publish a separate documentation
+PR for review. Stop before merge. The next proposed task is read-only review of
+that exact PR and its applicable CI, with separate owner approval required for
+merge. No further publication-reconciliation increment is selected automatically.
+
+Native GUI smoke and Research/Knowledge lifecycle checks remain advisory for a
+separately authorized owner walkthrough. D-125/M1/M2 remain parked. Do not repeat
+the cleanup or dependency remediation, and preserve all predecessor worktrees,
+changes and terminal records.
+
 ## Active demo cleanup main reconciliation — 2026-09-21
 
 Complete only the owner-approved

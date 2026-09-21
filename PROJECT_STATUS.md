@@ -1,5 +1,23 @@
 # Project status
 
+## Current state after PR #116 merge — 2026-09-21
+
+PR #116 is merged at `b5b7af701570e906caa8b8637806a589c28bfb74`.
+The 24-path squash result equals validated reconciliation head `33f3ff2`;
+all 13 completed UI changes and PR #117's inherited audit/dependency changes
+remain intact. Post-merge Documentation run `35565877482` and CI run
+`35565877539` succeeded. CI classification and frontend passed; dependency
+audit and Linux/target-Mac Rust jobs were conditionally skipped.
+
+This supersedes the publication-pending statements below without changing
+historical evidence. Only the eight-path
+[documentation closeout](docs/plans/2026-09-21-pr116-post-merge-closeout.md)
+is active. Native GUI smoke and Research/Knowledge lifecycle checks remain
+pending advisories. D-125/M1/M2 remain parked, not passed or waived. Existing
+checkouts, unpublished commits and both passing/failed gate records are preserved.
+No new runtime capability, dependency, audit exception or governance behavior
+is introduced.
+
 ## Active demo cleanup main reconciliation — 2026-09-21
 
 Status: **Required local verification passed; ordinary completion and remote

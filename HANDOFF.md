@@ -1,5 +1,49 @@
 # Handoff
 
+## PR #116 merged; documentation closeout — 2026-09-21
+
+[PR #116](https://github.com/SillyRbbit/ai-agent-assistant/pull/116) merged as
+`b5b7af701570e906caa8b8637806a589c28bfb74` on 2026-09-21. Its tree equals
+validated reconciliation head `33f3ff212247dcfc454a9111a7b4b0e2d91331e7`.
+The exact 24-path result retains all 13 completed UI changes, including the
+Structured-view deletion, and inherits PR #117's dependency and Rust audit
+changes unchanged. Earlier publication/reconciliation instructions below are
+historical and are superseded by this entry.
+
+Applicable post-merge [Documentation checks](https://github.com/SillyRbbit/ai-agent-assistant/actions/runs/35565877482)
+and [CI](https://github.com/SillyRbbit/ai-agent-assistant/actions/runs/35565877539)
+succeeded on the squash commit. CI classification and frontend jobs passed;
+dependency audit and Linux/target-Mac Rust jobs were skipped by the existing
+classifier, not newly executed. The reconciliation's local checks and actual
+desktop/narrow browser evidence remain in its immutable finalized review.
+Native GUI smoke and Research/Knowledge lifecycle controls remain pending
+advisories; browser checks do not prove native WebView behavior.
+
+The [closeout plan](docs/plans/2026-09-21-pr116-post-merge-closeout.md) limits
+this successor to eight documentation paths on
+`codex/pr116-post-merge-closeout`. Its
+[review](docs/reviews/2026-09-21-pr116-post-merge-closeout-post-increment-review.md)
+records local validation. Publication is authorized only after valid ordinary
+completion, then stops before merging the documentation PR. The original dirty
+checkout, seven unpublished commits, isolated worktrees, reconciliation marker,
+and terminal-failed dependency record remain preserved. D-125/M1/M2 stay parked;
+this closeout grants no product or operational authority.
+
+### Next prompt
+
+```text
+Inspect SillyRbbit/ai-agent-assistant, current remote main, and the documentation
+PR from codex/pr116-post-merge-closeout before acting. Preserve the original
+dirty checkout, seven unpublished commits, all isolated worktrees and existing
+changes. Verify its exact eight documentation paths against the closeout plan,
+valid local completion evidence, additive history preservation, truthful native
+GUI advisory, exact-head applicable CI and review status. Confirm PR #116 is
+merged at b5b7af701570e906caa8b8637806a589c28bfb74. Report merge readiness;
+stop on base/head drift, unexpected scope, stale evidence or failed/pending
+required checks. Do not edit, repeat completed work, resume D-125/M1/M2, or
+merge without separate explicit owner authorization.
+```
+
 ## Demo cleanup main reconciliation — 2026-09-21
 
 PR #117 merged the combined dependency and Rust audit unblock into `main` as

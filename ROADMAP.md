@@ -1,5 +1,20 @@
 # Cortexa roadmap
 
+## Immediate state after cleanup merge — 2026-09-21
+
+PR #116's completed 24-path cleanup is on main at
+`b5b7af701570e906caa8b8637806a589c28bfb74`, with successful applicable
+post-merge Documentation and CI runs. PR #117's dependency and Rust audit
+changes remain inherited unchanged. Prior publication/reconciliation lanes
+below are historical and are superseded by this current-state entry.
+
+The only active successor is the eight-path
+[documentation closeout](docs/plans/2026-09-21-pr116-post-merge-closeout.md),
+followed by read-only review of its documentation PR. Native GUI smoke and
+Research/Knowledge lifecycle verification remain pending advisories for a
+separately authorized walkthrough. D-125/M1/M2 remain parked, not completed,
+waived or selected next. No live capability or productionization work is opened.
+
 ## Current demo cleanup publication lane — 2026-09-21
 
 PR #117 merged the dependency and Rust audit unblock into `main`. The immediate
