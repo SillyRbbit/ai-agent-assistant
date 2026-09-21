@@ -1,7 +1,7 @@
 # Cortexa testing guide
 
 Status: Authoritative testing standard
-Last updated: 2026-09-03
+Last updated: 2026-09-20
 
 ## Testing principles
 
@@ -15,6 +15,23 @@ Last updated: 2026-09-03
   expiry, and late outcomes where those states exist.
 - Never report a check as passed unless its command completed successfully in
   the current increment.
+
+## D-127 dependency and Rust audit unblock
+
+The Cargo audit gate must expose exactly two accepted vulnerabilities and eight
+accepted warnings. Focused tests assert the entire warning set, preserve
+malformed-report, exit-status, new-finding, missing-finding, and version-drift
+coverage, and prove separately that each withdrawn GTK advisory
+RUSTSEC-2024-0411 through RUSTSEC-2024-0420 is rejected as unexpected if it
+reappears.
+
+Dependency validation requires a clean install, exact inspection of Vitest,
+@vitest/mocker, baseline-browser-mapping, and js-yaml, frontend discovery and
+behavior, full and production npm audits, pinned cargo-audit 0.22.2 against
+current RustSec data, repository gate validation of its JSON output, secret
+scanning, complete verification, documentation/repository checks, and exact
+scope and completion gates. An advisory change, peer error, source/configuration
+repair, or path outside the 16-path ceiling fails the increment.
 
 ## D-121 documentation-only fixed local candidate evidence decision
 
@@ -830,7 +847,7 @@ tests must use non-production accounts and redacted evidence.
 
 The scheduled CI dependency-audit job may retrieve npm and Rust advisory data. It
 contains no repository secrets and fails on any Rust advisory outside D-025's
-exact vulnerability baseline and D-046's exact warning baseline. Accepted
+exact vulnerability baseline and D-127's exact warning baseline. Accepted
 findings remain reported remediation debt.
 
 ## Required commands

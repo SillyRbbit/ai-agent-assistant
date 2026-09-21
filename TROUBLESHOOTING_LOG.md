@@ -2,6 +2,39 @@
 
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
+## TS-025 - Withdrawn gtk3-rs advisories made the exact Cargo baseline stale
+
+Date: 2026-09-20
+Status: Corrected by D-127; required local validation passed
+
+### Symptom
+
+After the JavaScript dependency candidate passed its focused checks, current
+cargo-audit 0.22.2 output failed the repository gate because ten warnings in the
+accepted set were absent. The tool still reported the exact two quick-xml
+vulnerabilities and eight other accepted warnings.
+
+### Cause
+
+RustSec withdrew RUSTSEC-2024-0411 through RUSTSEC-2024-0420 on 2026-08-14
+after gtk3-rs resumed maintenance. cargo-audit omits withdrawn advisories by
+default, while the repository's exact gate treated their absence as baseline
+drift. This was not target filtering or a cargo-audit parsing error.
+
+### Disposition
+
+D-127 removes only those ten tuples, preserves all current accepted findings,
+and tests that each withdrawn advisory fails as unexpected if it reappears. It
+adds no ignore or automatic advisory synchronization. Withdrawal reflects
+maintenance status and does not prove GTK 0.18.2 is vulnerability-free.
+
+### Avoid repeating
+
+Do not restore withdrawn IDs merely to satisfy historical output, use a blanket
+ignore, or repeat npm dependency resolution. Reuse the validated package bytes
+only when their baseline blobs still match remote main, then require current
+live npm/RustSec audits and the exact gate before publication.
+
 ## V0-6 frozen HTTPS candidates cannot prove DNS cancellation quiescence
 
 Date: 2026-09-03

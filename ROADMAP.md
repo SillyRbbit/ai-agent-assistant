@@ -1,5 +1,34 @@
 # Cortexa roadmap
 
+## Current demo cleanup publication lane — 2026-09-21
+
+PR #117 merged the dependency and Rust audit unblock into `main`. The immediate
+bounded lane is now the exact demo-cleanup reconciliation for PR #116: preserve
+its existing graph simplification and alignment bytes, inherit the audit changes
+unchanged, validate the combined head, and stop before merge.
+
+The combined local candidate passed dependency, audit, focused/full repository,
+secret, build, and actual desktop/narrow browser validation. Publication still
+requires a valid ordinary completion record and successful exact-head CI.
+
+This publication lane adds no product capability and does not reorder the
+deterministic Graph program. D-125/M1/M2 remain parked. Native GUI smoke stays
+advisory, and any later Personal Assistant connection still requires separate
+owner-approved planning and evidence.
+
+## Active audit unblock publication lane — 2026-09-20
+
+The immediate bounded lane is the exact 16-path combined dependency and Rust
+audit successor. Its implementation, clean install, dependency inspection, npm
+and Cargo audits, tests, builds, and complete verification passed. It may
+publish one separate PR into main only after exact scope and all documentation,
+session, quality, and post-increment gates pass.
+
+This lane does not reorder the deterministic Graph roadmap, resume D-125/M1/M2,
+or grant product capability. PR #116 remains a separate completed cleanup with
+its native GUI advisory retained. Merge of either PR remains owner-controlled
+and outside this increment.
+
 ## 2026-09-20 owner-approved cleanup publication
 
 The immediate bounded task is the

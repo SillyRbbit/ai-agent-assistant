@@ -1,5 +1,34 @@
 # Execution plans
 
+## Active demo cleanup main reconciliation — 2026-09-21
+
+The owner-approved active plan is
+[demo cleanup main reconciliation](docs/plans/2026-09-21-demo-cleanup-main-reconciliation.md).
+It integrates the completed cleanup with the merged audit-unblock history using
+one two-parent merge, five additive memory-document resolutions, byte-identical
+UI content, and a new reconciliation report. It permits no implementation,
+dependency, audit-policy, native, workflow, hook, skill, harness, or D-125/M1/M2
+change. Publication updates PR #116 only after all required checks pass and
+stops before merge. Required local install, audit, test, build, repository, and
+actual desktop/narrow browser verification passed; ordinary completion and
+exact-head CI remain publication gates.
+
+## Active dependency and Rust audit unblock — 2026-09-20
+
+The owner-approved active plan is
+[dependency and Rust audit unblock](docs/plans/2026-09-20-dependency-and-rust-audit-unblock.md).
+It is an exact 16-path successor from remote main that combines the already
+validated JavaScript dependency bytes with the smallest current RustSec
+warning-baseline correction and focused tests. It does not reopen the preserved
+terminal failed dependency increment or alter PR #116.
+
+The plan preserves the two quick-xml vulnerabilities, eight current warning
+tuples, product runtime, Cargo graph, workflows, hooks, skills, harnesses, and
+all parked D-125/M1/M2 work. All required implementation, dependency, audit,
+test, build, and complete verification checks passed. Publication remains
+conditional on the exact report and post-increment completion; merge remains
+outside scope.
+
 ## 2026-09-20 demo cleanup publication
 
 Verified candidate: [demo-cleanup-publication](docs/plans/2026-09-20-demo-cleanup-publication.md).

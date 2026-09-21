@@ -1,5 +1,63 @@
 # Handoff
 
+## Demo cleanup main reconciliation — 2026-09-21
+
+PR #117 merged the combined dependency and Rust audit unblock into `main` as
+`ba1336e92734585adcd336ea0a33b9e89a320716`. PR #116 remains the completed
+demo cleanup rooted at `92c2e19eb71b08ad7a2996f83e034afe9babd52a`.
+
+The owner authorized one bounded reconciliation successor on
+`codex/demo-cleanup-main-reconciliation`. It merges the verified current main
+into the cleanup history, preserves all 13 UI blobs byte-for-byte, keeps both
+predecessor records as historical evidence, and adds only the new reconciliation
+plan/report pair. The exact ceiling is 24 PR-relative paths.
+
+No runtime, dependency, audit baseline, native code, workflow, hook, skill,
+permission, or governance behavior changes. D-125/M1/M2 remain parked. Clean
+installation, exact dependency inspection, npm and Cargo audits, focused and
+full verification, secret scanning, and actual 2487px/1280px browser Fit View
+checks passed. Native GUI smoke remains advisory; browser evidence does not
+establish native WebView behavior. Publication requires a valid ordinary
+completion record and successful new exact-head CI, then stops before merge.
+
+### Next prompt
+
+```text
+Inspect PR #116 and current remote main before acting. Confirm the reconciled
+head, exact 24-path scope, valid completion marker, preserved 13 UI blobs,
+successful exact-head CI and retained native GUI advisory. Preserve every
+checkout and do not repeat implementation or resume D-125/M1/M2. Report merge
+readiness and stop on drift, failed or pending checks, conflicts, or new review
+findings. Do not merge without separate explicit owner authorization.
+```
+
+## Combined dependency and Rust audit unblock — 2026-09-20
+
+The owner authorized one isolated successor from remote main at
+f176c36cc701b5a296162331cfcb2600b2157663. The exact plan is
+[dependency and Rust audit unblock](docs/plans/2026-09-20-dependency-and-rust-audit-unblock.md).
+Ordinary gate admission succeeded on branch
+codex/dependency-and-rust-audit-unblock.
+
+The two package files were transferred byte-for-byte from the preserved valid
+terminal-failed dependency worktree after both source blobs matched remote
+main. The implementation updates only the approved JavaScript development/test
+graph, removes the ten withdrawn GTK advisories from the exact accepted-warning
+set, preserves the two quick-xml vulnerabilities and eight current warnings,
+and adds focused regression coverage.
+
+PR #116 remains open at head 92c2e19eb71b08ad7a2996f83e034afe9babd52a
+with its exact 22-file cleanup scope and unchanged native GUI advisory. The
+original dirty checkout, its seven unpublished commits, the cleanup worktree,
+and the terminal-failed dependency worktree remain preserved. D-125, M1, and M2
+remain parked.
+
+All required local install, dependency, test, audit, secret, build, Tauri, and
+complete verification checks passed after one in-scope plan-format repair.
+Completion remains authoritative only after the exact 16-path report and
+post-increment record validate. Then create one successor commit and PR and
+require successful exact-head CI. Stop before merge or any PR #116 update.
+
 ## 2026-09-20 demo cleanup publication
 
 The owner selected the bounded
