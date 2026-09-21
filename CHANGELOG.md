@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-21 — Documentation organization (uncommitted)
+
+- Move `ASSISTANT_USAGE.md` into `docs/workflows/` with unchanged contents and
+  update its repository-checker lookup without changing validation rules.
+- Add a concise documentation index linked from the root and workflow READMEs.
+  Retain root authority documents, tool-specific scopes and historical evidence.
+
 ## 2026-09-21 — PR #116 merged and documentation closeout
 
 - Recorded PR #116's squash merge at

@@ -1,5 +1,13 @@
 # Execution plans
 
+## Documentation organization — 2026-09-21
+
+The [bounded plan](docs/plans/2026-09-21-documentation-organization.md) covers
+one byte-preserving guide move, concise indexes, one equivalent checker path
+update and required closeout evidence. It preserves root authority documents,
+all historical records and earlier worktrees. No application, governance or
+milestone change is authorized. Stop after validation without commit or publication.
+
 ## PR #116 post-merge documentation closeout — 2026-09-21
 
 Active bounded plan:

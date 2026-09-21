@@ -132,6 +132,9 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening an issue or pull request.
 Current work is selected from [NEXT_STEPS.md](NEXT_STEPS.md), and durable
 engineering rules live in [ENGINEERING_GUIDE.md](ENGINEERING_GUIDE.md).
 
+Browse the [documentation index](docs/README.md) for guides, plans, decisions,
+architecture references, and historical evidence.
+
 Useful references:
 
 - [Product requirements](PRODUCT_REQUIREMENTS.md)

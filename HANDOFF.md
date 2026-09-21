@@ -1,5 +1,35 @@
 # Handoff
 
+## Documentation organization — 2026-09-21
+
+The bounded [organization plan](docs/plans/2026-09-21-documentation-organization.md)
+adds a [documentation index](docs/README.md) and moves the assistant guide into
+`docs/workflows/ASSISTANT_USAGE.md` without changing its contents. Root authority
+and tool-scoped documents remain in their required locations. One checker path
+follows the moved guide with the same validation rules. Historical references,
+requirements, decisions and failed evidence remain unchanged.
+
+Work is isolated in a detached worktree from `39947cf9be86f2e36a57946fa1ad7d966b94ce32`
+(PR #118's merged documentation closeout). The original checkout and all earlier
+worktrees remain preserved. No commit, push or publication is authorized.
+The [review](docs/reviews/2026-09-21-documentation-organization-post-increment-review.md)
+records passing documentation, repository, security, whitespace and 51 checker
+regression results. Quality is PASS WITH ADVISORIES; ordinary completion must
+validate before any follow-up. Native GUI smoke remains pending and D-125/M1/M2
+remain parked; documentation organization does not change milestone status.
+
+### Resume prompt
+
+```text
+Inspect /private/tmp/cortexa-documentation-organization and the original Cortexa
+checkout before acting. Preserve all existing worktrees, edits and terminal
+records. Review the uncommitted 13-path documentation organization against its
+plan and valid completion evidence. Confirm the guide move, indexes, unchanged
+checker semantics, historical preservation and applicable validation. Do not
+repeat implementation, resume D-125/M1/M2, broaden scope, commit or publish.
+Stop on scope drift, stale evidence or a failed required check.
+```
+
 ## PR #116 merged; documentation closeout — 2026-09-21
 
 [PR #116](https://github.com/SillyRbbit/ai-agent-assistant/pull/116) merged as
