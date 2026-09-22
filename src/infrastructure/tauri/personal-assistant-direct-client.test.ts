@@ -92,6 +92,18 @@ describe("direct native boundary", () => {
       "provider_stream_invalid_prompt",
       "The provider reported an invalid prompt in the response stream. No automatic retry was made.",
     ],
+    [
+      "provider_stream_error_event",
+      "The provider emitted a top-level error event in the response stream. No automatic retry was made.",
+    ],
+    [
+      "provider_stream_failed_unknown_code",
+      "The provider reported response.failed with an unrecognized error code. No automatic retry was made.",
+    ],
+    [
+      "provider_stream_failed_invalid_code",
+      "The provider reported response.failed without a usable error code. No automatic retry was made.",
+    ],
   ])("narrows %s to its exact static message", (code, message) => {
     const snapshot = {
       ...IDLE_DIRECT,

@@ -1,5 +1,132 @@
 # Handoff
 
+## Direct provider stream stage live-result evidence closeout — 2026-09-21
+
+The separately admitted documentation-only successor
+`direct-provider-stream-stage-live-result-evidence-closeout` completed in
+`/private/tmp/cortexa-direct-provider-stream-stage-live-result-evidence-closeout`.
+It preserves the completed 17-path diagnostics candidate and adds only eight
+superseding current-state entries plus a new plan/review pair, for 19 cumulative
+changed paths.
+
+Direct Computer Use observed the fixed sample, disclosure, acknowledgement,
+idle state and enabled Start control, then lost its native binding before a
+post-click state was available. The owner-supplied screenshot is separate
+evidence: it shows Cortexa in terminal `error` with the closed
+`provider_stream_error_event` message, no completed answer, and the static
+statement that no automatic retry occurred. The last authorized request was
+consumed; zero live attempts remain. Neither evidence source establishes the
+upstream cause, absence of earlier transient text, confirmed ownership release,
+or native live success.
+
+D-128 custody/abort limits, D-127 audit debt and native live-success advisories
+remain. D-125/M1/M2 stay parked. Do not make another provider request, inspect
+credentials or raw provider data, or repeat the completed diagnostics work.
+Documentation-tier validation, preservation, independent review, report-schema
+validation, ordinary finalization and Stop passed.
+
+### Exact resume prompt
+
+```text
+Inspect /private/tmp/cortexa-direct-provider-stream-stage-live-result-evidence-closeout,
+its completed documentation-only plan, exact 19-path cumulative inventory,
+external preservation evidence, completed predecessor and terminal source
+records before selecting any new work. Preserve every worktree, raw gate state,
+report, marker, screenshot hash, external script and both prunable registry
+entries. Do not repeat the closeout, rerun application tests or builds, launch
+Cortexa, inspect credentials or process environments, make provider requests,
+modify protected bytes, commit, push or publish without separate approval. Stop
+on drift, contradictory evidence or scope expansion. Keep D-125/M1/M2 parked and
+retain D-128, D-127 and native live-success advisories.
+```
+
+## Direct provider stream stage diagnostics evidence closeout — 2026-09-21
+
+The successor `direct-provider-stream-stage-diagnostics-evidence-closeout` is
+complete in `/private/tmp/cortexa-direct-provider-stream-stage-diagnostics-evidence-closeout`.
+It inherited the exact 15-path candidate from the terminal stream-stage
+diagnostics record and changes only eight current-state documents plus this
+plan/review pair, for 17 cumulative paths. The predecessor report/state remain
+byte-identical `failed / FAIL / Blocked` evidence with no completion marker.
+Documentation-tier validation, preservation, report-schema validation,
+finalization and Stop passed. Application tests, debug bundle evidence and the
+extra paid request are historical or unused, respectively; do not rerun or
+consume either.
+
+### Exact resume prompt
+
+```text
+Inspect the completed evidence closeout and the preserved terminal predecessor
+before selecting any new work. Preserve all worktrees, reports, raw states,
+external evidence and the unused native-request allowance. Do not repeat the
+documentation closeout or resume D-125/M1/M2. Any native request requires the
+existing owner-private procedure and explicit current-direction confirmation.
+Do not commit, publish or alter predecessor evidence without separate approval.
+```
+
+## Direct provider stream stage diagnostics — 2026-09-21
+
+The owner authorized one bounded diagnosis, minimal safe diagnostics, and one
+additional acknowledged native request after local validation. The prior request
+showed `starting` then `provider_stream`, without displayed text; controls were
+released and the process stopped. This does not identify the upstream cause.
+The verified predecessor at `3f99165b4dcb0ef18c52f9242b346eb1d711afaa` remains unchanged with its valid
+completion record. A new detached worktree at
+`/private/tmp/cortexa-direct-provider-stream-stage-diagnostics` received ordinary
+admission as `direct-provider-stream-stage-diagnostics`. All predecessor records and D-125/M1/M2 remain preserved;
+those parked lanes are not resumed.
+
+The exact 15-path delta separates a top-level `error` event from `response.failed`
+with an unknown string code or an absent/malformed/empty code. Existing three
+recognized response-error mappings stay intact. Only closed static error codes and
+messages cross the existing snapshot boundary; no raw code, body, header, request
+ID, prompt, credential or provider message is logged or persisted. The request,
+transport, validation order, lifecycle, ownership, no-retry policy and component
+production bytes remain unchanged. No parser defect or account cause is claimed.
+
+Application validation passed: 24 focused frontend tests, 13 focused Rust tests,
+complete offline verification, documentation/repository/security checks,
+whitespace and exact preservation. Full verification included 74 hook tests,
+83 repository tests, 395 frontend tests, 315 Rust library tests and 247 Rust
+integration tests (one pre-existing ignored test), plus strict lint/type checks
+and builds. The app-only debug bundle rebuilt offline with locked dependencies
+and no signing. Its identifier is com.aiagentassistant.desktop; executable SHA-256
+is f2cf3f5c998b072ffb47dce81c3047c0473307484b0e68006e21c27a3bb58e7d.
+An initial extra bundle check incorrectly required unused Rust Display strings
+in the executable. One external validation correction checks serialized native
+codes and generated frontend static messages instead; both passed. No source
+repair, download or repeated build was needed.
+
+Independent application review found no code blocker, but completion failed.
+The external report wrapper first failed to import common; adding the hook import
+path was external correction 2. The next run rejected the draft finding category
+Readiness. With the two-correction allowance treated as exhausted, work stopped
+before the paid request. The terminal report records FAIL / Blocked using the
+existing schema and ordinary close-failed route; terminal validity and Stop are
+checked separately after its freeze. This is not passing completion.
+
+The one additional request remains unused. No app was launched and no test-owned
+native process needs cleanup. Preserve the tested code, rebuilt bundle and all
+predecessor records. Live success, remaining GUI smoke, D-128 custody/abort limits
+and D-127 audit debt remain advisories. No automatic successor, commit or
+publication is authorized.
+
+See the [plan](docs/plans/2026-09-21-direct-provider-stream-stage-diagnostics.md) and [review](docs/reviews/2026-09-21-direct-provider-stream-stage-diagnostics-post-increment-review.md).
+
+### Exact resume prompt
+
+```text
+Inspect /private/tmp/cortexa-direct-provider-stream-stage-diagnostics, repository
+instructions, the terminal failure report and raw gate state read-only. Preserve
+all checkouts, changes and finalized records. Review the report-schema failure
+and distinguish passing application evidence from incomplete completion gates.
+Propose the smallest separately authorized evidence closeout with exact scope,
+validation and stop conditions. Do not edit, rerun application tests, rebuild,
+reopen terminal records, launch, inspect credentials, make requests or publish.
+Preserve the unused additional request and keep D-125/M1/M2 parked. Stop after
+the evidence-backed plan or on drift, uncertainty or scope expansion.
+```
+
 ## Direct provider diagnostics evidence closeout validator retry — 2026-09-21
 
 `direct-provider-diagnostics-evidence-closeout-validator-retry` completed in

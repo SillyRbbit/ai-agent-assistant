@@ -1,5 +1,84 @@
 # Troubleshooting log
 
+## Direct provider stream stage live-result evidence closeout — 2026-09-21
+
+**Observed evidence:** Direct Computer Use verified the idle, enabled, disclosed
+fixed-sample state, then reported an inactive native binding before returning any
+post-click state. The owner-supplied screenshot separately shows Cortexa in
+terminal `error` with the closed `provider_stream_error_event` message, no
+completed answer and the static statement that no automatic retry occurred.
+
+**Reconciliation:** The screenshot resolves request accounting: the final
+authorized request reached Cortexa and was consumed, leaving zero authorized
+attempts. The Computer Use interruption remains an observation-layer failure and
+does not erase the owner-supplied native result.
+
+**Limits:** No raw provider error, request identifier, credential, header, body or
+process environment was inspected. The evidence does not identify upstream cause,
+exclude earlier transient text, confirm ownership release or establish native
+live success. No retry, launch, build, application test or provider request is
+part of this documentation-only closeout. D-128, D-127 and native live-success
+advisories remain; D-125/M1/M2 stay parked.
+
+## Direct provider stream stage diagnostics evidence closeout — 2026-09-21
+
+The stream-stage diagnostics predecessor did not fail an application test or
+build. Its passing completion report first needed two external validation
+corrections, then its draft `Readiness` finding category was rejected because
+the repository allows only fixed categories. The predecessor was truthfully
+closed `FAIL / Blocked`. This successor validated its own report, finalized
+separately and preserved the original evidence unchanged. Any later validation
+failure still requires a separate bounded decision rather than an automatic repair.
+
+## Direct provider stream stage diagnostics — 2026-09-21
+
+The owner authorized one bounded diagnosis, minimal safe diagnostics, and one
+additional acknowledged native request after local validation. The prior request
+showed `starting` then `provider_stream`, without displayed text; controls were
+released and the process stopped. This does not identify the upstream cause.
+The verified predecessor at `3f99165b4dcb0ef18c52f9242b346eb1d711afaa` remains unchanged with its valid
+completion record. A new detached worktree at
+`/private/tmp/cortexa-direct-provider-stream-stage-diagnostics` received ordinary
+admission as `direct-provider-stream-stage-diagnostics`. All predecessor records and D-125/M1/M2 remain preserved;
+those parked lanes are not resumed.
+
+The exact 15-path delta separates a top-level `error` event from `response.failed`
+with an unknown string code or an absent/malformed/empty code. Existing three
+recognized response-error mappings stay intact. Only closed static error codes and
+messages cross the existing snapshot boundary; no raw code, body, header, request
+ID, prompt, credential or provider message is logged or persisted. The request,
+transport, validation order, lifecycle, ownership, no-retry policy and component
+production bytes remain unchanged. No parser defect or account cause is claimed.
+
+Application validation passed: 24 focused frontend tests, 13 focused Rust tests,
+complete offline verification, documentation/repository/security checks,
+whitespace and exact preservation. Full verification included 74 hook tests,
+83 repository tests, 395 frontend tests, 315 Rust library tests and 247 Rust
+integration tests (one pre-existing ignored test), plus strict lint/type checks
+and builds. The app-only debug bundle rebuilt offline with locked dependencies
+and no signing. Its identifier is com.aiagentassistant.desktop; executable SHA-256
+is f2cf3f5c998b072ffb47dce81c3047c0473307484b0e68006e21c27a3bb58e7d.
+An initial extra bundle check incorrectly required unused Rust Display strings
+in the executable. One external validation correction checks serialized native
+codes and generated frontend static messages instead; both passed. No source
+repair, download or repeated build was needed.
+
+Independent application review found no code blocker, but completion failed.
+The external report wrapper first failed to import common; adding the hook import
+path was external correction 2. The next run rejected the draft finding category
+Readiness. With the two-correction allowance treated as exhausted, work stopped
+before the paid request. The terminal report records FAIL / Blocked using the
+existing schema and ordinary close-failed route; terminal validity and Stop are
+checked separately after its freeze. This is not passing completion.
+
+The one additional request remains unused. No app was launched and no test-owned
+native process needs cleanup. Preserve the tested code, rebuilt bundle and all
+predecessor records. Live success, remaining GUI smoke, D-128 custody/abort limits
+and D-127 audit debt remain advisories. No automatic successor, commit or
+publication is authorized.
+
+See the [plan](docs/plans/2026-09-21-direct-provider-stream-stage-diagnostics.md) and [review](docs/reviews/2026-09-21-direct-provider-stream-stage-diagnostics-post-increment-review.md).
+
 ## 2026-09-21 — Direct provider diagnostics evidence closeout validator retry
 
 **Symptom:** The terminal documentation retry’s preservation validator raised
