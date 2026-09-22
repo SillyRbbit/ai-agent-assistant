@@ -11,8 +11,8 @@ fn public_storage_api_applies_and_lists_initial_migrations() -> StorageResult<()
         .map(|migration| migration.version)
         .collect();
 
-    assert_eq!(report.applied_versions, vec![1, 2]);
+    assert_eq!(report.applied_versions, vec![1, 2, 3, 4]);
     assert!(report.already_applied_versions.is_empty());
-    assert_eq!(versions, vec![1, 2]);
+    assert_eq!(versions, vec![1, 2, 3, 4]);
     Ok(())
 }

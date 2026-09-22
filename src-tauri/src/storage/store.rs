@@ -1,5 +1,10 @@
 use std::sync::{Mutex, MutexGuard};
 
+use crate::{
+    agent::definition::AgentId,
+    agent_preferences::{AgentPreferencesInput, AgentProfile, PreferencesError},
+};
+
 use super::{
     connection::{ConnectionSettings, DatabaseConnection},
     error::{StorageError, StorageResult},
@@ -41,6 +46,55 @@ pub struct Storage {
 }
 
 impl Storage {
+    pub(crate) fn agent_profiles(&self) -> Result<Vec<AgentProfile>, PreferencesError> {
+        let connection = self
+            .lock_connection()
+            .map_err(|_| PreferencesError::Storage)?;
+        AgentId::ALL
+            .into_iter()
+            .map(|id| super::agent_preferences::get(connection.raw(), id.as_str()))
+            .collect()
+    }
+
+    pub(crate) fn agent_profile(&self, agent_id: &str) -> Result<AgentProfile, PreferencesError> {
+        let connection = self
+            .lock_connection()
+            .map_err(|_| PreferencesError::Storage)?;
+        super::agent_preferences::get(connection.raw(), agent_id)
+    }
+
+    pub(crate) fn save_agent_preferences(
+        &self,
+        input: AgentPreferencesInput,
+    ) -> Result<AgentProfile, PreferencesError> {
+        let connection = self
+            .lock_connection()
+            .map_err(|_| PreferencesError::Storage)?;
+        super::agent_preferences::save(connection.raw(), input)
+    }
+
+    pub(crate) fn clear_agent_note(
+        &self,
+        agent_id: &str,
+        revision: u64,
+    ) -> Result<AgentProfile, PreferencesError> {
+        let connection = self
+            .lock_connection()
+            .map_err(|_| PreferencesError::Storage)?;
+        super::agent_preferences::clear_note(connection.raw(), agent_id, revision)
+    }
+
+    pub(crate) fn restore_agent_defaults(
+        &self,
+        agent_id: &str,
+        revision: u64,
+    ) -> Result<AgentProfile, PreferencesError> {
+        let connection = self
+            .lock_connection()
+            .map_err(|_| PreferencesError::Storage)?;
+        super::agent_preferences::restore_defaults(connection.raw(), agent_id, revision)
+    }
+
     pub fn initialize(config: &DatabaseConfig) -> StorageResult<StorageInitialization> {
         let location = config.location().clone();
         let mut connection = DatabaseConnection::open(config)?;
@@ -147,7 +201,7 @@ mod tests {
         assert!(!first.was_already_initialized());
         assert_eq!(
             first.storage().startup_migration_report().applied_versions,
-            vec![1, 2]
+            vec![1, 2, 3, 4]
         );
 
         let first_record = first
@@ -170,7 +224,7 @@ mod tests {
                 .storage()
                 .startup_migration_report()
                 .already_applied_versions,
-            vec![1, 2]
+            vec![1, 2, 3, 4]
         );
         assert_eq!(
             second

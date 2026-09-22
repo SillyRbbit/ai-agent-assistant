@@ -11,6 +11,10 @@ const ERRORS = {
   authentication: "OpenAI rejected authentication. Check the owner-only API key setup.",
   model_unavailable:
     "The fixed model is unavailable or OpenAI rejected the request. No fallback was used.",
+  http_bad_request: "OpenAI rejected the request (HTTP 400). No automatic retry was made.",
+  http_forbidden: "OpenAI denied access (HTTP 403). No automatic retry was made.",
+  http_not_found:
+    "OpenAI could not find the requested resource (HTTP 404). No automatic retry was made.",
   rate_limited: "OpenAI rate or spending limit reached. No automatic retry was made.",
   timeout: "The request timed out. Partial output is incomplete.",
   network:

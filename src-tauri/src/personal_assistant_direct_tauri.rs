@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use std::sync::{Arc, Mutex};
 use tokio::task::JoinHandle;
 
-use crate::personal_assistant_direct::{self as provider, ApiKey, DirectError};
+use crate::personal_assistant_direct::{self as provider, ApiKey, DirectError, GenerationLease};
 use crate::personal_assistant_v0::{
     PersonalAssistantV0FailureCode, PersonalAssistantV0Host, PersonalAssistantV0PresentationHandle,
     PersonalAssistantV0Snapshot,
@@ -128,7 +128,11 @@ impl Session {
 
 fn start_owned(
     state: &Arc<Mutex<Session>>,
-    spawn: impl FnOnce(Arc<Mutex<Session>>, PersonalAssistantV0PresentationHandle) -> JoinHandle<()>,
+    spawn: impl FnOnce(
+        Arc<Mutex<Session>>,
+        PersonalAssistantV0PresentationHandle,
+        GenerationLease,
+    ) -> JoinHandle<()>,
 ) -> Result<Snapshot, DirectError> {
     let mut session = state.lock().map_err(|_| DirectError::Internal)?;
     if session.stopping
@@ -139,11 +143,12 @@ fn start_owned(
     {
         return Err(DirectError::Busy);
     }
+    let lease = GenerationLease::acquire()?;
     let start = session.host.start_direct().map_err(|_| DirectError::Busy)?;
     let handle = start.presentation_handle().clone();
     session.error = None;
     session.handle = Some(handle.clone());
-    session.task = Some(spawn(Arc::clone(state), handle));
+    session.task = Some(spawn(Arc::clone(state), handle, lease));
     session.snapshot(None)
 }
 
@@ -151,6 +156,7 @@ async fn execute(
     state: Arc<Mutex<Session>>,
     handle: PersonalAssistantV0PresentationHandle,
     key: ApiKey,
+    _lease: GenerationLease,
 ) {
     let result = bounded_request(
         std::time::Duration::from_secs(60),
@@ -231,8 +237,8 @@ pub(crate) async fn start_personal_assistant_direct(
         return Err(DirectError::InvalidRequest);
     }
     let key = ApiKey::from_environment()?;
-    start_owned(&state.0, |state, handle| {
-        tokio::spawn(execute(state, handle, key))
+    start_owned(&state.0, |state, handle, lease| {
+        tokio::spawn(execute(state, handle, key, lease))
     })
 }
 #[tauri::command]
@@ -288,8 +294,9 @@ mod tests {
                 dropped.store(false, Ordering::SeqCst);
                 let guard = Dropped(Arc::clone(&dropped));
                 let state = Arc::new(Mutex::new(Session::default()));
-                let first = start_owned(&state, |_, _| {
+                let first = start_owned(&state, |_, _, lease| {
                     tokio::spawn(async move {
+                        let _lease = lease;
                         let _guard = guard;
                         std::future::pending::<()>().await;
                     })
@@ -349,8 +356,13 @@ mod tests {
             .build()?
             .block_on(async {
                 let state = Arc::new(Mutex::new(Session::default()));
-                let spawn = |_: Arc<Mutex<Session>>, _: PersonalAssistantV0PresentationHandle| {
-                    tokio::spawn(std::future::pending())
+                let spawn = |_: Arc<Mutex<Session>>,
+                             _: PersonalAssistantV0PresentationHandle,
+                             lease: GenerationLease| {
+                    tokio::spawn(async move {
+                        let _lease = lease;
+                        std::future::pending().await
+                    })
                 };
                 let first = start_owned(&state, spawn)?;
                 assert!(matches!(start_owned(&state, spawn), Err(DirectError::Busy)));

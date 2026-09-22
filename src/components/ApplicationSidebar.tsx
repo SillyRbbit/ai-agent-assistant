@@ -1,6 +1,7 @@
 import {
   Activity,
   Brain,
+  Bot,
   LayoutDashboard,
   ListTodo,
   MessagesSquare,
@@ -29,6 +30,7 @@ interface ApplicationSidebarProps {
 }
 
 const NAVIGATION_ICONS: Readonly<Record<AppRoute, LucideIcon>> = {
+  agents: Bot,
   activity: Activity,
   "command-center": LayoutDashboard,
   conversations: MessagesSquare,

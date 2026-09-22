@@ -24,7 +24,35 @@ CREATE TABLE app_metadata (
 ) STRICT;
 "#;
 
-const MIGRATIONS: [MigrationDefinition; 2] = [
+const CREATE_AGENT_PREFERENCES_SQL: &str = r#"
+CREATE TABLE agent_preferences (
+  agent_id TEXT PRIMARY KEY CHECK(agent_id IN (
+    'personal-assistant', 'research', 'coding', 'cloud-infrastructure',
+    'systems-operations', 'knowledge-document', 'qa-validation',
+    'security-risk', 'workflow-automation'
+  )),
+  connection TEXT NOT NULL CHECK(connection IN ('simulation', 'openai_api', 'codex')),
+  model TEXT NOT NULL,
+  effort TEXT NOT NULL CHECK(effort IN ('default', 'none', 'low', 'medium', 'high', 'xhigh')),
+  owner_instructions TEXT NOT NULL CHECK(length(owner_instructions) <= 4096),
+  memory_mode TEXT NOT NULL CHECK(memory_mode IN ('off', 'private_notes')),
+  note TEXT NOT NULL CHECK(length(note) <= 8192),
+  revision INTEGER NOT NULL CHECK(revision > 0)
+) STRICT;
+"#;
+
+const UPGRADE_AGENT_PREFERENCE_MODELS_SQL: &str = r#"
+UPDATE agent_preferences
+SET model = 'gpt-5.6-luna',
+    revision = CASE
+      WHEN revision < 9223372036854775807 THEN revision + 1
+      ELSE revision
+    END
+WHERE connection = 'openai_api'
+  AND model IN ('gpt-5.4-mini', 'gpt-5.4-nano');
+"#;
+
+const MIGRATIONS: [MigrationDefinition; 4] = [
     MigrationDefinition {
         version: 1,
         name: "create_schema_migrations",
@@ -36,6 +64,18 @@ const MIGRATIONS: [MigrationDefinition; 2] = [
         name: "create_app_metadata",
         checksum: "sha256:d16b7f69f3e25949aed1fbbdcb750ccbd87931c931f78b67f5d8b7c619479ade",
         sql: CREATE_APP_METADATA_SQL,
+    },
+    MigrationDefinition {
+        version: 3,
+        name: "create_agent_preferences",
+        checksum: "sha256:de2860c765836e89ced5164e9776708f9ecdfe248e54091b106975497e0f57b7",
+        sql: CREATE_AGENT_PREFERENCES_SQL,
+    },
+    MigrationDefinition {
+        version: 4,
+        name: "upgrade_agent_preference_models",
+        checksum: "sha256:25c320dee1ec4e2693c66b386639f6f52dbb20a2811cbc02911966cbe5b46681",
+        sql: UPGRADE_AGENT_PREFERENCE_MODELS_SQL,
     },
 ];
 
@@ -261,9 +301,12 @@ fn migration_table_exists(connection: &Connection) -> StorageResult<bool> {
 
 #[cfg(test)]
 mod tests {
+    use std::error::Error;
+
     use super::{
         apply_migrations_with_clock, available_migrations, MigrationDefinition,
-        CREATE_APP_METADATA_SQL, CREATE_SCHEMA_MIGRATIONS_SQL, MIGRATIONS,
+        CREATE_AGENT_PREFERENCES_SQL, CREATE_APP_METADATA_SQL, CREATE_SCHEMA_MIGRATIONS_SQL,
+        MIGRATIONS, UPGRADE_AGENT_PREFERENCE_MODELS_SQL,
     };
     use crate::storage::{
         config::DatabaseConfig,
@@ -278,9 +321,11 @@ mod tests {
             .map(|migration| migration.version)
             .collect();
 
-        assert_eq!(versions, vec![1, 2]);
+        assert_eq!(versions, vec![1, 2, 3, 4]);
         assert_eq!(MIGRATIONS[0].sql, CREATE_SCHEMA_MIGRATIONS_SQL);
         assert_eq!(MIGRATIONS[1].sql, CREATE_APP_METADATA_SQL);
+        assert_eq!(MIGRATIONS[2].sql, CREATE_AGENT_PREFERENCES_SQL);
+        assert_eq!(MIGRATIONS[3].sql, UPGRADE_AGENT_PREFERENCE_MODELS_SQL);
     }
 
     #[test]
@@ -294,19 +339,120 @@ mod tests {
             Ok(1_700_000_000_001)
         })?;
 
-        assert_eq!(first.applied_versions, vec![1, 2]);
+        assert_eq!(first.applied_versions, vec![1, 2, 3, 4]);
         assert!(first.already_applied_versions.is_empty());
         assert!(second.applied_versions.is_empty());
-        assert_eq!(second.already_applied_versions, vec![1, 2]);
+        assert_eq!(second.already_applied_versions, vec![1, 2, 3, 4]);
         assert!(connection.table_exists("schema_migrations")?);
         assert!(connection.table_exists("app_metadata")?);
+        assert!(connection.table_exists("agent_preferences")?);
 
         let applied = connection.applied_migrations()?;
         let versions: Vec<i64> = applied.iter().map(|migration| migration.version).collect();
-        assert_eq!(versions, vec![1, 2]);
+        assert_eq!(versions, vec![1, 2, 3, 4]);
         assert!(applied
             .iter()
             .all(|migration| migration.applied_at_ms == 1_700_000_000_000));
+        Ok(())
+    }
+
+    #[test]
+    fn upgrades_existing_metadata_database_without_rewriting_prior_migrations() -> StorageResult<()>
+    {
+        let mut connection = DatabaseConnection::open(&DatabaseConfig::in_memory())?;
+        apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS[..2], || Ok(100))?;
+        let prior = connection.applied_migrations()?;
+
+        let upgrade = apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS, || Ok(200))?;
+        let applied = connection.applied_migrations()?;
+
+        assert_eq!(upgrade.already_applied_versions, vec![1, 2]);
+        assert_eq!(upgrade.applied_versions, vec![3, 4]);
+        assert_eq!(&applied[..2], prior.as_slice());
+        assert_eq!(applied[2].version, 3);
+        assert_eq!(applied[2].applied_at_ms, 200);
+        assert_eq!(applied[3].version, 4);
+        assert_eq!(applied[3].applied_at_ms, 200);
+        assert!(connection.table_exists("agent_preferences")?);
+        Ok(())
+    }
+
+    #[test]
+    fn upgrades_removed_openai_models_without_changing_other_profile_content(
+    ) -> Result<(), Box<dyn Error>> {
+        let mut connection = DatabaseConnection::open(&DatabaseConfig::in_memory())?;
+        apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS[..3], || Ok(100))?;
+        for (agent_id, model, revision) in [
+            ("research", "gpt-5.4-mini", 4_i64),
+            ("coding", "gpt-5.4-nano", 9_i64),
+        ] {
+            connection.raw_mut().execute(
+                "INSERT INTO agent_preferences
+                 (agent_id, connection, model, effort, owner_instructions, memory_mode, note, revision)
+                 VALUES (?1, 'openai_api', ?2, 'low', 'Keep concise.', 'private_notes', 'Owned note.', ?3)",
+                rusqlite::params![agent_id, model, revision],
+            )?;
+        }
+        connection.raw_mut().execute(
+            "INSERT INTO agent_preferences
+             (agent_id, connection, model, effort, owner_instructions, memory_mode, note, revision)
+             VALUES ('qa-validation', 'simulation', 'simulation', 'default', '', 'off', '', 2)",
+            [],
+        )?;
+        connection.raw_mut().execute(
+            "INSERT INTO agent_preferences
+             (agent_id, connection, model, effort, owner_instructions, memory_mode, note, revision)
+             VALUES ('security-risk', 'openai_api', 'gpt-5.4-mini', 'default', '', 'off', '', 9223372036854775807)",
+            [],
+        )?;
+
+        let report = apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS, || Ok(200))?;
+
+        assert_eq!(report.applied_versions, vec![4]);
+        assert_eq!(report.already_applied_versions, vec![1, 2, 3]);
+        for (agent_id, revision) in [("research", 5_i64), ("coding", 10_i64)] {
+            let row = connection.raw_mut().query_row(
+                "SELECT model, effort, owner_instructions, memory_mode, note, revision
+                 FROM agent_preferences WHERE agent_id = ?1",
+                [agent_id],
+                |row| {
+                    Ok((
+                        row.get::<_, String>(0)?,
+                        row.get::<_, String>(1)?,
+                        row.get::<_, String>(2)?,
+                        row.get::<_, String>(3)?,
+                        row.get::<_, String>(4)?,
+                        row.get::<_, i64>(5)?,
+                    ))
+                },
+            )?;
+            assert_eq!(
+                row,
+                (
+                    "gpt-5.6-luna".to_owned(),
+                    "low".to_owned(),
+                    "Keep concise.".to_owned(),
+                    "private_notes".to_owned(),
+                    "Owned note.".to_owned(),
+                    revision,
+                )
+            );
+        }
+        let simulation: (String, i64) = connection.raw_mut().query_row(
+            "SELECT model, revision FROM agent_preferences WHERE agent_id = 'qa-validation'",
+            [],
+            |row| Ok((row.get(0)?, row.get(1)?)),
+        )?;
+        assert_eq!(simulation, ("simulation".to_owned(), 2));
+        let saturated: (String, i64) = connection.raw_mut().query_row(
+            "SELECT model, revision FROM agent_preferences WHERE agent_id = 'security-risk'",
+            [],
+            |row| Ok((row.get(0)?, row.get(1)?)),
+        )?;
+        assert_eq!(
+            saturated,
+            ("gpt-5.6-luna".to_owned(), 9_223_372_036_854_775_807)
+        );
         Ok(())
     }
 

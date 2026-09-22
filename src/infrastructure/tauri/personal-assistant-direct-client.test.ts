@@ -80,6 +80,12 @@ describe("direct native boundary", () => {
     );
   });
   it.each([
+    ["http_bad_request", "OpenAI rejected the request (HTTP 400). No automatic retry was made."],
+    ["http_forbidden", "OpenAI denied access (HTTP 403). No automatic retry was made."],
+    [
+      "http_not_found",
+      "OpenAI could not find the requested resource (HTTP 404). No automatic retry was made.",
+    ],
     [
       "provider_stream_server_error",
       "The provider reported a server error in the response stream. No automatic retry was made.",

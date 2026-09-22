@@ -80,6 +80,9 @@ DOCUMENTATION_TRUTH_MARKERS = (
     ),
 )
 EXPECTED_TAURI_IMPORTS = {
+    "src/infrastructure/tauri/agent-chat-client.ts": (
+        'import { invoke, isTauri } from "@tauri-apps/api/core";',
+    ),
     "src/infrastructure/tauri/personal-assistant-direct-client.ts": (
         'import { invoke, isTauri } from "@tauri-apps/api/core";',
     ),
@@ -98,6 +101,19 @@ EXPECTED_TAURI_IMPORTS = {
     ),
 }
 EXPECTED_TAURI_INVOKES = {
+    "src/infrastructure/tauri/agent-chat-client.ts": (
+        'invoke<unknown>("list_agent_preferences")',
+        'invoke<unknown>("list_agent_connections")',
+        'invoke<unknown>("save_agent_preferences", { request })',
+        'invoke<unknown>("clear_agent_note", { request: { agentId, revision } })',
+        'invoke<unknown>("restore_agent_defaults", { request: { agentId, revision } })',
+        'invoke<unknown>("start_agent_conversation", { request: { agentId } })',
+        'invoke<unknown>("send_agent_message", {\n'
+        '        request: { conversationId, message, acknowledgment },\n'
+        '      })',
+        'invoke<unknown>("poll_agent_conversation", { request: { conversationId } })',
+        'invoke<unknown>("cancel_agent_conversation", { request: { conversationId } })',
+    ),
     "src/infrastructure/tauri/personal-assistant-direct-client.ts": (
         'invoke<unknown>("start_personal_assistant_direct", {\n'
         '        request: { version: 1, acknowledgment: "openai-synthetic-direct-v1" },\n'
@@ -234,7 +250,16 @@ EXPECTED_INVOKE_HANDLER = (
     "research_knowledge_demo_lifecycle_tauri::cancel_research_knowledge_demo_lifecycle,"
     "personal_assistant_direct_tauri::start_personal_assistant_direct,"
     "personal_assistant_direct_tauri::poll_personal_assistant_direct,"
-    "personal_assistant_direct_tauri::cancel_personal_assistant_direct"
+    "personal_assistant_direct_tauri::cancel_personal_assistant_direct,"
+    "agent_chat_tauri::list_agent_preferences,"
+    "agent_chat_tauri::save_agent_preferences,"
+    "agent_chat_tauri::clear_agent_note,"
+    "agent_chat_tauri::restore_agent_defaults,"
+    "agent_chat_tauri::list_agent_connections,"
+    "agent_chat_tauri::start_agent_conversation,"
+    "agent_chat_tauri::send_agent_message,"
+    "agent_chat_tauri::poll_agent_conversation,"
+    "agent_chat_tauri::cancel_agent_conversation"
     "])"
 )
 PROJECTION_RUST_PROHIBITED_TOKENS = (

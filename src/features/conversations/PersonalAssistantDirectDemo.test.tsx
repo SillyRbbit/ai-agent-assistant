@@ -145,6 +145,21 @@ describe("native sample presentation", () => {
   });
   it.each([
     [
+      "http_bad_request",
+      "OpenAI rejected the request (HTTP 400). No automatic retry was made.",
+      "No automatic retry was made.",
+    ],
+    [
+      "http_forbidden",
+      "OpenAI denied access (HTTP 403). No automatic retry was made.",
+      "No automatic retry was made.",
+    ],
+    [
+      "http_not_found",
+      "OpenAI could not find the requested resource (HTTP 404). No automatic retry was made.",
+      "No automatic retry was made.",
+    ],
+    [
       "network",
       "connection failed while sending or receiving data",
       "No mock response was substituted.",

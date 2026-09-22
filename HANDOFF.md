@@ -1,5 +1,107 @@
 # Handoff
 
+## Optional API status repair — 2026-09-22
+
+The owner's time-boxed optional API task split the previously ambiguous
+`model_unavailable` mapping for HTTP 400/403/404 into `http_bad_request`,
+`http_forbidden` and `http_not_found`, with static messages and no response-body
+inspection. Legacy frontend messages remain readable. The latest historical
+failure cannot identify the provider/account/request cause. Models, fixed sample,
+request limits, endpoint, transport, ownership and no-retry behavior are unchanged.
+
+Focused checks passed (38 frontend, 17 native); full offline `npm run verify`
+passed (421 frontend, 337 Rust library tests, integration suite, 74 hook and
+85 repository tests, strict lint/type checks and release build). The offline
+locked app-only no-sign debug bundle passed identity checks. Its executable
+SHA-256 is `e3f329d126153251d618e52d5ccfb815430b300af8280672c6d08a2ea158555e`.
+Documentation, repository, security and whitespace checks passed after correcting
+new-prefix blank-line formatting in this same task. The repair is ready for
+ordinary finalization with advisories. The separately authorized
+optional fixed-sample batch is currently 0/1 used, awaiting owner-only private
+launch and acknowledgement; no new request has been made. API live success
+remains unverified and does not block independently verified Agents/settings/
+private-notes behavior. Codex live remains disabled under its existing advisory.
+
+Preserve all inherited changes and terminal records. D-128 custody/abort limits
+and D-127 audit debt remain; D-125/M1/M2 stay parked. No commit/publication or
+additional API investigation follows automatically. See the
+[bounded plan](docs/plans/2026-09-22-optional-api-status-repair.md).
+
+### Exact resume prompt
+
+```text
+Inspect the current optional-api-status-repair state and completion evidence in
+/private/tmp/cortexa-direct-provider-stream-stage-live-result-evidence-closeout.
+Preserve existing work and historical records; do not repeat implementation.
+The status repair passed offline verification. One optional fixed-sample request
+is authorized only after private owner launch and acknowledgement; current batch
+is 0/1 used. Use the exact verified native bundle, count one Start, stop on failure
+without retry, and observe final output and cleanup. Never inspect credentials,
+Terminal contents or process environments. If unresolved, park OpenAI API without
+blocking verified Agents/settings/notes. Do not commit, publish or resume D-125/M1/M2.
+```
+
+## Configurable agent current-model correction — 2026-09-22
+
+The completed bounded successor replaces the removed GPT-5.4 agent choices with
+GPT-5.6 Luna, Terra and Sol and migrates stored OpenAI profiles to Luna without
+losing owner settings or notes. The prior 36-path demo completion record remains
+archived and unchanged. Its optional live request was consumed by the observed
+`model_unavailable` result; zero attempts remain and no live retry is authorized.
+The exact 21-path successor/38-path cumulative candidate passed focused and full
+offline verification plus documentation, security, session and completion gates.
+Keep D-125/M1/M2 parked and preserve D-128/D-127 advisories.
+
+### Exact resume prompt
+
+```text
+Inspect the completed configurable-agent-current-models increment and its valid
+completion evidence before selecting new work. Preserve the 38-path cumulative
+candidate, predecessor report/state archive and all worktrees. The supported
+agent catalog is GPT-5.6 Luna, Terra and Sol; migration 4 upgrades stored 5.4
+OpenAI profiles. Zero live requests remain authorized. Do not make a provider
+request, commit, publish, or resume D-125/M1/M2 without explicit owner direction.
+```
+
+## Configurable agent demo — 2026-09-22
+
+The owner superseded the prior diagnostic-first queue with one private demo
+implementation. Work is in the existing published candidate at
+`/private/tmp/cortexa-direct-provider-stream-stage-live-result-evidence-closeout`;
+its baseline tree matches main `afeff59ed8fd7da8bc7edbb6d56f2d8e89e9eee6`.
+No other worktree or historical record is modified. Ordinary admission succeeded
+without a governance amendment; the previous completed raw state is archived.
+
+Agents now has native profiles and private notes, with a shared bounded text
+conversation path. Codex live is disabled for an unverified tool/file isolation
+contract; direct API live verification depends on private owner setup. Historical
+`provider_stream_error_event` evidence is unchanged. New batch counters remain
+OpenAI 0/1 and Codex 0/1 until an explicitly acknowledged send. D-128, D-127 and
+native live-success advisories remain; D-125/M1/M2 stay parked.
+
+Implementation and required offline validation are complete. `npm run verify`
+passed with 411 frontend tests, 336 Rust library tests, the full integration
+suite, strict lint/type checks and release builds. The native debug app bundle
+was built offline with locked dependencies and no signing. Direct Computer Use
+saved simulation settings, owner instructions and one harmless private note at
+revision 1, stopped the test process, relaunched the same bundle, observed the
+saved values, then observed `streaming · native generation owns this session`
+and terminal `completed · no active native generation`. The final simulated
+answer was explicitly labeled and stated that no hosted request was made.
+
+Exact key-free launch for a local walkthrough:
+
+```text
+env -u OPENAI_API_KEY CORTEXA_OPENAI_DEMO=0 \
+  /private/tmp/cortexa-direct-provider-stream-stage-live-result-evidence-closeout/src-tauri/target/debug/bundle/macos/Cortexa.app/Contents/MacOS/ai-agent-assistant
+```
+
+Open Agents, choose a profile, save settings and a harmless note, start a new
+conversation, and send a simulated message. Do not repeat implementation or
+publish. A future direct OpenAI check remains optional owner-operated work; it
+requires private key setup, visible acknowledgement and at most the unused 0/1
+request. Codex must remain disabled until supported isolation is proved.
+
 ## Direct provider stream stage live-result evidence closeout — 2026-09-21
 
 The separately admitted documentation-only successor

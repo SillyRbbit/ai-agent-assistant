@@ -1,4 +1,7 @@
 pub mod agent;
+mod agent_chat;
+mod agent_chat_tauri;
+mod agent_preferences;
 mod app_info;
 pub mod approvals;
 pub mod audit;
@@ -43,6 +46,7 @@ pub use tools::types::{PermissionKind, RiskClass};
 pub fn run() -> Result<(), AppError> {
     let app = tauri::Builder::default()
         .manage(personal_assistant_direct_tauri::DirectState::default())
+        .manage(agent_chat_tauri::AgentChatState::default())
         .manage(
             research_knowledge_demo_lifecycle_tauri::ResearchKnowledgeDemoLifecycleTauriState::new(
             ),
@@ -62,7 +66,16 @@ pub fn run() -> Result<(), AppError> {
             research_knowledge_demo_lifecycle_tauri::cancel_research_knowledge_demo_lifecycle,
             personal_assistant_direct_tauri::start_personal_assistant_direct,
             personal_assistant_direct_tauri::poll_personal_assistant_direct,
-            personal_assistant_direct_tauri::cancel_personal_assistant_direct
+            personal_assistant_direct_tauri::cancel_personal_assistant_direct,
+            agent_chat_tauri::list_agent_preferences,
+            agent_chat_tauri::save_agent_preferences,
+            agent_chat_tauri::clear_agent_note,
+            agent_chat_tauri::restore_agent_defaults,
+            agent_chat_tauri::list_agent_connections,
+            agent_chat_tauri::start_agent_conversation,
+            agent_chat_tauri::send_agent_message,
+            agent_chat_tauri::poll_agent_conversation,
+            agent_chat_tauri::cancel_agent_conversation
         ])
         .build(tauri::generate_context!())
         .map_err(AppError::from)?;

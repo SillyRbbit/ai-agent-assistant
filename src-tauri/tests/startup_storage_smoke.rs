@@ -13,7 +13,7 @@ fn file_backed_startup_is_idempotent_and_persists_only_the_bootstrap_marker() ->
     assert!(!first.was_already_initialized());
     assert_eq!(
         first.storage().startup_migration_report().applied_versions,
-        vec![1, 2]
+        vec![1, 2, 3, 4]
     );
     let first_record = first
         .storage()
@@ -36,7 +36,7 @@ fn file_backed_startup_is_idempotent_and_persists_only_the_bootstrap_marker() ->
             .storage()
             .startup_migration_report()
             .already_applied_versions,
-        vec![1, 2]
+        vec![1, 2, 3, 4]
     );
     assert_eq!(
         second

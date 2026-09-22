@@ -154,6 +154,11 @@ def write_valid_ui_native_boundary(root: Path) -> None:
         (Path(__file__).resolve().parents[2] / direct_client).read_text(encoding="utf-8"),
         encoding="utf-8",
     )
+    agent_client = "src/infrastructure/tauri/agent-chat-client.ts"
+    (root / agent_client).write_text(
+        (Path(__file__).resolve().parents[2] / agent_client).read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
     lifecycle_panel.write_text(
         (
             Path(__file__).resolve().parents[2]
@@ -188,7 +193,16 @@ def write_valid_ui_native_boundary(root: Path) -> None:
         "research_knowledge_demo_lifecycle_tauri::cancel_research_knowledge_demo_lifecycle,\n"
         "personal_assistant_direct_tauri::start_personal_assistant_direct,\n"
         "personal_assistant_direct_tauri::poll_personal_assistant_direct,\n"
-        "personal_assistant_direct_tauri::cancel_personal_assistant_direct\n"
+        "personal_assistant_direct_tauri::cancel_personal_assistant_direct,\n"
+        "agent_chat_tauri::list_agent_preferences,\n"
+        "agent_chat_tauri::save_agent_preferences,\n"
+        "agent_chat_tauri::clear_agent_note,\n"
+        "agent_chat_tauri::restore_agent_defaults,\n"
+        "agent_chat_tauri::list_agent_connections,\n"
+        "agent_chat_tauri::start_agent_conversation,\n"
+        "agent_chat_tauri::send_agent_message,\n"
+        "agent_chat_tauri::poll_agent_conversation,\n"
+        "agent_chat_tauri::cancel_agent_conversation\n"
         "])\n",
         encoding="utf-8",
     )
@@ -246,6 +260,70 @@ def write_valid_ui_native_boundary(root: Path) -> None:
 
 
 class RepositoryHealthTests(unittest.TestCase):
+    def test_agent_chat_boundary_rejects_command_payload_and_import_broadening(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            client = root / "src/infrastructure/tauri/agent-chat-client.ts"
+            baseline = client.read_text(encoding="utf-8")
+            self.assertEqual(health.ui_native_boundary_findings(root), ())
+            replacements = (
+                ('"list_agent_preferences"', '"execute_arbitrary"'),
+                ('"list_agent_connections"', '"get_credentials"'),
+                ('"save_agent_preferences"', '"write_arbitrary_file"'),
+                ('"clear_agent_note"', '"clear_all_notes"'),
+                ('"restore_agent_defaults"', '"modify_authority"'),
+                ('"start_agent_conversation"', '"start_runtime"'),
+                ('"send_agent_message"', '"execute_action"'),
+                ('"poll_agent_conversation"', '"get_provider_body"'),
+                ('"cancel_agent_conversation"', '"kill_arbitrary_process"'),
+                ('{ request }', '{ request, key: "fixture" }'),
+                ('{ agentId, revision }', '{ agentId, revision, allAgents: true }'),
+                ('{ agentId }', '{ agentId, note: "caller context" }'),
+                ('{ conversationId, message, acknowledgment }', '{ conversationId, message, acknowledgment, providerId: "caller" }'),
+                ('{ conversationId }', '{ conversationId, url: "caller" }'),
+                ('{ invoke, isTauri }', '{ invoke, isTauri, transformCallback }'),
+                ('{ invoke, isTauri }', '{ invoke as alternateInvoke, isTauri }'),
+            )
+            for old, new in replacements:
+                with self.subTest(new=new):
+                    self.assertIn(old, baseline)
+                    client.write_text(baseline.replace(old, new), encoding="utf-8")
+                    findings = health.ui_native_boundary_findings(root)
+                    self.assertTrue(any(finding.path == client.relative_to(root).as_posix() for finding in findings))
+            client.write_text(baseline + '\ninvoke<unknown>("extra_command");\n', encoding="utf-8")
+            self.assertTrue(health.ui_native_boundary_findings(root))
+            client.write_text(baseline, encoding="utf-8")
+            self.assertEqual(health.ui_native_boundary_findings(root), ())
+
+    def test_agent_chat_boundary_rejects_removed_calls_and_handler_changes(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            client = root / "src/infrastructure/tauri/agent-chat-client.ts"
+            baseline = client.read_text(encoding="utf-8")
+            for command in (
+                "list_agent_preferences", "list_agent_connections", "save_agent_preferences",
+                "clear_agent_note", "restore_agent_defaults", "start_agent_conversation",
+                "send_agent_message", "poll_agent_conversation", "cancel_agent_conversation",
+            ):
+                with self.subTest(removed=command):
+                    client.write_text(baseline.replace(f'invoke<unknown>("{command}"', f'undefined /* "{command}" */ ('), encoding="utf-8")
+                    self.assertTrue(health.ui_native_boundary_findings(root))
+            client.write_text(baseline, encoding="utf-8")
+            lib = root / "src-tauri/src/lib.rs"
+            registered = lib.read_text(encoding="utf-8")
+            for replacement in (
+                registered.replace("agent_chat_tauri::send_agent_message,\n", ""),
+                registered.replace("agent_chat_tauri::send_agent_message", "agent_chat_tauri::execute_action"),
+                registered.replace("agent_chat_tauri::cancel_agent_conversation\n", "agent_chat_tauri::cancel_agent_conversation,\narbitrary::execute\n"),
+            ):
+                with self.subTest(handler=replacement):
+                    lib.write_text(replacement, encoding="utf-8")
+                    self.assertTrue(any("invoke handler" in finding.detail for finding in health.ui_native_boundary_findings(root)))
+            lib.write_text(registered, encoding="utf-8")
+            self.assertEqual(health.ui_native_boundary_findings(root), ())
+
     def test_direct_client_rejects_command_and_payload_broadening(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

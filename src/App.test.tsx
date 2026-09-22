@@ -672,7 +672,7 @@ describe("App", () => {
     expect(currentConversation).toBeEnabled();
   });
 
-  it("opens all eight page shells in the shared scroll region and moves route focus", async () => {
+  it("opens all nine page shells in the shared scroll region and moves route focus", async () => {
     const harness = createMenuRouteHarness();
     const view = render(<App services={createServices(harness.source)} />);
     const { contentRegion, mainRegion } = getShellRegions(view.container);
@@ -680,7 +680,7 @@ describe("App", () => {
       name: "Open conversation: New conversation",
     });
 
-    expect(APP_ROUTES).toHaveLength(8);
+    expect(APP_ROUTES).toHaveLength(9);
 
     for (const route of APP_ROUTES) {
       const item = NAVIGATION_ITEMS.find((candidate) => candidate.route === route);
