@@ -1,5 +1,52 @@
 # Execution plans
 
+## Optional API status repair — 2026-09-22
+
+The owner's time-boxed optional API task split the previously ambiguous
+`model_unavailable` mapping for HTTP 400/403/404 into `http_bad_request`,
+`http_forbidden` and `http_not_found`, with static messages and no response-body
+inspection. Legacy frontend messages remain readable. The latest historical
+failure cannot identify the provider/account/request cause. Models, fixed sample,
+request limits, endpoint, transport, ownership and no-retry behavior are unchanged.
+
+Focused checks passed (38 frontend, 17 native); full offline `npm run verify`
+passed (421 frontend, 337 Rust library tests, integration suite, 74 hook and
+85 repository tests, strict lint/type checks and release build). The offline
+locked app-only no-sign debug bundle passed identity checks. Its executable
+SHA-256 is `e3f329d126153251d618e52d5ccfb815430b300af8280672c6d08a2ea158555e`.
+Documentation, repository, security and whitespace checks passed after correcting
+new-prefix blank-line formatting in this same task. The repair is ready for
+ordinary finalization with advisories. The separately authorized
+optional fixed-sample batch is currently 0/1 used, awaiting owner-only private
+launch and acknowledgement; no new request has been made. API live success
+remains unverified and does not block independently verified Agents/settings/
+private-notes behavior. Codex live remains disabled under its existing advisory.
+
+Preserve all inherited changes and terminal records. D-128 custody/abort limits
+and D-127 audit debt remain; D-125/M1/M2 stay parked. No commit/publication or
+additional API investigation follows automatically. See the
+[bounded plan](docs/plans/2026-09-22-optional-api-status-repair.md).
+
+## Configurable agent current-model correction — 2026-09-22
+
+The completed [bounded plan](docs/plans/2026-09-22-configurable-agent-current-models.md)
+replaces the removed GPT-5.4 choices with GPT-5.6 Luna, Terra and Sol, and adds
+one append-only stored-profile migration. The exact successor scope is 21 paths;
+the cumulative candidate is 38 paths. Focused and full offline validation plus
+completion gates passed. Zero live attempts remain. No publication or
+D-125/M1/M2 work is authorized.
+
+## Configurable agent demo — 2026-09-22
+
+The owner selected one coherent implementation, with independently scoped
+connection limitations and in-task routine repairs. The
+[completed plan](docs/plans/2026-09-22-configurable-agent-demo.md) covers Agents,
+persistent settings/private notes, bounded advice, offline validation and one
+native walkthrough. Historical diagnostics/closeouts are preserved evidence,
+not prerequisites. Full offline verification and the native save/restart/
+simulation walkthrough passed. OpenAI live remains owner-setup pending at 0/1;
+Codex remains disabled with 0/1 unused. D-125/M1/M2 remain parked.
+
 ## Direct provider stream stage live-result evidence closeout — 2026-09-21
 
 The completed bounded plan is

@@ -5,6 +5,29 @@ use reqwest::{header, Client, Request, StatusCode};
 use serde::Serialize;
 use serde_json::{json, Value};
 
+static GENERATION_OWNED: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+
+/// Retained by either native generation future through transport cleanup.
+pub(crate) struct GenerationLease;
+impl GenerationLease {
+    pub(crate) fn acquire() -> Result<Self, DirectError> {
+        GENERATION_OWNED
+            .compare_exchange(
+                false,
+                true,
+                std::sync::atomic::Ordering::SeqCst,
+                std::sync::atomic::Ordering::SeqCst,
+            )
+            .map(|_| Self)
+            .map_err(|_| DirectError::Busy)
+    }
+}
+impl Drop for GenerationLease {
+    fn drop(&mut self) {
+        GENERATION_OWNED.store(false, std::sync::atomic::Ordering::SeqCst);
+    }
+}
+
 pub(crate) const ENDPOINT: &str = "https://api.openai.com/v1/responses";
 pub(crate) const MODEL: &str = "gpt-5.6-luna";
 pub(crate) const SAMPLE: &str = crate::agent::runtime::PERSONAL_ASSISTANT_V0_SYNTHETIC_FIXTURE;
@@ -21,8 +44,14 @@ pub(crate) enum DirectError {
     MissingKey,
     #[error("The provider rejected authentication.")]
     Authentication,
-    #[error("The fixed model is unavailable or the request was rejected.")]
-    ModelUnavailable,
+    #[error("OpenAI rejected the request (HTTP 400). No automatic retry was made.")]
+    HttpBadRequest,
+    #[error("OpenAI denied access (HTTP 403). No automatic retry was made.")]
+    HttpForbidden,
+    #[error(
+        "OpenAI could not find the requested resource (HTTP 404). No automatic retry was made."
+    )]
+    HttpNotFound,
     #[error("The provider rate or spending limit was reached.")]
     RateLimited,
     #[error("The request timed out.")]
@@ -153,7 +182,9 @@ fn status_error(status: StatusCode) -> Result<(), DirectError> {
     match status.as_u16() {
         200 => Ok(()),
         401 => Err(DirectError::Authentication),
-        400 | 403 | 404 => Err(DirectError::ModelUnavailable),
+        400 => Err(DirectError::HttpBadRequest),
+        403 => Err(DirectError::HttpForbidden),
+        404 => Err(DirectError::HttpNotFound),
         429 => Err(DirectError::RateLimited),
         _ => Err(DirectError::HttpStatus),
     }
@@ -189,6 +220,53 @@ pub(crate) async fn run(
     decoder.finish()
 }
 
+/// Native-owned configurable requests use the same no-retry transport, with a
+/// separately enabled bounded reasoning-item decoder. The fixed sample stays strict.
+pub(crate) async fn run_configured(
+    key: ApiKey,
+    body: Vec<u8>,
+    mut emit: impl FnMut(ProviderEvent) -> Result<(), DirectError>,
+) -> Result<(), DirectError> {
+    let client = client()?;
+    let request = configured_request(&client, key, body)?;
+    let mut response = client.execute(request).await.map_err(network_error)?;
+    status_error(response.status())?;
+    if response
+        .headers()
+        .get(header::CONTENT_TYPE)
+        .and_then(|v| v.to_str().ok())
+        .and_then(|v| v.split(';').next())
+        .map(str::trim)
+        != Some("text/event-stream")
+    {
+        return Err(DirectError::Protocol);
+    }
+    let mut decoder = Decoder::configured();
+    while let Some(chunk) = response.chunk().await.map_err(network_error)? {
+        for event in decoder.push(&chunk)? {
+            emit(event)?;
+        }
+        if decoder.complete {
+            return Ok(());
+        }
+    }
+    decoder.finish()
+}
+
+fn configured_request(client: &Client, key: ApiKey, body: Vec<u8>) -> Result<Request, DirectError> {
+    if body.is_empty() || body.len() > MAX_FRAME {
+        return Err(DirectError::Limit);
+    }
+    client
+        .post(ENDPOINT)
+        .header(header::AUTHORIZATION, key.0)
+        .header(header::CONTENT_TYPE, "application/json")
+        .header(header::ACCEPT, "text/event-stream")
+        .body(body)
+        .build()
+        .map_err(|_| DirectError::Internal)
+}
+
 #[derive(Default)]
 struct Decoder {
     pending: Vec<u8>,
@@ -198,8 +276,21 @@ struct Decoder {
     item_id: Option<String>,
     text: String,
     complete: bool,
+    configured: bool,
+    reasoning_id: Option<String>,
+    reasoning_done: bool,
+    message_done: bool,
 }
 impl Decoder {
+    fn configured() -> Self {
+        Self {
+            configured: true,
+            ..Self::default()
+        }
+    }
+    fn message_index(&self) -> u64 {
+        u64::from(self.reasoning_id.is_some())
+    }
     fn finish(&self) -> Result<(), DirectError> {
         if self.complete {
             Ok(())
@@ -286,10 +377,28 @@ impl Decoder {
             }
             "response.output_item.added" => {
                 let item = &value["item"];
+                if self.configured && item["type"] == "reasoning" {
+                    if self.reasoning_id.is_some()
+                        || self.item_id.is_some()
+                        || value["output_index"] != 0
+                    {
+                        return Err(DirectError::Protocol);
+                    }
+                    check_reasoning(item, "in_progress")?;
+                    self.reasoning_id = Some(bounded_id(&item["id"])?);
+                    return Ok(None);
+                }
                 if self.item_id.is_some()
-                    || value["output_index"] != 0
+                    || value["output_index"] != self.message_index()
                     || item["type"] != "message"
                     || item["role"] != "assistant"
+                    || (self.configured
+                        && ((self.reasoning_id.is_some() && !self.reasoning_done)
+                            || item["id"].as_str() == self.reasoning_id.as_deref()
+                            || item["status"] != "in_progress"
+                            || item["content"]
+                                .as_array()
+                                .is_none_or(|parts| !parts.is_empty())))
                 {
                     return Err(DirectError::Protocol);
                 }
@@ -328,10 +437,27 @@ impl Decoder {
                 }
             }
             "response.output_item.done" => {
-                if value["output_index"] != 0 {
+                let item = &value["item"];
+                if self.configured && item["type"] == "reasoning" {
+                    if self.reasoning_id.is_none()
+                        || self.reasoning_done
+                        || self.item_id.is_some()
+                        || value["output_index"] != 0
+                        || item["id"].as_str() != self.reasoning_id.as_deref()
+                    {
+                        return Err(DirectError::Protocol);
+                    }
+                    check_reasoning(item, "completed")?;
+                    self.reasoning_done = true;
+                    return Ok(None);
+                }
+                if value["output_index"] != self.message_index()
+                    || (self.configured && self.message_done)
+                {
                     return Err(DirectError::Protocol);
                 }
-                self.check_message(&value["item"])?;
+                self.check_message(item)?;
+                self.message_done = true;
             }
             "response.completed" => {
                 let response = &value["response"];
@@ -343,10 +469,20 @@ impl Decoder {
                     return Err(DirectError::Incomplete);
                 }
                 let output = response["output"].as_array().ok_or(DirectError::Protocol)?;
-                if output.len() != 1 || self.text.is_empty() {
+                let message_index = usize::from(self.reasoning_id.is_some());
+                if output.len() != message_index + 1
+                    || self.text.is_empty()
+                    || (self.configured && !self.message_done)
+                {
                     return Err(DirectError::Protocol);
                 }
-                self.check_message(&output[0])?;
+                if let Some(reasoning_id) = &self.reasoning_id {
+                    if !self.reasoning_done || output[0]["id"].as_str() != Some(reasoning_id) {
+                        return Err(DirectError::Protocol);
+                    }
+                    check_reasoning(&output[0], "completed")?;
+                }
+                self.check_message(&output[message_index])?;
                 self.complete = true;
                 return Ok(Some(ProviderEvent::Completed));
             }
@@ -376,8 +512,9 @@ impl Decoder {
     fn check_item(&self, value: &Value) -> Result<(), DirectError> {
         if self.item_id.is_some()
             && value["item_id"].as_str() == self.item_id.as_deref()
-            && value["output_index"] == 0
+            && value["output_index"] == self.message_index()
             && value["content_index"] == 0
+            && !(self.configured && self.message_done)
         {
             Ok(())
         } else {
@@ -406,6 +543,29 @@ impl Decoder {
         Ok(())
     }
 }
+// Reasoning is framing only: no summary, reasoning text, or encrypted payload is
+// retained or emitted. Unknown event types still fail closed in Decoder::frame.
+fn check_reasoning(item: &Value, expected_status: &str) -> Result<(), DirectError> {
+    bounded_id(&item["id"])?;
+    if item["type"] != "reasoning"
+        || item["summary"]
+            .as_array()
+            .is_none_or(|summary| !summary.is_empty())
+        || item
+            .get("status")
+            .is_some_and(|status| status != expected_status)
+        || item
+            .get("content")
+            .is_some_and(|content| content.as_array().is_none_or(|parts| !parts.is_empty()))
+        || item
+            .get("encrypted_content")
+            .is_some_and(|value| !value.is_null() && !value.is_string())
+    {
+        return Err(DirectError::Protocol);
+    }
+    Ok(())
+}
+
 fn bounded_id(value: &Value) -> Result<String, DirectError> {
     value
         .as_str()
@@ -439,6 +599,241 @@ mod tests {
             );
         }
         bytes
+    }
+    fn configured_frames(with_reasoning: bool) -> Vec<Value> {
+        let original = frames();
+        let mut values = original[..2].to_vec();
+        let reasoning = json!({"id":"rs_fixture","type":"reasoning","summary":[],
+            "encrypted_content":"DUMMY-OPAQUE-REASONING"});
+        if with_reasoning {
+            values.push(json!({"type":"response.output_item.added","output_index":0,
+                "item":reasoning}));
+            values.push(json!({"type":"response.output_item.done","output_index":0,
+                "item":reasoning}));
+        }
+        let index = u64::from(with_reasoning);
+        let mut added = original[2].clone();
+        added["output_index"] = json!(index);
+        added["item"]["status"] = json!("in_progress");
+        added["item"]["content"] = json!([]);
+        values.push(added);
+        let mut delta = original[3].clone();
+        delta["output_index"] = json!(index);
+        values.push(delta);
+        let message = original[4]["response"]["output"][0].clone();
+        values
+            .push(json!({"type":"response.output_item.done","output_index":index,"item":message}));
+        let mut completed = original[4].clone();
+        if with_reasoning {
+            completed["response"]["output"] = json!([reasoning, message]);
+        }
+        values.push(completed);
+        values
+    }
+    #[test]
+    fn configured_reasoning_is_hidden_and_completion_is_explicit(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        for with_reasoning in [false, true] {
+            let input = wire(configured_frames(with_reasoning));
+            for size in [1, 7, 128, 65536] {
+                let mut decoder = Decoder::configured();
+                let mut starts = 0;
+                let mut completions = 0;
+                let mut visible = String::new();
+                for chunk in input.chunks(size) {
+                    for event in decoder.push(chunk)? {
+                        match event {
+                            ProviderEvent::Started(id) => {
+                                assert_eq!(id, "resp_fixture");
+                                starts += 1;
+                            }
+                            ProviderEvent::Delta(text) => visible.push_str(&text),
+                            ProviderEvent::Completed => completions += 1,
+                        }
+                    }
+                }
+                assert_eq!(starts, 1);
+                assert_eq!(completions, 1);
+                assert_eq!(visible, "Board 🙂 ready.");
+                assert!(!visible.contains("DUMMY-OPAQUE-REASONING"));
+                assert_eq!(decoder.finish(), Ok(()));
+            }
+            let mut incomplete = configured_frames(with_reasoning);
+            incomplete.pop();
+            let mut decoder = Decoder::configured();
+            decoder.push(&wire(incomplete))?;
+            assert_eq!(decoder.finish(), Err(DirectError::Incomplete));
+        }
+        // Reasoning support is never silently enabled for the fixed sample.
+        assert_eq!(
+            Decoder::default()
+                .push(&wire(configured_frames(true)))
+                .err(),
+            Some(DirectError::Protocol)
+        );
+        Ok(())
+    }
+    #[test]
+    fn configured_reasoning_rejects_malformed_items_and_identity_drift() {
+        for (frame, field, replacement) in [
+            (2, "output_index", json!(1)),
+            (3, "output_index", json!(1)),
+            (4, "output_index", json!(0)),
+            (5, "output_index", json!(0)),
+            (5, "content_index", json!(1)),
+            (5, "item_id", json!("rs_fixture")),
+            (6, "output_index", json!(0)),
+        ] {
+            let mut values = configured_frames(true);
+            values[frame][field] = replacement;
+            assert_eq!(
+                Decoder::configured().push(&wire(values)).err(),
+                Some(DirectError::Protocol)
+            );
+        }
+        for (frame, field, replacement) in [
+            (2, "id", json!("")),
+            (2, "id", json!("x".repeat(129))),
+            (2, "summary", json!(null)),
+            (
+                2,
+                "summary",
+                json!([{"type":"summary_text","text":"DUMMY-HIDDEN"}]),
+            ),
+            (
+                2,
+                "content",
+                json!([{"type":"reasoning_text","text":"DUMMY-HIDDEN"}]),
+            ),
+            (2, "encrypted_content", json!(42)),
+            (2, "status", json!("completed")),
+            (3, "id", json!("rs_other")),
+            (3, "status", json!("in_progress")),
+            (3, "type", json!("function_call")),
+            (4, "id", json!("rs_fixture")),
+            (4, "role", json!("user")),
+            (4, "status", json!("completed")),
+            (
+                4,
+                "content",
+                json!([{"type":"output_text","text":"unstreamed"}]),
+            ),
+            (6, "id", json!("msg_other")),
+            (6, "status", json!("in_progress")),
+        ] {
+            let mut values = configured_frames(true);
+            values[frame]["item"][field] = replacement;
+            assert_eq!(
+                Decoder::configured().push(&wire(values)).err(),
+                Some(DirectError::Protocol)
+            );
+        }
+        for malformed in [
+            json!([]),
+            json!({"id":"rs_other","type":"reasoning","summary":[]}),
+            json!({"id":"rs_fixture","type":"function_call","summary":[]}),
+        ] {
+            let mut values = configured_frames(true);
+            values[7]["response"]["output"][0] = malformed;
+            assert_eq!(
+                Decoder::configured().push(&wire(values)).err(),
+                Some(DirectError::Protocol)
+            );
+        }
+    }
+    #[test]
+    fn configured_reasoning_rejects_invalid_order_extra_items_and_unknown_events(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        for mutation in 0..8 {
+            let mut values = configured_frames(true);
+            match mutation {
+                0 => {
+                    values.remove(3);
+                } // Message before reasoning done.
+                1 => {
+                    values.remove(2);
+                } // Done without reasoning added.
+                2 => {
+                    values.insert(3, values[2].clone());
+                } // Duplicate reasoning.
+                3 => {
+                    values.insert(4, values[3].clone());
+                } // Duplicate done.
+                4 => {
+                    values.remove(6);
+                } // Completion without message done.
+                5 => {
+                    values.insert(7, values[5].clone());
+                } // Delta after done.
+                6 => {
+                    values[7]["response"]["output"]
+                        .as_array_mut()
+                        .ok_or("output")?
+                        .swap(0, 1);
+                }
+                _ => {
+                    values[7]["response"]["output"]
+                        .as_array_mut()
+                        .ok_or("output")?
+                        .push(json!({"type":"function_call"}));
+                }
+            }
+            assert_eq!(
+                Decoder::configured().push(&wire(values)).err(),
+                Some(DirectError::Protocol)
+            );
+        }
+        for kind in [
+            "response.reasoning_summary_text.delta",
+            "response.reasoning_text.delta",
+            "response.function_call_arguments.delta",
+            "response.unknown",
+        ] {
+            let values = vec![
+                frames()[0].clone(),
+                json!({"type":kind,"delta":"DUMMY-HIDDEN"}),
+            ];
+            assert_eq!(
+                Decoder::configured().push(&wire(values)).err(),
+                Some(DirectError::Protocol)
+            );
+        }
+        let mut values = configured_frames(false);
+        values[2]["item"]["type"] = json!("function_call");
+        assert_eq!(
+            Decoder::configured().push(&wire(values)).err(),
+            Some(DirectError::Protocol)
+        );
+        let sequence_drift = String::from_utf8(wire(configured_frames(true)))?
+            .replace("\"sequence_number\":3", "\"sequence_number\":2");
+        assert_eq!(
+            Decoder::configured().push(sequence_drift.as_bytes()).err(),
+            Some(DirectError::Protocol)
+        );
+        Ok(())
+    }
+    #[test]
+    fn configured_request_preserves_native_body_and_transport_identity(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let body = serde_json::to_vec(&json!({"model":"gpt-5.6-luna","stream":true,
+            "input":"DUMMY-NATIVE-CONTEXT","tools":[],"tool_choice":"none"}))?;
+        let key = ApiKey::from_values(true, true, Some("DUMMY-PRIVATE-KEY".to_owned()))?;
+        let request = configured_request(&client()?, key, body.clone())?;
+        assert_eq!(request.url().as_str(), ENDPOINT);
+        assert_eq!(request.method(), reqwest::Method::POST);
+        assert_eq!(
+            request.body().and_then(reqwest::Body::as_bytes),
+            Some(body.as_slice())
+        );
+        assert!(request.headers()[header::AUTHORIZATION].is_sensitive());
+        for body in [vec![], vec![b'x'; MAX_FRAME + 1]] {
+            let key = ApiKey::from_values(true, true, Some("DUMMY-PRIVATE-KEY".to_owned()))?;
+            assert_eq!(
+                configured_request(&client()?, key, body).err(),
+                Some(DirectError::Limit)
+            );
+        }
+        Ok(())
     }
     #[test]
     fn split_stream_and_explicit_completion() -> Result<(), Box<dyn std::error::Error>> {
@@ -546,10 +941,10 @@ mod tests {
     ) -> Result<(), Box<dyn std::error::Error>> {
         assert_eq!(status_error(StatusCode::OK), Ok(()));
         for (status, expected) in [
-            (400, DirectError::ModelUnavailable),
+            (400, DirectError::HttpBadRequest),
             (401, DirectError::Authentication),
-            (403, DirectError::ModelUnavailable),
-            (404, DirectError::ModelUnavailable),
+            (403, DirectError::HttpForbidden),
+            (404, DirectError::HttpNotFound),
             (429, DirectError::RateLimited),
             (201, DirectError::HttpStatus),
             (204, DirectError::HttpStatus),
@@ -569,6 +964,9 @@ mod tests {
         assert!(!error.is_timeout());
         assert_eq!(network_error(error), DirectError::Network);
         for (error, code) in [
+            (DirectError::HttpBadRequest, "http_bad_request"),
+            (DirectError::HttpForbidden, "http_forbidden"),
+            (DirectError::HttpNotFound, "http_not_found"),
             (DirectError::Network, "network"),
             (DirectError::HttpStatus, "http_status"),
             (DirectError::Timeout, "timeout"),
@@ -873,7 +1271,7 @@ mod tests {
         assert!(body.get("conversation").is_none());
         for (status, error) in [
             (401, DirectError::Authentication),
-            (404, DirectError::ModelUnavailable),
+            (404, DirectError::HttpNotFound),
             (429, DirectError::RateLimited),
             (500, DirectError::HttpStatus),
         ] {

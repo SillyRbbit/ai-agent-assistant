@@ -39,6 +39,7 @@ import {
   useApplicationWorkspacePanels,
 } from "./components/applicationWorkspacePanels";
 import { ActivityPage } from "./features/activity/ActivityPage";
+import { AgentsPage } from "./features/agents/AgentsPage";
 import { ConversationWorkspace } from "./features/conversations/ConversationWorkspace";
 import { PermissionCenter } from "./features/permissions/PermissionCenter";
 import { SettingsPage } from "./features/settings/SettingsPage";
@@ -277,6 +278,7 @@ function ApplicationShell({ services }: ApplicationShellProps) {
   );
 
   const pages: Readonly<Record<AppRoute, ReactNode>> = {
+    agents: <AgentsPage />,
     "command-center": (
       <Suspense fallback={<CommandCenterLoadingPage />}>
         <CommandCenterPage projectionLoader={services.researchKnowledgeDemoProjectionLoader} />
@@ -321,9 +323,9 @@ function ApplicationShell({ services }: ApplicationShellProps) {
     ),
     memory: (
       <PlaceholderPage
-        description="User-controlled session, working, and preference memory will appear here."
-        emptyDescription="Nothing is stored until memory controls and persistence are reviewed."
-        emptyTitle="No saved memory"
+        description="Private notes are managed separately for each agent in Agents."
+        emptyDescription="Open Agents to view, edit, save, or clear a private note. Notes are manually managed; no automatic learning or cross-agent sharing is enabled."
+        emptyTitle="Manage private notes in Agents"
         eyebrow="Context"
         headingId="memory-page-title"
         icon="M"

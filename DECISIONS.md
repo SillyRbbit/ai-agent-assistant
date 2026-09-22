@@ -1,5 +1,67 @@
 # Decision log
 
+## D-130 — Current configurable-agent model catalog
+
+Date: 2026-09-22. Status: Accepted by the owner's current-model correction.
+
+The configurable agent demo now offers only `gpt-5.6-luna`, `gpt-5.6-terra`
+and `gpt-5.6-sol`; Luna is the default. This supersedes only D-129's selectable
+GPT-5.4 catalog. D-129's profile, disclosure, custody, isolation, authority and
+no-retry boundaries remain unchanged. GPT-6 Astra is not offered because the
+shared existing effort selector includes `none`, while the documented Astra
+contract does not; model-specific UI would be a separate change.
+
+Append-only migration 4 updates persisted OpenAI profiles from either removed
+5.4 choice to Luna and increments an incrementable profile revision while
+preserving effort, instructions, memory mode and note. A revision already at the
+SQLite signed maximum remains saturated; its captured 5.4 profile still fails
+the new closed validator. This invalidates stale conversations without changing
+simulation or Codex profiles. The prior optional live request ended in
+the sanitized `model_unavailable` category; it is evidence for the correction,
+not proof of upstream cause. Zero live attempts remain authorized.
+
+See the [plan](docs/plans/2026-09-22-configurable-agent-current-models.md).
+
+## D-129 — Owner-configurable private text-advice demo
+
+Date: 2026-09-22. Status: Accepted by the owner's demo-first implementation prompt.
+
+For this bounded personal demo, the owner authorizes independent non-secret
+settings and one manually managed private note for each native canonical agent,
+native SQLite persistence, and an explicitly acknowledged text-only conversation.
+This supersedes D-094/D-119's nonselectable and Personal-Assistant-only limits
+only for this demo. It does not change immutable catalog authority, fixture
+workflows, tools, policy, approval, execution or automatic orchestration.
+
+The direct path retains D-128 native-session key custody and abort limitations,
+debug opt-in, verified TLS, fixed endpoint, no proxy/redirect/retry/fallback,
+empty tools and `store=false`. The new path permits owner text and selected
+private notes after hosted-processing disclosure; it does not claim ZDR, local
+encryption or deletion of provider copies. It offers only documented
+`gpt-5.4-mini` / `gpt-5.4-nano` effort combinations with bounded reasoning-item framing that
+never displays internal reasoning. Existing fixed synthetic diagnostics remain.
+Profiles/notes persist outside the repository in the existing application data
+directory, now in both native build modes; transcripts remain volatile.
+
+Codex is an optional saved selection, currently disabled: the inspected installed
+`0.155.0-alpha.9.2` protocol has no verified complete text-only tool/file isolation
+contract. No subprocess, authentication read, copied login, model request or
+fallback is enabled. Subscription status is not inferred. A future enabling
+change must prove all required restrictions using supported runtime controls.
+
+Each native conversation captures one saved profile and its own selected note.
+Revision changes reject subsequent sends from stale conversations. Stateless
+provider requests never accept caller-supplied provider IDs. One native transport
+guard spans completion, error, cancellation and cleanup across both text paths.
+This accepts bounded advice only, with no provider-to-device route.
+The repository checker registers only these nine new named IPC commands and
+the typed client import; exact boundary matching and rejection rules remain.
+
+The new batch allows at most one short explicitly acknowledged owner-triggered
+generation per available live connection, without retries; historical exhausted
+allowances stay exhausted. D-127 debt and D-125/M1/M2 parked status remain.
+See the [plan](docs/plans/2026-09-22-configurable-agent-demo.md).
+
 ## D-128 — Private direct OpenAI synthetic development demo
 
 Date: 2026-09-21. Status: Accepted by the owner's implementation prompt.

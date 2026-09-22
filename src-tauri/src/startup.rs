@@ -9,28 +9,12 @@ use crate::{
 
 const DEVELOPMENT_DATABASE_FILE_NAME: &str = "assistant-development.sqlite3";
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-enum StartupStorageMode {
-    Ephemeral,
-    DevelopmentFile,
-}
-
-impl StartupStorageMode {
-    const fn current() -> Self {
-        if cfg!(debug_assertions) {
-            Self::DevelopmentFile
-        } else {
-            Self::Ephemeral
-        }
-    }
-}
-
 pub(crate) fn initialize_tauri_app<R: Runtime>(app: &mut App<R>) -> Result<(), Box<dyn Error>> {
     initialize(app).map_err(|error| Box::new(error) as Box<dyn Error>)
 }
 
 fn initialize<R: Runtime>(app: &mut App<R>) -> Result<(), AppError> {
-    let config = storage_config(app, StartupStorageMode::current())?;
+    let config = storage_config(app)?;
     let initialization = Storage::initialize(&config)?;
     let summary = startup_summary(&initialization);
     let storage = initialization.into_storage();
@@ -43,24 +27,24 @@ fn initialize<R: Runtime>(app: &mut App<R>) -> Result<(), AppError> {
     Ok(())
 }
 
-fn storage_config<R: Runtime>(
-    app: &App<R>,
-    mode: StartupStorageMode,
-) -> Result<DatabaseConfig, AppError> {
-    match mode {
-        StartupStorageMode::Ephemeral => Ok(DatabaseConfig::in_memory()),
-        StartupStorageMode::DevelopmentFile => {
-            let directory = app
-                .path()
-                .app_local_data_dir()
-                .map_err(|source| AppError::ResolveStorageDirectory { source })?;
-            development_file_config(&directory)
-        }
-    }
+fn storage_config<R: Runtime>(app: &App<R>) -> Result<DatabaseConfig, AppError> {
+    // Editable profiles/notes must survive restart in either build mode. Keep the
+    // existing filename for compatibility, always under the app-owned data path.
+    let directory = app
+        .path()
+        .app_local_data_dir()
+        .map_err(|source| AppError::ResolveStorageDirectory { source })?;
+    development_file_config(&directory)
 }
 
 fn development_file_config(directory: &Path) -> Result<DatabaseConfig, AppError> {
     fs::create_dir_all(directory).map_err(|source| AppError::CreateStorageDirectory { source })?;
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        fs::set_permissions(directory, fs::Permissions::from_mode(0o700))
+            .map_err(|source| AppError::CreateStorageDirectory { source })?;
+    }
     DatabaseConfig::file(directory.join(DEVELOPMENT_DATABASE_FILE_NAME)).map_err(AppError::from)
 }
 
@@ -101,6 +85,14 @@ mod tests {
             &DatabaseLocation::File(nested.join(DEVELOPMENT_DATABASE_FILE_NAME))
         );
         assert!(nested.is_dir());
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            assert_eq!(
+                std::fs::metadata(&nested)?.permissions().mode() & 0o777,
+                0o700
+            );
+        }
         Ok(())
     }
 
@@ -110,7 +102,7 @@ mod tests {
         let summary = startup_summary(&initialization);
 
         assert!(summary.contains("mode=ephemeral-memory"));
-        assert!(summary.contains("applied_migrations=2"));
+        assert!(summary.contains("applied_migrations=4"));
         assert!(summary.contains("previously_initialized=false"));
         assert!(!summary.contains("sqlite"));
         Ok(())

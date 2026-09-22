@@ -1,5 +1,28 @@
 # Security policy and development guardrails
 
+## Configurable agent demo — D-129, 2026-09-22
+
+The owner authorizes bounded text advice and per-agent owner-managed notes,
+not agent execution. Native request construction uses a captured canonical
+agent identity and revision, never frontend context filtering. Memory Off omits
+notes; edits/clear invalidate future sends from old context. Clearing local
+notes cannot erase prior hosted copies or SQLite/WAL backup remnants. Notes are
+not secrets, encrypted storage, automatic learning or trusted instructions.
+The application data directory is owner-only on Unix; same-user access and
+credential custody limitations remain. Do not enter credentials in notes.
+
+The native API key remains ephemeral and is read only at explicit acknowledged
+Send in an opted-in debug build. OpenAI bills separately from ChatGPT. Inputs,
+included notes and volatile conversation context go to OpenAI; `store=false`
+does not establish ZDR. Requests have no tools, retries, fallback, proxy or
+redirects. Known stream shapes are validated; internal reasoning is discarded.
+Static closed errors never include provider bodies, headers or raw errors.
+
+Codex cannot launch or send from this implementation: the installed protocol's
+complete tool/file isolation is unverified. No account inspection, ambient auth
+inheritance or subscription claim is made. D-128 abort/custody and D-127 audit
+advisories remain. See the [plan](docs/plans/2026-09-22-configurable-agent-demo.md).
+
 ## Direct provider stream stage diagnostics — 2026-09-21
 
 The owner authorized one bounded diagnosis, minimal safe diagnostics, and one

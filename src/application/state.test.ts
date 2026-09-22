@@ -54,6 +54,7 @@ describe("applicationReducer", () => {
     expect(APP_ROUTES).toEqual([
       "command-center",
       "conversations",
+      "agents",
       "tasks",
       "memory",
       "activity",
@@ -66,6 +67,7 @@ describe("applicationReducer", () => {
   it.each<AppRoute>([
     "command-center",
     "conversations",
+    "agents",
     "tasks",
     "memory",
     "activity",

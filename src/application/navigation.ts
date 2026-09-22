@@ -1,6 +1,7 @@
 export const APP_ROUTES = [
   "command-center",
   "conversations",
+  "agents",
   "tasks",
   "memory",
   "activity",
@@ -27,6 +28,11 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     description: "Plan requests and work with your local assistant.",
     label: "Conversations",
     route: "conversations",
+  },
+  {
+    description: "Configure agent connections and private notes for bounded text advice.",
+    label: "Agents",
+    route: "agents",
   },
   {
     description: "Review local tasks and future reminders.",

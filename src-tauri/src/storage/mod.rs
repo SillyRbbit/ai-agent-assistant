@@ -1,3 +1,4 @@
+mod agent_preferences;
 mod config;
 mod connection;
 mod error;

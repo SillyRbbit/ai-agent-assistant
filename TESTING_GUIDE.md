@@ -1,5 +1,24 @@
 # Cortexa testing guide
 
+## Configurable agent demo — 2026-09-22
+
+Offline tests cover all nine independent profiles, restart persistence,
+transactional revisions, clearing and Memory Off, native request capture and
+cross-agent exclusion, chosen model/effort, stateless provider identity,
+malformed IPC, missing key, explicit acknowledgement, duplicate generation,
+owner drop, timeout, cancellation and cleanup. Configured reasoning framing is
+strict and hidden; existing fixed diagnostics are regression tested. Frontend
+checks exercise save/default/clear, disclosure, streaming, error and stop.
+
+The final cross-cutting `npm run verify` passed offline after the last source
+edit. The app-only debug bundle also built offline with locked dependencies and
+no signing. Native Computer Use observed settings/note save, process restart
+persistence, simulation streaming, explicit completion and released ownership.
+These results are separate from a live provider result: OpenAI remains 0/1 and
+owner-setup pending; Codex remains disabled at 0/1 pending verified isolation.
+Actual results are recorded in the
+[plan](docs/plans/2026-09-22-configurable-agent-demo.md) and final review.
+
 ## Direct provider stream stage live-result evidence closeout — 2026-09-21
 
 This successor is documentation-only. Direct Computer Use previously observed

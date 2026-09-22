@@ -1,5 +1,26 @@
 # Cortexa architecture
 
+## Configurable private agent demo — D-129, 2026-09-22
+
+Agents → typed agent-chat IPC → native profile store/bound conversation →
+simulation or direct Responses transport. The native registry supplies all nine
+identities; editable preferences grant no agent authority. Migration 3 adds one
+bounded row per agent without rewriting migrations 1/2. Application-local file
+storage persists profiles/notes across native restarts in both build modes.
+
+Native assembly selects only the conversation's own note, excludes it in Memory
+Off, and rejects follow-ups after profile revision changes. At most four turns
+of bounded volatile local text history are replayed statelessly; provider IDs
+are not shared or accepted through IPC. Shared transport ownership prevents
+overlapping native generations, including the fixed diagnostic sample. Codex
+selection fails closed because installed-runtime isolation is not verified.
+No new tools, workflows, device authority, dependencies or provider fallback.
+
+See [D-129](DECISIONS.md) and the
+[active plan](docs/plans/2026-09-22-configurable-agent-demo.md). Live capability
+is distinct from offline implementation evidence and remains pending until
+directly observed.
+
 ## Current direct demo exception — D-128, 2026-09-21
 
 The owner-approved development path is Conversations fixed-sample presentation

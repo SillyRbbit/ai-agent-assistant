@@ -1,5 +1,55 @@
 # Changelog
 
+## Optional API status repair — 2026-09-22
+
+The owner's time-boxed optional API task split the previously ambiguous
+`model_unavailable` mapping for HTTP 400/403/404 into `http_bad_request`,
+`http_forbidden` and `http_not_found`, with static messages and no response-body
+inspection. Legacy frontend messages remain readable. The latest historical
+failure cannot identify the provider/account/request cause. Models, fixed sample,
+request limits, endpoint, transport, ownership and no-retry behavior are unchanged.
+
+Focused checks passed (38 frontend, 17 native); full offline `npm run verify`
+passed (421 frontend, 337 Rust library tests, integration suite, 74 hook and
+85 repository tests, strict lint/type checks and release build). The offline
+locked app-only no-sign debug bundle passed identity checks. Its executable
+SHA-256 is `e3f329d126153251d618e52d5ccfb815430b300af8280672c6d08a2ea158555e`.
+Documentation, repository, security and whitespace checks passed after correcting
+new-prefix blank-line formatting in this same task. The repair is ready for
+ordinary finalization with advisories. The separately authorized
+optional fixed-sample batch is currently 0/1 used, awaiting owner-only private
+launch and acknowledgement; no new request has been made. API live success
+remains unverified and does not block independently verified Agents/settings/
+private-notes behavior. Codex live remains disabled under its existing advisory.
+
+Preserve all inherited changes and terminal records. D-128 custody/abort limits
+and D-127 audit debt remain; D-125/M1/M2 stay parked. No commit/publication or
+additional API investigation follows automatically. See the
+[bounded plan](docs/plans/2026-09-22-optional-api-status-repair.md).
+
+## Configurable agent current models — 2026-09-22
+
+Replaced the removed GPT-5.4 configurable-agent choices with GPT-5.6 Luna,
+Terra and Sol, defaulting to Luna. Added append-only migration 4 so stored 5.4
+OpenAI profiles reopen on Luna with an incremented revision and otherwise
+unchanged settings and notes. The single optional live request was consumed and
+ended in sanitized `model_unavailable`; no answer completed and no retry was
+made. Zero live attempts remain authorized. See the
+[plan](docs/plans/2026-09-22-configurable-agent-current-models.md).
+
+## Configurable agent demo — 2026-09-22
+
+Added an Agents page with nine native identities, independent saved settings
+and manually managed private notes. Added bounded native text conversations,
+revision-bound note isolation, a configured direct Responses path and explicit
+Codex-unavailable status. Existing fixed diagnostics and fixture workflows remain.
+The [plan](docs/plans/2026-09-22-configurable-agent-demo.md) records validation
+and live-verification status. Full offline verification and the native
+save/restart/simulation walkthrough passed. No live provider request was made:
+OpenAI remains owner-setup pending at 0/1 for this batch, while Codex remains
+disabled because complete tool/file isolation is unverified. No publication is
+authorized.
+
 ## Direct provider stream stage live-result evidence closeout — 2026-09-21
 
 The separately admitted documentation-only successor
