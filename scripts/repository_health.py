@@ -104,6 +104,7 @@ EXPECTED_TAURI_INVOKES = {
     "src/infrastructure/tauri/agent-chat-client.ts": (
         'invoke<unknown>("list_agent_preferences")',
         'invoke<unknown>("list_agent_connections")',
+        'invoke<unknown>("discover_agent_models", { request })',
         'invoke<unknown>("save_agent_preferences", { request })',
         'invoke<unknown>("clear_agent_note", { request: { agentId, revision } })',
         'invoke<unknown>("restore_agent_defaults", { request: { agentId, revision } })',
@@ -256,6 +257,7 @@ EXPECTED_INVOKE_HANDLER = (
     "agent_chat_tauri::clear_agent_note,"
     "agent_chat_tauri::restore_agent_defaults,"
     "agent_chat_tauri::list_agent_connections,"
+    "agent_chat_tauri::discover_agent_models,"
     "agent_chat_tauri::start_agent_conversation,"
     "agent_chat_tauri::send_agent_message,"
     "agent_chat_tauri::poll_agent_conversation,"

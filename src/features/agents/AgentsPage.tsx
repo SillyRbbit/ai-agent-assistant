@@ -3,6 +3,9 @@ import {
   agentChatClient,
   agentChatErrorMessage,
   EFFORTS,
+  isLocal,
+  ANTHROPIC_DOCUMENTED_MODELS,
+  type ModelInfo,
   OPENAI_AGENT_MODELS,
   type AgentChatClient,
   type AgentChatSnapshot,
@@ -17,11 +20,21 @@ const CONNECTION_LABELS = {
   simulation: "Simulation · no provider",
   openai_api: "OpenAI API",
   codex: "Codex · live unavailable",
+  anthropic_api: "Anthropic API",
+  lm_studio: "Local — LM Studio",
+  ollama: "Local — Ollama",
 } as const;
 const HOSTED_DISCLOSURE =
   "OpenAI receives this message, earlier turns in this conversation, saved owner instructions, and this agent's private note when enabled. This is a paid API request. store=false is not Zero Data Retention; provider abuse-monitoring and cache retention may still apply. Stop aborts local output but cannot guarantee immediate remote termination or zero billing. No tools, automatic retry, or connection fallback.";
 
+function catalogKey(connection: AgentConnection, endpoint: string, localAuth: boolean): string {
+  return JSON.stringify([connection, endpoint, localAuth]);
+}
+
 export function AgentsPage({ client = agentChatClient }: { readonly client?: AgentChatClient }) {
+  const [catalogs, setCatalogs] = useState<ReadonlyMap<string, readonly ModelInfo[]>>(
+    () => new Map(),
+  );
   const [profiles, setProfiles] = useState<readonly AgentProfile[]>([]);
   const [connections, setConnections] = useState<readonly AgentConnectionReadiness[]>([]);
   const [selectedId, setSelectedId] = useState("personal-assistant");
@@ -100,6 +113,20 @@ export function AgentsPage({ client = agentChatClient }: { readonly client?: Age
                 profile={selected}
                 client={client}
                 connections={connections}
+                cachedModels={catalogs.get(
+                  catalogKey(selected.connection, selected.endpoint, selected.localAuth),
+                )}
+                onCatalog={(connection, endpoint, localAuth, models) => {
+                  setCatalogs((previous) => {
+                    const next = new Map(previous);
+                    if (next.size >= 8) {
+                      const oldest = next.keys().next().value;
+                      if (oldest !== undefined) next.delete(oldest);
+                    }
+                    next.set(catalogKey(connection, endpoint, localAuth), models);
+                    return next;
+                  });
+                }}
                 onBusy={setBusy}
                 onSaved={(next) => {
                   setProfiles((previous) =>
@@ -131,6 +158,13 @@ interface SettingsProps {
   readonly profile: AgentProfile;
   readonly client: AgentChatClient;
   readonly connections: readonly AgentConnectionReadiness[];
+  readonly cachedModels: readonly ModelInfo[] | undefined;
+  readonly onCatalog: (
+    connection: AgentConnection,
+    endpoint: string,
+    localAuth: boolean,
+    models: readonly ModelInfo[],
+  ) => void;
   readonly onSaved: (next: AgentProfile) => void;
   readonly onBusy: (busy: boolean) => void;
   readonly onConversation: (next: AgentChatSnapshot) => void;
@@ -139,6 +173,8 @@ function AgentSettings({
   profile,
   client,
   connections,
+  cachedModels,
+  onCatalog,
   onSaved,
   onBusy,
   onConversation,
@@ -148,6 +184,9 @@ function AgentSettings({
     connection: profile.connection,
     model: profile.model,
     effort: profile.effort,
+    endpoint: profile.endpoint,
+    localAuth: profile.localAuth,
+    allowUnknownLocalityNotes: profile.allowUnknownLocalityNotes,
     ownerInstructions: profile.ownerInstructions,
     memoryMode: profile.memoryMode,
     note: profile.note,
@@ -156,6 +195,9 @@ function AgentSettings({
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const [confirmClear, setConfirmClear] = useState(false);
+  const [models, setModels] = useState<readonly ModelInfo[]>(
+    cachedModels ?? (profile.connection === "anthropic_api" ? ANTHROPIC_DOCUMENTED_MODELS : []),
+  );
   const mounted = useRef(true);
   const activeOperation = useRef(false);
   useEffect(() => {
@@ -165,6 +207,9 @@ function AgentSettings({
     };
   }, []);
   const dirty =
+    draft.endpoint !== profile.endpoint ||
+    draft.localAuth !== profile.localAuth ||
+    draft.allowUnknownLocalityNotes !== profile.allowUnknownLocalityNotes ||
     draft.connection !== profile.connection ||
     draft.model !== profile.model ||
     draft.effort !== profile.effort ||
@@ -188,7 +233,23 @@ function AgentSettings({
       if (mounted.current) setPending(false);
     }
   };
+  const selectedModel = models.find((model) => model.id === draft.model);
+  const conversationModels = models.filter((model) => {
+    const capabilities = model.capabilities;
+    if (Array.isArray(capabilities))
+      return !(capabilities.includes("embedding") && !capabilities.includes("completion"));
+    return !(
+      capabilities !== null &&
+      typeof capabilities === "object" &&
+      "type" in capabilities &&
+      capabilities.type === "embedding"
+    );
+  });
+  const catalogConnection = draft.connection === "anthropic_api" || isLocal(draft.connection);
+  const selectable = (model: ModelInfo) =>
+    model.locality !== "cloud" && !["unsupported", "retired"].includes(model.availability);
   const changeConnection = (connection: AgentConnection) => {
+    setModels(connection === "anthropic_api" ? ANTHROPIC_DOCUMENTED_MODELS : []);
     setDraft((previous) => ({
       ...previous,
       connection,
@@ -197,7 +258,19 @@ function AgentSettings({
           ? OPENAI_AGENT_MODELS[0]
           : connection === "codex"
             ? "unavailable"
-            : "simulation",
+            : connection === "anthropic_api"
+              ? "claude-fable-5-1"
+              : isLocal(connection)
+                ? ""
+                : "simulation",
+      endpoint:
+        connection === "lm_studio"
+          ? "http://127.0.0.1:1234/v1"
+          : connection === "ollama"
+            ? "http://127.0.0.1:11434/v1"
+            : "",
+      localAuth: false,
+      allowUnknownLocalityNotes: false,
       effort: "default",
     }));
   };
@@ -231,7 +304,12 @@ function AgentSettings({
             <select
               value={draft.model}
               onChange={(event) => {
-                setDraft({ ...draft, model: event.currentTarget.value });
+                setDraft({
+                  ...draft,
+                  model: event.currentTarget.value,
+                  effort: "default",
+                  allowUnknownLocalityNotes: false,
+                });
               }}
             >
               {draft.connection === "openai_api" ? (
@@ -240,6 +318,19 @@ function AgentSettings({
                     {model}
                   </option>
                 ))
+              ) : catalogConnection ? (
+                <>
+                  {!conversationModels.some((model) => model.id === draft.model) ? (
+                    <option value={draft.model}>
+                      {draft.model || "Refresh and select an installed text model"} · access unknown
+                    </option>
+                  ) : null}
+                  {conversationModels.map((model) => (
+                    <option key={model.id} value={model.id} disabled={!selectable(model)}>
+                      {model.label} · {model.evidence} · {model.availability.replaceAll("_", " ")}
+                    </option>
+                  ))}
+                </>
               ) : (
                 <option value={draft.model}>
                   {draft.model === "unavailable"
@@ -260,7 +351,10 @@ function AgentSettings({
                 });
               }}
             >
-              {(draft.connection === "openai_api" ? EFFORTS : ["default"]).map((effort) => (
+              {(draft.connection === "openai_api"
+                ? EFFORTS.filter((effort) => effort !== "max")
+                : (selectedModel?.efforts ?? ["default"])
+              ).map((effort) => (
                 <option key={effort} value={effort}>
                   {effort === "default" ? "Default" : effort}
                 </option>
@@ -268,6 +362,122 @@ function AgentSettings({
             </select>
           </label>
         </div>
+        {isLocal(draft.connection) ? (
+          <>
+            <label>
+              Loopback endpoint
+              <input
+                value={draft.endpoint}
+                maxLength={512}
+                onChange={(event) => {
+                  setDraft({
+                    ...draft,
+                    endpoint: event.currentTarget.value,
+                    allowUnknownLocalityNotes: false,
+                  });
+                  setModels([]);
+                }}
+              />
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={draft.localAuth}
+                onChange={(event) => {
+                  setDraft({
+                    ...draft,
+                    localAuth: event.currentTarget.checked,
+                    allowUnknownLocalityNotes: false,
+                  });
+                  setModels([]);
+                }}
+              />
+              Use a separately configured native local-server token
+            </label>
+            <p>
+              No hosted key is reused. Local tokens require an exact matching endpoint in the native
+              environment. Loopback is transport location, not proof of local processing.
+              Cloud-backed Ollama models are excluded.
+            </p>
+            <label>
+              <input
+                type="checkbox"
+                checked={draft.allowUnknownLocalityNotes}
+                onChange={(event) => {
+                  setDraft({ ...draft, allowUnknownLocalityNotes: event.currentTarget.checked });
+                }}
+              />
+              I allow this agent’s enabled private note to be sent to this exact endpoint and model
+              despite unknown execution locality.
+            </label>
+          </>
+        ) : null}
+        {catalogConnection ? (
+          <>
+            <button
+              type="button"
+              onClick={() =>
+                void perform(async () => {
+                  if (isLocal(draft.connection)) {
+                    setModels([]);
+                    onCatalog(draft.connection, draft.endpoint, draft.localAuth, []);
+                  }
+                  const catalog = await client.discover({
+                    connection: draft.connection,
+                    endpoint: draft.endpoint,
+                    localAuth: draft.localAuth,
+                  });
+                  if (mounted.current) {
+                    setModels(catalog.models);
+                    onCatalog(
+                      catalog.connection,
+                      catalog.endpoint,
+                      draft.localAuth,
+                      catalog.models,
+                    );
+                    setDraft((previous) => ({
+                      ...previous,
+                      endpoint: catalog.endpoint,
+                      effort: catalog.models
+                        .find((model) => model.id === previous.model)
+                        ?.efforts.includes(previous.effort)
+                        ? previous.effort
+                        : "default",
+                    }));
+                  }
+                })
+              }
+            >
+              Refresh model catalog
+            </button>
+            <p>
+              Refresh contacts only the selected service’s model metadata API. No generation,
+              downloads, model loading or fallback. Discovery is not a live test; unavailable
+              discovery leaves saved profiles intact.
+            </p>
+            <p>
+              Default omits effort on the wire.{" "}
+              {selectedModel?.thinking === "always_on"
+                ? "Thinking is always on for this model; only answer text is displayed."
+                : "Unsupported reasoning controls are omitted. Separate reasoning fields are hidden; local answer content follows the server’s framing."}
+            </p>
+            {selectedModel ? (
+              <p>
+                Exact ID: {selectedModel.id} · {selectedModel.evidence} ·{" "}
+                {selectedModel.availability.replaceAll("_", " ")} · live test: unverified ·
+                locality: {selectedModel.locality}
+                <br />
+                Quantization: {selectedModel.quantization ?? "unknown"} · size:{" "}
+                {selectedModel.sizeBytes === null
+                  ? "unknown"
+                  : `${String(selectedModel.sizeBytes)} bytes`}{" "}
+                · provenance/license: {selectedModel.provenance ?? "unknown"} · context:{" "}
+                {selectedModel.contextLimit ?? "unknown"} · loaded:{" "}
+                {selectedModel.loaded === null ? "unknown" : selectedModel.loaded ? "yes" : "no"}
+              </p>
+            ) : null}
+          </>
+        ) : null}
         <p className="agents-readiness" role="status">
           {readiness?.message ?? "Connection readiness unavailable."}
         </p>
@@ -397,7 +607,10 @@ function AgentSettings({
             dirty ||
             readiness === undefined ||
             readiness.status === "blocked" ||
-            draft.connection === "codex"
+            draft.connection === "codex" ||
+            (catalogConnection && selectedModel !== undefined && !selectable(selectedModel)) ||
+            (isLocal(draft.connection) &&
+              (selectedModel === undefined || !selectable(selectedModel)))
           }
           onClick={() =>
             void perform(async () => {
@@ -406,6 +619,7 @@ function AgentSettings({
                 next.agentId !== profile.agentId ||
                 next.connection !== profile.connection ||
                 next.model !== profile.model ||
+                next.endpoint !== profile.endpoint ||
                 next.effort !== profile.effort ||
                 next.memoryMode !== profile.memoryMode ||
                 next.settingsRevision !== profile.revision
@@ -465,6 +679,7 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
         next.agentId !== initial.agentId ||
         next.connection !== initial.connection ||
         next.model !== initial.model ||
+        next.endpoint !== initial.endpoint ||
         next.effort !== initial.effort ||
         next.memoryMode !== initial.memoryMode ||
         next.settingsRevision !== initial.settingsRevision ||
@@ -542,7 +757,7 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
       uncertainCleanup.current ||
       history.length >= 3 ||
       message.trim() === "" ||
-      (initial.connection === "openai_api" && !acknowledged) ||
+      (initial.connection !== "simulation" && !acknowledged) ||
       initial.connection === "codex"
     )
       return;
@@ -555,7 +770,13 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
       let next = await client.send(
         initial.conversationId,
         message,
-        initial.connection === "simulation" ? "simulation" : "openai-agent-text-v1",
+        initial.connection === "simulation"
+          ? "simulation"
+          : initial.connection === "openai_api"
+            ? "openai-agent-text-v1"
+            : initial.connection === "anthropic_api"
+              ? "anthropic-agent-text-v1"
+              : "local-agent-text-v1",
       );
       if (shouldStop()) next = await client.cancel(initial.conversationId);
       if (mounted.current) {
@@ -597,7 +818,8 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
     <section className="agents-conversation page-panel" aria-labelledby="agent-conversation-title">
       <h2 id="agent-conversation-title">Conversation · {displayName}</h2>
       <p>
-        {CONNECTION_LABELS[initial.connection]} · {initial.model} · effort {initial.effort} ·{" "}
+        {CONNECTION_LABELS[initial.connection]} · {initial.endpoint} · {initial.model} · effort{" "}
+        {initial.effort} ·{" "}
         {initial.memoryMode === "off" ? "Memory Off" : "Own private note included"} · saved revision{" "}
         {initial.settingsRevision}
       </p>
@@ -607,8 +829,8 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
         hosted turns include that conversation text. No tools or device actions are available.
       </p>
       <p>
-        Each message is limited to 4,096 characters. OpenAI requests have a 60-second deadline and a
-        2,048-token output budget including reasoning. No automatic retry is made.
+        Each message is limited to 4,096 characters. Provider requests have a 60-second deadline and
+        a 2,048-token output budget including reasoning. No automatic retry is made.
       </p>
       {initial.connection === "simulation" ? (
         <p className="agents-readiness">
@@ -616,7 +838,13 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
         </p>
       ) : (
         <>
-          <p>{HOSTED_DISCLOSURE}</p>
+          <p>
+            {initial.connection === "openai_api"
+              ? HOSTED_DISCLOSURE
+              : initial.connection === "anthropic_api"
+                ? "Anthropic receives this message, earlier turns, saved instructions and enabled private notes. API charges and provider retention terms apply. Stop aborts local output but cannot guarantee immediate remote termination or zero billing. No tools, automatic retry or fallback."
+                : "The selected server receives your message, earlier turns, instructions and enabled notes. Execution locality is unknown; localhost can proxy elsewhere. Sending may trigger normal loading of this selected installed model; loading uses the same bounded deadline. Cortexa does not download models, infer RAM needs or fall back to a cloud service."}
+          </p>
           <label className="agents-checkbox">
             <input
               type="checkbox"
@@ -626,8 +854,11 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
                 setAcknowledged(event.currentTarget.checked);
               }}
             />
-            I acknowledge sending this message and selected context to OpenAI with possible API
-            charges.
+            {initial.connection === "openai_api"
+              ? "I acknowledge sending this message and selected context to OpenAI with possible API charges."
+              : initial.connection === "anthropic_api"
+                ? "I acknowledge sending this message and selected context to Anthropic with possible API charges and provider retention."
+                : "I acknowledge sending this message and selected context to the configured server with unknown execution locality."}
           </label>
         </>
       )}
@@ -650,12 +881,18 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
           disabled={
             !canSend ||
             message.trim() === "" ||
-            (initial.connection === "openai_api" && !acknowledged) ||
+            (initial.connection !== "simulation" && !acknowledged) ||
             initial.connection === "codex"
           }
           onClick={() => void send()}
         >
-          {initial.connection === "simulation" ? "Send simulated message" : "Send to OpenAI"}
+          {initial.connection === "simulation"
+            ? "Send simulated message"
+            : initial.connection === "openai_api"
+              ? "Send to OpenAI"
+              : initial.connection === "anthropic_api"
+                ? "Send to Anthropic"
+                : "Send to selected server"}
         </button>
         <button
           type="button"

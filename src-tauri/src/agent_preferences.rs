@@ -19,6 +19,9 @@ pub(crate) const OPENAI_AGENT_MODEL: &str = "gpt-5.6-luna";
 pub(crate) enum AgentConnection {
     Simulation,
     OpenaiApi,
+    AnthropicApi,
+    LmStudio,
+    Ollama,
     Codex,
 }
 
@@ -27,6 +30,9 @@ impl AgentConnection {
         match self {
             Self::Simulation => "simulation",
             Self::OpenaiApi => "openai_api",
+            Self::AnthropicApi => "anthropic_api",
+            Self::LmStudio => "lm_studio",
+            Self::Ollama => "ollama",
             Self::Codex => "codex",
         }
     }
@@ -41,6 +47,7 @@ pub(crate) enum ReasoningEffort {
     Medium,
     High,
     Xhigh,
+    Max,
 }
 
 impl ReasoningEffort {
@@ -52,6 +59,7 @@ impl ReasoningEffort {
             Self::Medium => "medium",
             Self::High => "high",
             Self::Xhigh => "xhigh",
+            Self::Max => "max",
         }
     }
 }
@@ -78,6 +86,9 @@ pub(crate) struct AgentPreferencesInput {
     pub(crate) agent_id: String,
     pub(crate) connection: AgentConnection,
     pub(crate) model: String,
+    pub(crate) endpoint: String,
+    pub(crate) local_auth: bool,
+    pub(crate) allow_unknown_locality_notes: bool,
     pub(crate) effort: ReasoningEffort,
     pub(crate) owner_instructions: String,
     pub(crate) memory_mode: MemoryMode,
@@ -92,6 +103,9 @@ pub(crate) struct AgentProfile {
     pub(crate) display_name: String,
     pub(crate) connection: AgentConnection,
     pub(crate) model: String,
+    pub(crate) endpoint: String,
+    pub(crate) local_auth: bool,
+    pub(crate) allow_unknown_locality_notes: bool,
     pub(crate) effort: ReasoningEffort,
     pub(crate) owner_instructions: String,
     pub(crate) memory_mode: MemoryMode,
@@ -108,6 +122,9 @@ impl AgentProfile {
             display_name: definition.display_name().to_owned(),
             connection: AgentConnection::Simulation,
             model: "simulation".to_owned(),
+            endpoint: String::new(),
+            local_auth: false,
+            allow_unknown_locality_notes: false,
             effort: ReasoningEffort::Default,
             owner_instructions: String::new(),
             memory_mode: MemoryMode::Off,
@@ -130,6 +147,15 @@ impl AgentProfile {
         if self.display_name != expected.display_name {
             return Err(PreferencesError::InvalidRequest);
         }
+        if normalize_configuration(
+            self.connection,
+            &self.endpoint,
+            self.local_auth,
+            self.allow_unknown_locality_notes,
+        )? != self.endpoint
+        {
+            return Err(PreferencesError::InvalidRequest);
+        }
         Ok(())
     }
 }
@@ -148,6 +174,14 @@ impl AgentPreferencesInput {
         let mut profile = AgentProfile::defaults(id)?;
         profile.connection = self.connection;
         profile.model = self.model;
+        profile.endpoint = normalize_configuration(
+            self.connection,
+            &self.endpoint,
+            self.local_auth,
+            self.allow_unknown_locality_notes,
+        )?;
+        profile.local_auth = self.local_auth;
+        profile.allow_unknown_locality_notes = self.allow_unknown_locality_notes;
         profile.effort = self.effort;
         profile.owner_instructions = self.owner_instructions;
         profile.memory_mode = self.memory_mode;
@@ -203,6 +237,24 @@ fn validate_preferences(
         AgentConnection::Simulation => model == "simulation" && effort == ReasoningEffort::Default,
         AgentConnection::OpenaiApi => {
             matches!(model, OPENAI_AGENT_MODEL | "gpt-5.6-terra" | "gpt-5.6-sol")
+                && effort != ReasoningEffort::Max
+        }
+        AgentConnection::AnthropicApi => {
+            if !valid_model(model, false) || effort == ReasoningEffort::None {
+                false
+            } else if let Some(documented) = crate::anthropic::documented_models()
+                .iter()
+                .find(|entry| entry.id == model)
+            {
+                crate::agent_models::validate_selection(documented, effort).is_ok()
+            } else {
+                // Discovery decides access/capability before Send. Saving an unknown
+                // exact ID neither probes the provider nor claims it is supported.
+                true
+            }
+        }
+        AgentConnection::LmStudio | AgentConnection::Ollama => {
+            valid_model(model, true) && effort == ReasoningEffort::Default
         }
         // The installed runtime cannot prove tool isolation. Persist this explicit
         // unavailable choice without inventing a model or authentication status.
@@ -212,6 +264,32 @@ fn validate_preferences(
         return Err(PreferencesError::UnsupportedSettings);
     }
     Ok(id)
+}
+
+fn valid_model(model: &str, empty_allowed: bool) -> bool {
+    (empty_allowed || !model.is_empty())
+        && model.chars().count() <= 256
+        && !model.chars().any(char::is_control)
+        && (model.is_empty() || model.trim() == model)
+}
+
+fn normalize_configuration(
+    connection: AgentConnection,
+    endpoint: &str,
+    local_auth: bool,
+    allow_unknown_locality_notes: bool,
+) -> Result<String, PreferencesError> {
+    if matches!(
+        connection,
+        AgentConnection::LmStudio | AgentConnection::Ollama
+    ) {
+        crate::local_models::normalize_endpoint(endpoint)
+            .map_err(|_| PreferencesError::InvalidRequest)
+    } else if endpoint.is_empty() && !local_auth && !allow_unknown_locality_notes {
+        Ok(String::new())
+    } else {
+        Err(PreferencesError::InvalidRequest)
+    }
 }
 
 fn valid_content(value: &str, maximum: usize) -> bool {

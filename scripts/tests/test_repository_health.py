@@ -199,6 +199,7 @@ def write_valid_ui_native_boundary(root: Path) -> None:
         "agent_chat_tauri::clear_agent_note,\n"
         "agent_chat_tauri::restore_agent_defaults,\n"
         "agent_chat_tauri::list_agent_connections,\n"
+        "agent_chat_tauri::discover_agent_models,\n"
         "agent_chat_tauri::start_agent_conversation,\n"
         "agent_chat_tauri::send_agent_message,\n"
         "agent_chat_tauri::poll_agent_conversation,\n"
@@ -270,6 +271,7 @@ class RepositoryHealthTests(unittest.TestCase):
             replacements = (
                 ('"list_agent_preferences"', '"execute_arbitrary"'),
                 ('"list_agent_connections"', '"get_credentials"'),
+                ('"discover_agent_models"', '"discover_arbitrary_url"'),
                 ('"save_agent_preferences"', '"write_arbitrary_file"'),
                 ('"clear_agent_note"', '"clear_all_notes"'),
                 ('"restore_agent_defaults"', '"modify_authority"'),
@@ -303,7 +305,7 @@ class RepositoryHealthTests(unittest.TestCase):
             client = root / "src/infrastructure/tauri/agent-chat-client.ts"
             baseline = client.read_text(encoding="utf-8")
             for command in (
-                "list_agent_preferences", "list_agent_connections", "save_agent_preferences",
+                "list_agent_preferences", "list_agent_connections", "discover_agent_models", "save_agent_preferences",
                 "clear_agent_note", "restore_agent_defaults", "start_agent_conversation",
                 "send_agent_message", "poll_agent_conversation", "cancel_agent_conversation",
             ):

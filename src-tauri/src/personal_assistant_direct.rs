@@ -38,6 +38,24 @@ const MAX_EVENTS: u64 = 512;
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, thiserror::Error)]
 #[serde(rename_all = "snake_case")]
 pub(crate) enum DirectError {
+    #[error("The selected provider is unavailable. No fallback was used.")]
+    ProviderUnavailable,
+    #[error("The selected model is unavailable or not loaded. Check the selected server.")]
+    ModelUnavailable,
+    #[error("The server reported insufficient memory. Choose a smaller already-installed model or context.")]
+    OutOfMemory,
+    #[error("The response reached its output or context limit and is incomplete.")]
+    Truncated,
+    #[error("The selected model or response mode is unsupported. No fallback was used.")]
+    Unsupported,
+    #[error("Use a credential-free loopback HTTP(S) endpoint ending in /v1.")]
+    Endpoint,
+    #[error(
+        "Locality is unknown. Explicitly acknowledge transmitting notes to this destination first."
+    )]
+    Locality,
+    #[error("Refresh the model catalog for this exact connection before sending.")]
+    Catalog,
     #[error("Native live mode is disabled.")]
     Disabled,
     #[error("Set the native session API key before starting.")]

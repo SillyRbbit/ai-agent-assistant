@@ -52,7 +52,25 @@ WHERE connection = 'openai_api'
   AND model IN ('gpt-5.4-mini', 'gpt-5.4-nano');
 "#;
 
-const MIGRATIONS: [MigrationDefinition; 4] = [
+// A sidecar extends connection configuration without rewriting the existing
+// preferences table, notes, revisions, or migration history.
+const CREATE_AGENT_CONNECTION_SETTINGS_SQL: &str = r#"
+CREATE TABLE agent_connection_settings (
+  agent_id TEXT PRIMARY KEY REFERENCES agent_preferences(agent_id),
+  connection TEXT NOT NULL CHECK(connection IN (
+    'simulation', 'openai_api', 'codex', 'anthropic_api', 'lm_studio', 'ollama'
+  )),
+  model TEXT NOT NULL CHECK(length(model) <= 256),
+  effort TEXT NOT NULL CHECK(effort IN ('default', 'none', 'low', 'medium', 'high', 'xhigh', 'max')),
+  endpoint TEXT NOT NULL CHECK(length(endpoint) <= 2048),
+  local_auth INTEGER NOT NULL CHECK(local_auth IN (0, 1)),
+  allow_unknown_locality_notes INTEGER NOT NULL CHECK(allow_unknown_locality_notes IN (0, 1)),
+  CHECK(connection IN ('lm_studio', 'ollama') OR
+        (endpoint = '' AND local_auth = 0 AND allow_unknown_locality_notes = 0))
+) STRICT;
+"#;
+
+const MIGRATIONS: [MigrationDefinition; 5] = [
     MigrationDefinition {
         version: 1,
         name: "create_schema_migrations",
@@ -76,6 +94,12 @@ const MIGRATIONS: [MigrationDefinition; 4] = [
         name: "upgrade_agent_preference_models",
         checksum: "sha256:25c320dee1ec4e2693c66b386639f6f52dbb20a2811cbc02911966cbe5b46681",
         sql: UPGRADE_AGENT_PREFERENCE_MODELS_SQL,
+    },
+    MigrationDefinition {
+        version: 5,
+        name: "create_agent_connection_settings",
+        checksum: "sha256:676c971dd48eefc1ae7c53204537458118a7d05d490050e64bbcb1b788ad6be2",
+        sql: CREATE_AGENT_CONNECTION_SETTINGS_SQL,
     },
 ];
 
@@ -305,8 +329,9 @@ mod tests {
 
     use super::{
         apply_migrations_with_clock, available_migrations, MigrationDefinition,
-        CREATE_AGENT_PREFERENCES_SQL, CREATE_APP_METADATA_SQL, CREATE_SCHEMA_MIGRATIONS_SQL,
-        MIGRATIONS, UPGRADE_AGENT_PREFERENCE_MODELS_SQL,
+        CREATE_AGENT_CONNECTION_SETTINGS_SQL, CREATE_AGENT_PREFERENCES_SQL,
+        CREATE_APP_METADATA_SQL, CREATE_SCHEMA_MIGRATIONS_SQL, MIGRATIONS,
+        UPGRADE_AGENT_PREFERENCE_MODELS_SQL,
     };
     use crate::storage::{
         config::DatabaseConfig,
@@ -321,11 +346,12 @@ mod tests {
             .map(|migration| migration.version)
             .collect();
 
-        assert_eq!(versions, vec![1, 2, 3, 4]);
+        assert_eq!(versions, vec![1, 2, 3, 4, 5]);
         assert_eq!(MIGRATIONS[0].sql, CREATE_SCHEMA_MIGRATIONS_SQL);
         assert_eq!(MIGRATIONS[1].sql, CREATE_APP_METADATA_SQL);
         assert_eq!(MIGRATIONS[2].sql, CREATE_AGENT_PREFERENCES_SQL);
         assert_eq!(MIGRATIONS[3].sql, UPGRADE_AGENT_PREFERENCE_MODELS_SQL);
+        assert_eq!(MIGRATIONS[4].sql, CREATE_AGENT_CONNECTION_SETTINGS_SQL);
     }
 
     #[test]
@@ -339,17 +365,18 @@ mod tests {
             Ok(1_700_000_000_001)
         })?;
 
-        assert_eq!(first.applied_versions, vec![1, 2, 3, 4]);
+        assert_eq!(first.applied_versions, vec![1, 2, 3, 4, 5]);
         assert!(first.already_applied_versions.is_empty());
         assert!(second.applied_versions.is_empty());
-        assert_eq!(second.already_applied_versions, vec![1, 2, 3, 4]);
+        assert_eq!(second.already_applied_versions, vec![1, 2, 3, 4, 5]);
         assert!(connection.table_exists("schema_migrations")?);
         assert!(connection.table_exists("app_metadata")?);
         assert!(connection.table_exists("agent_preferences")?);
+        assert!(connection.table_exists("agent_connection_settings")?);
 
         let applied = connection.applied_migrations()?;
         let versions: Vec<i64> = applied.iter().map(|migration| migration.version).collect();
-        assert_eq!(versions, vec![1, 2, 3, 4]);
+        assert_eq!(versions, vec![1, 2, 3, 4, 5]);
         assert!(applied
             .iter()
             .all(|migration| migration.applied_at_ms == 1_700_000_000_000));
@@ -367,7 +394,7 @@ mod tests {
         let applied = connection.applied_migrations()?;
 
         assert_eq!(upgrade.already_applied_versions, vec![1, 2]);
-        assert_eq!(upgrade.applied_versions, vec![3, 4]);
+        assert_eq!(upgrade.applied_versions, vec![3, 4, 5]);
         assert_eq!(&applied[..2], prior.as_slice());
         assert_eq!(applied[2].version, 3);
         assert_eq!(applied[2].applied_at_ms, 200);
@@ -408,7 +435,7 @@ mod tests {
 
         let report = apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS, || Ok(200))?;
 
-        assert_eq!(report.applied_versions, vec![4]);
+        assert_eq!(report.applied_versions, vec![4, 5]);
         assert_eq!(report.already_applied_versions, vec![1, 2, 3]);
         for (agent_id, revision) in [("research", 5_i64), ("coding", 10_i64)] {
             let row = connection.raw_mut().query_row(
@@ -453,6 +480,107 @@ mod tests {
             saturated,
             ("gpt-5.6-luna".to_owned(), 9_223_372_036_854_775_807)
         );
+        Ok(())
+    }
+
+    #[test]
+    fn connection_sidecar_preserves_every_v4_profile_and_prior_migration_record(
+    ) -> Result<(), Box<dyn Error>> {
+        let mut connection = DatabaseConnection::open(&DatabaseConfig::in_memory())?;
+        apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS[..4], || Ok(100))?;
+        for (index, id) in crate::agent::definition::AgentId::ALL.iter().enumerate() {
+            connection.raw_mut().execute(
+                "INSERT INTO agent_preferences
+                 (agent_id, connection, model, effort, owner_instructions, memory_mode, note, revision)
+                 VALUES (?1, 'openai_api', 'gpt-5.6-luna', 'low', ?2, 'private_notes', ?3, ?4)",
+                rusqlite::params![id.as_str(), format!("owner-{index}"),
+                    format!("note-{index}"), index as i64 + 1],
+            )?;
+        }
+        let prior = connection.applied_migrations()?;
+        let schema: String = connection.raw_mut().query_row(
+            "SELECT sql FROM sqlite_master WHERE name = 'agent_preferences'",
+            [],
+            |row| row.get(0),
+        )?;
+        let upgrade = apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS, || Ok(200))?;
+        assert_eq!(upgrade.applied_versions, vec![5]);
+        assert_eq!(upgrade.already_applied_versions, vec![1, 2, 3, 4]);
+        assert_eq!(&connection.applied_migrations()?[..4], prior.as_slice());
+        let after_schema: String = connection.raw_mut().query_row(
+            "SELECT sql FROM sqlite_master WHERE name = 'agent_preferences'",
+            [],
+            |row| row.get(0),
+        )?;
+        assert_eq!(schema, after_schema);
+        for (index, id) in crate::agent::definition::AgentId::ALL.iter().enumerate() {
+            let row: (String, String, String, String, String, String, i64) = connection
+                .raw_mut()
+                .query_row(
+                "SELECT connection, model, effort, owner_instructions, memory_mode, note, revision
+                     FROM agent_preferences WHERE agent_id = ?1",
+                [id.as_str()],
+                |row| {
+                    Ok((
+                        row.get(0)?,
+                        row.get(1)?,
+                        row.get(2)?,
+                        row.get(3)?,
+                        row.get(4)?,
+                        row.get(5)?,
+                        row.get(6)?,
+                    ))
+                },
+            )?;
+            assert_eq!(
+                row,
+                (
+                    "openai_api".into(),
+                    "gpt-5.6-luna".into(),
+                    "low".into(),
+                    format!("owner-{index}"),
+                    "private_notes".into(),
+                    format!("note-{index}"),
+                    index as i64 + 1
+                )
+            );
+        }
+        let count: i64 = connection.raw_mut().query_row(
+            "SELECT count(*) FROM agent_connection_settings",
+            [],
+            |row| row.get(0),
+        )?;
+        assert_eq!(count, 0);
+        Ok(())
+    }
+
+    #[test]
+    fn failing_sidecar_creation_rolls_back_without_touching_v4_data() -> Result<(), Box<dyn Error>>
+    {
+        let mut connection = DatabaseConnection::open(&DatabaseConfig::in_memory())?;
+        apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS[..4], || Ok(100))?;
+        connection.raw_mut().execute(
+            "INSERT INTO agent_preferences
+             (agent_id, connection, model, effort, owner_instructions, memory_mode, note, revision)
+             VALUES ('research', 'simulation', 'simulation', 'default', 'retained', 'private_notes', 'retained-note', 7)",
+            [],
+        )?;
+        // A name collision rejects only the new CREATE TABLE; no owner row or
+        // pre-existing schema is changed before that failure.
+        connection
+            .raw_mut()
+            .execute("CREATE TABLE agent_connection_settings (sentinel TEXT)", [])?;
+        let failed = apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS, || Ok(200));
+        assert!(matches!(
+            failed,
+            Err(StorageError::MigrationExecution { version: 5, .. })
+        ));
+        let retained: (String, String, i64) = connection.raw_mut().query_row(
+            "SELECT owner_instructions, note, revision FROM agent_preferences WHERE agent_id = 'research'",
+            [], |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?)),
+        )?;
+        assert_eq!(retained, ("retained".into(), "retained-note".into(), 7));
+        assert_eq!(connection.applied_migrations()?.len(), 4);
         Ok(())
     }
 
