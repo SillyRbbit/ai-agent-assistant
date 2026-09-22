@@ -1,5 +1,84 @@
 # Security policy and development guardrails
 
+## Direct provider stream diagnostics — 2026-09-21
+
+The owner-approved `direct-provider-stream-diagnostics` successor is isolated in
+`/private/tmp/cortexa-direct-provider-stream-diagnostics`, detached at
+`0ed15810e90b6a4bd312a8096c61b0abb1ab7eff`. The verified 34-path candidate was
+transferred byte-for-byte before ordinary admission. All predecessor checkouts,
+finalized reports and raw gate states remain preserved; D-125/M1/M2 stay parked.
+
+The diagnostic delta classifies only response.failed response.error.code values
+server_error, rate_limit_exceeded and invalid_prompt into three fixed codes and
+static messages. Top-level error and other/malformed codes retain provider_stream.
+No request, transport, validation, ownership, dependency or permission change.
+
+Required frontend validation failed: 15 passed and 3 new UI cases failed because
+the reused assertion requires “No mock response was substituted.” while the
+approved new messages end with “No automatic retry was made.” No repair or retry
+was performed. The already-running focused Rust check completed: 43 passed.
+Full offline verification was not run. Quality is FAIL; readiness is Blocked.
+See the [plan](docs/plans/2026-09-21-direct-provider-stream-diagnostics.md) and
+[review](docs/reviews/2026-09-21-direct-provider-stream-diagnostics-post-increment-review.md).
+
+All three live rehearsal attempts are exhausted. The previous native observation
+was provider_stream with released ownership and no completed answer; its detailed
+cause remains unknown. Native live success, remaining GUI smoke, D-128 custody/
+abort limitations and D-127 dependency advisories remain. No launch, credential
+inspection, live request or publication occurred in this successor.
+
+## Direct provider failure diagnostics — 2026-09-21
+
+The owner-approved `direct-provider-failure-diagnostics` successor is isolated in
+`/private/tmp/cortexa-direct-provider-failure-diagnostics`, detached at
+`0ed15810e90b6a4bd312a8096c61b0abb1ab7eff`. The completed implementation candidate
+was transferred byte-for-byte before ordinary admission. Its original checkout,
+valid completion record, all other checkouts and already-prunable entries remain
+preserved. D-125/M1/M2 remain parked.
+
+The bounded change keeps `network` for non-timeout transport failures and adds
+payload-free `http_status` and `provider_stream` codes with static messages.
+Existing special HTTP mappings, timeouts, stream validation, request construction,
+credential handling, ownership, cancellation and retry policy are unchanged.
+No raw errors, provider bodies, headers or identifiers are exposed or logged.
+The earlier failure remains unexplained. A prior Python/OpenSSL DNS/TCP/TLS
+probe passed; it is not Rust/rustls, authentication or successful response proof.
+Two rehearsal attempts were used; one remains. This increment makes no requests.
+Native live success and the remaining Research/Knowledge GUI advisory stay pending.
+
+Required focused validation failed (9 passed, 3 new UI cases failed); see the [plan](docs/plans/2026-09-21-direct-provider-failure-diagnostics.md)
+and [review](docs/reviews/2026-09-21-direct-provider-failure-diagnostics-post-increment-review.md). Quality: FAIL; next-increment readiness: Blocked. Implementation stopped without
+repair or retry. The three new cases expected an alert while the rendered state
+was still streaming. Test-timing is a hypothesis, not a verified root cause.
+Rust tests and full verification were not run after this stop condition.
+Preserve these edits and the terminal failure; do not reopen this increment.
+
+## D-128 private direct synthetic development boundary — 2026-09-21
+
+Only explicit acknowledged Start in an opted-in debug native process reads the
+temporary session key and sends the fixed synthetic sample to the fixed HTTPS
+Responses endpoint. Mode selection and polling do not read credentials or call
+OpenAI. Release builds reject Start. No WebView key, URL, header, arbitrary text
+or provider frame is accepted. Authentication/status/errors and Debug output
+cannot forward provider bodies or the Authorization value.
+
+The client preserves TLS verification and disables redirects, proxies, automatic
+retries and fallback. Limits: connect 10s, idle read 20s, request 60s, 512 output
+tokens, 64KiB application chunk/frame, 1MiB wire input, 512 wire events, and the
+existing host's 128 updates / 8192 characters / 32768 bytes. Partial, refused,
+failed, malformed, truncated and tool-bearing streams fail closed. Provider text
+is escaped. Cancellation aborts the owned request and refuses late content;
+it does not guarantee remote billing/computation or OS resolver quiescence.
+Library header/TLS buffers are not pre-retention bounded by these application
+limits. Environment credentials are temporary convenience, not same-user or
+debugger isolation, and are not guaranteed zeroized.
+
+The owner's [D-128](DECISIONS.md) scopes these accepted limitations to synthetic,
+private development only. Real content, public distribution and broader key
+custody need new authorization. D-127's exact audit baseline is unchanged.
+The implementation used dummy credentials and fixtures; actual native key
+ingestion, GUI and paid-provider behavior remain unverified.
+
 Status: Authoritative security policy
 Last updated: 2026-09-20
 

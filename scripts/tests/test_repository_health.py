@@ -149,6 +149,11 @@ def write_valid_ui_native_boundary(root: Path) -> None:
         encoding="utf-8",
     )
     command_center.write_text("export const fixture = true;\n", encoding="utf-8")
+    direct_client = "src/infrastructure/tauri/personal-assistant-direct-client.ts"
+    (root / direct_client).write_text(
+        (Path(__file__).resolve().parents[2] / direct_client).read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
     lifecycle_panel.write_text(
         (
             Path(__file__).resolve().parents[2]
@@ -180,7 +185,10 @@ def write_valid_ui_native_boundary(root: Path) -> None:
         "research_knowledge_demo_lifecycle_tauri::get_research_knowledge_demo_lifecycle_snapshot,\n"
         "research_knowledge_demo_lifecycle_tauri::start_research_knowledge_demo_lifecycle,\n"
         "research_knowledge_demo_lifecycle_tauri::advance_research_knowledge_demo_lifecycle,\n"
-        "research_knowledge_demo_lifecycle_tauri::cancel_research_knowledge_demo_lifecycle\n"
+        "research_knowledge_demo_lifecycle_tauri::cancel_research_knowledge_demo_lifecycle,\n"
+        "personal_assistant_direct_tauri::start_personal_assistant_direct,\n"
+        "personal_assistant_direct_tauri::poll_personal_assistant_direct,\n"
+        "personal_assistant_direct_tauri::cancel_personal_assistant_direct\n"
         "])\n",
         encoding="utf-8",
     )
@@ -238,6 +246,22 @@ def write_valid_ui_native_boundary(root: Path) -> None:
 
 
 class RepositoryHealthTests(unittest.TestCase):
+    def test_direct_client_rejects_command_and_payload_broadening(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            write_valid_ui_native_boundary(root)
+            client = root / "src/infrastructure/tauri/personal-assistant-direct-client.ts"
+            baseline = client.read_text(encoding="utf-8")
+            for old, new in [
+                ('"start_personal_assistant_direct"', '"execute_arbitrary"'),
+                ('request: { version: 1,', 'request: { prompt: "arbitrary", version: 1,'),
+                ('request: { handle, cursor }', 'request: { handle, cursor, url: "arbitrary" }'),
+                ('request: { handle }', 'request: { handle, key: "arbitrary" }'),
+            ]:
+                with self.subTest(new=new):
+                    client.write_text(baseline.replace(old, new), encoding="utf-8")
+                    self.assertTrue(health.ui_native_boundary_findings(root))
+
     def test_links_accept_existing_targets_and_ignore_fenced_examples(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

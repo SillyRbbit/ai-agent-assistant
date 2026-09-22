@@ -1,5 +1,24 @@
 # Cortexa architecture
 
+## Current direct demo exception — D-128, 2026-09-21
+
+The owner-approved development path is Conversations fixed-sample presentation
+→ typed start/poll/cancel IPC → application-owned task/session wrapper →
+existing `PersonalAssistantV0Host` and `NativeAgentRuntime` → fixed native
+OpenAI Responses adapter. The private direct request profile reuses existing
+validation with actual provider response identity; no gateway authentication is
+simulated. The runtime still performs no I/O. The adapter owns HTTPS and bounded
+SSE decoding. Shared locks protect short transitions, never the request await.
+
+The request task is aborted and awaited on Stop; local host ingress closes first.
+A later Start waits for owned-task termination. Final output requires an explicit,
+consistent provider completion. Snapshots are volatile and bounded; errors are
+closed codes. No provider data becomes tool authority, persistence or simulated
+graph activity. Browser-only and mock paths stay separate. Three exact command
+declarations extend the static checker without weakening existing rules, CSP or
+capabilities. Historical broader architecture restrictions below are superseded
+only by [D-128](DECISIONS.md) for this path. Native/live verification is pending.
+
 Status: Authoritative current-state architecture
 Last updated: 2026-09-03
 

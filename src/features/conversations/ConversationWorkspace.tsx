@@ -1,4 +1,5 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
+import { PersonalAssistantDirectDemo } from "./PersonalAssistantDirectDemo";
 
 import type { MockContextProvenance } from "../../application/contextProvenance";
 import type {
@@ -53,6 +54,7 @@ export function ConversationWorkspace({
   toolActivities,
   toolResults,
 }: ConversationWorkspaceProps) {
+  const [mode, setMode] = useState<"mock" | "native">("mock");
   const isBusy = runStatus !== "idle";
   const canSubmit = !isBusy && composerDraft.trim().length > 0;
   const submitComposer = () => {
@@ -70,125 +72,144 @@ export function ConversationWorkspace({
         title="Conversations"
       />
 
-      <div className="conversation-workspace">
-        <div
-          aria-label={`Conversation transcript: ${conversationTitle}`}
-          aria-live="polite"
-          className="conversation-transcript"
-          role="region"
-        >
-          {messages.length === 0 ? (
-            <PageState
-              description="Use the composer below to start a deterministic mock run. This conversation remains in memory only."
-              icon="C"
-              title="No messages yet"
-            />
-          ) : (
-            <div className="conversation-timeline">
-              {messages.map((message) => (
-                <article
-                  className={`conversation-message conversation-message--${message.role}`}
-                  key={message.id}
-                >
-                  <span>{message.role === "user" ? "You" : "Assistant"}</span>
-                  <p>{message.content || "Preparing mock response…"}</p>
-                  {message.status === "stopped" ? <small>Stopped</small> : null}
-                  {message.status === "failed" ? (
-                    <div className="conversation-message__failure">
-                      <small>Failed</small>
-                      {message.id === retryableMessageId ? (
-                        <button onClick={onRetry} type="button">
-                          Retry
-                        </button>
-                      ) : null}
-                    </div>
-                  ) : null}
-                </article>
-              ))}
-              {contextProvenance.map((provenance) => (
-                <ContextProvenanceCard key={provenance.id} provenance={provenance} />
-              ))}
-              {toolActivities.map((activity) => (
-                <ToolActivityCard activity={activity} key={activity.id} />
-              ))}
-              {toolResults.map((result) => {
-                const finalAnswer = finalAnswers.find(
-                  (answer) =>
-                    answer.toolResultId === result.id &&
-                    answer.runId === result.runId &&
-                    answer.conversationId === result.conversationId,
-                );
-
-                return (
-                  <Fragment key={result.id}>
-                    <ToolResultCard result={result} />
-                    {finalAnswer === undefined ? null : <FinalAnswerMessage answer={finalAnswer} />}
-                  </Fragment>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
-        <form
-          className="composer-shell"
-          onSubmit={(event) => {
-            event.preventDefault();
-            submitComposer();
+      <label>
+        Conversation mode{" "}
+        <select
+          value={mode}
+          disabled={isBusy}
+          onChange={(event) => {
+            setMode(event.currentTarget.value === "native" ? "native" : "mock");
           }}
         >
-          <label htmlFor="assistant-request">Assistant request</label>
-          <div className="composer-shell__field">
-            <textarea
-              disabled={isBusy}
-              id="assistant-request"
-              onChange={(event) => {
-                onComposerDraftChange(event.currentTarget.value);
-              }}
-              onKeyDown={(event) => {
-                if (
-                  event.key !== "Enter" ||
-                  event.altKey ||
-                  event.ctrlKey ||
-                  event.metaKey ||
-                  event.shiftKey ||
-                  event.nativeEvent.isComposing ||
-                  (event.nativeEvent as { readonly keyCode?: number }).keyCode === 229
-                ) {
-                  return;
-                }
-
-                event.preventDefault();
-                submitComposer();
-              }}
-              placeholder="Describe what you need help with…"
-              rows={3}
-              value={composerDraft}
-            />
-            {runStatus === "streaming" ? (
-              <button className="composer-shell__stop" onClick={onStop} type="button">
-                Stop
-              </button>
+          <option value="mock">Mock demonstration</option>
+          <option value="native">Native live model · synthetic sample</option>
+        </select>
+      </label>
+      {mode === "native" ? (
+        <PersonalAssistantDirectDemo />
+      ) : (
+        <div className="conversation-workspace">
+          <div
+            aria-label={`Conversation transcript: ${conversationTitle}`}
+            aria-live="polite"
+            className="conversation-transcript"
+            role="region"
+          >
+            {messages.length === 0 ? (
+              <PageState
+                description="Use the composer below to start a deterministic mock run. This conversation remains in memory only."
+                icon="C"
+                title="No messages yet"
+              />
             ) : (
-              <button disabled={!canSubmit} type="submit">
-                Send
-              </button>
+              <div className="conversation-timeline">
+                {messages.map((message) => (
+                  <article
+                    className={`conversation-message conversation-message--${message.role}`}
+                    key={message.id}
+                  >
+                    <span>{message.role === "user" ? "You" : "Assistant"}</span>
+                    <p>{message.content || "Preparing mock response…"}</p>
+                    {message.status === "stopped" ? <small>Stopped</small> : null}
+                    {message.status === "failed" ? (
+                      <div className="conversation-message__failure">
+                        <small>Failed</small>
+                        {message.id === retryableMessageId ? (
+                          <button onClick={onRetry} type="button">
+                            Retry
+                          </button>
+                        ) : null}
+                      </div>
+                    ) : null}
+                  </article>
+                ))}
+                {contextProvenance.map((provenance) => (
+                  <ContextProvenanceCard key={provenance.id} provenance={provenance} />
+                ))}
+                {toolActivities.map((activity) => (
+                  <ToolActivityCard activity={activity} key={activity.id} />
+                ))}
+                {toolResults.map((result) => {
+                  const finalAnswer = finalAnswers.find(
+                    (answer) =>
+                      answer.toolResultId === result.id &&
+                      answer.runId === result.runId &&
+                      answer.conversationId === result.conversationId,
+                  );
+
+                  return (
+                    <Fragment key={result.id}>
+                      <ToolResultCard result={result} />
+                      {finalAnswer === undefined ? null : (
+                        <FinalAnswerMessage answer={finalAnswer} />
+                      )}
+                    </Fragment>
+                  );
+                })}
+              </div>
             )}
           </div>
-          <div className="composer-shell__footer">
-            <span>
-              {runStatus === "streaming"
-                ? "Streaming from the deterministic local mock"
-                : runStatus === "awaiting-approval"
-                  ? "Waiting for a mock approval decision"
-                  : "Local mock only · no model or tool execution"}
-            </span>
-            <span>{composerDraft.length} characters</span>
-          </div>
-        </form>
-      </div>
 
-      {activeApproval === null ? null : (
+          <form
+            className="composer-shell"
+            onSubmit={(event) => {
+              event.preventDefault();
+              submitComposer();
+            }}
+          >
+            <label htmlFor="assistant-request">Assistant request</label>
+            <div className="composer-shell__field">
+              <textarea
+                disabled={isBusy}
+                id="assistant-request"
+                onChange={(event) => {
+                  onComposerDraftChange(event.currentTarget.value);
+                }}
+                onKeyDown={(event) => {
+                  if (
+                    event.key !== "Enter" ||
+                    event.altKey ||
+                    event.ctrlKey ||
+                    event.metaKey ||
+                    event.shiftKey ||
+                    event.nativeEvent.isComposing ||
+                    (event.nativeEvent as { readonly keyCode?: number }).keyCode === 229
+                  ) {
+                    return;
+                  }
+
+                  event.preventDefault();
+                  submitComposer();
+                }}
+                placeholder="Describe what you need help with…"
+                rows={3}
+                value={composerDraft}
+              />
+              {runStatus === "streaming" ? (
+                <button className="composer-shell__stop" onClick={onStop} type="button">
+                  Stop
+                </button>
+              ) : (
+                <button disabled={!canSubmit} type="submit">
+                  Send
+                </button>
+              )}
+            </div>
+            <div className="composer-shell__footer">
+              <span>
+                {runStatus === "streaming"
+                  ? "Streaming from the deterministic local mock"
+                  : runStatus === "awaiting-approval"
+                    ? "Waiting for a mock approval decision"
+                    : "Local mock only · no model or tool execution"}
+              </span>
+              <span>{composerDraft.length} characters</span>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {mode !== "mock" || activeApproval === null ? null : (
         <ApprovalDialog approval={activeApproval} onDecision={onApprovalDecision} />
       )}
     </section>

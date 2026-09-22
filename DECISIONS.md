@@ -1,5 +1,36 @@
 # Decision log
 
+## D-128 — Private direct OpenAI synthetic development demo
+
+Date: 2026-09-21. Status: Accepted by the owner's implementation prompt.
+
+For this private Mac demo only, the owner approves existing Conversations →
+three closed Tauri commands → existing Rust Personal Assistant host/runtime →
+one direct OpenAI Responses HTTPS adapter. Native Rust may read a temporary
+`OPENAI_API_KEY` at explicit acknowledged Start, only in a debug build with
+`CORTEXA_OPENAI_DEMO=1`. No key enters WebView, IPC, source, configuration,
+logs, provider-error text or compile-time embedding. Session environments are
+not inaccessible to local processes or inherited tooling; no secure erasure
+or protection against same-user inspection/core dumps is claimed.
+
+This narrowly supersedes D-021/D-060/D-066 remote-only key custody, D-067 Worker
+topology, D-068 Access/Keychain prerequisites, and D-064/D-094 Cloudflare stages
+for this direct synthetic path. D-118's stronger DNS-quiescence and pre-retention
+HTTP-buffer requirements are superseded only here by the owner's explicit
+owned-request abort, terminal local cancellation and late-content rejection
+contract. Dropping the request future is not proof that OS DNS work, remote
+computation or billing has stopped. HTTP/TLS libraries may transiently allocate
+before application size checks. This does not admit an old gateway candidate.
+
+Use reqwest 0.13.5 with verified rustls TLS, fixed endpoint and model
+`gpt-5.6-luna`, no redirects/proxy/retries/fallback, foreground streaming,
+`store=false`, 512 output tokens, no tools and only the existing synthetic
+sample. Store=false is not Zero Data Retention. D-061's synthetic-only boundary,
+deterministic Rust authority and historical decisions remain intact.
+No real credentials, provider requests, new permissions, distribution,
+signing, deployment or publication are authorized in this increment.
+No D-125/M1/M2 progress follows. See the [plan](docs/plans/2026-08-28-personal-assistant-v0-live-synthetic-rehearsal.md).
+
 ## 2026-09-20 — Publish the bounded demo cleanup
 
 Status: Accepted by the owner for this exact publication task.

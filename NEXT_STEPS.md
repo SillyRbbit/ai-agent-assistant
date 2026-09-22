@@ -1,5 +1,160 @@
 # Next steps
 
+## Direct provider diagnostics evidence closeout validator retry — 2026-09-21
+
+This documentation-only evidence closeout completed with a ten-path repository
+delta and 44-path cumulative inventory. It preserved the 42-path retry candidate,
+terminal predecessor records, external scripts, formatter-clone preconditions and
+both prunable registry entries. The only validator correction uses
+`b"node_modules"` against raw Git bytes while retaining absent-path `None`
+handling. Documentation, repository, security, whitespace, preservation, session,
+quality, report-schema and gate workflows passed. Do not repeat this work. Native
+live success and remaining GUI evidence are retained advisories; all live attempts
+are exhausted and D-125/M1/M2 remain parked.
+
+## Direct provider diagnostics evidence closeout retry — 2026-09-21
+
+The active retry is limited to ten documentation paths and a new external
+preservation validator. It must prove the 42-path cumulative inventory,
+protected-byte identity, historical suffixes, predecessor state and registry,
+then complete the documentation-tier and ordinary completion workflow. The new
+validator raised TypeError while comparing status output; this retry is terminal
+failed without repair or retry. Any further correction requires separate
+authorization and admission. No application check, build, launch, credential
+inspection, provider request, commit or publication is authorized. All live
+attempts remain exhausted; D-125/M1/M2 stay parked.
+
+## Direct provider diagnostics evidence closeout — 2026-09-21
+
+The active successor at
+`/private/tmp/cortexa-direct-provider-diagnostics-evidence-closeout` is limited
+to ten documentation paths. It must retain the 40-path cumulative candidate,
+preserve every predecessor record and produce a schema-complete report. The first
+documentation validation failed because `prettier` is absent in this detached
+worktree; the preservation script also failed on its successor-only report path.
+This successor is terminal failed without repair or retry. Any correction needs
+separate authorization and admission. No application test, build, live request,
+credential inspection, commit or publication is authorized. All live attempts
+remain exhausted; D-125/M1/M2 stay parked.
+
+## Direct provider stream diagnostics message assertion — 2026-09-21
+
+The separately admitted corrective successor is terminal failed in
+`/private/tmp/cortexa-direct-provider-stream-diagnostics-message-assertion`.
+Its exact 11-path delta changes only the failed UI test's row-specific
+policy-message expectation plus additive current-state documentation and its new
+plan/review pair. The inherited terminal failure remains immutable.
+
+Focused frontend (18), focused Rust (43), complete offline verification,
+repository/documentation/security/whitespace, scope/preservation and session
+checks passed. Ordinary completion failed because the report scope heading was
+not the exact schema-required phrase. Do not reopen or retry this increment.
+Any correction requires separate owner authorization and ordinary admission.
+Do not launch, inspect credentials, make provider requests, commit or publish.
+All live attempts remain exhausted; D-125/M1/M2 stay parked.
+
+## Direct provider stream diagnostics — 2026-09-21
+
+The owner-approved `direct-provider-stream-diagnostics` successor is isolated in
+`/private/tmp/cortexa-direct-provider-stream-diagnostics`, detached at
+`0ed15810e90b6a4bd312a8096c61b0abb1ab7eff`. The verified 34-path candidate was
+transferred byte-for-byte before ordinary admission. All predecessor checkouts,
+finalized reports and raw gate states remain preserved; D-125/M1/M2 stay parked.
+
+The diagnostic delta classifies only response.failed response.error.code values
+server_error, rate_limit_exceeded and invalid_prompt into three fixed codes and
+static messages. Top-level error and other/malformed codes retain provider_stream.
+No request, transport, validation, ownership, dependency or permission change.
+
+Required frontend validation failed: 15 passed and 3 new UI cases failed because
+the reused assertion requires “No mock response was substituted.” while the
+approved new messages end with “No automatic retry was made.” No repair or retry
+was performed. The already-running focused Rust check completed: 43 passed.
+Full offline verification was not run. Quality is FAIL; readiness is Blocked.
+See the [plan](docs/plans/2026-09-21-direct-provider-stream-diagnostics.md) and
+[review](docs/reviews/2026-09-21-direct-provider-stream-diagnostics-post-increment-review.md).
+
+All three live rehearsal attempts are exhausted. The previous native observation
+was provider_stream with released ownership and no completed answer; its detailed
+cause remains unknown. Native live success, remaining GUI smoke, D-128 custody/
+abort limitations and D-127 dependency advisories remain. No launch, credential
+inspection, live request or publication occurred in this successor.
+
+## Direct diagnostics test sequencing — 2026-09-21
+
+The owner explicitly authorized a separate isolated corrective successor,
+`direct-provider-diagnostics-test-sequencing`, in
+`/private/tmp/cortexa-direct-provider-diagnostics-test-sequencing`, detached at
+`0ed15810e90b6a4bd312a8096c61b0abb1ab7eff`. The complete 32-path diagnostic
+candidate was copied and byte-verified before ordinary admission. Both predecessor
+checkouts, finalized reports and raw gate states remain unchanged; the earlier
+FAIL / Blocked record is not reopened or promoted.
+
+The only executable delta splits the new UI regression's 500ms fake-timer act
+into separate 250ms acts and asserts streaming between them. The next poll is
+scheduled by a snapshot-dependent effect; all later error, cleanup, release and
+no-retry assertions remain unchanged. All production and dependency bytes remain
+identical to the diagnostic candidate. No implementation is repeated.
+
+Local validation passed: 12 focused frontend tests, 41 focused Rust tests and
+full offline verification. Quality is PASS WITH ADVISORIES; require a valid
+ordinary completion marker before treating closeout as complete. See the [plan](docs/plans/2026-09-21-direct-provider-diagnostics-test-sequencing.md)
+and [review](docs/reviews/2026-09-21-direct-provider-diagnostics-test-sequencing-post-increment-review.md). No app launch, credential inspection or live request is included.
+One rehearsal attempt remains. The earlier native provider failure remains
+unexplained; the Python/OpenSSL TLS probe is not Rust-client evidence. Native
+live success and remaining GUI smoke remain advisories; D-125/M1/M2 stay parked.
+
+## Direct provider failure diagnostics — 2026-09-21
+
+The owner-approved `direct-provider-failure-diagnostics` successor is isolated in
+`/private/tmp/cortexa-direct-provider-failure-diagnostics`, detached at
+`0ed15810e90b6a4bd312a8096c61b0abb1ab7eff`. The completed implementation candidate
+was transferred byte-for-byte before ordinary admission. Its original checkout,
+valid completion record, all other checkouts and already-prunable entries remain
+preserved. D-125/M1/M2 remain parked.
+
+The bounded change keeps `network` for non-timeout transport failures and adds
+payload-free `http_status` and `provider_stream` codes with static messages.
+Existing special HTTP mappings, timeouts, stream validation, request construction,
+credential handling, ownership, cancellation and retry policy are unchanged.
+No raw errors, provider bodies, headers or identifiers are exposed or logged.
+The earlier failure remains unexplained. A prior Python/OpenSSL DNS/TCP/TLS
+probe passed; it is not Rust/rustls, authentication or successful response proof.
+Two rehearsal attempts were used; one remains. This increment makes no requests.
+Native live success and the remaining Research/Knowledge GUI advisory stay pending.
+
+Required focused validation failed (9 passed, 3 new UI cases failed); see the [plan](docs/plans/2026-09-21-direct-provider-failure-diagnostics.md)
+and [review](docs/reviews/2026-09-21-direct-provider-failure-diagnostics-post-increment-review.md). Quality: FAIL; next-increment readiness: Blocked. Implementation stopped without
+repair or retry. The three new cases expected an alert while the rendered state
+was still streaming. Test-timing is a hypothesis, not a verified root cause.
+Rust tests and full verification were not run after this stop condition.
+Preserve these edits and the terminal failure; do not reopen this increment.
+
+## Direct Personal Assistant implementation — 2026-09-21
+
+The owner-authorized private development connection is implemented in an isolated,
+detached worktree at `/private/tmp/cortexa-personal-assistant-direct-implementation`
+from verified remote main `0ed15810e90b6a4bd312a8096c61b0abb1ab7eff`.
+The original checkout, seven unpublished commits, dirty work, baseline/scope
+worktree and all earlier worktrees remain preserved. Historical entries below
+remain evidence; they do not select another active increment. D-125/M1/M2 stay parked.
+
+The [active plan](docs/plans/2026-08-28-personal-assistant-v0-live-synthetic-rehearsal.md) records the exact scope and owner launch procedure.
+The [implementation review](docs/reviews/2026-09-21-personal-assistant-direct-implementation-post-increment-review.md) is the source of final validation
+and completion status. Native GUI interaction and a paid provider rehearsal
+remain pending; fixture tests and builds are not live verification.
+
+### Next authorized boundary
+
+Only a separately approved owner-led native rehearsal is proposed next: inspect
+the preserved candidate and valid completion marker, launch without a key first,
+check native Settings/Conversations and mock behavior, then let the owner supply
+a temporary runtime key privately and explicitly acknowledge one fixed synthetic
+request. Confirm streamed text and explicit completion. No personal content,
+tools, retries, fallback, graph work or other agents. Stop on a failed prerequisite
+or unexpected request. No actual credential access or paid call was authorized
+for the implementation task.
+
 ## Documentation organization closeout — 2026-09-21
 
 The [bounded organization task](docs/plans/2026-09-21-documentation-organization.md)

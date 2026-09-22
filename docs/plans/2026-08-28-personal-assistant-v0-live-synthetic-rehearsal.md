@@ -1,5 +1,141 @@
 # V0-13 — live synthetic-text Stage C rehearsal
 
+## Direct implementation successor — 2026-09-21
+
+This entry supersedes the historical gateway-only execution instructions below
+for the owner's explicitly approved private synthetic development task.
+Baseline/scope evidence remains immutable in
+`/private/tmp/cortexa-personal-assistant-direct-scope`; its fixture-only staging
+recommendation is superseded by the owner's instruction to implement both
+checkpoints now. See [D-128](../../DECISIONS.md) for the narrow credential,
+topology and cancellation contract. Ordinary begin admitted
+`personal-assistant-direct-implementation` from clean remote main
+`0ed15810e90b6a4bd312a8096c61b0abb1ab7eff` in a new detached worktree.
+
+### Goal, non-goals and invariants
+
+Connect existing Conversations to a fixed native OpenAI Responses request,
+using existing Personal Assistant ownership, identities, runtime validation,
+snapshots, journal, cancellation and terminal semantics. No provider traffic on
+startup, mode selection, settings or polling. No arbitrary prompts, content,
+URLs, credentials or provider events from IPC. No gateway/proxy/server,
+execution, tools, persistence, voice, RAG, graph redesign, other-agent activation,
+permission changes, hook/harness changes, publication or D-125/M1/M2 work.
+
+Only explicit Start after disclosure can read the native session environment.
+Debug build plus `CORTEXA_OPENAI_DEMO=1` is required. Errors are closed and
+provider text is escaped. Browser-only mode has no native Start; mock UI is
+separate and its editable composer is hidden in native mode. Stop closes ingress,
+aborts and awaits the owned request task; new runs cannot inherit old ownership.
+Task abort does not prove DNS/remote-computation/billing cessation or immediate
+library-buffer erasure. Key bytes may remain in process memory/environment.
+
+### Checkpoints and dependency decision
+
+A: fixed Responses adapter and crate-private direct profile/ingress now reuse
+`PersonalAssistantV0Host`/`NativeAgentRuntime`. Focused Rust tests passed.
+B: application-owned async task, three versioned/closed control commands,
+strict TypeScript snapshot client and Conversations fixed-sample panel are
+implemented; focused frontend and exact-boundary checker tests passed.
+
+Pin reqwest 0.13.5, rustls TLS with verification, and tokio 1.52.3 runtime/time
+features. Lock resolution changes no unrelated existing version; Rust/Cargo 1.90
+is the tested toolchain (repository minimum 1.88, reqwest minimum 1.85).
+No fallback, redirect, proxy or retry. One POST:
+`https://api.openai.com/v1/responses`, `gpt-5.6-luna`, foreground stream,
+`store=false`, `background=false`, `tools=[]`, `tool_choice=none`,
+512 output tokens, reasoning effort none, plain text, truncation disabled.
+Only application instructions and this exact existing sample are transmitted:
+
+> Prepare a concise three-bullet board update from this synthetic status: planning is approved; implementation has not started; no external systems have changed.
+
+No provider conversation, previous response ID, personal history or attachments.
+Contract sources checked for this path: [model](https://developers.openai.com/api/docs/models/gpt-5.6-luna),
+[request](https://developers.openai.com/api/reference/resources/responses/methods/create),
+[stream events](https://developers.openai.com/api/reference/resources/responses/streaming-events),
+[data controls](https://developers.openai.com/api/docs/guides/your-data), and
+[reqwest client](https://docs.rs/reqwest/0.13.5/reqwest/struct.ClientBuilder.html).
+Model access and billing remain unverified; closed errors never trigger fallback.
+Limits: connect 10s/read-idle 20s/total 60s, 64KiB chunk/frame, 1MiB wire input,
+512 wire events, and existing host 128 updates / 8192 Unicode scalars / 32768 bytes.
+Reject non-text output, unknown/tool events, malformed IDs/sequences, missing
+completion and mismatched final text. Library buffers can allocate before
+application checks. `store=false` is not Zero Data Retention.
+
+### Exact authorized implementation inventory
+
+- Cargo.toml/lock; runtime.rs, native_runtime.rs, gateway_request.rs;
+  personal_assistant_v0.rs, lib.rs; new personal_assistant_direct.rs and
+  personal_assistant_direct_tauri.rs, all under src-tauri.
+- Conversations workspace; new PersonalAssistantDirectDemo component/test;
+  new personal-assistant-direct-client and test; App.test.tsx.
+- scripts/repository_health.py and its existing test module: extend only the
+  exact three IPC declarations and negative fixtures.
+- ARCHITECTURE, CHANGELOG, DECISIONS, HANDOFF, NEXT_STEPS, PLANS, PROJECT_STATUS,
+  ROADMAP, SECURITY, TESTING_GUIDE, TROUBLESHOOTING_LOG; this existing plan;
+  one new implementation post-increment review. Exact paths are in the
+  [review](../reviews/2026-09-21-personal-assistant-direct-implementation-post-increment-review.md).
+
+Preserve every historical section and finalized/failed report. Stop on an
+unexpected changed path, unpreservable overlapping work, new audit findings,
+material scope expansion or failure after at most two evidence-based repairs
+per distinct recoverable failure. No branch/commit/push. Rollback is an owner
+decision; leave isolated changes intact rather than resetting original work.
+
+### Validation and limits of evidence
+
+Required: focused Rust host/adapter tests, frontend/client/UI tests, checker
+regressions; clean npm install; exact dependency/lock inspection; full/production
+npm audit; pinned cargo-audit 0.22.2 and unchanged exact Cargo gate;
+`npm run verify`; documentation/repository/secret/whitespace checks; preservation
+inventory; session-end, composed quality review and ordinary post-increment
+finalize/status/Stop. Do not substitute old baseline evidence for new checks.
+The [review](../reviews/2026-09-21-personal-assistant-direct-implementation-post-increment-review.md)
+records actual outcomes.
+
+Native window/IPC/interaction, Research/Knowledge native GUI, credential ingestion
+and paid request completion remain pending. The owner explicitly allows native
+visual verification to remain advisory. No fixture test is live proof.
+
+### Owner-only native setup for a separately approved rehearsal
+
+No key is required for compilation or local tests. Node/npm satisfying
+package.json, Rust/Cargo 1.90 as tested, Xcode Command Line Tools and an available
+localhost port 1420 are required. Release builds intentionally reject live Start.
+
+In a key-free terminal, use the isolated candidate:
+
+```bash
+cd /private/tmp/cortexa-personal-assistant-direct-implementation
+cargo build --manifest-path src-tauri/Cargo.toml --locked
+npm run dev
+```
+
+In a separate owner-controlled zsh terminal, after authorizing one paid sample,
+read the key privately without writing its literal value to shell history:
+
+```zsh
+cd /private/tmp/cortexa-personal-assistant-direct-implementation
+read -r -s 'demo_key?OpenAI API key (private input): '
+printf '\n'
+OPENAI_API_KEY="$demo_key" CORTEXA_OPENAI_DEMO=1 ./src-tauri/target/debug/ai-agent-assistant
+unset demo_key
+```
+
+The native debug executable uses the existing Vite development URL. Do not use
+a VITE variable, repository .env, chat, source, logs, artifacts or a frontend
+field. Do not launch npm/tooling with the key. The process environment and local
+shell variable remain accessible under local inspection; this is not secure
+credential storage. Quit the native process and unset the temporary variable
+afterward, including after interruption.
+
+Owner must have API billing/model access, accept external synthetic transmission
+and possible charges, select native mode, read the displayed sample/disclosure,
+check acknowledgment and press Start once. No automatic fallback/retry. Record
+only safe statuses, not credentials or provider bodies. Stop remains local
+cancellation, not a guarantee about remote cost. Do not begin this rehearsal
+automatically during implementation.
+
 Status: Blocked; no traffic authority or complete prerequisite chain exists
 Owner: Henry Dang
 Last updated: 2026-08-28

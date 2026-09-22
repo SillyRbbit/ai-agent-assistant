@@ -1,6 +1,6 @@
 //! Volatile owner for the sealed Personal Assistant v0 synthetic turn.
 //!
-//! This host performs no I/O and exposes no response-frame ingress. It owns one
+//! This host performs no I/O; a crate-private typed ingress serves the direct demo. It owns one
 //! process-local Native run, validates the exact returned identity and initial
 //! status, and retains ambiguous cleanup ownership fail closed.
 
@@ -24,11 +24,12 @@ use crate::agent::runtime::{
     AgentRuntime, RuntimeCancellationOutcome, RuntimeError, RuntimeInvalidRequest, RuntimeRun,
     RuntimeRunIdentity, RuntimeRunStatus, RuntimeTurnRequest,
 };
-#[cfg(test)]
 use crate::agent::runtime::{
-    RuntimeEventAcceptance, RuntimeEventEnvelope, RuntimeEventRejection, RuntimeFailure,
-    RuntimeFailureCode, RuntimeOutputText, RuntimeResponseId, UntrustedRuntimeEvent,
+    RuntimeEventAcceptance, RuntimeEventEnvelope, RuntimeOutputText, RuntimeResponseId,
+    UntrustedRuntimeEvent,
 };
+#[cfg(test)]
+use crate::agent::runtime::{RuntimeEventRejection, RuntimeFailure, RuntimeFailureCode};
 
 const MAX_PRESENTATION_UPDATES: usize = 128;
 const MAX_PRESENTATION_SEQUENCE: u64 = 128;
@@ -549,6 +550,11 @@ impl Default for PersonalAssistantV0Host {
 }
 
 impl PersonalAssistantV0Host {
+    pub(crate) fn start_direct(
+        &mut self,
+    ) -> Result<PersonalAssistantV0Start, PersonalAssistantV0Error> {
+        self.core.start_with_profile(true)
+    }
     #[must_use]
     pub fn new() -> Self {
         Self {
@@ -582,6 +588,50 @@ impl PersonalAssistantV0Host {
         handle: &PersonalAssistantV0PresentationHandle,
     ) -> Result<PersonalAssistantV0Snapshot, PersonalAssistantV0Error> {
         self.core.cancel(handle)
+    }
+
+    /// Native-only ingress. The adapter supplies validated provider events;
+    /// presentation callers cannot construct or submit these events.
+    pub(crate) fn accept_direct(
+        &mut self,
+        handle: &PersonalAssistantV0PresentationHandle,
+        event: crate::personal_assistant_direct::ProviderEvent,
+    ) -> Result<PersonalAssistantV0Snapshot, PersonalAssistantV0Error> {
+        self.core.validate_handle(handle)?;
+        self.core.sample_deadline()?;
+        let state = mem::replace(&mut self.core.state, HostState::Idle);
+        let HostState::Active(active) = state else {
+            self.core.state = state;
+            return Err(PersonalAssistantV0Error::ProtocolViolation);
+        };
+        let prepared = prepare_direct_event(
+            &active.record,
+            &active.owner.expected_identity,
+            self.core.clock.sample(),
+            event,
+        );
+        match prepared {
+            Ok(prepared) => self.core.commit_input(active, prepared),
+            Err(_) => self
+                .core
+                .finish_fixture_failure(active, PersonalAssistantV0FailureCode::ProtocolViolation),
+        }
+    }
+
+    pub(crate) fn fail_direct(
+        &mut self,
+        handle: &PersonalAssistantV0PresentationHandle,
+        code: PersonalAssistantV0FailureCode,
+    ) -> Result<PersonalAssistantV0Snapshot, PersonalAssistantV0Error> {
+        self.core.validate_handle(handle)?;
+        let state = mem::replace(&mut self.core.state, HostState::Idle);
+        match state {
+            HostState::Active(active) => self.core.finish_fixture_failure(active, code),
+            other => {
+                self.core.state = other;
+                self.core.fixture_snapshot()
+            }
+        }
     }
 }
 
@@ -627,6 +677,13 @@ impl<R: AgentRuntime> HostCore<R> {
     }
 
     fn start_synthetic(&mut self) -> Result<PersonalAssistantV0Start, PersonalAssistantV0Error> {
+        self.start_with_profile(false)
+    }
+
+    fn start_with_profile(
+        &mut self,
+        direct: bool,
+    ) -> Result<PersonalAssistantV0Start, PersonalAssistantV0Error> {
         let prior_terminal = self.prepare_for_start()?;
         let lease = match ProcessLease::acquire() {
             Ok(lease) => lease,
@@ -652,8 +709,11 @@ impl<R: AgentRuntime> HostCore<R> {
         };
         let run_id = format!("pa-v0-run-{generation:016x}");
         let request_id = format!("pa-v0-request-{generation:016x}");
-        let request = match RuntimeTurnRequest::personal_assistant_v0_synthetic(run_id, request_id)
-        {
+        let request = match if direct {
+            RuntimeTurnRequest::personal_assistant_direct(run_id, request_id)
+        } else {
+            RuntimeTurnRequest::personal_assistant_v0_synthetic(run_id, request_id)
+        } {
             Ok(request) => request,
             Err(error) => {
                 self.restore_terminal(prior_terminal);
@@ -1020,7 +1080,7 @@ impl<R: AgentRuntime> HostCore<R> {
         }
 
         let state = mem::replace(&mut self.state, HostState::Idle);
-        let HostState::Active(mut active) = state else {
+        let HostState::Active(active) = state else {
             self.state = state;
             return Err(PersonalAssistantV0Error::ProtocolViolation);
         };
@@ -1050,6 +1110,24 @@ impl<R: AgentRuntime> HostCore<R> {
                 .finish_fixture_failure(active, PersonalAssistantV0FailureCode::LimitExceeded);
         };
         let PreparedFixture { envelope, commit } = *prepared;
+
+        self.commit_input(active, PreparedFixture { envelope, commit })
+    }
+
+    fn commit_input(
+        &mut self,
+        mut active: ActiveSession<R::Run>,
+        prepared: PreparedFixture,
+    ) -> Result<PersonalAssistantV0Snapshot, PersonalAssistantV0Error> {
+        let PreparedFixture { envelope, commit } = prepared;
+
+        if active.owner.run.identity() != &active.owner.expected_identity
+            || !active
+                .record
+                .runtime_state_matches(active.owner.run.status())
+        {
+            return self.finish_fixture_failure(active, PersonalAssistantV0FailureCode::Internal);
+        }
 
         let acceptance = active.owner.run.accept_event(envelope);
         let status = active.owner.run.status();
@@ -1126,6 +1204,7 @@ impl<R: AgentRuntime> HostCore<R> {
                 )?;
                 self.fixture_snapshot()
             }
+            #[cfg(test)]
             FixtureCommit::Failed {
                 next_runtime_sequence,
                 failure,
@@ -1140,6 +1219,7 @@ impl<R: AgentRuntime> HostCore<R> {
                 )?;
                 self.fixture_snapshot()
             }
+            #[cfg(test)]
             FixtureCommit::ExpectedProtocolFailure { failure } => {
                 self.finish_active(
                     active,
@@ -1152,7 +1232,6 @@ impl<R: AgentRuntime> HostCore<R> {
         }
     }
 
-    #[cfg(test)]
     fn finish_fixture_failure(
         &mut self,
         active: ActiveSession<R::Run>,
@@ -1174,7 +1253,6 @@ impl<R: AgentRuntime> HostCore<R> {
         self.fixture_snapshot()
     }
 
-    #[cfg(test)]
     fn fixture_snapshot(&self) -> Result<PersonalAssistantV0Snapshot, PersonalAssistantV0Error> {
         self.current_record()
             .map(SessionRecord::snapshot)
@@ -1299,7 +1377,6 @@ impl SessionRecord {
         self.deadlines.expired(now, &self.phase)
     }
 
-    #[cfg(test)]
     fn runtime_state_matches(&self, status: RuntimeRunStatus) -> bool {
         matches!(
             (&self.phase, status),
@@ -1325,7 +1402,6 @@ impl SessionRecord {
     ) -> Result<PreparedTerminal, PersonalAssistantV0Error> {
         let sequence = self.next_presentation_sequence()?;
         match intent {
-            #[cfg(test)]
             TerminalIntent::Completed => Ok(PreparedTerminal {
                 prepared: self.prepare_update(
                     PersonalAssistantV0Update::Completed(PersonalAssistantV0CompletedUpdate {
@@ -1490,7 +1566,6 @@ impl PresentationPhase {
 }
 
 enum TerminalIntent {
-    #[cfg(test)]
     Completed,
     Failed(PersonalAssistantV0Failure),
     Cancelled,
@@ -1516,7 +1591,6 @@ struct RecordCommitMetadata {
 #[derive(Clone, Copy)]
 enum CleanupExpectation {
     CancelledByHost,
-    #[cfg(test)]
     AlreadyTerminal(RuntimeRunStatus),
 }
 
@@ -1617,13 +1691,88 @@ enum FixturePreparation {
     CloseForJournalLimit,
 }
 
-#[cfg(test)]
 struct PreparedFixture {
     envelope: RuntimeEventEnvelope,
     commit: FixtureCommit,
 }
 
-#[cfg(test)]
+fn prepare_direct_event(
+    record: &SessionRecord,
+    identity: &RuntimeRunIdentity,
+    now: Duration,
+    event: crate::personal_assistant_direct::ProviderEvent,
+) -> Result<PreparedFixture, PersonalAssistantV0Error> {
+    use crate::personal_assistant_direct::ProviderEvent;
+    let sequence = record.next_presentation_sequence()?;
+    let next_runtime_sequence = record
+        .next_runtime_sequence
+        .checked_add(1)
+        .ok_or(PersonalAssistantV0Error::LimitExceeded)?;
+    let idle_deadline = SessionDeadlines::refreshed_idle(now)?;
+    let (event, commit) = match event {
+        ProviderEvent::Started(response_id)
+            if matches!(record.phase, PresentationPhase::Starting) =>
+        {
+            let runtime_id = RuntimeResponseId::new(response_id.clone())
+                .map_err(|_| PersonalAssistantV0Error::ProtocolViolation)?;
+            (
+                UntrustedRuntimeEvent::ResponseStarted {
+                    response_id: runtime_id,
+                },
+                FixtureCommit::Started {
+                    sequence,
+                    next_runtime_sequence,
+                    response_id,
+                    idle_deadline,
+                },
+            )
+        }
+        ProviderEvent::Delta(text) if record.phase.is_streaming() => {
+            let output_characters = record
+                .accepted_characters
+                .saturating_add(text.chars().count());
+            let output_bytes = record.accepted_bytes.saturating_add(text.len());
+            if text.is_empty()
+                || text.chars().count() > MAX_DELTA_CHARACTERS
+                || text.len() > MAX_DELTA_BYTES
+                || output_characters > MAX_OUTPUT_CHARACTERS
+                || output_bytes > MAX_OUTPUT_BYTES
+                || sequence >= MAX_PRESENTATION_SEQUENCE
+            {
+                return Err(PersonalAssistantV0Error::LimitExceeded);
+            }
+            let delta = RuntimeOutputText::new(text.clone())
+                .map_err(|_| PersonalAssistantV0Error::ProtocolViolation)?;
+            (
+                UntrustedRuntimeEvent::OutputTextDelta { delta },
+                FixtureCommit::Delta {
+                    sequence,
+                    next_runtime_sequence,
+                    text,
+                    output_characters,
+                    output_bytes,
+                    idle_deadline,
+                },
+            )
+        }
+        ProviderEvent::Completed
+            if record.phase.is_streaming() && !record.accepted_text.is_empty() =>
+        {
+            (
+                UntrustedRuntimeEvent::ResponseCompleted,
+                FixtureCommit::Completed {
+                    next_runtime_sequence,
+                },
+            )
+        }
+        _ => return Err(PersonalAssistantV0Error::ProtocolViolation),
+    };
+    Ok(PreparedFixture {
+        envelope: RuntimeEventEnvelope::for_identity(identity, record.next_runtime_sequence, event),
+        commit,
+    })
+}
+
 enum FixtureCommit {
     Started {
         sequence: u64,
@@ -1642,11 +1791,13 @@ enum FixtureCommit {
     Completed {
         next_runtime_sequence: u32,
     },
+    #[cfg(test)]
     Failed {
         next_runtime_sequence: u32,
         runtime_code: RuntimeFailureCode,
         failure: PersonalAssistantV0Failure,
     },
+    #[cfg(test)]
     ExpectedProtocolFailure {
         failure: PersonalAssistantV0Failure,
     },
@@ -1879,7 +2030,6 @@ fn validate_fixture_event_binding(
     }
 }
 
-#[cfg(test)]
 fn fixture_acceptance_matches(
     acceptance: &Result<RuntimeEventAcceptance, RuntimeError>,
     commit: &FixtureCommit,
@@ -1888,6 +2038,7 @@ fn fixture_acceptance_matches(
     let expected_status = match commit {
         FixtureCommit::Started { .. } | FixtureCommit::Delta { .. } => RuntimeRunStatus::Streaming,
         FixtureCommit::Completed { .. } => RuntimeRunStatus::Completed,
+        #[cfg(test)]
         FixtureCommit::Failed { .. } | FixtureCommit::ExpectedProtocolFailure { .. } => {
             RuntimeRunStatus::Failed
         }
@@ -1907,6 +2058,7 @@ fn fixture_acceptance_matches(
             FixtureCommit::Delta { text, .. },
         ) => actual.as_str() == text,
         (Ok(RuntimeEventAcceptance::ResponseCompleted), FixtureCommit::Completed { .. }) => true,
+        #[cfg(test)]
         (
             Ok(RuntimeEventAcceptance::ResponseFailed { failure: actual }),
             FixtureCommit::Failed { runtime_code, .. },
@@ -1915,6 +2067,7 @@ fn fixture_acceptance_matches(
                 && !actual.retryable()
                 && actual.retry_after_ms().is_none()
         }
+        #[cfg(test)]
         (
             Err(RuntimeError::EventRejected(RuntimeEventRejection::InvalidContent)),
             FixtureCommit::ExpectedProtocolFailure { .. },
@@ -1969,7 +2122,6 @@ impl SessionDeadlines {
         None
     }
 
-    #[cfg(test)]
     fn refreshed_idle(now: Duration) -> Result<Duration, PersonalAssistantV0Error> {
         now.checked_add(GATEWAY_STREAM_IDLE_TIMEOUT)
             .ok_or(PersonalAssistantV0Error::Internal)
@@ -2143,7 +2295,6 @@ fn classify_cleanup<R: RuntimeRun>(
         {
             CleanupResolution::Expected
         }
-        #[cfg(test)]
         Ok(RuntimeCancellationOutcome::AlreadyTerminal(actual))
             if matches!(
                 expectation,
@@ -2276,7 +2427,7 @@ fn is_valid_correlation(value: &str) -> bool {
 }
 
 #[cfg(test)]
-mod tests {
+pub(crate) mod tests {
     use std::error::Error;
     use std::panic::{catch_unwind, AssertUnwindSafe};
     use std::sync::atomic::AtomicUsize;
@@ -2286,7 +2437,7 @@ mod tests {
 
     static TEST_SERIAL: Mutex<()> = Mutex::new(());
 
-    fn serial_guard() -> Result<MutexGuard<'static, ()>, Box<dyn Error>> {
+    pub(crate) fn serial_guard() -> Result<MutexGuard<'static, ()>, Box<dyn Error>> {
         match TEST_SERIAL.lock() {
             Ok(guard) => Ok(guard),
             Err(poisoned) => Ok(poisoned.into_inner()),
