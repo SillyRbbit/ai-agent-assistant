@@ -13,9 +13,16 @@ export const AGENT_IDS = [
   "workflow-automation",
 ] as const;
 export type AgentId = (typeof AGENT_IDS)[number];
-export const CONNECTIONS = ["simulation", "openai_api", "codex"] as const;
+export const CONNECTIONS = [
+  "simulation",
+  "openai_api",
+  "codex",
+  "anthropic_api",
+  "lm_studio",
+  "ollama",
+] as const;
 export type AgentConnection = (typeof CONNECTIONS)[number];
-export const EFFORTS = ["default", "none", "low", "medium", "high", "xhigh"] as const;
+export const EFFORTS = ["default", "none", "low", "medium", "high", "xhigh", "max"] as const;
 export type AgentEffort = (typeof EFFORTS)[number];
 export const OPENAI_AGENT_MODELS = ["gpt-5.6-luna", "gpt-5.6-terra", "gpt-5.6-sol"] as const;
 export type MemoryMode = "off" | "private_notes";
@@ -24,6 +31,9 @@ export interface AgentProfileInput {
   readonly connection: AgentConnection;
   readonly model: string;
   readonly effort: AgentEffort;
+  readonly endpoint: string;
+  readonly localAuth: boolean;
+  readonly allowUnknownLocalityNotes: boolean;
   readonly ownerInstructions: string;
   readonly memoryMode: MemoryMode;
   readonly note: string;
@@ -49,6 +59,13 @@ export const AGENT_ERROR_CODES = [
   "missing_key",
   "authentication",
   "model_unavailable",
+  "provider_unavailable",
+  "out_of_memory",
+  "truncated",
+  "unsupported",
+  "endpoint",
+  "locality",
+  "catalog",
   "rate_limited",
   "timeout",
   "network",
@@ -79,6 +96,7 @@ export interface AgentChatSnapshot {
   readonly model: string;
   readonly effort: AgentEffort;
   readonly memoryMode: MemoryMode;
+  readonly endpoint: string;
   readonly settingsRevision: number;
   readonly status: AgentChatStatus;
   readonly text: string;
@@ -101,6 +119,16 @@ function record(value: unknown, keys: readonly string[]): Record<string, unknown
 function member<T extends string>(value: unknown, values: readonly T[]): value is T {
   return typeof value === "string" && values.some((item) => item === value);
 }
+function modelId(value: unknown): value is string {
+  return (
+    bounded(value, 256) &&
+    value !== "" &&
+    Array.from(value).every((character) => {
+      const code = character.charCodeAt(0);
+      return code >= 32 && (code < 127 || code > 159);
+    })
+  );
+}
 function bounded(value: unknown, limit: number): value is string {
   return (
     typeof value === "string" &&
@@ -115,7 +143,16 @@ function effective(value: Record<string, unknown>): boolean {
   return (
     member(value["connection"], CONNECTIONS) &&
     member(value["effort"], EFFORTS) &&
-    ((value["connection"] === "openai_api" && member(value["model"], OPENAI_AGENT_MODELS)) ||
+    ((value["connection"] === "openai_api" &&
+      value["effort"] !== "max" &&
+      member(value["model"], OPENAI_AGENT_MODELS)) ||
+      (value["connection"] === "anthropic_api" &&
+        bounded(value["model"], 256) &&
+        value["model"] !== "" &&
+        value["effort"] !== "none") ||
+      (isLocal(value["connection"]) &&
+        bounded(value["model"], 256) &&
+        value["effort"] === "default") ||
       (value["connection"] === "simulation" &&
         value["model"] === "simulation" &&
         value["effort"] === "default") ||
@@ -131,6 +168,9 @@ export function parseAgentProfile(value: unknown): AgentProfile {
     "connection",
     "model",
     "effort",
+    "endpoint",
+    "localAuth",
+    "allowUnknownLocalityNotes",
     "ownerInstructions",
     "memoryMode",
     "note",
@@ -141,6 +181,11 @@ export function parseAgentProfile(value: unknown): AgentProfile {
     !bounded(v["displayName"], 64) ||
     v["displayName"] === "" ||
     !effective(v) ||
+    !bounded(v["endpoint"], 512) ||
+    typeof v["localAuth"] !== "boolean" ||
+    typeof v["allowUnknownLocalityNotes"] !== "boolean" ||
+    (!isLocal(v["connection"]) &&
+      (v["endpoint"] !== "" || v["localAuth"] || v["allowUnknownLocalityNotes"])) ||
     !bounded(v["ownerInstructions"], 4096) ||
     !bounded(v["note"], 8192) ||
     !member(v["memoryMode"], ["off", "private_notes"]) ||
@@ -182,6 +227,7 @@ export function parseAgentChatSnapshot(value: unknown): AgentChatSnapshot {
     "model",
     "effort",
     "memoryMode",
+    "endpoint",
     "settingsRevision",
     "status",
     "text",
@@ -196,6 +242,8 @@ export function parseAgentChatSnapshot(value: unknown): AgentChatSnapshot {
     !member(v["agentId"], AGENT_IDS) ||
     !effective(v) ||
     !member(v["memoryMode"], ["off", "private_notes"]) ||
+    !bounded(v["endpoint"], 512) ||
+    (!isLocal(v["connection"]) && v["endpoint"] !== "") ||
     !integer(v["settingsRevision"]) ||
     !member(v["status"], ["idle", "starting", "streaming", "completed", "stopped", "error"]) ||
     !bounded(v["text"], 8192) ||
@@ -214,8 +262,30 @@ export function parseAgentChatSnapshot(value: unknown): AgentChatSnapshot {
 export function agentChatErrorMessage(error: unknown): string {
   const code = error instanceof Error ? error.message : error;
   switch (code) {
+    case "disabled":
+      return "This connection requires its native development opt-in before use.";
+    case "missing_key":
+      return "No valid native credential is available for the selected connection.";
+    case "authentication":
+      return "The selected service rejected authentication. Check its owner-only credential setup.";
+    case "rate_limited":
+      return "The selected provider rate or spending limit was reached. No automatic retry was made.";
     case "model_unavailable":
-      return "The selected model is unavailable or OpenAI rejected the request. No fallback was used.";
+      return "The selected model is unavailable or not loaded. Check the selected server. No fallback was used.";
+    case "provider_unavailable":
+      return "The selected provider is unavailable. No fallback was used.";
+    case "out_of_memory":
+      return "The server reported insufficient memory. Choose a smaller already-installed model or context.";
+    case "truncated":
+      return "The response reached its output or context limit and is incomplete.";
+    case "unsupported":
+      return "This model or response mode is unsupported. No fallback was used.";
+    case "endpoint":
+      return "Use a credential-free loopback HTTP(S) endpoint ending in /v1.";
+    case "locality":
+      return "Locality is unknown. Acknowledge note transmission for this destination before sending.";
+    case "catalog":
+      return "Refresh the model catalog for this exact connection before sending.";
     case "limit":
       return "The conversation or response reached the bounded demo limit. Start a new conversation.";
     case "unsupported_settings":
@@ -238,6 +308,7 @@ export interface AgentChatClient {
   readonly available: () => boolean;
   readonly list: () => Promise<readonly AgentProfile[]>;
   readonly connections: () => Promise<readonly AgentConnectionReadiness[]>;
+  readonly discover: (request: CatalogRequest) => Promise<ModelCatalog>;
   readonly save: (profile: AgentProfileInput) => Promise<AgentProfile>;
   readonly clearNote: (agentId: AgentId, revision: number) => Promise<AgentProfile>;
   readonly defaults: (agentId: AgentId, revision: number) => Promise<AgentProfile>;
@@ -245,7 +316,11 @@ export interface AgentChatClient {
   readonly send: (
     conversationId: string,
     message: string,
-    acknowledgment: "simulation" | "openai-agent-text-v1",
+    acknowledgment:
+      | "simulation"
+      | "openai-agent-text-v1"
+      | "anthropic-agent-text-v1"
+      | "local-agent-text-v1",
   ) => Promise<AgentChatSnapshot>;
   readonly poll: (conversationId: string) => Promise<AgentChatSnapshot>;
   readonly cancel: (conversationId: string) => Promise<AgentChatSnapshot>;
@@ -264,6 +339,11 @@ export const agentChatClient: AgentChatClient = {
   available: () => isTauri(),
   list: async () => parseAgentProfiles(await invoke<unknown>("list_agent_preferences")),
   connections: async () => parseAgentConnections(await invoke<unknown>("list_agent_connections")),
+  discover: async (request) => {
+    const catalog = parseModelCatalog(await invoke<unknown>("discover_agent_models", { request }));
+    if (catalog.connection !== request.connection) throw new Error("protocol");
+    return catalog;
+  },
   save: async (request) =>
     profileFor(await invoke<unknown>("save_agent_preferences", { request }), request.agentId),
   clearNote: async (agentId, revision) =>
@@ -301,3 +381,109 @@ export const agentChatClient: AgentChatClient = {
       conversationId,
     ),
 };
+
+export function isLocal(connection: unknown): boolean {
+  return connection === "lm_studio" || connection === "ollama";
+}
+export interface ModelInfo {
+  readonly id: string;
+  readonly label: string;
+  readonly evidence: "documented" | "discovered";
+  readonly availability: "access_unknown" | "available" | "unsupported" | "retired";
+  readonly efforts: readonly AgentEffort[];
+  readonly thinking: "always_on" | "default" | "unknown" | "unsupported";
+  readonly locality: "hosted" | "unknown" | "cloud";
+  readonly contextLimit: number | null;
+  readonly outputLimit: number | null;
+  readonly sizeBytes: number | null;
+  readonly quantization: string | null;
+  readonly provenance: string | null;
+  readonly loaded: boolean | null;
+  readonly capabilities: unknown;
+}
+export interface CatalogRequest {
+  readonly connection: AgentConnection;
+  readonly endpoint: string;
+  readonly localAuth: boolean;
+}
+export interface ModelCatalog {
+  readonly connection: AgentConnection;
+  readonly endpoint: string;
+  readonly models: readonly ModelInfo[];
+}
+export const ANTHROPIC_DOCUMENTED_MODELS: readonly ModelInfo[] = [
+  ["claude-fable-5-1", "Claude Fable 5.1", "always_on"],
+  ["claude-opus-5-5", "Claude Opus 5.5", "always_on"],
+  ["claude-sonnet-5", "Claude Sonnet 5", "default"],
+  ["claude-haiku-4-5-20251001", "Claude Haiku 4.5", "default"],
+  ["claude-opus-5", "Claude Opus 5 · active legacy", "default"],
+].map(([id, label, thinking]) => ({
+  id: id ?? "",
+  label: label ?? "",
+  thinking: thinking as ModelInfo["thinking"],
+  evidence: "documented",
+  availability: "access_unknown",
+  locality: "hosted",
+  efforts:
+    id === "claude-haiku-4-5-20251001"
+      ? ["default"]
+      : ["default", "low", "medium", "high", "xhigh", "max"],
+  contextLimit: null,
+  outputLimit: null,
+  sizeBytes: null,
+  quantization: null,
+  provenance: null,
+  loaded: null,
+  capabilities: null,
+}));
+export function parseModelCatalog(value: unknown): ModelCatalog {
+  const catalog = record(value, ["connection", "endpoint", "models"]);
+  if (
+    !member(catalog["connection"], ["anthropic_api", "lm_studio", "ollama"]) ||
+    !bounded(catalog["endpoint"], 512) ||
+    (catalog["connection"] === "anthropic_api" && catalog["endpoint"] !== "") ||
+    !Array.isArray(catalog["models"]) ||
+    catalog["models"].length > 200
+  )
+    throw new Error("protocol");
+  const models = catalog["models"].map((value: unknown) => {
+    const m = record(value, [
+      "id",
+      "label",
+      "evidence",
+      "availability",
+      "efforts",
+      "thinking",
+      "locality",
+      "contextLimit",
+      "outputLimit",
+      "sizeBytes",
+      "quantization",
+      "provenance",
+      "loaded",
+      "capabilities",
+    ]);
+    if (
+      !modelId(m["id"]) ||
+      !bounded(m["label"], 256) ||
+      !member(m["evidence"], ["documented", "discovered"]) ||
+      !member(m["availability"], ["access_unknown", "available", "unsupported", "retired"]) ||
+      !Array.isArray(m["efforts"]) ||
+      m["efforts"].length === 0 ||
+      new Set(m["efforts"]).size !== m["efforts"].length ||
+      m["efforts"].length > EFFORTS.length ||
+      !m["efforts"].every((e) => member(e, EFFORTS)) ||
+      !member(m["thinking"], ["always_on", "default", "unknown", "unsupported"]) ||
+      !member(m["locality"], ["hosted", "unknown", "cloud"]) ||
+      !["contextLimit", "outputLimit", "sizeBytes"].every((k) => m[k] === null || integer(m[k])) ||
+      !["quantization", "provenance"].every((k) => m[k] === null || bounded(m[k], 1024)) ||
+      !(m["loaded"] === null || typeof m["loaded"] === "boolean") ||
+      m["capabilities"] === undefined ||
+      JSON.stringify(m["capabilities"]).length > 16384
+    )
+      throw new Error("protocol");
+    return Object.freeze(m) as unknown as ModelInfo;
+  });
+  if (new Set(models.map((m) => m.id)).size !== models.length) throw new Error("protocol");
+  return { connection: catalog["connection"], endpoint: catalog["endpoint"], models };
+}

@@ -1,5 +1,40 @@
 # Handoff
 
+## 2026-09-22 — Anthropic and local agent connections
+
+The owner-approved `anthropic-local-agent-connections` increment adds one native
+Anthropic Messages adapter and one shared LM Studio/Ollama chat-completions
+adapter in the existing Agents page. See the [plan](docs/plans/2026-09-22-anthropic-local-agent-connections.md).
+Offline implementation and full verification passed, including 431 frontend
+tests, 368 Rust library tests, integration tests and the native release build.
+The quality/readiness review is PASS WITH ADVISORIES / Ready with advisories;
+see the [review](docs/reviews/2026-09-22-anthropic-local-agent-connections-post-increment-review.md). No provider/runtime request, model download, or live generation was
+performed. Discovery and live operation remain unverified until owner setup.
+This amendment grants no live request allowance and reuses no historical allowance.
+
+Keep D-127 audit debt, D-128 native-session custody/remote-abort limits, historical
+OpenAI failures and the native live-success advisory. Codex remains visibly
+live-disabled until supported isolation is proved. D-125/M1/M2 remain parked.
+No commit, push, publication, provider fallback or runtime management is authorized.
+
+Resume only by inspecting the current worktree and valid gate/report first;
+preserve other worktrees and historical records. Review the finished offline
+adapter tests before any separately authorized owner smoke. Do not repeat
+implementation, spend old allowances, or enable Codex through an unverified route.
+
+### Exact resume prompt
+
+```text
+Inspect the completed anthropic-local-agent-connections increment in
+/private/tmp/cortexa-direct-provider-stream-stage-live-result-evidence-closeout
+and its valid completion evidence read-only. Preserve all existing changes,
+worktrees and historical records; do not repeat implementation. Review the exact
+32-path diff, offline validation and remaining provider/native GUI advisories.
+Confirm settings, private-note isolation and protected boundaries remain intact.
+Stop on drift, failed evidence or scope expansion. Do not launch, inspect secrets,
+make requests, install runtimes/models, commit, publish or resume D-125/M1/M2.
+```
+
 ## Optional API status repair — 2026-09-22
 
 The owner's time-boxed optional API task split the previously ambiguous
