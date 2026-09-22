@@ -31,8 +31,12 @@ pub(crate) enum DirectError {
     Network,
     #[error("The provider returned an unsuccessful HTTP response.")]
     HttpStatus,
-    #[error("The provider reported a failure in the response stream.")]
-    ProviderStream,
+    #[error("The provider emitted a top-level error event in the response stream. No automatic retry was made.")]
+    ProviderStreamErrorEvent,
+    #[error("The provider reported response.failed with an unrecognized error code. No automatic retry was made.")]
+    ProviderStreamFailedUnknownCode,
+    #[error("The provider reported response.failed without a usable error code. No automatic retry was made.")]
+    ProviderStreamFailedInvalidCode,
     #[error(
         "The provider reported a server error in the response stream. No automatic retry was made."
     )]
@@ -353,10 +357,11 @@ impl Decoder {
                     Some("server_error") => DirectError::ProviderStreamServerError,
                     Some("rate_limit_exceeded") => DirectError::ProviderStreamRateLimit,
                     Some("invalid_prompt") => DirectError::ProviderStreamInvalidPrompt,
-                    _ => DirectError::ProviderStream,
+                    Some(code) if !code.is_empty() => DirectError::ProviderStreamFailedUnknownCode,
+                    _ => DirectError::ProviderStreamFailedInvalidCode,
                 });
             }
-            "error" => return Err(DirectError::ProviderStream),
+            "error" => return Err(DirectError::ProviderStreamErrorEvent),
             _ => return Err(DirectError::Protocol), // Includes every tool/function event.
         }
         Ok(None)
@@ -460,7 +465,10 @@ mod tests {
             ),
             ("response.refusal.delta", DirectError::Refused),
             ("response.incomplete", DirectError::Incomplete),
-            ("response.failed", DirectError::ProviderStream),
+            (
+                "response.failed",
+                DirectError::ProviderStreamFailedInvalidCode,
+            ),
         ] {
             let mut input = frames();
             input.truncate(3);
@@ -563,7 +571,6 @@ mod tests {
         for (error, code) in [
             (DirectError::Network, "network"),
             (DirectError::HttpStatus, "http_status"),
-            (DirectError::ProviderStream, "provider_stream"),
             (DirectError::Timeout, "timeout"),
         ] {
             assert_eq!(serde_json::to_value(error)?, json!(code));
@@ -573,15 +580,26 @@ mod tests {
     #[test]
     fn stream_failure_codes_are_sanitized_after_existing_validation(
     ) -> Result<(), Box<dyn std::error::Error>> {
-        for kind in ["response.failed", "error"] {
+        for (kind, expected, serialized) in [
+            (
+                "response.failed",
+                DirectError::ProviderStreamFailedInvalidCode,
+                "provider_stream_failed_invalid_code",
+            ),
+            (
+                "error",
+                DirectError::ProviderStreamErrorEvent,
+                "provider_stream_error_event",
+            ),
+        ] {
             let failure = json!({"type":kind,"error":{"message":"DUMMY-PRIVATE-CONTENT"}});
             let input = vec![frames()[0].clone(), failure.clone()];
             let error = Decoder::default()
                 .push(&wire(input))
                 .err()
                 .ok_or("expected a stream failure")?;
-            assert_eq!(error, DirectError::ProviderStream);
-            assert_eq!(serde_json::to_value(error)?, json!("provider_stream"));
+            assert_eq!(error, expected);
+            assert_eq!(serde_json::to_value(error)?, json!(serialized));
             assert!(!error.to_string().contains("DUMMY-PRIVATE-CONTENT"));
             assert!(!format!("{error:?}").contains("DUMMY-PRIVATE-CONTENT"));
             assert_eq!(
@@ -662,13 +680,13 @@ mod tests {
                 Decoder::default()
                     .push(&wire(vec![frames()[0].clone(), top]))
                     .err(),
-                Some(DirectError::ProviderStream)
+                Some(DirectError::ProviderStreamErrorEvent)
             );
         }
         Ok(())
     }
     #[test]
-    fn unrecognized_or_misplaced_stream_codes_remain_generic(
+    fn unrecognized_or_misplaced_stream_codes_identify_only_the_failure_shape(
     ) -> Result<(), Box<dyn std::error::Error>> {
         for code in [
             json!(null),
@@ -687,33 +705,138 @@ mod tests {
             json!("x".repeat(8192)),
         ] {
             for kind in ["response.failed", "error"] {
+                let (expected, serialized) = if kind == "error" {
+                    (
+                        DirectError::ProviderStreamErrorEvent,
+                        "provider_stream_error_event",
+                    )
+                } else if code.as_str().is_some_and(|code| !code.is_empty()) {
+                    (
+                        DirectError::ProviderStreamFailedUnknownCode,
+                        "provider_stream_failed_unknown_code",
+                    )
+                } else {
+                    (
+                        DirectError::ProviderStreamFailedInvalidCode,
+                        "provider_stream_failed_invalid_code",
+                    )
+                };
                 let event = json!({"type":kind,"code":code,"response":{"error":{"code":code,
                     "message":"DUMMY-PRIVATE-CONTENT"}},"message":"DUMMY-PRIVATE-CONTENT"});
                 let error = Decoder::default()
                     .push(&wire(vec![frames()[0].clone(), event]))
                     .err()
                     .ok_or("expected failure")?;
-                assert_eq!(error, DirectError::ProviderStream);
-                assert_eq!(serde_json::to_value(error)?, json!("provider_stream"));
+                assert_eq!(error, expected);
+                assert_eq!(serde_json::to_value(error)?, json!(serialized));
                 assert!(!error.to_string().contains("DUMMY-PRIVATE-CONTENT"));
                 assert!(!format!("{error:?}").contains("DUMMY-PRIVATE-CONTENT"));
             }
         }
-        for event in [
-            json!({"type":"response.failed"}),
-            json!({"type":"response.failed","response":null}),
-            json!({"type":"response.failed","response":42}),
-            json!({"type":"response.failed","response":{"error":[]}}),
-            json!({"type":"response.failed","response":{"error":{"message":"server_error"}}}),
-            json!({"type":"response.failed","code":"server_error","error":{"code":"server_error"}}),
-            json!({"type":"error","response":{"error":{"code":"server_error"}}}),
+        for (event, expected) in [
+            (
+                json!({"type":"response.failed"}),
+                DirectError::ProviderStreamFailedInvalidCode,
+            ),
+            (
+                json!({"type":"response.failed","response":null}),
+                DirectError::ProviderStreamFailedInvalidCode,
+            ),
+            (
+                json!({"type":"response.failed","response":42}),
+                DirectError::ProviderStreamFailedInvalidCode,
+            ),
+            (
+                json!({"type":"response.failed","response":{"error":[]}}),
+                DirectError::ProviderStreamFailedInvalidCode,
+            ),
+            (
+                json!({"type":"response.failed","response":{"error":{"message":"server_error"}}}),
+                DirectError::ProviderStreamFailedInvalidCode,
+            ),
+            (
+                json!({"type":"response.failed","code":"server_error","error":{"code":"server_error"}}),
+                DirectError::ProviderStreamFailedInvalidCode,
+            ),
+            (
+                json!({"type":"error","response":{"error":{"code":"server_error"}}}),
+                DirectError::ProviderStreamErrorEvent,
+            ),
         ] {
             assert_eq!(
                 Decoder::default()
                     .push(&wire(vec![frames()[0].clone(), event]))
                     .err(),
-                Some(DirectError::ProviderStream)
+                Some(expected)
             );
+        }
+        Ok(())
+    }
+    #[test]
+    fn failure_stages_are_payload_free_across_split_and_coalesced_frames(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        for (failure, expected, serialized, message) in [
+            (
+                json!({"type":"error","code":"server_error","message":"DUMMY-PRIVATE-CONTENT",
+                    "param":"DUMMY-PRIVATE-CONTENT","response":{"error":{"code":"invalid_prompt"}}}),
+                DirectError::ProviderStreamErrorEvent,
+                "provider_stream_error_event",
+                "The provider emitted a top-level error event in the response stream. No automatic retry was made.",
+            ),
+            (
+                json!({"type":"response.failed","response":{"error":{
+                    "code":"DUMMY-PRIVATE-CONTENT","message":"DUMMY-PRIVATE-CONTENT"}}}),
+                DirectError::ProviderStreamFailedUnknownCode,
+                "provider_stream_failed_unknown_code",
+                "The provider reported response.failed with an unrecognized error code. No automatic retry was made.",
+            ),
+            (
+                json!({"type":"response.failed","response":{"error":{
+                    "code":{"message":"DUMMY-PRIVATE-CONTENT"},"message":"DUMMY-PRIVATE-CONTENT"}}}),
+                DirectError::ProviderStreamFailedInvalidCode,
+                "provider_stream_failed_invalid_code",
+                "The provider reported response.failed without a usable error code. No automatic retry was made.",
+            ),
+        ] {
+            let input = wire(vec![frames()[0].clone(), failure.clone()]);
+            for size in [1, 2, 7, 128, 65536] {
+                let mut decoder = Decoder::default();
+                let mut actual = None;
+                for chunk in input.chunks(size) {
+                    if let Err(error) = decoder.push(chunk) {
+                        actual = Some(error);
+                        break;
+                    }
+                }
+                assert_eq!(actual, Some(expected));
+                assert!(!decoder.complete);
+            }
+            assert_eq!(expected.to_string(), message);
+            assert_eq!(serde_json::to_value(expected)?, json!(serialized));
+            for rendered in [
+                expected.to_string(),
+                format!("{expected:?}"),
+                serde_json::to_string(&expected)?,
+            ] {
+                assert!(!rendered.contains("DUMMY-PRIVATE-CONTENT"));
+            }
+            assert_eq!(
+                Decoder::default().push(&wire(vec![failure])).err(),
+                Some(DirectError::Protocol)
+            );
+            let valid_wire = String::from_utf8(input)?;
+            for invalid_wire in [
+                valid_wire.replace("\"sequence_number\":1", "\"sequence_number\":9"),
+                valid_wire
+                    .replace("event: response.failed", "event: unexpected")
+                    .replace("event: error", "event: unexpected"),
+                valid_wire.replace("\"type\":\"response.created\"", "\"type\":false"),
+            ] {
+                assert_eq!(
+                    Decoder::default().push(invalid_wire.as_bytes()).err(),
+                    Some(DirectError::Protocol)
+                );
+            }
         }
         Ok(())
     }

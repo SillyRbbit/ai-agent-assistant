@@ -25,6 +25,12 @@ const ERRORS = {
     "The provider reported a rate limit in the response stream. No automatic retry was made.",
   provider_stream_invalid_prompt:
     "The provider reported an invalid prompt in the response stream. No automatic retry was made.",
+  provider_stream_error_event:
+    "The provider emitted a top-level error event in the response stream. No automatic retry was made.",
+  provider_stream_failed_unknown_code:
+    "The provider reported response.failed with an unrecognized error code. No automatic retry was made.",
+  provider_stream_failed_invalid_code:
+    "The provider reported response.failed without a usable error code. No automatic retry was made.",
   refused: "The provider refused this request.",
   incomplete: "The stream ended without a complete answer.",
   limit: "The response exceeded the demo limit.",
