@@ -1,5 +1,159 @@
 # Troubleshooting log
 
+## 2026-09-21 — Direct provider diagnostics evidence closeout validator retry
+
+**Symptom:** The terminal documentation retry’s preservation validator raised
+`TypeError` before proving its scope because it compared the string
+`"node_modules"` to bytes returned by its Git helper.
+
+**Cause:** The helper intentionally returns raw bytes for hashes and NUL-safe Git
+path parsing; only call sites needing text decode their specific output.
+
+**Correction and result:** The new external validator retained `entry()` returning
+`None` for absent paths and changed only the membership assertion to
+`b"node_modules"`. The local formatter repaired eight in-scope formatting findings
+without installation. Documentation, repository, secret, whitespace,
+preservation, session, quality, report-schema and completion evidence passed.
+
+**Boundaries:** No application build, provider request, credential inspection or
+live rehearsal occurred. All attempts remain exhausted; native GUI/live-success
+advisories remain, and D-125/M1/M2 stay parked.
+
+## Direct provider diagnostics evidence closeout retry — 2026-09-21
+
+The prior closeout failed before formatting because a new detached worktree did
+not include local node_modules/.bin/prettier. It also failed because its
+external validator called stat on an allowed successor-only path. This retry
+uses an APFS clone of the known existing local dependency tree and a new external
+validator whose entry helper returns None for absent paths. Its later comparison
+used byte output from git status against a string literal and raised TypeError.
+The terminal source and failed validator remain unmodified; this retry was not
+repaired or retried.
+
+## Direct provider diagnostics evidence closeout — 2026-09-21
+
+The prior candidate's implementation evidence passed, but the ordinary completion
+report was initially rejected for a noncanonical `## Scope and preservation`
+heading and then for combined review headings. The terminal failure report was
+made schema-valid and preserved, but the increment could not be reopened. This
+separate successor uses the repository template from the beginning and treats
+previous application checks as historical evidence. Its documentation check then
+failed before execution because the new detached worktree lacked local `prettier`.
+Its initial scope validator also raised `FileNotFoundError` while comparing the
+successor-only report to the predecessor. Per the stop condition, no dependency
+copy, installation, validator repair or retry occurred.
+
+## Direct provider stream diagnostics message assertion — 2026-09-21
+
+The terminal predecessor's three UI failures were caused by a shared assertion
+that required the generic “No mock response was substituted.” suffix after the
+new rows had already displayed their approved “No automatic retry was made.”
+messages. The isolated corrective successor makes the expected policy suffix an
+explicit row value and changes only that shared assertion. No timer, production,
+transport or ownership defect was established. All 18 focused frontend tests,
+43 focused Rust tests and complete offline verification passed. The ordinary
+completion gate then rejected `## Scope and preservation`; its schema requires
+exactly one `## Scope and boundaries` section. Per the stop condition, no repair
+or retry occurred and the successor was recorded terminal failed. The earlier
+failed predecessor remains preserved as historical evidence.
+
+## Direct provider stream diagnostics — 2026-09-21
+
+The owner-approved `direct-provider-stream-diagnostics` successor is isolated in
+`/private/tmp/cortexa-direct-provider-stream-diagnostics`, detached at
+`0ed15810e90b6a4bd312a8096c61b0abb1ab7eff`. The verified 34-path candidate was
+transferred byte-for-byte before ordinary admission. All predecessor checkouts,
+finalized reports and raw gate states remain preserved; D-125/M1/M2 stay parked.
+
+The diagnostic delta classifies only response.failed response.error.code values
+server_error, rate_limit_exceeded and invalid_prompt into three fixed codes and
+static messages. Top-level error and other/malformed codes retain provider_stream.
+No request, transport, validation, ownership, dependency or permission change.
+
+Required frontend validation failed: 15 passed and 3 new UI cases failed because
+the reused assertion requires “No mock response was substituted.” while the
+approved new messages end with “No automatic retry was made.” No repair or retry
+was performed. The already-running focused Rust check completed: 43 passed.
+Full offline verification was not run. Quality is FAIL; readiness is Blocked.
+See the [plan](docs/plans/2026-09-21-direct-provider-stream-diagnostics.md) and
+[review](docs/reviews/2026-09-21-direct-provider-stream-diagnostics-post-increment-review.md).
+
+All three live rehearsal attempts are exhausted. The previous native observation
+was provider_stream with released ownership and no completed answer; its detailed
+cause remains unknown. Native live success, remaining GUI smoke, D-128 custody/
+abort limitations and D-127 dependency advisories remain. No launch, credential
+inspection, live request or publication occurred in this successor.
+
+## Direct diagnostics test sequencing — 2026-09-21
+
+The owner explicitly authorized a separate isolated corrective successor,
+`direct-provider-diagnostics-test-sequencing`, in
+`/private/tmp/cortexa-direct-provider-diagnostics-test-sequencing`, detached at
+`0ed15810e90b6a4bd312a8096c61b0abb1ab7eff`. The complete 32-path diagnostic
+candidate was copied and byte-verified before ordinary admission. Both predecessor
+checkouts, finalized reports and raw gate states remain unchanged; the earlier
+FAIL / Blocked record is not reopened or promoted.
+
+The only executable delta splits the new UI regression's 500ms fake-timer act
+into separate 250ms acts and asserts streaming between them. The next poll is
+scheduled by a snapshot-dependent effect; all later error, cleanup, release and
+no-retry assertions remain unchanged. All production and dependency bytes remain
+identical to the diagnostic candidate. No implementation is repeated.
+
+Local validation passed: 12 focused frontend tests, 41 focused Rust tests and
+full offline verification. Quality is PASS WITH ADVISORIES; require a valid
+ordinary completion marker before treating closeout as complete. See the [plan](docs/plans/2026-09-21-direct-provider-diagnostics-test-sequencing.md)
+and [review](docs/reviews/2026-09-21-direct-provider-diagnostics-test-sequencing-post-increment-review.md). No app launch, credential inspection or live request is included.
+One rehearsal attempt remains. The earlier native provider failure remains
+unexplained; the Python/OpenSSL TLS probe is not Rust-client evidence. Native
+live success and remaining GUI smoke remain advisories; D-125/M1/M2 stay parked.
+
+## Direct provider failure diagnostics — 2026-09-21
+
+The owner-approved `direct-provider-failure-diagnostics` successor is isolated in
+`/private/tmp/cortexa-direct-provider-failure-diagnostics`, detached at
+`0ed15810e90b6a4bd312a8096c61b0abb1ab7eff`. The completed implementation candidate
+was transferred byte-for-byte before ordinary admission. Its original checkout,
+valid completion record, all other checkouts and already-prunable entries remain
+preserved. D-125/M1/M2 remain parked.
+
+The bounded change keeps `network` for non-timeout transport failures and adds
+payload-free `http_status` and `provider_stream` codes with static messages.
+Existing special HTTP mappings, timeouts, stream validation, request construction,
+credential handling, ownership, cancellation and retry policy are unchanged.
+No raw errors, provider bodies, headers or identifiers are exposed or logged.
+The earlier failure remains unexplained. A prior Python/OpenSSL DNS/TCP/TLS
+probe passed; it is not Rust/rustls, authentication or successful response proof.
+Two rehearsal attempts were used; one remains. This increment makes no requests.
+Native live success and the remaining Research/Knowledge GUI advisory stay pending.
+
+Required focused validation failed (9 passed, 3 new UI cases failed); see the [plan](docs/plans/2026-09-21-direct-provider-failure-diagnostics.md)
+and [review](docs/reviews/2026-09-21-direct-provider-failure-diagnostics-post-increment-review.md). Quality: FAIL; next-increment readiness: Blocked. Implementation stopped without
+repair or retry. The three new cases expected an alert while the rendered state
+was still streaming. Test-timing is a hypothesis, not a verified root cause.
+Rust tests and full verification were not run after this stop condition.
+Preserve these edits and the terminal failure; do not reopen this increment.
+
+## 2026-09-21 — Direct implementation local diagnostics
+
+Scope: isolated `personal-assistant-direct-implementation`, not D-125/M1/M2.
+Offline Cargo resolution lacked tokio-macros; the authorized minimal HTTPS
+resolution fetched missing registry packages, retaining unrelated old versions.
+Intermediate compilation while integration was incomplete and strict frontend
+lint findings were corrected in scope. Async React test callbacks now await
+their microtask flush; the no-Debug provider event test checks errors without
+requiring content Debug. Focused Rust/frontend/checker checks passed afterward.
+The pinned cargo-audit binary was reused from
+`/private/tmp/cortexa-cargo-audit-0.22.2/bin/cargo-audit`; plain `cargo audit`
+was absent, so no toolchain was installed. The unchanged Cargo gate passed.
+Final completion outcomes are in the [review](docs/reviews/2026-09-21-personal-assistant-direct-implementation-post-increment-review.md); do not treat
+these intermediate diagnostics as final acceptance or native live evidence.
+
+The first full verify stopped at Clippy's existing no-unwrap rule in the new
+Rust tests. Tests now propagate Result/Option failures; no lint suppression was
+added. Focused strict Clippy passed. Final dependency review removed the unused
+tokio macros feature before the completion rerun; only runtime/time are needed.
+
 Use this file for resolved and unresolved environment, build, test, and runtime failures. Preserve history so later sessions do not repeat the same investigation.
 
 ## TS-025 - Withdrawn gtk3-rs advisories made the exact Cargo baseline stale

@@ -66,6 +66,16 @@ impl AgentRuntime for NativeAgentRuntime {
                     .map_err(map_personal_assistant_start_error)?,
                 ))
             }
+            RuntimeTurnProfile::PersonalAssistantDirectSynthetic => {
+                NativeTurn::PersonalAssistant(Box::new(
+                    PersonalAssistantTextTurn::new_direct(
+                        identity.run_id().as_str().to_owned(),
+                        identity.request_id().as_str().to_owned(),
+                        selected_text.into_inner(),
+                    )
+                    .map_err(map_personal_assistant_start_error)?,
+                ))
+            }
         };
 
         Ok(NativeAgentRun {

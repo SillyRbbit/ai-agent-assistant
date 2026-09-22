@@ -7,6 +7,8 @@ pub mod documents;
 mod error;
 pub mod memory;
 pub mod menu_bar;
+mod personal_assistant_direct;
+mod personal_assistant_direct_tauri;
 mod personal_assistant_v0;
 pub mod policy;
 mod research_knowledge_demo_lifecycle;
@@ -40,6 +42,7 @@ pub use tools::types::{PermissionKind, RiskClass};
 
 pub fn run() -> Result<(), AppError> {
     let app = tauri::Builder::default()
+        .manage(personal_assistant_direct_tauri::DirectState::default())
         .manage(
             research_knowledge_demo_lifecycle_tauri::ResearchKnowledgeDemoLifecycleTauriState::new(
             ),
@@ -56,7 +59,10 @@ pub fn run() -> Result<(), AppError> {
             research_knowledge_demo_lifecycle_tauri::get_research_knowledge_demo_lifecycle_snapshot,
             research_knowledge_demo_lifecycle_tauri::start_research_knowledge_demo_lifecycle,
             research_knowledge_demo_lifecycle_tauri::advance_research_knowledge_demo_lifecycle,
-            research_knowledge_demo_lifecycle_tauri::cancel_research_knowledge_demo_lifecycle
+            research_knowledge_demo_lifecycle_tauri::cancel_research_knowledge_demo_lifecycle,
+            personal_assistant_direct_tauri::start_personal_assistant_direct,
+            personal_assistant_direct_tauri::poll_personal_assistant_direct,
+            personal_assistant_direct_tauri::cancel_personal_assistant_direct
         ])
         .build(tauri::generate_context!())
         .map_err(AppError::from)?;

@@ -274,6 +274,23 @@ describe("App", () => {
     expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
   });
 
+  it("separates the native fixed sample from the editable mock conversation", () => {
+    const harness = createMenuRouteHarness();
+    render(<App services={createServices(harness.source)} />);
+    fireEvent.change(screen.getByLabelText("Assistant request"), {
+      target: { value: "private draft" },
+    });
+    fireEvent.change(screen.getByLabelText("Conversation mode"), { target: { value: "native" } });
+    expect(screen.queryByLabelText("Assistant request")).not.toBeInTheDocument();
+    expect(screen.queryByText("private draft")).not.toBeInTheDocument();
+    expect(
+      screen.getByText(/Browser-only mode: native OpenAI requests are unavailable/),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Start native sample" })).not.toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText("Conversation mode"), { target: { value: "mock" } });
+    expect(screen.getByLabelText("Assistant request")).toHaveValue("private draft");
+  });
+
   it("sends with Return while preserving multiline and composition input", () => {
     vi.useFakeTimers();
     const harness = createMenuRouteHarness();

@@ -1,5 +1,159 @@
 # Cortexa testing guide
 
+## Direct provider diagnostics evidence closeout validator retry — 2026-09-21
+
+This documentation-only successor ran no application test or build. Existing
+local formatter tooling was clone-copied with APFS clone mode. The initial
+documentation check found only formatting in the permitted current-state files;
+the local formatter repaired them and the rerun passed. Offline documentation,
+repository, security, whitespace, preservation, session, quality, report-schema
+and gate workflows passed. The preservation assertion compares
+`b"node_modules"` against raw byte output while retaining absent-path `None`
+handling. Historical frontend, Rust and full-offline verification results remain
+inherited evidence only.
+
+## Direct provider diagnostics evidence closeout retry — 2026-09-21
+
+The retry uses clone-copied existing local formatter tooling solely to run
+npm run docs:check; it does not install, resolve or update a package.
+Historical application checks remain evidence only. Required current checks are
+documentation, repository, security, whitespace, exact scope/preservation,
+session, quality, report schema, ordinary finalization, valid completion status
+and Stop. The new preservation validator failed with TypeError before completing
+scope proof; it was not repaired or retried. Application tests and builds remain
+out of scope because executable bytes do not change.
+
+## Direct provider diagnostics evidence closeout — 2026-09-21
+
+This documentation-only successor relies on recorded historical application
+evidence: 18 focused frontend tests, 43 focused Rust tests and full offline
+verification passed for the inherited candidate. It must not label those commands
+as newly executed. Its required checks are `npm run docs:check`,
+`npm run repository:check`, `npm run security:scan`, `git diff --check`, exact
+scope/preservation, session, quality, report-schema, ordinary finalization and
+Stop. The documentation command failed before formatting because `prettier` was
+unavailable; the initial preservation script also failed. Neither was repaired or
+retried. Application tests and builds remain out of scope because executable bytes
+do not change.
+
+## Direct provider stream diagnostics message assertion — 2026-09-21
+
+The active isolated corrective successor changes only the row-specific expected
+policy-message suffix in `PersonalAssistantDirectDemo.test.tsx`. Existing
+generic failures must retain “No mock response was substituted.”; narrowed
+stream failures must retain “No automatic retry was made.” The exact-message,
+streaming, cleanup, release, partial-output, one-Start and no-extra-poll
+assertions remain required.
+
+Completion requires focused frontend and Rust tests, full offline verification,
+documentation/repository/security/whitespace checks, exact 11-path and 38-path
+scope checks, production/predecessor preservation and all session/quality/post-
+increment gates. Native or provider testing is outside this successor; all live
+attempts remain exhausted.
+
+Observed completion: 18 focused frontend tests, 43 focused Rust tests and the
+complete offline verification passed. Final documentation, repository, security,
+whitespace, preservation and session checks passed. The ordinary completion gate
+failed because the report used a noncanonical scope heading; the increment is
+terminal failed. These offline results do not establish native provider success.
+
+## Direct provider stream diagnostics — 2026-09-21
+
+The owner-approved `direct-provider-stream-diagnostics` successor is isolated in
+`/private/tmp/cortexa-direct-provider-stream-diagnostics`, detached at
+`0ed15810e90b6a4bd312a8096c61b0abb1ab7eff`. The verified 34-path candidate was
+transferred byte-for-byte before ordinary admission. All predecessor checkouts,
+finalized reports and raw gate states remain preserved; D-125/M1/M2 stay parked.
+
+The diagnostic delta classifies only response.failed response.error.code values
+server_error, rate_limit_exceeded and invalid_prompt into three fixed codes and
+static messages. Top-level error and other/malformed codes retain provider_stream.
+No request, transport, validation, ownership, dependency or permission change.
+
+Required frontend validation failed: 15 passed and 3 new UI cases failed because
+the reused assertion requires “No mock response was substituted.” while the
+approved new messages end with “No automatic retry was made.” No repair or retry
+was performed. The already-running focused Rust check completed: 43 passed.
+Full offline verification was not run. Quality is FAIL; readiness is Blocked.
+See the [plan](docs/plans/2026-09-21-direct-provider-stream-diagnostics.md) and
+[review](docs/reviews/2026-09-21-direct-provider-stream-diagnostics-post-increment-review.md).
+
+All three live rehearsal attempts are exhausted. The previous native observation
+was provider_stream with released ownership and no completed answer; its detailed
+cause remains unknown. Native live success, remaining GUI smoke, D-128 custody/
+abort limitations and D-127 dependency advisories remain. No launch, credential
+inspection, live request or publication occurred in this successor.
+
+## Direct diagnostics test sequencing — 2026-09-21
+
+The owner explicitly authorized a separate isolated corrective successor,
+`direct-provider-diagnostics-test-sequencing`, in
+`/private/tmp/cortexa-direct-provider-diagnostics-test-sequencing`, detached at
+`0ed15810e90b6a4bd312a8096c61b0abb1ab7eff`. The complete 32-path diagnostic
+candidate was copied and byte-verified before ordinary admission. Both predecessor
+checkouts, finalized reports and raw gate states remain unchanged; the earlier
+FAIL / Blocked record is not reopened or promoted.
+
+The only executable delta splits the new UI regression's 500ms fake-timer act
+into separate 250ms acts and asserts streaming between them. The next poll is
+scheduled by a snapshot-dependent effect; all later error, cleanup, release and
+no-retry assertions remain unchanged. All production and dependency bytes remain
+identical to the diagnostic candidate. No implementation is repeated.
+
+Local validation passed: 12 focused frontend tests, 41 focused Rust tests and
+full offline verification. Quality is PASS WITH ADVISORIES; require a valid
+ordinary completion marker before treating closeout as complete. See the [plan](docs/plans/2026-09-21-direct-provider-diagnostics-test-sequencing.md)
+and [review](docs/reviews/2026-09-21-direct-provider-diagnostics-test-sequencing-post-increment-review.md). No app launch, credential inspection or live request is included.
+One rehearsal attempt remains. The earlier native provider failure remains
+unexplained; the Python/OpenSSL TLS probe is not Rust-client evidence. Native
+live success and remaining GUI smoke remain advisories; D-125/M1/M2 stay parked.
+
+## Direct provider failure diagnostics — 2026-09-21
+
+The owner-approved `direct-provider-failure-diagnostics` successor is isolated in
+`/private/tmp/cortexa-direct-provider-failure-diagnostics`, detached at
+`0ed15810e90b6a4bd312a8096c61b0abb1ab7eff`. The completed implementation candidate
+was transferred byte-for-byte before ordinary admission. Its original checkout,
+valid completion record, all other checkouts and already-prunable entries remain
+preserved. D-125/M1/M2 remain parked.
+
+The bounded change keeps `network` for non-timeout transport failures and adds
+payload-free `http_status` and `provider_stream` codes with static messages.
+Existing special HTTP mappings, timeouts, stream validation, request construction,
+credential handling, ownership, cancellation and retry policy are unchanged.
+No raw errors, provider bodies, headers or identifiers are exposed or logged.
+The earlier failure remains unexplained. A prior Python/OpenSSL DNS/TCP/TLS
+probe passed; it is not Rust/rustls, authentication or successful response proof.
+Two rehearsal attempts were used; one remains. This increment makes no requests.
+Native live success and the remaining Research/Knowledge GUI advisory stay pending.
+
+Required focused validation failed (9 passed, 3 new UI cases failed); see the [plan](docs/plans/2026-09-21-direct-provider-failure-diagnostics.md)
+and [review](docs/reviews/2026-09-21-direct-provider-failure-diagnostics-post-increment-review.md). Quality: FAIL; next-increment readiness: Blocked. Implementation stopped without
+repair or retry. The three new cases expected an alert while the rendered state
+was still streaming. Test-timing is a hypothesis, not a verified root cause.
+Rust tests and full verification were not run after this stop condition.
+Preserve these edits and the terminal failure; do not reopen this increment.
+
+## Direct Personal Assistant deterministic acceptance — 2026-09-21
+
+Use the [active plan](docs/plans/2026-08-28-personal-assistant-v0-live-synthetic-rehearsal.md) and [review](docs/reviews/2026-09-21-personal-assistant-direct-implementation-post-increment-review.md). Native tests construct
+requests with dummy keys without executing them. SSE fixtures cover split UTF-8
+and delimiters, known text metadata, explicit final text, refusal/failure,
+missing completion, malformed/oversized input, tools and identity/sequence drift.
+An isolated pending future proves timeout/Stop drops the owned task; no alternate
+production endpoint, test server or real credential access is introduced.
+Host tests cover duplicate starts, cancellation, late events and safe restarts.
+Frontend tests cover exact IPC payloads, snapshot narrowing, browser-only mode,
+mock/live separation, escaped text, pending-Start cancellation and stale polling.
+Negative checker tests retain strict command/payload/import registration.
+
+Required completion: focused tests, `npm run verify`, documentation/repository/
+secret/whitespace checks, full and production npm audits, pinned cargo-audit
+0.22.2 with the unchanged exact Cargo gate, scope/preservation and session/
+quality/post-increment checks. Native GUI and actual provider activation are
+explicitly pending advisories under this task, never inferred from browser
+or build results. Only the owner may approve a later paid rehearsal.
+
 Status: Authoritative testing standard
 Last updated: 2026-09-20
 

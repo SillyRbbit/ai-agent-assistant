@@ -335,6 +335,16 @@ struct PersonalAssistantStreamState {
 }
 
 impl PersonalAssistantTextTurn {
+    pub(super) fn new_direct(
+        run_id: String,
+        request_id: String,
+        text: String,
+    ) -> PersonalAssistantTextTurnResult<Self> {
+        let mut turn = Self::new(run_id, request_id, text)?;
+        turn.request.body = crate::personal_assistant_direct::request_body()
+            .map_err(|_| PersonalAssistantTextTurnError::SerializationFailed)?;
+        Ok(turn)
+    }
     pub(super) fn new(
         run_id: impl Into<String>,
         gateway_request_id: impl Into<String>,

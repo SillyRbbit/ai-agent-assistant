@@ -17,7 +17,7 @@ pub type RuntimeResult<T> = Result<T, RuntimeError>;
 
 pub const MAX_RUNTIME_OUTPUT_TEXT_BYTES: usize = MAX_ASSISTANT_OUTPUT_CHARACTERS_PER_TURN;
 
-pub(super) const PERSONAL_ASSISTANT_V0_SYNTHETIC_FIXTURE: &str = "Prepare a concise three-bullet board update from this synthetic status: planning is approved; implementation has not started; no external systems have changed.";
+pub(crate) const PERSONAL_ASSISTANT_V0_SYNTHETIC_FIXTURE: &str = "Prepare a concise three-bullet board update from this synthetic status: planning is approved; implementation has not started; no external systems have changed.";
 
 /// Constructs one bounded runtime run from application-owned input.
 pub trait AgentRuntime {
@@ -256,9 +256,18 @@ pub struct RuntimeTurnRequest {
 pub(super) enum RuntimeTurnProfile {
     Initial,
     PersonalAssistantV0Synthetic,
+    PersonalAssistantDirectSynthetic,
 }
 
 impl RuntimeTurnRequest {
+    pub(crate) fn personal_assistant_direct(
+        run_id: String,
+        request_id: String,
+    ) -> RuntimeResult<Self> {
+        let mut request = Self::personal_assistant_v0_synthetic(run_id, request_id)?;
+        request.profile = RuntimeTurnProfile::PersonalAssistantDirectSynthetic;
+        Ok(request)
+    }
     pub fn new(
         run_id: impl Into<String>,
         request_id: impl Into<String>,

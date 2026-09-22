@@ -80,6 +80,9 @@ DOCUMENTATION_TRUTH_MARKERS = (
     ),
 )
 EXPECTED_TAURI_IMPORTS = {
+    "src/infrastructure/tauri/personal-assistant-direct-client.ts": (
+        'import { invoke, isTauri } from "@tauri-apps/api/core";',
+    ),
     "src/infrastructure/tauri/app-info-client.ts": (
         'import { invoke } from "@tauri-apps/api/core";',
     ),
@@ -95,6 +98,13 @@ EXPECTED_TAURI_IMPORTS = {
     ),
 }
 EXPECTED_TAURI_INVOKES = {
+    "src/infrastructure/tauri/personal-assistant-direct-client.ts": (
+        'invoke<unknown>("start_personal_assistant_direct", {\n'
+        '        request: { version: 1, acknowledgment: "openai-synthetic-direct-v1" },\n'
+        '      })',
+        'invoke<unknown>("poll_personal_assistant_direct", { request: { handle, cursor } })',
+        'invoke<unknown>("cancel_personal_assistant_direct", { request: { handle } })',
+    ),
     "src/infrastructure/tauri/app-info-client.ts": ('invoke<unknown>("get_app_info")',),
     "src/infrastructure/tauri/research-knowledge-demo-projection-client.ts": (
         'invoke<unknown>("get_research_knowledge_demo_projection")',
@@ -221,7 +231,10 @@ EXPECTED_INVOKE_HANDLER = (
     "research_knowledge_demo_lifecycle_tauri::get_research_knowledge_demo_lifecycle_snapshot,"
     "research_knowledge_demo_lifecycle_tauri::start_research_knowledge_demo_lifecycle,"
     "research_knowledge_demo_lifecycle_tauri::advance_research_knowledge_demo_lifecycle,"
-    "research_knowledge_demo_lifecycle_tauri::cancel_research_knowledge_demo_lifecycle"
+    "research_knowledge_demo_lifecycle_tauri::cancel_research_knowledge_demo_lifecycle,"
+    "personal_assistant_direct_tauri::start_personal_assistant_direct,"
+    "personal_assistant_direct_tauri::poll_personal_assistant_direct,"
+    "personal_assistant_direct_tauri::cancel_personal_assistant_direct"
     "])"
 )
 PROJECTION_RUST_PROHIBITED_TOKENS = (
