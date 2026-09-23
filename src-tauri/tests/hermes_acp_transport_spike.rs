@@ -28,6 +28,7 @@ const EXPECTED_VERSION: &str = "0.20.0";
 const MAX_FRAME_BYTES: usize = 4_096;
 const MAX_FRAME_COUNT: usize = 24;
 const MAX_STDERR_BYTES: usize = 512;
+const STDERR_SIGNATURE_OVERLAP: usize = b"modulenotfounderror".len() - 1;
 const TEST_DEADLINE: Duration = Duration::from_secs(2);
 const TIMEOUT_DEADLINE: Duration = Duration::from_millis(120);
 
@@ -153,6 +154,43 @@ fn classify_stderr(sample: &[u8], truncated: bool, read_failed: bool) -> StderrC
     }
 }
 
+#[derive(Default)]
+struct StderrSignatureScanner {
+    suffix: Vec<u8>,
+    developer_tool: bool,
+    loader_architecture: bool,
+    python_startup: bool,
+}
+
+impl StderrSignatureScanner {
+    fn observe(&mut self, chunk: &[u8]) {
+        let mut window = Vec::with_capacity(self.suffix.len() + chunk.len());
+        window.extend_from_slice(&self.suffix);
+        window.extend_from_slice(chunk);
+        match classify_stderr(&window, false, false) {
+            StderrCategory::DeveloperTool => self.developer_tool = true,
+            StderrCategory::LoaderArchitecture => self.loader_architecture = true,
+            StderrCategory::PythonStartup => self.python_startup = true,
+            _ => {}
+        }
+        let suffix_start = window.len().saturating_sub(STDERR_SIGNATURE_OVERLAP);
+        self.suffix.clear();
+        self.suffix.extend_from_slice(&window[suffix_start..]);
+    }
+
+    const fn category(&self) -> Option<StderrCategory> {
+        if self.developer_tool {
+            Some(StderrCategory::DeveloperTool)
+        } else if self.loader_architecture {
+            Some(StderrCategory::LoaderArchitecture)
+        } else if self.python_startup {
+            Some(StderrCategory::PythonStartup)
+        } else {
+            None
+        }
+    }
+}
+
 fn version_probe_diagnostic(
     status: &ExitStatus,
     output_matches: bool,
@@ -163,6 +201,18 @@ fn version_probe_diagnostic(
         status.code(),
         status.signal(),
         category.as_str()
+    )
+}
+
+fn version_probe_line(
+    status: &ExitStatus,
+    output_matches: bool,
+    category: StderrCategory,
+    truncated: bool,
+) -> String {
+    format!(
+        "{} stderr_truncated={truncated}",
+        version_probe_diagnostic(status, output_matches, category)
     )
 }
 
@@ -232,6 +282,7 @@ where
     let handle = thread::spawn(move || {
         let mut total = 0_usize;
         let mut sample = Vec::with_capacity(MAX_STDERR_BYTES);
+        let mut signatures = StderrSignatureScanner::default();
         let mut read_failed = false;
         let mut chunk = [0_u8; 256];
         loop {
@@ -239,6 +290,7 @@ where
                 Ok(0) => break,
                 Ok(read) => {
                     total = total.saturating_add(read);
+                    signatures.observe(&chunk[..read]);
                     let remaining = MAX_STDERR_BYTES.saturating_sub(sample.len());
                     sample.extend_from_slice(&chunk[..read.min(remaining)]);
                 }
@@ -251,7 +303,13 @@ where
         let _sent = sender.try_send(StderrSummary {
             captured_bytes: total.min(MAX_STDERR_BYTES),
             truncated: total > MAX_STDERR_BYTES,
-            category: classify_stderr(&sample, total > MAX_STDERR_BYTES, read_failed),
+            category: if read_failed {
+                StderrCategory::ReadFailure
+            } else {
+                signatures
+                    .category()
+                    .unwrap_or_else(|| classify_stderr(&sample, total > MAX_STDERR_BYTES, false))
+            },
         });
     });
     (receiver, handle)
@@ -383,7 +441,7 @@ fn run_probe(arg: &OsStr, expected: &str) -> Result<(), SpikeError> {
         if arg == OsStr::new("--version") {
             eprintln!(
                 "{}",
-                version_probe_diagnostic(&status, output_matches, stderr.category)
+                version_probe_line(&status, output_matches, stderr.category, stderr.truncated)
             );
             return Err(SpikeError::new(SpikeErrorCode::VersionMismatch));
         }
@@ -733,6 +791,52 @@ fn version_probe_diagnostic_is_closed_and_redacted() {
         classify_stderr(private_stderr, false, true),
         StderrCategory::ReadFailure
     );
+}
+
+#[test]
+fn streamed_stderr_classifies_late_signatures_without_revealing_content(
+) -> Result<(), Box<dyn Error>> {
+    let status = ExitStatus::from_raw(1 << 8);
+    for (signature, expected) in [
+        (b"xcrun".as_slice(), StderrCategory::DeveloperTool),
+        (b"dyld".as_slice(), StderrCategory::LoaderArchitecture),
+        (b"Traceback".as_slice(), StderrCategory::PythonStartup),
+    ] {
+        let mut stderr = vec![b'z'; MAX_STDERR_BYTES - 3];
+        stderr.extend_from_slice(signature);
+        stderr.extend_from_slice(b": fixture-private-stderr-sentinel");
+        let (receiver, handle) = spawn_stderr_reader(std::io::Cursor::new(stderr));
+        handle
+            .join()
+            .map_err(|_| "test stderr reader must finish")?;
+        let summary = receiver
+            .try_recv()
+            .map_err(|_| "test stderr summary must exist")?;
+        assert_eq!(summary.category, expected);
+        assert!(summary.truncated);
+        assert_eq!(summary.captured_bytes, MAX_STDERR_BYTES);
+        let diagnostic = version_probe_line(&status, false, summary.category, summary.truncated);
+        assert!(diagnostic.contains("stderr_truncated=true"));
+        assert!(diagnostic.contains(expected.as_str()));
+        assert!(!diagnostic.contains("fixture-private-stderr-sentinel"));
+    }
+
+    let (receiver, handle) =
+        spawn_stderr_reader(std::io::Cursor::new(vec![b'z'; MAX_STDERR_BYTES + 1]));
+    handle
+        .join()
+        .map_err(|_| "test stderr reader must finish")?;
+    let summary = receiver
+        .try_recv()
+        .map_err(|_| "test stderr summary must exist")?;
+    assert_eq!(summary.category, StderrCategory::Truncated);
+    assert!(summary.truncated);
+    assert_eq!(summary.captured_bytes, MAX_STDERR_BYTES);
+    assert_eq!(
+        version_probe_line(&status, false, summary.category, summary.truncated),
+        "hermes_acp_fixture_version_probe: exit_code=Some(1) signal=None output_matches=false stderr_category=truncated stderr_truncated=true"
+    );
+    Ok(())
 }
 
 #[test]
