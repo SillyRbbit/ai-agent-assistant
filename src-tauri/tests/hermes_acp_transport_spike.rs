@@ -12,8 +12,9 @@ use std::fmt;
 use std::fs;
 use std::io::{Read, Write};
 use std::os::unix::fs::PermissionsExt;
+use std::os::unix::process::ExitStatusExt;
 use std::path::{Path, PathBuf};
-use std::process::{Child, ChildStdin, Command, Stdio};
+use std::process::{Child, ChildStdin, Command, ExitStatus, Stdio};
 use std::sync::mpsc::{self, Receiver, SyncSender, TrySendError};
 use std::thread::{self, JoinHandle};
 use std::time::{Duration, Instant};
@@ -91,6 +92,78 @@ impl Error for SpikeError {}
 struct StderrSummary {
     captured_bytes: usize,
     truncated: bool,
+    category: StderrCategory,
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+enum StderrCategory {
+    #[default]
+    Empty,
+    DeveloperTool,
+    LoaderArchitecture,
+    PythonStartup,
+    OtherNonempty,
+    Truncated,
+    ReadFailure,
+}
+
+impl StderrCategory {
+    const fn as_str(self) -> &'static str {
+        match self {
+            Self::Empty => "empty",
+            Self::DeveloperTool => "developer_tool",
+            Self::LoaderArchitecture => "loader_architecture",
+            Self::PythonStartup => "python_startup",
+            Self::OtherNonempty => "other_nonempty",
+            Self::Truncated => "truncated",
+            Self::ReadFailure => "read_failure",
+        }
+    }
+}
+
+fn classify_stderr(sample: &[u8], truncated: bool, read_failed: bool) -> StderrCategory {
+    if read_failed {
+        return StderrCategory::ReadFailure;
+    }
+    if truncated {
+        return StderrCategory::Truncated;
+    }
+    if sample.is_empty() {
+        return StderrCategory::Empty;
+    }
+    let lower = sample.to_ascii_lowercase();
+    let contains = |needle: &[u8]| lower.windows(needle.len()).any(|window| window == needle);
+    if contains(b"xcrun") || contains(b"xcode-select") || contains(b"active developer") {
+        StderrCategory::DeveloperTool
+    } else if contains(b"dyld")
+        || contains(b"mach-o")
+        || contains(b"architecture")
+        || contains(b"bad cpu type")
+    {
+        StderrCategory::LoaderArchitecture
+    } else if contains(b"traceback")
+        || contains(b"modulenotfounderror")
+        || contains(b"importerror")
+        || contains(b"syntaxerror")
+        || contains(b"python")
+    {
+        StderrCategory::PythonStartup
+    } else {
+        StderrCategory::OtherNonempty
+    }
+}
+
+fn version_probe_diagnostic(
+    status: &ExitStatus,
+    output_matches: bool,
+    category: StderrCategory,
+) -> String {
+    format!(
+        "hermes_acp_fixture_version_probe: exit_code={:?} signal={:?} output_matches={output_matches} stderr_category={}",
+        status.code(),
+        status.signal(),
+        category.as_str()
+    )
 }
 
 #[derive(Debug)]
@@ -158,16 +231,27 @@ where
     let (sender, receiver) = mpsc::sync_channel(1);
     let handle = thread::spawn(move || {
         let mut total = 0_usize;
+        let mut sample = Vec::with_capacity(MAX_STDERR_BYTES);
+        let mut read_failed = false;
         let mut chunk = [0_u8; 256];
         loop {
             match reader.read(&mut chunk) {
-                Ok(0) | Err(_) => break,
-                Ok(read) => total = total.saturating_add(read),
+                Ok(0) => break,
+                Ok(read) => {
+                    total = total.saturating_add(read);
+                    let remaining = MAX_STDERR_BYTES.saturating_sub(sample.len());
+                    sample.extend_from_slice(&chunk[..read.min(remaining)]);
+                }
+                Err(_) => {
+                    read_failed = true;
+                    break;
+                }
             }
         }
         let _sent = sender.try_send(StderrSummary {
             captured_bytes: total.min(MAX_STDERR_BYTES),
             truncated: total > MAX_STDERR_BYTES,
+            category: classify_stderr(&sample, total > MAX_STDERR_BYTES, read_failed),
         });
     });
     (receiver, handle)
@@ -296,11 +380,14 @@ fn run_probe(arg: &OsStr, expected: &str) -> Result<(), SpikeError> {
         .map(str::trim)
         == Some(expected);
     if !status.success() || stderr.truncated || !output_matches {
-        return Err(SpikeError::new(if arg == OsStr::new("--version") {
-            SpikeErrorCode::VersionMismatch
-        } else {
-            SpikeErrorCode::CheckFailed
-        }));
+        if arg == OsStr::new("--version") {
+            eprintln!(
+                "{}",
+                version_probe_diagnostic(&status, output_matches, stderr.category)
+            );
+            return Err(SpikeError::new(SpikeErrorCode::VersionMismatch));
+        }
+        return Err(SpikeError::new(SpikeErrorCode::CheckFailed));
     }
     Ok(())
 }
@@ -607,6 +694,45 @@ fn begin_prompt(child: &mut TestChild, prompt: &str) -> Result<(), SpikeError> {
             "prompt":[{"type":"text","text":prompt}]
         }),
     )
+}
+
+#[test]
+fn version_probe_diagnostic_is_closed_and_redacted() {
+    let private_stderr = b"Traceback: fixture-private-stderr-sentinel";
+    let category = classify_stderr(private_stderr, false, false);
+    let status = ExitStatus::from_raw(1 << 8);
+    let diagnostic = version_probe_diagnostic(&status, false, category);
+    assert_eq!(category, StderrCategory::PythonStartup);
+    assert_eq!(
+        diagnostic,
+        "hermes_acp_fixture_version_probe: exit_code=Some(1) signal=None output_matches=false stderr_category=python_startup"
+    );
+    assert!(!diagnostic.contains("fixture-private-stderr-sentinel"));
+    for (sample, expected) in [
+        (
+            b"xcrun: tool unavailable".as_slice(),
+            StderrCategory::DeveloperTool,
+        ),
+        (
+            b"dyld: missing architecture".as_slice(),
+            StderrCategory::LoaderArchitecture,
+        ),
+        (
+            b"unrecognized private detail".as_slice(),
+            StderrCategory::OtherNonempty,
+        ),
+    ] {
+        assert_eq!(classify_stderr(sample, false, false), expected);
+    }
+    assert_eq!(classify_stderr(b"", false, false), StderrCategory::Empty);
+    assert_eq!(
+        classify_stderr(private_stderr, true, false),
+        StderrCategory::Truncated
+    );
+    assert_eq!(
+        classify_stderr(private_stderr, false, true),
+        StderrCategory::ReadFailure
+    );
 }
 
 #[test]
