@@ -12,6 +12,8 @@ use std::fmt;
 use std::fs;
 use std::io::{Read, Write};
 use std::os::unix::fs::PermissionsExt;
+#[cfg(target_os = "macos")]
+use std::os::unix::process::ExitStatusExt;
 use std::path::{Path, PathBuf};
 use std::process::{Child, ChildStdin, Command, ExitStatus, Stdio};
 use std::sync::mpsc::{self, Receiver, SyncSender, TrySendError};
@@ -22,6 +24,8 @@ use serde_json::{json, Value};
 use tempfile::TempDir;
 
 const PYTHON: &str = "/usr/bin/python3";
+#[cfg(target_os = "macos")]
+const XCODE_DEVELOPER_DIR: &str = "/Applications/Xcode.app/Contents/Developer";
 const EXPECTED_VERSION_LINE: &str = "Hermes Agent v0.20.0 (2026.8.3)";
 const SESSION_ID: &str = "session-spike-1";
 const MAX_FRAME_BYTES: usize = 4_096;
@@ -218,6 +222,112 @@ where
     })
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum DiagnosticStderrCategory {
+    Empty,
+    DeveloperTool,
+    LoaderArchitecture,
+    PythonStartup,
+    OtherNonempty,
+    ReadFailure,
+}
+
+impl DiagnosticStderrCategory {
+    const fn label(self) -> &'static str {
+        match self {
+            Self::Empty => "empty",
+            Self::DeveloperTool => "developer_tool",
+            Self::LoaderArchitecture => "loader_architecture",
+            Self::PythonStartup => "python_startup",
+            Self::OtherNonempty => "other_nonempty",
+            Self::ReadFailure => "read_failure",
+        }
+    }
+}
+
+#[derive(Default)]
+struct DiagnosticStderrScanner {
+    suffix: Vec<u8>,
+    total: usize,
+    developer_tool: bool,
+    loader_architecture: bool,
+    python_startup: bool,
+    read_failed: bool,
+}
+
+impl DiagnosticStderrScanner {
+    fn observe(&mut self, chunk: &[u8]) {
+        self.total = self.total.saturating_add(chunk.len());
+        let mut window = Vec::with_capacity(self.suffix.len() + chunk.len());
+        window.extend_from_slice(&self.suffix);
+        window.extend_from_slice(chunk);
+        window.make_ascii_lowercase();
+        let contains = |needle: &[u8]| window.windows(needle.len()).any(|part| part == needle);
+        self.developer_tool |=
+            contains(b"xcrun") || contains(b"xcode-select") || contains(b"active developer");
+        self.loader_architecture |= contains(b"dyld")
+            || contains(b"mach-o")
+            || contains(b"architecture")
+            || contains(b"bad cpu type");
+        self.python_startup |= contains(b"traceback")
+            || contains(b"modulenotfounderror")
+            || contains(b"importerror")
+            || contains(b"syntaxerror")
+            || contains(b"python");
+        self.suffix.clear();
+        self.suffix
+            .extend_from_slice(&window[window.len().saturating_sub(32)..]);
+    }
+
+    fn summary(&self) -> DiagnosticStderrSummary {
+        let category = if self.read_failed {
+            DiagnosticStderrCategory::ReadFailure
+        } else if self.developer_tool {
+            DiagnosticStderrCategory::DeveloperTool
+        } else if self.loader_architecture {
+            DiagnosticStderrCategory::LoaderArchitecture
+        } else if self.python_startup {
+            DiagnosticStderrCategory::PythonStartup
+        } else if self.total == 0 {
+            DiagnosticStderrCategory::Empty
+        } else {
+            DiagnosticStderrCategory::OtherNonempty
+        };
+        DiagnosticStderrSummary {
+            category,
+            truncated: self.total > MAX_STDERR_BYTES,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+struct DiagnosticStderrSummary {
+    category: DiagnosticStderrCategory,
+    truncated: bool,
+}
+
+#[cfg(target_os = "macos")]
+fn spawn_diagnostic_stderr_reader<R>(mut reader: R) -> JoinHandle<DiagnosticStderrSummary>
+where
+    R: Read + Send + 'static,
+{
+    thread::spawn(move || {
+        let mut scanner = DiagnosticStderrScanner::default();
+        let mut chunk = [0_u8; 256];
+        loop {
+            match reader.read(&mut chunk) {
+                Ok(0) => break,
+                Ok(read) => scanner.observe(&chunk[..read]),
+                Err(_) => {
+                    scanner.read_failed = true;
+                    break;
+                }
+            }
+        }
+        scanner.summary()
+    })
+}
+
 fn fixture_path() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("tests")
@@ -264,6 +374,205 @@ fn configure_isolated_command(command: &mut Command, temp: &TempDir) {
         .stdin(Stdio::null())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped());
+}
+
+#[cfg(target_os = "macos")]
+#[derive(Clone, Copy)]
+enum DiagnosticStage {
+    Version,
+    FirstReady,
+}
+
+#[cfg(target_os = "macos")]
+impl DiagnosticStage {
+    const fn label(self) -> &'static str {
+        match self {
+            Self::Version => "version",
+            Self::FirstReady => "first_ready",
+        }
+    }
+}
+
+#[cfg(target_os = "macos")]
+struct DiagnosticObservation {
+    status: Option<ExitStatus>,
+    output_matches: bool,
+    stderr: DiagnosticStderrSummary,
+}
+
+#[cfg(target_os = "macos")]
+impl DiagnosticObservation {
+    fn write_closed(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            formatter,
+            "exit_code={:?} signal={:?} output_matches={} stderr_category={} stderr_truncated={}",
+            self.status.as_ref().and_then(ExitStatus::code),
+            self.status.as_ref().and_then(ExitStatusExt::signal),
+            self.output_matches,
+            self.stderr.category.label(),
+            self.stderr.truncated
+        )
+    }
+}
+
+#[cfg(target_os = "macos")]
+struct DiagnosticFailure {
+    stage: DiagnosticStage,
+    baseline: DiagnosticObservation,
+    developer_dir: DiagnosticObservation,
+}
+
+#[cfg(target_os = "macos")]
+impl fmt::Display for DiagnosticFailure {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(formatter, "stage={} baseline=(", self.stage.label())?;
+        self.baseline.write_closed(formatter)?;
+        write!(formatter, ") developer_dir=(")?;
+        self.developer_dir.write_closed(formatter)?;
+        write!(formatter, ")")
+    }
+}
+
+#[cfg(target_os = "macos")]
+impl fmt::Debug for DiagnosticFailure {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        fmt::Display::fmt(self, formatter)
+    }
+}
+
+#[cfg(target_os = "macos")]
+impl Error for DiagnosticFailure {}
+
+#[cfg(target_os = "macos")]
+fn diagnostic_command(
+    stage: DiagnosticStage,
+    developer_dir: bool,
+) -> Result<(Command, TempDir), SpikeError> {
+    let python = resolved_fixture_interpreter()?;
+    let fixture = fixture_path();
+    if !fixture.is_absolute() || !fixture.is_file() {
+        return Err(SpikeError::new(SpikeErrorCode::ExecutableRejected));
+    }
+    let temp = TempDir::new().map_err(|_| SpikeError::new(SpikeErrorCode::IoFailure))?;
+    let mut command = Command::new(python);
+    configure_isolated_command(&mut command, &temp);
+    command.arg("-I").arg("-B").arg("-u").arg(fixture);
+    command.arg(match stage {
+        DiagnosticStage::Version => "--version",
+        DiagnosticStage::FirstReady => "success",
+    });
+    if developer_dir {
+        command.env("DEVELOPER_DIR", XCODE_DEVELOPER_DIR);
+    }
+    if matches!(stage, DiagnosticStage::FirstReady) {
+        command.stdin(Stdio::piped());
+    }
+    Ok((command, temp))
+}
+
+#[cfg(target_os = "macos")]
+fn stop_diagnostic_child(child: &mut Child) -> Result<(), SpikeError> {
+    match child.try_wait() {
+        Ok(Some(_)) => Ok(()),
+        Ok(None) => {
+            drop(child.kill());
+            child
+                .wait()
+                .map(|_| ())
+                .map_err(|_| SpikeError::new(SpikeErrorCode::ShutdownFailed))
+        }
+        Err(_) => Err(SpikeError::new(SpikeErrorCode::ShutdownFailed)),
+    }
+}
+
+#[cfg(target_os = "macos")]
+fn observe_version_startup(developer_dir: bool) -> Result<DiagnosticObservation, SpikeError> {
+    let (mut command, _temp) = diagnostic_command(DiagnosticStage::Version, developer_dir)?;
+    command.stdin(Stdio::null());
+    let mut child = command
+        .spawn()
+        .map_err(|_| SpikeError::new(SpikeErrorCode::SpawnFailed))?;
+    let stdout = child
+        .stdout
+        .take()
+        .ok_or_else(|| SpikeError::new(SpikeErrorCode::IoFailure))?;
+    let stderr = child
+        .stderr
+        .take()
+        .ok_or_else(|| SpikeError::new(SpikeErrorCode::IoFailure))?;
+    let stdout_reader = spawn_capture_reader(stdout, MAX_VERSION_BYTES);
+    let stderr_reader = spawn_diagnostic_stderr_reader(stderr);
+    let deadline = Instant::now() + TEST_DEADLINE;
+    let status = loop {
+        match child.try_wait() {
+            Ok(Some(status)) => break Some(status),
+            Ok(None) if Instant::now() < deadline => thread::sleep(Duration::from_millis(5)),
+            Ok(None) => break None,
+            Err(_) => break None,
+        }
+    };
+    stop_diagnostic_child(&mut child)?;
+    let stdout = stdout_reader
+        .join()
+        .map_err(|_| SpikeError::new(SpikeErrorCode::IoFailure))?;
+    let stderr = stderr_reader
+        .join()
+        .map_err(|_| SpikeError::new(SpikeErrorCode::IoFailure))?;
+    let output_matches = !stdout.truncated
+        && !stdout.read_failed
+        && std::str::from_utf8(&stdout.bytes).is_ok_and(|output| {
+            let mut lines = output.lines();
+            lines.next() == Some(EXPECTED_VERSION_LINE) && lines.count() <= 7
+        });
+    Ok(DiagnosticObservation {
+        status,
+        output_matches,
+        stderr,
+    })
+}
+
+#[cfg(target_os = "macos")]
+fn observe_first_ready_startup(developer_dir: bool) -> Result<DiagnosticObservation, SpikeError> {
+    let (mut command, _temp) = diagnostic_command(DiagnosticStage::FirstReady, developer_dir)?;
+    let mut child = command
+        .spawn()
+        .map_err(|_| SpikeError::new(SpikeErrorCode::SpawnFailed))?;
+    let stdout = child
+        .stdout
+        .take()
+        .ok_or_else(|| SpikeError::new(SpikeErrorCode::IoFailure))?;
+    let stderr = child
+        .stderr
+        .take()
+        .ok_or_else(|| SpikeError::new(SpikeErrorCode::IoFailure))?;
+    let (stdout_receiver, stdout_reader) = spawn_stdout_reader(stdout);
+    let stderr_reader = spawn_diagnostic_stderr_reader(stderr);
+    let output_matches = match stdout_receiver.recv_timeout(TEST_DEADLINE) {
+        Ok(StdoutItem::Frame(bytes)) => {
+            serde_json::from_slice::<Value>(&bytes).is_ok_and(|value| {
+                value.get("jsonrpc").and_then(Value::as_str) == Some("2.0")
+                    && value.get("method").and_then(Value::as_str) == Some("event")
+                    && value.pointer("/params/type").and_then(Value::as_str)
+                        == Some("gateway.ready")
+            })
+        }
+        _ => false,
+    };
+    let status = child
+        .try_wait()
+        .map_err(|_| SpikeError::new(SpikeErrorCode::IoFailure))?;
+    stop_diagnostic_child(&mut child)?;
+    stdout_reader
+        .join()
+        .map_err(|_| SpikeError::new(SpikeErrorCode::IoFailure))?;
+    let stderr = stderr_reader
+        .join()
+        .map_err(|_| SpikeError::new(SpikeErrorCode::IoFailure))?;
+    Ok(DiagnosticObservation {
+        status,
+        output_matches,
+        stderr,
+    })
 }
 
 fn probe_version(path: &Path, args: &[OsString]) -> Result<(), SpikeError> {
@@ -792,6 +1101,90 @@ fn validates_explicit_executable_and_pinned_version() -> Result<(), Box<dyn Erro
         SpikeErrorCode::ExecutableRejected
     );
     Ok(())
+}
+
+#[cfg(target_os = "macos")]
+#[test]
+fn compares_isolated_version_startup_with_xcode_child_only() -> Result<(), Box<dyn Error>> {
+    let baseline = observe_version_startup(false)?;
+    let developer_dir = observe_version_startup(true)?;
+    let baseline_passed =
+        baseline.status.as_ref().is_some_and(ExitStatus::success) && baseline.output_matches;
+    let comparison = DiagnosticFailure {
+        stage: DiagnosticStage::Version,
+        baseline,
+        developer_dir,
+    };
+    eprintln!("{comparison}");
+    if baseline_passed {
+        Ok(())
+    } else {
+        Err(Box::new(comparison))
+    }
+}
+
+#[cfg(target_os = "macos")]
+#[test]
+fn compares_isolated_first_ready_with_xcode_child_only() -> Result<(), Box<dyn Error>> {
+    let baseline = observe_first_ready_startup(false)?;
+    let developer_dir = observe_first_ready_startup(true)?;
+    let baseline_passed = baseline.output_matches;
+    let comparison = DiagnosticFailure {
+        stage: DiagnosticStage::FirstReady,
+        baseline,
+        developer_dir,
+    };
+    eprintln!("{comparison}");
+    if baseline_passed {
+        Ok(())
+    } else {
+        Err(Box::new(comparison))
+    }
+}
+
+#[test]
+fn diagnostic_stderr_scanner_finds_closed_signature_after_cap_and_across_chunks() {
+    let mut scanner = DiagnosticStderrScanner::default();
+    scanner.observe(&vec![b'x'; MAX_STDERR_BYTES + 1]);
+    scanner.observe(b"xc");
+    scanner.observe(b"run private-sentinel");
+    assert_eq!(
+        scanner.summary(),
+        DiagnosticStderrSummary {
+            category: DiagnosticStderrCategory::DeveloperTool,
+            truncated: true,
+        }
+    );
+    assert!(scanner.suffix.len() <= 32);
+}
+
+#[cfg(target_os = "macos")]
+#[test]
+fn diagnostic_failure_format_is_closed_and_redacted() {
+    let mut scanner = DiagnosticStderrScanner::default();
+    scanner.observe(b"/private/sensitive-path secret-token private-sentinel");
+    let summary = scanner.summary();
+    let observation = DiagnosticObservation {
+        status: None,
+        output_matches: false,
+        stderr: summary,
+    };
+    let failure = DiagnosticFailure {
+        stage: DiagnosticStage::FirstReady,
+        baseline: observation,
+        developer_dir: DiagnosticObservation {
+            status: None,
+            output_matches: true,
+            stderr: summary,
+        },
+    };
+    let line = format!("{failure:?}");
+    assert!(line.contains("stage=first_ready baseline=(exit_code=None signal=None"));
+    assert!(line.contains("stderr_category=other_nonempty stderr_truncated=false"));
+    for secret in ["sensitive-path", "secret-token", "private-sentinel"] {
+        assert!(!line.contains(secret));
+    }
+    assert!(line.len() < 300);
 }
 
 #[test]
