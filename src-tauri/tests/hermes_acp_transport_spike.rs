@@ -450,6 +450,114 @@ fn run_probe(arg: &OsStr, expected: &str) -> Result<(), SpikeError> {
     Ok(())
 }
 
+// This diagnostic leaves run_probe and the fixture assertions unchanged. The
+// second child differs only by the already verified Xcode developer directory.
+fn compare_version_child(with_developer_dir: bool) -> Result<String, SpikeError> {
+    let python = resolved_python()?;
+    let fixture = fixture_path();
+    if !fixture.is_absolute() || !fixture.is_file() {
+        return Err(SpikeError::new(SpikeErrorCode::ExecutableRejected));
+    }
+    let temp = TempDir::new().map_err(|_| SpikeError::new(SpikeErrorCode::IoFailure))?;
+    let mut command = Command::new(python);
+    configure_isolated(&mut command, &temp);
+    if with_developer_dir {
+        command.env(
+            "DEVELOPER_DIR",
+            "/Applications/Xcode.app/Contents/Developer",
+        );
+    }
+    command
+        .arg("-I")
+        .arg("-B")
+        .arg("-u")
+        .arg(fixture)
+        .arg("--version")
+        .stdin(Stdio::null());
+    let mut child = command
+        .spawn()
+        .map_err(|_| SpikeError::new(SpikeErrorCode::SpawnFailed))?;
+    let stdout = child
+        .stdout
+        .take()
+        .ok_or_else(|| SpikeError::new(SpikeErrorCode::IoFailure))?;
+    let stderr = child
+        .stderr
+        .take()
+        .ok_or_else(|| SpikeError::new(SpikeErrorCode::IoFailure))?;
+    let (stdout_receiver, stdout_thread) = spawn_stdout_reader(stdout);
+    let (stderr_receiver, stderr_thread) = spawn_stderr_reader(stderr);
+
+    let deadline = Instant::now() + Duration::from_secs(10);
+    let status = loop {
+        match child.try_wait() {
+            Ok(Some(status)) => break status,
+            Ok(None) if Instant::now() < deadline => thread::sleep(Duration::from_millis(5)),
+            Ok(None) | Err(_) => {
+                let terminated = child.kill().is_ok() || matches!(child.try_wait(), Ok(Some(_)));
+                if !terminated || child.wait().is_err() {
+                    return Err(SpikeError::new(SpikeErrorCode::ShutdownFailed));
+                }
+                stdout_thread
+                    .join()
+                    .map_err(|_| SpikeError::new(SpikeErrorCode::IoFailure))?;
+                stderr_thread
+                    .join()
+                    .map_err(|_| SpikeError::new(SpikeErrorCode::IoFailure))?;
+                return Err(SpikeError::new(SpikeErrorCode::Timeout));
+            }
+        }
+    };
+    stdout_thread
+        .join()
+        .map_err(|_| SpikeError::new(SpikeErrorCode::IoFailure))?;
+    stderr_thread
+        .join()
+        .map_err(|_| SpikeError::new(SpikeErrorCode::IoFailure))?;
+    let mut frame = None;
+    let mut stdout_valid = true;
+    for item in stdout_receiver.try_iter() {
+        match item {
+            StdoutItem::Frame(bytes) if frame.is_none() => frame = Some(bytes),
+            StdoutItem::Eof => {}
+            StdoutItem::Frame(_)
+            | StdoutItem::FrameTooLarge
+            | StdoutItem::Unterminated
+            | StdoutItem::ReadFailure => stdout_valid = false,
+        }
+    }
+    let stderr = stderr_receiver
+        .try_recv()
+        .map_err(|_| SpikeError::new(SpikeErrorCode::IoFailure))?;
+    let output_matches = stdout_valid
+        && frame
+            .as_deref()
+            .and_then(|bytes| std::str::from_utf8(bytes).ok())
+            .map(str::trim)
+            == Some(EXPECTED_VERSION);
+    let label = if with_developer_dir {
+        "developer_dir"
+    } else {
+        "baseline"
+    };
+    Ok(format!(
+        "hermes_acp_fixture_startup_comparison {label}: exit_code={:?} signal={:?} output_matches={output_matches} stderr_category={} stderr_truncated={}",
+        status.code(),
+        status.signal(),
+        stderr.category.as_str(),
+        stderr.truncated
+    ))
+}
+
+#[test]
+fn compares_isolated_version_startup_with_xcode_child_only() -> Result<(), SpikeError> {
+    let baseline = compare_version_child(false)?;
+    eprintln!("{baseline}");
+    let developer_dir = compare_version_child(true)?;
+    eprintln!("{developer_dir}");
+    Ok(())
+}
+
 struct TestChild {
     child: Child,
     stdin: Option<ChildStdin>,
