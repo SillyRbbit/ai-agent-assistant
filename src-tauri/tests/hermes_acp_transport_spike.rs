@@ -22,12 +22,18 @@ use serde_json::{json, Value};
 use tempfile::TempDir;
 
 const PYTHON: &str = "/usr/bin/python3";
+#[cfg(target_os = "macos")]
+const XCODE_DEVELOPER_DIR: &str = "/Applications/Xcode.app/Contents/Developer";
 const SESSION_ID: &str = "acp-session-fixture-1";
 const EXPECTED_VERSION: &str = "0.20.0";
 const MAX_FRAME_BYTES: usize = 4_096;
 const MAX_FRAME_COUNT: usize = 24;
 const MAX_STDERR_BYTES: usize = 512;
 const TEST_DEADLINE: Duration = Duration::from_secs(2);
+#[cfg(target_os = "macos")]
+const STARTUP_DEADLINE: Duration = Duration::from_secs(10);
+#[cfg(not(target_os = "macos"))]
+const STARTUP_DEADLINE: Duration = TEST_DEADLINE;
 const TIMEOUT_DEADLINE: Duration = Duration::from_millis(120);
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -51,11 +57,60 @@ enum SpikeErrorCode {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 struct SpikeError {
     code: SpikeErrorCode,
+    timeout_site: Option<TimeoutSite>,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum TimeoutSite {
+    Probe(&'static str),
+    Read {
+        scenario: &'static str,
+        received_frames: usize,
+    },
+}
+
+fn probe_label(arg: &OsStr) -> &'static str {
+    match arg.to_str() {
+        Some("--version") => "version",
+        Some("--check") => "check",
+        Some("--hang-probe") => "expected_hang",
+        Some("--flood-probe") => "flood",
+        _ => "unknown_probe",
+    }
+}
+
+fn scenario_label(scenario: &str) -> &'static str {
+    match scenario {
+        "noisy_stderr" => "noisy_stderr",
+        "hang_before_initialize" => "hang_before_initialize",
+        "hang_after_update" => "hang_after_update",
+        "malformed" => "malformed",
+        "oversized" => "oversized",
+        "early_exit" => "early_exit",
+        "midstream_exit" => "midstream_exit",
+        "unknown_method" => "unknown_method",
+        "tool_update" => "tool_update",
+        "permission_request" => "permission_request",
+        "wrong_session" => "wrong_session",
+        "wrong_id" => "wrong_id",
+        "cancel" => "cancel",
+        _ => "unknown_scenario",
+    }
 }
 
 impl SpikeError {
     const fn new(code: SpikeErrorCode) -> Self {
-        Self { code }
+        Self {
+            code,
+            timeout_site: None,
+        }
+    }
+
+    const fn timeout(site: TimeoutSite) -> Self {
+        Self {
+            code: SpikeErrorCode::Timeout,
+            timeout_site: Some(site),
+        }
     }
 
     const fn code(self) -> SpikeErrorCode {
@@ -81,7 +136,15 @@ impl fmt::Display for SpikeError {
             SpikeErrorCode::LateOutput => "late_output",
             SpikeErrorCode::ShutdownFailed => "shutdown_failed",
         };
-        write!(formatter, "hermes_acp_transport_spike:{code}")
+        write!(formatter, "hermes_acp_transport_spike:{code}")?;
+        match self.timeout_site {
+            Some(TimeoutSite::Probe(label)) => write!(formatter, ":probe:{label}"),
+            Some(TimeoutSite::Read {
+                scenario,
+                received_frames,
+            }) => write!(formatter, ":read:{scenario}:{received_frames}"),
+            None => Ok(()),
+        }
     }
 }
 
@@ -219,6 +282,19 @@ fn configure_isolated(command: &mut Command, temp: &TempDir) {
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped());
+    #[cfg(target_os = "macos")]
+    command.env("DEVELOPER_DIR", XCODE_DEVELOPER_DIR);
+}
+
+fn probe_deadline(arg: &OsStr) -> Duration {
+    if matches!(
+        arg.to_str(),
+        Some("--version" | "--check" | "--flood-probe")
+    ) {
+        STARTUP_DEADLINE
+    } else {
+        TEST_DEADLINE
+    }
 }
 
 fn run_probe(arg: &OsStr, expected: &str) -> Result<(), SpikeError> {
@@ -246,7 +322,7 @@ fn run_probe(arg: &OsStr, expected: &str) -> Result<(), SpikeError> {
     let (stdout_receiver, stdout_thread) = spawn_stdout_reader(stdout);
     let (stderr_receiver, stderr_thread) = spawn_stderr_reader(stderr);
 
-    let deadline = Instant::now() + TEST_DEADLINE;
+    let deadline = Instant::now() + probe_deadline(arg);
     let status = loop {
         match child.try_wait() {
             Ok(Some(status)) => break status,
@@ -262,7 +338,7 @@ fn run_probe(arg: &OsStr, expected: &str) -> Result<(), SpikeError> {
                 stderr_thread
                     .join()
                     .map_err(|_| SpikeError::new(SpikeErrorCode::IoFailure))?;
-                return Err(SpikeError::new(SpikeErrorCode::Timeout));
+                return Err(SpikeError::timeout(TimeoutSite::Probe(probe_label(arg))));
             }
         }
     };
@@ -315,6 +391,7 @@ struct TestChild {
     stderr_summary: Option<StderrSummary>,
     temp: TempDir,
     frames: usize,
+    scenario_label: &'static str,
     reaped: bool,
 }
 
@@ -361,6 +438,7 @@ impl TestChild {
             stderr_summary: None,
             temp,
             frames: 0,
+            scenario_label: scenario_label(scenario),
             reaped: false,
         })
     }
@@ -413,7 +491,14 @@ impl TestChild {
             Ok(StdoutItem::Eof) | Err(mpsc::RecvTimeoutError::Disconnected) => {
                 self.fail(SpikeErrorCode::UnexpectedExit)
             }
-            Err(mpsc::RecvTimeoutError::Timeout) => self.fail(SpikeErrorCode::Timeout),
+            Err(mpsc::RecvTimeoutError::Timeout) => {
+                let site = TimeoutSite::Read {
+                    scenario: self.scenario_label,
+                    received_frames: self.frames,
+                };
+                let _cleanup_failed = self.force_reap().is_err();
+                Err(SpikeError::timeout(site))
+            }
         }
     }
 
@@ -575,7 +660,7 @@ fn initialize(child: &mut TestChild) -> Result<Value, SpikeError> {
             "clientInfo": {"name":"cortexa-fixture-host","version":"0.0.0"}
         }),
     )?;
-    let response = child.read_json(TEST_DEADLINE)?;
+    let response = child.read_json(STARTUP_DEADLINE)?;
     let result = expect_result(&response, 1)?;
     if result.get("protocolVersion").and_then(Value::as_u64) != Some(1)
         || result.pointer("/agentInfo/version").and_then(Value::as_str) != Some(EXPECTED_VERSION)
@@ -607,6 +692,46 @@ fn begin_prompt(child: &mut TestChild, prompt: &str) -> Result<(), SpikeError> {
             "prompt":[{"type":"text","text":prompt}]
         }),
     )
+}
+
+#[test]
+fn timeout_site_labels_are_closed_and_payload_free() {
+    let probe = SpikeError::timeout(TimeoutSite::Probe(probe_label(OsStr::new(
+        "private-probe-sentinel",
+    ))));
+    assert_eq!(
+        probe.to_string(),
+        "hermes_acp_transport_spike:timeout:probe:unknown_probe"
+    );
+    let read = SpikeError::timeout(TimeoutSite::Read {
+        scenario: scenario_label("private-scenario-sentinel"),
+        received_frames: 2,
+    });
+    assert_eq!(
+        read.to_string(),
+        "hermes_acp_transport_spike:timeout:read:unknown_scenario:2"
+    );
+    assert!(!format!("{probe:?} {read:?}").contains("private-"));
+    assert_eq!(probe_label(OsStr::new("--version")), "version");
+    assert_eq!(scenario_label("cancel"), "cancel");
+}
+
+#[test]
+fn startup_allowance_preserves_protocol_and_negative_case_deadlines() {
+    let expected_startup = if cfg!(target_os = "macos") {
+        Duration::from_secs(10)
+    } else {
+        Duration::from_secs(2)
+    };
+    assert_eq!(STARTUP_DEADLINE, expected_startup);
+    for arg in ["--version", "--check", "--flood-probe"] {
+        assert_eq!(probe_deadline(OsStr::new(arg)), expected_startup);
+    }
+    for arg in ["--hang-probe", "unknown-probe"] {
+        assert_eq!(probe_deadline(OsStr::new(arg)), Duration::from_secs(2));
+    }
+    assert_eq!(TEST_DEADLINE, Duration::from_secs(2));
+    assert_eq!(TIMEOUT_DEADLINE, Duration::from_millis(120));
 }
 
 #[test]
@@ -686,9 +811,15 @@ fn completes_initialize_session_text_and_eof_shutdown_in_isolation() -> Result<(
     for required in required {
         assert!(env_keys.iter().any(|key| key.as_str() == Some(required)));
     }
-    assert!(env_keys.iter().all(|key| key
-        .as_str()
-        .is_some_and(|key| required.contains(&key) || permitted_system_injected.contains(&key))));
+    #[cfg(target_os = "macos")]
+    assert!(env_keys
+        .iter()
+        .any(|key| key.as_str() == Some("DEVELOPER_DIR")));
+    assert!(env_keys
+        .iter()
+        .all(|key| key.as_str().is_some_and(|key| required.contains(&key)
+            || permitted_system_injected.contains(&key)
+            || (cfg!(target_os = "macos") && key == "DEVELOPER_DIR"))));
 
     begin_prompt(
         &mut child,
@@ -757,8 +888,13 @@ fn bounds_timeouts_malformed_output_and_process_exit() -> Result<(), Box<dyn Err
         } else {
             child.request(1, "initialize", json!({"protocolVersion":1}))?;
         }
+        let exit_deadline = if scenario == "early_exit" {
+            STARTUP_DEADLINE
+        } else {
+            TEST_DEADLINE
+        };
         let error = child
-            .read_json(TEST_DEADLINE)
+            .read_json(exit_deadline)
             .err()
             .ok_or("exit must fail closed")?;
         assert_eq!(error.code(), SpikeErrorCode::UnexpectedExit);

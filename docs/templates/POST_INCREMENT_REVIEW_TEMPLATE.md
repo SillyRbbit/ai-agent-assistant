@@ -3,7 +3,7 @@
 <!-- post-increment-gate-manifest
 {
   "commands_executed": [
-    "exact command"
+    "executed command"
   ],
   "files_changed": [
     "path/to/file"
@@ -22,7 +22,12 @@
   "schema_version": 1,
   "verification": [
     {
-      "command": "exact command",
+      "command": "executed command",
+      "required": true,
+      "status": "Failed"
+    },
+    {
+      "command": "skipped command",
       "required": true,
       "status": "Not run"
     }
@@ -45,6 +50,9 @@ State the approved goal, non-goals, trust-boundary impact, and whether the exact
 ## Verification results
 
 Run `python3 .codex/hooks/session_end_gate.py` before review. Record every required automated and manual check as exactly one of: `Passed`, `Failed`, `Not run`, or `Manual verification pending`. Do not infer success from an earlier run.
+List only commands actually run in `commands_executed`. An automated check marked
+`Not run` belongs in `verification` but must be absent from `commands_executed`;
+required `Not run` checks block completion.
 
 ## Architecture findings
 

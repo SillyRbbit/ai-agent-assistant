@@ -90,6 +90,7 @@ class PostIncrementGateTests(unittest.TestCase):
         quality_gate: str = "PASS",
         readiness: str = "Ready",
         findings: list[dict[str, object]] | None = None,
+        executed_commands: list[str] | None = None,
     ) -> str:
         (self.root / "change.txt").write_text("reviewed change\n", encoding="utf-8")
         relative_report = "docs/reviews/2026-07-14-04g-post-increment-review.md"
@@ -97,7 +98,9 @@ class PostIncrementGateTests(unittest.TestCase):
         report_path.write_text("placeholder\n", encoding="utf-8")
         files_changed = list(gate.changed_paths(self.root))
         manifest = {
-            "commands_executed": ["test command"],
+            "commands_executed": (
+                ["test command"] if executed_commands is None else executed_commands
+            ),
             "files_changed": files_changed,
             "findings": findings or [],
             "increment_id": "04g",
@@ -398,6 +401,56 @@ class PostIncrementGateTests(unittest.TestCase):
         with self.assertRaises(gate.GateError):
             gate.finalize_gate(self.root, "04g", report)
         self.assertEqual(gate.read_state(self.root)["status"], "active")
+
+    def test_not_run_required_verification_closes_only_as_terminal_failure(self) -> None:
+        report = self._write_report(
+            verification_status="Not run",
+            quality_gate="FAIL",
+            readiness="Blocked",
+            executed_commands=["preparation command"],
+        )
+
+        with self.assertRaisesRegex(
+            gate.GateError, "post-increment report contains blocking evidence"
+        ):
+            gate.finalize_gate(self.root, "04g", report)
+        self.assertEqual(gate.read_state(self.root)["status"], "active")
+
+        gate.close_failed_gate(self.root, "04g", report)
+        state = gate.read_state(self.root)
+        self.assertEqual(state["status"], "failed")
+        self.assertEqual(state["quality_gate"], "FAIL")
+        self.assertTrue(gate.validate_failed_state(self.root, state))
+        self.assertNotIn("completion_marker", state)
+
+    def test_not_run_verification_rejects_false_execution_claim(self) -> None:
+        report = self._write_report(
+            verification_status="Not run", quality_gate="FAIL", readiness="Blocked"
+        )
+
+        with self.assertRaisesRegex(
+            gate.GateError, "not-run verification command is listed as executed"
+        ):
+            gate.close_failed_gate(self.root, "04g", report)
+        self.assertEqual(gate.read_state(self.root)["status"], "active")
+
+    def test_executed_verification_requires_execution_record(self) -> None:
+        for status, quality, readiness in (
+            ("Passed", "PASS", "Ready"),
+            ("Failed", "FAIL", "Blocked"),
+        ):
+            with self.subTest(status=status):
+                report = self._write_report(
+                    verification_status=status,
+                    quality_gate=quality,
+                    readiness=readiness,
+                    executed_commands=["different command"],
+                )
+                with self.assertRaisesRegex(
+                    gate.GateError, "verification command is missing from commands executed"
+                ):
+                    gate.close_failed_gate(self.root, "04g", report)
+                self.assertEqual(gate.read_state(self.root)["status"], "active")
 
     def test_pending_required_manual_check_prevents_completion(self) -> None:
         report = self._write_report(

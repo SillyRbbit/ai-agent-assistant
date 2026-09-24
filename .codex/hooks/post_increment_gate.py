@@ -737,7 +737,11 @@ def _validate_report_evidence(
         _fail("report file inventory does not match the complete Git change set")
 
     for entry in verification:
-        if entry["command"] not in commands_executed:
+        executed = entry["command"] in commands_executed
+        if entry["status"] == "Not run":
+            if executed:
+                _fail("not-run verification command is listed as executed")
+        elif not executed:
             _fail("verification command is missing from commands executed")
 
     blocking_verification = any(
