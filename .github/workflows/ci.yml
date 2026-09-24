@@ -210,6 +210,9 @@ jobs:
       - name: Lint target-Mac Rust with warnings denied
         run: cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features --locked -- -D warnings
 
+      - name: Show closed ACP fixture startup comparison
+        run: cargo test --manifest-path src-tauri/Cargo.toml --test hermes_acp_transport_spike --locked compares_isolated_version_startup_with_xcode_child_only -- --exact --show-output
+
       - name: Test all target-Mac Rust targets
         run: cargo test --manifest-path src-tauri/Cargo.toml --all-targets --locked
 
