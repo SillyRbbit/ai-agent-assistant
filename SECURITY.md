@@ -1,5 +1,31 @@
 # Security policy and development guardrails
 
+## 2026-09-22 — Anthropic and local agent connections
+
+The owner-approved `anthropic-local-agent-connections` increment adds one native
+Anthropic Messages adapter and one shared LM Studio/Ollama chat-completions
+adapter in the existing Agents page. See the [plan](docs/plans/2026-09-22-anthropic-local-agent-connections.md).
+Offline implementation and full verification passed, including 431 frontend
+tests, 368 Rust library tests, integration tests and the native release build.
+The quality/readiness review is PASS WITH ADVISORIES / Ready with advisories;
+see the [review](docs/reviews/2026-09-22-anthropic-local-agent-connections-post-increment-review.md). No provider/runtime request, model download, or live generation was
+performed. Discovery and live operation remain unverified until owner setup.
+This amendment grants no live request allowance and reuses no historical allowance.
+
+Keep D-127 audit debt, D-128 native-session custody/remote-abort limits, historical
+OpenAI failures and the native live-success advisory. Codex remains visibly
+live-disabled until supported isolation is proved. D-125/M1/M2 remain parked.
+No commit, push, publication, provider fallback or runtime management is authorized.
+
+The new boundaries are governed by D-131. Only explicit model refresh or
+acknowledged Send accesses native provider credentials. Credentials and raw
+provider errors never enter IPC, profiles, notes or logs. New errors are closed
+static categories. Metadata, response bytes, events, context, duration and
+concurrent discovery are bounded. Endpoint identity and supported effort are
+revalidated natively; cloud-model metadata cannot be overridden by the WebView.
+Anthropic notes leave the device. Local endpoint locality remains unknown;
+explicit note-transmission consent is not a promise of offline execution.
+
 ## Configurable agent demo — D-129, 2026-09-22
 
 The owner authorizes bounded text advice and per-agent owner-managed notes,

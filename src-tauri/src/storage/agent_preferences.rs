@@ -6,7 +6,7 @@ use rusqlite::{params, Connection, OptionalExtension, Transaction, TransactionBe
 
 use crate::{
     agent::definition::AgentId,
-    agent_preferences::{AgentPreferencesInput, AgentProfile, PreferencesError},
+    agent_preferences::{AgentConnection, AgentPreferencesInput, AgentProfile, PreferencesError},
 };
 
 pub(super) fn get(
@@ -16,8 +16,12 @@ pub(super) fn get(
     let id = AgentId::from_str(agent_id).map_err(|_| PreferencesError::InvalidRequest)?;
     let row = connection
         .query_row(
-            "SELECT connection, model, effort, owner_instructions, memory_mode, note, revision
-             FROM agent_preferences WHERE agent_id = ?1",
+            "SELECT COALESCE(c.connection, p.connection), COALESCE(c.model, p.model),
+                    COALESCE(c.effort, p.effort), p.owner_instructions, p.memory_mode, p.note,
+                    p.revision, COALESCE(c.endpoint, ''), COALESCE(c.local_auth, 0),
+                    COALESCE(c.allow_unknown_locality_notes, 0)
+             FROM agent_preferences p LEFT JOIN agent_connection_settings c USING(agent_id)
+             WHERE p.agent_id = ?1",
             [id.as_str()],
             |row| {
                 Ok((
@@ -28,12 +32,26 @@ pub(super) fn get(
                     row.get::<_, String>(4)?,
                     row.get::<_, String>(5)?,
                     row.get::<_, u64>(6)?,
+                    row.get::<_, String>(7)?,
+                    row.get::<_, bool>(8)?,
+                    row.get::<_, bool>(9)?,
                 ))
             },
         )
         .optional()
         .map_err(|_| PreferencesError::Storage)?;
-    let Some((connection, model, effort, owner_instructions, memory_mode, note, revision)) = row
+    let Some((
+        connection,
+        model,
+        effort,
+        owner_instructions,
+        memory_mode,
+        note,
+        revision,
+        endpoint,
+        local_auth,
+        allow_unknown_locality_notes,
+    )) = row
     else {
         return AgentProfile::defaults(id);
     };
@@ -41,6 +59,9 @@ pub(super) fn get(
         agent_id: id.as_str().to_owned(),
         connection: parse_stored_enum(&connection)?,
         model,
+        endpoint,
+        local_auth,
+        allow_unknown_locality_notes,
         effort: parse_stored_enum(&effort)?,
         owner_instructions,
         memory_mode: parse_stored_enum(&memory_mode)?,
@@ -110,6 +131,12 @@ fn update(
     let mut profile = change(current)?;
     profile.revision = expected_revision + 1;
     profile.validate()?;
+    // Keep the original table's closed legacy schema unchanged. New connections
+    // have an inert simulation placeholder; only the sidecar stores selection.
+    let legacy = matches!(
+        profile.connection,
+        AgentConnection::Simulation | AgentConnection::OpenaiApi | AgentConnection::Codex
+    );
     let affected = transaction
         .execute(
             "INSERT INTO agent_preferences
@@ -122,9 +149,21 @@ fn update(
              WHERE agent_preferences.revision = ?9",
             params![
                 profile.agent_id,
-                profile.connection.as_str(),
-                profile.model,
-                profile.effort.as_str(),
+                if legacy {
+                    profile.connection.as_str()
+                } else {
+                    "simulation"
+                },
+                if legacy {
+                    profile.model.as_str()
+                } else {
+                    "simulation"
+                },
+                if legacy {
+                    profile.effort.as_str()
+                } else {
+                    "default"
+                },
                 profile.owner_instructions,
                 profile.memory_mode.as_str(),
                 profile.note,
@@ -136,6 +175,26 @@ fn update(
     if affected != 1 {
         return Err(PreferencesError::StaleContext);
     }
+    transaction
+        .execute(
+            "INSERT INTO agent_connection_settings
+         (agent_id, connection, model, effort, endpoint, local_auth, allow_unknown_locality_notes)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
+         ON CONFLICT(agent_id) DO UPDATE SET
+         connection = excluded.connection, model = excluded.model, effort = excluded.effort,
+         endpoint = excluded.endpoint, local_auth = excluded.local_auth,
+         allow_unknown_locality_notes = excluded.allow_unknown_locality_notes",
+            params![
+                profile.agent_id,
+                profile.connection.as_str(),
+                profile.model,
+                profile.effort.as_str(),
+                profile.endpoint,
+                profile.local_auth,
+                profile.allow_unknown_locality_notes
+            ],
+        )
+        .map_err(|_| PreferencesError::Storage)?;
     transaction
         .commit()
         .map_err(|_| PreferencesError::Storage)?;
@@ -162,6 +221,9 @@ mod tests {
             agent_id: profile.agent_id,
             connection: profile.connection,
             model: profile.model,
+            endpoint: profile.endpoint,
+            local_auth: profile.local_auth,
+            allow_unknown_locality_notes: profile.allow_unknown_locality_notes,
             effort: profile.effort,
             owner_instructions: profile.owner_instructions,
             memory_mode: profile.memory_mode,
@@ -282,6 +344,11 @@ mod tests {
         }
         let original = storage.agent_profile("research")?;
         for (connection, model, effort) in [
+            (
+                AgentConnection::OpenaiApi,
+                OPENAI_AGENT_MODEL,
+                ReasoningEffort::Max,
+            ),
             (
                 AgentConnection::OpenaiApi,
                 "unsupported",
@@ -412,7 +479,7 @@ mod tests {
         assert_eq!(format!("{saved:?}"), "AgentProfile { content: [redacted] }");
         let connection = Connection::open(&path)?;
         connection.execute(
-            "UPDATE agent_preferences SET model = ?1 WHERE agent_id = 'research'",
+            "UPDATE agent_connection_settings SET model = ?1 WHERE agent_id = 'research'",
             ["Synthetic invalid content"],
         )?;
         assert_eq!(
@@ -434,6 +501,7 @@ mod tests {
     fn ipc_input_rejects_unknown_credential_or_authority_fields() {
         let valid = serde_json::json!({
             "agentId":"research", "connection":"simulation", "model":"simulation",
+            "endpoint":"", "localAuth":false, "allowUnknownLocalityNotes":false,
             "effort":"default", "ownerInstructions":"", "memoryMode":"off", "note":"", "revision":0,
         });
         assert!(serde_json::from_value::<AgentPreferencesInput>(valid.clone()).is_ok());
@@ -448,5 +516,129 @@ mod tests {
             invalid[unknown] = serde_json::Value::Bool(true);
             assert!(serde_json::from_value::<AgentPreferencesInput>(invalid).is_err());
         }
+    }
+
+    #[test]
+    fn new_connection_settings_preserve_notes_and_reset_defaults_without_other_agent_changes(
+    ) -> Result<(), Box<dyn Error>> {
+        let directory = tempdir()?;
+        let config = DatabaseConfig::file(directory.path().join("profiles.sqlite"))?;
+        let initialized = Storage::initialize(&config)?;
+        let storage = initialized.storage();
+        let mut first = input(storage.agent_profile("research")?);
+        first.note = "retained synthetic note".into();
+        first.owner_instructions = "retained owner preference".into();
+        first.memory_mode = MemoryMode::PrivateNotes;
+        let mut saved = storage.save_agent_preferences(first)?;
+        let untouched = storage.agent_profile("coding")?;
+        for (connection, model, endpoint, local_auth) in [
+            (AgentConnection::AnthropicApi, "claude-fable-5-1", "", false),
+            (
+                AgentConnection::LmStudio,
+                "owner/exact-model:Q4_K_M",
+                "http://127.0.0.1:1234/v1",
+                true,
+            ),
+            (
+                AgentConnection::Ollama,
+                "qwen3:8b",
+                "http://127.0.0.1:11434/v1",
+                false,
+            ),
+        ] {
+            let mut next = input(saved);
+            next.connection = connection;
+            next.model = model.into();
+            next.endpoint = endpoint.into();
+            next.local_auth = local_auth;
+            next.allow_unknown_locality_notes = connection != AgentConnection::AnthropicApi;
+            saved = storage.save_agent_preferences(next)?;
+            assert_eq!(saved.connection, connection);
+            assert_eq!(saved.model, model);
+            assert_eq!(saved.local_auth, local_auth);
+            assert_eq!(saved.note, "retained synthetic note");
+            assert_eq!(saved.owner_instructions, "retained owner preference");
+            assert_eq!(storage.agent_profile("coding")?, untouched);
+        }
+        let expected = saved.clone();
+        drop(initialized);
+        let restarted = Storage::initialize(&config)?;
+        assert_eq!(restarted.storage().agent_profile("research")?, expected);
+        let defaults = restarted
+            .storage()
+            .restore_agent_defaults("research", saved.revision)?;
+        assert_eq!(defaults.connection, AgentConnection::Simulation);
+        assert_eq!(defaults.note, "retained synthetic note");
+        assert!(defaults.endpoint.is_empty());
+        assert!(!defaults.local_auth);
+        assert!(!defaults.allow_unknown_locality_notes);
+        Ok(())
+    }
+
+    #[test]
+    fn sidecar_write_failure_rolls_back_note_and_revision_update() -> Result<(), Box<dyn Error>> {
+        let directory = tempdir()?;
+        let path = directory.path().join("profiles.sqlite");
+        let initialized = Storage::initialize(&DatabaseConfig::file(&path)?)?;
+        let storage = initialized.storage();
+        let saved = storage.save_agent_preferences(input(storage.agent_profile("research")?))?;
+        let connection = Connection::open(&path)?;
+        connection.execute_batch(
+            "CREATE TRIGGER reject_test_sidecar BEFORE UPDATE ON agent_connection_settings
+             BEGIN SELECT RAISE(ABORT, 'synthetic test rejection'); END;",
+        )?;
+        let mut edit = input(saved.clone());
+        edit.note = "must not be committed".into();
+        assert_eq!(
+            storage.save_agent_preferences(edit),
+            Err(PreferencesError::Storage)
+        );
+        assert_eq!(storage.agent_profile("research")?, saved);
+        Ok(())
+    }
+
+    #[test]
+    fn new_profiles_reject_foreign_endpoint_auth_and_unsupported_effort(
+    ) -> Result<(), Box<dyn Error>> {
+        let initialized = Storage::initialize(&DatabaseConfig::in_memory())?;
+        let storage = initialized.storage();
+        let original = storage.agent_profile("research")?;
+        for (endpoint, local_auth, allow_notes) in [
+            ("http://127.0.0.1:1234/v1", false, false),
+            ("", true, false),
+            ("", false, true),
+        ] {
+            let mut bad = input(original.clone());
+            bad.endpoint = endpoint.into();
+            bad.local_auth = local_auth;
+            bad.allow_unknown_locality_notes = allow_notes;
+            assert_eq!(
+                storage.save_agent_preferences(bad),
+                Err(PreferencesError::InvalidRequest)
+            );
+        }
+        for model in ["bad\nmodel".to_owned(), "x".repeat(257)] {
+            let mut bad = input(original.clone());
+            bad.connection = AgentConnection::LmStudio;
+            bad.endpoint = "http://127.0.0.1:1234/v1".into();
+            bad.model = model;
+            assert_eq!(
+                storage.save_agent_preferences(bad),
+                Err(PreferencesError::UnsupportedSettings)
+            );
+        }
+        let mut local = input(original);
+        local.connection = AgentConnection::Ollama;
+        local.endpoint = "http://127.0.0.1:11434/v1".into();
+        local.model.clear();
+        let saved = storage.save_agent_preferences(local)?;
+        assert!(saved.model.is_empty());
+        let mut unsupported = input(saved);
+        unsupported.effort = ReasoningEffort::High;
+        assert_eq!(
+            storage.save_agent_preferences(unsupported),
+            Err(PreferencesError::UnsupportedSettings)
+        );
+        Ok(())
     }
 }

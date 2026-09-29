@@ -17,6 +17,10 @@ use crate::personal_assistant_v0::{
     PersonalAssistantV0Snapshot,
 };
 use crate::storage::Storage;
+use crate::{
+    agent_models::{validate_selection, ModelInfo},
+    anthropic, local_models,
+};
 
 #[derive(Default)]
 pub(crate) struct AgentChatState(Arc<Mutex<Session>>);
@@ -24,6 +28,7 @@ pub(crate) struct AgentChatState(Arc<Mutex<Session>>);
 #[derive(Default)]
 struct Session {
     conversation: Option<BoundConversation>,
+    catalogs: Vec<CatalogEntry>,
     next_id: u64,
     host: PersonalAssistantV0Host,
     handle: Option<PersonalAssistantV0PresentationHandle>,
@@ -37,6 +42,34 @@ impl Drop for Session {
         if let Some(task) = self.task.take() {
             task.abort();
         }
+    }
+}
+
+struct CatalogEntry {
+    connection: AgentConnection,
+    endpoint: String,
+    local_auth: bool,
+    models: Vec<ModelInfo>,
+}
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub(crate) struct CatalogRequest {
+    connection: AgentConnection,
+    endpoint: String,
+    local_auth: bool,
+}
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct CatalogSnapshot {
+    connection: AgentConnection,
+    endpoint: String,
+    models: Vec<ModelInfo>,
+}
+static DISCOVERY_OWNED: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+struct DiscoveryLease;
+impl Drop for DiscoveryLease {
+    fn drop(&mut self) {
+        DISCOVERY_OWNED.store(false, std::sync::atomic::Ordering::SeqCst);
     }
 }
 
@@ -72,6 +105,7 @@ pub(crate) struct ChatSnapshot {
     agent_id: String,
     connection: AgentConnection,
     model: String,
+    endpoint: String,
     effort: ReasoningEffort,
     memory_mode: MemoryMode,
     settings_revision: u64,
@@ -158,6 +192,7 @@ impl Session {
             agent_id: bound.profile.agent_id.clone(),
             connection: bound.profile.connection,
             model: bound.profile.model.clone(),
+            endpoint: bound.profile.endpoint.clone(),
             effort: bound.profile.effort,
             memory_mode: bound.profile.memory_mode,
             settings_revision: bound.profile.revision,
@@ -190,6 +225,15 @@ fn begin_conversation(
 
 enum AdapterRequest {
     Simulation,
+    Anthropic {
+        key: anthropic::AnthropicKey,
+        body: Vec<u8>,
+    },
+    Local {
+        endpoint: String,
+        key: Option<local_models::LocalKey>,
+        body: Vec<u8>,
+    },
     Openai {
         key: ApiKey,
         body: Vec<u8>,
@@ -211,6 +255,9 @@ fn start_owned(
     if session.owned() {
         return Err(ChatError::Busy);
     }
+    if session.handle.is_some() && !matches!(session.snapshot()?.status, "idle" | "completed") {
+        return Err(ChatError::InvalidRequest);
+    }
     let bound = session
         .conversation
         .as_ref()
@@ -225,6 +272,35 @@ fn start_owned(
                 return Err(ChatError::InvalidRequest);
             }
             AdapterRequest::Simulation
+        }
+        AgentConnection::AnthropicApi | AgentConnection::LmStudio | AgentConnection::Ollama => {
+            let profile = &bound.profile;
+            let expected = if profile.connection == AgentConnection::AnthropicApi {
+                "anthropic-agent-text-v1"
+            } else {
+                "local-agent-text-v1"
+            };
+            if request.acknowledgment != expected {
+                return Err(ChatError::InvalidRequest);
+            }
+            validate_catalog(&session.catalogs, profile)?;
+            let body = bound.provider_request_body(&request.message)?;
+            if profile.connection == AgentConnection::AnthropicApi {
+                AdapterRequest::Anthropic {
+                    key: anthropic::AnthropicKey::from_environment()?,
+                    body,
+                }
+            } else {
+                AdapterRequest::Local {
+                    endpoint: profile.endpoint.clone(),
+                    key: local_models::LocalKey::from_environment(
+                        profile.connection,
+                        &profile.endpoint,
+                        profile.local_auth,
+                    )?,
+                    body,
+                }
+            }
         }
         AgentConnection::OpenaiApi => {
             if request.acknowledgment != "openai-agent-text-v1" {
@@ -269,6 +345,12 @@ async fn run_adapter(
             let _guard = Dropped(dropped);
             std::future::pending().await
         }
+        AdapterRequest::Anthropic { key, body } => anthropic::run(key, body, emit).await,
+        AdapterRequest::Local {
+            endpoint,
+            key,
+            body,
+        } => local_models::run(&endpoint, key, body, emit).await,
         AdapterRequest::Openai { key, body } => provider::run_configured(key, body, emit).await,
         AdapterRequest::Simulation => {
             emit(ProviderEvent::Started("resp_cortexa_simulation".into()))?;
@@ -395,6 +477,103 @@ async fn stop_owned(state: &Arc<Mutex<Session>>, id: &str) -> Result<ChatSnapsho
     session.snapshot()
 }
 
+fn validate_catalog(catalogs: &[CatalogEntry], profile: &AgentProfile) -> Result<(), DirectError> {
+    let discovered = catalogs.iter().find(|entry| {
+        entry.connection == profile.connection
+            && entry.endpoint == profile.endpoint
+            && entry.local_auth == profile.local_auth
+    });
+    let seeds;
+    let models = if let Some(entry) = discovered {
+        &entry.models
+    } else if profile.connection == AgentConnection::AnthropicApi {
+        seeds = anthropic::documented_models();
+        &seeds
+    } else {
+        return Err(DirectError::Catalog);
+    };
+    let model = models
+        .iter()
+        .find(|model| model.id == profile.model)
+        .ok_or(DirectError::ModelUnavailable)?;
+    if model.locality == "cloud"
+        || (matches!(
+            profile.connection,
+            AgentConnection::LmStudio | AgentConnection::Ollama
+        ) && model.availability != "available")
+    {
+        return Err(DirectError::Unsupported);
+    }
+    validate_selection(model, profile.effort)
+}
+
+/// Explicit bounded refresh. No prompt, notes, secret, path or arbitrary method is accepted.
+#[tauri::command]
+pub(crate) async fn discover_agent_models(
+    request: CatalogRequest,
+    state: tauri::State<'_, AgentChatState>,
+) -> Result<CatalogSnapshot, ChatError> {
+    let endpoint = match request.connection {
+        AgentConnection::AnthropicApi if request.endpoint.is_empty() && !request.local_auth => {
+            String::new()
+        }
+        AgentConnection::LmStudio | AgentConnection::Ollama => {
+            local_models::normalize_endpoint(&request.endpoint)?
+        }
+        _ => return Err(ChatError::InvalidRequest),
+    };
+    if DISCOVERY_OWNED
+        .compare_exchange(
+            false,
+            true,
+            std::sync::atomic::Ordering::SeqCst,
+            std::sync::atomic::Ordering::SeqCst,
+        )
+        .is_err()
+    {
+        return Err(ChatError::Busy);
+    }
+    let _lease = DiscoveryLease;
+    // A failed refresh preserves profiles, not stale model authorization.
+    {
+        let mut session = state.0.lock().map_err(|_| ChatError::Internal)?;
+        session.catalogs.retain(|entry| {
+            !(entry.connection == request.connection
+                && entry.endpoint == endpoint
+                && entry.local_auth == request.local_auth)
+        });
+    }
+    let models = tokio::time::timeout(Duration::from_secs(30), async {
+        if request.connection == AgentConnection::AnthropicApi {
+            anthropic::discover().await
+        } else {
+            local_models::discover(request.connection, &endpoint, request.local_auth).await
+        }
+    })
+    .await
+    .map_err(|_| DirectError::Timeout)??;
+    let mut session = state.0.lock().map_err(|_| ChatError::Internal)?;
+    session.catalogs.retain(|entry| {
+        !(entry.connection == request.connection
+            && entry.endpoint == endpoint
+            && entry.local_auth == request.local_auth)
+    });
+    if session.catalogs.len() >= 8 {
+        session.catalogs.remove(0);
+    }
+    session.catalogs.push(CatalogEntry {
+        connection: request.connection,
+        endpoint: endpoint.clone(),
+        local_auth: request.local_auth,
+        models: models.clone(),
+    });
+    Ok(CatalogSnapshot {
+        connection: request.connection,
+        endpoint,
+        models,
+    })
+}
+
 #[tauri::command]
 pub(crate) fn list_agent_preferences(
     storage: tauri::State<'_, Storage>,
@@ -451,6 +630,9 @@ pub(crate) fn list_agent_connections() -> Vec<ConnectionReadiness> {
                 "Requires a debug build privately launched with CORTEXA_OPENAI_DEMO=1 and an owner session API key."
             },
         },
+        ConnectionReadiness { connection: AgentConnection::AnthropicApi, status: if cfg!(debug_assertions) { "owner_setup_required" } else { "blocked" }, message: "Owner setup: CORTEXA_ANTHROPIC_DEMO=1 and a native ANTHROPIC_API_KEY. Discovery and Send are explicit; account access is unverified." },
+        ConnectionReadiness { connection: AgentConnection::LmStudio, status: "owner_setup_required", message: "Connect an already-running loopback LM Studio server. Refresh models explicitly; no installation, loading or locality is assumed." },
+        ConnectionReadiness { connection: AgentConnection::Ollama, status: "owner_setup_required", message: "Connect an already-running loopback Ollama server. Cloud models are excluded. Disable cloud in the runtime; locality remains unverified." },
         ConnectionReadiness {
             connection: AgentConnection::Codex,
             status: "blocked",
@@ -653,6 +835,9 @@ mod tests {
             connection: AgentConnection::OpenaiApi,
             model: "gpt-5.6-luna".into(),
             effort: ReasoningEffort::Default,
+            endpoint: String::new(),
+            local_auth: false,
+            allow_unknown_locality_notes: false,
             owner_instructions: String::new(),
             memory_mode: MemoryMode::PrivateNotes,
             note: "private-fixture".into(),
@@ -682,6 +867,52 @@ mod tests {
             Err(ChatError::StaleContext)
         ));
         assert!(state.lock().map_err(|_| "lock")?.task.is_none());
+        Ok(())
+    }
+
+    #[test]
+    fn native_catalog_binds_destination_auth_model_and_rejects_cloud_or_unsupported_effort(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        use crate::agent::definition::AgentId;
+        let mut profile = AgentProfile::defaults(AgentId::Research)?;
+        profile.connection = AgentConnection::LmStudio;
+        profile.endpoint = "http://127.0.0.1:1234/v1".into();
+        profile.model = "fixture/model:q4".into();
+        let mut model = ModelInfo::unknown(profile.model.clone());
+        model.availability = "available".into();
+        let mut catalogs = vec![CatalogEntry {
+            connection: profile.connection,
+            endpoint: profile.endpoint.clone(),
+            local_auth: false,
+            models: vec![model],
+        }];
+        validate_catalog(&catalogs, &profile)?;
+        profile.endpoint = "http://127.0.0.1:1235/v1".into();
+        assert_eq!(
+            validate_catalog(&catalogs, &profile),
+            Err(DirectError::Catalog)
+        );
+        profile.endpoint = catalogs[0].endpoint.clone();
+        profile.local_auth = true;
+        assert_eq!(
+            validate_catalog(&catalogs, &profile),
+            Err(DirectError::Catalog)
+        );
+        profile.local_auth = false;
+        profile.effort = ReasoningEffort::High;
+        assert!(validate_catalog(&catalogs, &profile).is_err());
+        profile.effort = ReasoningEffort::Default;
+        catalogs[0].models[0].locality = "cloud".into();
+        assert_eq!(
+            validate_catalog(&catalogs, &profile),
+            Err(DirectError::Unsupported)
+        );
+        profile.connection = AgentConnection::AnthropicApi;
+        profile.endpoint.clear();
+        profile.model = "claude-haiku-4-5-20251001".into();
+        validate_catalog(&[], &profile)?;
+        profile.effort = ReasoningEffort::Max;
+        assert!(validate_catalog(&[], &profile).is_err());
         Ok(())
     }
 

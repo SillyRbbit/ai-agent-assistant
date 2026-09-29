@@ -2,6 +2,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { invoke, isTauri } from "@tauri-apps/api/core";
 import {
   AGENT_IDS,
+  ANTHROPIC_DOCUMENTED_MODELS,
+  parseModelCatalog,
   AGENT_ERROR_CODES,
   agentChatClient,
   agentChatErrorMessage,
@@ -18,6 +20,9 @@ const profile = {
   connection: "simulation",
   model: "simulation",
   effort: "default",
+  endpoint: "",
+  localAuth: false,
+  allowUnknownLocalityNotes: false,
   ownerInstructions: "",
   memoryMode: "off",
   note: "",
@@ -31,6 +36,9 @@ const connections = [
     status: "owner_setup_required",
     message: "Native session key checked on Send.",
   },
+  { connection: "anthropic_api", status: "owner_setup_required", message: "Native key setup." },
+  { connection: "lm_studio", status: "owner_setup_required", message: "Connect server." },
+  { connection: "ollama", status: "owner_setup_required", message: "Connect server." },
   { connection: "codex", status: "blocked", message: "Isolation unverified." },
 ];
 const idle = {
@@ -41,6 +49,7 @@ const idle = {
   model: "simulation",
   effort: "default",
   memoryMode: "off",
+  endpoint: "",
   settingsRevision: 0,
   status: "idle",
   text: "",
@@ -68,6 +77,9 @@ describe("agent chat native boundary", () => {
       connection: profile.connection,
       model: profile.model,
       effort: profile.effort,
+      endpoint: "",
+      localAuth: false,
+      allowUnknownLocalityNotes: false,
       ownerInstructions: "tone",
       memoryMode: profile.memoryMode,
       note: "local note",
@@ -151,7 +163,7 @@ describe("agent chat native boundary", () => {
     await expect(agentChatClient.poll("agent-chat-1")).rejects.toThrow("protocol");
   });
   it("fails closed on unsupported Codex readiness and malformed connection data", () => {
-    expect(parseAgentConnections(connections)).toHaveLength(3);
+    expect(parseAgentConnections(connections)).toHaveLength(6);
     for (const value of [
       [],
       [...connections.slice(0, 2), { connection: "codex", status: "ready", message: "DUMMY" }],
@@ -199,5 +211,66 @@ describe("agent chat native boundary", () => {
     }
     for (const failure of ["DUMMY secret", new Error("DUMMY secret"), { message: "DUMMY secret" }])
       expect(agentChatErrorMessage(failure)).toBe("The native session is unavailable.");
+  });
+});
+
+describe("provider catalog boundary", () => {
+  const model = ANTHROPIC_DOCUMENTED_MODELS[0];
+  it("retains exact discovered IDs and bounded capabilities but rejects malformed metadata", () => {
+    const catalog = {
+      connection: "anthropic_api",
+      endpoint: "",
+      models: [
+        {
+          ...model,
+          id: "claude-exact-fixture",
+          evidence: "discovered",
+          capabilities: { effort: { supported: true } },
+        },
+      ],
+    };
+    expect(parseModelCatalog(catalog).models[0]?.id).toBe("claude-exact-fixture");
+    for (const bad of [
+      { ...catalog, models: [...catalog.models, ...catalog.models] },
+      { ...catalog, apiKey: "fixture" },
+      { ...catalog, models: [{ ...model, efforts: ["invented"] }] },
+      { ...catalog, models: [{ ...model, locality: "local-guaranteed" }] },
+    ])
+      expect(() => parseModelCatalog(bad)).toThrow("protocol");
+  });
+  it("issues discovery only explicitly without note, prompt or credential payload", async () => {
+    const request = {
+      connection: "ollama" as const,
+      endpoint: "http://127.0.0.1:11434/v1",
+      localAuth: false,
+    };
+    vi.mocked(invoke).mockResolvedValue({
+      connection: request.connection,
+      endpoint: request.endpoint,
+      models: [],
+    });
+    await agentChatClient.discover(request);
+    expect(invoke).toHaveBeenLastCalledWith("discover_agent_models", { request });
+  });
+  it("accepts bound local settings and rejects hosted endpoint or OpenAI max effort", () => {
+    expect(
+      parseAgentProfile({
+        ...profile,
+        connection: "lm_studio",
+        model: "owner/model:q4",
+        endpoint: "http://127.0.0.1:1234/v1",
+      }).model,
+    ).toBe("owner/model:q4");
+    expect(() => parseAgentProfile({ ...profile, endpoint: "http://127.0.0.1/v1" })).toThrow(
+      "protocol",
+    );
+    expect(() =>
+      parseAgentProfile({
+        ...profile,
+        connection: "openai_api",
+        model: "gpt-5.6-luna",
+        effort: "max",
+      }),
+    ).toThrow("protocol");
   });
 });

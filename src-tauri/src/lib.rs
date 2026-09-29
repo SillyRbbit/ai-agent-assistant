@@ -1,13 +1,16 @@
 pub mod agent;
 mod agent_chat;
 mod agent_chat_tauri;
+mod agent_models;
 mod agent_preferences;
+mod anthropic;
 mod app_info;
 pub mod approvals;
 pub mod audit;
 pub mod credentials;
 pub mod documents;
 mod error;
+mod local_models;
 pub mod memory;
 pub mod menu_bar;
 mod personal_assistant_direct;
@@ -72,6 +75,7 @@ pub fn run() -> Result<(), AppError> {
             agent_chat_tauri::clear_agent_note,
             agent_chat_tauri::restore_agent_defaults,
             agent_chat_tauri::list_agent_connections,
+            agent_chat_tauri::discover_agent_models,
             agent_chat_tauri::start_agent_conversation,
             agent_chat_tauri::send_agent_message,
             agent_chat_tauri::poll_agent_conversation,

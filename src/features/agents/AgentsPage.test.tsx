@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { AgentsPage } from "./AgentsPage";
 import {
   AGENT_IDS,
+  ANTHROPIC_DOCUMENTED_MODELS,
   type AgentChatSnapshot,
   type AgentConnectionReadiness,
   type AgentProfile,
@@ -26,6 +27,9 @@ const profiles: readonly AgentProfile[] = AGENT_IDS.map((agentId, index) => ({
   connection: "simulation",
   model: "simulation",
   effort: "default",
+  endpoint: "",
+  localAuth: false,
+  allowUnknownLocalityNotes: false,
   ownerInstructions: "",
   memoryMode: "off",
   note: "",
@@ -38,6 +42,9 @@ const connections: readonly AgentConnectionReadiness[] = [
     status: "owner_setup_required",
     message: "Native session key checked on Send.",
   },
+  { connection: "anthropic_api", status: "owner_setup_required", message: "Native key setup." },
+  { connection: "lm_studio", status: "owner_setup_required", message: "Connect server." },
+  { connection: "ollama", status: "owner_setup_required", message: "Connect server." },
   { connection: "codex", status: "blocked", message: "Codex isolation unverified." },
 ];
 const idle: AgentChatSnapshot = {
@@ -48,6 +55,7 @@ const idle: AgentChatSnapshot = {
   model: "simulation",
   effort: "default",
   memoryMode: "off",
+  endpoint: "",
   settingsRevision: 0,
   status: "idle",
   text: "",
@@ -68,6 +76,11 @@ function harness() {
     available: () => true,
     list: vi.fn().mockResolvedValue(profiles),
     connections: vi.fn().mockResolvedValue(connections),
+    discover: vi.fn().mockResolvedValue({
+      connection: "lm_studio",
+      endpoint: "http://127.0.0.1:1234/v1",
+      models: [],
+    }),
     save: vi
       .fn<(profile: AgentProfileInput) => Promise<AgentProfile>>()
       .mockImplementation((profile) =>
@@ -365,4 +378,228 @@ describe("agent configuration and text conversations", () => {
     expect(client.send).toHaveBeenCalledTimes(1);
     expect(client.cancel).toHaveBeenCalledTimes(1);
   });
+});
+
+describe("additional provider controls", () => {
+  it("seeds documented Anthropic models without discovery or generation and scopes effort per model", async () => {
+    const client = harness();
+    render(<AgentsPage client={client} />);
+    await ready();
+    fireEvent.change(screen.getByLabelText("Connection"), { target: { value: "anthropic_api" } });
+    expect(screen.getByLabelText("Model")).toHaveValue("claude-fable-5-1");
+    expect(screen.getByText(/Thinking is always on/)).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText("Model"), {
+      target: { value: "claude-haiku-4-5-20251001" },
+    });
+    expect(screen.getByLabelText("Reasoning effort").querySelectorAll("option")).toHaveLength(1);
+    expect(client.discover).not.toHaveBeenCalled();
+    expect(client.send).not.toHaveBeenCalled();
+    client.discover.mockRejectedValueOnce("authentication");
+    fireEvent.click(screen.getByRole("button", { name: "Refresh model catalog" }));
+    await screen.findByRole("alert");
+    expect(screen.getByLabelText("Model")).toHaveValue("claude-haiku-4-5-20251001");
+    expect(client.save).not.toHaveBeenCalled();
+  });
+  it("requires local discovery and clears the note decision when endpoint/model changes", async () => {
+    const client = harness();
+    client.discover.mockResolvedValue({
+      connection: "lm_studio",
+      endpoint: "http://127.0.0.1:1234/v1",
+      models: [
+        {
+          ...ANTHROPIC_DOCUMENTED_MODELS[0],
+          id: "owner/model:q4",
+          label: "owner/model:q4",
+          evidence: "discovered",
+          availability: "available",
+          locality: "unknown",
+          efforts: ["default"],
+        },
+      ],
+    });
+    render(<AgentsPage client={client} />);
+    await ready();
+    fireEvent.change(screen.getByLabelText("Connection"), { target: { value: "lm_studio" } });
+    expect(screen.getByRole("button", { name: "Start conversation" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "Refresh model catalog" }));
+    await screen.findByRole("option", { name: /owner\/model:q4/ });
+    fireEvent.change(screen.getByLabelText("Model"), { target: { value: "owner/model:q4" } });
+    const decision = screen.getByRole("checkbox", { name: /despite unknown execution locality/ });
+    fireEvent.click(decision);
+    expect(decision).toBeChecked();
+    fireEvent.change(screen.getByLabelText("Loopback endpoint"), {
+      target: { value: "http://127.0.0.1:1235/v1" },
+    });
+    expect(decision).not.toBeChecked();
+    expect(client.send).not.toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: "Start conversation" })).toBeDisabled();
+  });
+  it("acknowledges Anthropic separately and preserves failure cleanup without fallback", async () => {
+    const client = harness();
+    client.list.mockResolvedValue(
+      profiles.map((p) =>
+        p.agentId === "personal-assistant"
+          ? { ...p, connection: "anthropic_api", model: "claude-fable-5-1" }
+          : p,
+      ),
+    );
+    const anthropicIdle = { ...idle, connection: "anthropic_api", model: "claude-fable-5-1" };
+    client.start.mockResolvedValue(anthropicIdle);
+    client.send.mockResolvedValue({
+      ...anthropicIdle,
+      status: "error",
+      sequence: 1,
+      error: "truncated",
+    });
+    render(<AgentsPage client={client} />);
+    await ready();
+    await openConversation();
+    fireEvent.change(screen.getByLabelText("Message"), { target: { value: "Synthetic test" } });
+    expect(screen.getByRole("button", { name: "Send to Anthropic" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("checkbox"));
+    fireEvent.click(screen.getByRole("button", { name: "Send to Anthropic" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent(/incomplete/);
+    expect(client.send).toHaveBeenCalledExactlyOnceWith(
+      "agent-chat-1",
+      "Synthetic test",
+      "anthropic-agent-text-v1",
+    );
+    expect(screen.getByRole("button", { name: "Send to Anthropic" })).toBeDisabled();
+    expect(screen.getByText(/no active native generation/)).toBeInTheDocument();
+  });
+});
+
+it("retains a discovered local destination across Save and Start without a second refresh", async () => {
+  const client = harness();
+  client.discover.mockResolvedValue({
+    connection: "lm_studio",
+    endpoint: "http://127.0.0.1:1234/v1",
+    models: [
+      {
+        ...ANTHROPIC_DOCUMENTED_MODELS[0],
+        id: "fixture:q4",
+        label: "fixture:q4",
+        evidence: "discovered",
+        availability: "available",
+        locality: "unknown",
+        efforts: ["default"],
+      },
+    ],
+  });
+  client.start.mockResolvedValue({
+    ...idle,
+    connection: "lm_studio",
+    model: "fixture:q4",
+    endpoint: "http://127.0.0.1:1234/v1",
+    settingsRevision: 1,
+  });
+  render(<AgentsPage client={client} />);
+  await ready();
+  fireEvent.change(screen.getByLabelText("Connection"), { target: { value: "lm_studio" } });
+  fireEvent.click(screen.getByRole("button", { name: "Refresh model catalog" }));
+  await screen.findByRole("option", { name: /fixture:q4/ });
+  fireEvent.change(screen.getByLabelText("Model"), { target: { value: "fixture:q4" } });
+  fireEvent.click(screen.getByRole("button", { name: "Save settings and note" }));
+  await screen.findByText("Saved locally · revision 1");
+  expect(screen.getByRole("button", { name: "Start conversation" })).toBeEnabled();
+  await openConversation();
+  expect(client.discover).toHaveBeenCalledTimes(1);
+  expect(client.send).not.toHaveBeenCalled();
+});
+it("does not start a known retired Anthropic model after refresh", async () => {
+  const client = harness();
+  client.list.mockResolvedValue(
+    profiles.map((p) =>
+      p.agentId === "personal-assistant"
+        ? { ...p, connection: "anthropic_api", model: "claude-fable-5-1" }
+        : p,
+    ),
+  );
+  client.discover.mockResolvedValue({
+    connection: "anthropic_api",
+    endpoint: "",
+    models: [
+      { ...ANTHROPIC_DOCUMENTED_MODELS[0], evidence: "discovered", availability: "retired" },
+    ],
+  });
+  render(<AgentsPage client={client} />);
+  await ready();
+  fireEvent.click(screen.getByRole("button", { name: "Refresh model catalog" }));
+  await screen.findByRole("option", { name: /retired/ });
+  expect(screen.getByRole("button", { name: "Start conversation" })).toBeDisabled();
+  expect(client.send).not.toHaveBeenCalled();
+});
+
+it("invalidates local catalog authorization after failed refresh without erasing saved settings", async () => {
+  const client = harness();
+  client.list.mockResolvedValue(
+    profiles.map((p) =>
+      p.agentId === "personal-assistant"
+        ? {
+            ...p,
+            connection: "lm_studio",
+            model: "fixture:q4",
+            endpoint: "http://127.0.0.1:1234/v1",
+            note: "saved note",
+          }
+        : p,
+    ),
+  );
+  client.discover
+    .mockResolvedValueOnce({
+      connection: "lm_studio",
+      endpoint: "http://127.0.0.1:1234/v1",
+      models: [
+        {
+          ...ANTHROPIC_DOCUMENTED_MODELS[0],
+          id: "fixture:q4",
+          label: "fixture:q4",
+          availability: "available",
+          evidence: "discovered",
+          locality: "unknown",
+          efforts: ["default"],
+        },
+      ],
+    })
+    .mockRejectedValueOnce("network");
+  render(<AgentsPage client={client} />);
+  await ready();
+  fireEvent.click(screen.getByRole("button", { name: "Refresh model catalog" }));
+  await waitFor(() => {
+    expect(screen.getByRole("button", { name: "Start conversation" })).toBeEnabled();
+  });
+  fireEvent.click(screen.getByRole("button", { name: "Refresh model catalog" }));
+  await screen.findByRole("alert");
+  expect(screen.getByRole("button", { name: "Start conversation" })).toBeDisabled();
+  expect(screen.getByLabelText(/Private note/)).toHaveValue("saved note");
+  expect(client.save).not.toHaveBeenCalled();
+  expect(client.send).not.toHaveBeenCalled();
+});
+
+it("keeps embedding-only models out of the conversation picker", async () => {
+  const client = harness();
+  client.discover.mockResolvedValue({
+    connection: "lm_studio",
+    endpoint: "http://127.0.0.1:1234/v1",
+    models: [
+      {
+        ...ANTHROPIC_DOCUMENTED_MODELS[0],
+        id: "embedding-only",
+        label: "Embedding fixture",
+        availability: "unsupported",
+        locality: "unknown",
+        efforts: ["default"],
+        capabilities: { type: "embedding" },
+      },
+    ],
+  });
+  render(<AgentsPage client={client} />);
+  await ready();
+  fireEvent.change(screen.getByLabelText("Connection"), { target: { value: "lm_studio" } });
+  fireEvent.click(screen.getByRole("button", { name: "Refresh model catalog" }));
+  await waitFor(() => {
+    expect(screen.getByRole("button", { name: "Refresh model catalog" })).toBeEnabled();
+  });
+  expect(screen.queryByRole("option", { name: /Embedding fixture/ })).not.toBeInTheDocument();
+  expect(client.send).not.toHaveBeenCalled();
 });

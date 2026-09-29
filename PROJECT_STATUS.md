@@ -1,4 +1,53 @@
+## 2026-09-29 — PR #123 fixture-repair publication preparation
+
+The owner authorized a separate publication candidate from PR #123 at
+`66090a0909d551c9a373ec142bb46b0f73ef0717`, with main still at
+`fc6006e892c89cbc83d60f709875e4db3d8f18de`. Ordinary admission opened
+`pr123-fixture-repair-publication` on `codex/pr123-fixture-repair-publication`.
+The two accepted Hermes integration-test files are copied byte-for-byte from
+the completed native-build-acceptance candidate. No product implementation is
+repeated. See the [plan](docs/plans/2026-09-29-pr123-fixture-repair-publication.md)
+and [review](docs/reviews/2026-09-29-pr123-fixture-repair-publication-post-increment-review.md).
+
+Exactly ten preparation paths produce 36 paths against main: the original 32
+PR paths, two fixture files and this plan/review pair. Six existing current-state
+documents receive additive entries. Checkout-specific admission changes, raw
+archives and diagnostic plan/review chains remain in the preserved development
+worktree; none is imported. Production, dependency, workflow, hook, skill,
+configuration and permissions bytes remain identical to the original PR head.
+
+Inherited local SDK 27.0 verification passed, including ACP 7/7, Hermes 13 passed
+and one intentionally ignored real-Hermes opt-in probe, strict Clippy and the
+native release build. This preparation reuses those unchanged-byte results;
+it does not claim another application-test run or native build. Fresh packaging
+and completion results belong in the review and checkout-local gate state.
+PR #123's older Target-Mac failure is not relabeled. New exact-head CI and review
+are mandatory after separately authorized publication and before any merge.
+
+Preserve the owner-reported key-free fresh-session observation: Personal Assistant
+was initially selected and all six connection choices appeared. No fresh GUI,
+provider/runtime or Codex-isolation proof is claimed. D-127 audit debt and D-128
+custody/abort limits remain; D-125/M1/M2 stay parked. No live request allowance,
+commit, push, PR update or merge is authorized by this preparation.
+
 # Project status
+
+## 2026-09-22 — Anthropic and local agent connections
+
+The owner-approved `anthropic-local-agent-connections` increment adds one native
+Anthropic Messages adapter and one shared LM Studio/Ollama chat-completions
+adapter in the existing Agents page. See the [plan](docs/plans/2026-09-22-anthropic-local-agent-connections.md).
+Offline implementation and full verification passed, including 431 frontend
+tests, 368 Rust library tests, integration tests and the native release build.
+The quality/readiness review is PASS WITH ADVISORIES / Ready with advisories;
+see the [review](docs/reviews/2026-09-22-anthropic-local-agent-connections-post-increment-review.md). No provider/runtime request, model download, or live generation was
+performed. Discovery and live operation remain unverified until owner setup.
+This amendment grants no live request allowance and reuses no historical allowance.
+
+Keep D-127 audit debt, D-128 native-session custody/remote-abort limits, historical
+OpenAI failures and the native live-success advisory. Codex remains visibly
+live-disabled until supported isolation is proved. D-125/M1/M2 remain parked.
+No commit, push, publication, provider fallback or runtime management is authorized.
 
 ## Optional API status repair — 2026-09-22
 

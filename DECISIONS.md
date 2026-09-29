@@ -1,5 +1,43 @@
 # Decision log
 
+## D-131 — Owner-selected Anthropic and loopback model connections
+
+Date: 2026-09-22. Status: Accepted by the owner's provider-additions prompt.
+
+Extend D-129's private text-advice demo only with native Anthropic Messages and
+one shared loopback chat-completions adapter for existing LM Studio/Ollama
+servers. No tools, automatic provider fallback, retry, model acquisition, runtime
+control, gateway, dependency, CSP or permission change. Retain D-130's OpenAI
+catalog and request behavior; Codex remains blocked by its existing isolation
+prerequisite.
+
+Explicit refresh uses bounded model metadata endpoints; no generation probes.
+Exact IDs and bounded capability metadata remain data. Documented seeds are not
+account access or live evidence. Anthropic Default omits effort; supported values
+use output_config.effort, with no thinking-disable flag. Text-only no-tool history
+may omit thinking under official guidance, so thinking/signatures are neither
+shown nor durably stored. Terminal EOF alone never means successful completion.
+
+Native-only ANTHROPIC_API_KEY is read on explicit action in an opted-in debug
+session. Optional local tokens use distinct environment names and an exact
+endpoint binding; hosted credentials never reach local servers. Loopback allows
+only validated HTTP(S), fixed routes, no userinfo/query/fragment, no proxy,
+redirect or retry, and normal TLS verification. Loopback does not prove local
+processing: LM Link and Ollama forwarding exist. Exclude known cloud-backed
+models and require a saved explicit per-destination/model decision before
+transmitting enabled private notes when locality remains unknown. Never label
+that decision proof of local execution.
+
+Append-only migration 5 adds non-secret connection settings without replacing
+the notes/preferences table or rewriting existing rows. Both tables update in
+one transaction under the existing revision check. Conversations bind saved
+agent, connection, endpoint, model, effort and revision. Changes require a new
+conversation; notes remain independent, memory-off excluded, history volatile.
+D-127 debt, D-128 custody and remote-abort limitations, prior failures and parked
+D-125/M1/M2 are preserved. No new live-request allowance or publication authority.
+
+See the [bounded plan](docs/plans/2026-09-22-anthropic-local-agent-connections.md).
+
 ## D-130 — Current configurable-agent model catalog
 
 Date: 2026-09-22. Status: Accepted by the owner's current-model correction.

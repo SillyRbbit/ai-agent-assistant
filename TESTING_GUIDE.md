@@ -1,5 +1,81 @@
 # Cortexa testing guide
 
+## 2026-09-22 — Anthropic and local agent connections
+
+The owner-approved `anthropic-local-agent-connections` increment adds one native
+Anthropic Messages adapter and one shared LM Studio/Ollama chat-completions
+adapter in the existing Agents page. See the [plan](docs/plans/2026-09-22-anthropic-local-agent-connections.md).
+Offline implementation and full verification passed, including 431 frontend
+tests, 368 Rust library tests, integration tests and the native release build.
+The quality/readiness review is PASS WITH ADVISORIES / Ready with advisories;
+see the [review](docs/reviews/2026-09-22-anthropic-local-agent-connections-post-increment-review.md). No provider/runtime request, model download, or live generation was
+performed. Discovery and live operation remain unverified until owner setup.
+This amendment grants no live request allowance and reuses no historical allowance.
+
+Keep D-127 audit debt, D-128 native-session custody/remote-abort limits, historical
+OpenAI failures and the native live-success advisory. Codex remains visibly
+live-disabled until supported isolation is proved. D-125/M1/M2 remain parked.
+No commit, push, publication, provider fallback or runtime management is authorized.
+
+### Owner-only smoke setup (not executed)
+
+Build a current debug bundle with credentials absent (do not reuse an older
+verified bundle for these new adapters). The installed CLI accepts:
+
+```bash
+cd /private/tmp/cortexa-direct-provider-stream-stage-live-result-evidence-closeout
+env -u OPENAI_API_KEY -u ANTHROPIC_API_KEY -u CORTEXA_LM_STUDIO_TOKEN -u CORTEXA_OLLAMA_TOKEN CARGO_NET_OFFLINE=true npm run tauri -- build --debug --bundles app --no-sign -- --locked --offline
+```
+
+This smoke bundle command is instructions only, not an executed check here.
+Launch the resulting `src-tauri/target/debug/bundle/macos/Cortexa.app` executable
+from the owner's private native session with the settings below. Supply secrets privately
+in the native launch environment, never in a VITE variable, source, command
+argument, chat, WebView or SQLite. Anthropic uses CORTEXA_ANTHROPIC_DEMO=1 and
+ANTHROPIC_API_KEY. Builds/tests must run without secrets. Its fixed endpoint is
+https://api.anthropic.com/v1/messages; explicit catalog refresh uses /v1/models.
+
+For local models, start your already-installed server yourself and use its exact
+loopback /v1 endpoint (LM Studio preset http://127.0.0.1:1234/v1; Ollama preset
+http://127.0.0.1:11434/v1). Cortexa starts no service and installs no weights.
+For Ollama, disable cloud yourself using its supported OLLAMA_NO_CLOUD=1 or
+server configuration before use; Cortexa does not inspect the runtime environment.
+If separate authentication is needed, explicitly enable local auth and privately
+set CORTEXA_LM_STUDIO_TOKEN with CORTEXA_LM_STUDIO_TOKEN_ENDPOINT, or
+CORTEXA_OLLAMA_TOKEN with CORTEXA_OLLAMA_TOKEN_ENDPOINT. The endpoint binding must
+normalize to the saved destination. Never reuse a hosted provider credential.
+
+1. Select the intended agent and connection, then explicitly Refresh model catalog.
+   Verify exact ID and discovered metadata. Missing server/account/model access
+   blocks only that connection; refresh must not erase notes or saved preferences.
+2. For Anthropic choose one accessible documented/discovered model, Default effort,
+   Memory Off and no private instructions. For local choose one already-installed
+   text model; verify cloud selections are unavailable. Unknown locality must be
+   disclosed, and any private-note transmission needs the separate saved decision.
+3. Save and Start conversation (no generation yet). Obtain fresh owner authorization
+   for one short synthetic request, read the disclosure, acknowledge and Send once.
+   Suggested synthetic input: “Return one short sentence confirming this synthetic
+   test; do not use tools.” This document grants no paid request allowance.
+4. Observe partial answer text, explicit completed status, displayed final answer
+   and no active native generation. Record only sanitized errors on failure and
+   stop without retry/fallback. Refusal, truncated output, timeout and premature
+   EOF are not completion. Stop cancellation must release local ownership; do not
+   infer remote billing termination. Sending a local model may cause that server
+   to load that one model; Cortexa does not infer RAM from file size.
+5. Independently verify another agent has not inherited notes/history. Switching
+   endpoint/model/connection requires a new conversation and resets the UI's
+   unknown-locality note decision. Anthropic thinking/signature blocks must not be displayed. Separate local reasoning fields are hidden, but reasoning embedded by a runtime in answer content follows that runtime’s framing.
+
+Catalogs are capped at 200 models and refresh has a short deadline; large or slow
+Ollama metadata scans can fail without changing saved settings. Old servers with
+no positive text capability metadata leave those models unavailable. Structured
+`out_of_memory` / `insufficient_memory` errors receive a specific message;
+free-form runtime errors remain generic and are never echoed. No RAM prediction,
+license acceptance, or guarantee of hardware compatibility follows from metadata.
+
+Fixture tests, discovered models and actual live-tested results are distinct.
+No models are live-tested by this increment. Retain existing native/live advisories.
+
 ## Configurable agent demo — 2026-09-22
 
 Offline tests cover all nine independent profiles, restart persistence,
