@@ -1,3 +1,20 @@
+## 2026-09-30 — Provider milestone boundary
+
+The native Codex adapter accepts only saved model/effort and native-captured text.
+No IPC accepts executable paths, runtime homes, RPC methods or environment maps.
+Setup comes from owner launch variables, never WebView data. The dedicated Codex
+home must not contain config.toml or AGENTS.md; do not reuse a working developer
+home. The child receives only HOME, CODEX_HOME and fixed PATH. OpenAI/Anthropic
+API keys are not inherited. Runtime account details are consumed natively only
+for a closed authenticated/unauthenticated result, never persisted or displayed.
+Fixed protocol/version, strict config, empty environment/capability roots and
+permission validation prevent granting device authority. Stdout frames, event
+count and visible text are bounded; stderr is discarded and errors are static.
+Cancellation/deadline/error drops kill and reap before generation ownership ends.
+Model identifiers remain untrusted selection metadata and never executable input.
+Owner-controlled malicious executable/auth-home modification is outside same-user
+integrity guarantees. No sandbox bypass, CSP/capability or dependency change.
+
 # Security policy and development guardrails
 
 ## 2026-09-22 — Anthropic and local agent connections

@@ -1,3 +1,32 @@
+## D-132 — Owner-approved bounded provider milestone
+
+The 2026-09-30 owner request authorizes completing the two selected connections,
+per-agent saved configuration and native text conversations while preserving all
+six connection options. This authorizes the narrow Codex child adapter; it grants
+no general model-to-device execution, new provider, graph or publication authority.
+
+Codex 0.159.0 app-server is the tested protocol. Launch uses an empty private
+working/HOME directory, a separately owner-authenticated `CORTEXA_CODEX_HOME`,
+cleared environment, fixed RPCs, ephemeral threads, empty environments/roots/tools,
+no approval, read-only sandbox, disabled shells/apps/plugins/hooks and no provider
+fallback. Thread response identities and permissions must match before input.
+Runtime/server tool requests fail closed. Credential and raw error payloads never
+reach the WebView or logs. Owner setup and explicit per-message acknowledgement
+are required. Other runtime versions/configurations fail closed until separately
+verified; authentication uses the runtime's own supported sign-in.
+
+The installed runtime rejects built-in provider retry overrides. Cortexa submits
+one turn and does not resubmit; runtime internal retries and token budgets cannot
+be promised disabled and are disclosed. Stop kills/reaps the local child before
+ownership release; remote termination or zero billing is not guaranteed.
+OpenAI uses the existing direct API key custody and no-retry HTTP adapter.
+The existing three GPT-5.6 models support none/low/medium/high/xhigh/max according
+to [official model guidance](https://developers.openai.com/api/docs/guides/latest-model?model=gpt-5.6).
+Default omits effort. Higher effort can exhaust the unchanged bounded budget.
+
+This is implementation authority, not live-generation approval or live verification.
+Retain D-127/D-128, historical failed evidence and parked D-125/M1/M2.
+
 # Decision log
 
 ## D-131 — Owner-selected Anthropic and loopback model connections

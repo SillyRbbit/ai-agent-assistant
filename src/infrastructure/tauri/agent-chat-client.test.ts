@@ -252,7 +252,7 @@ describe("provider catalog boundary", () => {
     await agentChatClient.discover(request);
     expect(invoke).toHaveBeenLastCalledWith("discover_agent_models", { request });
   });
-  it("accepts bound local settings and rejects hosted endpoint or OpenAI max effort", () => {
+  it("accepts bound local settings and documented OpenAI max effort; rejects hosted endpoints", () => {
     expect(
       parseAgentProfile({
         ...profile,
@@ -264,13 +264,13 @@ describe("provider catalog boundary", () => {
     expect(() => parseAgentProfile({ ...profile, endpoint: "http://127.0.0.1/v1" })).toThrow(
       "protocol",
     );
-    expect(() =>
+    expect(
       parseAgentProfile({
         ...profile,
         connection: "openai_api",
         model: "gpt-5.6-luna",
         effort: "max",
-      }),
-    ).toThrow("protocol");
+      }).effort,
+    ).toBe("max");
   });
 });

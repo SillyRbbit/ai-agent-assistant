@@ -187,9 +187,88 @@ describe("agent configuration and text conversations", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent("Saved context has changed");
     expect(client.save).toHaveBeenCalledTimes(1);
     fireEvent.change(screen.getByLabelText("Connection"), { target: { value: "codex" } });
-    expect(screen.getByText(/Authentication is unverified/)).toBeInTheDocument();
+    expect(screen.getByText(/Codex uses its own owner-managed sign-in/)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Start conversation" })).toBeDisabled();
     expect(screen.queryByRole("option", { name: "xhigh" })).not.toBeInTheDocument();
+  });
+  it("discovers Codex efforts, saves the selected agent, streams and releases native ownership", async () => {
+    const client = harness();
+    client.connections.mockResolvedValue(
+      connections.map((entry) =>
+        entry.connection === "codex" ? { ...entry, status: "owner_setup_required" } : entry,
+      ),
+    );
+    client.discover.mockResolvedValue({
+      connection: "codex",
+      endpoint: "",
+      models: [
+        {
+          ...ANTHROPIC_DOCUMENTED_MODELS[0],
+          id: "runtime-model",
+          label: "runtime-model",
+          evidence: "discovered",
+          efforts: ["default", "high"],
+          locality: "unknown",
+        },
+      ],
+    });
+    const bound = {
+      ...idle,
+      connection: "codex" as const,
+      model: "runtime-model",
+      effort: "high" as const,
+      settingsRevision: 1,
+    };
+    client.start.mockResolvedValue(bound);
+    client.send.mockResolvedValue({
+      ...bound,
+      status: "streaming",
+      text: "Synthetic ",
+      sequence: 1,
+      busy: true,
+    });
+    client.poll.mockResolvedValue({
+      ...bound,
+      status: "completed",
+      text: "Synthetic answer.",
+      sequence: 2,
+      busy: false,
+    });
+    render(<AgentsPage client={client} />);
+    await ready();
+    fireEvent.change(screen.getByLabelText("Connection"), { target: { value: "codex" } });
+    expect(screen.getByRole("button", { name: "Start conversation" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "Refresh model catalog" }));
+    await screen.findByRole("option", { name: /runtime-model/ });
+    fireEvent.change(screen.getByLabelText("Model"), { target: { value: "runtime-model" } });
+    fireEvent.change(screen.getByLabelText("Reasoning effort"), { target: { value: "high" } });
+    expect(screen.queryByRole("option", { name: "max" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Save settings and note" }));
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: "Start conversation" })).toBeEnabled();
+    });
+    await openConversation();
+    expect(screen.getByText(/Codex receives this message/)).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText("Message"), { target: { value: "Synthetic question" } });
+    expect(screen.getByRole("button", { name: "Send through Codex" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("checkbox", { name: /my Codex account/ }));
+    fireEvent.click(screen.getByRole("button", { name: "Send through Codex" }));
+    await screen.findByText("Synthetic answer.");
+    expect(client.send).toHaveBeenCalledExactlyOnceWith(
+      "agent-chat-1",
+      "Synthetic question",
+      "codex-agent-text-v1",
+    );
+    expect(screen.getByText(/completed · no active native generation/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Stop generation" })).toBeDisabled();
+    expect(client.save).toHaveBeenCalledWith(
+      expect.objectContaining({
+        agentId: "personal-assistant",
+        connection: "codex",
+        model: "runtime-model",
+        effort: "high",
+      }),
+    );
   });
   it("saves the selected Sol model and effort for a new native conversation", async () => {
     const client = harness();

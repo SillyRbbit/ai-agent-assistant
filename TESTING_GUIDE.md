@@ -1,3 +1,16 @@
+## 2026-09-30 — Provider milestone validation
+
+Use the [milestone checklist](docs/provider-milestone.md). Required automated checks:
+strict Rust/TypeScript lint, format, all hook/repository/frontend/native/integration
+tests and offline native build through `npm run verify`; documentation, repository,
+security, preservation, session/report/completion checks. Key-free protocol fixtures
+cover Codex permissions, model efforts, streaming, failure redaction and child reap;
+Agents tests cover explicit discovery/save/acknowledgement/completion. Persistence
+tests reopen all nine profiles including independent OpenAI and Codex choices.
+Actual installed-runtime loopback testing proves no tool exposure for that tested
+protocol/configuration only. Owner-authenticated live generation and native GUI QA
+remain separate and must not be reported passed from fixture evidence.
+
 # Cortexa testing guide
 
 ## 2026-09-22 — Anthropic and local agent connections
