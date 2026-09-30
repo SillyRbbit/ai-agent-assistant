@@ -1,3 +1,44 @@
+## 2026-09-29 — Brace-expansion remediation locally verified
+
+`brace-expansion-audit-remediation` in the isolated worktree passed fresh local validation
+from PR #126 head `a14b8ce0c022234ceb04558b090adeb79c5fa9ac`. Exactly nine successor paths and
+fifteen cumulative paths against main `14e9a6a51a292fccaa867b5666dd382768262abd` remain. Only
+version/registry URL/integrity changed in two brace-expansion lock entries:
+1.1.18 to 1.1.21 and 5.0.9 to 5.0.12. package.json, minimatch parents,
+undici 7.29.1 and unrelated versions/bytes are unchanged. Existing document
+bodies, six inherited plans/reports, all six predecessor worktrees, raw terminal
+states/completion records, artifacts and 36 prunable entries remain preserved.
+
+Clean npm ci, exact tree/official requirements and six-field lock checks passed.
+Full and production npm audits report zero vulnerabilities. Both package copies
+and minimatch consumers passed 42 assertions covering ordinary alternatives,
+ranges, escaping/nesting and bounded advisory inputs. Focused frontend lint and
+format passed. Full locked/offline npm run verify passed including strict lint,
+hook/repository/frontend/Rust/integration tests, typecheck and frontend/native
+release builds. The isolated native target used verified Python 3.12.1 through
+npm, Rust 1.90.0, process-local Xcode/SDK 27.0 and
+`profile.release.build-override.strip="none"`; no persistent setting changed.
+
+Pinned cargo-audit 0.22.2/current RustSec and the unchanged repository gate passed
+the exact accepted two quick-xml vulnerabilities/eight warnings. D-127 debt,
+D-128 custody/abort, native/provider/runtime live-success and Codex-isolation
+advisories remain. Default stripped native builds are not claimed repaired.
+D-125/M1/M2 remain parked. Historical PR #126 CI remains failed at npm audit;
+this uncommitted candidate has no new remote CI evidence or merge readiness.
+
+The review records current documentation, preservation, session and quality
+results; read checkout-local status and external receipts for actual schema,
+finalization and full Stop results after report freeze. No app launch, provider
+request, commit, push, PR update or publication occurred. See the
+[plan](docs/plans/2026-09-29-brace-expansion-audit-remediation.md) and [review](docs/reviews/2026-09-29-brace-expansion-audit-remediation-post-increment-review.md).
+
+Resume prompt: inspect this candidate, repository instructions, live main and
+PR #126, all records and completion evidence read-only; confirm nine successor
+and fifteen cumulative paths, exact six-field patch, historical/protected bytes
+and valid completion. Assess publication readiness without repeating passed
+implementation/tests or changing pre-commit validators. Preserve all work.
+Do not edit, commit, push, update the PR, merge or make provider requests.
+
 ## 2026-09-29 — Python-corrected undici acceptance
 
 Local acceptance validation passed for `undici-audit-remediation-python-acceptance` from main
