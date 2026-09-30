@@ -1,3 +1,40 @@
+## 2026-09-30 — Provider milestone ready for owner QA
+
+Implementation and available automated verification passed in
+`/Users/hdang/.codex/worktrees/provider-milestone/ai-agent-assistant`, branch
+`codex/provider-milestone`, baseline `f85d36954c77287901095afde3b000d8952d544d`.
+See [provider milestone](docs/provider-milestone.md) for setup, exact artifact,
+checklist and pending QA; see the [review](docs/reviews/2026-09-30-provider-milestone-post-increment-review.md)
+for the final acceptance evidence and checkout-local marker validation.
+
+Direct OpenAI retains its three models and now supports documented max effort.
+Headless Codex uses owner-managed sign-in, runtime model/effort discovery, native
+captured context and bounded streaming/cancellation. App exit reaps adapter-owned
+children before termination. Six connection choices, all nine persistent agent
+profiles and private-note isolation remain. No product graph, dependencies,
+workflow, governance or predecessor bytes changed; 24 milestone paths are local.
+
+Final offline verification passed: format, strict frontend/Rust lint, 74 hook,
+85 repository, 432 frontend and 374 native unit tests, integration suites,
+typecheck, frontend and native release builds. One existing real-Hermes opt-in
+probe remains ignored. The unsigned debug app bundle also passed. Builds use
+process-local Python 3.12, Xcode/SDK 27.0 and the existing Cargo build-override
+stripping workaround. All seven predecessor worktrees and 36 prunable entries
+remain preserved. Current docs/preservation/schema and ordinary finalization/Stop
+are authoritative only after their actual receipts validate.
+
+Live OpenAI/Codex generation and owner native GUI QA remain pending: no live
+requests, credential inspection or app launch occurred. Codex controls internal
+retries and token budgets; Cortexa submits once and never falls back. D-127/D-128,
+live-success and runtime-isolation limitations remain; D-125/M1/M2 stay parked.
+No commit, push, publication or merge occurred or is authorized.
+
+Resume: inspect this worktree, its valid completion evidence and
+`docs/provider-milestone.md`; preserve every change and historical record. Prepare
+owner QA without repeating implementation/builds. Obtain owner-only credential
+setup, provider/model/effort, request allowance and explicit acknowledgement before
+any live Send. Record only observed results; do not publish automatically.
+
 ## 2026-09-29 — Brace-expansion remediation locally verified
 
 `brace-expansion-audit-remediation` in the isolated worktree passed fresh local validation

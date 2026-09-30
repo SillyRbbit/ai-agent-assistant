@@ -38,6 +38,14 @@ const MAX_EVENTS: u64 = 512;
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, thiserror::Error)]
 #[serde(rename_all = "snake_case")]
 pub(crate) enum DirectError {
+    #[error("Codex requires the verified runtime and a dedicated owner-authenticated home without config.toml or AGENTS.md.")]
+    CodexSetup,
+    #[error("Sign in privately using the Codex CLI in the dedicated home before refreshing models or sending.")]
+    CodexAuthentication,
+    #[error("Codex isolation validation failed. Cortexa did not resubmit or use API fallback.")]
+    CodexIsolation,
+    #[error("Codex could not complete this turn. Cortexa did not resubmit or use API fallback.")]
+    CodexRuntime,
     #[error("The selected provider is unavailable. No fallback was used.")]
     ProviderUnavailable,
     #[error("The selected model is unavailable or not loaded. Check the selected server.")]

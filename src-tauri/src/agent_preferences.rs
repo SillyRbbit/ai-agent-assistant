@@ -237,7 +237,6 @@ fn validate_preferences(
         AgentConnection::Simulation => model == "simulation" && effort == ReasoningEffort::Default,
         AgentConnection::OpenaiApi => {
             matches!(model, OPENAI_AGENT_MODEL | "gpt-5.6-terra" | "gpt-5.6-sol")
-                && effort != ReasoningEffort::Max
         }
         AgentConnection::AnthropicApi => {
             if !valid_model(model, false) || effort == ReasoningEffort::None {
@@ -256,9 +255,9 @@ fn validate_preferences(
         AgentConnection::LmStudio | AgentConnection::Ollama => {
             valid_model(model, true) && effort == ReasoningEffort::Default
         }
-        // The installed runtime cannot prove tool isolation. Persist this explicit
-        // unavailable choice without inventing a model or authentication status.
-        AgentConnection::Codex => model == "unavailable" && effort == ReasoningEffort::Default,
+        // Persist the selected runtime ID; discovery and supported effort are
+        // revalidated at Send. Saving never proves authentication or execution.
+        AgentConnection::Codex => valid_model(model, false),
     };
     if !supported {
         return Err(PreferencesError::UnsupportedSettings);

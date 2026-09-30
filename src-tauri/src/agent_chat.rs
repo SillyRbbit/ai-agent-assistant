@@ -11,7 +11,6 @@ use crate::personal_assistant_direct::DirectError;
 pub(crate) const MAX_MESSAGE_CHARACTERS: usize = 4096;
 const MAX_HISTORY_CHARACTERS: usize = 16_384;
 const MAX_TURNS: usize = 4;
-pub(crate) const CODEX_LIMITATION: &str = "Codex live is disabled: text-only tool/file isolation has not been verified for the installed runtime. Authentication and subscription status are unverified. No process, request or API fallback is started.";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, thiserror::Error)]
 pub(crate) enum ChatError {
@@ -25,8 +24,6 @@ pub(crate) enum ChatError {
     StaleContext,
     #[error("Another generation still owns the native session.")]
     Busy,
-    #[error("Codex text-only isolation has not been verified; live mode is disabled.")]
-    CodexIsolation,
     #[error("The bounded conversation limit was reached. Start a new conversation.")]
     Limit,
     #[error("The native conversation could not complete.")]
@@ -41,7 +38,6 @@ impl Serialize for ChatError {
             Self::InvalidRequest => serializer.serialize_str("invalid_request"),
             Self::StaleContext => serializer.serialize_str("stale_context"),
             Self::Busy => serializer.serialize_str("busy"),
-            Self::CodexIsolation => serializer.serialize_str("codex_isolation"),
             Self::Limit => serializer.serialize_str("limit"),
             Self::Internal => serializer.serialize_str("internal"),
         }
@@ -64,9 +60,6 @@ pub(crate) struct BoundConversation {
 impl BoundConversation {
     pub(crate) fn new(id: String, profile: AgentProfile) -> Result<Self, ChatError> {
         profile.validate()?;
-        if profile.connection == AgentConnection::Codex {
-            return Err(ChatError::CodexIsolation);
-        }
         Ok(Self {
             id,
             profile,
@@ -213,6 +206,22 @@ impl BoundConversation {
         Ok(bytes)
     }
 
+    pub(crate) fn codex_input(&self, message: &str) -> Result<String, ChatError> {
+        if self.profile.connection != AgentConnection::Codex {
+            return Err(ChatError::InvalidRequest);
+        }
+        let mut value = json!({"agent":self.profile.display_name,
+            "untrusted_owner_preferences":self.profile.owner_instructions,"history":self.history,"message":message});
+        if self.profile.memory_mode == MemoryMode::PrivateNotes {
+            value["private_note"] = json!(self.profile.note);
+        }
+        let input = value.to_string();
+        if input.len() > 60_000 {
+            return Err(ChatError::Limit);
+        }
+        Ok(input)
+    }
+
     pub(crate) fn complete_turn(&mut self, prompt: String, answer: String) {
         self.history.push(Message {
             role: "user",
@@ -342,12 +351,21 @@ mod tests {
         codex.connection = AgentConnection::Codex;
         codex.model = "unavailable".into();
         codex.effort = ReasoningEffort::Default;
-        assert!(matches!(
-            BoundConversation::new("agent-chat-2".into(), codex),
-            Err(ChatError::CodexIsolation)
-        ));
+        let mut codex = BoundConversation::new("agent-chat-2".into(), codex)?;
+        assert_eq!(
+            codex.request_body("hello").err(),
+            Some(ChatError::InvalidRequest)
+        );
+        assert!(codex.codex_input("hello")?.contains("hello"));
+        assert!(codex.codex_input("hello")?.contains("sentinel"));
+        codex.profile.memory_mode = MemoryMode::Off;
+        codex.complete_turn("earlier question".into(), "earlier answer".into());
+        let captured = codex.codex_input("hello")?;
+        assert!(!captured.contains("sentinel"));
+        assert!(captured.contains("earlier answer"));
+        assert!(captured.contains("Research Agent"));
         for error in [
-            ChatError::CodexIsolation,
+            ChatError::Provider(DirectError::CodexIsolation),
             ChatError::Provider(DirectError::MissingKey),
             ChatError::Preferences(PreferencesError::Storage),
         ] {
@@ -369,6 +387,7 @@ mod tests {
                 ReasoningEffort::Medium,
                 ReasoningEffort::High,
                 ReasoningEffort::Xhigh,
+                ReasoningEffort::Max,
             ] {
                 let mut effective = profile.clone();
                 effective.model = model.into();

@@ -55,6 +55,9 @@ export const AGENT_ERROR_CODES = [
   "busy",
   "unavailable",
   "codex_isolation",
+  "codex_setup",
+  "codex_authentication",
+  "codex_runtime",
   "disabled",
   "missing_key",
   "authentication",
@@ -143,9 +146,7 @@ function effective(value: Record<string, unknown>): boolean {
   return (
     member(value["connection"], CONNECTIONS) &&
     member(value["effort"], EFFORTS) &&
-    ((value["connection"] === "openai_api" &&
-      value["effort"] !== "max" &&
-      member(value["model"], OPENAI_AGENT_MODELS)) ||
+    ((value["connection"] === "openai_api" && member(value["model"], OPENAI_AGENT_MODELS)) ||
       (value["connection"] === "anthropic_api" &&
         bounded(value["model"], 256) &&
         value["model"] !== "" &&
@@ -156,9 +157,7 @@ function effective(value: Record<string, unknown>): boolean {
       (value["connection"] === "simulation" &&
         value["model"] === "simulation" &&
         value["effort"] === "default") ||
-      (value["connection"] === "codex" &&
-        value["model"] === "unavailable" &&
-        value["effort"] === "default"))
+      (value["connection"] === "codex" && modelId(value["model"])))
   );
 }
 export function parseAgentProfile(value: unknown): AgentProfile {
@@ -208,8 +207,7 @@ export function parseAgentConnections(value: unknown): readonly AgentConnectionR
     if (
       !member(v["connection"], CONNECTIONS) ||
       !member(v["status"], ["ready", "owner_setup_required", "blocked"]) ||
-      !bounded(v["message"], 1024) ||
-      (v["connection"] === "codex" && v["status"] !== "blocked")
+      !bounded(v["message"], 1024)
     )
       throw new Error("protocol");
     return Object.freeze(v) as unknown as AgentConnectionReadiness;
@@ -296,8 +294,14 @@ export function agentChatErrorMessage(error: unknown): string {
       return "Agent settings could not be read or saved. No automatic retry was made.";
     case "unavailable":
       return "Native agent conversations are unavailable in this session.";
+    case "codex_setup":
+      return "Set up Codex 0.159.0 and a dedicated owner-authenticated home without config.toml or AGENTS.md. See the provider milestone guide.";
+    case "codex_authentication":
+      return "Sign in privately using the Codex CLI in the dedicated home, then refresh models.";
+    case "codex_runtime":
+      return "Codex could not complete this turn. Cortexa did not resubmit or use API fallback.";
     case "codex_isolation":
-      return "Codex live is blocked: the installed runtime does not provide verified tool and file isolation. Authentication is unverified.";
+      return "Codex isolation validation failed. Cortexa did not resubmit or use API fallback.";
     default:
       return member(code, AGENT_ERROR_CODES)
         ? directErrorMessage(code)
@@ -320,7 +324,8 @@ export interface AgentChatClient {
       | "simulation"
       | "openai-agent-text-v1"
       | "anthropic-agent-text-v1"
-      | "local-agent-text-v1",
+      | "local-agent-text-v1"
+      | "codex-agent-text-v1",
   ) => Promise<AgentChatSnapshot>;
   readonly poll: (conversationId: string) => Promise<AgentChatSnapshot>;
   readonly cancel: (conversationId: string) => Promise<AgentChatSnapshot>;
@@ -439,9 +444,9 @@ export const ANTHROPIC_DOCUMENTED_MODELS: readonly ModelInfo[] = [
 export function parseModelCatalog(value: unknown): ModelCatalog {
   const catalog = record(value, ["connection", "endpoint", "models"]);
   if (
-    !member(catalog["connection"], ["anthropic_api", "lm_studio", "ollama"]) ||
+    !member(catalog["connection"], ["anthropic_api", "lm_studio", "ollama", "codex"]) ||
     !bounded(catalog["endpoint"], 512) ||
-    (catalog["connection"] === "anthropic_api" && catalog["endpoint"] !== "") ||
+    (["anthropic_api", "codex"].includes(catalog["connection"]) && catalog["endpoint"] !== "") ||
     !Array.isArray(catalog["models"]) ||
     catalog["models"].length > 200
   )

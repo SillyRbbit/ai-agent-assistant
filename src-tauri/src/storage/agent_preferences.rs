@@ -136,7 +136,7 @@ fn update(
     let legacy = matches!(
         profile.connection,
         AgentConnection::Simulation | AgentConnection::OpenaiApi | AgentConnection::Codex
-    );
+    ) && profile.effort != crate::agent_preferences::ReasoningEffort::Max;
     let affected = transaction
         .execute(
             "INSERT INTO agent_preferences
@@ -253,7 +253,11 @@ mod tests {
             if index % 2 == 0 {
                 preferences.connection = AgentConnection::OpenaiApi;
                 preferences.model = OPENAI_AGENT_MODEL.to_owned();
-                preferences.effort = ReasoningEffort::Low;
+                preferences.effort = ReasoningEffort::Max;
+            } else {
+                preferences.connection = AgentConnection::Codex;
+                preferences.model = format!("runtime-model-{index}");
+                preferences.effort = ReasoningEffort::High;
             }
             let saved = storage.save_agent_preferences(preferences)?;
             assert_eq!(saved.revision, 1);
@@ -335,6 +339,7 @@ mod tests {
             ReasoningEffort::Medium,
             ReasoningEffort::High,
             ReasoningEffort::Xhigh,
+            ReasoningEffort::Max,
         ] {
             let mut preferences = input(storage.agent_profile("research")?);
             preferences.connection = AgentConnection::OpenaiApi;
@@ -344,11 +349,6 @@ mod tests {
         }
         let original = storage.agent_profile("research")?;
         for (connection, model, effort) in [
-            (
-                AgentConnection::OpenaiApi,
-                OPENAI_AGENT_MODEL,
-                ReasoningEffort::Max,
-            ),
             (
                 AgentConnection::OpenaiApi,
                 "unsupported",
@@ -364,10 +364,10 @@ mod tests {
                 OPENAI_AGENT_MODEL,
                 ReasoningEffort::Default,
             ),
-            (AgentConnection::Codex, "unavailable", ReasoningEffort::High),
+            (AgentConnection::Codex, "", ReasoningEffort::High),
             (
                 AgentConnection::Codex,
-                OPENAI_AGENT_MODEL,
+                "invalid\nmodel",
                 ReasoningEffort::Default,
             ),
         ] {

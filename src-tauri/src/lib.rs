@@ -7,6 +7,7 @@ mod anthropic;
 mod app_info;
 pub mod approvals;
 pub mod audit;
+mod codex_connection;
 pub mod credentials;
 pub mod documents;
 mod error;
@@ -84,6 +85,14 @@ pub fn run() -> Result<(), AppError> {
         .build(tauri::generate_context!())
         .map_err(AppError::from)?;
 
-    app.run(|app_handle, event| menu_bar::handle_run_event(app_handle, &event));
+    app.run(|app_handle, event| {
+        if let tauri::RunEvent::ExitRequested { api, .. } = &event {
+            if !codex_connection::shutdown() {
+                api.prevent_exit();
+                eprintln!("Cortexa could not confirm Codex child cleanup; exit was cancelled.");
+            }
+        }
+        menu_bar::handle_run_event(app_handle, &event);
+    });
     Ok(())
 }

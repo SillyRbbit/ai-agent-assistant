@@ -1,3 +1,14 @@
+## 2026-09-30 — Provider milestone native connection
+
+`codex_connection.rs` is a narrow adapter beneath existing native conversation
+ownership. Per-agent settings/revisions and notes remain in the existing SQLite
+storage boundary. React captures no authority: it sends IDs, text and acknowledgement;
+Rust reloads current settings, validates discovery and binds history/context.
+A fresh ephemeral Codex thread receives completed native history each turn. No
+runtime thread identifiers or transcripts are persisted in agent preferences.
+Codex owns authentication to its service; Cortexa never transforms ChatGPT sign-in
+into an OpenAI API credential or falls back between connections.
+
 # Cortexa architecture
 
 ## Configurable private agent demo — D-129, 2026-09-22

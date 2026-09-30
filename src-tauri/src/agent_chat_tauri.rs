@@ -5,10 +5,11 @@ use std::time::Duration;
 use serde::{Deserialize, Serialize};
 use tokio::task::JoinHandle;
 
-use crate::agent_chat::{BoundConversation, ChatError, CODEX_LIMITATION};
+use crate::agent_chat::{BoundConversation, ChatError};
 use crate::agent_preferences::{
     AgentConnection, AgentPreferencesInput, AgentProfile, MemoryMode, ReasoningEffort,
 };
+use crate::codex_connection;
 use crate::personal_assistant_direct::{
     self as provider, ApiKey, DirectError, GenerationLease, ProviderEvent,
 };
@@ -224,6 +225,12 @@ fn begin_conversation(
 }
 
 enum AdapterRequest {
+    Codex {
+        setup: codex_connection::Setup,
+        model: String,
+        effort: ReasoningEffort,
+        input: String,
+    },
     Simulation,
     Anthropic {
         key: anthropic::AnthropicKey,
@@ -266,7 +273,18 @@ fn start_owned(
     let current = storage.agent_profile(&bound.profile.agent_id)?;
     bound.validate_send(&current, &request.message)?;
     let adapter = match bound.profile.connection {
-        AgentConnection::Codex => return Err(ChatError::CodexIsolation),
+        AgentConnection::Codex => {
+            if request.acknowledgment != "codex-agent-text-v1" {
+                return Err(ChatError::InvalidRequest);
+            }
+            validate_catalog(&session.catalogs, &bound.profile)?;
+            AdapterRequest::Codex {
+                setup: codex_connection::Setup::from_environment()?,
+                model: bound.profile.model.clone(),
+                effort: bound.profile.effort,
+                input: bound.codex_input(&request.message)?,
+            }
+        }
         AgentConnection::Simulation => {
             if request.acknowledgment != "simulation" {
                 return Err(ChatError::InvalidRequest);
@@ -332,6 +350,12 @@ async fn run_adapter(
     mut emit: impl FnMut(ProviderEvent) -> Result<(), DirectError>,
 ) -> Result<(), DirectError> {
     match adapter {
+        AdapterRequest::Codex {
+            setup,
+            model,
+            effort,
+            input,
+        } => codex_connection::run(setup, model, effort, input, emit).await,
         #[cfg(test)]
         AdapterRequest::Failure(error) => Err(error),
         #[cfg(test)]
@@ -514,7 +538,9 @@ pub(crate) async fn discover_agent_models(
     state: tauri::State<'_, AgentChatState>,
 ) -> Result<CatalogSnapshot, ChatError> {
     let endpoint = match request.connection {
-        AgentConnection::AnthropicApi if request.endpoint.is_empty() && !request.local_auth => {
+        AgentConnection::AnthropicApi | AgentConnection::Codex
+            if request.endpoint.is_empty() && !request.local_auth =>
+        {
             String::new()
         }
         AgentConnection::LmStudio | AgentConnection::Ollama => {
@@ -544,7 +570,9 @@ pub(crate) async fn discover_agent_models(
         });
     }
     let models = tokio::time::timeout(Duration::from_secs(30), async {
-        if request.connection == AgentConnection::AnthropicApi {
+        if request.connection == AgentConnection::Codex {
+            codex_connection::discover().await
+        } else if request.connection == AgentConnection::AnthropicApi {
             anthropic::discover().await
         } else {
             local_models::discover(request.connection, &endpoint, request.local_auth).await
@@ -635,8 +663,8 @@ pub(crate) fn list_agent_connections() -> Vec<ConnectionReadiness> {
         ConnectionReadiness { connection: AgentConnection::Ollama, status: "owner_setup_required", message: "Connect an already-running loopback Ollama server. Cloud models are excluded. Disable cloud in the runtime; locality remains unverified." },
         ConnectionReadiness {
             connection: AgentConnection::Codex,
-            status: "blocked",
-            message: CODEX_LIMITATION,
+            status: if codex_connection::Setup::from_environment().is_ok() { "owner_setup_required" } else { "blocked" },
+            message: "Requires Codex 0.159.0, CORTEXA_CODEX_DEMO=1 and a dedicated owner-authenticated CORTEXA_CODEX_HOME without user configuration. Refresh models explicitly. No OpenAI API key inheritance or fallback.",
         },
     ]
 }
@@ -929,6 +957,9 @@ mod tests {
         let codex = list_agent_connections()
             .into_iter()
             .find(|c| c.connection == AgentConnection::Codex);
-        assert!(codex.is_some_and(|c| c.status == "blocked" && c.message == CODEX_LIMITATION));
+        assert!(
+            codex.is_some_and(|c| matches!(c.status, "blocked" | "owner_setup_required")
+                && c.message.contains("dedicated"))
+        );
     }
 }

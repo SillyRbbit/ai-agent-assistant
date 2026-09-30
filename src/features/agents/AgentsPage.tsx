@@ -19,7 +19,7 @@ import "./AgentsPage.css";
 const CONNECTION_LABELS = {
   simulation: "Simulation · no provider",
   openai_api: "OpenAI API",
-  codex: "Codex · live unavailable",
+  codex: "Headless Codex",
   anthropic_api: "Anthropic API",
   lm_studio: "Local — LM Studio",
   ollama: "Local — Ollama",
@@ -245,7 +245,10 @@ function AgentSettings({
       capabilities.type === "embedding"
     );
   });
-  const catalogConnection = draft.connection === "anthropic_api" || isLocal(draft.connection);
+  const catalogConnection =
+    draft.connection === "anthropic_api" ||
+    draft.connection === "codex" ||
+    isLocal(draft.connection);
   const selectable = (model: ModelInfo) =>
     model.locality !== "cloud" && !["unsupported", "retired"].includes(model.availability);
   const changeConnection = (connection: AgentConnection) => {
@@ -352,7 +355,7 @@ function AgentSettings({
               }}
             >
               {(draft.connection === "openai_api"
-                ? EFFORTS.filter((effort) => effort !== "max")
+                ? EFFORTS
                 : (selectedModel?.efforts ?? ["default"])
               ).map((effort) => (
                 <option key={effort} value={effort}>
@@ -418,7 +421,7 @@ function AgentSettings({
               type="button"
               onClick={() =>
                 void perform(async () => {
-                  if (isLocal(draft.connection)) {
+                  if (isLocal(draft.connection) || draft.connection === "codex") {
                     setModels([]);
                     onCatalog(draft.connection, draft.endpoint, draft.localAuth, []);
                   }
@@ -483,9 +486,10 @@ function AgentSettings({
         </p>
         {draft.connection === "codex" ? (
           <p>
-            Authentication is unverified. Codex is disabled because complete tool and file isolation
-            could not be established with the installed runtime. No ChatGPT subscription or API
-            billing mode is assumed.
+            Codex uses its own owner-managed sign-in, not the OpenAI API session key. Use the
+            dedicated home described in the provider milestone guide, then refresh models. Only
+            runtime-advertised model and effort choices are offered. Authentication and discovery do
+            not prove generation access. Tools, workspace access and fallback are disabled.
           </p>
         ) : null}
         <label>
@@ -607,7 +611,7 @@ function AgentSettings({
             dirty ||
             readiness === undefined ||
             readiness.status === "blocked" ||
-            draft.connection === "codex" ||
+            (draft.connection === "codex" && !selectedModel) ||
             (catalogConnection && selectedModel !== undefined && !selectable(selectedModel)) ||
             (isLocal(draft.connection) &&
               (selectedModel === undefined || !selectable(selectedModel)))
@@ -757,8 +761,7 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
       uncertainCleanup.current ||
       history.length >= 3 ||
       message.trim() === "" ||
-      (initial.connection !== "simulation" && !acknowledged) ||
-      initial.connection === "codex"
+      (initial.connection !== "simulation" && !acknowledged)
     )
       return;
     sendPending.current = true;
@@ -774,9 +777,11 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
           ? "simulation"
           : initial.connection === "openai_api"
             ? "openai-agent-text-v1"
-            : initial.connection === "anthropic_api"
-              ? "anthropic-agent-text-v1"
-              : "local-agent-text-v1",
+            : initial.connection === "codex"
+              ? "codex-agent-text-v1"
+              : initial.connection === "anthropic_api"
+                ? "anthropic-agent-text-v1"
+                : "local-agent-text-v1",
       );
       if (shouldStop()) next = await client.cancel(initial.conversationId);
       if (mounted.current) {
@@ -830,7 +835,10 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
       </p>
       <p>
         Each message is limited to 4,096 characters. Provider requests have a 60-second deadline and
-        a 2,048-token output budget including reasoning. No automatic retry is made.
+        {initial.connection === "codex"
+          ? "an 8,192-character visible output limit. Codex controls its token budget and internal transport retries; usage and retention follow its authenticated account."
+          : "a 2,048-token output budget including reasoning."}{" "}
+        Cortexa does not automatically resubmit a turn.
       </p>
       {initial.connection === "simulation" ? (
         <p className="agents-readiness">
@@ -841,9 +849,11 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
           <p>
             {initial.connection === "openai_api"
               ? HOSTED_DISCLOSURE
-              : initial.connection === "anthropic_api"
-                ? "Anthropic receives this message, earlier turns, saved instructions and enabled private notes. API charges and provider retention terms apply. Stop aborts local output but cannot guarantee immediate remote termination or zero billing. No tools, automatic retry or fallback."
-                : "The selected server receives your message, earlier turns, instructions and enabled notes. Execution locality is unknown; localhost can proxy elsewhere. Sending may trigger normal loading of this selected installed model; loading uses the same bounded deadline. Cortexa does not download models, infer RAM needs or fall back to a cloud service."}
+              : initial.connection === "codex"
+                ? "Codex receives this message, completed earlier turns, saved instructions and enabled notes through its own authenticated account. Account charges, limits and retention may apply. Stop kills the local runtime but cannot guarantee remote termination or zero usage. No tools, workspace access or API fallback."
+                : initial.connection === "anthropic_api"
+                  ? "Anthropic receives this message, earlier turns, saved instructions and enabled private notes. API charges and provider retention terms apply. Stop aborts local output but cannot guarantee immediate remote termination or zero billing. No tools, automatic retry or fallback."
+                  : "The selected server receives your message, earlier turns, instructions and enabled notes. Execution locality is unknown; localhost can proxy elsewhere. Sending may trigger normal loading of this selected installed model; loading uses the same bounded deadline. Cortexa does not download models, infer RAM needs or fall back to a cloud service."}
           </p>
           <label className="agents-checkbox">
             <input
@@ -856,9 +866,11 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
             />
             {initial.connection === "openai_api"
               ? "I acknowledge sending this message and selected context to OpenAI with possible API charges."
-              : initial.connection === "anthropic_api"
-                ? "I acknowledge sending this message and selected context to Anthropic with possible API charges and provider retention."
-                : "I acknowledge sending this message and selected context to the configured server with unknown execution locality."}
+              : initial.connection === "codex"
+                ? "I acknowledge sending this message and selected context through my Codex account with its usage and retention terms."
+                : initial.connection === "anthropic_api"
+                  ? "I acknowledge sending this message and selected context to Anthropic with possible API charges and provider retention."
+                  : "I acknowledge sending this message and selected context to the configured server with unknown execution locality."}
           </label>
         </>
       )}
@@ -881,8 +893,7 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
           disabled={
             !canSend ||
             message.trim() === "" ||
-            (initial.connection !== "simulation" && !acknowledged) ||
-            initial.connection === "codex"
+            (initial.connection !== "simulation" && !acknowledged)
           }
           onClick={() => void send()}
         >
@@ -890,9 +901,11 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
             ? "Send simulated message"
             : initial.connection === "openai_api"
               ? "Send to OpenAI"
-              : initial.connection === "anthropic_api"
-                ? "Send to Anthropic"
-                : "Send to selected server"}
+              : initial.connection === "codex"
+                ? "Send through Codex"
+                : initial.connection === "anthropic_api"
+                  ? "Send to Anthropic"
+                  : "Send to selected server"}
         </button>
         <button
           type="button"
