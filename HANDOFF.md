@@ -1,3 +1,113 @@
+## 2026-09-29 — Python-corrected undici acceptance
+
+Local acceptance validation passed for `undici-audit-remediation-python-acceptance` from main
+`14e9a6a51a292fccaa867b5666dd382768262abd`. The eleven-path source candidate was transferred
+byte-for-byte without gate state; this isolated successor has exactly thirteen
+cumulative paths and eight documentation edits. Both predecessor FAIL / Blocked
+records, their plans/reports, all original worktrees and artifacts remain preserved.
+
+The process-local PATH correction selects verified Python 3.12.1 through npm.
+Fresh full verification passed formatting, repository checks, strict lint,
+74 hook tests, 85 repository tests, 431 frontend tests, 368 Rust library tests,
+integration suites and the Tauri native no-bundle release build. ACP passed 7/7;
+Hermes passed 13 with one intentionally ignored real-runtime opt-in test.
+This is new local evidence, not a relabeling of either historical failure.
+
+Clean npm installation and exact tree/metadata checks passed. Both npm audits
+report zero vulnerabilities. Pinned cargo-audit 0.22.2 and the unchanged gate
+accepted precisely two quick-xml vulnerabilities and eight warnings; that is
+not vulnerability-free Rust. Only undici 7.29.0 to 7.29.1 remains in the lockfile.
+The native build used installed Rust 1.90.0, process-local Xcode/SDK 27.0 and
+`profile.release.build-override.strip="none"`. Default stripped builds are not
+claimed repaired. No persistent configuration or product/fixture byte changed.
+
+The report records actual checks and the quality decision. Ordinary finalization,
+complete/valid status and full-payload Stop must be read from checkout-local gate
+evidence after report freeze; local acceptance does not prove remote CI.
+Retain D-127 audit debt, D-128 custody/abort and native/provider/runtime live-success
+and Codex-isolation advisories. D-125/M1/M2 stay parked. No app launch, provider
+request, commit or publication occurred. See the [plan](docs/plans/2026-09-29-undici-audit-remediation-python-acceptance.md) and
+[review](docs/reviews/2026-09-29-undici-audit-remediation-python-acceptance-post-increment-review.md).
+
+Resume prompt: inspect this candidate, its completion marker, live main and all
+preserved records read-only; verify thirteen-path scope and unchanged dependency
+patch, then assess publication readiness without repeating passed implementation
+or tests. Do not commit, push, merge, make provider requests or change files.
+
+## 2026-09-29 — Undici isolated acceptance stopped: Python selection
+
+The owner admitted `undici-audit-remediation-acceptance` from verified main
+`14e9a6a51a292fccaa867b5666dd382768262abd` in the separate acceptance worktree.
+The nine-path predecessor candidate was transferred byte-for-byte; its valid
+terminal FAIL / Blocked report and raw state remain immutable. Cumulative scope
+is exactly eleven paths. Undici 7.29.1 remains the sole lockfile patch;
+package.json and all unrelated entries and product/fixture/governance bytes remain
+unchanged. See the [plan](docs/plans/2026-09-29-undici-audit-remediation-acceptance.md) and [review](docs/reviews/2026-09-29-undici-audit-remediation-acceptance-post-increment-review.md).
+
+Fresh clean npm installation, official metadata/requirements and exact tree,
+full and production npm audits (zero vulnerabilities), 18 focused Agents tests,
+and pinned cargo-audit 0.22.2 with the unchanged repository gate passed. RustSec
+still reports precisely two accepted quick-xml vulnerabilities and eight warning
+records, not a vulnerability-free result.
+
+Full verification failed before lint/tests/build: the clean process PATH selected
+macOS Python 3.9.6, and repository_health.py rejected `zip(..., strict=True)`.
+The existing Python 3.12 installation was omitted from that PATH. This is a
+verification-environment error, not evidence of a new product or native-build
+regression. No acceptance retry follows. Full Rust/frontend suites and the
+native build were Not run in this successor. Preserved prior native repair
+success is historical evidence only; default stripped builds remain affected.
+The required process-local Xcode/SDK 27.0 and Cargo host-build stripping override
+were supplied, but this invocation never reached the native build.
+
+Result: FAIL / Blocked. Passing finalization and a completion marker are not
+justified. Failure-disposition documentation/preservation/schema checks and
+ordinary close-failed/Stop are recorded by their actual results. Existing Python
+3.12 is used only for that disposition validation; no tools are installed.
+Retain D-127, D-128, provider/runtime live-success and Codex-isolation advisories;
+D-125/M1/M2 remain parked. No app launch, provider request or publication occurred.
+
+Resume prompt: inspect this failed acceptance candidate and preserved source
+read-only, verify interpreter selection and existing records, and propose the
+smallest explicitly authorized acceptance route. Do not repeat dependency,
+fixture or diagnosis work, reopen terminal history, edit or publish.
+
+## 2026-09-29 — Undici audit remediation blocked by native build
+
+The owner-authorized `undici-audit-remediation` candidate on
+`codex/undici-audit-remediation` starts from merged main
+`14e9a6a51a292fccaa867b5666dd382768262abd`. Only undici's lockfile version,
+resolved URL and integrity change from 7.29.0 to 7.29.1; jsdom 29.1.1,
+`package.json` and all unrelated versions remain unchanged. See the
+[plan](docs/plans/2026-09-29-undici-audit-remediation.md) and
+[review](docs/reviews/2026-09-29-undici-audit-remediation-post-increment-review.md).
+
+Clean npm installation, full/production npm audits (zero vulnerabilities),
+18 focused Agents tests, 431 full frontend tests, strict linting, 74 hook tests,
+85 repository tests, 368 Rust library tests and Rust integration suites passed.
+Pinned cargo-audit 0.22.2 and the unchanged repository gate passed only the
+accepted two quick-xml advisories and eight warning records; that is not a
+vulnerability-free Rust result. `npm run verify` failed with exit 1 at its
+required Tauri no-bundle native build: E0463 could not find `zerofrom_derive`,
+followed by E0432 in zerofrom 0.1.8. The underlying cause is not established.
+No rebuild or repair was attempted after that failure.
+
+The quality decision is FAIL / Blocked. Passing completion and publication are
+not justified. Ordinary terminal-failure validation is required; use the gate's
+actual status rather than inferring completion from passing tests. The next
+permitted proposal is a read-only review of the bounded build evidence, not an
+automatic successor, dependency upgrade or governance amendment.
+
+All predecessor checkouts, reports and gate states remain preserved. Keep
+native/provider/runtime live-success and Codex-isolation advisories, D-127 audit
+debt and D-128 custody/abort limits; D-125/M1/M2 remain parked. No app launch,
+provider request, commit, push, PR #123 update or publication was performed.
+
+Resume prompt: inspect this worktree and its valid terminal-failure record
+read-only, preserve all changes, identify the failing generated macro-library
+stage from existing evidence, and propose the smallest separately authorized
+next step. Do not rerun tests/builds, reopen the failure, edit or publish.
+
 ## 2026-09-29 — PR #123 fixture-repair publication preparation
 
 The owner authorized a separate publication candidate from PR #123 at
