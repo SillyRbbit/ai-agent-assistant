@@ -80,10 +80,62 @@ impl MemoryMode {
     }
 }
 
+/// Editable presentation metadata; never routing, permissions or execution authority.
+#[derive(Clone, Default, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub(crate) struct BotIdentity {
+    pub(crate) nickname: String,
+    pub(crate) avatar: BotAvatar,
+    pub(crate) description: String,
+    pub(crate) tone: BotTone,
+    pub(crate) verbosity: BotVerbosity,
+}
+#[derive(Clone, Copy, Default, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub(crate) enum BotAvatar {
+    #[default]
+    Bot,
+    Compass,
+    Spark,
+    Leaf,
+    Shield,
+    Star,
+}
+#[derive(Clone, Copy, Default, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub(crate) enum BotTone {
+    #[default]
+    Neutral,
+    Warm,
+    Direct,
+    Formal,
+}
+#[derive(Clone, Copy, Default, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub(crate) enum BotVerbosity {
+    Brief,
+    #[default]
+    Balanced,
+    Detailed,
+}
+impl BotIdentity {
+    pub(crate) fn validate(&self) -> Result<(), PreferencesError> {
+        if self.nickname.chars().count() > 48
+            || self.nickname.trim() != self.nickname
+            || self.nickname.chars().any(char::is_control)
+            || !valid_content(&self.description, 280)
+        {
+            return Err(PreferencesError::InvalidRequest);
+        }
+        Ok(())
+    }
+}
+
 #[derive(Clone, Deserialize, Eq, PartialEq)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub(crate) struct AgentPreferencesInput {
     pub(crate) agent_id: String,
+    pub(crate) identity: BotIdentity,
     pub(crate) connection: AgentConnection,
     pub(crate) model: String,
     pub(crate) endpoint: String,
@@ -100,6 +152,7 @@ pub(crate) struct AgentPreferencesInput {
 #[serde(rename_all = "camelCase")]
 pub(crate) struct AgentProfile {
     pub(crate) agent_id: String,
+    pub(crate) identity: BotIdentity,
     pub(crate) display_name: String,
     pub(crate) connection: AgentConnection,
     pub(crate) model: String,
@@ -119,6 +172,7 @@ impl AgentProfile {
             AgentDefinition::built_in(agent_id).map_err(|_| PreferencesError::InvalidRequest)?;
         Ok(Self {
             agent_id: agent_id.as_str().to_owned(),
+            identity: BotIdentity::default(),
             display_name: definition.display_name().to_owned(),
             connection: AgentConnection::Simulation,
             model: "simulation".to_owned(),
@@ -134,6 +188,7 @@ impl AgentProfile {
     }
 
     pub(crate) fn validate(&self) -> Result<(), PreferencesError> {
+        self.identity.validate()?;
         let id = validate_preferences(
             &self.agent_id,
             self.connection,
@@ -171,7 +226,9 @@ impl AgentPreferencesInput {
             &self.note,
             self.revision,
         )?;
+        self.identity.validate()?;
         let mut profile = AgentProfile::defaults(id)?;
+        profile.identity = self.identity;
         profile.connection = self.connection;
         profile.model = self.model;
         profile.endpoint = normalize_configuration(
@@ -296,4 +353,33 @@ fn valid_content(value: &str, maximum: usize) -> bool {
         && !value
             .chars()
             .any(|character| character.is_control() && !matches!(character, '\n' | '\t'))
+}
+
+#[cfg(test)]
+mod identity_tests {
+    use super::*;
+    #[test]
+    fn identity_has_closed_bounds_and_redacted_debug() -> Result<(), PreferencesError> {
+        let mut p = AgentProfile::defaults(AgentId::Research)?;
+        p.identity.nickname = "λ".repeat(48);
+        p.identity.description = "x".repeat(280);
+        p.validate()?;
+        p.identity.nickname.push('x');
+        assert_eq!(p.validate(), Err(PreferencesError::InvalidRequest));
+        for invalid in [" bad", "bad ", "bad\nname", "bad\u{7f}"] {
+            p.identity.nickname = invalid.into();
+            assert_eq!(p.validate(), Err(PreferencesError::InvalidRequest));
+        }
+        p.identity.nickname = "private-sentinel".into();
+        assert!(!format!("{p:?}").contains("private-sentinel"));
+        p.identity.description.push('x');
+        assert_eq!(p.validate(), Err(PreferencesError::InvalidRequest));
+        for field in ["avatar", "tone", "verbosity"] {
+            let mut value = serde_json::to_value(BotIdentity::default())
+                .map_err(|_| PreferencesError::InvalidRequest)?;
+            value[field] = serde_json::json!("unauthorized");
+            assert!(serde_json::from_value::<BotIdentity>(value).is_err());
+        }
+        Ok(())
+    }
 }

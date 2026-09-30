@@ -1,3 +1,4 @@
+import type * as ReactFlowLibrary from "@xyflow/react";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -22,6 +23,8 @@ interface MockFlowProps {
       readonly isSelected?: boolean;
       readonly label?: string;
     };
+    readonly height: number;
+    readonly width: number;
     readonly id: string;
     readonly position: { x: number; y: number };
     readonly style?: {
@@ -62,6 +65,9 @@ const flowHarness = vi.hoisted(() => {
       zoomOut,
     },
     lastProps: null as Record<string, unknown> | null,
+    nodesInitialized: true,
+    readinessOptions: undefined as { readonly includeHiddenNodes?: boolean } | undefined,
+    readinessListeners: new Set<() => void>(),
     setViewport,
     zoomIn,
     zoomOut,
@@ -71,6 +77,16 @@ const flowHarness = vi.hoisted(() => {
 vi.mock("@xyflow/react", async () => {
   const React = await import("react");
   return {
+    useNodesInitialized: (options?: { readonly includeHiddenNodes?: boolean }) => {
+      flowHarness.readinessOptions = options;
+      return React.useSyncExternalStore(
+        (listener) => {
+          flowHarness.readinessListeners.add(listener);
+          return () => flowHarness.readinessListeners.delete(listener);
+        },
+        () => flowHarness.nodesInitialized,
+      );
+    },
     Handle: () => null,
     MarkerType: { ArrowClosed: "arrow-closed" },
     Position: { Bottom: "bottom", Top: "top" },
@@ -82,7 +98,11 @@ vi.mock("@xyflow/react", async () => {
           (onInit as (instance: typeof flowHarness.instance) => void)(flowHarness.instance);
         }
       }, [onInit]);
-      return React.createElement("div", { "data-testid": "react-flow-mock" });
+      return React.createElement(
+        "div",
+        { "data-testid": "react-flow-mock" },
+        props["children"] as React.ReactNode,
+      );
     },
   };
 });
@@ -157,6 +177,14 @@ function resizeCanvas(width: number, height: number): void {
   flushFrames();
 }
 
+function setNodesInitialized(ready: boolean): void {
+  act(() => {
+    flowHarness.nodesInitialized = ready;
+    for (const listener of flowHarness.readinessListeners) listener();
+  });
+  flushFrames();
+}
+
 function expectDomainLaneClearance(): void {
   const graphNodes = flowProps().nodes;
   const orchestrator = graphNodes.find((node) => node.id === "demo-node:orchestrator");
@@ -217,6 +245,8 @@ beforeEach(() => {
   flowHarness.zoomIn.mockClear();
   flowHarness.zoomOut.mockClear();
   flowHarness.lastProps = null;
+  flowHarness.nodesInitialized = true;
+  flowHarness.readinessOptions = undefined;
   vi.stubGlobal("ResizeObserver", ResizeObserverMock);
   vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => {
     const id = nextFrameId;
@@ -246,6 +276,79 @@ afterEach(() => {
 });
 
 describe("OperationalTopologyAdapter viewport contract", () => {
+  it("waits for delayed node measurement after canvas and viewport readiness", () => {
+    flowHarness.nodesInitialized = false;
+    renderTopology();
+    resizeCanvas(502, 500);
+    expect(flowHarness.fitView).not.toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: "Fit view" })).toBeDisabled();
+
+    setNodesInitialized(true);
+    expect(flowHarness.fitView).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole("button", { name: "Fit view" })).toBeEnabled();
+  });
+
+  it("fits on subsequent route entry after an earlier unmeasured canvas unmounts", () => {
+    flowHarness.nodesInitialized = false;
+    const firstEntry = render(
+      <OperationalTopologyAdapter
+        onSelect={vi.fn()}
+        projection={buildCommandCenterProjection("catalog-idle")}
+        selectedId={null}
+      />,
+    );
+    resizeCanvas(502, 500);
+    firstEntry.unmount();
+    expect(flowHarness.readinessListeners.size).toBe(0);
+    setNodesInitialized(true);
+    expect(flowHarness.fitView).not.toHaveBeenCalled();
+
+    renderTopology();
+    resizeCanvas(502, 500);
+    expect(flowHarness.fitView).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps manually moved viewports when node measurement becomes ready again", () => {
+    renderTopology();
+    resizeCanvas(502, 500);
+    act(() => {
+      flowProps().onMove?.({}, { x: 30, y: 20, zoom: 1 });
+    });
+    flushFrames();
+    flowHarness.fitView.mockClear();
+    setNodesInitialized(false);
+    setNodesInitialized(true);
+    expect(flowHarness.fitView).not.toHaveBeenCalled();
+  });
+
+  it("supplies fixed node dimensions before measurement and after controlled node updates", () => {
+    flowHarness.nodesInitialized = false;
+    const projection = buildCommandCenterProjection("catalog-idle");
+    const view = render(
+      <OperationalTopologyAdapter onSelect={vi.fn()} projection={projection} selectedId={null} />,
+    );
+    const expectFixedDimensions = () => {
+      for (const node of flowProps().nodes) {
+        expect(node.width).toBe(node.style?.width);
+        expect(node.height).toBe(node.style?.height);
+        expect(node.width).toBeGreaterThan(0);
+        expect(node.height).toBeGreaterThan(0);
+      }
+    };
+    expectFixedDimensions();
+    view.rerender(
+      <OperationalTopologyAdapter
+        onSelect={vi.fn()}
+        projection={{
+          ...projection,
+          nodes: projection.nodes.map((node) => ({ ...node, label: `${node.label} saved` })),
+        }}
+        selectedId={null}
+      />,
+    );
+    expectFixedDimensions();
+  });
+
   it("waits for dimensions, then fits the compact layout with bounded controls", () => {
     renderTopology();
     flushFrames();
@@ -892,5 +995,125 @@ describe("OperationalTopologyAdapter viewport contract", () => {
     );
     expect(screen.getByRole("heading", { name: "Invalid graph data" })).toBeInTheDocument();
     expect(screen.getByRole("alert")).toHaveTextContent("Duplicate graph node identifier");
+  });
+});
+
+describe("OperationalTopologyAdapter actual React Flow measurement boundary", () => {
+  it("uses current measured internals when the controlled-node cached flag stays false", async () => {
+    const adapter = render(
+      <OperationalTopologyAdapter
+        onSelect={vi.fn()}
+        projection={buildCommandCenterProjection("catalog-idle")}
+        selectedId={null}
+      />,
+    );
+    const adapterOptions = flowHarness.readinessOptions;
+    adapter.unmount();
+    const actual = await vi.importActual<typeof ReactFlowLibrary>("@xyflow/react");
+    const { ReactFlow: ActualReactFlow } = actual;
+
+    // These are browser geometry fixtures, not readiness values. Measurement
+    // and both readiness selectors below run through the installed library.
+    vi.stubGlobal(
+      "DOMMatrixReadOnly",
+      class {
+        readonly m22 = 1;
+      },
+    );
+    vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockImplementation(function (
+      this: HTMLElement,
+    ) {
+      return Number.parseFloat(this.style.width) || 640;
+    });
+    vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockImplementation(function (
+      this: HTMLElement,
+    ) {
+      return Number.parseFloat(this.style.height) || 480;
+    });
+
+    function ReadinessProbe() {
+      const cached = actual.useNodesInitialized();
+      const measured = actual.useNodesInitialized({ includeHiddenNodes: true });
+      const configured = actual.useNodesInitialized(adapterOptions);
+      return (
+        <>
+          <output data-testid="cached-readiness">{String(cached)}</output>
+          <output data-testid="measured-readiness">{String(measured)}</output>
+          <output data-testid="configured-readiness">{String(configured)}</output>
+        </>
+      );
+    }
+    const nodes = [
+      {
+        id: "measurement-first",
+        position: { x: 0, y: 0 },
+        data: { label: "First" },
+        width: 196,
+        height: 120,
+      },
+      {
+        id: "measurement-second",
+        position: { x: 240, y: 0 },
+        data: { label: "Second" },
+        width: 196,
+        height: 120,
+      },
+    ];
+    const graph = (saved: boolean) => (
+      <ActualReactFlow
+        nodes={
+          saved
+            ? nodes.map((node) => ({ ...node, data: { label: `${node.data.label} saved` } }))
+            : nodes
+        }
+        edges={[]}
+        nodesDraggable={false}
+        nodesConnectable={false}
+        fitView={false}
+      >
+        <ReadinessProbe />
+      </ActualReactFlow>
+    );
+    const view = render(graph(false));
+    flushFrames();
+    expect(screen.getByTestId("cached-readiness")).toHaveTextContent("false");
+    expect(screen.getByTestId("measured-readiness")).toHaveTextContent("false");
+
+    const measure = (id: string) => {
+      const element = view.container.querySelector(`[data-id="${id}"]`);
+      if (element === null) throw new Error("Expected the real React Flow node wrapper");
+      const observer = resizeObservers.find((candidate) => candidate.targets.has(element));
+      if (observer === undefined) throw new Error("Expected the real React Flow node observer");
+      act(() => {
+        observer.callback(
+          [
+            {
+              target: element,
+              contentRect: element.getBoundingClientRect(),
+            } as ResizeObserverEntry,
+          ],
+          {} as ResizeObserver,
+        );
+      });
+      flushFrames();
+    };
+    measure("measurement-first");
+    expect(screen.getByTestId("measured-readiness")).toHaveTextContent("false");
+    measure("measurement-second");
+    expect(screen.getByTestId("cached-readiness")).toHaveTextContent("false");
+    expect(screen.getByTestId("measured-readiness")).toHaveTextContent("true");
+    expect(screen.getByTestId("configured-readiness")).toHaveTextContent("true");
+    expect(adapterOptions).toEqual({ includeHiddenNodes: true });
+
+    // Same-ID, same-size controlled node replacement resets handle measurement.
+    // It must not bypass readiness, and new observer deliveries must release it.
+    view.rerender(graph(true));
+    flushFrames();
+    expect(screen.getByTestId("configured-readiness")).toHaveTextContent("false");
+    measure("measurement-first");
+    expect(screen.getByTestId("configured-readiness")).toHaveTextContent("false");
+    measure("measurement-second");
+    expect(screen.getByTestId("configured-readiness")).toHaveTextContent("true");
+    expect(screen.getByTestId("cached-readiness")).toHaveTextContent("false");
   });
 });

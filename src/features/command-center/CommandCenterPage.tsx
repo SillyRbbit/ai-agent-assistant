@@ -1,9 +1,12 @@
 import { FlaskConical } from "lucide-react";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { useApplicationWorkspacePanels } from "../../components/applicationWorkspacePanels";
 import type { ResearchKnowledgeDemoProjectionLoader } from "../../infrastructure/tauri/research-knowledge-demo-projection-client";
+
+import { agentChatClient } from "../../infrastructure/tauri/agent-chat-client";
+import { type BotNameLoader, withBotNames } from "./commandCenterBotNames";
 
 import "./command-center.css";
 import {
@@ -157,6 +160,7 @@ function nodeMatches(
     node.agentId ?? "",
     node.groupId === null ? "" : (groupLabels.get(node.groupId) ?? ""),
     node.inspector.assignment ?? "",
+    ...node.inspector.facts.map((fact) => fact.value),
     ...node.inspector.findings,
     ...node.inspector.unresolvedIssues,
   ]
@@ -427,19 +431,50 @@ function topologySelectionFor(
 
 interface CommandCenterPageProps {
   readonly projectionLoader?: ResearchKnowledgeDemoProjectionLoader;
+  readonly botNameLoader?: BotNameLoader;
 }
 
 const unavailableProjectionLoader: ResearchKnowledgeDemoProjectionLoader = () =>
   Promise.reject(new Error("Projection loader unavailable."));
 
+const loadSavedBotNames: BotNameLoader = async () => {
+  if (!agentChatClient.available()) return new Map();
+  const profiles = await agentChatClient.list();
+  // Retain only names here; private notes and runtime settings never enter graph state.
+  return new Map(profiles.map((profile) => [profile.agentId, profile.identity.nickname]));
+};
+
 export default function CommandCenterPage({
   projectionLoader = unavailableProjectionLoader,
+  botNameLoader = loadSavedBotNames,
 }: CommandCenterPageProps) {
   const { actions, state } = useCommandCenterState();
   const workspacePanels = useApplicationWorkspacePanels();
+  const [botNames, setBotNames] = useState<ReadonlyMap<CommandCenterAgentId, string>>(new Map());
+  const [namesUnavailable, setNamesUnavailable] = useState(false);
+  useEffect(() => {
+    let current = true;
+    void botNameLoader().then(
+      (names) => {
+        if (current) {
+          setBotNames(names);
+          setNamesUnavailable(false);
+        }
+      },
+      () => {
+        if (current) {
+          setBotNames(new Map());
+          setNamesUnavailable(true);
+        }
+      },
+    );
+    return () => {
+      current = false;
+    };
+  }, [botNameLoader]);
   const projection = useMemo(
-    () => buildCommandCenterProjection(state.scenarioId),
-    [state.scenarioId],
+    () => withBotNames(buildCommandCenterProjection(state.scenarioId), botNames),
+    [state.scenarioId, botNames],
   );
   const currentSelection =
     state.selection?.scenarioId === projection.scenarioId ? state.selection : null;
@@ -866,6 +901,9 @@ export default function CommandCenterPage({
           </span>
         </p>
 
+        {namesUnavailable && (
+          <p role="status">Saved bot names are unavailable; canonical roles are shown.</p>
+        )}
         <div className="command-center-graph-shell">
           {filterControls}
           <div className="command-center-graph-workspace">

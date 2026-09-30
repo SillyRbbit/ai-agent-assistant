@@ -26,7 +26,46 @@ export const EFFORTS = ["default", "none", "low", "medium", "high", "xhigh", "ma
 export type AgentEffort = (typeof EFFORTS)[number];
 export const OPENAI_AGENT_MODELS = ["gpt-5.6-luna", "gpt-5.6-terra", "gpt-5.6-sol"] as const;
 export type MemoryMode = "off" | "private_notes";
+export const BOT_AVATARS = ["bot", "compass", "spark", "leaf", "shield", "star"] as const;
+export const BOT_TONES = ["neutral", "warm", "direct", "formal"] as const;
+export const BOT_VERBOSITIES = ["brief", "balanced", "detailed"] as const;
+export interface BotIdentity {
+  readonly nickname: string;
+  readonly avatar: (typeof BOT_AVATARS)[number];
+  readonly description: string;
+  readonly tone: (typeof BOT_TONES)[number];
+  readonly verbosity: (typeof BOT_VERBOSITIES)[number];
+}
+export const DEFAULT_BOT_IDENTITY: BotIdentity = Object.freeze({
+  nickname: "",
+  avatar: "bot",
+  description: "",
+  tone: "neutral",
+  verbosity: "balanced",
+});
+export function parseBotIdentity(value: unknown): BotIdentity {
+  const v = record(value, ["nickname", "avatar", "description", "tone", "verbosity"]);
+  if (
+    !bounded(v["nickname"], 48) ||
+    v["nickname"].trim() !== v["nickname"] ||
+    Array.from(v["nickname"]).some(
+      (c) => c.charCodeAt(0) < 32 || (c.charCodeAt(0) >= 127 && c.charCodeAt(0) <= 159),
+    ) ||
+    !bounded(v["description"], 280) ||
+    Array.from(v["description"]).some(
+      (c) =>
+        (c.charCodeAt(0) < 32 && c !== "\n" && c !== "\t") ||
+        (c.charCodeAt(0) >= 127 && c.charCodeAt(0) <= 159),
+    ) ||
+    !member(v["avatar"], BOT_AVATARS) ||
+    !member(v["tone"], BOT_TONES) ||
+    !member(v["verbosity"], BOT_VERBOSITIES)
+  )
+    throw new Error("protocol");
+  return Object.freeze(v) as unknown as BotIdentity;
+}
 export interface AgentProfileInput {
+  readonly identity: BotIdentity;
   readonly agentId: AgentId;
   readonly connection: AgentConnection;
   readonly model: string;
@@ -164,6 +203,7 @@ export function parseAgentProfile(value: unknown): AgentProfile {
   const v = record(value, [
     "agentId",
     "displayName",
+    "identity",
     "connection",
     "model",
     "effort",
@@ -191,7 +231,10 @@ export function parseAgentProfile(value: unknown): AgentProfile {
     !integer(v["revision"])
   )
     throw new Error("protocol");
-  return Object.freeze(v) as unknown as AgentProfile;
+  return Object.freeze({
+    ...v,
+    identity: parseBotIdentity(v["identity"]),
+  }) as unknown as AgentProfile;
 }
 export function parseAgentProfiles(value: unknown): readonly AgentProfile[] {
   if (!Array.isArray(value) || value.length !== AGENT_IDS.length) throw new Error("protocol");

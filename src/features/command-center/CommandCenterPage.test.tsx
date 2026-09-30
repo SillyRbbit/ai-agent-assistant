@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { useMemo, useState } from "react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
   ApplicationWorkspacePanelsContext,
@@ -16,6 +16,14 @@ import type {
   ResearchKnowledgeDemoProjectionLoader,
 } from "../../infrastructure/tauri/research-knowledge-demo-projection-client";
 import CommandCenterPage from "./CommandCenterPage";
+import type { BotNameLoader } from "./commandCenterBotNames";
+import {
+  agentChatClient,
+  DEFAULT_BOT_IDENTITY,
+  type AgentProfile,
+} from "../../infrastructure/tauri/agent-chat-client";
+
+afterEach(() => vi.restoreAllMocks());
 import {
   COMMAND_CENTER_AGENT_IDS,
   COMMAND_CENTER_DISCLOSURE,
@@ -116,10 +124,11 @@ function selectScenario(label: string): void {
 }
 
 interface CommandCenterTestShellProps {
+  readonly botNameLoader?: BotNameLoader;
   readonly projectionLoader?: ResearchKnowledgeDemoProjectionLoader;
 }
 
-function CommandCenterTestShell({ projectionLoader }: CommandCenterTestShellProps) {
+function CommandCenterTestShell({ projectionLoader, botNameLoader }: CommandCenterTestShellProps) {
   const [activityBodyTarget, setActivityBodyTarget] = useState<HTMLDivElement | null>(null);
   const [activitySummaryTarget, setActivitySummaryTarget] = useState<HTMLSpanElement | null>(null);
   const [inspectorBodyTarget, setInspectorBodyTarget] = useState<HTMLDivElement | null>(null);
@@ -138,7 +147,10 @@ function CommandCenterTestShell({ projectionLoader }: CommandCenterTestShellProp
 
   return (
     <ApplicationWorkspacePanelsContext.Provider value={workspacePanels}>
-      <CommandCenterPage {...(projectionLoader === undefined ? {} : { projectionLoader })} />
+      <CommandCenterPage
+        {...(projectionLoader === undefined ? {} : { projectionLoader })}
+        {...(botNameLoader === undefined ? {} : { botNameLoader })}
+      />
       <aside aria-labelledby="application-inspector-title" data-testid="test-shell-inspector">
         <div ref={setInspectorHeaderTarget} />
         <div ref={setInspectorBodyTarget} />
@@ -159,6 +171,31 @@ function renderCommandCenter(projectionLoader?: ResearchKnowledgeDemoProjectionL
 }
 
 describe("CommandCenterPage", () => {
+  it.each(COMMAND_CENTER_SCENARIO_IDS)(
+    "presents Conductor as the application coordinator, separate from the nine bots, in %s",
+    (scenarioId) => {
+      renderCommandCenter();
+      selectScenario(scenarioId);
+
+      const coordinator = graphNode(/^Conductor, orchestrator,/);
+      expect(coordinator).toHaveAttribute("id", "command-center-topology-demo-node-orchestrator");
+      expect(within(coordinator).getByText("Conductor")).toHaveClass("command-center-node__title");
+      expect(within(coordinator).getByTitle("Application coordinator")).toHaveTextContent(
+        "Application coordinator",
+      );
+      expect(coordinator.getAttribute("aria-label")).toMatch(/, Application coordinator$/);
+      fireEvent.click(coordinator);
+      const inspector = screen.getByTestId("test-shell-inspector");
+      expect(inspector).toHaveTextContent("Conductor");
+      expect(inspector).toHaveTextContent("Application coordinator");
+      expect(inspector).toHaveTextContent("Technical identity");
+      expect(inspector).toHaveTextContent("AgentOrchestrator");
+      const roster = screen.getByRole("list", { name: "Canonical agent roster" });
+      expect(within(roster).getAllByRole("button")).toHaveLength(9);
+      expect(roster).not.toHaveTextContent("Conductor");
+    },
+  );
+
   it("owns the full route width without changing the shared page-stack contract", () => {
     renderCommandCenter();
 
@@ -784,13 +821,13 @@ describe("CommandCenterPage", () => {
     renderCommandCenter();
     fireEvent.click(screen.getByLabelText("Show relationship legend"));
     const relationship = screen.getByRole("button", {
-      name: /Inspect relationship AgentOrchestrator, Orchestrates, Personal Assistant/,
+      name: /Inspect relationship Conductor, Orchestrates, Personal Assistant/,
     });
     fireEvent.click(relationship);
     expect(relationship).toHaveAttribute("aria-pressed", "true");
     const inspector = screen.getByTestId("test-shell-inspector");
     expect(inspector).toHaveTextContent("Source");
-    expect(inspector).toHaveTextContent("AgentOrchestrator");
+    expect(inspector).toHaveTextContent("Conductor");
     expect(inspector).toHaveTextContent("Personal Assistant");
     fireEvent.click(screen.getByText("View bounded detail"));
     expect(screen.getByText("Fixture event ID")).toBeInTheDocument();
@@ -859,4 +896,67 @@ describe("CommandCenterPage", () => {
       });
     }
   });
+});
+
+describe("saved bot names in Command Center", () => {
+  it("loads all nine names without changing canonical routing or role inspection", async () => {
+    const labels = ["Nova", "Mira", "Ada", "Atlas", "Orion", "Clio", "Vera", "Sable", "Tempo"];
+    const load = vi.fn(() =>
+      Promise.resolve(new Map(COMMAND_CENTER_AGENT_IDS.map((id, i) => [id, labels[i] ?? ""]))),
+    );
+    render(<CommandCenterTestShell botNameLoader={load} />);
+    await waitFor(() => {
+      expect(graphNode(/^Nova,/)).toBeInTheDocument();
+    });
+    for (const label of labels) expect(graphNode(new RegExp(`^${label},`))).toBeInTheDocument();
+    expect(load).toHaveBeenCalledTimes(1);
+    fireEvent.click(graphNode(/^Mira,/));
+    expect(screen.getByText("Canonical role")).toBeInTheDocument();
+    expect(
+      within(screen.getByTestId("test-shell-inspector")).getByText("Research Agent"),
+    ).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText("Search simulated topology"), {
+      target: { value: "Research Agent" },
+    });
+    expect(graphNode(/^Mira,/)).toBeInTheDocument();
+  });
+  it("keeps the graph usable on profile-read failure without exposing raw errors", async () => {
+    render(
+      <CommandCenterPage botNameLoader={() => Promise.reject(new Error("private diagnostic"))} />,
+    );
+    await screen.findByText("Saved bot names are unavailable; canonical roles are shown.");
+    expect(graphNode(/^Research Agent,/)).toBeInTheDocument();
+    expect(screen.queryByText("private diagnostic")).not.toBeInTheDocument();
+  });
+});
+
+it("uses the existing validated native list only and keeps private profile content out of the graph", async () => {
+  const profiles: readonly AgentProfile[] = COMMAND_CENTER_AGENT_IDS.map((agentId) => ({
+    agentId,
+    identity: { ...DEFAULT_BOT_IDENTITY, nickname: agentId === "research" ? "Mira" : "" },
+    displayName: agentId,
+    connection: "simulation",
+    model: "simulation",
+    effort: "default",
+    endpoint: "",
+    localAuth: false,
+    allowUnknownLocalityNotes: false,
+    ownerInstructions: "synthetic-private-instruction",
+    memoryMode: "off",
+    note: "synthetic-private-note",
+    revision: 1,
+  }));
+  vi.spyOn(agentChatClient, "available").mockReturnValue(true);
+  const list = vi.spyOn(agentChatClient, "list").mockResolvedValue(profiles);
+  const discover = vi.spyOn(agentChatClient, "discover");
+  const send = vi.spyOn(agentChatClient, "send");
+  renderCommandCenter();
+  await waitFor(() => {
+    expect(graphNode(/^Mira,/)).toBeInTheDocument();
+  });
+  expect(list).toHaveBeenCalledTimes(1);
+  expect(discover).not.toHaveBeenCalled();
+  expect(send).not.toHaveBeenCalled();
+  expect(document.body.textContent).not.toContain("synthetic-private-note");
+  expect(document.body.textContent).not.toContain("synthetic-private-instruction");
 });

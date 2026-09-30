@@ -1,3 +1,4 @@
+import { DEFAULT_BOT_IDENTITY } from "./agent-chat-client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { invoke, isTauri } from "@tauri-apps/api/core";
 import {
@@ -16,6 +17,7 @@ import {
 vi.mock("@tauri-apps/api/core", () => ({ invoke: vi.fn(), isTauri: vi.fn() }));
 const profile = {
   agentId: "personal-assistant",
+  identity: DEFAULT_BOT_IDENTITY,
   displayName: "Personal Assistant",
   connection: "simulation",
   model: "simulation",
@@ -74,6 +76,7 @@ describe("agent chat native boundary", () => {
     await agentChatClient.connections();
     const request = {
       agentId: profile.agentId,
+      identity: DEFAULT_BOT_IDENTITY,
       connection: profile.connection,
       model: profile.model,
       effort: profile.effort,
@@ -273,4 +276,24 @@ describe("provider catalog boundary", () => {
       }).effort,
     ).toBe("max");
   });
+});
+
+it("validates closed identity metadata without changing canonical IDs", () => {
+  expect(
+    parseAgentProfile({
+      ...profile,
+      identity: { ...DEFAULT_BOT_IDENTITY, nickname: "Mira", tone: "warm" },
+    }).agentId,
+  ).toBe(profile.agentId);
+  for (const identity of [
+    { ...DEFAULT_BOT_IDENTITY, nickname: "x".repeat(49) },
+    { ...DEFAULT_BOT_IDENTITY, nickname: " bad" },
+    { ...DEFAULT_BOT_IDENTITY, nickname: "bad\nname" },
+    { ...DEFAULT_BOT_IDENTITY, description: "x".repeat(281) },
+    { ...DEFAULT_BOT_IDENTITY, avatar: "https://remote/avatar" },
+    { ...DEFAULT_BOT_IDENTITY, tone: "admin" },
+    { ...DEFAULT_BOT_IDENTITY, verbosity: "unbounded" },
+    { ...DEFAULT_BOT_IDENTITY, permissions: "all" },
+  ])
+    expect(() => parseAgentProfile({ ...profile, identity })).toThrow("protocol");
 });

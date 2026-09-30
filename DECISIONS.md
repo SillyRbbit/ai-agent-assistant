@@ -1,3 +1,47 @@
+## 2026-09-30 Bot Identity and Personality — implementation accepted locally
+
+Worktree: `/Users/hdang/.codex/worktrees/provider-milestone/ai-agent-assistant`.
+Branch `codex/provider-milestone`; unchanged HEAD `fe7e663e175eaf7c515c17397cdd81060137a5b6`.
+The starting checkout was clean; this milestone introduces exactly 29 uncommitted
+paths listed in the [plan](docs/plans/2026-09-30-bot-identity-personality.md) and
+[review](docs/reviews/2026-09-30-bot-identity-personality-post-increment-review.md).
+
+Implemented: nine stable canonical bots with optional nickname, six static avatars,
+short description, four tones and three verbosity choices. The Bots page retains
+all six connections, runtime-specific controls, owner instructions and private notes.
+Migration 6 preserves older rows/history; identity saves share the existing atomic
+revision check. Personality-only reset changes five identity fields after Save,
+retaining connection/model/effort/instructions/notes. Stale conversations fail closed.
+Native OpenAI, Codex, Anthropic and local requests share bounded untrusted identity
+context. Application rules > current task > custom owner preferences > presets;
+identity never grants authority, tools, delegation or cross-bot note access.
+No orchestrator, graph, dependency, credential, workflow or governance bytes changed.
+
+Actual automated results: focused frontend/client 32/32; native identity 27/27;
+full offline verify passed (434 frontend, 378 native unit and 255 integration tests,
+74 hook and 85 repository tests; one pre-existing opt-in real-Hermes test ignored).
+Strict lint/Clippy, typecheck, frontend build and native release build passed.
+Unsigned arm64 debug app bundle built offline and identity-verified. Documentation,
+repository, secret scan, whitespace, exact scope and preservation checks passed.
+Earlier missing test metadata, migration-count and callback-lint failures were fixed
+in scope; their logs remain. No live requests or app launches occurred.
+
+Evidence: `/private/tmp/cortexa-bot-identity-personality-evidence`.
+Prior provider raw completion state and debug bundle are archived byte-identically;
+seven other valid worktrees and 36 already-prunable entries remain unchanged.
+Process-local Python 3.12, Xcode/SDK 27.0 and Cargo build-override `strip="none"`
+remain native-build prerequisites, not global changes. Retain D-127 audit debt,
+D-128 custody/abort limits, Codex runtime/isolation/internal-retry and provider/runtime
+live-success advisories. OpenAI remains parked at 4/5 attempts used. D-125/M1/M2 parked.
+
+Next action: owner manual QA using the prepared bundle and plan checklist. Live
+personality behavior, actual native visual/restart QA and remote CI for these
+uncommitted changes are unverified. Local request fixtures do not prove model
+obedience. A later separately approved owner-mediated two-bot synthetic handoff is
+the recommended bounded collaboration milestone; no messaging infrastructure or
+live authority is created here. Completion validity must be checked using the
+ordinary gate status and full Stop receipt; never infer it from this prose.
+
 ## D-132 — Owner-approved bounded provider milestone
 
 The 2026-09-30 owner request authorizes completing the two selected connections,

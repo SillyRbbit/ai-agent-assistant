@@ -9,6 +9,7 @@
   gap: var(--space-2);
 }
 .agents-page button,
+.agents-page input:not([type="checkbox"]),
 .agents-page select,
 .agents-page textarea {
   color: var(--color-text-primary);
@@ -149,4 +150,15 @@
   .agents-conversation {
     padding: var(--space-4);
   }
+}
+
+.bot-avatar {
+  color: var(--color-accent);
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+.bot-preview {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
 }
