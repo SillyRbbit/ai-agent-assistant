@@ -286,7 +286,7 @@ function createOrchestratorNode(status: OperationalStatus): OrchestratorTopology
     kind: "orchestrator",
     agentId: null,
     groupId: null,
-    label: "AgentOrchestrator",
+    label: "Conductor",
     status,
     availability: "available-in-fixture",
     health: "not-measured",
@@ -296,7 +296,7 @@ function createOrchestratorNode(status: OperationalStatus): OrchestratorTopology
     position: { x: 790, y: 20 },
     inspector: inspector(id, "orchestrator", {
       eyebrow: "Application authority",
-      title: "AgentOrchestrator",
+      title: "Conductor",
       description: "A simulated projection of the bounded application-owned orchestration service.",
       responsibility:
         "Owns task lineage, runtime-run assignment, result routing, and cancellation.",
@@ -307,6 +307,8 @@ function createOrchestratorNode(status: OperationalStatus): OrchestratorTopology
       outputs: ["Bounded presentation-only task and result state"],
       dependencyIds: [],
       facts: [
+        { label: "Role", value: "Application coordinator" },
+        { label: "Technical identity", value: "AgentOrchestrator" },
         { label: "Runtime", value: "Native boundary not connected to this projection" },
         { label: "Execution", value: "No action execution" },
       ],

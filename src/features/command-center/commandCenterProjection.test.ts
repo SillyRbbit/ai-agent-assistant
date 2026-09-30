@@ -126,7 +126,24 @@ describe("buildCommandCenterProjection", () => {
       expect(orchestrators[0]).toMatchObject({
         agentId: null,
         id: "demo-node:orchestrator",
+        label: "Conductor",
         trust: "application-authority",
+        position: { x: 790, y: 20 },
+        inspector: {
+          title: "Conductor",
+          responsibility:
+            "Owns task lineage, runtime-run assignment, result routing, and cancellation.",
+          authorityBoundary:
+            "It is not a provider, policy engine, approval manager, tool executor, audit log, memory store, scheduler, or UI boundary.",
+        },
+      });
+      expect(orchestrators[0]?.inspector.facts).toContainEqual({
+        label: "Role",
+        value: "Application coordinator",
+      });
+      expect(orchestrators[0]?.inspector.facts).toContainEqual({
+        label: "Technical identity",
+        value: "AgentOrchestrator",
       });
       expect(agents).toHaveLength(9);
       expect(new Set(agents.map((node) => node.agentId))).toEqual(

@@ -1,3 +1,4 @@
+import { DEFAULT_BOT_IDENTITY } from "../../infrastructure/tauri/agent-chat-client";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { AgentsPage } from "./AgentsPage";
@@ -23,6 +24,7 @@ const names = [
 ];
 const profiles: readonly AgentProfile[] = AGENT_IDS.map((agentId, index) => ({
   agentId,
+  identity: DEFAULT_BOT_IDENTITY,
   displayName: names[index] ?? agentId,
   connection: "simulation",
   model: "simulation",
@@ -681,4 +683,55 @@ it("keeps embedding-only models out of the conversation picker", async () => {
   });
   expect(screen.queryByRole("option", { name: /Embedding fixture/ })).not.toBeInTheDocument();
   expect(client.send).not.toHaveBeenCalled();
+});
+
+it("saves bot identity with canonical attribution and resets personality without notes or runtime loss", async () => {
+  const client = harness();
+  render(<AgentsPage client={client} />);
+  await screen.findByRole("heading", { name: "Personal Assistant" });
+  expect(screen.getByRole("heading", { name: "Bots" })).toBeInTheDocument();
+  fireEvent.change(screen.getByLabelText(/Nickname/), { target: { value: "Mira" } });
+  fireEvent.change(screen.getByLabelText("Avatar"), { target: { value: "compass" } });
+  fireEvent.change(screen.getByLabelText(/Profile description/), {
+    target: { value: "Friendly text advisor" },
+  });
+  fireEvent.change(screen.getByLabelText("Tone"), { target: { value: "warm" } });
+  fireEvent.change(screen.getByLabelText("Verbosity"), { target: { value: "detailed" } });
+  fireEvent.change(screen.getByLabelText(/Owner instructions/), {
+    target: { value: "Custom preference" },
+  });
+  fireEvent.change(screen.getByLabelText(/Private note/), { target: { value: "Retained note" } });
+  fireEvent.click(screen.getByRole("button", { name: "Save settings and note" }));
+  await screen.findByRole("heading", { name: "Mira" });
+  expect(screen.getByText("Canonical role: Personal Assistant")).toBeInTheDocument();
+  expect(client.save).toHaveBeenLastCalledWith(
+    expect.objectContaining({
+      agentId: "personal-assistant",
+      identity: {
+        nickname: "Mira",
+        avatar: "compass",
+        description: "Friendly text advisor",
+        tone: "warm",
+        verbosity: "detailed",
+      },
+    }),
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Reset identity and personality" }));
+  expect(client.save).toHaveBeenCalledTimes(1);
+  expect(screen.getByLabelText(/Owner instructions/)).toHaveValue("Custom preference");
+  expect(screen.getByLabelText(/Private note/)).toHaveValue("Retained note");
+  fireEvent.click(screen.getByRole("button", { name: "Save settings and note" }));
+  await screen.findByRole("heading", { name: "Personal Assistant" });
+  expect(client.save).toHaveBeenLastCalledWith(
+    expect.objectContaining({
+      identity: DEFAULT_BOT_IDENTITY,
+      connection: "simulation",
+      model: "simulation",
+      note: "Retained note",
+      ownerInstructions: "Custom preference",
+    }),
+  );
+  fireEvent.click(screen.getByRole("button", { name: /Research Agent/ }));
+  expect(screen.getByLabelText(/Nickname/)).toHaveValue("");
+  expect(screen.getByLabelText(/Private note/)).toHaveValue("");
 });

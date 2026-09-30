@@ -1,3 +1,221 @@
+## 2026-09-30 current state — Command Center measurement readiness
+
+Worktree `/Users/hdang/.codex/worktrees/provider-milestone/ai-agent-assistant`,
+branch `codex/provider-milestone`, HEAD `fe7e663e175eaf7c515c17397cdd81060137a5b6`.
+Eleven approved successor paths / 45 cumulative uncommitted paths; no commit.
+The adapter now selects `useNodesInitialized({ includeHiddenNodes: true })`.
+Installed React Flow 12.11.3's option inspects current node dimensions and handle
+bounds, while its default cached flag remains false for the evidenced controlled
+node measurement path. No hidden flow nodes are generated; measurement remains
+required for every node. Geometry, topology, profiles and authority are unchanged.
+
+Actual-library regression: old hook Failed (1/26); corrected hook Passed.
+Affected combined tests Passed 61/61; final adapter run Passed 26/26 after a
+test-only type-import lint correction; unchanged page tests Passed 35/35.
+Strict lint/typecheck/format, offline frontend/native debug packaging and
+initial documentation/repository/security/whitespace/preservation/session checks
+Passed. Final documentation and completion receipts are frozen externally in
+`/private/tmp/cortexa-command-center-measurement-readiness-evidence`.
+Quality review: PASS WITH ADVISORIES; native first-entry/Fit/reentry QA pending.
+Ordinary finalization/status/full Stop must pass before relying on completion.
+
+Prior direct native QA rendered cards/names but remained at 100% zoom with
+Fit/Reset/Zoom disabled; retain this failed observation. The new regression proves
+the library readiness boundary, not a native visual result. No launch or live
+request occurred here. OpenAI parked 4/5 used; retain D-127/D-128,
+native/provider/runtime live-success and Codex-isolation/internal-retry advisories,
+the process-local native workaround and parked D-125/M1/M2.
+
+The new case imports actual React Flow, delivers ResizeObserver node measurements, verifies partial/all-node and same-ID replacement readiness, and checks the exact adapter option. Existing delayed startup, route entry and manual viewport tests remain. Rust suites/full verify: Not run for this frontend-only delta; native QA: Manual verification pending.
+
+## 2026-09-30 — Command Center startup readiness — automated acceptance
+
+Owner-authorized `command-center-startup-readiness`; worktree
+`/Users/hdang/.codex/worktrees/provider-milestone/ai-agent-assistant`, branch
+`codex/provider-milestone`; unchanged HEAD `fe7e663e175eaf7c515c17397cdd81060137a5b6`.
+See [plan](docs/plans/2026-09-30-command-center-startup-readiness.md) and
+[review](docs/reviews/2026-09-30-command-center-startup-readiness-post-increment-review.md).
+Exactly 11 successor paths / 43 cumulative. Seven historical root document bodies,
+Conductor report/raw state/marker, seven other valid worktrees, 36 prunable entries,
+external evidence and prior bundle bytes/modes remain preserved.
+
+Fixed-size graph cards now supply React Flow node width/height matching their
+existing CSS geometry. A child of the existing React Flow provider observes
+`useNodesInitialized`; automatic fitting waits for node measurement, positive
+canvas dimensions and initialized viewport, then reacts when measurement finishes.
+Manual viewport ownership remains intact. No arbitrary delay, forced remount,
+dependency change, graph redesign or orchestration change.
+
+Affected adapter/page tests: **60/60 passed** (25 adapter, 35 page), including
+four new regressions for delayed measurement, subsequent route entry, manual pan
+ownership and fixed dimensions across controlled name updates. Red run against
+the old adapter: 3 failed / 22 passed. First combined run: 1 failed / 59 passed;
+the new manual regression used an unused event. It now uses the actual `onMove`
+path; no production behavior or existing assertion was weakened. All failure logs
+remain. Strict ESLint, typecheck, formatting, frontend build and offline unsigned
+app-only debug packaging passed. Documentation/repository/security/whitespace,
+exact scope, historical suffixes, protected bytes, state archive, registry and
+session inventory passed before report freeze; documentation checks rerun after
+this additive evidence update. No Rust suites or full verify were run for this
+frontend-only delta. Earlier native/test results remain inherited history.
+
+Native first-entry appearance is **Manual verification pending**, not proved by
+mocked readiness transitions, DOM checks or packaging. Direct previous QA observed
+domain boxes without nodes; route-reentry success is owner-reported evidence.
+The installed library/source and red regressions establish the readiness gap;
+they do not establish that every native rendering cause is resolved. Remote CI
+for these uncommitted changes is pending. Retain D-127 audit debt, D-128 custody/
+remote-abort limits, native/provider/runtime live-success and Codex isolation/
+internal-retry advisories. Process-local Python 3.12, Xcode/SDK 27.0 and Cargo
+build-override strip="none" remain build prerequisites. OpenAI parked **4/5 used**;
+D-125/M1/M2 parked. No provider request, native launch, Save, commit or publication.
+
+Prepared unsigned arm64 debug bundle:
+`src-tauri/target/acceptance/debug/bundle/macos/Cortexa.app`.
+Executable SHA-256 `03dcce38521eb0d3c9632568c84ee55338dad893f5d42289c2bd50b1fb8dc4c3`.
+Prior artifact preserved at
+`/private/tmp/cortexa-command-center-startup-readiness-evidence/preserved-Conductor-Cortexa.app`.
+Schema/finalization/status/full Stop are external receipts after report freeze;
+verify completion through actual gate status. Next: separately authorized native QA.
+
+Readiness tests simulate measurement independently of canvas sizing, assert no
+premature fit, release subscriptions after route unmount and preserve manual pan.
+Existing zero-size-canvas, layout, zoom, selection and keyboard cases remain.
+Native measured appearance is explicitly separate from this automated evidence.
+
+## 2026-09-30 — Conductor application coordinator — validated presentation
+
+Owner-authorized `conductor-display-name`; worktree
+`/Users/hdang/.codex/worktrees/provider-milestone/ai-agent-assistant`, branch
+`codex/provider-milestone`, unchanged HEAD `fe7e663e175eaf7c515c17397cdd81060137a5b6`.
+See [plan](docs/plans/2026-09-30-conductor-display-name.md) and
+[review](docs/reviews/2026-09-30-conductor-display-name-post-increment-review.md).
+Exactly 13 successor paths / 40 cumulative paths. Seven historical root bodies,
+predecessor reports/raw state/marker, old bundle, seven other valid worktrees,
+36 already-prunable entries and external evidence remain preserved.
+
+The existing graph coordinator now displays **Conductor** with a rendered
+**Application coordinator** subtitle and ARIA label. Its inspector retains the
+technical identity **AgentOrchestrator**. Stable `demo-node:orchestrator`, null
+agent ID, application authority, ownership, routing, cancellation, positions,
+edges and groups are unchanged. Nine bot profiles remain protected; no tenth bot.
+
+Actual frontend results: page 35/35 in the final rerun, plus 97/97 projection,
+name-overlay and topology adapter cases from the final applicable focused run.
+132 affected cases passed across those runs; there was no successful combined
+four-file command. Initial page assertions depended on JSDOM node visibility;
+DOM subtitle and explicit ARIA-label checks replaced them. Strict lint also rejected
+an unsafe test matcher, corrected with typed assertions. Earlier failure logs remain.
+Strict ESLint, typecheck, formatting, offline frontend/native debug bundle,
+docs/repository/security/whitespace, preservation and session checks passed.
+Final documentation checks are repeated only after this evidence update.
+Rust suites/full verify: Not run for frontend-only scope; inherited native results
+are historical, not new execution. Native visual QA and remote CI are pending.
+
+Retain D-127 audit debt, D-128 custody/abort limits, native/provider/runtime
+live-success and Codex isolation/internal-retry advisories. Process-local Python
+3.12, Xcode/SDK 27.0 and Cargo build-override strip="none" remain native prerequisites.
+OpenAI remains parked at 4/5 used; D-125/M1/M2 remain parked. No provider request,
+app launch, profile Save, commit or publication occurred in this increment.
+The previous viewport observation remains unresolved; this label change is not a
+rendering repair or native-success claim.
+
+Regression coverage: all seven scenarios preserve the coordinator ID/authority,
+responsibility, technical identity, exact nine canonical IDs and group definitions.
+The page checks rendered subtitle/ARIA label and inspector facts. JSDOM does not
+measure ReactFlow node visibility; only native QA can establish actual appearance.
+
+## 2026-09-30 — Saved bot names in the graph — validated candidate
+
+Owner-requested increment `bot-graph-name-sync`; same worktree
+`/Users/hdang/.codex/worktrees/provider-milestone/ai-agent-assistant`, branch `codex/provider-milestone`,
+HEAD `fe7e663e175eaf7c515c17397cdd81060137a5b6`.
+Inherited Bot Identity implementation: 29 paths, preserved. This successor changes
+13 paths (four frontend files, seven additive root entries and plan/review), yielding
+35 cumulative paths. See [plan](docs/plans/2026-09-30-bot-graph-name-sync.md) and [review](docs/reviews/2026-09-30-bot-graph-name-sync-post-increment-review.md).
+
+Saved nicknames are read once through the existing validated profile-list client when
+Command Center mounts. Only canonical ID/name pairs enter graph state. Node IDs,
+positions, edges, groups, simulated events, authority, ownership and native proof
+panels remain unchanged. Nicknames appear in the graph, overview, filters and
+inspector; canonical roles remain inspector facts and searchable. Empty/missing
+names use canonical roles. Read failure uses canonical roles with a static notice.
+No profiles, providers, notes, instructions or canonical definitions are rewritten.
+
+Owner-approved local nicknames: Nova, Mira, Ada, Atlas, Orion, Clio, Vera, Sable,
+Tempo. These saved values are presentation data, not hardcoded defaults.
+Actual results: focused 39/39, full frontend 449/449, affected page rerun 28/28,
+strict ESLint, typecheck, frontend formatting and debug bundle passed. Documentation,
+repository, secret scan, whitespace, exact scope/preservation and session checks
+passed. Native visual QA of the new graph is pending; no live requests were made.
+Rust tests/full verify were Not run for this frontend-only successor, per risk policy;
+unchanged Bot Identity native evidence remains inherited, not newly executed.
+Prior completed Bot Identity raw state/marker is archived byte-identically in
+`/private/tmp/cortexa-bot-graph-name-sync-evidence/bot-identity-state`.
+Historical document bodies, predecessor reports, seven other worktrees and all
+36 already-prunable entries remain protected. Native/provider/runtime live-success,
+Codex isolation/internal-retry, D-127/D-128 and process-local native workaround
+advisories remain. OpenAI parked at 4/5 used; D-125/M1/M2 parked.
+
+Next action: owner key-free graph QA using the updated debug bundle. Ordinary
+report validation, finalization and full Stop receipts establish the final gate state;
+never infer a marker from this prose. No live request or publication authority.
+
+### Resume prompt
+
+```text
+Inspect /Users/hdang/.codex/worktrees/provider-milestone/ai-agent-assistant and the
+bot-graph-name-sync plan/review and gate status first. Preserve all inherited work,
+records and local profiles. Do not repeat implementation or passing checks. Verify saved names, canonical-role inspection
+and stable simulated topology. No provider requests, commits or publication.
+Keep OpenAI parked at 4/5 used and D-125/M1/M2 parked. Stop on unexplained drift,
+unsupported access or scope expansion; repair recoverable in-scope failures.
+```
+
+## 2026-09-30 Bot Identity and Personality — implementation accepted locally
+
+Worktree: `/Users/hdang/.codex/worktrees/provider-milestone/ai-agent-assistant`.
+Branch `codex/provider-milestone`; unchanged HEAD `fe7e663e175eaf7c515c17397cdd81060137a5b6`.
+The starting checkout was clean; this milestone introduces exactly 29 uncommitted
+paths listed in the [plan](docs/plans/2026-09-30-bot-identity-personality.md) and
+[review](docs/reviews/2026-09-30-bot-identity-personality-post-increment-review.md).
+
+Implemented: nine stable canonical bots with optional nickname, six static avatars,
+short description, four tones and three verbosity choices. The Bots page retains
+all six connections, runtime-specific controls, owner instructions and private notes.
+Migration 6 preserves older rows/history; identity saves share the existing atomic
+revision check. Personality-only reset changes five identity fields after Save,
+retaining connection/model/effort/instructions/notes. Stale conversations fail closed.
+Native OpenAI, Codex, Anthropic and local requests share bounded untrusted identity
+context. Application rules > current task > custom owner preferences > presets;
+identity never grants authority, tools, delegation or cross-bot note access.
+No orchestrator, graph, dependency, credential, workflow or governance bytes changed.
+
+Actual automated results: focused frontend/client 32/32; native identity 27/27;
+full offline verify passed (434 frontend, 378 native unit and 255 integration tests,
+74 hook and 85 repository tests; one pre-existing opt-in real-Hermes test ignored).
+Strict lint/Clippy, typecheck, frontend build and native release build passed.
+Unsigned arm64 debug app bundle built offline and identity-verified. Documentation,
+repository, secret scan, whitespace, exact scope and preservation checks passed.
+Earlier missing test metadata, migration-count and callback-lint failures were fixed
+in scope; their logs remain. No live requests or app launches occurred.
+
+Evidence: `/private/tmp/cortexa-bot-identity-personality-evidence`.
+Prior provider raw completion state and debug bundle are archived byte-identically;
+seven other valid worktrees and 36 already-prunable entries remain unchanged.
+Process-local Python 3.12, Xcode/SDK 27.0 and Cargo build-override `strip="none"`
+remain native-build prerequisites, not global changes. Retain D-127 audit debt,
+D-128 custody/abort limits, Codex runtime/isolation/internal-retry and provider/runtime
+live-success advisories. OpenAI remains parked at 4/5 attempts used. D-125/M1/M2 parked.
+
+Next action: owner manual QA using the prepared bundle and plan checklist. Live
+personality behavior, actual native visual/restart QA and remote CI for these
+uncommitted changes are unverified. Local request fixtures do not prove model
+obedience. A later separately approved owner-mediated two-bot synthetic handoff is
+the recommended bounded collaboration milestone; no messaging infrastructure or
+live authority is created here. Completion validity must be checked using the
+ordinary gate status and full Stop receipt; never infer it from this prose.
+
 ## 2026-09-30 — Provider milestone validation
 
 Use the [milestone checklist](docs/provider-milestone.md). Required automated checks:

@@ -3,6 +3,7 @@ import {
   MarkerType,
   Position,
   ReactFlow,
+  useNodesInitialized,
   type CoordinateExtent,
   type Edge,
   type Node,
@@ -151,6 +152,19 @@ function nodeOptionId(id: string): string {
   return `command-center-topology-${id.replaceAll(/[^a-zA-Z0-9_-]/g, "-")}`;
 }
 
+// Runs inside React Flow's provider so measurement readiness is reactive.
+function TopologyReadiness({
+  onReadyChange,
+}: {
+  readonly onReadyChange: (ready: boolean) => void;
+}) {
+  const nodesInitialized = useNodesInitialized({ includeHiddenNodes: true });
+  useEffect(() => {
+    onReadyChange(nodesInitialized);
+  }, [nodesInitialized, onReadyChange]);
+  return null;
+}
+
 function NodeKindIcon({ kind }: { readonly kind: TopologyNodeKind }) {
   if (kind === "orchestrator") {
     return <Network aria-hidden="true" />;
@@ -185,6 +199,13 @@ function OperationalNode({ data }: NodeProps<OperationalFlowNode>) {
     );
   }
 
+  const roleLabel =
+    data.kind === "orchestrator"
+      ? "Application coordinator"
+      : data.groupLabel.length > 0
+        ? data.groupLabel
+        : readable(data.kind);
+
   return (
     <>
       <Handle
@@ -196,7 +217,7 @@ function OperationalNode({ data }: NodeProps<OperationalFlowNode>) {
       <div
         aria-label={`${data.label}, ${readable(data.kind)}, ${readable(data.status)}${
           data.groupLabel.length > 0 ? `, ${data.groupLabel} domain` : ""
-        }`}
+        }${data.kind === "orchestrator" ? `, ${roleLabel}` : ""}`}
         aria-selected={data.isSelected}
         className={`command-center-node command-center-node--${data.kind}${
           data.isSelected ? " command-center-node--selected" : ""
@@ -216,9 +237,7 @@ function OperationalNode({ data }: NodeProps<OperationalFlowNode>) {
           <span className={`command-center-status command-center-status--${data.status}`}>
             {readable(data.status)}
           </span>
-          <span title={data.groupLabel.length > 0 ? data.groupLabel : readable(data.kind)}>
-            {data.groupLabel.length > 0 ? data.groupLabel : readable(data.kind)}
-          </span>
+          <span title={roleLabel}>{roleLabel}</span>
         </span>
       </div>
       <Handle
@@ -623,6 +642,7 @@ function OperationalTopologyCanvas({
   const fitFrameRef = useRef<number | null>(null);
   const pendingCanvasSizeRef = useRef<CanvasSize | null>(null);
   const viewportModeRef = useRef<ViewportMode>("auto");
+  const [nodesReady, setNodesReady] = useState(false);
   const [canvasSize, setCanvasSize] = useState<CanvasSize>({ height: 0, width: 0 });
   const [instance, setInstance] = useState<ReactFlowInstance<
     OperationalFlowNode,
@@ -800,6 +820,9 @@ function OperationalTopologyCanvas({
             draggable: false,
             focusable: false,
             id: `demo-group:${group.id}`,
+            height:
+              maximumBottom - minimumY + DOMAIN_LANE_VERTICAL_PADDING + domainLaneBottomPadding,
+            width: maximumX - minimumX + NODE_WIDTH + domainLaneHorizontalPadding * 2,
             position: {
               x: minimumX - domainLaneHorizontalPadding,
               y: minimumY - DOMAIN_LANE_VERTICAL_PADDING,
@@ -850,6 +873,10 @@ function OperationalTopologyCanvas({
         draggable: false,
         focusable: false,
         id: node.id,
+        // CSS alone is not a dimension to React Flow. Keep rebuilt controlled
+        // cards visible while their handles and measured dimensions initialize.
+        height: nodeHeight(node),
+        width: NODE_WIDTH,
         position: node.position,
         selectable: false,
         style: { height: nodeHeight(node), width: NODE_WIDTH, zIndex: 2 },
@@ -997,6 +1024,7 @@ function OperationalTopologyCanvas({
     if (
       instance === null ||
       !instance.viewportInitialized ||
+      !nodesReady ||
       fitNodeReferences.length === 0 ||
       canvasSize.width <= 0 ||
       canvasSize.height <= 0
@@ -1017,6 +1045,7 @@ function OperationalTopologyCanvas({
     canvasSize.width,
     fitNodeReferences,
     instance,
+    nodesReady,
   ]);
 
   useEffect(() => {
@@ -1156,7 +1185,12 @@ function OperationalTopologyCanvas({
     [centerIds, compositeActiveId, keyboardNodes, onEscape, onSelect, selectedId],
   );
 
-  const controlsDisabled = instance === null || nodes.length === 0;
+  const controlsDisabled =
+    instance === null ||
+    !nodesReady ||
+    canvasSize.width <= 0 ||
+    canvasSize.height <= 0 ||
+    nodes.length === 0;
   const hasSelection = selectionPresent ?? selectedId !== null;
   const handleFlowInit = useCallback(
     (nextInstance: ReactFlowInstance<OperationalFlowNode, OperationalFlowEdge>) => {
@@ -1241,7 +1275,9 @@ function OperationalTopologyCanvas({
             translateExtent={translateExtent}
             zoomOnDoubleClick={false}
             zoomOnScroll
-          />
+          >
+            <TopologyReadiness onReadyChange={setNodesReady} />
+          </ReactFlow>
         ) : (
           <GraphState {...graphState} />
         )}

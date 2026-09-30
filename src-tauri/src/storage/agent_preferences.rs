@@ -14,6 +14,18 @@ pub(super) fn get(
     agent_id: &str,
 ) -> Result<AgentProfile, PreferencesError> {
     let id = AgentId::from_str(agent_id).map_err(|_| PreferencesError::InvalidRequest)?;
+    let identity_json: Option<String> = connection
+        .query_row(
+            "SELECT identity FROM agent_bot_identity WHERE agent_id = ?1",
+            [id.as_str()],
+            |row| row.get(0),
+        )
+        .optional()
+        .map_err(|_| PreferencesError::Storage)?;
+    let identity = match identity_json {
+        Some(value) => serde_json::from_str(&value).map_err(|_| PreferencesError::Storage)?,
+        None => crate::agent_preferences::BotIdentity::default(),
+    };
     let row = connection
         .query_row(
             "SELECT COALESCE(c.connection, p.connection), COALESCE(c.model, p.model),
@@ -57,6 +69,7 @@ pub(super) fn get(
     };
     let input = AgentPreferencesInput {
         agent_id: id.as_str().to_owned(),
+        identity,
         connection: parse_stored_enum(&connection)?,
         model,
         endpoint,
@@ -195,6 +208,15 @@ fn update(
             ],
         )
         .map_err(|_| PreferencesError::Storage)?;
+    let identity_json =
+        serde_json::to_string(&profile.identity).map_err(|_| PreferencesError::Storage)?;
+    transaction
+        .execute(
+            "INSERT INTO agent_bot_identity (agent_id, identity) VALUES (?1, ?2)
+         ON CONFLICT(agent_id) DO UPDATE SET identity = excluded.identity",
+            params![profile.agent_id, identity_json],
+        )
+        .map_err(|_| PreferencesError::Storage)?;
     transaction
         .commit()
         .map_err(|_| PreferencesError::Storage)?;
@@ -219,6 +241,7 @@ mod tests {
     fn input(profile: AgentProfile) -> AgentPreferencesInput {
         AgentPreferencesInput {
             agent_id: profile.agent_id,
+            identity: profile.identity,
             connection: profile.connection,
             model: profile.model,
             endpoint: profile.endpoint,
@@ -247,6 +270,10 @@ mod tests {
         let mut expected = Vec::new();
         for (index, profile) in defaults.into_iter().enumerate() {
             let mut preferences = input(profile);
+            preferences.identity.nickname = format!("Bot {index}");
+            preferences.identity.description = format!("Text advisor {index}");
+            preferences.identity.tone = crate::agent_preferences::BotTone::Warm;
+            preferences.identity.verbosity = crate::agent_preferences::BotVerbosity::Detailed;
             preferences.owner_instructions = format!("Synthetic role instruction {index}");
             preferences.note = format!("Synthetic private note {index}");
             preferences.memory_mode = MemoryMode::PrivateNotes;
@@ -500,7 +527,7 @@ mod tests {
     #[test]
     fn ipc_input_rejects_unknown_credential_or_authority_fields() {
         let valid = serde_json::json!({
-            "agentId":"research", "connection":"simulation", "model":"simulation",
+            "agentId":"research", "identity":crate::agent_preferences::BotIdentity::default(), "connection":"simulation", "model":"simulation",
             "endpoint":"", "localAuth":false, "allowUnknownLocalityNotes":false,
             "effort":"default", "ownerInstructions":"", "memoryMode":"off", "note":"", "revision":0,
         });
@@ -638,6 +665,36 @@ mod tests {
         assert_eq!(
             storage.save_agent_preferences(unsupported),
             Err(PreferencesError::UnsupportedSettings)
+        );
+        Ok(())
+    }
+    #[test]
+    fn personality_only_save_preserves_connection_and_note_and_invalidates_revision(
+    ) -> Result<(), Box<dyn Error>> {
+        let db = Storage::initialize(&DatabaseConfig::in_memory())?;
+        let storage = db.storage();
+        let mut edit = input(storage.agent_profile("research")?);
+        edit.connection = AgentConnection::OpenaiApi;
+        edit.model = "gpt-5.6-sol".into();
+        edit.effort = ReasoningEffort::High;
+        edit.note = "private sentinel".into();
+        edit.owner_instructions = "custom preference".into();
+        edit.identity.nickname = "Mira".into();
+        let saved = storage.save_agent_preferences(edit)?;
+        let mut reset = input(saved.clone());
+        reset.identity = crate::agent_preferences::BotIdentity::default();
+        let result = storage.save_agent_preferences(reset)?;
+        let mut expected = saved.clone();
+        expected.identity = crate::agent_preferences::BotIdentity::default();
+        expected.revision += 1;
+        assert_eq!(result, expected);
+        assert_eq!(
+            storage.save_agent_preferences(input(saved)),
+            Err(PreferencesError::StaleContext)
+        );
+        assert_eq!(
+            storage.agent_profile("coding")?,
+            AgentProfile::defaults(AgentId::Coding)?
         );
         Ok(())
     }

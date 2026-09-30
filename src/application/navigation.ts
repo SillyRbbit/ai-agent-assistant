@@ -31,7 +31,7 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
   },
   {
     description: "Configure agent connections and private notes for bounded text advice.",
-    label: "Agents",
+    label: "Bots",
     route: "agents",
   },
   {

@@ -1,5 +1,11 @@
+import { Bot, Compass, Sparkles, Leaf, Shield, Star } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  BOT_AVATARS,
+  BOT_TONES,
+  BOT_VERBOSITIES,
+  DEFAULT_BOT_IDENTITY,
+  type BotIdentity,
   agentChatClient,
   agentChatErrorMessage,
   EFFORTS,
@@ -16,6 +22,22 @@ import {
 } from "../../infrastructure/tauri/agent-chat-client";
 import "./AgentsPage.css";
 
+const AVATAR_ICONS = {
+  bot: Bot,
+  compass: Compass,
+  spark: Sparkles,
+  leaf: Leaf,
+  shield: Shield,
+  star: Star,
+};
+function BotAvatar({ identity }: { readonly identity: BotIdentity }) {
+  const Icon = AVATAR_ICONS[identity.avatar];
+  return <Icon className="bot-avatar" aria-hidden="true" size={28} />;
+}
+function botName(profile: AgentProfile): string {
+  return profile.identity.nickname || profile.displayName;
+}
+
 const CONNECTION_LABELS = {
   simulation: "Simulation · no provider",
   openai_api: "OpenAI API",
@@ -25,7 +47,7 @@ const CONNECTION_LABELS = {
   ollama: "Local — Ollama",
 } as const;
 const HOSTED_DISCLOSURE =
-  "OpenAI receives this message, earlier turns in this conversation, saved owner instructions, and this agent's private note when enabled. This is a paid API request. store=false is not Zero Data Retention; provider abuse-monitoring and cache retention may still apply. Stop aborts local output but cannot guarantee immediate remote termination or zero billing. No tools, automatic retry, or connection fallback.";
+  "OpenAI receives this message, earlier turns in this conversation, bot identity/personality, saved owner instructions, and this agent's private note when enabled. This is a paid API request. store=false is not Zero Data Retention; provider abuse-monitoring and cache retention may still apply. Stop aborts local output but cannot guarantee immediate remote termination or zero billing. No tools, automatic retry, or connection fallback.";
 
 function catalogKey(connection: AgentConnection, endpoint: string, localAuth: boolean): string {
   return JSON.stringify([connection, endpoint, localAuth]);
@@ -71,16 +93,16 @@ export function AgentsPage({ client = agentChatClient }: { readonly client?: Age
       <header className="page-header">
         <div>
           <p className="section-kicker">Private workspace</p>
-          <h1 id="agents-page-title">Agents</h1>
+          <h1 id="agents-page-title">Bots</h1>
           <p>
-            Choose one agent for bounded text advice. Settings and manually managed notes stay local
+            Choose one bot for bounded text advice. Settings and manually managed notes stay local
             until you explicitly send them.
           </p>
         </div>
       </header>
       {!available ? (
         <p role="status" className="page-panel">
-          Open the native Cortexa app to load agents and saved settings. Browser mode cannot save
+          Open the native Cortexa app to load bots and saved settings. Browser mode cannot save
           settings or send provider requests.
         </p>
       ) : loading ? (
@@ -101,7 +123,9 @@ export function AgentsPage({ client = agentChatClient }: { readonly client?: Age
                   setConversation(null);
                 }}
               >
-                <strong>{profile.displayName}</strong>
+                <BotAvatar identity={profile.identity} />
+                <strong>{botName(profile)}</strong>
+                {profile.identity.nickname ? <span>{profile.displayName}</span> : null}
                 <span>{CONNECTION_LABELS[profile.connection]}</span>
               </button>
             ))}
@@ -139,7 +163,7 @@ export function AgentsPage({ client = agentChatClient }: { readonly client?: Age
               <AgentConversation
                 key={conversation.conversationId}
                 initial={conversation}
-                displayName={selected.displayName}
+                displayName={`${botName(selected)}${selected.identity.nickname ? ` · ${selected.displayName}` : ""}`}
                 client={client}
                 onBusy={setBusy}
                 onExit={() => {
@@ -181,6 +205,7 @@ function AgentSettings({
 }: SettingsProps) {
   const [draft, setDraft] = useState<AgentProfileInput>(() => ({
     agentId: profile.agentId,
+    identity: profile.identity,
     connection: profile.connection,
     model: profile.model,
     effort: profile.effort,
@@ -207,6 +232,7 @@ function AgentSettings({
     };
   }, []);
   const dirty =
+    JSON.stringify(draft.identity) !== JSON.stringify(profile.identity) ||
     draft.endpoint !== profile.endpoint ||
     draft.localAuth !== profile.localAuth ||
     draft.allowUnknownLocalityNotes !== profile.allowUnknownLocalityNotes ||
@@ -279,11 +305,131 @@ function AgentSettings({
   };
   return (
     <section className="agents-settings page-panel" aria-labelledby="agent-settings-title">
-      <h2 id="agent-settings-title">{profile.displayName}</h2>
+      <h2 id="agent-settings-title">
+        <BotAvatar identity={profile.identity} /> {botName(profile)}
+      </h2>
+      <p>Canonical role: {profile.displayName}</p>
       <p>
         Saved settings apply to a new conversation. Selecting another agent discards unsaved edits.
         Agent authority and fixture workflows remain unchanged.
       </p>
+      <fieldset disabled={pending}>
+        <legend>Identity and personality</legend>
+        <label>
+          Nickname <span>(optional, 48 characters; blank uses canonical role)</span>
+          <input
+            maxLength={48}
+            value={draft.identity.nickname}
+            onChange={(e) => {
+              setDraft({
+                ...draft,
+                identity: { ...draft.identity, nickname: e.currentTarget.value },
+              });
+            }}
+          />
+        </label>
+        <label>
+          Avatar
+          <select
+            value={draft.identity.avatar}
+            onChange={(e) => {
+              setDraft({
+                ...draft,
+                identity: {
+                  ...draft.identity,
+                  avatar: e.currentTarget.value as BotIdentity["avatar"],
+                },
+              });
+            }}
+          >
+            {BOT_AVATARS.map((v) => (
+              <option key={v} value={v}>
+                {v}
+              </option>
+            ))}
+          </select>
+        </label>
+        <div className="bot-preview">
+          <BotAvatar identity={draft.identity} />
+          <span>{draft.identity.nickname || profile.displayName}</span>
+        </div>
+        <label>
+          Profile description <span>(optional, 280 characters)</span>
+          <textarea
+            rows={2}
+            maxLength={280}
+            value={draft.identity.description}
+            onChange={(e) => {
+              setDraft({
+                ...draft,
+                identity: { ...draft.identity, description: e.currentTarget.value },
+              });
+            }}
+          />
+        </label>
+        <div className="agents-fields">
+          <label>
+            Tone
+            <select
+              value={draft.identity.tone}
+              onChange={(e) => {
+                setDraft({
+                  ...draft,
+                  identity: {
+                    ...draft.identity,
+                    tone: e.currentTarget.value as BotIdentity["tone"],
+                  },
+                });
+              }}
+            >
+              {BOT_TONES.map((v) => (
+                <option key={v} value={v}>
+                  {v}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Verbosity
+            <select
+              value={draft.identity.verbosity}
+              onChange={(e) => {
+                setDraft({
+                  ...draft,
+                  identity: {
+                    ...draft.identity,
+                    verbosity: e.currentTarget.value as BotIdentity["verbosity"],
+                  },
+                });
+              }}
+            >
+              {BOT_VERBOSITIES.map((v) => (
+                <option key={v} value={v}>
+                  {v}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <p>
+          Application rules come first, then your current task, custom owner instructions, and these
+          tone/verbosity presets. Identity and descriptions never grant capabilities or permissions.
+          Do not enter secrets or describe unimplemented abilities.
+        </p>
+        <button
+          type="button"
+          onClick={() => {
+            setDraft({ ...draft, identity: DEFAULT_BOT_IDENTITY });
+          }}
+        >
+          Reset identity and personality
+        </button>
+        <p>
+          Reset changes only these five fields. Connection, model, owner instructions and private
+          notes are retained. Save to apply; an active conversation keeps its captured profile and
+          must be restarted after changes.
+        </p>
+      </fieldset>
       <fieldset disabled={pending}>
         <legend>Connection and response</legend>
         <div className="agents-fields">
@@ -850,10 +996,10 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
             {initial.connection === "openai_api"
               ? HOSTED_DISCLOSURE
               : initial.connection === "codex"
-                ? "Codex receives this message, completed earlier turns, saved instructions and enabled notes through its own authenticated account. Account charges, limits and retention may apply. Stop kills the local runtime but cannot guarantee remote termination or zero usage. No tools, workspace access or API fallback."
+                ? "Codex receives this message, bot identity/personality, completed earlier turns, saved instructions and enabled notes through its own authenticated account. Account charges, limits and retention may apply. Stop kills the local runtime but cannot guarantee remote termination or zero usage. No tools, workspace access or API fallback."
                 : initial.connection === "anthropic_api"
-                  ? "Anthropic receives this message, earlier turns, saved instructions and enabled private notes. API charges and provider retention terms apply. Stop aborts local output but cannot guarantee immediate remote termination or zero billing. No tools, automatic retry or fallback."
-                  : "The selected server receives your message, earlier turns, instructions and enabled notes. Execution locality is unknown; localhost can proxy elsewhere. Sending may trigger normal loading of this selected installed model; loading uses the same bounded deadline. Cortexa does not download models, infer RAM needs or fall back to a cloud service."}
+                  ? "Anthropic receives this message, bot identity/personality, earlier turns, saved instructions and enabled private notes. API charges and provider retention terms apply. Stop aborts local output but cannot guarantee immediate remote termination or zero billing. No tools, automatic retry or fallback."
+                  : "The selected server receives your message, bot identity/personality, earlier turns, instructions and enabled notes. Execution locality is unknown; localhost can proxy elsewhere. Sending may trigger normal loading of this selected installed model; loading uses the same bounded deadline. Cortexa does not download models, infer RAM needs or fall back to a cloud service."}
           </p>
           <label className="agents-checkbox">
             <input

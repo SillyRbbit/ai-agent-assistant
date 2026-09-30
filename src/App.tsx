@@ -323,9 +323,9 @@ function ApplicationShell({ services }: ApplicationShellProps) {
     ),
     memory: (
       <PlaceholderPage
-        description="Private notes are managed separately for each agent in Agents."
-        emptyDescription="Open Agents to view, edit, save, or clear a private note. Notes are manually managed; no automatic learning or cross-agent sharing is enabled."
-        emptyTitle="Manage private notes in Agents"
+        description="Private notes are managed separately for each agent in Bots."
+        emptyDescription="Open Bots to view, edit, save, or clear a private note. Notes are manually managed; no automatic learning or cross-agent sharing is enabled."
+        emptyTitle="Manage private notes in Bots"
         eyebrow="Context"
         headingId="memory-page-title"
         icon="M"

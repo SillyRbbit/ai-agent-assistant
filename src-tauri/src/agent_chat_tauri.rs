@@ -859,6 +859,7 @@ mod tests {
         let initialized = Storage::initialize(&DatabaseConfig::in_memory())?;
         let storage = initialized.storage();
         let profile = storage.save_agent_preferences(AgentPreferencesInput {
+            identity: crate::agent_preferences::BotIdentity::default(),
             agent_id: "research".into(),
             connection: AgentConnection::OpenaiApi,
             model: "gpt-5.6-luna".into(),
