@@ -1,3 +1,59 @@
+## 2026-09-30 — Operational Command Center locally verified
+
+The owner-authorized `operational-command-center` milestone is implemented in
+`/Users/hdang/.codex/worktrees/bot-collaboration-acceptance/ai-agent-assistant`,
+branch `codex/bot-collaboration-acceptance`, unchanged HEAD
+`61e5ad36e62a24ee0fe7c8a0d12e9510e00a93a7`. Its baseline tree equals merged
+main `bac63f6f517f4dc778a4067bcd27278c1c77adb5`; PR #129 and all historical
+records remain preserved. This checkout began clean. All current changes are
+this milestone's frontend, development-only browser tooling, tests and records.
+The [plan](docs/plans/2026-09-30-operational-command-center.md) and
+[review](docs/reviews/2026-09-30-operational-command-center-post-increment-review.md)
+contain the complete inventory and acceptance evidence. Check the ordinary gate
+status before treating the candidate as complete.
+
+One shared single-flight snapshot store now serves Rooms and Command Center.
+Four explicit modes separate current roster, selected collaboration run,
+historical inspection and existing deterministic demos. All four workflows use
+saved stages; nine canonical bots remain distinct from Conductor and separate
+stage executions. Inspector, filters, activity summaries and typed room links
+share accepted snapshots. The projection excludes private notes, custom
+instructions and transmitted input. It labels provisional output, saved settings,
+preparation/start timestamps and missing data truthfully. No execution, provider,
+storage, authority, workflow-definition or native source changes were made.
+
+Final offline verification passed after the last accessibility/layout correction: strict
+format/lint/Clippy/typecheck, 504 frontend tests, 74 hook tests, 86 repository tests,
+399 Rust library tests (also rerun by the integration command), 255 other native tests
+and release build. One existing opt-in real-Hermes probe was ignored, not passed. Real Chromium regressions cover delayed
+measurement, all routes, viewport ownership, navigation, ordering, deletion,
+filters, Unicode and inspector containment at 1280/1600/2200 widths. Direct
+Computer Use inspected those surfaces and an isolated unsigned native bundle.
+Native all-Simulation Research/Engineering/Operations/Workflow Proposal each
+completed (4/5/5/4 stages); four saved runs persisted across restart. The final
+bundle's native inspector containment, truthful edge help, stage navigation and
+50% manual-viewport return were observed. These are not live-provider results.
+Native cancellation was not repeated; changed snapshot cancellation presentation
+was tested with deterministic browser data. Original native execution and
+cancellation code remain byte-identical.
+
+Evidence: `/private/tmp/cortexa-operational-command-center-evidence`. Native QA
+uses identifier `com.cortexa.qa.operational20260930` and a separate data directory,
+not owner profiles or rooms. The initial data directory was absent. Its four
+synthetic runs are retained. The prior bundle and receipt remain preserved;
+`artifact-final.json` identifies the final bundle. The test-owned native process
+was quit. No credentials were inspected, no provider requests or publication
+occurred. Playwright 1.61.0 is development-only; unrelated lock entries remain
+unchanged. No new runtime dependencies, IPC, permissions or capabilities.
+
+Retain D-127/D-128, native/provider/runtime live-success and Codex-isolation
+advisories, process-local Python 3.12.1/Xcode SDK 27.0/Cargo build-override
+strip=none workaround, OpenAI parked 4/5 and D-125/M1/M2 parked. Remote CI and
+owner manual QA remain pending. Documentation, security, preservation and report-schema checks passed. Ordinary
+completion/full Stop receipts are generated after this record is frozen; require
+complete/valid status. Next action: owner QA or a separately authorized publication
+review. Do not execute either automatically.
+
 ## 2026-09-30 — Bot Collaboration acceptance
 
 Worktree `/Users/hdang/.codex/worktrees/bot-collaboration-acceptance/ai-agent-assistant`, branch `codex/bot-collaboration-acceptance`, baseline/main `9601852ec4799626bc15548e65ca5fe1f17d7580`. An ordinary gate admitted the frozen 49-path candidate from `codex/bot-identity-publication` HEAD `6a164d8d8cd360dd1e4ecc67c5c530cc973a9518` without gate state. Nine acceptance paths yield exactly 51 cumulative paths. All inherited executable bytes, historical document bodies, worktrees and prior bundles remain preserved. The source `bot-collaboration-cancellation-fixture` remains valid failed / FAIL / Blocked without a completion marker; this acceptance does not revise it.

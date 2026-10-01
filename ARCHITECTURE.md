@@ -1,3 +1,9 @@
+## 2026-09-30 — Operational collaboration projection
+
+The Command Center now consumes the existing typed room/run/stage snapshots via a client-keyed `CollaborationSnapshots` store shared with Rooms. One in-flight list request, mutation epochs, monotonic run acceptance and last-consumer cleanup bound polling and reject stale responses. It does not add a workflow engine or event stream. A separate allowlisted projection preserves the deterministic demo validator and excludes custom instructions, private notes, transmitted input and provider envelopes. Historical attribution uses saved participants, not current profiles; inactive historical roster members explicitly lack historical appearance. Stage preparation/start timestamps are not completion timestamps, and activity is a snapshot summary rather than a lifecycle journal.
+
+Rendering reuses React Flow, shared row geometry and BotAvatar appearance. Canonical IDs and stage IDs remain authoritative; Conductor is application coordination. Typed navigation carries room/run/stage IDs to the existing collaboration page. All Start/Stop, acknowledgement, provider selection, ownership and native persistence remain in their existing boundaries. Playwright and the synthetic IPC harness are development-only. No native, schema, permission, provider or workflow-definition changes.
+
 ## 2026-09-30 — Bot Collaboration local acceptance
 
 The owner-authorized `bot-collaboration` implementation is locally accepted in

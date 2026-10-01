@@ -1,0 +1,200 @@
+.operational-workspace {
+  padding: 24px;
+  min-width: 0;
+}
+.operational-center {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  min-width: 0;
+}
+.operational-center h1 {
+  margin: 0;
+}
+.operational-modes,
+.operational-controls,
+.operational-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 10px;
+}
+.operational-modes {
+  margin-bottom: 20px;
+}
+.operational-controls label {
+  display: grid;
+  gap: 6px;
+  min-width: 150px;
+  max-width: 100%;
+}
+.operational-center button,
+.operational-modes button {
+  color: #e3e8f4;
+  background: #192233;
+  border: 1px solid #60729b;
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+.operational-modes button[aria-pressed="true"] {
+  background: #383572;
+  border-color: #a5b4ff;
+}
+.operational-center input,
+.operational-center select {
+  color: #e3e8f4;
+  background: #101722;
+  border: 1px solid #60729b;
+  padding: 8px;
+  border-radius: 6px;
+  max-width: 100%;
+}
+.operational-center :focus-visible,
+.operational-modes :focus-visible {
+  outline: 3px solid #a5b4ff;
+  outline-offset: 3px;
+}
+.operational-canvas {
+  height: clamp(470px, 67vh, 850px);
+  width: 100%;
+  min-width: 0;
+  background: #0c1320;
+  border: 1px solid #465775;
+  border-radius: 10px;
+}
+.operational-card {
+  width: 240px;
+  height: 130px;
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  grid-template-rows: 44px 36px 30px;
+  gap: 3px 8px;
+  padding: 12px;
+  color: #e3e8f4;
+  background: #182233;
+  border: 1px solid #6b7da3;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+.operational-card strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.2;
+}
+.operational-card span:not(.bot-appearance):not(.operational-unknown-avatar),
+.operational-card small {
+  grid-column: 1 / -1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.operational-card[data-status="running"] {
+  border-width: 3px;
+  border-color: #67aaff;
+}
+.operational-card[data-status="failed"],
+.operational-card[data-status="partial"] {
+  border-color: #ffae55;
+}
+.operational-card[data-status="inactive"] {
+  border-style: dashed;
+}
+.react-flow__node.selected .operational-card {
+  outline: 3px solid #d2d9ff;
+  outline-offset: 3px;
+}
+.operational-inspector {
+  padding: 16px;
+  overflow-wrap: anywhere;
+}
+.operational-inspector dd {
+  margin: 0 0 12px;
+}
+.operational-inspector pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.operational-activity {
+  padding: 12px;
+}
+.operational-activity ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.operational-toolbar span {
+  flex: 1;
+  min-width: 240px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .operational-center * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.operational-card {
+  grid-template-rows: 36px 27px 24px;
+}
+.operational-controls select {
+  max-width: 280px;
+}
+.operational-center p {
+  margin: 0;
+}
+.operational-center button:disabled {
+  opacity: 0.5;
+}
+
+.operational-card > strong {
+  grid-column: 2;
+  grid-row: 1;
+}
+.operational-card > .operational-unknown-avatar,
+.operational-card > .bot-appearance {
+  grid-column: 1;
+  grid-row: 1;
+}
+.operational-card > span:not(.bot-appearance):not(.operational-unknown-avatar) {
+  grid-row: 2;
+}
+.operational-card > small {
+  grid-row: 3;
+}
+.operational-inspector button,
+.operational-activity button {
+  color: #e3e8f4;
+  background: #192233;
+  border: 1px solid #60729b;
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+.operational-activity li {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.operational-activity button {
+  max-width: 100%;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+/* The operational graph keeps its inspector alongside the canvas on laptops.
+   Other routes retain the shell's compact overlay behavior. */
+@media (min-width: 1100px) and (max-width: 1440px) {
+  .application-shell--inspector-expanded:has(.operational-workspace) {
+    --application-inspector-track: var(--app-inspector-width);
+  }
+  .application-shell:has(.operational-workspace) .application-inspector {
+    position: relative;
+    inset: auto;
+    grid-area: inspector;
+    width: auto;
+  }
+}

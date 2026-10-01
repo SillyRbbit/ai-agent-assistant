@@ -57,7 +57,9 @@ import {
   type ResearchKnowledgeDemoProjectionLoader,
 } from "./infrastructure/tauri/research-knowledge-demo-projection-client";
 
-const CommandCenterPage = lazy(() => import("./features/command-center/CommandCenterPage"));
+const CommandCenterPage = lazy(
+  () => import("./features/command-center/OperationalCommandCenterPage"),
+);
 
 export interface AppServices {
   readonly appInfoLoader: AppInfoLoader;
@@ -117,10 +119,7 @@ export function CommandCenterLoadingPage() {
       : createPortal(
           <div aria-busy="true" className="application-panel-empty">
             <strong>No Command Center selection available yet</strong>
-            <p>
-              The deterministic frontend fixture workspace is still loading. No live runtime data is
-              available here.
-            </p>
+            <p>The operational workspace is loading. No execution is started by this view.</p>
           </div>,
           workspacePanels.inspectorBodyTarget,
         );
@@ -128,21 +127,15 @@ export function CommandCenterLoadingPage() {
     workspacePanels?.activitySummaryTarget === null ||
     workspacePanels?.activitySummaryTarget === undefined
       ? null
-      : createPortal(
-          <>Deterministic fixture activity loading</>,
-          workspacePanels.activitySummaryTarget,
-        );
+      : createPortal(<>Snapshot presentation loading</>, workspacePanels.activitySummaryTarget);
   const activityBodyPortal =
     workspacePanels?.activityBodyTarget === null ||
     workspacePanels?.activityBodyTarget === undefined
       ? null
       : createPortal(
           <div aria-busy="true" className="application-panel-empty application-panel-empty--inline">
-            <strong>No Command Center fixture activity available yet</strong>
-            <p>
-              Bounded presentation events appear after the deterministic frontend fixture loads;
-              this panel is not live telemetry.
-            </p>
+            <strong>No Command Center activity available yet</strong>
+            <p>Accepted snapshots appear after loading. No event journal is inferred.</p>
           </div>,
           workspacePanels.activityBodyTarget,
         );
@@ -155,13 +148,13 @@ export function CommandCenterLoadingPage() {
         className="page-stack"
       >
         <PageHeader
-          description="Preparing the deterministic multi-agent operations workspace."
+          description="Preparing the read-only operational workspace."
           eyebrow="Operations"
           headingId="command-center-loading-title"
           title="Command Center"
         />
         <PageState
-          description="Loading the local visual prototype."
+          description="Loading graph presentation."
           icon="O"
           title="Preparing Command Center"
           tone="loading"
@@ -211,9 +204,13 @@ function ApplicationShell({ services }: ApplicationShellProps) {
       if (applicationContentRef.current !== null) {
         applicationContentRef.current.scrollTop = 0;
       }
-      mainContentRef.current?.focus();
+      const stage =
+        state.activeRoute === "collaboration" && state.collaborationLocation?.stageId
+          ? document.getElementById(state.collaborationLocation.stageId)
+          : null;
+      (stage ?? mainContentRef.current)?.focus();
     }
-  }, [state.activeRoute]);
+  }, [state.activeRoute, state.collaborationLocation]);
 
   useEffect(() => {
     const handleViewportResize = () => {
@@ -280,10 +277,23 @@ function ApplicationShell({ services }: ApplicationShellProps) {
 
   const pages: Readonly<Record<AppRoute, ReactNode>> = {
     agents: <AgentsPage />,
-    collaboration: <CollaborationPage />,
+    collaboration: (
+      <CollaborationPage
+        location={state.collaborationLocation}
+        onOpenGraph={(location) => {
+          dispatch({ type: "collaboration-navigate", route: "command-center", location });
+        }}
+      />
+    ),
     "command-center": (
       <Suspense fallback={<CommandCenterLoadingPage />}>
-        <CommandCenterPage projectionLoader={services.researchKnowledgeDemoProjectionLoader} />
+        <CommandCenterPage
+          projectionLoader={services.researchKnowledgeDemoProjectionLoader}
+          location={state.collaborationLocation}
+          onOpenRoom={(location) => {
+            dispatch({ type: "collaboration-navigate", route: "collaboration", location });
+          }}
+        />
       </Suspense>
     ),
     activity: <ActivityPage events={state.activityEvents} />,

@@ -292,7 +292,7 @@ export class CommandCenterProjectionValidationError extends Error {
   }
 }
 
-const EXPECTED_AGENT_GROUPS: Readonly<Record<CommandCenterAgentId, TopologyGroupId>> = {
+export const EXPECTED_AGENT_GROUPS: Readonly<Record<CommandCenterAgentId, TopologyGroupId>> = {
   "personal-assistant": "core",
   research: "intelligence",
   coding: "engineering",

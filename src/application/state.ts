@@ -43,7 +43,14 @@ export interface RetryableMockRun {
   readonly retryAttempt: MockRunAttempt;
 }
 
+export interface CollaborationLocation {
+  readonly roomId: number;
+  readonly runId: string;
+  readonly stageId: string | null;
+}
+
 export interface ApplicationState {
+  readonly collaborationLocation: CollaborationLocation | null;
   readonly activeApproval: MockApprovalRequest | null;
   readonly activeConversationId: string;
   readonly activeRun: ActiveMockRun | null;
@@ -58,6 +65,11 @@ export interface ApplicationState {
 }
 
 export type ApplicationAction =
+  | {
+      readonly type: "collaboration-navigate";
+      readonly route: "command-center" | "collaboration";
+      readonly location: CollaborationLocation;
+    }
   | { readonly route: AppRoute; readonly type: "navigate" }
   | { readonly route: AssistantMenuRoute; readonly type: "menu-route-received" }
   | { readonly conversationId: string; readonly type: "conversation-selected" }
@@ -86,6 +98,7 @@ const INITIAL_CONVERSATION: ConversationSession = {
 };
 
 export const INITIAL_APPLICATION_STATE: ApplicationState = {
+  collaborationLocation: null,
   activeApproval: null,
   activeConversationId: INITIAL_CONVERSATION.id,
   activeRun: null,
@@ -290,6 +303,8 @@ export function applicationReducer(
   action: ApplicationAction,
 ): ApplicationState {
   switch (action.type) {
+    case "collaboration-navigate":
+      return { ...state, activeRoute: action.route, collaborationLocation: action.location };
     case "navigate":
       return action.route === state.activeRoute ? state : { ...state, activeRoute: action.route };
     case "conversation-selected":

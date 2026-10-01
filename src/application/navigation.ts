@@ -26,7 +26,7 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     route: "collaboration",
   },
   {
-    description: "Inspect the deterministic multi-agent operations prototype.",
+    description: "Inspect bot identities and bounded collaboration snapshots.",
     label: "Command Center",
     route: "command-center",
   },
