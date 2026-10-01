@@ -1,3 +1,78 @@
+## 2026-10-01 — Owner delegation recorded
+
+Henry authorizes his Dots bot Thottie as a Cortexa development delegate until
+changed or revoked; direct owner instructions prevail. Root `AGENTS.md` records
+execution-versus-review intent, designated automatic routes, and unchanged
+approval/security limits. No automatic route is established by this record.
+
+Documentation-only increment `owner-thottie-delegation` in
+`/Users/hdang/.codex/worktrees/knowledge-documents/ai-agent-assistant`, branch
+`codex/knowledge-documents`, HEAD `e02df763ac2522198c8b9c3169dd51fbf9956cc7`.
+Eight successor documents; fourteen cumulative Git paths include the preserved
+eleven-path layout candidate. Prior raw completion is byte-identically archived
+at `/private/tmp/cortexa-owner-thottie-delegation-evidence/prior-raw-state.json`.
+All product/test bytes, prior reports, artifacts and synthetic data remain.
+
+Plan: [Owner delegation](docs/plans/2026-10-01-owner-thottie-delegation.md).
+Review: [Post-increment review](docs/reviews/2026-10-01-owner-thottie-delegation-post-increment-review.md).
+Final check/status/Stop receipts determine acceptance; do not infer success from
+this record. No app launch, provider request, commit or publication. Retain all
+advisories, the process-local native workaround, OpenAI parked 4/5 and
+D-125/M1/M2 parked. The older dirty Desktop checkout is untouched.
+
+Next action: read-only publication-scope review of the layout candidate and this
+additive owner instruction. Do not repeat passing tests/builds or QA. No
+publication authority follows; inspect and preserve existing work first.
+
+## 2026-10-01 — Knowledge navigation layout validated locally
+
+Increment `knowledge-navigation-layout` uses the existing
+`/Users/hdang/.codex/worktrees/knowledge-documents/ai-agent-assistant`, branch
+`codex/knowledge-documents`, unchanged HEAD
+`e02df763ac2522198c8b9c3169dd51fbf9956cc7`. Live main was verified at
+`02dc35e62ac083a49f0802e8d340c39500f45e78`. Eleven successor paths; no
+unrelated executable bytes or historical bodies changed. Prior complete/valid
+raw state and bundle were archived byte-identically before ordinary admission.
+Evidence: `/private/tmp/cortexa-knowledge-navigation-layout-evidence`.
+Plan: [Knowledge navigation layout](docs/plans/2026-10-01-knowledge-navigation-layout.md).
+Review: [Post-increment review](docs/reviews/2026-10-01-knowledge-navigation-layout-post-increment-review.md).
+
+At <=960px Knowledge/Collaboration now reserve the actual expanded or collapsed
+navigation width. The old shell reserved 68px while showing a 220px expanded
+sidebar, obscuring content. Only production CSS changed; navigation state,
+compact in-flow inspector, wide docking and other-route graph behavior remain.
+No timers, automatic collapse, remounts, dependencies or execution/storage changes.
+
+The actual-App browser regression caught the old overlap, then passed after the
+correction: 1600/961/960/959/760 widths, reverse resize, both navigation states,
+inspector open/closed, route transitions, scrolling, disclosure, controls, Escape
+and graph docking. It no longer collapses navigation to make assertions pass.
+All 65 affected frontend tests, strict typecheck/lint and one offline unsigned
+isolated debug bundle passed. Initial lint caught an unused harness global;
+it was removed without relaxing lint. Failed attempts remain external evidence.
+The build also verified frontend typecheck and production bundling.
+
+Direct Computer Use verified Knowledge and Collaboration at 2560x1410 and
+960x1410, open/closed inspector, expanded navigation, compact collapsed navigation,
+route changes, existing draft/room readability and lower-control scrolling.
+Compact-to-wide return retained collapsed navigation. One native 760x520 resize
+attempt had no effect; minimum-size coverage is browser-only. No synthetic data
+save, export, new preview preparation, workflow or provider call occurred.
+The exact isolated executable was verified; the QA app quit and process absence
+was confirmed. Previous artifacts and profiles/rooms remain preserved.
+
+Frontend-tier validation applies. Unchanged native/full-verification/audit evidence
+from Knowledge acceptance is explicitly inherited, not newly executed. Final
+format/docs/repository/security/whitespace, scope/preservation, session/review/schema,
+ordinary completion and full Stop receipts must pass before acceptance is claimed.
+Remote CI and live-provider behavior for this repair remain unverified.
+
+Retain D-127/D-128, native/provider/runtime live-success and Codex-isolation
+advisories, Python3.12.1/XcodeSDK27/Cargo release build-override strip=none process-local
+workaround, OpenAI parked4/5 and parked D-125/M1/M2. No publication is authorized.
+Next action after valid completion: read-only publication readiness review of the
+exact eleven-path repair; do not repeat completed tests/builds/QA or reopen history.
+
 ## 2026-10-01 — Knowledge inspector layout verified locally
 
 Owner-authorized `knowledge-inspector-layout` uses the existing

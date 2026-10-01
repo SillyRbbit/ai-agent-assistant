@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
 import { mkdir } from "node:fs/promises";
-/* global document, window, getComputedStyle */
+/* global document, window */
 const output = process.argv[2];
 if (!output) throw Error("External screenshot directory required");
 await mkdir(output, { recursive: true });
@@ -63,127 +63,159 @@ try {
       await page.close();
     }
   }
-  // Test CSS geometry at the real shell boundary, not isolated route components.
-  for (const [width, height] of [
-    [1600, 1000],
-    [1440, 1000],
-    [1280, 800],
-    [760, 520],
-  ]) {
-    const page = await browser.newPage({ viewport: { width, height } });
+  // Exercise the real shell without silently collapsing expanded navigation.
+  // Reuse each page across breakpoint crossings to cover native resize ordering.
+  for (const expanded of [true, false]) {
+    const page = await browser.newPage({ viewport: { width: 1600, height: 1000 } });
     await page.goto("http://127.0.0.1:4175/scripts/browser/knowledge.html?shell");
     const nav = page.getByRole("navigation", { name: "Primary navigation" });
-    // Narrow navigation itself is an intentional overlay. Close it after routing.
+    const stateName = expanded ? "expanded" : "collapsed";
+    if (!expanded) {
+      await page.getByRole("button", { name: "Collapse navigation", exact: true }).click();
+    }
     async function route(name) {
-      const expand = page.getByRole("button", { name: "Expand navigation", exact: true });
-      if (await expand.count()) await expand.click();
+      // The collapsed navigation retains accessible route buttons; never change
+      // the owner's navigation state to make a geometry assertion pass.
       await nav.getByRole("button", { name, exact: true }).click();
-      const collapse = page.getByRole("button", { name: "Collapse navigation", exact: true });
-      if (await collapse.count()) await collapse.click();
+    }
+    async function settled() {
       await page.waitForFunction(() => {
         const side = document.querySelector(".application-sidebar");
         return (
-          !!side &&
-          Math.abs(
-            side.getBoundingClientRect().width -
-              parseFloat(getComputedStyle(side).getPropertyValue("--app-sidebar-collapsed-width")),
-          ) < 1
+          !!side && side.getAnimations().every((animation) => animation.playState !== "running")
         );
       });
+      assert.equal(
+        await page
+          .getByRole("button", {
+            name: expanded ? "Collapse navigation" : "Expand navigation",
+            exact: true,
+          })
+          .count(),
+        1,
+        "resizing and routing preserve navigation state",
+      );
     }
     async function unobscured(locator) {
       await locator.scrollIntoViewIfNeeded();
       assert.equal(
         await locator.evaluate((el) => {
           const r = el.getBoundingClientRect();
-          const x = r.left + r.width / 2,
-            y = r.top + r.height / 2;
-          const hit = document.elementFromPoint(x, y);
           const main = document.querySelector(".application-main")?.getBoundingClientRect();
-          return (
-            !!main &&
-            r.left >= main.left - 1 &&
-            r.right <= main.right + 1 &&
-            y >= main.top &&
-            y <= main.bottom &&
-            !!hit &&
-            (el === hit || el.contains(hit))
-          );
+          if (!main || r.left < main.left - 1 || r.right > main.right + 1) return false;
+          // Test both sides as well as the center: a wide control may have an
+          // accessible center even though its left label is behind navigation.
+          return [r.left + 2, r.left + r.width / 2, r.right - 2].every((x) => {
+            const y = r.top + r.height / 2;
+            const hit = document.elementFromPoint(x, y);
+            return y >= main.top && y <= main.bottom && !!hit && (el === hit || el.contains(hit));
+          });
         }),
         true,
-        `reachable ${width}: ${await locator.textContent()}`,
+        `reachable ${stateName}: ${await locator.textContent()}`,
       );
     }
-    async function separated() {
+    async function separated(open) {
+      await settled();
       assert.equal(
-        await page.evaluate(() => {
+        await page.evaluate((inspectorOpen) => {
           const m = document.querySelector(".application-main")?.getBoundingClientRect();
+          const n = document.querySelector(".application-sidebar")?.getBoundingClientRect();
           const i = document.querySelector(".application-inspector")?.getBoundingClientRect();
           return (
             !!m &&
-            !!i &&
+            !!n &&
             m.height > 100 &&
-            (i.bottom <= m.top + 1 || m.right <= i.left + 1) &&
+            m.left >= n.right - 1 &&
+            (!inspectorOpen ||
+              (!!i && i.left >= n.right - 1 && (i.bottom <= m.top + 1 || m.right <= i.left + 1))) &&
             document.documentElement.scrollWidth <= window.innerWidth
           );
-        }),
+        }, open),
         true,
-        `nonoverlap ${width}`,
+        `navigation/workspace/inspector nonoverlap ${stateName} at ${page.viewportSize()?.width}`,
       );
     }
-    await route("Knowledge");
-    await page.getByRole("button", { name: "Show workspace inspector", exact: true }).click();
-    await separated();
-    await unobscured(page.getByRole("button", { name: "Import selected file", exact: true }));
-    await page.screenshot({ path: `${output}/shell-${width}-knowledge.png` });
-    await page.getByRole("button", { name: "Close workspace inspector", exact: true }).focus();
-    await page.keyboard.press("Escape");
-    assert.equal(await page.locator(".application-inspector").isVisible(), false);
-    assert.equal(
-      await page
-        .getByRole("button", { name: "Show workspace inspector", exact: true })
-        .evaluate((el) => el === document.activeElement),
-      true,
-    );
-    await page.getByRole("button", { name: "Show workspace inspector", exact: true }).click();
-    await route("Collaboration");
-    await page.getByRole("button", { name: "Synthetic layout room", exact: true }).click();
-    await separated();
-    await page.getByLabel("Objective", { exact: true }).fill("Synthetic layout only");
-    const prepare = page.getByRole("button", {
-      name: "Check readiness and review transmission",
-      exact: true,
-    });
-    await unobscured(prepare);
-    await prepare.click();
-    const disclosure = page.getByText(/Each listed provider receives the objective/);
-    await unobscured(disclosure);
-    await page.screenshot({ path: `${output}/shell-${width}-disclosure.png` });
-    const start = page.getByRole("button", { name: "Start simulation workflow", exact: true });
-    await unobscured(start);
-    assert.equal(await start.isEnabled(), false);
-    await page.getByRole("button", { name: "Close workspace inspector", exact: true }).click();
-    await unobscured(start);
-    await page.getByRole("button", { name: "Show workspace inspector", exact: true }).click();
-    await route("Knowledge");
-    await separated();
-    await route("Command Center");
-    if (width >= 1100) {
-      await page.waitForFunction(
-        () => document.querySelectorAll(".react-flow__node").length === 10,
-      );
+    for (const [width, height] of [
+      [1600, 1000],
+      [961, 1410],
+      [960, 1410],
+      [959, 1410],
+      [760, 520],
+      [959, 1410],
+      [960, 1410],
+      [961, 1410],
+      [1600, 1000],
+    ]) {
+      await page.setViewportSize({ width, height });
+      await route("Knowledge");
+      if (
+        await page.getByRole("button", { name: "Show workspace inspector", exact: true }).count()
+      ) {
+        await page.getByRole("button", { name: "Show workspace inspector", exact: true }).click();
+      }
+      await separated(true);
+      await unobscured(page.getByRole("heading", { name: "Knowledge & Documents", exact: true }));
+      await unobscured(page.getByRole("button", { name: "Import selected file", exact: true }));
+      await page.screenshot({ path: `${output}/shell-${width}-${stateName}-knowledge.png` });
+      await page.getByRole("button", { name: "Close workspace inspector", exact: true }).focus();
+      await page.keyboard.press("Escape");
+      assert.equal(await page.locator(".application-inspector").isVisible(), false);
+      // The real shell restores focus on its next animation frame. Observe the
+      // promised focus boundary rather than racing that callback.
+      await page.waitForFunction(() => {
+        const toggle = document.querySelector('button[aria-label="Show workspace inspector"]');
+        return !!toggle && toggle === document.activeElement;
+      });
       assert.equal(
-        await page.evaluate(() => {
-          const c = document.querySelector(".operational-canvas")?.getBoundingClientRect();
-          const i = document.querySelector(".application-inspector")?.getBoundingClientRect();
-          return !!c && !!i && c.right <= i.left + 1;
-        }),
+        await page
+          .getByRole("button", { name: "Show workspace inspector", exact: true })
+          .evaluate((el) => el === document.activeElement),
         true,
-        "graph docking retained",
       );
+      await separated(false);
+      await unobscured(page.getByRole("button", { name: "Import selected file", exact: true }));
+      await page.getByRole("button", { name: "Show workspace inspector", exact: true }).click();
+      await route("Collaboration");
+      await page.getByRole("button", { name: "Synthetic layout room", exact: true }).click();
+      await separated(true);
+      await unobscured(page.getByRole("heading", { name: "Collaboration", exact: true }));
+      await page.getByLabel("Objective", { exact: true }).fill("Synthetic layout only");
+      const prepare = page.getByRole("button", {
+        name: "Check readiness and review transmission",
+        exact: true,
+      });
+      await unobscured(prepare);
+      await prepare.click();
+      await unobscured(page.getByText(/Each listed provider receives the objective/));
+      const start = page.getByRole("button", { name: "Start simulation workflow", exact: true });
+      await unobscured(start);
+      assert.equal(await start.isEnabled(), false);
+      await page.screenshot({ path: `${output}/shell-${width}-${stateName}-disclosure.png` });
+      await page.getByRole("button", { name: "Close workspace inspector", exact: true }).click();
+      await separated(false);
+      await unobscured(start);
+      await page.getByRole("button", { name: "Show workspace inspector", exact: true }).click();
+      await route("Knowledge");
+      await separated(true);
+      if (width >= 1100) {
+        await route("Command Center");
+        await page.waitForFunction(
+          () => document.querySelectorAll(".react-flow__node").length === 10,
+        );
+        assert.equal(
+          await page.evaluate(() => {
+            const c = document.querySelector(".operational-canvas")?.getBoundingClientRect();
+            const i = document.querySelector(".application-inspector")?.getBoundingClientRect();
+            return !!c && !!i && c.right <= i.left + 1;
+          }),
+          true,
+          "graph docking retained",
+        );
+        await route("Collaboration");
+        await separated(true);
+      }
     }
-    await route("Collaboration");
-    await separated();
     await page.close();
   }
   console.log(
