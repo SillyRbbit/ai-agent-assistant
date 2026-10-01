@@ -80,6 +80,9 @@ DOCUMENTATION_TRUTH_MARKERS = (
     ),
 )
 EXPECTED_TAURI_IMPORTS = {
+    'src/infrastructure/tauri/collaboration-client.ts': (
+        'import { invoke, isTauri } from "@tauri-apps/api/core";',
+    ),
     "src/infrastructure/tauri/agent-chat-client.ts": (
         'import { invoke, isTauri } from "@tauri-apps/api/core";',
     ),
@@ -101,6 +104,14 @@ EXPECTED_TAURI_IMPORTS = {
     ),
 }
 EXPECTED_TAURI_INVOKES = {
+    'src/infrastructure/tauri/collaboration-client.ts': (
+        'invoke<unknown>("list_collaboration_rooms")',
+        'invoke<unknown>("create_collaboration_room", { request: { title } })',
+        'invoke<unknown>("prepare_collaboration", { request: { roomId, input } })',
+        'invoke<unknown>("start_collaboration", { request })',
+        'invoke<unknown>("cancel_collaboration", { request: { roomId } })',
+        'invoke<unknown>("delete_collaboration_room", { request: { roomId } })',
+    ),
     "src/infrastructure/tauri/agent-chat-client.ts": (
         'invoke<unknown>("list_agent_preferences")',
         'invoke<unknown>("list_agent_connections")',
@@ -244,6 +255,12 @@ EXPECTED_CAPABILITY_CONFIGURATION = {
 EXPECTED_INVOKE_HANDLER = (
     ".invoke_handler(tauri::generate_handler!["
     "app_info::get_app_info,"
+    "collaboration_tauri::list_collaboration_rooms,"
+    "collaboration_tauri::create_collaboration_room,"
+    "collaboration_tauri::prepare_collaboration,"
+    "collaboration_tauri::start_collaboration,"
+    "collaboration_tauri::cancel_collaboration,"
+    "collaboration_tauri::delete_collaboration_room,"
     "research_knowledge_demo_projection::get_research_knowledge_demo_projection,"
     "research_knowledge_demo_lifecycle_tauri::get_research_knowledge_demo_lifecycle_snapshot,"
     "research_knowledge_demo_lifecycle_tauri::start_research_knowledge_demo_lifecycle,"

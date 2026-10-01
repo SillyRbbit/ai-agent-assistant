@@ -397,6 +397,41 @@ pub(crate) async fn run(
     model: String,
     effort: ReasoningEffort,
     input: String,
+    emit: impl FnMut(ProviderEvent) -> Result<(), DirectError>,
+) -> Result<(), DirectError> {
+    run_with_rules(
+        setup,
+        model,
+        effort,
+        input,
+        crate::agent_chat::COMMUNICATION_RULES,
+        emit,
+    )
+    .await
+}
+pub(crate) async fn run_collaboration(
+    setup: Setup,
+    model: String,
+    effort: ReasoningEffort,
+    input: String,
+    emit: impl FnMut(ProviderEvent) -> Result<(), DirectError>,
+) -> Result<(), DirectError> {
+    run_with_rules(
+        setup,
+        model,
+        effort,
+        input,
+        crate::collaboration::RULES,
+        emit,
+    )
+    .await
+}
+async fn run_with_rules(
+    setup: Setup,
+    model: String,
+    effort: ReasoningEffort,
+    input: String,
+    rules: &str,
     mut emit: impl FnMut(ProviderEvent) -> Result<(), DirectError>,
 ) -> Result<(), DirectError> {
     let mut session = Session::spawn(&setup)?;
@@ -414,10 +449,10 @@ pub(crate) async fn run(
             .ok_or(DirectError::ModelUnavailable)?,
         effort,
     )?;
+    let mut parameters = thread_parameters(&model);
+    parameters["baseInstructions"] = json!(rules);
     let thread = thread_id(
-        &session
-            .request(4, "thread/start", thread_parameters(&model))
-            .await?,
+        &session.request(4, "thread/start", parameters).await?,
         &model,
     )?;
     let mut params =

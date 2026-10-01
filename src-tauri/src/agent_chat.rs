@@ -57,6 +57,7 @@ pub(crate) struct BoundConversation {
     pub(crate) id: String,
     pub(crate) profile: AgentProfile,
     history: Vec<Message>,
+    collaboration: bool,
 }
 
 impl BoundConversation {
@@ -66,7 +67,17 @@ impl BoundConversation {
             id,
             profile,
             history: Vec::new(),
+            collaboration: false,
         })
+    }
+
+    pub(crate) fn collaboration(profile: AgentProfile) -> Result<Self, ChatError> {
+        let mut profile = profile;
+        profile.note.clear();
+        profile.memory_mode = MemoryMode::Off;
+        let mut bound = Self::new("collaboration".into(), profile)?;
+        bound.collaboration = true;
+        Ok(bound)
     }
 
     pub(crate) fn validate_send(
@@ -210,7 +221,12 @@ impl BoundConversation {
     fn communication_instructions(&self) -> String {
         format!(
             "You are Cortexa's {}. {}",
-            self.profile.display_name, COMMUNICATION_RULES
+            self.profile.display_name,
+            if self.collaboration {
+                crate::collaboration::RULES
+            } else {
+                COMMUNICATION_RULES
+            }
         )
     }
     fn communication_context(&self) -> serde_json::Value {

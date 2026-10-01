@@ -224,8 +224,14 @@ fn begin_conversation(
     session.snapshot()
 }
 
-enum AdapterRequest {
+pub(crate) enum AdapterRequest {
     Codex {
+        setup: codex_connection::Setup,
+        model: String,
+        effort: ReasoningEffort,
+        input: String,
+    },
+    CollaborationCodex {
         setup: codex_connection::Setup,
         model: String,
         effort: ReasoningEffort,
@@ -247,6 +253,8 @@ enum AdapterRequest {
     },
     #[cfg(test)]
     Failure(DirectError),
+    #[cfg(test)]
+    Events(Vec<ProviderEvent>),
     #[cfg(test)]
     Pending(Arc<std::sync::atomic::AtomicBool>),
 }
@@ -345,11 +353,17 @@ fn start_owned(
     session.snapshot()
 }
 
-async fn run_adapter(
+pub(crate) async fn run_adapter(
     adapter: AdapterRequest,
     mut emit: impl FnMut(ProviderEvent) -> Result<(), DirectError>,
 ) -> Result<(), DirectError> {
     match adapter {
+        AdapterRequest::CollaborationCodex {
+            setup,
+            model,
+            effort,
+            input,
+        } => codex_connection::run_collaboration(setup, model, effort, input, emit).await,
         AdapterRequest::Codex {
             setup,
             model,
@@ -358,6 +372,13 @@ async fn run_adapter(
         } => codex_connection::run(setup, model, effort, input, emit).await,
         #[cfg(test)]
         AdapterRequest::Failure(error) => Err(error),
+        #[cfg(test)]
+        AdapterRequest::Events(events) => {
+            for event in events {
+                emit(event)?;
+            }
+            Ok(())
+        }
         #[cfg(test)]
         AdapterRequest::Pending(dropped) => {
             struct Dropped(Arc<std::sync::atomic::AtomicBool>);
@@ -699,6 +720,50 @@ pub(crate) async fn cancel_agent_conversation(
     state: tauri::State<'_, AgentChatState>,
 ) -> Result<ChatSnapshot, ChatError> {
     stop_owned(&state.0, &request.conversation_id).await
+}
+
+/// Native collaboration reuses the saved selection and already-discovered catalog.
+/// This never discovers a model, retries, or changes the single-conversation context.
+pub(crate) fn collaboration_adapter(
+    state: &AgentChatState,
+    profile: crate::agent_preferences::AgentProfile,
+    prompt: &str,
+) -> Result<AdapterRequest, ChatError> {
+    let session = state.0.lock().map_err(|_| ChatError::Internal)?;
+    profile.validate()?;
+    let bound = BoundConversation::collaboration(profile)?;
+    let p = &bound.profile;
+    if matches!(
+        p.connection,
+        AgentConnection::Codex
+            | AgentConnection::AnthropicApi
+            | AgentConnection::LmStudio
+            | AgentConnection::Ollama
+    ) {
+        validate_catalog(&session.catalogs, p)?;
+    }
+    Ok(match p.connection {
+        AgentConnection::Simulation => AdapterRequest::Simulation,
+        AgentConnection::OpenaiApi => AdapterRequest::Openai {
+            key: ApiKey::from_environment()?,
+            body: bound.request_body(prompt)?,
+        },
+        AgentConnection::AnthropicApi => AdapterRequest::Anthropic {
+            key: anthropic::AnthropicKey::from_environment()?,
+            body: bound.provider_request_body(prompt)?,
+        },
+        AgentConnection::LmStudio | AgentConnection::Ollama => AdapterRequest::Local {
+            endpoint: p.endpoint.clone(),
+            key: local_models::LocalKey::from_environment(p.connection, &p.endpoint, p.local_auth)?,
+            body: bound.provider_request_body(prompt)?,
+        },
+        AgentConnection::Codex => AdapterRequest::CollaborationCodex {
+            setup: codex_connection::Setup::from_environment()?,
+            model: p.model.clone(),
+            effort: p.effort,
+            input: bound.codex_input(prompt)?,
+        },
+    })
 }
 
 #[cfg(test)]

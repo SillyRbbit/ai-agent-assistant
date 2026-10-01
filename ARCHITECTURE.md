@@ -1,3 +1,51 @@
+## 2026-09-30 — Bot Collaboration local acceptance
+
+The owner-authorized `bot-collaboration` implementation is locally accepted in
+`/Users/hdang/.codex/worktrees/bot-identity-publication/ai-agent-assistant`,
+branch `codex/bot-identity-publication`, HEAD
+`6a164d8d8cd360dd1e4ecc67c5c530cc973a9518` (same tree as merged main
+`9601852ec4799626bc15548e65ca5fe1f17d7580`). Earlier publication notes below
+are historical. No inherited dirty files existed in this selected checkout;
+other checkouts, completed records and artifacts are preserved.
+
+Four fixed Rust-owned routes now cover all nine canonical bots: research (4
+stages), engineering (5), operations (5), and workflow proposal (4). The room
+supports preview-bound acknowledgement, saved configuration snapshots, bounded
+visible streams and validated handoffs, cancellation, local history, explicit
+restart interruption and deletion. Private notes are excluded. Simulation is
+explicit and never silently mixed with live profiles. All six connection options
+remain. Identity supports 18 avatars and 12 accessible colors; descriptions stay
+owner-owned with a description-only restore action.
+
+Implementation and available automated acceptance passed: full offline verification,
+release build, unsigned debug bundle, affected post-review frontend checks and
+native fixture coverage for all four routes. Key-free native QA observed room
+creation/restart persistence, four workflow choices, nine names, six connections,
+18 avatars/12 colors and preserved fitted Command Center. No generation or profile
+Save occurred. Mixed Simulation/OpenAI saved profiles correctly blocked readiness;
+no native streaming/cancellation or live collaboration success is claimed.
+Owner manual QA, live behavior and remote CI remain pending. The finalized review
+and ordinary gate receipts distinguish local acceptance from those advisories. OpenAI stays parked at 4/5 used. D-127/D-128,
+native/provider/runtime live-success and Codex-isolation advisories, the
+process-local Python 3.12 / Xcode/SDK 27.0 / release build-override strip=none
+workaround, and parked D-125/M1/M2 remain.
+
+Plan: [Bot Collaboration](docs/plans/2026-09-30-bot-collaboration.md).
+Evidence: `/private/tmp/cortexa-bot-collaboration-evidence`.
+Next action: owner manual QA of this exact prepared artifact. Live QA and
+publication require separate authorization; no automatic generation is approved.
+
+### Native ownership and room storage
+
+The new collaboration modules own four fixed routes above existing sealed
+provider adapters, without changing `AgentOrchestrator` or synthetic contracts.
+A single native generation lease spans every sequential stage. The WebView may
+submit a closed workflow ID, bounded objective/sources and an exact preview
+acknowledgement, never recipients, provider keys, history or execution authority.
+Migration 7 adds a bounded room table without changing applied migrations.
+Canonical IDs route; presentation snapshots preserve historical names and colors.
+No speculative bot messaging, arbitrary delegation or task execution is added.
+
 ## 2026-09-30 Bot Identity and Personality — implementation accepted locally
 
 Worktree: `/Users/hdang/.codex/worktrees/provider-milestone/ai-agent-assistant`.

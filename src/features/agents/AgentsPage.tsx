@@ -1,7 +1,9 @@
-import { Bot, Compass, Sparkles, Leaf, Shield, Star } from "lucide-react";
+import { BotAvatar } from "./BotAppearance";
+import { ROLE_DESCRIPTIONS } from "./botAppearanceValues";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   BOT_AVATARS,
+  BOT_COLORS,
   BOT_TONES,
   BOT_VERBOSITIES,
   DEFAULT_BOT_IDENTITY,
@@ -22,18 +24,6 @@ import {
 } from "../../infrastructure/tauri/agent-chat-client";
 import "./AgentsPage.css";
 
-const AVATAR_ICONS = {
-  bot: Bot,
-  compass: Compass,
-  spark: Sparkles,
-  leaf: Leaf,
-  shield: Shield,
-  star: Star,
-};
-function BotAvatar({ identity }: { readonly identity: BotIdentity }) {
-  const Icon = AVATAR_ICONS[identity.avatar];
-  return <Icon className="bot-avatar" aria-hidden="true" size={28} />;
-}
 function botName(profile: AgentProfile): string {
   return profile.identity.nickname || profile.displayName;
 }
@@ -353,6 +343,43 @@ function AgentSettings({
           <BotAvatar identity={draft.identity} />
           <span>{draft.identity.nickname || profile.displayName}</span>
         </div>
+        <label>
+          Color
+          <select
+            value={draft.identity.color}
+            onChange={(e) => {
+              setDraft({
+                ...draft,
+                identity: {
+                  ...draft.identity,
+                  color: e.currentTarget.value as BotIdentity["color"],
+                },
+              });
+            }}
+          >
+            {BOT_COLORS.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        </label>
+        <p>Canonical role: {ROLE_DESCRIPTIONS[profile.agentId]}</p>
+        <button
+          type="button"
+          onClick={() => {
+            setDraft({
+              ...draft,
+              identity: { ...draft.identity, description: ROLE_DESCRIPTIONS[profile.agentId] },
+            });
+          }}
+        >
+          Restore role description
+        </button>
+        <p>
+          A blank saved description stays blank. Restore changes only the description; Save applies
+          it.
+        </p>
         <label>
           Profile description <span>(optional, 280 characters)</span>
           <textarea

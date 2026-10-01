@@ -99,6 +99,7 @@ impl Storage {
         let location = config.location().clone();
         let mut connection = DatabaseConnection::open(config)?;
         let startup_migration_report = connection.migrate()?;
+        super::collaboration::interrupt(connection.raw())?;
         let connection_settings = connection.settings().clone();
         let storage = Self {
             connection: Mutex::new(connection),
@@ -167,7 +168,7 @@ impl Storage {
         metadata::set(connection.raw(), key, value, updated_at_ms)
     }
 
-    fn lock_connection(&self) -> StorageResult<MutexGuard<'_, DatabaseConnection>> {
+    pub(super) fn lock_connection(&self) -> StorageResult<MutexGuard<'_, DatabaseConnection>> {
         self.connection
             .lock()
             .map_err(|_| StorageError::ConnectionLockPoisoned)
@@ -201,7 +202,7 @@ mod tests {
         assert!(!first.was_already_initialized());
         assert_eq!(
             first.storage().startup_migration_report().applied_versions,
-            vec![1, 2, 3, 4, 5, 6]
+            vec![1, 2, 3, 4, 5, 6, 7]
         );
 
         let first_record = first
@@ -224,7 +225,7 @@ mod tests {
                 .storage()
                 .startup_migration_report()
                 .already_applied_versions,
-            vec![1, 2, 3, 4, 5, 6]
+            vec![1, 2, 3, 4, 5, 6, 7]
         );
         assert_eq!(
             second

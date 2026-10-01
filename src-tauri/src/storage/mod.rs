@@ -1,4 +1,5 @@
 mod agent_preferences;
+mod collaboration;
 mod config;
 mod connection;
 mod error;

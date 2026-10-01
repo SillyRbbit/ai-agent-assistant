@@ -26,10 +26,44 @@ export const EFFORTS = ["default", "none", "low", "medium", "high", "xhigh", "ma
 export type AgentEffort = (typeof EFFORTS)[number];
 export const OPENAI_AGENT_MODELS = ["gpt-5.6-luna", "gpt-5.6-terra", "gpt-5.6-sol"] as const;
 export type MemoryMode = "off" | "private_notes";
-export const BOT_AVATARS = ["bot", "compass", "spark", "leaf", "shield", "star"] as const;
+export const BOT_AVATARS = [
+  "bot",
+  "compass",
+  "spark",
+  "leaf",
+  "shield",
+  "star",
+  "sun",
+  "moon",
+  "flame",
+  "heart",
+  "gem",
+  "mountain",
+  "waves",
+  "rocket",
+  "book",
+  "code",
+  "globe",
+  "music",
+] as const;
 export const BOT_TONES = ["neutral", "warm", "direct", "formal"] as const;
 export const BOT_VERBOSITIES = ["brief", "balanced", "detailed"] as const;
+export const BOT_COLORS = [
+  "blue",
+  "teal",
+  "green",
+  "orange",
+  "coral",
+  "pink",
+  "purple",
+  "gold",
+  "cyan",
+  "lime",
+  "rose",
+  "indigo",
+] as const;
 export interface BotIdentity {
+  readonly color: (typeof BOT_COLORS)[number];
   readonly nickname: string;
   readonly avatar: (typeof BOT_AVATARS)[number];
   readonly description: string;
@@ -37,6 +71,7 @@ export interface BotIdentity {
   readonly verbosity: (typeof BOT_VERBOSITIES)[number];
 }
 export const DEFAULT_BOT_IDENTITY: BotIdentity = Object.freeze({
+  color: "blue",
   nickname: "",
   avatar: "bot",
   description: "",
@@ -44,7 +79,16 @@ export const DEFAULT_BOT_IDENTITY: BotIdentity = Object.freeze({
   verbosity: "balanced",
 });
 export function parseBotIdentity(value: unknown): BotIdentity {
-  const v = record(value, ["nickname", "avatar", "description", "tone", "verbosity"]);
+  const legacy =
+    value !== null && typeof value === "object" && !Array.isArray(value) && !("color" in value);
+  const v = record(legacy ? { ...value, color: "blue" } : value, [
+    "nickname",
+    "avatar",
+    "description",
+    "tone",
+    "verbosity",
+    "color",
+  ]);
   if (
     !bounded(v["nickname"], 48) ||
     v["nickname"].trim() !== v["nickname"] ||
@@ -57,6 +101,7 @@ export function parseBotIdentity(value: unknown): BotIdentity {
         (c.charCodeAt(0) < 32 && c !== "\n" && c !== "\t") ||
         (c.charCodeAt(0) >= 127 && c.charCodeAt(0) <= 159),
     ) ||
+    !member(v["color"], BOT_COLORS) ||
     !member(v["avatar"], BOT_AVATARS) ||
     !member(v["tone"], BOT_TONES) ||
     !member(v["verbosity"], BOT_VERBOSITIES)

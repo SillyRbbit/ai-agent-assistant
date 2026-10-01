@@ -8,6 +8,8 @@ mod app_info;
 pub mod approvals;
 pub mod audit;
 mod codex_connection;
+mod collaboration;
+mod collaboration_tauri;
 pub mod credentials;
 pub mod documents;
 mod error;
@@ -51,6 +53,7 @@ pub fn run() -> Result<(), AppError> {
     let app = tauri::Builder::default()
         .manage(personal_assistant_direct_tauri::DirectState::default())
         .manage(agent_chat_tauri::AgentChatState::default())
+        .manage(collaboration_tauri::CollaborationState::default())
         .manage(
             research_knowledge_demo_lifecycle_tauri::ResearchKnowledgeDemoLifecycleTauriState::new(
             ),
@@ -63,6 +66,12 @@ pub fn run() -> Result<(), AppError> {
         .on_window_event(menu_bar::handle_window_event)
         .invoke_handler(tauri::generate_handler![
             app_info::get_app_info,
+            collaboration_tauri::list_collaboration_rooms,
+            collaboration_tauri::create_collaboration_room,
+            collaboration_tauri::prepare_collaboration,
+            collaboration_tauri::start_collaboration,
+            collaboration_tauri::cancel_collaboration,
+            collaboration_tauri::delete_collaboration_room,
             research_knowledge_demo_projection::get_research_knowledge_demo_projection,
             research_knowledge_demo_lifecycle_tauri::get_research_knowledge_demo_lifecycle_snapshot,
             research_knowledge_demo_lifecycle_tauri::start_research_knowledge_demo_lifecycle,
