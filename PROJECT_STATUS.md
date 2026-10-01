@@ -1,3 +1,30 @@
+## 2026-10-01 — Standing Thottie delegation revoked
+
+Henry revoked the standing delegation and clarified that Dots had requested
+permission to send a command to Codex. The added authorization section was
+removed from `AGENTS.md`, restoring its exact pre-delegation bytes. No automatic
+connector or authorization configuration had been created. Normal authorization
+rules apply; Thottie's name or attribution alone grants no owner authority.
+
+Earlier dated delegation entries, plans and reviews below are historical and
+superseded; they grant no current permission. The valid prior raw completion is
+archived byte-identically externally. Layout implementation, tests, artifacts,
+synthetic data, prior reports and unrelated instructions remain unchanged.
+
+Worktree: `/Users/hdang/.codex/worktrees/knowledge-documents/ai-agent-assistant`;
+branch `codex/knowledge-navigation-layout`; HEAD
+`97c6391a5d4d47ac4a161890e777a1c4abc269a0`. Eight documentation successor paths.
+Plan: [Delegation revocation](docs/plans/2026-10-01-owner-thottie-delegation-revocation.md).
+Review: [Post-increment review](docs/reviews/2026-10-01-owner-thottie-delegation-revocation-post-increment-review.md).
+Evidence: `/private/tmp/cortexa-thottie-revocation-evidence`.
+
+Continue read-only PR #132 exact-head CI inspection under normal authorization.
+The published fourteen-path head remains unchanged; removing the grant remotely
+requires separate commit/push authorization for this local revocation. Do not
+merge the standing grant. Final completion/status/Stop receipts are authoritative.
+No app checks, builds, launches or provider requests. Retain all advisories,
+OpenAI parked4/5, process-local native workaround and D-125/M1/M2 parked.
+
 ## 2026-10-01 — Owner delegation recorded
 
 Henry authorizes his Dots bot Thottie as a Cortexa development delegate until

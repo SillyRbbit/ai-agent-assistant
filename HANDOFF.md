@@ -1,3 +1,55 @@
+## 2026-10-01 — Standing Thottie delegation revoked
+
+Henry revoked the standing delegation and clarified that Dots had requested
+permission to send a command to Codex. The added authorization section was
+removed from `AGENTS.md`, restoring its exact pre-delegation bytes. No automatic
+connector or authorization configuration had been created. Normal authorization
+rules apply; Thottie's name or attribution alone grants no owner authority.
+
+Earlier dated delegation entries, plans and reviews below are historical and
+superseded; they grant no current permission. The valid prior raw completion is
+archived byte-identically externally. Layout implementation, tests, artifacts,
+synthetic data, prior reports and unrelated instructions remain unchanged.
+
+Worktree: `/Users/hdang/.codex/worktrees/knowledge-documents/ai-agent-assistant`;
+branch `codex/knowledge-navigation-layout`; HEAD
+`97c6391a5d4d47ac4a161890e777a1c4abc269a0`. Eight documentation successor paths.
+Plan: [Delegation revocation](docs/plans/2026-10-01-owner-thottie-delegation-revocation.md).
+Review: [Post-increment review](docs/reviews/2026-10-01-owner-thottie-delegation-revocation-post-increment-review.md).
+Evidence: `/private/tmp/cortexa-thottie-revocation-evidence`.
+
+Continue read-only PR #132 exact-head CI inspection under normal authorization.
+The published fourteen-path head remains unchanged; removing the grant remotely
+requires separate commit/push authorization for this local revocation. Do not
+merge the standing grant. Final completion/status/Stop receipts are authoritative.
+No app checks, builds, launches or provider requests. Retain all advisories,
+OpenAI parked4/5, process-local native workaround and D-125/M1/M2 parked.
+
+### Next action and observed CI
+
+Published PR #132 head `97c6391a5d4d47ac4a161890e777a1c4abc269a0` has all six
+successful jobs, no skips/pending checks, no reviews and clean mergeability.
+It still contains the now-revoked standing grant; do not merge before publishing
+this correction with separate authorization. These results do not verify the new
+uncommitted documentation. No automatic CI rerun, commit or push is authorized.
+
+### Exact next prompt
+
+```text
+Review the local Thottie revocation for publication readiness read-only in:
+ /Users/hdang/.codex/worktrees/knowledge-documents/ai-agent-assistant
+Inspect instructions, current refs, complete/valid status and evidence:
+ /private/tmp/cortexa-thottie-revocation-evidence
+Require HEAD 97c6391a5d4d47ac4a161890e777a1c4abc269a0 and main
+02dc35e62ac083a49f0802e8d340c39500f45e78. Verify the exact eight successor
+paths, preserved product/history/artifact bytes and full Stop. Confirm restored
+normal authorization and superseded historical grants. Preserve all existing work;
+do not repeat checks, builds or QA. Determine the exact fast-forward PR #132
+publication scope and authority needed; distinguish existing-head CI from new
+uncommitted documents. No edits, commits, pushes, merges, launches or requests.
+Stop on drift or invalid evidence. Retain all advisories and parked work.
+```
+
 ## 2026-10-01 — Owner delegation recorded
 
 Henry authorizes his Dots bot Thottie as a Cortexa development delegate until
