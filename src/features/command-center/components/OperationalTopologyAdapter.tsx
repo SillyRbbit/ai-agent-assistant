@@ -1,3 +1,4 @@
+import { centeredRowX } from "../layoutRows";
 import {
   Handle,
   MarkerType,
@@ -315,12 +316,15 @@ function buildPackedPositions(
   for (let startIndex = 0; startIndex < orderedWorkNodes.length; startIndex += workColumnCount) {
     const rowNodes = orderedWorkNodes.slice(startIndex, startIndex + workColumnCount);
     const rowIndex = Math.floor(startIndex / workColumnCount);
-    const rowWidth =
-      rowNodes.length * NODE_WIDTH + Math.max(0, rowNodes.length - 1) * COMPACT_WORK_NODE_GAP;
-    const startX = (layoutWidth - rowWidth) / 2;
     rowNodes.forEach((node, columnIndex) => {
       positions.set(node.id, {
-        x: startX + columnIndex * (NODE_WIDTH + COMPACT_WORK_NODE_GAP),
+        x: centeredRowX(
+          rowNodes.length,
+          columnIndex,
+          NODE_WIDTH,
+          COMPACT_WORK_NODE_GAP,
+          layoutWidth,
+        ),
         y: workStartY + rowIndex * COMPACT_WORK_ROW_GAP,
       });
     });
@@ -437,12 +441,15 @@ function buildWorkspacePositions(
   for (let startIndex = 0; startIndex < workNodes.length; startIndex += workColumnCount) {
     const rowNodes = workNodes.slice(startIndex, startIndex + workColumnCount);
     const rowIndex = Math.floor(startIndex / workColumnCount);
-    const rowWidth =
-      rowNodes.length * NODE_WIDTH + Math.max(0, rowNodes.length - 1) * COMPACT_WORK_NODE_GAP;
-    const startX = (layoutWidth - rowWidth) / 2;
     rowNodes.forEach((node, columnIndex) => {
       positions.set(node.id, {
-        x: startX + columnIndex * (NODE_WIDTH + COMPACT_WORK_NODE_GAP),
+        x: centeredRowX(
+          rowNodes.length,
+          columnIndex,
+          NODE_WIDTH,
+          COMPACT_WORK_NODE_GAP,
+          layoutWidth,
+        ),
         y: workStartY + rowIndex * COMPACT_WORK_ROW_GAP,
       });
     });

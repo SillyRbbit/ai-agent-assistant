@@ -1,10 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   collaborationClient,
-  newerRooms,
   WORKFLOWS,
   type CollaborationClient,
-  type Room,
   type Workflow,
   type Source,
   type Preview,
@@ -13,13 +11,19 @@ import { BotAvatar } from "../agents/BotAppearance";
 import { ROLE_DESCRIPTIONS } from "../agents/botAppearanceValues";
 import { agentChatErrorMessage } from "../../infrastructure/tauri/agent-chat-client";
 import "./CollaborationPage.css";
+import { useCollaborationSnapshots } from "./collaborationSnapshots";
+import type { CollaborationLocation } from "../../application/state";
 export function CollaborationPage({
   client = collaborationClient,
+  location,
+  onOpenGraph,
 }: {
   readonly client?: CollaborationClient;
+  readonly location?: CollaborationLocation | null;
+  readonly onOpenGraph?: (location: CollaborationLocation) => void;
 }) {
-  const [rooms, setRooms] = useState<readonly Room[]>([]),
-    [selected, setSelected] = useState<number | null>(null),
+  const { rooms, status: snapshotStatus, store } = useCollaborationSnapshots(client);
+  const [selected, setSelected] = useState<number | null>(location?.roomId ?? null),
     [title, setTitle] = useState(""),
     [workflow, setWorkflow] = useState<Workflow>("research"),
     [objective, setObjective] = useState(""),
@@ -28,53 +32,34 @@ export function CollaborationPage({
     [ack, setAck] = useState(false),
     [busy, setBusy] = useState(false),
     [error, setError] = useState("");
-  const epoch = useRef(0),
-    alive = useRef(true);
+  const alive = useRef(true);
   const room = rooms.find((r) => r.id === selected);
   const active = rooms.some((r) =>
     r.runs.some((run) => run.status === "running" || run.status === "queued"),
   );
-  const load = useCallback(async () => {
-    const n = epoch.current;
-    try {
-      const next = await client.list();
-      if (alive.current && epoch.current === n) setRooms((old) => newerRooms(old, next));
-    } catch {
-      if (alive.current)
-        setError("Room history is unavailable. Native Cortexa access is required.");
-    }
-  }, [client]);
   useEffect(() => {
     alive.current = true;
-    let cancelled = false;
-    const initialEpoch = epoch.current;
-    void client
-      .list()
-      .then((next) => {
-        if (!cancelled && initialEpoch === epoch.current) setRooms((old) => newerRooms(old, next));
-      })
-      .catch(() => {
-        if (!cancelled) setError("Room history is unavailable. Native Cortexa access is required.");
-      });
     return () => {
-      cancelled = true;
       alive.current = false;
     };
-  }, [client]);
+  }, []);
+  const focusedLocation = useRef<CollaborationLocation | null>(null);
   useEffect(() => {
-    if (!active) return;
-    const id = window.setInterval(() => void load(), 400);
-    return () => {
-      window.clearInterval(id);
-    };
-  }, [active, load]);
+    if (location?.stageId && location !== focusedLocation.current) {
+      const target = document.getElementById(location.stageId);
+      if (target) {
+        target.focus();
+        focusedLocation.current = location;
+      }
+    }
+  }, [location, rooms]);
   async function action(fn: () => Promise<void>) {
     setBusy(true);
     setError("");
-    epoch.current++;
+    store.invalidate();
     try {
       await fn();
-      await load();
+      await store.refresh();
     } catch (e) {
       setError(
         typeof e === "string"
@@ -103,6 +88,22 @@ export function CollaborationPage({
         each). Encryption at rest is not claimed. Delete removes local history, not provider-held
         copies. Never submit credentials. Private bot notes and hidden reasoning are excluded.
       </p>
+      {snapshotStatus !== "current" && (
+        <p role="status">Room snapshots: {snapshotStatus}. No fixture fallback.</p>
+      )}
+      {location &&
+        !rooms.some(
+          (r) =>
+            r.id === location.roomId &&
+            r.runs.some(
+              (run) =>
+                run.id === location.runId &&
+                (!location.stageId || run.stages.some((s) => s.id === location.stageId)),
+            ),
+        ) &&
+        snapshotStatus === "current" && (
+          <p role="status">The linked room, run or stage is no longer available.</p>
+        )}
       {error && <p role="alert">{error}</p>}
       <div className="room-layout">
         <aside aria-label="Room list">
@@ -111,6 +112,7 @@ export function CollaborationPage({
               e.preventDefault();
               void action(async () => {
                 const created = await client.create(title);
+                store.acceptRoom(created);
                 setSelected(created.id);
                 setTitle("");
                 invalidate();
@@ -155,7 +157,7 @@ export function CollaborationPage({
                   void action(async () => {
                     await client.delete(room.id);
                     setSelected(null);
-                    setRooms((old) => old.filter((r) => r.id !== room.id));
+                    store.remove(room.id);
                     invalidate();
                   })
                 }
@@ -167,10 +169,19 @@ export function CollaborationPage({
                   <h3>
                     {run.input.workflow} · {run.status}
                   </h3>
+                  {onOpenGraph && (
+                    <button
+                      onClick={() => {
+                        onOpenGraph({ roomId: room.id, runId: run.id, stageId: null });
+                      }}
+                    >
+                      Inspect run in Command Center
+                    </button>
+                  )}
                   <p>{run.input.objective}</p>
                   {run.error && <p role="alert">{agentChatErrorMessage(run.error)}</p>}
                   {run.stages.map((s, i) => (
-                    <article key={s.id} className="room-message">
+                    <article key={s.id} id={s.id} tabIndex={-1} className="room-message">
                       <header>
                         <BotAvatar identity={s.participant.identity} />
                         <div>
@@ -230,7 +241,7 @@ export function CollaborationPage({
                       disabled={busy}
                       onClick={() =>
                         void action(async () => {
-                          await client.cancel(room.id);
+                          store.acceptRoom(await client.cancel(room.id));
                         })
                       }
                     >
@@ -408,7 +419,7 @@ export function CollaborationPage({
                     disabled={!ack || busy || active}
                     onClick={() =>
                       void action(async () => {
-                        await client.start(preview);
+                        store.acceptRoom(await client.start(preview));
                         invalidate();
                       })
                     }

@@ -235,10 +235,10 @@ describe("App", () => {
         within(inspector).getByRole("heading", { name: "Preparing Command Center" }),
       ).toHaveAttribute("id", "application-inspector-title");
       expect(inspector).toHaveTextContent("No Command Center selection available yet");
-      expect(inspector).toHaveTextContent("No live runtime data is available here");
-      expect(activity).toHaveTextContent("Deterministic fixture activity loading");
-      expect(activity).toHaveTextContent("No Command Center fixture activity available yet");
-      expect(activity).toHaveTextContent("not live telemetry");
+      expect(inspector).toHaveTextContent("No execution is started by this view");
+      expect(activity).toHaveTextContent("Snapshot presentation loading");
+      expect(activity).toHaveTextContent("No Command Center activity available yet");
+      expect(activity).toHaveTextContent("No event journal is inferred");
 
       fireEvent.click(within(inspector).getByRole("button", { name: "Close workspace inspector" }));
       expect(closeInspector).toHaveBeenCalledOnce();
@@ -747,6 +747,7 @@ describe("App", () => {
     transcript.scrollTop = 28;
 
     openSidebarRoute("Command Center");
+    fireEvent.click(await screen.findByRole("button", { name: "Deterministic demonstrations" }));
     await screen.findByRole("heading", { level: 1, name: "Command Center" });
 
     expect(contentRegion.scrollTop).toBe(0);
@@ -869,6 +870,7 @@ describe("App", () => {
     const harness = createMenuRouteHarness();
     const view = render(<App services={createServices(harness.source)} />);
     openSidebarRoute("Command Center");
+    fireEvent.click(await screen.findByRole("button", { name: "Deterministic demonstrations" }));
     await screen.findByLabelText("Deterministic scenario");
     const contextSummary = screen.getByText("Operational context").closest("summary");
     if (contextSummary === null) throw new Error("Expected Operational context summary");
@@ -924,6 +926,7 @@ describe("App", () => {
     const harness = createMenuRouteHarness();
     const view = render(<App services={createServices(harness.source)} />);
     openSidebarRoute("Command Center");
+    fireEvent.click(await screen.findByRole("button", { name: "Deterministic demonstrations" }));
     fireEvent.change(await screen.findByLabelText("Deterministic scenario"), {
       target: { value: "research-knowledge-active" },
     });
@@ -983,6 +986,7 @@ describe("App", () => {
     const harness = createMenuRouteHarness();
     const view = render(<App services={createServices(harness.source)} />);
     openSidebarRoute("Command Center");
+    fireEvent.click(await screen.findByRole("button", { name: "Deterministic demonstrations" }));
     await screen.findByRole("heading", { level: 1, name: "Command Center" });
     fireEvent.click(screen.getByRole("button", { name: "Show workspace inspector" }));
     fireEvent.click(screen.getByRole("button", { name: "Show activity panel" }));
@@ -1200,6 +1204,7 @@ describe("App", () => {
     );
 
     openSidebarRoute("Command Center");
+    fireEvent.click(await screen.findByRole("button", { name: "Deterministic demonstrations" }));
     fireEvent.change(await screen.findByLabelText("Deterministic scenario"), {
       target: { value: "research-knowledge-active" },
     });

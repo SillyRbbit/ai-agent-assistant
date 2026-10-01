@@ -1,3 +1,7 @@
+## 2026-09-30 — Operational Command Center
+
+Added a read-only collaboration graph using shared bounded snapshots, four explicit data modes, nine bot identities, separate stage executions, typed room links, safe inspector/activity, filters and stable viewports. Preserved native execution and demo contracts. Developer-only browser regressions supplement isolated native Simulation QA. See the [plan](docs/plans/2026-09-30-operational-command-center.md) and [review](docs/reviews/2026-09-30-operational-command-center-post-increment-review.md). Live-provider verification and remote CI are not claimed.
+
 ## 2026-09-30 — Bot Collaboration acceptance
 
 Worktree `/Users/hdang/.codex/worktrees/bot-collaboration-acceptance/ai-agent-assistant`, branch `codex/bot-collaboration-acceptance`, baseline/main `9601852ec4799626bc15548e65ca5fe1f17d7580`. An ordinary gate admitted the frozen 49-path candidate from `codex/bot-identity-publication` HEAD `6a164d8d8cd360dd1e4ecc67c5c530cc973a9518` without gate state. Nine acceptance paths yield exactly 51 cumulative paths. All inherited executable bytes, historical document bodies, worktrees and prior bundles remain preserved. The source `bot-collaboration-cancellation-fixture` remains valid failed / FAIL / Blocked without a completion marker; this acceptance does not revise it.
