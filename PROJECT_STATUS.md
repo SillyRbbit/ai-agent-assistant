@@ -1,3 +1,85 @@
+## 2026-10-01 — Knowledge inspector layout verified locally
+
+Owner-authorized `knowledge-inspector-layout` uses the existing
+`/Users/hdang/.codex/worktrees/knowledge-documents/ai-agent-assistant`, branch
+`codex/knowledge-documents`, unchanged HEAD `263f879c05155c960f0121dbd8c67df3066a0b4c`.
+Twelve successor paths / 48 cumulative paths. Prior 45-path candidate, complete
+raw state and final bundle were frozen externally before ordinary admission;
+historical plan/review and all unmodified executable bytes remain unchanged.
+Evidence: `/private/tmp/cortexa-knowledge-inspector-layout-evidence`.
+
+Only production CSS changed: at compact widths the Knowledge/Collaboration
+inspector occupies a bounded, independently scrolling row above the workspace.
+Wide docking, graph, focus/Escape, execution, disclosure and storage remain.
+Actual-App browser regressions passed at 1600/1440/1280/760 widths, including
+non-overlap, reachable controls/disclosure, scrolling, focus and route transitions.
+The first narrow check caught the harness observing an unfinished sidebar
+transition; it now waits for measured width, with no application delay.
+65 affected frontend tests, strict lint/typecheck and offline unsigned isolated
+debug bundle passed. The build also ran frontend typecheck and Vite production
+build. Unchanged native suites/full verification/audits are inherited evidence,
+not rerun or newly claimed. No dependency or security gate changed.
+
+Direct supported Computer Use at 1440x1000 observed Knowledge controls and
+Collaboration transmission disclosure with inspector open/closed; an unstarted
+all-Simulation preview retained unchecked acknowledgement and disabled Start.
+No workflow, profile/note save or provider call occurred. The native resize
+attempt did not change window size; narrow/wide layout coverage is browser
+coverage, not additional native observations. One export targeted only a new
+external disposable Markdown canary. After verified native Replace, Cortexa
+reported destination exists / nothing overwritten; canary and preserved export
+hashes remained unchanged. Inspector closed; exact QA process quit and was absent.
+
+Final documentation, preservation, session/report and completion receipts must
+confirm complete/valid and full Stop before publication readiness is claimed.
+The current report records actual checks; historical failures stay intact.
+Retain D-127/D-128, native/provider/runtime live-success and Codex-isolation
+advisories, Python3.12.1/XcodeSDK27/Cargo strip workaround, OpenAI parked4/5 and
+D-125/M1/M2 parked. Remote CI, live-provider behavior and owner release approval
+are not verified. No commit or publication is authorized.
+
+Next action after valid completion: read-only publication readiness review of
+all 48 paths, source-bound native/browser evidence and preserved history. Do not
+repeat passing tests/builds/workflows or start a live request.
+
+## 2026-10-01 — Knowledge & Documents v1 acceptance in progress
+
+The owner-authorized `knowledge-documents` increment uses
+`/Users/hdang/.codex/worktrees/knowledge-documents/ai-agent-assistant`, branch
+`codex/knowledge-documents`, unchanged baseline
+`263f879c05155c960f0121dbd8c67df3066a0b4c`. This worktree began clean; all
+uncommitted paths belong to the bounded milestone. Other checkouts and historical
+records remain preserved. The [plan](docs/plans/2026-10-01-knowledge-documents.md)
+and [review](docs/reviews/2026-10-01-knowledge-documents-post-increment-review.md)
+record exact scope and acceptance; completion is conditional on a valid marker.
+
+Knowledge replaces the Memory placeholder without importing private bot notes.
+Native-selected Markdown/text snapshots, owner notes and generated drafts have
+stable IDs, immutable versions and SHA-256 hashes. Local keyword search produces
+explicit passages; all four existing collaboration routes accept them alongside
+pasted sources. Prepare and Start reject stale/forged library selections. Rooms
+and the existing graph inspector reveal the exact saved historical passages.
+Reviewed drafts can be saved, searched and explicitly exported as Markdown.
+
+Direct Computer Use in separate synthetic native data imported a runbook and
+incident, searched/selected both, completed acknowledged Operations Simulation,
+inspected room/graph references, reviewed/saved a draft, restarted, found it and
+exported matching bytes. This is local Simulation evidence, not live-provider
+success. Evidence: `/private/tmp/cortexa-knowledge-documents-evidence`.
+Required final offline verification and completion gates are in progress.
+
+Preserve OpenAI parked at 4/5 used, D-127/D-128, native/provider/runtime live-success
+and Codex-isolation advisories, process-local Python 3.12.1/Xcode SDK 27.0/Cargo
+`profile.release.build-override.strip="none"`, and parked D-125/M1/M2. No provider
+request, owner data change, commit or publication is authorized. Owner QA and
+exact-head remote CI remain separate future evidence.
+
+Next action: finish the active plan's final verification and ordinary completion,
+then owner manual QA of the accepted candidate. Do not repeat the completed
+native Simulation scenario or reopen historical records. Inspect actual Git/gate
+state first, preserve existing changes and test artifacts, and do not publish or
+make live requests without separate authorization.
+
 ## 2026-09-30 — Operational Command Center locally verified
 
 The owner-authorized `operational-command-center` milestone is implemented in
@@ -3930,3 +4012,100 @@ signing, notarization, or another remediation automatically.
 - The dependency audit reports zero vulnerabilities, and native launch passed with idempotent storage startup.
 - No dependency, lockfile, Rust, Tauri, IPC, SQLite, capability, CSP, credential, network, packaging, or permission file changed.
 - The project owner confirmed conversation layout, creation, restoration, empty-session reuse, busy-state guards, native New Request behavior, existing mock interactions, Activity redaction, lifecycle, diagnostics, storage, and no-permission-prompt behavior all passed.
+
+## 2026-10-01 — Knowledge acceptance checkpoint; native access blocked
+
+This additive checkpoint supersedes earlier in-progress verification statements
+without removing any prior text. Worktree: `/Users/hdang/.codex/worktrees/knowledge-documents/ai-agent-assistant`;
+branch `codex/knowledge-documents`; HEAD `263f879c05155c960f0121dbd8c67df3066a0b4c`.
+Exact current scope: 45 uncommitted milestone paths; no inherited edits.
+
+Implementation and automated acceptance passed: 517 frontend tests, 74 hook tests,
+87 repository tests, 408 Rust library tests (also run by the integration command),
+255 other native tests, strict formatting/lint/typecheck/Clippy, release build and
+isolated unsigned debug bundle. One opt-in real-Hermes test is ignored, not passed.
+Both npm audits found zero vulnerabilities; pinned cargo-audit 0.22.2 retains its
+known raw exit 1 baseline, and the unchanged repository Rust audit gate passed.
+All package versions remain unchanged; only two already-locked direct Rust edges
+were added. Browser matrix and direct Computer Use inspected affected surfaces,
+including loading/error/long Unicode/narrow layout. All previous in-task failures
+were repaired without a successor or historical-record rewrite.
+
+The full isolated native import-to-reuse scenario passed: two selected synthetic
+files, search/passages, acknowledged five-stage Operations Simulation, room/graph
+historical references, reviewed draft save, restart/search and byte-exact export.
+The final bundle also directly showed the unclipped Knowledge navigation, retained
+three-item library/completed room and visible focused draft review. The Mac then
+locked during draft editing, before any Save click. Final save-feedback observation
+and graceful test-app cleanup are pending, not passed. No provider request occurred.
+The QA Vite server was stopped. Do not infer a product defect from unavailable access.
+
+Evidence: `/private/tmp/cortexa-knowledge-documents-evidence`; `artifact-final.json`
+identifies the final bundle and frozen source. The original bundle is preserved at
+`initial-native-bundle.app`. Native prior observations, browser screenshots, failed
+and passing logs remain. Formal acceptance stays active until required cleanup and
+ordinary gates pass; do not close/promote/reopen a historical terminal record.
+
+Exact next action: after the owner unlocks the Mac, verify the already-running
+isolated Cortexa Knowledge QA executable against artifact-final.json. Resume only
+reviewed synthetic draft save-feedback, then quit that test-owned app. Do not
+rebuild, repeat workflows/passing tests, touch owner data or make provider calls.
+Update this same active plan/review truthfully; run documentation, repository,
+security, whitespace, preservation and report-schema checks, then ordinary
+finalization/status/full Stop only when all required evidence passes. Preserve
+all 45 paths, historical bodies, prior artifacts, other worktrees and prunable
+entries. No commit, push or publication. OpenAI remains parked 4/5; retain
+D-127/D-128, native/provider/runtime and Codex-isolation advisories, process-local
+Python 3.12.1/Xcode SDK27/Cargo stripping workaround, and parked D-125/M1/M2.
+
+## 2026-10-01 — Knowledge native acceptance resumed and verified
+
+This additive result supersedes the earlier locked-Mac checkpoint, which remains
+unchanged. Worktree `/Users/hdang/.codex/worktrees/knowledge-documents/ai-agent-assistant`,
+branch `codex/knowledge-documents`, HEAD `263f879c05155c960f0121dbd8c67df3066a0b4c`:
+exactly 45 uncommitted paths. No product/test/build bytes changed in this resumption.
+
+After owner unlock and confirmation that the QA window was idle, supported
+Computer Use opened the existing completed synthetic Operations room, reviewed a
+generated draft, changed only its synthetic title/heading while retaining source
+attribution, and clicked Save once. The visible result was: “Draft saved to
+Knowledge. It is not automatically shared.” Command-Q gracefully quit the isolated
+QA app; the recorded process was confirmed absent. No workflow was rerun, no
+provider request was made and no owner profiles, notes or rooms were touched.
+Receipt: `/private/tmp/cortexa-knowledge-documents-evidence/native-resume-observations.json`.
+Both prior native receipts, the interrupted draft report and both artifacts remain.
+
+All implementation checklist items and required local native observations now
+have passing evidence. Reuse the source-bound full offline verification, strict
+Clippy, native builds, focused regressions, browser matrix and audits explicitly;
+these passing checks were not rerun in this resumption. Documentation, repository,
+security, whitespace, preservation, session inventory and report schema are the
+remaining closeout routes. The consolidated review records PASS WITH ADVISORIES;
+formal completion requires ordinary finalization, complete/valid status and full
+Stop. Gate receipts in the evidence directory are authoritative for actual status.
+
+Observed visual advisory: the generic workspace inspector overlaid right-side
+room content in the final native window. Save feedback was visible and the scoped
+save/cleanup check passed; no unrelated layout repair is claimed. Owner QA should
+check inspector-open/closed readability at the intended window size. Retain
+D-127/D-128, native/provider/runtime and Codex-isolation advisories, Python 3.12.1,
+Xcode SDK27/Cargo stripping workaround, OpenAI parked 4/5 and D-125/M1/M2 parked.
+Remote CI/Linux execution, live providers and owner manual QA are not verified.
+
+### Exact next prompt
+
+```text
+Assist owner manual QA of Knowledge & Documents in
+/Users/hdang/.codex/worktrees/knowledge-documents/ai-agent-assistant.
+Inspect instructions, the knowledge-documents plan/review, complete/valid status,
+artifact-final.json and native-resume-observations.json in
+/private/tmp/cortexa-knowledge-documents-evidence first. Preserve all 45 paths,
+historical records and both artifacts. Do not repeat passed builds/tests or the
+completed native Simulation scenario. Use the existing isolated synthetic bundle
+and supported Computer Use; confirm the intended owner-QA actions before changing
+local test data. Check library editing/versioning, source selection and historical
+references, Markdown portability/export conflicts, and inspector-open/closed
+readability. No owner vault/profile/room changes, live requests or publication.
+Stop on drift, unsupported access or necessary scope expansion. Report only
+observed results, retain all advisories, OpenAI parked 4/5 and D-125/M1/M2 parked.
+```

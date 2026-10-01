@@ -1,3 +1,4 @@
+import { SourceEvidence } from "../knowledge/KnowledgePage";
 import type { Viewport } from "@xyflow/react";
 import { AGENT_IDS } from "../../infrastructure/tauri/agent-chat-client";
 import { COMMAND_CENTER_GROUP_IDS } from "./commandCenterProjection";
@@ -196,6 +197,7 @@ function OperationalWorkspace({
             </>
           )}
           <p>Source references: {card.sources.join(", ") || "none recorded"}</p>
+          {run && <SourceEvidence sources={run.input.sources} labels={card.sources} />}
           <ul>
             {card.limitations.map((l, i) => (
               <li key={i}>{l}</li>

@@ -1,3 +1,6 @@
+import { SourcePicker } from "../knowledge/SourcePicker";
+import { SourceEvidence, NoteEditor } from "../knowledge/KnowledgePage";
+import { knowledgeClient, type Draft } from "../../infrastructure/tauri/knowledge-client";
 import { useEffect, useRef, useState } from "react";
 import {
   collaborationClient,
@@ -32,6 +35,9 @@ export function CollaborationPage({
     [ack, setAck] = useState(false),
     [busy, setBusy] = useState(false),
     [error, setError] = useState("");
+  const [librarySources, setLibrarySources] = useState<readonly Source[]>([]);
+  const [draft, setDraft] = useState<Draft | null>(null);
+  const [noteNotice, setNoteNotice] = useState("");
   const alive = useRef(true);
   const room = rooms.find((r) => r.id === selected);
   const active = rooms.some((r) =>
@@ -61,11 +67,20 @@ export function CollaborationPage({
       await fn();
       await store.refresh();
     } catch (e) {
-      setError(
-        typeof e === "string"
-          ? agentChatErrorMessage(e)
-          : "The bounded operation could not complete. Check saved connections and readiness; no automatic retry was made.",
-      );
+      if (e === "stale_context") {
+        invalidate();
+        setError(
+          "Saved settings or library sources changed. Detach outdated sources, select current versions, then prepare and acknowledge a new preview.",
+        );
+      } else {
+        setError(
+          e === "limit"
+            ? "A room, run or source limit was reached. Narrow the source selection or use an available room; nothing was truncated."
+            : typeof e === "string"
+              ? agentChatErrorMessage(e)
+              : "The bounded operation could not complete. Check saved connections and readiness; no automatic retry was made.",
+        );
+      }
     } finally {
       if (alive.current) setBusy(false);
     }
@@ -105,6 +120,19 @@ export function CollaborationPage({
           <p role="status">The linked room, run or stage is no longer available.</p>
         )}
       {error && <p role="alert">{error}</p>}
+      {noteNotice && <p role="status">{noteNotice}</p>}
+      {draft && (
+        <NoteEditor
+          initial={draft}
+          onSaved={() => {
+            setNoteNotice("Draft saved to Knowledge. It is not automatically shared.");
+            setDraft(null);
+          }}
+          onCancel={() => {
+            setDraft(null);
+          }}
+        />
+      )}
       <div className="room-layout">
         <aside aria-label="Room list">
           <form
@@ -219,6 +247,16 @@ export function CollaborationPage({
                               <li key={n}>{f}</li>
                             ))}
                           </ul>
+                          <SourceEvidence sources={run.input.sources} labels={s.handoff.evidence} />
+                          <button
+                            onClick={() =>
+                              void action(async () => {
+                                setDraft(await knowledgeClient.draft(room.id, run.id, s.id));
+                              })
+                            }
+                          >
+                            Save as knowledge note
+                          </button>
                           <details>
                             <summary>Handoff details and transmitted input</summary>
                             <p>
@@ -293,6 +331,13 @@ export function CollaborationPage({
                     }}
                   />
                 </label>
+                <SourcePicker
+                  value={librarySources}
+                  onChange={(s) => {
+                    setLibrarySources(s);
+                    invalidate();
+                  }}
+                />
                 {sources.map((s, i) => (
                   <div key={i}>
                     <label>
@@ -349,7 +394,7 @@ export function CollaborationPage({
                         await client.prepare(room.id, {
                           workflow,
                           objective,
-                          sources: sources.filter((s) => s.text.trim()),
+                          sources: [...sources.filter((s) => s.text.trim()), ...librarySources],
                         }),
                       );
                       setAck(false);

@@ -960,7 +960,7 @@ fn read_validated_file_with_hook(
     if before != registered_identity {
         return Err(ApprovedDocumentError::PathIdentityChanged);
     }
-    let mut file = File::open(path).map_err(|_| ApprovedDocumentError::ReadFailed)?;
+    let mut file = open_confined_file(path)?;
     let opened = FileIdentity::from_metadata(
         &file
             .metadata()
@@ -1088,6 +1088,57 @@ const fn ensure_supported_platform() -> ApprovedDocumentResult<()> {
     } else {
         Err(ApprovedDocumentError::UnsupportedPlatform)
     }
+}
+
+/// Called only after a native owner file dialog, never with an IPC path.
+#[cfg(target_os = "macos")]
+pub(crate) fn read_owner_selected_snapshot(path: &Path) -> ApprovedDocumentResult<String> {
+    ensure_supported_platform()?;
+    format_for_path(path)?;
+    let target = validate_direct_target(path)?;
+    read_validated_file(&target.path, target.identity)
+}
+
+// Descriptor-relative traversal prevents symlink substitution between check/open.
+#[cfg(unix)]
+pub(crate) fn open_confined_directory(path: &Path) -> ApprovedDocumentResult<File> {
+    use rustix::fs::{open, openat, Mode, OFlags};
+    if !path.is_absolute() {
+        return Err(ApprovedDocumentError::InvalidPath);
+    }
+    let flags = OFlags::RDONLY | OFlags::DIRECTORY | OFlags::NOFOLLOW | OFlags::CLOEXEC;
+    let mut fd =
+        open("/", flags, Mode::empty()).map_err(|_| ApprovedDocumentError::PathUnavailable)?;
+    for component in path.components() {
+        match component {
+            std::path::Component::RootDir => {}
+            std::path::Component::Normal(name) => {
+                fd = openat(&fd, name, flags, Mode::empty())
+                    .map_err(|_| ApprovedDocumentError::SymlinkRejected)?;
+            }
+            _ => return Err(ApprovedDocumentError::InvalidPath),
+        }
+    }
+    Ok(File::from(fd))
+}
+#[cfg(unix)]
+fn open_confined_file(path: &Path) -> ApprovedDocumentResult<File> {
+    let parent = open_confined_directory(path.parent().ok_or(ApprovedDocumentError::InvalidPath)?)?;
+    let fd = rustix::fs::openat(
+        &parent,
+        path.file_name().ok_or(ApprovedDocumentError::InvalidPath)?,
+        rustix::fs::OFlags::RDONLY
+            | rustix::fs::OFlags::NOFOLLOW
+            | rustix::fs::OFlags::CLOEXEC
+            | rustix::fs::OFlags::NONBLOCK,
+        rustix::fs::Mode::empty(),
+    )
+    .map_err(|_| ApprovedDocumentError::ReadFailed)?;
+    Ok(File::from(fd))
+}
+#[cfg(not(unix))]
+fn open_confined_file(_path: &Path) -> ApprovedDocumentResult<File> {
+    Err(ApprovedDocumentError::UnsupportedPlatform)
 }
 
 #[cfg(test)]

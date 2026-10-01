@@ -3,6 +3,7 @@ mod collaboration;
 mod config;
 mod connection;
 mod error;
+mod knowledge;
 mod metadata;
 mod migrations;
 mod store;

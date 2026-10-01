@@ -1,3 +1,63 @@
+## 2026-10-01 — Knowledge inspector layout verified locally
+
+Owner-authorized `knowledge-inspector-layout` uses the existing
+`/Users/hdang/.codex/worktrees/knowledge-documents/ai-agent-assistant`, branch
+`codex/knowledge-documents`, unchanged HEAD `263f879c05155c960f0121dbd8c67df3066a0b4c`.
+Twelve successor paths / 48 cumulative paths. Prior 45-path candidate, complete
+raw state and final bundle were frozen externally before ordinary admission;
+historical plan/review and all unmodified executable bytes remain unchanged.
+Evidence: `/private/tmp/cortexa-knowledge-inspector-layout-evidence`.
+
+Only production CSS changed: at compact widths the Knowledge/Collaboration
+inspector occupies a bounded, independently scrolling row above the workspace.
+Wide docking, graph, focus/Escape, execution, disclosure and storage remain.
+Actual-App browser regressions passed at 1600/1440/1280/760 widths, including
+non-overlap, reachable controls/disclosure, scrolling, focus and route transitions.
+The first narrow check caught the harness observing an unfinished sidebar
+transition; it now waits for measured width, with no application delay.
+65 affected frontend tests, strict lint/typecheck and offline unsigned isolated
+debug bundle passed. The build also ran frontend typecheck and Vite production
+build. Unchanged native suites/full verification/audits are inherited evidence,
+not rerun or newly claimed. No dependency or security gate changed.
+
+Direct supported Computer Use at 1440x1000 observed Knowledge controls and
+Collaboration transmission disclosure with inspector open/closed; an unstarted
+all-Simulation preview retained unchecked acknowledgement and disabled Start.
+No workflow, profile/note save or provider call occurred. The native resize
+attempt did not change window size; narrow/wide layout coverage is browser
+coverage, not additional native observations. One export targeted only a new
+external disposable Markdown canary. After verified native Replace, Cortexa
+reported destination exists / nothing overwritten; canary and preserved export
+hashes remained unchanged. Inspector closed; exact QA process quit and was absent.
+
+Final documentation, preservation, session/report and completion receipts must
+confirm complete/valid and full Stop before publication readiness is claimed.
+The current report records actual checks; historical failures stay intact.
+Retain D-127/D-128, native/provider/runtime live-success and Codex-isolation
+advisories, Python3.12.1/XcodeSDK27/Cargo strip workaround, OpenAI parked4/5 and
+D-125/M1/M2 parked. Remote CI, live-provider behavior and owner release approval
+are not verified. No commit or publication is authorized.
+
+Next action after valid completion: read-only publication readiness review of
+all 48 paths, source-bound native/browser evidence and preserved history. Do not
+repeat passing tests/builds/workflows or start a live request.
+
+## 2026-10-01 — Knowledge & Documents v1 acceptance in progress
+
+Knowledge regressions cover strict UTF-8/format/link/size handling, immutable
+versions, migration history, quotas, stale selections, four workflow routes,
+private-note exclusion, historical sources after edits/removal/room deletion,
+literal Markdown, generated draft attribution and exclusive export. Browser
+fixture `scripts/browser/knowledge.html` uses synthetic IPC only; run
+`node scripts/browser/knowledge-check.mjs` against the task's Vite server.
+Computer Use also inspects empty/loading/error/Unicode/narrow states.
+
+Native QA uses a separate app identifier and synthetic vault. Import runbook and
+incident; search/select passages; acknowledge all-Simulation Operations; inspect
+references; review/save draft; restart; search/export. Never use owner vaults,
+profiles, credentials or provider calls for this fixture. Keep previous artifacts.
+The final report distinguishes native observations from automated fixtures.
+
 ## 2026-09-30 — Operational graph acceptance
 
 `npm run test:frontend` covers snapshot lifetimes/races, safe projection and navigation in addition to retained fixture tests. For reproducible real-browser verification, start Vite on `127.0.0.1:4173` and run `node scripts/browser/operational-check.mjs <external-screenshot-directory>` with installed Playwright Chromium. The development-only `scripts/browser/operational.html` harness uses synthetic typed IPC snapshots and rejects execution. It is not a production entry point. Tests include actual React Flow delayed measurement, first fit, all routes, search/filter/keyboard, room focus, stale/deleted snapshots, manual viewport ownership and laptop inspector containment. Screenshots still require visual inspection.

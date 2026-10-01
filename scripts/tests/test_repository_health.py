@@ -159,6 +159,11 @@ def write_valid_ui_native_boundary(root: Path) -> None:
         (Path(__file__).resolve().parents[2] / agent_client).read_text(encoding="utf-8"),
         encoding="utf-8",
     )
+    knowledge_client = 'src/infrastructure/tauri/knowledge-client.ts'
+    (root / knowledge_client).write_text(
+        (Path(__file__).resolve().parents[2] / knowledge_client).read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
     collaboration_client = 'src/infrastructure/tauri/collaboration-client.ts'
     (root / collaboration_client).write_text(
         (Path(__file__).resolve().parents[2] / collaboration_client).read_text(encoding="utf-8"),
@@ -191,6 +196,15 @@ def write_valid_ui_native_boundary(root: Path) -> None:
     lib.write_text(
         ".invoke_handler(tauri::generate_handler![\n"
         "app_info::get_app_info,\n"
+        "knowledge_tauri::list_knowledge,\n"
+        "knowledge_tauri::save_knowledge,\n"
+        "knowledge_tauri::remove_knowledge,\n"
+        "knowledge_tauri::select_knowledge_source,\n"
+        "knowledge_tauri::search_knowledge,\n"
+        "knowledge_tauri::knowledge_draft,\n"
+        "knowledge_tauri::import_knowledge,\n"
+        "knowledge_tauri::export_knowledge,\n"
+        "knowledge_tauri::export_knowledge_draft,\n"
         "collaboration_tauri::list_collaboration_rooms,\n"
         "collaboration_tauri::create_collaboration_room,\n"
         "collaboration_tauri::prepare_collaboration,\n"
@@ -272,6 +286,31 @@ def write_valid_ui_native_boundary(root: Path) -> None:
 
 
 class RepositoryHealthTests(unittest.TestCase):
+    def test_knowledge_boundary_rejects_extra_commands_and_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            client = root / "src/infrastructure/tauri/knowledge-client.ts"
+            baseline = client.read_text(encoding="utf-8")
+            self.assertEqual(health.ui_native_boundary_findings(root), ())
+            for old, new in (
+                ('"import_knowledge"', '"read_arbitrary_path"'),
+                ('{ request: { id, version } }', '{ request: { id, version, path: "x" } }'),
+                ('{ request: draft }', '{ request: draft, destination: "x" }'),
+                ('{ invoke, isTauri }', '{ invoke, isTauri, transformCallback }'),
+            ):
+                with self.subTest(new=new):
+                    self.assertIn(old, baseline)
+                    client.write_text(baseline.replace(old, new), encoding="utf-8")
+                    self.assertTrue(health.ui_native_boundary_findings(root))
+            client.write_text(baseline + '\ninvoke<unknown>("extra");\n', encoding="utf-8")
+            self.assertTrue(health.ui_native_boundary_findings(root))
+            client.write_text(baseline, encoding="utf-8")
+            lib = root / "src-tauri/src/lib.rs"
+            lib.write_text(lib.read_text(encoding="utf-8").replace(
+                "knowledge_tauri::import_knowledge,", "arbitrary::read,"), encoding="utf-8")
+            self.assertTrue(health.ui_native_boundary_findings(root))
+
     def test_collaboration_exact_commands_and_payloads_remain_closed(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

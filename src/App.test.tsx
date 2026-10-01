@@ -689,7 +689,12 @@ describe("App", () => {
       }
 
       openSidebarRoute(item.label);
-      const expectedHeading = route === "permissions" ? "Permissions" : item.label;
+      const expectedHeading =
+        route === "permissions"
+          ? "Permissions"
+          : route === "memory"
+            ? "Knowledge & Documents"
+            : item.label;
       const heading = await screen.findByRole("heading", { level: 1, name: expectedHeading });
       expect(contentRegion).toContainElement(heading);
       expect(mainRegion).toHaveFocus();
