@@ -2015,3 +2015,28 @@ textarea:focus-visible {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Knowledge and Collaboration must keep disclosure and form controls unobscured.
+   A compact in-flow inspector preserves content width and its own scroll region. */
+@media (max-width: 1440px) {
+  .application-shell--inspector-expanded:has(.knowledge, .collaboration) {
+    grid-template-areas:
+      "header header header"
+      "navigation inspector inspector"
+      "navigation workspace workspace"
+      "navigation activity activity";
+    grid-template-rows:
+      var(--app-header-height) minmax(0, min(180px, 25vh)) minmax(0, 1fr)
+      var(--application-activity-track);
+  }
+
+  .application-shell:has(.knowledge, .collaboration) .application-inspector {
+    position: relative;
+    inset: auto;
+    grid-area: inspector;
+    width: auto;
+    border-left: 0;
+    border-bottom: 1px solid var(--border);
+    box-shadow: none;
+  }
+}

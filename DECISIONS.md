@@ -1,3 +1,19 @@
+## 2026-10-01 — Knowledge & Documents v1 acceptance in progress
+
+Owner-approved v1 uses ordinary UTF-8 Markdown/text snapshots, deterministic
+newline-preferred bounded passages and local AND-keyword search. Stable native IDs,
+immutable versions and hashes preserve attribution; explicit re-import appends a
+version. Applied migrations 1–7 remain unchanged; migration 8 adds a library table.
+SHA-256 and descriptor-relative file access reuse already locked sha2 0.10.9 and
+rustix 1.1.4 as pinned direct dependencies without changing package versions.
+
+Historical rooms retain only explicitly selected sources under existing context
+bounds. Removal deletes library availability, not room evidence. Drafts are
+reviewable/editable, never auto-trusted or auto-shared. Export is portable Markdown
+with readable attribution. Frontmatter/wikilinks are preserved as text, not
+resolved. Defer PDF/OCR, scanning/sync, Obsidian plugins, embeddings and automatic
+learning. Owner/live QA and publication remain separately authorized.
+
 ## 2026-09-30 — Bot Collaboration local acceptance
 
 The owner-authorized `bot-collaboration` implementation is locally accepted in

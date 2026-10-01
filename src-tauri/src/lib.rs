@@ -13,6 +13,8 @@ mod collaboration_tauri;
 pub mod credentials;
 pub mod documents;
 mod error;
+mod knowledge;
+mod knowledge_tauri;
 mod local_models;
 pub mod memory;
 pub mod menu_bar;
@@ -66,6 +68,15 @@ pub fn run() -> Result<(), AppError> {
         .on_window_event(menu_bar::handle_window_event)
         .invoke_handler(tauri::generate_handler![
             app_info::get_app_info,
+            knowledge_tauri::list_knowledge,
+            knowledge_tauri::save_knowledge,
+            knowledge_tauri::remove_knowledge,
+            knowledge_tauri::select_knowledge_source,
+            knowledge_tauri::search_knowledge,
+            knowledge_tauri::knowledge_draft,
+            knowledge_tauri::import_knowledge,
+            knowledge_tauri::export_knowledge,
+            knowledge_tauri::export_knowledge_draft,
             collaboration_tauri::list_collaboration_rooms,
             collaboration_tauri::create_collaboration_room,
             collaboration_tauri::prepare_collaboration,

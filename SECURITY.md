@@ -1,3 +1,23 @@
+## 2026-10-01 — Knowledge & Documents v1 acceptance in progress
+
+Knowledge inputs are untrusted. Native dialogs select one supported file or
+new export destination; IPC accepts no filesystem path. Reads reject unsafe links,
+hardlinks, nonregular files, changed identity, oversized input and invalid UTF-8.
+Descriptor-relative no-follow opens protect traversal. Exports exclusively create
+new owner-readable/writable `.md` files; no overwrite or silent destination choice.
+Literal text previews do not execute HTML/scripts, load images or follow links.
+
+Limits: 16 KiB/version, 200 items, eight versions/item, 4 MiB retained text;
+1024-Unicode-character passages, 200-byte search query, at most 50 matches.
+Existing collaboration limits remain six sources, 4096 characters/source and
+16 KiB aggregate. Source title/version/hash/location/text must match current
+selection at prepare/start. Only selected text and provenance enter the run.
+No original source path is persisted or transmitted. Private bot notes and
+credentials are never automatically imported; owners must avoid importing secrets.
+No encryption-at-rest claim. Library deletion prevents future selection but
+historical run snapshots remain until explicit room deletion. Generated content
+remains unverified even after saving; provenance is not factual support.
+
 ## 2026-09-30 — Bot Collaboration local acceptance
 
 The owner-authorized `bot-collaboration` implementation is locally accepted in

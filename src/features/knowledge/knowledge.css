@@ -1,0 +1,106 @@
+.knowledge {
+  max-width: 1200px;
+  padding: 1.25rem;
+}
+.knowledge label {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0.75rem 0;
+}
+.knowledge input,
+.knowledge textarea,
+.knowledge select {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  color: var(--text-primary, #eef0fa);
+  background: var(--surface-raised, #191f2e);
+  border: 1px solid #7885b2;
+  border-radius: 0.35rem;
+  padding: 0.6rem;
+}
+.knowledge textarea {
+  min-height: 13rem;
+  font-family: monospace;
+}
+.knowledge button {
+  margin: 0.25rem;
+  padding: 0.6rem 0.8rem;
+  color: #eef0fa;
+  background: #191f2e;
+  border: 1px solid #56658c;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+.knowledge button:hover:not(:disabled),
+.knowledge button[aria-pressed="true"] {
+  border-color: #9abfc6;
+  background: #252b4a;
+}
+.knowledge button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.knowledge button:focus-visible,
+.knowledge summary:focus-visible {
+  outline: 2px solid #9abfc6;
+  outline-offset: 3px;
+}
+.knowledge h2,
+.knowledge strong {
+  overflow-wrap: anywhere;
+}
+.knowledge details {
+  margin: 0.7rem 0;
+}
+.knowledge summary {
+  cursor: pointer;
+}
+
+.knowledge-layout {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(0, 3fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.knowledge-layout aside button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.knowledge small {
+  display: block;
+  color: #aeb9cd;
+}
+.knowledge-content {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 26rem;
+  overflow: auto;
+  background: #111827;
+  padding: 0.8rem;
+  border: 1px solid #465474;
+  border-radius: 0.4rem;
+}
+.knowledge-hash {
+  overflow-wrap: anywhere;
+  font-size: 0.8rem;
+}
+.knowledge-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.knowledge article {
+  border-bottom: 1px solid #465474;
+  padding: 0.7rem 0;
+}
+@media (max-width: 850px) {
+  .knowledge-layout {
+    grid-template-columns: 1fr;
+  }
+  .knowledge {
+    padding: 0.7rem;
+  }
+}

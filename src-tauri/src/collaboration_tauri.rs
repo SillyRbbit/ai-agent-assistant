@@ -95,6 +95,9 @@ pub(crate) fn prepare_collaboration(
     if room.runs.len() >= MAX_RUNS {
         return Err(ChatError::Limit);
     }
+    storage
+        .knowledge_check_sources(&request.input.sources)
+        .map_err(|_| ChatError::StaleContext)?;
     let run = Run::new(
         format!("room-{}/run-{}", room.id, room.runs.len() + 1),
         request.input,
@@ -178,6 +181,9 @@ pub(crate) fn start_collaboration(
     }
     let (id, mut run) = s.prepared.clone().ok_or(ChatError::InvalidRequest)?;
     validate_approval(&s, &request, id, &run)?;
+    storage
+        .knowledge_check_sources(&run.input.sources)
+        .map_err(|_| ChatError::StaleContext)?;
     preflight(&run, &storage.agent_profiles()?, |profile, prompt| {
         collaboration_adapter(&chat, profile, prompt)
     })?;

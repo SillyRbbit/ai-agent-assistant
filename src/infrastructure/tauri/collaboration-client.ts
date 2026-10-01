@@ -1,3 +1,4 @@
+import { parseOrigin, type Origin } from "./knowledge-client";
 import { invoke, isTauri } from "@tauri-apps/api/core";
 import {
   AGENT_IDS,
@@ -37,6 +38,7 @@ export type Status =
   | "interrupted"
   | "partial";
 export interface Source {
+  readonly origin?: Origin;
   readonly label: string;
   readonly text: string;
 }
@@ -137,6 +139,7 @@ export function parseRun(value: unknown): Run {
     const s = obj(raw);
     if (!txt(s["label"], 32) || !txt(s["text"], 16384) || labels.has(s["label"]))
       throw Error("protocol");
+    if (s["origin"] !== undefined) parseOrigin(s["origin"]);
     labels.add(s["label"]);
   }
   const route = WORKFLOWS[input["workflow"] as Workflow];

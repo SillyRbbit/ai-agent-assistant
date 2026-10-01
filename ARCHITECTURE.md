@@ -1,3 +1,19 @@
+## 2026-10-01 — Knowledge & Documents v1 acceptance in progress
+
+`knowledge.rs` owns bounded immutable document/version/passage contracts;
+`storage/knowledge.rs` stores the library through the existing native SQLite
+connection and appended migration 8. `knowledge_tauri.rs` exposes nine narrow
+commands for IDs, content, native file selection and explicit export; callers
+cannot provide paths. `documents.rs` retains its workflow-local contracts and
+reuses descriptor-relative no-follow validation for selected snapshot reads.
+
+The frontend Knowledge workspace and SourcePicker use typed native clients.
+Collaboration embeds only explicitly selected exact source snapshots, retaining
+existing source budgets and authority. Prepare/Start verify library provenance;
+source labels still undergo existing handoff validation. The operational inspector
+only reveals run-saved sources. There is no filesystem watcher, automatic memory,
+embedding service, network addition, routing or graph-structure change.
+
 ## 2026-09-30 — Operational collaboration projection
 
 The Command Center now consumes the existing typed room/run/stage snapshots via a client-keyed `CollaborationSnapshots` store shared with Rooms. One in-flight list request, mutation epochs, monotonic run acceptance and last-consumer cleanup bound polling and reject stale responses. It does not add a workflow engine or event stream. A separate allowlisted projection preserves the deterministic demo validator and excludes custom instructions, private notes, transmitted input and provider envelopes. Historical attribution uses saved participants, not current profiles; inactive historical roster members explicitly lack historical appearance. Stage preparation/start timestamps are not completion timestamps, and activity is a snapshot summary rather than a lifecycle journal.

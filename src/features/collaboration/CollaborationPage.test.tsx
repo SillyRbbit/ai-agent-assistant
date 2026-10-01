@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
+import { knowledgeClient } from "../../infrastructure/tauri/knowledge-client";
 import { CollaborationPage } from "./CollaborationPage";
 import { DEFAULT_BOT_IDENTITY } from "../../infrastructure/tauri/agent-chat-client";
 import {
@@ -95,6 +96,80 @@ function client(initial: Room[]): CollaborationClient {
   };
 }
 describe("Collaboration room", () => {
+  it("invalidates acknowledgement after native stale-source rejection without retry", async () => {
+    const c = client([]);
+    vi.mocked(c.start).mockRejectedValue("stale_context");
+    render(<CollaborationPage client={c} />);
+    fireEvent.change(screen.getByLabelText("Room title"), { target: { value: "Room" } });
+    fireEvent.click(screen.getByRole("button", { name: "Create room" }));
+    await screen.findByLabelText("Objective");
+    fireEvent.change(screen.getByLabelText("Objective"), { target: { value: "Assess sources" } });
+    fireEvent.click(
+      screen.getByRole("button", { name: "Check readiness and review transmission" }),
+    );
+    await screen.findByRole("button", { name: "Start simulation workflow" });
+    fireEvent.click(screen.getByRole("checkbox"));
+    fireEvent.click(screen.getByRole("button", { name: "Start simulation workflow" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Detach outdated sources");
+    expect(
+      screen.queryByRole("button", { name: "Start simulation workflow" }),
+    ).not.toBeInTheDocument();
+    expect(c.start).toHaveBeenCalledTimes(1);
+    fireEvent.click(
+      screen.getByRole("button", { name: "Check readiness and review transmission" }),
+    );
+    expect(await screen.findByRole("button", { name: "Start simulation workflow" })).toBeDisabled();
+    expect(screen.getByRole("checkbox")).not.toBeChecked();
+  });
+
+  it.each(Object.keys(WORKFLOWS) as Workflow[])(
+    "%s explicitly includes library sources and invalidates detached preview",
+    async (workflow) => {
+      const source = {
+        label: "K1_V1_P1",
+        text: "Synthetic library passage",
+        origin: {
+          documentId: 1,
+          version: 1,
+          passageId: 1,
+          title: "Runbook",
+          hash: "a".repeat(64),
+          startLine: 1,
+          endLine: 1,
+        },
+      };
+      const search = vi.spyOn(knowledgeClient, "search").mockResolvedValue([{ source }]);
+      const c = client([]);
+      render(<CollaborationPage client={c} />);
+      fireEvent.change(screen.getByLabelText("Room title"), { target: { value: "Room" } });
+      fireEvent.click(screen.getByRole("button", { name: "Create room" }));
+      await screen.findByLabelText("Objective");
+      fireEvent.change(screen.getByLabelText("Workflow"), { target: { value: workflow } });
+      fireEvent.change(screen.getByLabelText("Objective"), { target: { value: "Assess sources" } });
+      fireEvent.change(screen.getByLabelText("Find library passages"), {
+        target: { value: "synthetic" },
+      });
+      fireEvent.click(screen.getByRole("button", { name: "Find passages" }));
+      fireEvent.click(await screen.findByRole("button", { name: "Select K1_V1_P1" }));
+      fireEvent.click(
+        screen.getByRole("button", { name: "Check readiness and review transmission" }),
+      );
+      await screen.findByRole("button", { name: "Start simulation workflow" });
+      expect(c.prepare).toHaveBeenCalledWith(1, {
+        workflow,
+        objective: "Assess sources",
+        sources: [source],
+      });
+      fireEvent.click(screen.getByRole("checkbox"));
+      fireEvent.click(screen.getByRole("button", { name: "Detach K1_V1_P1" }));
+      expect(
+        screen.queryByRole("button", { name: "Start simulation workflow" }),
+      ).not.toBeInTheDocument();
+      expect(c.start).not.toHaveBeenCalled();
+      search.mockRestore();
+    },
+  );
+
   it.each(Object.keys(WORKFLOWS) as Workflow[])(
     "renders the complete %s route and inspectable handoffs",
     async (workflow) => {

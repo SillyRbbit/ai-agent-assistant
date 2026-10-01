@@ -46,8 +46,8 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     route: "tasks",
   },
   {
-    description: "Review working and approved preference memory.",
-    label: "Memory",
+    description: "Import snapshots, find passages and manage reusable Markdown notes.",
+    label: "Knowledge",
     route: "memory",
   },
   {

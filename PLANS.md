@@ -1,3 +1,53 @@
+## 2026-10-01 — Knowledge inspector layout verified locally
+
+Owner-authorized `knowledge-inspector-layout` uses the existing
+`/Users/hdang/.codex/worktrees/knowledge-documents/ai-agent-assistant`, branch
+`codex/knowledge-documents`, unchanged HEAD `263f879c05155c960f0121dbd8c67df3066a0b4c`.
+Twelve successor paths / 48 cumulative paths. Prior 45-path candidate, complete
+raw state and final bundle were frozen externally before ordinary admission;
+historical plan/review and all unmodified executable bytes remain unchanged.
+Evidence: `/private/tmp/cortexa-knowledge-inspector-layout-evidence`.
+
+Only production CSS changed: at compact widths the Knowledge/Collaboration
+inspector occupies a bounded, independently scrolling row above the workspace.
+Wide docking, graph, focus/Escape, execution, disclosure and storage remain.
+Actual-App browser regressions passed at 1600/1440/1280/760 widths, including
+non-overlap, reachable controls/disclosure, scrolling, focus and route transitions.
+The first narrow check caught the harness observing an unfinished sidebar
+transition; it now waits for measured width, with no application delay.
+65 affected frontend tests, strict lint/typecheck and offline unsigned isolated
+debug bundle passed. The build also ran frontend typecheck and Vite production
+build. Unchanged native suites/full verification/audits are inherited evidence,
+not rerun or newly claimed. No dependency or security gate changed.
+
+Direct supported Computer Use at 1440x1000 observed Knowledge controls and
+Collaboration transmission disclosure with inspector open/closed; an unstarted
+all-Simulation preview retained unchecked acknowledgement and disabled Start.
+No workflow, profile/note save or provider call occurred. The native resize
+attempt did not change window size; narrow/wide layout coverage is browser
+coverage, not additional native observations. One export targeted only a new
+external disposable Markdown canary. After verified native Replace, Cortexa
+reported destination exists / nothing overwritten; canary and preserved export
+hashes remained unchanged. Inspector closed; exact QA process quit and was absent.
+
+Final documentation, preservation, session/report and completion receipts must
+confirm complete/valid and full Stop before publication readiness is claimed.
+The current report records actual checks; historical failures stay intact.
+Retain D-127/D-128, native/provider/runtime live-success and Codex-isolation
+advisories, Python3.12.1/XcodeSDK27/Cargo strip workaround, OpenAI parked4/5 and
+D-125/M1/M2 parked. Remote CI, live-provider behavior and owner release approval
+are not verified. No commit or publication is authorized.
+
+Next action after valid completion: read-only publication readiness review of
+all 48 paths, source-bound native/browser evidence and preserved history. Do not
+repeat passing tests/builds/workflows or start a live request.
+
+## 2026-10-01 — Knowledge & Documents v1 acceptance in progress
+
+Active: [Knowledge & Documents v1](docs/plans/2026-10-01-knowledge-documents.md).
+The complete import-to-reuse milestone is owner-approved; its acceptance and
+manual QA remain distinct from publication and live-provider verification.
+
 ## 2026-09-30 — Operational graph milestone
 
 Owner-authorized [operational-command-center](docs/plans/2026-09-30-operational-command-center.md) integrates shared collaboration snapshots and completes graph presentation. [Consolidated review](docs/reviews/2026-09-30-operational-command-center-post-increment-review.md) records final verification. Existing historical plans and blocked work are unchanged.
@@ -2890,3 +2940,55 @@ Implementation now issues one owned presentation from the authoritative manager 
 The implementation adds exact macOS-target `rfd = "=0.17.2"` with default features disabled. Direct use registers no Tauri dialog plugin, invoke command, JavaScript API, capability, or application `unsafe`; the source remains disconnected from the shipping app, WebView, LocalAuthentication, audit, persistence, dispatch, execution, provider continuation, gateway networking, and credentials. Sixteen approval unit tests, two approval-binding integration tests, rustfmt, Clippy, `npm run verify`, `npm audit --audit-level=low`, dependency review, code review, and security review pass.
 
 The target-Mac owner interaction matrix passes: Approve, Reject, Edit, Return/default, fixed title/content order, terminal redaction, no action or persistence, and no permission prompt were confirmed; Escape had no effect and no window-close control was available. Exact `cargo-audit 0.22.2` exits nonzero on RUSTSEC-2026-0194 and RUSTSEC-2026-0195 in pre-existing `quick-xml 0.39.4`; 4E adds only `rfd`, and source review found the cited vulnerable APIs unused on the existing `plist -> Tauri` path. D-025 records the project owner's scoped reviewed baseline exception without an advisory ignore or dependency change. Increment 4E is verified complete, and no later increment is Ready.
+
+## 2026-10-01 — Knowledge native acceptance resumed and verified
+
+This additive result supersedes the earlier locked-Mac checkpoint, which remains
+unchanged. Worktree `/Users/hdang/.codex/worktrees/knowledge-documents/ai-agent-assistant`,
+branch `codex/knowledge-documents`, HEAD `263f879c05155c960f0121dbd8c67df3066a0b4c`:
+exactly 45 uncommitted paths. No product/test/build bytes changed in this resumption.
+
+After owner unlock and confirmation that the QA window was idle, supported
+Computer Use opened the existing completed synthetic Operations room, reviewed a
+generated draft, changed only its synthetic title/heading while retaining source
+attribution, and clicked Save once. The visible result was: “Draft saved to
+Knowledge. It is not automatically shared.” Command-Q gracefully quit the isolated
+QA app; the recorded process was confirmed absent. No workflow was rerun, no
+provider request was made and no owner profiles, notes or rooms were touched.
+Receipt: `/private/tmp/cortexa-knowledge-documents-evidence/native-resume-observations.json`.
+Both prior native receipts, the interrupted draft report and both artifacts remain.
+
+All implementation checklist items and required local native observations now
+have passing evidence. Reuse the source-bound full offline verification, strict
+Clippy, native builds, focused regressions, browser matrix and audits explicitly;
+these passing checks were not rerun in this resumption. Documentation, repository,
+security, whitespace, preservation, session inventory and report schema are the
+remaining closeout routes. The consolidated review records PASS WITH ADVISORIES;
+formal completion requires ordinary finalization, complete/valid status and full
+Stop. Gate receipts in the evidence directory are authoritative for actual status.
+
+Observed visual advisory: the generic workspace inspector overlaid right-side
+room content in the final native window. Save feedback was visible and the scoped
+save/cleanup check passed; no unrelated layout repair is claimed. Owner QA should
+check inspector-open/closed readability at the intended window size. Retain
+D-127/D-128, native/provider/runtime and Codex-isolation advisories, Python 3.12.1,
+Xcode SDK27/Cargo stripping workaround, OpenAI parked 4/5 and D-125/M1/M2 parked.
+Remote CI/Linux execution, live providers and owner manual QA are not verified.
+
+### Exact next prompt
+
+```text
+Assist owner manual QA of Knowledge & Documents in
+/Users/hdang/.codex/worktrees/knowledge-documents/ai-agent-assistant.
+Inspect instructions, the knowledge-documents plan/review, complete/valid status,
+artifact-final.json and native-resume-observations.json in
+/private/tmp/cortexa-knowledge-documents-evidence first. Preserve all 45 paths,
+historical records and both artifacts. Do not repeat passed builds/tests or the
+completed native Simulation scenario. Use the existing isolated synthetic bundle
+and supported Computer Use; confirm the intended owner-QA actions before changing
+local test data. Check library editing/versioning, source selection and historical
+references, Markdown portability/export conflicts, and inspector-open/closed
+readability. No owner vault/profile/room changes, live requests or publication.
+Stop on drift, unsupported access or necessary scope expansion. Report only
+observed results, retain all advisories, OpenAI parked 4/5 and D-125/M1/M2 parked.
+```

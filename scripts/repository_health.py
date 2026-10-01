@@ -80,6 +80,9 @@ DOCUMENTATION_TRUTH_MARKERS = (
     ),
 )
 EXPECTED_TAURI_IMPORTS = {
+    'src/infrastructure/tauri/knowledge-client.ts': (
+        'import { invoke, isTauri } from "@tauri-apps/api/core";',
+    ),
     'src/infrastructure/tauri/collaboration-client.ts': (
         'import { invoke, isTauri } from "@tauri-apps/api/core";',
     ),
@@ -104,6 +107,17 @@ EXPECTED_TAURI_IMPORTS = {
     ),
 }
 EXPECTED_TAURI_INVOKES = {
+    'src/infrastructure/tauri/knowledge-client.ts': (
+        'invoke<unknown>("list_knowledge")',
+        'invoke<unknown>("import_knowledge", { request })',
+        'invoke<unknown>("save_knowledge", { request: input })',
+        'invoke<unknown>("remove_knowledge", { request: { id, version } })',
+        'invoke<unknown>("search_knowledge", { request: { text } })',
+        'invoke<unknown>("select_knowledge_source", { request })',
+        'invoke<unknown>("export_knowledge", { request: { id, version } })',
+        'invoke<unknown>("export_knowledge_draft", { request: draft })',
+        'invoke<unknown>("knowledge_draft", { request })',
+    ),
     'src/infrastructure/tauri/collaboration-client.ts': (
         'invoke<unknown>("list_collaboration_rooms")',
         'invoke<unknown>("create_collaboration_room", { request: { title } })',
@@ -255,6 +269,15 @@ EXPECTED_CAPABILITY_CONFIGURATION = {
 EXPECTED_INVOKE_HANDLER = (
     ".invoke_handler(tauri::generate_handler!["
     "app_info::get_app_info,"
+    "knowledge_tauri::list_knowledge,"
+    "knowledge_tauri::save_knowledge,"
+    "knowledge_tauri::remove_knowledge,"
+    "knowledge_tauri::select_knowledge_source,"
+    "knowledge_tauri::search_knowledge,"
+    "knowledge_tauri::knowledge_draft,"
+    "knowledge_tauri::import_knowledge,"
+    "knowledge_tauri::export_knowledge,"
+    "knowledge_tauri::export_knowledge_draft,"
     "collaboration_tauri::list_collaboration_rooms,"
     "collaboration_tauri::create_collaboration_room,"
     "collaboration_tauri::prepare_collaboration,"
