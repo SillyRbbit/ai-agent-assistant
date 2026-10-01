@@ -84,6 +84,8 @@ impl MemoryMode {
 #[derive(Clone, Default, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub(crate) struct BotIdentity {
+    #[serde(default)]
+    pub(crate) color: BotColor,
     pub(crate) nickname: String,
     pub(crate) avatar: BotAvatar,
     pub(crate) description: String,
@@ -100,6 +102,35 @@ pub(crate) enum BotAvatar {
     Leaf,
     Shield,
     Star,
+    Sun,
+    Moon,
+    Flame,
+    Heart,
+    Gem,
+    Mountain,
+    Waves,
+    Rocket,
+    Book,
+    Code,
+    Globe,
+    Music,
+}
+#[derive(Clone, Copy, Default, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub(crate) enum BotColor {
+    #[default]
+    Blue,
+    Teal,
+    Green,
+    Orange,
+    Coral,
+    Pink,
+    Purple,
+    Gold,
+    Cyan,
+    Lime,
+    Rose,
+    Indigo,
 }
 #[derive(Clone, Copy, Default, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]

@@ -1,0 +1,83 @@
+.collaboration {
+  padding: 24px;
+  max-width: 1400px;
+  margin: auto;
+  overflow-wrap: anywhere;
+}
+.room-layout {
+  display: grid;
+  grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+  gap: 24px;
+}
+.room-layout aside,
+.room-layout form,
+.room-layout label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.room-layout aside {
+  align-self: start;
+  gap: 12px;
+}
+.collaboration button {
+  padding: 10px;
+  margin: 4px;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+}
+.collaboration textarea,
+.collaboration input,
+.collaboration select {
+  padding: 10px;
+  max-width: 100%;
+  color: #f1f5ff;
+  background: #171e2b;
+  border: 1px solid #8893a7;
+  border-radius: 6px;
+}
+.collaboration fieldset {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+.collaboration pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 320px;
+  overflow: auto;
+}
+.room-message {
+  border: 1px solid #647187;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+}
+.room-message header {
+  display: flex;
+  gap: 12px;
+  align-items: start;
+}
+.collaboration button:focus-visible,
+.collaboration input:focus-visible,
+.collaboration textarea:focus-visible,
+.collaboration select:focus-visible {
+  outline: 3px solid #67aaff;
+  outline-offset: 3px;
+}
+.room-retention {
+  max-width: 100ch;
+}
+.collaboration :disabled {
+  opacity: 0.65;
+}
+@media (max-width: 760px) {
+  .room-layout {
+    grid-template-columns: 1fr;
+  }
+  .room-layout aside {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}

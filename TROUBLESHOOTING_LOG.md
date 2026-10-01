@@ -1,3 +1,120 @@
+## 2026-09-30 — Bot Collaboration acceptance
+
+Worktree `/Users/hdang/.codex/worktrees/bot-collaboration-acceptance/ai-agent-assistant`, branch `codex/bot-collaboration-acceptance`, baseline/main `9601852ec4799626bc15548e65ca5fe1f17d7580`. An ordinary gate admitted the frozen 49-path candidate from `codex/bot-identity-publication` HEAD `6a164d8d8cd360dd1e4ecc67c5c530cc973a9518` without gate state. Nine acceptance paths yield exactly 51 cumulative paths. All inherited executable bytes, historical document bodies, worktrees and prior bundles remain preserved. The source `bot-collaboration-cancellation-fixture` remains valid failed / FAIL / Blocked without a completion marker; this acceptance does not revise it.
+
+The later direct supported Computer Use receipt at `/private/tmp/cortexa-cancellation-bounded-qa-j7acz2b8/observations.json` records one key-free synthetic Workflow Proposal in the fixed debug-only all-Simulation fixture. One Start produced the labeled provisional fragment; one Stop at about 2.15 seconds led to a cancelled run and four cancelled stages, retained provisional text, no final synthesis and visible ownership cleanup. Nova was restored to OpenAI/gpt-5.6-luna/low with Memory Off, instructions, note and appearance retained; Tempo and Vera remained unchanged. Artifact hash and full bundle tree match the receipt. This observed Simulation behavior is separate from unverified live provider cancellation or streaming.
+
+Inherited receipts in `/private/tmp/cortexa-bot-collaboration-cancellation-fixture-evidence` show focused native 4/4, frontend 10/10, corrected full locked offline `npm run verify`, strict lint/Clippy and release fixture isolation passed. Those commands were not rerun in this acceptance. New documentation, repository, security, whitespace, exact-scope, preservation and session checks passed using installed tooling; the ordinary review and machine gate provide the final completion status. The initial `docs:check` attempt could not find Prettier in this fresh worktree, so it was repeated successfully using the preserved installed binary through process-local PATH, without installation.
+
+Retain D-127/D-128, native/provider/runtime live-success, Codex-isolation, the process-local Python 3.12/Xcode SDK 27.0/Cargo release strip workaround, OpenAI parked 4/5 used and D-125/M1/M2 parked. Remote CI, a live provider collaboration run and live cancellation are not verified. No provider request, app launch, build, commit or publication occurred in this acceptance.
+
+The original fixture increment failed its required native QA because supported Computer Use timed out; its valid failed record is unchanged. A later bounded walkthrough of the same frozen artifact succeeded and established visible debug Simulation cancellation, without rewriting history. The acceptance worktree transfers identical product bytes and records this later evidence through an ordinary gate. The fresh checkout initially lacked a local Prettier binary; `docs:check` passed with the existing installed binary on process-local PATH. No package installation or product repair was needed. See [acceptance review](docs/reviews/2026-09-30-bot-collaboration-acceptance-post-increment-review.md).
+
+## 2026-09-30 — Bot Collaboration cancellation fixture: FAIL / Blocked
+
+Owner-authorized `bot-collaboration-cancellation-fixture` in `/Users/hdang/.codex/worktrees/bot-identity-publication/ai-agent-assistant`, branch `codex/bot-identity-publication`, unchanged HEAD `6a164d8d8cd360dd1e4ecc67c5c530cc973a9518`. Eleven successor paths / 49 cumulative paths; 47 inherited changes, historical document suffixes, raw completion archive, other worktrees and two prior bundles preserved byte-identically. Evidence: `/private/tmp/cortexa-bot-collaboration-cancellation-fixture-evidence`.
+
+Automated verification and offline fixture-enabled debug bundle passed. Native QA stopped at the first navigation action because supported Computer Use timed out. No retry, profile Save, workflow Start, or Stop click occurred. Cancellation, visible provisional output and native ownership cleanup remain unverified. The exact test-owned process was terminated and cleanup confirmed.
+
+The fixed debug build opt-in (`CORTEXA_COLLABORATION_CANCEL_QA=1` at compilation) holds only all-Simulation Workflow Proposal at stage one with clearly labeled fixed synthetic provisional text. Existing Stop aborts/joins it; a 60-second safety timeout fails without automatic advance. Ordinary Simulation, release/live execution, profiles, schema, IPC, routing and cancellation algorithm remain unchanged. Release activation regression passed with the flag supplied. The prepared unsigned arm64 debug artifact is fixture-enabled; ordinary builds omit the flag.
+
+Actual validation: affected frontend 10/10, focused cancellation native 4/4, strict lint/Clippy, corrected full offline verification (482 frontend; 399 native library tests in both required invocations plus integration suites; release build) and release activation guard passed. Recoverable frontend mock typing/read-only reassignment and Clippy test-lock-lifetime errors were corrected in scope; their failed receipts remain. No failed test was relabeled. Full verification was rerun only to validate the TypeScript correction. The external report-checker import initially failed because its dataclass module was not registered in sys.modules; the checker was corrected externally and the unchanged gate schema then passed. Whole-document formatter execution was rejected by automatic approval review due to historical-suffix preservation risk; no formatter ran, and read-only documentation checks passed without formatting changes.
+
+Plan: [Cancellation fixture](docs/plans/2026-09-30-bot-collaboration-cancellation-fixture.md). Review: [Cancellation fixture review](docs/reviews/2026-09-30-bot-collaboration-cancellation-fixture-post-increment-review.md). Artifact: `src-tauri/target/acceptance/debug/bundle/macos/Cortexa.app`; identity and full bundle bytes are frozen externally. No profile settings, notes or room history were changed during this increment's interrupted native QA. No app defect is inferred from unavailable Computer Use. Native cancellation acceptance is Not run; no completion may be claimed. Ordinary terminal failure disposition is required and writes no completion marker. Documentation, repository, security, whitespace, 12-section failed-report schema, session-end, artifact preservation and separate source review checks passed. Native QA is the sole unresolved required acceptance check.
+
+Retain D-127/D-128, native/provider/runtime live-success, Codex-isolation, process-local Python 3.12 / Xcode/SDK 27.0 / Cargo release build-override strip=none workaround, OpenAI parked 4/5 used and D-125/M1/M2 parked. No commits, publication, credentials or provider requests.
+
+Next action: owner-authorized fresh native access attempt with this existing artifact; no new implementation, recovery chain or reopening historical records.
+
+### Exact resume prompt
+
+```text
+Inspect `/Users/hdang/.codex/worktrees/bot-identity-publication/ai-agent-assistant`, its instructions, valid terminal-failed bot-collaboration-cancellation-fixture record, artifact identity and `/private/tmp/cortexa-bot-collaboration-cancellation-fixture-evidence/native-qa.json` before acting. Preserve all 49 paths, profiles, notes, rooms, artifacts and historical records; do not reopen the terminal record, edit, rebuild or repeat passing checks. I authorize one fresh supported app-inventory check and, only if access works, one key-free walkthrough of the exact existing fixture-enabled debug bundle. Verify executable identity without reading arguments, environments or credentials. Temporarily save only Nova as Simulation/deterministic/Default while retaining all other fields; Tempo and Vera remain unchanged. Prepare one acknowledged all-Simulation Workflow Proposal in a new synthetic room, Start once, observe the labeled provisional fragment and click freshly observed Stop once before the 60-second safety timeout. Verify cancelled stages, retained provisional output, no final synthesis and released ownership; restore Nova to OpenAI/gpt-5.6-luna/low and stop the test-owned app. No automatic retry, history deletion, providers, commits or publication. Stop on drift, unsupported access or unexpected failure; restore approved settings when access permits. Record external observed evidence only and retain OpenAI parked 4/5 used, all advisories and parked D-125/M1/M2. Do not promote the historical FAIL record; report the smallest later acceptance decision if QA passes.
+```
+
+## 2026-09-30 — Bot Collaboration native startup repair
+
+Owner-authorized `bot-collaboration-native-startup-repair` is locally validated in
+`/Users/hdang/.codex/worktrees/bot-identity-publication/ai-agent-assistant`,
+branch `codex/bot-identity-publication`, unchanged HEAD
+`6a164d8d8cd360dd1e4ecc67c5c530cc973a9518`. Preserve all 45 inherited paths.
+The ten-path repair scope produces 47 cumulative paths; earlier acceptance and
+native QA records below remain historical, not proof of successful collaboration.
+
+The first Research Simulation Start persisted `room-1/run-1`, then aborted in
+Tokio spawn from the synchronous native command. Restart marked all four stages
+interrupted without replay. Nova, Orion and Mira were restored and verified after
+restart before this repair; no owner profile or room is touched by this task.
+The explicit Tauri runtime handle now dispatches the existing task while retaining
+the same lease, Tokio abort/join handle, routing and approval checks. Both new
+plain-thread dispatch regressions reproduced the old missing-reactor panic and
+pass after the correction. Full offline verification passed 481 frontend tests,
+395 native library tests and all integration suites (one inherited real-Hermes
+opt-in test remains ignored). Strict checks, release build and the updated
+unsigned offline debug bundle passed. Native workflow QA remains unverified.
+No native launch or workflow execution is authorized in this repair.
+
+Previous raw completion state and debug bundle are byte-preserved in
+`/private/tmp/cortexa-bot-collaboration-native-startup-repair-evidence`.
+Plan: [Native startup repair](docs/plans/2026-09-30-bot-collaboration-native-startup-repair.md).
+OpenAI stays parked 4/5 used; retain D-127/D-128, native/provider/runtime and
+Codex-isolation advisories, the process-local Python 3.12 / Xcode/SDK 27.0 /
+Cargo release build-override strip=none workaround, and parked D-125/M1/M2.
+No commits, publication, dependency or governance changes.
+
+Observed root cause: thread-local `tokio::spawn` was called from a synchronous
+Tauri command with no active Tokio context. The isolated regression reproduced
+"there is no reactor running"; explicit application-runtime dispatch passes.
+Initial correction validation exposed only a test-struct update error because
+Session implements Drop; explicit fixture fields corrected it. Both failed logs
+remain unchanged. Native GUI success is still pending separate QA.
+
+## 2026-09-30 — Bot Collaboration local acceptance
+
+The owner-authorized `bot-collaboration` implementation is locally accepted in
+`/Users/hdang/.codex/worktrees/bot-identity-publication/ai-agent-assistant`,
+branch `codex/bot-identity-publication`, HEAD
+`6a164d8d8cd360dd1e4ecc67c5c530cc973a9518` (same tree as merged main
+`9601852ec4799626bc15548e65ca5fe1f17d7580`). Earlier publication notes below
+are historical. No inherited dirty files existed in this selected checkout;
+other checkouts, completed records and artifacts are preserved.
+
+Four fixed Rust-owned routes now cover all nine canonical bots: research (4
+stages), engineering (5), operations (5), and workflow proposal (4). The room
+supports preview-bound acknowledgement, saved configuration snapshots, bounded
+visible streams and validated handoffs, cancellation, local history, explicit
+restart interruption and deletion. Private notes are excluded. Simulation is
+explicit and never silently mixed with live profiles. All six connection options
+remain. Identity supports 18 avatars and 12 accessible colors; descriptions stay
+owner-owned with a description-only restore action.
+
+Implementation and available automated acceptance passed: full offline verification,
+release build, unsigned debug bundle, affected post-review frontend checks and
+native fixture coverage for all four routes. Key-free native QA observed room
+creation/restart persistence, four workflow choices, nine names, six connections,
+18 avatars/12 colors and preserved fitted Command Center. No generation or profile
+Save occurred. Mixed Simulation/OpenAI saved profiles correctly blocked readiness;
+no native streaming/cancellation or live collaboration success is claimed.
+Owner manual QA, live behavior and remote CI remain pending. The finalized review
+and ordinary gate receipts distinguish local acceptance from those advisories. OpenAI stays parked at 4/5 used. D-127/D-128,
+native/provider/runtime live-success and Codex-isolation advisories, the
+process-local Python 3.12 / Xcode/SDK 27.0 / release build-override strip=none
+workaround, and parked D-125/M1/M2 remain.
+
+Plan: [Bot Collaboration](docs/plans/2026-09-30-bot-collaboration.md).
+Evidence: `/private/tmp/cortexa-bot-collaboration-evidence`.
+Next action: owner manual QA of this exact prepared artifact. Live QA and
+publication require separate authorization; no automatic generation is approved.
+
+### Recoverable milestone checks
+
+Initial checks exposed a migration-count assertion, old nine-page navigation
+assertion, new color expectation, TypeScript mock typing, strict Rust item/enum
+organization and test-only type errors. These were corrected within this same
+active increment without weakening assertions or lint rules. The original logs
+remain in the external evidence directory. No recovery successor or historical
+record rewrite was used.
+
 ## 2026-09-30 current state — Bot Identity publication preparation
 
 Worktree `/Users/hdang/.codex/worktrees/bot-identity-publication/ai-agent-assistant`,

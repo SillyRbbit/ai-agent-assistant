@@ -708,6 +708,7 @@ it("saves bot identity with canonical attribution and resets personality without
     expect.objectContaining({
       agentId: "personal-assistant",
       identity: {
+        color: "blue",
         nickname: "Mira",
         avatar: "compass",
         description: "Friendly text advisor",
@@ -734,4 +735,33 @@ it("saves bot identity with canonical attribution and resets personality without
   fireEvent.click(screen.getByRole("button", { name: /Research Agent/ }));
   expect(screen.getByLabelText(/Nickname/)).toHaveValue("");
   expect(screen.getByLabelText(/Private note/)).toHaveValue("");
+});
+
+it("restores only role description and preserves appearance, owner settings and notes", async () => {
+  const c = harness();
+  render(<AgentsPage client={c} />);
+  await screen.findByRole("heading", { name: "Personal Assistant" });
+  fireEvent.change(screen.getByLabelText("Color"), { target: { value: "coral" } });
+  fireEvent.change(screen.getByLabelText("Avatar"), { target: { value: "rocket" } });
+  fireEvent.change(screen.getByLabelText(/Private note/), {
+    target: { value: "Retained local note" },
+  });
+  fireEvent.change(screen.getByLabelText(/Profile description/), {
+    target: { value: "Owner description" },
+  });
+  fireEvent.click(screen.getByRole("button", { name: "Restore role description" }));
+  expect(screen.getByLabelText(/Private note/)).toHaveValue("Retained local note");
+  expect(screen.getByLabelText("Color")).toHaveValue("coral");
+  expect(screen.getByLabelText("Avatar")).toHaveValue("rocket");
+  expect(screen.getByLabelText(/Profile description/)).toHaveValue(
+    "Clarifies the objective, coordinates the selected workflow, and synthesizes results.",
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Save settings and note" }));
+  await waitFor(() => {
+    expect(c.save).toHaveBeenCalledTimes(1);
+  });
+  const saved = c.save.mock.calls[0]?.[0];
+  expect(saved?.note).toBe("Retained local note");
+  expect(saved?.identity.color).toBe("coral");
+  expect(saved?.identity.avatar).toBe("rocket");
 });

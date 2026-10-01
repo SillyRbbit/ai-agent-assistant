@@ -39,6 +39,7 @@ import {
   useApplicationWorkspacePanels,
 } from "./components/applicationWorkspacePanels";
 import { ActivityPage } from "./features/activity/ActivityPage";
+import { CollaborationPage } from "./features/collaboration/CollaborationPage";
 import { AgentsPage } from "./features/agents/AgentsPage";
 import { ConversationWorkspace } from "./features/conversations/ConversationWorkspace";
 import { PermissionCenter } from "./features/permissions/PermissionCenter";
@@ -279,6 +280,7 @@ function ApplicationShell({ services }: ApplicationShellProps) {
 
   const pages: Readonly<Record<AppRoute, ReactNode>> = {
     agents: <AgentsPage />,
+    collaboration: <CollaborationPage />,
     "command-center": (
       <Suspense fallback={<CommandCenterLoadingPage />}>
         <CommandCenterPage projectionLoader={services.researchKnowledgeDemoProjectionLoader} />

@@ -31,6 +31,7 @@ interface ApplicationSidebarProps {
 
 const NAVIGATION_ICONS: Readonly<Record<AppRoute, LucideIcon>> = {
   agents: Bot,
+  collaboration: MessagesSquare,
   activity: Activity,
   "command-center": LayoutDashboard,
   conversations: MessagesSquare,

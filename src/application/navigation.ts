@@ -2,6 +2,7 @@ export const APP_ROUTES = [
   "command-center",
   "conversations",
   "agents",
+  "collaboration",
   "tasks",
   "memory",
   "activity",
@@ -19,6 +20,11 @@ export interface NavigationItem {
 }
 
 export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
+  {
+    description: "Prepare four bounded collaboration workflows with shared sources.",
+    label: "Collaboration",
+    route: "collaboration",
+  },
   {
     description: "Inspect the deterministic multi-agent operations prototype.",
     label: "Command Center",
