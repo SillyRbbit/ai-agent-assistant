@@ -2040,3 +2040,15 @@ textarea:focus-visible {
     box-shadow: none;
   }
 }
+
+/* Keep expanded navigation outside Knowledge/Collaboration content at compact
+   widths; the generic overlay reserves only the collapsed navigation track. */
+@media (max-width: 960px) {
+  .application-shell:has(.knowledge, .collaboration) {
+    --application-navigation-track: var(--app-sidebar-expanded-width);
+  }
+
+  .application-shell--navigation-collapsed:has(.knowledge, .collaboration) {
+    --application-navigation-track: var(--app-sidebar-collapsed-width);
+  }
+}
