@@ -1,3 +1,16 @@
+## 2026-10-01 — Connected Knowledge boundaries
+
+The existing Knowledge storage and nine-command native client remain the sole
+library boundary. `knowledge_links.rs` parses bounded local wikilinks;
+`storage/knowledge.rs` binds stable IDs in migration 9's sidecar without mutating
+historical versions. Read projections enrich current versions only. React's
+Markdown renderer escapes HTML and suppresses remote resources, while canonical
+properties remain in Markdown. Knowledge has its own React Flow provider,
+measured controlled nodes and local selection/viewport; Command Center is unchanged.
+Application dispatch consults a cancelable local unsaved-editor event before
+route changes. No native window-close permission or import exception was added.
+Native application quit interception is not claimed.
+
 ## 2026-10-01 — Knowledge & Documents v1 acceptance in progress
 
 `knowledge.rs` owns bounded immutable document/version/passage contracts;

@@ -38,6 +38,43 @@ let items: KnowledgeItem[] = params.has("long")
     ]
   : [];
 let serial = items.length;
+// Browser-only projection mirrors stable-title binding for presentation fixtures.
+// Actual persistence, parsing and removal semantics are tested at the Rust boundary.
+const bindings = new Map<string, number>();
+function projected(): KnowledgeItem[] {
+  return items.map((item) => ({
+    ...item,
+    versions: item.versions.map((v, n) =>
+      n !== item.versions.length - 1
+        ? v
+        : {
+            ...v,
+            links: [...v.content.matchAll(/\[\[([^\]\n|]+)(?:\|([^\]\n]+))?\]\]/g)].map((m) => {
+              const title = m[1]?.trim() ?? "";
+              const key = `${String(item.id)}:${title}`;
+              const matches = items.filter((i) => i.versions.at(-1)?.title === title);
+              const targetId =
+                bindings.get(key) ?? (matches.length === 1 ? matches[0]?.id : undefined) ?? null;
+              if (targetId !== null) bindings.set(key, targetId);
+              return {
+                title,
+                label: m[2] ?? title,
+                context: m[0],
+                targetId,
+                status:
+                  targetId !== null
+                    ? items.some((i) => i.id === targetId)
+                      ? "resolved"
+                      : "removed"
+                    : matches.length > 1
+                      ? "ambiguous"
+                      : "missing",
+              };
+            }),
+          },
+    ),
+  }));
+}
 function source(item: KnowledgeItem): Source {
   const v = item.versions.at(-1);
   if (!v) throw Error("fixture");
@@ -59,7 +96,7 @@ const client: KnowledgeClient = {
   list() {
     if (params.has("loading")) return new Promise(() => undefined);
     if (params.has("error")) return Promise.reject(new Error("unavailable"));
-    return Promise.resolve([...items]);
+    return Promise.resolve(projected());
   },
   import() {
     const id = ++serial;
@@ -81,6 +118,7 @@ const client: KnowledgeClient = {
     return Promise.resolve(item);
   },
   save(input) {
+    projected(); // Freeze old titles before a synthetic rename.
     const old = items.find((i) => i.id === input.id);
     const item: KnowledgeItem = {
       id: old?.id ?? ++serial,

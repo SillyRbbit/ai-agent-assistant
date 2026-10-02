@@ -1,6 +1,14 @@
 import { invoke, isTauri } from "@tauri-apps/api/core";
 import type { Source } from "./collaboration-client";
+export interface KnowledgeLink {
+  readonly title: string;
+  readonly label: string;
+  readonly context: string;
+  readonly targetId: number | null;
+  readonly status: "resolved" | "missing" | "ambiguous" | "removed";
+}
 export interface KnowledgeVersion {
+  readonly links?: readonly KnowledgeLink[];
   readonly id: number;
   readonly title: string;
   readonly content: string;
@@ -80,6 +88,20 @@ export function parseItem(v: unknown): KnowledgeItem {
     throw Error("protocol");
   for (const raw of o["versions"]) {
     const x = obj(raw);
+    if (x["links"] !== undefined) {
+      if (!Array.isArray(x["links"]) || x["links"].length > 4096) throw Error("protocol");
+      for (const rawLink of x["links"]) {
+        const l = obj(rawLink);
+        if (
+          !str(l["title"], 240) ||
+          !str(l["label"], 16384) ||
+          !str(l["context"], 440) ||
+          (l["targetId"] !== null && !num(l["targetId"])) ||
+          !["resolved", "missing", "ambiguous", "removed"].includes(String(l["status"]))
+        )
+          throw Error("protocol");
+      }
+    }
     if (
       !num(x["id"]) ||
       !str(x["title"], 240) ||
@@ -161,7 +183,7 @@ export function knowledgeError(e: unknown): string {
       {
         native_required: "Open the native app for the local library and file dialogs.",
         limit:
-          "A bounded limit was reached. Narrow the selection or remove unneeded library items.",
+          "Storage limit reached: 16 KiB/version, 200 items, 8 versions/item or 4 MiB total. Nothing was saved or pruned. Export your work before deciding what to remove.",
         duplicate: "This content is already in the library. No new version was saved.",
         stale_selection:
           "The item changed or was removed. Reload, select its current version and review again.",

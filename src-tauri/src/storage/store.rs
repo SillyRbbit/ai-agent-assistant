@@ -202,7 +202,7 @@ mod tests {
         assert!(!first.was_already_initialized());
         assert_eq!(
             first.storage().startup_migration_report().applied_versions,
-            vec![1, 2, 3, 4, 5, 6, 7, 8]
+            vec![1, 2, 3, 4, 5, 6, 7, 8, 9]
         );
 
         let first_record = first
@@ -225,7 +225,7 @@ mod tests {
                 .storage()
                 .startup_migration_report()
                 .already_applied_versions,
-            vec![1, 2, 3, 4, 5, 6, 7, 8]
+            vec![1, 2, 3, 4, 5, 6, 7, 8, 9]
         );
         assert_eq!(
             second

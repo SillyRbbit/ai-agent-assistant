@@ -1,3 +1,84 @@
+## 2026-10-02 — Historical Knowledge link label — local acceptance
+
+Worktree: `/Users/hdang/.codex/worktrees/connected-knowledge-workspace/ai-agent-assistant`.
+Branch: `codex/connected-knowledge-workspace`; HEAD
+`cc8b1b4e21b765b3af5bd5bdf5cf7fc91e021324`. Twelve successor paths,
+41 cumulative paths. All inherited historical bodies, plan/review, records and
+previous artifact remain preserved. Ordinary admission succeeded after raw state
+and previous accepted bundle were archived byte-identically and hash-verified.
+Plan: [Historical link label](docs/plans/2026-10-02-connected-knowledge-historical-link-label.md).
+Review: [Post-increment review](docs/reviews/2026-10-02-connected-knowledge-historical-link-label-post-increment-review.md).
+Evidence: `/private/tmp/cortexa-connected-knowledge-historical-link-label-evidence`.
+
+Historical wikilinks now remain literal, inert text without a false missing-target
+claim. A visible disclosure explains navigation is unavailable for old versions.
+Current resolved/missing/ambiguous/removed links, graph/backlinks, immutable versions,
+unsaved previews, storage and execution boundaries are unchanged. Two regressions
+cover supplied bindings in historical mode and actual-page v2/v1/v2 navigation,
+content/hash preservation and no-save behavior. Final affected tests: 24 passed;
+strict lint, typecheck/frontend build and one offline unsigned native bundle passed.
+New-test accessible-name and unsupported type-option failures were repaired;
+original failed logs remain. No gates or assertions weakened.
+
+Direct Computer Use in the verified isolated bundle observed literal v1 link,
+visible historical disclosure and no navigation after click; returning to v2
+restored its link/QA line. The approved unsaved edit was discarded through the
+visible in-app prompt; v2 hash remained unchanged, with exactly two saved versions.
+Current Incident link opened unchanged v3; visible graph-node click returned to
+unchanged QA v2. Properties/backlinks and 1440x1000 scrolling/inspector open/closed
+were readable. No new resize matrix, existing-note edit, room/profile access,
+workflow, provider request, save or version 3. Graceful quit and PID absence verified.
+
+Documentation, repository, security, format, whitespace, session and exact-scope
+preservation checks passed. Reviews found no new blocker. Quality result is PASS
+WITH ADVISORIES; ordinary complete/valid status and full Stop receipts remain the
+separate authoritative closure evidence.
+Next action after valid closure: read-only publication readiness review. No commit,
+push or publication is authorized. Prior full native verification/security/audit
+and width-matrix evidence is inherited and hash-bound, not newly executed.
+Retain all advisories, D-127/D-128, native/provider/runtime live-success, custody,
+Codex isolation, bounded Markdown/YAML, whole-app Quit limitation and Vite chunk.
+Process-local Python3.12.1/XcodeSDK27/Cargo release/build-override strip=none remains.
+OpenAI parked 4/5; D-125/M1/M2 parked. No standing delegation.
+
+Browser preview: `npm run dev -- --host 127.0.0.1` from this worktree,
+http://127.0.0.1:1420; native library requires the verified isolated bundle in
+`src-tauri/target/debug/bundle/macos/Cortexa Connected Knowledge QA.app`.
+
+Resume prompt: Inspect instructions, valid historical-link-label completion,
+frozen evidence and all 41 paths read-only in this same worktree. Preserve all
+work and synthetic data; assess publication scope without repeating accepted
+checks or claiming remote/live evidence. No edits or publication without approval.
+
+## 2026-10-01 — Connected Knowledge native presentation repairs
+
+Native Computer Use exposed unusable window.confirm navigation and collapsed SVG
+control icons. Replaced confirmation with an in-app focus-managed discard prompt;
+fixed only Knowledge control padding and fixed 12x12 SVG display dimensions.
+Final browser regressions and native observations verified both corrections.
+Automatic approval review rejected an optional native-window import allowlist edit
+and later a proposed icon-test threshold adjustment. Neither rejected edit ran.
+Removed the optional import and corrected product icon geometry instead; gates and
+assertions were not weakened. Prior failed logs and artifacts are retained externally.
+Native export matched source hash; disposable destination refusal preserved its hash.
+
+## 2026-10-01 — Connected Knowledge development corrections
+
+Focused checks caught and resolved a missing delete-transaction commit, migration
+count expectations, a case-insensitive module-name collision and test DOM observer
+setup. Native/storage checks then passed. Computer Use found duplicated Marked 18
+task tokens and disabled graph controls; task tokens are emitted once, and controlled
+React Flow nodes now retain measured dimensions through `onNodesChange`. A real-browser
+regression verifies enabled controls and navigation at 1280/760. Graph icon contrast
+was corrected after visual inspection. Strict TypeScript/lint found two new test
+issues, repaired without relaxing checks. Original failure logs remain external.
+
+Full verification first rejected an optional native window-listener import. Automatic
+approval review rejected expanding its repository import allowlist. The optional
+listener was removed; all governance, checker, capability and CSP bytes are unchanged.
+Editor close/Cancel, note changes and routes remain guarded; native application quit
+interception is not claimed. No historical record or earlier checkout was modified.
+
 ## 2026-10-01 — Knowledge navigation layout validated locally
 
 Increment `knowledge-navigation-layout` uses the existing

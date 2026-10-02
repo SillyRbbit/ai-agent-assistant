@@ -14,6 +14,7 @@ pub mod credentials;
 pub mod documents;
 mod error;
 mod knowledge;
+mod knowledge_links;
 mod knowledge_tauri;
 mod local_models;
 pub mod memory;

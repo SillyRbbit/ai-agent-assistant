@@ -1,3 +1,10 @@
+import { UnsavedKnowledgePrompt } from "./UnsavedKnowledgePrompt";
+import { KnowledgeMarkdown } from "./KnowledgeMarkdown";
+import { KnowledgeProperties } from "./PropertiesEditor";
+import { KnowledgeGraph } from "./KnowledgeGraph";
+import { LinkEditor } from "./LinkEditor";
+import { properties, TEMPLATES } from "./knowledgeProperties";
+import { useUnsavedKnowledge } from "./useUnsavedKnowledge";
 import { useEffect, useRef, useState } from "react";
 import {
   knowledgeClient,
@@ -67,8 +74,12 @@ export function NoteEditor({
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
     [notice, setNotice] = useState("");
+  const guard = useUnsavedKnowledge(title !== initial.title || content !== initial.content, busy);
   return (
     <section className="knowledge" aria-label="Review generated draft" ref={editor} tabIndex={-1}>
+      {guard.pending && (
+        <UnsavedKnowledgePrompt onCancel={guard.cancel} onDiscard={guard.discard} />
+      )}
       <h3>Review generated draft</h3>
       <p>
         Generated material is unverified. Edit before saving; saving never adds it automatically to
@@ -132,7 +143,12 @@ export function NoteEditor({
       >
         Export reviewed draft
       </button>
-      <button disabled={busy} onClick={onCancel}>
+      <button
+        disabled={busy}
+        onClick={() => {
+          guard.attempt(onCancel);
+        }}
+      >
         Cancel draft
       </button>
     </section>
@@ -151,7 +167,15 @@ export function KnowledgePage({ client = knowledgeClient }: { readonly client?: 
     [query, setQuery] = useState(""),
     [results, setResults] = useState<readonly { readonly source: Source }[] | null>(null),
     [confirm, setConfirm] = useState(false),
-    [loading, setLoading] = useState(true);
+    [loading, setLoading] = useState(true),
+    [original, setOriginal] = useState({ title: "", content: "", version: null as number | null }),
+    [template, setTemplate] = useState<keyof typeof TEMPLATES>("Blank note"),
+    [tagFilter, setTagFilter] = useState(""),
+    [projectFilter, setProjectFilter] = useState(""),
+    [typeFilter, setTypeFilter] = useState(""),
+    [reviewFilter, setReviewFilter] = useState("");
+  const dirty = editing && (title !== original.title || content !== original.content);
+  const guard = useUnsavedKnowledge(dirty, busy);
   useEffect(() => {
     let alive = true;
     void client
@@ -192,8 +216,27 @@ export function KnowledgePage({ client = knowledgeClient }: { readonly client?: 
     setEditing(false);
     setConfirm(false);
   }
+  function open(id: number) {
+    const target = items.find((i) => i.id === id);
+    if (target)
+      guard.attempt(() => {
+        choose(target);
+      });
+  }
+  const visible = items.filter((i) => {
+    const p = properties(i.versions.at(-1)?.content ?? "").values;
+    return (
+      (!tagFilter || p.tags.some((t) => t.toLowerCase().includes(tagFilter.toLowerCase()))) &&
+      p.project.toLowerCase().includes(projectFilter.toLowerCase()) &&
+      p.note_type.toLowerCase().includes(typeFilter.toLowerCase()) &&
+      p.review_status.toLowerCase().includes(reviewFilter.toLowerCase())
+    );
+  });
   return (
     <section className="knowledge" aria-labelledby="knowledge-title">
+      {guard.pending && (
+        <UnsavedKnowledgePrompt onCancel={guard.cancel} onDiscard={guard.discard} />
+      )}
       <h1 id="knowledge-title">Knowledge &amp; Documents</h1>
       <p>
         Local snapshots and reusable Markdown notes. Private bot notes stay in Bots and are never
@@ -201,45 +244,66 @@ export function KnowledgePage({ client = knowledgeClient }: { readonly client?: 
       </p>
       <p>
         16 KiB per version · 200 items · 8 versions/item · 4 MiB total. No encryption-at-rest claim.
-        No vault scanning, linked-file resolution or automatic sharing.
+        No vault scanning, filesystem-link resolution or automatic sharing.
       </p>
       {error && <p role="alert">{error}</p>}
       {notice && <p role="status">{notice}</p>}
+      <label>
+        New note template
+        <select
+          value={template}
+          onChange={(e) => {
+            setTemplate(e.target.value as keyof typeof TEMPLATES);
+          }}
+        >
+          {Object.keys(TEMPLATES).map((t) => (
+            <option key={t}>{t}</option>
+          ))}
+        </select>
+      </label>
       <div className="knowledge-actions">
         <button
           disabled={busy}
-          onClick={() =>
-            void action(async () => {
-              const i = await client.import();
-              if (i) {
-                choose(i);
-                setNotice("Imported local snapshot. Original file unchanged.");
-              }
-            })
-          }
+          onClick={() => {
+            guard.attempt(() => {
+              void action(async () => {
+                const i = await client.import();
+                if (i) {
+                  choose(i);
+                  setNotice("Imported local snapshot. Original file unchanged.");
+                }
+              });
+            });
+          }}
         >
           Import selected file
         </button>
         <button
           disabled={busy}
           onClick={() => {
-            setSelected(null);
-            setTitle("");
-            setContent("");
-            setEditing(true);
-            setConfirm(false);
+            guard.attempt(() => {
+              setSelected(null);
+              setTitle("");
+              setContent(TEMPLATES[template]);
+              setOriginal({ title: "", content: "", version: null });
+              setEditing(true);
+              setConfirm(false);
+            });
           }}
         >
           New Markdown note
         </button>
         <button
           disabled={busy}
-          onClick={() =>
-            void action(() => {
-              setNotice("Library reloaded.");
-              return Promise.resolve();
-            })
-          }
+          onClick={() => {
+            guard.attempt(() => {
+              void action(() => {
+                setEditing(false);
+                setNotice("Library reloaded.");
+                return Promise.resolve();
+              });
+            });
+          }}
         >
           Reload library
         </button>
@@ -291,18 +355,60 @@ export function KnowledgePage({ client = knowledgeClient }: { readonly client?: 
           ))}
         </section>
       )}
+      <details>
+        <summary>Filter properties</summary>
+        <label>
+          Filter tags
+          <input
+            value={tagFilter}
+            onChange={(e) => {
+              setTagFilter(e.target.value);
+            }}
+          />
+        </label>
+        <label>
+          Filter project
+          <input
+            value={projectFilter}
+            onChange={(e) => {
+              setProjectFilter(e.target.value);
+            }}
+          />
+        </label>
+        <label>
+          Filter note type
+          <input
+            value={typeFilter}
+            onChange={(e) => {
+              setTypeFilter(e.target.value);
+            }}
+          />
+        </label>
+        <label>
+          Filter review status
+          <input
+            value={reviewFilter}
+            onChange={(e) => {
+              setReviewFilter(e.target.value);
+            }}
+          />
+        </label>
+      </details>
       <div className="knowledge-layout">
         <aside aria-label="Knowledge items">
           {loading && <p role="status">Loading local library…</p>}
           {!loading && items.length === 0 && <p>No library items yet.</p>}
-          {items.map((i) => {
+          {visible.map((i) => {
             const x = i.versions.at(-1);
             return (
               <button
                 key={i.id}
+                disabled={busy}
                 aria-pressed={selected === i.id}
                 onClick={() => {
-                  choose(i);
+                  guard.attempt(() => {
+                    choose(i);
+                  });
                 }}
               >
                 {x?.title}
@@ -342,14 +448,61 @@ export function KnowledgePage({ client = knowledgeClient }: { readonly client?: 
               </label>
               <p className="knowledge-hash">SHA-256 {v.hash}</p>
               <p>
-                Literal safe Markdown preview. HTML, images and links do not execute or load;
-                frontmatter and wikilinks remain text.
+                Reading mode · HTML and remote resources are inert. Internal links navigate only
+                within this library.
               </p>
-              <pre className="knowledge-content">{v.content}</pre>
+              {properties(v.content).error && <p role="alert">{properties(v.content).error}</p>}
+              {v.id !== current?.id && (
+                <p>
+                  Historical version. Link navigation is unavailable in historical versions. Link
+                  graph and backlinks below refer to the current saved library only.
+                </p>
+              )}
+              <KnowledgeMarkdown
+                content={v.content}
+                historical={v.id !== current?.id}
+                links={v.id === current?.id ? (current.links ?? []) : []}
+                onOpen={open}
+              />
+              <details>
+                <summary>Original Markdown</summary>
+                <pre className="knowledge-content">{v.content}</pre>
+              </details>
+              <dl>
+                <dt>Tags</dt>
+                <dd>{properties(v.content).values.tags.join(", ") || "None"}</dd>
+                <dt>Project</dt>
+                <dd>{properties(v.content).values.project || "None"}</dd>
+                <dt>Note type</dt>
+                <dd>{properties(v.content).values.note_type || "None"}</dd>
+                <dt>Review status (owner label, not verification)</dt>
+                <dd>{properties(v.content).values.review_status || "None"}</dd>
+              </dl>
+              <section aria-label="Backlinks">
+                <h3>Backlinks · current saved library</h3>
+                {items.flatMap((source) =>
+                  (source.versions.at(-1)?.links ?? [])
+                    .filter((l) => l.status === "resolved" && l.targetId === item.id)
+                    .map((l, n) => (
+                      <article key={`${String(source.id)}-${String(n)}`}>
+                        <button
+                          onClick={() => {
+                            open(source.id);
+                          }}
+                        >
+                          {source.versions.at(-1)?.title}
+                        </button>
+                        <p>{l.context}</p>
+                      </article>
+                    )),
+                )}
+              </section>
+              <KnowledgeGraph items={items} selected={item.id} onOpen={open} />
               <div className="knowledge-actions">
                 <button
                   disabled={busy || v.id !== current?.id}
                   onClick={() => {
+                    setOriginal({ title: v.title, content: v.content, version: v.id });
                     setTitle(v.title);
                     setContent(v.content);
                     setEditing(true);
@@ -431,7 +584,7 @@ export function KnowledgePage({ client = knowledgeClient }: { readonly client?: 
                 void action(async () => {
                   const saved = await client.save({
                     id: selected,
-                    expectedVersion: current?.id ?? null,
+                    expectedVersion: original.version,
                     title,
                     content,
                     draft: item?.kind === "generated_draft",
@@ -452,21 +605,23 @@ export function KnowledgePage({ client = knowledgeClient }: { readonly client?: 
                   }}
                 />
               </label>
-              <label>
-                Markdown content
-                <textarea
-                  value={content}
-                  onChange={(e) => {
-                    setContent(e.currentTarget.value);
-                  }}
-                />
-              </label>
+              <p role="status">
+                {dirty ? "Unsaved changes — explicit Save required" : "No unsaved changes"}
+              </p>
+              <KnowledgeProperties content={content} onChange={setContent} />
+              <LinkEditor content={content} onChange={setContent} items={items} />
+              <details>
+                <summary>Preview unsaved Markdown</summary>
+                <KnowledgeMarkdown content={content} onOpen={open} />
+              </details>
               <p>{new TextEncoder().encode(content).length} / 16384 bytes</p>
               <button disabled={busy}>Save note version</button>
               <button
                 type="button"
                 onClick={() => {
-                  setEditing(false);
+                  guard.attempt(() => {
+                    setEditing(false);
+                  });
                 }}
               >
                 Cancel edit

@@ -1,3 +1,31 @@
+## 2026-10-01 — Connected Knowledge implementation decision
+
+Owner-authorized private milestone. Pin `marked` 18.0.14 (MIT; Node >=20) for its
+maintained GFM lexer, never its HTML renderer. React renders escaped tokens;
+HTML, URL anchors and images remain inert. No remote resources, permission,
+CSP, capability, runtime authority or provider changes. Original Markdown is
+canonical and remains available. Full Obsidian/CommonMark interoperability is
+not claimed; native wikilink parsing conservatively excludes fenced, indented
+and backtick code. Titles match exactly, case-sensitively.
+
+Migration 9 adds only a source-ID/title to target-ID sidecar. Freeze unambiguous
+current links before mutations, then freeze the resulting library. Existing
+bindings survive renames and become removed-target tombstones after deletion;
+they never silently retarget when another document reuses the title. Unbound
+ambiguous titles remain ambiguous; a unique saved target resolves a missing link.
+Historical version JSON and saved workflow sources are never rewritten. Only
+current versions expose a derived link projection. Backlinks and the one-hop,
+25-note graph use that same projection. No neighbors join a model context unless
+explicitly selected through existing source controls.
+
+Frontmatter supports `tags` (up to 16 nonempty strings of 64 characters), and
+`project`, `note_type`, `review_status` (120 characters each). Strings may be
+plain conservative YAML scalars, JSON-quoted or single-quoted; tags use a flat
+array. No anchors, executable objects, external references or general YAML
+loader. Unknown scalar lines/comments/order and newline style are preserved.
+Unsupported structures lock property controls and keep editable original source.
+Properties are owner labels, not verified claims. Templates are unsaved text.
+
 ## 2026-10-01 — Knowledge & Documents v1 acceptance in progress
 
 Owner-approved v1 uses ordinary UTF-8 Markdown/text snapshots, deterministic

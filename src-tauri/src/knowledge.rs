@@ -53,6 +53,8 @@ pub(crate) struct Version {
     pub hash: String,
     pub format: String,
     pub created_ms: u64,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub links: Vec<crate::knowledge_links::Link>,
 }
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]

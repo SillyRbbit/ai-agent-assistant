@@ -91,7 +91,16 @@ CREATE TABLE knowledge_items (
 ) STRICT;
 "#;
 
-const MIGRATIONS: [MigrationDefinition; 8] = [
+const CREATE_KNOWLEDGE_LINK_BINDINGS_SQL: &str = r#"
+CREATE TABLE knowledge_link_bindings (
+  source_id INTEGER NOT NULL,
+  title TEXT NOT NULL,
+  target_id INTEGER NOT NULL,
+  PRIMARY KEY (source_id, title)
+) STRICT;
+"#;
+
+const MIGRATIONS: [MigrationDefinition; 9] = [
     MigrationDefinition {
         version: 1,
         name: "create_schema_migrations",
@@ -139,6 +148,12 @@ const MIGRATIONS: [MigrationDefinition; 8] = [
         name: "create_knowledge_items",
         checksum: "sha256:f074e23b576a64babf9e72743a840dadb33572efb379720c720e56aa59e3d2aa",
         sql: CREATE_KNOWLEDGE_ITEMS_SQL,
+    },
+    MigrationDefinition {
+        version: 9,
+        name: "create_knowledge_link_bindings",
+        checksum: "sha256:c796f64d02ca859cd737a0cf8f1eeb851b0cac82091d8fc03fefcbce29cbc193",
+        sql: CREATE_KNOWLEDGE_LINK_BINDINGS_SQL,
     },
 ];
 
@@ -385,7 +400,7 @@ mod tests {
             .map(|migration| migration.version)
             .collect();
 
-        assert_eq!(versions, vec![1, 2, 3, 4, 5, 6, 7, 8]);
+        assert_eq!(versions, vec![1, 2, 3, 4, 5, 6, 7, 8, 9]);
         assert_eq!(MIGRATIONS[0].sql, CREATE_SCHEMA_MIGRATIONS_SQL);
         assert_eq!(MIGRATIONS[1].sql, CREATE_APP_METADATA_SQL);
         assert_eq!(MIGRATIONS[2].sql, CREATE_AGENT_PREFERENCES_SQL);
@@ -404,12 +419,12 @@ mod tests {
             Ok(1_700_000_000_001)
         })?;
 
-        assert_eq!(first.applied_versions, vec![1, 2, 3, 4, 5, 6, 7, 8]);
+        assert_eq!(first.applied_versions, vec![1, 2, 3, 4, 5, 6, 7, 8, 9]);
         assert!(first.already_applied_versions.is_empty());
         assert!(second.applied_versions.is_empty());
         assert_eq!(
             second.already_applied_versions,
-            vec![1, 2, 3, 4, 5, 6, 7, 8]
+            vec![1, 2, 3, 4, 5, 6, 7, 8, 9]
         );
         assert!(connection.table_exists("schema_migrations")?);
         assert!(connection.table_exists("app_metadata")?);
@@ -418,10 +433,34 @@ mod tests {
 
         let applied = connection.applied_migrations()?;
         let versions: Vec<i64> = applied.iter().map(|migration| migration.version).collect();
-        assert_eq!(versions, vec![1, 2, 3, 4, 5, 6, 7, 8]);
+        assert_eq!(versions, vec![1, 2, 3, 4, 5, 6, 7, 8, 9]);
         assert!(applied
             .iter()
             .all(|migration| migration.applied_at_ms == 1_700_000_000_000));
+        Ok(())
+    }
+
+    #[test]
+    fn knowledge_v8_upgrade_preserves_raw_documents_and_prior_receipts(
+    ) -> Result<(), Box<dyn Error>> {
+        let mut connection = DatabaseConnection::open(&DatabaseConfig::in_memory())?;
+        apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS[..8], || Ok(100))?;
+        let prior = connection.applied_migrations()?;
+        let original = r#"{"id":1,"kind":"owner_note","versions":[{"id":1,"title":"Legacy","content":"[[Target]]","hash":"kept","format":"md","createdMs":1}]}"#;
+        connection.raw().execute(
+            "INSERT INTO knowledge_items(id,content) VALUES (1,?1)",
+            [original],
+        )?;
+        let result = apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS, || Ok(200))?;
+        assert_eq!(result.applied_versions, vec![9]);
+        assert_eq!(&connection.applied_migrations()?[..8], prior.as_slice());
+        let after: String = connection.raw().query_row(
+            "SELECT content FROM knowledge_items WHERE id=1",
+            [],
+            |r| r.get(0),
+        )?;
+        assert_eq!(original, after);
+        assert!(connection.table_exists("knowledge_link_bindings")?);
         Ok(())
     }
 
@@ -436,7 +475,7 @@ mod tests {
         let applied = connection.applied_migrations()?;
 
         assert_eq!(upgrade.already_applied_versions, vec![1, 2]);
-        assert_eq!(upgrade.applied_versions, vec![3, 4, 5, 6, 7, 8]);
+        assert_eq!(upgrade.applied_versions, vec![3, 4, 5, 6, 7, 8, 9]);
         assert_eq!(&applied[..2], prior.as_slice());
         assert_eq!(applied[2].version, 3);
         assert_eq!(applied[2].applied_at_ms, 200);
@@ -477,7 +516,7 @@ mod tests {
 
         let report = apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS, || Ok(200))?;
 
-        assert_eq!(report.applied_versions, vec![4, 5, 6, 7, 8]);
+        assert_eq!(report.applied_versions, vec![4, 5, 6, 7, 8, 9]);
         assert_eq!(report.already_applied_versions, vec![1, 2, 3]);
         for (agent_id, revision) in [("research", 5_i64), ("coding", 10_i64)] {
             let row = connection.raw_mut().query_row(
@@ -546,7 +585,7 @@ mod tests {
             |row| row.get(0),
         )?;
         let upgrade = apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS, || Ok(200))?;
-        assert_eq!(upgrade.applied_versions, vec![5, 6, 7, 8]);
+        assert_eq!(upgrade.applied_versions, vec![5, 6, 7, 8, 9]);
         assert_eq!(upgrade.already_applied_versions, vec![1, 2, 3, 4]);
         assert_eq!(&connection.applied_migrations()?[..4], prior.as_slice());
         let after_schema: String = connection.raw_mut().query_row(
@@ -697,7 +736,7 @@ INSERT INTO missing_table (id) VALUES (1);
         )?;
         let history = connection.applied_migrations()?;
         let result = apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS, || Ok(200))?;
-        assert_eq!(result.applied_versions, vec![8]);
+        assert_eq!(result.applied_versions, vec![8, 9]);
         assert_eq!(&connection.applied_migrations()?[..7], history);
         let room: String = connection.raw_mut().query_row(
             "SELECT content FROM collaboration_rooms WHERE id=1",
@@ -726,7 +765,7 @@ INSERT INTO missing_table (id) VALUES (1);
         connection.raw_mut().execute("INSERT INTO agent_preferences VALUES ('research','openai_api','gpt-5.6-sol','high','custom','private_notes','retained note',7)", [])?;
         let history = connection.applied_migrations()?;
         let result = apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS, || Ok(200))?;
-        assert_eq!(result.applied_versions, vec![6, 7, 8]);
+        assert_eq!(result.applied_versions, vec![6, 7, 8, 9]);
         assert_eq!(&connection.applied_migrations()?[..5], history);
         let row: (String, String, String, i64) = connection.raw_mut().query_row("SELECT model, owner_instructions, note, revision FROM agent_preferences WHERE agent_id='research'", [], |r| Ok((r.get(0)?,r.get(1)?,r.get(2)?,r.get(3)?)))?;
         assert_eq!(

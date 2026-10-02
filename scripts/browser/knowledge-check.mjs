@@ -35,7 +35,10 @@ try {
       await page.getByRole("button", { name: "Draft surface" }).click();
       await page.getByLabel("Draft title").fill("Reusable synthetic draft");
       await page.getByRole("button", { name: "Save draft to Knowledge" }).click();
-      await page.getByRole("button", { name: /Reusable synthetic draft/ }).click();
+      await page
+        .getByRole("complementary", { name: "Knowledge items" })
+        .getByRole("button", { name: /Reusable synthetic draft/ })
+        .click();
       await page.getByRole("button", { name: "Export Markdown" }).click();
       await page.getByRole("alert").filter({ hasText: "Nothing was overwritten" }).waitFor();
       await page.screenshot({ path: `${output}/${name}-draft-error.png`, fullPage: true });
