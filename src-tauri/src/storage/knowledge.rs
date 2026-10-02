@@ -1,6 +1,6 @@
 use super::Storage;
 use crate::knowledge::{self, Item, Kind, KnowledgeError as E, Result, SaveNote, Version};
-use rusqlite::{params, Connection};
+use rusqlite::{params, Connection, OptionalExtension};
 fn items(c: &Connection) -> Result<Vec<Item>> {
     let mut q = c
         .prepare("SELECT content FROM knowledge_items ORDER BY id DESC LIMIT 200")
@@ -11,10 +11,74 @@ fn items(c: &Connection) -> Result<Vec<Item>> {
     rows.map(|row| serde_json::from_str(&row.map_err(|_| E::Storage)?).map_err(|_| E::Storage))
         .collect()
 }
+
+// Freeze existing unambiguous spellings before mutations so title changes and
+// deletion never silently redirect established links. Old version bytes stay intact.
+fn resolve(
+    c: &Connection,
+    source: i64,
+    text: &str,
+    all: &[Item],
+) -> Result<Vec<crate::knowledge_links::Link>> {
+    let mut links = crate::knowledge_links::parse(text);
+    for link in &mut links {
+        let bound: Option<i64> = c
+            .query_row(
+                "SELECT target_id FROM knowledge_link_bindings WHERE source_id=?1 AND title=?2",
+                params![source, link.title],
+                |r| r.get(0),
+            )
+            .optional()
+            .map_err(|_| E::Storage)?;
+        let candidates: Vec<_> = all
+            .iter()
+            .filter(|i| i.current().is_ok_and(|v| v.title == link.title))
+            .collect();
+        link.target_id = bound.or_else(|| {
+            if candidates.len() == 1 {
+                Some(candidates[0].id)
+            } else {
+                None
+            }
+        });
+        link.status = if let Some(id) = link.target_id {
+            if all.iter().any(|i| i.id == id) {
+                "resolved"
+            } else {
+                "removed"
+            }
+        } else if candidates.len() > 1 {
+            "ambiguous"
+        } else {
+            "missing"
+        }
+        .into();
+    }
+    Ok(links)
+}
+fn freeze_links(c: &Connection, all: &[Item]) -> Result<()> {
+    for item in all {
+        for link in resolve(c, item.id, &item.current()?.content, all)? {
+            if let Some(target) = link.target_id {
+                c.execute("INSERT OR IGNORE INTO knowledge_link_bindings(source_id,title,target_id) VALUES (?1,?2,?3)", params![item.id, link.title, target]).map_err(|_| E::Storage)?;
+            }
+        }
+    }
+    Ok(())
+}
+
 impl Storage {
     pub(crate) fn knowledge_items(&self) -> Result<Vec<Item>> {
         let c = self.lock_connection().map_err(|_| E::Storage)?;
-        items(c.raw())
+        let mut all = items(c.raw())?;
+        let snapshot = all.clone();
+        for i in &mut all {
+            // Links are a current-library projection, not historical evidence.
+            if let Some(v) = i.versions.last_mut() {
+                v.links = resolve(c.raw(), i.id, &v.content, &snapshot)?;
+            }
+        }
+        Ok(all)
     }
     pub(crate) fn knowledge_save(&self, input: SaveNote) -> Result<Item> {
         let kind = if let Some(id) = input.id {
@@ -104,8 +168,10 @@ impl Storage {
             hash,
             format: format.into(),
             created_ms,
+            links: vec![],
         });
         let tx = c.raw().unchecked_transaction().map_err(|_| E::Storage)?;
+        freeze_links(&tx, &all)?;
         if id.is_none() {
             tx.execute("INSERT INTO knowledge_items(content) VALUES ('{}')", [])
                 .map_err(|_| E::Storage)?;
@@ -119,6 +185,8 @@ impl Storage {
             ],
         )
         .map_err(|_| E::Storage)?;
+        let latest = items(&tx)?;
+        freeze_links(&tx, &latest)?;
         tx.commit().map_err(|_| E::Storage)?;
         Ok(item)
     }
@@ -129,9 +197,16 @@ impl Storage {
         if i.current()?.id != version {
             return Err(E::StaleSelection);
         }
-        c.raw()
-            .execute("DELETE FROM knowledge_items WHERE id=?1", [id])
+        let tx = c.raw().unchecked_transaction().map_err(|_| E::Storage)?;
+        freeze_links(&tx, &all)?;
+        tx.execute("DELETE FROM knowledge_items WHERE id=?1", [id])
             .map_err(|_| E::Storage)?;
+        tx.execute(
+            "DELETE FROM knowledge_link_bindings WHERE source_id=?1",
+            [id],
+        )
+        .map_err(|_| E::Storage)?;
+        tx.commit().map_err(|_| E::Storage)?;
         Ok(())
     }
     pub(crate) fn knowledge_check_sources(
@@ -362,5 +437,97 @@ mod tests {
             }
         }
         Err("aggregate bound was not enforced".into())
+    }
+    #[test]
+    fn connected_links_bind_renames_ambiguity_removal_and_restart(
+    ) -> std::result::Result<(), Box<dyn std::error::Error>> {
+        let dir = tempfile::tempdir()?;
+        let config = DatabaseConfig::file(dir.path().join("connected.sqlite"))?;
+        let s = Storage::initialize(&config)?.into_storage();
+        let target = save(&s, "Runbook", "Runbook body")?;
+        let note = save(
+            &s,
+            "Incident",
+            "[[Runbook|Recovery]] `[[not a link]]`\n[[Absent]]",
+        )?;
+        let original = note.versions[0].clone();
+        s.knowledge_write(
+            Some(target.id),
+            Some(1),
+            "Renamed",
+            "Changed runbook",
+            "md",
+            Kind::OwnerNote,
+        )?;
+        let other = save(&s, "Runbook", "A different note")?;
+        let all = s.knowledge_items()?;
+        let incident = all.iter().find(|i| i.id == note.id).ok_or("note")?;
+        assert_eq!(incident.current()?.links[0].target_id, Some(target.id));
+        assert_eq!(incident.current()?.links[0].status, "resolved");
+        assert_eq!(incident.current()?.links[1].status, "missing");
+        assert_eq!(incident.versions[0].content, original.content);
+        assert_eq!(incident.versions[0].hash, original.hash);
+        s.knowledge_remove(target.id, 2)?;
+        drop(s);
+        let s = Storage::initialize(&config)?.into_storage();
+        let all = s.knowledge_items()?;
+        let incident = all.iter().find(|i| i.id == note.id).ok_or("note")?;
+        assert_eq!(incident.current()?.links[0].status, "removed");
+        assert_ne!(incident.current()?.links[0].target_id, Some(other.id));
+        save(&s, "Runbook", "Duplicate title body")?;
+        let second = save(&s, "Another", "New [[Runbook]]")?;
+        assert_eq!(
+            s.knowledge_items()?
+                .iter()
+                .find(|i| i.id == second.id)
+                .ok_or("note")?
+                .current()?
+                .links[0]
+                .status,
+            "ambiguous"
+        );
+        Ok(())
+    }
+    #[test]
+    fn legacy_documents_freeze_before_first_rename_without_rewriting_versions(
+    ) -> std::result::Result<(), Box<dyn std::error::Error>> {
+        let s = Storage::initialize(&DatabaseConfig::in_memory())?.into_storage();
+        let target = save(&s, "Legacy", "legacy body")?;
+        let source = save(&s, "Source", "See [[Legacy]]")?;
+        let c = s.lock_connection()?;
+        c.raw().execute("DELETE FROM knowledge_link_bindings", [])?;
+        let before: String = c.raw().query_row(
+            "SELECT content FROM knowledge_items WHERE id=?1",
+            [source.id],
+            |r| r.get(0),
+        )?;
+        drop(c);
+        s.knowledge_write(
+            Some(target.id),
+            Some(1),
+            "New name",
+            "renamed body",
+            "md",
+            Kind::OwnerNote,
+        )?;
+        let c = s.lock_connection()?;
+        let after: String = c.raw().query_row(
+            "SELECT content FROM knowledge_items WHERE id=?1",
+            [source.id],
+            |r| r.get(0),
+        )?;
+        assert_eq!(before, after);
+        drop(c);
+        assert_eq!(
+            s.knowledge_items()?
+                .iter()
+                .find(|i| i.id == source.id)
+                .ok_or("source")?
+                .current()?
+                .links[0]
+                .target_id,
+            Some(target.id)
+        );
+        Ok(())
     }
 }

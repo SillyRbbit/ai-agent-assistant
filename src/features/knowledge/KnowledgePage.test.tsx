@@ -1,3 +1,20 @@
+import { beforeEach } from "vitest";
+beforeEach(() => {
+  vi.stubGlobal(
+    "ResizeObserver",
+    class {
+      observe() {
+        /* Geometry is covered by the real browser harness. */
+      }
+      unobserve() {
+        /* Geometry is covered by the real browser harness. */
+      }
+      disconnect() {
+        /* Test observer. */
+      }
+    },
+  );
+});
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { KnowledgePage, SourceEvidence, NoteEditor } from "./KnowledgePage";
@@ -63,12 +80,16 @@ describe("Knowledge & Documents", () => {
     fireEvent.click(screen.getByRole("button", { name: "Import selected file" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("not valid UTF-8");
   });
-  it("previews literal Markdown without scripts, images or links; edits create explicit versions", async () => {
+  it("renders safe Markdown and preserves original source; edits create explicit versions", async () => {
     const c = client();
     const { container } = render(<KnowledgePage client={c} />);
     fireEvent.click(await screen.findByRole("button", { name: /Runbook 界/ }));
-    expect(container.querySelector("pre")?.textContent).toBe(content);
-    expect(container.querySelector("script,img,a")).toBeNull();
+    expect(container.querySelector("pre.knowledge-content")?.textContent).toBe(content);
+    expect(
+      container.querySelector(
+        ".knowledge-markdown script,.knowledge-markdown img,.knowledge-markdown a",
+      ),
+    ).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "Edit local copy" }));
     fireEvent.change(screen.getByLabelText("Markdown content"), {
       target: { value: "# Edited copy" },
@@ -104,7 +125,7 @@ describe("Knowledge & Documents", () => {
       <SourceEvidence sources={[source]} labels={[source.label, "unknown"]} />,
     );
     expect(screen.getByText(/Unknown reference/)).toBeInTheDocument();
-    expect(container.querySelector("pre")?.textContent).toBe(content);
+    expect(container.querySelector("pre.knowledge-content")?.textContent).toBe(content);
     expect(screen.getByText(/Provenance identifies/)).toBeInTheDocument();
   });
   it("requires review and explicit action for generated notes and exports", async () => {

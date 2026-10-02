@@ -1,3 +1,107 @@
+## 2026-10-02 — Historical Knowledge link label — local acceptance
+
+Worktree: `/Users/hdang/.codex/worktrees/connected-knowledge-workspace/ai-agent-assistant`.
+Branch: `codex/connected-knowledge-workspace`; HEAD
+`cc8b1b4e21b765b3af5bd5bdf5cf7fc91e021324`. Twelve successor paths,
+41 cumulative paths. All inherited historical bodies, plan/review, records and
+previous artifact remain preserved. Ordinary admission succeeded after raw state
+and previous accepted bundle were archived byte-identically and hash-verified.
+Plan: [Historical link label](docs/plans/2026-10-02-connected-knowledge-historical-link-label.md).
+Review: [Post-increment review](docs/reviews/2026-10-02-connected-knowledge-historical-link-label-post-increment-review.md).
+Evidence: `/private/tmp/cortexa-connected-knowledge-historical-link-label-evidence`.
+
+Historical wikilinks now remain literal, inert text without a false missing-target
+claim. A visible disclosure explains navigation is unavailable for old versions.
+Current resolved/missing/ambiguous/removed links, graph/backlinks, immutable versions,
+unsaved previews, storage and execution boundaries are unchanged. Two regressions
+cover supplied bindings in historical mode and actual-page v2/v1/v2 navigation,
+content/hash preservation and no-save behavior. Final affected tests: 24 passed;
+strict lint, typecheck/frontend build and one offline unsigned native bundle passed.
+New-test accessible-name and unsupported type-option failures were repaired;
+original failed logs remain. No gates or assertions weakened.
+
+Direct Computer Use in the verified isolated bundle observed literal v1 link,
+visible historical disclosure and no navigation after click; returning to v2
+restored its link/QA line. The approved unsaved edit was discarded through the
+visible in-app prompt; v2 hash remained unchanged, with exactly two saved versions.
+Current Incident link opened unchanged v3; visible graph-node click returned to
+unchanged QA v2. Properties/backlinks and 1440x1000 scrolling/inspector open/closed
+were readable. No new resize matrix, existing-note edit, room/profile access,
+workflow, provider request, save or version 3. Graceful quit and PID absence verified.
+
+Documentation, repository, security, format, whitespace, session and exact-scope
+preservation checks passed. Reviews found no new blocker. Quality result is PASS
+WITH ADVISORIES; ordinary complete/valid status and full Stop receipts remain the
+separate authoritative closure evidence.
+Next action after valid closure: read-only publication readiness review. No commit,
+push or publication is authorized. Prior full native verification/security/audit
+and width-matrix evidence is inherited and hash-bound, not newly executed.
+Retain all advisories, D-127/D-128, native/provider/runtime live-success, custody,
+Codex isolation, bounded Markdown/YAML, whole-app Quit limitation and Vite chunk.
+Process-local Python3.12.1/XcodeSDK27/Cargo release/build-override strip=none remains.
+OpenAI parked 4/5; D-125/M1/M2 parked. No standing delegation.
+
+Browser preview: `npm run dev -- --host 127.0.0.1` from this worktree,
+http://127.0.0.1:1420; native library requires the verified isolated bundle in
+`src-tauri/target/debug/bundle/macos/Cortexa Connected Knowledge QA.app`.
+
+Resume prompt: Inspect instructions, valid historical-link-label completion,
+frozen evidence and all 41 paths read-only in this same worktree. Preserve all
+work and synthetic data; assess publication scope without repeating accepted
+checks or claiming remote/live evidence. No edits or publication without approval.
+
+## 2026-10-01 — Connected Knowledge Workspace local acceptance
+
+Worktree: `/Users/hdang/.codex/worktrees/connected-knowledge-workspace/ai-agent-assistant`.
+Branch: `codex/connected-knowledge-workspace`; last commit/baseline
+`cc8b1b4e21b765b3af5bd5bdf5cf7fc91e021324`. Fresh isolated checkout;
+all changes here belong to this milestone. Desktop branding/general-closure,
+other dirty checkouts and historical terminal records were not transferred or modified.
+Plan: [Connected Knowledge](docs/plans/2026-10-01-connected-knowledge-workspace.md).
+Report: [local review](docs/reviews/2026-10-01-connected-knowledge-workspace-post-increment-review.md).
+Evidence: `/private/tmp/cortexa-connected-knowledge-evidence`.
+
+Implemented safe GFM reading, explicit saves, accessible unsaved-edit guards,
+stable ID-bound links/backlinks, keyboard suggestions, canonical bounded frontmatter,
+five templates and a separate 25-note Knowledge graph. Private bot notes, explicit
+source selection, source budgets and historical workflow snapshots remain unchanged.
+Final automated/native acceptance is recorded in the report; finalization is valid
+only when the ordinary status command reports complete/valid.
+
+Direct isolated native QA covered template notes/properties/links, graph navigation,
+rename/restart persistence, keyboard autocomplete, discard confirmation, one acknowledged
+all-Simulation Research run, reviewed linked draft, unchanged historical v2 after v3
+edit, exact Markdown export and refusal to overwrite a disposable canary. Native
+1440/960px readability was observed; 760px is browser evidence only. Fixed native
+confirmation and graph icon defects within this increment. No live requests occurred.
+
+Browser preview: from this worktree run `npm run dev -- --host 127.0.0.1`, then
+http://127.0.0.1:1420 (native library unavailable in an ordinary browser).
+Native synthetic QA: open the exact `Cortexa Connected Knowledge QA.app` referenced
+by `artifact-accepted.json`; it has a separate identifier and retained synthetic data.
+Do not use the ordinary app for synthetic QA. Tooling is process-local Python 3.12.1,
+Rust 1.90, Xcode/SDK 27.0, Cargo release/build-override strip=none; no global changes.
+
+Next action: owner manual QA and read-only publication review; no commit/publication
+is authorized. Retain D-127/D-128, native/provider/runtime live-success, custody,
+Codex-isolation and process-local workaround advisories. OpenAI parked 4/5;
+D-125/M1/M2 parked. Normal authorization rules; no standing delegation.
+
+### Exact next prompt
+
+```text
+Review Connected Knowledge Workspace read-only in
+/Users/hdang/.codex/worktrees/connected-knowledge-workspace/ai-agent-assistant.
+Inspect instructions, plan/review, complete/valid status and
+/private/tmp/cortexa-connected-knowledge-evidence. Preserve all changes,
+artifacts and synthetic data. Verify frozen scope, preservation and native
+observations; distinguish owner QA, Simulation and unverified live/remote CI.
+Do not repeat passing checks, build, launch, edit, commit or publish.
+Report the smallest publication plan and required authorization. Stop on
+unexplained drift, invalid evidence or scope ambiguity. OpenAI parked 4/5;
+retain all advisories and D-125/M1/M2 parked.
+```
+
 ## 2026-10-01 — Standing Thottie delegation revoked
 
 Henry revoked the standing delegation and clarified that Dots had requested
