@@ -80,6 +80,9 @@ DOCUMENTATION_TRUTH_MARKERS = (
     ),
 )
 EXPECTED_TAURI_IMPORTS = {
+    "src/infrastructure/tauri/diagnostics-client.ts": (
+        'import { invoke, isTauri } from "@tauri-apps/api/core";',
+    ),
     'src/infrastructure/tauri/knowledge-client.ts': (
         'import { invoke, isTauri } from "@tauri-apps/api/core";',
     ),
@@ -107,6 +110,10 @@ EXPECTED_TAURI_IMPORTS = {
     ),
 }
 EXPECTED_TAURI_INVOKES = {
+    "src/infrastructure/tauri/diagnostics-client.ts": (
+        'invoke<unknown>("read_diagnostics")',
+        'invoke<unknown>("export_diagnostics")',
+    ),
     'src/infrastructure/tauri/knowledge-client.ts': (
         'invoke<unknown>("list_knowledge")',
         'invoke<unknown>("import_knowledge", { request })',
@@ -269,6 +276,8 @@ EXPECTED_CAPABILITY_CONFIGURATION = {
 EXPECTED_INVOKE_HANDLER = (
     ".invoke_handler(tauri::generate_handler!["
     "app_info::get_app_info,"
+    "diagnostics_tauri::read_diagnostics,"
+    "diagnostics_tauri::export_diagnostics,"
     "knowledge_tauri::list_knowledge,"
     "knowledge_tauri::save_knowledge,"
     "knowledge_tauri::remove_knowledge,"

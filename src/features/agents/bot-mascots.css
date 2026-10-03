@@ -1,0 +1,131 @@
+.bot-mascot-presentation {
+  display: inline-flex;
+  vertical-align: middle;
+  flex: 0 0 auto;
+}
+.bot-mascot-space {
+  display: block;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+}
+.bot-mascot-body,
+.bot-mascot-sprite {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.bot-mascot-sprite {
+  background-image: var(--mascot-src);
+  background-size: var(--atlas-size, 300% 100%);
+  background-position: 0% 0%;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+}
+.bot-mascot-presentation--large {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  max-width: 100%;
+}
+.bot-mascot-presentation--large .bot-mascot-space {
+  width: 144px;
+  height: 144px;
+  margin: 16px;
+}
+.bot-mascot-disclosure {
+  text-align: center;
+  max-width: 30rem;
+}
+.bot-mascot-play:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 4px;
+}
+[data-motion="idle"] .bot-mascot-sprite {
+  animation: mascot-blink var(--blink-duration) steps(1, end) infinite;
+}
+[data-motion="idle"] .bot-mascot-body {
+  animation: mascot-breathe 3.9s ease-in-out infinite;
+}
+[data-motion="greeting"] .bot-mascot-sprite {
+  animation: mascot-wave 1.2s steps(1, end) 1;
+}
+[data-motion="success"] .bot-mascot-body {
+  animation: mascot-jump 0.65s ease-out 1;
+}
+[data-motion="playful"] .bot-mascot-body {
+  animation: mascot-spin 0.8s ease-in-out 1;
+}
+@keyframes mascot-blink {
+  0%,
+  92%,
+  98%,
+  100% {
+    background-position: 0% 0%;
+  }
+  94%,
+  96% {
+    background-position: var(--blink-frame, 50% 0%);
+  }
+}
+@keyframes mascot-breathe {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+@keyframes mascot-wave {
+  0%,
+  28%,
+  56%,
+  84%,
+  100% {
+    background-position: 0% 0%;
+  }
+  14%,
+  42%,
+  70% {
+    background-position: var(--wave-frame, 100% 0%);
+  }
+}
+@keyframes mascot-jump {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  45% {
+    transform: translateY(-14px);
+  }
+}
+@keyframes mascot-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+[data-motion="working"] .bot-mascot-sprite {
+  animation: mascot-conduct 2.8s steps(1, end) infinite;
+}
+@keyframes mascot-conduct {
+  0%,
+  18%,
+  100% {
+    background-position: 0% 0%;
+  }
+  8% {
+    background-position: 100% 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bot-mascot-body,
+  .bot-mascot-sprite {
+    animation: none !important;
+    transform: none !important;
+    background-position: 0% 0% !important;
+  }
+}

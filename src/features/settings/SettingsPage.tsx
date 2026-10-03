@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { useBotAnimations, setBotAnimations } from "../agents/botMotion";
+import { DiagnosticsPanel } from "./DiagnosticsPanel";
 import type { CoreConnection } from "../../application/useCoreConnection";
 import type { MenuRouteConnectionStatus } from "../../application/useMenuRouteSubscription";
 import { PageState } from "../../components/PageState";
@@ -9,14 +12,35 @@ interface SettingsPageProps {
 }
 
 export function SettingsPage({ coreConnection, menuRouteStatus }: SettingsPageProps) {
+  const animations = useBotAnimations();
+  const [motionError, setMotionError] = useState(false);
   return (
     <section aria-labelledby="settings-page-title" className="page-stack">
       <PageHeader
-        description="Local preferences and diagnostics. Nothing on this page is persisted yet."
+        description="Local application status and content-free diagnostics."
         headingId="settings-page-title"
         title="Settings"
       />
 
+      <section className="page-panel" aria-label="Bot animation settings">
+        <h2>Bot animations</h2>
+        <label>
+          <input
+            type="checkbox"
+            checked={animations}
+            onChange={(event) => {
+              setMotionError(!setBotAnimations(event.target.checked));
+            }}
+          />{" "}
+          Enable bot animations
+        </label>
+        <p>
+          Saved on this device. Reduced-motion preferences take precedence. Decorative movement does
+          not indicate connection or work status.
+        </p>
+        {motionError && <p role="alert">Could not save animation preference.</p>}
+      </section>
+      <DiagnosticsPanel />
       <div className="settings-grid">
         <section aria-labelledby="general-settings-heading" className="settings-card page-panel">
           <div className="settings-card__header">

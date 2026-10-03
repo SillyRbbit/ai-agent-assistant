@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cortexa synthetic diagnostic shape QA</title>
+  </head>
+  <body>
+    <main style="max-width: 960px; margin: 24px auto; padding: 16px">
+      <h1>Synthetic diagnostic shape QA</h1>
+      <p>
+        Fixed synthetic records only. No native IPC, provider requests, owner data or file export.
+        Copy uses only the displayed synthetic snapshot.
+      </p>
+      <div id="root"></div>
+      <label for="copy-check"
+        >Synthetic copy verification (paste the copied fixture summary only)</label
+      >
+      <textarea id="copy-check" rows="4" style="width: 100%"></textarea>
+    </main>
+    <script type="module">
+      import React from "react";
+      import { createRoot } from "react-dom/client";
+      import { DiagnosticsPanel } from "/src/features/settings/DiagnosticsPanel.tsx";
+      import { parseDiagnostics } from "/src/infrastructure/tauri/diagnostics-client.ts";
+      import "/src/styles.css";
+      const labels = [
+        "openai_top_level_missing_code",
+        "openai_top_level_absent_code",
+        "openai_top_level_null_code",
+        "openai_top_level_param_model",
+        "openai_top_level_param_reasoning",
+        "openai_top_level_param_reasoning_effort",
+        "openai_top_level_param_max_output_tokens",
+        "openai_top_level_param_service_tier",
+        "openai_top_level_param_absent",
+        "openai_top_level_param_null",
+        "openai_top_level_param_invalid",
+        "openai_top_level_param_unknown",
+      ];
+      const record = {
+        utcMs: 1790962000000,
+        severity: "info",
+        appVersion: "0.1.0",
+        event: "request_started",
+        outcome: "observed",
+        error: null,
+        session: `sha256:${"a".repeat(64)}`,
+        conversation: `sha256:${"b".repeat(64)}`,
+        attempt: `sha256:${"c".repeat(64)}`,
+        request: `sha256:${"d".repeat(64)}`,
+        workflow: null,
+        stage: null,
+        provider: "openai_api",
+        model: "gpt-5.6-luna",
+        durationMs: 0,
+      };
+      const snapshot = parseDiagnostics({
+        available: true,
+        events: [
+          record,
+          ...labels.map((error, i) => ({
+            ...record,
+            utcMs: record.utcMs + i + 1,
+            severity: "error",
+            durationMs: i + 1,
+            error,
+            event: error.startsWith("openai_top_level_param_")
+              ? "openai_top_level_error_param"
+              : "openai_top_level_error",
+          })),
+          {
+            ...record,
+            utcMs: record.utcMs + 20,
+            severity: "error",
+            durationMs: 20,
+            event: "request_finished",
+            outcome: "failed",
+            error: "stream_error",
+          },
+        ],
+      });
+      const client = { read: async () => snapshot, export: async () => false };
+      createRoot(document.getElementById("root")).render(
+        React.createElement(DiagnosticsPanel, { client }),
+      );
+    </script>
+  </body>
+</html>

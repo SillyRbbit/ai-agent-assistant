@@ -297,3 +297,35 @@ it("validates closed identity metadata without changing canonical IDs", () => {
   ])
     expect(() => parseAgentProfile({ ...profile, identity })).toThrow("protocol");
 });
+
+it("accepts generated trace IDs without widening existing IPC or copying answer content", async () => {
+  vi.resetAllMocks();
+  const requestId = `sha256:${"d".repeat(64)}`;
+  const terminal = {
+    ...idle,
+    requestId,
+    status: "completed",
+    text: "DUMMY-PRIVATE-ANSWER",
+    sequence: 2,
+  };
+  vi.mocked(invoke).mockResolvedValue(terminal);
+  expect((await agentChatClient.poll(idle.conversationId)).requestId).toBe(requestId);
+  expect(vi.mocked(invoke).mock.calls).toEqual([
+    ["poll_agent_conversation", { request: { conversationId: idle.conversationId } }],
+  ]);
+  expect(JSON.stringify(vi.mocked(invoke).mock.calls)).not.toContain("DUMMY-PRIVATE-ANSWER");
+  for (const id of ["PRIVATE-ID-CANARY", 42, {}, "sha256:abc"])
+    expect(() => parseAgentChatSnapshot({ ...terminal, requestId: id })).toThrow("protocol");
+});
+
+it("preserves deliberate legacy avatars and accepts the additive mascot without changing profile data", () => {
+  for (const avatar of ["bot", "compass", "music", "mascot"] as const) {
+    const saved = {
+      ...profile,
+      identity: { ...DEFAULT_BOT_IDENTITY, avatar, nickname: "Saved", description: "Synthetic" },
+      note: "Synthetic private note",
+      revision: 8,
+    };
+    expect(parseAgentProfile(saved)).toEqual(saved);
+  }
+});

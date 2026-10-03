@@ -14,8 +14,22 @@ pub(crate) fn initialize_tauri_app<R: Runtime>(app: &mut App<R>) -> Result<(), B
 }
 
 fn initialize<R: Runtime>(app: &mut App<R>) -> Result<(), AppError> {
+    if let Ok(directory) = app.path().app_local_data_dir() {
+        crate::diagnostics::install(directory.join("logs"));
+    }
+    crate::diagnostics::event(
+        crate::diagnostics::Event::ApplicationStarted,
+        crate::diagnostics::Outcome::Observed,
+        None,
+    );
     let config = storage_config(app)?;
-    let initialization = Storage::initialize(&config)?;
+    let initialization = Storage::initialize(&config).inspect_err(|_| {
+        crate::diagnostics::event(
+            crate::diagnostics::Event::StorageFailure,
+            crate::diagnostics::Outcome::Failed,
+            Some(crate::diagnostics::Category::Storage),
+        );
+    })?;
     let summary = startup_summary(&initialization);
     let storage = initialization.into_storage();
 

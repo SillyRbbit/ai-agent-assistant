@@ -1,0 +1,25 @@
+{
+  "identity": "AgentOrchestrator",
+  "displayName": "Conductor",
+  "source": "original.png",
+  "editableAtlas": "atlas.png",
+  "runtime": "atlas.webp",
+  "grid": {
+    "columns": 2,
+    "rows": 2
+  },
+  "frames": {
+    "neutral": [0, 0],
+    "blink": [1, 0],
+    "greeting": [0, 1],
+    "conduct": [1, 1]
+  },
+  "timings": {
+    "blinkSeconds": 6.5,
+    "greetingSeconds": 1.2,
+    "conductPeriodSeconds": 2.8,
+    "jumpSeconds": 0.65,
+    "spinSeconds": 0.8
+  },
+  "provenance": "Owner-approved indigo/gold reference; generated four poses with retained original. WebP lossless visible RGB and alpha; transparent hidden RGB may normalize."
+}

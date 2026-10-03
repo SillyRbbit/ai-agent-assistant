@@ -29,6 +29,7 @@
   "include": [
     "src",
     "scripts/browser/operational-fixture.tsx",
-    "scripts/browser/knowledge-fixture.tsx"
+    "scripts/browser/knowledge-fixture.tsx",
+    "scripts/browser/mascot-fixture.tsx"
   ]
 }

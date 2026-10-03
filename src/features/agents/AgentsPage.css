@@ -159,6 +159,12 @@
 }
 .bot-preview {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-3);
+}
+
+.bot-preview > span:last-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }

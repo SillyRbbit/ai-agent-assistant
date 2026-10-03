@@ -110,16 +110,47 @@ struct Session {
     readers: Vec<JoinHandle<()>>,
     directory: PathBuf,
     frames: usize,
+    diagnostic: Option<crate::diagnostics::Observer>,
 }
 impl Drop for Session {
     fn drop(&mut self) {
         self.tx.take();
-        let _ = reap(&self.child);
+        let reaped = reap(&self.child);
+        if let Some(o) = &self.diagnostic {
+            o.record(
+                crate::diagnostics::Event::RuntimeExited,
+                if reaped {
+                    crate::diagnostics::Outcome::Completed
+                } else {
+                    crate::diagnostics::Outcome::Failed
+                },
+                if reaped {
+                    None
+                } else {
+                    Some(crate::diagnostics::Category::Runtime)
+                },
+            );
+        }
         for reader in self.readers.drain(..) {
             let _ = reader.join();
         }
         // Only this exclusively created, ephemeral runtime directory is removed.
-        let _ = std::fs::remove_dir_all(&self.directory);
+        let removed = std::fs::remove_dir_all(&self.directory).is_ok();
+        if let Some(o) = &self.diagnostic {
+            o.record(
+                crate::diagnostics::Event::RuntimeCleanup,
+                if removed && reaped {
+                    crate::diagnostics::Outcome::Completed
+                } else {
+                    crate::diagnostics::Outcome::Failed
+                },
+                if removed && reaped {
+                    None
+                } else {
+                    Some(crate::diagnostics::Category::Cleanup)
+                },
+            );
+        }
     }
 }
 fn command(setup: &Setup, directory: &std::path::Path) -> Command {
@@ -182,7 +213,15 @@ impl Session {
             readers: Vec::new(),
             directory,
             frames: 0,
+            diagnostic: crate::diagnostics::current(),
         };
+        if let Some(o) = &session.diagnostic {
+            o.record(
+                crate::diagnostics::Event::RuntimeStarted,
+                crate::diagnostics::Outcome::Observed,
+                None,
+            );
+        }
         let (mut stdin, stdout) = {
             let mut child = session.child.lock().map_err(|_| DirectError::Internal)?;
             (
@@ -386,6 +425,13 @@ pub(crate) async fn discover() -> Result<Vec<ModelInfo>, DirectError> {
     let mut session = Session::spawn(&setup)?;
     session.initialize().await?;
     session.authenticate().await?;
+    if let Some(observer) = crate::diagnostics::current() {
+        observer.record(
+            crate::diagnostics::Event::CredentialsAvailable,
+            crate::diagnostics::Outcome::Observed,
+            None,
+        );
+    }
     models(
         &session
             .request(3, "model/list", json!({"limit":128,"includeHidden":false}))
@@ -437,6 +483,13 @@ async fn run_with_rules(
     let mut session = Session::spawn(&setup)?;
     session.initialize().await?;
     session.authenticate().await?;
+    if let Some(observer) = crate::diagnostics::current() {
+        observer.record(
+            crate::diagnostics::Event::CredentialsAvailable,
+            crate::diagnostics::Outcome::Observed,
+            None,
+        );
+    }
     let catalog = models(
         &session
             .request(3, "model/list", json!({"limit":128,"includeHidden":false}))
@@ -680,6 +733,57 @@ for line in sys.stdin:
                 assert_eq!(text, "Synthetic answer.");
             }
         }
+        Ok(())
+    }
+    #[cfg(unix)]
+    #[test]
+    fn diagnostics_capture_child_lifecycle_without_subprocess_content(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        use crate::diagnostics::{Attempt, Event, Logger, Outcome, CURRENT};
+        let (directory, setup) = fixture("error")?;
+        let log = Logger::open(directory.path().join("diagnostics"));
+        let mut attempt = Attempt::with_logger(
+            Some(log.clone()),
+            crate::agent_preferences::AgentConnection::Codex,
+            "fixture-model",
+            Some("chat-1"),
+            None,
+            None,
+        );
+        let observer = attempt.observer();
+        let result = tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()?
+            .block_on(CURRENT.scope(
+                observer,
+                run(
+                    setup,
+                    "fixture-model".into(),
+                    ReasoningEffort::High,
+                    "PRIVATE_PROMPT_CANARY".into(),
+                    |_| Ok(()),
+                ),
+            ));
+        assert_eq!(result, Err(DirectError::CodexRuntime));
+        attempt.finish(result);
+        let snapshot = log.snapshot();
+        assert!(snapshot
+            .events
+            .iter()
+            .any(|r| r.event == Event::RuntimeStarted));
+        assert!(snapshot
+            .events
+            .iter()
+            .any(|r| r.event == Event::RuntimeExited && r.outcome == Outcome::Completed));
+        assert!(snapshot
+            .events
+            .iter()
+            .any(|r| r.event == Event::RuntimeCleanup && r.outcome == Outcome::Completed));
+        let encoded = serde_json::to_string(&snapshot)?;
+        assert!(!encoded.contains("PRIVATE_PROMPT_CANARY"));
+        assert!(!encoded.contains("secret-sentinel"));
+        assert!(!encoded.contains("fixture-model"));
+        assert!(log.flush(true));
         Ok(())
     }
     #[cfg(unix)]

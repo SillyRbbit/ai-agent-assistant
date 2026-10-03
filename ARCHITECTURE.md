@@ -1,3 +1,178 @@
+# 2026-10-02 — Conductor extension closeout
+
+Conductor extends the accepted Animated Bot Identity milestone; it is not a tenth bot.
+The supplied indigo/gold original is retained byte-identically beside transparent PNG,
+lossless WebP and editable frame/timing metadata. Shared avatar/motion supports idle blink,
+free-hand greeting, actual-running baton, one newly observed overall-success jump and
+keyboard-accessible playful spin. Static dense views, reduced motion, local animation
+preference and hidden/offscreen suppression remain in force. No provider, profile, role,
+logo, authority, routing, cancellation, IPC, dependency or governance change.
+
+Worktree: `/Users/hdang/.codex/worktrees/local-diagnostics/ai-agent-assistant`.
+Branch: `codex/local-diagnostics`; HEAD `662fe1a57a1148a215beb04b215ad35681c4cbe6`.
+26 extension paths; 90 cumulative uncommitted paths (80 inherited, 10 new).
+Previous raw completion, nine-bot assets, historical document bodies and bundles preserved.
+Evidence: `/private/tmp/cortexa-animated-conductor-evidence`.
+Report: [Conductor review](docs/reviews/2026-10-02-animated-conductor-post-increment-review.md).
+
+Full offline verify passed: 579 frontend, 436 Rust unit, 255 Rust integration, 74 hook
+and 88 repository tests; one existing opt-in Hermes test ignored. Focused regressions:
+49 passed. Real-app and fixture unsigned offline native builds passed. Native Computer
+Use observed greeting/blink/baton/jump/keyboard spin, no repeated success, failure/cancel
+and historical suppression, light/dark transparency, compact scrolling, coordinator
+inspector and one actual all-Simulation Research summary with four validated stages.
+The intermediate actual-run reaction was too fast to establish; native fixture playback
+is separately identified. Reduced-motion/hidden/offscreen cases are automated evidence.
+Both isolated QA apps quit; only new synthetic fixture/room data changed.
+
+Initial roster observations retained a graph measurement warning. Later completed-run
+navigation settled, enabled Fit and changed zoom from 25% to 57%. No diagnosis or
+readiness repair is claimed. Owner first-entry/aesthetic QA remains advisable. Existing
+compact expanded-navigation overlap, asset weight/Vite chunk warnings, D-127/D-128,
+native/provider/runtime/Codex-isolation and Python 3.12.1/Xcode SDK27/Cargo stripping
+workaround advisories remain. Live QA stays parked at 3/10 used, 7 remaining;
+D-125/M1/M2 remain parked. No commit or publication.
+
+## Animated Bot Identity accepted implementation — 2026-10-02
+
+This additive checkpoint supersedes the in-progress text below; historical bodies
+remain intact. Worktree: `/Users/hdang/.codex/worktrees/local-diagnostics/ai-agent-assistant`;
+branch `codex/local-diagnostics`; HEAD `662fe1a57a1148a215beb04b215ad35681c4cbe6`.
+See the [plan](docs/plans/2026-10-02-animated-bot-identity.md) and
+[review](docs/reviews/2026-10-02-animated-bot-identity-post-increment-review.md).
+49 successor paths / 80 cumulative uncommitted paths include the preserved 43-path
+diagnostics predecessor. Exact inventories and hashes are external; no commit or publication.
+
+Implemented all nine approved role mascots using transparent three-frame atlases,
+visible eyelid blink, arm/wing greeting, one new-success jump and explicit keyboard
+spin. Shared static dense avatars and expressive conversation/settings presentations
+preserve stable IDs, roles, Conductor, runtime choices, notes and execution authority.
+Persistent animation disable and reduced-motion preference take precedence. Hidden
+or offscreen reactions are consumed without replay; no animation timers or frame loop.
+New profiles default to mascot; all saved avatar choices (including generic bot) remain.
+An existing generic icon is not silently treated as consent to overwrite a saved choice.
+
+Direct Computer Use observed all nine/four behaviors in the isolated native app,
+keyboard action, animation-disable restart persistence and retained synthetic compass
+selection. Collaboration Research completed with static handoff avatars. Native graph
+QA exposed a grid-cell class omission; the final shared class and nine-ID regression
+correct it. A greeting initially below the conversation viewport was moved beside the
+composer. Final graph and conversation QA use the corrected bundle. The latest
+Simulation cancellation attempt completed before Stop; it proves no cancellation.
+Deterministic tests cover failure, cancellation, hidden/replayed events and cleanup.
+
+Evidence: `/private/tmp/cortexa-animated-bot-identity-evidence`; native receipt
+`native-observations.json`; final bundle `artifact-accepted.json`. Test-owned apps and
+Vite are stopped. Only isolated synthetic data changed; no owner profiles or rooms.
+Native compact approximately 761×521 works after manually collapsing navigation;
+pre-existing expanded-sidebar overlap remains an advisory. Native supports dark theme;
+light/dark transparent edges were checked in the browser fixture, not native light mode.
+Owner aesthetic QA remains separate. No live success/cancellation or remote CI claim.
+
+Keep live QA parked at 3/10 used, 7 remaining; retain D-127/D-128, native/provider/runtime,
+Codex-isolation, process-local Python 3.12 / Xcode SDK27 / Cargo strip-none workaround
+and parked D-125/M1/M2. No provider requests, installs, credentials or publication.
+Completion is established only by the final complete/valid and full Stop receipts.
+
+Presentation uses one closed canonical-ID asset registry and finite CSS reactions. The
+only native profile change is an additive serialized avatar enum/default; no new IPC,
+permissions, schema, dependencies, orchestration or provider request construction.
+
+## Animated Bot Identity implementation checkpoint — 2026-10-02
+
+The admitted [Animated Bot Identity plan](docs/plans/2026-10-02-animated-bot-identity.md)
+now has nine transparent three-frame mascots, lossless runtime atlases, shared dense
+static and expressive presentations, finite greeting/jump/spin, visible eye blinking,
+OS reduced-motion support and a device-local animation toggle. Saved custom avatars
+remain unchanged; only new profiles default to the additive mascot choice. Canonical
+IDs, Conductor, providers, notes, routing and execution remain unchanged.
+
+Worktree: `/Users/hdang/.codex/worktrees/local-diagnostics/ai-agent-assistant`;
+branch `codex/local-diagnostics`; HEAD `662fe1a57a1148a215beb04b215ad35681c4cbe6`.
+54 focused frontend tests, strict lint and typecheck passed. Initial test-environment
+storage/event setup and a delayed-greeting edge case were corrected and retested.
+Full offline verification is running; native acceptance and final gates are pending.
+Evidence: `/private/tmp/cortexa-animated-bot-identity-evidence`. Preview: `npm run dev
+-- --host 127.0.0.1` from this worktree; native features require the isolated QA bundle.
+Next action: inspect full verification, build the isolated app and perform native
+Computer Use acceptance, then freeze the review. No live requests or publication.
+
+Live-provider QA stays parked at 3/10 used, 7 remaining. Retain D-127/D-128,
+native/provider/runtime and Codex-isolation advisories, the process-local Python 3.12 /
+Xcode SDK27 / Cargo stripping workaround, pending owner QA and parked D-125/M1/M2.
+
+## 2026-10-02 — Provider troubleshooting
+
+Existing bounded content-free logger remains the only diagnostics system. Optional generated request ID is distinct from the dispatch attempt ID; legacy records remain readable. Existing snapshot output exposes the same ID; no IPC input changes. Native polling return is not proof of frontend rendering. Transport release is local only. Codex internal retries remain opaque. Restart marks retained nonterminal requests interrupted without invented cleanup or success. The 256-item nonblocking queue and three 5 MiB files remain; bounded loss is not audit completeness.
+
+## 2026-10-02 — Local diagnostics acceptance
+
+Worktree: `/Users/hdang/.codex/worktrees/local-diagnostics/ai-agent-assistant`.
+Branch: `codex/local-diagnostics`; unchanged HEAD/main baseline
+`662fe1a57a1148a215beb04b215ad35681c4cbe6`. Thirty-one uncommitted paths;
+no commits, publication, dependency changes or owner-data changes.
+Plan: [Local diagnostics](docs/plans/2026-10-02-local-diagnostics.md).
+Evidence: `/private/tmp/cortexa-local-diagnostics-evidence`.
+
+Rust owns content-free structured records, a 256-record queue/recent window,
+three files capped at 5 MiB each, UTC timestamps, generated opaque correlations,
+closed event/error/outcome fields and monotonic timing. First HTTP headers and
+first accepted text are distinct; Codex/Simulation first response is the first
+accepted normalized event. Dynamic model IDs are fingerprinted. One terminal
+record seals an attempt; abort cleanup retains an observed host timeout rather
+than incorrectly labeling it cancellation. No payload, path, raw exception,
+provider body or subprocess output enters this schema. Request-owned Codex child
+reap/cleanup, collaboration stages and relevant configuration/storage failures
+are instrumented. Logs are neither transcripts nor authenticated audit evidence.
+
+Settings → Local diagnostics provides availability, severity filtering, explicit
+refresh, sanitized copy/selectable summary and native exclusive-create export of
+the recent 256 records. Unix logs use 0700/0600; symlinks/hardlinks and malformed
+stored records are rejected. Queue/storage failure is nonfatal and availability
+stays false until restart. Export currently uses the established macOS picker.
+Exactly two argument-free IPC checker entries/rejection tests were separately
+owner-approved. Hooks, CSP, permissions, provider rules and dependencies remain.
+
+Final full offline verification passed: 538 frontend tests, 423 native unit tests,
+native integration suites, 74 hook tests, 88 repository tests, strict lint/format,
+typecheck/frontend build and release native build. Eleven focused diagnostic tests
+passed before the final full suite. Actual-App browser coverage passed 24 layout
+combinations. Initial test/import/checker/lint failures were repaired; their logs
+remain. A native 960px navigation overlap was found, corrected only for Diagnostics
+using the established selectors, rebuilt and directly rechecked at 960 and 760px.
+
+Direct native Computer Use observed Simulation partial streaming, completed status,
+released ownership, correlated start/first response/first text/terminal records,
+filtering, copy feedback, export and overwrite refusal with unchanged bytes,
+restart persistence, refresh, compact inspector/scrolling and graceful Quit.
+First response was 2 ms, first text 185 ms, completion 549 ms in that one synthetic
+attempt. Both artifacts remain. Native reverse-resize to wide was not observed;
+automated reverse-resize passed. Disk/export canary absence and permissions passed.
+Unavailable storage, cancellation, timeout and runtime failure are deterministic
+automated evidence, not observed live behavior. The test app and server are stopped.
+
+Logging quality result: PASS WITH ADVISORIES. Consult the
+[final review](docs/reviews/2026-10-02-local-diagnostics-post-increment-review.md)
+and checkout-local hook status for completion validity; full Stop is recorded
+externally. The sequential live-provider checkpoint remains blocked:
+owner-private credential launch and confirmation of OpenAI API/gpt-5.6-luna/low
+are pending. No live request was made. Ledger stays 4/5 used, at most one remaining.
+The proposed fresh prompt is “Reply with OK.”, Memory Off, empty instructions,
+no notes/documents/history. Never inspect keys or retry automatically. Prior Sol
+HTTP403 and owner-reported Luna stream errors remain distinct unresolved evidence.
+
+Retain D-127/D-128, native/provider/runtime and Codex-isolation advisories,
+process-local Python 3.12/Xcode SDK27/Cargo strip=none workaround, pending inherited
+owner/Knowledge 760px QA, and parked D-125/M1/M2. Future app-version changes require
+review of the closed diagnostic schema/version policy. Existing >500kB Vite chunk
+warning remains advisory. Remote CI and live-provider verification are not claimed.
+
+Preview from this worktree: `npm run dev -- --host 127.0.0.1` at
+http://127.0.0.1:1420 (browser has no native diagnostics/provider access).
+Native QA bundle: `src-tauri/target/debug/bundle/macos/Cortexa Diagnostics QA.app`;
+identity/hashes are in external `artifact-final.json`. Use supported private native
+launch for any authorized live test. Do not copy or replace older Desktop work.
+
 ## 2026-10-01 — Connected Knowledge boundaries
 
 The existing Knowledge storage and nine-command native client remain the sole

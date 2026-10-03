@@ -1,0 +1,75 @@
+{
+  "source": "concept.png",
+  "layout": "three equal square cells, left to right",
+  "framePositions": ["0%", "50%", "100%"],
+  "idleBlinkSeconds": [4.7, 5.3, 6.1, 5.7, 6.7, 4.9, 7.1, 5.9, 6.3],
+  "greetingSeconds": 1.2,
+  "jumpSeconds": 0.65,
+  "spinSeconds": 0.8,
+  "artwork": "Image tool adaptation of owner-approved concept. PNG masters retained; WebP is lossless encoding.",
+  "sources": {
+    "personal-assistant": {
+      "source": "/Users/hdang/.codex/generated_images/01a0c184-189a-7b01-ae8f-07cfb1b83d96/exec-f6f6a6b3-e0ae-4b19-b7e6-87c39164cb5c.png",
+      "width": 2172,
+      "height": 724,
+      "frames": ["neutral", "blink", "wave"],
+      "webpBytes": 736954
+    },
+    "research": {
+      "source": "/Users/hdang/.codex/generated_images/01a0c184-189a-7b01-ae8f-07cfb1b83d96/exec-a3f922e4-cc05-4517-8153-c02d6579fb47.png",
+      "width": 2172,
+      "height": 724,
+      "frames": ["neutral", "blink", "wave"],
+      "webpBytes": 780808
+    },
+    "coding": {
+      "source": "/Users/hdang/.codex/generated_images/01a0c184-189a-7b01-ae8f-07cfb1b83d96/exec-52a010fd-b606-418e-a0f9-117b6fe1c4a8.png",
+      "width": 2172,
+      "height": 724,
+      "frames": ["neutral", "blink", "wave"],
+      "webpBytes": 546862
+    },
+    "cloud-infrastructure": {
+      "source": "/Users/hdang/.codex/generated_images/01a0c184-189a-7b01-ae8f-07cfb1b83d96/exec-ee451eb6-caac-44dd-b1a8-8255e5f1cfe4.png",
+      "width": 2172,
+      "height": 724,
+      "frames": ["neutral", "blink", "wave"],
+      "webpBytes": 564176
+    },
+    "systems-operations": {
+      "source": "/Users/hdang/.codex/generated_images/01a0c184-189a-7b01-ae8f-07cfb1b83d96/exec-64318aa5-0d16-4c49-8c7e-0468c709e440.png",
+      "width": 2172,
+      "height": 724,
+      "frames": ["neutral", "blink", "wave"],
+      "webpBytes": 680310
+    },
+    "knowledge-document": {
+      "source": "/Users/hdang/.codex/generated_images/01a0c184-189a-7b01-ae8f-07cfb1b83d96/exec-52e47797-8359-41bd-a94b-3d1f685977bc.png",
+      "width": 2172,
+      "height": 724,
+      "frames": ["neutral", "blink", "wave"],
+      "webpBytes": 717706
+    },
+    "qa-validation": {
+      "source": "/Users/hdang/.codex/generated_images/01a0c184-189a-7b01-ae8f-07cfb1b83d96/exec-d83f8b9a-cd1a-4c32-b7ea-52c24b1f8017.png",
+      "width": 2172,
+      "height": 724,
+      "frames": ["neutral", "blink", "wave"],
+      "webpBytes": 766540
+    },
+    "security-risk": {
+      "source": "/Users/hdang/.codex/generated_images/01a0c184-189a-7b01-ae8f-07cfb1b83d96/exec-570fe64a-37c6-4b52-bdd3-d15ffaff95b0.png",
+      "width": 2172,
+      "height": 724,
+      "frames": ["neutral", "blink", "wave"],
+      "webpBytes": 784216
+    },
+    "workflow-automation": {
+      "source": "/Users/hdang/.codex/generated_images/01a0c184-189a-7b01-ae8f-07cfb1b83d96/exec-0eb77d12-20e5-47c7-95d5-368f3cc7dec9.png",
+      "width": 2172,
+      "height": 724,
+      "frames": ["neutral", "blink", "wave"],
+      "webpBytes": 852548
+    }
+  }
+}

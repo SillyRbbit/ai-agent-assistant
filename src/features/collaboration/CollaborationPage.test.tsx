@@ -329,3 +329,16 @@ describe("Collaboration room", () => {
     ]);
   });
 });
+
+it("presents Conductor as coordinator on a saved run without replay or configuration", async () => {
+  const c = client([{ id: 1, title: "Saved synthetic room", runs: [fixture()] }]);
+  const v = render(<CollaborationPage client={c} />);
+  fireEvent.click(await screen.findByRole("button", { name: "Saved synthetic room" }));
+  expect(await screen.findByText("Conductor · Application coordinator")).toBeInTheDocument();
+  expect(screen.getByText("Overall workflow: completed")).toBeInTheDocument();
+  expect(v.container.querySelector('[data-agent="conductor"]')).not.toHaveAttribute(
+    "data-motion",
+    "success",
+  );
+  expect(c.start).not.toHaveBeenCalled();
+});

@@ -250,6 +250,14 @@ if (params.has("shell")) {
   }));
   mockIPC((command) => {
     if (command === "list_agent_preferences") return profiles;
+    if (command === "list_agent_connections")
+      return ["simulation", "openai_api", "codex", "anthropic_api", "lm_studio", "ollama"].map(
+        (connection) => ({
+          connection,
+          status: connection === "simulation" ? "ready" : "blocked",
+          message: "Synthetic layout fixture only; execution is unavailable.",
+        }),
+      );
     if (command === "list_knowledge") return items;
     if (command === "list_collaboration_rooms")
       return [{ id: 1, title: "Synthetic layout room", runs: [] }];
