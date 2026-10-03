@@ -15,7 +15,7 @@ import {
   type Viewport,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { BotAvatar } from "../agents/BotAppearance";
+import { BotAvatar, CoordinatorAvatar } from "../agents/BotAppearance";
 import type { OperationalCard, OperationalProjection } from "./collaborationProjection";
 type CardNode = Node<{ card: OperationalCard }, "card">;
 
@@ -26,8 +26,10 @@ function Card({ data }: NodeProps<CardNode>) {
       <Handle id="input" type="target" position={Position.Left} style={{ top: "40%" }} />
       <Handle id="result-in" type="target" position={Position.Left} style={{ top: "75%" }} />
       <Handle id="coord-in" type="target" position={Position.Top} />
-      {c.identity ? (
-        <BotAvatar identity={c.identity} />
+      {c.kind === "coordinator" ? (
+        <CoordinatorAvatar />
+      ) : c.identity ? (
+        <BotAvatar identity={c.identity} agentId={c.agentId} />
       ) : (
         <span className="operational-unknown-avatar" aria-hidden="true">
           ◇

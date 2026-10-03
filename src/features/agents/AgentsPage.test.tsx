@@ -765,3 +765,16 @@ it("restores only role description and preserves appearance, owner settings and 
   expect(saved?.identity.color).toBe("coral");
   expect(saved?.identity.avatar).toBe("rocket");
 });
+
+it("shows the canonical mascot in list, detail and conversation without saving a profile", async () => {
+  const client = harness();
+  const view = render(<AgentsPage client={client} />);
+  await ready();
+  expect(view.container.querySelectorAll('[data-agent="personal-assistant"]')).toHaveLength(3);
+  await openConversation();
+  expect(
+    view.container.querySelector('.agents-conversation [data-agent="personal-assistant"]'),
+  ).toBeInTheDocument();
+  expect(client.save).not.toHaveBeenCalled();
+  expect(client.send).not.toHaveBeenCalled();
+});

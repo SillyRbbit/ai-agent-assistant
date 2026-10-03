@@ -202,6 +202,7 @@ pub(crate) async fn run(
         .execute(request(&client, key, body)?)
         .await
         .map_err(network_error)?;
+    crate::diagnostics::response_received();
     status_error(response.status())?; // Never read or forward unsuccessful bodies.
     if response
         .headers()

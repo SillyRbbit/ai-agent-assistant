@@ -1,3 +1,4 @@
+import { ConductorIdentity } from "../agents/ConductorIdentity";
 import { SourcePicker } from "../knowledge/SourcePicker";
 import { SourceEvidence, NoteEditor } from "../knowledge/KnowledgePage";
 import { knowledgeClient, type Draft } from "../../infrastructure/tauri/knowledge-client";
@@ -194,6 +195,11 @@ export function CollaborationPage({
               </button>
               {room.runs.map((run) => (
                 <section key={run.id} aria-label={`Run ${run.id}`}>
+                  <ConductorIdentity
+                    run={run}
+                    current={snapshotStatus === "current"}
+                    expressive={run === room.runs.at(-1)}
+                  />
                   <h3>
                     {run.input.workflow} · {run.status}
                   </h3>
@@ -211,7 +217,10 @@ export function CollaborationPage({
                   {run.stages.map((s, i) => (
                     <article key={s.id} id={s.id} tabIndex={-1} className="room-message">
                       <header>
-                        <BotAvatar identity={s.participant.identity} />
+                        <BotAvatar
+                          identity={s.participant.identity}
+                          agentId={s.participant.agentId}
+                        />
                         <div>
                           <strong>{s.participant.identity.nickname || s.participant.role}</strong>
                           <br />
@@ -414,7 +423,10 @@ export function CollaborationPage({
                   <ol>
                     {preview.run.stages.map((s) => (
                       <li key={s.id}>
-                        <BotAvatar identity={s.participant.identity} />
+                        <BotAvatar
+                          identity={s.participant.identity}
+                          agentId={s.participant.agentId}
+                        />
                         {s.participant.identity.nickname || s.participant.role} ·{" "}
                         {s.participant.role} · {s.participant.connection} · {s.participant.model} ·{" "}
                         {s.participant.effort}

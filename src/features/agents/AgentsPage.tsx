@@ -1,3 +1,4 @@
+import { isNewBotSuccess } from "./botMotion";
 import { BotAvatar } from "./BotAppearance";
 import { ROLE_DESCRIPTIONS } from "./botAppearanceValues";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -113,7 +114,7 @@ export function AgentsPage({ client = agentChatClient }: { readonly client?: Age
                   setConversation(null);
                 }}
               >
-                <BotAvatar identity={profile.identity} />
+                <BotAvatar identity={profile.identity} agentId={profile.agentId} />
                 <strong>{botName(profile)}</strong>
                 {profile.identity.nickname ? <span>{profile.displayName}</span> : null}
                 <span>{CONNECTION_LABELS[profile.connection]}</span>
@@ -152,6 +153,7 @@ export function AgentsPage({ client = agentChatClient }: { readonly client?: Age
             ) : (
               <AgentConversation
                 key={conversation.conversationId}
+                identity={selected.identity}
                 initial={conversation}
                 displayName={`${botName(selected)}${selected.identity.nickname ? ` · ${selected.displayName}` : ""}`}
                 client={client}
@@ -296,7 +298,7 @@ function AgentSettings({
   return (
     <section className="agents-settings page-panel" aria-labelledby="agent-settings-title">
       <h2 id="agent-settings-title">
-        <BotAvatar identity={profile.identity} /> {botName(profile)}
+        <BotAvatar identity={profile.identity} agentId={profile.agentId} /> {botName(profile)}
       </h2>
       <p>Canonical role: {profile.displayName}</p>
       <p>
@@ -340,7 +342,7 @@ function AgentSettings({
           </select>
         </label>
         <div className="bot-preview">
-          <BotAvatar identity={draft.identity} />
+          <BotAvatar identity={draft.identity} agentId={profile.agentId} expressive />
           <span>{draft.identity.nickname || profile.displayName}</span>
         </div>
         <label>
@@ -825,13 +827,22 @@ function AgentSettings({
 }
 
 interface ConversationProps {
+  readonly identity: BotIdentity;
   readonly initial: AgentChatSnapshot;
   readonly displayName: string;
   readonly client: AgentChatClient;
   readonly onBusy: (busy: boolean) => void;
   readonly onExit: () => void;
 }
-function AgentConversation({ initial, displayName, client, onBusy, onExit }: ConversationProps) {
+function AgentConversation({
+  initial,
+  identity,
+  displayName,
+  client,
+  onBusy,
+  onExit,
+}: ConversationProps) {
+  const [success, setSuccess] = useState(0);
   const [snapshot, setSnapshot] = useState(initial);
   const [message, setMessage] = useState("");
   const [acknowledged, setAcknowledged] = useState(false);
@@ -849,7 +860,7 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
   const stopRequested = useRef(false);
   const generation = useRef(0);
   const accept = useCallback(
-    (next: AgentChatSnapshot, fresh = false) => {
+    (next: AgentChatSnapshot, fresh = false, allowSuccess = true) => {
       const previous = current.current;
       if (
         next.conversationId !== initial.conversationId ||
@@ -870,6 +881,8 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
       current.current = next;
       uncertainCleanup.current = false;
       if (mounted.current) {
+        if (allowSuccess && isNewBotSuccess(previous, next, fresh))
+          setSuccess((value) => value + 1);
         setSnapshot(next);
         setCleanupUnconfirmed(false);
       }
@@ -882,7 +895,7 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
     if (sendPending.current || (!current.current.busy && !uncertainCleanup.current)) return;
     try {
       const next = await client.cancel(initial.conversationId);
-      if (mounted.current) accept(next);
+      if (mounted.current) accept(next, false, false);
     } catch (failure) {
       if (mounted.current) setError(agentChatErrorMessage(failure));
     }
@@ -959,7 +972,7 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
       if (shouldStop()) next = await client.cancel(initial.conversationId);
       if (mounted.current) {
         const previous = current.current;
-        accept(next, true);
+        accept(next, true, !shouldStop());
         if (previous.status === "completed")
           setHistory((turns) => [...turns, { message: sentMessage, answer: previous.text }]);
         setSentMessage(message);
@@ -974,7 +987,7 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
       if (mounted.current) setCleanupUnconfirmed(true);
       try {
         const next = await client.cancel(initial.conversationId);
-        if (mounted.current) accept(next, true);
+        if (mounted.current) accept(next, true, false);
       } catch {
         // Preserve the closed original failure; native cleanup is not claimed.
       }
@@ -1047,6 +1060,13 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
           </label>
         </>
       )}
+      <BotAvatar
+        identity={identity}
+        agentId={initial.agentId}
+        expressive
+        greeting
+        success={success}
+      />
       <label>
         Message
         <textarea
@@ -1114,6 +1134,12 @@ function AgentConversation({ initial, displayName, client, onBusy, onExit }: Con
         </div>
       ))}
       {sentMessage !== "" ? <p>You: {sentMessage}</p> : null}
+      {snapshot.requestId ? (
+        <p style={{ overflowWrap: "anywhere" }}>
+          Diagnostic request: <code>{snapshot.requestId}</code>. Find this ID in Settings → Local
+          diagnostics.
+        </p>
+      ) : null}
       {snapshot.text !== "" ? (
         <div className="agents-answer">
           <h3>

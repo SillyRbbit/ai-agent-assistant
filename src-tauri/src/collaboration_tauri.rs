@@ -1,7 +1,7 @@
 //! Narrow room commands. Only Rust selects participants and advances stages.
 use crate::{
     agent_chat::ChatError,
-    agent_chat_tauri::{collaboration_adapter, run_adapter, AgentChatState},
+    agent_chat_tauri::{collaboration_adapter, run_adapter_traced, AgentChatState},
     agent_preferences::AgentConnection,
     collaboration::*,
     personal_assistant_direct::{DirectError, GenerationLease},
@@ -228,7 +228,13 @@ fn update(
         return Err(ChatError::InvalidRequest);
     }
     *last = run.clone();
-    storage.save_collaboration_room(&r)
+    storage.save_collaboration_room(&r).inspect_err(|_| {
+        crate::diagnostics::event(
+            crate::diagnostics::Event::StorageFailure,
+            crate::diagnostics::Outcome::Failed,
+            Some(crate::diagnostics::Category::Storage),
+        );
+    })
 }
 async fn execute(
     app: tauri::AppHandle,
@@ -324,6 +330,10 @@ async fn execute_stages_with_fixture(
             run.sequence += 1;
             persist(run)?;
             let profile = run.stages[i].participant.profile()?;
+            let mut diagnostic = crate::diagnostics::Attempt::new(profile.connection, &profile.model, None, Some(&run.id), Some(&run.stages[i].id));
+            let observer = diagnostic.observer();
+            observer.record(crate::diagnostics::Event::ConfigurationValidated, crate::diagnostics::Outcome::Observed, None);
+            let stage_result = async {
             let mut stream = StreamGuard::default();
             if hold && i == 0 {
                 run.stages[i].provisional = CANCELLATION_FIXTURE_FRAGMENT.into();
@@ -338,8 +348,10 @@ async fn execute_stages_with_fixture(
                 stream.completed = true;
                 tokio::task::yield_now().await;
             } else {
+                let credentialed = matches!(profile.connection, AgentConnection::OpenaiApi | AgentConnection::AnthropicApi);
                 let request = adapter(profile, &prompt)?;
-                tokio::time::timeout(std::time::Duration::from_secs(60), run_adapter(request, |event| {
+                if credentialed { observer.record(crate::diagnostics::Event::CredentialsAvailable, crate::diagnostics::Outcome::Observed, None); }
+                tokio::time::timeout(std::time::Duration::from_secs(60), run_adapter_traced(request, observer.clone(), |event| {
                     if stream.accept(event)? {
                         run.stages[i].provisional = stream.text.clone();
                         run.sequence += 1;
@@ -351,6 +363,11 @@ async fn execute_stages_with_fixture(
             if !stream.completed { return Err(ChatError::Provider(DirectError::Incomplete)); }
             run.accept(i, &stream.text)?;
             persist(run)?;
+            Ok::<(), ChatError>(())
+            }.await;
+            if stage_result.is_ok() && run.status == Status::Partial { diagnostic.partial(); }
+            else { diagnostic.finish(stage_result.map_err(|e| match e { ChatError::Provider(e) => e, _ => DirectError::Internal })); }
+            stage_result?;
             if run.status == Status::Partial { break; }
         }
         Ok(())
@@ -425,6 +442,7 @@ pub(crate) async fn delete_collaboration_room(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::agent_chat_tauri::run_adapter;
     #[test]
     fn command_dispatch_runs_without_an_ambient_tokio_runtime(
     ) -> Result<(), Box<dyn std::error::Error>> {

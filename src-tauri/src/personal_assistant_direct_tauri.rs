@@ -18,6 +18,7 @@ struct Session {
     task: Option<JoinHandle<()>>,
     stopping: bool,
     error: Option<DirectError>,
+    diagnostic: Option<crate::diagnostics::Observer>,
 }
 impl Drop for Session {
     fn drop(&mut self) {
@@ -85,6 +86,17 @@ impl Session {
         if snapshot.is_terminal() {
             if let Some(task) = &self.task {
                 if !task.is_finished() {
+                    if let PersonalAssistantV0Snapshot::Failed(failed) = &snapshot {
+                        if let Some(observer) = &self.diagnostic {
+                            observer.aborting_with(match failed.failure().code() {
+                                PersonalAssistantV0FailureCode::DeadlineExceeded
+                                | PersonalAssistantV0FailureCode::ProviderTimeout => {
+                                    DirectError::Timeout
+                                }
+                                _ => DirectError::Protocol,
+                            });
+                        }
+                    }
                     task.abort();
                 }
             }
@@ -147,6 +159,7 @@ fn start_owned(
     let start = session.host.start_direct().map_err(|_| DirectError::Busy)?;
     let handle = start.presentation_handle().clone();
     session.error = None;
+    session.diagnostic = None;
     session.handle = Some(handle.clone());
     session.task = Some(spawn(Arc::clone(state), handle, lease));
     session.snapshot(None)
@@ -158,25 +171,58 @@ async fn execute(
     key: ApiKey,
     _lease: GenerationLease,
 ) {
-    let result = bounded_request(
-        std::time::Duration::from_secs(60),
-        provider::run(key, |event| {
-            let mut session = state.lock().map_err(|_| DirectError::Internal)?;
-            session.matching(handle.as_str())?;
-            let snapshot = session
-                .host
-                .accept_direct(&handle, event)
-                .map_err(|_| DirectError::Protocol)?;
-            if matches!(
-                snapshot,
-                PersonalAssistantV0Snapshot::Failed(_) | PersonalAssistantV0Snapshot::Cancelled(_)
-            ) {
-                return Err(DirectError::Protocol);
-            }
-            Ok(())
-        }),
-    )
-    .await;
+    let mut diagnostic = crate::diagnostics::Attempt::new(
+        crate::agent_preferences::AgentConnection::OpenaiApi,
+        "gpt-5.6-luna",
+        Some(handle.as_str()),
+        None,
+        None,
+    );
+    let observer = diagnostic.observer();
+    if let Ok(mut session) = state.lock() {
+        session.diagnostic = Some(observer.clone());
+    }
+    observer.record(
+        crate::diagnostics::Event::ConfigurationValidated,
+        crate::diagnostics::Outcome::Observed,
+        None,
+    );
+    observer.record(
+        crate::diagnostics::Event::CredentialsAvailable,
+        crate::diagnostics::Outcome::Observed,
+        None,
+    );
+    observer.dispatch();
+    let transport = crate::diagnostics::TransportScope(observer.clone());
+    let result = crate::diagnostics::CURRENT
+        .scope(
+            observer.clone(),
+            bounded_request(
+                std::time::Duration::from_secs(60),
+                provider::run(key, |event| {
+                    let text_event =
+                        matches!(&event, provider::ProviderEvent::Delta(text) if !text.is_empty());
+                    let mut session = state.lock().map_err(|_| DirectError::Internal)?;
+                    session.matching(handle.as_str())?;
+                    let snapshot = session
+                        .host
+                        .accept_direct(&handle, event)
+                        .map_err(|_| DirectError::Protocol)?;
+                    if matches!(
+                        snapshot,
+                        PersonalAssistantV0Snapshot::Failed(_)
+                            | PersonalAssistantV0Snapshot::Cancelled(_)
+                    ) {
+                        return Err(DirectError::Protocol);
+                    }
+                    observer.first(text_event);
+                    Ok(())
+                }),
+            ),
+        )
+        .await;
+    drop(transport);
+    diagnostic.finish(result);
     if let Err(error) = result {
         if let Ok(mut session) = state.lock() {
             if session.matching(handle.as_str()).is_ok() {

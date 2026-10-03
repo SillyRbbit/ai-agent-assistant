@@ -211,6 +211,7 @@ fn safe_error(value: &Value) -> DirectError {
     }
 }
 async fn status_error(response: Response) -> Result<Response, DirectError> {
+    crate::diagnostics::response_received();
     match response.status() {
         StatusCode::OK => return Ok(response),
         StatusCode::UNAUTHORIZED | StatusCode::FORBIDDEN => {

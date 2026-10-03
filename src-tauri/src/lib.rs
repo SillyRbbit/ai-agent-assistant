@@ -11,6 +11,8 @@ mod codex_connection;
 mod collaboration;
 mod collaboration_tauri;
 pub mod credentials;
+mod diagnostics;
+mod diagnostics_tauri;
 pub mod documents;
 mod error;
 mod knowledge;
@@ -69,6 +71,8 @@ pub fn run() -> Result<(), AppError> {
         .on_window_event(menu_bar::handle_window_event)
         .invoke_handler(tauri::generate_handler![
             app_info::get_app_info,
+            diagnostics_tauri::read_diagnostics,
+            diagnostics_tauri::export_diagnostics,
             knowledge_tauri::list_knowledge,
             knowledge_tauri::save_knowledge,
             knowledge_tauri::remove_knowledge,
@@ -111,6 +115,16 @@ pub fn run() -> Result<(), AppError> {
             if !codex_connection::shutdown() {
                 api.prevent_exit();
                 eprintln!("Cortexa could not confirm Codex child cleanup; exit was cancelled.");
+            }
+        }
+        if matches!(&event, tauri::RunEvent::Exit) {
+            diagnostics::event(
+                diagnostics::Event::ApplicationShutdown,
+                diagnostics::Outcome::Observed,
+                None,
+            );
+            if let Some(log) = diagnostics::logger() {
+                let _ = log.flush(true);
             }
         }
         menu_bar::handle_run_event(app_handle, &event);

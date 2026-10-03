@@ -45,6 +45,7 @@ export const BOT_AVATARS = [
   "code",
   "globe",
   "music",
+  "mascot",
 ] as const;
 export const BOT_TONES = ["neutral", "warm", "direct", "formal"] as const;
 export const BOT_VERBOSITIES = ["brief", "balanced", "detailed"] as const;
@@ -73,7 +74,7 @@ export interface BotIdentity {
 export const DEFAULT_BOT_IDENTITY: BotIdentity = Object.freeze({
   color: "blue",
   nickname: "",
-  avatar: "bot",
+  avatar: "mascot",
   description: "",
   tone: "neutral",
   verbosity: "balanced",
@@ -176,6 +177,7 @@ export const AGENT_ERROR_CODES = [
 export type AgentChatError = (typeof AGENT_ERROR_CODES)[number];
 export type AgentChatStatus = "idle" | "starting" | "streaming" | "completed" | "stopped" | "error";
 export interface AgentChatSnapshot {
+  readonly requestId?: string | null;
   readonly version: 1;
   readonly conversationId: string;
   readonly agentId: AgentId;
@@ -305,7 +307,9 @@ export function parseAgentConnections(value: unknown): readonly AgentConnectionR
   return Object.freeze(result);
 }
 export function parseAgentChatSnapshot(value: unknown): AgentChatSnapshot {
+  const hasTrace = value !== null && typeof value === "object" && "requestId" in value;
   const v = record(value, [
+    ...(hasTrace ? ["requestId"] : []),
     "version",
     "conversationId",
     "agentId",
@@ -322,6 +326,9 @@ export function parseAgentChatSnapshot(value: unknown): AgentChatSnapshot {
     "error",
   ]);
   if (
+    (hasTrace &&
+      v["requestId"] !== null &&
+      (typeof v["requestId"] !== "string" || !/^sha256:[a-f0-9]{64}$/.test(v["requestId"]))) ||
     v["version"] !== 1 ||
     !bounded(v["conversationId"], 128) ||
     !/^[a-zA-Z0-9-]+$/.test(v["conversationId"]) ||

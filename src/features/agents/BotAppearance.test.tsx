@@ -16,8 +16,8 @@ function luminance(hex: string) {
   return (c[0] ?? 0) * 0.2126 + (c[1] ?? 0) * 0.7152 + (c[2] ?? 0) * 0.0722;
 }
 describe("Bot appearance", () => {
-  it("preserves original avatar ids and validates 18 choices and 12 colors", () => {
-    expect(BOT_AVATARS).toHaveLength(18);
+  it("preserves original avatar ids and validates 19 choices and 12 colors", () => {
+    expect(BOT_AVATARS).toHaveLength(19);
     expect(BOT_COLORS).toHaveLength(12);
     expect(BOT_AVATARS.slice(0, 6)).toEqual(["bot", "compass", "spark", "leaf", "shield", "star"]);
     for (const avatar of BOT_AVATARS)

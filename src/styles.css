@@ -2016,10 +2016,10 @@ textarea:focus-visible {
   }
 }
 
-/* Knowledge and Collaboration must keep disclosure and form controls unobscured.
+/* Knowledge, Collaboration and Diagnostics must keep disclosure and form controls unobscured.
    A compact in-flow inspector preserves content width and its own scroll region. */
 @media (max-width: 1440px) {
-  .application-shell--inspector-expanded:has(.knowledge, .collaboration) {
+  .application-shell--inspector-expanded:has(.knowledge, .collaboration, .local-diagnostics) {
     grid-template-areas:
       "header header header"
       "navigation inspector inspector"
@@ -2030,7 +2030,7 @@ textarea:focus-visible {
       var(--application-activity-track);
   }
 
-  .application-shell:has(.knowledge, .collaboration) .application-inspector {
+  .application-shell:has(.knowledge, .collaboration, .local-diagnostics) .application-inspector {
     position: relative;
     inset: auto;
     grid-area: inspector;
@@ -2041,14 +2041,44 @@ textarea:focus-visible {
   }
 }
 
-/* Keep expanded navigation outside Knowledge/Collaboration content at compact
+/* Keep expanded navigation outside Knowledge/Collaboration/Diagnostics/Bots content at compact
    widths; the generic overlay reserves only the collapsed navigation track. */
 @media (max-width: 960px) {
-  .application-shell:has(.knowledge, .collaboration) {
+  .application-shell:has(.knowledge, .collaboration, .local-diagnostics, .agents-page) {
     --application-navigation-track: var(--app-sidebar-expanded-width);
   }
 
-  .application-shell--navigation-collapsed:has(.knowledge, .collaboration) {
+  .application-shell--navigation-collapsed:has(
+    .knowledge,
+    .collaboration,
+    .local-diagnostics,
+    .agents-page
+  ) {
     --application-navigation-track: var(--app-sidebar-collapsed-width);
   }
+}
+
+.local-diagnostics {
+  min-width: 0;
+}
+.local-diagnostics__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+.local-diagnostics__events {
+  max-height: 28rem;
+  overflow: auto;
+  overflow-wrap: anywhere;
+}
+.local-diagnostics__events li {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.local-diagnostics pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 20rem;
+  overflow: auto;
 }

@@ -159,6 +159,9 @@ def write_valid_ui_native_boundary(root: Path) -> None:
         (Path(__file__).resolve().parents[2] / agent_client).read_text(encoding="utf-8"),
         encoding="utf-8",
     )
+    diagnostic_client = root / "src/infrastructure/tauri/diagnostics-client.ts"
+    diagnostic_client.parent.mkdir(parents=True, exist_ok=True)
+    diagnostic_client.write_text('import { invoke, isTauri } from "@tauri-apps/api/core";\ninvoke<unknown>("read_diagnostics");\ninvoke<unknown>("export_diagnostics");\n', encoding="utf-8")
     knowledge_client = 'src/infrastructure/tauri/knowledge-client.ts'
     (root / knowledge_client).write_text(
         (Path(__file__).resolve().parents[2] / knowledge_client).read_text(encoding="utf-8"),
@@ -196,6 +199,8 @@ def write_valid_ui_native_boundary(root: Path) -> None:
     lib.write_text(
         ".invoke_handler(tauri::generate_handler![\n"
         "app_info::get_app_info,\n"
+        "diagnostics_tauri::read_diagnostics,\n"
+        "diagnostics_tauri::export_diagnostics,\n"
         "knowledge_tauri::list_knowledge,\n"
         "knowledge_tauri::save_knowledge,\n"
         "knowledge_tauri::remove_knowledge,\n"
@@ -336,6 +341,25 @@ class RepositoryHealthTests(unittest.TestCase):
             lib = root / "src-tauri/src/lib.rs"
             lib.write_text(lib.read_text(encoding="utf-8").replace(
                 "collaboration_tauri::start_collaboration,", "arbitrary::execute,"), encoding="utf-8")
+            self.assertTrue(health.ui_native_boundary_findings(root))
+
+    def test_diagnostics_boundary_rejects_paths_extra_commands_and_imports(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            client = root / "src/infrastructure/tauri/diagnostics-client.ts"
+            original = client.read_text(encoding="utf-8")
+            self.assertEqual(health.ui_native_boundary_findings(root), ())
+            for old, new in (
+                ('"read_diagnostics")', '"read_diagnostics", { path: "/private" })'),
+                ('"export_diagnostics")', '"export_diagnostics", { overwrite: true })'),
+                ('"read_diagnostics"', '"read_arbitrary_file"'),
+                ('{ invoke, isTauri }', '{ invoke, isTauri, transformCallback }'),
+            ):
+                with self.subTest(new=new):
+                    client.write_text(original.replace(old, new), encoding="utf-8")
+                    self.assertTrue(health.ui_native_boundary_findings(root))
+            client.write_text(original + '\ninvoke<unknown>("extra");\n', encoding="utf-8")
             self.assertTrue(health.ui_native_boundary_findings(root))
 
     def test_agent_chat_boundary_rejects_command_payload_and_import_broadening(self) -> None:

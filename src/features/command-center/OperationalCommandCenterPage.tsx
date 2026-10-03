@@ -1,3 +1,5 @@
+import { ConductorIdentity } from "../agents/ConductorIdentity";
+import { BotAvatar } from "../agents/BotAppearance";
 import { SourceEvidence } from "../knowledge/KnowledgePage";
 import type { Viewport } from "@xyflow/react";
 import { AGENT_IDS } from "../../infrastructure/tauri/agent-chat-client";
@@ -162,6 +164,14 @@ function OperationalWorkspace({
     <div className="operational-inspector">
       {card ? (
         <>
+          {card.kind === "coordinator" && (
+            <ConductorIdentity
+              run={run}
+              current={mode === "run" && snapshotStatus === "current"}
+              expressive
+            />
+          )}
+          {card.identity && <BotAvatar identity={card.identity} agentId={card.agentId} />}
           <h3>{card.label}</h3>
           <p>{card.role}</p>
           <p>{card.description}</p>

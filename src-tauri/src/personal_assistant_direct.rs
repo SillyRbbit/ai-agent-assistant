@@ -35,6 +35,68 @@ const MAX_FRAME: usize = 65_536;
 const MAX_WIRE: usize = 1_048_576;
 const MAX_EVENTS: u64 = 512;
 
+// Diagnostic literals only, not the separate response.failed error taxonomy.
+// No provider-controlled string survives this boundary.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum TopLevelErrorCode {
+    ServerError,
+    RateLimitExceeded,
+    InvalidPrompt,
+    Unknown,
+    Absent,
+    Null,
+    Invalid,
+}
+impl TopLevelErrorCode {
+    fn classify(code: Option<&Value>) -> Self {
+        match code {
+            None => Self::Absent,
+            Some(Value::Null) => Self::Null,
+            Some(Value::String(code)) => match code.as_str() {
+                "server_error" => Self::ServerError,
+                "rate_limit_exceeded" => Self::RateLimitExceeded,
+                "invalid_prompt" => Self::InvalidPrompt,
+                "" => Self::Invalid,
+                _ => Self::Unknown,
+            },
+            Some(_) => Self::Invalid,
+        }
+    }
+}
+
+// Only these request-field literals can cross the diagnostic boundary.
+// Unknown provider strings are neither retained nor normalized.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum TopLevelErrorParam {
+    Model,
+    Reasoning,
+    ReasoningEffort,
+    MaxOutputTokens,
+    ServiceTier,
+    Absent,
+    Null,
+    Invalid,
+    Unknown,
+}
+impl TopLevelErrorParam {
+    fn classify(param: Option<&Value>) -> Self {
+        match param {
+            None => Self::Absent,
+            Some(Value::Null) => Self::Null,
+            Some(Value::String(param)) => match param.as_str() {
+                "model" => Self::Model,
+                "reasoning" => Self::Reasoning,
+                "reasoning.effort" => Self::ReasoningEffort,
+                "max_output_tokens" => Self::MaxOutputTokens,
+                "service_tier" => Self::ServiceTier,
+                "" => Self::Invalid,
+                _ => Self::Unknown,
+            },
+            Some(_) => Self::Invalid,
+        }
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, thiserror::Error)]
 #[serde(rename_all = "snake_case")]
 pub(crate) enum DirectError {
@@ -223,6 +285,7 @@ pub(crate) async fn run(
     let client = client()?;
     let request = request(&client, key)?;
     let mut response = client.execute(request).await.map_err(network_error)?;
+    crate::diagnostics::response_received();
     status_error(response.status())?; // Never read/forward an error response body.
     if response
         .headers()
@@ -256,6 +319,7 @@ pub(crate) async fn run_configured(
     let client = client()?;
     let request = configured_request(&client, key, body)?;
     let mut response = client.execute(request).await.map_err(network_error)?;
+    crate::diagnostics::response_received();
     status_error(response.status())?;
     if response
         .headers()
@@ -523,7 +587,13 @@ impl Decoder {
                     _ => DirectError::ProviderStreamFailedInvalidCode,
                 });
             }
-            "error" => return Err(DirectError::ProviderStreamErrorEvent),
+            "error" => {
+                crate::diagnostics::top_level_error(
+                    TopLevelErrorCode::classify(value.get("code")),
+                    TopLevelErrorParam::classify(value.get("param")),
+                );
+                return Err(DirectError::ProviderStreamErrorEvent);
+            }
             _ => return Err(DirectError::Protocol), // Includes every tool/function event.
         }
         Ok(None)
@@ -603,6 +673,292 @@ fn bounded_id(value: &Value) -> Result<String, DirectError> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn decode_with_diagnostics(
+        input: &[u8],
+        configured: bool,
+        chunk_size: usize,
+    ) -> Result<(DirectError, crate::diagnostics::Snapshot), Box<dyn std::error::Error>> {
+        use crate::{agent_preferences::AgentConnection, diagnostics};
+        let directory = tempfile::tempdir()?;
+        let log = diagnostics::Logger::open(directory.path().join("logs"));
+        let mut attempt = diagnostics::Attempt::with_logger(
+            Some(log.clone()),
+            AgentConnection::OpenaiApi,
+            MODEL,
+            Some("synthetic-conversation"),
+            None,
+            None,
+        );
+        let error = tokio::runtime::Builder::new_current_thread()
+            .build()?
+            .block_on(diagnostics::CURRENT.scope(attempt.observer(), async {
+                let mut decoder = if configured {
+                    Decoder::configured()
+                } else {
+                    Decoder::default()
+                };
+                input
+                    .chunks(chunk_size)
+                    .find_map(|chunk| decoder.push(chunk).err())
+                    .ok_or("expected a decoder error")
+            }))?;
+        attempt.finish(Err(error));
+        drop(attempt);
+        assert!(log.flush(false));
+        let snapshot = log.snapshot();
+        let serialized = serde_json::to_string(&snapshot)?;
+        let persisted = std::fs::read_to_string(directory.path().join("logs/diagnostics-0.jsonl"))?;
+        let export = directory.path().join("export.json");
+        diagnostics::export_new(&export, &snapshot)?;
+        let exported = std::fs::read_to_string(export)?;
+        for text in [&serialized, &persisted, &exported] {
+            assert!(!text.contains("PRIVATE_ERROR_CANARY"));
+            use sha2::Digest;
+            assert!(!text.contains(&format!(
+                "{:x}",
+                sha2::Sha256::digest(b"PRIVATE_ERROR_CANARY")
+            )));
+            assert!(!text.contains("resp_fixture"));
+            assert!(!text.contains("synthetic-conversation"));
+        }
+        assert!(log.flush(true));
+        let reopened = diagnostics::Logger::open(directory.path().join("logs"));
+        let reloaded = reopened.snapshot();
+        assert!(reloaded.available);
+        assert_eq!(serde_json::to_string(&reloaded)?, serialized);
+        assert!(reopened.flush(true));
+        Ok((error, snapshot))
+    }
+
+    #[test]
+    fn top_level_error_diagnostics_classify_only_exact_literals_after_validation(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        use crate::diagnostics::{Category, Event, Outcome};
+        let cases = [
+            (None, Category::OpenaiTopLevelAbsentCode),
+            (Some(Value::Null), Category::OpenaiTopLevelNullCode),
+            (Some(json!("")), Category::OpenaiTopLevelInvalidCode),
+            (Some(json!(42)), Category::OpenaiTopLevelInvalidCode),
+            (Some(json!(true)), Category::OpenaiTopLevelInvalidCode),
+            (Some(json!([])), Category::OpenaiTopLevelInvalidCode),
+            (
+                Some(json!({"code":"server_error"})),
+                Category::OpenaiTopLevelInvalidCode,
+            ),
+            (
+                Some(json!("server_error")),
+                Category::OpenaiTopLevelServerError,
+            ),
+            (
+                Some(json!("rate_limit_exceeded")),
+                Category::OpenaiTopLevelRateLimitExceeded,
+            ),
+            (
+                Some(json!("invalid_prompt")),
+                Category::OpenaiTopLevelInvalidPrompt,
+            ),
+            (
+                Some(json!("SERVER_ERROR")),
+                Category::OpenaiTopLevelUnknownCode,
+            ),
+            (
+                Some(json!(" server_error")),
+                Category::OpenaiTopLevelUnknownCode,
+            ),
+            (
+                Some(json!("server_error ")),
+                Category::OpenaiTopLevelUnknownCode,
+            ),
+            (
+                Some(json!("PRIVATE_ERROR_CANARY")),
+                Category::OpenaiTopLevelUnknownCode,
+            ),
+            (
+                Some(json!("PRIVATE_ERROR_CANARY".repeat(256))),
+                Category::OpenaiTopLevelUnknownCode,
+            ),
+        ];
+        for (code, expected) in cases {
+            let mut failure = json!({
+                "type":"error", "message":"PRIVATE_ERROR_CANARY", "param":"PRIVATE_ERROR_CANARY",
+                "error":{"code":"rate_limit_exceeded", "message":"PRIVATE_ERROR_CANARY"},
+                "response":{"error":{"code":"invalid_prompt", "message":"PRIVATE_ERROR_CANARY"}}
+            });
+            if let Some(code) = code {
+                failure["code"] = code;
+            }
+            let input = wire(vec![frames()[0].clone(), failure]);
+            for configured in [false, true] {
+                for chunk_size in [1, 7, MAX_FRAME] {
+                    let (error, snapshot) =
+                        decode_with_diagnostics(&input, configured, chunk_size)?;
+                    assert_eq!(error, DirectError::ProviderStreamErrorEvent);
+                    assert_eq!(
+                        serde_json::to_value(error)?,
+                        json!("provider_stream_error_event")
+                    );
+                    assert_eq!(snapshot.events.len(), 4);
+                    let detail = &snapshot.events[1];
+                    assert_eq!(detail.event, Event::OpenaiTopLevelError);
+                    assert_eq!(detail.error, Some(expected));
+                    assert_eq!(detail.outcome, Outcome::Observed);
+                    assert_eq!(snapshot.events[2].event, Event::OpenaiTopLevelErrorParam);
+                    assert_eq!(
+                        snapshot.events[2].error,
+                        Some(Category::OpenaiTopLevelParamUnknown)
+                    );
+                    assert!(snapshot
+                        .events
+                        .iter()
+                        .all(|r| r.attempt == detail.attempt
+                            && r.conversation == detail.conversation));
+                    assert_eq!(snapshot.events[3].event, Event::RequestFinished);
+                    assert_eq!(snapshot.events[3].outcome, Outcome::Failed);
+                    assert_eq!(snapshot.events[3].error, Some(Category::StreamError));
+                }
+            }
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn top_level_error_param_exact_shapes_are_private_across_decoder_and_storage(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        use crate::diagnostics::{Category, Event};
+        let cases = [
+            (None, Category::OpenaiTopLevelParamAbsent),
+            (Some(Value::Null), Category::OpenaiTopLevelParamNull),
+            (Some(json!("model")), Category::OpenaiTopLevelParamModel),
+            (
+                Some(json!("reasoning")),
+                Category::OpenaiTopLevelParamReasoning,
+            ),
+            (
+                Some(json!("reasoning.effort")),
+                Category::OpenaiTopLevelParamReasoningEffort,
+            ),
+            (
+                Some(json!("max_output_tokens")),
+                Category::OpenaiTopLevelParamMaxOutputTokens,
+            ),
+            (
+                Some(json!("service_tier")),
+                Category::OpenaiTopLevelParamServiceTier,
+            ),
+            (Some(json!("")), Category::OpenaiTopLevelParamInvalid),
+            (Some(json!(false)), Category::OpenaiTopLevelParamInvalid),
+            (Some(json!(7)), Category::OpenaiTopLevelParamInvalid),
+            (Some(json!([])), Category::OpenaiTopLevelParamInvalid),
+            (
+                Some(json!({"param":"model"})),
+                Category::OpenaiTopLevelParamInvalid,
+            ),
+            (Some(json!("MODEL")), Category::OpenaiTopLevelParamUnknown),
+            (Some(json!(" model")), Category::OpenaiTopLevelParamUnknown),
+            (Some(json!("model ")), Category::OpenaiTopLevelParamUnknown),
+            (
+                Some(json!("input[0]")),
+                Category::OpenaiTopLevelParamUnknown,
+            ),
+            (
+                Some(json!("PRIVATE_ERROR_CANARY".repeat(256))),
+                Category::OpenaiTopLevelParamUnknown,
+            ),
+        ];
+        for (param, expected) in cases {
+            for code in [None, Some(Value::Null)] {
+                let mut failure = json!({"type":"error","message":"PRIVATE_ERROR_CANARY",
+                    "error":{"code":"server_error","param":"model"},
+                    "response":{"error":{"param":"service_tier"}}});
+                if let Some(code) = &code {
+                    failure["code"] = code.clone();
+                }
+                if let Some(param) = &param {
+                    failure["param"] = param.clone();
+                }
+                let input = wire(vec![frames()[0].clone(), failure]);
+                for configured in [false, true] {
+                    for chunk in [1, 7, MAX_FRAME] {
+                        let (error, snapshot) = decode_with_diagnostics(&input, configured, chunk)?;
+                        assert_eq!(error, DirectError::ProviderStreamErrorEvent);
+                        assert_eq!(snapshot.events.len(), 4);
+                        assert_eq!(
+                            snapshot.events[1].error,
+                            Some(if code.is_none() {
+                                Category::OpenaiTopLevelAbsentCode
+                            } else {
+                                Category::OpenaiTopLevelNullCode
+                            })
+                        );
+                        assert_eq!(snapshot.events[2].event, Event::OpenaiTopLevelErrorParam);
+                        assert_eq!(snapshot.events[2].error, Some(expected));
+                        assert!(snapshot
+                            .events
+                            .iter()
+                            .all(|r| r.attempt == snapshot.events[0].attempt
+                                && r.conversation == snapshot.events[0].conversation));
+                        assert_eq!(snapshot.events[3].error, Some(Category::StreamError));
+                    }
+                }
+            }
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn top_level_error_diagnostics_never_bypass_framing_or_classify_response_failed(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        use crate::diagnostics::Event;
+        let failure =
+            json!({"type":"error","code":"server_error","message":"PRIVATE_ERROR_CANARY"});
+        let valid = String::from_utf8(wire(vec![frames()[0].clone(), failure.clone()]))?;
+        let invalid = [
+            wire(vec![failure]),
+            valid
+                .replace("\"sequence_number\":1", "\"sequence_number\":7")
+                .into_bytes(),
+            valid
+                .replace("event: error", "event: response.failed")
+                .into_bytes(),
+            valid
+                .replace("\"status\":\"in_progress\"", "\"status\":\"completed\"")
+                .into_bytes(),
+            valid.replace("data: {", "data: !{").into_bytes(),
+        ];
+        for input in invalid {
+            for configured in [false, true] {
+                for chunk_size in [1, MAX_FRAME] {
+                    let (error, snapshot) =
+                        decode_with_diagnostics(&input, configured, chunk_size)?;
+                    assert_eq!(error, DirectError::Protocol);
+                    assert_eq!(snapshot.events.len(), 2);
+                    assert!(snapshot
+                        .events
+                        .iter()
+                        .all(|r| r.event != Event::OpenaiTopLevelError
+                            && r.event != Event::OpenaiTopLevelErrorParam));
+                }
+            }
+        }
+        let failed = json!({"type":"response.failed", "code":"invalid_prompt",
+            "response":{"error":{"code":"server_error","message":"PRIVATE_ERROR_CANARY"}}});
+        for configured in [false, true] {
+            let (error, snapshot) = decode_with_diagnostics(
+                &wire(vec![frames()[0].clone(), failed.clone()]),
+                configured,
+                MAX_FRAME,
+            )?;
+            assert_eq!(error, DirectError::ProviderStreamServerError);
+            assert!(snapshot
+                .events
+                .iter()
+                .all(|r| r.event != Event::OpenaiTopLevelError
+                    && r.event != Event::OpenaiTopLevelErrorParam));
+        }
+        Ok(())
+    }
+
     fn frames() -> Vec<Value> {
         vec![
             json!({"type":"response.created","response":{"id":"resp_fixture","status":"in_progress"}}),

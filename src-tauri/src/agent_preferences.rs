@@ -96,6 +96,7 @@ pub(crate) struct BotIdentity {
 #[serde(rename_all = "snake_case")]
 pub(crate) enum BotAvatar {
     #[default]
+    Mascot,
     Bot,
     Compass,
     Spark,
@@ -389,6 +390,21 @@ fn valid_content(value: &str, maximum: usize) -> bool {
 #[cfg(test)]
 mod identity_tests {
     use super::*;
+    #[test]
+    fn mascot_default_preserves_all_saved_avatar_choices() -> Result<(), serde_json::Error> {
+        assert!(matches!(BotIdentity::default().avatar, BotAvatar::Mascot));
+        for avatar in [
+            "bot", "compass", "spark", "leaf", "shield", "star", "sun", "moon", "flame", "heart",
+            "gem", "mountain", "waves", "rocket", "book", "code", "globe", "music", "mascot",
+        ] {
+            let mut saved = serde_json::to_value(BotIdentity::default())?;
+            saved["avatar"] = serde_json::json!(avatar);
+            saved["nickname"] = serde_json::json!("Synthetic saved name");
+            let decoded: BotIdentity = serde_json::from_value(saved.clone())?;
+            assert_eq!(serde_json::to_value(decoded)?, saved);
+        }
+        Ok(())
+    }
     #[test]
     fn identity_has_closed_bounds_and_redacted_debug() -> Result<(), PreferencesError> {
         let mut p = AgentProfile::defaults(AgentId::Research)?;

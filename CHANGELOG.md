@@ -1,3 +1,433 @@
+# 2026-10-03 — Bots mascot preview layout
+
+Status: PASS WITH ADVISORIES; finalization/status/full Stop receipts govern completion.
+Worktree: `/Users/hdang/.codex/worktrees/bots-mascot-preview-layout/ai-agent-assistant`.
+Branch: `codex/bots-mascot-preview-layout`; last commit and baseline:
+`662fe1a57a1148a215beb04b215ad35681c4cbe6`. No commit or publication.
+
+Transferred 96 frozen paths from the preserved acceptance checkout; ordinary admission
+succeeded. Eleven successor paths / 99 cumulative uncommitted paths. The only new
+product change lets `.bot-preview` and its full text label wrap; canvas dimensions,
+padding, artwork, animation, navigation repair, fixture and execution behavior stay
+unchanged. Both predecessor valid terminal FAILs, raw states and historical bodies
+remain immutable. No promotion or gate-state copying.
+
+New evidence: 67 focused frontend tests; strict lint/typecheck/frontend build;
+22 browser matrix cases with nine bot selections each, 1600/961/960/959/761/760px,
+short heights, both navigation states and reverse resizing. Label containment,
+144px mascot canvas, existing padding, controls, scrolling, no overflow,
+readiness/rejection and inspector close/Escape assertions passed.
+One installed-tooling offline unsigned isolated native bundle passed. Direct Computer
+Use reviewed nine profiles/artwork at wide size and compact 761px navigation,
+wrapped Workflow preview, full labels/controls, scrolling and Knowledge/Collaboration
+transitions. Reverse resize passed; QA app quit; unrelated app preserved.
+No profile changes, Saves, Sends or workflows. Detailed observations/limitations:
+`/private/tmp/cortexa-bots-mascot-preview-layout-evidence/native-observations.json`.
+
+Unchanged Rust, animation and prior native Simulation evidence is inherited, not rerun.
+Retain D-127/D-128, native/provider/runtime/Codex-isolation and process-local
+Python3.12.1/Xcode SDK27/Cargo strip-none advisories. Live QA parked at 3/10;
+D-125/M1/M2 remain parked. Owner aesthetics, live behavior and remote CI remain
+unverified by this increment. Review source bindings before any publication.
+
+[Plan](docs/plans/2026-10-03-bots-mascot-preview-layout.md) ·
+[Review](docs/reviews/2026-10-03-bots-mascot-preview-layout-post-increment-review.md).
+Evidence: `/private/tmp/cortexa-bots-mascot-preview-layout-evidence`.
+Next action: owner-authorized read-only publication-readiness review.
+Browser preview from this worktree: `npm run dev -- --host 127.0.0.1 --port 4175 --strictPort`;
+`http://127.0.0.1:4175` is browser-only. Prepared isolated native bundle is recorded
+in `artifact.json`; launches/live requests require the applicable separate authority.
+
+## Exact resume prompt for this checkpoint
+
+```text
+Review the bots-mascot-preview-layout candidate read-only in
+/Users/hdang/.codex/worktrees/bots-mascot-preview-layout/ai-agent-assistant.
+Inspect instructions, HANDOFF, plan/review and evidence at
+/private/tmp/cortexa-bots-mascot-preview-layout-evidence.
+Verify ordinary completion/status/full Stop, 99 frozen paths,
+predecessor FAIL preservation, native observations and current refs.
+Preserve all checkouts, changes, artifacts, profiles, rooms and history.
+Do not repeat passing tests/builds/QA or edit, launch, request, commit
+or publish. Separate inherited, automated and direct native evidence.
+Stop on drift, invalid evidence or scope ambiguity. Assess publication
+readiness and exact authority needed; retain all advisories, live QA
+3/10 and parked D-125/M1/M2.
+```
+
+Historical bodies below remain byte-identical.
+
+# 2026-10-02 — Bots navigation acceptance blocked by preview overflow
+
+The isolated acceptance fixture now returns the fixed six-connection readiness
+response (Simulation only ready) and preserves denial of mutation/execution.
+The checker waits for nine loaded choices; select locators were corrected to
+actual accessible combobox names. The 1600px expanded case passed. At 961px,
+a real `.bot-preview` label overflow blocks the required matrix: the final selected
+synthetic `workflow-automation` span reaches x=962.953 while content ends at x=946
+excluding the scrollbar gutter. Content scrollWidth 743 exceeds clientWidth 726.
+Sidebar and workspace meet correctly at x=220. No sidebar overlap is inferred here.
+Large mascot presentation is nonshrinking and the preview row does not wrap.
+Shortening synthetic names, clipping away evidence or weakening assertions is not
+acceptance. Product bytes are frozen by authorization, so no CSS repair was made.
+
+Worktree: `/Users/hdang/.codex/worktrees/bots-navigation-layout-acceptance/ai-agent-assistant`.
+Branch: `codex/bots-navigation-layout-acceptance`.
+HEAD/live-main preflight: `662fe1a57a1148a215beb04b215ad35681c4cbe6`.
+11 successor / 96 cumulative paths. The original 93-path source, its terminal FAIL,
+previous raw state, historical bodies, artifacts, profiles and rooms are preserved.
+Evidence: `/private/tmp/cortexa-bots-navigation-layout-acceptance-evidence`.
+See [plan](docs/plans/2026-10-02-bots-navigation-layout-acceptance.md) and
+[review](docs/reviews/2026-10-02-bots-navigation-layout-acceptance-post-increment-review.md).
+
+Lint/typecheck/frontend build passed; unchanged 67 focused tests and prior Rust,
+animation and workflow evidence are inherited, not rerun. Browser acceptance failed;
+compact/collapsed/reverse matrix remains incomplete. One offline unsigned isolated
+bundle built using installed Python/Xcode SDK27/Cargo strip-none, with predecessor
+hashes preserved. Native access inventory worked, but this new app was never launched
+because of the product-edit scope stop. No new native layout result is claimed.
+The task-owned Vite server was stopped; no profile, note, room or owner-data changes.
+
+Next action: explicit bounded product-layout and admission decision preserving both
+terminal records. Investigate wrapping/shrinking the preview row while preserving
+mascot padding and controls; do not change animation, names or authority. No automatic
+successor, gate amendment or historical promotion. Acceptance remains FAIL/Blocked.
+Keep live QA parked 3/10 used (7 remain), D-127/D-128, native/provider/runtime and
+Codex-isolation advisories, asset/chunk and initial-graph/owner-aesthetic limitations,
+the process-local native workaround and D-125/M1/M2 parked. No publication.
+
+Browser preview (synthetic fallback, not native authority):
+
+```bash
+cd /Users/hdang/.codex/worktrees/bots-navigation-layout-acceptance/ai-agent-assistant
+npm run dev -- --host 127.0.0.1
+```
+
+Use the printed local URL. The unlaunched bundle is
+`src-tauri/target/debug/bundle/macos/Cortexa Bots Navigation QA.app`, bound in
+external artifact.json. Historical bodies below remain byte-identical.
+
+# 2026-10-02 — Bots navigation layout blocked
+
+The CSS repair adds `.agents-page` to both compact navigation-width selectors.
+The actual-App browser matrix was added within the authorized checker; its first
+roster assertion failed (0 choices, expected 9). Source confirms AgentsPage awaits
+both profiles and connection readiness, while the unchanged Knowledge fixture
+rejects `list_agent_connections`. This required read-only fixture response is
+outside the eleven-path authorization, which explicitly forbids fixture changes.
+This is a fixture capability gap, not observed evidence of a failed native repair.
+Implementation is preserved; acceptance is incomplete and quality is **FAIL**.
+
+Worktree: `/Users/hdang/.codex/worktrees/local-diagnostics/ai-agent-assistant`.
+Branch: `codex/local-diagnostics`; HEAD: `662fe1a57a1148a215beb04b215ad35681c4cbe6`.
+Eleven successor / 93 cumulative paths; predecessor raw state archived unchanged.
+Evidence: `/private/tmp/cortexa-bots-navigation-layout-evidence`.
+See [plan](docs/plans/2026-10-02-bots-navigation-layout.md) and
+[review](docs/reviews/2026-10-02-bots-navigation-layout-post-increment-review.md).
+
+67 focused frontend tests passed; strict frontend lint, typecheck and frontend
+build passed. The required browser matrix failed before completion. Native bundle
+and Computer Use acceptance were not attempted after the scope stop. No animation
+or workflow QA was repeated. Existing Rust evidence is inherited, not new validation.
+The task-owned Vite server was stopped. No profiles, rooms or owner data were changed.
+
+Exact next action: obtain a bounded fixture-scope decision and an admission path
+that preserves the terminal FAIL; do not reopen or promote it. The smallest proposed
+fixture addition is fixed synthetic connection readiness for all six existing
+connections (only Simulation ready), with execution/save commands still rejected.
+No automatic recovery, generic IPC fallback or product changes are authorized by
+this proposal. Then complete the browser matrix and previously authorized native QA.
+Keep live QA parked at 3/10 used (7 remain), D-127/D-128, native/provider/runtime,
+Codex-isolation, asset/chunk, initial graph and owner-aesthetic advisories, the
+process-local Python 3.12.1/Xcode SDK27/Cargo stripping workaround and D-125/M1/M2.
+No commits or publication.
+
+Browser preview (not native acceptance):
+
+```bash
+cd /Users/hdang/.codex/worktrees/local-diagnostics/ai-agent-assistant
+npm run dev -- --host 127.0.0.1
+```
+
+Use its printed localhost URL. Previous native bundles represent the predecessor,
+not this repair. Historical document bodies below are preserved byte-identically.
+
+# 2026-10-02 — Conductor extension closeout
+
+Conductor extends the accepted Animated Bot Identity milestone; it is not a tenth bot.
+The supplied indigo/gold original is retained byte-identically beside transparent PNG,
+lossless WebP and editable frame/timing metadata. Shared avatar/motion supports idle blink,
+free-hand greeting, actual-running baton, one newly observed overall-success jump and
+keyboard-accessible playful spin. Static dense views, reduced motion, local animation
+preference and hidden/offscreen suppression remain in force. No provider, profile, role,
+logo, authority, routing, cancellation, IPC, dependency or governance change.
+
+Worktree: `/Users/hdang/.codex/worktrees/local-diagnostics/ai-agent-assistant`.
+Branch: `codex/local-diagnostics`; HEAD `662fe1a57a1148a215beb04b215ad35681c4cbe6`.
+26 extension paths; 90 cumulative uncommitted paths (80 inherited, 10 new).
+Previous raw completion, nine-bot assets, historical document bodies and bundles preserved.
+Evidence: `/private/tmp/cortexa-animated-conductor-evidence`.
+Report: [Conductor review](docs/reviews/2026-10-02-animated-conductor-post-increment-review.md).
+
+Full offline verify passed: 579 frontend, 436 Rust unit, 255 Rust integration, 74 hook
+and 88 repository tests; one existing opt-in Hermes test ignored. Focused regressions:
+49 passed. Real-app and fixture unsigned offline native builds passed. Native Computer
+Use observed greeting/blink/baton/jump/keyboard spin, no repeated success, failure/cancel
+and historical suppression, light/dark transparency, compact scrolling, coordinator
+inspector and one actual all-Simulation Research summary with four validated stages.
+The intermediate actual-run reaction was too fast to establish; native fixture playback
+is separately identified. Reduced-motion/hidden/offscreen cases are automated evidence.
+Both isolated QA apps quit; only new synthetic fixture/room data changed.
+
+Initial roster observations retained a graph measurement warning. Later completed-run
+navigation settled, enabled Fit and changed zoom from 25% to 57%. No diagnosis or
+readiness repair is claimed. Owner first-entry/aesthetic QA remains advisable. Existing
+compact expanded-navigation overlap, asset weight/Vite chunk warnings, D-127/D-128,
+native/provider/runtime/Codex-isolation and Python 3.12.1/Xcode SDK27/Cargo stripping
+workaround advisories remain. Live QA stays parked at 3/10 used, 7 remaining;
+D-125/M1/M2 remain parked. No commit or publication.
+
+## Animated Bot Identity accepted implementation — 2026-10-02
+
+This additive checkpoint supersedes the in-progress text below; historical bodies
+remain intact. Worktree: `/Users/hdang/.codex/worktrees/local-diagnostics/ai-agent-assistant`;
+branch `codex/local-diagnostics`; HEAD `662fe1a57a1148a215beb04b215ad35681c4cbe6`.
+See the [plan](docs/plans/2026-10-02-animated-bot-identity.md) and
+[review](docs/reviews/2026-10-02-animated-bot-identity-post-increment-review.md).
+49 successor paths / 80 cumulative uncommitted paths include the preserved 43-path
+diagnostics predecessor. Exact inventories and hashes are external; no commit or publication.
+
+Implemented all nine approved role mascots using transparent three-frame atlases,
+visible eyelid blink, arm/wing greeting, one new-success jump and explicit keyboard
+spin. Shared static dense avatars and expressive conversation/settings presentations
+preserve stable IDs, roles, Conductor, runtime choices, notes and execution authority.
+Persistent animation disable and reduced-motion preference take precedence. Hidden
+or offscreen reactions are consumed without replay; no animation timers or frame loop.
+New profiles default to mascot; all saved avatar choices (including generic bot) remain.
+An existing generic icon is not silently treated as consent to overwrite a saved choice.
+
+Direct Computer Use observed all nine/four behaviors in the isolated native app,
+keyboard action, animation-disable restart persistence and retained synthetic compass
+selection. Collaboration Research completed with static handoff avatars. Native graph
+QA exposed a grid-cell class omission; the final shared class and nine-ID regression
+correct it. A greeting initially below the conversation viewport was moved beside the
+composer. Final graph and conversation QA use the corrected bundle. The latest
+Simulation cancellation attempt completed before Stop; it proves no cancellation.
+Deterministic tests cover failure, cancellation, hidden/replayed events and cleanup.
+
+Evidence: `/private/tmp/cortexa-animated-bot-identity-evidence`; native receipt
+`native-observations.json`; final bundle `artifact-accepted.json`. Test-owned apps and
+Vite are stopped. Only isolated synthetic data changed; no owner profiles or rooms.
+Native compact approximately 761×521 works after manually collapsing navigation;
+pre-existing expanded-sidebar overlap remains an advisory. Native supports dark theme;
+light/dark transparent edges were checked in the browser fixture, not native light mode.
+Owner aesthetic QA remains separate. No live success/cancellation or remote CI claim.
+
+Keep live QA parked at 3/10 used, 7 remaining; retain D-127/D-128, native/provider/runtime,
+Codex-isolation, process-local Python 3.12 / Xcode SDK27 / Cargo strip-none workaround
+and parked D-125/M1/M2. No provider requests, installs, credentials or publication.
+Completion is established only by the final complete/valid and full Stop receipts.
+
+Added nine role mascots, finite reactions, local motion preference and focused regression
+coverage. Existing selections remain backward compatible. Source artwork and animation
+specification are retained alongside lossless WebP runtime atlases.
+
+## Animated Bot Identity implementation checkpoint — 2026-10-02
+
+The admitted [Animated Bot Identity plan](docs/plans/2026-10-02-animated-bot-identity.md)
+now has nine transparent three-frame mascots, lossless runtime atlases, shared dense
+static and expressive presentations, finite greeting/jump/spin, visible eye blinking,
+OS reduced-motion support and a device-local animation toggle. Saved custom avatars
+remain unchanged; only new profiles default to the additive mascot choice. Canonical
+IDs, Conductor, providers, notes, routing and execution remain unchanged.
+
+Worktree: `/Users/hdang/.codex/worktrees/local-diagnostics/ai-agent-assistant`;
+branch `codex/local-diagnostics`; HEAD `662fe1a57a1148a215beb04b215ad35681c4cbe6`.
+54 focused frontend tests, strict lint and typecheck passed. Initial test-environment
+storage/event setup and a delayed-greeting edge case were corrected and retested.
+Full offline verification is running; native acceptance and final gates are pending.
+Evidence: `/private/tmp/cortexa-animated-bot-identity-evidence`. Preview: `npm run dev
+-- --host 127.0.0.1` from this worktree; native features require the isolated QA bundle.
+Next action: inspect full verification, build the isolated app and perform native
+Computer Use acceptance, then freeze the review. No live requests or publication.
+
+Live-provider QA stays parked at 3/10 used, 7 remaining. Retain D-127/D-128,
+native/provider/runtime and Codex-isolation advisories, the process-local Python 3.12 /
+Xcode SDK27 / Cargo stripping workaround, pending owner QA and parked D-125/M1/M2.
+
+## 2026-10-02 — Provider troubleshooting
+
+Added generated request/dispatch correlation, observable preparation/cleanup phases, interruption recovery, closed troubleshooting advice, filters and native summary copy. Final full offline verification and native Simulation QA passed; live checkpoint remains owner-blocked at 3/10 used.
+
+## 2026-10-02 — Bounded stream-error shape diagnostic
+
+Worktree: `/Users/hdang/.codex/worktrees/local-diagnostics/ai-agent-assistant`.
+Branch: `codex/local-diagnostics`; HEAD `662fe1a57a1148a215beb04b215ad35681c4cbe6`.
+Sixteen successor paths / thirty-six cumulative paths; all remain uncommitted.
+The 33-path predecessor, historical document bodies, raw completion state,
+receipts and all three prior bundles are preserved. Ordinary admission succeeded.
+Evidence: `/private/tmp/cortexa-openai-stream-error-shape-diagnostic-evidence`.
+Plan: [Shape diagnostic](docs/plans/2026-10-02-openai-stream-error-shape-diagnostic.md).
+Review: [Shape diagnostic review](docs/reviews/2026-10-02-openai-stream-error-shape-diagnostic-post-increment-review.md).
+
+Implemented: distinct absent/null code; exact parameter allowlist model, reasoning,
+reasoning.effort, max_output_tokens, service_tier; absent/null/invalid/unknown
+buckets. Historical missing-code stays readable without reinterpretation. One code
+and one parameter observation are bounded by the existing observer. Record fields,
+request construction, response.failed, framing, terminal errors, retries and cleanup
+are unchanged. No arbitrary value, nested fallback or excluded-value hash is retained.
+
+Verified: nine focused Rust tests, seven focused frontend tests, full offline
+verification (strict formatting/lint/Clippy, hooks/repository, 540 frontend tests,
+432 Rust unit tests plus integration contracts, frontend and native no-bundle build).
+Direct synthetic Computer Use of the actual DiagnosticsPanel observed closed labels,
+legacy labels, matching correlations, All/Error/Info/Warning filters, scrolling,
+empty state, refresh and real copy/paste of fourteen records / fourteen fields.
+The temporary browser clipboard API returned empty; keyboard paste verified the
+actual clipboard round trip. No product defect was inferred from that tool result.
+The first verify failed only on a new-plan relative self-link; correction and the
+full rerun passed. An early schema check correctly rejected the draft report while
+required checks were still marked Not run; final schema validation follows all checks.
+Automatic review rejected a broad formatter before execution;
+only the three allowlisted Rust files were formatted. Preview and QA tab closed.
+
+Acceptance: PASS WITH ADVISORIES review; ordinary finalization/status/full Stop must be
+verified in the external receipts before relying on completion.
+No native launch or bundle replacement, provider request, installation, commit or
+publication. Existing native/Simulation evidence is inherited, not newly executed.
+This does not identify the historical error cause or verify live success/cancellation.
+OpenAI is paused at 3/10 used, 7 remaining, superseding historical ledgers below.
+Retain D-127/D-128, native/provider/runtime, Codex-isolation, bounded-log loss and
+older-reader compatibility limits, owner/760px QA, the process-local Python3.12 /
+Xcode SDK27 / Cargo strip=none workaround, Vite chunk warning and parked D-125/M1/M2.
+Next action: owner-authorized isolated diagnostic bundle preparation, without launch
+or Send; existing bundles predate the new classifier. Do not start automatically.
+
+Synthetic browser preview only, from the worktree above:
+`npm run dev -- --host 127.0.0.1 --port 4177 --strictPort`
+then http://127.0.0.1:4177/scripts/browser/diagnostics-fixture.html.
+This synthetic fixture is a label matrix, not an observed live attempt lifecycle.
+
+## 2026-10-02 — Bounded top-level stream-error diagnostics
+
+Worktree: `/Users/hdang/.codex/worktrees/local-diagnostics/ai-agent-assistant`.
+Branch: `codex/local-diagnostics`; unchanged HEAD
+`662fe1a57a1148a215beb04b215ad35681c4cbe6`. Fifteen successor paths,
+thirty-three cumulative paths. The inherited 31-path candidate, prior raw
+complete/valid record, historical document bodies, receipts and both bundles
+are preserved. Ordinary admission succeeded after a hash-verified external archive.
+Plan: [Bounded stream-error diagnostic](docs/plans/2026-10-02-openai-stream-error-diagnostic.md).
+Review: [Post-increment review](docs/reviews/2026-10-02-openai-stream-error-diagnostic-post-increment-review.md).
+Evidence: `/private/tmp/cortexa-openai-stream-error-diagnostic-evidence`.
+
+The accepted top-level SSE error now emits at most one correlated
+`openai_top_level_error` observation for a nonterminal OpenAI attempt. Its closed
+label identifies only exact server_error, rate_limit_exceeded or invalid_prompt
+literals, or unknown/missing/invalid code. Missing includes absent/null; invalid
+includes empty/non-string. Nested error fields, messages, parameters, frames and
+arbitrary strings are never copied. This conservative allowlist is not an
+exhaustive provider taxonomy or proof of a specific account failure.
+The conversation error and terminal stream_error remain unchanged, as do request
+construction, response.failed mapping, framing, retries and ownership cleanup.
+No new record fields, IPC commands, dependencies, permissions or storage paths.
+
+Seven focused Rust regressions and seven focused frontend tests passed. Full
+offline verification passed: 540 frontend tests, 430 native unit tests, all
+integration suites, 74 hook tests, 88 repository tests, strict format/lint/typecheck,
+frontend build and native release build. One pre-existing opt-in Hermes version
+probe remained ignored; it was not newly verified. Documentation/repository/security,
+whitespace and preservation checks passed. Independent review found no new
+correctness, security or architecture blocker. Quality is PASS WITH ADVISORIES;
+ordinary complete/valid status and full Stop receipts are authoritative externally.
+The prior
+Computer Use/layout/Simulation evidence is inherited only. No launch, request,
+new debug bundle or live verification occurred. Both existing bundles predate
+this source change and must not be presented as containing the new classifier.
+
+The prior allowance is exhausted at 5/5. The replacement-key batch is 1/10 used,
+9 remaining, based on the preserved owner-acknowledged QA receipt. This supersedes
+older ledger entries below without changing them. The previous top-level event's
+cause cannot be reconstructed; its arbitrary fields were never retained. OpenAI
+remains paused; no fallback or automatic retry. Retain all advisories, D-127/D-128,
+native/provider/runtime and Codex-isolation limits, process-local Python 3.12 /
+Xcode SDK27 / Cargo strip=none workaround, owner/760px QA and parked D-125/M1/M2.
+
+Exact next action after valid closure: obtain separate authorization for one
+updated isolated debug bundle and native diagnostic QA; no automatic request.
+Browser preview from this
+worktree is `npm run dev -- --host 127.0.0.1` at http://127.0.0.1:1420; native
+logging needs an updated native artifact under separate authorization. No preview
+or app launch is performed in this task. Do not resume historical failures,
+provider execution or publication automatically.
+
+## 2026-10-02 — Local diagnostics acceptance
+
+Worktree: `/Users/hdang/.codex/worktrees/local-diagnostics/ai-agent-assistant`.
+Branch: `codex/local-diagnostics`; unchanged HEAD/main baseline
+`662fe1a57a1148a215beb04b215ad35681c4cbe6`. Thirty-one uncommitted paths;
+no commits, publication, dependency changes or owner-data changes.
+Plan: [Local diagnostics](docs/plans/2026-10-02-local-diagnostics.md).
+Evidence: `/private/tmp/cortexa-local-diagnostics-evidence`.
+
+Rust owns content-free structured records, a 256-record queue/recent window,
+three files capped at 5 MiB each, UTC timestamps, generated opaque correlations,
+closed event/error/outcome fields and monotonic timing. First HTTP headers and
+first accepted text are distinct; Codex/Simulation first response is the first
+accepted normalized event. Dynamic model IDs are fingerprinted. One terminal
+record seals an attempt; abort cleanup retains an observed host timeout rather
+than incorrectly labeling it cancellation. No payload, path, raw exception,
+provider body or subprocess output enters this schema. Request-owned Codex child
+reap/cleanup, collaboration stages and relevant configuration/storage failures
+are instrumented. Logs are neither transcripts nor authenticated audit evidence.
+
+Settings → Local diagnostics provides availability, severity filtering, explicit
+refresh, sanitized copy/selectable summary and native exclusive-create export of
+the recent 256 records. Unix logs use 0700/0600; symlinks/hardlinks and malformed
+stored records are rejected. Queue/storage failure is nonfatal and availability
+stays false until restart. Export currently uses the established macOS picker.
+Exactly two argument-free IPC checker entries/rejection tests were separately
+owner-approved. Hooks, CSP, permissions, provider rules and dependencies remain.
+
+Final full offline verification passed: 538 frontend tests, 423 native unit tests,
+native integration suites, 74 hook tests, 88 repository tests, strict lint/format,
+typecheck/frontend build and release native build. Eleven focused diagnostic tests
+passed before the final full suite. Actual-App browser coverage passed 24 layout
+combinations. Initial test/import/checker/lint failures were repaired; their logs
+remain. A native 960px navigation overlap was found, corrected only for Diagnostics
+using the established selectors, rebuilt and directly rechecked at 960 and 760px.
+
+Direct native Computer Use observed Simulation partial streaming, completed status,
+released ownership, correlated start/first response/first text/terminal records,
+filtering, copy feedback, export and overwrite refusal with unchanged bytes,
+restart persistence, refresh, compact inspector/scrolling and graceful Quit.
+First response was 2 ms, first text 185 ms, completion 549 ms in that one synthetic
+attempt. Both artifacts remain. Native reverse-resize to wide was not observed;
+automated reverse-resize passed. Disk/export canary absence and permissions passed.
+Unavailable storage, cancellation, timeout and runtime failure are deterministic
+automated evidence, not observed live behavior. The test app and server are stopped.
+
+Logging quality result: PASS WITH ADVISORIES. Consult the
+[final review](docs/reviews/2026-10-02-local-diagnostics-post-increment-review.md)
+and checkout-local hook status for completion validity; full Stop is recorded
+externally. The sequential live-provider checkpoint remains blocked:
+owner-private credential launch and confirmation of OpenAI API/gpt-5.6-luna/low
+are pending. No live request was made. Ledger stays 4/5 used, at most one remaining.
+The proposed fresh prompt is “Reply with OK.”, Memory Off, empty instructions,
+no notes/documents/history. Never inspect keys or retry automatically. Prior Sol
+HTTP403 and owner-reported Luna stream errors remain distinct unresolved evidence.
+
+Retain D-127/D-128, native/provider/runtime and Codex-isolation advisories,
+process-local Python 3.12/Xcode SDK27/Cargo strip=none workaround, pending inherited
+owner/Knowledge 760px QA, and parked D-125/M1/M2. Future app-version changes require
+review of the closed diagnostic schema/version policy. Existing >500kB Vite chunk
+warning remains advisory. Remote CI and live-provider verification are not claimed.
+
+Preview from this worktree: `npm run dev -- --host 127.0.0.1` at
+http://127.0.0.1:1420 (browser has no native diagnostics/provider access).
+Native QA bundle: `src-tauri/target/debug/bundle/macos/Cortexa Diagnostics QA.app`;
+identity/hashes are in external `artifact-final.json`. Use supported private native
+launch for any authorized live test. Do not copy or replace older Desktop work.
+
 ## 2026-10-02 — Historical Knowledge link label — local acceptance
 
 Worktree: `/Users/hdang/.codex/worktrees/connected-knowledge-workspace/ai-agent-assistant`.

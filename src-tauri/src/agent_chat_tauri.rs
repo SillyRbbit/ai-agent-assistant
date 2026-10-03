@@ -36,6 +36,7 @@ struct Session {
     task: Option<JoinHandle<()>>,
     stopping: bool,
     error: Option<ChatError>,
+    diagnostic: Option<crate::diagnostics::Observer>,
 }
 
 impl Drop for Session {
@@ -102,6 +103,7 @@ pub(crate) struct SendRequest {
 #[serde(rename_all = "camelCase")]
 pub(crate) struct ChatSnapshot {
     version: u8,
+    request_id: Option<String>,
     conversation_id: String,
     agent_id: String,
     connection: AgentConnection,
@@ -157,6 +159,17 @@ impl Session {
             if snapshot.is_terminal() {
                 if let Some(task) = &self.task {
                     if !task.is_finished() {
+                        if let PersonalAssistantV0Snapshot::Failed(failed) = &snapshot {
+                            if let Some(observer) = &self.diagnostic {
+                                observer.aborting_with(match failed.failure().code() {
+                                    PersonalAssistantV0FailureCode::DeadlineExceeded
+                                    | PersonalAssistantV0FailureCode::ProviderTimeout => {
+                                        DirectError::Timeout
+                                    }
+                                    _ => DirectError::Protocol,
+                                });
+                            }
+                        }
                         task.abort();
                     }
                 }
@@ -187,8 +200,14 @@ impl Session {
             .conversation
             .as_ref()
             .ok_or(ChatError::InvalidRequest)?;
+        if !self.owned() && matches!(status, "completed" | "stopped" | "error") {
+            if let Some(observer) = &self.diagnostic {
+                observer.ownership_released();
+            }
+        }
         Ok(ChatSnapshot {
             version: 1,
+            request_id: self.diagnostic.as_ref().and_then(|o| o.request_id()),
             conversation_id: bound.id.clone(),
             agent_id: bound.profile.agent_id.clone(),
             connection: bound.profile.connection,
@@ -220,6 +239,7 @@ fn begin_conversation(
     session.conversation = Some(bound);
     session.handle = None;
     session.error = None;
+    session.diagnostic = None;
     session.task = None;
     session.snapshot()
 }
@@ -277,68 +297,105 @@ fn start_owned(
         .conversation
         .as_ref()
         .ok_or(ChatError::InvalidRequest)?;
-    // The caller supplies only a conversation ID and message, never context or agent authority.
-    let current = storage.agent_profile(&bound.profile.agent_id)?;
-    bound.validate_send(&current, &request.message)?;
-    let adapter = match bound.profile.connection {
-        AgentConnection::Codex => {
-            if request.acknowledgment != "codex-agent-text-v1" {
-                return Err(ChatError::InvalidRequest);
-            }
-            validate_catalog(&session.catalogs, &bound.profile)?;
-            AdapterRequest::Codex {
-                setup: codex_connection::Setup::from_environment()?,
-                model: bound.profile.model.clone(),
-                effort: bound.profile.effort,
-                input: bound.codex_input(&request.message)?,
-            }
-        }
-        AgentConnection::Simulation => {
-            if request.acknowledgment != "simulation" {
-                return Err(ChatError::InvalidRequest);
-            }
-            AdapterRequest::Simulation
-        }
-        AgentConnection::AnthropicApi | AgentConnection::LmStudio | AgentConnection::Ollama => {
-            let profile = &bound.profile;
-            let expected = if profile.connection == AgentConnection::AnthropicApi {
-                "anthropic-agent-text-v1"
-            } else {
-                "local-agent-text-v1"
-            };
-            if request.acknowledgment != expected {
-                return Err(ChatError::InvalidRequest);
-            }
-            validate_catalog(&session.catalogs, profile)?;
-            let body = bound.provider_request_body(&request.message)?;
-            if profile.connection == AgentConnection::AnthropicApi {
-                AdapterRequest::Anthropic {
-                    key: anthropic::AnthropicKey::from_environment()?,
-                    body,
+    let mut diagnostic = crate::diagnostics::Attempt::new(
+        bound.profile.connection,
+        &bound.profile.model,
+        Some(&bound.id),
+        None,
+        None,
+    );
+    let observer = diagnostic.observer();
+    let prepared = (|| -> Result<_, ChatError> {
+        // The caller supplies only a conversation ID and message, never context or agent authority.
+        let current = storage.agent_profile(&bound.profile.agent_id)?;
+        bound.validate_send(&current, &request.message)?;
+        observer.record(
+            crate::diagnostics::Event::ConfigurationValidated,
+            crate::diagnostics::Outcome::Observed,
+            None,
+        );
+        let adapter = match bound.profile.connection {
+            AgentConnection::Codex => {
+                if request.acknowledgment != "codex-agent-text-v1" {
+                    return Err(ChatError::InvalidRequest);
                 }
-            } else {
-                AdapterRequest::Local {
-                    endpoint: profile.endpoint.clone(),
-                    key: local_models::LocalKey::from_environment(
-                        profile.connection,
-                        &profile.endpoint,
-                        profile.local_auth,
-                    )?,
-                    body,
+                validate_catalog(&session.catalogs, &bound.profile)?;
+                AdapterRequest::Codex {
+                    setup: codex_connection::Setup::from_environment()?,
+                    model: bound.profile.model.clone(),
+                    effort: bound.profile.effort,
+                    input: bound.codex_input(&request.message)?,
                 }
             }
-        }
-        AgentConnection::OpenaiApi => {
-            if request.acknowledgment != "openai-agent-text-v1" {
-                return Err(ChatError::InvalidRequest);
+            AgentConnection::Simulation => {
+                if request.acknowledgment != "simulation" {
+                    return Err(ChatError::InvalidRequest);
+                }
+                AdapterRequest::Simulation
             }
-            let body = bound.request_body(&request.message)?;
-            AdapterRequest::Openai { key: key()?, body }
+            AgentConnection::AnthropicApi | AgentConnection::LmStudio | AgentConnection::Ollama => {
+                let profile = &bound.profile;
+                let expected = if profile.connection == AgentConnection::AnthropicApi {
+                    "anthropic-agent-text-v1"
+                } else {
+                    "local-agent-text-v1"
+                };
+                if request.acknowledgment != expected {
+                    return Err(ChatError::InvalidRequest);
+                }
+                validate_catalog(&session.catalogs, profile)?;
+                let body = bound.provider_request_body(&request.message)?;
+                if profile.connection == AgentConnection::AnthropicApi {
+                    AdapterRequest::Anthropic {
+                        key: anthropic::AnthropicKey::from_environment()?,
+                        body,
+                    }
+                } else {
+                    AdapterRequest::Local {
+                        endpoint: profile.endpoint.clone(),
+                        key: local_models::LocalKey::from_environment(
+                            profile.connection,
+                            &profile.endpoint,
+                            profile.local_auth,
+                        )?,
+                        body,
+                    }
+                }
+            }
+            AgentConnection::OpenaiApi => {
+                if request.acknowledgment != "openai-agent-text-v1" {
+                    return Err(ChatError::InvalidRequest);
+                }
+                let body = bound.request_body(&request.message)?;
+                AdapterRequest::Openai { key: key()?, body }
+            }
+        };
+        if matches!(
+            bound.profile.connection,
+            AgentConnection::OpenaiApi | AgentConnection::AnthropicApi
+        ) {
+            observer.record(
+                crate::diagnostics::Event::CredentialsAvailable,
+                crate::diagnostics::Outcome::Observed,
+                None,
+            );
+        }
+        Ok((adapter, GenerationLease::acquire()?))
+    })();
+    let (adapter, lease) = match prepared {
+        Ok(value) => value,
+        Err(error) => {
+            diagnostic.fail_preparation(error);
+            session.diagnostic = Some(observer);
+            return Err(error);
         }
     };
-    let lease = GenerationLease::acquire()?;
+    session.diagnostic = Some(observer);
     // Presentation ownership and transport cleanup must both finish before reuse.
-    let start = session.host.start_direct().map_err(|_| ChatError::Busy)?;
+    let start = session.host.start_direct().map_err(|_| {
+        diagnostic.fail_preparation(ChatError::Busy);
+        ChatError::Busy
+    })?;
     let handle = start.presentation_handle().clone();
     session.handle = Some(handle.clone());
     session.error = None;
@@ -349,6 +406,7 @@ fn start_owned(
         adapter,
         lease,
         Duration::from_secs(60),
+        diagnostic,
     )));
     session.snapshot()
 }
@@ -412,6 +470,26 @@ pub(crate) async fn run_adapter(
     }
 }
 
+pub(crate) async fn run_adapter_traced(
+    adapter: AdapterRequest,
+    observer: crate::diagnostics::Observer,
+    mut emit: impl FnMut(ProviderEvent) -> Result<(), DirectError>,
+) -> Result<(), DirectError> {
+    observer.dispatch();
+    let _transport = crate::diagnostics::TransportScope(observer.clone());
+    crate::diagnostics::CURRENT
+        .scope(
+            observer.clone(),
+            run_adapter(adapter, |event| {
+                let text = matches!(&event, ProviderEvent::Delta(text) if !text.is_empty());
+                emit(event)?;
+                observer.first(text);
+                Ok(())
+            }),
+        )
+        .await
+}
+
 async fn execute(
     state: Weak<Mutex<Session>>,
     handle: PersonalAssistantV0PresentationHandle,
@@ -419,11 +497,13 @@ async fn execute(
     adapter: AdapterRequest,
     _lease: GenerationLease,
     deadline: Duration,
+    mut diagnostic: crate::diagnostics::Attempt,
 ) {
+    let observer = diagnostic.observer();
     let mut completed = false;
     let result = tokio::time::timeout(
         deadline,
-        run_adapter(adapter, |event| {
+        run_adapter_traced(adapter, observer, |event| {
             let state = state.upgrade().ok_or(DirectError::InvalidRequest)?;
             let mut session = state.lock().map_err(|_| DirectError::Internal)?;
             if session.handle.as_ref() != Some(&handle) || session.stopping {
@@ -452,6 +532,7 @@ async fn execute(
             Err(DirectError::Incomplete)
         }
     });
+    let mut final_result = result;
     // The transport future is dropped before the terminal transition releases the lease.
     let Some(state) = state.upgrade() else {
         return;
@@ -460,12 +541,21 @@ async fn execute(
         if session.handle.as_ref() != Some(&handle) || session.stopping {
             return;
         }
-        if !session
-            .host
-            .snapshot(&handle)
-            .is_ok_and(|s| !s.is_terminal())
-        {
-            return;
+        match session.host.snapshot(&handle) {
+            Ok(PersonalAssistantV0Snapshot::Failed(failed)) => {
+                diagnostic.finish(Err(match failed.failure().code() {
+                    PersonalAssistantV0FailureCode::DeadlineExceeded
+                    | PersonalAssistantV0FailureCode::ProviderTimeout => DirectError::Timeout,
+                    _ => DirectError::Protocol,
+                }));
+                return;
+            }
+            Ok(snapshot) if snapshot.is_terminal() => return,
+            Err(_) => {
+                diagnostic.finish(Err(DirectError::Internal));
+                return;
+            }
+            _ => {}
         }
         match result {
             Ok(()) => {
@@ -479,6 +569,7 @@ async fn execute(
                         }
                     }
                     Err(_) => {
+                        final_result = Err(DirectError::Internal);
                         session.error = Some(ChatError::Internal);
                         let _ = session
                             .host
@@ -494,6 +585,7 @@ async fn execute(
             }
         }
     };
+    diagnostic.finish(final_result);
 }
 
 async fn stop_owned(state: &Arc<Mutex<Session>>, id: &str) -> Result<ChatSnapshot, ChatError> {
@@ -636,7 +728,20 @@ pub(crate) fn save_agent_preferences(
     state: tauri::State<'_, AgentChatState>,
 ) -> Result<AgentProfile, ChatError> {
     let _session = state.0.lock().map_err(|_| ChatError::Internal)?;
-    Ok(storage.save_agent_preferences(request)?)
+    Ok(storage
+        .save_agent_preferences(request)
+        .inspect_err(|error| {
+            crate::diagnostics::event(
+                crate::diagnostics::Event::ConfigurationFailure,
+                crate::diagnostics::Outcome::Failed,
+                Some(match error {
+                    crate::agent_preferences::PreferencesError::Storage => {
+                        crate::diagnostics::Category::Storage
+                    }
+                    _ => crate::diagnostics::Category::Configuration,
+                }),
+            );
+        })?)
 }
 #[tauri::command]
 pub(crate) fn clear_agent_note(
@@ -703,7 +808,17 @@ pub(crate) async fn send_agent_message(
     storage: tauri::State<'_, Storage>,
     state: tauri::State<'_, AgentChatState>,
 ) -> Result<ChatSnapshot, ChatError> {
-    start_owned(&state.0, &storage, request, ApiKey::from_environment)
+    start_owned(&state.0, &storage, request, ApiKey::from_environment).inspect_err(|error| {
+        let category = match error {
+            ChatError::Provider(e) => crate::diagnostics::Category::from(*e),
+            _ => crate::diagnostics::Category::Configuration,
+        };
+        crate::diagnostics::event(
+            crate::diagnostics::Event::ConfigurationFailure,
+            crate::diagnostics::Outcome::Failed,
+            Some(category),
+        );
+    })
 }
 #[tauri::command]
 pub(crate) fn poll_agent_conversation(
@@ -712,7 +827,13 @@ pub(crate) fn poll_agent_conversation(
 ) -> Result<ChatSnapshot, ChatError> {
     let mut session = state.0.lock().map_err(|_| ChatError::Internal)?;
     session.check_id(&request.conversation_id)?;
-    session.snapshot()
+    let snapshot = session.snapshot()?;
+    if !snapshot.busy && matches!(snapshot.status, "completed" | "stopped" | "error") {
+        if let (Some(observer), Some(id)) = (&session.diagnostic, &snapshot.request_id) {
+            observer.ui_returned(id);
+        }
+    }
+    Ok(snapshot)
 }
 #[tauri::command]
 pub(crate) async fn cancel_agent_conversation(
@@ -841,6 +962,13 @@ mod tests {
                         adapter,
                         lease,
                         Duration::ZERO,
+                        crate::diagnostics::Attempt::new(
+                            AgentConnection::Simulation,
+                            "simulation",
+                            None,
+                            None,
+                            None,
+                        ),
                     )
                     .await;
                     let snapshot = state.lock().map_err(|_| "lock")?.snapshot()?;
@@ -1027,5 +1155,77 @@ mod tests {
             codex.is_some_and(|c| matches!(c.status, "blocked" | "owner_setup_required")
                 && c.message.contains("dedicated"))
         );
+    }
+}
+
+#[cfg(test)]
+mod diagnostic_boundary_tests {
+    use super::*;
+    #[test]
+    fn preparation_failure_and_success_keep_trace_without_provider_or_content_in_id(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let _serial = crate::personal_assistant_v0::tests::serial_guard()?;
+        let initialized = Storage::initialize(&crate::storage::DatabaseConfig::in_memory())?;
+        let storage = initialized.storage();
+        tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()?
+            .block_on(async {
+                let state = Arc::new(Mutex::new(Session::default()));
+                let profile = storage.save_agent_preferences(AgentPreferencesInput {
+                    identity: crate::agent_preferences::BotIdentity::default(),
+                    agent_id: "personal-assistant".into(),
+                    connection: AgentConnection::OpenaiApi,
+                    model: "gpt-5.6-luna".into(),
+                    effort: ReasoningEffort::Low,
+                    endpoint: String::new(),
+                    local_auth: false,
+                    allow_unknown_locality_notes: false,
+                    owner_instructions: String::new(),
+                    memory_mode: MemoryMode::Off,
+                    note: String::new(),
+                    revision: 0,
+                })?;
+                let initial = begin_conversation(&state, profile)?;
+                let result = start_owned(
+                    &state,
+                    storage,
+                    SendRequest {
+                        conversation_id: initial.conversation_id.clone(),
+                        message: "DUMMY-PRIVATE-PROMPT".into(),
+                        acknowledgment: "openai-agent-text-v1".into(),
+                    },
+                    || Err(DirectError::MissingKey),
+                );
+                assert!(matches!(
+                    result,
+                    Err(ChatError::Provider(DirectError::MissingKey))
+                ));
+                let failed = state.lock().map_err(|_| "lock")?.snapshot()?;
+                assert!(!failed.busy);
+                let failed_id = failed.request_id.ok_or("missing trace")?;
+                assert!(failed_id.starts_with("sha256:"));
+                assert!(!failed_id.contains("DUMMY"));
+                let next = begin_conversation(&state, storage.agent_profile("research")?)?;
+                assert!(next.request_id.is_none());
+                let started = start_owned(
+                    &state,
+                    storage,
+                    SendRequest {
+                        conversation_id: next.conversation_id.clone(),
+                        message: "DUMMY-SIMULATION".into(),
+                        acknowledgment: "simulation".into(),
+                    },
+                    || Err(DirectError::MissingKey),
+                )?;
+                assert_ne!(started.request_id.as_ref(), Some(&failed_id));
+                let id = started.request_id.ok_or("missing trace")?;
+                let stopped = stop_owned(&state, &next.conversation_id).await?;
+                assert!(!stopped.busy);
+                assert_eq!(stopped.request_id.as_deref(), Some(id.as_str()));
+                assert!(GenerationLease::acquire().is_ok());
+                Ok::<(), Box<dyn std::error::Error>>(())
+            })?;
+        Ok(())
     }
 }
