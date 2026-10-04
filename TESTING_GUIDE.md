@@ -1,3 +1,326 @@
+# 2026-10-03 — Collapsed sidebar acceptance
+
+Worktree: `/Users/hdang/.codex/worktrees/collapsed-sidebar-reachability/ai-agent-assistant`.
+Branch: `codex/collapsed-sidebar-reachability`; unchanged HEAD:
+`dcea9df088ddb01c26c1a79ab51e0307190f551c`.
+
+Status: separate owner approval and installed acceptance-request admission passed;
+documentation verification and acceptance reviews passed with advisories.
+Ordinary finalization, complete/valid status and full Stop are recorded externally
+after this document is frozen; their actual receipts control completion. Nine additive
+documentation paths / 61 cumulative paths. No product or governance changes.
+Both original terminal FAILs, their reports and raw states remain immutable in the
+sealed lineage and retained checkouts/evidence. Earlier failures and unknown causes
+are not reinterpreted as historical passes.
+
+The owner approved all four criterion-specific mappings: compact Conversations
+scrolling, compact dimensions, sidebar reachability/tooltips/cleanup and the later
+observation filling the earlier lost-access gap. The later native receipt directly
+observed measured 760x520, both navigation states, first-control/Settings wheel
+reachability, independent empty composer/disclosure scrolling, hover/focus labels,
+keyboard/Escape and successful quit/absence. This run only verifies and reconciles
+that inherited evidence; no new native QA, launch or product check is claimed.
+
+Evidence: `/private/tmp/cortexa-collapsed-sidebar-acceptance-evidence-oleavape`.
+Sealed maintenance: `/private/tmp/cortexa-evidence-acceptance-maintenance-kw8t1_eu`.
+Inherited native receipt: `/private/tmp/cortexa-sidebar-short-native-qa-iwwfuyno/observations.json`.
+
+All advisories remain: D-127/D-128; unsigned/native/provider/runtime/Codex-isolation;
+branding/icon/ICNS/Windows and remaining owner QA; process-local Python/Xcode SDK27/
+Cargo workaround. Live QA remains parked at 3/10; D-125/M1/M2 remain parked.
+No live success/cancellation or historical crash/provider-error cause is established.
+
+Next action: after the external complete/valid and full Stop receipts verify,
+request a separate read-only publication readiness review. No commit, push, merge or publication is authorized here.
+
+---
+
+New validation is limited to documentation, repository, security, whitespace,
+scope/preservation, reviews, session/report schema and ordinary completion/Stop.
+Inherited maintenance results: 105 hooks (30 new lifecycle regressions), 94
+repository tests, 580 frontend tests, 436 Rust unit tests, 255 integration tests,
+strict checks and native no-bundle build passed; one existing opt-in Hermes test
+was ignored. These commands were not rerun in this documentation acceptance.
+Original browser/product QA and the later direct native receipt remain bound to
+unchanged product/artifact bytes. Owner 760x640 reports remain owner-reported.
+
+---
+
+# Current maintenance checkpoint — 2026-10-03
+
+`evidence-bound-acceptance-maintenance` is the explicitly authorized limited
+bootstrap. Ordinary admission did not occur. Worktree:
+`/Users/hdang/.codex/worktrees/collapsed-sidebar-reachability/ai-agent-assistant`.
+Branch: `codex/collapsed-sidebar-reachability`; unchanged HEAD:
+`dcea9df088ddb01c26c1a79ab51e0307190f551c`.
+
+Status: maintenance verification passed with advisories; formal acceptance remains
+unstarted. The sealed receipt, status and full Stop results are recorded externally
+after this report is frozen; their actual outcomes control final disposition.
+Exactly eighteen maintenance paths / 59 cumulative paths. Preserve the inherited
+48-path candidate; seven inherited current-state documents receive additive
+updates only. Application, branding, sidebar repair, profiles, rooms and bundle
+bytes are unchanged. Both historical terminal FAILs remain FAIL/Blocked without
+rewriting or promotion. No completion marker is issued by maintenance.
+
+Recoverable current/predecessor snapshots and new verification receipts:
+`/private/tmp/cortexa-evidence-acceptance-maintenance-kw8t1_eu`.
+Previous artifacts and `/private/tmp/cortexa-collapsed-sidebar-reachability-evidence-uh9elj_i`
+remain intact. Inherited native evidence:
+`/private/tmp/cortexa-sidebar-short-native-qa-iwwfuyno/observations.json` directly
+observed 760x520 scrolling in both navigation states, hover/focus tooltips,
+keyboard/Escape, empty composer/disclosure and successful quit/absence.
+No native QA, launch or provider request is repeated here. Owner 760x640 evidence
+remains owner-reported; earlier failed access attempts remain failures.
+
+Next action: verify the frozen maintenance seal and full Stop receipts, then
+request separate nine-document `collapsed-sidebar-acceptance`
+authorization to resolve all four historical blocker entries against immutable
+evidence. No acceptance, new worktree or publication is authorized now.
+
+Retain all advisories: D-127/D-128, unsigned/native/provider/runtime/Codex-isolation,
+branding/icon/ICNS/Windows and owner-QA limitations, process-local Python/Xcode
+SDK27/Cargo workaround. Live QA remains parked 3/10; no historical provider cause,
+live success or live cancellation is claimed. D-125/M1/M2 remain parked.
+
+Future browser preview command is `npm run dev` from this exact worktree, under
+separate launch authorization; browser mocks do not verify native Tauri behavior.
+Do not launch from this handoff. Native preview requires a separately verified
+key-free isolated bundle and approved QA scope.
+
+---
+
+# 2026-10-03 — Collapsed sidebar reachability: native access blocked
+
+Worktree: `/Users/hdang/.codex/worktrees/collapsed-sidebar-reachability/ai-agent-assistant`.
+Branch: `codex/collapsed-sidebar-reachability`; baseline
+`dcea9df088ddb01c26c1a79ab51e0307190f551c`, verified tree-equivalent to source HEAD
+`20961cab5410b749e62e45fa0c765364f5d29ec5`. Ordinary isolated admission succeeded;
+46 frozen candidate files transferred byte-identically without gate state or data.
+13 authorized successor paths; 48 cumulative paths. Original checkout, terminal
+FAIL, predecessor completion, historical bodies and previous bundles are preserved.
+
+Implemented: constrained collapsed navigation scroll owner with one grid row;
+existing hover/focus tooltip labels placed outside the clipping list, bounded to
+the viewport, dismissed by Escape/blur/expansion/navigation clicks. Branding,
+sidebar dimensions/state, profiles, inspector, routing and execution are unchanged.
+
+New automated evidence: 43 affected App tests, strict lint/typecheck, frontend
+build, formatting, and 28 actual-App browser cases passed. Browser coverage uses
+real wheel scrolling and scrollend before keyboard actions, reaches lowest/first
+controls, traverses all routes by Tab/reverse Tab, checks tooltips, independent
+workspace scrolling, short compact/wide layouts and reverse resizing. Initial
+lint/typecheck/tooltip/settling failures remain recorded; repaired within scope.
+Documentation, repository, security, whitespace, session and 13/48 preservation
+checks passed; final closeout reruns only affected documentation/evidence checks.
+Unchanged Rust, animation, workflow and branding evidence is inherited, not rerun.
+
+One offline unsigned isolated bundle built using installed process-local
+Python/Xcode SDK27/Cargo tooling. Executable SHA-256:
+`58cedbcd1022a00c8ad44f91fa85626686560e25c956c9b0a7fcec23be771f21`.
+Native Computer Use directly captured the same PID/window at measured 760x520
+points: collapsed sidebar scrollbar and Settings icon visible, Conversations
+heading/mock mode/empty state separated and readable. The first attempted sidebar
+scroll failed with `noWindowsAvailable`; no fresh scroll transition, expanded
+state or tooltip playback was observed. This is an access failure, not proof of
+an application defect. No UI retry, typing, Saves, Sends or workflows occurred.
+The exact test-owned process exited after one SIGTERM (no force kill); absence
+and bundle preservation verified. Only task-owned port 4187 server was stopped;
+the original 4175 preview remains untouched.
+
+Quality **FAIL**, readiness **Blocked**: required native acceptance is incomplete.
+Never promote or reopen either terminal failure. Final report/schema/terminal
+status/full Stop receipts are external. Next: separately authorized read-only
+assessment of supported native binding/remaining acceptance; no automatic retry,
+new worktree, implementation or governance change.
+
+Evidence: `/private/tmp/cortexa-collapsed-sidebar-reachability-evidence-uh9elj_i`.
+[Plan](docs/plans/2026-10-03-collapsed-sidebar-reachability.md);
+[Review](docs/reviews/2026-10-03-collapsed-sidebar-reachability-post-increment-review.md).
+Retain D-127/D-128, native/provider/runtime/Codex-isolation, icon/artwork/chunk
+advisories, process-local workaround, live QA parked 3/10 and D-125/M1/M2 parked.
+No provider requests, commits or publication.
+
+Browser preview from this worktree (server currently stopped):
+`npm run dev -- --host 127.0.0.1 --port 4187 --strictPort`.
+Browser preview does not verify native Tauri functionality. Do not start another
+QA attempt or launch automatically.
+
+## Exact resume prompt
+
+```text
+Assess the remaining native acceptance gap read-only in
+/Users/hdang/.codex/worktrees/collapsed-sidebar-reachability/ai-agent-assistant.
+Inspect instructions, HANDOFF, terminal FAIL and evidence at
+/private/tmp/cortexa-collapsed-sidebar-reachability-evidence-uh9elj_i.
+Preserve all 48 paths, both source/repair failures, artifacts and history.
+Reuse passing automated evidence. Computer Use captured measured 760x520
+collapsed UI, then first scroll failed with noWindowsAvailable while the
+exact process remained alive. Cleanup and absence were verified. Do not infer
+an application defect. Propose the smallest supported remaining native check
+and formal acceptance authorization. No edits, admission, launches, retries,
+tests/builds, provider requests or publication. Do not promote FAIL. Retain
+all advisories, live QA parked 3/10 and D-125/M1/M2 parked.
+```
+
+---
+
+# 2026-10-03 — Conversations navigation layout: native compact acceptance blocked
+
+Worktree: `/Users/hdang/.codex/worktrees/bots-mascot-preview-layout/ai-agent-assistant`; branch `codex/bots-mascot-preview-layout`; HEAD `20961cab5410b749e62e45fa0c765364f5d29ec5`.
+Owner-authorized eleven-path successor, 46 cumulative paths. Ordinary admission
+followed byte-identical predecessor completion archival; earlier records and both
+logo bundles remain preserved. Only Conversations was added to the two existing
+compact navigation-width selectors. No branding, sidebar state/dimensions,
+inspector, graph, profiles, execution, storage, dependencies or governance changes.
+
+42 affected App tests, strict lint/typecheck, frontend build and all 24 isolated
+actual-App Conversations browser cases passed. The matrix covers 1600/961/960/959/
+760/595px, short heights, both navigation states, reverse resizing and route
+transitions; it waits for real sidebar transitions, checks controls/disclosure,
+scrolling and no horizontal overflow, and starts no runs. An initial semantic
+locator timeout was corrected without weakening assertions; its receipt remains.
+One offline unsigned isolated native bundle built using the documented
+process-local Python/Xcode SDK27/Cargo route. Prior Rust/animation evidence is
+inherited, not rerun. Existing bundle bytes are preserved.
+
+Direct Computer Use observed readable wide expanded and collapsed Conversations,
+an empty mock composer, disabled Send, disclosure and centered branding. Native
+compact sizing could not be established: supported gestures and a window-menu
+sizing command left the window unchanged. This is an interaction limitation,
+not evidence of an application layout defect. No native compact pass is claimed.
+The test-owned app quit via Cmd-Q; exact executable absence verified. No typing,
+Saves, Sends, workflows, provider calls, credentials or owner-data changes.
+
+Quality result **FAIL**; readiness **Blocked** because required native compact
+acceptance is unobserved. Final checks, schema and terminal-failed/full Stop
+receipts are retained externally after this report freezes. Never promote this
+FAIL or reopen its record. Next action: read-only acceptance-path assessment,
+then a separately authorized bounded native compact verification decision.
+No automatic successor, new worktree, repair, publication or governance changes.
+
+Evidence: `/private/tmp/cortexa-conversations-navigation-layout-evidence-h6gauvkv`.
+[Plan](docs/plans/2026-10-03-conversations-navigation-layout.md); [Review](docs/reviews/2026-10-03-conversations-navigation-layout-post-increment-review.md). Live QA parked 3/10; retain pending owner/live
+QA, D-127/D-128, native/provider/runtime/Codex-isolation and chunk/icon/artwork
+advisories, process-local workaround and parked D-125/M1/M2.
+
+Browser preview (native Tauri features unavailable):
+
+```bash
+cd /Users/hdang/.codex/worktrees/bots-mascot-preview-layout/ai-agent-assistant
+npm run dev -- --host 127.0.0.1 --port 4175 --strictPort
+```
+
+Use the existing `http://127.0.0.1:4175/` preview; its server was left running.
+Do not launch a duplicate. Native QA artifact identity is in external artifact.json;
+the test-owned app is stopped. Do not relaunch without further authorization.
+
+---
+
+# 2026-10-03 — Sidebar copy alignment completed
+
+Worktree: `/Users/hdang/.codex/worktrees/bots-mascot-preview-layout/ai-agent-assistant`.
+Branch: `codex/bots-mascot-preview-layout`; HEAD `20961cab5410b749e62e45fa0c765364f5d29ec5`.
+Owner requested Cortexa centered beneath the brain. One CSS declaration centers
+both the name and Private workspace subtitle. Logo assets, sizes, navigation and
+all execution/data/mascot boundaries are unchanged. The prior complete/valid logo
+record and raw completion state are preserved externally before ordinary begin.
+Ten successor paths, 43 cumulative paths; prior historical bodies remain intact.
+[Plan](docs/plans/2026-10-03-sidebar-brand-copy-alignment.md).
+
+42 affected App tests, strict frontend lint/typecheck and frontend build passed.
+Direct Computer Use observed centered copy at 1600x900 and 760x520; measured text
+centers differ from symbol center by less than 0.01px. Collapsed copy remains
+hidden and 28px symbol unchanged. Viewport/navigation restored; user preview and
+server left intact. Previous native bundle was not rebuilt and does not include
+this declaration; native alignment is unobserved. Final ordinary gates/status
+and full Stop are recorded externally after validation.
+Next: owner branding QA; inspect current browser for this alignment.
+No native rebuild or provider calls. Live QA parked 3/10; retain all advisories,
+process-local workaround and D-125/M1/M2. No publication.
+
+Preview: `npm run dev -- --host 127.0.0.1 --port 4175 --strictPort` from the worktree
+above; URL `http://127.0.0.1:4175`. Browser preview lacks native Tauri functionality.
+
+---
+
+# 2026-10-03 — Approved logo integration and sidebar refinement
+
+Worktree: `/Users/hdang/.codex/worktrees/bots-mascot-preview-layout/ai-agent-assistant`.
+Branch: `codex/bots-mascot-preview-layout`; last commit `20961cab5410b749e62e45fa0c765364f5d29ec5`.
+Verified main `dcea9df088ddb01c26c1a79ab51e0307190f551c` shares the baseline tree.
+41 asset/presentation/test/documentation paths; no commits or publication.
+The older Desktop checkout, all mascots/Conductor, profiles, rooms, prior artifacts,
+predecessor FAILs and D-129 rollback/D-130 closure remain untouched.
+
+Implemented: exact September 23 full artwork and dark-field brain crop for
+favicon/native icons; complete PNG/ICO/ICNS family and README/metadata references.
+The owner subsequently authorized a sidebar-only transparent brain cutout:
+72px expanded, 28px collapsed, existing Cortexa/Private workspace copy retained.
+The built-in image tool performed cutout/edge cleanup; original and tool outputs
+are retained. The cutout is visually compared, not claimed pixel-identical to the
+opaque input. Full/native assets retain their exact decoded fidelity.
+
+Automated evidence: full offline verify passed before the sidebar refinement
+(579 frontend, 436 Rust library, 255 other native, 74 hook, 93 repository tests;
+one opt-in Hermes test ignored). After refinement: 42 affected App tests, six
+asset regressions, strict lint/typecheck, decoded assets and 12 responsive cases
+passed. Fresh offline isolated app/DMG packaging passed. Unchanged Rust evidence
+is reused, not described as rerun. The initial native RGBA build failure and first
+cutout failures remain external; corrected final checks passed. Apple iconutil
+legacy 16/32 export changes one blue sample; independent stored fidelity is exact.
+
+Direct Computer Use: native wide 1280x949 and compact 761x521, expanded/collapsed,
+transparent symbol, copy, spacing and scrolling to Settings observed. No visible
+rectangle, dark fringe, clipping or stretch. README full raster observed locally.
+Native styling is currently fixed dark; light/dark browser media cases passed.
+Finder access disconnected before its icon observation; Dock/Cmd-Tab not reached.
+Those system-icon/owner aesthetic checks remain pending, not product failures.
+Browser extension overlays prevented an unmodified browser-tab favicon observation.
+No Windows execution, signing, notarization, live success or cancellation claim.
+
+Cleanup: both test-owned QA apps are absent. Refined instance received verified
+SIGTERM when Computer Use disconnected; Vite/README test servers were stopped.
+No owner-data changes, Saves, Sends or workflows. A test-created Finder window may
+remain because access failed; no owner Finder window was closed or modified.
+
+Evidence: `/private/tmp/cortexa-approved-logo-evidence-m4eq94p1`.
+[Active plan](docs/plans/2026-10-03-approved-logo-integration.md).
+[Consolidated review](docs/reviews/2026-10-03-approved-logo-integration-post-increment-review.md).
+All required automated checks and direct native sidebar acceptance passed. The
+quality result is PASS WITH ADVISORIES; formal finalization/status/full Stop are
+recorded externally as the final actions. Consult the complete/valid marker.
+Next action after passing closure: owner manual branding and system-icon QA only.
+
+Browser preview (does not provide native Tauri functionality):
+
+```bash
+cd /Users/hdang/.codex/worktrees/bots-mascot-preview-layout/ai-agent-assistant
+npm run dev -- --host 127.0.0.1 --port 4175 --strictPort
+```
+
+URL: `http://127.0.0.1:4175`. Key-free isolated native preview:
+
+```bash
+sh /private/tmp/cortexa-connected-knowledge-evidence/offline.sh '/Users/hdang/.codex/worktrees/bots-mascot-preview-layout/ai-agent-assistant/src-tauri/target/debug/bundle/macos/Cortexa Sidebar Logo QA.app/Contents/MacOS/ai-agent-assistant'
+```
+
+Resume prompt: Assist owner QA of approved logo integration in the worktree/branch
+above. Inspect instructions, handoff, plan/review, complete/valid marker and the
+external evidence before acting; preserve all 41 paths and history. Reuse the
+verified Sidebar Logo QA bundle, no rebuild/passing-test repeats. Inspect the
+transparent sidebar at wide/compact expanded/collapsed sizes and, if supported
+Computer Use works, Finder/Dock/Cmd-Tab icons. Confirm any data changes first;
+make none by default. No credentials, Saves, Sends, workflows, owner-data changes,
+repository edits or publication. Quit only the test-owned app. Stop on drift,
+unsupported access or unexpected failure; report observations separately.
+
+Live QA remains parked 3/10; D-125/M1/M2 remain parked. Retain D-127/D-128,
+provider/native/runtime/Codex-isolation advisories and the process-local
+Python/Xcode SDK27/Cargo stripping workaround. Normal authorization applies.
+
+---
+
 # 2026-10-03 — Bots mascot preview layout
 
 Status: PASS WITH ADVISORIES; finalization/status/full Stop receipts govern completion.

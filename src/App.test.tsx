@@ -257,12 +257,13 @@ describe("App", () => {
     const brandMark = container.querySelector(".application-brand__mark");
     expect(brandMark).not.toBeNull();
     expect(brandMark).toHaveTextContent("");
-    expect(
-      brandMark?.querySelector('source[media="(prefers-color-scheme: dark)"]'),
-    ).toHaveAttribute("srcset", expect.stringContaining("logo-dark"));
-    expect(brandMark?.querySelector("img")).toHaveAttribute(
-      "src",
-      expect.stringContaining("logo-light"),
+    expect(brandMark).toHaveAttribute("src", expect.stringContaining("sidebar-symbol"));
+    expect(brandMark).toHaveAttribute("width", "1254");
+    expect(brandMark).toHaveAttribute("height", "1254");
+    expect(brandMark).toHaveAttribute("alt", "");
+    expect(brandMark).toHaveAttribute("aria-hidden", "true");
+    expect(container.querySelector(".application-brand__copy")).toHaveTextContent(
+      "CortexaPrivate workspace",
     );
     expect(screen.getByRole("heading", { level: 1, name: "Conversations" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "No messages yet" })).toBeInTheDocument();
@@ -715,6 +716,41 @@ describe("App", () => {
     }
   });
 
+  it("keeps collapsed hover and focus labels outside the scrolling list and dismisses them", () => {
+    const harness = createMenuRouteHarness();
+    const view = render(<App services={createServices(harness.source)} />);
+    fireEvent.click(screen.getByRole("button", { name: "Collapse navigation" }));
+    const settings = screen.getByRole("button", { name: "Settings" });
+    const tip = view.container.querySelector("#navigation-tooltip-settings");
+    const list = view.container.querySelector('[data-scroll-region="primary-navigation-scroll"]');
+    expect(tip).toHaveAttribute("role", "tooltip");
+    expect(list).not.toContainElement(tip as HTMLElement);
+    expect(settings).toHaveAttribute("aria-describedby", "navigation-tooltip-settings");
+    fireEvent.mouseEnter(settings);
+    expect(tip).toHaveAttribute("data-open", "true");
+    fireEvent.keyDown(window, { key: "Escape" });
+    expect(tip).toHaveAttribute("data-open", "false");
+    fireEvent.focus(settings);
+    expect(tip).toHaveAttribute("data-open", "true");
+    fireEvent.blur(settings);
+    expect(tip).toHaveAttribute("data-open", "false");
+    fireEvent.mouseEnter(settings);
+    fireEvent.click(screen.getByRole("button", { name: "Expand navigation" }));
+    expect(view.container.querySelector("#navigation-tooltip-settings")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Collapse navigation" }));
+    expect(view.container.querySelector("#navigation-tooltip-settings")).toHaveAttribute(
+      "data-open",
+      "false",
+    );
+    fireEvent.focus(settings);
+    fireEvent.click(settings);
+    expect(screen.getByRole("heading", { name: "Settings" })).toBeInTheDocument();
+    expect(view.container.querySelector("#navigation-tooltip-settings")).toHaveAttribute(
+      "data-open",
+      "false",
+    );
+  });
+
   it("routes all pages into one primary content scroll container", () => {
     const harness = createMenuRouteHarness();
     const view = render(<App services={createServices(harness.source)} />);
@@ -789,7 +825,7 @@ describe("App", () => {
     expect(view.container.querySelector(".application-brand__mark")).toBeNull();
     expect(screen.getByRole("img", { name: "Cortexa" })).toHaveAttribute(
       "src",
-      expect.stringContaining("favicon"),
+      expect.stringContaining("sidebar-symbol"),
     );
     for (const item of NAVIGATION_ITEMS) {
       const routeButton = screen.getByRole("button", { name: item.label });
