@@ -335,6 +335,14 @@ def _validate_disposition(value: Any, label: str) -> dict[str, Any]:
 
 
 def validate_state(state_value: dict[str, Any]) -> None:
+    if state_value.get("schema_version") == 4:
+        import lifecycle_acceptance as acceptance
+        acceptance.shape(state_value)
+        legacy = dict(state_value)
+        legacy.pop("acceptance_lineage")
+        legacy["schema_version"] = STATE_SCHEMA_VERSION
+        validate_state(legacy)
+        return
     schema_version = state_value.get("schema_version")
     status_value = state_value.get("status")
     common_keys = {
@@ -497,11 +505,15 @@ def validate_increment_id(value: Any) -> str:
     return value
 
 
-def begin_gate(root: Path, increment_id: str) -> None:
+def begin_gate(root: Path, increment_id: str, acceptance_request: str | None = None) -> None:
     increment_id = validate_increment_id(increment_id)
     if has_merge_conflicts(root):
         _fail("cannot begin an increment while merge conflicts exist")
     existing_state = read_state(root)
+    if acceptance_request is not None:
+        import lifecycle_acceptance as acceptance
+        acceptance.begin(root, increment_id, acceptance_request)
+        return
     if existing_state is not None and existing_state["status"] == "active":
         if existing_state["increment_id"] == increment_id:
             return
@@ -1062,6 +1074,9 @@ def finalize_gate(root: Path, increment_id: str, report_value: str) -> None:
     if suspicious:
         _fail("suspicious generated, credential, database, or build path detected")
     _validate_lineage_change_scope(state_value, repository_changes)
+    if "acceptance_lineage" in state_value:
+        import lifecycle_acceptance as acceptance
+        acceptance.validate_lineage(root, state_value)
 
     manifest, report_path, report_digest = validate_report(
         root, report_value, increment_id
@@ -1082,6 +1097,11 @@ def finalize_gate(root: Path, increment_id: str, report_value: str) -> None:
         completed_state["predecessor_disposition"] = state_value[
             "predecessor_disposition"
         ]
+    if "acceptance_lineage" in state_value:
+        import lifecycle_acceptance as acceptance
+        acceptance.review_checks(manifest, False)
+        completed_state["schema_version"] = 4
+        completed_state["acceptance_lineage"] = state_value["acceptance_lineage"]
     write_state(root, completed_state)
 
 
@@ -1107,11 +1127,18 @@ def close_failed_gate(root: Path, increment_id: str, report_value: str) -> None:
     ):
         _fail("terminal failure cannot be reclosed after HEAD changes")
 
+    import lifecycle_acceptance as acceptance
+    if state_value["status"] == "failed" and (root / acceptance.POINTER).exists():
+        _fail("sealed failure history cannot be reclosed")
+
     repository_changes = changed_paths(root)
     suspicious = suspicious_changed_paths(repository_changes)
     if suspicious:
         _fail("suspicious generated, credential, database, or build path detected")
     _validate_lineage_change_scope(state_value, repository_changes)
+    if "acceptance_lineage" in state_value:
+        import lifecycle_acceptance as acceptance
+        acceptance.validate_lineage(root, state_value)
 
     manifest, report_path, report_digest = validate_failed_report(
         root, report_value, increment_id
@@ -1133,6 +1160,9 @@ def close_failed_gate(root: Path, increment_id: str, report_value: str) -> None:
         failed_state["predecessor_disposition"] = state_value[
             "predecessor_disposition"
         ]
+    if "acceptance_lineage" in state_value:
+        failed_state["schema_version"] = 4
+        failed_state["acceptance_lineage"] = state_value["acceptance_lineage"]
     write_state(root, failed_state)
 
 
@@ -1144,6 +1174,11 @@ def _validate_terminal_evidence(root: Path, state_value: dict[str, Any]) -> bool
         return _validate_disposed_failed_state(root, state_value)
     try:
         validate_state(state_value)
+        import lifecycle_acceptance as acceptance
+        if "acceptance_lineage" in state_value:
+            acceptance.validate_lineage(root, state_value)
+        elif state_value["status"] == "failed" and (root / acceptance.POINTER).exists():
+            return acceptance.maintenance(root) is not None
         if has_merge_conflicts(root):
             return False
         report_path = _safe_report_path(
@@ -1258,6 +1293,20 @@ def redacted_status(root: Path) -> dict[str, Any]:
             status_value["valid"] = validate_failed_state(root, state_value)
         else:
             status_value["valid"] = validate_completed_state(root, state_value)
+    import lifecycle_acceptance as acceptance
+    if (root / acceptance.POINTER).exists():
+        try:
+            record = acceptance.maintenance(root, "acceptance_lineage" not in state_value)
+            status_value["acceptance_maintenance"] = {
+                "valid": record is not None,
+                "historical_result_unchanged": True,
+                "original_workspace_matches": workspace_fingerprint(root) == acceptance.fingerprint(
+                    acceptance.parse(acceptance.blob(root, record["request"]["before_manifest"]))
+                ),
+                "acceptance_started": "acceptance_lineage" in state_value,
+            }
+        except GateError:
+            status_value["acceptance_maintenance"] = {"valid": False}
     return status_value
 
 
@@ -1271,6 +1320,9 @@ def build_parser() -> argparse.ArgumentParser:
         "begin", help="record one active implementation increment"
     )
     begin_parser.add_argument("--increment", required=True)
+    begin_parser.add_argument("--acceptance-request")
+    maintenance_parser = subparsers.add_parser("seal-acceptance-maintenance")
+    maintenance_parser.add_argument("--request", required=True)
 
     finalize_parser = subparsers.add_parser(
         "finalize", help="validate a report and write the completion marker"
@@ -1303,7 +1355,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         root = repository_root(Path.cwd())
         if arguments.command == "begin":
-            begin_gate(root, arguments.increment)
+            begin_gate(root, arguments.increment, arguments.acceptance_request)
             print(f"post-increment-gate: active increment {arguments.increment}")
         elif arguments.command == "finalize":
             finalize_gate(root, arguments.increment, arguments.report)
@@ -1320,6 +1372,10 @@ def main(argv: list[str] | None = None) -> int:
                 "post-increment-gate: recorded exact successor disposition for "
                 f"{FAILED_DISPOSITION_INCREMENT_ID}"
             )
+        elif arguments.command == "seal-acceptance-maintenance":
+            import lifecycle_acceptance as acceptance
+            acceptance.seal(root, arguments.request)
+            print("post-increment-gate: maintenance sealed; acceptance not begun")
         elif arguments.command == "status":
             json.dump(redacted_status(root), sys.stdout, sort_keys=True)
             sys.stdout.write("\n")

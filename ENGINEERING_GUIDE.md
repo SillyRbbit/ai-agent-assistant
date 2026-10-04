@@ -439,3 +439,40 @@ production distribution remain planned, not implemented.
   approved plans, and verified completion evidence.
 - Use Mermaid for maintainable architecture flows and `$branding` for branded
   visual artifacts.
+
+## D-133 evidence-bound acceptance maintenance
+
+The owner authorizes only the eighteen-path `evidence-bound-acceptance-maintenance`
+bootstrap in `codex/collapsed-sidebar-reachability`, preserving the inherited
+48-path product candidate with a 59-path cumulative ceiling. Ordinary begin is
+blocked; this explicit bootstrap is not ordinary admission, D-098 recovery or
+Desktop general closure. Preserve both terminal FAIL reports, raw states and
+historical inventories byte-identically. Never reopen or promote either FAIL.
+
+After recoverable snapshots, all required governance verification, passing
+architecture/security/code-health/preservation/readiness reviews and a frozen
+passing maintenance report, `seal-acceptance-maintenance --request <local-request>`
+may publish an immutable maintenance receipt atomically. It writes no completion
+marker and grants no acceptance or publication. Original failed/FAIL/Blocked
+remains; status distinguishes historical integrity from the changed workspace.
+Full Stop fails closed on missing evidence, artifact drift, scope or lineage
+changes. Local receipt hashes are workflow evidence, not authentication against
+malicious same-user rewriting.
+
+Only a separate owner approval permits `begin --increment collapsed-sidebar-acceptance
+--acceptance-request <local-request>`. It must bind the sealed receipt, current
+fingerprint, DECISIONS.md hash and exact nine-document scope. Every required
+nonpassing check and completion/next-blocking finding in both FAILs requires a
+criterion-specific resolved mapping to sealed evidence and owner review. No
+deferred, waived, unknown or omitted criterion is admitted. Preserve application
+and artifact bytes, historical reports and prior document bodies.
+
+The successor may edit only the seven current-state root documents and add its
+new dated plan/report. Ordinary report validation, documentation/repository/
+security/whitespace/session checks, reviews, finalization and full Stop apply.
+Schema-v4 lineage carries immutable history and the bounded scope through passing
+or terminal-failed disposition. A failed successor cannot reuse the old seal.
+Legacy mechanisms and D-125/M1/M2 remain unchanged. No force option, checkout
+bypass, arbitrary successor, product edits or automatic recovery chain follows.
+
+See [the maintenance plan](docs/plans/2026-10-03-evidence-bound-acceptance-maintenance.md).

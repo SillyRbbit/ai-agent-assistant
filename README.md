@@ -3,7 +3,7 @@
 [![CI](https://github.com/SillyRbbit/ai-agent-assistant/actions/workflows/ci.yml/badge.svg)](https://github.com/SillyRbbit/ai-agent-assistant/actions/workflows/ci.yml)
 [![Documentation](https://github.com/SillyRbbit/ai-agent-assistant/actions/workflows/documentation.yml/badge.svg)](https://github.com/SillyRbbit/ai-agent-assistant/actions/workflows/documentation.yml)
 
-<img src="assets/branding/logo-primary.png" alt="Cortexa logo" width="144" />
+<img src="assets/branding/logo-primary.png" alt="Cortexa approved circuit-brain logo and wordmark" width="240" />
 
 Cortexa is a local-first Tauri desktop application exploring a controlled
 executive-assistant workflow. The model is treated as an untrusted planner;
