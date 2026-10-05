@@ -1,3 +1,29 @@
+# 2026-10-03 — Approved September 23 raster identity
+
+This owner-approved current treatment supersedes the legacy near-white-field
+asset rules and table below, which remain historical. The exact source is
+`approved-september23.png` (1254 × 1254 RGB, SHA-256
+`12aaa6b3e3b02f69d0cc7e6b624eb3eb211b6eaabf2b831a411f8735ac0323c4`).
+The primary/light/dark full-logo aliases copy those exact bytes. Keep its original
+wordmark, colors, glow, geometry and opaque navy field. No SVG approximation,
+recoloring or transparent replacement of the full/native artwork is approved.
+The sidebar-only owner refinement is the sole extraction exception: use
+`sidebar-symbol.png`, genuine RGBA transparency, 72px expanded and 28px collapsed,
+with existing Cortexa/Private workspace text beneath. Full/logo/native assets
+remain separate; see the generation guide for retained cutout provenance.
+
+The owner separately approves one square brain crop `(335, 210, 910, 785)` for
+compact/native assets; it ends above the wordmark. Resize proportionally with
+Lanczos. Full artwork appears in README; the crop identifies the favicon/native
+application. The sidebar now uses its separate transparent symbol. The dark field on light themes
+is intentional. Do not add a second field, stretch or clip the artwork.
+
+Bot mascots and Conductor remain separate identities; never use them as the app
+logo. Compatibility identifiers remain unchanged under D-026. See
+[repeatable generation and fidelity checks](APP_ICON_GENERATION.md).
+
+---
+
 # Cortexa brand guidelines
 
 ![Cortexa logo](../../assets/branding/logo-primary.png)

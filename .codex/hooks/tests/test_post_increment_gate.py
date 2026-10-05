@@ -44,6 +44,15 @@ class PostIncrementGateTests(unittest.TestCase):
         self._git("commit", "--quiet", "-m", "Create fixture")
         gate.begin_gate(self.root, "04g")
 
+    def test_acceptance_schema_requires_exact_lineage(self) -> None:
+        state = gate.read_state(self.root)
+        state["schema_version"] = 4
+        with self.assertRaises(gate.GateError):
+            gate.validate_state(state)
+        state["acceptance_lineage"] = {"maintenance": "0" * 64, "admission": "1" * 64, "force": True}
+        with self.assertRaises(gate.GateError):
+            gate.validate_state(state)
+
     def tearDown(self) -> None:
         self.temporary_directory.cleanup()
 

@@ -3,18 +3,23 @@ import assert from "node:assert/strict";
 import { mkdir } from "node:fs/promises";
 /* global document, window, getComputedStyle */
 const output = process.argv[2];
+const portOption = process.argv.find((arg) => arg.startsWith("--port="));
+const port = portOption?.slice(7) ?? "4175";
+if (!/^\d{4,5}$/.test(port) || Number(port) > 65535) throw Error("Invalid local QA port");
+const baseUrl = `http://127.0.0.1:${port}`;
 if (!output) throw Error("External screenshot directory required");
 await mkdir(output, { recursive: true });
 const botsOnly = process.argv.includes("--bots-only");
+const conversationsOnly = process.argv.includes("--conversations-only");
 const browser = await chromium.launch({ headless: true });
 try {
-  if (!process.argv.includes("--shell-only") && !botsOnly) {
+  if (!process.argv.includes("--shell-only") && !botsOnly && !conversationsOnly) {
     for (const [name, width] of [
       ["desktop", 1280],
       ["narrow", 760],
     ]) {
       const page = await browser.newPage({ viewport: { width, height: 900 } });
-      await page.goto("http://127.0.0.1:4175/scripts/browser/knowledge.html");
+      await page.goto(`${baseUrl}/scripts/browser/knowledge.html`);
       await page.getByText("No library items yet.", { exact: true }).waitFor();
       await page.screenshot({ path: `${output}/${name}-empty.png`, fullPage: true });
       await page.getByRole("button", { name: "Import selected file" }).click();
@@ -53,7 +58,7 @@ try {
     }
     for (const mode of ["loading", "error", "long"]) {
       const page = await browser.newPage({ viewport: { width: 760, height: 900 } });
-      await page.goto(`http://127.0.0.1:4175/scripts/browser/knowledge.html?${mode}`);
+      await page.goto(`${baseUrl}/scripts/browser/knowledge.html?${mode}`);
       if (mode === "loading") await page.getByText("Loading local library…").waitFor();
       else if (mode === "error") await page.getByRole("alert").waitFor();
       else await page.getByRole("button", { name: /界.*imported/ }).click();
@@ -69,9 +74,9 @@ try {
   }
   // Exercise the real shell without silently collapsing expanded navigation.
   // Reuse each page across breakpoint crossings to cover native resize ordering.
-  for (const expanded of botsOnly ? [] : [true, false]) {
+  for (const expanded of botsOnly || conversationsOnly ? [] : [true, false]) {
     const page = await browser.newPage({ viewport: { width: 1600, height: 1000 } });
-    await page.goto("http://127.0.0.1:4175/scripts/browser/knowledge.html?shell");
+    await page.goto(`${baseUrl}/scripts/browser/knowledge.html?shell`);
     const nav = page.getByRole("navigation", { name: "Primary navigation" });
     const stateName = expanded ? "expanded" : "collapsed";
     if (!expanded) {
@@ -222,16 +227,16 @@ try {
     }
     await page.close();
   }
-  if (!botsOnly) {
+  if (!botsOnly && !conversationsOnly) {
     console.log(
       "Knowledge actual-shell inspector matrix passed; retained standalone scenarios: empty/import/search/selection/draft/export-error/loading/long Unicode at 1280/760 widths",
     );
   }
   // Bots uses the same real App and immutable synthetic profiles. Never Save,
   // prepare a conversation, or execute a workflow in this layout regression.
-  for (const expanded of [true, false]) {
+  for (const expanded of conversationsOnly ? [] : [true, false]) {
     const page = await browser.newPage({ viewport: { width: 1600, height: 1000 } });
-    await page.goto("http://127.0.0.1:4175/scripts/browser/knowledge.html?shell");
+    await page.goto(`${baseUrl}/scripts/browser/knowledge.html?shell`);
     // Exercise the public Tauri invoke boundary only inside the isolated mock.
     // Rejected writes are synthetic calls; this browser has no native authority.
     const boundary = await page.evaluate(async () => {
@@ -494,9 +499,289 @@ try {
     }
     await page.close();
   }
-  console.log(
-    "Bots actual-App layout passed: 22 resize/state cases, nine choices/settings, route transitions, scrolling, overflow and inspector close/Escape",
-  );
+  if (!conversationsOnly)
+    console.log(
+      "Bots actual-App layout passed: 22 resize/state cases, nine choices/settings, route transitions, scrolling, overflow and inspector close/Escape",
+    );
+  // Conversations reuses the existing actual-App fixture; no Send or execution.
+  for (const expanded of conversationsOnly ? [true, false] : []) {
+    const page = await browser.newPage({ viewport: { width: 1600, height: 1000 } });
+    await page.goto(`${baseUrl}/scripts/browser/knowledge.html?shell`);
+    const nav = page.getByRole("navigation", { name: "Primary navigation" });
+    const stateName = expanded ? "expanded" : "collapsed";
+    if (!expanded)
+      await page.getByRole("button", { name: "Collapse navigation", exact: true }).click();
+    async function separated() {
+      await page.waitForFunction(() => {
+        const side = document.querySelector(".application-sidebar");
+        return (
+          !!side && side.getAnimations().every((animation) => animation.playState !== "running")
+        );
+      });
+      assert.equal(
+        await page
+          .getByRole("button", {
+            name: expanded ? "Collapse navigation" : "Expand navigation",
+            exact: true,
+          })
+          .count(),
+        1,
+      );
+      assert.equal(
+        await page.evaluate(() => {
+          const side = document.querySelector(".application-sidebar").getBoundingClientRect();
+          const main = document.querySelector(".application-main").getBoundingClientRect();
+          const content = document.querySelector(".application-content");
+          return (
+            main.left >= side.right - 1 &&
+            main.height > 100 &&
+            content.scrollWidth <= content.clientWidth + 1 &&
+            document.documentElement.scrollWidth <= window.innerWidth
+          );
+        }),
+        true,
+        `Conversations separated/overflow ${stateName} ${page.viewportSize().width}`,
+      );
+    }
+    async function reachable(locator) {
+      await locator.scrollIntoViewIfNeeded();
+      assert.equal(
+        await locator.evaluate((el) => {
+          const b = el.getBoundingClientRect();
+          const main = document.querySelector(".application-main").getBoundingClientRect();
+          if (b.left < main.left - 1 || b.right > main.right + 1) return false;
+          return [b.left + 2, b.left + b.width / 2, b.right - 2].every((x) => {
+            const y = b.top + b.height / 2,
+              hit = document.elementFromPoint(x, y);
+            return y >= main.top && y <= main.bottom && !!hit && (hit === el || el.contains(hit));
+          });
+        }),
+        true,
+        `Conversations reachable ${stateName}: ${await locator.textContent()}`,
+      );
+    }
+    async function wheelBoundary(locator, down) {
+      if (
+        await locator.evaluate(
+          (el, toBottom) =>
+            toBottom ? el.scrollTop + el.clientHeight >= el.scrollHeight - 1 : el.scrollTop === 0,
+          down,
+        )
+      )
+        return;
+      const box = await locator.boundingBox();
+      assert.ok(box);
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await locator.evaluate((el) => {
+        el.dataset.qaScrollSettled = "false";
+        el.addEventListener(
+          "scrollend",
+          () => {
+            el.dataset.qaScrollSettled = "true";
+          },
+          { once: true },
+        );
+      });
+      await page.mouse.wheel(0, down ? 2000 : -2000);
+      await page.waitForFunction(
+        ({ el, toBottom }) =>
+          el.dataset.qaScrollSettled === "true" &&
+          (toBottom
+            ? el.scrollTop > 0 && el.scrollTop + el.clientHeight >= el.scrollHeight - 1
+            : el.scrollTop === 0),
+        { el: await locator.elementHandle(), toBottom: down },
+      );
+    }
+    async function sidebarReachability() {
+      const list = page.locator('[data-scroll-region="primary-navigation-scroll"]');
+      const workspace = page.locator(".application-content");
+      const workspaceBefore = await workspace.evaluate((el) => el.scrollTop);
+      const scrollable = await list.evaluate((el) => el.scrollHeight > el.clientHeight + 1);
+      const box = await list.boundingBox();
+      assert.ok(box && box.height > 0);
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      if (scrollable) {
+        await wheelBoundary(list, false);
+        await wheelBoundary(list, true);
+      }
+      async function navHit(label) {
+        const control = nav.getByRole("button", { name: label, exact: true });
+        try {
+          await page.waitForFunction(
+            (el) => {
+              const b = el.getBoundingClientRect(),
+                list = el.closest("ul").getBoundingClientRect();
+              const hit = document.elementFromPoint(b.left + b.width / 2, b.top + b.height / 2);
+              return (
+                b.top >= list.top - 1 &&
+                b.bottom <= list.bottom + 1 &&
+                b.top >= 0 &&
+                b.bottom <= window.innerHeight &&
+                !!hit &&
+                el.contains(hit)
+              );
+            },
+            await control.elementHandle(),
+          );
+        } catch (error) {
+          console.log(
+            JSON.stringify(
+              await control.evaluate((el) => {
+                const list = el.closest("ul"),
+                  b = el.getBoundingClientRect();
+                const hit = document.elementFromPoint(b.left + b.width / 2, b.top + b.height / 2);
+                return {
+                  name: el.getAttribute("aria-label"),
+                  button: b.toJSON(),
+                  list: list.getBoundingClientRect().toJSON(),
+                  scrollTop: list.scrollTop,
+                  clientHeight: list.clientHeight,
+                  scrollHeight: list.scrollHeight,
+                  hit: hit?.tagName,
+                  active: document.activeElement?.getAttribute("aria-label"),
+                  viewport: [window.innerWidth, window.innerHeight],
+                };
+              }),
+            ),
+          );
+          await page.screenshot({ path: `${output}/sidebar-failure.png` });
+          throw error;
+        }
+      }
+      await navHit("Settings");
+      if (!expanded) {
+        const settings = nav.getByRole("button", { name: "Settings", exact: true });
+        await settings.hover();
+        const tip = page.locator("#navigation-tooltip-settings");
+        await tip.waitFor({ state: "visible" });
+        assert.equal(
+          await tip.evaluate((el) => {
+            const b = el.getBoundingClientRect(),
+              side = document.querySelector(".application-sidebar").getBoundingClientRect();
+            return (
+              !el.closest("ul") &&
+              b.left >= side.right &&
+              b.right <= window.innerWidth &&
+              b.top >= 0 &&
+              b.bottom <= window.innerHeight &&
+              getComputedStyle(el).visibility === "visible"
+            );
+          }),
+          true,
+          "Tooltip must escape the list without viewport clipping",
+        );
+        await page.screenshot({ path: `${output}/sidebar-tooltip-${step}-${stateName}.png` });
+        await page.keyboard.press("Escape");
+        await tip.waitFor({ state: "hidden" });
+      }
+      if (scrollable) await wheelBoundary(list, false);
+      await navHit("Collaboration");
+      assert.equal(
+        await workspace.evaluate((el) => el.scrollTop),
+        workspaceBefore,
+        "Sidebar wheel must not move workspace",
+      );
+      // Use native tab order, never programmatic list scrolling, to reach every route.
+      await nav.getByRole("button", { name: "Collaboration", exact: true }).focus();
+      const names = await nav
+        .getByRole("button")
+        .evaluateAll((els) => els.map((el) => el.getAttribute("aria-label")));
+      for (const name of names.slice(1)) {
+        await page.keyboard.press("Tab");
+        assert.equal(
+          await page.evaluate(() => document.activeElement?.getAttribute("aria-label")),
+          name,
+        );
+        await navHit(name);
+        if (!expanded) {
+          const id = await nav
+            .getByRole("button", { name, exact: true })
+            .getAttribute("aria-describedby");
+          await page.locator(`#${id}[data-open="true"]`).waitFor({ state: "visible" });
+        }
+      }
+      for (const name of names.slice(0, -1).reverse()) {
+        await page.keyboard.press("Shift+Tab");
+        assert.equal(
+          await page.evaluate(() => document.activeElement?.getAttribute("aria-label")),
+          name,
+        );
+        await navHit(name);
+        if (!expanded) {
+          const id = await nav
+            .getByRole("button", { name, exact: true })
+            .getAttribute("aria-describedby");
+          await page.locator(`#${id}[data-open="true"]`).waitFor({ state: "visible" });
+        }
+      }
+      const listBefore = await list.evaluate((el) => el.scrollTop);
+      await wheelBoundary(workspace, false);
+      if (await workspace.evaluate((el) => el.scrollHeight > el.clientHeight + 1)) {
+        await wheelBoundary(workspace, true);
+      }
+      assert.equal(
+        await list.evaluate((el) => el.scrollTop),
+        listBefore,
+        "Workspace wheel must not move navigation",
+      );
+    }
+    let step = 0;
+    for (const [width, height] of [
+      [1600, 1000],
+      [961, 1000],
+      [960, 1000],
+      [959, 1000],
+      [840, 562],
+      [1600, 520],
+      [760, 520],
+      [595, 520],
+      [595, 853],
+      [760, 520],
+      [959, 1000],
+      [960, 1000],
+      [961, 1000],
+      [1600, 1000],
+    ]) {
+      step++;
+      await page.setViewportSize({ width, height });
+      for (const route of ["Knowledge", "Collaboration", "Bots", "Conversations"]) {
+        await nav.getByRole("button", { name: route, exact: true }).click();
+        await separated();
+      }
+      await reachable(page.getByRole("heading", { name: "Conversations", exact: true }));
+      await reachable(page.getByRole("combobox", { name: /^Conversation mode/ }));
+      assert.equal(
+        await page.getByRole("combobox", { name: /^Conversation mode/ }).inputValue(),
+        "mock",
+      );
+      await reachable(page.getByLabel("Assistant request", { exact: true }));
+      await reachable(page.getByRole("button", { name: "Send", exact: true }));
+      assert.equal(
+        await page.getByRole("button", { name: "Send", exact: true }).isEnabled(),
+        false,
+      );
+      assert.equal(await page.getByLabel("Assistant request", { exact: true }).inputValue(), "");
+      await reachable(
+        page.getByText("Local mock only · no model or tool execution", { exact: true }),
+      );
+      assert.equal(
+        await page
+          .locator(".application-content")
+          .evaluate(
+            (el) =>
+              el.scrollHeight <= el.clientHeight + 1 || getComputedStyle(el).overflowY === "auto",
+          ),
+        true,
+      );
+      await sidebarReachability();
+      await page.screenshot({ path: `${output}/conversations-${step}-${width}-${stateName}.png` });
+    }
+    await page.close();
+  }
+  if (conversationsOnly)
+    console.log(
+      "Conversations actual-App: 28 resize/state cases; real sidebar/workspace wheel, keyboard, tooltip reachability;, route transitions, heading/mode/composer/disclosure hit-testing, scrolling, no overflow; no input or execution",
+    );
 } finally {
   await browser.close();
 }

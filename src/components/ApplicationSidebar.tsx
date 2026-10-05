@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Activity,
   Brain,
@@ -14,9 +15,7 @@ import {
 
 import type { ConversationSession } from "../application/conversations";
 import { NAVIGATION_ITEMS, type AppRoute } from "../application/navigation";
-import brandFavicon from "../../assets/branding/favicon.png";
-import brandLogoDark from "../../assets/branding/logo-dark.png";
-import brandLogoLight from "../../assets/branding/logo-light.png";
+import sidebarSymbol from "../../assets/branding/sidebar-symbol.png";
 
 interface ApplicationSidebarProps {
   readonly activeConversationId: string;
@@ -53,6 +52,67 @@ export function ApplicationSidebar({
   onSelectConversation,
 }: ApplicationSidebarProps) {
   const newestFirstConversations = [...conversations].reverse();
+  const [tooltip, setTooltip] = useState<{
+    route: AppRoute;
+    anchor: HTMLButtonElement;
+    left: number;
+    top: number;
+  } | null>(null);
+
+  if (expanded && tooltip) setTooltip(null);
+
+  function showTooltip(route: AppRoute, anchor: HTMLButtonElement) {
+    if (expanded) return;
+    const bounds = anchor.getBoundingClientRect();
+    setTooltip({
+      route,
+      anchor,
+      left: Math.max(
+        8,
+        Math.min(
+          (anchor.closest("aside")?.getBoundingClientRect().right ?? bounds.right) + 8,
+          window.innerWidth - 228,
+        ),
+      ),
+      top: Math.max(24, Math.min(bounds.top + bounds.height / 2, window.innerHeight - 24)),
+    });
+  }
+
+  useEffect(() => {
+    if (!tooltip || expanded) return;
+    const { anchor, route } = tooltip;
+    function reposition() {
+      const bounds = anchor.getBoundingClientRect();
+      const list = anchor.closest("ul")?.getBoundingClientRect();
+      if (!list || bounds.top < list.top || bounds.bottom > list.bottom) {
+        setTooltip(null);
+        return;
+      }
+      setTooltip({
+        route,
+        anchor,
+        left: Math.max(
+          8,
+          Math.min(
+            (anchor.closest("aside")?.getBoundingClientRect().right ?? bounds.right) + 8,
+            window.innerWidth - 228,
+          ),
+        ),
+        top: Math.max(24, Math.min(bounds.top + bounds.height / 2, window.innerHeight - 24)),
+      });
+    }
+    function dismiss(event: KeyboardEvent) {
+      if (event.key === "Escape") setTooltip(null);
+    }
+    window.addEventListener("keydown", dismiss);
+    window.addEventListener("scroll", reposition, true);
+    window.addEventListener("resize", reposition);
+    return () => {
+      window.removeEventListener("keydown", dismiss);
+      window.removeEventListener("scroll", reposition, true);
+      window.removeEventListener("resize", reposition);
+    };
+  }, [tooltip, expanded]);
 
   return (
     <aside
@@ -64,23 +124,21 @@ export function ApplicationSidebar({
     >
       <div className="application-brand">
         {expanded ? (
-          <picture className="application-brand__mark" aria-hidden="true">
-            <source media="(prefers-color-scheme: dark)" srcSet={brandLogoDark} />
-            <img
-              alt=""
-              className="application-brand__logo"
-              height="434"
-              src={brandLogoLight}
-              width="360"
-            />
-          </picture>
+          <img
+            alt=""
+            aria-hidden="true"
+            className="application-brand__mark application-brand__logo"
+            height="1254"
+            src={sidebarSymbol}
+            width="1254"
+          />
         ) : (
           <img
             alt="Cortexa"
             className="application-brand__favicon"
-            height="64"
-            src={brandFavicon}
-            width="64"
+            height="1254"
+            src={sidebarSymbol}
+            width="1254"
           />
         )}
         <div className="application-brand__copy">
@@ -151,7 +209,23 @@ export function ApplicationSidebar({
                   aria-describedby={expanded ? undefined : tooltipId}
                   aria-label={item.label}
                   className="primary-navigation__item"
+                  onMouseEnter={(event) => {
+                    showTooltip(item.route, event.currentTarget);
+                  }}
+                  onFocus={(event) => {
+                    showTooltip(item.route, event.currentTarget);
+                  }}
+                  onMouseLeave={(event) => {
+                    if (!event.currentTarget.matches(":focus-visible")) setTooltip(null);
+                  }}
+                  onBlur={() => {
+                    setTooltip(null);
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === "Escape") setTooltip(null);
+                  }}
                   onClick={() => {
+                    setTooltip(null);
                     onNavigate(item.route);
                   }}
                   title={`${item.label} — ${item.description}`}
@@ -161,17 +235,28 @@ export function ApplicationSidebar({
                     <Icon />
                   </span>
                   <span className="primary-navigation__label">{item.label}</span>
-                  {!expanded ? (
-                    <span className="primary-navigation__tooltip" id={tooltipId} role="tooltip">
-                      {item.label}
-                    </span>
-                  ) : null}
                 </button>
               </li>
             );
           })}
         </ul>
       </nav>
+      {!expanded
+        ? NAVIGATION_ITEMS.map((item) => (
+            <span
+              className="primary-navigation__tooltip"
+              data-open={tooltip?.route === item.route}
+              id={`navigation-tooltip-${item.route}`}
+              key={item.route}
+              role="tooltip"
+              style={
+                tooltip?.route === item.route ? { left: tooltip.left, top: tooltip.top } : undefined
+              }
+            >
+              {item.label}
+            </span>
+          ))
+        : null}
 
       <div
         className="application-sidebar__footer"
