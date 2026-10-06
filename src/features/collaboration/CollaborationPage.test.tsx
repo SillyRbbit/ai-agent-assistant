@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { knowledgeClient } from "../../infrastructure/tauri/knowledge-client";
 import { CollaborationPage } from "./CollaborationPage";
@@ -341,4 +341,35 @@ it("presents Conductor as coordinator on a saved run without replay or configura
     "success",
   );
   expect(c.start).not.toHaveBeenCalled();
+});
+
+it("keeps the stage overview tied to cancelled saved stages without promoting provisional output", async () => {
+  const base = fixture();
+  const run: Run = {
+    ...base,
+    status: "cancelled",
+    stages: base.stages.map((stage, index) => ({
+      ...stage,
+      status: "cancelled",
+      handoff: null,
+      provisional: index === 0 ? "Retained unvalidated fragment" : "",
+    })),
+  };
+  const c = client([{ id: 1, title: "Cancelled room", runs: [run] }]);
+  render(<CollaborationPage client={c} />);
+  fireEvent.click(await screen.findByRole("button", { name: "Cancelled room" }));
+  const overview = screen.getByRole("list", { name: `Stages for ${run.id}` });
+  expect(within(overview).getAllByRole("listitem")).toHaveLength(run.stages.length);
+  for (const [index, stage] of run.stages.entries()) {
+    expect(within(overview).getByText(stage.participant.identity.nickname)).toBeInTheDocument();
+    expect(
+      within(overview).getByText(`Stage ${String(index + 1)} · cancelled`),
+    ).toBeInTheDocument();
+  }
+  expect(screen.getByText("Retained unvalidated fragment")).toBeInTheDocument();
+  expect(screen.getByText(/Provisional output — not a validated handoff/)).toBeInTheDocument();
+  expect(screen.queryByText("Final synthesis")).not.toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Stop collaboration" })).not.toBeInTheDocument();
+  expect(c.start).not.toHaveBeenCalled();
+  expect(c.prepare).not.toHaveBeenCalled();
 });

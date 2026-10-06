@@ -1,3 +1,63 @@
+# 2026-10-05 — UI/UX implementation and native evidence recorded
+
+Worktree: `/Users/hdang/.codex/worktrees/ui-ux-redesign/ai-agent-assistant`.
+Branch: `codex/ui-ux-redesign`; baseline: `d2090d66f5d6212bf7ca030f0502b0b88c215d94`.
+Candidate: 31 paths within the declared 33-path ceiling; no inherited changes.
+Evidence: `/private/tmp/cortexa-ui-ux-redesign-evidence-6jl4jhzb`.
+The frozen report and external complete/valid/full Stop receipts control completion;
+this documentation does not preclaim those final gates passed.
+
+Current plan: [UI/UX redesign](docs/plans/2026-10-05-ui-ux-redesign.md).
+Review: [post-increment review](docs/reviews/2026-10-05-ui-ux-redesign-post-increment-review.md).
+Reversibility: [UI/UX milestone](docs/ui-ux-milestone.md).
+
+One presentation milestone follows the owner video. No backend, storage, provider,
+framework, authority, artwork replacement or governance expansion was introduced.
+Native select-height defects were addressed within CSS scope with artifact-specific
+observations. Final plan/report and external gates control disposition; a later
+milestone does not begin automatically.
+
+Approved artwork, all earlier checkouts, artifacts, historical document bodies
+and both terminal FAILs remain preserved. Retain D-127/D-128, unsigned/platform,
+provider/runtime/Codex-isolation, asset-weight/build-warning and process-local
+Python/Xcode SDK27/Cargo strip-none advisories. Live QA remains parked at 3/10;
+D-125/M1/M2 remain parked. No live success/cancellation or Windows execution is
+claimed. Owner manual QA and any publication decision remain separate.
+
+---
+
+# 2026-10-05 — Active reversible UI/UX redesign
+
+Worktree: `/Users/hdang/.codex/worktrees/ui-ux-redesign/ai-agent-assistant`.
+Branch: `codex/ui-ux-redesign`; baseline: `d2090d66f5d6212bf7ca030f0502b0b88c215d94`.
+Evidence: `/private/tmp/cortexa-ui-ux-redesign-evidence-6jl4jhzb`.
+Ordinary admission succeeded from the clean merged PR135 tree. This milestone is
+active; final report, preservation, complete/valid status and full Stop are pending.
+The declared ceiling is 33 paths; the expected final 31-path inventory must be
+verified after the remaining closeout files are written.
+
+Plan: [UI/UX redesign](docs/plans/2026-10-05-ui-ux-redesign.md).
+Milestone and rollback record: [UI/UX milestone](docs/ui-ux-milestone.md).
+The owner video controls the visual direction; supporting references inform only
+navigation/settings/knowledge presentation. The exact scope is presentation,
+focused tests/browser fixtures and additive closeout documentation. No backend,
+storage, provider, governance, artwork replacement or runtime expansion is admitted.
+
+Implementation and initial automated/browser/wide-native work are recorded.
+A native WebKit control-height observation prompted an in-scope CSS refinement;
+corrected artifact/compact validation and formal closeout remain. The forthcoming
+review must bind actual final bytes and distinguish inherited/first-artifact
+results from new refined checks. Do not advance another plan automatically.
+
+All prior checkouts, approved branding/mascot bytes, artifacts, historical document
+bodies and both terminal FAILs remain preserved. D-127/D-128, unsigned/platform,
+provider/runtime/Codex-isolation, asset-weight/build-warning and process-local
+Python/Xcode SDK27/Cargo strip-none advisories remain. Live QA stays parked at
+3/10 used; D-125/M1/M2 remain parked. No live success/cancellation, Windows native
+execution, commit or publication is claimed.
+
+---
+
 # 2026-10-03 — Collapsed sidebar acceptance
 
 Worktree: `/Users/hdang/.codex/worktrees/collapsed-sidebar-reachability/ai-agent-assistant`.

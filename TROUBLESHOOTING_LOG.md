@@ -1,3 +1,78 @@
+# 2026-10-05 — UI/UX corrections and evidence lineage
+
+Worktree: `/Users/hdang/.codex/worktrees/ui-ux-redesign/ai-agent-assistant`.
+Branch: `codex/ui-ux-redesign`; baseline: `d2090d66f5d6212bf7ca030f0502b0b88c215d94`.
+Candidate: 31 paths within the declared 33-path ceiling; no inherited changes.
+Evidence: `/private/tmp/cortexa-ui-ux-redesign-evidence-6jl4jhzb`.
+The frozen report and external complete/valid/full Stop receipts control completion;
+this documentation does not preclaim those final gates passed.
+
+Knowledge results initially preceded the moved search form; results now follow
+it with an announced count and an unchanged selected reader. Command Center's
+initial controls/roster buried the graph; bounded density corrections preserve
+labels, controls and actual status. Diagnostics labels use a constrained grid
+track so a child's inline width cannot escape its allocated label.
+
+WebKit continued rendering small selects despite min-height. The final CSS removes
+only native decorative appearance, preserves select semantics and adds a static
+12px arrow. The native-controls receipt records the corrected result; previous
+Chromium/native screenshots do not prove it. Earlier failing attempts, superseded
+bundles and unknown unrelated access/provider causes remain preserved. Directly
+reviewed native test processes quit with exit 0 and PID absence recorded.
+
+Intermediate test/matrix failures remain in external receipts. Later passing
+checks resolve only their tested acceptance criteria; no historical record is
+rewritten or promoted and no governance recovery chain is introduced.
+
+Approved artwork, all earlier checkouts, artifacts, historical document bodies
+and both terminal FAILs remain preserved. Retain D-127/D-128, unsigned/platform,
+provider/runtime/Codex-isolation, asset-weight/build-warning and process-local
+Python/Xcode SDK27/Cargo strip-none advisories. Live QA remains parked at 3/10;
+D-125/M1/M2 remain parked. No live success/cancellation or Windows execution is
+claimed. Owner manual QA and any publication decision remain separate.
+
+---
+
+# 2026-10-05 — UI/UX redesign discoveries (active)
+
+Worktree: `/Users/hdang/.codex/worktrees/ui-ux-redesign/ai-agent-assistant`.
+Branch: `codex/ui-ux-redesign`; baseline: `d2090d66f5d6212bf7ca030f0502b0b88c215d94`.
+Evidence: `/private/tmp/cortexa-ui-ux-redesign-evidence-6jl4jhzb`.
+Ordinary admission succeeded from the clean merged PR135 tree. This milestone is
+active; final report, preservation, complete/valid status and full Stop are pending.
+The declared ceiling is 33 paths; the expected final 31-path inventory must be
+verified after the remaining closeout files are written.
+
+- Knowledge search results initially appeared before their moved sidebar form,
+  behind the user's reading position. They now follow the form with a polite
+  result count; the selected reader remains unchanged. The affected 10-test pass
+  and subsequent browser search observations are recorded. Initial test-only
+  assertion/whitespace failures remain in external receipts.
+- Command Center's initial stacked controls/roster consumed the viewport before
+  the graph. A scoped CSS density refinement preserved labels, identities,
+  statuses and graph geometry while making the central graph visible. Browser
+  evidence covers the resulting presentation; no execution state was invented.
+- First native wide inspection exposed WebKit-specific select/button height.
+  Source styling has been refined; the corrected bundle and affected compact
+  native acceptance are still pending. Chromium passes alone do not close this
+  native issue. The first QA app quit with exit 0 and verified PID absence.
+- Earlier frontend/browser intermediate failures are retained in external logs;
+  later passing results establish only their final tested scope. Existing native
+  toolchain/stripping workarounds were process-local, with old artifacts retained.
+
+Continue the current bounded milestone through its pending affected checks and
+truthful closeout. Do not modify historical failures, broaden governance or start
+an unrelated repair. No cleanup/reset/recovery chain is authorized.
+
+All prior checkouts, approved branding/mascot bytes, artifacts, historical document
+bodies and both terminal FAILs remain preserved. D-127/D-128, unsigned/platform,
+provider/runtime/Codex-isolation, asset-weight/build-warning and process-local
+Python/Xcode SDK27/Cargo strip-none advisories remain. Live QA stays parked at
+3/10 used; D-125/M1/M2 remain parked. No live success/cancellation, Windows native
+execution, commit or publication is claimed.
+
+---
+
 # 2026-10-03 — Collapsed sidebar acceptance
 
 Worktree: `/Users/hdang/.codex/worktrees/collapsed-sidebar-reachability/ai-agent-assistant`.

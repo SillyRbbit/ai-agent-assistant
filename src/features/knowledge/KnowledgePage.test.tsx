@@ -15,7 +15,7 @@ beforeEach(() => {
     },
   );
 });
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { KnowledgePage, SourceEvidence, NoteEditor } from "./KnowledgePage";
 import { SourcePicker } from "./SourcePicker";
@@ -63,6 +63,65 @@ function client(): { -readonly [K in keyof KnowledgeClient]: KnowledgeClient[K] 
   };
 }
 describe("Knowledge & Documents", () => {
+  it("presents asynchronous search results beside the search without replacing the reader", async () => {
+    const c = client();
+    let finish: (value: readonly { readonly source: Source }[]) => void = () => undefined;
+    c.search = vi.fn(
+      () =>
+        new Promise<readonly { readonly source: Source }[]>((resolve) => {
+          finish = resolve;
+        }),
+    );
+    render(<KnowledgePage client={c} />);
+    const library = screen.getByRole("complementary", { name: "Knowledge items" });
+    fireEvent.click(await within(library).findByRole("button", { name: /Runbook 界/ }));
+    const query = within(library).getByLabelText("Search local passages");
+    query.focus();
+    fireEvent.change(query, { target: { value: "incident" } });
+    fireEvent.click(within(library).getByRole("button", { name: "Search" }));
+    expect(c.search).toHaveBeenCalledWith("incident");
+    finish([{ source }]);
+    const results = await within(library).findByRole("region", { name: "Search results" });
+    expect(within(results).getByRole("status")).toHaveTextContent("1 matching passages");
+    expect(within(results).getByText(source.text, { normalizer: (value) => value })).toBeVisible();
+    expect(query.compareDocumentPosition(results) & Node.DOCUMENT_POSITION_FOLLOWING).not.toBe(0);
+    expect(query).toHaveFocus();
+    expect(
+      within(screen.getByRole("region", { name: "Knowledge detail" })).getByRole("heading", {
+        name: "Runbook 界",
+        level: 2,
+      }),
+    ).toBeVisible();
+    expect(c.save).not.toHaveBeenCalled();
+    expect(c.select).not.toHaveBeenCalled();
+  });
+  it("keeps the selected document readable when library filters have no matches", async () => {
+    const c = client();
+    render(<KnowledgePage client={c} />);
+    const library = screen.getByRole("complementary", { name: "Knowledge items" });
+    expect(screen.getByText("Your next idea starts here")).toBeInTheDocument();
+    fireEvent.click(await within(library).findByRole("button", { name: /Runbook 界/ }));
+    fireEvent.click(within(library).getByText("Filter properties"));
+    fireEvent.change(within(library).getByLabelText("Filter tags"), {
+      target: { value: "no-such-tag" },
+    });
+    expect(within(library).getByText("No items match these property filters.")).toBeVisible();
+    expect(within(library).queryByRole("button", { name: /Runbook 界/ })).not.toBeInTheDocument();
+    expect(
+      within(screen.getByRole("region", { name: "Knowledge detail" })).getByRole("heading", {
+        name: "Runbook 界",
+        level: 2,
+      }),
+    ).toBeVisible();
+    fireEvent.change(within(library).getByLabelText("Filter tags"), { target: { value: "" } });
+    expect(within(library).getByRole("button", { name: /Runbook 界/ })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    expect(c.save).not.toHaveBeenCalled();
+    expect(c.remove).not.toHaveBeenCalled();
+    expect(c.select).not.toHaveBeenCalled();
+  });
   it("shows loading then empty and sanitized errors", async () => {
     const c = client();
     let resolve: (value: readonly KnowledgeItem[]) => void = () => undefined;

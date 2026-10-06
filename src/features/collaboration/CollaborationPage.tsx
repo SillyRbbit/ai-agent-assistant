@@ -1,4 +1,5 @@
 import { ConductorIdentity } from "../agents/ConductorIdentity";
+import { PageHeader } from "../shared/PageHeader";
 import { SourcePicker } from "../knowledge/SourcePicker";
 import { SourceEvidence, NoteEditor } from "../knowledge/KnowledgePage";
 import { knowledgeClient, type Draft } from "../../infrastructure/tauri/knowledge-client";
@@ -92,13 +93,12 @@ export function CollaborationPage({
   }
   return (
     <section className="collaboration" aria-labelledby="collaboration-title">
-      <header>
-        <h1 id="collaboration-title">Collaboration</h1>
-        <p>
-          Conductor · Application coordinator. Four fixed analysis routes; no browsing, tools,
-          commands, edits, tests or infrastructure actions.
-        </p>
-      </header>
+      <PageHeader
+        eyebrow="Shared work"
+        headingId="collaboration-title"
+        title="Collaboration"
+        description="Conductor · Application coordinator. Four fixed analysis routes; no browsing, tools, commands, edits, tests or infrastructure actions."
+      />
       <p className="room-retention">
         Submitted objectives, sources and visible results are stored locally (up to 10 rooms, 4 runs
         each). Encryption at rest is not claimed. Delete removes local history, not provider-held
@@ -136,6 +136,7 @@ export function CollaborationPage({
       )}
       <div className="room-layout">
         <aside aria-label="Room list">
+          <h2>Rooms</h2>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -164,6 +165,7 @@ export function CollaborationPage({
           {rooms.map((r) => (
             <button
               key={r.id}
+              className="room-list-item"
               aria-pressed={selected === r.id}
               onClick={() => {
                 setSelected(r.id);
@@ -174,7 +176,7 @@ export function CollaborationPage({
             </button>
           ))}
         </aside>
-        <section aria-label="Selected collaboration room">
+        <section className="room-workspace" aria-label="Selected collaboration room">
           {!room ? (
             <p>Select a room to prepare its objective and sources.</p>
           ) : (
@@ -194,13 +196,13 @@ export function CollaborationPage({
                 Delete room and local history
               </button>
               {room.runs.map((run) => (
-                <section key={run.id} aria-label={`Run ${run.id}`}>
+                <section className="collaboration-run" key={run.id} aria-label={`Run ${run.id}`}>
                   <ConductorIdentity
                     run={run}
                     current={snapshotStatus === "current"}
                     expressive={run === room.runs.at(-1)}
                   />
-                  <h3>
+                  <h3 className="room-run-title" data-status={run.status}>
                     {run.input.workflow} · {run.status}
                   </h3>
                   {onOpenGraph && (
@@ -214,6 +216,24 @@ export function CollaborationPage({
                   )}
                   <p>{run.input.objective}</p>
                   {run.error && <p role="alert">{agentChatErrorMessage(run.error)}</p>}
+                  <ol className="room-stage-overview" aria-label={`Stages for ${run.id}`}>
+                    {run.stages.map((stage, index) => (
+                      <li key={stage.id}>
+                        <BotAvatar
+                          identity={stage.participant.identity}
+                          agentId={stage.participant.agentId}
+                        />
+                        <span>
+                          <strong>
+                            {stage.participant.identity.nickname || stage.participant.role}
+                          </strong>
+                          <small>
+                            Stage {index + 1} · {stage.status}
+                          </small>
+                        </span>
+                      </li>
+                    ))}
+                  </ol>
                   {run.stages.map((s, i) => (
                     <article key={s.id} id={s.id} tabIndex={-1} className="room-message">
                       <header>

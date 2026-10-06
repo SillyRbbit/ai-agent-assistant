@@ -17,6 +17,7 @@ import type {
 import type { Source } from "../../src/infrastructure/tauri/collaboration-client";
 import "../../src/styles.css";
 const params = new URLSearchParams(location.search);
+const design = params.has("design");
 const sample =
   "---\ntags: [operations]\n---\n# Incident runbook 界\nInvestigate synthetic service availability.\n[[Related note]] <script>never execute</script> ![remote](https://invalid.test/no)\n";
 let items: KnowledgeItem[] = params.has("long")
@@ -36,7 +37,40 @@ let items: KnowledgeItem[] = params.has("long")
         ],
       },
     ]
-  : [];
+  : design
+    ? [
+        {
+          id: 1,
+          kind: "owner_note",
+          versions: [
+            {
+              id: 1,
+              title: "Workspace design notes",
+              content:
+                "---\ntags: [synthetic, design]\nproject: Cortexa presentation QA\nnote_type: note\nreview_status: draft\n---\n# Workspace design notes\nThis fixed synthetic note is for presentation review only.\n\n## Review checklist\n- Keep the workspace calm and readable.\n- Preserve clear source and execution boundaries.\n\nRelated: [[Interface review]].\n",
+              hash: "c".repeat(64),
+              format: "md",
+              createdMs: 1790800000000,
+            },
+          ],
+        },
+        {
+          id: 2,
+          kind: "owner_note",
+          versions: [
+            {
+              id: 1,
+              title: "Interface review",
+              content:
+                "# Interface review\nSynthetic reference material. No owner data, live provider, or workflow result is represented.\n\nReview navigation, note reading, and visible status labels.\n",
+              hash: "d".repeat(64),
+              format: "md",
+              createdMs: 1790800000000,
+            },
+          ],
+        },
+      ]
+    : [];
 let serial = items.length;
 // Browser-only projection mirrors stable-title binding for presentation fixtures.
 // Actual persistence, parsing and removal semantics are tested at the Rust boundary.
@@ -225,7 +259,7 @@ export function Harness() {
 }
 // Actual-shell mode adds no execution route: unsupported IPC, including Start,
 // always rejects. The original standalone component scenarios remain unchanged.
-if (params.has("shell")) {
+if (params.has("shell") || design) {
   Object.defineProperty(window, "isTauri", { value: true });
   const notice = document.querySelector<HTMLElement>("body > [role=note]");
   if (notice)
@@ -233,10 +267,13 @@ if (params.has("shell")) {
   document
     .getElementById("root")
     ?.style.setProperty("--app-viewport-height", "calc(100dvh - 24px)");
-  const profiles = AGENT_IDS.map((agentId) => ({
+  const nicknames = ["Nova", "Sage", "Byte", "Nimbus", "Gear", "Fern", "Vera", "Aegis", "Tempo"];
+  const profiles = AGENT_IDS.map((agentId, index) => ({
     agentId,
     displayName: agentId,
-    identity: DEFAULT_BOT_IDENTITY,
+    identity: design
+      ? { ...DEFAULT_BOT_IDENTITY, nickname: nicknames[index] ?? "" }
+      : DEFAULT_BOT_IDENTITY,
     connection: "simulation",
     model: "simulation",
     effort: "default",
@@ -258,7 +295,10 @@ if (params.has("shell")) {
           message: "Synthetic layout fixture only; execution is unavailable.",
         }),
       );
-    if (command === "list_knowledge") return items;
+    if (command === "list_knowledge") return design ? projected() : items;
+    // Design review has fixed, empty diagnostics; no fabricated live events and
+    // no export, configuration, file, provider, or execution responder.
+    if (design && command === "read_diagnostics") return { available: true, events: [] };
     if (command === "list_collaboration_rooms")
       return [{ id: 1, title: "Synthetic layout room", runs: [] }];
     if (command === "prepare_collaboration")
@@ -290,4 +330,4 @@ if (params.has("shell")) {
   });
 }
 const root = document.getElementById("root");
-if (root) createRoot(root).render(params.has("shell") ? <App /> : <Harness />);
+if (root) createRoot(root).render(params.has("shell") || design ? <App /> : <Harness />);

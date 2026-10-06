@@ -1,3 +1,68 @@
+# 2026-10-05 — Final closeout, then owner review
+
+Worktree: `/Users/hdang/.codex/worktrees/ui-ux-redesign/ai-agent-assistant`.
+Branch: `codex/ui-ux-redesign`; baseline: `d2090d66f5d6212bf7ca030f0502b0b88c215d94`.
+Candidate: 31 paths within the declared 33-path ceiling; no inherited changes.
+Evidence: `/private/tmp/cortexa-ui-ux-redesign-evidence-6jl4jhzb`.
+The frozen report and external complete/valid/full Stop receipts control completion;
+this documentation does not preclaim those final gates passed.
+
+First verify the frozen report, exact 31-path recovery/preservation evidence and
+ordinary complete/valid/full Stop receipts. If a required check is pending, finish
+it before treating the milestone as complete. No unrelated roadmap work is selected.
+
+Then offer owner manual review of this isolated UI/UX candidate. Reuse completed
+automated/native evidence and target owner judgment or unobserved behavior only.
+Confirm synthetic-data changes; live-provider QA remains parked and publication
+requires separate approval. See [HANDOFF](HANDOFF.md) for preview commands,
+remaining manual items and recovery requirements. Do not begin ECC, provider QA
+or another milestone automatically.
+
+Approved artwork, all earlier checkouts, artifacts, historical document bodies
+and both terminal FAILs remain preserved. Retain D-127/D-128, unsigned/platform,
+provider/runtime/Codex-isolation, asset-weight/build-warning and process-local
+Python/Xcode SDK27/Cargo strip-none advisories. Live QA remains parked at 3/10;
+D-125/M1/M2 remain parked. No live success/cancellation or Windows execution is
+claimed. Owner manual QA and any publication decision remain separate.
+
+---
+
+# 2026-10-05 — Finish the active UI/UX redesign only
+
+Worktree: `/Users/hdang/.codex/worktrees/ui-ux-redesign/ai-agent-assistant`.
+Branch: `codex/ui-ux-redesign`; baseline: `d2090d66f5d6212bf7ca030f0502b0b88c215d94`.
+Evidence: `/private/tmp/cortexa-ui-ux-redesign-evidence-6jl4jhzb`.
+Ordinary admission succeeded from the clean merged PR135 tree. This milestone is
+active; final report, preservation, complete/valid status and full Stop are pending.
+The declared ceiling is 33 paths; the expected final 31-path inventory must be
+verified after the remaining closeout files are written.
+
+1. Finish affected native control-height validation and the corrected isolated QA
+   bundle. Preserve the first artifact and all earlier evidence.
+2. Reverify bundle/source identity and observe remaining compact native screens
+   with supported Computer Use and owner-assisted sizing; quit only the test app
+   and verify absence. Do not substitute browser geometry for native observation.
+3. Freeze the current exact inventory and recovery patch/new files, synchronize
+   final evidence and run required documentation/repository/security/preservation,
+   reviews/schema/session and ordinary completion/full Stop gates.
+4. Once complete/valid receipts exist, offer owner manual review of this exact
+   candidate. Publication requires a separate decision; no automatic next milestone.
+
+The 586-test frontend pass, 156-case browser matrix, 22 Bots cases, supplemental
+search/motion/theme checks and completed wide native observations are reusable
+within their recorded source/artifact bindings. Pending refined/compact native
+checks must not be represented as done. See [the active plan](docs/plans/2026-10-05-ui-ux-redesign.md)
+and [handoff](HANDOFF.md) for the exact preview route and recovery requirements.
+
+All prior checkouts, approved branding/mascot bytes, artifacts, historical document
+bodies and both terminal FAILs remain preserved. D-127/D-128, unsigned/platform,
+provider/runtime/Codex-isolation, asset-weight/build-warning and process-local
+Python/Xcode SDK27/Cargo strip-none advisories remain. Live QA stays parked at
+3/10 used; D-125/M1/M2 remain parked. No live success/cancellation, Windows native
+execution, commit or publication is claimed.
+
+---
+
 # 2026-10-03 — Collapsed sidebar acceptance
 
 Worktree: `/Users/hdang/.codex/worktrees/collapsed-sidebar-reachability/ai-agent-assistant`.

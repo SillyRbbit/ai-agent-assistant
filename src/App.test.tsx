@@ -281,7 +281,11 @@ describe("App", () => {
     fireEvent.change(screen.getByLabelText("Assistant request"), {
       target: { value: "private draft" },
     });
+    expect(screen.getByText("Mock · no provider calls")).toBeInTheDocument();
+    expect(screen.queryByText("Local only")).not.toBeInTheDocument();
     fireEvent.change(screen.getByLabelText("Conversation mode"), { target: { value: "native" } });
+    expect(screen.getByText("Review provider disclosure")).toBeInTheDocument();
+    expect(screen.queryByText("Mock · no provider calls")).not.toBeInTheDocument();
     expect(screen.queryByLabelText("Assistant request")).not.toBeInTheDocument();
     expect(screen.queryByText("private draft")).not.toBeInTheDocument();
     expect(

@@ -1,3 +1,182 @@
+# 2026-10-05 — UI/UX candidate handoff
+
+Worktree: `/Users/hdang/.codex/worktrees/ui-ux-redesign/ai-agent-assistant`.
+Branch: `codex/ui-ux-redesign`; baseline: `d2090d66f5d6212bf7ca030f0502b0b88c215d94`.
+Candidate: 31 paths within the declared 33-path ceiling; no inherited changes.
+Evidence: `/private/tmp/cortexa-ui-ux-redesign-evidence-6jl4jhzb`.
+The frozen report and external complete/valid/full Stop receipts control completion;
+this documentation does not preclaim those final gates passed.
+
+Plan: [UI/UX redesign](docs/plans/2026-10-05-ui-ux-redesign.md).
+Review: [post-increment review](docs/reviews/2026-10-05-ui-ux-redesign-post-increment-review.md).
+Milestone/reversibility: [UI/UX record](docs/ui-ux-milestone.md).
+
+Implementation and available direct native checks are ready for final local
+closeout. If completion receipts do not yet exist, finish only required
+documentation/repository/security/whitespace, preservation/scope, reviews/schema,
+session/quality and ordinary completion/full Stop. Reuse passing evidence;
+repeat no unchanged product suites or QA. Once completion is valid, the next action
+is owner manual review of this exact candidate; no publication is authorized.
+
+Recorded automated evidence includes 586 frontend tests, 10 affected Knowledge
+tests after the search correction, 21 Collaboration/Command Center tests, 156
+six-screen browser cases, 22 Bots cases and supplemental search/motion/theme
+checks. These overlapping runs are not an additive unique-test total. Later
+focused CSS rechecks retain their own receipts and source bindings. Unchanged
+Rust/backend and historical animation/workflow evidence is inherited, not rerun.
+
+Direct Computer Use observed all six major routes at wide and 760x520 compact
+native sizes, both navigation states, independent scrolling, Conductor inspection,
+a finite preview spin and Cancel/discard of an unsaved new Knowledge note without
+Save. Each observation belongs to its recorded artifact. The final
+`native-controls/artifact.json` and observation receipt verify the appearance-only
+native-select correction; its process exited 0 with bound PID absent and artifact/
+wrapper preservation verified. No owner data, Saves, Sends, workflow starts or
+provider requests were used in native review.
+
+Browser preview after checking for an existing task-owned instance or port conflict:
+
+```bash
+cd /Users/hdang/.codex/worktrees/ui-ux-redesign/ai-agent-assistant
+npm run dev -- --host 127.0.0.1 --port 4192 --strictPort
+```
+
+Use `http://127.0.0.1:4192/`. Browser mode does not establish native Tauri storage
+or provider behavior. Do not start a competing server. For separately approved
+owner native review, first reverify `native-controls/artifact.json`, executable
+and wrapper hashes, then use the existing key-free wrapper and isolated executable:
+
+```bash
+sh /private/tmp/cortexa-connected-knowledge-evidence/offline.sh '/Users/hdang/.codex/worktrees/ui-ux-redesign/ai-agent-assistant/src-tauri/target/debug/bundle/macos/Cortexa UI UX Review QA.app/Contents/MacOS/ai-agent-assistant'
+```
+
+This opens `Cortexa UI UX Review QA` with isolated synthetic data, not the owner
+app. Do not rerun the one-shot evidence launcher: its existing receipts and
+initial-data guard deliberately reject replay. Quit only the test-owned app.
+
+Owner review checklist: approve the spacing, palette and retained brain/bot/
+Conductor artwork; inspect six routes at comfortable wide/compact sizes; review
+reading, navigation, contextual panels and keyboard focus; exercise ordinary
+personal workflows only under separate synthetic/data-change scope. The existing
+dark application theme is the sole supported theme. Screen-reader speech,
+Windows/high-contrast behavior and live providers are not established.
+
+Recovery requirement: retain the final exact patch, all new candidate files and
+hash manifest externally. The final preservation receipt must identify and verify
+those payloads before any discard is considered; this text does not claim an
+archive exists before that receipt. Before integration, discard only this isolated
+candidate with separate owner approval. After a later authorized integration,
+reverse only the reviewed milestone diff against then-current main, preserve later
+unrelated work and run affected checks. Never blanket-reset/clean.
+
+Approved artwork, all earlier checkouts, artifacts, historical document bodies
+and both terminal FAILs remain preserved. Retain D-127/D-128, unsigned/platform,
+provider/runtime/Codex-isolation, asset-weight/build-warning and process-local
+Python/Xcode SDK27/Cargo strip-none advisories. Live QA remains parked at 3/10;
+D-125/M1/M2 remain parked. No live success/cancellation or Windows execution is
+claimed. Owner manual QA and any publication decision remain separate.
+
+Standalone next prompt, only after complete/valid and full Stop receipts verify:
+
+```text
+Assist owner manual review of Cortexa's reversible UI/UX candidate in
+/Users/hdang/.codex/worktrees/ui-ux-redesign/ai-agent-assistant on codex/ui-ux-redesign.
+Inspect instructions, HANDOFF, the plan/review and
+/private/tmp/cortexa-ui-ux-redesign-evidence-6jl4jhzb. Verify final completion,
+31-path inventory and the exact native-controls artifact before any launch.
+Preserve every change, artifact and historical record. Do not repeat completed
+tests/builds or QA. Identify remaining owner aesthetic/ordinary-workflow items;
+confirm synthetic-data changes before acting. Use supported Computer Use and the
+verified key-free bundle only within the owner's launch authorization. Attribute
+direct observations and owner judgments separately; quit only the test app.
+Stop on drift, unsupported access, unexpected failure or scope expansion. No owner
+data changes, provider requests, installs, commits or publication. Keep live QA
+parked 3/10, all advisories and D-125/M1/M2 parked.
+```
+
+---
+
+# 2026-10-05 — UI/UX redesign: native refinement checkpoint
+
+Worktree: `/Users/hdang/.codex/worktrees/ui-ux-redesign/ai-agent-assistant`.
+Branch: `codex/ui-ux-redesign`; baseline: `d2090d66f5d6212bf7ca030f0502b0b88c215d94`.
+Evidence: `/private/tmp/cortexa-ui-ux-redesign-evidence-6jl4jhzb`.
+Ordinary admission succeeded from the clean merged PR135 tree. This milestone is
+active; final report, preservation, complete/valid status and full Stop are pending.
+The declared ceiling is 33 paths; the expected final 31-path inventory must be
+verified after the remaining closeout files are written.
+
+Current plan: [UI/UX redesign](docs/plans/2026-10-05-ui-ux-redesign.md).
+Reversible milestone record: [UI/UX milestone](docs/ui-ux-milestone.md).
+
+Completed source work covers six major screens, consistent tokens/headers,
+constrained navigation and inspectors, readable bot profiles, real identity/status
+strips and contextual Knowledge reading/search. The first wide native pass directly
+observed all six screens, the Conductor inspector, a new unsaved Knowledge note's
+Cancel/discard flow without Save, and a preview spin returning to idle. That app
+quit with exit status 0 and its PID was absent. These observations belong to the
+first artifact, not the subsequently refined native control styling.
+
+Next action: finish the affected control-height checks and corrected isolated
+bundle, bind its identity, obtain owner-assisted compact sizing where needed,
+record only observed compact/native results, then quit and verify absence.
+Reuse the passing automated and prior wide evidence; repeat only checks affected
+by later changes. Finish documentation, repository, security, preservation,
+review/schema, session/quality and ordinary complete/valid/full Stop gates before
+claiming completion. Preserve evidence if access or verification fails.
+
+Browser preview from this exact checkout (first verify that port 4192 is free, or
+reuse the already verified task-owned preview instead of starting a competitor):
+
+```bash
+cd /Users/hdang/.codex/worktrees/ui-ux-redesign/ai-agent-assistant
+npm run dev -- --host 127.0.0.1 --port 4192 --strictPort
+```
+
+URL: `http://127.0.0.1:4192/`. Browser mode does not establish native Tauri storage,
+provider behavior or native control rendering. Native review uses only the
+hash-verified isolated key-free QA bundle/wrapper; the corrected compact bundle
+and its final launch command remain pending. Do not substitute the owner app or
+launch the superseded first bundle as evidence for the corrected native controls.
+
+Reversibility: keep the isolated worktree and every predecessor intact. Before
+closeout, save the exact candidate patch, all untracked candidate files and hashes
+externally; this final recovery archive is planned, not yet claimed. Any discard
+requires separate owner approval of only this candidate. After a later authorized
+integration, reverse only its reviewed diff against then-current main, preserve
+later unrelated changes and run affected checks; never blanket-reset/clean.
+
+Owner manual QA remains separate: aesthetic approval, comfortable compact reading,
+keyboard/focus and ordinary personal workflows after artifact verification. Remote
+CI, provider success and live cancellation are unverified by this milestone.
+
+All prior checkouts, approved branding/mascot bytes, artifacts, historical document
+bodies and both terminal FAILs remain preserved. D-127/D-128, unsigned/platform,
+provider/runtime/Codex-isolation, asset-weight/build-warning and process-local
+Python/Xcode SDK27/Cargo strip-none advisories remain. Live QA stays parked at
+3/10 used; D-125/M1/M2 remain parked. No live success/cancellation, Windows native
+execution, commit or publication is claimed.
+
+Exact continuation prompt if interrupted:
+
+```text
+Resume the active ui-ux-redesign milestone in
+/Users/hdang/.codex/worktrees/ui-ux-redesign/ai-agent-assistant on
+codex/ui-ux-redesign. Inspect instructions, HANDOFF, the active plan and
+/private/tmp/cortexa-ui-ux-redesign-evidence-6jl4jhzb. Preserve all existing work,
+artifacts, historical bodies and FAILs. Finish only pending affected native
+control-height/compact validation and closeout; reuse completed evidence without
+repeating unchanged tests or QA. Use the verified isolated key-free artifact and
+owner-assisted sizing. Record automated, direct native and pending owner evidence
+separately. Save a recoverable patch/new-file archive; run required final gates and
+require complete/valid status and full Stop before claiming completion. Stop on
+conflicting drift, scope expansion, unsupported access or unresolved failure. No
+installs, owner-data changes, provider requests, commits or publication. Keep live
+QA parked 3/10 and D-125/M1/M2 parked.
+```
+
+---
+
 # 2026-10-03 — Collapsed sidebar acceptance
 
 Worktree: `/Users/hdang/.codex/worktrees/collapsed-sidebar-reachability/ai-agent-assistant`.

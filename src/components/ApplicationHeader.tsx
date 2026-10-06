@@ -51,7 +51,7 @@ export function ApplicationHeader({
         </button>
 
         <div className="application-header__location">
-          <span>Workspace</span>
+          <span>Your workspace</span>
           <span aria-hidden="true">/</span>
           <strong aria-atomic="true" aria-live="polite" className="application-toolbar__location">
             {activeLabel}

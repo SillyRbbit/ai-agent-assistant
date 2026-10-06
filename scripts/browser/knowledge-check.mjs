@@ -477,8 +477,16 @@ try {
       const inspector = page.locator(".application-inspector");
       assert.equal(await inspector.isVisible(), true);
       assert.equal(
-        await inspector.evaluate((el) => getComputedStyle(el).position),
-        width <= 1440 ? "absolute" : "static",
+        await inspector.evaluate((el) => {
+          const i = el.getBoundingClientRect();
+          const m = document.querySelector(".application-main")?.getBoundingClientRect();
+          const n = document.querySelector(".application-sidebar")?.getBoundingClientRect();
+          return (
+            !!m && !!n && i.left >= n.right - 1 && (i.bottom <= m.top + 1 || i.left >= m.right - 1)
+          );
+        }),
+        true,
+        "inspector remains separate from Bots and navigation",
       );
       await page.getByRole("button", { name: "Close workspace inspector", exact: true }).focus();
       await page.keyboard.press("Escape");
