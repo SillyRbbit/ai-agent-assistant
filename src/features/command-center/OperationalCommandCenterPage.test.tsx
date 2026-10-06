@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, cleanup, within } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import Page from "./OperationalCommandCenterPage";
 import {
@@ -6,7 +6,11 @@ import {
   type CollaborationClient,
   type Room,
 } from "../../infrastructure/tauri/collaboration-client";
-import { DEFAULT_BOT_IDENTITY } from "../../infrastructure/tauri/agent-chat-client";
+import {
+  AGENT_IDS,
+  DEFAULT_BOT_IDENTITY,
+  type AgentProfile,
+} from "../../infrastructure/tauri/agent-chat-client";
 vi.mock("./CollaborationTopology", () => ({
   CollaborationTopology: () => <div>Operational canvas</div>,
 }));
@@ -95,4 +99,73 @@ it("keeps a chosen run on route reentry without replaying a consumed deep link",
   view.unmount();
   render(<Page client={client} loadProfiles={loadProfiles} location={location} />);
   expect(screen.getByRole("combobox", { name: "Run" })).toHaveValue("room-1/run-2");
+});
+
+it("inspects saved roster identities without implying execution and keeps filters consistent", async () => {
+  const { client } = makeClient();
+  const profiles: readonly AgentProfile[] = AGENT_IDS.map((agentId, index) => ({
+    agentId,
+    displayName: agentId,
+    identity: { ...DEFAULT_BOT_IDENTITY, nickname: `Current bot ${String(index + 1)}` },
+    connection: "simulation",
+    model: "simulation",
+    effort: "default",
+    endpoint: "",
+    localAuth: false,
+    allowUnknownLocalityNotes: false,
+    ownerInstructions: "PRIVATE INSTRUCTIONS",
+    memoryMode: "off",
+    note: "PRIVATE NOTE",
+    revision: 1,
+  }));
+  render(<Page client={client} loadProfiles={() => Promise.resolve(profiles)} />);
+  const first = await screen.findByRole("button", {
+    name: "Inspect Current bot 1 · personal-assistant",
+  });
+  const identities = screen.getByRole("list", { name: "Inspectable identities" });
+  expect(within(identities).getAllByRole("button")).toHaveLength(10);
+  expect(within(identities).getAllByText("roster")).toHaveLength(10);
+  expect(screen.getByText("Saved profiles · no execution")).toBeInTheDocument();
+  fireEvent.click(first);
+  expect(first).toHaveAttribute("aria-pressed", "true");
+  expect(screen.getByRole("heading", { name: "Current bot 1" })).toBeInTheDocument();
+  expect(screen.queryByText("PRIVATE INSTRUCTIONS")).not.toBeInTheDocument();
+  expect(screen.queryByText("PRIVATE NOTE")).not.toBeInTheDocument();
+  fireEvent.change(screen.getByRole("combobox", { name: "Entities" }), {
+    target: { value: "stage" },
+  });
+  expect(within(identities).queryAllByRole("button")).toHaveLength(0);
+  expect(screen.getByText("No identities match the current filters.")).toBeInTheDocument();
+  expect(screen.getByText(/Selected entity is filtered out/)).toBeInTheDocument();
+  expect(client.start).not.toHaveBeenCalled();
+  expect(client.prepare).not.toHaveBeenCalled();
+  expect(client.cancel).not.toHaveBeenCalled();
+});
+
+it("labels the coordinator from the cancelled run while retaining saved participant attribution", async () => {
+  const { client, room } = makeClient();
+  const run = room.runs[0];
+  if (!run) throw Error("fixture");
+  vi.mocked(client.list).mockResolvedValue([{ ...room, runs: [{ ...run, status: "cancelled" }] }]);
+  const view = render(
+    <Page
+      client={client}
+      loadProfiles={() => Promise.resolve([])}
+      location={{ roomId: 1, runId: run.id, stageId: null }}
+    />,
+  );
+  const conductor = await screen.findByRole("button", {
+    name: "Inspect Conductor · Application coordinator",
+  });
+  expect(within(conductor).getByText("cancelled")).toBeInTheDocument();
+  expect(within(conductor).queryByText("running")).not.toBeInTheDocument();
+  const savedParticipant = screen.getByRole("button", {
+    name: `Inspect Saved name · ${run.stages[0]?.participant.role ?? ""}`,
+  });
+  expect(within(savedParticipant).getByText("participant")).toBeInTheDocument();
+  fireEvent.click(conductor);
+  expect(screen.getByText(/Overall workflow: cancelled/)).toBeInTheDocument();
+  expect(view.container.querySelector('[data-motion="working"]')).not.toBeInTheDocument();
+  expect(view.container.querySelector('[data-motion="success"]')).not.toBeInTheDocument();
+  expect(client.start).not.toHaveBeenCalled();
 });

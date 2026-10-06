@@ -1,5 +1,6 @@
 interface PageHeaderProps {
   readonly description: string;
+  readonly badge?: string;
   readonly eyebrow?: string | undefined;
   readonly headingId: string;
   readonly title: string;
@@ -7,6 +8,7 @@ interface PageHeaderProps {
 
 export function PageHeader({
   description,
+  badge,
   eyebrow = "Workspace",
   headingId,
   title,
@@ -18,7 +20,7 @@ export function PageHeader({
         <h1 id={headingId}>{title}</h1>
         <p>{description}</p>
       </div>
-      <span className="local-only-badge">Local only</span>
+      {badge && <span className="page-header__badge">{badge}</span>}
     </header>
   );
 }

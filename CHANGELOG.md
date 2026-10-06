@@ -1,3 +1,139 @@
+# 2026-10-05 — Source-map-js audit remediation verification
+
+Worktree: `/Users/hdang/.codex/worktrees/ui-ux-redesign/ai-agent-assistant`.
+Branch: `codex/ui-ux-redesign`; HEAD: `b0eec3d2185f2f546c9ddff1bbf9e2c7f0d8d6da`.
+Verified live main: `d2090d66f5d6212bf7ca030f0502b0b88c215d94`.
+Ten successor paths, 34 cumulative PR paths. Ordinary admission succeeded after
+byte-identical predecessor completion archival. Evidence: `/private/tmp/cortexa-source-map-js-audit-evidence-h9_xadz8`.
+Plan: [source-map-js repair](docs/plans/2026-10-05-source-map-js-audit-remediation.md).
+Review: [bounded repair review](docs/reviews/2026-10-05-source-map-js-audit-remediation-post-increment-review.md).
+
+The exact source-map-js lock entry is patched from 1.2.1 to 1.2.2. Its version,
+registry tarball URL and SHA512 integrity are the only dependency fields changed.
+package.json, parent versions, other lock entries and all application source bytes
+are unchanged. Registry SHA512/SHA1 and all 18 installed package files verified.
+The resolved chains remain Vite/PostCSS and jsdom/css-tree; ^1.2.1 permits 1.2.2.
+
+New evidence: 25 bounded patched-package regressions passed; npm audit at the
+unchanged low threshold reports zero vulnerabilities. Full npm run verify passed
+with 105 hook tests, 94 repository tests, 587 frontend tests, 436 Rust unit tests
+and 255 Rust integration tests (1 existing opt-in test ignored). The script
+also reruns the 436 library tests during its integration phase; do not double-count
+them. Formatting, strict lint/typecheck, frontend builds and release no-bundle
+Tauri compilation passed using the documented process-local offline Python/Xcode
+SDK27/Cargo strip-none route. No app was launched. Generated dist bytes match the
+prior native-controls dist exactly; the previous bundle remains unchanged.
+
+Initial external regression failures remain recorded. Indexed column-zero lookup
+and indexed sourcesContent/sourceRoot conversion behavior predate 1.2.2, with
+implicated functions compared byte-identically against retained 1.2.1 source.
+The final suite checks normal flat conversion and indexed decoding independently.
+An undefined-column fixture default was corrected to construct malformed values
+literally. Final bounded tests cover invalid scalars, excessive/nested offsets,
+ordering and the constructor limit without generating large output. No vulnerable
+version exploit was executed and no unrelated library behavior was repaired.
+
+Prior raw completion state, historical report/document bodies, retained evidence,
+UI/UX source, artwork and bundles remain preserved. The original CI audit failure
+(PR136 run 37401118851/job 112068417730) is owner-supplied historical evidence,
+not a rerun or newly retrieved raw log. Earlier-head passing jobs are inherited;
+this local patch has no new remote CI evidence and is not published.
+
+Native visual evidence is inherited from the source-bound UI/UX receipts. Owner
+approval of all six screens and inspected panels is owner-reported, not new direct
+Computer Use. Cleanup verified bound-process absence after authorized SIGTERM;
+graceful quit and system-wide absence were not established. No native QA repeated.
+Retain D-127/D-128, unused local-only-badge CSS, Node localStorage/build-weight
+warnings, unsigned/platform/provider/runtime/Codex-isolation and process-local
+native-workaround advisories. Windows, screen-reader speech, ordinary personal
+workflows and live success/cancellation remain limited/unverified. Live QA stays
+parked 3/10; D-125/M1/M2 stay parked.
+
+Final documentation, preservation/schema and complete/valid/full Stop receipts
+control local completion; do not infer those final gates passed from this text.
+After they pass, the next action is separately authorized publication to PR136.
+No commit, push, CI rerun or merge is authorized by the current repair.
+
+---
+
+# 2026-10-05 — UI/UX candidate for final closeout
+
+Worktree: `/Users/hdang/.codex/worktrees/ui-ux-redesign/ai-agent-assistant`.
+Branch: `codex/ui-ux-redesign`; baseline: `d2090d66f5d6212bf7ca030f0502b0b88c215d94`.
+Candidate: 31 paths within the declared 33-path ceiling; no inherited changes.
+Evidence: `/private/tmp/cortexa-ui-ux-redesign-evidence-6jl4jhzb`.
+The frozen report and external complete/valid/full Stop receipts control completion;
+this documentation does not preclaim those final gates passed.
+
+Implemented shared shell tokens/headers and consistent six-screen presentation,
+navigation that reserves its actual width, in-flow compact inspectors, readable
+bot profiles, real saved identities/statuses and discoverable Knowledge search.
+Mode-specific labels preserve mock/live disclosure. Approved artwork and all
+persistence/provider/execution/governance boundaries are unchanged.
+
+Native WebKit control sizing was corrected through CSS appearance and a constant
+decorative chevron while retaining native select semantics. Earlier failures and
+superseded bundles remain evidence; only bound later observations resolve them.
+
+Recorded automated evidence includes 586 frontend tests, 10 affected Knowledge
+tests after the search correction, 21 Collaboration/Command Center tests, 156
+six-screen browser cases, 22 Bots cases and supplemental search/motion/theme
+checks. These overlapping runs are not an additive unique-test total. Later
+focused CSS rechecks retain their own receipts and source bindings. Unchanged
+Rust/backend and historical animation/workflow evidence is inherited, not rerun.
+
+Direct Computer Use observed all six major routes at wide and 760x520 compact
+native sizes, both navigation states, independent scrolling, Conductor inspection,
+a finite preview spin and Cancel/discard of an unsaved new Knowledge note without
+Save. Each observation belongs to its recorded artifact. The final
+`native-controls/artifact.json` and observation receipt verify the appearance-only
+native-select correction; its process exited 0 with bound PID absent and artifact/
+wrapper preservation verified. No owner data, Saves, Sends, workflow starts or
+provider requests were used in native review.
+
+Approved artwork, all earlier checkouts, artifacts, historical document bodies
+and both terminal FAILs remain preserved. Retain D-127/D-128, unsigned/platform,
+provider/runtime/Codex-isolation, asset-weight/build-warning and process-local
+Python/Xcode SDK27/Cargo strip-none advisories. Live QA remains parked at 3/10;
+D-125/M1/M2 remain parked. No live success/cancellation or Windows execution is
+claimed. Owner manual QA and any publication decision remain separate.
+
+---
+
+# 2026-10-05 — Reversible UI/UX redesign checkpoint
+
+Worktree: `/Users/hdang/.codex/worktrees/ui-ux-redesign/ai-agent-assistant`.
+Branch: `codex/ui-ux-redesign`; baseline: `d2090d66f5d6212bf7ca030f0502b0b88c215d94`.
+Evidence: `/private/tmp/cortexa-ui-ux-redesign-evidence-6jl4jhzb`.
+Ordinary admission succeeded from the clean merged PR135 tree. This milestone is
+active; final report, preservation, complete/valid status and full Stop are pending.
+The declared ceiling is 33 paths; the expected final 31-path inventory must be
+verified after the remaining closeout files are written.
+
+Implemented a shared charcoal/lavender presentation across the shell, Bots,
+Conversations, Collaboration, Command Center, Knowledge and Settings. Navigation
+keeps its own width; compact inspectors occupy an in-flow panel. Approved artwork
+is unchanged. Real saved identities/statuses populate Command Center and room
+summaries; no activity, metrics or successful execution is invented. Knowledge
+search feedback follows its form and announces its count without replacing the
+selected reader. Mode-specific labels replace the unconditional local-only badge.
+
+New automated evidence includes 586 frontend tests, focused regressions, 156
+six-screen browser cases, 22 Bots cases and supplemental search/motion/theme
+checks. The first isolated native bundle was built and inspected at wide size.
+Native select/button height exposed a WebKit presentation issue; the CSS repair
+is implemented, but its refined bundle and compact observations remain pending.
+No product persistence, provider, permissions, backend or governance behavior changed.
+
+All prior checkouts, approved branding/mascot bytes, artifacts, historical document
+bodies and both terminal FAILs remain preserved. D-127/D-128, unsigned/platform,
+provider/runtime/Codex-isolation, asset-weight/build-warning and process-local
+Python/Xcode SDK27/Cargo strip-none advisories remain. Live QA stays parked at
+3/10 used; D-125/M1/M2 remain parked. No live success/cancellation, Windows native
+execution, commit or publication is claimed.
+
+---
+
 # 2026-10-03 — Collapsed sidebar acceptance
 
 Worktree: `/Users/hdang/.codex/worktrees/collapsed-sidebar-reachability/ai-agent-assistant`.

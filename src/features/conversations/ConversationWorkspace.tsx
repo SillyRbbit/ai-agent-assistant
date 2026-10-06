@@ -66,13 +66,14 @@ export function ConversationWorkspace({
   return (
     <section aria-labelledby="conversations-page-title" className="page-stack conversation-page">
       <PageHeader
-        description="A private workspace for requests, context, and reviewed local actions."
+        description="A focused space for your requests, context, and reviewed actions."
+        badge={mode === "mock" ? "Mock · no provider calls" : "Review provider disclosure"}
         eyebrow="Assistant"
         headingId="conversations-page-title"
         title="Conversations"
       />
 
-      <label>
+      <label className="conversation-mode">
         Conversation mode{" "}
         <select
           value={mode}

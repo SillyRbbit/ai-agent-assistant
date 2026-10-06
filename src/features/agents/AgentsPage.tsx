@@ -1,4 +1,5 @@
 import { isNewBotSuccess } from "./botMotion";
+import { PageHeader } from "../shared/PageHeader";
 import { BotAvatar } from "./BotAppearance";
 import { ROLE_DESCRIPTIONS } from "./botAppearanceValues";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -81,16 +82,12 @@ export function AgentsPage({ client = agentChatClient }: { readonly client?: Age
   const selected = profiles.find((profile) => profile.agentId === selectedId);
   return (
     <section className="page-stack agents-page" aria-labelledby="agents-page-title">
-      <header className="page-header">
-        <div>
-          <p className="section-kicker">Private workspace</p>
-          <h1 id="agents-page-title">Bots</h1>
-          <p>
-            Choose one bot for bounded text advice. Settings and manually managed notes stay local
-            until you explicitly send them.
-          </p>
-        </div>
-      </header>
+      <PageHeader
+        eyebrow="Your team"
+        headingId="agents-page-title"
+        title="Bots"
+        description="Choose a bot, shape its personality, and review its connection. Settings and private notes stay local until you explicitly send them."
+      />
       {!available ? (
         <p role="status" className="page-panel">
           Open the native Cortexa app to load bots and saved settings. Browser mode cannot save
@@ -103,6 +100,10 @@ export function AgentsPage({ client = agentChatClient }: { readonly client?: Age
       {selected !== undefined ? (
         <div className="agents-layout">
           <nav className="agents-list" aria-label="Agent selection">
+            <div className="agents-roster-heading">
+              <p className="section-kicker">Bot roster</p>
+              <span>{profiles.length} bots</span>
+            </div>
             {profiles.map((profile) => (
               <button
                 key={profile.agentId}
@@ -115,9 +116,11 @@ export function AgentsPage({ client = agentChatClient }: { readonly client?: Age
                 }}
               >
                 <BotAvatar identity={profile.identity} agentId={profile.agentId} />
-                <strong>{botName(profile)}</strong>
-                {profile.identity.nickname ? <span>{profile.displayName}</span> : null}
-                <span>{CONNECTION_LABELS[profile.connection]}</span>
+                <span className="agents-roster-copy">
+                  <strong>{botName(profile)}</strong>
+                  {profile.identity.nickname ? <span>{profile.displayName}</span> : null}
+                  <span>{CONNECTION_LABELS[profile.connection]}</span>
+                </span>
               </button>
             ))}
           </nav>
@@ -297,13 +300,17 @@ function AgentSettings({
   };
   return (
     <section className="agents-settings page-panel" aria-labelledby="agent-settings-title">
-      <h2 id="agent-settings-title">
-        <BotAvatar identity={profile.identity} agentId={profile.agentId} /> {botName(profile)}
-      </h2>
-      <p>Canonical role: {profile.displayName}</p>
-      <p>
-        Saved settings apply to a new conversation. Selecting another agent discards unsaved edits.
-        Agent authority and fixture workflows remain unchanged.
+      <header className="agents-profile-header">
+        <BotAvatar identity={profile.identity} agentId={profile.agentId} />
+        <div>
+          <p className="section-kicker">Bot profile</p>
+          <h2 id="agent-settings-title">{botName(profile)}</h2>
+          <p>Canonical role: {profile.displayName}</p>
+        </div>
+        <span className="agents-connection-label">{CONNECTION_LABELS[profile.connection]}</span>
+      </header>
+      <p className="agents-editing-note">
+        Saved settings apply to a new conversation. Selecting another bot discards unsaved edits.
       </p>
       <fieldset disabled={pending}>
         <legend>Identity and personality</legend>

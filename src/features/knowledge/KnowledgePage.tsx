@@ -1,4 +1,5 @@
 import { UnsavedKnowledgePrompt } from "./UnsavedKnowledgePrompt";
+import { PageHeader } from "../shared/PageHeader";
 import { KnowledgeMarkdown } from "./KnowledgeMarkdown";
 import { KnowledgeProperties } from "./PropertiesEditor";
 import { KnowledgeGraph } from "./KnowledgeGraph";
@@ -233,194 +234,229 @@ export function KnowledgePage({ client = knowledgeClient }: { readonly client?: 
     );
   });
   return (
-    <section className="knowledge" aria-labelledby="knowledge-title">
+    <section className="page-stack knowledge" aria-labelledby="knowledge-title">
       {guard.pending && (
         <UnsavedKnowledgePrompt onCancel={guard.cancel} onDiscard={guard.discard} />
       )}
-      <h1 id="knowledge-title">Knowledge &amp; Documents</h1>
-      <p>
-        Local snapshots and reusable Markdown notes. Private bot notes stay in Bots and are never
-        imported automatically.
-      </p>
-      <p>
-        16 KiB per version · 200 items · 8 versions/item · 4 MiB total. No encryption-at-rest claim.
-        No vault scanning, filesystem-link resolution or automatic sharing.
-      </p>
+      <PageHeader
+        eyebrow="Your library"
+        headingId="knowledge-title"
+        title="Knowledge & Documents"
+        description="A connected home for local documents and reusable Markdown notes. Choose what to read, link, and share with your bots."
+        badge="Local library"
+      />
+      <details className="knowledge-boundaries">
+        <summary>Library privacy and limits</summary>
+        <p>
+          Private bot notes stay in Bots and are never imported automatically. 16 KiB per version ·
+          200 items · 8 versions/item · 4 MiB total. No encryption-at-rest claim. No vault scanning,
+          filesystem-link resolution or automatic sharing.
+        </p>
+      </details>
       {error && <p role="alert">{error}</p>}
       {notice && <p role="status">{notice}</p>}
-      <label>
-        New note template
-        <select
-          value={template}
-          onChange={(e) => {
-            setTemplate(e.target.value as keyof typeof TEMPLATES);
-          }}
-        >
-          {Object.keys(TEMPLATES).map((t) => (
-            <option key={t}>{t}</option>
-          ))}
-        </select>
-      </label>
-      <div className="knowledge-actions">
-        <button
-          disabled={busy}
-          onClick={() => {
-            guard.attempt(() => {
-              void action(async () => {
-                const i = await client.import();
-                if (i) {
-                  choose(i);
-                  setNotice("Imported local snapshot. Original file unchanged.");
-                }
+      <div className="knowledge-toolbar">
+        <label>
+          New note template
+          <select
+            value={template}
+            onChange={(e) => {
+              setTemplate(e.target.value as keyof typeof TEMPLATES);
+            }}
+          >
+            {Object.keys(TEMPLATES).map((t) => (
+              <option key={t}>{t}</option>
+            ))}
+          </select>
+        </label>
+        <div className="knowledge-actions">
+          <button
+            disabled={busy}
+            onClick={() => {
+              guard.attempt(() => {
+                void action(async () => {
+                  const i = await client.import();
+                  if (i) {
+                    choose(i);
+                    setNotice("Imported local snapshot. Original file unchanged.");
+                  }
+                });
               });
-            });
-          }}
-        >
-          Import selected file
-        </button>
-        <button
-          disabled={busy}
-          onClick={() => {
-            guard.attempt(() => {
-              setSelected(null);
-              setTitle("");
-              setContent(TEMPLATES[template]);
-              setOriginal({ title: "", content: "", version: null });
-              setEditing(true);
-              setConfirm(false);
-            });
-          }}
-        >
-          New Markdown note
-        </button>
-        <button
-          disabled={busy}
-          onClick={() => {
-            guard.attempt(() => {
-              void action(() => {
-                setEditing(false);
-                setNotice("Library reloaded.");
-                return Promise.resolve();
+            }}
+          >
+            Import selected file
+          </button>
+          <button
+            className="knowledge-primary"
+            disabled={busy}
+            onClick={() => {
+              guard.attempt(() => {
+                setSelected(null);
+                setTitle("");
+                setContent(TEMPLATES[template]);
+                setOriginal({ title: "", content: "", version: null });
+                setEditing(true);
+                setConfirm(false);
               });
-            });
-          }}
-        >
-          Reload library
-        </button>
+            }}
+          >
+            New Markdown note
+          </button>
+          <button
+            disabled={busy}
+            onClick={() => {
+              guard.attempt(() => {
+                void action(() => {
+                  setEditing(false);
+                  setNotice("Library reloaded.");
+                  return Promise.resolve();
+                });
+              });
+            }}
+          >
+            Reload library
+          </button>
+        </div>
       </div>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          setError("");
-          setBusy(true);
-          void client
-            .search(query)
-            .then(setResults)
-            .catch((e: unknown) => {
-              setError(knowledgeError(e));
-            })
-            .finally(() => {
-              setBusy(false);
-            });
-        }}
-      >
-        <label>
-          Search local passages
-          <input
-            maxLength={200}
-            value={query}
-            onChange={(e) => {
-              setQuery(e.currentTarget.value);
-            }}
-          />
-        </label>
-        <button disabled={busy || !query.trim()}>Search</button>
-      </form>
-      {results && (
-        <section aria-label="Search results">
-          <p>
-            {results.length} matching passages (up to 50). Keyword matches are not proof of support.
-          </p>
-          {results.length === 0 && (
-            <p>No matching evidence. Try other terms or import a relevant document.</p>
-          )}
-          {results.map(({ source: s }) => (
-            <article key={s.label}>
-              <strong>
-                {s.origin?.title} · version {s.origin?.version} · lines {s.origin?.startLine}–
-                {s.origin?.endLine}
-              </strong>
-              <pre className="knowledge-content">{s.text}</pre>
-            </article>
-          ))}
-        </section>
-      )}
-      <details>
-        <summary>Filter properties</summary>
-        <label>
-          Filter tags
-          <input
-            value={tagFilter}
-            onChange={(e) => {
-              setTagFilter(e.target.value);
-            }}
-          />
-        </label>
-        <label>
-          Filter project
-          <input
-            value={projectFilter}
-            onChange={(e) => {
-              setProjectFilter(e.target.value);
-            }}
-          />
-        </label>
-        <label>
-          Filter note type
-          <input
-            value={typeFilter}
-            onChange={(e) => {
-              setTypeFilter(e.target.value);
-            }}
-          />
-        </label>
-        <label>
-          Filter review status
-          <input
-            value={reviewFilter}
-            onChange={(e) => {
-              setReviewFilter(e.target.value);
-            }}
-          />
-        </label>
-      </details>
       <div className="knowledge-layout">
-        <aside aria-label="Knowledge items">
+        <aside className="knowledge-library" aria-label="Knowledge items">
+          <div className="knowledge-library-heading">
+            <h2>Library</h2>
+            {!loading && (
+              <span>
+                {visible.length} of {items.length} items
+              </span>
+            )}
+          </div>
+          <form
+            className="knowledge-search"
+            onSubmit={(e) => {
+              e.preventDefault();
+              setError("");
+              setBusy(true);
+              void client
+                .search(query)
+                .then(setResults)
+                .catch((e: unknown) => {
+                  setError(knowledgeError(e));
+                })
+                .finally(() => {
+                  setBusy(false);
+                });
+            }}
+          >
+            <label>
+              Search local passages
+              <input
+                maxLength={200}
+                value={query}
+                onChange={(e) => {
+                  setQuery(e.currentTarget.value);
+                }}
+              />
+            </label>
+            <button disabled={busy || !query.trim()}>Search</button>
+          </form>
+          {results && (
+            <section className="knowledge-search-results" aria-label="Search results">
+              <p role="status">
+                {results.length} matching passages (up to 50). Keyword matches are not proof of
+                support.
+              </p>
+              {results.length === 0 && (
+                <p>No matching evidence. Try other terms or import a relevant document.</p>
+              )}
+              {results.map(({ source: s }) => (
+                <article key={s.label}>
+                  <strong>
+                    {s.origin?.title} · version {s.origin?.version} · lines {s.origin?.startLine}–
+                    {s.origin?.endLine}
+                  </strong>
+                  <pre className="knowledge-content">{s.text}</pre>
+                </article>
+              ))}
+            </section>
+          )}
+          <details className="knowledge-filters">
+            <summary>Filter properties</summary>
+            <label>
+              Filter tags
+              <input
+                value={tagFilter}
+                onChange={(e) => {
+                  setTagFilter(e.target.value);
+                }}
+              />
+            </label>
+            <label>
+              Filter project
+              <input
+                value={projectFilter}
+                onChange={(e) => {
+                  setProjectFilter(e.target.value);
+                }}
+              />
+            </label>
+            <label>
+              Filter note type
+              <input
+                value={typeFilter}
+                onChange={(e) => {
+                  setTypeFilter(e.target.value);
+                }}
+              />
+            </label>
+            <label>
+              Filter review status
+              <input
+                value={reviewFilter}
+                onChange={(e) => {
+                  setReviewFilter(e.target.value);
+                }}
+              />
+            </label>
+          </details>
           {loading && <p role="status">Loading local library…</p>}
           {!loading && items.length === 0 && <p>No library items yet.</p>}
-          {visible.map((i) => {
-            const x = i.versions.at(-1);
-            return (
-              <button
-                key={i.id}
-                disabled={busy}
-                aria-pressed={selected === i.id}
-                onClick={() => {
-                  guard.attempt(() => {
-                    choose(i);
-                  });
-                }}
-              >
-                {x?.title}
-                <small>
-                  {i.kind.replaceAll("_", " ")} · {x?.format} ·{" "}
-                  {new TextEncoder().encode(x?.content ?? "").length} bytes · v{x?.id}
-                </small>
-              </button>
-            );
-          })}
+          {!loading && items.length > 0 && visible.length === 0 && (
+            <p>No items match these property filters.</p>
+          )}
+          <div className="knowledge-item-list">
+            {visible.map((i) => {
+              const x = i.versions.at(-1);
+              return (
+                <button
+                  className="knowledge-item"
+                  key={i.id}
+                  disabled={busy}
+                  aria-pressed={selected === i.id}
+                  onClick={() => {
+                    guard.attempt(() => {
+                      choose(i);
+                    });
+                  }}
+                >
+                  <strong>{x?.title}</strong>
+                  <small>
+                    {i.kind.replaceAll("_", " ")} · {x?.format} ·{" "}
+                    {new TextEncoder().encode(x?.content ?? "").length} bytes · v{x?.id}
+                  </small>
+                </button>
+              );
+            })}
+          </div>
         </aside>
-        <section aria-label="Knowledge detail">
+        <section className="knowledge-detail" aria-label="Knowledge detail">
+          {!editing && !v && (
+            <div className="knowledge-empty">
+              <p className="section-kicker">Read · connect · create</p>
+              <h2>Your next idea starts here</h2>
+              <p>
+                Select a library item to read its saved versions, or create a new Markdown note.
+              </p>
+              <p>Nothing joins a bot’s context until you explicitly select it.</p>
+            </div>
+          )}
           {!editing && v && item && (
             <>
               <h2>{v.title}</h2>
@@ -468,7 +504,7 @@ export function KnowledgePage({ client = knowledgeClient }: { readonly client?: 
                 <summary>Original Markdown</summary>
                 <pre className="knowledge-content">{v.content}</pre>
               </details>
-              <dl>
+              <dl className="knowledge-metadata">
                 <dt>Tags</dt>
                 <dd>{properties(v.content).values.tags.join(", ") || "None"}</dd>
                 <dt>Project</dt>
@@ -615,7 +651,9 @@ export function KnowledgePage({ client = knowledgeClient }: { readonly client?: 
                 <KnowledgeMarkdown content={content} onOpen={open} />
               </details>
               <p>{new TextEncoder().encode(content).length} / 16384 bytes</p>
-              <button disabled={busy}>Save note version</button>
+              <button className="knowledge-primary" disabled={busy}>
+                Save note version
+              </button>
               <button
                 type="button"
                 onClick={() => {

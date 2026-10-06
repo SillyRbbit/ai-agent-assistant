@@ -15,14 +15,15 @@ export function SettingsPage({ coreConnection, menuRouteStatus }: SettingsPagePr
   const animations = useBotAnimations();
   const [motionError, setMotionError] = useState(false);
   return (
-    <section aria-labelledby="settings-page-title" className="page-stack">
+    <section aria-labelledby="settings-page-title" className="page-stack settings-page">
       <PageHeader
-        description="Local application status and content-free diagnostics."
+        description="Appearance, local diagnostics, and application information."
+        eyebrow="Preferences"
         headingId="settings-page-title"
         title="Settings"
       />
 
-      <section className="page-panel" aria-label="Bot animation settings">
+      <section className="page-panel settings-appearance" aria-label="Bot animation settings">
         <h2>Bot animations</h2>
         <label>
           <input
@@ -46,7 +47,7 @@ export function SettingsPage({ coreConnection, menuRouteStatus }: SettingsPagePr
           <div className="settings-card__header">
             <div>
               <p className="section-kicker">General</p>
-              <h2 id="general-settings-heading">Application behavior</h2>
+              <h2 id="general-settings-heading">Mock conversation behavior</h2>
             </div>
             <span className="settings-tag">In memory</span>
           </div>
@@ -56,12 +57,12 @@ export function SettingsPage({ coreConnection, menuRouteStatus }: SettingsPagePr
               <dd>Conversations</dd>
             </div>
             <div>
-              <dt>Conversation persistence</dt>
+              <dt>Mock conversation persistence</dt>
               <dd>Off</dd>
             </div>
             <div>
-              <dt>Model access</dt>
-              <dd>Not configured</dd>
+              <dt>Mock provider access</dt>
+              <dd>No provider calls</dd>
             </div>
             <div>
               <dt>Permission prompts</dt>

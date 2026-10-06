@@ -1,5 +1,6 @@
 import { ConductorIdentity } from "../agents/ConductorIdentity";
-import { BotAvatar } from "../agents/BotAppearance";
+import { BotAvatar, CoordinatorAvatar } from "../agents/BotAppearance";
+import { PageHeader } from "../shared/PageHeader";
 import { SourceEvidence } from "../knowledge/KnowledgePage";
 import type { Viewport } from "@xyflow/react";
 import { AGENT_IDS } from "../../infrastructure/tauri/agent-chat-client";
@@ -156,6 +157,9 @@ function OperationalWorkspace({
   const projection = useMemo(() => projectCollaboration(profiles, run), [profiles, run]);
   const missing = mode !== "roster" && !run;
   const card = missing ? undefined : projection.cards.find((c) => c.id === selected);
+  const identities = projection.cards.filter(
+    (entity) => entity.kind !== "stage" && matchesCard(entity, filters),
+  );
   function select(id: string | null) {
     setSelected(id);
     if (id) panels?.openInspector();
@@ -268,15 +272,14 @@ function OperationalWorkspace({
   );
   return (
     <section className="operational-center" aria-label="Operational Command Center">
-      <header>
-        <p className="section-kicker">Read-only operational projection</p>
-        <h1>Command Center</h1>
-        <p>
-          Nine bots · Conductor is the application coordinator. Start, Stop and approval remain in
-          the room.
-        </p>
-      </header>
-      <div className="operational-controls">
+      <PageHeader
+        eyebrow="Operational workspace"
+        headingId="operational-center-title"
+        title="Command Center"
+        description="Nine bots · Conductor is the application coordinator. Start, Stop and approval remain in the room."
+        badge="Read only"
+      />
+      <div className="operational-controls operational-controls--selection">
         <label>
           Room
           <select
@@ -329,7 +332,7 @@ function OperationalWorkspace({
           </button>
         )}
       </div>
-      <p role="status">
+      <p role="status" className="operational-provenance">
         Snapshots: {snapshotStatus}. {mode === "history" ? "Historical inspection. " : ""}
         {missing ? "No selected run data" : projection.provenance}.{" "}
         {snapshotStatus === "stale" ? "Last accepted data; current state unknown." : ""}
@@ -344,7 +347,48 @@ function OperationalWorkspace({
         </p>
       )}
       {projection.error && <p role="alert">{agentChatErrorMessage(projection.error)}</p>}
-      <div className="operational-controls">
+      {!missing && (
+        <section className="operational-identities" aria-labelledby="operational-identities-title">
+          <div className="operational-section-heading">
+            <h2 id="operational-identities-title">{run ? "Run identities" : "Your bot roster"}</h2>
+            <p>{run ? "Saved participants and coordinator" : "Saved profiles · no execution"}</p>
+          </div>
+          <ul aria-label="Inspectable identities">
+            {identities.map((entity) => (
+              <li key={entity.id}>
+                <button
+                  type="button"
+                  className="operational-identity"
+                  aria-label={`Inspect ${entity.label} · ${entity.role}`}
+                  aria-pressed={selected === entity.id}
+                  onClick={() => {
+                    select(entity.id);
+                  }}
+                >
+                  {entity.kind === "coordinator" ? (
+                    <CoordinatorAvatar />
+                  ) : entity.identity ? (
+                    <BotAvatar identity={entity.identity} agentId={entity.agentId} />
+                  ) : (
+                    <span aria-hidden="true" className="operational-identity__unknown">
+                      ?
+                    </span>
+                  )}
+                  <span className="operational-identity__copy">
+                    <strong>{entity.label}</strong>
+                    <small>{entity.role}</small>
+                    <span className="operational-status" data-status={entity.status}>
+                      {entity.status}
+                    </span>
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+          {identities.length === 0 && <p>No identities match the current filters.</p>}
+        </section>
+      )}
+      <div className="operational-controls operational-controls--filters">
         <label>
           Search nickname or canonical role
           <input
