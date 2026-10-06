@@ -1,3 +1,61 @@
+# 2026-10-05 — Source-map-js audit remediation verification
+
+Worktree: `/Users/hdang/.codex/worktrees/ui-ux-redesign/ai-agent-assistant`.
+Branch: `codex/ui-ux-redesign`; HEAD: `b0eec3d2185f2f546c9ddff1bbf9e2c7f0d8d6da`.
+Verified live main: `d2090d66f5d6212bf7ca030f0502b0b88c215d94`.
+Ten successor paths, 34 cumulative PR paths. Ordinary admission succeeded after
+byte-identical predecessor completion archival. Evidence: `/private/tmp/cortexa-source-map-js-audit-evidence-h9_xadz8`.
+Plan: [source-map-js repair](docs/plans/2026-10-05-source-map-js-audit-remediation.md).
+Review: [bounded repair review](docs/reviews/2026-10-05-source-map-js-audit-remediation-post-increment-review.md).
+
+The exact source-map-js lock entry is patched from 1.2.1 to 1.2.2. Its version,
+registry tarball URL and SHA512 integrity are the only dependency fields changed.
+package.json, parent versions, other lock entries and all application source bytes
+are unchanged. Registry SHA512/SHA1 and all 18 installed package files verified.
+The resolved chains remain Vite/PostCSS and jsdom/css-tree; ^1.2.1 permits 1.2.2.
+
+New evidence: 25 bounded patched-package regressions passed; npm audit at the
+unchanged low threshold reports zero vulnerabilities. Full npm run verify passed
+with 105 hook tests, 94 repository tests, 587 frontend tests, 436 Rust unit tests
+and 255 Rust integration tests (1 existing opt-in test ignored). The script
+also reruns the 436 library tests during its integration phase; do not double-count
+them. Formatting, strict lint/typecheck, frontend builds and release no-bundle
+Tauri compilation passed using the documented process-local offline Python/Xcode
+SDK27/Cargo strip-none route. No app was launched. Generated dist bytes match the
+prior native-controls dist exactly; the previous bundle remains unchanged.
+
+Initial external regression failures remain recorded. Indexed column-zero lookup
+and indexed sourcesContent/sourceRoot conversion behavior predate 1.2.2, with
+implicated functions compared byte-identically against retained 1.2.1 source.
+The final suite checks normal flat conversion and indexed decoding independently.
+An undefined-column fixture default was corrected to construct malformed values
+literally. Final bounded tests cover invalid scalars, excessive/nested offsets,
+ordering and the constructor limit without generating large output. No vulnerable
+version exploit was executed and no unrelated library behavior was repaired.
+
+Prior raw completion state, historical report/document bodies, retained evidence,
+UI/UX source, artwork and bundles remain preserved. The original CI audit failure
+(PR136 run 37401118851/job 112068417730) is owner-supplied historical evidence,
+not a rerun or newly retrieved raw log. Earlier-head passing jobs are inherited;
+this local patch has no new remote CI evidence and is not published.
+
+Native visual evidence is inherited from the source-bound UI/UX receipts. Owner
+approval of all six screens and inspected panels is owner-reported, not new direct
+Computer Use. Cleanup verified bound-process absence after authorized SIGTERM;
+graceful quit and system-wide absence were not established. No native QA repeated.
+Retain D-127/D-128, unused local-only-badge CSS, Node localStorage/build-weight
+warnings, unsigned/platform/provider/runtime/Codex-isolation and process-local
+native-workaround advisories. Windows, screen-reader speech, ordinary personal
+workflows and live success/cancellation remain limited/unverified. Live QA stays
+parked 3/10; D-125/M1/M2 stay parked.
+
+Final documentation, preservation/schema and complete/valid/full Stop receipts
+control local completion; do not infer those final gates passed from this text.
+After they pass, the next action is separately authorized publication to PR136.
+No commit, push, CI rerun or merge is authorized by the current repair.
+
+---
+
 # 2026-10-05 — UI/UX verification attribution
 
 Worktree: `/Users/hdang/.codex/worktrees/ui-ux-redesign/ai-agent-assistant`.
