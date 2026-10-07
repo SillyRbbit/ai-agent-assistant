@@ -80,6 +80,10 @@ describe("direct native boundary", () => {
     );
   });
   it.each([
+    [
+      "provider_stream_credit_balance_exhausted",
+      "OpenAI reports no prepaid API credits remaining for this request's organization. Check API billing for the organization associated with your key. Work/Codex credits are separate. No automatic retry was made.",
+    ],
     ["http_bad_request", "OpenAI rejected the request (HTTP 400). No automatic retry was made."],
     ["http_forbidden", "OpenAI denied access (HTTP 403). No automatic retry was made."],
     [

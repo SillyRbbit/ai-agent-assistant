@@ -29,6 +29,8 @@ const ERRORS = {
     "The provider reported a rate limit in the response stream. No automatic retry was made.",
   provider_stream_invalid_prompt:
     "The provider reported an invalid prompt in the response stream. No automatic retry was made.",
+  provider_stream_credit_balance_exhausted:
+    "OpenAI reports no prepaid API credits remaining for this request's organization. Check API billing for the organization associated with your key. Work/Codex credits are separate. No automatic retry was made.",
   provider_stream_error_event:
     "The provider emitted a top-level error event in the response stream. No automatic retry was made.",
   provider_stream_failed_unknown_code:

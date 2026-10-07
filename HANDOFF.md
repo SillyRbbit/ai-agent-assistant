@@ -1,3 +1,556 @@
+## 2026-10-07 — Live-provider bounded acceptance closeout
+
+Quality review: **PASS WITH ADVISORIES** for the approved API/Codex
+minimum-route acceptance scope. All required evidence is reconciled. The
+consolidated [review](docs/reviews/2026-10-06-live-provider-e2e-post-increment-review.md) records the complete 31-path candidate,
+reviews, required check receipts and retained advisories. This additive entry
+supersedes older pending A/B native-checkpoint statements; their original bodies,
+failed receipts and unknown historical causes remain unchanged.
+
+New source-bound native evidence: actual installed Codex executable directly,
+dedicated owner-authenticated file store, saved low shown as support unverified
+before discovery, successful catalog refresh retaining low without Save, one fresh
+`Reply with OK.` response completed as `OK`, restart persistence at revision 2,
+and both Cmd-Q exits at zero with independent BSD PID absence and preservation.
+The exact tested bundle remains in `/private/tmp/cortexa-codex-effort-bundle-o9c6phuu`.
+Evidence: `/private/tmp/cortexa-codex-effort-recheck-3nvc11hq/FINAL-HANDOFF.md`.
+No old credential-store wrapper is needed for this repaired-artifact recheck.
+
+Inherited native evidence separately covers API and Codex runtime/model/effort,
+normal completion, incremental streaming, follow-up context, active cancellation
+with retained partial text, subsequent successful Send, terminal UI stability,
+restart/per-bot isolation and one four-stage research workflow per runtime.
+Other collaboration routes are **not tested live**. Completion-edge UI evidence
+does not establish backend Stop ordering; controlled race regressions are separate
+automated evidence. Safe negative cases reuse offline fixtures and observed
+failure/recovery, without manufacturing billing, credential or network failures.
+
+Verified unchanged automated evidence is reused under explicit owner instruction:
+`npm run verify` passed (105 hook, 94 repository, 601 frontend, 459 Rust library,
+255 integration tests; one inherited opt-in Hermes probe ignored), plus focused
+27 AgentsPage and 10 Codex adapter cases, strict lint/typecheck and builds.
+No tests, builds or live QA are repeated in this documentation-only closeout.
+Fresh documentation/repository/security/whitespace, preservation, session/report
+validation and ordinary finalization/status/full Stop receipts are recorded in
+`/private/tmp/cortexa-live-provider-final-s9667wje`. Completion is valid only if ordinary status reports complete/valid and
+actual full Stop allows ending; this prose does not replace those receipts.
+
+Ledger **33**; the A/B recheck added one Codex Send and one separate model-metadata
+refresh. No Sends or account actions occur here. Preserve D-127/D-128, runtime
+isolation/internal-retry/remote-abort limits, debug-only private diagnostic custody,
+128-update journal usability, fixed diagnostic mapping, stale Codex version hint,
+Node localStorage/frontend chunk advisories and the process-local Python/Xcode
+SDK27/Cargo workaround. Journal coalescing remains unapproved. ECC hooks/MCP stay
+disabled; D-125/M1/M2 parked. No personal-profile changes, product edits or publication.
+
+Next proposed task: read-only publication-readiness assessment of this exact frozen
+candidate and its completion receipts. This does not approve commit/push/merge or
+reorder the roadmap. Broader live collaboration or journal improvements need their
+own bounded authorization. Exact next prompt:
+
+```text
+Assess Cortexa live-provider-e2e publication readiness read-only in
+/Users/hdang/.codex/worktrees/live-provider-qa/ai-agent-assistant.
+Inspect instructions, HANDOFF, the final review and evidence in
+/private/tmp/cortexa-live-provider-final-s9667wje.
+Preserve all work and history; verify the 31 frozen paths and completion/full Stop
+receipts, then inspect live refs and state without changing working files.
+Separate inherited automated/native evidence from the A/B recheck and untested
+variants. Report exact publication authorization needed. No edits, launches,
+Sends, repeated tests/builds/QA, commits or publication. Stop on drift or ambiguity.
+Retain ledger33, all advisories, disabled ECC hooks/MCP and parked D-125/M1/M2.
+```
+
+---
+
+## 2026-10-07 — A/B offline verification passed; affected native recheck pending
+
+`npm run verify` exited zero: 105 hook, 94 repository, 601 frontend, 459 Rust
+library and 255 integration tests passed; the inherited opt-in Hermes probe
+remains ignored. Formatting, strict ESLint/Clippy/typecheck, frontend build and
+native release no-bundle build passed. Focused checks passed all 27 AgentsPage
+and 10 Codex adapter tests. No source changes followed verification. The existing
+Node localStorage and frontend chunk-size advisories remain. Installed tooling
+used the documented process-local workaround and fresh external Cargo output;
+the old bundle/dist are preserved. The release executable is verification output,
+not a new isolated debug QA artifact.
+
+The stage preservation check passes for 30 cumulative paths within 31, three
+product/test files and nine additive documents, 1,072 unchanged source bindings,
+318 retained historical bindings, earlier artifacts/config/dist, raw active gate
+and the predecessor fifteen-path completion. The first preservation checker
+misclassified authorized current-file bindings as immutable history; its failed
+receipt and original script remain preserved. The corrected checker verifies
+those pre-edit hashes against snapshots and enforces the exact current edit scope.
+No conflicting source drift or product test failure was found.
+
+Final documentation/repository/security/whitespace, session, status and full Stop
+receipts live in `/private/tmp/cortexa-codex-effort-repair-o41b458n`. Review:
+`/private/tmp/cortexa-codex-effort-repair-o41b458n/REVIEW.md`. The milestone remains
+active, with no finalize, terminal-failure rewrite or completion claim. Full Stop
+is expected to block until remaining native acceptance is resolved; exit zero
+must not be treated as a passing Stop. The reserved final review remains absent.
+
+Affected native recheck: a fresh isolated bundle from this source, real installed
+Codex executable directly (no file-store-injecting wrapper), the dedicated owner
+QA home with file-store login, saved low visible as unverified before discovery,
+successful refresh retaining low without Save, one minimal native response,
+restart display/persistence and identity-bound cleanup. Reuse unchanged API,
+cancellation and collaboration evidence; other live variants stay untested.
+No launch or Send occurred here: ledger 32, all advisories, disabled ECC hooks/MCP,
+native workaround and parked D-125/M1/M2 are unchanged. Journal coalescing remains
+unapproved. No commit, push or publication.
+
+---
+
+## 2026-10-07 — Approved Codex file store and saved-effort repair
+
+The owner approved proposals A/B from the retained post-restart handoff. Ordinary
+same-increment admission passed after a verified recoverable snapshot. The exact
+cumulative ceiling is 31 paths: the prior 29 plus `src/features/agents/AgentsPage.tsx`
+and its existing test; the final milestone review remains reserved. This stage
+changes only those two files, `src-tauri/src/codex_connection.rs` with in-module
+tests, and additive existing milestone documentation. No journal coalescing,
+dependency, gate, security-policy, credential, profile or account change is included.
+
+The native Codex command now explicitly selects the dedicated file credential
+store, matching the owner-authenticated QA home. Fresh HOME, explicit CODEX_HOME,
+cleared inherited environment, strict config, disabled tools/features, closed RPC
+validation, no API-key fallback and owned-child cleanup are unchanged. This does
+not establish the exact cause of the earlier catalog failure.
+
+Before discovery, a saved effort absent from the offered options remains visible
+as a disabled `support unverified` option. It does not authorize that effort or
+start discovery. Supported refresh retains the value without Save; unsupported
+refresh keeps the existing draft-to-default behavior without writing the profile.
+No persistence format, default setting, provider selection or runtime gate changed.
+
+Current native evidence is inherited from the prior bound artifact, not proof of
+this repaired build. Direct API and dedicated Codex native completion, streaming,
+follow-up, active cancellation, recovery, restart/isolation and the four-stage
+research workflow were exercised. Completion-edge UI stability does not prove
+backend Stop arrived before completion; inherited controlled race tests remain
+separate. Other collaboration variants remain untested live. The saved-effort
+misdisplay was observed after restart and corrected by refresh without Save.
+
+Ledger 32 (9 historical + 8 API chat + 4 API workflow + 7 Codex chat + 4 Codex
+workflow stages); model metadata requests are separate. The later autonomous
+QA authorization superseded the old cap without rewriting any historical receipt.
+No launch, Send or credential inspection occurs in this offline repair. Keep ECC
+hooks/MCP disabled, all D-127/D-128 and runtime advisories, the process-local
+Python/Xcode SDK27/Cargo workaround and D-125/M1/M2 parked.
+
+Evidence: `/private/tmp/cortexa-codex-effort-repair-o41b458n`. Exact scope, baseline,
+raw gate state, earlier dist and receipts are retained there. Native evidence:
+`/private/tmp/cortexa-codex-file-store-wq7bovw_/POST-RESTART-HANDOFF.md`.
+Required affected regressions/full verification and final preservation outcomes
+are recorded in a subsequent additive entry. The milestone stays active; no
+completion marker, global acceptance or passing full Stop is claimed.
+
+Exact next prompt after offline verification:
+
+```text
+Build one fresh isolated Cortexa QA artifact for the approved Codex file-store
+and saved-effort repair in /Users/hdang/.codex/worktrees/live-provider-qa/ai-agent-assistant.
+Inspect instructions, HANDOFF and /private/tmp/cortexa-codex-effort-repair-o41b458n.
+Preserve all existing work, historical artifacts and receipts. Reuse passing
+verification and verified dist; use installed tooling and the documented native
+workaround with fresh external output. Bind source/config/dist/executable/resources.
+Do not launch or Send in this build step. Stop on drift, missing tooling, build
+failure or scope expansion. Report exact separate private-launch/recheck authority
+for the real Codex executable with dedicated file-store home, saved low display
+before discovery, one minimal native request, restart and cleanup. Keep ledger32,
+ECC hooks/MCP disabled, all advisories and D-125/M1/M2 parked. No journal coalescing,
+repository edits, installs, commits or publication.
+```
+
+---
+
+## 2026-10-06 — Stream terminal repair offline verification results
+
+The authorized host correction and affected regressions passed. Focused results:
+eight direct/native tests, eight chat/lifecycle tests and one diagnostic test;
+the prior 28 focused frontend cases are retained. The required full verification
+passed 105 hook tests, 94 repository tests, 596 frontend tests, 459 Rust library
+tests and 255 integration tests, with one inherited opt-in Hermes probe ignored.
+Formatting and strict frontend/Rust lint passed.
+
+The full `npm run verify` invocation then exited 2 at TypeScript TS2532 in the new
+diagnostic test's unchecked array access. Its receipt remains Failed. An exact-array
+assertion corrected that test only; no product code changed. Per risk-based policy,
+the affected seven-test diagnostic suite, frontend lint, strict typecheck/frontend
+build and previously unexecuted native release no-bundle build subsequently passed.
+Unchanged passing suites were reused rather than repeated. Do not relabel the
+original full invocation as a zero-exit pass. Existing chunk-size and Node experimental
+localStorage advisories remain. The release output is validation output, not a new
+isolated diagnostic bundle; no application was launched.
+
+Evidence: `/private/tmp/cortexa-stream-terminal-repair-fqrmfi6v/amendment-001` and
+its parent command receipts. Exact scope/preservation, final documentation/security/
+repository checks, reviews, session/status and complete-payload Stop are recorded
+there separately. The active full milestone cannot complete until required native
+acceptance is established. No finalize, terminal-failure rewrite, request, commit
+or publication occurred. Ledger stays 9/10; all historical failures, prior artifacts,
+ECC hooks/MCP-disabled state, native workaround and D-125/M1/M2 remain preserved.
+
+The separate fixed diagnostic demo retains its inherited generic host-failure
+mapping and is outside this repair; the repaired saved-agent conversation uses
+`agent_chat_tauri.rs`. No claim is made about repairing that other route. Attempt
+9's historical first failing event remains unproven, despite the matching bounded
+reproduction. Native active Stop and post-cancellation recovery are still pending.
+
+Next: separately authorize one fresh isolated offline diagnostic bundle from this
+repaired source, reusing verified dist and installed process-local tooling. Preserve
+all old artifacts and bind source/config/dist/executable/resources. Do not launch or
+Send as part of the build. Later private setup and final Send acknowledgement are
+separate; resolve the one-request budget constraint before claiming the remaining
+native acceptance matrix can be completed.
+
+Exact resume prompt:
+
+```text
+Prepare one offline isolated diagnostic bundle for the verified stream-terminal
+repair in /Users/hdang/.codex/worktrees/live-provider-qa/ai-agent-assistant.
+Inspect instructions, HANDOFF and the amendment-001 evidence under
+/private/tmp/cortexa-stream-terminal-repair-fqrmfi6v before acting. Preserve all
+28 candidate paths, active completion history, profiles and old artifacts.
+Reuse passing checks and verified dist; use installed tooling and the documented
+process-local workaround with fresh external output and source/config/dist/
+executable/resource bindings. Do not launch or Send. Stop on drift, missing
+tooling, build failure or scope expansion. Keep ledger9/10, disabled ECC hooks/MCP,
+all advisories and D-125/M1/M2 parked. Report separate launch/setup authority needed.
+```
+
+---
+
+## 2026-10-06 — Bounded stream terminal classification repair
+
+The owner explicitly added only `src-tauri/src/personal_assistant_v0.rs` to the
+existing scope, raising the cumulative ceiling to 29 paths including the reserved
+final review. Ordinary same-increment admission passed after byte-verified
+snapshots. There are 28 current paths; the final review is still reserved.
+
+Confirmed defect: the direct host converted a typed `LimitExceeded` preparation
+error into `ProtocolViolation`; the chat adapter also flattened terminal host
+failures. The repair preserves the limit through callback, polling and terminal
+handling, uses the closed `resource_limit` diagnostic category, and gives fixed
+shorter-response guidance. All event, byte, character, sequence and time limits
+remain unchanged. Partial text stays visible and incomplete. Unknown/malformed
+input remains fail-closed; no raw provider data or private code is exposed.
+
+Attempt 9 received partial text then recorded `malformed_stream` at 2396 ms.
+The owner reported one Send and no Stop; no cancellation is recorded. The
+controlled two-deltas-per-integer reproduction retains 1–63 before the journal
+limit. This matches the symptom but does not prove the historical first failing
+event: individual provider events were not retained. Do not call this cancellation
+acceptance or reinterpret historical failures as passes.
+
+Focused verification passed: eight direct/native tests, eight chat tests and one
+diagnostic regression. The prior 28 focused frontend tests remain applicable.
+Required final verification results are recorded in a later additive entry.
+Controlled active Stop, Stop between provider completion and transport release,
+late/repeated Stop, partial text, lease release and fresh synthetic completion
+are automated evidence only. No cancellation implementation change was needed.
+
+Preserve the launch-time `Send_authorized: false` receipt: it describes setup.
+The later explicit final authorization and owner correction establish attempt 9.
+Do not rewrite either record. Attempt 8's prior-bundle OK/cleanup evidence is
+inherited; this source has no new isolated debug QA artifact yet. A fresh artifact,
+private launch/setup and final acknowledgement are required before another Send.
+One remaining request cannot prove both active cancellation and paid recovery.
+Do not finalize or close the full milestone during this offline checkpoint.
+
+Evidence: `/private/tmp/cortexa-stream-terminal-repair-fqrmfi6v`, with the
+separately authorized one-path continuation in `amendment-001`. Ledger: 9/10 used,
+one remaining. No launch or Send occurred in this offline stage. ECC hooks/MCP
+remain disabled; all advisories, the process-local native workaround and parked
+D-125/M1/M2 remain. The full milestone stays active with native acceptance pending.
+
+---
+
+## 2026-10-06 — Billing repair offline verification passed
+
+Four focused Rust billing tests and 40 focused frontend tests passed. Full
+`npm run verify` passed: 105 hook, 94 repository, 593 frontend, 454 Rust library
+and 255 integration tests; one inherited opt-in Hermes probe remains ignored.
+Formatting, strict lint/typecheck/Clippy, frontend and native release no-bundle
+builds passed with the installed process-local workaround and separate output.
+The existing frontend chunk-size advisory remains. No app launch or request.
+
+Scope/preservation checks passed: 27/28 cumulative paths, 20 stage paths, 1,064
+other source files, all nine prior document bodies, predecessor fifteen-path
+completion, prior artifact/dist/config and attempt receipts preserved. Session
+inventory has no conflicts or staged files. The full Stop payload returns
+`decision: block` because `live-provider-e2e` is still active; exit zero is not a
+completion pass. No finalize, terminal-failure rewrite or completion claim was
+made. Native acceptance remains pending outside this offline authorization.
+
+Evidence: `/private/tmp/cortexa-billing-classification-4akauqim`. The prior native
+bundle predates this repair; neither it nor the copied cache is a new QA artifact.
+Next requires owner-private API billing/access resolution and separate authority
+for a freshly bound diagnostic bundle, launch/setup and final Send. Ledger stays
+7/10. All prior advisories, disabled ECC hooks/MCP, native workaround and parked
+D-125/M1/M2 remain. The unchanged Codex setup hint still names only 0.159.0 despite
+the earlier 0.160.1 compatibility repair; this nonblocking wording advisory is
+outside billing-only behavior and was not silently changed.
+
+---
+
+## 2026-10-06 — Bounded offline prepaid API billing classification
+
+The owner authorized only this offline continuation of `live-provider-e2e`.
+The cumulative ceiling is now 28 paths: the existing 24 plus the agent-chat and
+personal-assistant-direct IPC clients and their tests. There are 27 current paths;
+the final milestone review remains reserved. Ordinary same-increment admission
+succeeded. The raw active state, predecessor completion, old artifacts, attempt
+receipts and prior document bodies remain preserved externally under
+`/private/tmp/cortexa-billing-classification-4akauqim`.
+
+The owner reported a prepaid API credit-exhaustion category after attempt 7.
+This is owner attribution, not account inspection or copied private diagnostic
+output. Earlier unknown-cause records remain historical. The repair recognizes
+one exact publicly documented stream-error code after existing framing validation,
+uses a closed billing category and fixed guidance in both native IPC clients and
+Settings diagnostics. Unknown codes stay generic; competing flat/nested fields
+remain generic. Nested classification still requires absent root code and param.
+HTTP status and `response.failed` handling are unchanged. No raw provider text,
+account identifiers or private Terminal output joins IPC, logs or documentation.
+
+No launch, provider request, billing/account change, retry, fallback or new native
+acceptance is authorized here. Ledger: 7/10 used, three remaining. Work/Codex
+credits do not establish API funds. ECC hooks/MCP remain disabled; all advisories,
+the process-local native workaround and D-125/M1/M2 remain unchanged. Verification
+results are recorded separately after execution; the full milestone stays active.
+
+Next: finish offline verification and preservation, then stop. Any new native
+artifact or launch/Send needs separate authorization and fresh source bindings.
+Do not replay either consumed launch helper or repeat an unchanged paid request.
+
+---
+
+## 2026-10-06 — Codex repair offline verification passed
+
+Ten focused Codex tests and full `npm run verify` passed: 105 hook, 94 repository,
+589 frontend, 450 Rust library and 255 integration tests; the inherited opt-in
+Hermes probe remains ignored. Strict formatting/lint/typecheck, frontend and native
+release no-bundle builds passed with installed tooling and the documented workaround.
+No provider request, account inspection or native app launch occurred. The owner
+confirmed no QA instance, no additional Sends (6/10), and no dedicated Codex home.
+The new isolated debug artifact and private launch bindings are recorded externally
+under `/private/tmp/cortexa-provider-repair-uxyhm6p9`; do not infer build/launch success
+without its actual receipts. Continue native direct-API diagnosis, then acceptance;
+Codex live QA requires owner-private dedicated authentication. The gate stays active.
+Historical evidence and all parked work remain unchanged.
+
+---
+
+## 2026-10-06 — Provider repair continuation: verified Codex compatibility
+
+The owner resumed implementation and native live troubleshooting using current
+Cortexa and pinned OpenClaw/Hermes references. Continue only in
+`/Users/hdang/.codex/worktrees/live-provider-qa/ai-agent-assistant`; do not replace
+this candidate with Desktop or public main. Evidence and preserved baselines:
+`/private/tmp/cortexa-provider-repair-uxyhm6p9`.
+
+Confirmed separate Codex defect: the installed executable reports 0.160.1 and a
+credential-free initialization with Cortexa's unchanged fixed flags succeeds;
+its identity is rejected by the former exact 0.159.0 check. The bounded repair
+accepts only reviewed 0.159.0/0.160.1 identities, retaining client-prefix/shape and
+all thread/tool/home isolation checks. Installed experimental schema confirms
+those thread fields and model cursor pagination. Catalog reads now follow at most
+four pages and 128 aggregate rows, reject malformed/repeated cursors and duplicate
+models, and use distinct request IDs before thread/turn start. No generation retry,
+raw stderr/RPC exposure, account switch or personal Codex-home import was added.
+Ten focused Codex offline tests passed, including streaming/error/cleanup fixtures.
+Full verification and a new source-bound native artifact are the next checks.
+
+The latest owner-requested runtime compatibility repair adds only
+`src-tauri/src/codex_connection.rs` to the prior declared scope: 24 cumulative
+paths maximum, currently 23 present (the live-provider final review is not yet
+created). This is a bounded scope amendment under the existing active milestone,
+not a governance change or new admission. All earlier 23-path receipts remain
+immutable historical records. Other product bytes stay frozen until evidence
+supports an authorized correction.
+
+Attempt 6 used direct OpenAI API / gpt-5.6-luna / low, not Codex. Its nested unknown
+provider error before text remains unexplained; the Codex defect is not its cause.
+Official model documentation supports low effort, which does not prove account
+entitlement. The previously verified owner-private code diagnostic remains the
+next bounded way to distinguish this failure without disclosing raw provider text.
+Never capture the owner's Terminal, persist the private code or replay a consumed
+helper. Fresh source/config/artifact binding and owner-private credentials are
+required. No additional Send has occurred; ledger remains 6/10. No dedicated
+Codex authentication has yet been supplied. Do not claim native acceptance.
+
+Pinned references: OpenClaw `a6496a2c5d1aee637a9c7fe0381ec2fc1ce524bb` and Hermes
+`ee8dd6c886326db4b468c2ba18d9409f123da827`, both MIT. No upstream code was copied
+into Cortexa. Retain explicit completion, per-request correlation and cleanup;
+do not import upstream raw-error logging, account selection, tool authority or
+ambiguous-generation retries. Reference review is not Cortexa runtime acceptance.
+
+No commit/publication, dependency, permission or governance changes. ECC hooks/MCP
+remain disabled; all advisories, process-local native workaround and D-125/M1/M2
+remain. The latest owner request restores bounded launch/live-QA authority; old
+offline-only instructions below describe their historical stage. Owner-provided
+private credentials, exact app continuity and the remaining ledger cap still apply.
+
+---
+
+## 2026-10-06 — Owner-private diagnostic offline verification complete
+
+The offline stage passed: six focused Rust privacy/one-shot/failure/cleanup tests,
+six mocked external-helper checks, and `npm run verify` (105 hook, 94 repository,
+589 frontend, 447 Rust library and 255 integration tests; the existing opt-in Hermes
+probe remains ignored). Strict formatting/lint/typecheck, frontend and native
+release no-bundle builds passed using the documented process-local workaround.
+Release cfg excludes the private display, and four private markers were absent
+from the verified release executable. Documentation, security, whitespace and
+session inventory checks passed. The existing frontend chunk-size advisory remains.
+The earlier five-test checkpoint below predates the added pre-dispatch sink check.
+
+Final offline evidence and resume instructions:
+`/private/tmp/cortexa-private-code-offline-khj7_xnb/FINAL-HANDOFF.md`.
+Only one product file and nine additive existing documents changed in this stage;
+22 cumulative paths remain within the 23-path ceiling. Prior document bodies,
+source outside scope, original artifacts, raw active gate state and historical
+receipts are preserved. The initial fixture/format failures remain recorded with
+their bounded corrections. The helper is sealed as offline preparation only:
+launch denied, no executable bound. No app launch, real Terminal display, Send,
+credential access or native acceptance occurred; attempt 6's cause remains unknown.
+
+The broader `live-provider-e2e` gate is still active. No completion marker or full
+Stop success is claimed while native acceptance remains pending. Obtain separate
+authorization for one fresh source-bound isolated debug bundle first, then a fresh
+owner-private launch and separately acknowledged Send. Do not reuse the old bundle
+as proof of this diagnostic. Terminal/OS retention cannot be excluded; a failed or
+partial one-write display must not trigger a retry or disclosure into chat.
+Ledger 6/10, ECC hooks/MCP disabled, all advisories and D-125/M1/M2 parked.
+
+---
+
+## 2026-10-06 — Owner-private diagnostic offline checkpoint
+
+The active `live-provider-e2e` milestone now includes a separately owner-approved,
+macOS debug-only code display in `personal_assistant_direct.rs`. The first configured
+request consumes an explicit single-use arm, including disabled/open/write/failure
+and cancellation paths. Only a nested stream `error.code` string of 1–64 UTF-8 bytes
+may be rendered once with ASCII Rust escapes to a verified controlling Terminal.
+The fixed nonblocking descriptor has no stdout/stderr/file/log/WebView/SQLite fallback;
+release builds exclude the display path. The helper never receives the value.
+Unknown code content can be sensitive; the owner expressly accepts private disclosure
+and that Terminal/OS retention cannot be ruled out. Do not claim universal zero retention.
+
+Attempt 6 is preserved: nested object, unknown code, null parameter, no text,
+clean terminal release, graceful Cmd-Q/exit 0 and independent PID absence. Cause remains
+unknown. Ledger is 6/10, four remaining. The earlier prelaunch no-Send checkpoint below
+is historical. Native acceptance remains pending; no request or launch is authorized
+in this offline stage. Reuse prior native evidence without reattribution.
+
+Evidence: `/private/tmp/cortexa-private-code-offline-khj7_xnb`. Five new mocked Rust
+checks and six external-helper checks passed. The first new decoder test omitted the
+required response.created event and correctly failed Protocol; its fixture was corrected
+without changing framing. Required full verification is recorded externally after the
+final edits; do not infer its result from this checkpoint. The gate remains active,
+not complete. Prior artifacts/helpers/raw completion/history remain preserved.
+
+Next: finish offline verification and preservation, then obtain separate authorization
+for a fresh source-bound isolated debug bundle and one owner-private diagnostic launch/
+Send (attempt 7). The offline helper rejects launching and has no bound executable.
+Do not replay a consumed helper or use copied cache bundles as new artifacts. Never
+capture the owner's Terminal with Computer Use or put the code in chat/receipts.
+No app launch, live Send, install, credential inspection or publication occurred here.
+ECC hooks/MCP disabled; all advisories/native workaround and D-125/M1/M2 retained.
+
+---
+
+# 2026-10-06 — Live provider QA active
+
+Dedicated worktree `/Users/hdang/.codex/worktrees/live-provider-qa/ai-agent-assistant`, branch `codex/live-provider-qa`.
+See [active plan](docs/plans/2026-10-06-live-provider-e2e.md).
+Ordinary admission passed; prior fifteen-file completion remains immutable in its
+original worktree. Evidence: `/var/folders/s5/0brc74x17kn0836ng7b5phqh0000gn/T/cortexa-live-provider-e2e-mjsjo4ic`.
+Native OpenAI/Codex acceptance remains unverified. Starting ledger 5/10; no new
+Send. Owner has authorized bounded troubleshooting/live QA; ECC hooks/MCP disabled,
+all prior advisories retained, D-125/M1/M2 parked. Do not mistake inherited tests
+or historical parked wording below for this task's current authorization/status.
+
+---
+
+# 2026-10-06 — Conversation adapter ownership
+
+Worktree: `/Users/hdang/.codex/worktrees/conversation-adapter-ownership/ai-agent-assistant`.
+Branch: `codex/conversation-adapter-ownership`; baseline/main:
+`6bebfa1ba43bb6ec8da4f19084ce8154faba96ef`. Exactly fifteen candidate paths.
+See the [plan](docs/plans/2026-10-06-conversation-adapter-ownership.md) and [review](docs/reviews/2026-10-06-conversation-adapter-ownership-post-increment-review.md). Evidence:
+`/private/tmp/cortexa-conversation-adapter-evidence-fqr8ao92`.
+
+The private `agent_adapter` module now owns the existing closed request enum and
+plain/traced dispatcher used by chat and collaboration. The enum and function
+bodies moved identically. Each workflow still owns its distinct preparation,
+validation, credentials, cancellation, host state and terminal disposition.
+This is an ownership clarification, not a fix for the unexplained provider error.
+No UI, payload, storage, permission, dependency, runtime choice or governance change.
+
+Passed: baseline chat 7, collaboration 12 and diagnostics 18 tests; three new
+characterization tests before and after extraction. Full offline `npm run verify`
+passed: 105 hook, 94 repository, 587 frontend, 439 Rust unit and 255 Rust integration
+tests, with one inherited opt-in Hermes test ignored. The integration script also
+reruns the 439 library tests; this is not an additional unique-test total.
+Formatting, strict lint/Clippy, typecheck, frontend and release no-bundle native
+builds passed. The process-local Python 3.12.1/Xcode SDK27/Cargo strip-none route
+used installed tooling; no installs, global changes, app launches or live requests.
+
+Independent source review found no blocking issue. Exact-scope/preservation checks
+retain all sixteen other checkouts, their files/status, historical document bodies,
+prior raw gate states and the bound UI/UX QA/personal bundle bytes. Final report
+schema, ordinary completion, complete/valid status and full Stop are recorded
+externally after the report freezes; those receipts control completion.
+
+Native visual/layout/animation and owner six-screen approval are inherited,
+not repeated or attributed to a new refactor bundle. No isolated refactor bundle
+was created; cached bundle copies are old evidence, not new QA artifacts. Windows,
+screen-reader speech, ordinary owner workflows, live success/cancellation and new
+remote CI remain unverified. Preserve D-127/D-128, unsigned/platform/provider/runtime/
+Codex-isolation, build-weight/Node localStorage warnings, process-local workaround
+and all other historical advisories. Live QA remains parked at 4/10 used, six left;
+D-125/M1/M2 remain parked. No commit, push, merge or publication occurred.
+
+Manual QA, if later authorized against an isolated source-bound artifact:
+
+1. Use only synthetic Simulation data; observe ordered text and one terminal state.
+2. Stop once during a run, wait for ownership release, then start a separate fresh conversation.
+3. Confirm diagnostics correlate that run without exposing synthetic text; preserve existing records.
+
+These optional checks are not new live-provider evidence or a reason to repeat the
+completed aesthetic/layout review. Do not use a personal profile as a QA substitute.
+
+Rollback: compare against baseline `6bebfa1` and reverse only this milestone's
+five Rust paths and additive documentation after checking for later edits. Preserve
+new evidence/tests in the external archive. No database migration or profile rollback
+is needed. Never blanket restore/reset, remove other worktrees or erase history.
+
+Exact proposed next prompt; do not execute automatically:
+
+```text
+Prepare one bounded live-provider QA checkpoint for the accepted conversation-adapter-ownership candidate in
+/Users/hdang/.codex/worktrees/conversation-adapter-ownership/ai-agent-assistant.
+Inspect repository instructions, HANDOFF, the plan/review and
+/private/tmp/cortexa-conversation-adapter-evidence-fqr8ao92 before acting.
+Preserve every checkout, artifact, profile and historical record; reuse passing tests/builds and visual QA.
+Reconcile the ledger at 4/10 used, six remaining, with /private/tmp/cortexa-live-qa-private-dmopz8b_/observations.json.
+The fourth attempt sent a different prompt and failed; do not infer its cause or live cancellation.
+Verify complete/valid status and exact candidate hashes. Identify a source-bound isolated diagnostic artifact;
+do not treat copied build-cache bundles as artifacts of this refactor. If a new artifact is necessary,
+specify exact offline build/launch authorization before proceeding. Confirm intended OpenAI API/gpt-5.6-luna/low
+setup, fresh context, Memory Off, blank instructions/notes, no documents/history, disclosure and idle state.
+Keep ECC hooks and optional MCP disabled. No launch, credential inspection or Send in this preparation;
+any later Send requires separate final acknowledgement, counts failures and permits no retry/fallback.
+Stop on drift, ambiguous identity, missing evidence or scope expansion. No repository edits, installs,
+commits or publication. Retain all advisories, the process-local workaround and parked D-125/M1/M2.
+```
+
+---
+
 # 2026-10-05 — Source-map-js audit remediation verification
 
 Worktree: `/Users/hdang/.codex/worktrees/ui-ux-redesign/ai-agent-assistant`.

@@ -1,7 +1,8 @@
 //! Narrow room commands. Only Rust selects participants and advances stages.
 use crate::{
+    agent_adapter::{run_adapter_traced, AdapterRequest},
     agent_chat::ChatError,
-    agent_chat_tauri::{collaboration_adapter, run_adapter_traced, AgentChatState},
+    agent_chat_tauri::{collaboration_adapter, AgentChatState},
     agent_preferences::AgentConnection,
     collaboration::*,
     personal_assistant_direct::{DirectError, GenerationLease},
@@ -122,7 +123,7 @@ fn preflight(
     mut adapter: impl FnMut(
         crate::agent_preferences::AgentProfile,
         &str,
-    ) -> Result<crate::agent_chat_tauri::AdapterRequest, ChatError>,
+    ) -> Result<AdapterRequest, ChatError>,
 ) -> Result<bool, ChatError> {
     let simulation = run
         .stages
@@ -304,7 +305,7 @@ async fn execute_stages(
     adapter: impl FnMut(
         crate::agent_preferences::AgentProfile,
         &str,
-    ) -> Result<crate::agent_chat_tauri::AdapterRequest, ChatError>,
+    ) -> Result<AdapterRequest, ChatError>,
     persist: impl FnMut(&Run) -> Result<(), ChatError>,
 ) -> Result<(), ChatError> {
     let hold = cancellation_fixture_selected(run, cancellation_fixture_opt_in());
@@ -315,7 +316,7 @@ async fn execute_stages_with_fixture(
     mut adapter: impl FnMut(
         crate::agent_preferences::AgentProfile,
         &str,
-    ) -> Result<crate::agent_chat_tauri::AdapterRequest, ChatError>,
+    ) -> Result<AdapterRequest, ChatError>,
     mut persist: impl FnMut(&Run) -> Result<(), ChatError>,
     hold: bool,
 ) -> Result<(), ChatError> {
@@ -442,7 +443,7 @@ pub(crate) async fn delete_collaboration_room(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::agent_chat_tauri::run_adapter;
+    use crate::agent_adapter::run_adapter;
     #[test]
     fn command_dispatch_runs_without_an_ambient_tokio_runtime(
     ) -> Result<(), Box<dyn std::error::Error>> {
@@ -730,7 +731,7 @@ mod tests {
     fn events(
         profile: crate::agent_preferences::AgentProfile,
         prompt: &str,
-    ) -> Result<crate::agent_chat_tauri::AdapterRequest, ChatError> {
+    ) -> Result<AdapterRequest, ChatError> {
         use crate::personal_assistant_direct::ProviderEvent;
         let value: serde_json::Value =
             serde_json::from_str(prompt).map_err(|_| ChatError::Internal)?;
@@ -738,7 +739,7 @@ mod tests {
         let raw = serde_json::json!({"version":1,"stage":value["stage"],"agentId":profile.agent_id,
             "status":"complete","summary":"Deterministic proposal","findings":[],"evidence":[],"limitations":["No action performed"]}).to_string();
         let mid = raw.len() / 2;
-        Ok(crate::agent_chat_tauri::AdapterRequest::Events(vec![
+        Ok(AdapterRequest::Events(vec![
             ProviderEvent::Started("unused".into()),
             ProviderEvent::Delta(raw[..mid].into()),
             ProviderEvent::Delta(raw[mid..].into()),
@@ -794,9 +795,7 @@ mod tests {
                             let index = calls;
                             calls += 1;
                             if index == fail_stage {
-                                Ok(crate::agent_chat_tauri::AdapterRequest::Failure(
-                                    DirectError::ProviderUnavailable,
-                                ))
+                                Ok(AdapterRequest::Failure(DirectError::ProviderUnavailable))
                             } else {
                                 events(p, prompt)
                             }
@@ -842,9 +841,7 @@ mod tests {
                     &mut run,
                     |_, _| {
                         calls += 1;
-                        Ok(crate::agent_chat_tauri::AdapterRequest::Pending(
-                            Arc::clone(&dropped),
-                        ))
+                        Ok(AdapterRequest::Pending(Arc::clone(&dropped)))
                     },
                     |_| Ok(()),
                 )
@@ -877,7 +874,7 @@ mod tests {
         assert_eq!(
             preflight(&run, &profiles, |_, _| {
                 checks += 1;
-                Ok(crate::agent_chat_tauri::AdapterRequest::Simulation)
+                Ok(AdapterRequest::Simulation)
             }),
             Err(ChatError::StaleContext)
         );
@@ -885,7 +882,7 @@ mod tests {
         run.stages[1].participant.connection = AgentConnection::Simulation;
         assert!(preflight(&run, &profiles, |_, _| {
             checks += 1;
-            Ok(crate::agent_chat_tauri::AdapterRequest::Simulation)
+            Ok(AdapterRequest::Simulation)
         })
         .is_err());
         assert_eq!(checks, 1);
@@ -948,11 +945,7 @@ mod tests {
                     s.active = Some((room.id, run.id));
                     s.task = Some(tokio::spawn(async move {
                         let _lease = lease;
-                        let _ = run_adapter(
-                            crate::agent_chat_tauri::AdapterRequest::Pending(d),
-                            |_| Ok(()),
-                        )
-                        .await;
+                        let _ = run_adapter(AdapterRequest::Pending(d), |_| Ok(())).await;
                     }));
                 }
                 tokio::task::yield_now().await;

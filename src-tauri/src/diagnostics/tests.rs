@@ -192,13 +192,13 @@ fn actual_adapter_events_keep_payloads_out_of_diagnostics() -> Result<(), Box<dy
                 None,
             );
             let observer = a.observer();
-            let adapter = crate::agent_chat_tauri::AdapterRequest::Events(vec![
+            let adapter = crate::agent_adapter::AdapterRequest::Events(vec![
                 ProviderEvent::Started("SECRET_ID_CANARY".into()),
                 ProviderEvent::Delta("PRIVATE_TEXT_CANARY".into()),
                 ProviderEvent::Completed,
             ]);
             let result =
-                crate::agent_chat_tauri::run_adapter_traced(adapter, observer.clone(), |event| {
+                crate::agent_adapter::run_adapter_traced(adapter, observer.clone(), |event| {
                     observer.first(matches!(event, ProviderEvent::Delta(_)));
                     Ok(())
                 })
@@ -238,8 +238,8 @@ fn abort_join_releases_future_before_one_cancel_terminal_and_rejects_late_events
             let inner = Arc::clone(&dropped);
             let task = tokio::spawn(async move {
                 let _attempt = a;
-                crate::agent_chat_tauri::run_adapter_traced(
-                    crate::agent_chat_tauri::AdapterRequest::Pending(inner),
+                crate::agent_adapter::run_adapter_traced(
+                    crate::agent_adapter::AdapterRequest::Pending(inner),
                     observer,
                     |_| Ok(()),
                 )
@@ -559,6 +559,10 @@ fn top_level_error_buckets_survive_disk_restart_and_export_without_content(
             TopLevelErrorCode::Absent,
             Category::OpenaiTopLevelAbsentCode,
         ),
+        (
+            TopLevelErrorCode::CreditBalanceExhausted,
+            Category::OpenaiCreditBalanceExhausted,
+        ),
         (TopLevelErrorCode::Null, Category::OpenaiTopLevelNullCode),
         (
             TopLevelErrorCode::Invalid,
@@ -585,7 +589,7 @@ fn top_level_error_buckets_survive_disk_restart_and_export_without_content(
     let restarted = Logger::open(root);
     let snapshot = restarted.snapshot();
     assert!(snapshot.available);
-    assert_eq!(snapshot.events.len(), 28);
+    assert_eq!(snapshot.events.len(), cases.len() * 4);
     assert_eq!(
         snapshot
             .events
@@ -797,4 +801,453 @@ fn precise_categories_do_not_guess_http_resource_or_provider_cause() {
         Category::from(DirectError::CodexSetup),
         Category::RuntimeLaunch
     );
+}
+
+#[test]
+fn traced_adapter_marks_only_accepted_events_and_stops_at_callback_error(
+) -> Result<(), Box<dyn std::error::Error>> {
+    use crate::agent_adapter::{run_adapter_traced, AdapterRequest};
+    tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .build()?
+        .block_on(async {
+            for reject_at in [None, Some(0), Some(2)] {
+                let directory = tempfile::tempdir()?;
+                let log = Logger::open(directory.path().join("logs"));
+                let mut attempt = Attempt::with_logger(
+                    Some(log.clone()),
+                    AgentConnection::Simulation,
+                    "simulation",
+                    None,
+                    None,
+                    None,
+                );
+                let mut delivered = 0;
+                let result = run_adapter_traced(
+                    AdapterRequest::Events(vec![
+                        ProviderEvent::Started("resp_fixture".into()),
+                        ProviderEvent::Delta(String::new()),
+                        ProviderEvent::Delta("Synthetic text".into()),
+                        ProviderEvent::Completed,
+                    ]),
+                    attempt.observer(),
+                    |_| {
+                        // Each callback precedes diagnostic acceptance of that event.
+                        let records = log.snapshot().events;
+                        assert_eq!(
+                            records
+                                .iter()
+                                .filter(|r| r.event == Event::FirstResponse)
+                                .count(),
+                            usize::from(delivered > 0)
+                        );
+                        assert_eq!(
+                            records
+                                .iter()
+                                .filter(|r| r.event == Event::FirstText)
+                                .count(),
+                            usize::from(delivered > 2)
+                        );
+                        let reject = reject_at == Some(delivered);
+                        delivered += 1;
+                        if reject {
+                            Err(DirectError::InvalidRequest)
+                        } else {
+                            Ok(())
+                        }
+                    },
+                )
+                .await;
+                assert_eq!(
+                    result,
+                    reject_at.map_or(Ok(()), |_| Err(DirectError::InvalidRequest))
+                );
+                assert_eq!(delivered, reject_at.map_or(4, |index| index + 1));
+                let records = log.snapshot().events;
+                assert_eq!(
+                    records
+                        .iter()
+                        .filter(|r| r.event == Event::FirstResponse)
+                        .count(),
+                    usize::from(reject_at != Some(0))
+                );
+                assert_eq!(
+                    records
+                        .iter()
+                        .filter(|r| r.event == Event::FirstText)
+                        .count(),
+                    usize::from(reject_at.is_none())
+                );
+                assert_eq!(
+                    records.last().map(|r| r.event),
+                    Some(Event::TransportReleased)
+                );
+                assert!(!records.iter().any(|r| r.event == Event::RequestFinished));
+                attempt.finish(result);
+                assert!(log.flush(true));
+            }
+            Ok::<(), Box<dyn std::error::Error>>(())
+        })
+}
+
+#[test]
+fn traced_adapter_keeps_interleaved_task_local_observers_separate(
+) -> Result<(), Box<dyn std::error::Error>> {
+    use crate::agent_adapter::{run_adapter_traced, AdapterRequest};
+    let directory = tempfile::tempdir()?;
+    let log = Logger::open(directory.path().join("logs"));
+    tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .build()?
+        .block_on(async {
+            let mut left = Attempt::with_logger(
+                Some(log.clone()),
+                AgentConnection::Simulation,
+                "simulation",
+                Some("left-conversation"),
+                None,
+                None,
+            );
+            let mut right = Attempt::with_logger(
+                Some(log.clone()),
+                AgentConnection::Simulation,
+                "simulation",
+                None,
+                Some("right-workflow"),
+                Some("right-stage"),
+            );
+            let outer = Attempt::with_logger(
+                None,
+                AgentConnection::Simulation,
+                "simulation",
+                None,
+                None,
+                None,
+            );
+            let left_id = left.observer().request_id();
+            let right_id = right.observer().request_id();
+            let outer_id = outer.observer().request_id();
+            assert!(left_id.is_some() && right_id.is_some());
+            assert_ne!(left_id, right_id);
+            let deliveries = std::cell::RefCell::new(Vec::new());
+            assert!(current().is_none());
+            let (left_result, right_result) = CURRENT
+                .scope(outer.observer(), async {
+                    let mut left_run = std::pin::pin!(run_adapter_traced(
+                        AdapterRequest::Simulation,
+                        left.observer(),
+                        |event| {
+                            let active = current().ok_or(DirectError::Internal)?;
+                            assert_eq!(active.request_id(), left_id);
+                            active.record(Event::RuntimeStarted, Outcome::Observed, None);
+                            deliveries
+                                .borrow_mut()
+                                .push(("left", matches!(event, ProviderEvent::Started(_))));
+                            Ok(())
+                        }
+                    ));
+                    let mut right_run = std::pin::pin!(run_adapter_traced(
+                        AdapterRequest::Simulation,
+                        right.observer(),
+                        |event| {
+                            let active = current().ok_or(DirectError::Internal)?;
+                            assert_eq!(active.request_id(), right_id);
+                            active.record(Event::RuntimeStarted, Outcome::Observed, None);
+                            deliveries
+                                .borrow_mut()
+                                .push(("right", matches!(event, ProviderEvent::Started(_))));
+                            Ok(())
+                        }
+                    ));
+                    // Poll both existing adapter futures; no Tokio macros feature is needed.
+                    let mut left_result = None;
+                    let mut right_result = None;
+                    let results = std::future::poll_fn(|context| {
+                        if left_result.is_none() {
+                            if let std::task::Poll::Ready(result) =
+                                std::future::Future::poll(left_run.as_mut(), context)
+                            {
+                                left_result = Some(result);
+                            }
+                        }
+                        assert_eq!(current().and_then(|o| o.request_id()), outer_id);
+                        if right_result.is_none() {
+                            if let std::task::Poll::Ready(result) =
+                                std::future::Future::poll(right_run.as_mut(), context)
+                            {
+                                right_result = Some(result);
+                            }
+                        }
+                        assert_eq!(current().and_then(|o| o.request_id()), outer_id);
+                        match (left_result, right_result) {
+                            (Some(left), Some(right)) => std::task::Poll::Ready((left, right)),
+                            _ => std::task::Poll::Pending,
+                        }
+                    })
+                    .await;
+                    assert_eq!(current().and_then(|o| o.request_id()), outer_id);
+                    results
+                })
+                .await;
+            assert!(current().is_none());
+            assert_eq!(left_result, Ok(()));
+            assert_eq!(right_result, Ok(()));
+            // Both transports began before either yielded its first delta.
+            let deliveries = deliveries.into_inner();
+            assert!(deliveries.len() >= 2);
+            assert!(deliveries[0].1 && deliveries[1].1);
+            assert_ne!(deliveries[0].0, deliveries[1].0);
+            left.finish(left_result);
+            right.finish(right_result);
+            let records = log.snapshot().events;
+            for id in [&left_id, &right_id] {
+                let correlated = records
+                    .iter()
+                    .filter(|r| &r.request == id)
+                    .collect::<Vec<_>>();
+                let initial = correlated.first().ok_or("missing request records")?;
+                assert!(correlated
+                    .iter()
+                    .all(|r| r.conversation == initial.conversation
+                        && r.workflow == initial.workflow
+                        && r.stage == initial.stage));
+                assert_eq!(
+                    correlated
+                        .iter()
+                        .filter(|r| r.event == Event::RuntimeStarted)
+                        .count(),
+                    1
+                );
+                assert_eq!(
+                    correlated
+                        .iter()
+                        .filter(|r| r.event == Event::ProviderDispatch)
+                        .count(),
+                    1
+                );
+                assert_eq!(
+                    correlated
+                        .iter()
+                        .filter(|r| r.event == Event::TransportReleased)
+                        .count(),
+                    1
+                );
+            }
+            Ok::<(), Box<dyn std::error::Error>>(())
+        })?;
+    assert!(log.flush(true));
+    Ok(())
+}
+
+#[test]
+fn traced_adapter_failure_returns_before_fresh_attempt_without_fallback(
+) -> Result<(), Box<dyn std::error::Error>> {
+    use crate::agent_adapter::{run_adapter_traced, AdapterRequest};
+    let directory = tempfile::tempdir()?;
+    let log = Logger::open(directory.path().join("logs"));
+    tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .build()?
+        .block_on(async {
+            let mut failed = Attempt::with_logger(
+                Some(log.clone()),
+                AgentConnection::Simulation,
+                "simulation",
+                None,
+                None,
+                None,
+            );
+            let failed_id = failed.observer().request_id();
+            let mut delivered = 0;
+            let failure = run_adapter_traced(
+                AdapterRequest::Failure(DirectError::Network),
+                failed.observer(),
+                |_| {
+                    delivered += 1;
+                    Ok(())
+                },
+            )
+            .await;
+            assert_eq!(failure, Err(DirectError::Network));
+            assert_eq!(delivered, 0);
+            assert_eq!(
+                log.snapshot()
+                    .events
+                    .iter()
+                    .map(|r| r.event)
+                    .collect::<Vec<_>>(),
+                vec![
+                    Event::RequestStarted,
+                    Event::ProviderDispatch,
+                    Event::TransportReleased
+                ]
+            );
+            // The caller, not the adapter wrapper, owns terminal disposition.
+            failed.finish(failure);
+            let mut fresh = Attempt::with_logger(
+                Some(log.clone()),
+                AgentConnection::Simulation,
+                "simulation",
+                None,
+                None,
+                None,
+            );
+            let fresh_id = fresh.observer().request_id();
+            assert_ne!(failed_id, fresh_id);
+            let success = run_adapter_traced(
+                AdapterRequest::Events(vec![
+                    ProviderEvent::Started("resp_fresh_fixture".into()),
+                    ProviderEvent::Delta("Synthetic text".into()),
+                    ProviderEvent::Completed,
+                ]),
+                fresh.observer(),
+                |_| {
+                    delivered += 1;
+                    Ok(())
+                },
+            )
+            .await;
+            assert_eq!(success, Ok(()));
+            assert_eq!(delivered, 3);
+            let before_finish = log.snapshot().events;
+            assert_eq!(
+                before_finish.last().map(|r| r.event),
+                Some(Event::TransportReleased)
+            );
+            assert!(!before_finish
+                .iter()
+                .any(|r| r.request == fresh_id && r.event == Event::RequestFinished));
+            fresh.finish(success);
+            let records = log.snapshot().events;
+            let dispatches = records
+                .iter()
+                .filter(|r| r.event == Event::ProviderDispatch)
+                .collect::<Vec<_>>();
+            assert_eq!(dispatches.len(), 2);
+            assert!(dispatches.iter().all(|r| r.attempt.is_some()));
+            assert_ne!(dispatches[0].attempt, dispatches[1].attempt);
+            let terminals = records
+                .iter()
+                .filter(|r| r.event == Event::RequestFinished)
+                .collect::<Vec<_>>();
+            assert_eq!(terminals.len(), 2);
+            assert_eq!(terminals[0].request, failed_id);
+            assert_eq!(terminals[0].outcome, Outcome::Failed);
+            assert_eq!(terminals[0].error, Some(Category::Network));
+            assert_eq!(terminals[1].request, fresh_id);
+            assert_eq!(terminals[1].outcome, Outcome::Completed);
+            assert_eq!(terminals[1].error, None);
+        });
+    assert!(log.flush(true));
+    Ok(())
+}
+
+#[test]
+fn nested_error_observation_requires_openai_root_error_and_stops_at_terminal(
+) -> Result<(), Box<dyn std::error::Error>> {
+    use crate::personal_assistant_direct::{ErrorEnvelope, TopLevelErrorCode, TopLevelErrorParam};
+    for provider in [AgentConnection::OpenaiApi, AgentConnection::Codex] {
+        let mut a = Attempt::with_logger(None, provider, "gpt-5.6-luna", None, None, None);
+        let o = a.observer();
+        let nested =
+            ErrorEnvelope::Object(TopLevelErrorCode::ModelNotFound, TopLevelErrorParam::Model);
+        o.error_envelope(nested);
+        assert!(
+            !o.0.lock()
+                .map_err(|_| "observer lock poisoned")?
+                .error_envelope
+        );
+        o.top_level_error(TopLevelErrorCode::Absent, TopLevelErrorParam::Absent);
+        o.error_envelope(nested);
+        o.error_envelope(nested);
+        assert_eq!(
+            o.0.lock()
+                .map_err(|_| "observer lock poisoned")?
+                .error_envelope,
+            provider == AgentConnection::OpenaiApi
+        );
+        a.finish(Err(DirectError::ProviderStreamErrorEvent));
+        let before =
+            o.0.lock()
+                .map_err(|_| "observer lock poisoned")?
+                .phases
+                .clone();
+        o.error_envelope(nested);
+        assert_eq!(
+            o.0.lock().map_err(|_| "observer lock poisoned")?.phases,
+            before
+        );
+    }
+    Ok(())
+}
+
+#[test]
+fn credit_balance_terminal_category_is_closed_and_serializable(
+) -> Result<(), Box<dyn std::error::Error>> {
+    let error = DirectError::ProviderStreamCreditBalanceExhausted;
+    assert_eq!(
+        Category::from(error),
+        Category::OpenaiCreditBalanceExhausted
+    );
+    assert_eq!(
+        serde_json::to_value(error)?,
+        serde_json::json!("provider_stream_credit_balance_exhausted")
+    );
+    let category = serde_json::to_value(Category::from(error))?;
+    assert_eq!(
+        category,
+        serde_json::json!("openai_credit_balance_exhausted")
+    );
+    assert_eq!(
+        serde_json::from_value::<Category>(category)?,
+        Category::OpenaiCreditBalanceExhausted
+    );
+    for value in [
+        serde_json::json!("openai_credit_balance_exhausted PRIVATE_ERROR_CANARY"),
+        serde_json::json!({"code":"openai_credit_balance_exhausted"}),
+    ] {
+        assert!(serde_json::from_value::<Category>(value).is_err());
+    }
+    Ok(())
+}
+
+#[test]
+fn local_limit_is_not_configuration_or_malformed_stream() -> Result<(), Box<dyn std::error::Error>>
+{
+    let d = tempfile::tempdir()?;
+    let log = Logger::open(d.path().join("logs"));
+    let mut attempt = Attempt::with_logger(
+        Some(log.clone()),
+        AgentConnection::Simulation,
+        "simulation",
+        None,
+        None,
+        None,
+    );
+    let observer = attempt.observer();
+    observer.first(true);
+    attempt.finish(Err(DirectError::Limit));
+    // Late abort/completion observations cannot overwrite the terminal reason.
+    observer.aborting_with(DirectError::Protocol);
+    attempt.finish(Ok(()));
+    drop(attempt);
+    assert!(log.flush(false));
+    let snapshot = log.snapshot();
+    let terminal: Vec<_> = snapshot
+        .events
+        .iter()
+        .filter(|r| r.event == Event::RequestFinished)
+        .collect();
+    assert_eq!(terminal.len(), 1);
+    assert_eq!(terminal[0].outcome, Outcome::Failed);
+    assert_eq!(terminal[0].error, Some(Category::ResourceLimit));
+    assert_eq!(
+        Category::from(DirectError::Protocol),
+        Category::MalformedStream
+    );
+    assert_eq!(
+        Category::from(DirectError::Incomplete),
+        Category::Incomplete
+    );
+    Ok(())
 }
