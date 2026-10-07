@@ -35,13 +35,19 @@ const MAX_FRAME: usize = 65_536;
 const MAX_WIRE: usize = 1_048_576;
 const MAX_EVENTS: u64 = 512;
 
-// Diagnostic literals only, not the separate response.failed error taxonomy.
+// Closed stream-error literals, not the separate response.failed error taxonomy.
 // No provider-controlled string survives this boundary.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum TopLevelErrorCode {
     ServerError,
     RateLimitExceeded,
     InvalidPrompt,
+    InvalidApiKey,
+    InsufficientQuota,
+    CreditBalanceExhausted,
+    ModelNotFound,
+    UnsupportedValue,
+    InvalidValue,
     Unknown,
     Absent,
     Null,
@@ -56,6 +62,12 @@ impl TopLevelErrorCode {
                 "server_error" => Self::ServerError,
                 "rate_limit_exceeded" => Self::RateLimitExceeded,
                 "invalid_prompt" => Self::InvalidPrompt,
+                "invalid_api_key" => Self::InvalidApiKey,
+                "insufficient_quota" => Self::InsufficientQuota,
+                "credit_balance_exhausted" => Self::CreditBalanceExhausted,
+                "model_not_found" => Self::ModelNotFound,
+                "unsupported_value" => Self::UnsupportedValue,
+                "invalid_value" => Self::InvalidValue,
                 "" => Self::Invalid,
                 _ => Self::Unknown,
             },
@@ -93,6 +105,380 @@ impl TopLevelErrorParam {
                 _ => Self::Unknown,
             },
             Some(_) => Self::Invalid,
+        }
+    }
+}
+
+// Observes the otherwise opaque envelope without retaining its message or unknown keys.
+// This does not accept the envelope as a successful response or choose between causes.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum ErrorEnvelope {
+    Absent,
+    Null,
+    Invalid,
+    Object(TopLevelErrorCode, TopLevelErrorParam),
+}
+impl ErrorEnvelope {
+    fn classify(value: Option<&Value>) -> Self {
+        match value {
+            None => Self::Absent,
+            Some(Value::Null) => Self::Null,
+            Some(Value::Object(fields)) => Self::Object(
+                TopLevelErrorCode::classify(fields.get("code")),
+                TopLevelErrorParam::classify(fields.get("param")),
+            ),
+            Some(_) => Self::Invalid,
+        }
+    }
+}
+
+// Owner-approved, debug-only exception: one bounded code to the private controlling
+// terminal. Never a diagnostic/log/IPC value. Terminal/OS retention is not excluded.
+#[cfg(any(test, all(debug_assertions, target_os = "macos")))]
+mod private_error_code {
+    use std::io::Write;
+    use std::sync::atomic::{AtomicBool, Ordering};
+
+    use serde_json::Value;
+
+    const MAX_CODE_BYTES: usize = 64;
+    const PREFIX: &str = "Cortexa owner-private error.code (escaped; do not paste into chat): ";
+
+    // Consume the first configured request even when disabled. Opening, writing or
+    // cancellation failure never restores the permit or arms a later request.
+    fn claim(first: &AtomicBool, development: bool, enabled: bool) -> bool {
+        !first.swap(true, Ordering::SeqCst) && development && enabled
+    }
+
+    pub(super) struct Terminal(Box<dyn Write + Send>);
+
+    fn try_arm(
+        first: &AtomicBool,
+        development: bool,
+        enabled: bool,
+        open: impl FnOnce() -> Result<Terminal, super::DirectError>,
+    ) -> Result<Option<Terminal>, super::DirectError> {
+        if !claim(first, development, enabled) {
+            return Ok(None);
+        }
+        open().map(Some)
+    }
+
+    fn record(code: Option<&Value>) -> String {
+        let Some(Value::String(code)) = code else {
+            return "Cortexa private diagnostic: code_unavailable\n".to_owned();
+        };
+        if code.is_empty() || code.len() > MAX_CODE_BYTES {
+            return "Cortexa private diagnostic: code_rejected\n".to_owned();
+        }
+        let mut escaped = String::from(PREFIX);
+        escaped.push('"');
+        for character in code.chars() {
+            // ASCII-only reversible Rust escapes, including bidi/control characters.
+            // No raw provider character can introduce an ANSI/OSC/clipboard sequence.
+            escaped.extend(character.escape_default());
+        }
+        escaped.push_str("\"\n");
+        escaped
+    }
+
+    impl Terminal {
+        pub(super) fn show(mut self, code: Option<&Value>) {
+            let output = record(code);
+            // Nonblocking production descriptor; exactly one bounded write attempt.
+            // A short write/error is not retried and is never printed or propagated.
+            let _ = self.0.write(output.as_bytes());
+        }
+    }
+
+    #[cfg(all(debug_assertions, target_os = "macos", not(test)))]
+    pub(super) fn arm() -> Result<Option<Terminal>, super::DirectError> {
+        use std::io::IsTerminal;
+        use std::os::unix::fs::FileTypeExt;
+
+        static FIRST_REQUEST: AtomicBool = AtomicBool::new(false);
+        let enabled = std::env::var_os("CORTEXA_PRIVATE_ERROR_CODE_ONCE").as_deref()
+            == Some(std::ffi::OsStr::new("owner-terminal-v1"));
+        try_arm(&FIRST_REQUEST, true, enabled, || {
+            // Fixed controlling-terminal device only: no caller path, creation,
+            // truncation, redirection, stdout/stderr fallback, or new controlling TTY.
+            // An armed but unavailable sink fails before client/request dispatch.
+            let fd = rustix::fs::open(
+                "/dev/tty",
+                rustix::fs::OFlags::WRONLY
+                    | rustix::fs::OFlags::NOCTTY
+                    | rustix::fs::OFlags::NOFOLLOW
+                    | rustix::fs::OFlags::NONBLOCK
+                    | rustix::fs::OFlags::CLOEXEC,
+                rustix::fs::Mode::empty(),
+            )
+            .map_err(|_| super::DirectError::Internal)?;
+            let file = std::fs::File::from(fd);
+            if !file.is_terminal()
+                || !file
+                    .metadata()
+                    .map_err(|_| super::DirectError::Internal)?
+                    .file_type()
+                    .is_char_device()
+            {
+                return Err(super::DirectError::Internal);
+            }
+            Ok(Terminal(Box::new(file)))
+        })
+    }
+
+    // Tests never read launch variables, open a terminal or display real values.
+    #[cfg(test)]
+    pub(super) fn arm() -> Result<Option<Terminal>, super::DirectError> {
+        Ok(None)
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+        use std::io;
+        use std::sync::{Arc, Mutex};
+
+        #[derive(Default)]
+        struct Capture {
+            bytes: Vec<u8>,
+            writes: usize,
+            drops: usize,
+            fail: bool,
+            short: bool,
+        }
+        struct Sink(Arc<Mutex<Capture>>);
+        impl Write for Sink {
+            fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+                let mut state = self.0.lock().map_err(|_| io::Error::other("mock_lock"))?;
+                state.writes += 1;
+                if state.fail {
+                    return Err(io::Error::new(io::ErrorKind::WouldBlock, "mock_failure"));
+                }
+                let n = if state.short {
+                    bytes.len() / 2
+                } else {
+                    bytes.len()
+                };
+                state.bytes.extend_from_slice(&bytes[..n]);
+                Ok(n)
+            }
+            fn flush(&mut self) -> io::Result<()> {
+                Ok(())
+            }
+        }
+        impl Drop for Sink {
+            fn drop(&mut self) {
+                if let Ok(mut state) = self.0.lock() {
+                    state.drops += 1;
+                }
+            }
+        }
+
+        #[test]
+        fn private_code_claim_is_single_use_disabled_release_and_concurrent() {
+            for (development, enabled) in
+                [(false, false), (false, true), (true, false), (true, true)]
+            {
+                let first = AtomicBool::new(false);
+                assert_eq!(claim(&first, development, enabled), development && enabled);
+                assert!(!claim(&first, true, true));
+            }
+            let first = AtomicBool::new(false);
+            let winners = std::sync::atomic::AtomicUsize::new(0);
+            std::thread::scope(|scope| {
+                for _ in 0..16 {
+                    scope.spawn(|| {
+                        if claim(&first, true, true) {
+                            winners.fetch_add(1, Ordering::SeqCst);
+                        }
+                    });
+                }
+            });
+            assert_eq!(winners.load(Ordering::SeqCst), 1);
+            assert!(arm().is_ok_and(|value| value.is_none()));
+        }
+
+        #[test]
+        fn private_code_open_failure_is_consumed_and_fails_closed_before_dispatch() {
+            let first = AtomicBool::new(false);
+            assert!(matches!(
+                try_arm(&first, true, true, || Err(
+                    super::super::DirectError::Internal
+                )),
+                Err(super::super::DirectError::Internal)
+            ));
+            assert!(try_arm(&first, true, true, || Err(
+                super::super::DirectError::Protocol
+            ))
+            .is_ok_and(|value| value.is_none()));
+            for (development, enabled) in [(false, true), (true, false)] {
+                let first = AtomicBool::new(false);
+                assert!(try_arm(&first, development, enabled, || Err(
+                    super::super::DirectError::Protocol
+                ))
+                .is_ok_and(|value| value.is_none()));
+            }
+        }
+
+        #[test]
+        fn private_code_serialization_is_bounded_exact_escaped_and_code_only() {
+            let code = serde_json::json!("SYNTHETIC_\"\\\n\r\t\u{1b}]52;c;\u{7}\u{202e}é");
+            let output = record(Some(&code));
+            assert!(output.is_ascii());
+            assert_eq!(output, format!("{PREFIX}\"SYNTHETIC_\\\"\\\\\\n\\r\\t\\u{{1b}}]52;c;\\u{{7}}\\u{{202e}}\\u{{e9}}\"\n"));
+            assert_eq!(output.bytes().filter(|b| *b == b'\n').count(), 1);
+            for v in [
+                Value::Null,
+                serde_json::json!(42),
+                serde_json::json!({"code":"SYNTHETIC","message":"EXCLUDED"}),
+                serde_json::json!([]),
+            ] {
+                assert_eq!(
+                    record(Some(&v)),
+                    "Cortexa private diagnostic: code_unavailable\n"
+                );
+            }
+            assert_eq!(
+                record(None),
+                "Cortexa private diagnostic: code_unavailable\n"
+            );
+            for v in [
+                serde_json::json!(""),
+                serde_json::json!("X".repeat(65)),
+                serde_json::json!("é".repeat(33)),
+            ] {
+                assert_eq!(
+                    record(Some(&v)),
+                    "Cortexa private diagnostic: code_rejected\n"
+                );
+            }
+            assert!(record(Some(&serde_json::json!("X".repeat(64)))).contains(&"X".repeat(64)));
+            assert!(record(Some(&serde_json::json!("\u{1b}".repeat(64)))).len() < 640);
+        }
+
+        #[test]
+        fn private_code_write_failure_short_write_and_drop_never_retry(
+        ) -> Result<(), Box<dyn std::error::Error>> {
+            for (fail, short) in [(false, false), (true, false), (false, true)] {
+                let captured = Arc::new(Mutex::new(Capture {
+                    fail,
+                    short,
+                    ..Capture::default()
+                }));
+                Terminal(Box::new(Sink(captured.clone())))
+                    .show(Some(&serde_json::json!("SYNTHETIC_CODE")));
+                let state = captured.lock().map_err(|_| "mock_lock")?;
+                assert_eq!(state.writes, 1);
+                assert_eq!(state.drops, 1);
+                if fail {
+                    assert!(state.bytes.is_empty());
+                }
+            }
+            let captured = Arc::new(Mutex::new(Capture::default()));
+            drop(Terminal(Box::new(Sink(captured.clone()))));
+            let state = captured.lock().map_err(|_| "mock_lock")?;
+            assert_eq!(state.writes, 0);
+            assert_eq!(state.drops, 1);
+            Ok(())
+        }
+
+        #[test]
+        fn private_code_decoder_keeps_error_cleanup_and_excludes_message(
+        ) -> Result<(), Box<dyn std::error::Error>> {
+            use super::super::{Decoder, DirectError, MODEL};
+            use crate::{agent_preferences::AgentConnection, diagnostics};
+            let directory = tempfile::tempdir()?;
+            let log = diagnostics::Logger::open(directory.path().join("logs"));
+            let mut attempt = diagnostics::Attempt::with_logger(
+                Some(log.clone()),
+                AgentConnection::OpenaiApi,
+                MODEL,
+                Some("synthetic-private-code"),
+                None,
+                None,
+            );
+            let captured = Arc::new(Mutex::new(Capture::default()));
+            let created = serde_json::json!({"type":"response.created","sequence_number":0,"response":{"id":"resp_private_fixture","status":"in_progress"}});
+            let frame = serde_json::json!({"type":"error","sequence_number":1,"message":"EXCLUDED_ROOT_MESSAGE","error":{"code":"SYNTHETIC_CODE","message":"EXCLUDED_NESTED_MESSAGE","param":"EXCLUDED_PARAM"}});
+            let input = format!(
+                "event: response.created\ndata: {created}\n\nevent: error\ndata: {frame}\n\n"
+            );
+            let error = tokio::runtime::Builder::new_current_thread()
+                .build()?
+                .block_on(diagnostics::CURRENT.scope(attempt.observer(), async {
+                    let mut decoder = Decoder::configured();
+                    decoder.private_code = Some(Terminal(Box::new(Sink(captured.clone()))));
+                    let error = decoder.push(input.as_bytes()).err();
+                    assert!(decoder.private_code.is_none());
+                    error.ok_or("expected_stream_error")
+                }))?;
+            assert_eq!(error, DirectError::ProviderStreamErrorEvent);
+            attempt.finish(Err(error));
+            drop(attempt);
+            assert!(log.flush(false));
+            let snapshot = log.snapshot();
+            let exported = directory.path().join("export.json");
+            diagnostics::export_new(&exported, &snapshot)?;
+            let serialized = serde_json::to_string(&snapshot)?;
+            let persisted =
+                std::fs::read_to_string(directory.path().join("logs/diagnostics-0.jsonl"))?;
+            let export_text = std::fs::read_to_string(exported)?;
+            use sha2::Digest;
+            let code_hash = format!("{:x}", sha2::Sha256::digest(b"SYNTHETIC_CODE"));
+            for text in [&serialized, &persisted, &export_text] {
+                for forbidden in [
+                    "SYNTHETIC_CODE",
+                    "EXCLUDED",
+                    "resp_private_fixture",
+                    code_hash.as_str(),
+                ] {
+                    assert!(!text.contains(forbidden));
+                }
+            }
+            assert!(log.flush(true));
+            let reloaded = diagnostics::Logger::open(directory.path().join("logs"));
+            assert_eq!(serde_json::to_string(&reloaded.snapshot())?, serialized);
+            assert!(reloaded.flush(true));
+            let state = captured.lock().map_err(|_| "mock_lock")?;
+            assert_eq!(state.writes, 1);
+            assert_eq!(state.drops, 1);
+            assert_eq!(
+                state.bytes,
+                record(Some(&serde_json::json!("SYNTHETIC_CODE"))).as_bytes()
+            );
+            assert!(!String::from_utf8_lossy(&state.bytes).contains("EXCLUDED"));
+            Ok(())
+        }
+
+        #[test]
+        fn private_code_protocol_rejection_and_cancellation_emit_nothing(
+        ) -> Result<(), Box<dyn std::error::Error>> {
+            use super::super::{Decoder, DirectError};
+            for body in [
+                "not json",
+                r#"{"type":"error","sequence_number":9,"error":{"code":"SYNTHETIC_CODE"}}"#,
+            ] {
+                let captured = Arc::new(Mutex::new(Capture::default()));
+                let mut decoder = Decoder::configured();
+                decoder.private_code = Some(Terminal(Box::new(Sink(captured.clone()))));
+                assert_eq!(
+                    decoder.push(format!("data: {body}\n\n").as_bytes()).err(),
+                    Some(DirectError::Protocol)
+                );
+                drop(decoder);
+                let state = captured.lock().map_err(|_| "mock_lock")?;
+                assert_eq!(state.writes, 0);
+                assert_eq!(state.drops, 1);
+            }
+            let captured = Arc::new(Mutex::new(Capture::default()));
+            let mut decoder = Decoder::configured();
+            decoder.private_code = Some(Terminal(Box::new(Sink(captured.clone()))));
+            drop(decoder); // cancellation drops the owned descriptor without a write
+            let state = captured.lock().map_err(|_| "mock_lock")?;
+            assert_eq!(state.writes, 0);
+            assert_eq!(state.drops, 1);
+            Ok(())
         }
     }
 }
@@ -150,6 +536,8 @@ pub(crate) enum DirectError {
     HttpStatus,
     #[error("The provider emitted a top-level error event in the response stream. No automatic retry was made.")]
     ProviderStreamErrorEvent,
+    #[error("OpenAI reports no prepaid API credits remaining for this request's organization. Check API billing for the organization associated with your key. Work/Codex credits are separate. No automatic retry was made.")]
+    ProviderStreamCreditBalanceExhausted,
     #[error("The provider reported response.failed with an unrecognized error code. No automatic retry was made.")]
     ProviderStreamFailedUnknownCode,
     #[error("The provider reported response.failed without a usable error code. No automatic retry was made.")]
@@ -316,6 +704,8 @@ pub(crate) async fn run_configured(
     body: Vec<u8>,
     mut emit: impl FnMut(ProviderEvent) -> Result<(), DirectError>,
 ) -> Result<(), DirectError> {
+    #[cfg(all(debug_assertions, target_os = "macos"))]
+    let private_code = private_error_code::arm()?;
     let client = client()?;
     let request = configured_request(&client, key, body)?;
     let mut response = client.execute(request).await.map_err(network_error)?;
@@ -332,6 +722,10 @@ pub(crate) async fn run_configured(
         return Err(DirectError::Protocol);
     }
     let mut decoder = Decoder::configured();
+    #[cfg(all(debug_assertions, target_os = "macos"))]
+    {
+        decoder.private_code = private_code;
+    }
     while let Some(chunk) = response.chunk().await.map_err(network_error)? {
         for event in decoder.push(&chunk)? {
             emit(event)?;
@@ -359,6 +753,8 @@ fn configured_request(client: &Client, key: ApiKey, body: Vec<u8>) -> Result<Req
 
 #[derive(Default)]
 struct Decoder {
+    #[cfg(any(test, all(debug_assertions, target_os = "macos")))]
+    private_code: Option<private_error_code::Terminal>,
     pending: Vec<u8>,
     wire_bytes: usize,
     sequence: u64,
@@ -588,11 +984,37 @@ impl Decoder {
                 });
             }
             "error" => {
+                let code = TopLevelErrorCode::classify(value.get("code"));
                 crate::diagnostics::top_level_error(
-                    TopLevelErrorCode::classify(value.get("code")),
+                    code,
                     TopLevelErrorParam::classify(value.get("param")),
                 );
-                return Err(DirectError::ProviderStreamErrorEvent);
+                // Do not choose between flat and nested error representations.
+                // Only the documented exact literal changes the fixed terminal message.
+                let mut billing = code == TopLevelErrorCode::CreditBalanceExhausted
+                    && value.get("error").is_none();
+                if value.get("code").is_none() && value.get("param").is_none() {
+                    let envelope = ErrorEnvelope::classify(value.get("error"));
+                    crate::diagnostics::error_envelope(envelope);
+                    billing = matches!(
+                        envelope,
+                        ErrorEnvelope::Object(TopLevelErrorCode::CreditBalanceExhausted, _)
+                    );
+                    #[cfg(any(test, all(debug_assertions, target_os = "macos")))]
+                    if let Some(terminal) = self.private_code.take() {
+                        terminal.show(
+                            value
+                                .get("error")
+                                .and_then(|v| v.as_object())
+                                .and_then(|v| v.get("code")),
+                        );
+                    }
+                }
+                return Err(if billing {
+                    DirectError::ProviderStreamCreditBalanceExhausted
+                } else {
+                    DirectError::ProviderStreamErrorEvent
+                });
             }
             _ => return Err(DirectError::Protocol), // Includes every tool/function event.
         }
@@ -729,6 +1151,91 @@ mod tests {
         assert_eq!(serde_json::to_string(&reloaded)?, serialized);
         assert!(reopened.flush(true));
         Ok((error, snapshot))
+    }
+
+    #[test]
+    fn missing_flat_fields_observe_nested_error_without_leaking_or_succeeding(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        use crate::diagnostics::{Category, Event};
+        for (nested, shape, code) in [
+            (None, Category::OpenaiEnvelopeAbsent, None),
+            (Some(Value::Null), Category::OpenaiEnvelopeNull, None),
+            (Some(json!(42)), Category::OpenaiEnvelopeInvalid, None),
+            (Some(json!([])), Category::OpenaiEnvelopeInvalid, None),
+            (
+                Some(
+                    json!({"code":"model_not_found", "param":"model", "message":"PRIVATE_ERROR_CANARY"}),
+                ),
+                Category::OpenaiEnvelopeObject,
+                Some(Category::OpenaiModelNotFound),
+            ),
+            (
+                Some(json!({"code":"invalid_api_key", "param":null})),
+                Category::OpenaiEnvelopeObject,
+                Some(Category::OpenaiInvalidApiKey),
+            ),
+            (
+                Some(json!({"code":"insufficient_quota", "message":"PRIVATE_ERROR_CANARY"})),
+                Category::OpenaiEnvelopeObject,
+                Some(Category::OpenaiInsufficientQuota),
+            ),
+            (
+                Some(json!({"code":"unsupported_value", "param":"reasoning.effort"})),
+                Category::OpenaiEnvelopeObject,
+                Some(Category::OpenaiUnsupportedValue),
+            ),
+            (
+                Some(json!({"code":"invalid_value", "param":"model"})),
+                Category::OpenaiEnvelopeObject,
+                Some(Category::OpenaiInvalidValue),
+            ),
+            (
+                Some(json!({"code":"PRIVATE_ERROR_CANARY", "param":"PRIVATE_ERROR_CANARY"})),
+                Category::OpenaiEnvelopeObject,
+                Some(Category::OpenaiTopLevelUnknownCode),
+            ),
+            (
+                Some(json!({"code":{}, "param":[]})),
+                Category::OpenaiEnvelopeObject,
+                Some(Category::OpenaiTopLevelInvalidCode),
+            ),
+        ] {
+            let mut failure = json!({"type":"error", "message":"PRIVATE_ERROR_CANARY"});
+            if let Some(nested) = nested {
+                failure["error"] = nested;
+            }
+            let bytes = wire(vec![
+                json!({"type":"response.created","response":{"id":"resp_fixture","status":"in_progress"}}),
+                failure,
+            ]);
+            for configured in [false, true] {
+                for chunk in [1, bytes.len()] {
+                    let (error, snapshot) = decode_with_diagnostics(&bytes, configured, chunk)?;
+                    assert_eq!(error, DirectError::ProviderStreamErrorEvent);
+                    let envelope: Vec<_> = snapshot
+                        .events
+                        .iter()
+                        .filter(|r| r.event == Event::OpenaiErrorEnvelope)
+                        .collect();
+                    assert_eq!(envelope.len(), 1);
+                    assert_eq!(envelope[0].error, Some(shape));
+                    let nested: Vec<_> = snapshot
+                        .events
+                        .iter()
+                        .filter(|r| r.event == Event::OpenaiNestedErrorCode)
+                        .collect();
+                    assert_eq!(nested.len(), usize::from(code.is_some()));
+                    if let Some(code) = code {
+                        assert_eq!(nested[0].error, Some(code));
+                    }
+                    assert_eq!(
+                        snapshot.events.last().and_then(|r| r.error),
+                        Some(Category::StreamError)
+                    );
+                }
+            }
+        }
+        Ok(())
     }
 
     #[test]
@@ -882,7 +1389,25 @@ mod tests {
                     for chunk in [1, 7, MAX_FRAME] {
                         let (error, snapshot) = decode_with_diagnostics(&input, configured, chunk)?;
                         assert_eq!(error, DirectError::ProviderStreamErrorEvent);
-                        assert_eq!(snapshot.events.len(), 4);
+                        let nested = code.is_none() && param.is_none();
+                        assert_eq!(snapshot.events.len(), if nested { 7 } else { 4 });
+                        if nested {
+                            assert_eq!(snapshot.events[3].event, Event::OpenaiErrorEnvelope);
+                            assert_eq!(
+                                snapshot.events[3].error,
+                                Some(Category::OpenaiEnvelopeObject)
+                            );
+                            assert_eq!(snapshot.events[4].event, Event::OpenaiNestedErrorCode);
+                            assert_eq!(
+                                snapshot.events[4].error,
+                                Some(Category::OpenaiTopLevelServerError)
+                            );
+                            assert_eq!(snapshot.events[5].event, Event::OpenaiNestedErrorParam);
+                            assert_eq!(
+                                snapshot.events[5].error,
+                                Some(Category::OpenaiTopLevelParamModel)
+                            );
+                        }
                         assert_eq!(
                             snapshot.events[1].error,
                             Some(if code.is_none() {
@@ -898,7 +1423,10 @@ mod tests {
                             .iter()
                             .all(|r| r.attempt == snapshot.events[0].attempt
                                 && r.conversation == snapshot.events[0].conversation));
-                        assert_eq!(snapshot.events[3].error, Some(Category::StreamError));
+                        assert_eq!(
+                            snapshot.events.last().and_then(|r| r.error),
+                            Some(Category::StreamError)
+                        );
                     }
                 }
             }
@@ -955,6 +1483,125 @@ mod tests {
                 .iter()
                 .all(|r| r.event != Event::OpenaiTopLevelError
                     && r.event != Event::OpenaiTopLevelErrorParam));
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn credit_balance_classification_is_exact_private_and_terminal(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        use crate::diagnostics::{Category, Event, Outcome};
+        // Public documented literal; synthetic fixtures contain no owner diagnostic output.
+        for failure in [
+            json!({"type":"error", "code":"credit_balance_exhausted", "message":"PRIVATE_ERROR_CANARY", "param":null}),
+            json!({"type":"error", "error":{"code":"credit_balance_exhausted", "message":"PRIVATE_ERROR_CANARY", "param":"PRIVATE_ERROR_CANARY"}}),
+        ] {
+            let bytes = wire(vec![frames()[0].clone(), failure]);
+            for configured in [false, true] {
+                for chunk in [1, bytes.len()] {
+                    let (error, snapshot) = decode_with_diagnostics(&bytes, configured, chunk)?;
+                    assert_eq!(error, DirectError::ProviderStreamCreditBalanceExhausted);
+                    assert!(error
+                        .to_string()
+                        .contains("Work/Codex credits are separate"));
+                    assert!(error.to_string().contains("No automatic retry was made"));
+                    let last = snapshot.events.last().ok_or("terminal record absent")?;
+                    assert_eq!(last.error, Some(Category::OpenaiCreditBalanceExhausted));
+                    assert_eq!(last.outcome, Outcome::Failed);
+                    assert_eq!(
+                        snapshot
+                            .events
+                            .iter()
+                            .filter(|r| r.event == Event::RequestFinished)
+                            .count(),
+                        1
+                    );
+                    assert!(snapshot.events.iter().any(|r| matches!(
+                        r.event,
+                        Event::OpenaiTopLevelError | Event::OpenaiNestedErrorCode
+                    ) && r.error
+                        == Some(Category::OpenaiCreditBalanceExhausted)));
+                }
+            }
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn credit_balance_does_not_infer_from_unknown_malformed_or_competing_fields(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let mut failures = Vec::new();
+        for code in [
+            Value::Null,
+            json!(17),
+            json!({}),
+            json!([]),
+            json!(""),
+            json!("CREDIT_BALANCE_EXHAUSTED"),
+            json!(" credit_balance_exhausted"),
+            json!("credit_balance_exhausted PRIVATE_ERROR_CANARY"),
+        ] {
+            failures
+                .push(json!({"type":"error", "code":code, "message":"credit_balance_exhausted"}));
+            failures.push(json!({"type":"error", "error":{"code":code, "message":"credit_balance_exhausted"}}));
+        }
+        failures.extend([
+            json!({"type":"error", "code":"server_error", "error":{"code":"credit_balance_exhausted"}}),
+            json!({"type":"error", "code":null, "error":{"code":"credit_balance_exhausted"}}),
+            json!({"type":"error", "param":null, "error":{"code":"credit_balance_exhausted"}}),
+            json!({"type":"error", "code":"credit_balance_exhausted", "error":{"code":"server_error"}}),
+            json!({"type":"error", "code":"credit_balance_exhausted", "error":{"code":"credit_balance_exhausted"}}),
+            json!({"type":"error", "code":"credit_balance_exhausted", "error":null}),
+        ]);
+        for failure in failures {
+            for configured in [false, true] {
+                let bytes = wire(vec![frames()[0].clone(), failure.clone()]);
+                let (error, snapshot) = decode_with_diagnostics(&bytes, configured, 1)?;
+                assert_eq!(error, DirectError::ProviderStreamErrorEvent);
+                assert_eq!(
+                    snapshot.events.last().and_then(|r| r.error),
+                    Some(crate::diagnostics::Category::StreamError)
+                );
+            }
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn credit_balance_never_bypasses_framing_or_changes_response_failed(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        use crate::diagnostics::Event;
+        let failure = json!({"type":"error", "error":{"code":"credit_balance_exhausted"}});
+        let valid = String::from_utf8(wire(vec![frames()[0].clone(), failure.clone()]))?;
+        for input in [
+            wire(vec![failure]),
+            valid
+                .replace("\"sequence_number\":1", "\"sequence_number\":7")
+                .into_bytes(),
+            valid
+                .replace("event: error", "event: response.failed")
+                .into_bytes(),
+            valid
+                .replace("\"status\":\"in_progress\"", "\"status\":\"completed\"")
+                .into_bytes(),
+            valid.replace("data: {", "data: !{").into_bytes(),
+        ] {
+            for configured in [false, true] {
+                let (error, snapshot) = decode_with_diagnostics(&input, configured, 1)?;
+                assert_eq!(error, DirectError::Protocol);
+                assert!(snapshot.events.iter().all(|r| !matches!(
+                    r.event,
+                    Event::OpenaiTopLevelError | Event::OpenaiNestedErrorCode
+                )));
+            }
+        }
+        let bytes = wire(vec![
+            frames()[0].clone(),
+            json!({"type":"response.failed", "response":{"error":{"code":"credit_balance_exhausted"}}}),
+        ]);
+        for configured in [false, true] {
+            let (error, _) = decode_with_diagnostics(&bytes, configured, 1)?;
+            assert_eq!(error, DirectError::ProviderStreamFailedUnknownCode);
         }
         Ok(())
     }

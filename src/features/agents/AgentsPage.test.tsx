@@ -778,3 +778,110 @@ it("shows the canonical mascot in list, detail and conversation without saving a
   expect(client.save).not.toHaveBeenCalled();
   expect(client.send).not.toHaveBeenCalled();
 });
+
+describe("saved Codex effort before discovery", () => {
+  function savedClient(effort: AgentProfile["effort"]) {
+    const client = harness();
+    client.connections.mockResolvedValue(
+      connections.map((entry) =>
+        entry.connection === "codex" ? { ...entry, status: "ready" } : entry,
+      ),
+    );
+    client.list.mockResolvedValue(
+      profiles.map((profile) =>
+        profile.agentId === "personal-assistant"
+          ? { ...profile, connection: "codex", model: "gpt-5.6-luna", effort, revision: 2 }
+          : profile,
+      ),
+    );
+    return client;
+  }
+  const catalog = (efforts: readonly AgentProfile["effort"][]) => ({
+    connection: "codex",
+    endpoint: "",
+    models: [
+      {
+        ...ANTHROPIC_DOCUMENTED_MODELS[0],
+        id: "gpt-5.6-luna",
+        label: "gpt-5.6-luna",
+        evidence: "discovered",
+        availability: "available",
+        locality: "unknown",
+        efforts,
+      },
+    ],
+  });
+
+  it.each(["low", "high", "default"] as const)(
+    "displays saved %s on remount without saving or granting discovery authority",
+    async (effort) => {
+      const client = savedClient(effort);
+      for (let mount = 0; mount < 2; mount += 1) {
+        const view = render(<AgentsPage client={client} />);
+        await ready();
+        expect(screen.getByLabelText("Reasoning effort")).toHaveValue(effort);
+        if (effort !== "default") {
+          expect(
+            screen.getByRole("option", { name: `${effort} · support unverified` }),
+          ).toBeDisabled();
+        }
+        expect(screen.getByRole("button", { name: "Save settings and note" })).toBeDisabled();
+        expect(screen.getByRole("button", { name: "Start conversation" })).toBeDisabled();
+        fireEvent.click(screen.getByRole("button", { name: /Research Agent/ }));
+        expect(screen.getByLabelText("Reasoning effort")).toHaveValue("default");
+        expect(screen.getByLabelText("Connection")).toHaveValue("simulation");
+        fireEvent.click(screen.getByRole("button", { name: /Personal Assistant/ }));
+        expect(screen.getByLabelText("Reasoning effort")).toHaveValue(effort);
+        view.unmount();
+      }
+      expect(client.save).not.toHaveBeenCalled();
+      expect(client.discover).not.toHaveBeenCalled();
+      expect(client.start).not.toHaveBeenCalled();
+      expect(client.send).not.toHaveBeenCalled();
+    },
+  );
+
+  it("retains saved low after discovery failure and validates it only on supported refresh", async () => {
+    const client = savedClient("low");
+    client.discover
+      .mockRejectedValueOnce("network")
+      .mockResolvedValueOnce(catalog(["default", "low"]));
+    render(<AgentsPage client={client} />);
+    await ready();
+    fireEvent.click(screen.getByRole("button", { name: "Refresh model catalog" }));
+    await screen.findByRole("alert");
+    expect(screen.getByLabelText("Reasoning effort")).toHaveValue("low");
+    expect(screen.getByRole("option", { name: "low · support unverified" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Start conversation" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Save settings and note" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "Refresh model catalog" }));
+    await screen.findByRole("option", { name: "low" });
+    expect(screen.queryByRole("option", { name: /support unverified/ })).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Reasoning effort")).toHaveValue("low");
+    expect(screen.getByRole("button", { name: "Save settings and note" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Start conversation" })).toBeEnabled();
+    expect(client.save).not.toHaveBeenCalled();
+    expect(client.start).not.toHaveBeenCalled();
+    expect(client.send).not.toHaveBeenCalled();
+  });
+
+  it("preserves the existing unsupported-effort refresh correction without silently saving it", async () => {
+    const client = savedClient("high");
+    client.discover.mockResolvedValue(catalog(["default", "low"]));
+    render(<AgentsPage client={client} />);
+    await ready();
+    expect(screen.getByLabelText("Reasoning effort")).toHaveValue("high");
+    fireEvent.click(screen.getByRole("button", { name: "Refresh model catalog" }));
+    await screen.findByRole("option", { name: "low" });
+    expect(screen.getByLabelText("Reasoning effort")).toHaveValue("default");
+    expect(screen.queryByRole("option", { name: /support unverified/ })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Start conversation" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Save settings and note" })).toBeEnabled();
+    expect(client.save).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: /Research Agent/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Personal Assistant/ }));
+    expect(screen.getByLabelText("Reasoning effort")).toHaveValue("high");
+    expect(screen.getByRole("option", { name: "high · support unverified" })).toBeDisabled();
+    expect(client.send).not.toHaveBeenCalled();
+  });
+});

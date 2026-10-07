@@ -4,12 +4,23 @@ export function diagnosticAdvice(error: DiagnosticRecord["error"]): string {
   switch (error) {
     case "missing_credentials":
       return "No usable native credential was available. Check owner-only private launch. Retrying unchanged will not help.";
+    case "openai_invalid_api_key":
     case "authentication":
       return "Authentication was rejected. Check the owner-only credential/account setup. Do not retry unchanged.";
     case "denied_access":
       return "Access was denied; the reason is not known. Check project/model permission privately. Do not assume billing or retry unchanged.";
+    case "openai_model_not_found":
     case "model_unavailable":
       return "The runtime reported the selected model unavailable. Check its catalog or loaded model; no fallback was used.";
+    case "openai_credit_balance_exhausted":
+      return "OpenAI reports no prepaid API credits remaining for this request's organization. Check the key's API organization billing privately; Work/Codex credits are separate. Do not retry unchanged or change billing automatically.";
+    case "openai_insufficient_quota":
+      return "The provider reported insufficient_quota. Check the API project quota/billing privately. Do not retry unchanged or change billing automatically.";
+    case "openai_unsupported_value":
+    case "openai_invalid_value":
+      return "The provider rejected a request value. Use its separately recorded parameter category to check compatibility; do not substitute a model automatically.";
+    case "openai_envelope_object":
+      return "An error object was present inside the stream error event. Nested categories are separate observations; missing top-level fields do not establish a cause.";
     case "rate_limit":
     case "openai_top_level_rate_limit_exceeded":
       return "A rate or spending limit was reported. Check limits privately; a later explicitly authorized retry may help.";
@@ -33,6 +44,8 @@ export function diagnosticAdvice(error: DiagnosticRecord["error"]): string {
       return "Local storage failed. Preserve data and check writable storage/space. Do not retry automatically.";
     case "interrupted":
       return "No terminal outcome was retained before restart. The outcome and cleanup are unknown; logs may be incomplete. Do not replay automatically.";
+    case "resource_limit":
+      return "Cortexa reached a bounded local response or event limit. Partial output is incomplete. Request a shorter response in a new conversation; no automatic retry was made.";
     case "incomplete":
       return "The response was incomplete, refused or truncated. Inspect the terminal UI and bounded output limit; do not assume success.";
     case "openai_top_level_server_error":

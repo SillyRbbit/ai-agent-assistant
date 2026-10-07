@@ -255,6 +255,9 @@ function AgentSettings({
     }
   };
   const selectedModel = models.find((model) => model.id === draft.model);
+  const effortOptions =
+    draft.connection === "openai_api" ? EFFORTS : (selectedModel?.efforts ?? ["default"]);
+
   const conversationModels = models.filter((model) => {
     const capabilities = model.capabilities;
     if (Array.isArray(capabilities))
@@ -536,10 +539,12 @@ function AgentSettings({
                 });
               }}
             >
-              {(draft.connection === "openai_api"
-                ? EFFORTS
-                : (selectedModel?.efforts ?? ["default"])
-              ).map((effort) => (
+              {!effortOptions.includes(draft.effort) ? (
+                <option value={draft.effort} disabled>
+                  {draft.effort} · support unverified
+                </option>
+              ) : null}
+              {effortOptions.map((effort) => (
                 <option key={effort} value={effort}>
                   {effort === "default" ? "Default" : effort}
                 </option>

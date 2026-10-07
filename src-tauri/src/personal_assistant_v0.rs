@@ -612,6 +612,9 @@ impl PersonalAssistantV0Host {
         );
         match prepared {
             Ok(prepared) => self.core.commit_input(active, prepared),
+            Err(PersonalAssistantV0Error::LimitExceeded) => self
+                .core
+                .finish_fixture_failure(active, PersonalAssistantV0FailureCode::LimitExceeded),
             Err(_) => self
                 .core
                 .finish_fixture_failure(active, PersonalAssistantV0FailureCode::ProtocolViolation),
@@ -2442,6 +2445,89 @@ pub(crate) mod tests {
             Ok(guard) => Ok(guard),
             Err(poisoned) => Ok(poisoned.into_inner()),
         }
+    }
+
+    #[test]
+    fn direct_journal_boundary_preserves_limit_and_allows_terminal_completion(
+    ) -> Result<(), Box<dyn Error>> {
+        use crate::personal_assistant_direct::ProviderEvent;
+        let _serial = serial_guard()?;
+        for finish_at_boundary in [false, true] {
+            let mut host = PersonalAssistantV0Host::default();
+            let handle = host.start_direct()?.presentation_handle().clone();
+            host.accept_direct(&handle, ProviderEvent::Started("resp_fixture".into()))?;
+            for _ in 0..126 {
+                host.accept_direct(&handle, ProviderEvent::Delta("x".into()))?;
+            }
+            assert_eq!(host.snapshot(&handle)?.sequence(), 127);
+            let terminal = host.accept_direct(
+                &handle,
+                if finish_at_boundary {
+                    ProviderEvent::Completed
+                } else {
+                    ProviderEvent::Delta("rejected".into())
+                },
+            )?;
+            assert_eq!(terminal.sequence(), 128);
+            assert_eq!(terminal.accepted_text(), "x".repeat(126));
+            if finish_at_boundary {
+                assert!(matches!(
+                    terminal,
+                    PersonalAssistantV0Snapshot::Completed(_)
+                ));
+            } else {
+                assert_eq!(
+                    terminal_failure(&terminal)?.code(),
+                    PersonalAssistantV0FailureCode::LimitExceeded
+                );
+            }
+            assert_eq!(host.cancel(&handle)?, terminal);
+            assert_eq!(host.cancel(&handle)?, terminal);
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn direct_text_limits_and_malformed_order_remain_distinct() -> Result<(), Box<dyn Error>> {
+        use crate::personal_assistant_direct::ProviderEvent;
+        let _serial = serial_guard()?;
+        for aggregate in [false, true] {
+            let mut host = PersonalAssistantV0Host::default();
+            let handle = host.start_direct()?.presentation_handle().clone();
+            host.accept_direct(&handle, ProviderEvent::Started("resp_fixture".into()))?;
+            if aggregate {
+                for _ in 0..(MAX_OUTPUT_CHARACTERS / MAX_DELTA_CHARACTERS) {
+                    host.accept_direct(
+                        &handle,
+                        ProviderEvent::Delta("x".repeat(MAX_DELTA_CHARACTERS)),
+                    )?;
+                }
+            }
+            let before = host.snapshot(&handle)?.accepted_text().to_owned();
+            let rejected = if aggregate {
+                "x".into()
+            } else {
+                "x".repeat(MAX_DELTA_CHARACTERS + 1)
+            };
+            let failed = host.accept_direct(&handle, ProviderEvent::Delta(rejected))?;
+            assert_eq!(
+                terminal_failure(&failed)?.code(),
+                PersonalAssistantV0FailureCode::LimitExceeded
+            );
+            assert_eq!(failed.accepted_text(), before);
+            assert_eq!(host.cancel(&handle)?, failed);
+        }
+        let mut host = PersonalAssistantV0Host::default();
+        let handle = host.start_direct()?.presentation_handle().clone();
+        // A delta before Started is still invalid protocol, never a resource limit.
+        let failed = host.accept_direct(&handle, ProviderEvent::Delta("out of order".into()))?;
+        assert_eq!(
+            terminal_failure(&failed)?.code(),
+            PersonalAssistantV0FailureCode::ProtocolViolation
+        );
+        assert!(failed.accepted_text().is_empty());
+        assert_eq!(host.cancel(&handle)?, failed);
+        Ok(())
     }
 
     fn native_host() -> (HostCore<NativeAgentRuntime>, ManualClock) {

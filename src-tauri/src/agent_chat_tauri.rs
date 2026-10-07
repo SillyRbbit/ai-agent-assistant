@@ -5,14 +5,13 @@ use std::time::Duration;
 use serde::{Deserialize, Serialize};
 use tokio::task::JoinHandle;
 
+use crate::agent_adapter::{run_adapter_traced, AdapterRequest};
 use crate::agent_chat::{BoundConversation, ChatError};
 use crate::agent_preferences::{
     AgentConnection, AgentPreferencesInput, AgentProfile, MemoryMode, ReasoningEffort,
 };
 use crate::codex_connection;
-use crate::personal_assistant_direct::{
-    self as provider, ApiKey, DirectError, GenerationLease, ProviderEvent,
-};
+use crate::personal_assistant_direct::{ApiKey, DirectError, GenerationLease, ProviderEvent};
 use crate::personal_assistant_v0::{
     PersonalAssistantV0FailureCode, PersonalAssistantV0Host, PersonalAssistantV0PresentationHandle,
     PersonalAssistantV0Snapshot,
@@ -127,6 +126,17 @@ pub(crate) struct ConnectionReadiness {
     message: &'static str,
 }
 
+// Preserve the host's bounded-resource failure through callback, poll and
+// abort paths. A local limit is not evidence of malformed provider data.
+fn presentation_error(code: PersonalAssistantV0FailureCode) -> DirectError {
+    match code {
+        PersonalAssistantV0FailureCode::DeadlineExceeded
+        | PersonalAssistantV0FailureCode::ProviderTimeout => DirectError::Timeout,
+        PersonalAssistantV0FailureCode::LimitExceeded => DirectError::Limit,
+        _ => DirectError::Protocol,
+    }
+}
+
 impl Session {
     fn check_id(&self, id: &str) -> Result<(), ChatError> {
         if self.conversation.as_ref().is_some_and(|c| c.id == id) {
@@ -161,13 +171,7 @@ impl Session {
                     if !task.is_finished() {
                         if let PersonalAssistantV0Snapshot::Failed(failed) = &snapshot {
                             if let Some(observer) = &self.diagnostic {
-                                observer.aborting_with(match failed.failure().code() {
-                                    PersonalAssistantV0FailureCode::DeadlineExceeded
-                                    | PersonalAssistantV0FailureCode::ProviderTimeout => {
-                                        DirectError::Timeout
-                                    }
-                                    _ => DirectError::Protocol,
-                                });
+                                observer.aborting_with(presentation_error(failed.failure().code()));
                             }
                         }
                         task.abort();
@@ -182,13 +186,9 @@ impl Session {
                 | PersonalAssistantV0Snapshot::Cancelling(_) => "stopped",
                 PersonalAssistantV0Snapshot::Failed(failed) => {
                     if self.error.is_none() {
-                        self.error = Some(ChatError::Provider(match failed.failure().code() {
-                            PersonalAssistantV0FailureCode::DeadlineExceeded
-                            | PersonalAssistantV0FailureCode::ProviderTimeout => {
-                                DirectError::Timeout
-                            }
-                            _ => DirectError::Protocol,
-                        }));
+                        self.error = Some(ChatError::Provider(presentation_error(
+                            failed.failure().code(),
+                        )));
                     }
                     "error"
                 }
@@ -242,41 +242,6 @@ fn begin_conversation(
     session.diagnostic = None;
     session.task = None;
     session.snapshot()
-}
-
-pub(crate) enum AdapterRequest {
-    Codex {
-        setup: codex_connection::Setup,
-        model: String,
-        effort: ReasoningEffort,
-        input: String,
-    },
-    CollaborationCodex {
-        setup: codex_connection::Setup,
-        model: String,
-        effort: ReasoningEffort,
-        input: String,
-    },
-    Simulation,
-    Anthropic {
-        key: anthropic::AnthropicKey,
-        body: Vec<u8>,
-    },
-    Local {
-        endpoint: String,
-        key: Option<local_models::LocalKey>,
-        body: Vec<u8>,
-    },
-    Openai {
-        key: ApiKey,
-        body: Vec<u8>,
-    },
-    #[cfg(test)]
-    Failure(DirectError),
-    #[cfg(test)]
-    Events(Vec<ProviderEvent>),
-    #[cfg(test)]
-    Pending(Arc<std::sync::atomic::AtomicBool>),
 }
 
 fn start_owned(
@@ -411,85 +376,6 @@ fn start_owned(
     session.snapshot()
 }
 
-pub(crate) async fn run_adapter(
-    adapter: AdapterRequest,
-    mut emit: impl FnMut(ProviderEvent) -> Result<(), DirectError>,
-) -> Result<(), DirectError> {
-    match adapter {
-        AdapterRequest::CollaborationCodex {
-            setup,
-            model,
-            effort,
-            input,
-        } => codex_connection::run_collaboration(setup, model, effort, input, emit).await,
-        AdapterRequest::Codex {
-            setup,
-            model,
-            effort,
-            input,
-        } => codex_connection::run(setup, model, effort, input, emit).await,
-        #[cfg(test)]
-        AdapterRequest::Failure(error) => Err(error),
-        #[cfg(test)]
-        AdapterRequest::Events(events) => {
-            for event in events {
-                emit(event)?;
-            }
-            Ok(())
-        }
-        #[cfg(test)]
-        AdapterRequest::Pending(dropped) => {
-            struct Dropped(Arc<std::sync::atomic::AtomicBool>);
-            impl Drop for Dropped {
-                fn drop(&mut self) {
-                    self.0.store(true, std::sync::atomic::Ordering::SeqCst);
-                }
-            }
-            let _guard = Dropped(dropped);
-            std::future::pending().await
-        }
-        AdapterRequest::Anthropic { key, body } => anthropic::run(key, body, emit).await,
-        AdapterRequest::Local {
-            endpoint,
-            key,
-            body,
-        } => local_models::run(&endpoint, key, body, emit).await,
-        AdapterRequest::Openai { key, body } => provider::run_configured(key, body, emit).await,
-        AdapterRequest::Simulation => {
-            emit(ProviderEvent::Started("resp_cortexa_simulation".into()))?;
-            for part in [
-                "Simulation only — no hosted request was made. ",
-                "This native conversation is bound to your selected agent and saved settings. ",
-                "Switch to an available connection for generated text advice; no tools or actions run.",
-            ] {
-                tokio::time::sleep(Duration::from_millis(180)).await;
-                emit(ProviderEvent::Delta(part.into()))?;
-            }
-            emit(ProviderEvent::Completed)
-        }
-    }
-}
-
-pub(crate) async fn run_adapter_traced(
-    adapter: AdapterRequest,
-    observer: crate::diagnostics::Observer,
-    mut emit: impl FnMut(ProviderEvent) -> Result<(), DirectError>,
-) -> Result<(), DirectError> {
-    observer.dispatch();
-    let _transport = crate::diagnostics::TransportScope(observer.clone());
-    crate::diagnostics::CURRENT
-        .scope(
-            observer.clone(),
-            run_adapter(adapter, |event| {
-                let text = matches!(&event, ProviderEvent::Delta(text) if !text.is_empty());
-                emit(event)?;
-                observer.first(text);
-                Ok(())
-            }),
-        )
-        .await
-}
-
 async fn execute(
     state: Weak<Mutex<Session>>,
     handle: PersonalAssistantV0PresentationHandle,
@@ -517,6 +403,9 @@ async fn execute(
                 .host
                 .accept_direct(&handle, event)
                 .map_err(|_| DirectError::Protocol)?;
+            if let PersonalAssistantV0Snapshot::Failed(failed) = &snapshot {
+                return Err(presentation_error(failed.failure().code()));
+            }
             if snapshot.is_terminal() {
                 return Err(DirectError::Protocol);
             }
@@ -543,11 +432,7 @@ async fn execute(
         }
         match session.host.snapshot(&handle) {
             Ok(PersonalAssistantV0Snapshot::Failed(failed)) => {
-                diagnostic.finish(Err(match failed.failure().code() {
-                    PersonalAssistantV0FailureCode::DeadlineExceeded
-                    | PersonalAssistantV0FailureCode::ProviderTimeout => DirectError::Timeout,
-                    _ => DirectError::Protocol,
-                }));
+                diagnostic.finish(Err(presentation_error(failed.failure().code())));
                 return;
             }
             Ok(snapshot) if snapshot.is_terminal() => return,
@@ -898,6 +783,199 @@ mod tests {
             message: "Give one planning suggestion.".into(),
             acknowledgment: "simulation".into(),
         }
+    }
+
+    type ControlledEvents =
+        tokio::sync::mpsc::Sender<(ProviderEvent, tokio::sync::oneshot::Sender<()>)>;
+
+    fn controlled_request(
+        state: &Arc<Mutex<Session>>,
+        storage: &Storage,
+    ) -> Result<(String, ControlledEvents), Box<dyn std::error::Error>> {
+        let initial = begin_conversation(state, storage.agent_profile("research")?)?;
+        let mut session = state.lock().map_err(|_| "lock")?;
+        let handle = session.host.start_direct()?.presentation_handle().clone();
+        session.handle = Some(handle.clone());
+        let (send, receive) = tokio::sync::mpsc::channel(1);
+        session.task = Some(tokio::spawn(execute(
+            Arc::downgrade(state),
+            handle,
+            "synthetic".into(),
+            AdapterRequest::Stepped(receive),
+            GenerationLease::acquire()?,
+            Duration::from_secs(60),
+            crate::diagnostics::Attempt::new(
+                AgentConnection::Simulation,
+                "simulation",
+                None,
+                None,
+                None,
+            ),
+        )));
+        Ok((initial.conversation_id, send))
+    }
+
+    async fn accepted_step(
+        send: &ControlledEvents,
+        event: ProviderEvent,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let (acknowledge, accepted) = tokio::sync::oneshot::channel();
+        send.send((event, acknowledge))
+            .await
+            .map_err(|_| "closed fixture")?;
+        tokio::time::timeout(Duration::from_secs(2), accepted).await??;
+        Ok(())
+    }
+
+    async fn join_controlled(
+        state: &Arc<Mutex<Session>>,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let task = state
+            .lock()
+            .map_err(|_| "lock")?
+            .task
+            .take()
+            .ok_or("no task")?;
+        tokio::time::timeout(Duration::from_secs(2), task).await??;
+        Ok(())
+    }
+
+    #[test]
+    fn controlled_stream_stop_completion_races_and_subsequent_send(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let _serial = crate::personal_assistant_v0::tests::serial_guard()?;
+        let initialized = Storage::initialize(&DatabaseConfig::in_memory())?;
+        let storage = initialized.storage();
+        tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()?
+            .block_on(async {
+                // Active text; completion event before transport release; fully completed.
+                // Channels control each boundary, without sleep-based race scheduling.
+                for phase in 0..3 {
+                    let state = Arc::new(Mutex::new(Session::default()));
+                    let (id, events) = controlled_request(&state, storage)?;
+                    accepted_step(&events, ProviderEvent::Started("resp_fixture".into())).await?;
+                    accepted_step(&events, ProviderEvent::Delta("1\n".into())).await?;
+                    let first = state.lock().map_err(|_| "lock")?.snapshot()?;
+                    assert_eq!(first.status, "streaming");
+                    assert_eq!(first.text, "1\n");
+                    assert!(first.busy);
+                    accepted_step(&events, ProviderEvent::Delta("2\n".into())).await?;
+                    let second = state.lock().map_err(|_| "lock")?.snapshot()?;
+                    assert_eq!(second.text, "1\n2\n");
+                    assert!(second.sequence > first.sequence);
+                    if phase > 0 {
+                        accepted_step(&events, ProviderEvent::Completed).await?;
+                    }
+                    if phase == 2 {
+                        drop(events);
+                        join_controlled(&state).await?;
+                        assert_eq!(
+                            state.lock().map_err(|_| "lock")?.snapshot()?.status,
+                            "completed"
+                        );
+                    } else {
+                        // Keep the transport open until Stop explicitly aborts and joins it.
+                        let stopped = stop_owned(&state, &id).await?;
+                        assert_eq!(stopped.status, "stopped");
+                        assert!(events.is_closed());
+                        drop(events);
+                    }
+                    for _ in 0..2 {
+                        let terminal = stop_owned(&state, &id).await?;
+                        assert_eq!(
+                            terminal.status,
+                            if phase == 2 { "completed" } else { "stopped" }
+                        );
+                        assert_eq!(terminal.text, "1\n2\n");
+                        assert_eq!(terminal.error, None);
+                        assert!(!terminal.busy);
+                    }
+                    drop(GenerationLease::acquire()?);
+                    // A separate fresh conversation succeeds after cancellation/completion.
+                    let (next_id, events) = controlled_request(&state, storage)?;
+                    assert_ne!(id, next_id);
+                    accepted_step(&events, ProviderEvent::Started("resp_next".into())).await?;
+                    accepted_step(&events, ProviderEvent::Delta("OK".into())).await?;
+                    accepted_step(&events, ProviderEvent::Completed).await?;
+                    drop(events);
+                    join_controlled(&state).await?;
+                    let next = state.lock().map_err(|_| "lock")?.snapshot()?;
+                    assert_eq!(next.status, "completed");
+                    assert_eq!(next.text, "OK");
+                    assert_eq!(next.error, None);
+                    assert!(!next.busy);
+                    drop(GenerationLease::acquire()?);
+                }
+                Ok::<(), Box<dyn std::error::Error>>(())
+            })?;
+        Ok(())
+    }
+
+    #[test]
+    fn fragmented_stream_limit_preserves_partial_text_and_terminal_reason(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let _serial = crate::personal_assistant_v0::tests::serial_guard()?;
+        let initialized = Storage::initialize(&DatabaseConfig::in_memory())?;
+        let storage = initialized.storage();
+        tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()?
+            .block_on(async {
+                let state = Arc::new(Mutex::new(Session::default()));
+                let initial = begin_conversation(&state, storage.agent_profile("research")?)?;
+                let handle = {
+                    let mut session = state.lock().map_err(|_| "lock")?;
+                    let handle = session.host.start_direct()?.presentation_handle().clone();
+                    session.handle = Some(handle.clone());
+                    handle
+                };
+                let mut events = vec![ProviderEvent::Started("resp_fixture".into())];
+                for number in 1..=64 {
+                    events.push(ProviderEvent::Delta(number.to_string()));
+                    events.push(ProviderEvent::Delta("\n".into()));
+                }
+                events.push(ProviderEvent::Completed);
+                execute(
+                    Arc::downgrade(&state),
+                    handle,
+                    "synthetic".into(),
+                    AdapterRequest::Events(events),
+                    GenerationLease::acquire()?,
+                    Duration::from_secs(60),
+                    crate::diagnostics::Attempt::new(
+                        AgentConnection::Simulation,
+                        "simulation",
+                        None,
+                        None,
+                        None,
+                    ),
+                )
+                .await;
+                let snapshot = state.lock().map_err(|_| "lock")?.snapshot()?;
+                assert_eq!(snapshot.status, "error");
+                assert_eq!(
+                    snapshot.error,
+                    Some(ChatError::Provider(DirectError::Limit))
+                );
+                let expected: String = (1..=63).map(|n| format!("{n}\n")).collect();
+                assert_eq!(snapshot.text, expected);
+                assert_eq!(snapshot.sequence, 128);
+                assert!(!snapshot.busy);
+                // Late and repeated Stop must preserve the real failure and partial text.
+                for _ in 0..2 {
+                    let stopped = stop_owned(&state, &initial.conversation_id).await?;
+                    assert_eq!(stopped.status, snapshot.status);
+                    assert_eq!(stopped.error, snapshot.error);
+                    assert_eq!(stopped.text, expected);
+                    assert_eq!(stopped.sequence, snapshot.sequence);
+                    assert!(!stopped.busy);
+                }
+                drop(GenerationLease::acquire()?);
+                Ok::<(), Box<dyn std::error::Error>>(())
+            })?;
+        Ok(())
     }
 
     #[test]

@@ -167,6 +167,8 @@ fn command(setup: &Setup, directory: &std::path::Path) -> Command {
             "--strict-config",
             "-c",
             "web_search=\"disabled\"",
+            "-c",
+            "cli_auth_credentials_store=\"file\"",
         ]);
     for feature in FEATURES {
         command.args(["-c", &format!("features.{feature}=false")]);
@@ -322,12 +324,7 @@ impl Session {
     }
     async fn initialize(&mut self) -> Result<(), DirectError> {
         let value = self.request(1,"initialize",json!({"clientInfo":{"name":"cortexa","version":"0.1.0"},"capabilities":{"experimentalApi":true}})).await?;
-        if !value["userAgent"]
-            .as_str()
-            .is_some_and(|v| v.starts_with("cortexa/0.159.0 "))
-        {
-            return Err(DirectError::CodexSetup);
-        }
+        validate_runtime_identity(&value)?;
         self.send(json!({"method":"initialized"}))
     }
     async fn authenticate(&mut self) -> Result<(), DirectError> {
@@ -343,6 +340,73 @@ impl Session {
         Ok(())
     }
 }
+// Only explicitly reviewed protocol versions; never accept an arbitrary newer runtime.
+// The installed 0.160.1 handshake/schema were checked independently of authentication.
+fn validate_runtime_identity(value: &Value) -> Result<(), DirectError> {
+    let identity = value["userAgent"]
+        .as_str()
+        .filter(|v| v.len() <= 512 && !v.chars().any(char::is_control))
+        .and_then(|v| v.split_once(' '))
+        .map(|(product, _)| product);
+    if matches!(identity, Some("cortexa/0.159.0" | "cortexa/0.160.1")) {
+        Ok(())
+    } else {
+        Err(DirectError::CodexSetup)
+    }
+}
+
+const MAX_CATALOG_PAGES: u64 = 4;
+const MAX_CATALOG_ROWS: usize = 128;
+
+// Opaque cursors stay native and ephemeral; never log them or accept unbounded pages.
+fn append_catalog_page(
+    value: &Value,
+    rows: &mut Vec<Value>,
+    cursors: &mut Vec<String>,
+) -> Result<Option<String>, DirectError> {
+    let page = value["data"].as_array().ok_or(DirectError::Catalog)?;
+    if page.len() > MAX_CATALOG_ROWS || rows.len() + page.len() > MAX_CATALOG_ROWS {
+        return Err(DirectError::Catalog);
+    }
+    let next = match value.get("nextCursor") {
+        Some(Value::Null) => None,
+        Some(Value::String(cursor))
+            if !cursor.is_empty()
+                && cursor.len() <= 256
+                && !cursor.chars().any(char::is_control)
+                && !cursors.contains(cursor) =>
+        {
+            Some(cursor.clone())
+        }
+        _ => return Err(DirectError::Catalog),
+    };
+    if let Some(cursor) = &next {
+        cursors.push(cursor.clone());
+    }
+    rows.extend(page.iter().cloned());
+    Ok(next)
+}
+
+impl Session {
+    async fn catalog(&mut self) -> Result<Vec<ModelInfo>, DirectError> {
+        let mut rows = Vec::new();
+        let mut cursors = Vec::new();
+        let mut cursor = None;
+        for page in 0..MAX_CATALOG_PAGES {
+            let mut params = json!({"limit":128,"includeHidden":false});
+            if let Some(cursor) = cursor {
+                params["cursor"] = Value::String(cursor);
+            }
+            let value = self.request(3 + page, "model/list", params).await?;
+            cursor = append_catalog_page(&value, &mut rows, &mut cursors)?;
+            if cursor.is_none() {
+                return models(&json!({"data":rows,"nextCursor":null}));
+            }
+        }
+        Err(DirectError::Catalog)
+    }
+}
+
 fn reject_tool(value: &Value) -> Result<(), DirectError> {
     if matches!(
         value["method"].as_str(),
@@ -432,11 +496,7 @@ pub(crate) async fn discover() -> Result<Vec<ModelInfo>, DirectError> {
             None,
         );
     }
-    models(
-        &session
-            .request(3, "model/list", json!({"limit":128,"includeHidden":false}))
-            .await?,
-    )
+    session.catalog().await
 }
 pub(crate) async fn run(
     setup: Setup,
@@ -490,11 +550,7 @@ async fn run_with_rules(
             None,
         );
     }
-    let catalog = models(
-        &session
-            .request(3, "model/list", json!({"limit":128,"includeHidden":false}))
-            .await?,
-    )?;
+    let catalog = session.catalog().await?;
     crate::agent_models::validate_selection(
         catalog
             .iter()
@@ -505,7 +561,7 @@ async fn run_with_rules(
     let mut parameters = thread_parameters(&model);
     parameters["baseInstructions"] = json!(rules);
     let thread = thread_id(
-        &session.request(4, "thread/start", parameters).await?,
+        &session.request(10, "thread/start", parameters).await?,
         &model,
     )?;
     let mut params =
@@ -513,7 +569,7 @@ async fn run_with_rules(
     if effort != ReasoningEffort::Default {
         params["effort"] = json!(effort);
     }
-    let response = session.request(5, "turn/start", params).await?;
+    let response = session.request(11, "turn/start", params).await?;
     let turn = identifier(&response["turn"]["id"])?;
     emit(ProviderEvent::Started("resp_cortexa_codex".into()))?;
     let mut output = String::new();
@@ -565,6 +621,106 @@ async fn run_with_rules(
 mod tests {
     use super::*;
     #[test]
+    fn runtime_identity_accepts_only_reviewed_versions_and_rejects_untrusted_values() {
+        for version in ["0.159.0", "0.160.1"] {
+            assert_eq!(
+                validate_runtime_identity(
+                    &json!({"userAgent":format!("cortexa/{version} fixture")})
+                ),
+                Ok(())
+            );
+        }
+        for value in [
+            Value::Null,
+            json!(1),
+            json!("cortexa/0.160.10 fixture"),
+            json!("cortexa/0.160.1-preview fixture"),
+            json!("other/0.160.1 fixture"),
+            json!("cortexa/0.160.1"),
+            json!("cortexa/0.160.1 fixture\nPRIVATE"),
+            json!(format!("cortexa/0.160.1 {}", "x".repeat(512))),
+        ] {
+            assert_eq!(
+                validate_runtime_identity(&json!({"userAgent":value})),
+                Err(DirectError::CodexSetup)
+            );
+        }
+    }
+
+    #[test]
+    fn catalog_pagination_rejects_cycles_malformed_cursors_and_total_overflow(
+    ) -> Result<(), DirectError> {
+        let mut rows = Vec::new();
+        let mut cursors = Vec::new();
+        assert_eq!(
+            append_catalog_page(
+                &json!({"data":[],"nextCursor":"opaque"}),
+                &mut rows,
+                &mut cursors
+            )?,
+            Some("opaque".into())
+        );
+        for value in [
+            json!({"data":[],"nextCursor":"opaque"}),
+            json!({"data":[],"nextCursor":""}),
+            json!({"data":[],"nextCursor":4}),
+            json!({"data":[]}),
+            json!({"data":null,"nextCursor":null}),
+            json!({"data":[],"nextCursor":"unsafe\n"}),
+            json!({"data":[],"nextCursor":"x".repeat(257)}),
+        ] {
+            assert_eq!(
+                append_catalog_page(&value, &mut rows, &mut cursors),
+                Err(DirectError::Catalog)
+            );
+        }
+        rows.resize(128, Value::Null);
+        assert_eq!(
+            append_catalog_page(
+                &json!({"data":[null],"nextCursor":null}),
+                &mut rows,
+                &mut cursors
+            ),
+            Err(DirectError::Catalog)
+        );
+        Ok(())
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn offline_catalog_pages_use_unique_rpc_ids_and_fail_closed_at_page_cap(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let runtime = tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()?;
+        for (mode, success) in [
+            ("pages", true),
+            ("page-loop", false),
+            ("page-limit", false),
+            ("page-duplicate", false),
+        ] {
+            let (_directory, setup) = fixture(mode)?;
+            let mut session = Session::spawn(&setup)?;
+            let result = runtime.block_on(async {
+                tokio::time::timeout(Duration::from_secs(5), async {
+                    session.initialize().await?;
+                    session.catalog().await
+                })
+                .await
+            })?;
+            assert_eq!(result.is_ok(), success);
+            if let Ok(models) = result {
+                assert_eq!(models.len(), 2);
+                assert_eq!(models[0].id, "fixture-model");
+                assert_eq!(models[1].id, "fixture-second");
+            } else {
+                assert_eq!(result.err(), Some(DirectError::Catalog));
+            }
+        }
+        Ok(())
+    }
+
+    #[test]
     fn isolation_parameters_and_clean_environment_are_closed() {
         let setup = Setup {
             executable: "/synthetic/codex".into(),
@@ -576,6 +732,41 @@ mod tests {
             .filter_map(|(k, v)| v.map(|_| k.to_string_lossy().into_owned()))
             .collect();
         assert_eq!(keys, ["CODEX_HOME", "HOME", "PATH"]);
+        assert_eq!(command.get_program(), "/synthetic/codex");
+        assert_eq!(
+            command.get_current_dir(),
+            Some(std::path::Path::new("/synthetic/empty"))
+        );
+        let environment: Vec<_> = command
+            .get_envs()
+            .map(|(key, value)| (key.to_str(), value.and_then(|v| v.to_str())))
+            .collect();
+        assert_eq!(
+            environment,
+            [
+                (Some("CODEX_HOME"), Some("/synthetic/auth")),
+                (Some("HOME"), Some("/synthetic/empty")),
+                (Some("PATH"), Some("/usr/bin:/bin")),
+            ]
+        );
+        let arguments: Vec<_> = command
+            .get_args()
+            .map(|v| v.to_string_lossy().into_owned())
+            .collect();
+        let mut expected = vec![
+            "app-server".to_owned(),
+            "--stdio".to_owned(),
+            "--strict-config".to_owned(),
+            "-c".to_owned(),
+            "web_search=\"disabled\"".to_owned(),
+            "-c".to_owned(),
+            "cli_auth_credentials_store=\"file\"".to_owned(),
+        ];
+        for feature in FEATURES {
+            expected.extend(["-c".to_owned(), format!("features.{feature}=false")]);
+        }
+        assert_eq!(arguments, expected);
+
         let p = thread_parameters("model");
         for key in [
             "environments",
@@ -658,9 +849,16 @@ def out(v): print(json.dumps(v),flush=True)
 for line in sys.stdin:
  v=json.loads(line);m=v['method'];i=v.get('id')
  if m=='initialized': continue
- if m=='initialize': result={'userAgent':'cortexa/0.159.0 fixture'}
+ if m=='initialize': result={'userAgent':'cortexa/0.160.1 fixture'}
  elif m=='account/read': result={'account':{'type':'chatgpt'}}
- elif m=='model/list': result={'nextCursor':None,'data':[{'model':'fixture-model','hidden':False,'supportedReasoningEfforts':[{'reasoningEffort':'high'}]}]}
+ elif m=='model/list':
+  page=i-3;assert 0<=page<4
+  assert v['params'].get('cursor')==(None if page==0 else 'cursor-'+str(page))
+  name='fixture-second' if mode=='pages' and page>0 else 'fixture-model'
+  result={'nextCursor':None,'data':[{'model':name,'hidden':False,'supportedReasoningEfforts':[{'reasoningEffort':'high'}]}]}
+  if mode in ['pages','page-duplicate'] and page==0: result['nextCursor']='cursor-1'
+  if mode=='page-loop': result['nextCursor']='cursor-1'
+  if mode=='page-limit': result['nextCursor']='cursor-'+str(page+1);result['data']=[]
  elif m=='thread/start':
   p=v['params'];assert all(p[k]==[] for k in ['environments','runtimeWorkspaceRoots','selectedCapabilityRoots','dynamicTools']);assert p['approvalPolicy']=='never'
   result={'model':'fixture-model','modelProvider':'openai','approvalPolicy':'never','sandbox':{'type':'readOnly','networkAccess':False},'runtimeWorkspaceRoots':[],'instructionSources':[],'thread':{'id':'thread-fixture'}}

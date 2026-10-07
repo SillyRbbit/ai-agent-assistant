@@ -1,4 +1,5 @@
 pub mod agent;
+mod agent_adapter;
 mod agent_chat;
 mod agent_chat_tauri;
 mod agent_models;

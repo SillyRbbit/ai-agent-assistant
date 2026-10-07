@@ -55,3 +55,28 @@ describe("bounded troubleshooting summary", () => {
     expect(summary).toContain("Terminal outcome: completed");
   });
 });
+
+it("keeps nested error guidance specific without claiming a successful retry", () => {
+  expect(diagnosticAdvice("openai_insufficient_quota")).toContain("Do not retry unchanged");
+  expect(diagnosticAdvice("openai_invalid_api_key")).toContain("Authentication was rejected");
+  expect(diagnosticAdvice("openai_unsupported_value")).toContain("do not substitute a model");
+  expect(diagnosticAdvice("openai_envelope_object")).toContain("separate observations");
+});
+
+it("distinguishes prepaid API credit exhaustion from transient limits and subscription credits", () => {
+  const advice = diagnosticAdvice("openai_credit_balance_exhausted");
+  expect(advice).toContain("no prepaid API credits remaining");
+  expect(advice).toContain("Work/Codex credits are separate");
+  expect(advice).toContain("Do not retry unchanged or change billing automatically");
+  expect(diagnosticAdvice("rate_limit")).not.toBe(advice);
+  expect(diagnosticAdvice("openai_insufficient_quota")).not.toBe(advice);
+  expect(diagnosticAdvice("openai_top_level_unknown_code")).toContain("does not establish");
+});
+
+it("distinguishes local bounds from malformed or incomplete provider data", () => {
+  const advice = diagnosticAdvice("resource_limit");
+  expect(advice).toContain("bounded local response or event limit");
+  expect(advice).toContain("shorter response");
+  expect(advice).not.toBe(diagnosticAdvice("malformed_stream"));
+  expect(advice).not.toBe(diagnosticAdvice("incomplete"));
+});

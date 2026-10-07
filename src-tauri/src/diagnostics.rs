@@ -2,7 +2,9 @@
 //! Producers cannot supply a message, path, prompt, response or raw error string.
 use crate::{
     agent_preferences::AgentConnection,
-    personal_assistant_direct::{DirectError, TopLevelErrorCode, TopLevelErrorParam},
+    personal_assistant_direct::{
+        DirectError, ErrorEnvelope, TopLevelErrorCode, TopLevelErrorParam,
+    },
 };
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -57,6 +59,9 @@ pub(crate) enum Event {
     ConfigurationFailure,
     OpenaiTopLevelError,
     OpenaiTopLevelErrorParam,
+    OpenaiErrorEnvelope,
+    OpenaiNestedErrorCode,
+    OpenaiNestedErrorParam,
 }
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
@@ -87,6 +92,16 @@ pub(crate) enum Category {
     OpenaiTopLevelServerError,
     OpenaiTopLevelRateLimitExceeded,
     OpenaiTopLevelInvalidPrompt,
+    OpenaiInvalidApiKey,
+    OpenaiInsufficientQuota,
+    OpenaiCreditBalanceExhausted,
+    OpenaiModelNotFound,
+    OpenaiUnsupportedValue,
+    OpenaiInvalidValue,
+    OpenaiEnvelopeAbsent,
+    OpenaiEnvelopeNull,
+    OpenaiEnvelopeInvalid,
+    OpenaiEnvelopeObject,
     OpenaiTopLevelUnknownCode,
     // Historical combined absent/null category remains readable.
     OpenaiTopLevelMissingCode,
@@ -104,6 +119,7 @@ pub(crate) enum Category {
 
     OpenaiTopLevelInvalidCode,
     Incomplete,
+    ResourceLimit,
     Runtime,
     Configuration,
     Storage,
@@ -121,6 +137,8 @@ impl From<DirectError> for Category {
             DirectError::Timeout => Self::Timeout,
             DirectError::Network | DirectError::ProviderUnavailable => Self::Network,
             DirectError::Protocol => Self::MalformedStream,
+            DirectError::Limit => Self::ResourceLimit,
+            DirectError::ProviderStreamCreditBalanceExhausted => Self::OpenaiCreditBalanceExhausted,
             DirectError::ProviderStreamErrorEvent
             | DirectError::ProviderStreamFailedUnknownCode
             | DirectError::ProviderStreamFailedInvalidCode
@@ -510,6 +528,7 @@ struct AttemptState {
     response: bool,
     text: bool,
     top_level_error: bool,
+    error_envelope: bool,
     terminal: bool,
     abort_error: Option<DirectError>,
     phases: Vec<Event>,
@@ -564,6 +583,7 @@ impl Attempt {
             response: false,
             text: false,
             top_level_error: false,
+            error_envelope: false,
             terminal: false,
             abort_error: None,
             phases: Vec::new(),
@@ -663,7 +683,7 @@ impl Observer {
     }
 
     // A diagnostic observation does not change the attempt's terminal outcome.
-    // The transport returns the same generic error and keeps cleanup ownership.
+    // The decoder chooses a fixed terminal error; transport cleanup ownership is unchanged.
     pub(crate) fn top_level_error(&self, code: TopLevelErrorCode, param: TopLevelErrorParam) {
         if let Ok(mut s) = self.0.lock() {
             if s.terminal
@@ -673,36 +693,50 @@ impl Observer {
                 return;
             }
             s.top_level_error = true;
-            let category = match code {
-                TopLevelErrorCode::ServerError => Category::OpenaiTopLevelServerError,
-                TopLevelErrorCode::RateLimitExceeded => Category::OpenaiTopLevelRateLimitExceeded,
-                TopLevelErrorCode::InvalidPrompt => Category::OpenaiTopLevelInvalidPrompt,
-                TopLevelErrorCode::Unknown => Category::OpenaiTopLevelUnknownCode,
-                TopLevelErrorCode::Absent => Category::OpenaiTopLevelAbsentCode,
-                TopLevelErrorCode::Null => Category::OpenaiTopLevelNullCode,
-                TopLevelErrorCode::Invalid => Category::OpenaiTopLevelInvalidCode,
-            };
+            let category = error_code_category(code);
             s.record_event(
                 Event::OpenaiTopLevelError,
                 Outcome::Observed,
                 Some(category),
             );
-            let parameter = match param {
-                TopLevelErrorParam::Model => Category::OpenaiTopLevelParamModel,
-                TopLevelErrorParam::Reasoning => Category::OpenaiTopLevelParamReasoning,
-                TopLevelErrorParam::ReasoningEffort => Category::OpenaiTopLevelParamReasoningEffort,
-                TopLevelErrorParam::MaxOutputTokens => Category::OpenaiTopLevelParamMaxOutputTokens,
-                TopLevelErrorParam::ServiceTier => Category::OpenaiTopLevelParamServiceTier,
-                TopLevelErrorParam::Absent => Category::OpenaiTopLevelParamAbsent,
-                TopLevelErrorParam::Null => Category::OpenaiTopLevelParamNull,
-                TopLevelErrorParam::Invalid => Category::OpenaiTopLevelParamInvalid,
-                TopLevelErrorParam::Unknown => Category::OpenaiTopLevelParamUnknown,
-            };
+            let parameter = error_param_category(param);
             s.record_event(
                 Event::OpenaiTopLevelErrorParam,
                 Outcome::Observed,
                 Some(parameter),
             );
+        }
+    }
+
+    pub(crate) fn error_envelope(&self, envelope: ErrorEnvelope) {
+        if let Ok(mut s) = self.0.lock() {
+            if s.terminal
+                || s.error_envelope
+                || !s.top_level_error
+                || s.record.provider != Some(AgentConnection::OpenaiApi)
+            {
+                return;
+            }
+            s.error_envelope = true;
+            let shape = match envelope {
+                ErrorEnvelope::Absent => Category::OpenaiEnvelopeAbsent,
+                ErrorEnvelope::Null => Category::OpenaiEnvelopeNull,
+                ErrorEnvelope::Invalid => Category::OpenaiEnvelopeInvalid,
+                ErrorEnvelope::Object(_, _) => Category::OpenaiEnvelopeObject,
+            };
+            s.record_event(Event::OpenaiErrorEnvelope, Outcome::Observed, Some(shape));
+            if let ErrorEnvelope::Object(code, param) = envelope {
+                s.record_event(
+                    Event::OpenaiNestedErrorCode,
+                    Outcome::Observed,
+                    Some(error_code_category(code)),
+                );
+                s.record_event(
+                    Event::OpenaiNestedErrorParam,
+                    Outcome::Observed,
+                    Some(error_param_category(param)),
+                );
+            }
         }
     }
 
@@ -767,6 +801,40 @@ pub(crate) fn response_received() {
 pub(crate) fn top_level_error(code: TopLevelErrorCode, param: TopLevelErrorParam) {
     let _ = CURRENT.try_with(|o| o.top_level_error(code, param));
 }
+pub(crate) fn error_envelope(envelope: ErrorEnvelope) {
+    let _ = CURRENT.try_with(|o| o.error_envelope(envelope));
+}
+fn error_code_category(code: TopLevelErrorCode) -> Category {
+    match code {
+        TopLevelErrorCode::ServerError => Category::OpenaiTopLevelServerError,
+        TopLevelErrorCode::RateLimitExceeded => Category::OpenaiTopLevelRateLimitExceeded,
+        TopLevelErrorCode::InvalidPrompt => Category::OpenaiTopLevelInvalidPrompt,
+        TopLevelErrorCode::InvalidApiKey => Category::OpenaiInvalidApiKey,
+        TopLevelErrorCode::InsufficientQuota => Category::OpenaiInsufficientQuota,
+        TopLevelErrorCode::CreditBalanceExhausted => Category::OpenaiCreditBalanceExhausted,
+        TopLevelErrorCode::ModelNotFound => Category::OpenaiModelNotFound,
+        TopLevelErrorCode::UnsupportedValue => Category::OpenaiUnsupportedValue,
+        TopLevelErrorCode::InvalidValue => Category::OpenaiInvalidValue,
+        TopLevelErrorCode::Unknown => Category::OpenaiTopLevelUnknownCode,
+        TopLevelErrorCode::Absent => Category::OpenaiTopLevelAbsentCode,
+        TopLevelErrorCode::Null => Category::OpenaiTopLevelNullCode,
+        TopLevelErrorCode::Invalid => Category::OpenaiTopLevelInvalidCode,
+    }
+}
+fn error_param_category(param: TopLevelErrorParam) -> Category {
+    match param {
+        TopLevelErrorParam::Model => Category::OpenaiTopLevelParamModel,
+        TopLevelErrorParam::Reasoning => Category::OpenaiTopLevelParamReasoning,
+        TopLevelErrorParam::ReasoningEffort => Category::OpenaiTopLevelParamReasoningEffort,
+        TopLevelErrorParam::MaxOutputTokens => Category::OpenaiTopLevelParamMaxOutputTokens,
+        TopLevelErrorParam::ServiceTier => Category::OpenaiTopLevelParamServiceTier,
+        TopLevelErrorParam::Absent => Category::OpenaiTopLevelParamAbsent,
+        TopLevelErrorParam::Null => Category::OpenaiTopLevelParamNull,
+        TopLevelErrorParam::Invalid => Category::OpenaiTopLevelParamInvalid,
+        TopLevelErrorParam::Unknown => Category::OpenaiTopLevelParamUnknown,
+    }
+}
+
 pub(crate) fn current() -> Option<Observer> {
     CURRENT.try_with(Clone::clone).ok()
 }

@@ -163,6 +163,7 @@ export const AGENT_ERROR_CODES = [
   "http_not_found",
 
   "provider_stream_error_event",
+  "provider_stream_credit_balance_exhausted",
   "provider_stream_failed_unknown_code",
   "provider_stream_failed_invalid_code",
   "provider_stream_server_error",
@@ -380,7 +381,7 @@ export function agentChatErrorMessage(error: unknown): string {
     case "catalog":
       return "Refresh the model catalog for this exact connection before sending.";
     case "limit":
-      return "The conversation or response reached the bounded demo limit. Start a new conversation.";
+      return "Cortexa reached a bounded local conversation, response or event limit. Any partial output is incomplete. Start a new conversation with a shorter requested response. No automatic retry was made.";
     case "unsupported_settings":
       return "This connection does not support the selected model or reasoning effort.";
     case "stale_context":

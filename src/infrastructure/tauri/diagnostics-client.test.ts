@@ -135,3 +135,51 @@ it("accepts generated request identity and explicit interruption but rejects arb
     expect(() => parseDiagnostics({ available: true, events: [{ ...item, request }] })).toThrow();
   }
 });
+
+it("accepts bounded envelope observations but refuses raw nested content", () => {
+  for (const error of [
+    "openai_envelope_absent",
+    "openai_envelope_null",
+    "openai_envelope_invalid",
+    "openai_envelope_object",
+    "openai_invalid_api_key",
+    "openai_insufficient_quota",
+    "openai_credit_balance_exhausted",
+    "openai_model_not_found",
+    "openai_unsupported_value",
+    "openai_invalid_value",
+  ]) {
+    const row = { ...record, event: "openai_error_envelope", error };
+    expect(parseDiagnostics({ available: true, events: [row] }).events).toEqual([row]);
+    expect(() =>
+      parseDiagnostics({ available: true, events: [{ ...row, message: "PRIVATE_ERROR_CANARY" }] }),
+    ).toThrow();
+  }
+  for (const event of ["openai_nested_error_code", "openai_nested_error_param"]) {
+    expect(
+      parseDiagnostics({ available: true, events: [{ ...record, event }] }).events,
+    ).toHaveLength(1);
+  }
+});
+
+it("rejects nonliteral billing categories and private fields", () => {
+  for (const error of [
+    "credit_balance_exhausted",
+    "openai_credit_balance_exhausted PRIVATE_ERROR_CANARY",
+    { code: "openai_credit_balance_exhausted" },
+  ]) {
+    expect(() => parseDiagnostics({ available: true, events: [{ ...record, error }] })).toThrow();
+  }
+});
+
+it("accepts only the closed resource-limit category", () => {
+  expect(
+    parseDiagnostics({ available: true, events: [{ ...record, error: "resource_limit" }] }).events,
+  ).toEqual([{ ...record, error: "resource_limit" }]);
+  expect(() =>
+    parseDiagnostics({
+      available: true,
+      events: [{ ...record, error: "resource_limit: PRIVATE_CANARY" }],
+    }),
+  ).toThrow();
+});
