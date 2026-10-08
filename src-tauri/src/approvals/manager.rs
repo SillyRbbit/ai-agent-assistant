@@ -288,10 +288,8 @@ impl ApprovalClock for SystemApprovalClock {
 
 #[derive(Clone, Eq, PartialEq)]
 enum ApprovalSubjectKey {
-    IsolatedChange {
-        run_id: String,
-        review_hash: String,
-    },
+    #[cfg(target_os = "macos")]
+    IsolatedChange { run_id: String, review_hash: String },
     LegacyGateway {
         run_id: String,
         gateway_request_id: String,
@@ -306,6 +304,7 @@ enum ApprovalSubjectKey {
 impl ApprovalSubjectKey {
     fn from_decision(decision: &ApprovalDecision) -> Self {
         match decision {
+            #[cfg(target_os = "macos")]
             ApprovalDecision::IsolatedChange {
                 run_id,
                 review_hash,
@@ -397,6 +396,7 @@ pub struct InMemoryApprovalManager {
 }
 
 impl InMemoryApprovalManager {
+    #[cfg(target_os = "macos")]
     pub(crate) fn create_isolated_change(
         &mut self,
         run_id: &str,

@@ -23,7 +23,18 @@ fn git(root: &Path, args: &[&str]) -> TestResult {
         .stdout(std::process::Stdio::null())
         .stderr(std::process::Stdio::null())
         .status()?;
-    assert!(status.success());
+    let stage = match args.first().copied() {
+        Some("init") => "fixture_init",
+        Some("add") => "fixture_add",
+        Some("commit") => "fixture_commit",
+        Some("checkout") => "fixture_checkout",
+        _ => "fixture_git_other",
+    };
+    assert!(
+        status.success(),
+        "synthetic Git failure: stage={stage}, exit={:?}",
+        status.code()
+    );
     Ok(())
 }
 fn fixture(root: &Path) -> TestResult {

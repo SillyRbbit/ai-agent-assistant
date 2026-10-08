@@ -5545,3 +5545,86 @@ Reuse native Codex and direct API evidence distinctly; all inherited warnings,
 unknown historical causes, untested variants and owned cleanup remain as recorded.
 Ledger63/66; no new requests. ECC hooks/MCP disabled, native workaround retained,
 D-125/M1/M2 parked. Commit/push/PR/merge require separate owner authorization.
+
+## 2026-10-08 — PR139 Git fixture diagnostic successor
+
+Owner-authorized `git-fixture-diagnostics` was admitted with ordinary D-134
+schema-2 admission, preserving the completed publication record in a verified
+snapshot. Only the Git helper in `src-tauri/src/isolated_action/tests.rs` changed:
+fixed `fixture_init`, `fixture_add`, `fixture_commit`, `fixture_checkout` or
+`fixture_git_other` stage and numeric/absent exit status on failure.
+Cleared environment, disabled hooks/signing, raw-output suppression and all
+fixture behavior remain unchanged. No HOME addition or product repair.
+
+Three external diagnostic privacy/status tests passed. One representative Mac
+test, `isolated_action::tests::exact_add_preserves_baseline_and_rejects_replay`,
+passed (one run, 492 filtered). The earlier sandbox-limited Cargo preparation
+stopped before any test with Tauri build `Operation not permitted`; its receipt
+is preserved separately from the successful authorized-access invocation.
+The first admission report used an absolute system-Python command spelling;
+its rejection is retained. Correct literal session-command evidence permitted
+ordinary admission without any gate change.
+
+The Git assertion failure reported from CI did not reproduce locally. No
+stderr cause, missing HOME, missing identity or runner defect is established.
+The fixture already returns its final Git result; adding `Ok(())` would not
+repair the demonstrated assertion. PR139's historical Linux Clippy failure
+and Mac test failure remain unresolved; local success is not CI acceptance.
+A separate owner-authorized repair or CI diagnostic publication/rerun is needed.
+
+Full unchanged product and native verification is inherited, not repeated;
+the changed helper has focused fresh verification. Frozen68 committed bytes,
+prior reports/receipts, original QA completion, index, Git links and unrelated
+source/configuration are preserved. Additive current documents qualify the
+new successor separately from historical publication completion.
+
+Evidence and recovery snapshot:
+`/private/tmp/cortexa-git-fixture-diagnostics-wka3b3gv`.
+Ledger63/66; zero new requests. ECC hooks/MCP remain disabled; all advisories,
+the process-local Python/Xcode SDK27/Cargo workaround and parked D-125/M1/M2
+remain. No app launch, provider request, install, commit, push or CI rerun.
+
+Next action: inspect retained diagnostics and committed platform-specific
+approval call sites before approving the smallest Linux platform-gating repair
+and/or publication of this bounded Git diagnostic. Preserve strict warnings,
+fail-closed non-macOS approval and historical evidence; do not infer a Mac cause.
+
+## 2026-10-08 — PR139 platform-gating successor and diagnostic publication
+
+Owner-authorized `pr139-platform-gating` uses ordinary D-134 schema-2 admission.
+Only approvals/manager.rs and approvals/types.rs gain consistent macOS-only
+private isolated-change constructor/decision/subject availability and dependent
+match arms. Public preview/provenance metadata, macOS approval validation and
+non-macOS ActionError::Approval rejection remain unchanged. Strict warnings,
+hooks/signing policy, review hash/expiry/replay and cleanup are retained.
+
+The inherited eleven-path Git diagnostic completion is preserved historically.
+Its helper, plan and review reports remain byte-identical; existing root document
+bodies are retained as prefixes. Prior publication/QA states, artifacts, failed
+receipts and Git metadata remain preserved in verified recoverable snapshots.
+No fixture behavior, HOME, raw output, product behavior, gate, dependency or
+workflow changes. The source already returns the final fixture Git result.
+
+Local Mac strict Clippy and all-target Rust tests passed, including exact native
+approval/hash/expiry/one-use checks. Native unsigned no-bundle compilation passed
+with fresh Cargo output, installed offline tooling and verified reused dist.
+Unchanged frontend182, repository21 and hook9 inputs match retained passing
+verification. This is composite verify coverage, not a fresh full npm run verify.
+The earlier required rustfmt failure is retained; the owner explicitly authorized
+its exact one-line layout adjustment and resumed verification. Corrected format
+passed. Historical prior full-verify failures remain separate from later passes.
+
+New Linux CI acceptance and the old Mac CI fixture cause remain unclaimed before
+publication. One local representative fixture test previously passed; no HOME,
+identity or other CI cause is inferred. Publishing the unchanged fixed Git
+stage/exit diagnostic permits bounded evidence from a new exact-head CI run.
+No historical workflow rerun or automatic additional repair is authorized.
+
+Current review: docs/reviews/2026-10-08-pr139-platform-gating-post-increment-review.md.
+Evidence: /private/tmp/cortexa-pr139-platform-repair-tl9x12y6.
+Local completion/full Stop and publication result are recorded externally after
+freeze; this prose is not gate acceptance. Owner permits one exact Conventional
+Commit/non-force push to the existing branch/PR139 only after local gates pass.
+No merge, new PR, app launch, provider request, install or further repair.
+Ledger63/66, ECC hooks/MCP disabled, all advisories, native workaround and parked
+D-125/M1/M2 unchanged. Observe actual new CI outcomes; never presume success.

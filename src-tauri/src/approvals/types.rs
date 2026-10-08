@@ -208,6 +208,7 @@ impl fmt::Debug for ApprovalOrigin {
 /// profile as approval-eligible.
 #[derive(Eq, PartialEq)]
 pub(crate) enum ApprovalDecision {
+    #[cfg(target_os = "macos")]
     IsolatedChange {
         run_id: String,
         review_hash: String,
@@ -237,6 +238,7 @@ impl ApprovalDecision {
 
     pub(crate) fn outcome(&self) -> PolicyOutcome {
         match self {
+            #[cfg(target_os = "macos")]
             Self::IsolatedChange { .. } => PolicyOutcome::RequireApproval,
             Self::LegacyGateway(decision) => decision.outcome(),
             Self::Agent { decision, .. } => decision.outcome(),
@@ -245,6 +247,7 @@ impl ApprovalDecision {
 
     pub(crate) fn policy_reason(&self) -> PolicyReason {
         match self {
+            #[cfg(target_os = "macos")]
             Self::IsolatedChange { .. } => PolicyReason::ReversibleRequiresApproval,
             Self::LegacyGateway(decision) => decision.reason(),
             Self::Agent {
@@ -256,6 +259,7 @@ impl ApprovalDecision {
 
     pub(crate) fn agent_policy_reason(&self) -> Option<AgentPolicyReason> {
         match self {
+            #[cfg(target_os = "macos")]
             Self::IsolatedChange { .. } => None,
             Self::LegacyGateway(_) => None,
             Self::Agent { decision, .. } => Some(decision.reason()),
@@ -264,6 +268,7 @@ impl ApprovalDecision {
 
     pub(crate) fn origin(&self) -> ApprovalOrigin {
         match self {
+            #[cfg(target_os = "macos")]
             Self::IsolatedChange { .. } => ApprovalOrigin::IsolatedChange,
             Self::LegacyGateway(_) => ApprovalOrigin::LegacyGateway,
             Self::Agent { decision, .. } => {
@@ -274,6 +279,7 @@ impl ApprovalDecision {
 
     pub(crate) fn run_id(&self) -> &str {
         match self {
+            #[cfg(target_os = "macos")]
             Self::IsolatedChange { run_id, .. } => run_id,
             Self::LegacyGateway(decision) => decision.validated_call().run_id(),
             Self::Agent { decision, .. } => decision
@@ -287,6 +293,7 @@ impl ApprovalDecision {
 
     pub(crate) fn gateway_request_id(&self) -> &str {
         match self {
+            #[cfg(target_os = "macos")]
             Self::IsolatedChange { review_hash, .. } => review_hash,
             Self::LegacyGateway(decision) => decision.validated_call().gateway_request_id(),
             Self::Agent { decision, .. } => decision
@@ -300,6 +307,7 @@ impl ApprovalDecision {
 
     pub(crate) fn call_id(&self) -> &str {
         match self {
+            #[cfg(target_os = "macos")]
             Self::IsolatedChange { review_hash, .. } => review_hash,
             Self::LegacyGateway(decision) => decision.validated_call().call_id(),
             Self::Agent { decision, .. } => decision.request().call_id(),
@@ -308,6 +316,7 @@ impl ApprovalDecision {
 
     pub(crate) fn tool_name(&self) -> &str {
         match self {
+            #[cfg(target_os = "macos")]
             Self::IsolatedChange { .. } => "apply_isolated_change",
             Self::LegacyGateway(decision) => decision.validated_call().tool_name(),
             Self::Agent { decision, .. } => decision.request().schema().name(),
@@ -316,6 +325,7 @@ impl ApprovalDecision {
 
     pub(crate) fn tool_contract_version(&self) -> u16 {
         match self {
+            #[cfg(target_os = "macos")]
             Self::IsolatedChange { .. } => 1,
             Self::LegacyGateway(decision) => decision.validated_call().tool_contract_version(),
             Self::Agent { decision, .. } => decision.request().schema().version(),
@@ -324,6 +334,7 @@ impl ApprovalDecision {
 
     pub(crate) fn risk_class(&self) -> RiskClass {
         match self {
+            #[cfg(target_os = "macos")]
             Self::IsolatedChange { .. } => RiskClass::ReversibleLocalAction,
             Self::LegacyGateway(decision) => decision.validated_call().risk_class(),
             Self::Agent { decision, .. } => decision.request().risk_class(),
@@ -332,6 +343,7 @@ impl ApprovalDecision {
 
     pub(crate) fn required_permission(&self) -> PermissionKind {
         match self {
+            #[cfg(target_os = "macos")]
             Self::IsolatedChange { .. } => PermissionKind::Files,
             Self::LegacyGateway(decision) => decision.validated_call().required_permission(),
             Self::Agent { decision, .. } => decision.request().required_permission(),
@@ -390,6 +402,7 @@ impl<'a> ApprovalPreview<'a> {
 
     pub(crate) fn from_approval_decision(decision: &'a ApprovalDecision) -> Option<Self> {
         match decision {
+            #[cfg(target_os = "macos")]
             ApprovalDecision::IsolatedChange { summary, .. } => {
                 Some(Self::ApplyIsolatedChange { summary })
             }
@@ -631,8 +644,9 @@ impl ApprovalResolution {
             ApprovalDecision::LegacyGateway(decision) => {
                 return Self::new(id, disposition, decision, interaction_evidence);
             }
-            agent @ ApprovalDecision::Agent { .. }
-            | agent @ ApprovalDecision::IsolatedChange { .. } => agent,
+            agent @ ApprovalDecision::Agent { .. } => agent,
+            #[cfg(target_os = "macos")]
+            isolated @ ApprovalDecision::IsolatedChange { .. } => isolated,
         };
         let origin = decision.origin();
         Self {
