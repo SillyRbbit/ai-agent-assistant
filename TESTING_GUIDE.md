@@ -3275,3 +3275,21 @@ status, Stop behavior, no completion marker, and clean admission of only the
 recorded successor with `predecessor_disposition` lineage. Do not exercise the
 real transition until every focused and complete check passes and the recovery
 report is frozen.
+
+## 2026-10-08 — Upstream D-134 governance integration
+
+The owner selected governance-only integration on `codex/milestone-governance-upstream`
+from GitHub main `bbe7546281fec3c8b4b608d68a52bc9732d9ecd9`. General milestone
+admission/closure, canonical absent-path comparison and linked-index validation are
+extracted from the frozen Main Session port; D-133 and legacy behavior are preserved.
+See [the fresh plan](docs/plans/2026-10-08-milestone-governance-upstream.md).
+Fresh 145 hook tests, 94 repository tests and governance checks pass. Product verification is inherited with 347 unchanged input bindings. Review is PASS WITH ADVISORIES; actual gate/Stop and local commit receipts follow in the external integration handoff.
+Existing product roadmap and historical records remain unchanged. Local commits
+are authorized only after review/checks; publication needs separate owner direction.
+
+For D-134, run fresh hook/repository suites and documentation, security, whitespace
+and session checks. Reuse product-only stages only after matching their complete
+relevant source/configuration/dependency/tool inputs and environment. The final
+review must distinguish inherited full verification from newly executed checks and
+retain original failures/skips. No native QA is required for this governance-only
+change; no native acceptance or product readiness is granted.

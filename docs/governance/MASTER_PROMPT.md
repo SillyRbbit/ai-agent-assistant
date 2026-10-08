@@ -20,12 +20,13 @@ instructions may add constraints but do not weaken this document.
 Use this order:
 
 1. Platform and system instructions.
-2. Root `AGENTS.md`.
-3. This master document.
-4. Current-state records: `PROJECT_STATUS.md`, `NEXT_STEPS.md`, `HANDOFF.md`,
+2. Explicit current owner instructions, within platform safeguards.
+3. Root `AGENTS.md`.
+4. This master document.
+5. Current-state records: `PROJECT_STATUS.md`, `NEXT_STEPS.md`, `HANDOFF.md`,
    and accepted decisions in `DECISIONS.md`.
-5. The approved task-specific skill, prompt, plan, or increment record.
-6. More-specific directory-level `AGENTS.md` files, when present.
+6. The approved task-specific skill, prompt, plan, or increment record.
+7. More-specific directory-level `AGENTS.md` files, when present.
 
 This is instruction precedence, not a claim that every current-state document
 has equal architecture authority. Follow `ENGINEERING_GUIDE.md` for
@@ -37,8 +38,7 @@ Before work, read the root required reading order, inspect the branch and
 working tree, reconcile the handoff with repository evidence, identify the one
 approved task, inspect applicable implementation and tests, and run the
 smallest useful baseline check. Do not discard, overwrite, stash, reset, or
-clean user work. Stop when overlapping changes, a failed baseline, or an
-unresolved architecture decision prevents safe work.
+clean user work. Resolve recoverable in-scope failures, attribute overlaps and assess inherited defects by impact. Stop only for a genuine blocker; finish independent work first.
 
 ## 5. Current-increment selection
 
@@ -50,11 +50,7 @@ new evidence without silently reprioritizing it.
 
 ## 6. Scope control
 
-State the goal, non-goals, exact expected files, risks, verification, manual
-gates, and rollback before editing. Prefer the smallest change that satisfies
-the accepted criteria. Stop for approval before expanding a declared file,
-capability, permission, dependency, data, or trust boundary. Do not perform
-unrelated refactors or speculative implementation.
+Follow AGENTS.md D-134: objective, exclusions and acceptance define scope. Declare expected paths for attribution, not a count ceiling. Routine implementation, tests, review, documentation and truthful finalization are authorized together. Request approval only at the explicit D-134 boundaries.
 
 ## 7. Change-planning requirements
 
@@ -126,7 +122,7 @@ Markdown, links, paths, scope, and repository-policy checks; they do not require
 application builds unless executable tooling or an approved plan requires them.
 Cross-cutting, security-sensitive, dependency, Tauri, storage, policy,
 approval, IPC, or release work requires the complete applicable validation.
-Report every command and actual result, including checks not run and why.
+Reuse valid unchanged-input evidence with command, result, input identity and environment. Record inherited failures separately and assess impact; never claim an untested result passed. Documentation/checkpoints alone do not require full builds or live QA.
 
 ## 15. Documentation updates
 
@@ -215,8 +211,10 @@ required`.
 
 ## 20. Stop conditions
 
-Stop and request direction when a required owner decision, baseline, scope,
-security boundary, manual gate, operational evidence, or external authority is
-missing. Do not fabricate success, accept hidden risk, create deployment
-resources, or begin a later increment. Before completion, inspect the complete
-diff and use the required session-end, quality, and post-increment workflows.
+Continue the authorized milestone through routine work and recoverable failures.
+Follow AGENTS.md D-134 approval boundaries. Checkpointing is not completion.
+Missing access is a blocker; finish independent work first. Keep original failure
+records immutable and assess successor dependencies explicitly. Ordinary final
+review, documentation and truthful gate finalization need no separate approval.
+Do not automatically begin a later milestone or perform unauthorized Git/publication
+operations.

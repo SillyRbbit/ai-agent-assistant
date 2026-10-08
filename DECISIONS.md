@@ -7071,3 +7071,40 @@ Legacy mechanisms and D-125/M1/M2 remain unchanged. No force option, checkout
 bypass, arbitrary successor, product edits or automatic recovery chain follows.
 
 See [the maintenance plan](docs/plans/2026-10-03-evidence-bound-acceptance-maintenance.md).
+
+## D-134 — General milestone governance and compatible upstream integration
+
+Date: 2026-10-08. Status: Accepted for owner-authorized governance maintenance.
+The owner authorizes this isolated integration and local commits after passing
+review and required verification; no push, PR, merge or publication. AGENTS.md
+and ENGINEERING_GUIDE.md define objective-based operation, informational path
+counts, independent successor readiness, proportionate verification, narrow approval
+boundaries and truthful completion. Preserve platform safeguards, protected files,
+attribution and original failure evidence. D-133 is unchanged.
+
+### Historical decision crosswalk
+
+Decision numbers are repository-lineage qualified. Desktop history below is frozen
+at commit `a9f2e5e2a5d94dc09b75a28a19bc1114597e65b3`, `DECISIONS.md`; upstream
+meanings are from `bbe7546281fec3c8b4b608d68a52bc9732d9ecd9`, `DECISIONS.md`.
+Do not renumber or rewrite either historical record.
+
+| ID    | Desktop meaning                    | Existing upstream meaning             | Integration disposition                                      |
+| ----- | ---------------------------------- | ------------------------------------- | ------------------------------------------------------------ |
+| D-127 | Sidebar branding                   | Cargo audit maintenance               | Excluded; preserve both histories                            |
+| D-128 | Native/README branding             | Direct OpenAI demo                    | Excluded; unfinished Desktop branding remains deferred       |
+| D-129 | Completed bootstrap rollback       | Configurable agent demo               | Preserve rollback and retained branding; no replay           |
+| D-130 | General closure without completion | Model catalog                         | General implementation adopted under upstream D-134          |
+| D-131 | Milestone governance               | Anthropic/loopback connections        | General policy adopted under upstream D-134                  |
+| D-132 | Absent-path comparison             | Provider milestone                    | Comparison and regressions adopted under upstream D-134      |
+| D-133 | Not this Desktop policy            | Evidence-bound acceptance maintenance | Preserve upstream code, tests, identities and separate route |
+
+The verified Main Session port adds linked-index handling and D-133 isolation;
+its dated D-131 label describes Desktop provenance, not a new upstream D-131.
+Extract the three verified code/test files and supporting policy only. Existing
+upstream decisions, D-098/D-133 historical records and all unpublished product work
+remain intact. No Desktop exception chain, QA artifact, private state or branding
+is imported. Local receipt hashes are integrity evidence, not authentication against
+malicious same-user rewriting. This milestone begins with upstream's existing
+ordinary gate before the new implementation is installed; it remains legacy-admitted
+and must complete through that supported route. Future new milestones use schema 2.

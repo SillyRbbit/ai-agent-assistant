@@ -8,7 +8,7 @@ description: Implement one small, bounded Cortexa increment with explicit non-go
 1. Select one ready item from `NEXT_STEPS.md` or one explicitly requested bounded task.
 2. Read the relevant product, security, decision, and increment documents.
 3. State goal, non-goals, expected files, risks, and verification commands.
-4. After approval and before editing, run `python3 .codex/hooks/post_increment_gate.py begin --increment <increment>` when the repository gate exists. The sole exception is the exact D-098 same-terminal-record recovery: it is not a new increment, must preserve the predecessor failure, and must not call `begin`, `finalize`, or `close-failed`.
+4. Use existing owner authorization, prepare the checklist/readiness evidence where needed, then begin through the supported gate before implementation. New general milestones use schema-2 admission. Preserve the separately recorded D-098/D-133 historical procedures; never replay them for arbitrary new work.
 5. Preserve current behavior outside scope.
 6. Implement the smallest coherent change.
 7. Add or update focused tests for success and failure behavior.
@@ -18,7 +18,7 @@ description: Implement one small, bounded Cortexa increment with explicit non-go
 11. Update handoff, status, next steps, changelog, decisions, troubleshooting, and increment documentation as applicable.
 12. Run `$post-increment-gate`; do not mark an ordinary increment complete without a valid passing report and completion marker. D-098 instead requires its separate passing recovery report and valid schema-v3 disposition while retaining no completion marker.
 
-Stop broad implementation if the baseline fails or the required architecture decision is unresolved.
+Resolve recoverable in-scope failures and assess inherited failures by impact. Continue independent authorized work; stop when a required decision, attribution, access or verification remains blocked.
 
 ## D-133 evidence-bound acceptance maintenance
 
@@ -56,3 +56,13 @@ Legacy mechanisms and D-125/M1/M2 remain unchanged. No force option, checkout
 bypass, arbitrary successor, product edits or automatic recovery chain follows.
 
 See [the maintenance plan](../../../docs/plans/2026-10-03-evidence-bound-acceptance-maintenance.md).
+
+## D-134 milestone operation
+
+Follow AGENTS.md and ENGINEERING_GUIDE.md: objective, exclusions and acceptance
+are the scope boundary. Path counts are informational; preserve protected paths,
+attribution and unrelated work. Continue authorized routine work through review,
+documentation and truthful finalization. Reuse valid unchanged-input verification
+with provenance; distinguish implemented, automatically verified, live verified,
+deferred and blocked criteria. Historical FAIL evidence and D-133's separate
+acceptance route remain immutable. Request approval only at AGENTS.md boundaries.

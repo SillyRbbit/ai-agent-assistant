@@ -44,7 +44,7 @@ State the approved goal, non-goals, trust-boundary impact, and whether the exact
 
 ## Verification results
 
-Run `python3 .codex/hooks/session_end_gate.py` before review. Record every required automated and manual check as exactly one of: `Passed`, `Failed`, `Not run`, or `Manual verification pending`. Do not infer success from an earlier run.
+Run `python3 .codex/hooks/session_end_gate.py` before review. Record every required automated and manual check as exactly one of: `Passed`, `Failed`, `Not run`, or `Manual verification pending`. Reuse earlier evidence only with verified unchanged inputs, command, result and environment; label it inherited rather than newly executed.
 
 ## Architecture findings
 
@@ -89,3 +89,13 @@ List every tracked and untracked changed path. The list must match the machine m
 ## Exact commands executed
 
 List every command and its actual result. The machine manifest must contain each required verification command verbatim.
+
+## D-134 milestone operation
+
+Follow AGENTS.md and ENGINEERING_GUIDE.md: objective, exclusions and acceptance
+are the scope boundary. Path counts are informational; preserve protected paths,
+attribution and unrelated work. Continue authorized routine work through review,
+documentation and truthful finalization. Reuse valid unchanged-input verification
+with provenance; distinguish implemented, automatically verified, live verified,
+deferred and blocked criteria. Historical FAIL evidence and D-133's separate
+acceptance route remain immutable. Request approval only at AGENTS.md boundaries.

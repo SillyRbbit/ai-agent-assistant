@@ -72,3 +72,13 @@ Complete this section before marking the increment complete.
 - [ ] `DECISIONS.md`, if required
 - [ ] `CHANGELOG.md`
 - [ ] `TROUBLESHOOTING_LOG.md`, if required
+
+## D-134 milestone operation
+
+Follow AGENTS.md and ENGINEERING_GUIDE.md: objective, exclusions and acceptance
+are the scope boundary. Path counts are informational; preserve protected paths,
+attribution and unrelated work. Continue authorized routine work through review,
+documentation and truthful finalization. Reuse valid unchanged-input verification
+with provenance; distinguish implemented, automatically verified, live verified,
+deferred and blocked criteria. Historical FAIL evidence and D-133's separate
+acceptance route remain immutable. Request approval only at AGENTS.md boundaries.

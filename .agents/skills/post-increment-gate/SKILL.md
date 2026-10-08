@@ -5,7 +5,7 @@ description: Run Cortexa's consolidated post-increment verification, engineering
 
 # Post-increment gate
 
-Run this workflow only after the approved implementation is finished. Do not commit, push, begin another increment, or automatically fix advisory findings.
+Run this workflow only after the approved implementation is finished. Complete authorized local commits only after checks and review. Do not start another increment or perform unauthorized publication; defer unrelated advisories.
 
 ## A. Repository state review
 
@@ -18,7 +18,7 @@ Run this workflow only after the approved implementation is finished. Do not com
 
 ## B. Required verification
 
-1. Run every automated command required by the active increment. Do not substitute an earlier run.
+1. Run every affected required check. Reuse valid unchanged-input evidence with command, result, input identity and environment; do not represent reuse as a fresh execution.
 2. Record each command as exactly `Passed`, `Failed`, `Not run`, or `Manual verification pending`.
 3. Record each required manual check using the same statuses.
 4. Never claim success without the command's actual zero exit status or the project owner's explicit manual confirmation.
@@ -150,3 +150,13 @@ Legacy mechanisms and D-125/M1/M2 remain unchanged. No force option, checkout
 bypass, arbitrary successor, product edits or automatic recovery chain follows.
 
 See [the maintenance plan](../../../docs/plans/2026-10-03-evidence-bound-acceptance-maintenance.md).
+
+## D-134 milestone operation
+
+Follow AGENTS.md and ENGINEERING_GUIDE.md: objective, exclusions and acceptance
+are the scope boundary. Path counts are informational; preserve protected paths,
+attribution and unrelated work. Continue authorized routine work through review,
+documentation and truthful finalization. Reuse valid unchanged-input verification
+with provenance; distinguish implemented, automatically verified, live verified,
+deferred and blocked criteria. Historical FAIL evidence and D-133's separate
+acceptance route remain immutable. Request approval only at AGENTS.md boundaries.
