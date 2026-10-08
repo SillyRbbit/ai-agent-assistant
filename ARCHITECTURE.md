@@ -1,3 +1,107 @@
+## 2026-10-07 — Codex action offline verification passed
+
+The five-file Codex action extension passed its focused offline regressions and
+required `npm run verify` with the installed process-local workaround. Synthetic
+runtime cases cover fixed action instructions, successful text streaming/completion,
+EOF, malformed output, tool/approval rejection, output bounds and runtime errors;
+active cancellation reaps the child before a subsequent synthetic request succeeds.
+The new test initially referenced an unavailable Tokio macro; its compile receipts
+remain preserved. Standard future polling corrected the test without dependency or
+production lifecycle changes. The final verification passed on the corrected source.
+
+The current candidate has 60 paths within the 40 successor / 61 cumulative ceiling;
+the final review is still reserved. Prior document bodies, predecessor completion,
+API evidence, historical failures and old artifacts remain preserved. Fresh
+isolated bundle and launch-disabled Codex-only helper preparation is recorded under
+`/private/tmp/cortexa-codex-action-extension-oedk0qdz/native`; their external manifests
+are authoritative for readiness and exact hashes, not this documentation record.
+
+Native action acceptance has not run. It needs separate authorization for the
+verified artifact, autonomous launcher and Computer Use, preserving the dedicated
+Cortexa-Codex-QA home and all identity/window/cleanup safeguards. Direct-API gaps
+remain pending private credentials; Codex results cannot replace API evidence.
+Usage stays historical 33 plus 2/20 additional (35 total, 18 remaining). Keep all
+advisories, disabled ECC hooks/MCP, native workaround and D-125/M1/M2 parked.
+No completion, full Stop, launch, Send, commit or publication is claimed here.
+
+---
+
+## 2026-10-07 — Bounded Headless Codex action route
+
+The owner approved extending only the five native adapter/context modules, with
+in-module tests, to support Headless Codex for isolated Coding -> QA actions.
+The scope is now 40 successor / 61 cumulative paths including the reserved final
+review. Only `agent_adapter.rs` and `codex_connection.rs` are newly allowlisted;
+the original 38/59 scope and all historical evidence remain preserved. The existing
+ordinary active increment is retained without a new begin, state edit or waiver.
+
+Action context accepts only OpenAI API and Codex. Native preparation and dispatch
+validate the saved Codex selection against the discovered catalog. A closed
+`ActionCodex` adapter chooses only the fixed isolated-action instructions through
+the existing file-store runtime. It adds no model tools, filesystem authority,
+provider fallback, IPC surface or dependency. Codex only proposes bounded JSON;
+Rust still owns strict contracts, Docker execution, exact native approval and
+new-file-only application. Existing API behavior and all execution limits remain.
+
+Focused offline cases cover context privacy, catalog/revision rejection, fixed
+instructions, streaming/errors, denied tools/approval and child cleanup. Required
+verification and fresh isolated artifact/helper preparation are tracked separately
+in `/private/tmp/cortexa-codex-action-extension-oedk0qdz`. No native launch or Send
+is authorized in this offline stage. Do not promote synthetic results to native
+acceptance or reuse the old API artifact for the changed source.
+
+Separate native approval must bind the new bundle and a fresh Codex-only launcher
+using the dedicated Cortexa-Codex-QA home, never personal credentials or API fallback.
+Current additional usage remains 2/20 (historical 33; total 35), with 18 remaining.
+Existing API successes and failed QA handoff remain; API-specific gaps await private
+credential access. Native action approval/application, correction, rejection/drift,
+cancellation/recovery and restart remain pending. Retain all advisories, disabled
+ECC hooks/MCP, the process-local workaround and parked D-125/M1/M2. No completion,
+full Stop, commit or publication claim.
+
+---
+
+## 2026-10-07 — Isolated bot action workflow implementation checkpoint
+
+The owner-authorized `isolated-bot-action-workflow` is active, not complete.
+The [bounded plan](docs/plans/2026-10-07-isolated-bot-action-workflow.md) freezes
+36 successor / 57 cumulative paths, including the retained 28-path architecture
+atlas. Its dated diagrams, prior completion, historical failures and artifact
+bytes remain unchanged; they are inherited evidence, not this workflow's acceptance.
+
+The existing Rust collaboration owner adds one `coding_action` route: Coding
+proposes a strict one-file replacement, Rust writes the isolated copy and runs
+fixed Python unittest validation, then QA & Validation assesses the actual diff
+and exit evidence. One correction is allowed (four generation attempts maximum).
+Existing rooms, profile snapshots, diagnostics, generation lease and Command
+Center projection remain the owners; no second orchestrator or generic tool API.
+Only OpenAI API is supported for this action route; other analysis routes are unchanged.
+
+`isolated_action/workspace.rs` owns no-follow target access, raw Git tree/index/file
+comparisons, snapshots, recovery backups and atomic application. `sandbox.rs` owns
+only fixed Docker argument construction and exact-container cleanup. The pinned
+Linux/arm64 Python image receives two read-only files, no credentials, target,
+home or Docker socket. Network is disabled; root is read-only; UID 65534, no added
+capabilities, no-new-privileges, bounded memory/PIDs/CPU/tmpfs/output and a 15-second
+in-container watchdog restrict execution. Docker Desktop remains trusted infrastructure.
+
+Native folder selection produces an opaque Rust-held target binding. The WebView
+cannot provide a target path, command, image, mount or approval result. Existing
+native approval components gain one closed exact-change subject. Only successful
+native resolution creates an internal consuming effect permit; applying still
+rechecks its expiry, physical repository identity, baseline, staged bytes, tests,
+review hash and immutable intent journal. Approval does not become generic authority.
+
+Recovery data resides in the active app identity's `isolated-actions` data directory.
+Prepared/running/review/apply states do not replay after restart. Missing process-held
+ownership requires explicit recovery review; backup/journals remain. Unfinished
+container identity/cleanup fails closed. Hard process loss may leave an exited
+container after its watchdog; do not infer object removal from process termination.
+
+All advisories, disabled ECC hooks/MCP, native workaround and parked D-125/M1/M2 remain.
+
+---
+
 ## 2026-10-07 — Live-provider bounded acceptance closeout
 
 Quality review: **PASS WITH ADVISORIES** for the approved API/Codex
@@ -2376,3 +2480,33 @@ boundary requires its own approved plan and verification.
 - `PROJECT_STATUS.md`
 - `docs/product/ARCHITECTURE_BASELINE.md`
 - `docs/branding/PRESENTATION_GUIDELINES.md`
+
+## Isolated action final review — 2026-10-08
+
+The bounded acceptance matrix is reconciled in
+[the consolidated review](docs/reviews/2026-10-07-isolated-bot-action-workflow-post-increment-review.md).
+Codex native correction, exact Reject, exact Approve/apply with retained recovery
+records, active cancellation/subsequent recovery, drift rejection and interruption/
+restart without replay passed. The direct-API Coding/QA action separately completed
+strict contracts and actual pinned Docker validation, reaching review_ready with
+its target unchanged. API evidence is not Codex evidence; shared lifecycle cases
+were not repeated or relabeled API checks. Ledger63/66 remains unchanged.
+
+Final architecture, security, code-health, debt and readiness review finds no
+blocking defect within the approved new-file-only scope: PASS WITH ADVISORIES.
+Ordinary finalization is conditional on current documentation, schema, preservation
+and session checks; its actual status and full Stop outcome are recorded externally
+in `/private/tmp/cortexa-isolated-action-final-39rz8nvq/FINAL-HANDOFF.md`.
+Historical active/failed checkpoints remain historical, not current acceptance.
+The legacy gate is not converted; ordinary finalization is its only authorized
+state transition. No product changes, new QA, launch, Send, build, install, commit
+or publication occur in this review.
+
+Retain stale API-only scope-copy advice, native app-scoped Computer Use limitations,
+process-local Python/SDK27/Cargo workaround, image/host assumptions, disabled ECC
+hooks/MCP and parked D-125/M1/M2. Actual rollback restoration, native cancellation
+after Docker starts, API repetition of shared lifecycle cases and all timing/
+provider/platform variants remain unclaimed. Required bounded cancellation and
+cleanup combine native provider evidence with automated actual Docker child checks.
+Discarded historical schema-failure causes remain unknown. No later milestone or
+publication is automatically authorized.

@@ -138,11 +138,13 @@ impl ApprovalInteractionEvidence {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ApprovalAction {
+    ApplyIsolatedChange,
     CreateLocalTask,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ApprovalTarget {
+    SelectedRepositoryFile,
     LocalTaskList,
 }
 
@@ -163,6 +165,7 @@ pub enum ApprovalReversibility {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ApprovalRisk {
+    AddsSelectedFile,
     CreatesLocalTask,
 }
 
@@ -173,6 +176,7 @@ pub enum ApprovalRisk {
 /// evidence only; it carries no execution authority.
 #[derive(Clone, Eq, PartialEq)]
 pub enum ApprovalOrigin {
+    IsolatedChange,
     LegacyGateway,
     Agent(AgentAttribution),
 }
@@ -181,7 +185,7 @@ impl ApprovalOrigin {
     #[must_use]
     pub fn agent_attribution(&self) -> Option<&AgentAttribution> {
         match self {
-            Self::LegacyGateway => None,
+            Self::LegacyGateway | Self::IsolatedChange => None,
             Self::Agent(attribution) => Some(attribution),
         }
     }
@@ -191,6 +195,7 @@ impl fmt::Debug for ApprovalOrigin {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::LegacyGateway => formatter.write_str("LegacyGateway"),
+            Self::IsolatedChange => formatter.write_str("IsolatedChange"),
             Self::Agent(_) => formatter.debug_tuple("Agent").field(&"[REDACTED]").finish(),
         }
     }
@@ -203,6 +208,11 @@ impl fmt::Debug for ApprovalOrigin {
 /// profile as approval-eligible.
 #[derive(Eq, PartialEq)]
 pub(crate) enum ApprovalDecision {
+    IsolatedChange {
+        run_id: String,
+        review_hash: String,
+        summary: String,
+    },
     LegacyGateway(PolicyDecision),
     Agent {
         decision: AgentPolicyDecision,
@@ -227,6 +237,7 @@ impl ApprovalDecision {
 
     pub(crate) fn outcome(&self) -> PolicyOutcome {
         match self {
+            Self::IsolatedChange { .. } => PolicyOutcome::RequireApproval,
             Self::LegacyGateway(decision) => decision.outcome(),
             Self::Agent { decision, .. } => decision.outcome(),
         }
@@ -234,6 +245,7 @@ impl ApprovalDecision {
 
     pub(crate) fn policy_reason(&self) -> PolicyReason {
         match self {
+            Self::IsolatedChange { .. } => PolicyReason::ReversibleRequiresApproval,
             Self::LegacyGateway(decision) => decision.reason(),
             Self::Agent {
                 deterministic_reason,
@@ -244,6 +256,7 @@ impl ApprovalDecision {
 
     pub(crate) fn agent_policy_reason(&self) -> Option<AgentPolicyReason> {
         match self {
+            Self::IsolatedChange { .. } => None,
             Self::LegacyGateway(_) => None,
             Self::Agent { decision, .. } => Some(decision.reason()),
         }
@@ -251,6 +264,7 @@ impl ApprovalDecision {
 
     pub(crate) fn origin(&self) -> ApprovalOrigin {
         match self {
+            Self::IsolatedChange { .. } => ApprovalOrigin::IsolatedChange,
             Self::LegacyGateway(_) => ApprovalOrigin::LegacyGateway,
             Self::Agent { decision, .. } => {
                 ApprovalOrigin::Agent(decision.request().attribution().clone())
@@ -260,6 +274,7 @@ impl ApprovalDecision {
 
     pub(crate) fn run_id(&self) -> &str {
         match self {
+            Self::IsolatedChange { run_id, .. } => run_id,
             Self::LegacyGateway(decision) => decision.validated_call().run_id(),
             Self::Agent { decision, .. } => decision
                 .request()
@@ -272,6 +287,7 @@ impl ApprovalDecision {
 
     pub(crate) fn gateway_request_id(&self) -> &str {
         match self {
+            Self::IsolatedChange { review_hash, .. } => review_hash,
             Self::LegacyGateway(decision) => decision.validated_call().gateway_request_id(),
             Self::Agent { decision, .. } => decision
                 .request()
@@ -284,6 +300,7 @@ impl ApprovalDecision {
 
     pub(crate) fn call_id(&self) -> &str {
         match self {
+            Self::IsolatedChange { review_hash, .. } => review_hash,
             Self::LegacyGateway(decision) => decision.validated_call().call_id(),
             Self::Agent { decision, .. } => decision.request().call_id(),
         }
@@ -291,6 +308,7 @@ impl ApprovalDecision {
 
     pub(crate) fn tool_name(&self) -> &str {
         match self {
+            Self::IsolatedChange { .. } => "apply_isolated_change",
             Self::LegacyGateway(decision) => decision.validated_call().tool_name(),
             Self::Agent { decision, .. } => decision.request().schema().name(),
         }
@@ -298,6 +316,7 @@ impl ApprovalDecision {
 
     pub(crate) fn tool_contract_version(&self) -> u16 {
         match self {
+            Self::IsolatedChange { .. } => 1,
             Self::LegacyGateway(decision) => decision.validated_call().tool_contract_version(),
             Self::Agent { decision, .. } => decision.request().schema().version(),
         }
@@ -305,6 +324,7 @@ impl ApprovalDecision {
 
     pub(crate) fn risk_class(&self) -> RiskClass {
         match self {
+            Self::IsolatedChange { .. } => RiskClass::ReversibleLocalAction,
             Self::LegacyGateway(decision) => decision.validated_call().risk_class(),
             Self::Agent { decision, .. } => decision.request().risk_class(),
         }
@@ -312,6 +332,7 @@ impl ApprovalDecision {
 
     pub(crate) fn required_permission(&self) -> PermissionKind {
         match self {
+            Self::IsolatedChange { .. } => PermissionKind::Files,
             Self::LegacyGateway(decision) => decision.validated_call().required_permission(),
             Self::Agent { decision, .. } => decision.request().required_permission(),
         }
@@ -320,6 +341,7 @@ impl ApprovalDecision {
 
 #[derive(Eq, PartialEq)]
 pub enum ApprovalAffectedData<'a> {
+    IsolatedChangeSummary(&'a str),
     LocalTaskTitle(&'a str),
 }
 
@@ -327,7 +349,7 @@ impl ApprovalAffectedData<'_> {
     #[must_use]
     pub fn value(&self) -> &str {
         match self {
-            Self::LocalTaskTitle(title) => title,
+            Self::LocalTaskTitle(title) | Self::IsolatedChangeSummary(title) => title,
         }
     }
 }
@@ -335,6 +357,9 @@ impl ApprovalAffectedData<'_> {
 impl fmt::Debug for ApprovalAffectedData<'_> {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            Self::IsolatedChangeSummary(_) => {
+                formatter.write_str("IsolatedChangeSummary([REDACTED])")
+            }
             Self::LocalTaskTitle(_) => formatter
                 .debug_tuple("LocalTaskTitle")
                 .field(&"[REDACTED]")
@@ -345,6 +370,7 @@ impl fmt::Debug for ApprovalAffectedData<'_> {
 
 #[derive(Eq, PartialEq)]
 pub enum ApprovalPreview<'a> {
+    ApplyIsolatedChange { summary: &'a str },
     CreateLocalTask { title: &'a str },
 }
 
@@ -364,6 +390,9 @@ impl<'a> ApprovalPreview<'a> {
 
     pub(crate) fn from_approval_decision(decision: &'a ApprovalDecision) -> Option<Self> {
         match decision {
+            ApprovalDecision::IsolatedChange { summary, .. } => {
+                Some(Self::ApplyIsolatedChange { summary })
+            }
             ApprovalDecision::LegacyGateway(decision) => Self::from_policy_decision(decision),
             ApprovalDecision::Agent { decision, .. } => {
                 if decision.outcome() != PolicyOutcome::RequireApproval {
@@ -383,18 +412,27 @@ impl<'a> ApprovalPreview<'a> {
 
     #[must_use]
     pub fn action(&self) -> ApprovalAction {
-        ApprovalAction::CreateLocalTask
+        match self {
+            Self::ApplyIsolatedChange { .. } => ApprovalAction::ApplyIsolatedChange,
+            Self::CreateLocalTask { .. } => ApprovalAction::CreateLocalTask,
+        }
     }
 
     #[must_use]
     pub fn target(&self) -> ApprovalTarget {
-        ApprovalTarget::LocalTaskList
+        match self {
+            Self::ApplyIsolatedChange { .. } => ApprovalTarget::SelectedRepositoryFile,
+            Self::CreateLocalTask { .. } => ApprovalTarget::LocalTaskList,
+        }
     }
 
     #[must_use]
     pub fn affected_data(&self) -> ApprovalAffectedData<'a> {
         match self {
             Self::CreateLocalTask { title } => ApprovalAffectedData::LocalTaskTitle(title),
+            Self::ApplyIsolatedChange { summary } => {
+                ApprovalAffectedData::IsolatedChangeSummary(summary)
+            }
         }
     }
 
@@ -415,7 +453,10 @@ impl<'a> ApprovalPreview<'a> {
 
     #[must_use]
     pub fn required_permission(&self) -> PermissionKind {
-        PermissionKind::None
+        match self {
+            Self::ApplyIsolatedChange { .. } => PermissionKind::Files,
+            Self::CreateLocalTask { .. } => PermissionKind::None,
+        }
     }
 
     #[must_use]
@@ -425,13 +466,19 @@ impl<'a> ApprovalPreview<'a> {
 
     #[must_use]
     pub fn risk(&self) -> ApprovalRisk {
-        ApprovalRisk::CreatesLocalTask
+        match self {
+            Self::ApplyIsolatedChange { .. } => ApprovalRisk::AddsSelectedFile,
+            Self::CreateLocalTask { .. } => ApprovalRisk::CreatesLocalTask,
+        }
     }
 }
 
 impl fmt::Debug for ApprovalPreview<'_> {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            Self::ApplyIsolatedChange { .. } => {
+                formatter.write_str("ApplyIsolatedChange([REDACTED])")
+            }
             Self::CreateLocalTask { .. } => formatter
                 .debug_struct("CreateLocalTask")
                 .field("title", &"[REDACTED]")
@@ -584,7 +631,8 @@ impl ApprovalResolution {
             ApprovalDecision::LegacyGateway(decision) => {
                 return Self::new(id, disposition, decision, interaction_evidence);
             }
-            agent @ ApprovalDecision::Agent { .. } => agent,
+            agent @ ApprovalDecision::Agent { .. }
+            | agent @ ApprovalDecision::IsolatedChange { .. } => agent,
         };
         let origin = decision.origin();
         Self {

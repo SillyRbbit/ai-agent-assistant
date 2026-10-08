@@ -21,6 +21,7 @@ dependencies = [
 name = "ai-agent-assistant"
 version = "0.1.0"
 dependencies = [
+ "raw-window-handle",
  "reqwest",
  "rfd",
  "rusqlite",

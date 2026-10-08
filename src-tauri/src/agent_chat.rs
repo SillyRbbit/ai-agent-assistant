@@ -17,6 +17,8 @@ const MAX_TURNS: usize = 4;
 #[derive(Clone, Copy, Debug, Eq, PartialEq, thiserror::Error)]
 pub(crate) enum ChatError {
     #[error(transparent)]
+    Action(#[from] crate::isolated_action::ActionError),
+    #[error(transparent)]
     Preferences(#[from] PreferencesError),
     #[error(transparent)]
     Provider(#[from] DirectError),
@@ -35,6 +37,7 @@ pub(crate) enum ChatError {
 impl Serialize for ChatError {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         match self {
+            Self::Action(error) => error.serialize(serializer),
             Self::Preferences(error) => error.serialize(serializer),
             Self::Provider(error) => error.serialize(serializer),
             Self::InvalidRequest => serializer.serialize_str("invalid_request"),
@@ -58,6 +61,7 @@ pub(crate) struct BoundConversation {
     pub(crate) profile: AgentProfile,
     history: Vec<Message>,
     collaboration: bool,
+    action: bool,
 }
 
 impl BoundConversation {
@@ -68,7 +72,20 @@ impl BoundConversation {
             profile,
             history: Vec::new(),
             collaboration: false,
+            action: false,
         })
+    }
+
+    pub(crate) fn action(profile: AgentProfile) -> Result<Self, ChatError> {
+        if !matches!(
+            profile.connection,
+            AgentConnection::OpenaiApi | AgentConnection::Codex
+        ) {
+            return Err(ChatError::InvalidRequest);
+        }
+        let mut bound = Self::collaboration(profile)?;
+        bound.action = true;
+        Ok(bound)
     }
 
     pub(crate) fn collaboration(profile: AgentProfile) -> Result<Self, ChatError> {
@@ -222,7 +239,9 @@ impl BoundConversation {
         format!(
             "You are Cortexa's {}. {}",
             self.profile.display_name,
-            if self.collaboration {
+            if self.action {
+                crate::isolated_action::RULES
+            } else if self.collaboration {
                 crate::collaboration::RULES
             } else {
                 COMMUNICATION_RULES
@@ -648,6 +667,64 @@ mod tests {
         }
         assert!(COMMUNICATION_RULES.contains("current task before saved custom owner preferences"));
         assert!(COMMUNICATION_RULES.contains("Do not use tools, delegate"));
+        Ok(())
+    }
+
+    #[test]
+    fn action_codex_context_is_closed_private_and_bounded() -> Result<(), Box<dyn std::error::Error>>
+    {
+        use crate::agent::definition::AgentId;
+        for connection in [AgentConnection::OpenaiApi, AgentConnection::Codex] {
+            let mut profile = AgentProfile::defaults(AgentId::Coding)?;
+            profile.connection = connection;
+            profile.model = "gpt-5.6-luna".into();
+            profile.note = "PRIVATE_ACTION_NOTE".into();
+            profile.memory_mode = MemoryMode::PrivateNotes;
+            let bound = BoundConversation::action(profile)?;
+            assert!(bound.history.is_empty());
+            assert_eq!(bound.profile.memory_mode, MemoryMode::Off);
+            assert!(bound.profile.note.is_empty());
+            assert!(bound
+                .communication_instructions()
+                .contains(crate::isolated_action::RULES));
+            if connection == AgentConnection::Codex {
+                let input = bound.codex_input("synthetic action")?;
+                assert!(!input.contains("PRIVATE_ACTION_NOTE"));
+                assert_eq!(
+                    serde_json::from_str::<serde_json::Value>(&input)?["history"],
+                    json!([])
+                );
+                assert!(matches!(
+                    bound.codex_input(&"x".repeat(60_001)),
+                    Err(ChatError::Limit)
+                ));
+                assert!(matches!(
+                    bound.request_body("synthetic"),
+                    Err(ChatError::InvalidRequest)
+                ));
+            } else {
+                let body: serde_json::Value =
+                    serde_json::from_slice(&bound.request_body("synthetic")?)?;
+                assert_eq!(body["tools"], json!([]));
+                assert_eq!(body["tool_choice"], "none");
+                assert_eq!(body["max_output_tokens"], 2048);
+                assert_eq!(body["store"], false);
+                assert!(!body.to_string().contains("PRIVATE_ACTION_NOTE"));
+            }
+        }
+        for connection in [
+            AgentConnection::Simulation,
+            AgentConnection::AnthropicApi,
+            AgentConnection::LmStudio,
+            AgentConnection::Ollama,
+        ] {
+            let mut profile = AgentProfile::defaults(AgentId::Coding)?;
+            profile.connection = connection;
+            assert!(matches!(
+                BoundConversation::action(profile),
+                Err(ChatError::InvalidRequest)
+            ));
+        }
         Ok(())
     }
 }

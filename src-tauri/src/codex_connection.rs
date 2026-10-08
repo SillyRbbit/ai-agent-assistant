@@ -532,6 +532,24 @@ pub(crate) async fn run_collaboration(
     )
     .await
 }
+/// Only native action preparation can select this closed, tool-free text route.
+pub(crate) async fn run_action(
+    setup: Setup,
+    model: String,
+    effort: ReasoningEffort,
+    input: String,
+    emit: impl FnMut(ProviderEvent) -> Result<(), DirectError>,
+) -> Result<(), DirectError> {
+    run_with_rules(
+        setup,
+        model,
+        effort,
+        input,
+        crate::isolated_action::RULES,
+        emit,
+    )
+    .await
+}
 async fn run_with_rules(
     setup: Setup,
     model: String,
@@ -844,6 +862,8 @@ mod tests {
         let script = r#"
 import sys,json,time,os
 mode=MODE
+action=mode.startswith("action-")
+if action: mode=mode[7:]
 assert set(os.environ).issubset({'HOME','CODEX_HOME','PATH','LC_CTYPE','__CF_USER_TEXT_ENCODING'})
 def out(v): print(json.dumps(v),flush=True)
 for line in sys.stdin:
@@ -861,6 +881,7 @@ for line in sys.stdin:
   if mode=='page-limit': result['nextCursor']='cursor-'+str(page+1);result['data']=[]
  elif m=='thread/start':
   p=v['params'];assert all(p[k]==[] for k in ['environments','runtimeWorkspaceRoots','selectedCapabilityRoots','dynamicTools']);assert p['approvalPolicy']=='never'
+  if action: assert p['baseInstructions']==ACTION_RULES
   result={'model':'fixture-model','modelProvider':'openai','approvalPolicy':'never','sandbox':{'type':'readOnly','networkAccess':False},'runtimeWorkspaceRoots':[],'instructionSources':[],'thread':{'id':'thread-fixture'}}
  elif m=='turn/start':
   assert v['params']['effort']=='high';assert v['params']['environments']==[]
@@ -869,6 +890,11 @@ for line in sys.stdin:
  out({'id':i,'result':result})
  if m=='turn/start':
   if mode=='pending': time.sleep(30)
+  elif mode=='eof': sys.exit(0)
+  elif mode=='malformed': print('invalid-json',flush=True)
+  elif mode=='approval': out({'id':99,'method':'item/commandExecution/requestApproval','params':{'private':'secret-sentinel'}})
+  elif mode=='incomplete': out({'method':'turn/completed','params':{'threadId':'thread-fixture','turn':{'id':'turn-fixture','status':'completed'}}})
+  elif mode=='limit': out({'method':'item/agentMessage/delta','params':{'threadId':'thread-fixture','turnId':'turn-fixture','delta':'x'*8193}})
   elif mode=='tool': out({'method':'item/started','params':{'item':{'type':'commandExecution','raw':'secret-sentinel'}}})
   elif mode=='error': out({'method':'error','params':{'threadId':'thread-fixture','error':{'message':'secret-sentinel'}}})
   else:
@@ -879,7 +905,12 @@ for line in sys.stdin:
             &executable,
             format!(
                 "#!{python}\n{}",
-                script.replace("MODE", &serde_json::to_string(mode)?)
+                script
+                    .replace("MODE", &serde_json::to_string(mode)?)
+                    .replace(
+                        "ACTION_RULES",
+                        &serde_json::to_string(crate::isolated_action::RULES)?
+                    )
             ),
         )?;
         std::fs::set_permissions(&executable, std::fs::Permissions::from_mode(0o700))?;
@@ -1023,6 +1054,163 @@ for line in sys.stdin:
         // The session remains alive here; cleanup does not depend on polling it.
         assert!(session.directory.exists());
         drop(session);
+        Ok(())
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn action_codex_adapter_uses_fixed_rules_preserves_errors_and_cleanup(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        use crate::agent_adapter::{run_adapter_traced, AdapterRequest};
+        use crate::diagnostics::{Attempt, Event, Logger, Outcome};
+        let runtime = tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()?;
+        for (mode, expected) in [
+            ("action-success", None),
+            ("action-tool", Some(DirectError::CodexIsolation)),
+            ("action-error", Some(DirectError::CodexRuntime)),
+            ("action-eof", Some(DirectError::ProviderUnavailable)),
+            ("action-limit", Some(DirectError::Limit)),
+            ("action-malformed", Some(DirectError::Protocol)),
+            ("action-approval", Some(DirectError::CodexIsolation)),
+            ("action-incomplete", Some(DirectError::Incomplete)),
+        ] {
+            let (directory, setup) = fixture(mode)?;
+            let log = Logger::open(directory.path().join("diagnostics"));
+            let mut attempt = Attempt::with_logger(
+                Some(log.clone()),
+                crate::agent_preferences::AgentConnection::Codex,
+                "fixture-model",
+                None,
+                Some("room-fixture"),
+                Some("stage-fixture"),
+            );
+            let mut text = String::new();
+            let mut complete = false;
+            let result = runtime.block_on(async {
+                tokio::time::timeout(
+                    Duration::from_secs(5),
+                    run_adapter_traced(
+                        AdapterRequest::ActionCodex {
+                            setup,
+                            model: "fixture-model".into(),
+                            effort: ReasoningEffort::High,
+                            input: "PRIVATE_ACTION_PROMPT".into(),
+                        },
+                        attempt.observer(),
+                        |event| {
+                            match event {
+                                ProviderEvent::Delta(v) => text.push_str(&v),
+                                ProviderEvent::Completed => complete = true,
+                                ProviderEvent::Started(_) => {}
+                            }
+                            Ok(())
+                        },
+                    ),
+                )
+                .await
+            })?;
+            assert_eq!(result, expected.map_or(Ok(()), Err));
+            assert_eq!(complete, expected.is_none());
+            attempt.finish(result);
+            let snapshot = log.snapshot();
+            assert!(snapshot
+                .events
+                .iter()
+                .any(|r| r.event == Event::RuntimeExited && r.outcome == Outcome::Completed));
+            assert!(snapshot
+                .events
+                .iter()
+                .any(|r| r.event == Event::RuntimeCleanup && r.outcome == Outcome::Completed));
+            let encoded = serde_json::to_string(&snapshot)?;
+            assert!(!encoded.contains("PRIVATE_ACTION_PROMPT"));
+            assert!(!encoded.contains("secret-sentinel"));
+            assert!(!text.contains("secret-sentinel"));
+            assert!(log.flush(true));
+        }
+        Ok(())
+    }
+    #[cfg(unix)]
+    #[test]
+    fn action_codex_cancellation_reaps_before_a_subsequent_request(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        use crate::agent_adapter::{run_adapter_traced, AdapterRequest};
+        use crate::diagnostics::{Attempt, Event, Logger, Outcome};
+        let (directory, setup) = fixture("action-pending")?;
+        let log = Logger::open(directory.path().join("diagnostics"));
+        let attempt = Attempt::with_logger(
+            Some(log.clone()),
+            crate::agent_preferences::AgentConnection::Codex,
+            "fixture-model",
+            None,
+            Some("room-fixture"),
+            Some("stage-fixture"),
+        );
+        let runtime = tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()?;
+        runtime.block_on(async {
+            use std::future::Future;
+            use std::task::Poll;
+            let started = std::cell::Cell::new(false);
+            let mut work = Box::pin(run_adapter_traced(
+                AdapterRequest::ActionCodex {
+                    setup,
+                    model: "fixture-model".into(),
+                    effort: ReasoningEffort::High,
+                    input: "synthetic".into(),
+                },
+                attempt.observer(),
+                |event| {
+                    if matches!(event, ProviderEvent::Started(_)) {
+                        started.set(true);
+                    }
+                    Ok(())
+                },
+            ));
+            tokio::time::timeout(
+                Duration::from_secs(5),
+                std::future::poll_fn(|cx| match work.as_mut().poll(cx) {
+                    Poll::Ready(result) => Poll::Ready(result.and(Err(DirectError::Internal))),
+                    Poll::Pending if started.get() => Poll::Ready(Ok(())),
+                    Poll::Pending => Poll::Pending,
+                }),
+            )
+            .await??;
+            // Dropping the pending request must synchronously reap the owned runtime.
+            drop(work);
+            Ok::<(), Box<dyn std::error::Error>>(())
+        })?;
+        let snapshot = log.snapshot();
+        for event in [Event::RuntimeExited, Event::RuntimeCleanup] {
+            assert!(snapshot
+                .events
+                .iter()
+                .any(|r| r.event == event && r.outcome == Outcome::Completed));
+        }
+        let (_next, setup) = fixture("action-success")?;
+        let mut complete = false;
+        runtime.block_on(async {
+            tokio::time::timeout(
+                Duration::from_secs(5),
+                run_action(
+                    setup,
+                    "fixture-model".into(),
+                    ReasoningEffort::High,
+                    "synthetic".into(),
+                    |event| {
+                        if matches!(event, ProviderEvent::Completed) {
+                            complete = true;
+                        }
+                        Ok(())
+                    },
+                ),
+            )
+            .await
+        })??;
+        assert!(complete);
+        assert!(log.flush(true));
         Ok(())
     }
 }

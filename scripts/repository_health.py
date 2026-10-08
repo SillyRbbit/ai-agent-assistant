@@ -128,7 +128,11 @@ EXPECTED_TAURI_INVOKES = {
     'src/infrastructure/tauri/collaboration-client.ts': (
         'invoke<unknown>("list_collaboration_rooms")',
         'invoke<unknown>("create_collaboration_room", { request: { title } })',
-        'invoke<unknown>("prepare_collaboration", { request: { roomId, input } })',
+        'invoke<unknown>("select_action_repository")',
+        'invoke<unknown>("review_action_change", { request: { roomId, runId, reviewHash } })',
+        'invoke<unknown>("prepare_collaboration", {\n'
+        '        request: { roomId, input, ...(action ? { action } : {}) },\n'
+        '      })',
         'invoke<unknown>("start_collaboration", { request })',
         'invoke<unknown>("cancel_collaboration", { request: { roomId } })',
         'invoke<unknown>("delete_collaboration_room", { request: { roomId } })',
@@ -290,6 +294,8 @@ EXPECTED_INVOKE_HANDLER = (
     "collaboration_tauri::list_collaboration_rooms,"
     "collaboration_tauri::create_collaboration_room,"
     "collaboration_tauri::prepare_collaboration,"
+    "collaboration_tauri::select_action_repository,"
+    "collaboration_tauri::review_action_change,"
     "collaboration_tauri::start_collaboration,"
     "collaboration_tauri::cancel_collaboration,"
     "collaboration_tauri::delete_collaboration_room,"

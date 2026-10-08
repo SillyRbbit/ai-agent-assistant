@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1560 1456" role="img" aria-labelledby="title desc">
+<title id="title">05 · Lifecycle and failure handling</title><desc id="desc">Exact state vocabularies differ between host, bot UI and persisted rooms. Awaiting approval belongs to synthetic/foundation workflows, not this live machine. Journal cap128 and text/token/time limits remain. Local Stop cannot prove zero remote billing or server cancellation.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#4758A2"/></marker></defs>
+<rect width="1560" height="1456" fill="#FBFBFB"/>
+<g font-family="Arial, Helvetica, sans-serif">
+<rect x="0" y="0" width="1560" height="112" fill="#252B71"/>
+<text x="40" y="47" font-size="30" font-weight="700" fill="#ffffff" text-anchor="start">05 · Lifecycle and failure handling</text>
+<text x="40" y="81" font-size="19" font-weight="400" fill="#ffffff" text-anchor="start">Exact state vocabularies differ between host, bot UI and persisted rooms</text>
+<rect x="40" y="132" width="18" height="18" fill="#eef1fb" stroke="#4758A2"/>
+<text x="67" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Native</text>
+<rect x="131" y="132" width="18" height="18" fill="#e7f3f5" stroke="#326672"/>
+<text x="158" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Interface</text>
+<rect x="246" y="132" width="18" height="18" fill="#fff4db" stroke="#94642c"/>
+<text x="273" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Owner</text>
+<rect x="329" y="132" width="18" height="18" fill="#f8eaf3" stroke="#934873"/>
+<text x="356" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Remote</text>
+<rect x="420" y="132" width="18" height="18" fill="#e9f4eb" stroke="#42784e"/>
+<text x="447" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Stored</text>
+<rect x="511" y="132" width="18" height="18" fill="#f1eff7" stroke="#79628d" stroke-dasharray="6 4"/>
+<text x="538" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Separate foundation</text>
+<rect x="706" y="132" width="18" height="18" fill="#ffffff" stroke="#79628d" stroke-dasharray="6 4"/>
+<text x="733" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Deferred / unverified</text>
+<text x="40" y="190" font-size="20" font-weight="700" fill="#182033" text-anchor="start">HOST · successful generation</text>
+<g data-component="HOST"><rect x="40.0" y="214" width="295.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="56.0" y="239" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">HOST</text>
+<text x="56.0" y="268" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Starting</text>
+<text x="56.0" y="301" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Request admitted under lease.</text>
+</g>
+<line x1="341.0" y1="318" x2="426.0" y2="318" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="385.0" y="275" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">Started +</text>
+<text x="385.0" y="292" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">Delta</text>
+<g data-component="HOST"><rect x="435.0" y="214" width="295.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="451.0" y="239" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">HOST</text>
+<text x="451.0" y="268" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Streaming</text>
+<text x="451.0" y="301" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Accepted bounded Delta events</text>
+<text x="451.0" y="322" font-size="16" font-weight="400" fill="#182033" text-anchor="start">accumulate partial text.</text>
+</g>
+<line x1="736.0" y1="318" x2="821.0" y2="318" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="780.0" y="275" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">valid</text>
+<text x="780.0" y="292" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">terminal</text>
+<g data-component="HOST"><rect x="830.0" y="214" width="295.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="846.0" y="239" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">HOST</text>
+<text x="846.0" y="268" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Completed</text>
+<text x="846.0" y="301" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Explicit terminal AND</text>
+<text x="846.0" y="322" font-size="16" font-weight="400" fill="#182033" text-anchor="start">successful transport</text>
+<text x="846.0" y="343" font-size="16" font-weight="400" fill="#182033" text-anchor="start">settlement.</text>
+</g>
+<line x1="1131.0" y1="318" x2="1216.0" y2="318" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1175.0" y="275" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">settled</text>
+<text x="1175.0" y="292" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">snapshot</text>
+<g data-component="CHAT"><rect x="1225.0" y="214" width="295.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="1241.0" y="239" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">CHAT</text>
+<text x="1241.0" y="268" font-size="19" font-weight="700" fill="#182033" text-anchor="start">UI completed</text>
+<text x="1241.0" y="301" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Completed context may support</text>
+<text x="1241.0" y="322" font-size="16" font-weight="400" fill="#182033" text-anchor="start">follow-up.</text>
+</g>
+<text x="43" y="441" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">Evidence: HOST, CHAT</text>
+<text x="40" y="472" font-size="20" font-weight="700" fill="#182033" text-anchor="start">HOST · active cancellation</text>
+<g data-component="UI"><rect x="40.0" y="496" width="295.0" height="204" rx="12" fill="#e7f3f5" stroke="#326672" stroke-width="2"/>
+<text x="56.0" y="521" font-size="14" font-weight="700" fill="#326672" text-anchor="start">UI</text>
+<text x="56.0" y="550" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Stop action</text>
+<text x="56.0" y="583" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Cancel owned active generation.</text>
+</g>
+<line x1="341.0" y1="600" x2="426.0" y2="600" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="385.0" y="557" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">owned cancel</text>
+<g data-component="HOST"><rect x="435.0" y="496" width="295.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="451.0" y="521" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">HOST</text>
+<text x="451.0" y="550" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Cancelling</text>
+<text x="451.0" y="583" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Close ingress; abort/join;</text>
+<text x="451.0" y="604" font-size="16" font-weight="400" fill="#182033" text-anchor="start">preserve accepted partial text.</text>
+</g>
+<line x1="736.0" y1="600" x2="821.0" y2="600" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="780.0" y="557" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">joined</text>
+<text x="780.0" y="574" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">termination</text>
+<g data-component="HOST"><rect x="830.0" y="496" width="295.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="846.0" y="521" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">HOST</text>
+<text x="846.0" y="550" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Cancelled</text>
+<text x="846.0" y="583" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Native cancellation settled;</text>
+<text x="846.0" y="604" font-size="16" font-weight="400" fill="#182033" text-anchor="start">release lease.</text>
+</g>
+<line x1="1131.0" y1="600" x2="1216.0" y2="600" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1175.0" y="557" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">mapped</text>
+<text x="1175.0" y="574" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">snapshot</text>
+<g data-component="CHAT"><rect x="1225.0" y="496" width="295.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="1241.0" y="521" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">CHAT</text>
+<text x="1241.0" y="550" font-size="19" font-weight="700" fill="#182033" text-anchor="start">UI stopped</text>
+<text x="1241.0" y="583" font-size="16" font-weight="400" fill="#182033" text-anchor="start">New conversation; late/repeated</text>
+<text x="1241.0" y="604" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Stop preserves terminal.</text>
+</g>
+<text x="43" y="723" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">Evidence: CHAT, HOST, UI</text>
+<text x="40" y="754" font-size="20" font-weight="700" fill="#182033" text-anchor="start">HOST · independent failure</text>
+<g data-component="ADAPTER"><rect x="40.0" y="778" width="426.6666666666667" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="56.0" y="803" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">ADAPTER</text>
+<text x="56.0" y="832" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Transport / protocol error</text>
+<text x="56.0" y="865" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Incomplete, timeout, limit, billing, auth or</text>
+<text x="56.0" y="886" font-size="16" font-weight="400" fill="#182033" text-anchor="start">malformed stream.</text>
+</g>
+<line x1="472.6666666666667" y1="882" x2="557.6666666666667" y2="882" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="516.6666666666667" y="839" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">fixed</text>
+<text x="516.6666666666667" y="856" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">category</text>
+<g data-component="HOST"><rect x="566.6666666666667" y="778" width="426.6666666666667" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="582.6666666666667" y="803" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">HOST</text>
+<text x="582.6666666666667" y="832" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Failed</text>
+<text x="582.6666666666667" y="865" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Preserve partial text plus fixed reason; not</text>
+<text x="582.6666666666667" y="886" font-size="16" font-weight="400" fill="#182033" text-anchor="start">completion.</text>
+</g>
+<line x1="999.3333333333335" y1="882" x2="1084.3333333333335" y2="882" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1043.3333333333335" y="839" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">sanitized</text>
+<text x="1043.3333333333335" y="856" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">status</text>
+<g data-component="CHAT"><rect x="1093.3333333333335" y="778" width="426.6666666666667" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="1109.3333333333335" y="803" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">CHAT</text>
+<text x="1109.3333333333335" y="832" font-size="19" font-weight="700" fill="#182033" text-anchor="start">UI error</text>
+<text x="1109.3333333333335" y="865" font-size="16" font-weight="400" fill="#182033" text-anchor="start">No automatic retry/fallback. New conversation</text>
+<text x="1109.3333333333335" y="886" font-size="16" font-weight="400" fill="#182033" text-anchor="start">for recovery.</text>
+</g>
+<text x="43" y="1005" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">Evidence: ADAPTER, API, HOST, CHAT</text>
+<text x="40" y="1036" font-size="20" font-weight="700" fill="#182033" text-anchor="start">ROOM_DB · durable collaboration states</text>
+<g data-component="COORD"><rect x="40.0" y="1060" width="426.6666666666667" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="56.0" y="1085" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">COORD</text>
+<text x="56.0" y="1114" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Queued → Running</text>
+<text x="56.0" y="1147" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Sequential stage progression.</text>
+</g>
+<line x1="472.6666666666667" y1="1164" x2="557.6666666666667" y2="1164" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="516.6666666666667" y="1121" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">validated</text>
+<text x="516.6666666666667" y="1138" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">results</text>
+<g data-component="ROOM_DB"><rect x="566.6666666666667" y="1060" width="426.6666666666667" height="204" rx="12" fill="#e9f4eb" stroke="#42784e" stroke-width="2"/>
+<text x="582.6666666666667" y="1085" font-size="14" font-weight="700" fill="#42784e" text-anchor="start">ROOM_DB</text>
+<text x="582.6666666666667" y="1114" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Terminal variants</text>
+<text x="582.6666666666667" y="1147" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Completed / Failed / Cancelled / Partial.</text>
+</g>
+<line x1="999.3333333333335" y1="1164" x2="1084.3333333333335" y2="1164" stroke="#4758A2" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="1043.3333333333335" y="1121" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">separate</text>
+<text x="1043.3333333333335" y="1138" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">restart path</text>
+<g data-component="ROOM_DB"><rect x="1093.3333333333335" y="1060" width="426.6666666666667" height="204" rx="12" fill="#e9f4eb" stroke="#42784e" stroke-width="2"/>
+<text x="1109.3333333333335" y="1085" font-size="14" font-weight="700" fill="#42784e" text-anchor="start">ROOM_DB</text>
+<text x="1109.3333333333335" y="1114" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Interrupted on restart</text>
+<text x="1109.3333333333335" y="1147" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Only unfinished stored runs become Interrupted;</text>
+<text x="1109.3333333333335" y="1168" font-size="16" font-weight="400" fill="#182033" text-anchor="start">terminal runs unchanged.</text>
+</g>
+<text x="43" y="1287" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">Evidence: ROUTES, COORD, ROOM_DB</text>
+<text x="40" y="1352" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Awaiting approval belongs to synthetic/foundation workflows, not this live machine. Journal cap128 and text/token/time limits remain. Local Stop cannot prove zero</text>
+<text x="40" y="1374" font-size="16" font-weight="400" fill="#182033" text-anchor="start">remote billing or server cancellation.</text>
+<text x="40" y="1434" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">CORTEXA  /  Source bc12776412c7  /  2026-10-07  /  Solid arrows: stated flow; dashed lines: comparison or unwired boundary</text>
+</g>
+</svg>
