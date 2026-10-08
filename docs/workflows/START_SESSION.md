@@ -56,7 +56,7 @@ available. Otherwise use `prompts/workflows/start-session.md` with
    - Files likely to change.
    - Verification commands.
 
-8. Stop and troubleshoot before implementation if the baseline does not compile or the handoff conflicts with the repository.
+8. Diagnose baseline failures and handoff mismatches, preserve evidence and assess impact. Continue independent authorized work; stop for unresolved attribution, access or required-check failure.
 
 ## Expected assistant opening
 
@@ -72,3 +72,13 @@ Risks or blockers: ...
 ## Exit condition
 
 The session is ready for implementation only after the baseline, scope, and verification path are known.
+
+## D-134 milestone operation
+
+Follow AGENTS.md and ENGINEERING_GUIDE.md: objective, exclusions and acceptance
+are the scope boundary. Path counts are informational; preserve protected paths,
+attribution and unrelated work. Continue authorized routine work through review,
+documentation and truthful finalization. Reuse valid unchanged-input verification
+with provenance; distinguish implemented, automatically verified, live verified,
+deferred and blocked criteria. Historical FAIL evidence and D-133's separate
+acceptance route remain immutable. Request approval only at AGENTS.md boundaries.

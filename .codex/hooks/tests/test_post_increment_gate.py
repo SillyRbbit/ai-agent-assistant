@@ -1454,5 +1454,717 @@ class PostIncrementGateTests(unittest.TestCase):
         )
 
 
+class ClosureWithoutCompletionTests(unittest.TestCase):
+    setUp = PostIncrementGateTests.setUp
+    tearDown = PostIncrementGateTests.tearDown
+    _git = PostIncrementGateTests._git
+    _stop_payload = PostIncrementGateTests._stop_payload
+    _write_report = PostIncrementGateTests._write_report
+
+    def _closure_review(self, increment="closure-maintenance", *, passing=True):
+        closure = gate._closure()
+        report = f"docs/reviews/2026-10-01-{increment}-post-increment-review.md"
+        path = self.root / report
+        path.write_text("pending\n")
+        m = {
+            "schema_version": 1, "increment_id": increment,
+            "quality_gate": "PASS" if passing else "FAIL", "next_increment_readiness": "Ready",
+            "commands_executed": sorted(closure.REQUIRED_COMMANDS),
+            "files_changed": list(gate.changed_paths(self.root)), "findings": [],
+            "verification": [{"command": c, "required": True,
+                              "status": "Passed" if passing else "Failed"}
+                             for c in sorted(closure.REQUIRED_COMMANDS)],
+            "manual_verification": [{"check": c, "required": True, "status": "Passed"}
+                                    for c in sorted(closure.REQUIRED_REVIEWS)],
+        }
+        path.write_text(gate.MANIFEST_START + json.dumps(m) + gate.MANIFEST_END + "\n" +
+                        "\n".join(section + "\nFixture evidence.\n" for section in gate.REQUIRED_REPORT_SECTIONS))
+        return report
+
+    def _closure_fixture(self):
+        import shutil
+        closure = gate._closure()
+        (self.root / "DECISIONS.md").write_text("Owner approves fixture closure and separately ready fixture work.\n")
+        failed_report = self._write_report(verification_status="Failed", quality_gate="FAIL", readiness="Blocked")
+        gate.close_failed_gate(self.root, "04g", failed_report)
+        raw = gate.state_path(self.root).read_bytes()
+        before = closure.manifest(self.root)
+        backup = self.root / ".codex/state/backup"
+        for name, item in before.items():
+            if item["exists"]:
+                p = backup / "before" / name
+                p.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(self.root / name, p)
+        for name in (".git/index", str(gate.STATE_RELATIVE_PATH)):
+            p = backup / "before" / name
+            p.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(closure.git_index_path(self.root) if name == ".git/index" else self.root / name, p)
+        (backup / "workspace-before.json").write_bytes(closure.encoded(before))
+        (self.root / "maintenance.md").write_text("Maintenance implementation fixture.\n")
+        review = self._closure_review()
+        request = {
+            "schema_version": 1,
+            "owner_authorization": {"approved": True, "source": "Explicit fixture owner instruction",
+                                    "decision_path": "DECISIONS.md",
+                                    "decision_sha256": closure.digest((self.root / "DECISIONS.md").read_bytes())},
+            "failed_state_sha256": closure.digest(raw), "backup_directory": str(backup),
+            "manifest_sha256": closure.digest((backup / "workspace-before.json").read_bytes()),
+            "allowed_paths": ["maintenance.md", review],
+            "disposition": {"retained": ["existing work"], "deferred": ["unfinished acceptance"],
+                            "restored": [], "unresolved": closure.unresolved((self.root / failed_report).read_text())},
+            "verification": {"increment_id": "closure-maintenance", "report_path": review},
+        }
+        path = ".codex/state/closure-request.json"
+        (self.root / path).write_bytes(closure.encoded(request))
+        return closure, request, path, raw
+
+    def _closure_admission(self, closure, request, *, relationship="independent", increment="independent-task"):
+        readiness = self._closure_review(increment + "-readiness")
+        body = {
+            "schema_version": 1, "owner_authorization": request["owner_authorization"],
+            "increment_id": increment, "workspace_fingerprint": gate.workspace_fingerprint(self.root),
+            "allowed_paths": ["next.txt", f"docs/reviews/2026-10-01-{increment}-post-increment-review.md"],
+            "dependencies": {request["failed_state_sha256"] + "/" + issue:
+                             {"relationship": relationship, "rationale": "Fixture task requires no failed capability."}
+                             for issue in request["disposition"]["unresolved"]},
+            "readiness_report": readiness, "readiness_increment": increment + "-readiness",
+        }
+        path = ".codex/state/admission-request.json"
+        (self.root / path).write_bytes(closure.encoded(body))
+        return body, path
+
+    def _milestone_admission(self):
+        closure, request, path, raw = self._closure_fixture()
+        closure.close(self.root, path)
+        body, admission = self._closure_admission(closure, request)
+        body.pop("allowed_paths")
+        body["schema_version"] = 2
+        body["milestone"] = {
+            "objective": "Implement the fixture documentation milestone",
+            "exclusions": ["Product behavior and external actions"],
+            "acceptance": {"documentation": "Document the fixture with verified evidence"},
+            "protected_paths": ["src", "DECISIONS.md"],
+            "authorized_destructive_paths": [],
+        }
+        (self.root / admission).write_bytes(closure.encoded(body))
+        gate.begin_gate(self.root, "independent-task", admission=admission)
+        return closure, request, raw
+
+    def _milestone_review(self, *, status="automatically_verified", quality="PASS"):
+        closure = gate._closure()
+        report = self._closure_review("independent-task", passing=quality != "FAIL")
+        path = self.root / report
+        text = path.read_text()
+        m = gate._extract_manifest(text)
+        state = gate.read_state(self.root)
+        admission = closure.read_json(self.root / closure.DIRECTORY /
+                                     ("admission-" + state["closure_lineage"]["admission"] + ".json"))
+        delta = closure.changed(admission["baseline_manifest"], closure.manifest(self.root))
+        m["milestone"] = {
+            "criteria": {"documentation": {"status": status, "evidence": "Fixture checks observed passing."}},
+            "paths": {p: {"criterion": "documentation", "rationale": "Supports the fixture checklist.",
+                          "within_objective": True, "preserves_existing": True} for p in delta},
+        }
+        self._replace_milestone_report(path, text, m)
+        return report
+
+    def _replace_milestone_report(self, path, text, m):
+        start = text.index(gate.MANIFEST_START) + len(gate.MANIFEST_START)
+        end = text.index(gate.MANIFEST_END, start)
+        path.write_text(text[:start] + json.dumps(m) + text[end:])
+
+    def _assert_absent_path_checkpoint(self, version):
+        deleted = self.root / "tracked/deleted.txt"
+        deleted.unlink()  # Inherited physical deletion, before closure/admission.
+        if version == 2:
+            closure, request, raw = self._milestone_admission()
+            report = self._milestone_review()
+        else:
+            closure, request, path, raw = self._closure_fixture()
+            closure.close(self.root, path)
+            _, path = self._closure_admission(closure, request)
+            gate.begin_gate(self.root, "independent-task", admission=path)
+            report = self._closure_review("independent-task")
+        gate.finalize_gate(self.root, "independent-task", report)
+        state = gate.read_state(self.root)
+        admission = self.root / closure.DIRECTORY / (
+            "admission-" + state["closure_lineage"]["admission"] + ".json")
+        frozen = admission.read_bytes()
+        self.assertEqual(json.loads(frozen)["baseline_manifest"]["tracked/deleted.txt"],
+                         {"exists": False})
+        before = gate.workspace_fingerprint(self.root)
+        self.assertTrue(gate.validate_completed_state(self.root, state))
+        self._git("add", "--all")
+        self.assertNotIn("tracked/deleted.txt", closure.manifest(self.root))
+        self.assertEqual(gate.workspace_fingerprint(self.root), before)
+        self.assertTrue(gate.validate_completed_state(self.root, state))
+        self._git("commit", "--quiet", "-m", "Checkpoint inherited absence")
+        self.assertTrue(gate.validate_completed_state(self.root, state))
+        self.assertFalse(gate.evaluate_stop_payload(self._stop_payload()).should_continue)
+        self.assertEqual(admission.read_bytes(), frozen)
+        self.assertEqual(closure.historical(self.root, request["failed_state_sha256"])["raw_state"].encode(), raw)
+        # Canonical comparison must not relax the byte-bound evidence check.
+        admission.write_bytes(frozen + b"\n")
+        self.assertFalse(gate.validate_completed_state(self.root, state))
+        admission.write_bytes(frozen)
+        historical = self.root / json.loads(raw)["report_path"]
+        original = historical.read_bytes()
+        historical.write_bytes(original + b"\n")
+        self.assertFalse(gate.validate_completed_state(self.root, state))
+        historical.write_bytes(original)
+        # Reappearance is a real content change, not index bookkeeping.
+        deleted.write_text("Unapproved recreation.\n")
+        self.assertFalse(gate.validate_completed_state(self.root, state))
+        if version == 1:
+            with self.assertRaisesRegex(gate.GateError, "authorized scope"):
+                closure.validate_lineage(self.root, state)
+        else:
+            review = self._milestone_review()
+            text = (self.root / review).read_text()
+            m = gate._extract_manifest(text)
+            m["milestone"]["paths"]["tracked/deleted.txt"]["within_objective"] = False
+            self._replace_milestone_report(self.root / review, text, m)
+            with self.assertRaisesRegex(gate.GateError, "unrelated scope"):
+                gate.finalize_gate(self.root, "independent-task", review)
+
+    def test_absent_path_legacy_staging_commit_and_evidence_binding(self):
+        self._assert_absent_path_checkpoint(1)
+
+    def test_absent_path_milestone_staging_commit_and_evidence_binding(self):
+        self._assert_absent_path_checkpoint(2)
+
+    def test_absent_path_comparison_is_symmetric_and_keeps_real_changes(self):
+        closure = gate._closure()
+        absent = {"deleted": {"exists": False}}
+        frozen = json.dumps(absent)
+        self.assertEqual(closure.changed(absent, {}), set())
+        self.assertEqual(closure.changed({}, absent), set())
+        self.assertEqual(json.dumps(absent), frozen)
+        for value in ({"exists": True, "mode": 420, "sha256": "a" * 64},
+                      {"exists": False, "unexpected": True}, None):
+            with self.subTest(value=value):
+                self.assertEqual(closure.changed(absent, {"deleted": value}), {"deleted"})
+                self.assertEqual(closure.changed({"deleted": value}, absent), {"deleted"})
+
+    def test_absent_path_fix_rejects_new_deletion_before_and_after_staging(self):
+        closure, _, _ = self._milestone_admission()
+        state = gate.read_state(self.root)
+        (self.root / "README.md").unlink()
+        for stage in (False, True):
+            if stage:
+                self._git("add", "--", "README.md")
+            with self.subTest(staged=stage), self.assertRaisesRegex(gate.GateError, "destructive path"):
+                closure.validate_lineage(self.root, state)
+
+    def test_milestone_without_failure_history_preserves_contract_on_next_begin(self):
+        closure = gate._closure()
+        report = self._write_report()
+        gate.finalize_gate(self.root, "04g", report)
+        (self.root / "DECISIONS.md").write_text("Explicit owner approval for fixture milestone.\n")
+        ready = self._closure_review("independent-task-readiness")
+        request = {
+            "schema_version": 2,
+            "owner_authorization": {"approved": True, "source": "Fixture owner instruction",
+                                    "decision_path": "DECISIONS.md",
+                                    "decision_sha256": closure.digest((self.root / "DECISIONS.md").read_bytes())},
+            "increment_id": "independent-task", "workspace_fingerprint": gate.workspace_fingerprint(self.root),
+            "dependencies": {}, "readiness_report": ready, "readiness_increment": "independent-task-readiness",
+            "milestone": {"objective": "Fixture documentation", "exclusions": ["Product changes"],
+                          "acceptance": {"documentation": "Document verified behavior"},
+                          "protected_paths": ["src"], "authorized_destructive_paths": []},
+        }
+        path = ".codex/state/new-milestone.json"
+        (self.root / path).write_bytes(closure.encoded(request))
+        gate.begin_gate(self.root, "independent-task", admission=path)
+        final = self._milestone_review()
+        gate.finalize_gate(self.root, "independent-task", final)
+        self.assertTrue(gate.validate_completed_state(self.root, gate.read_state(self.root)))
+        with self.assertRaisesRegex(gate.GateError, "admission required"):
+            gate.begin_gate(self.root, "unapproved-successor")
+
+    def test_milestone_subtree_and_mode_changes_are_protected(self):
+        self._milestone_admission()
+        (self.root / "src").mkdir(exist_ok=True)
+        path = self.root / "src/unrelated.txt"; path.write_text("Unrelated implementation.\n")
+        report = self._milestone_review()
+        with self.assertRaisesRegex(gate.GateError, "protected path"):
+            gate.finalize_gate(self.root, "independent-task", report)
+        path.unlink()
+        (self.root / "maintenance.md").chmod(0o755)
+        report = self._milestone_review()
+        with self.assertRaisesRegex(gate.GateError, "destructive path"):
+            gate.finalize_gate(self.root, "independent-task", report)
+
+    def test_milestone_relevant_growth_exceeds_old_ceilings_and_completes(self):
+        closure, request, raw = self._milestone_admission()
+        for i in range(48):
+            (self.root / f"relevant-{i}.md").write_text("Relevant documentation fixture.\n")
+        report = self._milestone_review()
+        gate.finalize_gate(self.root, "independent-task", report)
+        self.assertTrue(gate.validate_completed_state(self.root, gate.read_state(self.root)))
+        self.assertEqual(closure.historical(self.root, request["failed_state_sha256"])["raw_state"].encode(), raw)
+        self.assertFalse(gate.evaluate_stop_payload(self._stop_payload()).should_continue)
+
+    def test_milestone_rejects_unrelated_scope_or_missing_attribution(self):
+        self._milestone_admission()
+        (self.root / "new.md").write_text("Fixture content.\n")
+        report = self._milestone_review()
+        p = self.root / report; original = p.read_text()
+        for field, value in (("within_objective", False), ("preserves_existing", False),
+                             ("criterion", "unapproved-objective"), ("rationale", "")):
+            with self.subTest(field=field):
+                m = gate._extract_manifest(original)
+                m["milestone"]["paths"]["new.md"][field] = value
+                self._replace_milestone_report(p, original, m)
+                with self.assertRaises(gate.GateError):
+                    gate.finalize_gate(self.root, "independent-task", report)
+        m = gate._extract_manifest(original); del m["milestone"]["paths"]["new.md"]
+        self._replace_milestone_report(p, original, m)
+        with self.assertRaises(gate.GateError):
+            gate.finalize_gate(self.root, "independent-task", report)
+
+    def test_milestone_protected_paths_and_unauthorized_deletion_are_blocked(self):
+        closure, request, raw = self._milestone_admission()
+        protected = self.root / "DECISIONS.md"; before = protected.read_bytes()
+        protected.write_bytes(before + b"Unauthorized scope expansion\n")
+        report = self._milestone_review()
+        with self.assertRaisesRegex(gate.GateError, "protected path"):
+            gate.finalize_gate(self.root, "independent-task", report)
+        protected.write_bytes(before)
+        (self.root / "maintenance.md").unlink()
+        report = self._milestone_review()
+        with self.assertRaisesRegex(gate.GateError, "destructive path"):
+            gate.finalize_gate(self.root, "independent-task", report)
+
+    def test_milestone_checklist_and_false_completion_are_blocked(self):
+        self._milestone_admission()
+        for status in ("implemented", "deferred", "blocked"):
+            with self.subTest(status=status):
+                report = self._milestone_review(status=status)
+                with self.assertRaises(gate.GateError):
+                    gate.finalize_gate(self.root, "independent-task", report)
+        report = self._milestone_review(); p = self.root / report; original = p.read_text()
+        m = gate._extract_manifest(original); m["milestone"]["criteria"] = {}
+        self._replace_milestone_report(p, original, m)
+        with self.assertRaises(gate.GateError):
+            gate.finalize_gate(self.root, "independent-task", report)
+        m = gate._extract_manifest(original); del m["milestone"]
+        self._replace_milestone_report(p, original, m)
+        with self.assertRaises(gate.GateError):
+            gate.finalize_gate(self.root, "independent-task", report)
+
+    def test_milestone_failure_is_truthful_and_retains_history(self):
+        closure, request, raw = self._milestone_admission()
+        report = self._milestone_review(status="blocked", quality="FAIL")
+        gate.close_failed_gate(self.root, "independent-task", report)
+        self.assertTrue(gate.validate_failed_state(self.root, gate.read_state(self.root)))
+        self.assertNotIn("completion_marker", gate.read_state(self.root))
+        self.assertEqual(closure.historical(self.root, request["failed_state_sha256"])["raw_state"].encode(), raw)
+
+    def test_milestone_checklist_only_failure_is_retained_for_successor_assessment(self):
+        closure, request, raw = self._milestone_admission()
+        report = self._milestone_review(status="deferred")
+        p = self.root / report; text = p.read_text(); m = gate._extract_manifest(text)
+        m["quality_gate"] = "FAIL"
+        self._replace_milestone_report(p, text, m)
+        gate.close_failed_gate(self.root, "independent-task", report)
+        issues = closure.unresolved(p.read_text())
+        self.assertEqual(len(issues), 1)
+        self.assertTrue(issues[0].startswith("criterion:"))
+        self.assertTrue(gate.validate_failed_state(self.root, gate.read_state(self.root)))
+        # No ordinary independent begin can clear the new failure; its own closure
+        # must now carry the checklist criterion into the existing dependency map.
+        with self.assertRaises(gate.GateError):
+            gate.begin_gate(self.root, "another-task")
+        self.assertEqual(closure.historical(self.root, request["failed_state_sha256"])["raw_state"].encode(), raw)
+
+    def test_milestone_tampered_admission_or_history_cannot_complete(self):
+        closure, request, raw = self._milestone_admission()
+        report = self._milestone_review()
+        state = gate.read_state(self.root)
+        p = self.root / closure.DIRECTORY / ("admission-" + state["closure_lineage"]["admission"] + ".json")
+        original = p.read_bytes(); p.write_bytes(original + b" ")
+        with self.assertRaises(gate.GateError):
+            gate.finalize_gate(self.root, "independent-task", report)
+        p.write_bytes(original)
+        failed = json.loads(raw)["report_path"]
+        (self.root / failed).write_text("Tampered historical failure")
+        with self.assertRaises(gate.GateError):
+            gate.finalize_gate(self.root, "independent-task", report)
+
+    def test_milestone_rejects_dependent_or_unassessed_successor(self):
+        closure, request, path, raw = self._closure_fixture()
+        closure.close(self.root, path)
+        body, admission = self._closure_admission(closure, request)
+        body.pop("allowed_paths"); body["schema_version"] = 2
+        body["milestone"] = {"objective": "Fixture milestone", "exclusions": ["External effects"],
+                             "acceptance": {"check": "Required result"}, "protected_paths": [],
+                             "authorized_destructive_paths": []}
+        for assessment in ({}, {k: {"relationship": "dependent", "rationale": "Requires failed capability"}
+                                for k in body["dependencies"]}):
+            body["dependencies"] = assessment
+            (self.root / admission).write_bytes(closure.encoded(body))
+            with self.assertRaises(gate.GateError):
+                gate.begin_gate(self.root, "independent-task", admission=admission)
+        self.assertEqual(gate.state_path(self.root).read_bytes(), raw)
+
+    def test_closure_keeps_failure_raw_and_creates_no_completion_marker(self):
+        closure, request, path, raw = self._closure_fixture()
+        closure.close(self.root, path)
+        self.assertEqual(gate.state_path(self.root).read_bytes(), raw)
+        status = gate.redacted_status(self.root)
+        self.assertEqual(status["status"], "failed")
+        self.assertEqual(status["quality_gate"], "FAIL")
+        self.assertEqual(status["next_increment_readiness"], "Blocked")
+        self.assertTrue(status["valid"])
+        self.assertTrue(status["workspace_valid"])
+        self.assertNotIn("completion_marker", gate.read_state(self.root))
+        self.assertFalse(gate.evaluate_stop_payload(self._stop_payload()).should_continue)
+
+    def test_closure_requires_recorded_owner_approval_and_decision_binding(self):
+        closure, request, path, raw = self._closure_fixture()
+        for value in (False, "true", 1):
+            request["owner_authorization"]["approved"] = value
+            (self.root / path).write_bytes(closure.encoded(request))
+            with self.assertRaises(gate.GateError):
+                closure.close(self.root, path)
+        request["owner_authorization"]["approved"] = True
+        request["owner_authorization"]["decision_sha256"] = "0" * 64
+        (self.root / path).write_bytes(closure.encoded(request))
+        with self.assertRaises(gate.GateError):
+            closure.close(self.root, path)
+        self.assertEqual(gate.state_path(self.root).read_bytes(), raw)
+
+    def test_closure_rejects_missing_and_tampered_backup_payloads(self):
+        closure, request, path, raw = self._closure_fixture()
+        p = Path(request["backup_directory"]) / "before/README.md"
+        original = p.read_bytes()
+        for content in (None, b"tamper"):
+            if content is None:
+                p.unlink()
+            else:
+                p.write_bytes(content)
+            with self.assertRaises(gate.GateError):
+                closure.close(self.root, path)
+        p.write_bytes(original)
+        m = Path(request["backup_directory"]) / "workspace-before.json"
+        m.write_bytes(m.read_bytes() + b"\n")
+        with self.assertRaises(gate.GateError):
+            closure.close(self.root, path)
+        self.assertEqual(gate.state_path(self.root).read_bytes(), raw)
+
+    def test_closure_rejects_state_report_head_and_index_drift(self):
+        closure, request, path, raw = self._closure_fixture()
+        state = gate.read_state(self.root)
+        for name in (str(gate.STATE_RELATIVE_PATH), state["report_path"], ".git/index"):
+            p = self.root / name
+            original = p.read_bytes()
+            p.write_bytes(original + b"\n")
+            with self.assertRaises(gate.GateError):
+                closure.close(self.root, path)
+            p.write_bytes(original)
+        with mock.patch.object(gate, "current_head_commit", return_value="0" * 40):
+            with self.assertRaises(gate.GateError):
+                closure.close(self.root, path)
+
+    def test_closure_rejects_workspace_scope_escape_and_incomplete_criteria(self):
+        closure, request, path, raw = self._closure_fixture()
+        p = self.root / "README.md"
+        original = p.read_bytes()
+        p.write_bytes(b"unrelated modification")
+        with self.assertRaises(gate.GateError):
+            closure.close(self.root, path)
+        p.write_bytes(original)
+        request["disposition"]["unresolved"] = ["invented replacement"]
+        (self.root / path).write_bytes(closure.encoded(request))
+        with self.assertRaises(gate.GateError):
+            closure.close(self.root, path)
+
+    def test_closure_requires_passing_full_verification_and_reviews(self):
+        closure, request, path, raw = self._closure_fixture()
+        self._closure_review(passing=False)
+        with self.assertRaises(gate.GateError):
+            closure.close(self.root, path)
+        report = self._closure_review()
+        p = self.root / report
+        original = p.read_text()
+        m = gate._extract_manifest(original)
+        m["verification"] = [e for e in m["verification"] if e["command"] != "npm run verify"]
+        p.write_text(original.replace(json.dumps(gate._extract_manifest(original)), json.dumps(m)))
+        with self.assertRaises(gate.GateError):
+            closure.close(self.root, path)
+
+    def test_closure_interruption_replay_and_changed_replay_are_safe(self):
+        closure, request, path, raw = self._closure_fixture()
+        with mock.patch.object(closure.os, "link", side_effect=OSError("interrupted")):
+            with self.assertRaises(gate.GateError):
+                closure.close(self.root, path)
+        self.assertFalse(closure.receipt_path(self.root, request["failed_state_sha256"]).exists())
+        self.assertEqual(gate.state_path(self.root).read_bytes(), raw)
+        closure.close(self.root, path)
+        p = closure.receipt_path(self.root, request["failed_state_sha256"])
+        receipt = p.read_bytes()
+        closure.close(self.root, path)
+        self.assertEqual(p.read_bytes(), receipt)
+        request["disposition"]["retained"] = ["changed replay"]
+        (self.root / path).write_bytes(closure.encoded(request))
+        with self.assertRaises(gate.GateError):
+            closure.close(self.root, path)
+
+    def test_closure_history_integrity_is_separate_from_workspace_readiness(self):
+        closure, request, path, raw = self._closure_fixture()
+        closure.close(self.root, path)
+        (self.root / "later.md").write_text("Later work needs admission.\n")
+        status = gate.redacted_status(self.root)
+        self.assertTrue(status["valid"])
+        self.assertFalse(status["workspace_valid"])
+        self.assertTrue(gate.evaluate_stop_payload(self._stop_payload()).should_continue)
+        with self.assertRaises(gate.GateError):
+            gate.begin_gate(self.root, "next-task")
+        p = closure.receipt_path(self.root, request["failed_state_sha256"])
+        p.write_bytes(p.read_bytes().replace(b'"approved": true', b'"approved": false'))
+        self.assertFalse(gate.redacted_status(self.root)["valid"])
+
+    def test_closure_dependent_or_unapproved_successors_stay_blocked(self):
+        closure, request, path, raw = self._closure_fixture()
+        closure.close(self.root, path)
+        body, admission = self._closure_admission(closure, request, relationship="dependent")
+        with self.assertRaises(gate.GateError):
+            gate.begin_gate(self.root, "independent-task", admission=admission)
+        body, admission = self._closure_admission(closure, request)
+        body["owner_authorization"]["approved"] = False
+        (self.root / admission).write_bytes(closure.encoded(body))
+        with self.assertRaises(gate.GateError):
+            gate.begin_gate(self.root, "independent-task", admission=admission)
+        self.assertEqual(gate.state_path(self.root).read_bytes(), raw)
+
+    def test_closure_independent_authorized_successor_uses_normal_completion(self):
+        closure, request, path, raw = self._closure_fixture()
+        closure.close(self.root, path)
+        body, admission = self._closure_admission(closure, request)
+        gate.begin_gate(self.root, "independent-task", admission=admission)
+        self.assertEqual(gate.read_state(self.root)["status"], "active")
+        (self.root / "next.txt").write_text("bounded implementation\n")
+        report = self._closure_review("independent-task")
+        gate.finalize_gate(self.root, "independent-task", report)
+        self.assertTrue(gate.redacted_status(self.root)["valid"])
+        record = closure.historical(self.root, request["failed_state_sha256"])
+        self.assertEqual(record["raw_state"].encode(), raw)
+        self.assertEqual(json.loads(record["raw_state"])["quality_gate"], "FAIL")
+        # Future legitimate code changes cannot erase immutable failure evidence.
+        (self.root / "next.txt").write_text("changed after completion\n")
+        self.assertEqual(closure.historical(self.root, request["failed_state_sha256"])["raw_state"].encode(), raw)
+        self.assertFalse(gate.redacted_status(self.root)["valid"])
+
+    def test_closure_admission_drift_and_scope_escape_fail_closed(self):
+        closure, request, path, raw = self._closure_fixture()
+        closure.close(self.root, path)
+        body, admission = self._closure_admission(closure, request)
+        (self.root / "drift.md").write_text("drift\n")
+        with self.assertRaises(gate.GateError):
+            gate.begin_gate(self.root, "independent-task", admission=admission)
+        (self.root / "drift.md").unlink()
+        gate.begin_gate(self.root, "independent-task", admission=admission)
+        (self.root / "README.md").write_text("outside scope\n")
+        report = self._closure_review("independent-task")
+        with self.assertRaises(gate.GateError):
+            gate.finalize_gate(self.root, "independent-task", report)
+
+    def test_closure_rejects_symlink_evidence_and_malformed_requests(self):
+        closure, request, path, raw = self._closure_fixture()
+        p = Path(request["backup_directory"]) / "before/README.md"
+        p.unlink()
+        p.symlink_to(self.root / "README.md")
+        with self.assertRaises(gate.GateError):
+            closure.close(self.root, path)
+        (self.root / path).write_text("{not json")
+        with self.assertRaises(gate.GateError):
+            closure.close(self.root, path)
+
+    def test_closure_successor_failure_retains_history_without_completion(self):
+        closure, request, path, raw = self._closure_fixture()
+        closure.close(self.root, path)
+        body, admission = self._closure_admission(closure, request)
+        gate.begin_gate(self.root, "independent-task", admission=admission)
+        report = self._closure_review("independent-task", passing=False)
+        gate.close_failed_gate(self.root, "independent-task", report)
+        self.assertTrue(gate.redacted_status(self.root)["valid"])
+        self.assertNotIn("completion_marker", gate.read_state(self.root))
+        with self.assertRaises(gate.GateError):
+            gate.begin_gate(self.root, "another-task", admission=admission)
+        self.assertEqual(closure.historical(self.root, request["failed_state_sha256"])["raw_state"].encode(), raw)
+
+    def test_closure_actual_cli_and_stop_preserve_terminal_bytes(self):
+        closure, request, path, raw = self._closure_fixture()
+        result = subprocess.run([sys.executable, "-B", str(MODULE_PATH),
+                                 "close-without-completion", "--request", path],
+                                cwd=self.root, capture_output=True, text=True, timeout=30)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        result = subprocess.run([sys.executable, "-B", str(MODULE_PATH), "stop"],
+                                cwd=self.root, input=json.dumps(self._stop_payload()),
+                                capture_output=True, text=True, timeout=30)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout, "")
+        self.assertEqual(gate.state_path(self.root).read_bytes(), raw)
+
+    def test_closure_missing_history_and_wrong_state_fail_closed(self):
+        closure, request, path, raw = self._closure_fixture()
+        closure.close(self.root, path)
+        wrong = json.loads(raw)
+        wrong["report_sha256"] = "0" * 64
+        self.assertFalse(gate.validate_failed_state(self.root, wrong))
+        p = closure.receipt_path(self.root, request["failed_state_sha256"])
+        record = p.read_bytes()
+        p.unlink()
+        self.assertFalse(gate.redacted_status(self.root)["valid"])
+        p.write_bytes(record)
+        original_report = self.root / json.loads(raw)["report_path"]
+        original_report.write_bytes(original_report.read_bytes() + b"changed")
+        self.assertFalse(gate.redacted_status(self.root)["valid"])
+
+    def test_closure_admission_interruption_retries_without_lost_history(self):
+        closure, request, path, raw = self._closure_fixture()
+        closure.close(self.root, path)
+        body, admission = self._closure_admission(closure, request)
+        with mock.patch.object(gate, "write_state", side_effect=gate.GateError("interrupted")):
+            with self.assertRaises(gate.GateError):
+                gate.begin_gate(self.root, "independent-task", admission=admission)
+        self.assertEqual(gate.state_path(self.root).read_bytes(), raw)
+        gate.begin_gate(self.root, "independent-task", admission=admission)
+        self.assertEqual(gate.read_state(self.root)["status"], "active")
+        p = self.root / body["readiness_report"]
+        p.write_bytes(p.read_bytes() + b"tampered")
+        report = self._closure_review("independent-task")
+        with self.assertRaises(gate.GateError):
+            gate.finalize_gate(self.root, "independent-task", report)
+
+    def test_closure_cannot_reclose_or_finalize_original_failure(self):
+        closure, request, path, raw = self._closure_fixture()
+        closure.close(self.root, path)
+        original_report = json.loads(raw)["report_path"]
+        with self.assertRaisesRegex(gate.GateError, "immutable"):
+            gate.close_failed_gate(self.root, "04g", original_report)
+        with self.assertRaises(gate.GateError):
+            gate.finalize_gate(self.root, "04g", original_report)
+        self.assertEqual(gate.state_path(self.root).read_bytes(), raw)
+
+    def test_closure_malformed_nested_evidence_is_a_controlled_rejection(self):
+        closure, request, path, raw = self._closure_fixture()
+        closure.close(self.root, path)
+        p = closure.receipt_path(self.root, request["failed_state_sha256"])
+        original = p.read_bytes()
+        for malformed in (None, [], {}):
+            record = json.loads(original)
+            record["payload"]["raw_state"] = malformed
+            record["sha256"] = closure.digest(closure.encoded(record["payload"]))
+            p.write_bytes(closure.encoded(record))
+            self.assertFalse(gate.redacted_status(self.root)["valid"])
+            self.assertTrue(gate.evaluate_stop_payload(self._stop_payload()).should_continue)
+        p.write_bytes(original)
+        body, admission = self._closure_admission(closure, request)
+        gate.begin_gate(self.root, "independent-task", admission=admission)
+        state = gate.read_state(self.root)
+        state["schema_version"] = 1
+        with self.assertRaises(gate.GateError):
+            gate.validate_state(state)
+
+class GovernanceIntegrationTests(unittest.TestCase):
+    setUp = PostIncrementGateTests.setUp
+    tearDown = PostIncrementGateTests.tearDown
+    _git = PostIncrementGateTests._git
+    _stop_payload = PostIncrementGateTests._stop_payload
+    _write_report = PostIncrementGateTests._write_report
+    _closure_review = ClosureWithoutCompletionTests._closure_review
+    _closure_fixture = ClosureWithoutCompletionTests._closure_fixture
+
+    def _linked_root(self):
+        other = tempfile.TemporaryDirectory()
+        self.addCleanup(other.cleanup)
+        path = Path(other.name).resolve() / "linked"
+        self._git("worktree", "add", "--detach", str(path), "HEAD")
+        original = self.root
+        self.addCleanup(setattr, self, "root", original)
+        self.root = path
+        (path / "docs/reviews").mkdir(parents=True)
+        gate.begin_gate(path, "04g")
+        return original
+
+    def test_linked_worktree_closure_uses_own_index_and_retains_raw_failure(self):
+        original = self._linked_root()
+        closure, request, path, raw = self._closure_fixture()
+        index = closure.git_index_path(self.root)
+        self.assertTrue((self.root / ".git").is_file())
+        self.assertNotEqual(index, closure.git_index_path(original))
+        before = index.read_bytes()
+        closure.close(self.root, path)
+        self.assertEqual(index.read_bytes(), before)
+        self.assertEqual(gate.state_path(self.root).read_bytes(), raw)
+        self.assertTrue(gate.validate_failed_state(self.root, gate.read_state(self.root)))
+        self.assertFalse(gate.evaluate_stop_payload(self._stop_payload()).should_continue)
+
+    def test_linked_worktree_index_drift_blocks_closure(self):
+        self._linked_root()
+        closure, request, path, raw = self._closure_fixture()
+        self._git("add", "DECISIONS.md")
+        with self.assertRaisesRegex(gate.GateError, "index drift"):
+            closure.close(self.root, path)
+        self.assertEqual(gate.state_path(self.root).read_bytes(), raw)
+        self.assertIsNone(closure.current_receipt(self.root))
+
+    def test_git_index_path_rejects_malformed_or_unavailable_output(self):
+        closure = gate._closure()
+        for value in (b"", b"one\ntwo", b"\xff", b"missing-index"):
+            with self.subTest(value=value), mock.patch.object(gate, "_run_git", return_value=value):
+                with self.assertRaises(gate.GateError):
+                    closure.git_index_path(self.root)
+
+    def test_git_index_path_rejects_symlink_without_resolving_it(self):
+        closure = gate._closure()
+        link = self.root / "index-link"
+        link.symlink_to(closure.git_index_path(self.root))
+        with mock.patch.object(gate, "_run_git", return_value=str(link).encode()):
+            with self.assertRaises(gate.GateError):
+                closure.git_index_path(self.root)
+
+    def test_active_legacy_state_is_not_converted_or_rewritten(self):
+        before = gate.state_path(self.root).read_bytes()
+        gate.begin_gate(self.root, "04g")
+        self.assertEqual(gate.state_path(self.root).read_bytes(), before)
+        with self.assertRaisesRegex(gate.GateError, "cannot convert"):
+            gate.begin_gate(self.root, "04g", admission="missing.json")
+        self.assertEqual(gate.state_path(self.root).read_bytes(), before)
+        self.assertTrue(gate.evaluate_stop_payload(self._stop_payload()).should_continue)
+
+    def test_mixed_admission_cli_and_api_are_rejected(self):
+        before = gate.state_path(self.root).read_bytes()
+        with self.assertRaisesRegex(gate.GateError, "choose one"):
+            gate.begin_gate(self.root, "04g", "one.json", admission="two.json")
+        with mock.patch("sys.stderr", io.StringIO()), self.assertRaises(SystemExit):
+            gate.build_parser().parse_args(["begin", "--increment", "04g", "--admission", "a", "--acceptance-request", "b"])
+        self.assertEqual(gate.state_path(self.root).read_bytes(), before)
+
+    def test_mixed_lineage_and_unbound_milestone_evidence_are_rejected(self):
+        state = gate.read_state(self.root)
+        state.update(schema_version=4, acceptance_lineage={"maintenance": "0" * 64, "admission": "1" * 64},
+                     closure_lineage={"closures": [], "admission": "2" * 64})
+        with self.assertRaisesRegex(gate.GateError, "cannot be combined"):
+            gate.validate_state(state)
+        with self.assertRaisesRegex(gate.GateError, "needs objective-based admission"):
+            gate._closure().milestone_report(self.root, "04g", {"milestone": {}})
+
+    def test_general_closure_cannot_adopt_d133_maintenance(self):
+        import lifecycle_acceptance as acceptance
+        closure, request, path, raw = self._closure_fixture()
+        pointer = self.root / acceptance.POINTER
+        pointer.parent.mkdir(parents=True, exist_ok=True)
+        pointer.write_text("Retained D-133 fixture; never adopted by general closure.")
+        with self.assertRaisesRegex(gate.GateError, "D-133"):
+            closure.close(self.root, path)
+        with self.assertRaisesRegex(gate.GateError, "D-133"):
+            closure.begin(self.root, "other", "missing.json")
+        self.assertEqual(gate.state_path(self.root).read_bytes(), raw)
+        self.assertIsNone(closure.current_receipt(self.root))
+
+
 if __name__ == "__main__":
     unittest.main()

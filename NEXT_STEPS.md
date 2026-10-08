@@ -4767,3 +4767,19 @@ readability. No owner vault/profile/room changes, live requests or publication.
 Stop on drift, unsupported access or necessary scope expansion. Report only
 observed results, retain all advisories, OpenAI parked 4/5 and D-125/M1/M2 parked.
 ```
+
+## 2026-10-08 — Upstream D-134 governance integration
+
+The owner selected governance-only integration on `codex/milestone-governance-upstream`
+from GitHub main `bbe7546281fec3c8b4b608d68a52bc9732d9ecd9`. General milestone
+admission/closure, canonical absent-path comparison and linked-index validation are
+extracted from the frozen Main Session port; D-133 and legacy behavior are preserved.
+See [the fresh plan](docs/plans/2026-10-08-milestone-governance-upstream.md).
+Fresh 145 hook tests, 94 repository tests and governance checks pass. Product verification is inherited with 347 unchanged input bindings. Review is PASS WITH ADVISORIES; actual gate/Stop and local commit receipts follow in the external integration handoff.
+Existing product roadmap and historical records remain unchanged. Local commits
+are authorized only after review/checks; publication needs separate owner direction.
+
+D-134 closeout: ordinary finalization and complete-payload Stop passed; status was
+complete/valid with PASS WITH ADVISORIES. The final documentation fingerprint and
+reviewed local commit are recorded in the external integration FINAL-HANDOFF.
+No publication occurred. Do not resume product or branding work from this record.

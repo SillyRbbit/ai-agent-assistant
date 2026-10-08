@@ -71,12 +71,54 @@ start the next increment early.
   adapters, and never transfer validation, policy, approval, execution, audit,
   memory, or device authority to a runtime or agent.
 
+## Authorized milestone operating rules (D-134)
+
+An explicit owner-authorized objective, exclusions and acceptance checklist are the
+scope boundary. Routine implementation, debugging, necessary tests, review,
+documentation and truthful gate finalization are authorized together. Keep the
+existing plan checklist and handoff current. Continue through assessment, planning,
+checkpoints, successful substeps and recoverable in-scope failures until acceptance
+is satisfied or a genuine blocker remains.
+
+Changed-path inventories are for attribution and preservation, not routine count
+ceilings. Relevant path growth needs no renewed approval. Protect explicitly
+excluded files, unrelated work and historical evidence; resolve ownership before
+extending existing changes. Checkpointing is not a stopping condition.
+
+Assess successors against unresolved criteria and defects. Independent work may
+use supported general closure/admission; dependent or unassessed work stays blocked.
+Preserve original reports, raw failed states, hashes and results against their
+recorded snapshots. Evaluate current readiness separately. Closure never changes
+FAIL to PASS or issues a completion marker. Historical Desktop bootstrap rollback
+and retained branding remain preserved; unfinished branding is deferred.
+
+Run relevant required checks and reuse valid unchanged-input evidence with command,
+result, input identity and environment recorded. Documentation/checkpoint updates
+alone do not require full builds or live QA. Record inherited failures and their
+actual impact. Distinguish implemented, automatically verified, live verified,
+deferred and blocked work; required unverified criteria prevent completion.
+
+Request approval only for destructive/irreversible actions not already authorized,
+material objective expansion, credential/permission/security-boundary/external-system
+changes beyond existing authorization, additional paid usage, commits/pushes/merges/
+publication unless already authorized, or ambiguous changes risking unrelated work.
+Missing access or expired authentication is a blocker, not renewed authorization.
+Complete independent work before handing back. Platform safeguards and external
+access controls always apply; do not bypass a rejection.
+
+Use the general admission contract in ENGINEERING_GUIDE.md for new milestones.
+Legacy active states remain on their existing route; never convert or copy live
+state. D-098 and D-133 retain their recorded identities, validators and bounded
+historical procedures. Their fixed ceilings are not new general-milestone limits.
+D-133 acceptance lineage cannot be adopted by general closure. A fresh checkout
+must not be used to escape known failure or dependency evidence.
+
 ## Work and Git safety
 
 - Work on one approved, coherent increment only. Preserve behavior outside its
   declared scope; do not refactor or implement speculatively.
 - Inspect the relevant code, tests, Git branch, and working tree before edits.
-  State the goal, non-goals, exact files, risks, and verification first.
+  State the objective, exclusions, acceptance checklist, expected files, risks and verification first.
 - Read current implementation before proposing replacement. Prefer adapting or
   wrapping verified code over rewriting it around an external framework.
 - After an exact task is authorized, safe in-scope local work may proceed
@@ -84,7 +126,7 @@ start the next increment early.
   publication, deployment, credential changes, and material scope expansion
   still require explicit authorization.
 - Do not discard, overwrite, reset, clean, stash, or silently rewrite existing
-  work. Stop if uncommitted work overlaps planned edits.
+  work. Stop for overlap only when safe attribution is unresolved.
 - Do not create branches, commit, push, merge, release, or publish unless the
   project owner explicitly directs that action.
 - Use descriptive `codex/` branches, Conventional Commits, and squash merges
@@ -131,7 +173,7 @@ Before marking it complete, run the required session-end, quality, and
 post-increment gate workflow. A completion marker is valid only when its report
 and workspace fingerprint validate. A truthful `FAIL` must instead use the
 hook's terminal failed state: it writes no completion marker, cannot be promoted
-to complete, and grants no authority to begin a blocked successor.
+to complete, and satisfies no dependent criterion. Independent successors need supported closure/admission and readiness assessment.
 
 D-098 defines one exceptional recovery for the published D-097 record only.
 It is not a new increment and must not call `begin`, `finalize`, or

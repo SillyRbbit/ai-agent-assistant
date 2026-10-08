@@ -199,12 +199,11 @@ An increment is Ready only when:
 
 - its prerequisite state is verified in the repository;
 - one bounded goal and user-visible outcome are stated;
-- exact implementation and closeout files are declared;
+- objective, exclusions, acceptance checklist and expected implementation/closeout paths are declared;
 - risks, security impact, non-goals, verification, manual gates, and rollback
   are documented;
 - unresolved architecture decisions do not block the work;
-- the project owner has selected the plan and approval is still required before
-  editing.
+- the project owner has authorized the objective; existing authorization covers routine in-scope work.
 
 Only the first Ready item in `NEXT_STEPS.md` may be implemented unless the
 project owner explicitly selects another bounded task.
@@ -260,10 +259,10 @@ contract, generated type, or user-facing cross-boundary behavior changed.
 
 ### Cross-cutting tier
 
-Run the complete `npm run verify` suite for IPC, storage, SQLite, policy,
+Obtain complete `npm run verify` coverage for IPC, storage, SQLite, policy,
 approval, security, dependency, Tauri configuration, release, or other changes
 that cross trust, language, persistence, packaging, or platform boundaries. Add
-the increment's required manual and target-platform checks.
+the increment's required manual and target-platform checks. D-134 permits reuse of valid unchanged-input stages with explicit command/result/input/environment provenance; run every affected stage freshly and retain inherited failures. Do not label a composite evidence set as a new exit-zero full run.
 
 ### Final increment gate
 
@@ -292,7 +291,7 @@ not replace the final local increment gate or target-platform evidence.
   paths select every affected application job.
 - Scheduled CI runs only the dependency audit. Manual CI dispatch runs all
   application jobs. Manual Documentation dispatch runs the documentation tier.
-- The complete `npm run verify` command remains mandatory locally when this
+- Complete local `npm run verify` coverage remains mandatory when this
   policy or the approved increment class requires it, including when hosted
   path filtering skips unrelated jobs.
 
@@ -315,11 +314,10 @@ evidence even when the hosting plan cannot enforce them.
 
 1. Use `$session-start` or `$resume-session` and reconcile memory with Git.
 2. Read the required documents, source boundaries, and relevant tests.
-3. Confirm a clean tree and pass the smallest useful baseline.
-4. State the goal, non-goals, exact files, risks, verification, and rollback.
-5. Wait for project-owner approval.
-6. Begin the mandatory gate with
-   `python3 .codex/hooks/post_increment_gate.py begin --increment <id>`.
+3. Attribute and preserve the working tree; check the smallest useful baseline and assess inherited failures by impact.
+4. State the objective, exclusions, checklist, expected paths, risks and verification.
+5. Use the existing owner authorization; ask only at AGENTS.md D-134 boundaries.
+6. Begin the mandatory gate through its supported route before implementation. New general milestones use `python3 -B .codex/hooks/post_increment_gate.py begin --increment <id> --admission <request>` with the D-134 schema-2 contract; existing active states retain their original admission.
 7. Implement only the approved scope and run focused checks while working.
 8. Run the risk-based completion verification and any required manual checks.
 9. Run `python3 .codex/hooks/session_end_gate.py` and resolve any conflict or
@@ -331,7 +329,7 @@ evidence even when the hosting plan cannot enforce them.
 12. Run `$post-increment-gate`. Require a valid PASS or PASS WITH ADVISORIES
     completion marker, or record a truthful `FAIL` with the valid terminal
     failed state and no completion marker.
-13. Stop. Do not begin the next increment, commit, or publish automatically.
+13. Continue until acceptance is satisfied or a genuine blocker remains. Do not start a later milestone or perform unauthorized Git/publication operations.
 
 ### Exceptional D-098 terminal-record recovery
 
@@ -384,11 +382,7 @@ An increment is complete only when:
 
 A terminally failed increment is not complete and does not satisfy this
 Definition of Done. Its valid failed record only preserves evidence and permits
-the Stop hook to end. In the checkout retaining the ignored state, a different
-increment may begin only when the failed report's readiness is not Blocked, the
-workspace is clean, and the owner has separately approved that work. A fresh
-clone does not inherit this enforcement and must not be used to bypass the
-recorded disposition.
+the Stop hook to end. General closure/admission may admit independently ready, owner-authorized successors without relabeling failed evidence. Legacy and D-133 routes retain their recorded checks. A fresh checkout must not bypass a known failed dependency or recorded disposition.
 
 The sole D-098 exception preserves that original Blocked readiness and attaches
 separately passing cumulative evidence for one exact successor. The recovery is
@@ -476,3 +470,35 @@ Legacy mechanisms and D-125/M1/M2 remain unchanged. No force option, checkout
 bypass, arbitrary successor, product edits or automatic recovery chain follows.
 
 See [the maintenance plan](docs/plans/2026-10-03-evidence-bound-acceptance-maintenance.md).
+
+## D-134 general milestone admission
+
+AGENTS.md defines the operating/approval rules. The general route is
+`python3 -B .codex/hooks/post_increment_gate.py begin --increment <id> --admission <request>`.
+Use request schema 2 with `owner_authorization` (approved, source, DECISIONS.md path
+and current SHA-256), increment ID, current workspace fingerprint, readiness report
+and readiness increment, dependencies, and `milestone`. Its objective, exclusions,
+acceptance ID-to-description map, protected paths and authorized destructive paths
+are frozen. Every report delta needs criterion, rationale, within_objective and
+preserves_existing attribution. Required criteria must be automatically_verified
+or live_verified; implemented/deferred/blocked is not completion. Inventory growth
+alone is informational. No semantic or malicious-same-user authentication is claimed.
+
+Readiness preparation is authorized by the selected objective: preserve existing
+work, prepare the existing plan/review with passing applicable checks, then begin
+before implementation. On a predecessor failure, first use the supported
+`close-without-completion --request <request>` route with immutable raw-state/report
+backup, complete preservation and passing closure verification. It never restores
+files itself. Every unresolved criterion requires an explicit independent rationale
+in the successor; dependent or unassessed successors reject. Preserve recorded
+historical snapshots separately from current workspace readiness. Schema 1 general
+receipts remain compatible; new milestones use schema 2.
+
+D-133 remains on its separate `--acceptance-request` route and schema-4 lineage;
+no mixed routes, failed-record adoption or active-state conversion. Linked checkouts
+resolve their actual index with Git and compare backup bytes; already-absent paths
+compare equally before and after staging while real deletion remains protected.
+See the [integration plan](docs/plans/2026-10-08-milestone-governance-upstream.md)
+and D-134's qualified decision crosswalk. Platform and external access controls
+are never waived. Local receipt hashes preserve workflow integrity, not authenticity
+against a malicious same-user rewrite.

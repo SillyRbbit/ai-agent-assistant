@@ -10,7 +10,7 @@ post-increment quality and marker closeout.
 
 ## Procedure
 
-1. Stop active development processes with `Control-C` where appropriate.
+1. Stop only task-owned development processes when no longer needed; preserve other tasks.
 2. Inspect all changes:
 
    ```bash
@@ -19,7 +19,7 @@ post-increment quality and marker closeout.
    git diff
    ```
 
-3. Run the relevant final checks. For a completed implementation increment:
+3. Run relevant final checks under the Risk-Based Validation Policy; reuse valid unchanged-input stages with provenance. The full cross-cutting suite includes:
 
    ```bash
    npm run format:check
@@ -59,9 +59,12 @@ post-increment quality and marker closeout.
 12. Confirm `python3 .codex/hooks/post_increment_gate.py status` reports the active increment as complete and valid.
 13. Show the final Git status.
 
-## Emergency hook bypass
+## Gate or access blockers
 
-Use `/hooks` to review, trust, or disable the repository Stop hook. For an emergency session, start Codex with `--disable hooks`. Record why the hook was bypassed, do not mark the increment complete, and rerun the full post-increment gate before completion. `--dangerously-bypass-hook-trust` is not a routine substitute for normal review.
+Preserve the rejection and evidence, identify the exact restriction, and use an
+existing supported authorized route. Do not disable hooks or bypass platform
+approval rejection to complete a milestone. Missing access is a blocker; finish
+independent work before handing back.
 
 ## Required handoff content
 
@@ -81,3 +84,13 @@ Use `/hooks` to review, trust, or disable the repository Stop hook. For an emerg
 ## Exit condition
 
 A new session can begin by reading the repository alone and can reproduce the last known result. A completed implementation increment also has a valid passing post-increment report and completion marker.
+
+## D-134 milestone operation
+
+Follow AGENTS.md and ENGINEERING_GUIDE.md: objective, exclusions and acceptance
+are the scope boundary. Path counts are informational; preserve protected paths,
+attribution and unrelated work. Continue authorized routine work through review,
+documentation and truthful finalization. Reuse valid unchanged-input verification
+with provenance; distinguish implemented, automatically verified, live verified,
+deferred and blocked criteria. Historical FAIL evidence and D-133's separate
+acceptance route remain immutable. Request approval only at AGENTS.md boundaries.

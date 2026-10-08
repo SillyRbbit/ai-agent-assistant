@@ -16,7 +16,7 @@ State one bounded goal and the observable outcome.
 
 List the Git, source, test, decision, and completion-marker evidence that establishes the baseline.
 
-## Exact files
+## Expected paths and attribution
 
 List every implementation, test, configuration, and closeout path expected to change.
 
@@ -42,4 +42,14 @@ Record each blocker or advisory with path or evidence, impact, owner, and smalle
 
 ## Approval boundary
 
-State that readiness is not implementation approval and that no gate, edit, commit, push, merge, or later increment starts automatically.
+Record existing owner authorization, explicit remaining approval boundaries, and independence from unresolved failures. Readiness alone grants no new authority; an already-authorized milestone continues through supported admission and implementation.
+
+## D-134 milestone operation
+
+Follow AGENTS.md and ENGINEERING_GUIDE.md: objective, exclusions and acceptance
+are the scope boundary. Path counts are informational; preserve protected paths,
+attribution and unrelated work. Continue authorized routine work through review,
+documentation and truthful finalization. Reuse valid unchanged-input verification
+with provenance; distinguish implemented, automatically verified, live verified,
+deferred and blocked criteria. Historical FAIL evidence and D-133's separate
+acceptance route remain immutable. Request approval only at AGENTS.md boundaries.
