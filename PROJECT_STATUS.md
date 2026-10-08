@@ -6855,3 +6855,54 @@ Commit/non-force push to the existing branch/PR139 only after local gates pass.
 No merge, new PR, app launch, provider request, install or further repair.
 Ledger63/66, ECC hooks/MCP disabled, all advisories, native workaround and parked
 D-125/M1/M2 unchanged. Observe actual new CI outcomes; never presume success.
+
+## 2026-10-08 — PR139 fixed runner diagnostic publication readiness
+
+Owner-authorized pr139-runner-diagnostics uses ordinary D-134 schema-2 admission.
+Preserved predecessor completion and a verified1128-path recoverable snapshot at
+/private/tmp/cortexa-pr139-runner-diagnostic-nh_qzs9q. The three tooling paths are
+.github/workflows/ci.yml, scripts/ci_git_fixture_probe.py and its focused test.
+Existing normal CI job/configuration bytes remain an exact prefix; no product,
+fixture behavior, dependency, gate, runner/service or permission changes.
+
+The independent fixed Mac job is eligible only for the first push after required
+head9c2a371b61c38504d3d8c564cf41c9e435f1d8aa on the existing publication branch,
+run attempt1. It verifies expected runner name/OS/architecture, source parent and
+frozen Rust Git-helper hash. GitHub assigned runner22 must be checked before
+accepting results; labels/name alone are not a numeric runner-ID guarantee.
+The new job is runner-originated evidence, not proof of exact historical context.
+No manual dispatch/rerun, arbitrary input or new workflow. Normal CI and
+Documentation triggered by the authorized push remain independent acceptance.
+
+Only two private disposable Git-init cases are possible. Baseline uses the exact
+cleared environment and disabled configuration/hooks/signing; only exit1 permits
+one variant adding a private task-local HOME. Raw output is suppressed; only fixed
+stage/outcome/exit and executable SHA-256 leave the probe. Ten-second command
+limits and bounded owned-child termination preserve no-retry/no-force-kill.
+Exclusive private root prevents replay within the job; run-attempt/push guards
+prevent subsequent eligible runs. Fixtures are retained; no existing data deleted.
+A successful diagnostic job means the observation was completed, not that product
+fixture tests passed. Baseline success stops without a variant or cause claim.
+
+Focused mocked probe17 and affected workflow/policy79 tests passed. Tests cover
+exact environment delta, baseline short-circuit, fixed privacy output, source and
+runner/event binding, timeout races, failed cleanup, replay and existing-job
+preservation. Audit sanitizer8 cases passed. Unchanged Rust749/3ignored, native
+compile, frontend182 input hashes and hook9 inputs reuse retained passing evidence;
+no product build/test/native QA was repeated. Required current documentation,
+schema, session, preservation and final gate outcomes are recorded externally.
+
+The one bounded annotation read for historical audit check113562559566 classified
+runner_communication_lost. No raw message was retained. Secret/npm/Rust audit
+steps passed; this annotation does not establish a vulnerability or checkout
+cleanup cause. Mac fixture_init/exit1 remains owner-reported; missing HOME is
+unproven, and the same helper passed prior local checks. No further repair here.
+
+Current plan: docs/plans/2026-10-08-pr139-runner-diagnostics.md.
+Current review: docs/reviews/2026-10-08-pr139-runner-diagnostics-post-increment-review.md.
+Local completion concerns diagnostic publication readiness only. Actual commit,
+new exact-head CI/probe results and assigned runners belong in the external final
+handoff after publication; no post-publication result is presumed or waived.
+One commit/non-force push is authorized; no merge or automatic fixture repair.
+Ledger63/66, disabled ECC hooks/MCP, all advisories, native workaround and parked
+D-125/M1/M2 remain. Preserve earlier failed attempts and all untested variants.
