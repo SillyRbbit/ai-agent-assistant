@@ -7015,3 +7015,57 @@ No manual rerun, installs, merge, product repair or subsequent milestone authori
 
 Plan: docs/plans/2026-10-08-pr139-metadata-home-diagnostics.md
 Review: docs/reviews/2026-10-08-pr139-metadata-home-diagnostics-post-increment-review.md
+
+## 2026-10-08 — PR139 bounded stderr diagnostic publication readiness
+
+Owner-authorized pr139-bounded-stderr-diagnostics uses ordinary D-134 schema-2 admission.
+Preserved predecessor completion, old failed receipts and verified1139-path
+recoverable snapshot at /private/tmp/cortexa-pr139-stderr-t42qmnrd. Three tooling paths only: existing probe/test and
+one-push workflow parent binding. Normal CI prefix, Rust fixture, product/artifact
+bytes, gates, policy and every prior document body remain unchanged.
+
+Starting head 24b65bb676775d3de12fe38c0ef26f401ef6dcc0; unchanged main fc239b6161d9379915891e04f7c56fcaa9c4971c.
+Existing runner22 baseline and private-HOME metadata commands normally exited1.
+No stderr was retained, so missing HOME, identical causes and product failure
+remain unproved. New one-push attempt runs only the unchanged cleared-environment
+rev-parse HEAD HEAD^ baseline once. No HOME comparison, Git-init case or retry.
+Preserve context/attempt/fixture/executable and strict actual HEAD-parent checks.
+Require numeric assigned runner22 before accepting remote evidence; names/labels
+are not a numeric assignment guarantee. Never silently run on another runner.
+
+Concurrent selector capture keeps stdout83, stderr2048 plus one overflow byte,
+one ten-second deadline including reaping and five-second retained-child cleanup.
+Fixed command/exit, stderr category, cleanup and close rows remain independent.
+No raw output, snippets, exception messages, paths, environments or stderr hashes
+are printed/persisted. Mutable buffers are cleared; Python/OS residual-memory
+absence is not guaranteed. Capture/close/wait failure and truncation cannot receive
+signature classification. No classifier grants source acceptance or another query.
+
+Reviewed Git v2.47.0 setup.c/usage.c signature observations are repository-discovery
+and ownership-rejection only. Labels do not authenticate a cause or establish
+installed Git version. Empty, unknown, truncated and capture-failed are explicit
+fallbacks; Apple/HOME/localized/unreviewed messages remain unknown. Public signature
+sources and exact matching rules are in the current plan and focused tests.
+
+Focused36 mocked cases and affected79 policy cases passed. The first focused run
+failed an EOF mock expectation (empty read already means EOF); its receipt remains.
+Corrected test expectation passed without product or fixture behavior changes.
+All changed subprocesses are mocked; no actual Git diagnostic/init ran locally.
+Current documentation/repository/security/whitespace/session/schema/preservation
+checks and architecture/security/code-health/debt/readiness reviews are required
+and recorded externally. Reuse verified unchanged Rust749passed/3ignored, strict
+Clippy/native compile, frontend182 and hook9 evidence. No repeated product QA/build.
+Composite verification is not a newly executed full npm run verify.
+
+Local completion covers diagnostic implementation/publication readiness only.
+Actual finalization/status/full Stop and remote outcomes belong in external receipts;
+no runner signature or normal CI pass is presumed by this prose. Unknown/truncated
+stderr supports no repair. Linux runner availability is independent and no service
+change is authorized. Historical audit communication-loss evidence is retained,
+not reread; no vulnerability or checkout-cleanup cause is inferred.
+
+Plan: docs/plans/2026-10-08-pr139-bounded-stderr-diagnostics.md
+Review: docs/reviews/2026-10-08-pr139-bounded-stderr-diagnostics-post-increment-review.md
+Ledger63/66, zero requests. Disabled ECC hooks/MCP, native workaround, all advisories,
+historical failures and parked D-125/M1/M2 retained. Owner authorizes one exact commit
+and non-force push after local gates; no manual rerun, install, merge or broader repair.

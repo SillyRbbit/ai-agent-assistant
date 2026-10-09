@@ -13,7 +13,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-PARENT = "a84668cae9d2fda20b8b90a15d9dc5bbc132eaaa"
+PARENT = "24b65bb676775d3de12fe38c0ef26f401ef6dcc0"
 BRANCH = "refs/heads/codex/isolated-action-publication"
 FIXTURE_HASH = "2ca30bd1bb9e79d61005ad703ceba40ef48ca7e864d3f75d3995c8781afee686"
 GIT = "/usr/bin/git"
@@ -40,6 +40,8 @@ OUTCOMES = frozenset({
     "executable_drift",
     "metadata_malformed", "head_parent_mismatch", "metadata_timed_out",
     "metadata_cleanup_unresolved", "preflight_failed", "executable_bound",
+    "metadata_stderr_limit", "stderr_empty", "stderr_unknown", "stderr_truncated",
+    "stderr_capture_failed", "stderr_git_repository_signature", "stderr_git_ownership_signature",
     "fixture_access_failed", "already_used", "exited", "spawn_failed", "timed_out",
     "cleanup_unresolved", "baseline_not_reproduced", "baseline_unexpected",
     "comparison_complete", "comparison_stopped",
@@ -87,59 +89,104 @@ def stop_metadata_child(child: subprocess.Popen) -> tuple[str, int | None]:
         return "metadata_cleanup_unresolved", None
 
 
-def metadata(repo: Path, home: Path | None = None) -> tuple:
-    """Fixed bounded query; result bytes remain transient and never emitted."""
-    env = dict(BASE_ENV)
-    if home is not None:
-        env["HOME"] = str(home)
+# Reviewed Git v2.47.0 setup.c/usage.c signatures; observations, not causes.
+# https://github.com/git/git/blob/v2.47.0/setup.c
+# https://github.com/git/git/blob/v2.47.0/usage.c
+STDERR_LIMIT = 2048
+REPOSITORY_SIGNATURE = b"fatal: not a git repository (or any of the parent directories): .git\n"
+OWNERSHIP_PREFIX = b"fatal: detected dubious ownership in repository at '"
+
+
+def classify_stderr(captured: bytearray) -> str:
+    """Only reviewed anchored signatures; no dynamic values leave this function."""
+    if not captured:
+        return "stderr_empty"
+    if captured == REPOSITORY_SIGNATURE:
+        return "stderr_git_repository_signature"
+    newline = captured.find(b"\n")
+    if (captured.startswith(OWNERSHIP_PREFIX) and newline > len(OWNERSHIP_PREFIX)
+            and captured[newline - 1] == ord("'")
+            and all(32 <= captured[i] < 127 for i in range(newline))):
+        return "stderr_git_ownership_signature"
+    return "stderr_unknown"
+
+
+def metadata(repo: Path) -> tuple:
+    """One unchanged baseline query; raw stderr never escapes transient capture."""
     try:
         child = subprocess.Popen(
             [GIT, *GIT_OPTIONS, "rev-parse", "HEAD", "HEAD^"], cwd=repo,
-            env=env, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
+            env=dict(BASE_ENV), stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
         )
     except OSError:
-        return "metadata_spawn_failed", None, b"", None, False
+        return "metadata_spawn_failed", None, b"", None, False, "stderr_capture_failed"
     deadline = time.monotonic() + 10
-    captured = bytearray()
+    buffers = {"stdout": bytearray(), "stderr": bytearray()}
+    streams = {"stdout": child.stdout, "stderr": child.stderr}
+    limits = {"stdout": 83, "stderr": STDERR_LIMIT + 1}
     outcome, status = "metadata_read", None
+    cleanup, close_failed = None, False
     try:
-        with selectors.DefaultSelector() as selector:
-            selector.register(child.stdout, selectors.EVENT_READ)
-            while True:
-                remaining = deadline - time.monotonic()
-                if remaining <= 0 or not selector.select(remaining):
-                    raise subprocess.TimeoutExpired("fixed metadata", 10)
-                chunk = os.read(child.stdout.fileno(), 83 - len(captured))
-                if not chunk:
-                    break
-                captured.extend(chunk)
-                if len(captured) == 83:
-                    outcome = "metadata_malformed"
-                    break
-    except subprocess.TimeoutExpired:
-        outcome = "metadata_timed_out"
-    except (OSError, ValueError):
-        outcome = "metadata_capture_failed"
-    if outcome == "metadata_read":
         try:
-            status = child.wait(timeout=max(0, deadline - time.monotonic()))
-            if status != 0:
-                outcome = "metadata_nonzero"
+            with selectors.DefaultSelector() as selector:
+                for name, stream in streams.items():
+                    selector.register(stream, selectors.EVENT_READ, data=name)
+                pending = set(streams)
+                while pending and outcome == "metadata_read":
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        raise subprocess.TimeoutExpired("fixed metadata", 10)
+                    events = selector.select(remaining)
+                    if not events:
+                        raise subprocess.TimeoutExpired("fixed metadata", 10)
+                    for key, _ in events:
+                        name = key.data
+                        chunk = os.read(streams[name].fileno(), limits[name] - len(buffers[name]))
+                        if not chunk:
+                            selector.unregister(streams[name])
+                            pending.remove(name)
+                            continue
+                        buffers[name].extend(chunk)
+                        if len(buffers[name]) == limits[name]:
+                            outcome = "metadata_malformed" if name == "stdout" else "metadata_stderr_limit"
+                            break
         except subprocess.TimeoutExpired:
             outcome = "metadata_timed_out"
         except (OSError, ValueError):
-            outcome = "metadata_wait_failed"
-    cleanup = None
-    if outcome not in ("metadata_read", "metadata_nonzero"):
-        cleanup = stop_metadata_child(child)
-    close_failed = False
-    try:
-        child.stdout.close()
-    except (OSError, ValueError):
-        close_failed = True
-    output = bytes(captured) if outcome == "metadata_read" and not close_failed else b""
-    return outcome, status, output, cleanup, close_failed
+            outcome = "metadata_capture_failed"
+        if outcome == "metadata_read":
+            try:
+                status = child.wait(timeout=max(0, deadline - time.monotonic()))
+                if status != 0:
+                    outcome = "metadata_nonzero"
+            except subprocess.TimeoutExpired:
+                outcome = "metadata_timed_out"
+            except (OSError, ValueError):
+                outcome = "metadata_wait_failed"
+        if outcome not in ("metadata_read", "metadata_nonzero"):
+            cleanup = stop_metadata_child(child)
+        for stream in streams.values():
+            try:
+                stream.close()
+            except (OSError, ValueError):
+                close_failed = True
+        if close_failed:
+            category = "stderr_capture_failed"
+        elif outcome == "metadata_stderr_limit":
+            category = "stderr_truncated"
+        elif outcome in ("metadata_read", "metadata_nonzero"):
+            category = classify_stderr(buffers["stderr"])
+        else:
+            category = "stderr_capture_failed"
+        output = bytes(buffers["stdout"]) if outcome == "metadata_read" and not close_failed else b""
+        return outcome, status, output, cleanup, close_failed, category
+    finally:
+        # Best-effort clearing, not a guarantee against Python/OS memory retention.
+        for captured in buffers.values():
+            for i in range(len(captured)):
+                captured[i] = 0
+            captured.clear()
 
 
 def source_bound(output: bytes, sha: str) -> str:
@@ -176,8 +223,9 @@ def private_metadata_home(temp: Path, run_id: str) -> Path:
 
 
 def record_metadata(stage: str, result: tuple) -> None:
-    outcome, status, _, cleanup, close_failed = result
+    outcome, status, _, cleanup, close_failed, category = result
     emit(stage, outcome, status)  # Primary result recorded before branching.
+    emit(stage, category)
     if cleanup is not None:
         emit(stage, *cleanup)
     if close_failed:
@@ -188,35 +236,18 @@ def executable_hash() -> str:
     return hashlib.sha256(Path(GIT).read_bytes()).hexdigest()
 
 
-def metadata_only(repo: Path, sha: str, home: Path, git_hash: str) -> int:
+def metadata_only(repo: Path, sha: str, git_hash: str) -> int:
     result = metadata(repo)
     record_metadata("metadata_baseline", result)
-    outcome, status, output, cleanup, close_failed = result
+    outcome, status, output, cleanup, close_failed, _ = result
     if executable_hash() != git_hash:
         emit("result", "executable_drift")
         return 1
-    if cleanup is not None or close_failed:
-        emit("result", "comparison_stopped")
-        return 1
-    if outcome == "metadata_read":
-        binding = source_bound(output, sha)
-        emit("result", "metadata_baseline_verified" if binding == "source_bound" else binding)
-        return 0 if binding == "source_bound" else 1
-    if outcome != "metadata_nonzero" or status != 1:
-        emit("result", "comparison_stopped")
-        return 1
-    # Exactly one controlled case, not an automatic retry. HOME is the only delta.
-    result = metadata(repo, home)
-    record_metadata("metadata_private_home", result)
-    outcome, status, output, cleanup, close_failed = result
-    if executable_hash() != git_hash:
-        emit("result", "executable_drift")
-        return 1
-    if outcome != "metadata_read" or cleanup is not None or close_failed:
+    if outcome != "metadata_read" or status != 0 or cleanup is not None or close_failed:
         emit("result", "comparison_stopped")
         return 1
     binding = source_bound(output, sha)
-    emit("result", "metadata_comparison_verified" if binding == "source_bound" else binding)
+    emit("result", "metadata_baseline_verified" if binding == "source_bound" else binding)
     return 0 if binding == "source_bound" else 1
 
 
@@ -301,7 +332,7 @@ def main() -> int:
     try:
         git_hash = executable_hash()
         emit("executable", "executable_bound", executable_sha256=git_hash)
-        home = private_metadata_home(Path(os.environ.get("RUNNER_TEMP", "")), values["GITHUB_RUN_ID"])
+        private_metadata_home(Path(os.environ.get("RUNNER_TEMP", "")), values["GITHUB_RUN_ID"])
     except FileExistsError:
         emit("preflight", "already_used")
         return 1
@@ -310,7 +341,7 @@ def main() -> int:
         return 1
     try:
         # This authorized one-push continuation ends here, before any Git-init case.
-        return metadata_only(repo, values["GITHUB_SHA"], home, git_hash)
+        return metadata_only(repo, values["GITHUB_SHA"], git_hash)
     except (OSError, ValueError, subprocess.SubprocessError):
         emit("preflight", "preflight_failed")
         return 1

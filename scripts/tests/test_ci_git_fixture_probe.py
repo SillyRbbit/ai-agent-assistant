@@ -139,8 +139,8 @@ class ProbeTests(unittest.TestCase):
     def success_bytes(self):
         return ('a'*40+'\n'+probe.PARENT+'\n').encode()
 
-    def result(self,outcome='metadata_read',status=0,output=None,cleanup=None,close=False):
-        return (outcome,status,self.success_bytes() if output is None else output,cleanup,close)
+    def result(self,outcome='metadata_read',status=0,output=None,cleanup=None,close=False,category='stderr_empty'):
+        return (outcome,status,self.success_bytes() if output is None else output,cleanup,close,category)
 
     def test_exact_source_and_each_malformed_mismatch(self):
         self.assertEqual(probe.source_bound(self.success_bytes(),'a'*40),'source_bound')
@@ -155,58 +155,122 @@ class ProbeTests(unittest.TestCase):
         with patch.object(probe.Path,'is_symlink',return_value=True):self.assertFalse(probe.fixture_bound(ROOT))
         with patch.object(probe.Path,'read_bytes',side_effect=OSError('PRIVATE')):self.assertFalse(probe.fixture_bound(ROOT))
 
-    def metadata_case(self,chunks,status=0,select=True,wait=None,close_error=None,home=None):
-        child=Mock();child.wait.return_value=status;child.poll.return_value=status
+    def metadata_case(self,events,status=0,wait=None,close=None,select_error=None,clock=None):
+        child=Mock();child.stdout.fileno.return_value=11;child.stderr.fileno.return_value=12
+        child.wait.return_value=status;child.poll.return_value=status
         if wait is not None:child.wait.side_effect=wait
-        if close_error is not None:child.stdout.close.side_effect=close_error
-        selector=Mock();selector.select.return_value=[True] if select else []
+        if close is not None:getattr(child,close).close.side_effect=OSError('PRIVATE')
+        selector=Mock();queue=[]
+        def selected(timeout):
+            if select_error is not None:raise select_error
+            if not events:return []
+            batch=events.pop(0)
+            queue.extend(batch)
+            return [(Mock(data=name),1)for name,chunk in batch]
+        selector.select.side_effect=selected
+        def read(fd,count):
+            name,chunk=queue.pop(0)
+            self.assertEqual(fd,11 if name=='stdout' else 12)
+            self.assertLessEqual(count,83 if name=='stdout' else probe.STDERR_LIMIT+1)
+            if isinstance(chunk,Exception):raise chunk
+            self.assertLessEqual(len(chunk),count)
+            return chunk
         context=Mock();context.__enter__=Mock(return_value=selector);context.__exit__=Mock(return_value=False)
-        with patch.object(probe.subprocess,'Popen',return_value=child) as spawn,patch.object(probe.selectors,'DefaultSelector',return_value=context),patch.object(probe.os,'read',side_effect=chunks) as read:
-            result=probe.metadata(ROOT,home)
+        with patch.object(probe.subprocess,'Popen',return_value=child)as spawn,patch.object(probe.selectors,'DefaultSelector',return_value=context),patch.object(probe.os,'read',side_effect=read)as reader,patch.object(probe.time,'monotonic',side_effect=clock,return_value=1):
+            result=probe.metadata(ROOT)
         self.assertEqual(spawn.call_args.args[0],[probe.GIT,*probe.GIT_OPTIONS,'rev-parse','HEAD','HEAD^'])
-        expected=dict(probe.BASE_ENV)
-        if home is not None:expected['HOME']=str(home)
-        self.assertEqual(spawn.call_args.kwargs['env'],expected)
+        self.assertEqual(spawn.call_args.kwargs['env'],probe.BASE_ENV)
         self.assertEqual(spawn.call_args.kwargs['cwd'],ROOT)
-        for name in ['stdin','stderr']:self.assertEqual(spawn.call_args.kwargs[name],subprocess.DEVNULL)
-        child.stdout.close.assert_called_once_with();child.kill.assert_not_called()
-        return result,child,read
+        self.assertEqual(spawn.call_args.kwargs['stdin'],subprocess.DEVNULL)
+        for name in ['stdout','stderr']:
+            self.assertEqual(spawn.call_args.kwargs[name],subprocess.PIPE)
+            getattr(child,name).close.assert_called_once_with()
+        child.kill.assert_not_called()
+        return result,child,reader,selector
 
-    def test_metadata_capture_cap_and_home_only_delta(self):
+    def events(self,stdout=None,stderr=b'',order=('stdout','stderr')):
+        data={'stdout':self.success_bytes()if stdout is None else stdout,'stderr':stderr}
+        return [[(n,data[n])]for n in order if data[n]]+[[(n,b'')]for n in order]
+
+    def test_dual_stream_both_eof_orders_and_simultaneous_ready(self):
+        for order in [('stdout','stderr'),('stderr','stdout')]:
+            result,child,read,selector=self.metadata_case(self.events(stderr=b'PRIVATE',order=order))
+            self.assertEqual(result,('metadata_read',0,self.success_bytes(),None,False,'stderr_unknown'))
+            self.assertEqual([x.args[1]for x in read.call_args_list], [83,2049,1,2042]if order[0]=='stdout'else[2049,83,2042,1])
+            self.assertEqual(selector.register.call_count,2);self.assertEqual(selector.unregister.call_count,2);child.terminate.assert_not_called()
+        result,_,_,_=self.metadata_case([[('stdout',self.success_bytes()),('stderr',b'PRIVATE')],[('stderr',b''),('stdout',b'')]])
+        self.assertEqual(result[-1],'stderr_unknown')
+
+    def test_split_reads_preserve_metadata_shape_and_bound_caps(self):
         data=self.success_bytes()
-        result,child,read=self.metadata_case([data[:40],data[40:],b''])
-        self.assertEqual(result,('metadata_read',0,data,None,False))
-        self.assertEqual([x.args[1]for x in read.call_args_list],[83,43,1]);child.terminate.assert_not_called()
-        self.assertEqual(self.metadata_case([data,b''],home=Path('/synthetic/private-home'))[0],result)
-        self.assertNotIn('HOME',probe.BASE_ENV)
+        result,_,read,_=self.metadata_case([[('stdout',data[:40])],[('stderr',b'x'*1024)],[('stdout',data[40:])],[('stderr',b'x'*1024)],[('stdout',b''),('stderr',b'')]])
+        self.assertEqual(result[:3],('metadata_read',0,data));self.assertEqual(result[-1],'stderr_unknown')
+        self.assertEqual([x.args[1]for x in read.call_args_list],[83,2049,43,1025,1,1])
 
-    def test_nonzero_wait_result_is_distinct_and_private(self):
+    def test_reviewed_signatures_empty_unknown_and_near_misses(self):
+        positive=[(probe.REPOSITORY_SIGNATURE,'stderr_git_repository_signature'),(probe.OWNERSHIP_PREFIX+b"/PRIVATE/path'\nPRIVATE trailing advice",'stderr_git_ownership_signature')]
+        for raw,category in positive:
+            self.assertEqual(probe.classify_stderr(bytearray(raw)),category)
+        for raw in [b'PRIVATE',b'\xff',probe.REPOSITORY_SIGNATURE[:-1],b'x'+probe.REPOSITORY_SIGNATURE,probe.REPOSITORY_SIGNATURE+b'PRIVATE',probe.REPOSITORY_SIGNATURE.upper(),probe.OWNERSHIP_PREFIX+b"/PRIVATE/path'",probe.OWNERSHIP_PREFIX+b"/PRIVATE\x1b/path'\n",b"warning: "+probe.OWNERSHIP_PREFIX]:
+            self.assertEqual(probe.classify_stderr(bytearray(raw)),'stderr_unknown')
+        self.assertEqual(probe.classify_stderr(bytearray()),'stderr_empty')
+
+    def test_normal_nonzero_signature_observation_remains_failure(self):
         for status in [1,128,-15]:
-            result,child,_=self.metadata_case([b'PRIVATE',b''],status=status)
-            self.assertEqual(result,('metadata_nonzero',status,b'',None,False));child.terminate.assert_not_called()
+            result,child,_,_=self.metadata_case(self.events(stdout=b'PRIVATE',stderr=probe.REPOSITORY_SIGNATURE),status=status)
+            self.assertEqual(result,('metadata_nonzero',status,b'',None,False,'stderr_git_repository_signature'));child.terminate.assert_not_called()
+            code,count,rows=self.experiment([result]);self.assertEqual((code,count),(1,1));self.assertEqual(rows[-1]['outcome'],'comparison_stopped')
 
-    def test_spawn_capture_wait_failures_are_distinct(self):
+    def test_each_stream_overflow_stops_with_independent_cleanup(self):
+        for name,chunk,primary,category in [('stdout',b'P'*83,'metadata_malformed','stderr_capture_failed'),('stderr',b'P'*2049,'metadata_stderr_limit','stderr_truncated')]:
+            result,child,read,_=self.metadata_case([[(name,chunk)]],status=1)
+            self.assertEqual(result,(primary,None,b'',('metadata_cleanup_reaped',1),False,category))
+            self.assertEqual(read.call_count,1);child.terminate.assert_not_called()
+
+    def test_truncated_signature_never_classifies_or_exports_bytes(self):
+        raw=probe.OWNERSHIP_PREFIX+b"/PRIVATE/path'\n"+b'P'*(2049-len(probe.OWNERSHIP_PREFIX)-len(b"/PRIVATE/path'\n"))
+        with patch.object(probe,'classify_stderr')as classify:
+            result,_,_,_=self.metadata_case([[('stderr',raw)]],status=1)
+        classify.assert_not_called();self.assertEqual(result[-1],'stderr_truncated')
+        code,count,rows=self.experiment([result]);self.assertEqual((code,count),(1,1));self.assertNotIn('PRIVATE',json.dumps(rows))
+
+    def test_spawn_capture_select_and_wait_failures_stay_distinct(self):
         with patch.object(probe.subprocess,'Popen',side_effect=OSError('PRIVATE')):
-            self.assertEqual(probe.metadata(ROOT),('metadata_spawn_failed',None,b'',None,False))
-        result,_,_=self.metadata_case([OSError('PRIVATE')],status=1)
-        self.assertEqual(result,('metadata_capture_failed',None,b'',('metadata_cleanup_reaped',1),False))
-        result,_,_=self.metadata_case([b''],wait=[OSError('PRIVATE'),1])
-        self.assertEqual(result,('metadata_wait_failed',None,b'',('metadata_cleanup_reaped',1),False))
+            self.assertEqual(probe.metadata(ROOT),('metadata_spawn_failed',None,b'',None,False,'stderr_capture_failed'))
+        for stream in ['stdout','stderr']:
+            result,_,_,_=self.metadata_case([[(stream,OSError('PRIVATE'))]],status=1)
+            self.assertEqual(result,('metadata_capture_failed',None,b'',('metadata_cleanup_reaped',1),False,'stderr_capture_failed'))
+        result,_,_,_=self.metadata_case([],status=1,select_error=ValueError('PRIVATE'))
+        self.assertEqual(result[0],'metadata_capture_failed')
+        result,_,_,_=self.metadata_case(self.events(),wait=[OSError('PRIVATE'),1])
+        self.assertEqual(result,('metadata_wait_failed',None,b'',('metadata_cleanup_reaped',1),False,'stderr_capture_failed'))
 
-    def test_timeout_and_overflow_preserve_primary_with_cleanup(self):
-        result,_,_=self.metadata_case([],select=False,status=1)
-        self.assertEqual(result,('metadata_timed_out',None,b'',('metadata_cleanup_reaped',1),False))
-        result,_,_=self.metadata_case([b'P'*83],status=1)
-        self.assertEqual(result,('metadata_malformed',None,b'',('metadata_cleanup_reaped',1),False))
-        result,_,_=self.metadata_case([b''],wait=[subprocess.TimeoutExpired('PRIVATE',10),1])
-        self.assertEqual(result,('metadata_timed_out',None,b'',('metadata_cleanup_reaped',1),False))
+    def test_shared_deadline_includes_both_streams_and_reaping(self):
+        for events,clock in [([],None),([[('stdout',self.success_bytes())]],None),([[('stderr',probe.REPOSITORY_SIGNATURE)]],[1,12])]:
+            with patch.object(probe,'classify_stderr')as classify:
+                result,_,_,_=self.metadata_case(events,status=1,clock=clock)
+            self.assertEqual(result[0],'metadata_timed_out');self.assertEqual(result[-1],'stderr_capture_failed');classify.assert_not_called()
+        result,child,_,_=self.metadata_case(self.events(),wait=[subprocess.TimeoutExpired('PRIVATE',10),1])
+        self.assertEqual(result[0],'metadata_timed_out');self.assertEqual(result[-1],'stderr_capture_failed')
+        self.assertEqual(child.wait.call_args_list[0].kwargs,{'timeout':10});self.assertEqual(child.wait.call_args_list[1].kwargs,{'timeout':5})
 
-    def test_close_failure_does_not_erase_primary_or_allow_home(self):
-        result,_,_=self.metadata_case([b''],status=1,close_error=OSError('PRIVATE'))
-        self.assertEqual(result,('metadata_nonzero',1,b'',None,True))
-        code,count,rows=self.experiment([result])
-        self.assertEqual((code,count),(1,1))
-        self.assertEqual([r['outcome']for r in rows],['metadata_nonzero','metadata_stream_close_failed','comparison_stopped'])
+    def test_either_close_failure_preserves_primary_and_denies_classification(self):
+        for name in ['stdout','stderr']:
+            with patch.object(probe,'classify_stderr')as classify:
+                result,_,_,_=self.metadata_case(self.events(stderr=probe.REPOSITORY_SIGNATURE),status=1,close=name)
+            self.assertEqual(result,('metadata_nonzero',1,b'',None,True,'stderr_capture_failed'));classify.assert_not_called()
+            code,count,rows=self.experiment([result]);self.assertEqual((code,count),(1,1))
+            self.assertEqual([r['outcome']for r in rows],['metadata_nonzero','stderr_capture_failed','metadata_stream_close_failed','comparison_stopped'])
+
+    def test_transient_stderr_buffer_is_cleared_and_only_label_returned(self):
+        buffers=[];real=probe.classify_stderr
+        def classify(captured):buffers.append(captured);return real(captured)
+        with patch.object(probe,'classify_stderr',side_effect=classify):
+            result,_,_,_=self.metadata_case(self.events(stderr=b'PRIVATE key/path/environment'),status=1)
+        self.assertEqual(buffers,[bytearray()]);self.assertEqual(result[-1],'stderr_unknown')
+        self.assertNotIn('PRIVATE',repr(result))
+        code,count,rows=self.experiment([result]);self.assertNotIn('PRIVATE',json.dumps(rows))
+        self.assertTrue(all(set(r)=={'stage','outcome','exit_status'}for r in rows))
 
     def test_cleanup_owned_identity_race_and_unknown_status(self):
         child=Mock();child.poll.return_value=None;child.wait.return_value=-15
@@ -219,40 +283,27 @@ class ProbeTests(unittest.TestCase):
 
     def experiment(self,results,hashes=None):
         buf=io.StringIO()
-        with patch.object(probe,'metadata',side_effect=results) as query,patch.object(probe,'executable_hash',side_effect=hashes,return_value='f'*64),redirect_stdout(buf):
-            status=probe.metadata_only(ROOT,'a'*40,Path('/synthetic/home'),'f'*64)
+        with patch.object(probe,'metadata',side_effect=results)as query,patch.object(probe,'executable_hash',side_effect=hashes,return_value='f'*64),redirect_stdout(buf):
+            status=probe.metadata_only(ROOT,'a'*40,'f'*64)
         return status,query.call_count,[json.loads(x)for x in buf.getvalue().splitlines()]
 
     def test_baseline_success_strictly_bound_stops_without_variant(self):
         code,count,rows=self.experiment([self.result()]);self.assertEqual((code,count),(0,1));self.assertEqual(rows[-1]['outcome'],'metadata_baseline_verified')
         for output in [b'PRIVATE',('b'*40+'\n'+probe.PARENT+'\n').encode()]:
-            code,count,rows=self.experiment([self.result(output=output)])
-            self.assertEqual((code,count),(1,1));self.assertNotIn('PRIVATE',json.dumps(rows))
+            code,count,rows=self.experiment([self.result(output=output)]);self.assertEqual((code,count),(1,1));self.assertNotIn('PRIVATE',json.dumps(rows))
 
-    def test_only_normal_exit_one_permits_one_home_query(self):
-        buf=io.StringIO()
-        with patch.object(probe,'metadata',side_effect=[self.result('metadata_nonzero',1,b''),self.result()]) as query,patch.object(probe,'executable_hash',return_value='f'*64),redirect_stdout(buf):
-            self.assertEqual(probe.metadata_only(ROOT,'a'*40,Path('/synthetic/home'),'f'*64),0)
-        self.assertEqual(query.call_args_list[0].args,(ROOT,));self.assertEqual(query.call_args_list[1].args,(ROOT,Path('/synthetic/home')))
-        rows=[json.loads(x)for x in buf.getvalue().splitlines()]
-        self.assertEqual(rows[0],{'stage':'metadata_baseline','outcome':'metadata_nonzero','exit_status':1});self.assertEqual(rows[-1]['outcome'],'metadata_comparison_verified')
+    def test_every_failure_including_normal_exit_one_stops_after_one_query(self):
+        for outcome,status in [('metadata_spawn_failed',None),('metadata_capture_failed',None),('metadata_wait_failed',None),('metadata_timed_out',None),('metadata_malformed',None),('metadata_stderr_limit',None),('metadata_nonzero',1),('metadata_nonzero',2),('metadata_nonzero',-15)]:
+            code,count,rows=self.experiment([self.result(outcome,status,b'',category='stderr_unknown')]);self.assertEqual((code,count),(1,1));self.assertEqual(rows[-1]['outcome'],'comparison_stopped')
 
-    def test_capture_exit_one_cleanup_never_admits_home(self):
-        for outcome in ['metadata_capture_failed','metadata_wait_failed','metadata_timed_out','metadata_malformed']:
-            for cleanup in [('metadata_cleanup_reaped',1),('metadata_cleanup_unresolved',None)]:
-                code,count,rows=self.experiment([self.result(outcome,None,b'',cleanup)])
-                self.assertEqual((code,count),(1,1));self.assertEqual(rows[0]['outcome'],outcome);self.assertEqual(rows[1]['outcome'],cleanup[0])
-        for outcome,status in [('metadata_spawn_failed',None),('metadata_nonzero',0),('metadata_nonzero',2),('metadata_nonzero',-15)]:
-            code,count,_=self.experiment([self.result(outcome,status,b'')]);self.assertEqual((code,count),(1,1))
+    def test_primary_failure_survives_cleanup_one_or_unavailable_status(self):
+        for cleanup in [('metadata_cleanup_reaped',1),('metadata_cleanup_unresolved',None)]:
+            code,count,rows=self.experiment([self.result('metadata_capture_failed',None,b'',cleanup,category='stderr_capture_failed')])
+            self.assertEqual((code,count),(1,1));self.assertEqual([r['outcome']for r in rows],['metadata_capture_failed','stderr_capture_failed',cleanup[0],'comparison_stopped'])
 
-    def test_variant_failures_never_retry_or_accept_source(self):
-        baseline=self.result('metadata_nonzero',1,b'')
-        for r in [self.result('metadata_nonzero',1,b''),self.result('metadata_capture_failed',None,b'',('metadata_cleanup_reaped',1)),self.result(output=b'PRIVATE'),self.result(output=('b'*40+'\n'+probe.PARENT+'\n').encode()),self.result(close=True)]:
-            code,count,rows=self.experiment([baseline,r]);self.assertEqual((code,count),(1,2));self.assertNotIn('PRIVATE',json.dumps(rows))
-
-    def test_executable_drift_blocks_next_query_and_acceptance(self):
-        for results,hashes,expected_count in [([self.result('metadata_nonzero',1,b'')],['e'*64],1),([self.result('metadata_nonzero',1,b''),self.result()],['f'*64,'e'*64],2)]:
-            code,count,rows=self.experiment(results,hashes);self.assertEqual((code,count),(1,expected_count));self.assertEqual(rows[-1]['outcome'],'executable_drift')
+    def test_executable_drift_blocks_acceptance_without_second_query(self):
+        for result in [self.result(),self.result('metadata_nonzero',1,b'')]:
+            code,count,rows=self.experiment([result],['e'*64]);self.assertEqual((code,count),(1,1));self.assertEqual(rows[-1]['outcome'],'executable_drift')
 
     def test_metadata_private_root_claim_and_replay(self):
         with tempfile.TemporaryDirectory() as t:
