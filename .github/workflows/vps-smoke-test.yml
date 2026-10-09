@@ -1,0 +1,42 @@
+
+name: Cortexa VPS Smoke Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  vps-smoke:
+    name: Validate VPS runner
+    runs-on: [self-hosted, Linux, X64, cortexa-linux]
+    timeout-minutes: 10
+
+    steps:
+      - name: Verify runner and toolchains
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Runner: $RUNNER_NAME"
+          echo "OS: $RUNNER_OS"
+          test "$RUNNER_NAME" = "cortexa-vps"
+          test "$RUNNER_OS" = "Linux"
+
+          rustc --version
+          cargo --version
+          node --version
+          npm --version
+
+          pkg-config --modversion webkit2gtk-4.1
+          pkg-config --modversion javascriptcoregtk-4.1
+          pkg-config --modversion gtk+-3.0
+
+      - name: Verify workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -w "$GITHUB_WORKSPACE"
+          echo "Workspace is writable"
+          df -h "$GITHUB_WORKSPACE"
+          free -h
