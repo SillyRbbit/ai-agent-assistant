@@ -136,15 +136,92 @@ class ProbeTests(unittest.TestCase):
             with self.assertRaises(ValueError):probe.private_fixtures(link,'123')
         with self.assertRaises(ValueError):probe.private_fixtures(Path('.'),'123')
 
-    def test_bound_source_and_wrong_parent_head_hash(self):
-        with patch.object(probe.subprocess,'run',return_value=subprocess.CompletedProcess([],0,('a'*40+'\n'+probe.PARENT+'\n').encode())) as run:
-            self.assertTrue(probe.source_bound(ROOT,'a'*40))
-            self.assertEqual(run.call_args.args[0],[probe.GIT,*probe.GIT_OPTIONS,'rev-parse','HEAD','HEAD^'])
-        for output in [b'private',('b'*40+'\n'+probe.PARENT+'\n').encode()]:
-            with patch.object(probe.subprocess,'run',return_value=subprocess.CompletedProcess([],0,output)):
-                self.assertFalse(probe.source_bound(ROOT,'a'*40))
-        with patch.object(probe,'FIXTURE_HASH','0'*64),patch.object(probe.subprocess,'run') as run:
-            self.assertFalse(probe.source_bound(ROOT,'a'*40));run.assert_not_called()
+    def test_bound_source_and_each_fixed_rejection(self):
+        expected=('a'*40+'\n'+probe.PARENT+'\n').encode()
+        with patch.object(probe,'metadata',return_value=('metadata_read',0,expected)):
+            self.assertEqual(probe.source_bound(ROOT,'a'*40),('source_bound',0))
+        for output in [b'PRIVATE',expected+b'\n',expected.upper(),b'\xff',b'a'*83]:
+            with patch.object(probe,'metadata',return_value=('metadata_read',0,output)):
+                self.assertEqual(probe.source_bound(ROOT,'a'*40),('metadata_malformed',0))
+        for output in [('b'*40+'\n'+probe.PARENT+'\n').encode(),('a'*40+'\n'+'b'*40+'\n').encode()]:
+            with patch.object(probe,'metadata',return_value=('metadata_read',0,output)):
+                self.assertEqual(probe.source_bound(ROOT,'a'*40),('head_parent_mismatch',0))
+        with patch.object(probe,'FIXTURE_HASH','0'*64),patch.object(probe,'metadata') as metadata:
+            self.assertEqual(probe.source_bound(ROOT,'a'*40),('fixture_binding_rejected',None));metadata.assert_not_called()
+        with patch.object(probe.Path,'is_symlink',return_value=True),patch.object(probe,'metadata') as metadata:
+            self.assertEqual(probe.source_bound(ROOT,'a'*40),('fixture_binding_rejected',None));metadata.assert_not_called()
+        with patch.object(probe.Path,'read_bytes',side_effect=OSError('PRIVATE')),patch.object(probe,'metadata') as metadata:
+            self.assertEqual(probe.source_bound(ROOT,'a'*40),('fixture_binding_rejected',None));metadata.assert_not_called()
+
+    def metadata_case(self,chunks,status=0,select=True):
+        child=Mock();child.wait.return_value=status;child.poll.return_value=status
+        selector=Mock();selector.select.return_value=[True] if select else []
+        context=Mock();context.__enter__=Mock(return_value=selector);context.__exit__=Mock(return_value=False)
+        with patch.object(probe.subprocess,'Popen',return_value=child) as spawn,patch.object(probe.selectors,'DefaultSelector',return_value=context),patch.object(probe.os,'read',side_effect=chunks) as read:
+            result=probe.metadata(ROOT)
+        self.assertEqual(spawn.call_args.args[0],[probe.GIT,*probe.GIT_OPTIONS,'rev-parse','HEAD','HEAD^'])
+        self.assertEqual(spawn.call_args.kwargs['env'],probe.BASE_ENV)
+        self.assertEqual(spawn.call_args.kwargs['stderr'],subprocess.DEVNULL)
+        self.assertEqual(spawn.call_args.kwargs['stdin'],subprocess.DEVNULL)
+        child.stdout.close.assert_called_once_with();child.kill.assert_not_called()
+        return result,child,read
+
+    def test_metadata_bounded_capture_and_exact_command(self):
+        data=('a'*40+'\n'+probe.PARENT+'\n').encode()
+        result,child,read=self.metadata_case([data[:40],data[40:],b''])
+        self.assertEqual(result,('metadata_read',0,data))
+        self.assertEqual([x.args[1]for x in read.call_args_list],[83,43,1])
+        child.terminate.assert_not_called()
+
+    def test_metadata_nonzero_never_retains_output(self):
+        for status in [1,128,-15]:
+            result,_,_=self.metadata_case([b'PRIVATE',b''],status)
+            self.assertEqual(result,('metadata_command_failed',status,b''))
+
+    def test_metadata_overflow_and_deadline_fail_closed(self):
+        result,_,_=self.metadata_case([b'P'*83])
+        self.assertEqual(result,('metadata_malformed',0,b''))
+        result,_,_=self.metadata_case([],select=False)
+        self.assertEqual(result,('metadata_timed_out',0,b''))
+
+    def test_metadata_spawn_and_read_failure_are_private(self):
+        with patch.object(probe.subprocess,'Popen',side_effect=OSError('PRIVATE')):
+            self.assertEqual(probe.metadata(ROOT),('metadata_command_failed',None,b''))
+        result,_,_=self.metadata_case([OSError('PRIVATE')])
+        self.assertEqual(result,('metadata_command_failed',0,b''))
+
+    def test_metadata_cleanup_owned_child_and_failure(self):
+        child=Mock();child.poll.return_value=None;child.wait.return_value=-15
+        self.assertEqual(probe.stop_metadata_child(child),('metadata_timed_out',-15))
+        child.terminate.assert_called_once_with();child.kill.assert_not_called()
+        child.wait.side_effect=subprocess.TimeoutExpired('PRIVATE',5)
+        self.assertEqual(probe.stop_metadata_child(child),('metadata_cleanup_unresolved',None))
+        child.terminate.side_effect=OSError('PRIVATE')
+        self.assertEqual(probe.stop_metadata_child(child),('metadata_cleanup_unresolved',None))
+        child.kill.assert_not_called()
+
+    def test_metadata_terminal_categories_propagate_unchanged(self):
+        for outcome,status in [('metadata_command_failed',None),('metadata_command_failed',128),('metadata_timed_out',-15),('metadata_cleanup_unresolved',None)]:
+            with patch.object(probe,'metadata',return_value=(outcome,status,b'')):
+                self.assertEqual(probe.source_bound(ROOT,'a'*40),(outcome,status))
+
+    def test_metadata_eof_wait_timeout_requires_owned_cleanup(self):
+        child=Mock();child.poll.return_value=None
+        child.wait.side_effect=[subprocess.TimeoutExpired('PRIVATE',10),-15]
+        selector=Mock();selector.select.return_value=[True]
+        context=Mock();context.__enter__=Mock(return_value=selector);context.__exit__=Mock(return_value=False)
+        with patch.object(probe.subprocess,'Popen',return_value=child),patch.object(probe.selectors,'DefaultSelector',return_value=context),patch.object(probe.os,'read',return_value=b''):
+            self.assertEqual(probe.metadata(ROOT),('metadata_timed_out',-15,b''))
+        child.terminate.assert_called_once_with();child.kill.assert_not_called()
+        child.stdout.close.assert_called_once_with()
+
+    def test_main_all_source_failures_stop_before_fixture_creation(self):
+        for outcome,status in [('fixture_binding_rejected',None),('metadata_command_failed',1),('metadata_malformed',0),('head_parent_mismatch',0),('metadata_timed_out',-15),('metadata_cleanup_unresolved',None)]:
+            buf=io.StringIO()
+            with patch.object(probe.sys,'argv',['probe']),patch.dict(os.environ,self.context(),clear=True),patch.object(probe,'source_bound',return_value=(outcome,status)),patch.object(probe,'private_fixtures') as fixtures,patch.object(probe,'compare') as compare,redirect_stdout(buf):
+                self.assertEqual(probe.main(),1);fixtures.assert_not_called();compare.assert_not_called()
+            self.assertEqual(json.loads(buf.getvalue()),{'stage':'preflight','outcome':outcome,'exit_status':status})
+            self.assertNotIn('PRIVATE',buf.getvalue())
 
     def test_main_rejects_context_before_any_io(self):
         with patch.object(probe.sys,'argv',['probe']),patch.dict(os.environ,{},clear=True),patch.object(probe,'source_bound') as bound,redirect_stdout(io.StringIO()):

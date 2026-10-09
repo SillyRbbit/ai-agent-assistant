@@ -5601,3 +5601,65 @@ handoff after publication; no post-publication result is presumed or waived.
 One commit/non-force push is authorized; no merge or automatic fixture repair.
 Ledger63/66, disabled ECC hooks/MCP, all advisories, native workaround and parked
 D-125/M1/M2 remain. Preserve earlier failed attempts and all untested variants.
+
+## 2026-10-08 — PR139 source-binding diagnostic correction publication readiness
+
+Owner-authorized pr139-source-binding-diagnostics uses ordinary D-134 schema-2 admission.
+Preserved predecessor completion and a verified1133-path recoverable snapshot at
+/private/tmp/cortexa-pr139-source-binding-mc6klmva. The three tooling paths are
+.github/workflows/ci.yml, scripts/ci_git_fixture_probe.py and its focused test.
+Existing normal CI job/configuration bytes remain an exact prefix; no product,
+fixture behavior, dependency, gate, runner/service or permission changes.
+
+The independent fixed Mac job is eligible only for the first push after required
+headcf70384fb2c8bc2ceb9ae5eea2e2fd06ca8b3798 on the existing publication branch,
+run attempt1. It verifies expected runner name/OS/architecture, source parent and
+frozen Rust Git-helper hash. GitHub assigned runner22 must be checked before
+accepting results; labels/name alone are not a numeric runner-ID guarantee.
+The new job is runner-originated evidence, not proof of exact historical context.
+No manual dispatch/rerun, arbitrary input or new workflow. Normal CI and
+Documentation triggered by the authorized push remain independent acceptance.
+
+The prior runner22 diagnostic stopped at source_rejected before either fixture
+case. That row, retrieved through Computer Use after unavailable API log access,
+does not identify the failing source check. New fixed categories distinguish
+fixture_binding_rejected, metadata_command_failed (exit/null), metadata_malformed,
+head_parent_mismatch, metadata_timed_out and metadata_cleanup_unresolved.
+Raw metadata, exception messages and source values never leave. Capture is capped
+at83 bytes against the exact82-byte two-lowercase-hash shape. Preserve the exact
+source checks, command/options/environment and ten-second deadline; bounded
+cleanup signals only the retained child, never force kill. All rejection paths
+stop before fixture creation. This is a diagnostic correction, not a HOME repair.
+
+Only two private disposable Git-init cases are possible. Baseline uses the exact
+cleared environment and disabled configuration/hooks/signing; only exit1 permits
+one variant adding a private task-local HOME. Raw output is suppressed; only fixed
+stage/outcome/exit and executable SHA-256 leave the probe. Ten-second command
+limits and bounded owned-child termination preserve no-retry/no-force-kill.
+Exclusive private root prevents replay within the job; run-attempt/push guards
+prevent subsequent eligible runs. Fixtures are retained; no existing data deleted.
+A successful diagnostic job means the observation was completed, not that product
+fixture tests passed. Baseline success stops without a variant or cause claim.
+
+Focused mocked probe25 and affected workflow/policy79 tests passed. Tests cover
+exact environment delta, baseline short-circuit, fixed privacy output, source and
+runner/event binding, timeout races, failed cleanup, replay and existing-job
+preservation. Previous audit sanitizer8 evidence is inherited, not repeated. Unchanged Rust749/3ignored, native
+compile, frontend182 input hashes and hook9 inputs reuse retained passing evidence;
+no product build/test/native QA was repeated. Required current documentation,
+schema, session, preservation and final gate outcomes are recorded externally.
+
+The retained predecessor annotation read for historical audit check113562559566 classified
+runner_communication_lost. No raw message was retained. Secret/npm/Rust audit
+steps passed; this annotation does not establish a vulnerability or checkout
+cleanup cause. Mac fixture_init/exit1 remains owner-reported; missing HOME is
+unproven, and the same helper passed prior local checks. No further repair here.
+
+Current plan: docs/plans/2026-10-08-pr139-source-binding-diagnostics.md.
+Current review: docs/reviews/2026-10-08-pr139-source-binding-diagnostics-post-increment-review.md.
+Local completion concerns diagnostic publication readiness only. Actual commit,
+new exact-head CI/probe results and assigned runners belong in the external final
+handoff after publication; no post-publication result is presumed or waived.
+One commit/non-force push is authorized; no merge or automatic fixture repair.
+Ledger63/66, disabled ECC hooks/MCP, all advisories, native workaround and parked
+D-125/M1/M2 remain. Preserve earlier failed attempts and all untested variants.
