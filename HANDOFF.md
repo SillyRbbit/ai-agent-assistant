@@ -11342,3 +11342,64 @@ repository root instead of .codex/state/closures. A fresh corrected helper uses
 the archive's original root and passes every unchanged byte comparison. Both
 failed preparation sources/receipts remain external; no gate waiver, repository
 history mutation or product repair was used. Focused probe25 and policy79 pass.
+
+## 2026-10-08 — PR139 metadata-only diagnostic publication readiness
+
+Owner-authorized pr139-metadata-home-diagnostics uses ordinary D-134 schema-2
+successor admission; predecessor completed state, reports, failed receipts and
+verified1136-path snapshot are retained at /private/tmp/cortexa-pr139-metadata-home-al2k79xb.
+Only the fixed probe/test and existing one-push parent binding change, with seven
+additive root documents and a new plan/readiness/final review. Normal CI prefix,
+Rust Git fixture, product/artifact bytes, gates and upstream policies are unchanged.
+
+The one-push job binds parenta84668cae9d2fda20b8b90a15d9dc5bbc132eaaa, current publication branch and attempt1.
+Preserve Mac context/name/architecture and require assigned runner22 for remote
+evidence. New behavior is metadata-only: no Git-init case, fixture execution,
+product HOME change or cause claim. Before queries, validate frozen fixture hash,
+bind /usr/bin/git hash and claim a fresh exclusive private metadata HOME root.
+Recheck executable identity between/after cases; no personal HOME or credentials.
+
+The unchanged cleared-environment rev-parse HEAD HEAD^ case runs once. Only normal
+command exit1 with successful capture/stream close/reaping permits one case adding
+private task-local HOME; no other environment/options/cwd/executable delta.
+Separate fixed spawn/capture/wait/nonzero/timeout categories. Primary outcome and
+independent cleanup/close outcomes are recorded before evaluation, never relabeled.
+Keep83-byte cap, exact82-byte lowercase-hash shape and strict actual HEAD/parent
+match. Suppress stderr/raw bytes, exception messages, paths and environment values.
+Ten-second deadline, five-second retained-child cleanup, no force kill or retries.
+Any capture/cleanup/source/identity failure stops; success stops after metadata.
+A verified HOME comparison would demonstrate only that controlled metadata case,
+not the historical Git-init cause or passing normal Rust CI.
+
+Focused32 mocked cases and affected79 policy cases passed; no live Git query/init
+executed locally. Required documentation/repository/security/whitespace/session,
+schema and preservation verification is recorded externally. Reuse unchanged
+Rust749passed/3ignored, strictClippy/native compile, frontend182 and hook9 sealed
+evidence. No repeated product builds/tests/native QA. Local completion concerns
+diagnostic implementation/publication readiness; actual runner outcome belongs
+in the external handoff after the authorized commit/non-force push.
+
+Previous metadata_command_failed/exit1 remains inconclusive and unchanged.
+Historical audit annotation runner_communication_lost remains inherited, not reread.
+Linux runner23 availability is an independent CI prerequisite; no service or
+runner changes. All historical failures, untested variants, host/same-user hash
+limits and inherited native timing/Docker/provider advisories remain disclosed.
+Ledger63/66, disabled ECC hooks/MCP, native workaround and parked D-125/M1/M2 remain.
+No manual rerun, installs, merge, product repair or subsequent milestone authorized.
+
+Plan: docs/plans/2026-10-08-pr139-metadata-home-diagnostics.md
+Review: docs/reviews/2026-10-08-pr139-metadata-home-diagnostics-post-increment-review.md
+
+### Exact next resume prompt
+
+```text
+Inspect instructions and current PR139 state before any further work. Read
+/private/tmp/cortexa-pr139-metadata-home-al2k79xb/FINAL-HANDOFF.md. Preserve current changes, completion, artifacts and all
+historical failed receipts. Verify published head/main and actual runner22 fixed
+metadata results. Keep command versus capture/cleanup evidence distinct; never
+infer the original fixture cause or run Git init from metadata success alone.
+Inspect independent CI and runner availability read-only. Propose the smallest
+further diagnostic or repair separately. No replay, failed-log retrieval repeats,
+manual reruns, product edits, runner changes or merge. Reuse passing evidence;
+retain ledger63/66, all advisories, disabled ECC hooks/MCP and parked work.
+```

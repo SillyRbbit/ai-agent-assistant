@@ -268,7 +268,7 @@ jobs:
     if: >-
       github.event_name == 'push' &&
       github.ref == 'refs/heads/codex/isolated-action-publication' &&
-      github.event.before == 'cf70384fb2c8bc2ceb9ae5eea2e2fd06ca8b3798' &&
+      github.event.before == 'a84668cae9d2fda20b8b90a15d9dc5bbc132eaaa' &&
       github.run_attempt == 1
     runs-on: [self-hosted, macOS, X64, cortexa-ci]
     timeout-minutes: 5

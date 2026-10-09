@@ -136,104 +136,162 @@ class ProbeTests(unittest.TestCase):
             with self.assertRaises(ValueError):probe.private_fixtures(link,'123')
         with self.assertRaises(ValueError):probe.private_fixtures(Path('.'),'123')
 
-    def test_bound_source_and_each_fixed_rejection(self):
-        expected=('a'*40+'\n'+probe.PARENT+'\n').encode()
-        with patch.object(probe,'metadata',return_value=('metadata_read',0,expected)):
-            self.assertEqual(probe.source_bound(ROOT,'a'*40),('source_bound',0))
-        for output in [b'PRIVATE',expected+b'\n',expected.upper(),b'\xff',b'a'*83]:
-            with patch.object(probe,'metadata',return_value=('metadata_read',0,output)):
-                self.assertEqual(probe.source_bound(ROOT,'a'*40),('metadata_malformed',0))
-        for output in [('b'*40+'\n'+probe.PARENT+'\n').encode(),('a'*40+'\n'+'b'*40+'\n').encode()]:
-            with patch.object(probe,'metadata',return_value=('metadata_read',0,output)):
-                self.assertEqual(probe.source_bound(ROOT,'a'*40),('head_parent_mismatch',0))
-        with patch.object(probe,'FIXTURE_HASH','0'*64),patch.object(probe,'metadata') as metadata:
-            self.assertEqual(probe.source_bound(ROOT,'a'*40),('fixture_binding_rejected',None));metadata.assert_not_called()
-        with patch.object(probe.Path,'is_symlink',return_value=True),patch.object(probe,'metadata') as metadata:
-            self.assertEqual(probe.source_bound(ROOT,'a'*40),('fixture_binding_rejected',None));metadata.assert_not_called()
-        with patch.object(probe.Path,'read_bytes',side_effect=OSError('PRIVATE')),patch.object(probe,'metadata') as metadata:
-            self.assertEqual(probe.source_bound(ROOT,'a'*40),('fixture_binding_rejected',None));metadata.assert_not_called()
+    def success_bytes(self):
+        return ('a'*40+'\n'+probe.PARENT+'\n').encode()
 
-    def metadata_case(self,chunks,status=0,select=True):
+    def result(self,outcome='metadata_read',status=0,output=None,cleanup=None,close=False):
+        return (outcome,status,self.success_bytes() if output is None else output,cleanup,close)
+
+    def test_exact_source_and_each_malformed_mismatch(self):
+        self.assertEqual(probe.source_bound(self.success_bytes(),'a'*40),'source_bound')
+        for output in [b'PRIVATE',self.success_bytes()+b'\n',self.success_bytes().upper(),b'\xff',b'a'*83]:
+            self.assertEqual(probe.source_bound(output,'a'*40),'metadata_malformed')
+        for output in [('b'*40+'\n'+probe.PARENT+'\n').encode(),('a'*40+'\n'+'b'*40+'\n').encode()]:
+            self.assertEqual(probe.source_bound(output,'a'*40),'head_parent_mismatch')
+
+    def test_fixture_binding_remains_strict(self):
+        self.assertTrue(probe.fixture_bound(ROOT))
+        with patch.object(probe,'FIXTURE_HASH','0'*64):self.assertFalse(probe.fixture_bound(ROOT))
+        with patch.object(probe.Path,'is_symlink',return_value=True):self.assertFalse(probe.fixture_bound(ROOT))
+        with patch.object(probe.Path,'read_bytes',side_effect=OSError('PRIVATE')):self.assertFalse(probe.fixture_bound(ROOT))
+
+    def metadata_case(self,chunks,status=0,select=True,wait=None,close_error=None,home=None):
         child=Mock();child.wait.return_value=status;child.poll.return_value=status
+        if wait is not None:child.wait.side_effect=wait
+        if close_error is not None:child.stdout.close.side_effect=close_error
         selector=Mock();selector.select.return_value=[True] if select else []
         context=Mock();context.__enter__=Mock(return_value=selector);context.__exit__=Mock(return_value=False)
         with patch.object(probe.subprocess,'Popen',return_value=child) as spawn,patch.object(probe.selectors,'DefaultSelector',return_value=context),patch.object(probe.os,'read',side_effect=chunks) as read:
-            result=probe.metadata(ROOT)
+            result=probe.metadata(ROOT,home)
         self.assertEqual(spawn.call_args.args[0],[probe.GIT,*probe.GIT_OPTIONS,'rev-parse','HEAD','HEAD^'])
-        self.assertEqual(spawn.call_args.kwargs['env'],probe.BASE_ENV)
-        self.assertEqual(spawn.call_args.kwargs['stderr'],subprocess.DEVNULL)
-        self.assertEqual(spawn.call_args.kwargs['stdin'],subprocess.DEVNULL)
+        expected=dict(probe.BASE_ENV)
+        if home is not None:expected['HOME']=str(home)
+        self.assertEqual(spawn.call_args.kwargs['env'],expected)
+        self.assertEqual(spawn.call_args.kwargs['cwd'],ROOT)
+        for name in ['stdin','stderr']:self.assertEqual(spawn.call_args.kwargs[name],subprocess.DEVNULL)
         child.stdout.close.assert_called_once_with();child.kill.assert_not_called()
         return result,child,read
 
-    def test_metadata_bounded_capture_and_exact_command(self):
-        data=('a'*40+'\n'+probe.PARENT+'\n').encode()
+    def test_metadata_capture_cap_and_home_only_delta(self):
+        data=self.success_bytes()
         result,child,read=self.metadata_case([data[:40],data[40:],b''])
-        self.assertEqual(result,('metadata_read',0,data))
-        self.assertEqual([x.args[1]for x in read.call_args_list],[83,43,1])
-        child.terminate.assert_not_called()
+        self.assertEqual(result,('metadata_read',0,data,None,False))
+        self.assertEqual([x.args[1]for x in read.call_args_list],[83,43,1]);child.terminate.assert_not_called()
+        self.assertEqual(self.metadata_case([data,b''],home=Path('/synthetic/private-home'))[0],result)
+        self.assertNotIn('HOME',probe.BASE_ENV)
 
-    def test_metadata_nonzero_never_retains_output(self):
+    def test_nonzero_wait_result_is_distinct_and_private(self):
         for status in [1,128,-15]:
-            result,_,_=self.metadata_case([b'PRIVATE',b''],status)
-            self.assertEqual(result,('metadata_command_failed',status,b''))
+            result,child,_=self.metadata_case([b'PRIVATE',b''],status=status)
+            self.assertEqual(result,('metadata_nonzero',status,b'',None,False));child.terminate.assert_not_called()
 
-    def test_metadata_overflow_and_deadline_fail_closed(self):
-        result,_,_=self.metadata_case([b'P'*83])
-        self.assertEqual(result,('metadata_malformed',0,b''))
-        result,_,_=self.metadata_case([],select=False)
-        self.assertEqual(result,('metadata_timed_out',0,b''))
-
-    def test_metadata_spawn_and_read_failure_are_private(self):
+    def test_spawn_capture_wait_failures_are_distinct(self):
         with patch.object(probe.subprocess,'Popen',side_effect=OSError('PRIVATE')):
-            self.assertEqual(probe.metadata(ROOT),('metadata_command_failed',None,b''))
-        result,_,_=self.metadata_case([OSError('PRIVATE')])
-        self.assertEqual(result,('metadata_command_failed',0,b''))
+            self.assertEqual(probe.metadata(ROOT),('metadata_spawn_failed',None,b'',None,False))
+        result,_,_=self.metadata_case([OSError('PRIVATE')],status=1)
+        self.assertEqual(result,('metadata_capture_failed',None,b'',('metadata_cleanup_reaped',1),False))
+        result,_,_=self.metadata_case([b''],wait=[OSError('PRIVATE'),1])
+        self.assertEqual(result,('metadata_wait_failed',None,b'',('metadata_cleanup_reaped',1),False))
 
-    def test_metadata_cleanup_owned_child_and_failure(self):
+    def test_timeout_and_overflow_preserve_primary_with_cleanup(self):
+        result,_,_=self.metadata_case([],select=False,status=1)
+        self.assertEqual(result,('metadata_timed_out',None,b'',('metadata_cleanup_reaped',1),False))
+        result,_,_=self.metadata_case([b'P'*83],status=1)
+        self.assertEqual(result,('metadata_malformed',None,b'',('metadata_cleanup_reaped',1),False))
+        result,_,_=self.metadata_case([b''],wait=[subprocess.TimeoutExpired('PRIVATE',10),1])
+        self.assertEqual(result,('metadata_timed_out',None,b'',('metadata_cleanup_reaped',1),False))
+
+    def test_close_failure_does_not_erase_primary_or_allow_home(self):
+        result,_,_=self.metadata_case([b''],status=1,close_error=OSError('PRIVATE'))
+        self.assertEqual(result,('metadata_nonzero',1,b'',None,True))
+        code,count,rows=self.experiment([result])
+        self.assertEqual((code,count),(1,1))
+        self.assertEqual([r['outcome']for r in rows],['metadata_nonzero','metadata_stream_close_failed','comparison_stopped'])
+
+    def test_cleanup_owned_identity_race_and_unknown_status(self):
         child=Mock();child.poll.return_value=None;child.wait.return_value=-15
-        self.assertEqual(probe.stop_metadata_child(child),('metadata_timed_out',-15))
-        child.terminate.assert_called_once_with();child.kill.assert_not_called()
-        child.wait.side_effect=subprocess.TimeoutExpired('PRIVATE',5)
-        self.assertEqual(probe.stop_metadata_child(child),('metadata_cleanup_unresolved',None))
-        child.terminate.side_effect=OSError('PRIVATE')
-        self.assertEqual(probe.stop_metadata_child(child),('metadata_cleanup_unresolved',None))
-        child.kill.assert_not_called()
+        self.assertEqual(probe.stop_metadata_child(child),('metadata_cleanup_reaped',-15));child.terminate.assert_called_once_with();child.kill.assert_not_called()
+        for error in [OSError('PRIVATE'),ValueError('PRIVATE'),subprocess.TimeoutExpired('PRIVATE',5)]:
+            child=Mock();child.poll.return_value=0;child.wait.side_effect=error
+            self.assertEqual(probe.stop_metadata_child(child),('metadata_cleanup_unresolved',None));child.terminate.assert_not_called();child.kill.assert_not_called()
+        child=Mock();child.poll.side_effect=OSError('PRIVATE')
+        self.assertEqual(probe.stop_metadata_child(child),('metadata_cleanup_unresolved',None));child.terminate.assert_not_called()
 
-    def test_metadata_terminal_categories_propagate_unchanged(self):
-        for outcome,status in [('metadata_command_failed',None),('metadata_command_failed',128),('metadata_timed_out',-15),('metadata_cleanup_unresolved',None)]:
-            with patch.object(probe,'metadata',return_value=(outcome,status,b'')):
-                self.assertEqual(probe.source_bound(ROOT,'a'*40),(outcome,status))
+    def experiment(self,results,hashes=None):
+        buf=io.StringIO()
+        with patch.object(probe,'metadata',side_effect=results) as query,patch.object(probe,'executable_hash',side_effect=hashes,return_value='f'*64),redirect_stdout(buf):
+            status=probe.metadata_only(ROOT,'a'*40,Path('/synthetic/home'),'f'*64)
+        return status,query.call_count,[json.loads(x)for x in buf.getvalue().splitlines()]
 
-    def test_metadata_eof_wait_timeout_requires_owned_cleanup(self):
-        child=Mock();child.poll.return_value=None
-        child.wait.side_effect=[subprocess.TimeoutExpired('PRIVATE',10),-15]
-        selector=Mock();selector.select.return_value=[True]
-        context=Mock();context.__enter__=Mock(return_value=selector);context.__exit__=Mock(return_value=False)
-        with patch.object(probe.subprocess,'Popen',return_value=child),patch.object(probe.selectors,'DefaultSelector',return_value=context),patch.object(probe.os,'read',return_value=b''):
-            self.assertEqual(probe.metadata(ROOT),('metadata_timed_out',-15,b''))
-        child.terminate.assert_called_once_with();child.kill.assert_not_called()
-        child.stdout.close.assert_called_once_with()
+    def test_baseline_success_strictly_bound_stops_without_variant(self):
+        code,count,rows=self.experiment([self.result()]);self.assertEqual((code,count),(0,1));self.assertEqual(rows[-1]['outcome'],'metadata_baseline_verified')
+        for output in [b'PRIVATE',('b'*40+'\n'+probe.PARENT+'\n').encode()]:
+            code,count,rows=self.experiment([self.result(output=output)])
+            self.assertEqual((code,count),(1,1));self.assertNotIn('PRIVATE',json.dumps(rows))
 
-    def test_main_all_source_failures_stop_before_fixture_creation(self):
-        for outcome,status in [('fixture_binding_rejected',None),('metadata_command_failed',1),('metadata_malformed',0),('head_parent_mismatch',0),('metadata_timed_out',-15),('metadata_cleanup_unresolved',None)]:
+    def test_only_normal_exit_one_permits_one_home_query(self):
+        buf=io.StringIO()
+        with patch.object(probe,'metadata',side_effect=[self.result('metadata_nonzero',1,b''),self.result()]) as query,patch.object(probe,'executable_hash',return_value='f'*64),redirect_stdout(buf):
+            self.assertEqual(probe.metadata_only(ROOT,'a'*40,Path('/synthetic/home'),'f'*64),0)
+        self.assertEqual(query.call_args_list[0].args,(ROOT,));self.assertEqual(query.call_args_list[1].args,(ROOT,Path('/synthetic/home')))
+        rows=[json.loads(x)for x in buf.getvalue().splitlines()]
+        self.assertEqual(rows[0],{'stage':'metadata_baseline','outcome':'metadata_nonzero','exit_status':1});self.assertEqual(rows[-1]['outcome'],'metadata_comparison_verified')
+
+    def test_capture_exit_one_cleanup_never_admits_home(self):
+        for outcome in ['metadata_capture_failed','metadata_wait_failed','metadata_timed_out','metadata_malformed']:
+            for cleanup in [('metadata_cleanup_reaped',1),('metadata_cleanup_unresolved',None)]:
+                code,count,rows=self.experiment([self.result(outcome,None,b'',cleanup)])
+                self.assertEqual((code,count),(1,1));self.assertEqual(rows[0]['outcome'],outcome);self.assertEqual(rows[1]['outcome'],cleanup[0])
+        for outcome,status in [('metadata_spawn_failed',None),('metadata_nonzero',0),('metadata_nonzero',2),('metadata_nonzero',-15)]:
+            code,count,_=self.experiment([self.result(outcome,status,b'')]);self.assertEqual((code,count),(1,1))
+
+    def test_variant_failures_never_retry_or_accept_source(self):
+        baseline=self.result('metadata_nonzero',1,b'')
+        for r in [self.result('metadata_nonzero',1,b''),self.result('metadata_capture_failed',None,b'',('metadata_cleanup_reaped',1)),self.result(output=b'PRIVATE'),self.result(output=('b'*40+'\n'+probe.PARENT+'\n').encode()),self.result(close=True)]:
+            code,count,rows=self.experiment([baseline,r]);self.assertEqual((code,count),(1,2));self.assertNotIn('PRIVATE',json.dumps(rows))
+
+    def test_executable_drift_blocks_next_query_and_acceptance(self):
+        for results,hashes,expected_count in [([self.result('metadata_nonzero',1,b'')],['e'*64],1),([self.result('metadata_nonzero',1,b''),self.result()],['f'*64,'e'*64],2)]:
+            code,count,rows=self.experiment(results,hashes);self.assertEqual((code,count),(1,expected_count));self.assertEqual(rows[-1]['outcome'],'executable_drift')
+
+    def test_metadata_private_root_claim_and_replay(self):
+        with tempfile.TemporaryDirectory() as t:
+            home=probe.private_metadata_home(Path(t),'123')
+            for p in [home.parent,home]:self.assertEqual(p.stat().st_mode &0o777,0o700)
+            self.assertEqual(list(home.iterdir()),[])
+            with self.assertRaises(FileExistsError):probe.private_metadata_home(Path(t),'123')
+            link=Path(t)/'link';link.symlink_to(Path(t),target_is_directory=True)
+            with self.assertRaises(ValueError):probe.private_metadata_home(link,'124')
+            for bad in ['0','../outside']:
+                with self.assertRaises(ValueError):probe.private_metadata_home(Path(t),bad)
+        with self.assertRaises(ValueError):probe.private_metadata_home(Path('.'),'123')
+
+    def test_metadata_claim_wrong_owner_or_mode_stops(self):
+        with tempfile.TemporaryDirectory() as t:
+            uid=os.getuid()
+            with patch.object(probe.os,'getuid',return_value=uid+1):
+                with self.assertRaises(ValueError):probe.private_metadata_home(Path(t),'123')
+            mkdir=Path.mkdir
+            def wrong_mode(path,mode=0o777,parents=False,exist_ok=False):
+                return mkdir(path,mode=0o755,parents=parents,exist_ok=exist_ok)
+            with patch.object(probe.Path,'mkdir',wrong_mode):
+                with self.assertRaises(ValueError):probe.private_metadata_home(Path(t),'124')
+
+    def test_main_denies_context_and_fixture_before_claim_or_query(self):
+        for context,binding in [({},True),(self.context(),False)]:
+            with patch.object(probe.sys,'argv',['probe']),patch.dict(os.environ,context,clear=True),patch.object(probe,'fixture_bound',return_value=binding),patch.object(probe,'private_metadata_home') as home,patch.object(probe,'metadata') as query,redirect_stdout(io.StringIO()):
+                self.assertEqual(probe.main(),1);home.assert_not_called();query.assert_not_called()
+
+    def test_main_claim_errors_are_fixed_and_never_query(self):
+        for error,outcome in [(FileExistsError('PRIVATE'),'already_used'),(OSError('PRIVATE'),'preflight_failed')]:
             buf=io.StringIO()
-            with patch.object(probe.sys,'argv',['probe']),patch.dict(os.environ,self.context(),clear=True),patch.object(probe,'source_bound',return_value=(outcome,status)),patch.object(probe,'private_fixtures') as fixtures,patch.object(probe,'compare') as compare,redirect_stdout(buf):
-                self.assertEqual(probe.main(),1);fixtures.assert_not_called();compare.assert_not_called()
-            self.assertEqual(json.loads(buf.getvalue()),{'stage':'preflight','outcome':outcome,'exit_status':status})
-            self.assertNotIn('PRIVATE',buf.getvalue())
+            with patch.object(probe.sys,'argv',['probe']),patch.dict(os.environ,self.context(),clear=True),patch.object(probe,'fixture_bound',return_value=True),patch.object(probe,'executable_hash',return_value='f'*64),patch.object(probe,'private_metadata_home',side_effect=error),patch.object(probe,'metadata_only') as query,redirect_stdout(buf):
+                self.assertEqual(probe.main(),1);query.assert_not_called()
+            self.assertNotIn('PRIVATE',buf.getvalue());self.assertEqual(json.loads(buf.getvalue().splitlines()[-1])['outcome'],outcome)
 
-    def test_main_rejects_context_before_any_io(self):
-        with patch.object(probe.sys,'argv',['probe']),patch.dict(os.environ,{},clear=True),patch.object(probe,'source_bound') as bound,redirect_stdout(io.StringIO()):
-            self.assertEqual(probe.main(),1);bound.assert_not_called()
-
-    def test_main_routes_preflight_failure_without_private_output(self):
-        for effect in [OSError('PRIVATE'),subprocess.TimeoutExpired('PRIVATE',10)]:
-            buf=io.StringIO()
-            with patch.object(probe.sys,'argv',['probe']),patch.dict(os.environ,self.context(),clear=True),patch.object(probe,'source_bound',side_effect=effect),patch.object(probe,'compare') as compare,redirect_stdout(buf):
-                self.assertEqual(probe.main(),1);compare.assert_not_called()
-            self.assertNotIn('PRIVATE',buf.getvalue())
-            self.assertEqual(json.loads(buf.getvalue())['outcome'],'preflight_failed')
+    def test_main_can_never_execute_git_init_or_fixtures(self):
+        with patch.object(probe.sys,'argv',['probe']),patch.dict(os.environ,self.context(),clear=True),patch.object(probe,'fixture_bound',return_value=True),patch.object(probe,'executable_hash',return_value='f'*64),patch.object(probe,'private_metadata_home',return_value=Path('/synthetic/home')),patch.object(probe,'metadata_only',return_value=0) as query,patch.object(probe,'private_fixtures') as fixtures,patch.object(probe,'git_init') as init,patch.object(probe,'compare') as compare,redirect_stdout(io.StringIO()):
+            self.assertEqual(probe.main(),0);query.assert_called_once();fixtures.assert_not_called();init.assert_not_called();compare.assert_not_called()
 
     def test_workflow_preserves_all_normal_jobs_and_controls(self):
         text=(ROOT/'.github/workflows/ci.yml').read_text()

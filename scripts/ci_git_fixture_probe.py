@@ -13,7 +13,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-PARENT = "cf70384fb2c8bc2ceb9ae5eea2e2fd06ca8b3798"
+PARENT = "a84668cae9d2fda20b8b90a15d9dc5bbc132eaaa"
 BRANCH = "refs/heads/codex/isolated-action-publication"
 FIXTURE_HASH = "2ca30bd1bb9e79d61005ad703ceba40ef48ca7e864d3f75d3995c8781afee686"
 GIT = "/usr/bin/git"
@@ -30,9 +30,14 @@ BASE_ENV = {
 }
 STAGES = frozenset({
     "preflight", "executable", "fixture_init_baseline", "fixture_init_private_home", "result",
+    "metadata_baseline", "metadata_private_home",
 })
 OUTCOMES = frozenset({
     "context_rejected", "fixture_binding_rejected", "metadata_command_failed",
+    "metadata_spawn_failed", "metadata_capture_failed", "metadata_wait_failed",
+    "metadata_nonzero", "metadata_read", "metadata_stream_close_failed",
+    "metadata_cleanup_reaped", "metadata_baseline_verified", "metadata_comparison_verified",
+    "executable_drift",
     "metadata_malformed", "head_parent_mismatch", "metadata_timed_out",
     "metadata_cleanup_unresolved", "preflight_failed", "executable_bound",
     "fixture_access_failed", "already_used", "exited", "spawn_failed", "timed_out",
@@ -70,30 +75,34 @@ def valid_context(values: dict[str, str]) -> bool:
 
 
 def stop_metadata_child(child: subprocess.Popen) -> tuple[str, int | None]:
-    """Reap only the retained child, without retry, PID search or force kill."""
-    if child.poll() is None:
-        try:
-            child.terminate()
-        except OSError:
-            return "metadata_cleanup_unresolved", None
+    """Cleanup is independent of the primary failure; only the retained child."""
     try:
-        return "metadata_timed_out", child.wait(timeout=5)
-    except (OSError, subprocess.TimeoutExpired):
+        if child.poll() is None:
+            child.terminate()
+    except (OSError, ValueError):
+        return "metadata_cleanup_unresolved", None
+    try:
+        return "metadata_cleanup_reaped", child.wait(timeout=5)
+    except (OSError, ValueError, subprocess.TimeoutExpired):
         return "metadata_cleanup_unresolved", None
 
 
-def metadata(repo: Path) -> tuple[str, int | None, bytes]:
-    """Capture at most83 bytes; never expose the two source hashes or raw errors."""
+def metadata(repo: Path, home: Path | None = None) -> tuple:
+    """Fixed bounded query; result bytes remain transient and never emitted."""
+    env = dict(BASE_ENV)
+    if home is not None:
+        env["HOME"] = str(home)
     try:
         child = subprocess.Popen(
             [GIT, *GIT_OPTIONS, "rev-parse", "HEAD", "HEAD^"], cwd=repo,
-            env=dict(BASE_ENV), stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+            env=env, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
             stderr=subprocess.DEVNULL,
         )
     except OSError:
-        return "metadata_command_failed", None, b""
+        return "metadata_spawn_failed", None, b"", None, False
     deadline = time.monotonic() + 10
     captured = bytearray()
+    outcome, status = "metadata_read", None
     try:
         with selectors.DefaultSelector() as selector:
             selector.register(child.stdout, selectors.EVENT_READ)
@@ -106,41 +115,109 @@ def metadata(repo: Path) -> tuple[str, int | None, bytes]:
                     break
                 captured.extend(chunk)
                 if len(captured) == 83:
-                    outcome, status = stop_metadata_child(child)
-                    if outcome == "metadata_cleanup_unresolved":
-                        return outcome, status, b""
-                    return "metadata_malformed", status, b""
-        status = child.wait(timeout=max(0, deadline - time.monotonic()))
-        if status != 0:
-            return "metadata_command_failed", status, b""
-        return "metadata_read", status, bytes(captured)
+                    outcome = "metadata_malformed"
+                    break
     except subprocess.TimeoutExpired:
-        outcome, status = stop_metadata_child(child)
-        return outcome, status, b""
+        outcome = "metadata_timed_out"
     except (OSError, ValueError):
-        outcome, status = stop_metadata_child(child)
-        if outcome == "metadata_cleanup_unresolved":
-            return outcome, status, b""
-        return "metadata_command_failed", status, b""
-    finally:
+        outcome = "metadata_capture_failed"
+    if outcome == "metadata_read":
+        try:
+            status = child.wait(timeout=max(0, deadline - time.monotonic()))
+            if status != 0:
+                outcome = "metadata_nonzero"
+        except subprocess.TimeoutExpired:
+            outcome = "metadata_timed_out"
+        except (OSError, ValueError):
+            outcome = "metadata_wait_failed"
+    cleanup = None
+    if outcome not in ("metadata_read", "metadata_nonzero"):
+        cleanup = stop_metadata_child(child)
+    close_failed = False
+    try:
         child.stdout.close()
+    except (OSError, ValueError):
+        close_failed = True
+    output = bytes(captured) if outcome == "metadata_read" and not close_failed else b""
+    return outcome, status, output, cleanup, close_failed
 
 
-def source_bound(repo: Path, sha: str) -> tuple[str, int | None]:
+def source_bound(output: bytes, sha: str) -> str:
+    if re.fullmatch(rb"[0-9a-f]{40}\n[0-9a-f]{40}\n", output) is None:
+        return "metadata_malformed"
+    if output != (sha + "\n" + PARENT + "\n").encode("ascii"):
+        return "head_parent_mismatch"
+    return "source_bound"
+
+
+def fixture_bound(repo: Path) -> bool:
     fixture = repo / "src-tauri/src/isolated_action/tests.rs"
     try:
-        if fixture.is_symlink() or hashlib.sha256(fixture.read_bytes()).hexdigest() != FIXTURE_HASH:
-            return "fixture_binding_rejected", None
+        return not fixture.is_symlink() and hashlib.sha256(fixture.read_bytes()).hexdigest() == FIXTURE_HASH
     except OSError:
-        return "fixture_binding_rejected", None
-    outcome, status, output = metadata(repo)
-    if outcome != "metadata_read":
-        return outcome, status
-    if re.fullmatch(rb"[0-9a-f]{40}\n[0-9a-f]{40}\n", output) is None:
-        return "metadata_malformed", status
-    if output != (sha + "\n" + PARENT + "\n").encode("ascii"):
-        return "head_parent_mismatch", status
-    return "source_bound", status
+        return False
+
+
+def private_metadata_home(temp: Path, run_id: str) -> Path:
+    """An exclusive diagnostic claim, not a Git fixture or a personal HOME."""
+    if not temp.is_absolute() or temp.is_symlink() or not temp.is_dir():
+        raise ValueError("invalid metadata parent")
+    if re.fullmatch(r"[1-9][0-9]{0,19}", run_id) is None:
+        raise ValueError("invalid run identity")
+    root = temp.resolve() / ("cortexa-pr139-metadata-" + run_id)
+    root.mkdir(mode=0o700)
+    if stat.S_IMODE(root.stat().st_mode) != 0o700 or root.stat().st_uid != os.getuid():
+        raise ValueError("invalid metadata ownership")
+    home = root / "private-home"
+    home.mkdir(mode=0o700)
+    if home.is_symlink() or stat.S_IMODE(home.stat().st_mode) != 0o700 or home.stat().st_uid != os.getuid():
+        raise ValueError("invalid private home")
+    return home
+
+
+def record_metadata(stage: str, result: tuple) -> None:
+    outcome, status, _, cleanup, close_failed = result
+    emit(stage, outcome, status)  # Primary result recorded before branching.
+    if cleanup is not None:
+        emit(stage, *cleanup)
+    if close_failed:
+        emit(stage, "metadata_stream_close_failed")
+
+
+def executable_hash() -> str:
+    return hashlib.sha256(Path(GIT).read_bytes()).hexdigest()
+
+
+def metadata_only(repo: Path, sha: str, home: Path, git_hash: str) -> int:
+    result = metadata(repo)
+    record_metadata("metadata_baseline", result)
+    outcome, status, output, cleanup, close_failed = result
+    if executable_hash() != git_hash:
+        emit("result", "executable_drift")
+        return 1
+    if cleanup is not None or close_failed:
+        emit("result", "comparison_stopped")
+        return 1
+    if outcome == "metadata_read":
+        binding = source_bound(output, sha)
+        emit("result", "metadata_baseline_verified" if binding == "source_bound" else binding)
+        return 0 if binding == "source_bound" else 1
+    if outcome != "metadata_nonzero" or status != 1:
+        emit("result", "comparison_stopped")
+        return 1
+    # Exactly one controlled case, not an automatic retry. HOME is the only delta.
+    result = metadata(repo, home)
+    record_metadata("metadata_private_home", result)
+    outcome, status, output, cleanup, close_failed = result
+    if executable_hash() != git_hash:
+        emit("result", "executable_drift")
+        return 1
+    if outcome != "metadata_read" or cleanup is not None or close_failed:
+        emit("result", "comparison_stopped")
+        return 1
+    binding = source_bound(output, sha)
+    emit("result", "metadata_comparison_verified" if binding == "source_bound" else binding)
+    return 0 if binding == "source_bound" else 1
 
 
 def private_fixtures(temp: Path, run_id: str) -> tuple[Path, Path, Path]:
@@ -218,25 +295,26 @@ def main() -> int:
         emit("preflight", "context_rejected")
         return 1
     repo = Path(__file__).resolve().parents[1]
-    try:
-        outcome, status = source_bound(repo, values["GITHUB_SHA"])
-        if outcome != "source_bound":
-            emit("preflight", outcome, status)
-            return 1
-        git_hash = hashlib.sha256(Path(GIT).read_bytes()).hexdigest()
-        emit("executable", "executable_bound", executable_sha256=git_hash)
-    except (OSError, ValueError, subprocess.SubprocessError):
-        emit("preflight", "preflight_failed")
+    if not fixture_bound(repo):
+        emit("preflight", "fixture_binding_rejected")
         return 1
     try:
-        fixtures = private_fixtures(Path(os.environ.get("RUNNER_TEMP", "")), values["GITHUB_RUN_ID"])
+        git_hash = executable_hash()
+        emit("executable", "executable_bound", executable_sha256=git_hash)
+        home = private_metadata_home(Path(os.environ.get("RUNNER_TEMP", "")), values["GITHUB_RUN_ID"])
     except FileExistsError:
         emit("preflight", "already_used")
         return 1
     except (OSError, ValueError):
-        emit("preflight", "fixture_access_failed")
+        emit("preflight", "preflight_failed")
         return 1
-    return compare(*fixtures)
+    try:
+        # This authorized one-push continuation ends here, before any Git-init case.
+        return metadata_only(repo, values["GITHUB_SHA"], home, git_hash)
+    except (OSError, ValueError, subprocess.SubprocessError):
+        emit("preflight", "preflight_failed")
+        return 1
+
 
 
 if __name__ == "__main__":
