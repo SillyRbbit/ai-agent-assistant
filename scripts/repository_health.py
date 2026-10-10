@@ -26,12 +26,18 @@ ACTION_USE = re.compile(
 IMMUTABLE_ACTION = re.compile(r"^[^@\s]+@[0-9a-fA-F]{40}$")
 IMMUTABLE_CONTAINER = re.compile(r"^docker://[^@\s]+@sha256:[0-9a-fA-F]{64}$")
 WRITE_PERMISSION = re.compile(r"^\s*[a-z][a-z-]*:\s*write\s*$", re.MULTILINE)
-RUNNER_SELECTOR = re.compile(r"^\s*runs-on:\s*(?P<selector>.+?)\s*$", re.MULTILINE)
+RUNNER_SELECTOR = re.compile(
+    r"^[ \t]*runs-on:[ \t]*(?:\n[ \t]+)?(?P<selector>\[[^\]]*\]|[^\n]+)",
+    re.MULTILINE,
+)
 PROMPT_PLACEHOLDER = re.compile(r"\{\{(?P<name>[A-Z][A-Z0-9_]*)\}\}")
 PROMPT_PATH_REFERENCE = re.compile(r"\bprompts/[A-Za-z0-9_./-]+\.md\b")
 REQUIREMENT_IDENTIFIER = re.compile(r"^\s*- \*\*(?P<identifier>FR-[0-9]+[A-Z]?)\*\*:", re.MULTILINE)
 EXPECTED_WORKFLOWS = frozenset({"ci.yml", "documentation.yml"})
-LINUX_RUNNER_SELECTOR = "[self-hosted, Linux, X64, cortexa-ci]"
+LINUX_RUNNER_SELECTOR = (
+    '[self-hosted, Linux, X64, "${{ github.ref == \'refs/heads/main\' '
+    '&& \'cortexa-linux\' || \'cortexa-ci\' }}"]'
+)
 MACOS_RUNNER_SELECTOR = "[self-hosted, macOS, X64, cortexa-ci]"
 TRUSTED_WORKFLOW_BRANCHES = (
     '- "codex/**"',
@@ -1434,6 +1440,13 @@ def ui_native_boundary_findings(root: Path) -> tuple[Finding, ...]:
     return tuple(findings)
 
 
+def normalized_runner_selector(selector: str) -> str:
+    """Normalize YAML flow-array layout, retaining the exact routing expression."""
+    normalized = " ".join(selector.split())
+    normalized = re.sub(r"^\[\s*", "[", normalized)
+    return re.sub(r",?\s*\]$", "]", normalized)
+
+
 def workflow_findings(root: Path) -> tuple[Finding, ...]:
     workflow_directory = root / ".github" / "workflows"
     if not workflow_directory.is_dir():
@@ -1484,9 +1497,9 @@ def workflow_findings(root: Path) -> tuple[Finding, ...]:
             findings.append(Finding("workflows", relative_path, "write workflow permission is prohibited", text.count("\n", 0, match.start()) + 1))
         if "permissions:\n  contents: read" not in text:
             findings.append(Finding("workflows", relative_path, "top-level contents: read permission is required"))
-        selectors = tuple(match.group("selector") for match in RUNNER_SELECTOR.finditer(text))
+        selectors = tuple(normalized_runner_selector(match.group("selector")) for match in RUNNER_SELECTOR.finditer(text))
         for match in RUNNER_SELECTOR.finditer(text):
-            if match.group("selector") not in {
+            if normalized_runner_selector(match.group("selector")) not in {
                 LINUX_RUNNER_SELECTOR,
                 MACOS_RUNNER_SELECTOR,
             }:
@@ -1526,6 +1539,11 @@ def workflow_findings(root: Path) -> tuple[Finding, ...]:
                 )
             )
 
+        if LINUX_RUNNER_SELECTOR not in selectors:
+            findings.append(Finding("workflows", relative_path, "main-only Linux runner selector is required"))
+        if path.name == "ci.yml" and MACOS_RUNNER_SELECTOR not in selectors:
+            findings.append(Finding("workflows", relative_path, "target-Mac runner selector is required"))
+
         if path.name == "ci.yml":
             required_ci = (
                 "schedule:",
@@ -1534,8 +1552,6 @@ def workflow_findings(root: Path) -> tuple[Finding, ...]:
                 "Linux Rust validation",
                 "Target-Mac Rust validation",
                 "Dependency and secret audit",
-                LINUX_RUNNER_SELECTOR,
-                MACOS_RUNNER_SELECTOR,
                 ".codex/hooks/tests",
                 "scripts/tests",
                 '"src/**"',
@@ -1564,7 +1580,6 @@ def workflow_findings(root: Path) -> tuple[Finding, ...]:
                 '".agents/**"',
                 "npm run docs:check",
                 "npm run repository:check",
-                LINUX_RUNNER_SELECTOR,
             )
             missing_documentation = tuple(
                 value for value in required_documentation if value not in text

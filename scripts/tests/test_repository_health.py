@@ -52,7 +52,7 @@ def write_valid_workflows(root: Path) -> None:
         + "jobs:\n"
         + "  classify:\n"
         + "    name: Classify change\n"
-        + "    runs-on: [self-hosted, Linux, X64, cortexa-ci]\n"
+        + "    runs-on: [self-hosted, Linux, X64, \"${{ github.ref == 'refs/heads/main' && 'cortexa-linux' || 'cortexa-ci' }}\"]\n"
         + "    steps:\n"
         + "      - uses: actions/checkout@"
         + ("a" * 40)
@@ -61,10 +61,10 @@ def write_valid_workflows(root: Path) -> None:
         + "      - run: python3 scripts/ci_change_scope.py classify\n"
         + "      - run: python3 -m unittest discover -s scripts/tests -v\n"
         + "      - run: python3 -m unittest discover -s .codex/hooks/tests -v\n"
-        + "  frontend:\n    name: Frontend validation\n    runs-on: [self-hosted, Linux, X64, cortexa-ci]\n"
-        + "  rust:\n    name: Linux Rust validation\n    runs-on: [self-hosted, Linux, X64, cortexa-ci]\n"
+        + "  frontend:\n    name: Frontend validation\n    runs-on: [self-hosted, Linux, X64, \"${{ github.ref == 'refs/heads/main' && 'cortexa-linux' || 'cortexa-ci' }}\"]\n"
+        + "  rust:\n    name: Linux Rust validation\n    runs-on: [self-hosted, Linux, X64, \"${{ github.ref == 'refs/heads/main' && 'cortexa-linux' || 'cortexa-ci' }}\"]\n"
         + "  rust-macos:\n    name: Target-Mac Rust validation\n    runs-on: [self-hosted, macOS, X64, cortexa-ci]\n"
-        + "  audit:\n    name: Dependency and secret audit\n    runs-on: [self-hosted, Linux, X64, cortexa-ci]\n"
+        + "  audit:\n    name: Dependency and secret audit\n    runs-on: [self-hosted, Linux, X64, \"${{ github.ref == 'refs/heads/main' && 'cortexa-linux' || 'cortexa-ci' }}\"]\n"
         + '  # "src-tauri/**" "assets/branding/**" "package-lock.json" ".prettierrc*" ".codex/**" ".github/workflows/ci.yml" ".github/workflows/documentation.yml"\n',
         encoding="utf-8",
     )
@@ -72,7 +72,7 @@ def write_valid_workflows(root: Path) -> None:
         shared.replace('      - "src/**"', '      - "**/*.md"')
         + "jobs:\n"
         + "  documentation:\n"
-        + "    runs-on: [self-hosted, Linux, X64, cortexa-ci]\n"
+        + "    runs-on: [self-hosted, Linux, X64, \"${{ github.ref == 'refs/heads/main' && 'cortexa-linux' || 'cortexa-ci' }}\"]\n"
         + "    steps:\n"
         + '      - run: npm run docs:check && npm run repository:check # "prompts/**" ".agents/**" "LICENSE*"\n',
         encoding="utf-8",
@@ -1578,7 +1578,7 @@ class RepositoryHealthTests(unittest.TestCase):
                 path.read_text(encoding="utf-8")
                 .replace("  push:\n", "  pull_request:\n", 1)
                 .replace(
-                    "runs-on: [self-hosted, Linux, X64, cortexa-ci]",
+                    f"runs-on: {health.LINUX_RUNNER_SELECTOR}",
                     "runs-on: ubuntu-latest",
                     1,
                 ),
@@ -1594,6 +1594,93 @@ class RepositoryHealthTests(unittest.TestCase):
                 "runner selector is not an approved dedicated Cortexa runner",
                 details,
             )
+
+    def test_workflow_check_accepts_prettier_flow_array_layout(self) -> None:
+        formatted = "[\n        self-hosted,\n        Linux,\n        X64,\n" + (
+            "        \"${{ github.ref == 'refs/heads/main' && 'cortexa-linux' || 'cortexa-ci' }}\",\n      ]"
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_workflows(root)
+            for workflow in ("ci.yml", "documentation.yml"):
+                path = root / ".github" / "workflows" / workflow
+                path.write_text(path.read_text().replace(
+                    "runs-on: " + health.LINUX_RUNNER_SELECTOR,
+                    "runs-on:\n      " + formatted), encoding="utf-8")
+            self.assertEqual(health.workflow_findings(root), ())
+            docs = root / ".github" / "workflows" / "documentation.yml"
+            docs.write_text(docs.read_text().replace(
+                "|| 'cortexa-ci'", "|| 'cortexa-linux'"), encoding="utf-8")
+            self.assertTrue(any(
+                "runner selector is not an approved dedicated Cortexa runner" == f.detail
+                for f in health.workflow_findings(root)
+            ))
+
+    def test_workflow_check_rejects_arbitrary_linux_selectors(self) -> None:
+        selectors = (
+            "[self-hosted, Linux, X64, cortexa-ci]",
+            "[self-hosted, Linux, X64, cortexa-linux]",
+            "[self-hosted, Linux, X64]",
+            "[self-hosted, Linux, X64, unrelated-runner]",
+            "${{ inputs.runner }}",
+            "${{ matrix.runner }}",
+            "ubuntu-latest",
+        )
+        for workflow in ("ci.yml", "documentation.yml"):
+            for selector in selectors:
+                with self.subTest(workflow=workflow, selector=selector):
+                    with tempfile.TemporaryDirectory() as directory:
+                        root = Path(directory)
+                        write_valid_workflows(root)
+                        path = root / ".github" / "workflows" / workflow
+                        path.write_text(path.read_text().replace(
+                            health.LINUX_RUNNER_SELECTOR, selector, 1), encoding="utf-8")
+                        details = {f.detail for f in health.workflow_findings(root)}
+                        self.assertIn(
+                            "runner selector is not an approved dedicated Cortexa runner",
+                            details,
+                        )
+
+    def test_workflow_check_rejects_development_branch_vps_routing(self) -> None:
+        mutations = (
+            ("github.ref == 'refs/heads/main'", "github.ref != 'refs/heads/main'"),
+            ("github.ref == 'refs/heads/main'", "github.ref == 'refs/heads/codex/isolated-action-publication'"),
+            ("github.ref == 'refs/heads/main'", "startsWith(github.ref, 'refs/heads/')"),
+            ("github.ref == 'refs/heads/main'", "github.ref_name == 'main'"),
+            ("&& 'cortexa-linux' || 'cortexa-ci'", "&& 'cortexa-ci' || 'cortexa-linux'"),
+            ("|| 'cortexa-ci'", "|| 'cortexa-linux'"),
+        )
+        for workflow in ("ci.yml", "documentation.yml"):
+            for old, new in mutations:
+                with self.subTest(workflow=workflow, mutation=new):
+                    with tempfile.TemporaryDirectory() as directory:
+                        root = Path(directory)
+                        write_valid_workflows(root)
+                        path = root / ".github" / "workflows" / workflow
+                        path.write_text(path.read_text().replace(old, new, 1), encoding="utf-8")
+                        self.assertTrue(any(
+                            "runner selector is not an approved dedicated Cortexa runner" == f.detail
+                            for f in health.workflow_findings(root)
+                        ))
+
+    def test_workflow_check_keeps_documentation_linux_only_and_mac_selector_fixed(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_workflows(root)
+            docs = root / ".github" / "workflows" / "documentation.yml"
+            docs.write_text(docs.read_text().replace(
+                health.LINUX_RUNNER_SELECTOR, health.MACOS_RUNNER_SELECTOR), encoding="utf-8")
+            self.assertTrue(any(
+                "documentation jobs must use the dedicated Linux runner" == f.detail
+                for f in health.workflow_findings(root)
+            ))
+            write_mac = root / ".github" / "workflows" / "ci.yml"
+            write_mac.write_text(write_mac.read_text().replace(
+                health.MACOS_RUNNER_SELECTOR, "[self-hosted, macOS, X64, cortexa-linux]"), encoding="utf-8")
+            self.assertTrue(any(
+                "runner selector is not an approved dedicated Cortexa runner" == f.detail
+                for f in health.workflow_findings(root)
+            ))
 
     def test_workflow_check_rejects_unexpected_workflow(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

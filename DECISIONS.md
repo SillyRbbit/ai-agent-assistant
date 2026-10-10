@@ -1,3 +1,30 @@
+## 2026-10-10 — Bounded selective routing publication authority
+
+The owner authorizes one dependent publication-only export from completed
+`main-linux-routing-local-remediation`, without ordinary admission, on verified
+remote main `de0d6bcbb63e5377825da4edd6d31bfd98d03dfb`. See the
+[exact plan](docs/plans/2026-10-10-main-linux-routing-publication.md).
+This thirteen-path export contains four frozen implementation files and nine
+publication documentation paths. It excludes D-136 hooks/instructions, local Stop
+configuration, task-local executables, ignored packages and unrelated changes.
+No live gate state is copied, reopened or converted. Original FAIL, unknown
+outcomes, D-136 sealing and all source evidence remain historical facts.
+
+One reviewed commit, branch push, dedicated PR and conditional squash merge are
+authorized after required fresh extraction checks. The owner accepts offline
+local-Linux branch checks remaining queued and the existing concurrency policy
+potentially superseding queued main Documentation run `37948922997`. Effective
+GitHub rules must still be obeyed. Recheck main, exact PR tree, rules, runner
+identities and queue immediately before merge. No administrative bypass, settings,
+labels, services, hosts, toolchains, manual dispatch/rerun/cancel, unrelated queue
+operation, automatic rollback, cleanup or PR #139 change is authorized.
+
+Actual acceptance requires successful classification, frontend, Linux Rust,
+dependency-audit and Documentation on VPS24, plus target-Mac Rust on Mac22, all
+at the exact merged SHA. Observe for at most one hour after merge. Local and
+manual VPS results cannot satisfy these GitHub Actions requirements. Pending or
+unsuccessful acceptance yields a truthful partial publication result.
+
 ## 2026-10-01 — Connected Knowledge implementation decision
 
 Owner-authorized private milestone. Pin `marked` 18.0.14 (MIT; Node >=20) for its

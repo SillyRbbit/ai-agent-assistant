@@ -40,7 +40,13 @@ concurrency:
 jobs:
   documentation:
     name: Documentation and repository policy
-    runs-on: [self-hosted, Linux, X64, cortexa-ci]
+    runs-on:
+      [
+        self-hosted,
+        Linux,
+        X64,
+        "${{ github.ref == 'refs/heads/main' && 'cortexa-linux' || 'cortexa-ci' }}",
+      ]
     timeout-minutes: 10
     steps:
       - name: Verify Linux runner prerequisites

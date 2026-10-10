@@ -1,5 +1,112 @@
 # Self-hosted GitHub Actions runners
 
+## Current routing contract — 2026-10-10
+
+The [selective publication plan](../plans/2026-10-10-main-linux-routing-publication.md)
+covers the reviewed main-only Linux routing change. Its
+[publication review](../reviews/2026-10-10-main-linux-routing-publication-review.md)
+and separate publication receipts distinguish local preparation, publication,
+and actual GitHub Actions acceptance. Publication and Actions acceptance remain
+conditional until their required evidence is recorded.
+
+All five Linux jobs in the publication candidate use this exact selector:
+
+```yaml
+runs-on:
+  [
+    self-hosted,
+    Linux,
+    X64,
+    "${{ github.ref == 'refs/heads/main' && 'cortexa-linux' || 'cortexa-ci' }}",
+  ]
+```
+
+The five jobs are CI classification, frontend validation, Linux Rust validation,
+dependency and secret audit, and Documentation. Exact `refs/heads/main` selects
+`cortexa-linux`; every other ref selects `cortexa-ci`. Existing triggers,
+classification conditions, permissions, timeouts, steps and concurrency remain
+unchanged. Neither workflow subscribes to `pull_request` or
+`pull_request_target`.
+
+Target-Mac Rust retains its existing selector:
+
+```yaml
+runs-on: [self-hosted, macOS, X64, cortexa-ci]
+```
+
+### Runner identities and boundaries
+
+The required inventory for this activation is:
+
+| Runner | Identity                    | Required assignment and state                                                               |
+| ------ | --------------------------- | ------------------------------------------------------------------------------------------- |
+| 24     | `cortexa-vps`               | Online Linux x64; `cortexa-linux`, without `cortexa-ci`; receives the five main Linux jobs. |
+| 23     | `henry-dang-HP-Elite-Slice` | Offline Linux x64; retains `cortexa-ci`; receives no configuration or recovery changes.     |
+| 22     | `Henrys-MacBook-Pro`        | Online macOS x64; retains `cortexa-ci` and the unchanged target-Mac selector.               |
+
+Runner availability is transient: recheck identity, labels and queue immediately
+before merge. Labels select jobs; they do not provide a security boundary or
+preferred-host ordering. Already queued runs retain their original selectors.
+The publication branch therefore does not gain VPS eligibility, and queued
+branch checks are not passing validation.
+
+No label, runner registration, service, host, firewall, account, toolchain or
+GitHub setting change is part of this activation. PR #139 and its historical
+failed diagnostic remain isolated. The original routing FAIL and D-136's sealed,
+unconsumed preparation/request remain preserved.
+
+### Conditional publication and Actions acceptance
+
+The owner-authorized operation permits one reviewed selective publication and
+conditional squash merge, subject to effective GitHub rules. It explicitly
+permits that merge before the offline local-Linux branch checks finish; this
+does not turn those checks into passing results or establish a general merge
+exception. Recheck remote main, the exact PR tree, effective rules, runner
+identities and queue immediately before merge.
+
+The merge may start automatic main CI and Documentation runs. The unchanged
+concurrency policy may supersede queued main Documentation run `37948922997`;
+that specific consequence is accepted. Manual dispatch, rerun, cancellation and
+unrelated queue manipulation are excluded.
+
+Activation acceptance requires successful execution at the exact merged SHA:
+
+- CI classification, frontend, Linux Rust and dependency-audit jobs on VPS
+  runner 24.
+- Documentation on VPS runner 24.
+- Target-Mac Rust on runner 22.
+
+Retain run/job IDs, runner assignments, logs and conclusions. Observe for at most
+one hour after merge. Pending, failed, cancelled, skipped or incorrectly assigned
+required jobs do not satisfy acceptance. If publication succeeds but required
+Actions acceptance does not, report that partial result and stop; no automatic
+infrastructure repair or rollback is authorized.
+
+### Evidence applicability
+
+The completed local remediation verified the preserved routing candidate on
+macOS using the pinned CommandLineTools SDK 27 and offline Rust 1.90 environment.
+Its fresh full verification passed; unchanged applicable product, Rust and
+frontend evidence is reused for this selective export. Fresh export checks and
+focused independent review must be recorded separately before publication.
+Their combination is not a new full-verification run.
+
+Local macOS validation, owner-reported manual VPS checks and GitHub Actions
+results are distinct evidence. Only the assigned successful jobs at the merged
+SHA establish this activation's GitHub Actions acceptance. Neither local nor
+Actions success establishes product deployment, broader lifecycle adoption,
+unattended execution support, or arbitrary-command support.
+
+The architecture overview and detailed runbook in Word and PDF remain deferred
+until deployment and applicable validation finish.
+
+## Historical D-058 record — preserved verbatim
+
+Everything below is the retained July 2026 D-058 record, including its historical
+“Active” wording, runner 21 assignments and administrative examples. It does not
+describe the current runner inventory or authorize the present operation to
+change labels, hosts, services or settings.
+
 Status: Active under D-058
 
 Active CI and Documentation workflows use two repository-scoped persistent
