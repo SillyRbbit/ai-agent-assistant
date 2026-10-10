@@ -1,3 +1,29 @@
+## 2026-10-10 — Selective main Linux routing publication
+
+The owner authorized the exact thirteen-path dependent publication export described
+in the [publication plan](docs/plans/2026-10-10-main-linux-routing-publication.md) and [review](docs/reviews/2026-10-10-main-linux-routing-publication-review.md). The four implementation
+files are copied byte-for-byte from the completed local remediation; all other
+changes are additive publication documentation on main `de0d6bc`.
+The complete mixed 28-path source candidate and D-137 lifecycle are not published
+by this export. Original routing FAIL and D-136 preparation remain preserved;
+D-136's sealed retry is unconsumed and PR #139 remains isolated.
+
+The Linux jobs select `cortexa-linux` only for `refs/heads/main` and `cortexa-ci`
+otherwise. The target-Mac route is unchanged. VPS24 keeps `cortexa-linux` without
+`cortexa-ci`; local Linux23 remains offline. No runner configuration change is
+authorized. Local macOS verification, manual VPS evidence and actual GitHub
+Actions results remain separate. Publication and Actions activation acceptance
+are pending at preparation: the exact merged SHA must pass all five Linux jobs
+on VPS24 and target-Mac Rust on Mac22. Pending, skipped, failed, cancelled or
+incorrectly assigned required jobs block acceptance.
+
+The owner conditionally authorizes one commit, push, PR and squash merge after
+fresh extraction checks and independent review, including merge before offline
+local-Linux branch checks finish if effective GitHub rules permit. No manual CI
+dispatch/rerun/cancel, infrastructure change, cleanup or broader adoption follows.
+The architecture overview and detailed runbook in Word/PDF remain deferred until
+deployment and applicable validation finish. Preserve all older entries below.
+
 ## 2026-10-07 — Live-provider bounded acceptance closeout
 
 Quality review: **PASS WITH ADVISORIES** for the approved API/Codex

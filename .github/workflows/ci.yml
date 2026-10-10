@@ -49,7 +49,13 @@ concurrency:
 jobs:
   classify:
     name: Classify change and enforce repository policy
-    runs-on: [self-hosted, Linux, X64, cortexa-ci]
+    runs-on:
+      [
+        self-hosted,
+        Linux,
+        X64,
+        "${{ github.ref == 'refs/heads/main' && 'cortexa-linux' || 'cortexa-ci' }}",
+      ]
     timeout-minutes: 5
     outputs:
       frontend: ${{ steps.scope.outputs.frontend }}
@@ -107,7 +113,13 @@ jobs:
     name: Frontend validation
     needs: classify
     if: needs.classify.outputs.frontend == 'true'
-    runs-on: [self-hosted, Linux, X64, cortexa-ci]
+    runs-on:
+      [
+        self-hosted,
+        Linux,
+        X64,
+        "${{ github.ref == 'refs/heads/main' && 'cortexa-linux' || 'cortexa-ci' }}",
+      ]
     timeout-minutes: 15
     steps:
       - name: Verify Linux runner prerequisites
@@ -150,7 +162,13 @@ jobs:
     name: Linux Rust validation
     needs: classify
     if: needs.classify.outputs.rust == 'true'
-    runs-on: [self-hosted, Linux, X64, cortexa-ci]
+    runs-on:
+      [
+        self-hosted,
+        Linux,
+        X64,
+        "${{ github.ref == 'refs/heads/main' && 'cortexa-linux' || 'cortexa-ci' }}",
+      ]
     timeout-minutes: 30
     steps:
       - name: Verify Linux runner prerequisites
@@ -217,7 +235,13 @@ jobs:
     name: Dependency and secret audit
     needs: classify
     if: needs.classify.outputs.audit == 'true'
-    runs-on: [self-hosted, Linux, X64, cortexa-ci]
+    runs-on:
+      [
+        self-hosted,
+        Linux,
+        X64,
+        "${{ github.ref == 'refs/heads/main' && 'cortexa-linux' || 'cortexa-ci' }}",
+      ]
     timeout-minutes: 20
     steps:
       - name: Verify Linux runner prerequisites
