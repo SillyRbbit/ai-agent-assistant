@@ -7,3 +7,6 @@ package-lock.json
 src-tauri/Cargo.lock
 
 src-tauri/gen/
+
+# Owner-authorized immutable historical FAIL; strict hash/report validation remains.
+docs/reviews/2026-10-11-dependent-remediation-admission-post-increment-review.md
