@@ -1,0 +1,197 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1560 1738" role="img" aria-labelledby="title desc">
+<title id="title">03 · Collaboration routes and delivery</title><desc id="desc">COORD is deterministic application coordination; every live route is sequential. No parallel model agents in these routes. Handoff validation is not factual verification. A Security bot cannot override native policy. Foundation parallelism is separate.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#4758A2"/></marker></defs>
+<rect width="1560" height="1738" fill="#FBFBFB"/>
+<g font-family="Arial, Helvetica, sans-serif">
+<rect x="0" y="0" width="1560" height="112" fill="#252B71"/>
+<text x="40" y="47" font-size="30" font-weight="700" fill="#ffffff" text-anchor="start">03 · Collaboration routes and delivery</text>
+<text x="40" y="81" font-size="19" font-weight="400" fill="#ffffff" text-anchor="start">COORD is deterministic application coordination; every live route is sequential</text>
+<rect x="40" y="132" width="18" height="18" fill="#eef1fb" stroke="#4758A2"/>
+<text x="67" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Native</text>
+<rect x="131" y="132" width="18" height="18" fill="#e7f3f5" stroke="#326672"/>
+<text x="158" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Interface</text>
+<rect x="246" y="132" width="18" height="18" fill="#fff4db" stroke="#94642c"/>
+<text x="273" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Owner</text>
+<rect x="329" y="132" width="18" height="18" fill="#f8eaf3" stroke="#934873"/>
+<text x="356" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Remote</text>
+<rect x="420" y="132" width="18" height="18" fill="#e9f4eb" stroke="#42784e"/>
+<text x="447" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Stored</text>
+<rect x="511" y="132" width="18" height="18" fill="#f1eff7" stroke="#79628d" stroke-dasharray="6 4"/>
+<text x="538" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Separate foundation</text>
+<rect x="706" y="132" width="18" height="18" fill="#ffffff" stroke="#79628d" stroke-dasharray="6 4"/>
+<text x="733" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Deferred / unverified</text>
+<text x="40" y="190" font-size="20" font-weight="700" fill="#182033" text-anchor="start">Research · four model stages · retained minimum live route</text>
+<g data-component="BOT.PA"><rect x="40.0" y="214" width="295.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="56.0" y="239" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">BOT.PA</text>
+<text x="56.0" y="268" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Personal Assistant</text>
+<text x="56.0" y="301" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Frame objective.</text>
+</g>
+<line x1="341.0" y1="318" x2="426.0" y2="318" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="385.0" y="275" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">handoff</text>
+<g data-component="BOT.RESEARCH"><rect x="435.0" y="214" width="295.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="451.0" y="239" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">BOT.RESEARCH</text>
+<text x="451.0" y="268" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Research</text>
+<text x="451.0" y="301" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Analyze supplied evidence.</text>
+</g>
+<line x1="736.0" y1="318" x2="821.0" y2="318" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="780.0" y="275" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">handoff</text>
+<g data-component="BOT.KNOWLEDGE"><rect x="830.0" y="214" width="295.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="846.0" y="239" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">BOT.KNOWLEDGE</text>
+<text x="846.0" y="268" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Knowledge &amp; Document</text>
+<text x="846.0" y="301" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Organize attributed synthesis.</text>
+</g>
+<line x1="1131.0" y1="318" x2="1216.0" y2="318" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1175.0" y="275" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">handoff</text>
+<g data-component="BOT.PA"><rect x="1225.0" y="214" width="295.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="1241.0" y="239" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">BOT.PA</text>
+<text x="1241.0" y="268" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Personal Assistant</text>
+<text x="1241.0" y="301" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Deliver final advice.</text>
+</g>
+<text x="43" y="441" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">Evidence: ROUTES, COORD</text>
+<text x="40" y="472" font-size="20" font-weight="700" fill="#182033" text-anchor="start">Engineering · five stages · other live variant not accepted by Research evidence</text>
+<g data-component="BOT.PA"><rect x="40.0" y="496" width="216.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="56.0" y="521" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">BOT.PA</text>
+<text x="56.0" y="550" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Personal</text>
+<text x="56.0" y="573" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Assistant</text>
+<text x="56.0" y="606" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Frame task.</text>
+</g>
+<line x1="262.0" y1="600" x2="347.0" y2="600" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="306.0" y="557" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">handoff</text>
+<g data-component="BOT.CODE"><rect x="356.0" y="496" width="216.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="372.0" y="521" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">BOT.CODE</text>
+<text x="372.0" y="550" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Coding</text>
+<text x="372.0" y="583" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Propose code; no</text>
+<text x="372.0" y="604" font-size="16" font-weight="400" fill="#182033" text-anchor="start">execution.</text>
+</g>
+<line x1="578.0" y1="600" x2="663.0" y2="600" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="622.0" y="557" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">handoff</text>
+<g data-component="BOT.QA"><rect x="672.0" y="496" width="216.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="688.0" y="521" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">BOT.QA</text>
+<text x="688.0" y="550" font-size="19" font-weight="700" fill="#182033" text-anchor="start">QA &amp; Validation</text>
+<text x="688.0" y="583" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Assess evidence; no</text>
+<text x="688.0" y="604" font-size="16" font-weight="400" fill="#182033" text-anchor="start">test run.</text>
+</g>
+<line x1="894.0" y1="600" x2="979.0" y2="600" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="938.0" y="557" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">handoff</text>
+<g data-component="BOT.SECURITY"><rect x="988.0" y="496" width="216.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="1004.0" y="521" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">BOT.SECURITY</text>
+<text x="1004.0" y="550" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Security &amp; Risk</text>
+<text x="1004.0" y="583" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Advisory review.</text>
+</g>
+<line x1="1210.0" y1="600" x2="1295.0" y2="600" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1254.0" y="557" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">handoff</text>
+<g data-component="BOT.PA"><rect x="1304.0" y="496" width="216.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="1320.0" y="521" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">BOT.PA</text>
+<text x="1320.0" y="550" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Personal</text>
+<text x="1320.0" y="573" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Assistant</text>
+<text x="1320.0" y="606" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Final advice.</text>
+</g>
+<text x="43" y="723" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">Evidence: ROUTES, CATALOG</text>
+<text x="40" y="754" font-size="20" font-weight="700" fill="#182033" text-anchor="start">Operations · five stages · advice, not machine administration</text>
+<g data-component="BOT.PA"><rect x="40.0" y="778" width="216.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="56.0" y="803" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">BOT.PA</text>
+<text x="56.0" y="832" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Personal</text>
+<text x="56.0" y="855" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Assistant</text>
+<text x="56.0" y="888" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Frame task.</text>
+</g>
+<line x1="262.0" y1="882" x2="347.0" y2="882" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="306.0" y="839" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">handoff</text>
+<g data-component="BOT.CLOUD"><rect x="356.0" y="778" width="216.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="372.0" y="803" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">BOT.CLOUD</text>
+<text x="372.0" y="832" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Cloud</text>
+<text x="372.0" y="855" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Infrastructure</text>
+<text x="372.0" y="888" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Assess supplied</text>
+<text x="372.0" y="909" font-size="16" font-weight="400" fill="#182033" text-anchor="start">configuration.</text>
+</g>
+<line x1="578.0" y1="882" x2="663.0" y2="882" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="622.0" y="839" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">handoff</text>
+<g data-component="BOT.SYSTEMS"><rect x="672.0" y="778" width="216.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="688.0" y="803" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">BOT.SYSTEMS</text>
+<text x="688.0" y="832" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Systems</text>
+<text x="688.0" y="855" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Operations</text>
+<text x="688.0" y="888" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Propose diagnostics.</text>
+</g>
+<line x1="894.0" y1="882" x2="979.0" y2="882" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="938.0" y="839" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">handoff</text>
+<g data-component="BOT.SECURITY"><rect x="988.0" y="778" width="216.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="1004.0" y="803" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">BOT.SECURITY</text>
+<text x="1004.0" y="832" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Security &amp; Risk</text>
+<text x="1004.0" y="865" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Advisory review.</text>
+</g>
+<line x1="1210.0" y1="882" x2="1295.0" y2="882" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1254.0" y="839" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">handoff</text>
+<g data-component="BOT.PA"><rect x="1304.0" y="778" width="216.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="1320.0" y="803" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">BOT.PA</text>
+<text x="1320.0" y="832" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Personal</text>
+<text x="1320.0" y="855" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Assistant</text>
+<text x="1320.0" y="888" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Final advice.</text>
+</g>
+<text x="43" y="1005" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">Evidence: ROUTES, CATALOG</text>
+<text x="40" y="1036" font-size="20" font-weight="700" fill="#182033" text-anchor="start">Proposal · four stages · no autonomous scheduler</text>
+<g data-component="BOT.PA"><rect x="40.0" y="1060" width="295.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="56.0" y="1085" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">BOT.PA</text>
+<text x="56.0" y="1114" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Personal Assistant</text>
+<text x="56.0" y="1147" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Frame task.</text>
+</g>
+<line x1="341.0" y1="1164" x2="426.0" y2="1164" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="385.0" y="1121" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">handoff</text>
+<g data-component="BOT.WORKFLOW"><rect x="435.0" y="1060" width="295.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="451.0" y="1085" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">BOT.WORKFLOW</text>
+<text x="451.0" y="1114" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Workflow Automation</text>
+<text x="451.0" y="1147" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Propose steps.</text>
+</g>
+<line x1="736.0" y1="1164" x2="821.0" y2="1164" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="780.0" y="1121" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">handoff</text>
+<g data-component="BOT.QA"><rect x="830.0" y="1060" width="295.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="846.0" y="1085" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">BOT.QA</text>
+<text x="846.0" y="1114" font-size="19" font-weight="700" fill="#182033" text-anchor="start">QA &amp; Validation</text>
+<text x="846.0" y="1147" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Review proposal.</text>
+</g>
+<line x1="1131.0" y1="1164" x2="1216.0" y2="1164" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1175.0" y="1121" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">handoff</text>
+<g data-component="BOT.PA"><rect x="1225.0" y="1060" width="295.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="1241.0" y="1085" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">BOT.PA</text>
+<text x="1241.0" y="1114" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Personal Assistant</text>
+<text x="1241.0" y="1147" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Final advice.</text>
+</g>
+<text x="43" y="1287" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">Evidence: ROUTES, CATALOG</text>
+<text x="40" y="1318" font-size="20" font-weight="700" fill="#182033" text-anchor="start">Common envelope · sharing approval is not patch-apply authority</text>
+<g data-component="ROOM_UI"><rect x="40.0" y="1342" width="295.0" height="204" rx="12" fill="#e7f3f5" stroke="#326672" stroke-width="2"/>
+<text x="56.0" y="1367" font-size="14" font-weight="700" fill="#326672" text-anchor="start">ROOM_UI</text>
+<text x="56.0" y="1396" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Owner preview</text>
+<text x="56.0" y="1429" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Objective, explicit sources and</text>
+<text x="56.0" y="1450" font-size="16" font-weight="400" fill="#182033" text-anchor="start">captured participants.</text>
+</g>
+<line x1="341.0" y1="1446" x2="426.0" y2="1446" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="385.0" y="1403" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">acknowledge</text>
+<g data-component="COORD"><rect x="435.0" y="1342" width="295.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="451.0" y="1367" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">COORD</text>
+<text x="451.0" y="1396" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Native Start</text>
+<text x="451.0" y="1429" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Recheck</text>
+<text x="451.0" y="1450" font-size="16" font-weight="400" fill="#182033" text-anchor="start">serial/revisions/sources,</text>
+<text x="451.0" y="1471" font-size="16" font-weight="400" fill="#182033" text-anchor="start">acknowledge, acquire lease.</text>
+</g>
+<line x1="736.0" y1="1446" x2="821.0" y2="1446" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="780.0" y="1403" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">stage</text>
+<text x="780.0" y="1420" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">results</text>
+<g data-component="ROOM_DB"><rect x="830.0" y="1342" width="295.0" height="204" rx="12" fill="#e9f4eb" stroke="#42784e" stroke-width="2"/>
+<text x="846.0" y="1367" font-size="14" font-weight="700" fill="#42784e" text-anchor="start">ROOM_DB</text>
+<text x="846.0" y="1396" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Validated delivery</text>
+<text x="846.0" y="1429" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Persist results;</text>
+<text x="846.0" y="1450" font-size="16" font-weight="400" fill="#182033" text-anchor="start">failed/partial/cancel stops</text>
+<text x="846.0" y="1471" font-size="16" font-weight="400" fill="#182033" text-anchor="start">route.</text>
+</g>
+<line x1="1131.0" y1="1446" x2="1216.0" y2="1446" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1175.0" y="1403" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">owner action</text>
+<g data-component="KNOW"><rect x="1225.0" y="1342" width="295.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="1241.0" y="1367" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">KNOW</text>
+<text x="1241.0" y="1396" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Optional draft / Save</text>
+<text x="1241.0" y="1429" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Owner reviews model-generated</text>
+<text x="1241.0" y="1450" font-size="16" font-weight="400" fill="#182033" text-anchor="start">draft before Save.</text>
+</g>
+<text x="43" y="1569" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">Evidence: COORD, ROOM_DB, KNOW</text>
+<text x="40" y="1634" font-size="16" font-weight="400" fill="#182033" text-anchor="start">No parallel model agents in these routes. Handoff validation is not factual verification. A Security bot cannot override native policy. Foundation parallelism is</text>
+<text x="40" y="1656" font-size="16" font-weight="400" fill="#182033" text-anchor="start">separate.</text>
+<text x="40" y="1716" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">CORTEXA  /  Source bc12776412c7  /  2026-10-07  /  Solid arrows: stated flow; dashed lines: comparison or unwired boundary</text>
+</g>
+</svg>

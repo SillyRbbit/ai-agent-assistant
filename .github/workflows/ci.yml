@@ -286,3 +286,38 @@ jobs:
           audit_status=$?
           set -e
           python3 scripts/cargo_audit_gate.py "${RUNNER_TEMP}/cargo-audit.json" --cargo-audit-exit "${audit_status}"
+
+  pr139-git-fixture-diagnostic:
+    name: PR139 fixed Mac Git fixture diagnostic
+    if: >-
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/codex/isolated-action-publication' &&
+      github.event.before == '24b65bb676775d3de12fe38c0ef26f401ef6dcc0' &&
+      github.run_attempt == 1
+    runs-on: [self-hosted, macOS, X64, cortexa-ci]
+    timeout-minutes: 5
+    steps:
+      - name: Require the reviewed Mac runner context
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${RUNNER_NAME}" != "Henrys-MacBook-Pro" ] ||
+             [ "${RUNNER_OS}" != "macOS" ] || [ "${RUNNER_ARCH}" != "X64" ]; then
+            echo 'pr139_probe_context_rejected'
+            exit 1
+          fi
+          if ! command -v python3 >/dev/null 2>&1; then
+            echo 'pr139_probe_tool_unavailable'
+            exit 1
+          fi
+
+      - name: Check out the single reviewed diagnostic commit
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+
+      - name: Compare fixed Git init cases with raw output suppressed
+        env:
+          PROBE_BEFORE: ${{ github.event.before }}
+        run: python3 -B scripts/ci_git_fixture_probe.py

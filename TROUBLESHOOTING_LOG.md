@@ -4455,3 +4455,1312 @@ See [the fresh plan](docs/plans/2026-10-08-milestone-governance-upstream.md).
 Fresh 145 hook tests, 94 repository tests and governance checks pass. Product verification is inherited with 347 unchanged input bindings. Review is PASS WITH ADVISORIES; actual gate/Stop and local commit receipts follow in the external integration handoff.
 Existing product roadmap and historical records remain unchanged. Local commits
 are authorized only after review/checks; publication needs separate owner direction.
+
+## Retained QA candidate history — Desktop D-131 provenance
+
+The following original candidate additions are retained verbatim as historical
+records from the QA checkout. Their dated gate/inventory claims bind that original
+checkout; they are not current publication-worktree gate claims. Upstream D-134
+governs this reconciliation; Desktop D-131 is qualified historical provenance.
+
+## Native approval parenting — offline verification passed
+
+The owner approved replacing only the configuration test's duplicate context
+macro with deserialization of the existing compile-time tauri.conf.json into
+Tauri Config. Its identity/window/security assertions remain. The runtime host,
+validated borrowed parent capture and every product/dependency file are unchanged
+in this correction. All prior constructor/type-inference/plist failures and their
+source snapshots remain historical evidence; none were overwritten or waived.
+Ordinary begin passed with identical active gate bytes. Scope remains43successor/
+64cumulative including the reserved review, with63current candidate paths.
+
+All three focused example tests passed. Required npm run verify exited0 using
+installed tooling, offline Cargo, fresh external output and the documented
+process-local Python/Xcode SDK27 workaround: all-target Clippy,105hook tests,
+95repository tests,612frontend tests,490Rust library tests and255integration
+tests passed, along with frontend and native release builds. The library suite
+also runs under the required integration command; do not count that repeat as
+new coverage. The existing two opt-in Docker library tests and one opt-in Hermes
+probe remain skipped. Earlier actual execution/native evidence remains inherited.
+Retain the Vite chunk-size and Node localStorage experimental warnings, all other
+advisories and the native workaround; no limits or checks were relaxed.
+
+The previously blocked offline parenting repair now has passing automated
+verification. It does not prove Cortexa native sheet access, Reject or exact
+Approve/apply, nor the original unparented failure cause. The overall action
+milestone remains active and incomplete, with no finalization or full Stop claim.
+Separate native acceptance needs a fresh source-bound isolated bundle and launcher,
+explicit original-window continuity with at most two unclassified same-PID extras
+for the approval checkpoint (initial one;16-row cap), unambiguous app-scoped
+Computer Use, disposable fresh Reject and exact Approve/apply cases, bounded
+Codex dispatch accounting and identity-bound cleanup. Old review-ready runs and
+consumed helpers must not be replayed. API-specific gaps remain separate.
+
+Evidence: /private/tmp/cortexa-example-config-71q_jh9c. Preservation is checked
+against frozen candidate/source/dependency/gate/history bindings; final closeout
+receipts and external handoff are authoritative for actual outcomes. No app or
+dialog launch, Send, credential inspection, QA window-policy change, install,
+commit or publication occurred. Ledger43total,10remaining; disabled ECC hooks/MCP,
+all advisories and parked D-125/M1/M2 remain unchanged.
+
+---
+
+## Native approval example — annotated context exposes duplicate plist embedding
+
+The owner-authorized test-only tauri::Context<tauri::Wry> annotation was applied.
+Ordinary begin passed and all candidate/history bindings matched before editing.
+The focused example test command exited101 before running tests: two expansions
+of generate_context!() in the example test binary define \_EMBED_INFO_PLIST twice.
+The installed tauri-codegen2.6.3/ embed_plist1.2.2 implementation and documented
+reuse protection confirm that contract. This is a new test-construction blocker,
+not evidence about native approval behavior or the original access failure.
+
+The smallest proposed additional test-only correction parses the existing
+compile-time tauri.conf.json into tauri::utils::config::Config and retains the
+same identity/window/security assertions. It leaves the production macro and
+host unchanged, needs no dependency or scope increase, and avoids duplicate
+embedding. It exceeds the exact annotation authorized in this turn; approval
+has been requested and no such correction or retry has occurred at this checkpoint.
+
+Evidence: /private/tmp/cortexa-example-context-n0pl3mwf. Prior source snapshots and
+all failed receipts remain intact. Required npm run verify has not started;
+earlier passing evidence is retained without claiming this example passed.
+Preservation after compilation passed63paths within43/64,1530historical external
+bindings,368unrelated source bindings, eight prior document bodies, unchanged gate
+and dependency files, no staged paths/conflicts. Milestone remains active and
+native acceptance pending. No app launch, Send or QA window-policy change.
+Ledger43total,10remaining; disabled ECC hooks/MCP, all advisories, native workaround
+and parked D-125/M1/M2 remain unchanged.
+
+---
+
+## 2026-10-07 — Standalone example correction stopped at test compilation
+
+The authorized example-only compatibility correction is implemented but not
+verified. The first focused command, cargo test --manifest-path
+src-tauri/Cargo.toml --example native_approval_dialog --locked --offline, exited101
+with E0283 at the new configuration test. Calling config() directly on
+generate_context!() leaves its generic Runtime parameter unconstrained. No tests
+ran. The production host supplies Builder type inference, but this failure does
+not establish a passing example build or native behavior.
+
+Owner instructions require stopping on failure. No retry or further code repair
+was made. The exact proposed correction, within the already approved example
+path, is to bind the generated test context as tauri::Context<tauri::Wry>, then
+clone context.config(). Required npm run verify was not started. Earlier parent
+and strict-request regression evidence is retained, not treated as verification
+of this new example. No native launch or Send occurred.
+
+Ordinary begin passed; scope43/64 includes the reserved review. Existing product,
+dependency, history and gate bytes remain protected. Only the example and eight
+additive documents changed. The standalone host is blank/incognito, retains its
+own main-window parent through the synchronous decision, registers no product
+commands/services/database and preserves fixed failure output and synthetic
+approval outcomes. Native acceptance remains pending and the milestone active.
+Evidence: /private/tmp/cortexa-parent-example-23qh8a91. Preserve the compiler
+failure and previous receipts unchanged. Ledger43total,10remaining; disabled ECC
+hooks/MCP, all advisories, native workaround and parked work remain unchanged.
+
+---
+
+## 2026-10-07 — Authorized standalone approval example compatibility correction
+
+The owner adds only src-tauri/examples/native_approval_dialog.rs, raising the
+successor/cumulative scope to43/64 including the reserved final review. Ordinary
+begin passed with unchanged active gate state. Existing candidate hashes and
+historical receipts verified before edits. The prior all-target compilation
+failure remains immutable evidence; this correction does not erase it.
+
+The synthetic example retains its own native main-window owner and validated
+parent through the synchronous trusted decision. Its standalone host uses a blank
+incognito WebView and separate example identity, with no product commands,
+services, databases or execution. Native parent/host errors retain the fixed
+failure output. Existing policy, strict input validation, approval resolution
+and synthetic outcomes remain; no fallback, new dependency, weakened checks or
+product threading/locking changes. Focused and required verification are pending.
+
+Only this example and the eight already authorized additive documents change in
+this stage. Evidence: /private/tmp/cortexa-parent-example-23qh8a91. No app/dialog
+launch, request, product-QA window-policy amendment, commit or publication.
+Ledger43total,10remaining; disabled ECC hooks/MCP, all advisories, native workaround
+and parked D-125/M1/M2 remain. Overall native action acceptance is still pending.
+
+---
+
+## 2026-10-07 — Offline parenting repair blocked by retained example caller
+
+The authorized macOS raw-window-handle exactly0.6.2 dependency resolved offline.
+Only the root dependency edge changed in Cargo.lock; all retained registry
+versions/checksums and unrelated lock entries match the preserved baseline.
+Ordinary begin passed for the active isolated-bot-action-workflow; gate bytes
+remain unchanged. Scope is42successor/63cumulative including the reserved review,
+with62current candidate paths. Three Rust files now capture both validated
+borrowed AppKit handles once from the native invoking main window and retain its
+owner through the synchronous trusted presenter. No unparented fallback, unsafe
+block, WebView authority, speculative threading or locking change was added.
+
+Five parent regressions and one strict request-boundary regression passed.
+Required `npm run verify` exited101 at all-target Rust Clippy: the retained
+`src-tauri/examples/native_approval_dialog.rs:48` calls the old no-argument
+constructor and cannot call request_decision on the new Result. This caller was
+missed in the initial scoped inspection. Formatting, repository health and
+frontend lint passed before that failure. The remaining full tests/frontend and
+release builds were not reached. No native acceptance or overall pass is claimed.
+
+Implementation stopped without altering the out-of-scope example or weakening
+the parent requirement. The smallest proposed scope extension adds only
+src-tauri/examples/native_approval_dialog.rs (43successor/64cumulative) to adapt
+its standalone host to supply a validated owning main window and propagate parent
+errors through its fixed failure route. It must preserve the synthetic example's
+policy/approval outcomes, add no database or action execution, and never fall back
+to an unparented dialog. That repair requires separate owner approval; it has not
+been implemented. Focused validation and the failed required verification must
+then pass before any separate native Reject/Approve acceptance authorization.
+
+Read-only preservation passed after the stop:364unrelated source bindings,
+1335historical external bindings, eight historical document bodies, unchanged gate
+and the exact62-path candidate. Evidence and command exit statuses are retained in
+/private/tmp/cortexa-native-parenting-3d6pdfhs. The active milestone is incomplete;
+no finalization or full Stop acceptance was attempted. No app launch, live request,
+QA window-policy amendment, install, commit or publication occurred. Ledger43total,
+10remaining; disabled ECC hooks/MCP, native workaround, all advisories and parked
+D-125/M1/M2 remain unchanged.
+
+---
+
+## 2026-10-07 — Authorized offline native approval parenting repair
+
+Owner authorization adds only macOS raw-window-handle exactly0.6.2 and the root
+lock dependency edge, raising successor/cumulative scope42/63 including the
+reserved review. Existing registry versions/checksums and all historical evidence
+remain frozen. Three scoped Rust files bind the native invoking main window to
+its trusted presenter using once-captured borrowed handles; no WebView parent or
+decision input, unparented fallback, unsafe block, thread/lock redesign or altered
+approval/apply boundary is authorized. Eight existing documents are additive.
+
+The parented synthetic Reject probe passed; it does not prove product acceptance
+or the original failure cause. Offline regressions and required verification are
+pending for this repair. No new native artifact, launch, Send or product-QA
+window-policy amendment is authorized. Ledger43total,10remaining. Preserve all
+advisories, disabled ECC hooks/MCP, native workaround and parked D-125/M1/M2.
+Evidence: /private/tmp/cortexa-native-parenting-3d6pdfhs.
+
+---
+
+## 2026-10-07 — Fixed schema diagnostic verified; Codex review ready, native approval blocked
+
+The authorized diagnostic changes only isolated_action/mod.rs and workspace.rs
+in-module tests, with eight additive documents. Three focused schema cases and
+eight rejection-filter cases passed (one overlaps), preserving original parser
+acceptance/public errors, strict limits, fixed value-free receipts, replay and
+containment. Required npm run verify passed612frontend and484Rust library tests,
+integrations and release build; two Docker library opt-ins and the existing Hermes
+integration opt-in remain skipped by the ordinary suite, with unchanged prior
+Docker-specific evidence retained. No new native acceptance is inferred from mocks.
+Fresh isolated source/config/dist/executable/resource bindings and preservation
+passed. Launcher preparation first stopped because sealing was still in progress,
+before an attempt directory or launch existed. That receipt is preserved. Only after
+sealing passed did unchanged-helper configuration validation pass and one launch run.
+
+Computer Use observed the dedicated Codex route with saved Coding/QA gpt-5.6-luna/low,
+Memory Off, blank notes/instructions, no profile Saves and one model-catalog refresh.
+Fresh room-6/run-1 reached review_ready with two generation dispatches. Coding passed
+the unchanged strict Edit parser; actual Docker validation exited0 with three checks
+passed and the exact container independently absent. QA returned a valid handoff
+with evidence: []. The visible diff adds only add(a,b) returning a+b in solution.py.
+New shape categories were not emitted for this valid response. This success does
+not establish the cause of earlier schema rejections or prove they are repaired.
+
+While opening Review exact change in native approval, Computer Use returned
+noWindowsAvailable (-10005). Input delivery and dialog presentation are unknown;
+no native decision or application is claimed. Subsequent PID-filtered metadata
+still contained the exact original process/window with one permitted unclassified
+extra record. Saved disposition stayed review_ready; no approval.json or source-
+confirmed apply-started/apply-complete journal exists. All six fixtures are clean
+with original bytes and absent solution.py. The cause may be tooling/modal access
+or product behavior; neither is established by the error. No repeated click or
+additional request occurred. App-scoped Computer Use is not CGWindowID-directed.
+
+Authorized identity-bound SIGTERM then closed only the unchanged QA process:
+retained-child exit-15, independent BSD absence, no force kill and preservation
+passed. GUI graceful quit was not verified. Historical helpers, failed receipts,
+prior artifacts and completion lineage remain intact. Ledger43total equals
+33historical plus10/20additional;10remain. All action acceptance beyond review-ready
+remains incomplete: native approval/apply/rejection, correction, drift, active
+cancellation/recovery and restart/no-replay. Direct-API cases remain distinct.
+
+Evidence and exact read-only next diagnosis: /private/tmp/cortexa-edit-schema-r1iavdfq/FINAL-HANDOFF.md and
+NEXT-ACTION.md. Scope remains40/61,60candidatepaths; active gate unchanged. No
+finalization/full Stop or overall milestone pass is claimed. Preserve all advisories,
+disabled ECC hooks/MCP, native workaround and parked D-125/M1/M2. No publication.
+
+---
+
+## 2026-10-07 — Authorized fixed edit-schema shape diagnostic
+
+Owner approval extends only the current isolated_action/mod.rs diagnostic and
+workspace.rs in-module receipt tests, plus eight additive milestone records.
+The original strict Edit parser remains authoritative. Only after its Data rejection
+is a bounded in-memory classifier consulted for fixed root/missing/unexpected/
+duplicate/type/version-range labels, falling back to schema_data on uncertainty.
+No member names, values, counts, parser messages or raw response enter evidence.
+The byte and JSON depth limits, public errors, no-retry/fallback, approval, Docker
+isolation and cleanup remain unchanged. No prompt or accepted contract is repaired.
+Differential tests compare prior acceptance/error behavior, including the existing
+Serde sequence representation; no diagnostic claim silently narrows that behavior.
+
+Scope remains40successor/61cumulative,60candidatepaths. Previous active admission,
+completion history, native failures and artifacts remain immutable. Evidence:
+/private/tmp/cortexa-edit-schema-r1iavdfq. Focused and required offline checks precede a fresh bound bundle and
+one targeted Codex retry. Inspect its fixed result before further dispatches.
+Ledger41total,8/20additional used,12remain before the attempt. Retain disabled ECC
+hooks/MCP, all advisories, process-local workaround and parked D-125/M1/M2. Stop
+on further repair, drift, unsafe access, inadequate isolation or budget exhaustion.
+
+---
+
+## 2026-10-07 — Coding rejection diagnostic verified; native schema rejection
+
+The approved three-file diagnostic and eight additive records passed seven focused
+contract/privacy/storage/replay/error-preservation cases and npm run verify. The
+full run passed612frontend tests and481Rust library tests (two existing opt-in
+ignores), integrations and release build. Documentation, repository, security,
+whitespace, session and scope/preservation checks passed. A fresh unsigned isolated
+bundle in /private/tmp/cortexa-coding-rejection-nd21ep5r/native binds current source,
+configuration, frontend and executable/resources; unchanged evidence was reused.
+
+Computer Use observed one targeted Codex room-5/run-1 with saved Coding/QA
+gpt-5.6-luna/low, Memory Off, blank instructions/notes and unchanged profiles. The
+new fixed receipt records edit_contract / schema_data: strict Edit deserialization
+failed before staging. Transport/runtime completed and cleaned up; that does not
+mean the edit contract was accepted. QA did not dispatch, no candidate was staged,
+no Docker check executed and no native approval/apply occurred. The exact member
+or value mismatch remains unknown; raw provider responses/parser messages were
+neither inspected nor retained. Do not infer an old failure's cause from this run.
+The existing Coding prompt and parser name the same four-field contract, so no
+specific corrective prompt/content transformation is justified yet.
+
+All six disposable fixtures remain clean with bound original bytes and absent
+solution.py. The original process/window remained continuous with at most one
+unclassified additional record; Computer Use remains app-scoped. Cmd-Q closed the
+verified app with retained-child exit0, independent BSD absence and preservation;
+no SIGTERM/force kill or unrelated-process action. Historical artifacts, helpers,
+receipts, predecessor completion and gate bytes remain unchanged.
+
+Ledger41 total =33historical plus8/20additional;12remain. The native happy path,
+correction, approval/rejection, drift protection, active cancellation/recovery and
+restart acceptance are still incomplete. The earlier QA empty-evidence prompt's
+native effect remains untested. Codex results do not count as direct-API action
+acceptance. No identical retry or further request occurred after rejection.
+
+Evidence, actual acceptance checklist and approval-ready narrower fixed schema
+shape diagnostic proposal: /private/tmp/cortexa-coding-rejection-nd21ep5r.
+Only this amendment's offline verification passed; overall milestone remains active,
+not complete. No finalization/full Stop acceptance is claimed. Scope remains40/61,
+60candidatepaths with reserved final review. Retain all advisories, disabled ECC
+hooks/MCP, native workaround and parked D-125/M1/M2. No commit/publication.
+
+---
+
+## 2026-10-07 — Authorized fixed Coding-rejection diagnostics
+
+The owner authorized only isolated_action/mod.rs, isolated_action/workspace.rs
+and collaboration_action.rs, in-module tests and these additive milestone records.
+Active ordinary scope remains40successor/61cumulative,60paths; prior admission and
+completion history stay unchanged. Exact proposal and baseline are retained in
+/private/tmp/cortexa-coding-rejection-nd21ep5r.
+
+The edit parser now classifies closed syntax/data/EOF/unexpected-parser, filename,
+content, limit, drift and no-change rejections without changing accepted contracts
+or existing public errors. A task-owned create-new coding-rejection.json records
+only fixed phase/category labels. Descriptor-bound directory checks, no-follow,
+exclusive creation,0600 mode and128byte cap preserve receipt scope/replay safety.
+Receipt-storage failure remains terminal with the original error and a separate
+fixed StorageFailure diagnostic. No raw response, parser message, values, path or
+credential is admitted to the receipt. No approval/execution authority is added.
+
+Focused contract/privacy/storage/replay tests and required verification precede
+fresh isolated build/configuration and one targeted Codex retry. The old scope
+failure's exact predicate remains unknown; new diagnostics cannot explain it
+retroactively. Ledger40total,additional7/20,13remain before QA. No further product
+repairs, API fallback or identical retry without evidence. Preserve all advisories,
+disabled ECC hooks/MCP, native workaround and parked D-125/M1/M2.
+
+---
+
+## 2026-10-07 — Empty-reference prompt verified; native Coding scope rejection
+
+The approved collaboration_action.rs prompt now explicitly requires evidence: []
+for this source-free action and places actual-check discussion in summary/findings.
+Its in-module prompt/contract/privacy regression and required npm run verify passed;
+477 Rust library cases passed with two existing opt-in ignores. Documentation,
+repository, security, whitespace and session checks passed before native QA.
+Source, exact embedded frontend, configuration, executable and resources bind the
+fresh isolated bundle in /private/tmp/cortexa-action-prompt-repair-hpkj8ace/native.
+Earlier artifact and failure records remain unchanged. A launcher-preparation call
+ran before artifact sealing finished and stopped before attempt creation; that
+receipt is retained. Preparation resumed only after successful sealing, with
+unchanged protected launcher behavior and four passing configuration cases.
+
+The dedicated Codex home reported ChatGPT file-store authentication. Computer Use
+confirmed saved Coding/QA gpt-5.6-luna/low revision2, Memory Off and blank notes/
+instructions; no Saves. Fresh room-4/run-1 dispatched one Coding generation and
+failed with fixed scope rejection before staging or Docker validation. QA was
+cancelled without dispatch. The UI's generic target/edit message does not prove
+that a target file existed: solution.py remains absent and all six disposable
+fixtures are unchanged and clean. No attempt directory, native approval or apply
+journal was created. Bounded diagnostics contain12 records, one dispatch and
+completed runtime/transport cleanup; they do not establish accepted edit output.
+
+The exact failed predicate was not retained. Candidate hypotheses include strict
+JSON/schema rejection, invalid filename/control characters or a pre-stage workspace
+scope check; no raw provider response or parser values were inspected/retained.
+The repaired QA prompt was not reached, so its native effect is NOT TESTED.
+Happy-path/native approval, correction, owner rejection, drift, active cancellation/
+recovery and restart acceptance remain incomplete. No identical retry occurred.
+An additional fixed-category Coding rejection diagnostic requires product approval;
+do not loosen parsing or infer this failure's cause from the generic message.
+
+Ledger: historical33 plus7/20 additional =40 total,13 remaining. Count the failed
+Coding dispatch; no QA generation, fallback or further request occurred. Cmd-Q
+closed only the bound QA app with retained-child exit0 and independent BSD absence;
+no signal or force kill. No Docker execution was reached in this attempt. Original
+window continuity and approved unclassified additional-record policy remained valid.
+Computer Use remains app-scoped, not CoreGraphics-ID-directed input.
+
+Evidence and exact next proposal: /private/tmp/cortexa-action-prompt-repair-hpkj8ace.
+Scope remains40/61,60 paths; the ordinary gate remains active, not finalized. No
+completion or full Stop acceptance is claimed. Direct-API action-specific acceptance
+remains pending private access, distinct from Codex. Retain all advisories, disabled
+ECC hooks/MCP, native workaround and parked D-125/M1/M2. No commit/publication.
+
+---
+
+## 2026-10-07 — Authorized action-QA empty-reference prompt repair
+
+The owner authorized only collaboration_action.rs, in-module regressions and
+additive existing milestone documentation. Active scope remains 40 successor /
+61 cumulative paths (60 present; final review reserved). The action QA prompt
+now explicitly requires evidence: [] because no labeled sources are supplied;
+actual-check assessment belongs in summary/findings. It states existing string
+and array bounds. Strict parsing/reference rejection, failing-check authority,
+Docker isolation, native approval, runtime authentication and cleanup are unchanged.
+Focused prompt/contract/privacy and required verification precede a fresh bound
+Codex-only native retry. Historical failed runs and artifacts remain immutable.
+Evidence: /private/tmp/cortexa-action-prompt-repair-hpkj8ace.
+Ledger remains 39 total, additional6/20,14 remaining before the retry. No native
+acceptance or completion is claimed by this offline change. Disabled ECC hooks/MCP,
+all advisories, native workaround and parked D-125/M1/M2 remain unchanged.
+
+---
+
+## 2026-10-07 — Codex action references rejection; repair approval needed
+
+The bounded diagnostic amendment passed seven external mocked extractor cases,
+25 focused collaboration tests, required npm run verify, docs/security/whitespace
+checks, and a fresh isolated debug bundle with exact embedded frontend/source/
+executable bindings. The external extractor test initially had a substring false
+positive; its failed receipt and corrected test remain preserved. Native evidence
+and the current acceptance checklist are in
+/private/tmp/cortexa-handoff-diagnostics-yf_s10mi/FINAL-HANDOFF.md.
+
+One autonomous Codex-only launch used the dedicated authenticated Cortexa home.
+Saved Coding/QA profiles already had gpt-5.6-luna/low; no profile edits or Saves.
+One targeted room-3/run-1 retry dispatched two generations. Coding produced the
+expected addition and Docker checks passed, but QA failed qa_contract_references.
+Strict deserialization succeeded in this new attempt; the empty supplied source
+set means a nonempty evidence-reference list was rejected. Its values were not
+inspected or retained. This does not establish the earlier schema rejection cause.
+Both attempts' bounded diagnostics show runtime completion/cleanup and transport
+completion, which is distinct from accepted QA handoffs and action completion.
+
+Overall native happy-path acceptance remains FAILED. Actual candidate creation,
+Docker validation, rejected-handoff containment and truthful failed-run graph
+attribution were observed. No native review/approval/application occurred. Correction,
+owner rejection, deliberate drift, active cancellation/recovery and restart remain
+NOT TESTED; product repair is needed before repeating the failed handoff. API-specific
+action acceptance remains pending private access and is not replaced by Codex.
+
+Ledger: historical33 plus6/20 additional =39 total,14 remaining. No identical retry,
+Stop, fallback or further dispatch occurred. Computer Use Cmd-Q produced exit0;
+independent BSD PID and exact Docker container absence verified. All six disposable
+targets remain unchanged and clean, with solution.py absent. The first external
+container-absence assertion rejected a newline-only stdout; a bounded exact-ID
+classification confirmed whitespace-only stdout and fixed no-such-container response.
+Both probe receipts are preserved. No force kill or unrelated-process changes.
+
+Smallest proposed product repair, requiring owner approval: collaboration_action.rs
+only, with in-module tests, must explicitly tell QA that no source labels are supplied
+and evidence must be []; put actual-check discussion in summary/findings and retain
+string-array types/bounds. Keep strict reference rejection and all approval/execution
+boundaries. Do not infer missing private values or relax parsing. Existing scope stays
+40 successor /61 cumulative,60 candidate paths; final review remains reserved.
+Rebuild/rebind only after affected verification, then use a fresh targeted checkpoint.
+The milestone remains active, not complete; no finalization or full Stop acceptance.
+All historical artifacts/failures, predecessor completion, disabled ECC hooks/MCP,
+advisories, native workaround and parked D-125/M1/M2 remain preserved.
+
+---
+
+## 2026-10-07 — Bounded QA parser diagnostics and authorized Codex retry
+
+The owner authorized a diagnostic-only refinement in collaboration.rs and
+collaboration_action.rs, their in-module tests, and additive milestone records.
+The ordinary isolated-bot-action-workflow remains active with 40 successor /
+61 cumulative paths; no gate reset, new increment or completion is claimed.
+Only fixed JSON syntax, schema-data, EOF and unexpected-parser categories replace
+the coarse schema rejection for new failures. Strict parsing, accepted handoffs,
+limits, wire errors, approval, isolation and cleanup remain unchanged. Historical
+qa_contract_schema receipts are preserved; their exact cause remains unknown.
+
+The preceding Codex native run accepted Coding and passed actual Docker validation,
+then rejected the QA schema. No approval/application occurred. Graceful app exit,
+independent PID/container absence and fixture preservation were recorded. Ledger
+is historical33 plus4/20 additional:37 total,16 remaining. The external extractor's
+unconditional hash check conflicted with nullable pre-dispatch attempt identifiers;
+a fresh strict extractor and mocked privacy tests must pass before a bounded reread.
+
+Evidence and current checkpoints: /private/tmp/cortexa-handoff-diagnostics-yf_s10mi.
+After affected verification, the owner authorizes a fresh isolated bundle and
+Codex-only autonomous launch using the dedicated Cortexa-Codex-QA home, then one
+targeted retry before deciding further checks. Count every generation dispatch;
+no identical failing retry, parser relaxation, API fallback or raw response/parser
+message/credential retention. Further product repairs require approval. Native
+acceptance, final reviews and ordinary completion gates remain pending.
+All advisories, disabled ECC hooks/MCP, native workaround and D-125/M1/M2 remain.
+
+---
+
+## 2026-10-07 — Codex action offline verification passed
+
+The five-file Codex action extension passed its focused offline regressions and
+required `npm run verify` with the installed process-local workaround. Synthetic
+runtime cases cover fixed action instructions, successful text streaming/completion,
+EOF, malformed output, tool/approval rejection, output bounds and runtime errors;
+active cancellation reaps the child before a subsequent synthetic request succeeds.
+The new test initially referenced an unavailable Tokio macro; its compile receipts
+remain preserved. Standard future polling corrected the test without dependency or
+production lifecycle changes. The final verification passed on the corrected source.
+
+The current candidate has 60 paths within the 40 successor / 61 cumulative ceiling;
+the final review is still reserved. Prior document bodies, predecessor completion,
+API evidence, historical failures and old artifacts remain preserved. Fresh
+isolated bundle and launch-disabled Codex-only helper preparation is recorded under
+`/private/tmp/cortexa-codex-action-extension-oedk0qdz/native`; their external manifests
+are authoritative for readiness and exact hashes, not this documentation record.
+
+Native action acceptance has not run. It needs separate authorization for the
+verified artifact, autonomous launcher and Computer Use, preserving the dedicated
+Cortexa-Codex-QA home and all identity/window/cleanup safeguards. Direct-API gaps
+remain pending private credentials; Codex results cannot replace API evidence.
+Usage stays historical 33 plus 2/20 additional (35 total, 18 remaining). Keep all
+advisories, disabled ECC hooks/MCP, native workaround and D-125/M1/M2 parked.
+No completion, full Stop, launch, Send, commit or publication is claimed here.
+
+---
+
+## 2026-10-07 — Bounded Headless Codex action route
+
+The owner approved extending only the five native adapter/context modules, with
+in-module tests, to support Headless Codex for isolated Coding -> QA actions.
+The scope is now 40 successor / 61 cumulative paths including the reserved final
+review. Only `agent_adapter.rs` and `codex_connection.rs` are newly allowlisted;
+the original 38/59 scope and all historical evidence remain preserved. The existing
+ordinary active increment is retained without a new begin, state edit or waiver.
+
+Action context accepts only OpenAI API and Codex. Native preparation and dispatch
+validate the saved Codex selection against the discovered catalog. A closed
+`ActionCodex` adapter chooses only the fixed isolated-action instructions through
+the existing file-store runtime. It adds no model tools, filesystem authority,
+provider fallback, IPC surface or dependency. Codex only proposes bounded JSON;
+Rust still owns strict contracts, Docker execution, exact native approval and
+new-file-only application. Existing API behavior and all execution limits remain.
+
+Focused offline cases cover context privacy, catalog/revision rejection, fixed
+instructions, streaming/errors, denied tools/approval and child cleanup. Required
+verification and fresh isolated artifact/helper preparation are tracked separately
+in `/private/tmp/cortexa-codex-action-extension-oedk0qdz`. No native launch or Send
+is authorized in this offline stage. Do not promote synthetic results to native
+acceptance or reuse the old API artifact for the changed source.
+
+Separate native approval must bind the new bundle and a fresh Codex-only launcher
+using the dedicated Cortexa-Codex-QA home, never personal credentials or API fallback.
+Current additional usage remains 2/20 (historical 33; total 35), with 18 remaining.
+Existing API successes and failed QA handoff remain; API-specific gaps await private
+credential access. Native action approval/application, correction, rejection/drift,
+cancellation/recovery and restart remain pending. Retain all advisories, disabled
+ECC hooks/MCP, the process-local workaround and parked D-125/M1/M2. No completion,
+full Stop, commit or publication claim.
+
+---
+
+## 2026-10-07 — Native QA handoff rejection diagnostics
+
+The first isolated native action run generated a real candidate and passed three
+Docker unittest checks, with owned container absence. Its second provider call
+completed, but QA handoff validation rejected the contract. No native approval or
+target application occurred. All six disposable targets remain unchanged. The app
+quit normally (exit 0) with independent PID absence and preservation verified.
+Additional live budget is 2/20 used, 18 remaining (historical 33; total 35).
+
+The owner authorized fixed rejection categories within the existing 38/59 scope.
+Only the collaboration parser/action modules and their focused tests change product
+behavior: accepted contracts and existing wire errors remain unchanged. Failed QA
+handoffs retain only a fixed output-bound, schema, identity/status, content-bounds,
+or references category in existing action evidence, never raw output or parser
+messages. Transport completion remains distinct from application contract acceptance.
+The exact prior rejection cause is unknown; diagnostics do not claim a repair.
+
+Preserve `/private/tmp/cortexa-isolated-action-g_e2rnqv/native` and its consumed
+launch-001. Current correction evidence is in
+`/private/tmp/cortexa-action-contract-diagnostics-tppch9h0`. Affected verification
+and a fresh hash-bound native attempt must precede acceptance. Approval/application,
+correction, rejection/drift, cancellation/recovery and restart remain pending.
+No finalization or completion claim. All advisories, disabled ECC hooks/MCP,
+process-local native workaround and parked D-125/M1/M2 remain unchanged.
+
+---
+
+## 2026-10-07 — Isolated-action offline verification passed
+
+The exact IPC allowlist amendment is implemented within the approved 38 successor /
+59 cumulative paths. The checker algorithm, CSP, capabilities and gate code are
+unchanged. Focused rejection cases cover extra paths/commands/approval flags,
+changed prepare payload and missing/extra registrations.
+
+`npm run verify` passed using the documented process-local workaround: 105 hook,
+95 repository, 612 frontend, 470 Rust library and 255 integration tests, strict
+format/lint/typecheck and frontend/native release builds. Two opt-in Docker cases
+are skipped by the ordinary library suite but passed in the separate 11-test
+isolated-action run; the inherited opt-in Hermes probe remains skipped. The initial
+wrong-interpreter checker run and strict lint failures are retained with their
+successful corrected receipts. Node localStorage and frontend chunk advisories remain.
+
+Native generation, review, approval/application, correction, cancellation/recovery,
+rejection/drift and restart acceptance remain pending. Fresh isolated artifact and
+private launcher preparation use disposable Git fixtures only. No new provider
+request has occurred: historical33, additional 0/20. Preserve personal profiles,
+old artifacts, all failures and predecessor completion. No finalization or passing
+completion claim until every required native and review/gate criterion is verified.
+
+Evidence: `/private/tmp/cortexa-isolated-action-g_e2rnqv`; the native checklist and
+fresh preparation are under its `native` directory. ECC hooks/MCP remain disabled;
+all advisories, native workaround and parked D-125/M1/M2 remain unchanged.
+
+---
+
+## 2026-10-07 — Isolated-action verification scope blocker
+
+The active isolated-action implementation has 11 passing focused Rust/Docker tests
+and 43 passing frontend tests; native acceptance remains untested. Required
+`npm run verify` stopped at repository health: its exact native-command allowlist
+has not been amended for the two approved action commands and optional prepare
+payload. No bypass or out-of-scope checker change was made.
+
+The smallest owner scope amendment adds only `scripts/repository_health.py` and
+`scripts/tests/test_repository_health.py`, raising 36 successor / 57 cumulative
+paths to 38 / 59. Preserve the exact-match security boundary and add focused
+negative tests. Detailed proposal, preserved failure and next steps are in
+`/private/tmp/cortexa-isolated-action-g_e2rnqv/HANDOFF.md`.
+
+Current scope remains unchanged pending approval. Full verification, native
+acceptance and final gates are incomplete. Additional requests remain 0/20;
+historical ledger33, all advisories, disabled ECC hooks/MCP and parked work remain.
+
+---
+
+## 2026-10-07 — Isolated bot action workflow implementation checkpoint
+
+The owner-authorized `isolated-bot-action-workflow` is active, not complete.
+The [bounded plan](docs/plans/2026-10-07-isolated-bot-action-workflow.md) freezes
+36 successor / 57 cumulative paths, including the retained 28-path architecture
+atlas. Its dated diagrams, prior completion, historical failures and artifact
+bytes remain unchanged; they are inherited evidence, not this workflow's acceptance.
+
+Docker engine access succeeded outside the tool filesystem sandbox. The first pull
+needed the already-installed Docker credential-helper directory on that process's
+PATH; no credentials/configuration were inspected or changed. The first network
+probe incorrectly assumed sysfs contained only loopback; corrected checks verify
+interfaces are down and actual IPv4/IPv6 connections are unavailable.
+
+The first production-executor cleanup check rejected Docker 29's lowercase
+`error: no such object:` response despite actual container removal. An exact-ID,
+whole-response case-normalized comparison corrected that contract; unknown responses
+still fail closed. Subsequent real executor checks passed. Initial compile/test
+failures and a test-only audit-fixture correction are preserved in external receipts.
+The production isolated-action audit identity remains distinct from local-task audit.
+
+All advisories, disabled ECC hooks/MCP, native workaround and parked D-125/M1/M2 remain.
+
+---
+
+## 2026-10-07 — Current architecture and execution atlas
+
+The owner-authorized `current-architecture-walkthrough` documentation increment
+adds [the architecture atlas](docs/architecture/current/README.md), a standalone
+[offline viewer](docs/architecture/current/viewer.html), nine SVG views and a
+[ten-page PDF overview](docs/architecture/current/overview.pdf). Editable JSON,
+the deterministic renderer and 57 source/hash references are included. The
+[capability inventory](docs/architecture/current/capabilities.md),
+[security evidence](docs/architecture/current/security.md),
+[external-project matrix](docs/architecture/current/external-projects.md) and
+[concrete Research walkthrough](docs/architecture/current/walkthrough.md)
+separate implemented behavior, retained verification, fixtures and deferred work.
+
+Source: `codex/live-provider-qa` at
+`bc12776412c717613de1fdc42c38bf3312493726`; its product tree equals merged main
+`bbe7546281fec3c8b4b608d68a52bc9732d9ecd9`. The starting checkout was clean.
+Exactly 28 documentation paths are scoped; no application, profile, dependency,
+hook, permission, artifact or historical-report bytes are changed. Current
+root-document bodies remain intact beneath additive entries. Ordinary admission
+was used after archiving the valid predecessor completion byte-identically.
+
+Fresh evidence is document/source consistency, offline SVG/HTML/PDF rendering,
+visual inspection, navigation/zoom and required documentation/preservation/gate
+checks. Existing product tests/builds/native QA are inherited, not repeated.
+The final review and actual completion receipts determine closeout; prose does
+not replace complete/valid status or full Stop acceptance. See the
+[plan](docs/plans/2026-10-07-current-architecture-walkthrough.md) and
+[review](docs/reviews/2026-10-07-current-architecture-walkthrough-post-increment-review.md).
+External receipts: `/private/tmp/cortexa-architecture-walkthrough-8sim6hio`.
+
+Important limits: live routes are sequential, Conductor is application
+coordination, and tested policy/tool/memory foundations are not a generic live
+device executor. Anthropic/local adapters and other live collaboration variants
+are not accepted by the minimum API/Codex Research evidence. Owner aesthetic
+judgments, native observations and automated race tests remain distinct. No
+complete security audit, encrypted-database guarantee, zero remote retention,
+precise backend cancellation ordering or production release claim is made.
+
+Ledger **33**, D-127/D-128 advisories, 128-update journal usability, stale Codex
+hint, private diagnostic custody, runtime isolation/internal retries/remote
+abort limits, Node/chunk advisories and process-local Python/SDK27/Cargo workaround
+remain. ECC hooks/MCP stay disabled; D-125/M1/M2 remain parked. This documentation
+does not reorder the roadmap, authorize a repair or publish anything.
+
+Documentation rendering initially rejected a CSS selector beginning with a digit;
+the external screenshot harness was corrected to use an attribute selector.
+Its failure receipt remains. Optional image/PDF imports absent from the default
+Python were replaced by already-bundled document libraries without installation.
+The final document render has nine diagrams, zero text overflow, no network
+requests, working navigation/zoom and ten nonempty PDF pages. No product defect
+or new product QA is inferred from these documentation-tool observations.
+
+---
+
+<!-- Original candidate EOF additions follow, retained verbatim. -->
+
+## 2026-10-08 — Selective D-131 integration in the QA worktree
+
+Owner-authorized governance integration extends existing changes without altering
+product code or the raw active `isolated-bot-action-workflow` state. D-130/D-131
+schema-2 general admission and D-132 absent-path semantics coexist with retained
+D-133 acceptance validation. Linked-worktree closure resolves the index through
+Git while retaining exact backup-byte comparison. No active-state conversion,
+closure, finalization, native launch or provider request is authorized here.
+
+Snapshot and attributed evidence: `/private/tmp/cortexa-d131-integration-rin1mbe4`.
+The [integration plan](docs/plans/2026-10-08-d131-qa-worktree-integration.md) tracks
+verification; results are pending until recorded there and in its review. Preserve
+all original document bodies, product/artifact hashes and historical receipts.
+Existing full-source seals remain historical: current governance deltas need
+separate attribution, not rewritten hashes or an unnecessary product rebuild.
+
+Current action acceptance remains incomplete. Native Reject and exact Approve/apply
+are inherited passes; the latest correction run failed at `qa_contract_schema_data`
+after an actual failed Docker check. Terminal-failed restart/no-replay passed;
+correction, drift and active cancellation/recovery gaps remain. Ledger50, three
+requests remain, insufficient for a fresh four-dispatch reservation. No paid usage
+is added by governance work. Keep disabled ECC hooks/MCP, all advisories, the
+process-local native workaround and parked D-125/M1/M2. No commit or publication.
+
+### D-131 integration verification result
+
+Selective governance integration verified with advisories. All145 hook tests
+(including legacy/D-133 and40 added general/integration cases) and95 repository
+tests pass. Repository tests use installed Python3.12; the initial system-Python
+run failed because `zip(strict=...)` is unavailable there, and its failed receipt
+is retained. Documentation, repository, security, whitespace and session checks
+pass. See the [integration review](docs/reviews/2026-10-08-d131-qa-worktree-integration-post-increment-review.md).
+
+The recoverable snapshot preserves1114 baseline paths. Product bytes, the native
+bundle,1659 historical bindings, original document bodies, Git index/links and raw
+active state remain preserved. Historical whole-source records include governance
+files: verify those originals against the snapshot and attribute this governance
+delta separately. Do not rerun old full-source launch validators against changed
+governance or alter their frozen records; fresh authorized configuration must carry
+both original artifact binding and current governance attribution.
+
+Read-only status remains active. Full Stop returns `decision: block`, correctly
+refusing completion of unfinished action acceptance; exit0 is not Stop acceptance.
+No finalization, closure, state conversion, product build, live QA or request ran.
+D-131 operating guidance is available now; new objective-based admission applies
+only through its ordinary supported route. Existing action state remains legacy.
+
+Next: diagnose the retained correction-run `qa_contract_schema_data` rejection
+read-only before proposing any value-free diagnostic/product repair. Do not infer
+the discarded response. Ledger50 leaves3 requests, below the4-dispatch worst-case
+reservation for another action; future live continuation needs sufficient explicit
+budget. Correction, drift and active cancellation/recovery remain incomplete.
+
+## 2026-10-08 — Bounded QA-handoff schema diagnostic
+
+Owner authorized offline diagnosis only after authoritative Handoff deserialization
+rejects serde Data. Only collaboration.rs and collaboration_action.rs change in
+product source, with in-module tests. The active legacy gate, D-131/D-133 governance
+and historical evidence remain unchanged. Recoverable snapshot and fresh receipts:
+`/private/tmp/cortexa-qa-shape-1cv9b4i4`.
+
+The original strict parser remains authoritative. Fixed diagnostic categories
+distinguish root, missing, unexpected, duplicate, type and numeric-range problems;
+uncertain secondary parsing retains qa_contract_schema_data. No key, value, raw
+response, parser message or credential is retained. The category describes a
+structural observation, not the discarded historical response or necessarily the
+first authoritative error when multiple problems coexist. Public errors, 16KiB
+output bound, JSON depth limits, accepted inputs, identity/content/reference
+validation, execution, approval and cleanup remain unchanged.
+
+Focused Handoff and action-persistence tests passed. Coverage includes all eight
+missing/null/duplicate fields, nested collection types, unknown fields, integer
+bounds, privacy, malformed secondary input, depth/output limits and accepted
+struct-sequence compatibility. Action tests require fixed-category persistence,
+unchanged execution evidence and no accepted handoff. Required verification is
+pending until the final result is recorded; no broader pass is claimed here.
+
+Native Reject, exact Approve/apply and terminal-failed restart/no-replay remain
+inherited evidence. Correction, drift and active cancellation/recovery remain
+incomplete. Ledger50, three remaining; no request or launch. Another four-dispatch
+action needs sufficient separate paid-budget authorization. No API fallback,
+installs, commit, publication or credential/personal-data access. Retain disabled
+ECC hooks/MCP, all advisories, native workaround and parked D-125/M1/M2.
+
+### Offline schema diagnostic verification result
+
+Required `npm run verify` passed using the installed process-local Python/Xcode
+SDK27/Cargo workaround and fresh external Cargo output. Receipt:
+`/private/tmp/cortexa-qa-shape-1cv9b4i4/verify-host.json`. The initial sandbox run
+failed on Vitest temporary-file access (EPERM); its receipt is preserved. The
+host-context rerun passed without changing product code to bypass that failure.
+
+Verification includes 145 hook tests, 95 repository tests, 612 frontend tests,
+491 Rust library tests and 255 additional integration tests. The integration
+command also repeats the library suite; it is not counted twice. Two opt-in Docker
+cases and one opt-in Hermes case remain ignored, not passed. Formatting, lint,
+all-target/all-feature Clippy, frontend build and native release no-bundle build
+passed. Vite chunk-size and Node experimental-localStorage advisories remain.
+Focused Handoff and action tests separately passed. Existing native evidence is
+reused; no native QA, launch or provider request occurred in this checkpoint.
+
+The release verification executable is not an isolated, identity-bound QA artifact.
+The prior bundle and frontend dist remain preserved; a fresh isolated bundle and
+fresh bound launcher would be needed to exercise the new diagnostics natively.
+No historical response details are recovered or inferred. Ledger50, three requests
+remain; a later four-dispatch action requires explicit sufficient budget first.
+The active legacy gate is retained without finalization; required correction,
+drift and active cancellation/recovery acceptance remains incomplete. Final
+preservation and read-only gate/session receipts are recorded externally in the
+same evidence directory. Retain all advisories, disabled ECC hooks/MCP, the native
+workaround and parked D-125/M1/M2.
+
+## 2026-10-08 — Native Codex correction checkpoint passed; budget exhausted
+
+Fresh isolated diagnostic bundle and single-use launcher were verified against
+current source/config/dist/executable/resources. Offline build and affected reader/
+binding validation passed; unchanged product verification was reused. Evidence:
+`/private/tmp/cortexa-shape-native-2arkqf3s`. No product or gate changes, installs,
+commits or publication. The active legacy state remains byte-identical under D-131.
+
+Computer Use and sanitized persisted diagnostics agree: room-10/run-2 used four
+Codex generation dispatches with gpt-5.6-luna/low. Dedicated file-store login and
+catalog were verified; Coding/QA profiles already matched, so no Save was needed.
+The ten-room limit was respected by creating a new run in the existing correction
+room with a fresh disposable fixture; no existing room or run was deleted.
+
+Actual Docker validation rejected the multiplication candidate with exit1. The
+first strict QA handoff was accepted. The bounded correction produced addition;
+Docker validation passed exit0 and the final strict QA handoff was accepted. The
+native UI and retained result reached completed/review_ready with two attempts.
+This passes native correction-after-failed-validation acceptance. It does not
+prove why the earlier discarded response failed schema validation, nor exercise
+the new rejection categories live; their negative/privacy coverage is offline.
+
+Target baseline/test bytes remain unchanged, solution.py remains absent, and no
+native approval or application was requested. Recovery files and both actual
+validation attempts are retained. Exact owned container IDs were independently
+confirmed absent. Bound app Cmd-Q exited0; retained-child status and independent
+BSD PID absence passed, with no SIGTERM or force kill. Original window continuity
+passed; additional same-PID records remain unclassified. Computer Use is app-scoped,
+not proof of window-ID-directed input; GUI inventory is not system-wide absence.
+
+Ledger50 +4 =54 total (33historical +21additional), ceiling54, zero remaining.
+All four were reserved before Start. No further generation is authorized. Native
+Reject/exact Approve/apply and terminal-failed restart/no-replay passes remain
+inherited. Native drift and active cancellation/recovery remain incomplete;
+API-specific action checks remain separate/pending private API access. The scope
+paragraph still says OpenAI API only despite the exact transmission/diagnostics
+confirming Codex; this wording advisory is retained without a product edit.
+
+Do not finalize incomplete acceptance. Preserve prior failures, all advisories,
+disabled ECC hooks/MCP, the native workaround and parked D-125/M1/M2. Next: assess
+remaining native criteria and propose the smallest explicit budget/continuation
+amendment; do not replay this helper or repeat passed correction/approval QA.
+Final documentation/preservation/gate outcomes are in the external final handoff.
+
+## 2026-10-08 — Codex cancellation, drift and active-restart acceptance
+
+Evidence: `/private/tmp/cortexa-lifecycle-acceptance-k7affrbs`.
+Reused the verified schema-diagnostic bundle and unchanged full product verification;
+no product, dependency or gate changes, rebuild, install or publication. Dedicated
+ChatGPT/file-store authentication and native catalog gpt-5.6-luna/low were verified.
+Coding/QA settings already matched; no profile Save was performed. ECC hooks/MCP
+remain disabled. Fresh helpers and focused binding/reader validation passed.
+
+Computer Use observed and operated the actual native isolated app. Initial single
+window binding and original-ID continuity held, with at most one unclassified extra
+in these measurements (authorized maximum two, privacy cap16). App-scoped input
+is not proof of CoreGraphics-ID-directed input; GUI inventory is not system-wide
+absence proof. No credential contents, raw provider responses or parser messages
+were retained.
+
+Starting54, ceiling66. Four dispatches were reserved before each action. The first
+intended cancellation sample room9/run2 completed normally before Stop, using two
+dispatches; cancellation is untested for that sample. A fresh room9/run3 was then
+observed with Coding running and requests1 before Stop; it settled cancelled with
+both stages cancelled. The target and prepared recovery evidence were preserved;
+no container or approval/application journal was created. This is cancellation
+during provider generation, not a live Docker-cancellation claim.
+
+A fresh room9/run4 completed after cancellation, using two dispatches. Actual Docker
+checks passed and strict QA accepted the result at review_ready. Adding only
+owner-drift.txt with exactly “Synthetic drift check.” caused native review to return
+“The target or reviewed evidence changed. No automatic retry or application.”
+No approval or apply occurred. The marker, original target files and reviewed
+candidate/check/recovery hashes were preserved.
+
+Room10/run3 reached active QA after one accepted Coding candidate and actual passing
+Docker validation, using two dispatches. Cmd-Q closed the verified app with exit0;
+retained-child status and independent BSD PID absence passed. The single no-Send
+restart changed running/prepared to interrupted/recovery_required without a new
+dispatch, execution or application replay. Coding stayed completed; QA interrupted.
+Native room and graph agreed, with no stage running. Prior recovery hashes stayed
+unchanged. All new targets still lack solution.py and approval/apply journals.
+
+Both task-owned QA instances closed normally with independent app-PID absence and
+preservation; no SIGTERM or force kill. All three exact Docker IDs were independently
+absent. The first external container probe rejected Docker's lowercase missing-object
+error; exact-ID case-insensitive classification resolved that reader failure, whose
+receipts remain. Tauri's registered-Codex-child exit guard was inspected; independent
+Codex-child PID absence is not claimed where no child identity was captured.
+
+Ledger54 +7 =61 total, five remain under66. Seven actual provider_dispatch events
+were counted: normal-before-Stop2, active cancellation1, recovery/drift2, active
+interruption2. These are application dispatch records, not a billing invoice.
+No API request, fallback or unchanged failing generation retry occurred.
+
+Native Codex correction, Reject, exact Approve/apply remain inherited passes.
+Cancellation/recovery, drift and active-interruption restart now pass for the tested
+Codex cases. Direct-API isolated-action acceptance remains pending private access;
+Codex does not substitute for it. Prior discarded schema-failure cause remains
+unknown. Actual rollback, cancel during Docker and all provider/timing variants are
+not newly claimed. Preserve the stale OpenAI-only scope wording advisory, native
+workaround, other advisories and parked D-125/M1/M2. Do not finalize incomplete API
+acceptance. The checklist and exact next action are in the external handoff.
+
+## 2026-10-08 — Direct-API isolated-action checkpoint passed
+
+Evidence: `/private/tmp/cortexa-api-action-wfza90xc`.
+The unchanged shape-native bundle and passing product verification were reused.
+No product, dependency or gate changes, rebuild, install, commit or publication.
+Owner-private hidden Terminal key entry was used; no credentials, environments,
+raw provider responses or parser messages were inspected or retained.
+
+Owner confirmed the actual isolated Coding/QA profile differences. Computer Use
+changed only their Connection to OpenAI API, retained gpt-5.6-luna and set low last,
+then saved each once (revision3). Memory Off, blank instructions/notes and other
+identity/personality fields were preserved. Existing synthetic items remain.
+
+Four dispatches were reserved before the single room10/run4 action against fresh
+fixture-api. Native transmission review and sanitized diagnostics identify both
+stages as openai_api/gpt-5.6-luna/low. Strict Coding accepted the addition candidate;
+actual pinned Docker validation passed exit0, all three tests. Strict QA accepted
+its handoff, with evidence empty, and the UI/result reached completed/review_ready.
+Candidate SHA-256: ba1a531f581d2e6094e978ed6f7aca7a8d92eeb62c6e7ad73ee692f7f18bc772.
+Exact review SHA-256: e4f74ad7832cc619237e2cb8db83908d1b29e73dbc15318f33451cefce6dbc98.
+No native approval or application was requested. Target baseline/test hashes and
+clean fixture Git state remain unchanged, solution.py absent; recovery is retained,
+with no approval/apply journals. This is direct-API action evidence, separate from
+inherited Codex correction, Reject, exact Approve/apply, drift and lifecycle passes.
+
+The initial sanitized reader rejected this API run because it retained a Codex-only
+provider check. A fresh API-only external binding passed seven focused mocked
+privacy/required-identifier/wrong-route/model cases; bounded diagnostics then
+confirmed two dispatches and both successful terminals. Original reader/failure
+receipts remain. A sandbox Docker socket denial was classified without retaining
+raw output; an authorized host-context exact-ID read independently confirmed the
+owned container absent. Neither external-tool failure is an application defect.
+
+Exact process/original-window continuity held before/after app-scoped Computer Use;
+initial one record, later original exactly once plus one unclassified same-PID extra
+(approved maximum two, privacy cap16). No geometry/order selection or rebinding.
+Computer Use does not prove CoreGraphics-ID-directed input; GUI registration does
+not establish system-wide duplicate absence. Verified-app Cmd-Q exited0 with
+retained-child result and independent BSD PID absence; no signal or force kill.
+
+Ledger61 +2 =63 total, ceiling66, three remain. Counts are actual application
+provider_dispatch records, not billing receipts. No second action, unchanged retry
+or fallback. The required bounded API checkpoint passed; consolidated final review,
+report-schema and ordinary completion/full Stop remain pending. Do not claim full
+milestone completion or broaden native coverage. API-specific repetitions of shared
+lifecycle/approval cases, live Docker cancellation, actual rollback restoration and
+all timing/provider variants are not newly claimed. Historical schema-failure causes
+remain unknown. Preserve all advisories, stale API-only scope wording, disabled ECC
+hooks/MCP, the process-local native workaround and parked D-125/M1/M2.
+
+Next: reconcile the required acceptance matrix with these retained API and Codex
+results, complete ordinary final review/documentation and truthful gates only if
+every required criterion passes. Do not replay consumed helpers or repeat passed
+product verification/native QA. No further request is authorized by this checkpoint.
+
+## Isolated action final review — 2026-10-08
+
+The bounded acceptance matrix is reconciled in
+[the consolidated review](docs/reviews/2026-10-07-isolated-bot-action-workflow-post-increment-review.md).
+Codex native correction, exact Reject, exact Approve/apply with retained recovery
+records, active cancellation/subsequent recovery, drift rejection and interruption/
+restart without replay passed. The direct-API Coding/QA action separately completed
+strict contracts and actual pinned Docker validation, reaching review_ready with
+its target unchanged. API evidence is not Codex evidence; shared lifecycle cases
+were not repeated or relabeled API checks. Ledger63/66 remains unchanged.
+
+Final architecture, security, code-health, debt and readiness review finds no
+blocking defect within the approved new-file-only scope: PASS WITH ADVISORIES.
+Ordinary finalization is conditional on current documentation, schema, preservation
+and session checks; its actual status and full Stop outcome are recorded externally
+in `/private/tmp/cortexa-isolated-action-final-39rz8nvq/FINAL-HANDOFF.md`.
+Historical active/failed checkpoints remain historical, not current acceptance.
+The legacy gate is not converted; ordinary finalization is its only authorized
+state transition. No product changes, new QA, launch, Send, build, install, commit
+or publication occur in this review.
+
+Retain stale API-only scope-copy advice, native app-scoped Computer Use limitations,
+process-local Python/SDK27/Cargo workaround, image/host assumptions, disabled ECC
+hooks/MCP and parked D-125/M1/M2. Actual rollback restoration, native cancellation
+after Docker starts, API repetition of shared lifecycle cases and all timing/
+provider/platform variants remain unclaimed. Required bounded cancellation and
+cleanup combine native provider evidence with automated actual Docker child checks.
+Discarded historical schema-failure causes remain unknown. No later milestone or
+publication is automatically authorized.
+
+## 2026-10-08 — Isolated action publication reconciliation
+
+Current owner-authorized preparation uses `/Users/hdang/.codex/worktrees/isolated-action-publication/ai-agent-assistant`, branch
+`codex/isolated-action-publication`, main HEAD `fc239b6161d9379915891e04f7c56fcaa9c4971c`.
+The original frozen85 candidate remains complete/valid in `/Users/hdang/.codex/worktrees/live-provider-qa/ai-agent-assistant`.
+Carry58 exact unique paths, preserve19 upstream policy/gate paths, reconcile eight
+shared documents additively and add two current reports:68 Git paths. No new product
+behavior, test/build/QA repeat, credential access or publication. D-134 ordinary
+schema-2 admission controls this separate task; no private state is copied.
+Current report: [reconciliation review](docs/reviews/2026-10-08-isolated-action-publication-reconciliation-post-increment-review.md).
+Evidence: `/private/tmp/cortexa-action-publication-prep-8cfs2y51`; actual finalization/status/full Stop will be recorded externally
+after the report is frozen. This prose does not substitute for gate acceptance.
+Reuse native Codex and direct API evidence distinctly; all inherited warnings,
+unknown historical causes, untested variants and owned cleanup remain as recorded.
+Ledger63/66; no new requests. ECC hooks/MCP disabled, native workaround retained,
+D-125/M1/M2 parked. Commit/push/PR/merge require separate owner authorization.
+
+## 2026-10-08 — PR139 Git fixture diagnostic successor
+
+Owner-authorized `git-fixture-diagnostics` was admitted with ordinary D-134
+schema-2 admission, preserving the completed publication record in a verified
+snapshot. Only the Git helper in `src-tauri/src/isolated_action/tests.rs` changed:
+fixed `fixture_init`, `fixture_add`, `fixture_commit`, `fixture_checkout` or
+`fixture_git_other` stage and numeric/absent exit status on failure.
+Cleared environment, disabled hooks/signing, raw-output suppression and all
+fixture behavior remain unchanged. No HOME addition or product repair.
+
+Three external diagnostic privacy/status tests passed. One representative Mac
+test, `isolated_action::tests::exact_add_preserves_baseline_and_rejects_replay`,
+passed (one run, 492 filtered). The earlier sandbox-limited Cargo preparation
+stopped before any test with Tauri build `Operation not permitted`; its receipt
+is preserved separately from the successful authorized-access invocation.
+The first admission report used an absolute system-Python command spelling;
+its rejection is retained. Correct literal session-command evidence permitted
+ordinary admission without any gate change.
+
+The Git assertion failure reported from CI did not reproduce locally. No
+stderr cause, missing HOME, missing identity or runner defect is established.
+The fixture already returns its final Git result; adding `Ok(())` would not
+repair the demonstrated assertion. PR139's historical Linux Clippy failure
+and Mac test failure remain unresolved; local success is not CI acceptance.
+A separate owner-authorized repair or CI diagnostic publication/rerun is needed.
+
+Full unchanged product and native verification is inherited, not repeated;
+the changed helper has focused fresh verification. Frozen68 committed bytes,
+prior reports/receipts, original QA completion, index, Git links and unrelated
+source/configuration are preserved. Additive current documents qualify the
+new successor separately from historical publication completion.
+
+Evidence and recovery snapshot:
+`/private/tmp/cortexa-git-fixture-diagnostics-wka3b3gv`.
+Ledger63/66; zero new requests. ECC hooks/MCP remain disabled; all advisories,
+the process-local Python/Xcode SDK27/Cargo workaround and parked D-125/M1/M2
+remain. No app launch, provider request, install, commit, push or CI rerun.
+
+Next action: inspect retained diagnostics and committed platform-specific
+approval call sites before approving the smallest Linux platform-gating repair
+and/or publication of this bounded Git diagnostic. Preserve strict warnings,
+fail-closed non-macOS approval and historical evidence; do not infer a Mac cause.
+
+## 2026-10-08 — PR139 platform-gating successor and diagnostic publication
+
+Owner-authorized `pr139-platform-gating` uses ordinary D-134 schema-2 admission.
+Only approvals/manager.rs and approvals/types.rs gain consistent macOS-only
+private isolated-change constructor/decision/subject availability and dependent
+match arms. Public preview/provenance metadata, macOS approval validation and
+non-macOS ActionError::Approval rejection remain unchanged. Strict warnings,
+hooks/signing policy, review hash/expiry/replay and cleanup are retained.
+
+The inherited eleven-path Git diagnostic completion is preserved historically.
+Its helper, plan and review reports remain byte-identical; existing root document
+bodies are retained as prefixes. Prior publication/QA states, artifacts, failed
+receipts and Git metadata remain preserved in verified recoverable snapshots.
+No fixture behavior, HOME, raw output, product behavior, gate, dependency or
+workflow changes. The source already returns the final fixture Git result.
+
+Local Mac strict Clippy and all-target Rust tests passed, including exact native
+approval/hash/expiry/one-use checks. Native unsigned no-bundle compilation passed
+with fresh Cargo output, installed offline tooling and verified reused dist.
+Unchanged frontend182, repository21 and hook9 inputs match retained passing
+verification. This is composite verify coverage, not a fresh full npm run verify.
+The earlier required rustfmt failure is retained; the owner explicitly authorized
+its exact one-line layout adjustment and resumed verification. Corrected format
+passed. Historical prior full-verify failures remain separate from later passes.
+
+New Linux CI acceptance and the old Mac CI fixture cause remain unclaimed before
+publication. One local representative fixture test previously passed; no HOME,
+identity or other CI cause is inferred. Publishing the unchanged fixed Git
+stage/exit diagnostic permits bounded evidence from a new exact-head CI run.
+No historical workflow rerun or automatic additional repair is authorized.
+
+Current review: docs/reviews/2026-10-08-pr139-platform-gating-post-increment-review.md.
+Evidence: /private/tmp/cortexa-pr139-platform-repair-tl9x12y6.
+Local completion/full Stop and publication result are recorded externally after
+freeze; this prose is not gate acceptance. Owner permits one exact Conventional
+Commit/non-force push to the existing branch/PR139 only after local gates pass.
+No merge, new PR, app launch, provider request, install or further repair.
+Ledger63/66, ECC hooks/MCP disabled, all advisories, native workaround and parked
+D-125/M1/M2 unchanged. Observe actual new CI outcomes; never presume success.
+
+## 2026-10-08 — PR139 fixed runner diagnostic publication readiness
+
+Owner-authorized pr139-runner-diagnostics uses ordinary D-134 schema-2 admission.
+Preserved predecessor completion and a verified1128-path recoverable snapshot at
+/private/tmp/cortexa-pr139-runner-diagnostic-nh_qzs9q. The three tooling paths are
+.github/workflows/ci.yml, scripts/ci_git_fixture_probe.py and its focused test.
+Existing normal CI job/configuration bytes remain an exact prefix; no product,
+fixture behavior, dependency, gate, runner/service or permission changes.
+
+The independent fixed Mac job is eligible only for the first push after required
+head9c2a371b61c38504d3d8c564cf41c9e435f1d8aa on the existing publication branch,
+run attempt1. It verifies expected runner name/OS/architecture, source parent and
+frozen Rust Git-helper hash. GitHub assigned runner22 must be checked before
+accepting results; labels/name alone are not a numeric runner-ID guarantee.
+The new job is runner-originated evidence, not proof of exact historical context.
+No manual dispatch/rerun, arbitrary input or new workflow. Normal CI and
+Documentation triggered by the authorized push remain independent acceptance.
+
+Only two private disposable Git-init cases are possible. Baseline uses the exact
+cleared environment and disabled configuration/hooks/signing; only exit1 permits
+one variant adding a private task-local HOME. Raw output is suppressed; only fixed
+stage/outcome/exit and executable SHA-256 leave the probe. Ten-second command
+limits and bounded owned-child termination preserve no-retry/no-force-kill.
+Exclusive private root prevents replay within the job; run-attempt/push guards
+prevent subsequent eligible runs. Fixtures are retained; no existing data deleted.
+A successful diagnostic job means the observation was completed, not that product
+fixture tests passed. Baseline success stops without a variant or cause claim.
+
+Focused mocked probe17 and affected workflow/policy79 tests passed. Tests cover
+exact environment delta, baseline short-circuit, fixed privacy output, source and
+runner/event binding, timeout races, failed cleanup, replay and existing-job
+preservation. Audit sanitizer8 cases passed. Unchanged Rust749/3ignored, native
+compile, frontend182 input hashes and hook9 inputs reuse retained passing evidence;
+no product build/test/native QA was repeated. Required current documentation,
+schema, session, preservation and final gate outcomes are recorded externally.
+
+The one bounded annotation read for historical audit check113562559566 classified
+runner_communication_lost. No raw message was retained. Secret/npm/Rust audit
+steps passed; this annotation does not establish a vulnerability or checkout
+cleanup cause. Mac fixture_init/exit1 remains owner-reported; missing HOME is
+unproven, and the same helper passed prior local checks. No further repair here.
+
+Current plan: docs/plans/2026-10-08-pr139-runner-diagnostics.md.
+Current review: docs/reviews/2026-10-08-pr139-runner-diagnostics-post-increment-review.md.
+Local completion concerns diagnostic publication readiness only. Actual commit,
+new exact-head CI/probe results and assigned runners belong in the external final
+handoff after publication; no post-publication result is presumed or waived.
+One commit/non-force push is authorized; no merge or automatic fixture repair.
+Ledger63/66, disabled ECC hooks/MCP, all advisories, native workaround and parked
+D-125/M1/M2 remain. Preserve earlier failed attempts and all untested variants.
+
+## 2026-10-08 — PR139 source-binding diagnostic correction publication readiness
+
+Owner-authorized pr139-source-binding-diagnostics uses ordinary D-134 schema-2 admission.
+Preserved predecessor completion and a verified1133-path recoverable snapshot at
+/private/tmp/cortexa-pr139-source-binding-mc6klmva. The three tooling paths are
+.github/workflows/ci.yml, scripts/ci_git_fixture_probe.py and its focused test.
+Existing normal CI job/configuration bytes remain an exact prefix; no product,
+fixture behavior, dependency, gate, runner/service or permission changes.
+
+The independent fixed Mac job is eligible only for the first push after required
+headcf70384fb2c8bc2ceb9ae5eea2e2fd06ca8b3798 on the existing publication branch,
+run attempt1. It verifies expected runner name/OS/architecture, source parent and
+frozen Rust Git-helper hash. GitHub assigned runner22 must be checked before
+accepting results; labels/name alone are not a numeric runner-ID guarantee.
+The new job is runner-originated evidence, not proof of exact historical context.
+No manual dispatch/rerun, arbitrary input or new workflow. Normal CI and
+Documentation triggered by the authorized push remain independent acceptance.
+
+The prior runner22 diagnostic stopped at source_rejected before either fixture
+case. That row, retrieved through Computer Use after unavailable API log access,
+does not identify the failing source check. New fixed categories distinguish
+fixture_binding_rejected, metadata_command_failed (exit/null), metadata_malformed,
+head_parent_mismatch, metadata_timed_out and metadata_cleanup_unresolved.
+Raw metadata, exception messages and source values never leave. Capture is capped
+at83 bytes against the exact82-byte two-lowercase-hash shape. Preserve the exact
+source checks, command/options/environment and ten-second deadline; bounded
+cleanup signals only the retained child, never force kill. All rejection paths
+stop before fixture creation. This is a diagnostic correction, not a HOME repair.
+
+Only two private disposable Git-init cases are possible. Baseline uses the exact
+cleared environment and disabled configuration/hooks/signing; only exit1 permits
+one variant adding a private task-local HOME. Raw output is suppressed; only fixed
+stage/outcome/exit and executable SHA-256 leave the probe. Ten-second command
+limits and bounded owned-child termination preserve no-retry/no-force-kill.
+Exclusive private root prevents replay within the job; run-attempt/push guards
+prevent subsequent eligible runs. Fixtures are retained; no existing data deleted.
+A successful diagnostic job means the observation was completed, not that product
+fixture tests passed. Baseline success stops without a variant or cause claim.
+
+Focused mocked probe25 and affected workflow/policy79 tests passed. Tests cover
+exact environment delta, baseline short-circuit, fixed privacy output, source and
+runner/event binding, timeout races, failed cleanup, replay and existing-job
+preservation. Previous audit sanitizer8 evidence is inherited, not repeated. Unchanged Rust749/3ignored, native
+compile, frontend182 input hashes and hook9 inputs reuse retained passing evidence;
+no product build/test/native QA was repeated. Required current documentation,
+schema, session, preservation and final gate outcomes are recorded externally.
+
+The retained predecessor annotation read for historical audit check113562559566 classified
+runner_communication_lost. No raw message was retained. Secret/npm/Rust audit
+steps passed; this annotation does not establish a vulnerability or checkout
+cleanup cause. Mac fixture_init/exit1 remains owner-reported; missing HOME is
+unproven, and the same helper passed prior local checks. No further repair here.
+
+Current plan: docs/plans/2026-10-08-pr139-source-binding-diagnostics.md.
+Current review: docs/reviews/2026-10-08-pr139-source-binding-diagnostics-post-increment-review.md.
+Local completion concerns diagnostic publication readiness only. Actual commit,
+new exact-head CI/probe results and assigned runners belong in the external final
+handoff after publication; no post-publication result is presumed or waived.
+One commit/non-force push is authorized; no merge or automatic fixture repair.
+Ledger63/66, disabled ECC hooks/MCP, all advisories, native workaround and parked
+D-125/M1/M2 remain. Preserve earlier failed attempts and all untested variants.
+
+## 2026-10-08 — PR139 metadata-only diagnostic publication readiness
+
+Owner-authorized pr139-metadata-home-diagnostics uses ordinary D-134 schema-2
+successor admission; predecessor completed state, reports, failed receipts and
+verified1136-path snapshot are retained at /private/tmp/cortexa-pr139-metadata-home-al2k79xb.
+Only the fixed probe/test and existing one-push parent binding change, with seven
+additive root documents and a new plan/readiness/final review. Normal CI prefix,
+Rust Git fixture, product/artifact bytes, gates and upstream policies are unchanged.
+
+The one-push job binds parenta84668cae9d2fda20b8b90a15d9dc5bbc132eaaa, current publication branch and attempt1.
+Preserve Mac context/name/architecture and require assigned runner22 for remote
+evidence. New behavior is metadata-only: no Git-init case, fixture execution,
+product HOME change or cause claim. Before queries, validate frozen fixture hash,
+bind /usr/bin/git hash and claim a fresh exclusive private metadata HOME root.
+Recheck executable identity between/after cases; no personal HOME or credentials.
+
+The unchanged cleared-environment rev-parse HEAD HEAD^ case runs once. Only normal
+command exit1 with successful capture/stream close/reaping permits one case adding
+private task-local HOME; no other environment/options/cwd/executable delta.
+Separate fixed spawn/capture/wait/nonzero/timeout categories. Primary outcome and
+independent cleanup/close outcomes are recorded before evaluation, never relabeled.
+Keep83-byte cap, exact82-byte lowercase-hash shape and strict actual HEAD/parent
+match. Suppress stderr/raw bytes, exception messages, paths and environment values.
+Ten-second deadline, five-second retained-child cleanup, no force kill or retries.
+Any capture/cleanup/source/identity failure stops; success stops after metadata.
+A verified HOME comparison would demonstrate only that controlled metadata case,
+not the historical Git-init cause or passing normal Rust CI.
+
+Focused32 mocked cases and affected79 policy cases passed; no live Git query/init
+executed locally. Required documentation/repository/security/whitespace/session,
+schema and preservation verification is recorded externally. Reuse unchanged
+Rust749passed/3ignored, strictClippy/native compile, frontend182 and hook9 sealed
+evidence. No repeated product builds/tests/native QA. Local completion concerns
+diagnostic implementation/publication readiness; actual runner outcome belongs
+in the external handoff after the authorized commit/non-force push.
+
+Previous metadata_command_failed/exit1 remains inconclusive and unchanged.
+Historical audit annotation runner_communication_lost remains inherited, not reread.
+Linux runner23 availability is an independent CI prerequisite; no service or
+runner changes. All historical failures, untested variants, host/same-user hash
+limits and inherited native timing/Docker/provider advisories remain disclosed.
+Ledger63/66, disabled ECC hooks/MCP, native workaround and parked D-125/M1/M2 remain.
+No manual rerun, installs, merge, product repair or subsequent milestone authorized.
+
+Plan: docs/plans/2026-10-08-pr139-metadata-home-diagnostics.md
+Review: docs/reviews/2026-10-08-pr139-metadata-home-diagnostics-post-increment-review.md
+
+## 2026-10-08 — PR139 bounded stderr diagnostic publication readiness
+
+Owner-authorized pr139-bounded-stderr-diagnostics uses ordinary D-134 schema-2 admission.
+Preserved predecessor completion, old failed receipts and verified1139-path
+recoverable snapshot at /private/tmp/cortexa-pr139-stderr-t42qmnrd. Three tooling paths only: existing probe/test and
+one-push workflow parent binding. Normal CI prefix, Rust fixture, product/artifact
+bytes, gates, policy and every prior document body remain unchanged.
+
+Starting head 24b65bb676775d3de12fe38c0ef26f401ef6dcc0; unchanged main fc239b6161d9379915891e04f7c56fcaa9c4971c.
+Existing runner22 baseline and private-HOME metadata commands normally exited1.
+No stderr was retained, so missing HOME, identical causes and product failure
+remain unproved. New one-push attempt runs only the unchanged cleared-environment
+rev-parse HEAD HEAD^ baseline once. No HOME comparison, Git-init case or retry.
+Preserve context/attempt/fixture/executable and strict actual HEAD-parent checks.
+Require numeric assigned runner22 before accepting remote evidence; names/labels
+are not a numeric assignment guarantee. Never silently run on another runner.
+
+Concurrent selector capture keeps stdout83, stderr2048 plus one overflow byte,
+one ten-second deadline including reaping and five-second retained-child cleanup.
+Fixed command/exit, stderr category, cleanup and close rows remain independent.
+No raw output, snippets, exception messages, paths, environments or stderr hashes
+are printed/persisted. Mutable buffers are cleared; Python/OS residual-memory
+absence is not guaranteed. Capture/close/wait failure and truncation cannot receive
+signature classification. No classifier grants source acceptance or another query.
+
+Reviewed Git v2.47.0 setup.c/usage.c signature observations are repository-discovery
+and ownership-rejection only. Labels do not authenticate a cause or establish
+installed Git version. Empty, unknown, truncated and capture-failed are explicit
+fallbacks; Apple/HOME/localized/unreviewed messages remain unknown. Public signature
+sources and exact matching rules are in the current plan and focused tests.
+
+Focused36 mocked cases and affected79 policy cases passed. The first focused run
+failed an EOF mock expectation (empty read already means EOF); its receipt remains.
+Corrected test expectation passed without product or fixture behavior changes.
+All changed subprocesses are mocked; no actual Git diagnostic/init ran locally.
+Current documentation/repository/security/whitespace/session/schema/preservation
+checks and architecture/security/code-health/debt/readiness reviews are required
+and recorded externally. Reuse verified unchanged Rust749passed/3ignored, strict
+Clippy/native compile, frontend182 and hook9 evidence. No repeated product QA/build.
+Composite verification is not a newly executed full npm run verify.
+
+Local completion covers diagnostic implementation/publication readiness only.
+Actual finalization/status/full Stop and remote outcomes belong in external receipts;
+no runner signature or normal CI pass is presumed by this prose. Unknown/truncated
+stderr supports no repair. Linux runner availability is independent and no service
+change is authorized. Historical audit communication-loss evidence is retained,
+not reread; no vulnerability or checkout-cleanup cause is inferred.
+
+Plan: docs/plans/2026-10-08-pr139-bounded-stderr-diagnostics.md
+Review: docs/reviews/2026-10-08-pr139-bounded-stderr-diagnostics-post-increment-review.md
+Ledger63/66, zero requests. Disabled ECC hooks/MCP, native workaround, all advisories,
+historical failures and parked D-125/M1/M2 retained. Owner authorizes one exact commit
+and non-force push after local gates; no manual rerun, install, merge or broader repair.

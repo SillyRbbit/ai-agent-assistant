@@ -1,3 +1,113 @@
+## 2026-10-07 — Codex action offline verification passed
+
+The five-file Codex action extension passed its focused offline regressions and
+required `npm run verify` with the installed process-local workaround. Synthetic
+runtime cases cover fixed action instructions, successful text streaming/completion,
+EOF, malformed output, tool/approval rejection, output bounds and runtime errors;
+active cancellation reaps the child before a subsequent synthetic request succeeds.
+The new test initially referenced an unavailable Tokio macro; its compile receipts
+remain preserved. Standard future polling corrected the test without dependency or
+production lifecycle changes. The final verification passed on the corrected source.
+
+The current candidate has 60 paths within the 40 successor / 61 cumulative ceiling;
+the final review is still reserved. Prior document bodies, predecessor completion,
+API evidence, historical failures and old artifacts remain preserved. Fresh
+isolated bundle and launch-disabled Codex-only helper preparation is recorded under
+`/private/tmp/cortexa-codex-action-extension-oedk0qdz/native`; their external manifests
+are authoritative for readiness and exact hashes, not this documentation record.
+
+Native action acceptance has not run. It needs separate authorization for the
+verified artifact, autonomous launcher and Computer Use, preserving the dedicated
+Cortexa-Codex-QA home and all identity/window/cleanup safeguards. Direct-API gaps
+remain pending private credentials; Codex results cannot replace API evidence.
+Usage stays historical 33 plus 2/20 additional (35 total, 18 remaining). Keep all
+advisories, disabled ECC hooks/MCP, native workaround and D-125/M1/M2 parked.
+No completion, full Stop, launch, Send, commit or publication is claimed here.
+
+---
+
+## 2026-10-07 — Bounded Headless Codex action route
+
+The owner approved extending only the five native adapter/context modules, with
+in-module tests, to support Headless Codex for isolated Coding -> QA actions.
+The scope is now 40 successor / 61 cumulative paths including the reserved final
+review. Only `agent_adapter.rs` and `codex_connection.rs` are newly allowlisted;
+the original 38/59 scope and all historical evidence remain preserved. The existing
+ordinary active increment is retained without a new begin, state edit or waiver.
+
+Action context accepts only OpenAI API and Codex. Native preparation and dispatch
+validate the saved Codex selection against the discovered catalog. A closed
+`ActionCodex` adapter chooses only the fixed isolated-action instructions through
+the existing file-store runtime. It adds no model tools, filesystem authority,
+provider fallback, IPC surface or dependency. Codex only proposes bounded JSON;
+Rust still owns strict contracts, Docker execution, exact native approval and
+new-file-only application. Existing API behavior and all execution limits remain.
+
+Focused offline cases cover context privacy, catalog/revision rejection, fixed
+instructions, streaming/errors, denied tools/approval and child cleanup. Required
+verification and fresh isolated artifact/helper preparation are tracked separately
+in `/private/tmp/cortexa-codex-action-extension-oedk0qdz`. No native launch or Send
+is authorized in this offline stage. Do not promote synthetic results to native
+acceptance or reuse the old API artifact for the changed source.
+
+Separate native approval must bind the new bundle and a fresh Codex-only launcher
+using the dedicated Cortexa-Codex-QA home, never personal credentials or API fallback.
+Current additional usage remains 2/20 (historical 33; total 35), with 18 remaining.
+Existing API successes and failed QA handoff remain; API-specific gaps await private
+credential access. Native action approval/application, correction, rejection/drift,
+cancellation/recovery and restart remain pending. Retain all advisories, disabled
+ECC hooks/MCP, the process-local workaround and parked D-125/M1/M2. No completion,
+full Stop, commit or publication claim.
+
+---
+
+## 2026-10-07 — New-file-only application boundary
+
+Security review narrowed this first workflow to adding one new root-level Python
+file. The filename must be absent at preparation and application. Atomic
+`NOREPLACE` rejects a concurrent creator; existing target files are never replaced.
+Coding may revise its isolated candidate before review. The original Git baseline,
+unchanged tests, candidate, check evidence and apply journal remain recoverable.
+This supersedes the earlier addition/replacement prototype wording below without
+altering its historical record. Native acceptance and final verification remain
+pending; scope, request budget and all parked work are unchanged.
+
+---
+
+## 2026-10-07 — Isolated bot action workflow implementation checkpoint
+
+The owner-authorized `isolated-bot-action-workflow` is active, not complete.
+The [bounded plan](docs/plans/2026-10-07-isolated-bot-action-workflow.md) freezes
+36 successor / 57 cumulative paths, including the retained 28-path architecture
+atlas. Its dated diagrams, prior completion, historical failures and artifact
+bytes remain unchanged; they are inherited evidence, not this workflow's acceptance.
+
+Trust boundaries: owner-native target selection -> bounded Git/raw-file snapshot;
+untrusted model JSON -> strict Rust edit validation; isolated files -> fixed Docker
+execution; actual check evidence -> QA assessment; exact native decision -> consuming
+Rust permit -> revalidated one-file atomic replacement. No raw provider envelopes,
+credentials, private bot notes or model reasoning enter action receipts. Submitted
+source/tests, visible diffs and sanitized execution output are locally retained and
+explicitly disclosed to the configured API route; never select credential-bearing files.
+
+The container sees neither target nor unrelated host paths, credential directories,
+provider environment or engine socket. Input/output/time/PID/memory limits fail closed.
+Command arguments, image and mounts are application-owned. Git comparison avoids
+working-tree filters/hooks/fsmonitor execution. Native review cannot be replaced by
+an IPC boolean. Approval is bound to exact bytes, actual validation and the physical
+target; stale or repeated application fails. Recovery preserves original content and
+intent/completion journals without automatic replay or rollback.
+
+Limits: no defense against a compromised host/engine or hostile same-user administrator
+is claimed. Immediate revalidation and atomic single-file replacement are not an OS
+compare-and-swap lock against arbitrary simultaneous host writers. Inaccessible or
+ambiguous identity, cleanup or recovery must stop. No broader production security
+acceptance is inferred from the focused probes.
+
+All advisories, disabled ECC hooks/MCP, native workaround and parked D-125/M1/M2 remain.
+
+---
+
 ## 2026-10-01 — Knowledge & Documents v1 acceptance in progress
 
 Knowledge inputs are untrusted. Native dialogs select one supported file or

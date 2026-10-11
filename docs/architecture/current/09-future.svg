@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1560 1174" role="img" aria-labelledby="title desc">
+<title id="title">09 · Future and separate foundations</title><desc id="desc">Dashed nodes are not current live integration claims. Dashed connectors compare separate capabilities or directions; they are not runtime dataflow. D-125/M1/M2 stay parked. This document grants no future admission or implementation authority.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#4758A2"/></marker></defs>
+<rect width="1560" height="1174" fill="#FBFBFB"/>
+<g font-family="Arial, Helvetica, sans-serif">
+<rect x="0" y="0" width="1560" height="112" fill="#252B71"/>
+<text x="40" y="47" font-size="30" font-weight="700" fill="#ffffff" text-anchor="start">09 · Future and separate foundations</text>
+<text x="40" y="81" font-size="19" font-weight="400" fill="#ffffff" text-anchor="start">Dashed nodes are not current live integration claims</text>
+<rect x="40" y="132" width="18" height="18" fill="#eef1fb" stroke="#4758A2"/>
+<text x="67" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Native</text>
+<rect x="131" y="132" width="18" height="18" fill="#e7f3f5" stroke="#326672"/>
+<text x="158" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Interface</text>
+<rect x="246" y="132" width="18" height="18" fill="#fff4db" stroke="#94642c"/>
+<text x="273" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Owner</text>
+<rect x="329" y="132" width="18" height="18" fill="#f8eaf3" stroke="#934873"/>
+<text x="356" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Remote</text>
+<rect x="420" y="132" width="18" height="18" fill="#e9f4eb" stroke="#42784e"/>
+<text x="447" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Stored</text>
+<rect x="511" y="132" width="18" height="18" fill="#f1eff7" stroke="#79628d" stroke-dasharray="6 4"/>
+<text x="538" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Separate foundation</text>
+<rect x="706" y="132" width="18" height="18" fill="#ffffff" stroke="#79628d" stroke-dasharray="6 4"/>
+<text x="733" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Deferred / unverified</text>
+<text x="40" y="190" font-size="20" font-weight="700" fill="#182033" text-anchor="start">Tested foundations · not a general live executor</text>
+<g data-component="FOUNDATION"><rect x="40.0" y="214" width="295.0" height="204" rx="12" fill="#f1eff7" stroke="#79628d" stroke-width="2" stroke-dasharray="7 4"/>
+<text x="56.0" y="239" font-size="14" font-weight="700" fill="#79628d" text-anchor="start">FOUNDATION</text>
+<text x="56.0" y="268" font-size="19" font-weight="700" fill="#182033" text-anchor="start">NativeAgentRuntime</text>
+<text x="56.0" y="301" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Bounded typed foundation.</text>
+</g>
+<line x1="341.0" y1="318" x2="426.0" y2="318" stroke="#4758A2" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="385.0" y="275" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">foundation</text>
+<g data-component="PARALLEL"><rect x="435.0" y="214" width="295.0" height="204" rx="12" fill="#f1eff7" stroke="#79628d" stroke-width="2" stroke-dasharray="7 4"/>
+<text x="451.0" y="239" font-size="14" font-weight="700" fill="#79628d" text-anchor="start">PARALLEL</text>
+<text x="451.0" y="268" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Bounded parallelism</text>
+<text x="451.0" y="301" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Foundation tests; live routes</text>
+<text x="451.0" y="322" font-size="16" font-weight="400" fill="#182033" text-anchor="start">remain sequential.</text>
+</g>
+<line x1="736.0" y1="318" x2="821.0" y2="318" stroke="#4758A2" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="780.0" y="275" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">contracts</text>
+<g data-component="MEMORY"><rect x="830.0" y="214" width="295.0" height="204" rx="12" fill="#f1eff7" stroke="#79628d" stroke-width="2" stroke-dasharray="7 4"/>
+<text x="846.0" y="239" font-size="14" font-weight="700" fill="#79628d" text-anchor="start">MEMORY</text>
+<text x="846.0" y="268" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Grant-based memory</text>
+<text x="846.0" y="301" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Private/task/shared scope</text>
+<text x="846.0" y="322" font-size="16" font-weight="400" fill="#182033" text-anchor="start">contracts.</text>
+</g>
+<line x1="1131.0" y1="318" x2="1216.0" y2="318" stroke="#4758A2" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="1175.0" y="275" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">authority</text>
+<g data-component="POLICY / APPROVAL"><rect x="1225.0" y="214" width="295.0" height="204" rx="12" fill="#f1eff7" stroke="#79628d" stroke-width="2" stroke-dasharray="7 4"/>
+<text x="1241.0" y="239" font-size="14" font-weight="700" fill="#79628d" text-anchor="start">POLICY / APPROVAL</text>
+<text x="1241.0" y="268" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Authority contracts</text>
+<text x="1241.0" y="301" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Deterministic policy +</text>
+<text x="1241.0" y="322" font-size="16" font-weight="400" fill="#182033" text-anchor="start">single-use approval.</text>
+</g>
+<text x="43" y="441" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">Evidence: FOUNDATION, PARALLEL, MEMORY, APPROVAL</text>
+<text x="40" y="472" font-size="20" font-weight="700" fill="#182033" text-anchor="start">External runtime direction · evaluation only</text>
+<g data-component="HERMES"><rect x="40.0" y="496" width="426.6666666666667" height="204" rx="12" fill="#ffffff" stroke="#79628d" stroke-width="2" stroke-dasharray="7 4"/>
+<text x="56.0" y="521" font-size="14" font-weight="700" fill="#79628d" text-anchor="start">HERMES</text>
+<text x="56.0" y="550" font-size="19" font-weight="700" fill="#182033" text-anchor="start">HermesAgentRuntime</text>
+<text x="56.0" y="583" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Deferred/Blocked; later assessment NO-GO.</text>
+</g>
+<line x1="472.6666666666667" y1="600" x2="557.6666666666667" y2="600" stroke="#4758A2" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="516.6666666666667" y="557" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">no</text>
+<text x="516.6666666666667" y="574" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">integration</text>
+<g data-component="OPENCLAW"><rect x="566.6666666666667" y="496" width="426.6666666666667" height="204" rx="12" fill="#ffffff" stroke="#79628d" stroke-width="2" stroke-dasharray="7 4"/>
+<text x="582.6666666666667" y="521" font-size="14" font-weight="700" fill="#79628d" text-anchor="start">OPENCLAW</text>
+<text x="582.6666666666667" y="550" font-size="19" font-weight="700" fill="#182033" text-anchor="start">OpenClaw</text>
+<text x="582.6666666666667" y="583" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Reference/evaluation mechanisms only.</text>
+</g>
+<line x1="999.3333333333335" y1="600" x2="1084.3333333333335" y2="600" stroke="#4758A2" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="1043.3333333333335" y="557" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">no</text>
+<text x="1043.3333333333335" y="574" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">integration</text>
+<g data-component="FRAMEWORKS"><rect x="1093.3333333333335" y="496" width="426.6666666666667" height="204" rx="12" fill="#ffffff" stroke="#79628d" stroke-width="2" stroke-dasharray="7 4"/>
+<text x="1109.3333333333335" y="521" font-size="14" font-weight="700" fill="#79628d" text-anchor="start">FRAMEWORKS</text>
+<text x="1109.3333333333335" y="550" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Other frameworks</text>
+<text x="1109.3333333333335" y="583" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Agent Zero/OpenHands/CrewAI integration not</text>
+<text x="1109.3333333333335" y="604" font-size="16" font-weight="400" fill="#182033" text-anchor="start">evidenced.</text>
+</g>
+<text x="43" y="723" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">Evidence: HERMES, NATIVE_PLAN, PLAN</text>
+<text x="40" y="754" font-size="20" font-weight="700" fill="#182033" text-anchor="start">Not established in current application</text>
+<g data-component="EXECUTOR"><rect x="40.0" y="778" width="426.6666666666667" height="204" rx="12" fill="#ffffff" stroke="#79628d" stroke-width="2" stroke-dasharray="7 4"/>
+<text x="56.0" y="803" font-size="14" font-weight="700" fill="#79628d" text-anchor="start">EXECUTOR</text>
+<text x="56.0" y="832" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Device work</text>
+<text x="56.0" y="865" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Generic shell, cloud mutations, patch apply and</text>
+<text x="56.0" y="886" font-size="16" font-weight="400" fill="#182033" text-anchor="start">scheduling.</text>
+</g>
+<line x1="472.6666666666667" y1="882" x2="557.6666666666667" y2="882" stroke="#4758A2" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="516.6666666666667" y="839" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">no current</text>
+<text x="516.6666666666667" y="856" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">wiring</text>
+<g data-component="RETRIEVAL"><rect x="566.6666666666667" y="778" width="426.6666666666667" height="204" rx="12" fill="#ffffff" stroke="#79628d" stroke-width="2" stroke-dasharray="7 4"/>
+<text x="582.6666666666667" y="803" font-size="14" font-weight="700" fill="#79628d" text-anchor="start">RETRIEVAL</text>
+<text x="582.6666666666667" y="832" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Automatic learning / RAG</text>
+<text x="582.6666666666667" y="865" font-size="16" font-weight="400" fill="#182033" text-anchor="start">No embedding index, autonomous learning or</text>
+<text x="582.6666666666667" y="886" font-size="16" font-weight="400" fill="#182033" text-anchor="start">external vault sync.</text>
+</g>
+<line x1="999.3333333333335" y1="882" x2="1084.3333333333335" y2="882" stroke="#4758A2" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="1043.3333333333335" y="839" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">no current</text>
+<text x="1043.3333333333335" y="856" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">wiring</text>
+<g data-component="RELEASE"><rect x="1093.3333333333335" y="778" width="426.6666666666667" height="204" rx="12" fill="#ffffff" stroke="#79628d" stroke-width="2" stroke-dasharray="7 4"/>
+<text x="1109.3333333333335" y="803" font-size="14" font-weight="700" fill="#79628d" text-anchor="start">RELEASE</text>
+<text x="1109.3333333333335" y="832" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Public distribution</text>
+<text x="1109.3333333333335" y="865" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Signing/notarization/deployment need separate</text>
+<text x="1109.3333333333335" y="886" font-size="16" font-weight="400" fill="#182033" text-anchor="start">scope.</text>
+</g>
+<text x="43" y="1005" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">Evidence: RPC, TOOLS, KNOW_DB, CI</text>
+<text x="40" y="1070" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Dashed connectors compare separate capabilities or directions; they are not runtime dataflow. D-125/M1/M2 stay parked. This document grants no future admission or</text>
+<text x="40" y="1092" font-size="16" font-weight="400" fill="#182033" text-anchor="start">implementation authority.</text>
+<text x="40" y="1152" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">CORTEXA  /  Source bc12776412c7  /  2026-10-07  /  Solid arrows: stated flow; dashed lines: comparison or unwired boundary</text>
+</g>
+</svg>

@@ -60,7 +60,7 @@ describe("safe operational projection", () => {
       expect(new Set(p.cards.map((c) => c.id)).size).toBe(p.cards.length);
       expect(
         p.cards.filter((c) => c.kind === "stage" && c.agentId === "personal-assistant"),
-      ).toHaveLength(2);
+      ).toHaveLength(workflow === "coding_action" ? 0 : 2);
       expect(p.links.filter((e) => e.kind === "handoff")).toHaveLength(run.stages.length - 1);
       expect(p.provenance).toContain("Simulation");
       expect(JSON.stringify(p)).not.toContain("secret");
@@ -147,4 +147,14 @@ it("uses saved identity and settings when the current profile was renamed", () =
     projectCollaboration([current], null).cards.find((c) => c.id === "bot:personal-assistant")
       ?.label,
   ).toBe("Renamed current");
+});
+
+it("projects actual Coding and QA states without exposing action source or paths", () => {
+  const run = fixture("coding_action");
+  const p = projectCollaboration([], run);
+  expect(p.cards.filter((c) => c.kind === "stage").map((c) => c.agentId)).toEqual([
+    "coding",
+    "qa-validation",
+  ]);
+  expect(JSON.stringify(p)).not.toContain("secret");
 });

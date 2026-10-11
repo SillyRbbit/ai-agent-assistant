@@ -1,6 +1,11 @@
 use std::fmt;
 use std::sync::Arc;
 
+use raw_window_handle::{
+    DisplayHandle, HandleError, HasDisplayHandle, HasWindowHandle, RawDisplayHandle,
+    RawWindowHandle, WindowHandle,
+};
+
 use rfd::{MessageButtons, MessageDialog, MessageDialogResult, MessageLevel};
 
 use super::manager::{
@@ -19,12 +24,65 @@ const REJECT_BUTTON: &str = "Reject";
 const APPROVE_BUTTON: &str = "Approve";
 const EDIT_BUTTON: &str = "Edit";
 
-pub struct MacOsNativeApprovalDecisionSource;
+// The only constructor borrows the invoking native main window. The raw handles
+// remain borrowed for the synchronous dialog; no WebView-supplied identity exists.
+pub struct MacOsNativeApprovalDecisionSource<'a> {
+    _owner: &'a tauri::WebviewWindow,
+    parent: CapturedParent<WindowHandle<'a>, DisplayHandle<'a>>,
+}
 
-impl MacOsNativeApprovalDecisionSource {
-    #[must_use]
-    pub fn new() -> Self {
-        Self
+struct CapturedParent<W, D> {
+    window: W,
+    display: D,
+}
+
+// Capture each fallible handle once. rfd discards handle lookup errors in
+// set_parent, so supply only these already validated, infallible snapshots.
+fn capture_parent<W, D>(
+    label: &str,
+    window: impl FnOnce() -> Result<W, HandleError>,
+    display: impl FnOnce() -> Result<D, HandleError>,
+    valid: impl FnOnce(&W, &D) -> bool,
+) -> Result<CapturedParent<W, D>, HandleError> {
+    if label != "main" {
+        return Err(HandleError::Unavailable);
+    }
+    let window = window()?;
+    let display = display()?;
+    if !valid(&window, &display) {
+        return Err(HandleError::Unavailable);
+    }
+    Ok(CapturedParent { window, display })
+}
+
+fn appkit_parent(window: RawWindowHandle, display: RawDisplayHandle) -> bool {
+    matches!(window, RawWindowHandle::AppKit(_)) && matches!(display, RawDisplayHandle::AppKit(_))
+}
+
+impl HasWindowHandle for CapturedParent<WindowHandle<'_>, DisplayHandle<'_>> {
+    fn window_handle(&self) -> Result<WindowHandle<'_>, HandleError> {
+        Ok(self.window)
+    }
+}
+
+impl HasDisplayHandle for CapturedParent<WindowHandle<'_>, DisplayHandle<'_>> {
+    fn display_handle(&self) -> Result<DisplayHandle<'_>, HandleError> {
+        Ok(self.display)
+    }
+}
+
+impl<'a> MacOsNativeApprovalDecisionSource<'a> {
+    pub fn new(owner: &'a tauri::WebviewWindow) -> Result<Self, HandleError> {
+        let parent = capture_parent(
+            owner.label(),
+            || owner.window_handle(),
+            || owner.display_handle(),
+            |window, display| appkit_parent(window.as_raw(), display.as_raw()),
+        )?;
+        Ok(Self {
+            _owner: owner,
+            parent,
+        })
     }
 
     #[must_use]
@@ -48,15 +106,10 @@ impl MacOsNativeApprovalDecisionSource {
             .set_title(NATIVE_APPROVAL_DIALOG_TITLE)
             .set_description(message)
             .set_buttons(native_message_buttons())
+            .set_parent(&self.parent)
             .show();
 
         outcome_from_dialog_result(parts, result)
-    }
-}
-
-impl Default for MacOsNativeApprovalDecisionSource {
-    fn default() -> Self {
-        Self::new()
     }
 }
 
@@ -259,7 +312,7 @@ fn build_native_message_from_facts(
     }
 
     let message = format!(
-        "Action: {}\nTarget: {}\nSchedule/date-time: {}\nRecipients: {}\nReversibility: {}\nRequired permission: {}\nMain risk: {}\nChoices: Approve, Reject, Edit\nAffected task title: {}",
+        "Action: {}\nTarget: {}\nSchedule/date-time: {}\nRecipients: {}\nReversibility: {}\nRequired permission: {}\nMain risk: {}\nChoices: Approve, Reject, Edit\n{}: {}",
         action_label(action),
         target_label(target),
         schedule_label(schedule),
@@ -267,6 +320,7 @@ fn build_native_message_from_facts(
         reversibility_label(reversibility),
         permission_label(required_permission),
         risk_label(risk),
+        if action == ApprovalAction::CreateLocalTask { "Affected task title" } else { "Affected data" },
         title,
     );
 
@@ -279,12 +333,14 @@ fn build_native_message_from_facts(
 
 fn action_label(action: ApprovalAction) -> &'static str {
     match action {
+        ApprovalAction::ApplyIsolatedChange => "Apply exactly one reviewed file change",
         ApprovalAction::CreateLocalTask => "Create one local task",
     }
 }
 
 fn target_label(target: ApprovalTarget) -> &'static str {
     match target {
+        ApprovalTarget::SelectedRepositoryFile => "Owner-selected clean repository",
         ApprovalTarget::LocalTaskList => "Local task list",
     }
 }
@@ -310,11 +366,11 @@ fn reversibility_label(reversibility: ApprovalReversibility) -> &'static str {
 fn permission_label(permission: crate::tools::types::PermissionKind) -> &'static str {
     match permission {
         crate::tools::types::PermissionKind::None => "None",
+        crate::tools::types::PermissionKind::Files => "Explicitly selected repository file only",
         crate::tools::types::PermissionKind::Calendar
         | crate::tools::types::PermissionKind::Reminders
         | crate::tools::types::PermissionKind::Contacts
         | crate::tools::types::PermissionKind::Notifications
-        | crate::tools::types::PermissionKind::Files
         | crate::tools::types::PermissionKind::Accessibility
         | crate::tools::types::PermissionKind::ScreenRecording
         | crate::tools::types::PermissionKind::Automation
@@ -324,6 +380,7 @@ fn permission_label(permission: crate::tools::types::PermissionKind) -> &'static
 
 fn risk_label(risk: ApprovalRisk) -> &'static str {
     match risk {
+        ApprovalRisk::AddsSelectedFile => "Adds one new file; existing target files are preserved",
         ApprovalRisk::CreatesLocalTask => "Creates a local task",
     }
 }
@@ -1013,5 +1070,99 @@ mod tests {
             ApprovalAuthenticationEvidence::NotEvaluated
         );
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod parent_binding_tests {
+    use super::*;
+    use std::cell::Cell;
+
+    #[test]
+    fn wrong_window_label_never_queries_handles() {
+        let calls = Cell::new(0);
+        let result = capture_parent(
+            "other",
+            || {
+                calls.set(calls.get() + 1);
+                Ok(1)
+            },
+            || Ok(2),
+            |_, _| true,
+        );
+        assert!(matches!(result, Err(HandleError::Unavailable)));
+        assert_eq!(calls.get(), 0);
+    }
+
+    #[test]
+    fn handle_errors_stop_before_parent_construction() {
+        let display_calls = Cell::new(0);
+        let result = capture_parent::<u8, u8>(
+            "main",
+            || Err(HandleError::Unavailable),
+            || {
+                display_calls.set(1);
+                Ok(2)
+            },
+            |_, _| true,
+        );
+        assert!(matches!(result, Err(HandleError::Unavailable)));
+        assert_eq!(display_calls.get(), 0);
+        let validation_calls = Cell::new(0);
+        let result = capture_parent::<u8, u8>(
+            "main",
+            || Ok(1),
+            || Err(HandleError::NotSupported),
+            |_, _| {
+                validation_calls.set(1);
+                true
+            },
+        );
+        assert!(matches!(result, Err(HandleError::NotSupported)));
+        assert_eq!(validation_calls.get(), 0);
+    }
+
+    #[test]
+    fn validated_handles_are_captured_once_without_later_lookup() -> Result<(), HandleError> {
+        let window_calls = Cell::new(0);
+        let display_calls = Cell::new(0);
+        let parent = capture_parent(
+            "main",
+            || {
+                window_calls.set(window_calls.get() + 1);
+                Ok(7)
+            },
+            || {
+                display_calls.set(display_calls.get() + 1);
+                Ok(9)
+            },
+            |w, d| *w == 7 && *d == 9,
+        )?;
+        // Reading retained snapshots does not query the provider again.
+        for _ in 0..3 {
+            assert_eq!((parent.window, parent.display), (7, 9));
+        }
+        assert_eq!((window_calls.get(), display_calls.get()), (1, 1));
+        Ok(())
+    }
+
+    #[test]
+    fn invalid_pair_is_rejected() {
+        assert!(capture_parent("main", || Ok(7), || Ok(9), |_, _| false).is_err());
+    }
+
+    #[test]
+    fn only_appkit_handle_pairs_are_accepted() {
+        // These raw values are only classified, never borrowed, shown or dereferenced.
+        let app_window = RawWindowHandle::AppKit(raw_window_handle::AppKitWindowHandle::new(
+            std::ptr::NonNull::dangling(),
+        ));
+        let app_display = RawDisplayHandle::AppKit(raw_window_handle::AppKitDisplayHandle::new());
+        let web_window = RawWindowHandle::Web(raw_window_handle::WebWindowHandle::new(1));
+        let web_display = RawDisplayHandle::Web(raw_window_handle::WebDisplayHandle::new());
+        assert!(appkit_parent(app_window, app_display));
+        assert!(!appkit_parent(web_window, app_display));
+        assert!(!appkit_parent(app_window, web_display));
+        assert!(!appkit_parent(web_window, web_display));
     }
 }

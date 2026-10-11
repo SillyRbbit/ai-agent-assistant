@@ -1,0 +1,462 @@
+{
+  "source_commit": "bc12776412c717613de1fdc42c38bf3312493726",
+  "equivalent_merged_main": "bbe7546281fec3c8b4b608d68a52bc9732d9ecd9",
+  "sources": {
+    "UI": {
+      "path": "src/features/agents/AgentsPage.tsx",
+      "symbol_or_anchor": "export function AgentsPage",
+      "line": 48,
+      "description": "Bot editor, native conversation and polling",
+      "sha256": "c21228324ec39a86563477f6e887d30102f8b92b262ab3629468e3124171a2b9",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src/features/agents/AgentsPage.tsx#L48"
+    },
+    "RPC": {
+      "path": "src-tauri/src/lib.rs",
+      "symbol_or_anchor": "invoke_handler",
+      "line": 73,
+      "description": "Registered native commands",
+      "sha256": "dfa02cff73b7ef4fb578f2d0fbef229456e2f5f558149b2e1c12e132d1b294b9",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/lib.rs#L73"
+    },
+    "CHAT": {
+      "path": "src-tauri/src/agent_chat_tauri.rs",
+      "symbol_or_anchor": "fn start_owned",
+      "line": 247,
+      "description": "Native send and lifecycle ownership",
+      "sha256": "77ed3e8ed25b0edb704e9c881e1ad4255416276d3b131dd4f447a30bb0b05920",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/agent_chat_tauri.rs#L247"
+    },
+    "CTX": {
+      "path": "src-tauri/src/agent_chat.rs",
+      "symbol_or_anchor": "struct BoundConversation",
+      "line": 56,
+      "description": "Bound context, history, input builders",
+      "sha256": "cf7ea907f37a30c6e36d400010fb9f3a61b49e34c1b51601a7f7adac92117874",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/agent_chat.rs#L56"
+    },
+    "PROFILE": {
+      "path": "src-tauri/src/agent_preferences.rs",
+      "symbol_or_anchor": "enum AgentConnection",
+      "line": 19,
+      "description": "Six connections and profile validation",
+      "sha256": "df9b948b935d64653961d8c75f8e28a0e93c68689d094c3f5fbe8e6208c41d48",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/agent_preferences.rs#L19"
+    },
+    "PROFILE_DB": {
+      "path": "src-tauri/src/storage/agent_preferences.rs",
+      "symbol_or_anchor": "pub(super) fn save",
+      "line": 92,
+      "description": "Revision-bound profile persistence",
+      "sha256": "835cf2f2af09fca58c0154369c79470c256d40137dae0f4943bb78a6d0069e1d",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/storage/agent_preferences.rs#L92"
+    },
+    "CATALOG": {
+      "path": "src-tauri/src/agent/definition.rs",
+      "symbol_or_anchor": "pub enum AgentId",
+      "line": 151,
+      "description": "Nine immutable canonical bot identities",
+      "sha256": "476554930606576416d4bae299e3ab4e2a7082e35ccc99cb7edcb17294cee0cd",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/agent/definition.rs#L151"
+    },
+    "ADAPTER": {
+      "path": "src-tauri/src/agent_adapter.rs",
+      "symbol_or_anchor": "enum AdapterRequest",
+      "line": 16,
+      "description": "Closed provider dispatch",
+      "sha256": "4144c65999015a0e8d15ea607341a1cb7e93d94aa040608f995f8b3806bedfce",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/agent_adapter.rs#L16"
+    },
+    "API": {
+      "path": "src-tauri/src/personal_assistant_direct.rs",
+      "symbol_or_anchor": "pub(crate) const ENDPOINT",
+      "line": 31,
+      "description": "OpenAI transport, SSE and errors",
+      "sha256": "4a1455acc38617e2eb8e8c2ce4c64d9c00304621ad0b92588f797703c75fc0d5",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/personal_assistant_direct.rs#L31"
+    },
+    "CODEX": {
+      "path": "src-tauri/src/codex_connection.rs",
+      "symbol_or_anchor": "fn command",
+      "line": 156,
+      "description": "Strict native Codex process configuration",
+      "sha256": "8df0ac32c30220b2c21b83a7d24ed4ce447b85552a537181a7683896c217d2dc",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/codex_connection.rs#L156"
+    },
+    "LOCAL": {
+      "path": "src-tauri/src/local_models.rs",
+      "symbol_or_anchor": "fn normalize_endpoint",
+      "line": 20,
+      "description": "Loopback endpoint and model validation",
+      "sha256": "5ab4f08bf402239a0887a5dc2e30419de370fea67e372537d8872d2d90efa5fc",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/local_models.rs#L20"
+    },
+    "CLAUDE": {
+      "path": "src-tauri/src/anthropic.rs",
+      "symbol_or_anchor": "pub(crate) struct AnthropicKey",
+      "line": 24,
+      "description": "Anthropic credentials, catalog and streaming",
+      "sha256": "7780168043e05fbc2f568d4b7d9a4d7acbc9c487de08cffa73bab798012e04fb",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/anthropic.rs#L24"
+    },
+    "MODELS": {
+      "path": "src-tauri/src/agent_models.rs",
+      "symbol_or_anchor": "struct ModelInfo",
+      "line": 10,
+      "description": "Model capability metadata",
+      "sha256": "0eacd783e96ad33463ff890ade12649faf90beaebfdef830cb7c1da5cf8560af",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/agent_models.rs#L10"
+    },
+    "HOST": {
+      "path": "src-tauri/src/personal_assistant_v0.rs",
+      "symbol_or_anchor": "pub enum PersonalAssistantV0Snapshot",
+      "line": 246,
+      "description": "Actual native state and bounded journal",
+      "sha256": "619be42cb4eacff79108b524911d1d4a1c2791614f9cf5300c96fe618bd1b799",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/personal_assistant_v0.rs#L246"
+    },
+    "COORD": {
+      "path": "src-tauri/src/collaboration_tauri.rs",
+      "symbol_or_anchor": "fn start_collaboration",
+      "line": 172,
+      "description": "Preview/start, fixed stage runner, cancellation",
+      "sha256": "9a1ba938fc9dd688917ced142a0a240ac841c3cb1a4ee5fdf6fe1ccab51228aa",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/collaboration_tauri.rs#L172"
+    },
+    "ROUTES": {
+      "path": "src-tauri/src/collaboration.rs",
+      "symbol_or_anchor": "fn route",
+      "line": 30,
+      "description": "Four fixed routes and handoff validation",
+      "sha256": "76b4e2d54408dae833009a8876df59cab53fc138cf88d4c210fb5e696f63eacc",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/collaboration.rs#L30"
+    },
+    "ROOM_DB": {
+      "path": "src-tauri/src/storage/collaboration.rs",
+      "symbol_or_anchor": "fn interrupt",
+      "line": 9,
+      "description": "Persistent rooms and restart interruption",
+      "sha256": "05be21ecac0a637b5f39fb4e2b62e3507e78acfbfaa976007013a27100770d6a",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/storage/collaboration.rs#L9"
+    },
+    "ROOM_UI": {
+      "path": "src/features/collaboration/CollaborationPage.tsx",
+      "symbol_or_anchor": "export function CollaborationPage",
+      "line": 21,
+      "description": "Room objective, preview, acknowledgement, delivery",
+      "sha256": "f45f1f5c5e126375cf599091233b0e3df5d14c48a87764fe1c8c296fcbfcaef0",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src/features/collaboration/CollaborationPage.tsx#L21"
+    },
+    "SNAP": {
+      "path": "src/features/collaboration/collaborationSnapshots.ts",
+      "symbol_or_anchor": "class CollaborationSnapshots",
+      "line": 14,
+      "description": "Shared polling store and freshness",
+      "sha256": "fd27276125f9c382b41e82450e4ac8358e650769762f69ef43c91d350506d8e4",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src/features/collaboration/collaborationSnapshots.ts#L14"
+    },
+    "GRAPH": {
+      "path": "src/features/command-center/collaborationProjection.ts",
+      "symbol_or_anchor": "function projectCollaboration",
+      "line": 39,
+      "description": "Read-only roster/run projection",
+      "sha256": "13a4036e08940adf796867733c70e991657e79c60bd2c634e52dce5cc90e6609",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src/features/command-center/collaborationProjection.ts#L39"
+    },
+    "CENTER": {
+      "path": "src/features/command-center/OperationalCommandCenterPage.tsx",
+      "symbol_or_anchor": "type Mode",
+      "line": 27,
+      "description": "Roster, run, history and demo modes",
+      "sha256": "3540b70d00e82f0fa9f0cad91f6546141b42718f5fe303fc1969f945863189ad",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src/features/command-center/OperationalCommandCenterPage.tsx#L27"
+    },
+    "CONDUCTOR": {
+      "path": "src/features/agents/ConductorIdentity.tsx",
+      "symbol_or_anchor": "function conductorWorking",
+      "line": 5,
+      "description": "Coordinator animation from accepted snapshots",
+      "sha256": "75afdd9a9e0ef43eeb9adcafe0efe863ca0df5c1682cb5bd6142065f74aa0b72",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src/features/agents/ConductorIdentity.tsx#L5"
+    },
+    "ART": {
+      "path": "src/features/agents/botMotion.ts",
+      "symbol_or_anchor": "export function setBotAnimations",
+      "line": 20,
+      "description": "Motion and reduced-motion behavior",
+      "sha256": "905fece21bad1cd740a5790f267d0938a79cb3e89210a6529764a0a04bd89578",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src/features/agents/botMotion.ts#L20"
+    },
+    "KNOW": {
+      "path": "src-tauri/src/knowledge_tauri.rs",
+      "symbol_or_anchor": "fn search",
+      "line": 80,
+      "description": "Knowledge commands, keyword search and dialogs",
+      "sha256": "cf044735287a3c8cf1b76ebdf38f5103ec34660f75ff74c42e6bb683c5c973d2",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/knowledge_tauri.rs#L80"
+    },
+    "KNOW_VALUES": {
+      "path": "src-tauri/src/knowledge.rs",
+      "symbol_or_anchor": "pub(crate) const MAX_BYTES",
+      "line": 4,
+      "description": "Version/source bounds and SHA-256",
+      "sha256": "a86c4dc7963351bba3fd02b0f7a5ffa02fbfbfab686447bfaf37310878dbe690",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/knowledge.rs#L4"
+    },
+    "KNOW_DB": {
+      "path": "src-tauri/src/storage/knowledge.rs",
+      "symbol_or_anchor": "fn knowledge_save",
+      "line": 83,
+      "description": "Version storage, frozen link bindings and stale writes",
+      "sha256": "ec865e29196429a42b4175a2686941b141f29e1b1604ccdac1f768354bc0c644",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/storage/knowledge.rs#L83"
+    },
+    "DOCS": {
+      "path": "src-tauri/src/documents.rs",
+      "symbol_or_anchor": "pub struct ApprovedDocumentReader",
+      "line": 514,
+      "description": "Approved reads and owner-selected import",
+      "sha256": "90a267445953f1c9cd2edcf0be78198ecc2276ae142013d33723bb34bc7b1f6c",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/documents.rs#L514"
+    },
+    "LINKS": {
+      "path": "src-tauri/src/knowledge_links.rs",
+      "symbol_or_anchor": "pub",
+      "line": 5,
+      "description": "Wikilink parsing and closed status",
+      "sha256": "55ab6b385490db39ed9a4530866b2a5e73be5d6b49b2aa70eb068b87fa9dcee8",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/knowledge_links.rs#L5"
+    },
+    "MARKDOWN": {
+      "path": "src/features/knowledge/KnowledgeMarkdown.tsx",
+      "symbol_or_anchor": "export function KnowledgeMarkdown",
+      "line": 19,
+      "description": "Safe React Markdown rendering",
+      "sha256": "22504830f6f08f60096f343570346bd1f8388401683ec8a2f99987923c25b157",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src/features/knowledge/KnowledgeMarkdown.tsx#L19"
+    },
+    "PROPS": {
+      "path": "src/features/knowledge/knowledgeProperties.ts",
+      "symbol_or_anchor": "function properties",
+      "line": 29,
+      "description": "Bounded property/frontmatter editing",
+      "sha256": "ae4f7d2275034124978664889a8653de2980e8e40a6e00e022d8eb583d81c155",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src/features/knowledge/knowledgeProperties.ts#L29"
+    },
+    "KGRAPH": {
+      "path": "src/features/knowledge/knowledgeNeighborhood.ts",
+      "symbol_or_anchor": "function neighborhood",
+      "line": 3,
+      "description": "25-node one-hop Knowledge graph",
+      "sha256": "2a799ef585a3eca5451f6e1d0543c000f67e5289530ef2d3a232f8a033fcdd4b",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src/features/knowledge/knowledgeNeighborhood.ts#L3"
+    },
+    "DB": {
+      "path": "src-tauri/src/startup.rs",
+      "symbol_or_anchor": "const DEVELOPMENT_DATABASE_FILE_NAME",
+      "line": 10,
+      "description": "Application-owned persistent database path",
+      "sha256": "8194277dcfdd5e3ce5af5ea42927f40f456777794efb8548e8a5c44fe770dc25",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/startup.rs#L10"
+    },
+    "SQL": {
+      "path": "src-tauri/src/storage/connection.rs",
+      "symbol_or_anchor": "pub fn open",
+      "line": 49,
+      "description": "WAL, foreign keys and timeout",
+      "sha256": "a0f68bf8cfb66cfa731349ae9184756e01ee211e6da8aafbe65c7168c1d6c563",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/storage/connection.rs#L49"
+    },
+    "MIGRATIONS": {
+      "path": "src-tauri/src/storage/migrations.rs",
+      "symbol_or_anchor": "const",
+      "line": 10,
+      "description": "Versioned transactional migration history",
+      "sha256": "07353c2767b86f97b4112256510739b72c021543ad4c5daa13f02c69ac9054e9",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/storage/migrations.rs#L10"
+    },
+    "DIAG": {
+      "path": "src-tauri/src/diagnostics.rs",
+      "symbol_or_anchor": "pub(crate) enum Event",
+      "line": 39,
+      "description": "Closed diagnostics, retention, privacy, cleanup outcomes",
+      "sha256": "92dfea63373edcd4e1d08b8679ea1a56a210dbd45cad4140edf3b1eeed66c5fb",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/diagnostics.rs#L39"
+    },
+    "DIAG_UI": {
+      "path": "src/features/settings/DiagnosticsPanel.tsx",
+      "symbol_or_anchor": "export function DiagnosticsPanel",
+      "line": 10,
+      "description": "Local diagnostics presentation",
+      "sha256": "d99608c8803c345e668e04b85e69b336909505e54bf665eacb5c4daacbdc6e12",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src/features/settings/DiagnosticsPanel.tsx#L10"
+    },
+    "DIAG_IPC": {
+      "path": "src-tauri/src/diagnostics_tauri.rs",
+      "symbol_or_anchor": "pub(crate)",
+      "line": 6,
+      "description": "Read/export diagnostics commands",
+      "sha256": "563c5f76f465d2a4526fac6c9993cee726d73755ff3b98bde2adbe1ae1599307",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/diagnostics_tauri.rs#L6"
+    },
+    "CSP": {
+      "path": "src-tauri/tauri.conf.json",
+      "symbol_or_anchor": "\"security\"",
+      "line": 26,
+      "description": "CSP, identity, main window and packaging",
+      "sha256": "93ce9e66da5d91c2eb7bb3fed2ac56d0e9ef55679e1f2ed7c88c62c664b4f17c",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/tauri.conf.json#L26"
+    },
+    "CAP": {
+      "path": "src-tauri/capabilities/default.json",
+      "symbol_or_anchor": "\"permissions\"",
+      "line": 6,
+      "description": "Core-only main-window capability",
+      "sha256": "6e99b26b808a494df182c4c7fd759683142ccecfb175a2877f26f6d56b36b45f",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/capabilities/default.json#L6"
+    },
+    "MOCK": {
+      "path": "src/features/conversations/ConversationWorkspace.tsx",
+      "symbol_or_anchor": "const [mode",
+      "line": 57,
+      "description": "Separate simulated conversation and fixed native sample",
+      "sha256": "76d8776bfaca1ad4a98a1398e33b3fe125d22debd44bbc69f9960361a39d7422",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src/features/conversations/ConversationWorkspace.tsx#L57"
+    },
+    "MOCK_STATE": {
+      "path": "src/application/state.ts",
+      "symbol_or_anchor": "export interface ApplicationState",
+      "line": 52,
+      "description": "Volatile frontend demo state",
+      "sha256": "e13703db39162f9e33e37ec004dcc49130652ed4fba1663bc6fe91677218e847",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src/application/state.ts#L52"
+    },
+    "POLICY": {
+      "path": "src-tauri/src/policy/engine.rs",
+      "symbol_or_anchor": "fn classify",
+      "line": 53,
+      "description": "Transport-free deterministic policy foundation",
+      "sha256": "45cedecbc4d806ab75795986ce49d6bda5021a92f3039c4d0e42160085b5ef7d",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/policy/engine.rs#L53"
+    },
+    "APPROVAL": {
+      "path": "src-tauri/src/approvals/manager.rs",
+      "symbol_or_anchor": "pub const APPROVAL_TTL",
+      "line": 23,
+      "description": "Scoped approval presentation/replay foundation",
+      "sha256": "5141ea212e8646c53effaaefb12bbe3e91b8143105fd7544e56b4118a7ecc51f",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/approvals/manager.rs#L23"
+    },
+    "TOOLS": {
+      "path": "src-tauri/src/tools/schema.rs",
+      "symbol_or_anchor": "pub enum ToolSchema",
+      "line": 14,
+      "description": "Two tool contracts, not a live executor",
+      "sha256": "4f924d1dabf75b998e7db0ab13140595b994bb0e13813bc46c02a31e6160d64c",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/tools/schema.rs#L14"
+    },
+    "MEMORY": {
+      "path": "src-tauri/src/memory.rs",
+      "symbol_or_anchor": "pub struct MemoryStore",
+      "line": 454,
+      "description": "Separate workflow-local sealed memory foundation",
+      "sha256": "9b63f484e8510d9b741719e58ffe8b41d67b0b3da577c3afa62cf89b02a72001",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/memory.rs#L454"
+    },
+    "FOUNDATION": {
+      "path": "src-tauri/src/agent/native_runtime.rs",
+      "symbol_or_anchor": "//!",
+      "line": 1,
+      "description": "Transport-free NativeAgentRuntime",
+      "sha256": "ae23201d77cfe6fb3b53daa67ed2e8ec30219133c3fbed5f6612f0c0d80789ac",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/agent/native_runtime.rs#L1"
+    },
+    "PARALLEL": {
+      "path": "src-tauri/src/agent/bounded_parallelism.rs",
+      "symbol_or_anchor": "//!",
+      "line": 1,
+      "description": "Fixture-only bounded parallelism",
+      "sha256": "c73734b81d0138813895133f83745b10f059004dbc155b734d46657a2427ce0d",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/src/agent/bounded_parallelism.rs#L1"
+    },
+    "CI": {
+      "path": ".github/workflows/ci.yml",
+      "symbol_or_anchor": "name: CI",
+      "line": 1,
+      "description": "Linux/Mac validation, secrets and dependency audit",
+      "sha256": "de11476018d8fc8ce9bb2d983471db5a64ac967134c8698d3e55f05bc945bf07",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/.github/workflows/ci.yml#L1"
+    },
+    "DOC_CI": {
+      "path": ".github/workflows/documentation.yml",
+      "symbol_or_anchor": "name: Documentation",
+      "line": 1,
+      "description": "Documentation checks with read-only permissions",
+      "sha256": "025538578b5bddbd83f9379a20d36e8304aa39156629a78078b5cd1136944aa3",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/.github/workflows/documentation.yml#L1"
+    },
+    "DEPS": {
+      "path": "src-tauri/Cargo.toml",
+      "symbol_or_anchor": "[dependencies]",
+      "line": 17,
+      "description": "Pinned native dependencies",
+      "sha256": "48cea069fdb509646c423bedbf47aba4f511fa83e4d6fb66fbde27d09b2a506f",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/src-tauri/Cargo.toml#L17"
+    },
+    "NPM": {
+      "path": "package.json",
+      "symbol_or_anchor": "\"scripts\"",
+      "line": 12,
+      "description": "Development/build/verification scripts",
+      "sha256": "7dc303ea11bb22879418446f17066232bf1a2e4a676840a8b6197cf4d7185b16",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/package.json#L12"
+    },
+    "REVIEW": {
+      "path": "docs/reviews/2026-10-06-live-provider-e2e-post-increment-review.md",
+      "symbol_or_anchor": "## Executive summary",
+      "line": 261,
+      "description": "Retained final verified scope and limitations",
+      "sha256": "eeff3adea8236b1afb8b43679effccd178a6a8647c83e4b10350add5e5f941f5",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/docs/reviews/2026-10-06-live-provider-e2e-post-increment-review.md#L261"
+    },
+    "UI_REVIEW": {
+      "path": "docs/reviews/2026-10-05-ui-ux-redesign-post-increment-review.md",
+      "symbol_or_anchor": "## Executive summary",
+      "line": 165,
+      "description": "Inherited UI/UX verification",
+      "sha256": "1ebf69d8fd2c1bbb8c797d19cf97a4abb49ed1e146a2b6bd0d07b83773c1c1c9",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/docs/reviews/2026-10-05-ui-ux-redesign-post-increment-review.md#L165"
+    },
+    "PLAN": {
+      "path": "docs/plans/2026-10-06-live-provider-e2e.md",
+      "symbol_or_anchor": "Pinned references:",
+      "line": 459,
+      "description": "Pinned external reference analysis; no code copied",
+      "sha256": "0510f71642fff19a201d1867bcc6e06835fd581eaa7bb4fce1886ad209151625",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/docs/plans/2026-10-06-live-provider-e2e.md#L459"
+    },
+    "HERMES": {
+      "path": "docs/architecture/HERMES_INTEGRATION_ASSESSMENT.md",
+      "symbol_or_anchor": "# Hermes",
+      "line": 1,
+      "description": "Historical assessment with superseding NO-GO",
+      "sha256": "9c2e7b95e6836f3bb07c9aa59246802a59b45e607fa708ca71c05ea26d10ad1c",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/docs/architecture/HERMES_INTEGRATION_ASSESSMENT.md#L1"
+    },
+    "NATIVE_PLAN": {
+      "path": "docs/architecture/NATIVE_MULTI_AGENT_ASSESSMENT.md",
+      "symbol_or_anchor": "Hermes integration",
+      "line": 172,
+      "description": "Native foundation and deferred external runtimes",
+      "sha256": "850e2ca820a037b6ae4e7d638a4c093051d06d7b84fd374d95e5ef980c4658ab",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/docs/architecture/NATIVE_MULTI_AGENT_ASSESSMENT.md#L172"
+    },
+    "BRAND": {
+      "path": "docs/branding/BRAND_GUIDELINES.md",
+      "symbol_or_anchor": "# 2026-10-03",
+      "line": 1,
+      "description": "Approved current raster and sidebar identity",
+      "sha256": "5e2629453a3753fb8dfe399346e397da6290609b7b160900670ddb95d4f8d258",
+      "url": "https://github.com/SillyRbbit/ai-agent-assistant/blob/bc12776412c717613de1fdc42c38bf3312493726/docs/branding/BRAND_GUIDELINES.md#L1"
+    }
+  }
+}

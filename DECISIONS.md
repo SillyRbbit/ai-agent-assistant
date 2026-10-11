@@ -7135,3 +7135,209 @@ is imported. Local receipt hashes are integrity evidence, not authentication aga
 malicious same-user rewriting. This milestone begins with upstream's existing
 ordinary gate before the new implementation is installed; it remains legacy-admitted
 and must complete through that supported route. Future new milestones use schema 2.
+
+## Retained QA candidate history — Desktop D-131 provenance
+
+The following original candidate additions are retained verbatim as historical
+records from the QA checkout. Their dated gate/inventory claims bind that original
+checkout; they are not current publication-worktree gate claims. Upstream D-134
+governs this reconciliation; Desktop D-131 is qualified historical provenance.
+
+## 2026-10-07 — Codex action offline verification passed
+
+The five-file Codex action extension passed its focused offline regressions and
+required `npm run verify` with the installed process-local workaround. Synthetic
+runtime cases cover fixed action instructions, successful text streaming/completion,
+EOF, malformed output, tool/approval rejection, output bounds and runtime errors;
+active cancellation reaps the child before a subsequent synthetic request succeeds.
+The new test initially referenced an unavailable Tokio macro; its compile receipts
+remain preserved. Standard future polling corrected the test without dependency or
+production lifecycle changes. The final verification passed on the corrected source.
+
+The current candidate has 60 paths within the 40 successor / 61 cumulative ceiling;
+the final review is still reserved. Prior document bodies, predecessor completion,
+API evidence, historical failures and old artifacts remain preserved. Fresh
+isolated bundle and launch-disabled Codex-only helper preparation is recorded under
+`/private/tmp/cortexa-codex-action-extension-oedk0qdz/native`; their external manifests
+are authoritative for readiness and exact hashes, not this documentation record.
+
+Native action acceptance has not run. It needs separate authorization for the
+verified artifact, autonomous launcher and Computer Use, preserving the dedicated
+Cortexa-Codex-QA home and all identity/window/cleanup safeguards. Direct-API gaps
+remain pending private credentials; Codex results cannot replace API evidence.
+Usage stays historical 33 plus 2/20 additional (35 total, 18 remaining). Keep all
+advisories, disabled ECC hooks/MCP, native workaround and D-125/M1/M2 parked.
+No completion, full Stop, launch, Send, commit or publication is claimed here.
+
+---
+
+## 2026-10-07 — Bounded Headless Codex action route
+
+The owner approved extending only the five native adapter/context modules, with
+in-module tests, to support Headless Codex for isolated Coding -> QA actions.
+The scope is now 40 successor / 61 cumulative paths including the reserved final
+review. Only `agent_adapter.rs` and `codex_connection.rs` are newly allowlisted;
+the original 38/59 scope and all historical evidence remain preserved. The existing
+ordinary active increment is retained without a new begin, state edit or waiver.
+
+Action context accepts only OpenAI API and Codex. Native preparation and dispatch
+validate the saved Codex selection against the discovered catalog. A closed
+`ActionCodex` adapter chooses only the fixed isolated-action instructions through
+the existing file-store runtime. It adds no model tools, filesystem authority,
+provider fallback, IPC surface or dependency. Codex only proposes bounded JSON;
+Rust still owns strict contracts, Docker execution, exact native approval and
+new-file-only application. Existing API behavior and all execution limits remain.
+
+Focused offline cases cover context privacy, catalog/revision rejection, fixed
+instructions, streaming/errors, denied tools/approval and child cleanup. Required
+verification and fresh isolated artifact/helper preparation are tracked separately
+in `/private/tmp/cortexa-codex-action-extension-oedk0qdz`. No native launch or Send
+is authorized in this offline stage. Do not promote synthetic results to native
+acceptance or reuse the old API artifact for the changed source.
+
+Separate native approval must bind the new bundle and a fresh Codex-only launcher
+using the dedicated Cortexa-Codex-QA home, never personal credentials or API fallback.
+Current additional usage remains 2/20 (historical 33; total 35), with 18 remaining.
+Existing API successes and failed QA handoff remain; API-specific gaps await private
+credential access. Native action approval/application, correction, rejection/drift,
+cancellation/recovery and restart remain pending. Retain all advisories, disabled
+ECC hooks/MCP, the process-local workaround and parked D-125/M1/M2. No completion,
+full Stop, commit or publication claim.
+
+---
+
+## 2026-10-07 — Exact IPC allowlist amendment authorized
+
+The owner approved adding only `scripts/repository_health.py` and its existing
+`scripts/tests/test_repository_health.py` regression module to the active isolated
+bot action workflow. The current scope is 38 successor / 59 cumulative paths,
+including the reserved final review. External `scope-v2.json` preserves the prior
+scope hash; the prior scope, failure receipts and predecessor completion remain
+unchanged. The ordinary active gate is retained, without a new begin or state edit.
+
+Update only exact action command registrations/payloads and focused positive and
+negative tests; retain the checker algorithm and every unrelated security rule.
+Resume required verification and disposable native acceptance afterward. No
+completion is claimed; additional requests remain 0/20, historical ledger33.
+All advisories, ECC hooks/MCP disabled, native workaround and parked work remain.
+
+---
+
+## 2026-10-07 — New-file-only application boundary
+
+Security review narrowed this first workflow to adding one new root-level Python
+file. The filename must be absent at preparation and application. Atomic
+`NOREPLACE` rejects a concurrent creator; existing target files are never replaced.
+Coding may revise its isolated candidate before review. The original Git baseline,
+unchanged tests, candidate, check evidence and apply journal remain recoverable.
+This supersedes the earlier addition/replacement prototype wording below without
+altering its historical record. Native acceptance and final verification remain
+pending; scope, request budget and all parked work are unchanged.
+
+---
+
+## 2026-10-07 — Isolated bot action workflow implementation checkpoint
+
+The owner-authorized `isolated-bot-action-workflow` is active, not complete.
+The [bounded plan](docs/plans/2026-10-07-isolated-bot-action-workflow.md) freezes
+36 successor / 57 cumulative paths, including the retained 28-path architecture
+atlas. Its dated diagrams, prior completion, historical failures and artifact
+bytes remain unchanged; they are inherited evidence, not this workflow's acceptance.
+
+The owner approves a deliberately narrow first execution boundary: one ordinary,
+clean, small Git clone; one root-level UTF-8 Python addition/replacement; one
+unchanged root-level `test_*.py`; at most 32 regular non-executable files, 8 KiB each.
+Linked target worktrees, subdirectories, hidden extra files, hard/symbolic links,
+binary files, deletion/rename and arbitrary commands are rejected. Existing Cortexa
+linked development worktrees are preserved and are not QA application targets.
+
+Execution uses the existing installed Docker Desktop engine and one reviewed
+Official Python image, pinned to
+`docker.io/library/python@sha256:739ba32ae445e8d58f3d90feb85f83bebc8346f8dd280fa1eb5848f4ff1ed163`.
+The official `3.12.15-slim-bookworm` recipe was reviewed at commit
+`2a3b794c223ab067d122719541cdd54a068732a5`; its recipe is MIT, with separate Python,
+Debian and bundled GNU utility licenses. No vulnerability-free image claim is made.
+Separate future review is needed for an image update; no runtime pull or dependency
+installation occurs. The dependency fills the actual isolation gap; a Git worktree
+alone, unrestricted host shell, or an imported agent framework was rejected.
+
+The fixed native approval subject uses Files permission, reversible-local-action
+risk and mandatory approval. The original backup and exact candidate/test/target
+hashes remain reviewable. No commit, push, publication, real-project QA application,
+new provider, learning, messaging or generalized runtime/device authority follows.
+
+All advisories, disabled ECC hooks/MCP, native workaround and parked D-125/M1/M2 remain.
+
+---
+
+<!-- Original candidate EOF additions follow, retained verbatim. -->
+
+## 2026-10-08 — Selective D-131 integration in the QA worktree
+
+Owner-authorized governance integration extends existing changes without altering
+product code or the raw active `isolated-bot-action-workflow` state. D-130/D-131
+schema-2 general admission and D-132 absent-path semantics coexist with retained
+D-133 acceptance validation. Linked-worktree closure resolves the index through
+Git while retaining exact backup-byte comparison. No active-state conversion,
+closure, finalization, native launch or provider request is authorized here.
+
+Snapshot and attributed evidence: `/private/tmp/cortexa-d131-integration-rin1mbe4`.
+The [integration plan](docs/plans/2026-10-08-d131-qa-worktree-integration.md) tracks
+verification; results are pending until recorded there and in its review. Preserve
+all original document bodies, product/artifact hashes and historical receipts.
+Existing full-source seals remain historical: current governance deltas need
+separate attribution, not rewritten hashes or an unnecessary product rebuild.
+
+Current action acceptance remains incomplete. Native Reject and exact Approve/apply
+are inherited passes; the latest correction run failed at `qa_contract_schema_data`
+after an actual failed Docker check. Terminal-failed restart/no-replay passed;
+correction, drift and active cancellation/recovery gaps remain. Ledger50, three
+requests remain, insufficient for a fresh four-dispatch reservation. No paid usage
+is added by governance work. Keep disabled ECC hooks/MCP, all advisories, the
+process-local native workaround and parked D-125/M1/M2. No commit or publication.
+
+### D-131 integration verification result
+
+Selective governance integration verified with advisories. All145 hook tests
+(including legacy/D-133 and40 added general/integration cases) and95 repository
+tests pass. Repository tests use installed Python3.12; the initial system-Python
+run failed because `zip(strict=...)` is unavailable there, and its failed receipt
+is retained. Documentation, repository, security, whitespace and session checks
+pass. See the [integration review](docs/reviews/2026-10-08-d131-qa-worktree-integration-post-increment-review.md).
+
+The recoverable snapshot preserves1114 baseline paths. Product bytes, the native
+bundle,1659 historical bindings, original document bodies, Git index/links and raw
+active state remain preserved. Historical whole-source records include governance
+files: verify those originals against the snapshot and attribute this governance
+delta separately. Do not rerun old full-source launch validators against changed
+governance or alter their frozen records; fresh authorized configuration must carry
+both original artifact binding and current governance attribution.
+
+Read-only status remains active. Full Stop returns `decision: block`, correctly
+refusing completion of unfinished action acceptance; exit0 is not Stop acceptance.
+No finalization, closure, state conversion, product build, live QA or request ran.
+D-131 operating guidance is available now; new objective-based admission applies
+only through its ordinary supported route. Existing action state remains legacy.
+
+Next: diagnose the retained correction-run `qa_contract_schema_data` rejection
+read-only before proposing any value-free diagnostic/product repair. Do not infer
+the discarded response. Ledger50 leaves3 requests, below the4-dispatch worst-case
+reservation for another action; future live continuation needs sufficient explicit
+budget. Correction, drift and active cancellation/recovery remain incomplete.
+
+## 2026-10-08 — Isolated action publication reconciliation
+
+Current owner-authorized preparation uses `/Users/hdang/.codex/worktrees/isolated-action-publication/ai-agent-assistant`, branch
+`codex/isolated-action-publication`, main HEAD `fc239b6161d9379915891e04f7c56fcaa9c4971c`.
+The original frozen85 candidate remains complete/valid in `/Users/hdang/.codex/worktrees/live-provider-qa/ai-agent-assistant`.
+Carry58 exact unique paths, preserve19 upstream policy/gate paths, reconcile eight
+shared documents additively and add two current reports:68 Git paths. No new product
+behavior, test/build/QA repeat, credential access or publication. D-134 ordinary
+schema-2 admission controls this separate task; no private state is copied.
+Current report: [reconciliation review](docs/reviews/2026-10-08-isolated-action-publication-reconciliation-post-increment-review.md).
+Evidence: `/private/tmp/cortexa-action-publication-prep-8cfs2y51`; actual finalization/status/full Stop will be recorded externally
+after the report is frozen. This prose does not substitute for gate acceptance.
+Reuse native Codex and direct API evidence distinctly; all inherited warnings,
+unknown historical causes, untested variants and owned cleanup remain as recorded.
+Ledger63/66; no new requests. ECC hooks/MCP disabled, native workaround retained,
+D-125/M1/M2 parked. Commit/push/PR/merge require separate owner authorization.
