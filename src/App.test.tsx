@@ -2,6 +2,7 @@ import { act, fireEvent, render, screen, waitFor, within } from "@testing-librar
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { App, CommandCenterLoadingPage, type AppServices } from "./App";
+import { createConversationSession } from "./application/conversations";
 import { APP_ROUTES, NAVIGATION_ITEMS, type AssistantMenuRoute } from "./application/navigation";
 import { MOCK_STREAM_INTERVAL_MS } from "./application/mockAssistantRun";
 import {
@@ -10,6 +11,7 @@ import {
   type MockRunEvent,
   type MockRunEventListener,
 } from "./application/mockRunDriver";
+import { ApplicationSidebar } from "./components/ApplicationSidebar";
 import { ApplicationWorkspacePanelsContext } from "./components/applicationWorkspacePanels";
 import type { AppInfo } from "./infrastructure/tauri/app-info-client";
 import type {
@@ -1140,33 +1142,40 @@ describe("App", () => {
   });
 
   it("keeps long lists inside the sidebar overflow owner", () => {
-    vi.useFakeTimers();
-    const harness = createMenuRouteHarness();
-    const view = render(<App services={createServices(harness.source)} />);
-    const { sidebarRegion } = getShellRegions(view.container);
-    const conversationList = sidebarRegion.querySelector(
-      '[data-scroll-region="conversation-list-scroll"]',
+    const conversations = Array.from({ length: 20 }, (_, index) => {
+      const conversation = createConversationSession(index + 1);
+      if (conversation === null) {
+        throw new Error("Expected a valid conversation fixture ordinal.");
+      }
+      return { ...conversation, title: `Request ${String(index)}` };
+    });
+
+    render(
+      <ApplicationSidebar
+        activeConversationId="conversation-20"
+        activeRoute="conversations"
+        conversationNavigationDisabled={false}
+        conversations={conversations}
+        expanded
+        onNavigate={vi.fn()}
+        onNewConversation={vi.fn()}
+        onSelectConversation={vi.fn()}
+      />,
     );
+    const sidebarRegion = screen.getByRole("complementary", {
+      name: "Cortexa workspace navigation",
+    });
+    const conversationHistory = within(sidebarRegion).getByRole("list", {
+      name: "Conversation history",
+    });
     const primaryList = sidebarRegion.querySelector(
       '[data-scroll-region="primary-navigation-scroll"]',
     );
 
-    expect(conversationList).not.toBeNull();
-    expect(primaryList).not.toBeNull();
-
-    // create many conversations to ensure the list is structurally long-capable
-    for (let index = 0; index < 20; index += 1) {
-      submitMockRequest(`Request ${String(index)}`);
-      finishMockStream();
-      fireEvent.click(screen.getByRole("button", { name: "Reject" }));
-      if (index < 19) {
-        startNewConversation();
-      }
-    }
-
-    const conversationHistory = screen.getByRole("list", { name: "Conversation history" });
+    expect(conversationHistory).toHaveAttribute("data-scroll-region", "conversation-list-scroll");
     expect(within(conversationHistory).getAllByRole("button")).toHaveLength(20);
-    expect(conversationList?.closest("aside")).toBe(sidebarRegion);
+    expect(conversationHistory.closest("aside")).toBe(sidebarRegion);
+    expect(primaryList).not.toBeNull();
     expect(primaryList?.closest("aside")).toBe(sidebarRegion);
   });
 
