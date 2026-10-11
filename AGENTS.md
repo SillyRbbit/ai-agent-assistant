@@ -269,3 +269,20 @@ Legacy mechanisms and D-125/M1/M2 remain unchanged. No force option, checkout
 bypass, arbitrary successor, product edits or automatic recovery chain follows.
 
 See [the maintenance plan](docs/plans/2026-10-03-evidence-bound-acceptance-maintenance.md).
+
+## Task-bound dual-label dependent admission
+
+The additive dependent route is restricted to
+`vps-dual-label-operating-mode-remediation`, with predecessor
+`vps-dual-label-operating-mode` and its original schema-2 admission. It does not
+change general independent D-134 admission or D-133, and does not adopt D-137.
+See the existing [dependent-admission plan](docs/plans/2026-10-11-dependent-remediation-admission.md)
+and `ENGINEERING_GUIDE.md` for exact bindings, carried obligations and separate
+owner approvals. No request grants its own authority. Real admission and execution
+remain unset until separately authorized; this local capability is not publication.
+
+The owner separately approved `dependent-remediation-admission-maintenance` as
+pre-admission maintenance without begin. Only this operation closes through a
+separately passing maintenance report, existing close-without-completion receipt
+and full Stop. Original FAIL state/report and historical fingerprint remain
+immutable; no completion marker or generic bootstrap authority follows.

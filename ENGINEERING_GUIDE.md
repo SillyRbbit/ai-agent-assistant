@@ -502,3 +502,41 @@ See the [integration plan](docs/plans/2026-10-08-milestone-governance-upstream.m
 and D-134's qualified decision crosswalk. Platform and external access controls
 are never waived. Local receipt hashes preserve workflow integrity, not authenticity
 against a malicious same-user rewrite.
+
+## Task-bound dependent documentation admission
+
+The local additive implementation admits only the original dual-label
+`vps-dual-label-operating-mode` failure into one separately authorized
+`vps-dual-label-operating-mode-remediation` attempt. General D-134 independent
+admission and D-133 retain their original behavior. This is not global D-137.
+
+A request binds checkout, branch, HEAD, current index and workspace, immutable
+raw predecessor/report, historical inventory, original failed comparison,
+qualified archival provenance, explicit unavailable-custody inventory and
+verified surviving copies. Essential state/report/index copies are mandatory;
+retained references are not retained contents. Every unresolved obligation and
+original acceptance criterion carries forward. The single preservation criterion
+replacement requires its own owner decision; it never changes the original FAIL.
+Separate admission and execution authorizations bind the current decision bytes.
+Protected inputs, exact nine-document scope and no-destructive-path contract are
+validated at admission and again for report/finalization/Stop. Final reports still
+require strict existing regular-file validation; prospective admission alone may
+bind a safe absent report directly under docs/reviews.
+
+After separate real authorization, the supported interface is existing
+`begin --increment vps-dual-label-operating-mode-remediation --dependent-request <request>`.
+The read-only `dependent-preservation` command verifies admitted surviving
+bindings, not historical full custody. Schema 5 records only this dependent
+lineage. Content-addressed original bytes and an exclusively created consumed
+receipt reject tampering, replay and observed interruption. An interrupted
+publication may leave an orphan seal or consumed receipt; neither authorizes
+resume. Preserve it and obtain a new recovery decision. A failed dependent
+attempt stays terminal, with no completion marker or automatic successor.
+No executor, live remediation, arbitrary runner/input, authority authenticator,
+restoration, publication or infrastructure permission is introduced.
+
+For the separately owner-amended maintenance of this validator, do not use its
+unfinished route or ordinary begin. Freeze a passing maintenance report and use
+existing close-without-completion; preserve the live failed state byte-for-byte.
+Existing closure verification requirements remain unchanged, including full
+verify. Maintenance success and original increment FAIL are separate results.
