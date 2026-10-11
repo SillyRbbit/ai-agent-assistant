@@ -1,3 +1,5 @@
+import { ActionReview } from "./ActionReview";
+import { actionError } from "../../infrastructure/tauri/collaboration-client";
 import { ConductorIdentity } from "../agents/ConductorIdentity";
 import { PageHeader } from "../shared/PageHeader";
 import { SourcePicker } from "../knowledge/SourcePicker";
@@ -11,6 +13,7 @@ import {
   type Workflow,
   type Source,
   type Preview,
+  type SelectedRepository,
 } from "../../infrastructure/tauri/collaboration-client";
 import { BotAvatar } from "../agents/BotAppearance";
 import { ROLE_DESCRIPTIONS } from "../agents/botAppearanceValues";
@@ -37,6 +40,9 @@ export function CollaborationPage({
     [ack, setAck] = useState(false),
     [busy, setBusy] = useState(false),
     [error, setError] = useState("");
+  const [target, setTarget] = useState<SelectedRepository | null>(null);
+  const [editFile, setEditFile] = useState("solution.py");
+  const [testFile, setTestFile] = useState("test_solution.py");
   const [librarySources, setLibrarySources] = useState<readonly Source[]>([]);
   const [draft, setDraft] = useState<Draft | null>(null);
   const [noteNotice, setNoteNotice] = useState("");
@@ -79,7 +85,7 @@ export function CollaborationPage({
           e === "limit"
             ? "A room, run or source limit was reached. Narrow the source selection or use an available room; nothing was truncated."
             : typeof e === "string"
-              ? agentChatErrorMessage(e)
+              ? (actionError(e) ?? agentChatErrorMessage(e))
               : "The bounded operation could not complete. Check saved connections and readiness; no automatic retry was made.",
         );
       }
@@ -97,7 +103,7 @@ export function CollaborationPage({
         eyebrow="Shared work"
         headingId="collaboration-title"
         title="Collaboration"
-        description="Conductor · Application coordinator. Four fixed analysis routes; no browsing, tools, commands, edits, tests or infrastructure actions."
+        description="Conductor · Application coordinator. Four analysis routes and one bounded, isolated Python change workflow with native owner approval."
       />
       <p className="room-retention">
         Submitted objectives, sources and visible results are stored locally (up to 10 rooms, 4 runs
@@ -215,7 +221,34 @@ export function CollaborationPage({
                     </button>
                   )}
                   <p>{run.input.objective}</p>
-                  {run.error && <p role="alert">{agentChatErrorMessage(run.error)}</p>}
+                  {run.action && (
+                    <ActionReview
+                      evidence={run.action}
+                      disabled={busy || active}
+                      onReview={
+                        client.reviewAction && run.action.reviewHash
+                          ? () => {
+                              void action(async () => {
+                                if (client.reviewAction && run.action?.reviewHash)
+                                  store.acceptRoom(
+                                    await client.reviewAction(
+                                      room.id,
+                                      run.id,
+                                      run.action.reviewHash,
+                                    ),
+                                  );
+                              });
+                            }
+                          : undefined
+                      }
+                    />
+                  )}
+                  {run.error && (
+                    <p role="alert">
+                      {(run.action ? actionError(run.error) : undefined) ??
+                        agentChatErrorMessage(run.error)}
+                    </p>
+                  )}
                   <ol className="room-stage-overview" aria-label={`Stages for ${run.id}`}>
                     {run.stages.map((stage, index) => (
                       <li key={stage.id}>
@@ -346,8 +379,8 @@ export function CollaborationPage({
                   </select>
                 </label>
                 <p>
-                  Route: {WORKFLOWS[workflow].join(" → ")}. Maximum {WORKFLOWS[workflow].length}{" "}
-                  generation calls.
+                  Route: {WORKFLOWS[workflow].join(" → ")}. Maximum{" "}
+                  {workflow === "coding_action" ? 4 : WORKFLOWS[workflow].length} generation calls.
                 </p>
                 <label>
                   Objective
@@ -360,71 +393,133 @@ export function CollaborationPage({
                     }}
                   />
                 </label>
-                <SourcePicker
-                  value={librarySources}
-                  onChange={(s) => {
-                    setLibrarySources(s);
-                    invalidate();
-                  }}
-                />
-                {sources.map((s, i) => (
-                  <div key={i}>
+                {workflow === "coding_action" ? (
+                  <section aria-label="Isolated change scope">
+                    <p>
+                      OpenAI API Coding → QA &amp; Validation only. One new root-level Python file
+                      (must not already exist), one unchanged unittest file; at most one correction.
+                      No arbitrary commands or dependencies. Clean ordinary Git clone, up to 32
+                      small regular files; no links or subdirectories. Docker runs without network
+                      or credentials. Repository content and diff are shared with the configured
+                      provider.
+                    </p>
+                    <button
+                      type="button"
+                      disabled={!client.selectActionRepository}
+                      onClick={() => {
+                        void action(async () => {
+                          if (client.selectActionRepository) {
+                            setTarget(await client.selectActionRepository());
+                            invalidate();
+                          }
+                        });
+                      }}
+                    >
+                      Choose target repository in native dialog
+                    </button>
+                    <p>{target?.path ?? "No target selected"}</p>
                     <label>
-                      Source {i + 1} label
+                      New Python file
                       <input
-                        maxLength={32}
-                        value={s.label}
+                        value={editFile}
+                        maxLength={64}
                         onChange={(e) => {
-                          setSources(
-                            sources.map((x, n) =>
-                              n === i ? { ...x, label: e.currentTarget.value } : x,
-                            ),
-                          );
+                          setEditFile(e.currentTarget.value);
                           invalidate();
                         }}
                       />
                     </label>
                     <label>
-                      Source {i + 1} text
-                      <textarea
-                        maxLength={4096}
-                        value={s.text}
+                      Unchanged test file
+                      <input
+                        value={testFile}
+                        maxLength={64}
                         onChange={(e) => {
-                          setSources(
-                            sources.map((x, n) =>
-                              n === i ? { ...x, text: e.currentTarget.value } : x,
-                            ),
-                          );
+                          setTestFile(e.currentTarget.value);
                           invalidate();
                         }}
                       />
                     </label>
-                  </div>
-                ))}
+                  </section>
+                ) : (
+                  <>
+                    <SourcePicker
+                      value={librarySources}
+                      onChange={(s) => {
+                        setLibrarySources(s);
+                        invalidate();
+                      }}
+                    />
+                    {sources.map((s, i) => (
+                      <div key={i}>
+                        <label>
+                          Source {i + 1} label
+                          <input
+                            maxLength={32}
+                            value={s.label}
+                            onChange={(e) => {
+                              setSources(
+                                sources.map((x, n) =>
+                                  n === i ? { ...x, label: e.currentTarget.value } : x,
+                                ),
+                              );
+                              invalidate();
+                            }}
+                          />
+                        </label>
+                        <label>
+                          Source {i + 1} text
+                          <textarea
+                            maxLength={4096}
+                            value={s.text}
+                            onChange={(e) => {
+                              setSources(
+                                sources.map((x, n) =>
+                                  n === i ? { ...x, text: e.currentTarget.value } : x,
+                                ),
+                              );
+                              invalidate();
+                            }}
+                          />
+                        </label>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      disabled={sources.length >= 6}
+                      onClick={() => {
+                        setSources([
+                          ...sources,
+                          { label: `source${String(sources.length + 1)}`, text: "" },
+                        ]);
+                        invalidate();
+                      }}
+                    >
+                      Add source
+                    </button>
+                  </>
+                )}
                 <button
                   type="button"
-                  disabled={sources.length >= 6}
-                  onClick={() => {
-                    setSources([
-                      ...sources,
-                      { label: `source${String(sources.length + 1)}`, text: "" },
-                    ]);
-                    invalidate();
-                  }}
-                >
-                  Add source
-                </button>
-                <button
-                  type="button"
-                  disabled={!objective.trim()}
+                  disabled={!objective.trim() || (workflow === "coding_action" && !target)}
                   onClick={() =>
                     void action(async () => {
+                      const input = {
+                        workflow,
+                        objective,
+                        sources:
+                          workflow === "coding_action"
+                            ? []
+                            : [...sources.filter((s) => s.text.trim()), ...librarySources],
+                      };
                       setPreview(
-                        await client.prepare(room.id, {
-                          workflow,
-                          objective,
-                          sources: [...sources.filter((s) => s.text.trim()), ...librarySources],
-                        }),
+                        workflow === "coding_action" && target
+                          ? await client.prepare(room.id, input, {
+                              selection: target.selection,
+                              file: editFile,
+                              testFile,
+                            })
+                          : await client.prepare(room.id, input),
                       );
                       setAck(false);
                     })
@@ -440,6 +535,24 @@ export function CollaborationPage({
                       ? "Simulation only · no provider calls"
                       : "Live workflow · explicit approval required"}
                   </h3>
+                  {preview.run.action && (
+                    <>
+                      <p>
+                        Only the new file <code>{preview.run.action.file}</code> may be added. Fixed
+                        unittest command uses <code>{preview.run.action.testFile}</code>; 15-second
+                        execution, 128 MiB memory, 32 PIDs and 16 KiB output. The target remains
+                        unchanged until separate native approval.
+                      </p>
+                      <details>
+                        <summary>Selected original file sent to Coding</summary>
+                        <pre>{preview.run.action.original}</pre>
+                      </details>
+                      <details>
+                        <summary>Unchanged tests sent to Coding and executed in isolation</summary>
+                        <pre>{preview.run.action.tests}</pre>
+                      </details>
+                    </>
+                  )}
                   <ol>
                     {preview.run.stages.map((s) => (
                       <li key={s.id}>

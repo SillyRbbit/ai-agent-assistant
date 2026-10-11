@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1560 1456" role="img" aria-labelledby="title desc">
+<title id="title">07 · Security and outbound data</title><desc id="desc">Native typed boundaries; model text and WebView input remain untrusted. Roles/prompts are not enforced controls. A directory is not a sandbox. Runtime flags are not a full isolation audit. Prompt injection can influence text; schema validation does not establish truth.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#4758A2"/></marker></defs>
+<rect width="1560" height="1456" fill="#FBFBFB"/>
+<g font-family="Arial, Helvetica, sans-serif">
+<rect x="0" y="0" width="1560" height="112" fill="#252B71"/>
+<text x="40" y="47" font-size="30" font-weight="700" fill="#ffffff" text-anchor="start">07 · Security and outbound data</text>
+<text x="40" y="81" font-size="19" font-weight="400" fill="#ffffff" text-anchor="start">Native typed boundaries; model text and WebView input remain untrusted</text>
+<rect x="40" y="132" width="18" height="18" fill="#eef1fb" stroke="#4758A2"/>
+<text x="67" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Native</text>
+<rect x="131" y="132" width="18" height="18" fill="#e7f3f5" stroke="#326672"/>
+<text x="158" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Interface</text>
+<rect x="246" y="132" width="18" height="18" fill="#fff4db" stroke="#94642c"/>
+<text x="273" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Owner</text>
+<rect x="329" y="132" width="18" height="18" fill="#f8eaf3" stroke="#934873"/>
+<text x="356" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Remote</text>
+<rect x="420" y="132" width="18" height="18" fill="#e9f4eb" stroke="#42784e"/>
+<text x="447" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Stored</text>
+<rect x="511" y="132" width="18" height="18" fill="#f1eff7" stroke="#79628d" stroke-dasharray="6 4"/>
+<text x="538" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Separate foundation</text>
+<rect x="706" y="132" width="18" height="18" fill="#ffffff" stroke="#79628d" stroke-dasharray="6 4"/>
+<text x="733" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Deferred / unverified</text>
+<text x="40" y="190" font-size="20" font-weight="700" fill="#182033" text-anchor="start">Boundary A · WebView to native admission</text>
+<g data-component="OWNER"><rect x="40.0" y="214" width="426.6666666666667" height="204" rx="12" fill="#fff4db" stroke="#94642c" stroke-width="2"/>
+<text x="56.0" y="239" font-size="14" font-weight="700" fill="#94642c" text-anchor="start">OWNER</text>
+<text x="56.0" y="268" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Owner action</text>
+<text x="56.0" y="301" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Reviews content and authorizes sharing.</text>
+</g>
+<line x1="472.6666666666667" y1="318" x2="557.6666666666667" y2="318" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="516.6666666666667" y="275" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">untrusted</text>
+<text x="516.6666666666667" y="292" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">input</text>
+<g data-component="UI / RPC"><rect x="566.6666666666667" y="214" width="426.6666666666667" height="204" rx="12" fill="#e7f3f5" stroke="#326672" stroke-width="2"/>
+<text x="582.6666666666667" y="239" font-size="14" font-weight="700" fill="#326672" text-anchor="start">UI / RPC</text>
+<text x="582.6666666666667" y="268" font-size="19" font-weight="700" fill="#182033" text-anchor="start">WebView → Tauri</text>
+<text x="582.6666666666667" y="301" font-size="16" font-weight="400" fill="#182033" text-anchor="start">CSP + closed commands; native validation still</text>
+<text x="582.6666666666667" y="322" font-size="16" font-weight="400" fill="#182033" text-anchor="start">required.</text>
+</g>
+<line x1="999.3333333333335" y1="318" x2="1084.3333333333335" y2="318" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1043.3333333333335" y="275" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">typed</text>
+<text x="1043.3333333333335" y="292" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">request</text>
+<g data-component="CHAT / COORD"><rect x="1093.3333333333335" y="214" width="426.6666666666667" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="1109.3333333333335" y="239" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">CHAT / COORD</text>
+<text x="1109.3333333333335" y="268" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Native checks</text>
+<text x="1109.3333333333335" y="301" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Profile/source/serial identity, bounds and one</text>
+<text x="1109.3333333333335" y="322" font-size="16" font-weight="400" fill="#182033" text-anchor="start">lease.</text>
+</g>
+<text x="43" y="441" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">Evidence: RPC, CSP, CAP, CHAT, COORD</text>
+<text x="40" y="472" font-size="20" font-weight="700" fill="#182033" text-anchor="start">Boundary B · direct HTTPS route</text>
+<g data-component="API"><rect x="40.0" y="496" width="426.6666666666667" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="56.0" y="521" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">API</text>
+<text x="56.0" y="550" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Native key access</text>
+<text x="56.0" y="583" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Opt-in debug route; no key in WebView or</text>
+<text x="56.0" y="604" font-size="16" font-weight="400" fill="#182033" text-anchor="start">ordinary logs.</text>
+</g>
+<line x1="472.6666666666667" y1="600" x2="557.6666666666667" y2="600" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="516.6666666666667" y="557" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">HTTPS /</text>
+<text x="516.6666666666667" y="574" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">bounded text</text>
+<g data-component="REMOTE"><rect x="566.6666666666667" y="496" width="426.6666666666667" height="204" rx="12" fill="#f8eaf3" stroke="#934873" stroke-width="2"/>
+<text x="582.6666666666667" y="521" font-size="14" font-weight="700" fill="#934873" text-anchor="start">REMOTE</text>
+<text x="582.6666666666667" y="550" font-size="19" font-weight="700" fill="#182033" text-anchor="start">OpenAI Responses</text>
+<text x="582.6666666666667" y="583" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Selected context leaves device; store=false ≠</text>
+<text x="582.6666666666667" y="604" font-size="16" font-weight="400" fill="#182033" text-anchor="start">zero retention.</text>
+</g>
+<line x1="999.3333333333335" y1="600" x2="1084.3333333333335" y2="600" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1043.3333333333335" y="557" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">untrusted</text>
+<text x="1043.3333333333335" y="574" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">SSE</text>
+<g data-component="HOST / DIAG"><rect x="1093.3333333333335" y="496" width="426.6666666666667" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="1109.3333333333335" y="521" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">HOST / DIAG</text>
+<text x="1109.3333333333335" y="550" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Validated return</text>
+<text x="1109.3333333333335" y="583" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Strict parsing, bounds, fixed categories; no</text>
+<text x="1109.3333333333335" y="604" font-size="16" font-weight="400" fill="#182033" text-anchor="start">raw body.</text>
+</g>
+<text x="43" y="723" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">Evidence: API, HOST, DIAG</text>
+<text x="40" y="754" font-size="20" font-weight="700" fill="#182033" text-anchor="start">Boundary C · child runtime route</text>
+<g data-component="CODEX"><rect x="40.0" y="778" width="426.6666666666667" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="56.0" y="803" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">CODEX</text>
+<text x="56.0" y="832" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Cleared-env child</text>
+<text x="56.0" y="865" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Exact executable; dedicated home; file</text>
+<text x="56.0" y="886" font-size="16" font-weight="400" fill="#182033" text-anchor="start">credential store.</text>
+</g>
+<line x1="472.6666666666667" y1="882" x2="557.6666666666667" y2="882" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="516.6666666666667" y="839" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">stdio /</text>
+<text x="516.6666666666667" y="856" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">strict setup</text>
+<g data-component="RUNTIME"><rect x="566.6666666666667" y="778" width="426.6666666666667" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="582.6666666666667" y="803" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">RUNTIME</text>
+<text x="582.6666666666667" y="832" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Codex app-server</text>
+<text x="582.6666666666667" y="865" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Read-only, networkAccess=false thread; tool</text>
+<text x="582.6666666666667" y="886" font-size="16" font-weight="400" fill="#182033" text-anchor="start">calls rejected.</text>
+</g>
+<line x1="999.3333333333335" y1="882" x2="1084.3333333333335" y2="882" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1043.3333333333335" y="839" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">model</text>
+<text x="1043.3333333333335" y="856" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">request</text>
+<g data-component="REMOTE"><rect x="1093.3333333333335" y="778" width="426.6666666666667" height="204" rx="12" fill="#f8eaf3" stroke="#934873" stroke-width="2"/>
+<text x="1109.3333333333335" y="803" font-size="14" font-weight="700" fill="#934873" text-anchor="start">REMOTE</text>
+<text x="1109.3333333333335" y="832" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Provider account</text>
+<text x="1109.3333333333335" y="865" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Explicit model/account; no fallback; external</text>
+<text x="1109.3333333333335" y="886" font-size="16" font-weight="400" fill="#182033" text-anchor="start">retention.</text>
+</g>
+<text x="43" y="1005" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">Evidence: CODEX, ADAPTER</text>
+<text x="40" y="1036" font-size="20" font-weight="700" fill="#182033" text-anchor="start">Boundary D · local content and files</text>
+<g data-component="KNOW / DOCS"><rect x="40.0" y="1060" width="426.6666666666667" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="56.0" y="1085" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">KNOW / DOCS</text>
+<text x="56.0" y="1114" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Selected document IO</text>
+<text x="56.0" y="1147" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Owner dialogs, path identity/NOFOLLOW, bounds;</text>
+<text x="56.0" y="1168" font-size="16" font-weight="400" fill="#182033" text-anchor="start">no generic file tool.</text>
+</g>
+<line x1="472.6666666666667" y1="1164" x2="557.6666666666667" y2="1164" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="516.6666666666667" y="1121" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">content /</text>
+<text x="516.6666666666667" y="1138" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">hashes</text>
+<g data-component="DB / DIAG"><rect x="566.6666666666667" y="1060" width="426.6666666666667" height="204" rx="12" fill="#e9f4eb" stroke="#42784e" stroke-width="2"/>
+<text x="582.6666666666667" y="1085" font-size="14" font-weight="700" fill="#42784e" text-anchor="start">DB / DIAG</text>
+<text x="582.6666666666667" y="1114" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Private local storage</text>
+<text x="582.6666666666667" y="1147" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Private directory/diagnostics; no proven</text>
+<text x="582.6666666666667" y="1168" font-size="16" font-weight="400" fill="#182033" text-anchor="start">database encryption key.</text>
+</g>
+<line x1="999.3333333333335" y1="1164" x2="1084.3333333333335" y2="1164" stroke="#4758A2" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="1043.3333333333335" y="1121" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">no execution</text>
+<text x="1043.3333333333335" y="1138" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">link</text>
+<g data-component="POLICY / TOOLS"><rect x="1093.3333333333335" y="1060" width="426.6666666666667" height="204" rx="12" fill="#f1eff7" stroke="#79628d" stroke-width="2" stroke-dasharray="7 4"/>
+<text x="1109.3333333333335" y="1085" font-size="14" font-weight="700" fill="#79628d" text-anchor="start">POLICY / TOOLS</text>
+<text x="1109.3333333333335" y="1114" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Separate foundations</text>
+<text x="1109.3333333333335" y="1147" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Sealed approvals ≠ live arbitrary shell or</text>
+<text x="1109.3333333333335" y="1168" font-size="16" font-weight="400" fill="#182033" text-anchor="start">patch apply.</text>
+</g>
+<text x="43" y="1287" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">Evidence: DOCS, KNOW, DB, DIAG, POLICY, TOOLS</text>
+<text x="40" y="1352" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Roles/prompts are not enforced controls. A directory is not a sandbox. Runtime flags are not a full isolation audit. Prompt injection can influence text; schema</text>
+<text x="40" y="1374" font-size="16" font-weight="400" fill="#182033" text-anchor="start">validation does not establish truth.</text>
+<text x="40" y="1434" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">CORTEXA  /  Source bc12776412c7  /  2026-10-07  /  Solid arrows: stated flow; dashed lines: comparison or unwired boundary</text>
+</g>
+</svg>

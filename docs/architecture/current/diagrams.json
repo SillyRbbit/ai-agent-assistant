@@ -1,0 +1,1059 @@
+{
+  "schema_version": 1,
+  "source_commit": "bc12776412c717613de1fdc42c38bf3312493726",
+  "diagrams": [
+    {
+      "slug": "01-system",
+      "title": "01 \u00b7 System overview",
+      "subtitle": "Local desktop coordination, explicit provider boundaries, no general device executor",
+      "rows": [
+        {
+          "label": "Interactive request \u00b7 WebView data is untrusted",
+          "nodes": [
+            {
+              "id": "OWNER",
+              "title": "Owner",
+              "body": "Chooses bot, context and connection; acknowledges sharing.",
+              "kind": "owner"
+            },
+            {
+              "id": "UI",
+              "title": "Desktop interface",
+              "body": "React / Bots / Collaboration / Knowledge / Command Center.",
+              "kind": "ui"
+            },
+            {
+              "id": "RPC",
+              "title": "Typed Tauri commands",
+              "body": "Closed command list. Native validation owns admission.",
+              "kind": "native"
+            },
+            {
+              "id": "CHAT / COORD",
+              "title": "Native owners",
+              "body": "One generation lease; bot chat or fixed sequential room.",
+              "kind": "native"
+            }
+          ],
+          "arrows": ["input + approval", "typed requests", "validated settings"],
+          "refs": ["UI", "RPC", "CHAT", "COORD"]
+        },
+        {
+          "label": "Outbound alternatives \u00b7 local transport crosses into an external service",
+          "nodes": [
+            {
+              "id": "ADAPTER",
+              "title": "Closed dispatch",
+              "body": "Simulation, OpenAI, Codex, Anthropic, LM Studio or Ollama.",
+              "kind": "native"
+            },
+            {
+              "id": "API / CODEX",
+              "title": "API or child runtime",
+              "body": "API: native HTTPS. Codex: cleared-env child + dedicated home.",
+              "kind": "native"
+            },
+            {
+              "id": "REMOTE",
+              "title": "Model service",
+              "body": "Receives selected context. External retention and billing.",
+              "kind": "remote"
+            }
+          ],
+          "arrows": ["selected request", "request / context"],
+          "refs": ["ADAPTER", "API", "CODEX", "CLAUDE", "LOCAL"]
+        },
+        {
+          "label": "Explicit persistence \u00b7 selected content, not automatic learning",
+          "nodes": [
+            {
+              "id": "PROFILE / KNOW",
+              "title": "Profiles + Knowledge",
+              "body": "Revisions, private notes, document versions and source hashes.",
+              "kind": "native"
+            },
+            {
+              "id": "DB",
+              "title": "App-local SQLite",
+              "body": "Profiles, Knowledge and rooms persist; bot-chat transcript volatile.",
+              "kind": "store"
+            },
+            {
+              "id": "ROOM_DB / DIAG",
+              "title": "Distinct records",
+              "body": "Contentful room snapshots; separate content-free diagnostics.",
+              "kind": "store"
+            }
+          ],
+          "arrows": ["Save / local reads", "separate records"],
+          "refs": ["PROFILE_DB", "KNOW_DB", "DB", "ROOM_DB", "DIAG"]
+        },
+        {
+          "label": "Execution boundary \u00b7 foundations are not a live tools pipeline",
+          "nodes": [
+            {
+              "id": "FOUNDATION",
+              "title": "NativeAgentRuntime",
+              "body": "Transport-free tested foundation; not the live adapter selector.",
+              "kind": "foundation"
+            },
+            {
+              "id": "TOOLS / POLICY",
+              "title": "Authority foundations",
+              "body": "Two tool schemas; deterministic policy and sealed approvals.",
+              "kind": "foundation"
+            },
+            {
+              "id": "DEVICE",
+              "title": "No generic executor",
+              "body": "No arbitrary shell, file-write bot, patch apply or cloud deployment.",
+              "kind": "boundary"
+            }
+          ],
+          "arrows": ["separate contracts", "no live wiring"],
+          "refs": ["FOUNDATION", "TOOLS", "POLICY", "APPROVAL"]
+        }
+      ],
+      "note": "Rows show distinct paths, not one serial workflow. Anthropic/local adapters have code and offline coverage; the accepted live matrix is OpenAI/Codex. Legacy Conversations includes mocks and a fixed native sample.",
+      "evidence": "Live-provider final review; inherited UI/UX verification. Native acceptance is bounded to recorded models, settings and minimum Research-route scope."
+    },
+    {
+      "slug": "02-sequence",
+      "title": "02 \u00b7 Prompt to completion",
+      "subtitle": "Single-bot native path; numbered rows continue in order",
+      "rows": [
+        {
+          "label": "1\u20133 \u00b7 Before generation",
+          "nodes": [
+            {
+              "id": "OWNER",
+              "title": "1 \u00b7 Select and review",
+              "body": "Bots \u2192 saved profile \u2192 fresh conversation.",
+              "kind": "owner"
+            },
+            {
+              "id": "PROFILE",
+              "title": "2 \u00b7 Capture revision",
+              "body": "Connection, model, effort, identity, instructions and memory.",
+              "kind": "native"
+            },
+            {
+              "id": "CTX",
+              "title": "3 \u00b7 Build context",
+              "body": "Role + untrusted owner context + completed turns; Off omits note.",
+              "kind": "native"
+            }
+          ],
+          "arrows": ["start conversation", "captured settings"],
+          "refs": ["UI", "PROFILE", "CTX"]
+        },
+        {
+          "label": "4\u20136 \u00b7 Native admission",
+          "nodes": [
+            {
+              "id": "UI",
+              "title": "4 \u00b7 Acknowledge Send",
+              "body": "Exact prompt and context-sharing acknowledgement.",
+              "kind": "ui"
+            },
+            {
+              "id": "CHAT",
+              "title": "5 \u00b7 Validate + lease",
+              "body": "Reject stale revision, busy ownership or invalid bounds.",
+              "kind": "native"
+            },
+            {
+              "id": "ADAPTER",
+              "title": "6 \u00b7 Resolve runtime",
+              "body": "No silent model/provider fallback. Native credentials only.",
+              "kind": "native"
+            }
+          ],
+          "arrows": ["typed send", "validated request"],
+          "refs": ["UI", "CHAT", "ADAPTER"]
+        },
+        {
+          "label": "7\u20139 \u00b7 Selected runtime only",
+          "nodes": [
+            {
+              "id": "API / CODEX",
+              "title": "7 \u00b7 Execute",
+              "body": "API: HTTPS Responses. Codex: authenticated app-server child.",
+              "kind": "native"
+            },
+            {
+              "id": "HOST",
+              "title": "8 \u00b7 Accept events",
+              "body": "Started / Delta / Completed; validate stream and termination.",
+              "kind": "native"
+            },
+            {
+              "id": "UI",
+              "title": "9 \u00b7 Poll snapshot",
+              "body": "250 ms while busy; accepted text and accurate terminal status.",
+              "kind": "ui"
+            }
+          ],
+          "arrows": ["normalized events", "snapshot IPC"],
+          "refs": ["API", "CODEX", "HOST", "CHAT", "UI"]
+        },
+        {
+          "label": "10\u201312 \u00b7 Settlement",
+          "nodes": [
+            {
+              "id": "CHAT",
+              "title": "10 \u00b7 Release ownership",
+              "body": "Abort/join or verified completion; release generation lease.",
+              "kind": "native"
+            },
+            {
+              "id": "CTX",
+              "title": "11 \u00b7 Follow-up context",
+              "body": "Completed turns retained in memory; stopped/error \u2192 new conversation.",
+              "kind": "native"
+            },
+            {
+              "id": "DIAG",
+              "title": "12 \u00b7 Sanitized record",
+              "body": "Hashed request ID, categories and timings; no durable bot transcript.",
+              "kind": "store"
+            }
+          ],
+          "arrows": ["terminal result", "fixed diagnostics"],
+          "refs": ["CHAT", "CTX", "DIAG"]
+        }
+      ],
+      "note": "No general tool-action stage exists here. Simulation needs no remote authentication. Collaboration instead persists room snapshots. Partial text alone does not prove completion.",
+      "evidence": "Adapter/host regressions plus native API/Codex completion, streaming and follow-up. Corrected Codex file-store and saved-low recheck separately retained."
+    },
+    {
+      "slug": "03-collaboration",
+      "title": "03 \u00b7 Collaboration routes and delivery",
+      "subtitle": "COORD is deterministic application coordination; every live route is sequential",
+      "rows": [
+        {
+          "label": "Research \u00b7 four model stages \u00b7 retained minimum live route",
+          "nodes": [
+            {
+              "id": "BOT.PA",
+              "title": "Personal Assistant",
+              "body": "Frame objective.",
+              "kind": "native"
+            },
+            {
+              "id": "BOT.RESEARCH",
+              "title": "Research",
+              "body": "Analyze supplied evidence.",
+              "kind": "native"
+            },
+            {
+              "id": "BOT.KNOWLEDGE",
+              "title": "Knowledge & Document",
+              "body": "Organize attributed synthesis.",
+              "kind": "native"
+            },
+            {
+              "id": "BOT.PA",
+              "title": "Personal Assistant",
+              "body": "Deliver final advice.",
+              "kind": "native"
+            }
+          ],
+          "arrows": ["handoff", "handoff", "handoff"],
+          "refs": ["ROUTES", "COORD"]
+        },
+        {
+          "label": "Engineering \u00b7 five stages \u00b7 other live variant not accepted by Research evidence",
+          "nodes": [
+            {
+              "id": "BOT.PA",
+              "title": "Personal Assistant",
+              "body": "Frame task.",
+              "kind": "native"
+            },
+            {
+              "id": "BOT.CODE",
+              "title": "Coding",
+              "body": "Propose code; no execution.",
+              "kind": "native"
+            },
+            {
+              "id": "BOT.QA",
+              "title": "QA & Validation",
+              "body": "Assess evidence; no test run.",
+              "kind": "native"
+            },
+            {
+              "id": "BOT.SECURITY",
+              "title": "Security & Risk",
+              "body": "Advisory review.",
+              "kind": "native"
+            },
+            {
+              "id": "BOT.PA",
+              "title": "Personal Assistant",
+              "body": "Final advice.",
+              "kind": "native"
+            }
+          ],
+          "arrows": ["handoff", "handoff", "handoff", "handoff"],
+          "refs": ["ROUTES", "CATALOG"]
+        },
+        {
+          "label": "Operations \u00b7 five stages \u00b7 advice, not machine administration",
+          "nodes": [
+            {
+              "id": "BOT.PA",
+              "title": "Personal Assistant",
+              "body": "Frame task.",
+              "kind": "native"
+            },
+            {
+              "id": "BOT.CLOUD",
+              "title": "Cloud Infrastructure",
+              "body": "Assess supplied configuration.",
+              "kind": "native"
+            },
+            {
+              "id": "BOT.SYSTEMS",
+              "title": "Systems Operations",
+              "body": "Propose diagnostics.",
+              "kind": "native"
+            },
+            {
+              "id": "BOT.SECURITY",
+              "title": "Security & Risk",
+              "body": "Advisory review.",
+              "kind": "native"
+            },
+            {
+              "id": "BOT.PA",
+              "title": "Personal Assistant",
+              "body": "Final advice.",
+              "kind": "native"
+            }
+          ],
+          "arrows": ["handoff", "handoff", "handoff", "handoff"],
+          "refs": ["ROUTES", "CATALOG"]
+        },
+        {
+          "label": "Proposal \u00b7 four stages \u00b7 no autonomous scheduler",
+          "nodes": [
+            {
+              "id": "BOT.PA",
+              "title": "Personal Assistant",
+              "body": "Frame task.",
+              "kind": "native"
+            },
+            {
+              "id": "BOT.WORKFLOW",
+              "title": "Workflow Automation",
+              "body": "Propose steps.",
+              "kind": "native"
+            },
+            {
+              "id": "BOT.QA",
+              "title": "QA & Validation",
+              "body": "Review proposal.",
+              "kind": "native"
+            },
+            {
+              "id": "BOT.PA",
+              "title": "Personal Assistant",
+              "body": "Final advice.",
+              "kind": "native"
+            }
+          ],
+          "arrows": ["handoff", "handoff", "handoff"],
+          "refs": ["ROUTES", "CATALOG"]
+        },
+        {
+          "label": "Common envelope \u00b7 sharing approval is not patch-apply authority",
+          "nodes": [
+            {
+              "id": "ROOM_UI",
+              "title": "Owner preview",
+              "body": "Objective, explicit sources and captured participants.",
+              "kind": "ui"
+            },
+            {
+              "id": "COORD",
+              "title": "Native Start",
+              "body": "Recheck serial/revisions/sources, acknowledge, acquire lease.",
+              "kind": "native"
+            },
+            {
+              "id": "ROOM_DB",
+              "title": "Validated delivery",
+              "body": "Persist results; failed/partial/cancel stops route.",
+              "kind": "store"
+            },
+            {
+              "id": "KNOW",
+              "title": "Optional draft / Save",
+              "body": "Owner reviews model-generated draft before Save.",
+              "kind": "native"
+            }
+          ],
+          "arrows": ["acknowledge", "stage results", "owner action"],
+          "refs": ["COORD", "ROOM_DB", "KNOW"]
+        }
+      ],
+      "note": "No parallel model agents in these routes. Handoff validation is not factual verification. A Security bot cannot override native policy. Foundation parallelism is separate.",
+      "evidence": "Fixed-route/schema/lifecycle tests; API/Codex Research minimum native route only. Other live workflow/provider combinations remain untested."
+    },
+    {
+      "slug": "04-context",
+      "title": "04 \u00b7 Identity, instructions and memory",
+      "subtitle": "Separate stores and sharing rules; none grants device authority",
+      "rows": [
+        {
+          "label": "Saved personality and settings",
+          "nodes": [
+            {
+              "id": "OWNER",
+              "title": "Explicit profile Save",
+              "body": "Name, description, avatar/color, personality and runtime settings.",
+              "kind": "owner"
+            },
+            {
+              "id": "PROFILE / DB",
+              "title": "Revision-bound profile",
+              "body": "Owner instructions and private note are separate fields.",
+              "kind": "store"
+            },
+            {
+              "id": "CTX",
+              "title": "Request construction",
+              "body": "Canonical role + communication context; stale revision rejected.",
+              "kind": "native"
+            }
+          ],
+          "arrows": ["validated profile", "captured revision"],
+          "refs": ["PROFILE", "PROFILE_DB", "CTX"]
+        },
+        {
+          "label": "Private note \u00b7 optional prompt context, not automatic learning",
+          "nodes": [
+            {
+              "id": "PROFILE",
+              "title": "Memory Off / On",
+              "body": "Off keeps stored note but excludes it from bot input.",
+              "kind": "native"
+            },
+            {
+              "id": "CTX",
+              "title": "Private context",
+              "body": "On includes bounded note. Collaboration always clears it.",
+              "kind": "native"
+            },
+            {
+              "id": "ADAPTER",
+              "title": "Outbound context",
+              "body": "Instructions, documents and bot text remain untrusted.",
+              "kind": "native"
+            }
+          ],
+          "arrows": ["conditional inclusion", "serialized request"],
+          "refs": ["PROFILE", "CTX", "ADAPTER"]
+        },
+        {
+          "label": "History versus shared Knowledge",
+          "nodes": [
+            {
+              "id": "CTX",
+              "title": "Completed chat turns",
+              "body": "Volatile, bounded follow-up; not durable storage.",
+              "kind": "native"
+            },
+            {
+              "id": "KNOW",
+              "title": "Selected documents",
+              "body": "Version/passage/hash attribution; local keyword search.",
+              "kind": "native"
+            },
+            {
+              "id": "COORD",
+              "title": "Shared room context",
+              "body": "Objective + selected excerpts + prior handoffs. No private notes.",
+              "kind": "native"
+            }
+          ],
+          "arrows": ["distinct context types", "explicit source selection"],
+          "refs": ["CTX", "KNOW_DB", "COORD"]
+        },
+        {
+          "label": "Skills and future memory are separate",
+          "nodes": [
+            {
+              "id": "CATALOG",
+              "title": "Role descriptions",
+              "body": "Canonical purposes; not executable skill loading.",
+              "kind": "native"
+            },
+            {
+              "id": "MEMORY",
+              "title": "Grant-based foundation",
+              "body": "Private/task/shared contracts; no automatic live learning.",
+              "kind": "foundation"
+            },
+            {
+              "id": "ECC",
+              "title": "Development-only skills",
+              "body": "Codex plugin; not shipped in Cortexa model requests.",
+              "kind": "boundary"
+            }
+          ],
+          "arrows": ["separate foundation", "no runtime integration"],
+          "refs": ["CATALOG", "MEMORY", "PLAN"]
+        }
+      ],
+      "note": "Knowledge provides Markdown, versions, stable links, bounded graph and owner import/export. No embedding retrieval, external vault sync or automatic private-memory learning is established.",
+      "evidence": "Profile/context/storage/Knowledge tests. Six-screen owner aesthetic approval is distinct from ordinary Knowledge-workflow comfort. No personal database inspected."
+    },
+    {
+      "slug": "05-lifecycle",
+      "title": "05 \u00b7 Lifecycle and failure handling",
+      "subtitle": "Exact state vocabularies differ between host, bot UI and persisted rooms",
+      "rows": [
+        {
+          "label": "HOST \u00b7 successful generation",
+          "nodes": [
+            {
+              "id": "HOST",
+              "title": "Starting",
+              "body": "Request admitted under lease.",
+              "kind": "native"
+            },
+            {
+              "id": "HOST",
+              "title": "Streaming",
+              "body": "Accepted bounded Delta events accumulate partial text.",
+              "kind": "native"
+            },
+            {
+              "id": "HOST",
+              "title": "Completed",
+              "body": "Explicit terminal AND successful transport settlement.",
+              "kind": "native"
+            },
+            {
+              "id": "CHAT",
+              "title": "UI completed",
+              "body": "Completed context may support follow-up.",
+              "kind": "native"
+            }
+          ],
+          "arrows": ["Started + Delta", "valid terminal", "settled snapshot"],
+          "refs": ["HOST", "CHAT"]
+        },
+        {
+          "label": "HOST \u00b7 active cancellation",
+          "nodes": [
+            {
+              "id": "UI",
+              "title": "Stop action",
+              "body": "Cancel owned active generation.",
+              "kind": "ui"
+            },
+            {
+              "id": "HOST",
+              "title": "Cancelling",
+              "body": "Close ingress; abort/join; preserve accepted partial text.",
+              "kind": "native"
+            },
+            {
+              "id": "HOST",
+              "title": "Cancelled",
+              "body": "Native cancellation settled; release lease.",
+              "kind": "native"
+            },
+            {
+              "id": "CHAT",
+              "title": "UI stopped",
+              "body": "New conversation; late/repeated Stop preserves terminal.",
+              "kind": "native"
+            }
+          ],
+          "arrows": ["owned cancel", "joined termination", "mapped snapshot"],
+          "refs": ["CHAT", "HOST", "UI"]
+        },
+        {
+          "label": "HOST \u00b7 independent failure",
+          "nodes": [
+            {
+              "id": "ADAPTER",
+              "title": "Transport / protocol error",
+              "body": "Incomplete, timeout, limit, billing, auth or malformed stream.",
+              "kind": "native"
+            },
+            {
+              "id": "HOST",
+              "title": "Failed",
+              "body": "Preserve partial text plus fixed reason; not completion.",
+              "kind": "native"
+            },
+            {
+              "id": "CHAT",
+              "title": "UI error",
+              "body": "No automatic retry/fallback. New conversation for recovery.",
+              "kind": "native"
+            }
+          ],
+          "arrows": ["fixed category", "sanitized status"],
+          "refs": ["ADAPTER", "API", "HOST", "CHAT"]
+        },
+        {
+          "label": "ROOM_DB \u00b7 durable collaboration states",
+          "nodes": [
+            {
+              "id": "COORD",
+              "title": "Queued \u2192 Running",
+              "body": "Sequential stage progression.",
+              "kind": "native"
+            },
+            {
+              "id": "ROOM_DB",
+              "title": "Terminal variants",
+              "body": "Completed / Failed / Cancelled / Partial.",
+              "kind": "store"
+            },
+            {
+              "id": "ROOM_DB",
+              "title": "Interrupted on restart",
+              "body": "Only unfinished stored runs become Interrupted; terminal runs unchanged.",
+              "kind": "store"
+            }
+          ],
+          "arrows": ["validated results", "separate restart path"],
+          "refs": ["ROUTES", "COORD", "ROOM_DB"]
+        }
+      ],
+      "note": "Awaiting approval belongs to synthetic/foundation workflows, not this live machine. Journal cap128 and text/token/time limits remain. Local Stop cannot prove zero remote billing or server cancellation.",
+      "evidence": "Native cancel/recovery/UI terminal stability retained. Precise backend race ordering is controlled-regression evidence, not a screenshot claim. Historical failures remain failures."
+    },
+    {
+      "slug": "06-observability",
+      "title": "06 \u00b7 Observability and graph updates",
+      "subtitle": "Observable state and outputs; never private model thoughts",
+      "rows": [
+        {
+          "label": "Bot chat \u00b7 polling, not a WebView provider subscription",
+          "nodes": [
+            {
+              "id": "ADAPTER",
+              "title": "Provider events",
+              "body": "Native parsing of untrusted frames.",
+              "kind": "native"
+            },
+            {
+              "id": "HOST",
+              "title": "Accepted snapshot",
+              "body": "Bounded text, sequence and terminal category.",
+              "kind": "native"
+            },
+            {
+              "id": "UI",
+              "title": "Bot-chat view",
+              "body": "Poll 250 ms while busy; reject stale epoch updates.",
+              "kind": "ui"
+            }
+          ],
+          "arrows": ["validated events", "typed snapshot"],
+          "refs": ["ADAPTER", "HOST", "UI"]
+        },
+        {
+          "label": "Collaboration \u00b7 one source for room and graph",
+          "nodes": [
+            {
+              "id": "COORD",
+              "title": "Stage event",
+              "body": "Provisional text + validated handoff or terminal.",
+              "kind": "native"
+            },
+            {
+              "id": "ROOM_DB",
+              "title": "Stored snapshot",
+              "body": "Persist run and stage state.",
+              "kind": "store"
+            },
+            {
+              "id": "SNAP",
+              "title": "Shared poll store",
+              "body": "List 400 ms while queued/running.",
+              "kind": "native"
+            },
+            {
+              "id": "GRAPH / CENTER",
+              "title": "Room + Command Center",
+              "body": "Projection/inspector/history; freshness labels.",
+              "kind": "ui"
+            }
+          ],
+          "arrows": ["accepted state", "list IPC", "same data"],
+          "refs": ["COORD", "ROOM_DB", "SNAP", "GRAPH", "CENTER"]
+        },
+        {
+          "label": "Content-free operational diagnostics",
+          "nodes": [
+            {
+              "id": "CHAT / COORD",
+              "title": "Lifecycle observation",
+              "body": "First text, terminal, cleanup and category.",
+              "kind": "native"
+            },
+            {
+              "id": "DIAG",
+              "title": "Bounded journal",
+              "body": "Hashed IDs; rotation and restrictive file handling.",
+              "kind": "store"
+            },
+            {
+              "id": "DIAG_UI",
+              "title": "Local diagnostics",
+              "body": "Sanitized list; owner-controlled export.",
+              "kind": "ui"
+            }
+          ],
+          "arrows": ["fixed record", "read / export"],
+          "refs": ["DIAG", "DIAG_IPC", "DIAG_UI"]
+        },
+        {
+          "label": "Presentation and distinct QA evidence",
+          "nodes": [
+            {
+              "id": "GRAPH",
+              "title": "Accepted run state",
+              "body": "Edges: coordination, dependency or handoff.",
+              "kind": "native"
+            },
+            {
+              "id": "CONDUCTOR / ART",
+              "title": "Status animation",
+              "body": "Working/success feedback; reduced-motion support.",
+              "kind": "ui"
+            },
+            {
+              "id": "QA",
+              "title": "External receipts",
+              "body": "Ledger 33 is QA accounting, not product cost metering.",
+              "kind": "boundary"
+            }
+          ],
+          "arrows": ["derived visuals", "separate evidence"],
+          "refs": ["GRAPH", "CONDUCTOR", "ART", "REVIEW"]
+        }
+      ],
+      "note": "Mock tool events and deterministic demo graphs are separate. Diagnostics are not immutable audit, raw provider logs or a billing ledger. No generic live tool results feed this graph.",
+      "evidence": "Projection/freshness/animation tests; retained native snapshots and UI inspection. Computer Use is app-scoped, not CoreGraphics-ID-directed input."
+    },
+    {
+      "slug": "07-security",
+      "title": "07 \u00b7 Security and outbound data",
+      "subtitle": "Native typed boundaries; model text and WebView input remain untrusted",
+      "rows": [
+        {
+          "label": "Boundary A \u00b7 WebView to native admission",
+          "nodes": [
+            {
+              "id": "OWNER",
+              "title": "Owner action",
+              "body": "Reviews content and authorizes sharing.",
+              "kind": "owner"
+            },
+            {
+              "id": "UI / RPC",
+              "title": "WebView \u2192 Tauri",
+              "body": "CSP + closed commands; native validation still required.",
+              "kind": "ui"
+            },
+            {
+              "id": "CHAT / COORD",
+              "title": "Native checks",
+              "body": "Profile/source/serial identity, bounds and one lease.",
+              "kind": "native"
+            }
+          ],
+          "arrows": ["untrusted input", "typed request"],
+          "refs": ["RPC", "CSP", "CAP", "CHAT", "COORD"]
+        },
+        {
+          "label": "Boundary B \u00b7 direct HTTPS route",
+          "nodes": [
+            {
+              "id": "API",
+              "title": "Native key access",
+              "body": "Opt-in debug route; no key in WebView or ordinary logs.",
+              "kind": "native"
+            },
+            {
+              "id": "REMOTE",
+              "title": "OpenAI Responses",
+              "body": "Selected context leaves device; store=false \u2260 zero retention.",
+              "kind": "remote"
+            },
+            {
+              "id": "HOST / DIAG",
+              "title": "Validated return",
+              "body": "Strict parsing, bounds, fixed categories; no raw body.",
+              "kind": "native"
+            }
+          ],
+          "arrows": ["HTTPS / bounded text", "untrusted SSE"],
+          "refs": ["API", "HOST", "DIAG"]
+        },
+        {
+          "label": "Boundary C \u00b7 child runtime route",
+          "nodes": [
+            {
+              "id": "CODEX",
+              "title": "Cleared-env child",
+              "body": "Exact executable; dedicated home; file credential store.",
+              "kind": "native"
+            },
+            {
+              "id": "RUNTIME",
+              "title": "Codex app-server",
+              "body": "Read-only, networkAccess=false thread; tool calls rejected.",
+              "kind": "native"
+            },
+            {
+              "id": "REMOTE",
+              "title": "Provider account",
+              "body": "Explicit model/account; no fallback; external retention.",
+              "kind": "remote"
+            }
+          ],
+          "arrows": ["stdio / strict setup", "model request"],
+          "refs": ["CODEX", "ADAPTER"]
+        },
+        {
+          "label": "Boundary D \u00b7 local content and files",
+          "nodes": [
+            {
+              "id": "KNOW / DOCS",
+              "title": "Selected document IO",
+              "body": "Owner dialogs, path identity/NOFOLLOW, bounds; no generic file tool.",
+              "kind": "native"
+            },
+            {
+              "id": "DB / DIAG",
+              "title": "Private local storage",
+              "body": "Private directory/diagnostics; no proven database encryption key.",
+              "kind": "store"
+            },
+            {
+              "id": "POLICY / TOOLS",
+              "title": "Separate foundations",
+              "body": "Sealed approvals \u2260 live arbitrary shell or patch apply.",
+              "kind": "foundation"
+            }
+          ],
+          "arrows": ["content / hashes", "no execution link"],
+          "refs": ["DOCS", "KNOW", "DB", "DIAG", "POLICY", "TOOLS"]
+        }
+      ],
+      "note": "Roles/prompts are not enforced controls. A directory is not a sandbox. Runtime flags are not a full isolation audit. Prompt injection can influence text; schema validation does not establish truth.",
+      "evidence": "Closed-boundary/privacy regressions retained. This is source-based architecture documentation, not a complete security audit. See security.md for detailed evidence."
+    },
+    {
+      "slug": "08-delivery",
+      "title": "08 \u00b7 Development and delivery",
+      "subtitle": "Development pipeline is separate from native request execution",
+      "rows": [
+        {
+          "label": "Owner-approved local increment",
+          "nodes": [
+            {
+              "id": "DEV",
+              "title": "Source + exact scope",
+              "body": "Preserve work; ordinary admission and living plan.",
+              "kind": "owner"
+            },
+            {
+              "id": "CHECKS",
+              "title": "Risk-based validation",
+              "body": "Focused checks then required verify/docs/security.",
+              "kind": "native"
+            },
+            {
+              "id": "GATE",
+              "title": "Reviews + full Stop",
+              "body": "Fingerprint-bound report; truthful complete/failed state.",
+              "kind": "native"
+            }
+          ],
+          "arrows": ["bounded edits", "frozen evidence"],
+          "refs": ["NPM", "REVIEW"]
+        },
+        {
+          "label": "Publication \u00b7 separately authorized",
+          "nodes": [
+            {
+              "id": "GIT",
+              "title": "Commit + PR",
+              "body": "Exact parent/diff; no automatic publication.",
+              "kind": "native"
+            },
+            {
+              "id": "CI",
+              "title": "Self-hosted checks",
+              "body": "Linux X64 + macOS ARM64; cortexa-ci labels.",
+              "kind": "native"
+            },
+            {
+              "id": "MERGE",
+              "title": "Approved squash",
+              "body": "Required checks/reviews; retain failed attempts.",
+              "kind": "native"
+            }
+          ],
+          "arrows": ["exact head", "reported results"],
+          "refs": ["CI", "DOC_CI"]
+        },
+        {
+          "label": "Build and artifact provenance",
+          "nodes": [
+            {
+              "id": "NPM",
+              "title": "Frontend build",
+              "body": "TypeScript/Vite \u2192 dist; browser \u2260 native Rust QA.",
+              "kind": "native"
+            },
+            {
+              "id": "TAURI",
+              "title": "Native bundle",
+              "body": "Installed tooling; process-local Python/SDK27/Cargo workaround.",
+              "kind": "native"
+            },
+            {
+              "id": "ARTIFACT",
+              "title": "Isolated QA artifact",
+              "body": "External config/output + source/dist/executable/resource hashes.",
+              "kind": "store"
+            }
+          ],
+          "arrows": ["assets", "native package"],
+          "refs": ["NPM", "DEPS", "REVIEW"]
+        },
+        {
+          "label": "Private development boundary",
+          "nodes": [
+            {
+              "id": "QA",
+              "title": "Owner/native QA",
+              "body": "Isolated identity; sanitized receipts; ledger33.",
+              "kind": "native"
+            },
+            {
+              "id": "REVIEW",
+              "title": "Evidence acceptance",
+              "body": "Automated vs native vs owner-reported vs untested.",
+              "kind": "native"
+            },
+            {
+              "id": "RELEASE",
+              "title": "No release claim",
+              "body": "Signing/notarization/public release not established.",
+              "kind": "boundary"
+            }
+          ],
+          "arrows": ["bounded results", "not release authority"],
+          "refs": ["REVIEW", "UI_REVIEW", "CI"]
+        }
+      ],
+      "note": "CI content permissions are read-only; ordinary jobs make no live requests. Self-hosted administration is an external trust boundary. No product tests/builds/live requests repeated for these diagrams.",
+      "evidence": "Retained full verification, corrected Codex A/B recheck, and six successful post-merge jobs. Earlier Linux failures remain historical failures."
+    },
+    {
+      "slug": "09-future",
+      "title": "09 \u00b7 Future and separate foundations",
+      "subtitle": "Dashed nodes are not current live integration claims",
+      "rows": [
+        {
+          "label": "Tested foundations \u00b7 not a general live executor",
+          "nodes": [
+            {
+              "id": "FOUNDATION",
+              "title": "NativeAgentRuntime",
+              "body": "Bounded typed foundation.",
+              "kind": "foundation"
+            },
+            {
+              "id": "PARALLEL",
+              "title": "Bounded parallelism",
+              "body": "Foundation tests; live routes remain sequential.",
+              "kind": "foundation"
+            },
+            {
+              "id": "MEMORY",
+              "title": "Grant-based memory",
+              "body": "Private/task/shared scope contracts.",
+              "kind": "foundation"
+            },
+            {
+              "id": "POLICY / APPROVAL",
+              "title": "Authority contracts",
+              "body": "Deterministic policy + single-use approval.",
+              "kind": "foundation"
+            }
+          ],
+          "arrows": ["foundation", "contracts", "authority"],
+          "refs": ["FOUNDATION", "PARALLEL", "MEMORY", "APPROVAL"]
+        },
+        {
+          "label": "External runtime direction \u00b7 evaluation only",
+          "nodes": [
+            {
+              "id": "HERMES",
+              "title": "HermesAgentRuntime",
+              "body": "Deferred/Blocked; later assessment NO-GO.",
+              "kind": "deferred"
+            },
+            {
+              "id": "OPENCLAW",
+              "title": "OpenClaw",
+              "body": "Reference/evaluation mechanisms only.",
+              "kind": "deferred"
+            },
+            {
+              "id": "FRAMEWORKS",
+              "title": "Other frameworks",
+              "body": "Agent Zero/OpenHands/CrewAI integration not evidenced.",
+              "kind": "deferred"
+            }
+          ],
+          "arrows": ["no integration", "no integration"],
+          "refs": ["HERMES", "NATIVE_PLAN", "PLAN"]
+        },
+        {
+          "label": "Not established in current application",
+          "nodes": [
+            {
+              "id": "EXECUTOR",
+              "title": "Device work",
+              "body": "Generic shell, cloud mutations, patch apply and scheduling.",
+              "kind": "deferred"
+            },
+            {
+              "id": "RETRIEVAL",
+              "title": "Automatic learning / RAG",
+              "body": "No embedding index, autonomous learning or external vault sync.",
+              "kind": "deferred"
+            },
+            {
+              "id": "RELEASE",
+              "title": "Public distribution",
+              "body": "Signing/notarization/deployment need separate scope.",
+              "kind": "deferred"
+            }
+          ],
+          "arrows": ["no current wiring", "no current wiring"],
+          "refs": ["RPC", "TOOLS", "KNOW_DB", "CI"]
+        }
+      ],
+      "note": "Dashed connectors compare separate capabilities or directions; they are not runtime dataflow. D-125/M1/M2 stay parked. This document grants no future admission or implementation authority.",
+      "evidence": "Architecture/decision records and negative source/manifests inspection. Discussed patterns or historical experiments are not current runtime integrations."
+    }
+  ]
+}

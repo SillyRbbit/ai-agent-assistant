@@ -12,6 +12,7 @@ pub(crate) const MAX_OUTPUT: usize = 16_384;
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub(crate) enum Workflow {
+    CodingAction,
     Research,
     Engineering,
     Operations,
@@ -21,6 +22,7 @@ pub(crate) enum Workflow {
 impl Workflow {
     fn outcome(self) -> &'static str {
         match self {
+            Self::CodingAction => "One isolated file change with actual checks, followed by separate native owner approval.",
             Self::Research => "Organized brief with supplied-source references, uncertainties and recommendations.",
             Self::Engineering => "Proposed solution, validation assessment, security findings and consolidated recommendation.",
             Self::Operations => "Infrastructure assessment, proposed operational procedure, risks and consolidated recommendation.",
@@ -29,6 +31,7 @@ impl Workflow {
     }
     pub(crate) fn route(self) -> &'static [&'static str] {
         match self {
+            Self::CodingAction => &["coding", "qa-validation"],
             Self::Research => &[
                 "personal-assistant",
                 "research",
@@ -172,6 +175,151 @@ pub(crate) struct Handoff {
     pub(crate) evidence: Vec<String>,
     pub(crate) limitations: Vec<String>,
 }
+/// Closed diagnostic categories: never carry provider values or parser messages.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) enum HandoffRejection {
+    OutputBound,
+    JsonSyntax,
+    SchemaData,
+    SchemaRoot,
+    SchemaMissing,
+    SchemaUnexpected,
+    SchemaDuplicate,
+    SchemaType,
+    SchemaNumericRange,
+    JsonEof,
+    UnexpectedParser,
+    IdentityStatus,
+    ContentBounds,
+    References,
+}
+impl HandoffRejection {
+    fn from_json_category(category: serde_json::error::Category) -> Self {
+        match category {
+            serde_json::error::Category::Syntax => Self::JsonSyntax,
+            serde_json::error::Category::Data => Self::SchemaData,
+            serde_json::error::Category::Eof => Self::JsonEof,
+            // from_str does not perform I/O; retain a closed fail-closed category.
+            serde_json::error::Category::Io => Self::UnexpectedParser,
+        }
+    }
+    pub(crate) fn label(self) -> &'static str {
+        match self {
+            Self::OutputBound => "qa_contract_output_bound",
+            Self::JsonSyntax => "qa_contract_json_syntax",
+            Self::SchemaData => "qa_contract_schema_data",
+            Self::SchemaRoot => "qa_contract_schema_root",
+            Self::SchemaMissing => "qa_contract_schema_missing",
+            Self::SchemaUnexpected => "qa_contract_schema_unexpected",
+            Self::SchemaDuplicate => "qa_contract_schema_duplicate",
+            Self::SchemaType => "qa_contract_schema_type",
+            Self::SchemaNumericRange => "qa_contract_schema_numeric_range",
+            Self::JsonEof => "qa_contract_json_eof",
+            Self::UnexpectedParser => "qa_contract_unexpected_parser",
+            Self::IdentityStatus => "qa_contract_identity_status",
+            Self::ContentBounds => "qa_contract_content_bounds",
+            Self::References => "qa_contract_references",
+        }
+    }
+    pub(crate) fn error(self) -> ChatError {
+        match self {
+            Self::OutputBound => ChatError::Limit,
+            _ => ChatError::InvalidRequest,
+        }
+    }
+}
+// Diagnostic only after authoritative deserialization rejects Data. A second
+// parse cannot accept a handoff or override the original public error. Keys and
+// values are transient; only a closed category escapes. Keep JSON depth limits.
+fn rejected_handoff_shape(raw: &str) -> HandoffRejection {
+    use serde::de::{MapAccess, Visitor};
+    use HandoffRejection::*;
+    struct Shape(HandoffRejection);
+    impl<'de> Deserialize<'de> for Shape {
+        fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+            struct Object;
+            impl<'de> Visitor<'de> for Object {
+                type Value = Shape;
+                fn expecting(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                    f.write_str("handoff object")
+                }
+                fn visit_map<M: MapAccess<'de>>(self, mut map: M) -> Result<Shape, M::Error> {
+                    let mut seen = 0u16;
+                    let mut first = None;
+                    while let Some(key) = map.next_key::<String>()? {
+                        let bit = match key.as_str() {
+                            "version" => 1,
+                            "stage" => 2,
+                            "agentId" => 4,
+                            "status" => 8,
+                            "summary" => 16,
+                            "findings" => 32,
+                            "evidence" => 64,
+                            "limitations" => 128,
+                            _ => 0,
+                        };
+                        let value = map.next_value::<serde_json::Value>()?;
+                        let problem = if bit == 0 {
+                            Some(SchemaUnexpected)
+                        } else if seen & bit != 0 {
+                            Some(SchemaDuplicate)
+                        } else if bit <= 2 {
+                            match &value {
+                                serde_json::Value::Number(n) if n.is_u64() || n.is_i64() => {
+                                    let max = if bit == 1 {
+                                        u8::MAX as u64
+                                    } else {
+                                        usize::MAX as u64
+                                    };
+                                    if n.as_u64().is_some_and(|v| v <= max) {
+                                        None
+                                    } else {
+                                        Some(SchemaNumericRange)
+                                    }
+                                }
+                                _ => Some(SchemaType),
+                            }
+                        } else if bit <= 16 {
+                            if value.is_string() {
+                                None
+                            } else {
+                                Some(SchemaType)
+                            }
+                        } else if value
+                            .as_array()
+                            .is_some_and(|a| a.iter().all(|v| v.is_string()))
+                        {
+                            None
+                        } else {
+                            Some(SchemaType)
+                        };
+                        if first.is_none() {
+                            first = problem;
+                        }
+                        seen |= bit;
+                    }
+                    Ok(Shape(first.unwrap_or(if seen == 255 {
+                        SchemaData
+                    } else {
+                        SchemaMissing
+                    })))
+                }
+            }
+            d.deserialize_map(Object)
+        }
+    }
+    if raw.len() > MAX_OUTPUT {
+        return SchemaData;
+    }
+    match serde_json::from_str::<Shape>(raw) {
+        Ok(Shape(category)) => category,
+        Err(_) => match serde_json::from_str::<serde_json::Value>(raw) {
+            Ok(v) if !v.is_object() => SchemaRoot,
+            _ => SchemaData,
+        },
+    }
+}
+
 impl Handoff {
     pub(crate) fn parse(
         raw: &str,
@@ -179,15 +327,32 @@ impl Handoff {
         agent: &str,
         input: &Objective,
     ) -> Result<Self, ChatError> {
+        Self::parse_classified(raw, stage, agent, input).map_err(HandoffRejection::error)
+    }
+    pub(crate) fn parse_classified(
+        raw: &str,
+        stage: usize,
+        agent: &str,
+        input: &Objective,
+    ) -> Result<Self, HandoffRejection> {
         if raw.len() > MAX_OUTPUT {
-            return Err(ChatError::Limit);
+            return Err(HandoffRejection::OutputBound);
         }
-        let v: Self = serde_json::from_str(raw).map_err(|_| ChatError::InvalidRequest)?;
+        let v: Self = serde_json::from_str(raw).map_err(|error| {
+            if error.classify() == serde_json::error::Category::Data {
+                rejected_handoff_shape(raw)
+            } else {
+                HandoffRejection::from_json_category(error.classify())
+            }
+        })?;
         if v.version != 1
             || v.stage != stage
             || v.agent_id != agent
             || !matches!(v.status.as_str(), "complete" | "partial")
-            || !text(&v.summary, 2000)
+        {
+            return Err(HandoffRejection::IdentityStatus);
+        }
+        if !text(&v.summary, 2000)
             || v.findings.len() > 8
             || v.limitations.len() > 8
             || v.evidence.len() > 6
@@ -195,20 +360,24 @@ impl Handoff {
                 .iter()
                 .chain(&v.limitations)
                 .any(|s| !text(s, 500))
-            || v.evidence
-                .iter()
-                .any(|e| !input.sources.iter().any(|s| &s.label == e))
+        {
+            return Err(HandoffRejection::ContentBounds);
+        }
+        if v.evidence
+            .iter()
+            .any(|e| !input.sources.iter().any(|s| &s.label == e))
             || v.evidence
                 .iter()
                 .collect::<std::collections::HashSet<_>>()
                 .len()
                 != v.evidence.len()
         {
-            return Err(ChatError::InvalidRequest);
+            return Err(HandoffRejection::References);
         }
         Ok(v)
     }
 }
+
 #[derive(Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub(crate) struct Stage {
@@ -223,6 +392,8 @@ pub(crate) struct Stage {
 #[derive(Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub(crate) struct Run {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub(crate) action: Option<crate::isolated_action::Evidence>,
     pub(crate) id: String,
     pub(crate) input: Objective,
     pub(crate) status: Status,
@@ -272,6 +443,7 @@ impl Run {
             })
             .collect::<Result<Vec<_>, ChatError>>()?;
         Ok(Self {
+            action: None,
             id,
             input,
             status: Status::Queued,
@@ -364,6 +536,237 @@ mod tests {
     fn output(i: usize, id: &str) -> String {
         serde_json::json!({"version":1,"stage":i,"agentId":id,"status":"complete","summary":"Proposal only","findings":["Needs owner validation"],"evidence":["S1"],"limitations":["No execution performed"]}).to_string()
     }
+    #[test]
+    fn classified_handoff_rejections_preserve_strict_contract_and_privacy(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        use HandoffRejection::*;
+        let input = input(Workflow::Research);
+        let valid: serde_json::Value = serde_json::from_str(&output(1, "qa-validation"))?;
+        let mut cases = vec![
+            ("not JSON private-marker".to_owned(), JsonSyntax),
+            ("x".repeat(MAX_OUTPUT + 1), OutputBound),
+        ];
+        for (key, value, category) in [
+            ("version", serde_json::json!(2), IdentityStatus),
+            ("stage", serde_json::json!(0), IdentityStatus),
+            (
+                "agentId",
+                serde_json::json!("private-marker"),
+                IdentityStatus,
+            ),
+            ("status", serde_json::json!("approved"), IdentityStatus),
+            ("summary", serde_json::json!(" "), ContentBounds),
+            (
+                "summary",
+                serde_json::json!("x".repeat(2001)),
+                ContentBounds,
+            ),
+            (
+                "summary",
+                serde_json::json!("private-marker\u{1b}"),
+                ContentBounds,
+            ),
+            ("findings", serde_json::json!(vec!["x"; 9]), ContentBounds),
+            (
+                "limitations",
+                serde_json::json!(vec!["x"; 9]),
+                ContentBounds,
+            ),
+            (
+                "findings",
+                serde_json::json!(["x".repeat(501)]),
+                ContentBounds,
+            ),
+            ("limitations", serde_json::json!([""]), ContentBounds),
+            ("evidence", serde_json::json!(vec!["S1"; 7]), ContentBounds),
+            (
+                "evidence",
+                serde_json::json!(["private-marker"]),
+                References,
+            ),
+            ("evidence", serde_json::json!(["S1", "S1"]), References),
+            ("summary", serde_json::json!(42), SchemaType),
+            (
+                "findings",
+                serde_json::json!({"private-marker":true}),
+                SchemaType,
+            ),
+            (
+                "unexpected-private-marker",
+                serde_json::json!("private-marker"),
+                SchemaUnexpected,
+            ),
+        ] {
+            let mut v = valid.clone();
+            v[key] = value;
+            cases.push((v.to_string(), category));
+        }
+        let mut missing = valid.clone();
+        missing.as_object_mut().ok_or("object")?.remove("summary");
+        cases.push((missing.to_string(), SchemaMissing));
+        cases.push((format!("```json\n{}\n```", valid), JsonSyntax));
+        cases.push((r#"{"summary":"private-marker"#.to_owned(), JsonEof));
+        for (key, value) in [
+            ("summary", serde_json::Value::Null),
+            ("findings", serde_json::json!([{"private-marker": true}])),
+            ("evidence", serde_json::json!([7])),
+        ] {
+            let mut v = valid.clone();
+            v[key] = value;
+            cases.push((v.to_string(), SchemaType));
+        }
+        assert_eq!(
+            HandoffRejection::from_json_category(serde_json::error::Category::Io),
+            UnexpectedParser
+        );
+        assert_eq!(UnexpectedParser.error(), ChatError::InvalidRequest);
+        assert_eq!(UnexpectedParser.label(), "qa_contract_unexpected_parser");
+        for (raw, expected) in cases {
+            let actual = Handoff::parse_classified(&raw, 1, "qa-validation", &input).err();
+            assert_eq!(actual, Some(expected));
+            assert_eq!(
+                Handoff::parse(&raw, 1, "qa-validation", &input).err(),
+                Some(expected.error())
+            );
+            assert!(!expected.label().contains("private-marker"));
+            assert!(!format!("{expected:?}").contains("private-marker"));
+        }
+        // Preserve accepted partial status, Unicode character limits, and known refs.
+        let mut boundary = valid;
+        boundary["status"] = serde_json::json!("partial");
+        boundary["summary"] = serde_json::json!("é".repeat(2000));
+        boundary["findings"] = serde_json::json!(vec!["é".repeat(500); 8]);
+        boundary["limitations"] = serde_json::json!(["line\nwith\ttabs\rand returns"]);
+        assert!(
+            Handoff::parse_classified(&boundary.to_string(), 1, "qa-validation", &input).is_ok()
+        );
+        let empty_sources = Objective {
+            workflow: Workflow::CodingAction,
+            objective: "synthetic".into(),
+            sources: vec![],
+        };
+        boundary["evidence"] = serde_json::json!([]);
+        assert!(Handoff::parse(&boundary.to_string(), 1, "qa-validation", &empty_sources).is_ok());
+        boundary["evidence"] = serde_json::json!(["S1"]);
+        assert_eq!(
+            Handoff::parse_classified(&boundary.to_string(), 1, "qa-validation", &empty_sources)
+                .err(),
+            Some(References)
+        );
+        Ok(())
+    }
+    #[test]
+    fn handoff_shape_diagnostics_are_bounded_value_free_and_non_authoritative(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        use HandoffRejection::*;
+        let input = input(Workflow::Research);
+        let valid: serde_json::Value = serde_json::from_str(&output(1, "qa-validation"))?;
+        let classify = |raw: &str, expected| -> Result<(), Box<dyn std::error::Error>> {
+            let original = serde_json::from_str::<Handoff>(raw)
+                .err()
+                .ok_or("must reject")?;
+            assert_eq!(original.classify(), serde_json::error::Category::Data);
+            let actual = Handoff::parse_classified(raw, 1, "qa-validation", &input).err();
+            assert_eq!(actual, Some(expected));
+            assert_eq!(
+                Handoff::parse(raw, 1, "qa-validation", &input).err(),
+                Some(ChatError::InvalidRequest)
+            );
+            assert!(!expected.label().contains("private-marker"));
+            assert!(!format!("{expected:?}").contains("private-marker"));
+            Ok(())
+        };
+        for key in [
+            "version",
+            "stage",
+            "agentId",
+            "status",
+            "summary",
+            "findings",
+            "evidence",
+            "limitations",
+        ] {
+            let mut v = valid.clone();
+            v.as_object_mut().ok_or("object")?.remove(key);
+            classify(&v.to_string(), SchemaMissing)?;
+            for value in [
+                serde_json::Value::Null,
+                serde_json::json!({"private-marker":true}),
+            ] {
+                let mut v = valid.clone();
+                v[key] = value;
+                classify(&v.to_string(), SchemaType)?;
+            }
+            let raw = valid.to_string();
+            let duplicate = format!(
+                "{},{}:{} }}",
+                &raw[..raw.len() - 1],
+                serde_json::to_string(key)?,
+                valid[key]
+            );
+            classify(&duplicate, SchemaDuplicate)?;
+        }
+        for key in ["findings", "evidence", "limitations"] {
+            for value in [
+                serde_json::json!(["safe", null]),
+                serde_json::json!([["private-marker"]]),
+                serde_json::json!([7]),
+                serde_json::json!("private-marker"),
+            ] {
+                let mut v = valid.clone();
+                v[key] = value;
+                classify(&v.to_string(), SchemaType)?;
+            }
+        }
+        for (key, value, expected) in [
+            ("version", serde_json::json!(256), SchemaNumericRange),
+            ("version", serde_json::json!(-1), SchemaNumericRange),
+            ("stage", serde_json::json!(-1), SchemaNumericRange),
+            ("version", serde_json::json!(1.0), SchemaType),
+            ("stage", serde_json::json!(1.5), SchemaType),
+            ("stage", serde_json::json!("1"), SchemaType),
+            (
+                "private-marker",
+                serde_json::json!({"private-marker":"private-marker"}),
+                SchemaUnexpected,
+            ),
+        ] {
+            let mut v = valid.clone();
+            v[key] = value;
+            classify(&v.to_string(), expected)?;
+        }
+        for raw in ["null", "false", "7", "[]", "\"private-marker\""] {
+            classify(raw, SchemaRoot)?;
+        }
+        // Secondary parse failure must retain Data, not invent a specific cause.
+        classify(r#"{"private-marker":true,"summary":"truncated"#, SchemaData)?;
+        assert_eq!(
+            rejected_handoff_shape(&"x".repeat(MAX_OUTPUT + 1)),
+            SchemaData
+        );
+        let deep = format!("{}0{}", "[".repeat(140), "]".repeat(140));
+        assert_eq!(rejected_handoff_shape(&deep), SchemaData);
+        assert_eq!(rejected_handoff_shape(&valid.to_string()), SchemaData);
+        // Authoritative successful inputs never reach the diagnostic parser,
+        // including Serde's existing struct-sequence representation.
+        let sequence =
+            serde_json::json!([1, 1, "qa-validation", "complete", "safe", [], ["S1"], []]);
+        assert!(Handoff::parse(&sequence.to_string(), 1, "qa-validation", &input).is_ok());
+        for (key, value) in [
+            ("version", serde_json::json!(u8::MAX)),
+            ("stage", serde_json::json!(usize::MAX)),
+        ] {
+            let mut v = valid.clone();
+            v[key] = value;
+            assert!(serde_json::from_str::<Handoff>(&v.to_string()).is_ok());
+            assert_eq!(
+                Handoff::parse_classified(&v.to_string(), 1, "qa-validation", &input).err(),
+                Some(IdentityStatus)
+            );
+        }
+        Ok(())
+    }
+
     #[test]
     fn all_four_routes_nine_bots_snapshots_synthesis_and_attribution(
     ) -> Result<(), Box<dyn std::error::Error>> {

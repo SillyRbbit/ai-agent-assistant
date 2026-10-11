@@ -1,3 +1,92 @@
+## 2026-10-07 — Codex action offline verification passed
+
+The five-file Codex action extension passed its focused offline regressions and
+required `npm run verify` with the installed process-local workaround. Synthetic
+runtime cases cover fixed action instructions, successful text streaming/completion,
+EOF, malformed output, tool/approval rejection, output bounds and runtime errors;
+active cancellation reaps the child before a subsequent synthetic request succeeds.
+The new test initially referenced an unavailable Tokio macro; its compile receipts
+remain preserved. Standard future polling corrected the test without dependency or
+production lifecycle changes. The final verification passed on the corrected source.
+
+The current candidate has 60 paths within the 40 successor / 61 cumulative ceiling;
+the final review is still reserved. Prior document bodies, predecessor completion,
+API evidence, historical failures and old artifacts remain preserved. Fresh
+isolated bundle and launch-disabled Codex-only helper preparation is recorded under
+`/private/tmp/cortexa-codex-action-extension-oedk0qdz/native`; their external manifests
+are authoritative for readiness and exact hashes, not this documentation record.
+
+Native action acceptance has not run. It needs separate authorization for the
+verified artifact, autonomous launcher and Computer Use, preserving the dedicated
+Cortexa-Codex-QA home and all identity/window/cleanup safeguards. Direct-API gaps
+remain pending private credentials; Codex results cannot replace API evidence.
+Usage stays historical 33 plus 2/20 additional (35 total, 18 remaining). Keep all
+advisories, disabled ECC hooks/MCP, native workaround and D-125/M1/M2 parked.
+No completion, full Stop, launch, Send, commit or publication is claimed here.
+
+---
+
+## 2026-10-07 — Bounded Headless Codex action route
+
+The owner approved extending only the five native adapter/context modules, with
+in-module tests, to support Headless Codex for isolated Coding -> QA actions.
+The scope is now 40 successor / 61 cumulative paths including the reserved final
+review. Only `agent_adapter.rs` and `codex_connection.rs` are newly allowlisted;
+the original 38/59 scope and all historical evidence remain preserved. The existing
+ordinary active increment is retained without a new begin, state edit or waiver.
+
+Action context accepts only OpenAI API and Codex. Native preparation and dispatch
+validate the saved Codex selection against the discovered catalog. A closed
+`ActionCodex` adapter chooses only the fixed isolated-action instructions through
+the existing file-store runtime. It adds no model tools, filesystem authority,
+provider fallback, IPC surface or dependency. Codex only proposes bounded JSON;
+Rust still owns strict contracts, Docker execution, exact native approval and
+new-file-only application. Existing API behavior and all execution limits remain.
+
+Focused offline cases cover context privacy, catalog/revision rejection, fixed
+instructions, streaming/errors, denied tools/approval and child cleanup. Required
+verification and fresh isolated artifact/helper preparation are tracked separately
+in `/private/tmp/cortexa-codex-action-extension-oedk0qdz`. No native launch or Send
+is authorized in this offline stage. Do not promote synthetic results to native
+acceptance or reuse the old API artifact for the changed source.
+
+Separate native approval must bind the new bundle and a fresh Codex-only launcher
+using the dedicated Cortexa-Codex-QA home, never personal credentials or API fallback.
+Current additional usage remains 2/20 (historical 33; total 35), with 18 remaining.
+Existing API successes and failed QA handoff remain; API-specific gaps await private
+credential access. Native action approval/application, correction, rejection/drift,
+cancellation/recovery and restart remain pending. Retain all advisories, disabled
+ECC hooks/MCP, the process-local workaround and parked D-125/M1/M2. No completion,
+full Stop, commit or publication claim.
+
+---
+
+## 2026-10-07 — Isolated bot action workflow implementation checkpoint
+
+The owner-authorized `isolated-bot-action-workflow` is active, not complete.
+The [bounded plan](docs/plans/2026-10-07-isolated-bot-action-workflow.md) freezes
+36 successor / 57 cumulative paths, including the retained 28-path architecture
+atlas. Its dated diagrams, prior completion, historical failures and artifact
+bytes remain unchanged; they are inherited evidence, not this workflow's acceptance.
+
+The first supported action is intentionally small: choose a clean ordinary Git
+repository in the native folder dialog, name the editable `.py` and unchanged
+`test_*.py`, submit a bounded task, review transmission and start. Coding and QA
+must already have saved compatible OpenAI API selections; nothing silently switches.
+The UI presents files, checks, limits, actual diffs, exit results, correction history
+and separate native approval. Generated prose is not counted as an edit or test.
+
+The target stays unchanged through preparation, execution, validation and rejection.
+Only the exact reviewed candidate may be applied after a fresh target check and
+native decision. Application does not execute the resulting file on the host.
+Passing tests do not establish that generated code is safe for later unrestricted
+host execution; the owner must review the diff and limitations. Native E2E acceptance
+against disposable fixtures is still pending at this checkpoint.
+
+All advisories, disabled ECC hooks/MCP, native workaround and parked D-125/M1/M2 remain.
+
+---
+
 # Cortexa product requirements
 
 Status: Authoritative normalized product requirements

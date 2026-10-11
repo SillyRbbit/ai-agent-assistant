@@ -176,7 +176,14 @@ impl ApprovalPresentation {
 
     #[must_use]
     pub fn preview(&self) -> ApprovalPreview<'_> {
-        ApprovalPreview::CreateLocalTask { title: &self.title }
+        match self.action {
+            ApprovalAction::ApplyIsolatedChange => ApprovalPreview::ApplyIsolatedChange {
+                summary: &self.title,
+            },
+            ApprovalAction::CreateLocalTask => {
+                ApprovalPreview::CreateLocalTask { title: &self.title }
+            }
+        }
     }
 
     #[must_use]
@@ -281,6 +288,8 @@ impl ApprovalClock for SystemApprovalClock {
 
 #[derive(Clone, Eq, PartialEq)]
 enum ApprovalSubjectKey {
+    #[cfg(target_os = "macos")]
+    IsolatedChange { run_id: String, review_hash: String },
     LegacyGateway {
         run_id: String,
         gateway_request_id: String,
@@ -295,6 +304,15 @@ enum ApprovalSubjectKey {
 impl ApprovalSubjectKey {
     fn from_decision(decision: &ApprovalDecision) -> Self {
         match decision {
+            #[cfg(target_os = "macos")]
+            ApprovalDecision::IsolatedChange {
+                run_id,
+                review_hash,
+                ..
+            } => Self::IsolatedChange {
+                run_id: run_id.clone(),
+                review_hash: review_hash.clone(),
+            },
             ApprovalDecision::LegacyGateway(decision) => {
                 let call = decision.validated_call();
                 Self::LegacyGateway {
@@ -319,6 +337,14 @@ impl ApprovalSubjectKey {
         call_id: &str,
     ) -> bool {
         match (self, origin) {
+            (
+                Self::IsolatedChange {
+                    run_id: expected,
+                    review_hash,
+                },
+                ApprovalOrigin::IsolatedChange,
+            ) => expected == run_id && review_hash == gateway_request_id && review_hash == call_id,
+            (Self::IsolatedChange { .. }, _) | (_, ApprovalOrigin::IsolatedChange) => false,
             (
                 Self::LegacyGateway {
                     run_id: expected_run_id,
@@ -370,6 +396,28 @@ pub struct InMemoryApprovalManager {
 }
 
 impl InMemoryApprovalManager {
+    #[cfg(target_os = "macos")]
+    pub(crate) fn create_isolated_change(
+        &mut self,
+        run_id: &str,
+        review_hash: &str,
+        summary: &str,
+    ) -> ApprovalResult<ApprovalId> {
+        if run_id.len() > 80
+            || run_id.is_empty()
+            || review_hash.len() != 64
+            || !review_hash.bytes().all(|c| c.is_ascii_hexdigit())
+            || summary.len() > 500
+            || summary.chars().any(char::is_control)
+        {
+            return Err(ApprovalError::UnsupportedApprovalSubject);
+        }
+        self.create_closed_request(ApprovalDecision::IsolatedChange {
+            run_id: run_id.into(),
+            review_hash: review_hash.into(),
+            summary: summary.into(),
+        })
+    }
     #[must_use]
     pub fn new() -> Self {
         Self::with_clock(SystemApprovalClock)
@@ -1277,6 +1325,53 @@ mod tests {
             assert!(!output.contains(sentinel));
             assert!(!output.contains(&raw_arguments));
         }
+        Ok(())
+    }
+    #[test]
+    #[cfg(target_os = "macos")]
+    fn isolated_change_native_decision_is_exact_expiring_and_one_use() -> Result<(), Box<dyn Error>>
+    {
+        use rfd::MessageDialogResult;
+        for label in ["Approve", "Reject", "Edit"] {
+            let mut m = InMemoryApprovalManager::new();
+            let hash = "a".repeat(64);
+            let id =
+                m.create_isolated_change("fixture-run", &hash, "fixture.py exact reviewed hash")?;
+            let view = m.pending()?.ok_or("missing pending")?;
+            assert_eq!(view.preview().action(), ApprovalAction::ApplyIsolatedChange);
+            assert_eq!(view.required_permission(), PermissionKind::Files);
+            let presentation = m.issue_presentation(id)?;
+            assert!(m.issue_presentation(id).is_err());
+            let out = test_outcome_from_dialog_result(
+                presentation,
+                MessageDialogResult::Custom(label.into()),
+            );
+            let resolution = m.resolve_source_outcome(out)?;
+            assert_eq!(
+                resolution.disposition() == ApprovalDisposition::Approved,
+                label == "Approve"
+            );
+            let mut audit = crate::audit::approval::InMemoryApprovalAuditAdapter::new();
+            audit.record(&resolution)?;
+            assert_eq!(audit.records()[0].tool_name(), "apply_isolated_change");
+            assert!(m
+                .create_isolated_change("fixture-run", &hash, "same")
+                .is_err());
+        }
+        let clock = TestClock::new();
+        let mut m = InMemoryApprovalManager::with_clock(clock.clone());
+        let hash = "b".repeat(64);
+        let id = m.create_isolated_change("fixture-expiry", &hash, "fixture.py")?;
+        let p = m.issue_presentation(id)?;
+        assert!(clock.advance(Duration::from_secs(121)));
+        let out = test_outcome_from_dialog_result(p, MessageDialogResult::Custom("Approve".into()));
+        assert_eq!(
+            m.resolve_source_outcome(out)?.disposition(),
+            ApprovalDisposition::Expired
+        );
+        assert!(m
+            .create_isolated_change("bad", "not-a-hash", "test")
+            .is_err());
         Ok(())
     }
 }

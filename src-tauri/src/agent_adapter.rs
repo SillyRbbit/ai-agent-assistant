@@ -20,6 +20,12 @@ pub(crate) enum AdapterRequest {
         effort: ReasoningEffort,
         input: String,
     },
+    ActionCodex {
+        setup: codex_connection::Setup,
+        model: String,
+        effort: ReasoningEffort,
+        input: String,
+    },
     CollaborationCodex {
         setup: codex_connection::Setup,
         model: String,
@@ -55,6 +61,12 @@ pub(crate) async fn run_adapter(
     mut emit: impl FnMut(ProviderEvent) -> Result<(), DirectError>,
 ) -> Result<(), DirectError> {
     match adapter {
+        AdapterRequest::ActionCodex {
+            setup,
+            model,
+            effort,
+            input,
+        } => codex_connection::run_action(setup, model, effort, input, emit).await,
         AdapterRequest::CollaborationCodex {
             setup,
             model,

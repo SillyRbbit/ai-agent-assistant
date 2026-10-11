@@ -216,3 +216,19 @@
     gap: var(--space-4);
   }
 }
+
+.action-review {
+  padding: 1rem;
+  border: 1px solid var(--border-color, #57546b);
+  border-radius: 0.5rem;
+  margin-block: 1rem;
+}
+.action-review pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 24rem;
+  overflow: auto;
+}
+.action-review code {
+  overflow-wrap: anywhere;
+}

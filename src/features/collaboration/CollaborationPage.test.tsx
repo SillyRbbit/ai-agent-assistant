@@ -1,3 +1,4 @@
+import { ActionReview } from "./ActionReview";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { knowledgeClient } from "../../infrastructure/tauri/knowledge-client";
@@ -122,7 +123,7 @@ describe("Collaboration room", () => {
     expect(screen.getByRole("checkbox")).not.toBeChecked();
   });
 
-  it.each(Object.keys(WORKFLOWS) as Workflow[])(
+  it.each((Object.keys(WORKFLOWS) as Workflow[]).filter((w) => w !== "coding_action"))(
     "%s explicitly includes library sources and invalidates detached preview",
     async (workflow) => {
       const source = {
@@ -372,4 +373,85 @@ it("keeps the stage overview tied to cancelled saved stages without promoting pr
   expect(screen.queryByRole("button", { name: "Stop collaboration" })).not.toBeInTheDocument();
   expect(c.start).not.toHaveBeenCalled();
   expect(c.prepare).not.toHaveBeenCalled();
+});
+
+describe("isolated action review", () => {
+  it("renders untrusted diff as text and requires separate native review", () => {
+    const onReview = vi.fn();
+    render(
+      <ActionReview
+        disabled={false}
+        onReview={onReview}
+        evidence={{
+          file: "solution.py",
+          testFile: "test_solution.py",
+          baseline: "a".repeat(64),
+          original: "old",
+          tests: "test",
+          requests: 2,
+          recovery: "/synthetic/recovery",
+          reviewHash: "b".repeat(64),
+          disposition: "review_ready",
+          attempts: [
+            {
+              candidate: "<script>unsafe()</script>",
+              candidateHash: "c".repeat(64),
+              diff: "+<script>unsafe()</script>",
+              qaSummary: "Reviewed actual checks",
+              qaHandoff: null,
+              check: {
+                command: "fixed unittest runner",
+                exit: 0,
+                output: "ok",
+                passed: true,
+                image: "pinned",
+                candidateHash: "c".repeat(64),
+                testHash: "d".repeat(64),
+                containerId: "e".repeat(64),
+                processAbsent: true,
+              },
+            },
+          ],
+        }}
+      />,
+    );
+    expect(screen.getByText("+<script>unsafe()</script>")).toBeVisible();
+    expect(document.querySelector("script")).toBeNull();
+    expect(onReview).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "Review exact change in native approval" }));
+    expect(onReview).toHaveBeenCalledOnce();
+  });
+  it("keeps failed validation reviewable without an apply control", () => {
+    render(
+      <ActionReview
+        disabled={false}
+        evidence={{
+          file: "solution.py",
+          testFile: "test_solution.py",
+          baseline: "a".repeat(64),
+          original: "old",
+          tests: "test",
+          requests: 4,
+          recovery: "/synthetic/recovery",
+          reviewHash: null,
+          disposition: "validation_failed",
+          attempts: [],
+        }}
+      />,
+    );
+    expect(screen.queryByRole("button", { name: /native approval/ })).toBeNull();
+    expect(screen.getByText(/validation failed/)).toBeVisible();
+  });
+});
+
+it("requires native target selection for the isolated route and shares no library sources", async () => {
+  const c = client([{ id: 1, title: "Fixture", runs: [] }]);
+  render(<CollaborationPage client={c} />);
+  fireEvent.click(await screen.findByRole("button", { name: "Fixture" }));
+  fireEvent.change(screen.getByLabelText("Workflow"), { target: { value: "coding_action" } });
+  fireEvent.change(screen.getByLabelText("Objective"), { target: { value: "Add numbers" } });
+  expect(
+    screen.getByRole("button", { name: "Check readiness and review transmission" }),
+  ).toBeDisabled();
+  expect(screen.queryByLabelText("Find library passages")).toBeNull();
 });

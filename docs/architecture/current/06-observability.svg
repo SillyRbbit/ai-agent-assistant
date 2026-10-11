@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1560 1456" role="img" aria-labelledby="title desc">
+<title id="title">06 · Observability and graph updates</title><desc id="desc">Observable state and outputs; never private model thoughts. Mock tool events and deterministic demo graphs are separate. Diagnostics are not immutable audit, raw provider logs or a billing ledger. No generic live tool results feed this graph.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#4758A2"/></marker></defs>
+<rect width="1560" height="1456" fill="#FBFBFB"/>
+<g font-family="Arial, Helvetica, sans-serif">
+<rect x="0" y="0" width="1560" height="112" fill="#252B71"/>
+<text x="40" y="47" font-size="30" font-weight="700" fill="#ffffff" text-anchor="start">06 · Observability and graph updates</text>
+<text x="40" y="81" font-size="19" font-weight="400" fill="#ffffff" text-anchor="start">Observable state and outputs; never private model thoughts</text>
+<rect x="40" y="132" width="18" height="18" fill="#eef1fb" stroke="#4758A2"/>
+<text x="67" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Native</text>
+<rect x="131" y="132" width="18" height="18" fill="#e7f3f5" stroke="#326672"/>
+<text x="158" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Interface</text>
+<rect x="246" y="132" width="18" height="18" fill="#fff4db" stroke="#94642c"/>
+<text x="273" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Owner</text>
+<rect x="329" y="132" width="18" height="18" fill="#f8eaf3" stroke="#934873"/>
+<text x="356" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Remote</text>
+<rect x="420" y="132" width="18" height="18" fill="#e9f4eb" stroke="#42784e"/>
+<text x="447" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Stored</text>
+<rect x="511" y="132" width="18" height="18" fill="#f1eff7" stroke="#79628d" stroke-dasharray="6 4"/>
+<text x="538" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Separate foundation</text>
+<rect x="706" y="132" width="18" height="18" fill="#ffffff" stroke="#79628d" stroke-dasharray="6 4"/>
+<text x="733" y="147" font-size="15" font-weight="400" fill="#182033" text-anchor="start">Deferred / unverified</text>
+<text x="40" y="190" font-size="20" font-weight="700" fill="#182033" text-anchor="start">Bot chat · polling, not a WebView provider subscription</text>
+<g data-component="ADAPTER"><rect x="40.0" y="214" width="426.6666666666667" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="56.0" y="239" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">ADAPTER</text>
+<text x="56.0" y="268" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Provider events</text>
+<text x="56.0" y="301" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Native parsing of untrusted frames.</text>
+</g>
+<line x1="472.6666666666667" y1="318" x2="557.6666666666667" y2="318" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="516.6666666666667" y="275" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">validated</text>
+<text x="516.6666666666667" y="292" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">events</text>
+<g data-component="HOST"><rect x="566.6666666666667" y="214" width="426.6666666666667" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="582.6666666666667" y="239" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">HOST</text>
+<text x="582.6666666666667" y="268" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Accepted snapshot</text>
+<text x="582.6666666666667" y="301" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Bounded text, sequence and terminal category.</text>
+</g>
+<line x1="999.3333333333335" y1="318" x2="1084.3333333333335" y2="318" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1043.3333333333335" y="275" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">typed</text>
+<text x="1043.3333333333335" y="292" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">snapshot</text>
+<g data-component="UI"><rect x="1093.3333333333335" y="214" width="426.6666666666667" height="204" rx="12" fill="#e7f3f5" stroke="#326672" stroke-width="2"/>
+<text x="1109.3333333333335" y="239" font-size="14" font-weight="700" fill="#326672" text-anchor="start">UI</text>
+<text x="1109.3333333333335" y="268" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Bot-chat view</text>
+<text x="1109.3333333333335" y="301" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Poll 250 ms while busy; reject stale epoch</text>
+<text x="1109.3333333333335" y="322" font-size="16" font-weight="400" fill="#182033" text-anchor="start">updates.</text>
+</g>
+<text x="43" y="441" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">Evidence: ADAPTER, HOST, UI</text>
+<text x="40" y="472" font-size="20" font-weight="700" fill="#182033" text-anchor="start">Collaboration · one source for room and graph</text>
+<g data-component="COORD"><rect x="40.0" y="496" width="295.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="56.0" y="521" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">COORD</text>
+<text x="56.0" y="550" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Stage event</text>
+<text x="56.0" y="583" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Provisional text + validated</text>
+<text x="56.0" y="604" font-size="16" font-weight="400" fill="#182033" text-anchor="start">handoff or terminal.</text>
+</g>
+<line x1="341.0" y1="600" x2="426.0" y2="600" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="385.0" y="557" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">accepted</text>
+<text x="385.0" y="574" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">state</text>
+<g data-component="ROOM_DB"><rect x="435.0" y="496" width="295.0" height="204" rx="12" fill="#e9f4eb" stroke="#42784e" stroke-width="2"/>
+<text x="451.0" y="521" font-size="14" font-weight="700" fill="#42784e" text-anchor="start">ROOM_DB</text>
+<text x="451.0" y="550" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Stored snapshot</text>
+<text x="451.0" y="583" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Persist run and stage state.</text>
+</g>
+<line x1="736.0" y1="600" x2="821.0" y2="600" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="780.0" y="557" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">list IPC</text>
+<g data-component="SNAP"><rect x="830.0" y="496" width="295.0" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="846.0" y="521" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">SNAP</text>
+<text x="846.0" y="550" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Shared poll store</text>
+<text x="846.0" y="583" font-size="16" font-weight="400" fill="#182033" text-anchor="start">List 400 ms while</text>
+<text x="846.0" y="604" font-size="16" font-weight="400" fill="#182033" text-anchor="start">queued/running.</text>
+</g>
+<line x1="1131.0" y1="600" x2="1216.0" y2="600" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1175.0" y="557" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">same data</text>
+<g data-component="GRAPH / CENTER"><rect x="1225.0" y="496" width="295.0" height="204" rx="12" fill="#e7f3f5" stroke="#326672" stroke-width="2"/>
+<text x="1241.0" y="521" font-size="14" font-weight="700" fill="#326672" text-anchor="start">GRAPH / CENTER</text>
+<text x="1241.0" y="550" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Room + Command Center</text>
+<text x="1241.0" y="583" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Projection/inspector/history;</text>
+<text x="1241.0" y="604" font-size="16" font-weight="400" fill="#182033" text-anchor="start">freshness labels.</text>
+</g>
+<text x="43" y="723" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">Evidence: COORD, ROOM_DB, SNAP, GRAPH, CENTER</text>
+<text x="40" y="754" font-size="20" font-weight="700" fill="#182033" text-anchor="start">Content-free operational diagnostics</text>
+<g data-component="CHAT / COORD"><rect x="40.0" y="778" width="426.6666666666667" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="56.0" y="803" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">CHAT / COORD</text>
+<text x="56.0" y="832" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Lifecycle observation</text>
+<text x="56.0" y="865" font-size="16" font-weight="400" fill="#182033" text-anchor="start">First text, terminal, cleanup and category.</text>
+</g>
+<line x1="472.6666666666667" y1="882" x2="557.6666666666667" y2="882" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="516.6666666666667" y="839" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">fixed record</text>
+<g data-component="DIAG"><rect x="566.6666666666667" y="778" width="426.6666666666667" height="204" rx="12" fill="#e9f4eb" stroke="#42784e" stroke-width="2"/>
+<text x="582.6666666666667" y="803" font-size="14" font-weight="700" fill="#42784e" text-anchor="start">DIAG</text>
+<text x="582.6666666666667" y="832" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Bounded journal</text>
+<text x="582.6666666666667" y="865" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Hashed IDs; rotation and restrictive file</text>
+<text x="582.6666666666667" y="886" font-size="16" font-weight="400" fill="#182033" text-anchor="start">handling.</text>
+</g>
+<line x1="999.3333333333335" y1="882" x2="1084.3333333333335" y2="882" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1043.3333333333335" y="839" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">read /</text>
+<text x="1043.3333333333335" y="856" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">export</text>
+<g data-component="DIAG_UI"><rect x="1093.3333333333335" y="778" width="426.6666666666667" height="204" rx="12" fill="#e7f3f5" stroke="#326672" stroke-width="2"/>
+<text x="1109.3333333333335" y="803" font-size="14" font-weight="700" fill="#326672" text-anchor="start">DIAG_UI</text>
+<text x="1109.3333333333335" y="832" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Local diagnostics</text>
+<text x="1109.3333333333335" y="865" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Sanitized list; owner-controlled export.</text>
+</g>
+<text x="43" y="1005" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">Evidence: DIAG, DIAG_IPC, DIAG_UI</text>
+<text x="40" y="1036" font-size="20" font-weight="700" fill="#182033" text-anchor="start">Presentation and distinct QA evidence</text>
+<g data-component="GRAPH"><rect x="40.0" y="1060" width="426.6666666666667" height="204" rx="12" fill="#eef1fb" stroke="#4758A2" stroke-width="2"/>
+<text x="56.0" y="1085" font-size="14" font-weight="700" fill="#4758A2" text-anchor="start">GRAPH</text>
+<text x="56.0" y="1114" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Accepted run state</text>
+<text x="56.0" y="1147" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Edges: coordination, dependency or handoff.</text>
+</g>
+<line x1="472.6666666666667" y1="1164" x2="557.6666666666667" y2="1164" stroke="#4758A2" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="516.6666666666667" y="1121" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">derived</text>
+<text x="516.6666666666667" y="1138" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">visuals</text>
+<g data-component="CONDUCTOR / ART"><rect x="566.6666666666667" y="1060" width="426.6666666666667" height="204" rx="12" fill="#e7f3f5" stroke="#326672" stroke-width="2"/>
+<text x="582.6666666666667" y="1085" font-size="14" font-weight="700" fill="#326672" text-anchor="start">CONDUCTOR / ART</text>
+<text x="582.6666666666667" y="1114" font-size="19" font-weight="700" fill="#182033" text-anchor="start">Status animation</text>
+<text x="582.6666666666667" y="1147" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Working/success feedback; reduced-motion</text>
+<text x="582.6666666666667" y="1168" font-size="16" font-weight="400" fill="#182033" text-anchor="start">support.</text>
+</g>
+<line x1="999.3333333333335" y1="1164" x2="1084.3333333333335" y2="1164" stroke="#4758A2" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="1043.3333333333335" y="1121" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">separate</text>
+<text x="1043.3333333333335" y="1138" font-size="13" font-weight="600" fill="#252B71" text-anchor="middle">evidence</text>
+<g data-component="QA"><rect x="1093.3333333333335" y="1060" width="426.6666666666667" height="204" rx="12" fill="#f2f2f4" stroke="#686b77" stroke-width="2"/>
+<text x="1109.3333333333335" y="1085" font-size="14" font-weight="700" fill="#686b77" text-anchor="start">QA</text>
+<text x="1109.3333333333335" y="1114" font-size="19" font-weight="700" fill="#182033" text-anchor="start">External receipts</text>
+<text x="1109.3333333333335" y="1147" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Ledger 33 is QA accounting, not product cost</text>
+<text x="1109.3333333333335" y="1168" font-size="16" font-weight="400" fill="#182033" text-anchor="start">metering.</text>
+</g>
+<text x="43" y="1287" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">Evidence: GRAPH, CONDUCTOR, ART, REVIEW</text>
+<text x="40" y="1352" font-size="16" font-weight="400" fill="#182033" text-anchor="start">Mock tool events and deterministic demo graphs are separate. Diagnostics are not immutable audit, raw provider logs or a billing ledger. No generic live tool</text>
+<text x="40" y="1374" font-size="16" font-weight="400" fill="#182033" text-anchor="start">results feed this graph.</text>
+<text x="40" y="1434" font-size="14" font-weight="400" fill="#49516a" text-anchor="start">CORTEXA  /  Source bc12776412c7  /  2026-10-07  /  Solid arrows: stated flow; dashed lines: comparison or unwired boundary</text>
+</g>
+</svg>

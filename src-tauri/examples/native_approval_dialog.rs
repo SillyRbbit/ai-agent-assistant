@@ -26,12 +26,12 @@ mod macos {
     const CALL_ID: &str = "call-native-approval-example-1";
     const TOOL_CONTRACT_VERSION: u16 = 1;
 
+    const EXAMPLE_IDENTIFIER: &str = "com.cortexa.example.nativeapproval";
+
     pub fn main() -> ExitCode {
-        match run() {
-            Ok(resolution) => {
-                print_resolution(&resolution);
-                ExitCode::SUCCESS
-            }
+        match run_host() {
+            Ok(0) => ExitCode::SUCCESS,
+            Ok(_) => ExitCode::FAILURE,
             Err(_) => {
                 eprintln!("native approval example failed");
                 ExitCode::FAILURE
@@ -39,13 +39,52 @@ mod macos {
         }
     }
 
-    fn run() -> Result<ApprovalResolution, Box<dyn Error>> {
+    fn configure_host(config: &mut tauri::utils::config::Config) {
+        // Do not load the product UI or use its persistent WebView identity.
+        config.identifier = EXAMPLE_IDENTIFIER.into();
+        config.app.windows.clear();
+    }
+
+    fn run_host() -> Result<i32, Box<dyn Error>> {
+        let mut context = tauri::generate_context!();
+        configure_host(context.config_mut());
+        // This standalone host installs no product commands, services or database.
+        let app = tauri::Builder::default().build(context)?;
+        Ok(app.run_return(|app, event| {
+            if let tauri::RunEvent::Ready = event {
+                let code = match show_example(app) {
+                    Ok(resolution) => {
+                        print_resolution(&resolution);
+                        0
+                    }
+                    Err(_) => {
+                        eprintln!("native approval example failed");
+                        1
+                    }
+                };
+                app.exit(code);
+            }
+        }))
+    }
+
+    fn show_example(app: &tauri::AppHandle) -> Result<ApprovalResolution, Box<dyn Error>> {
+        let owner = tauri::WebviewWindowBuilder::new(
+            app,
+            "main",
+            tauri::WebviewUrl::External("about:blank".parse()?),
+        )
+        .title("Cortexa synthetic approval example")
+        .incognito(true)
+        .build()?;
+        // Keep the owner and its captured borrowed handles alive through the
+        // synchronous decision. Parent acquisition failure never shows a dialog.
+        let source = MacOsNativeApprovalDecisionSource::new(&owner)?;
         let mut manager = InMemoryApprovalManager::new();
         let id = manager.create_request(local_task_decision(
             "Review the trusted native approval decision source",
         )?)?;
         let presentation = manager.issue_presentation(id)?;
-        let outcome = MacOsNativeApprovalDecisionSource::new().request_decision(presentation);
+        let outcome = source.request_decision(presentation);
         Ok(manager.resolve_source_outcome(outcome)?)
     }
 
@@ -117,6 +156,51 @@ mod macos {
             ApprovalDisposition::Expired => "expired",
         };
         println!("approval {}: {label}", resolution.id().value());
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+        use ai_agent_assistant_lib::policy::types::PolicyOutcome;
+
+        #[test]
+        fn host_configuration_preserves_security_without_product_windows(
+        ) -> Result<(), Box<dyn Error>> {
+            let mut config: tauri::utils::config::Config =
+                serde_json::from_str(include_str!("../tauri.conf.json"))?;
+            let security = serde_json::to_value(&config.app.security)?;
+            configure_host(&mut config);
+            assert_eq!(config.identifier, EXAMPLE_IDENTIFIER);
+            assert!(config.app.windows.is_empty());
+            assert_eq!(serde_json::to_value(&config.app.security)?, security);
+            Ok(())
+        }
+
+        #[test]
+        fn synthetic_request_still_requires_approval_and_rejects_replay(
+        ) -> Result<(), Box<dyn Error>> {
+            let decision =
+                local_task_decision("Review the trusted native approval decision source")?;
+            assert_eq!(decision.outcome(), PolicyOutcome::RequireApproval);
+            let mut manager = InMemoryApprovalManager::new();
+            let id = manager.create_request(decision)?;
+            let _presentation = manager.issue_presentation(id)?;
+            assert!(manager.issue_presentation(id).is_err());
+            let resolution = manager.cancel_for_run_termination(id)?;
+            assert_eq!(
+                resolution.disposition(),
+                ApprovalDisposition::Cancelled(ApprovalCancellationReason::RunTerminated)
+            );
+            assert!(manager.cancel_for_run_termination(id).is_err());
+            Ok(())
+        }
+
+        #[test]
+        fn synthetic_input_validation_remains_strict() {
+            for invalid in ["", " leading whitespace", "line\nbreak"] {
+                assert!(local_task_decision(invalid).is_err());
+            }
+        }
     }
 }
 

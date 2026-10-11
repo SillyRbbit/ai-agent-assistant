@@ -10,12 +10,14 @@ pub mod approvals;
 pub mod audit;
 mod codex_connection;
 mod collaboration;
+mod collaboration_action;
 mod collaboration_tauri;
 pub mod credentials;
 mod diagnostics;
 mod diagnostics_tauri;
 pub mod documents;
 mod error;
+mod isolated_action;
 mod knowledge;
 mod knowledge_links;
 mod knowledge_tauri;
@@ -86,6 +88,8 @@ pub fn run() -> Result<(), AppError> {
             collaboration_tauri::list_collaboration_rooms,
             collaboration_tauri::create_collaboration_room,
             collaboration_tauri::prepare_collaboration,
+            collaboration_tauri::select_action_repository,
+            collaboration_tauri::review_action_change,
             collaboration_tauri::start_collaboration,
             collaboration_tauri::cancel_collaboration,
             collaboration_tauri::delete_collaboration_room,

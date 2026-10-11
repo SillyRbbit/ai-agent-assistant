@@ -730,6 +730,40 @@ pub(crate) async fn cancel_agent_conversation(
 
 /// Native collaboration reuses the saved selection and already-discovered catalog.
 /// This never discovers a model, retries, or changes the single-conversation context.
+fn action_context(
+    state: &AgentChatState,
+    profile: AgentProfile,
+) -> Result<BoundConversation, ChatError> {
+    let bound = BoundConversation::action(profile)?;
+    if bound.profile.connection == AgentConnection::Codex {
+        let session = state.0.lock().map_err(|_| ChatError::Internal)?;
+        validate_catalog(&session.catalogs, &bound.profile)?;
+    }
+    // The native catalog lock is released before any runtime is spawned or polled.
+    Ok(bound)
+}
+
+pub(crate) fn action_adapter(
+    state: &AgentChatState,
+    profile: crate::agent_preferences::AgentProfile,
+    prompt: &str,
+) -> Result<AdapterRequest, ChatError> {
+    let bound = action_context(state, profile)?;
+    Ok(match bound.profile.connection {
+        AgentConnection::OpenaiApi => AdapterRequest::Openai {
+            key: ApiKey::from_environment()?,
+            body: bound.request_body(prompt)?,
+        },
+        AgentConnection::Codex => AdapterRequest::ActionCodex {
+            setup: codex_connection::Setup::from_environment()?,
+            model: bound.profile.model.clone(),
+            effort: bound.profile.effort,
+            input: bound.codex_input(prompt)?,
+        },
+        _ => return Err(ChatError::InvalidRequest),
+    })
+}
+
 pub(crate) fn collaboration_adapter(
     state: &AgentChatState,
     profile: crate::agent_preferences::AgentProfile,
@@ -1304,6 +1338,58 @@ mod diagnostic_boundary_tests {
                 assert!(GenerationLease::acquire().is_ok());
                 Ok::<(), Box<dyn std::error::Error>>(())
             })?;
+        Ok(())
+    }
+
+    #[test]
+    fn action_codex_catalog_precedes_auth_and_releases_native_lock(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        use crate::agent::definition::AgentId;
+        let state = AgentChatState::default();
+        let mut profile = AgentProfile::defaults(AgentId::Coding)?;
+        profile.connection = AgentConnection::Codex;
+        profile.model = "gpt-5.6-luna".into();
+        profile.effort = ReasoningEffort::Low;
+        assert!(matches!(
+            action_adapter(&state, profile.clone(), "synthetic"),
+            Err(ChatError::Provider(DirectError::Catalog))
+        ));
+        let mut model = ModelInfo::unknown(profile.model.clone());
+        model.efforts = vec![ReasoningEffort::Default, ReasoningEffort::Low];
+        state
+            .0
+            .lock()
+            .map_err(|_| "lock")?
+            .catalogs
+            .push(CatalogEntry {
+                connection: AgentConnection::Codex,
+                endpoint: String::new(),
+                local_auth: false,
+                models: vec![model],
+            });
+        let bound = action_context(&state, profile.clone())?;
+        assert_eq!(bound.profile.connection, AgentConnection::Codex);
+        assert!(state.0.try_lock().is_ok());
+        profile.effort = ReasoningEffort::High;
+        assert!(matches!(
+            action_context(&state, profile.clone()),
+            Err(ChatError::Provider(DirectError::Unsupported))
+        ));
+        profile.effort = ReasoningEffort::Low;
+        profile.model = "unknown-model".into();
+        assert!(matches!(
+            action_context(&state, profile.clone()),
+            Err(ChatError::Provider(DirectError::ModelUnavailable))
+        ));
+        profile.model = "gpt-5.6-luna".into();
+        state.0.lock().map_err(|_| "lock")?.catalogs[0].connection = AgentConnection::OpenaiApi;
+        assert!(matches!(
+            action_context(&state, profile.clone()),
+            Err(ChatError::Provider(DirectError::Catalog))
+        ));
+        profile.connection = AgentConnection::OpenaiApi;
+        // The unchanged API route needs no Codex catalog; neither pure context path reads a key.
+        assert!(action_context(&state, profile).is_ok());
         Ok(())
     }
 }

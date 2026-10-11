@@ -213,6 +213,8 @@ def write_valid_ui_native_boundary(root: Path) -> None:
         "collaboration_tauri::list_collaboration_rooms,\n"
         "collaboration_tauri::create_collaboration_room,\n"
         "collaboration_tauri::prepare_collaboration,\n"
+        "collaboration_tauri::select_action_repository,\n"
+        "collaboration_tauri::review_action_change,\n"
         "collaboration_tauri::start_collaboration,\n"
         "collaboration_tauri::cancel_collaboration,\n"
         "collaboration_tauri::delete_collaboration_room,\n"
@@ -326,7 +328,7 @@ class RepositoryHealthTests(unittest.TestCase):
             for old, new in (
                 ('"start_collaboration"', '"arbitrary_generation"'),
                 ('"prepare_collaboration"', '"choose_arbitrary_route"'),
-                ('{ request: { roomId, input } }', '{ request: { roomId, input, privateNote: "x" } }'),
+                ('request: { roomId, input, ...(action ? { action } : {}) }', 'request: { roomId, input, action, privateNote: "x" }'),
                 ('{ request }', '{ request, key: "x" }'),
                 ('{ request: { roomId } }', '{ request: { roomId, allRooms: true } }'),
                 ('{ invoke, isTauri }', '{ invoke, isTauri, transformCallback }'),
@@ -342,6 +344,43 @@ class RepositoryHealthTests(unittest.TestCase):
             lib.write_text(lib.read_text(encoding="utf-8").replace(
                 "collaboration_tauri::start_collaboration,", "arbitrary::execute,"), encoding="utf-8")
             self.assertTrue(health.ui_native_boundary_findings(root))
+
+    def test_isolated_action_exact_ipc_rejects_authority_and_registration_changes(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            client = root / "src/infrastructure/tauri/collaboration-client.ts"
+            baseline = client.read_text(encoding="utf-8")
+            self.assertEqual(health.ui_native_boundary_findings(root), ())
+            for old, new in (
+                ('invoke<unknown>("select_action_repository")', 'invoke<unknown>("select_action_repository", { path: "/tmp/chosen" })'),
+                ('"select_action_repository"', '"execute_action"'),
+                ('"review_action_change"', '"apply_without_review"'),
+                ('{ request: { roomId, runId, reviewHash } }', '{ request: { roomId, runId, reviewHash, approved: true } }'),
+                ('{ request: { roomId, runId, reviewHash } }', '{ request: { roomId, runId, reviewHash, command: "arbitrary" } }'),
+                ('{ request: { roomId, runId, reviewHash } }', '{ request: { roomId, runId } }'),
+                ('request: { roomId, input, ...(action ? { action } : {}) }', 'request: { roomId, input, action, path: "/tmp/chosen" }'),
+                ('request: { roomId, input, ...(action ? { action } : {}) }', 'request: { roomId, input }'),
+            ):
+                with self.subTest(new=new):
+                    self.assertIn(old, baseline)
+                    client.write_text(baseline.replace(old, new), encoding="utf-8")
+                    self.assertTrue(health.ui_native_boundary_findings(root))
+            client.write_text(baseline, encoding="utf-8")
+            lib = root / "src-tauri/src/lib.rs"
+            registration = lib.read_text(encoding="utf-8")
+            for old, new in (
+                ("collaboration_tauri::select_action_repository,", ""),
+                ("collaboration_tauri::review_action_change,", "arbitrary::execute,"),
+                ("collaboration_tauri::review_action_change,", "collaboration_tauri::review_action_change,arbitrary::execute,"),
+                ("collaboration_tauri::select_action_repository,", "collaboration_tauri::select_action_repository,collaboration_tauri::select_action_repository,"),
+            ):
+                with self.subTest(new=new):
+                    self.assertIn(old, registration)
+                    lib.write_text(registration.replace(old, new), encoding="utf-8")
+                    self.assertTrue(health.ui_native_boundary_findings(root))
+            lib.write_text(registration, encoding="utf-8")
+            self.assertEqual(health.ui_native_boundary_findings(root), ())
 
     def test_diagnostics_boundary_rejects_paths_extra_commands_and_imports(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

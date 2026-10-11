@@ -41,6 +41,7 @@ impl ApprovalAuditReceipt {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum ApprovalAuditTool {
+    ApplyIsolatedChangeV1,
     CreateLocalTaskV1,
 }
 
@@ -48,12 +49,13 @@ impl ApprovalAuditTool {
     fn name(self) -> &'static str {
         match self {
             Self::CreateLocalTaskV1 => APPROVAL_TOOL_NAME,
+            Self::ApplyIsolatedChangeV1 => "apply_isolated_change",
         }
     }
 
     fn contract_version(self) -> u16 {
         match self {
-            Self::CreateLocalTaskV1 => APPROVAL_TOOL_CONTRACT_VERSION,
+            Self::CreateLocalTaskV1 | Self::ApplyIsolatedChangeV1 => APPROVAL_TOOL_CONTRACT_VERSION,
         }
     }
 }
@@ -81,7 +83,11 @@ impl ApprovalAuditRecord {
             run_id: resolution.run_id().to_owned(),
             gateway_request_id: resolution.gateway_request_id().to_owned(),
             call_id: resolution.call_id().to_owned(),
-            tool: ApprovalAuditTool::CreateLocalTaskV1,
+            tool: if resolution.origin() == &ApprovalOrigin::IsolatedChange {
+                ApprovalAuditTool::ApplyIsolatedChangeV1
+            } else {
+                ApprovalAuditTool::CreateLocalTaskV1
+            },
             risk_class: resolution.risk_class(),
             required_permission: resolution.required_permission(),
             policy_outcome: resolution.policy_outcome(),
@@ -257,11 +263,15 @@ impl fmt::Debug for InMemoryApprovalAuditAdapter {
 }
 
 fn validate_resolution(resolution: &ApprovalResolution) -> ApprovalAuditResult<()> {
-    if resolution.origin() != &ApprovalOrigin::LegacyGateway
-        || resolution.tool_name() != APPROVAL_TOOL_NAME
+    let isolated = resolution.origin() == &ApprovalOrigin::IsolatedChange
+        && resolution.tool_name() == "apply_isolated_change"
+        && resolution.required_permission() == PermissionKind::Files;
+    if (!isolated
+        && (resolution.origin() != &ApprovalOrigin::LegacyGateway
+            || resolution.tool_name() != APPROVAL_TOOL_NAME
+            || resolution.required_permission() != PermissionKind::None))
         || resolution.tool_contract_version() != APPROVAL_TOOL_CONTRACT_VERSION
         || resolution.risk_class() != RiskClass::ReversibleLocalAction
-        || resolution.required_permission() != PermissionKind::None
         || resolution.policy_outcome() != PolicyOutcome::RequireApproval
         || resolution.policy_reason() != PolicyReason::ReversibleRequiresApproval
     {
