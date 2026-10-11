@@ -1,3 +1,21 @@
+## 2026-10-10 — Main Linux routing acceptance reconciled
+
+Current evidence supersedes the pending publication/Actions statements below; their dated bodies remain verbatim. The distinct `main-linux-routing-local-remediation` successor completed locally with PASS WITH ADVISORIES, valid completion and full Stop. Its original predecessor remains terminal **FAIL / Blocked**, without a completion marker.
+
+[PR #141](https://github.com/SillyRbbit/ai-agent-assistant/pull/141) published routing at `4c8c935dacbe0d673fdc40dc6bde1d2911bec572`. [PR #142](https://github.com/SillyRbbit/ai-agent-assistant/pull/142) published the isolated sidebar test-fixture correction at `026586fdbaa415e16714ed37c109fe3ffc090bfe`. Actual [CI run 38099448267](https://github.com/SillyRbbit/ai-agent-assistant/actions/runs/38099448267) passed at that exact SHA: four Linux jobs on `cortexa-vps` (24), target-Mac Rust on `Henrys-MacBook-Pro` (22). Same-SHA [Documentation run 38098283934](https://github.com/SillyRbbit/ai-agent-assistant/actions/runs/38098283934), job `114348688217`, passed on VPS24. These retained results are separate from local macOS verification and manual VPS checks, and do not promote the earlier failed Actions run.
+
+D-136 remains sealed/unconsumed, with admission and execution approvals false and stale candidate/decision bindings. Its original temporary directory is unavailable; recorded bytes survive in verified durable copies. Cause of disappearance remains unknown. The [closeout plan](docs/plans/2026-10-10-main-linux-routing-documentation-closeout.md) and [consolidated review](docs/reviews/2026-10-10-main-linux-routing-documentation-closeout-post-increment-review.md) record preservation, provenance and supported D-134 admission. Broader D-137 adoption, deployment, DR outage drills and additional parallel Linux capacity remain separate, unverified objectives. PR #139 and its historical failed macOS diagnostic remain untouched.
+
+This documentation branch is `codex/docs/main-linux-routing-closeout`, based on the exact PR #142 main SHA. Nine documentation paths are attributable to this closeout; no commit, push, PR or merge is authorized. Check the checkout-local gate status and final receipts before treating this documentation closeout as complete. No completed implementation, verification, publication or Actions task should be repeated.
+
+Next proposed work: owner review of the documentation for possible separate publication authority.
+
+Next prompt:
+
+```text
+Review the main-linux-routing documentation closeout in /Users/hdang/.codex/worktrees/main-linux-routing-doc-closeout/ai-agent-assistant. Inspect current repository instructions and latest main before editing; preserve all user work, historical FAIL evidence, completed remediation, snapshots and D-136. Confirm the documented exact-SHA Actions results and valid complete/Stop receipts, then assess only documentation publication readiness. Do not repeat builds, routing changes or Actions acceptance. Do not commit, push, create/merge PRs, change runners or infrastructure without separate explicit authority. Stop on evidence drift or unsupported lifecycle requirements.
+```
+
 ## 2026-10-10 — Selective main Linux routing publication
 
 The owner authorized the exact thirteen-path dependent publication export described
