@@ -1,3 +1,13 @@
+## 2026-10-10 — Published routing and exact-SHA Actions acceptance
+
+This additive record supersedes the pending acceptance wording in the dated routing contract below. PR #141 published routing at `4c8c935dacbe0d673fdc40dc6bde1d2911bec572`; PR #142 corrected the isolated sidebar test fixture at `026586fdbaa415e16714ed37c109fe3ffc090bfe`. CI run `38099448267` and reused Documentation run `38098283934` passed at the latter exact SHA. The [consolidated closeout review](../reviews/2026-10-10-main-linux-routing-documentation-closeout-post-increment-review.md) records exact jobs, runner assignments, retained seals and historical qualifications. No new Actions observation or execution occurs in this closeout.
+
+The Linux selector remains `${{ github.ref == 'refs/heads/main' && 'cortexa-linux' || 'cortexa-ci' }}`. Main classification, frontend, dependency audit, Linux Rust and Documentation executed on VPS24; target-Mac Rust executed on Mac22 with its unchanged `cortexa-ci` selector. VPS24 retains `cortexa-linux` without `cortexa-ci`; local Linux23 remained offline in the retained inventory. PR #139's branch jobs and failed macOS diagnostic are preserved, without new VPS authorization. Labels are job selectors, not isolation or failover priority.
+
+Owner maintenance policy: owner-reviewed code only; weekly disk checks; preserve trusted Cargo/tool caches; inspect provenance and remove disposable workspace/temporary paths only while idle and under separately authorized maintenance. Keep administrative credentials out of CI. Existing metadata/account/firewall evidence is inherited, not rechecked here. Never infer cache cleanliness or future host health from passing jobs.
+
+The original routing FAIL, D-136's sealed/unconsumed request and stale bindings remain preserved. Its missing original temporary directory has verified durable copies; disappearance cause remains unknown. Completed local macOS verification, manual VPS validation and actual Actions results are distinct. Earlier Actions failures are not promoted. No global D-137 adoption, deployment, automatic outage failover, DR drill or additional parallel Linux capacity is established. Word/PDF architecture and detailed deployment runbooks remain deferred until separately authorized deployment and applicable validation finish.
+
 # Self-hosted GitHub Actions runners
 
 ## Current routing contract — 2026-10-10

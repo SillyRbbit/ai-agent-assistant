@@ -1,3 +1,13 @@
+## 2026-10-10 — Main Linux routing acceptance reconciled
+
+Current evidence supersedes the pending publication/Actions statements below; their dated bodies remain verbatim. The distinct `main-linux-routing-local-remediation` successor completed locally with PASS WITH ADVISORIES, valid completion and full Stop. Its original predecessor remains terminal **FAIL / Blocked**, without a completion marker.
+
+[PR #141](https://github.com/SillyRbbit/ai-agent-assistant/pull/141) published routing at `4c8c935dacbe0d673fdc40dc6bde1d2911bec572`. [PR #142](https://github.com/SillyRbbit/ai-agent-assistant/pull/142) published the isolated sidebar test-fixture correction at `026586fdbaa415e16714ed37c109fe3ffc090bfe`. Actual [CI run 38099448267](https://github.com/SillyRbbit/ai-agent-assistant/actions/runs/38099448267) passed at that exact SHA: four Linux jobs on `cortexa-vps` (24), target-Mac Rust on `Henrys-MacBook-Pro` (22). Same-SHA [Documentation run 38098283934](https://github.com/SillyRbbit/ai-agent-assistant/actions/runs/38098283934), job `114348688217`, passed on VPS24. These retained results are separate from local macOS verification and manual VPS checks, and do not promote the earlier failed Actions run.
+
+D-136 remains sealed/unconsumed, with admission and execution approvals false and stale candidate/decision bindings. Its original temporary directory is unavailable; recorded bytes survive in verified durable copies. Cause of disappearance remains unknown. The [closeout plan](docs/plans/2026-10-10-main-linux-routing-documentation-closeout.md) and [consolidated review](docs/reviews/2026-10-10-main-linux-routing-documentation-closeout-post-increment-review.md) record preservation, provenance and supported D-134 admission. Broader D-137 adoption, deployment, DR outage drills and additional parallel Linux capacity remain separate, unverified objectives. PR #139 and its historical failed macOS diagnostic remain untouched.
+
+Added current-state evidence reconciliation for completed local remediation, PR #141/#142 publication and exact-SHA Actions acceptance. Historical failures and dated documentation remain unchanged. No runtime, workflow, dependency, validator, runner or host behavior changed in this documentation closeout.
+
 ## 2026-10-10 — Selective main Linux routing publication
 
 The owner authorized the exact thirteen-path dependent publication export described
