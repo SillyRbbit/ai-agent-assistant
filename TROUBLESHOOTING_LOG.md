@@ -1,3 +1,26 @@
+## 2026-10-12 — Documentation drift resolved on a verified main snapshot
+
+Symptom: README and undated capability/storage summaries described all assistant
+interaction as mocked, no live transport and SQLite bootstrap-only storage,
+although merged adapters, bot workflows and Knowledge exist. Other stale prose
+called Codex unavailable or claimed release startup used only in-memory storage.
+
+Cause: maintained summaries did not incorporate later published implementations;
+dated candidate reports also appeared beside current prose without scope labels.
+Resolution: source-bound README/capability/provider/storage/setup annotations,
+explicit main-versus-candidate separation and retained evidence qualifications.
+Verification: source/configuration/path inspection and small checks recorded in
+the [audit review](docs/reviews/2026-10-12-documentation-implementation-audit-post-increment-review.md).
+No app or provider run occurred. Original history and failed receipts stay intact.
+
+Remaining: policy wording still describes older boundaries; provider-QA temporary
+artifacts are unavailable for revalidation; candidate memory C7/runtime acceptance
+is unresolved. These are distinct from corrected documentation drift. Do not
+recreate evidence or promote candidates. Prevention: cite the exact source/build
+and reuse the existing capability reference when updating future summaries.
+
+---
+
 ## 2026-10-11 — Accepted dependent-admission maintenance prepared for publication
 
 The owner now authorizes publication of the complete accepted governance scope,

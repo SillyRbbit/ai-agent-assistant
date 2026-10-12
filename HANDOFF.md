@@ -1,3 +1,51 @@
+## 2026-10-12 — Main documentation audit
+
+Documented remote source: `main`,
+`26447708934ef7f8118329d1b62977d7f14d45b6` (2026-10-12). The task-owned checkout
+is `/private/tmp/cortexa-documentation-audit-20261012`, detached at that SHA,
+with no local branch. Canonical main remains `a9f2e5e`; active candidates and
+existing changes are preserved. No main checkout reset, branch creation, commit,
+push, PR, merge, launch, provider request or build is part of this task.
+
+The maintained [capability matrix](ARCHITECTURE.md#current-and-future-capability-matrix)
+now distinguishes merged bot/provider/collaboration/Knowledge/diagnostic features
+from mock Conversations and unmerged saved-conversation/memory/isolated-action
+work. README is a concise entry point; provider/setup, architecture, requirements,
+security and troubleshooting prose follow code/configuration rather than old
+blanket mock-only claims. Retained QA/CI is source/build qualified; external
+provider-QA temporary artifacts are unavailable for revalidation here.
+
+Quality review: **PASS WITH ADVISORIES**. All six required documentation checks
+passed with zero exit status; no conflicts or non-Markdown edits remain.
+
+Documentation-only acceptance uses `npm run docs:check`,
+`npm run repository:check`, `npm run security:scan`, `git diff --check`,
+`python3 -B .codex/hooks/session_end_gate.py` and focused reference/preservation
+checks. Actual results belong in the
+[audit review](docs/reviews/2026-10-12-documentation-implementation-audit-post-increment-review.md).
+Check the checkout-local completion/status/full Stop receipts before treating
+this documentation milestone as finalized; it does not complete product acceptance.
+
+Remaining product gaps: persistent-memory candidate C7 native/runtime acceptance,
+untested live provider/route variants, runtime-containment and remote-abort
+limits, fragmented-output journal usability and native Knowledge Quit guard.
+Older instruction boundary wording needs a separately selected policy review;
+no policy was changed. Roadmap order and historical failures stay intact.
+
+The recoverable Markdown snapshot and baseline content bindings are in
+`/private/tmp/cortexa-documentation-audit-evidence-20261012`; the living
+[plan](docs/plans/2026-10-12-documentation-implementation-audit.md) records scope.
+Next proposed task is read-only documentation publication-readiness review.
+Publication is not authorized by this audit.
+
+Prompt 1
+
+```text
+Review the completed Cortexa documentation audit in /private/tmp/cortexa-documentation-audit-20261012, documented remote main 26447708934ef7f8118329d1b62977d7f14d45b6. Inspect current repository instructions, Git/main and the 2026-10-12 audit plan/report before editing. Preserve all existing user changes, active candidates and historical evidence; avoid unrelated changes and do not repeat completed auditing, builds or live QA. Assess only documentation publication readiness and the separately reported instruction-policy wording inconsistency. Verify documentation scope, current-source applicability, completion/status/full Stop and documentation/repository/security/whitespace checks. Report drift or ambiguous ownership as a blocker; propose any policy reconciliation separately. Do not modify AGENTS.md, skills, gate code, approval policy or product behavior; no credentials, provider requests, application launch, commits, pushes, PR or merge without separate explicit authority.
+```
+
+---
+
 ## 2026-10-11 — Accepted dependent-admission maintenance prepared for publication
 
 The owner now authorizes publication of the complete accepted governance scope,

@@ -1,3 +1,14 @@
+## 2026-10-12 — Documentation implementation audit
+
+Documentation-only: replace README's blanket mock/no-provider/no-persistence
+claims with the merged source baseline `2644770`; centralize capability and
+verification status in ARCHITECTURE; update provider setup, data/memory/Knowledge,
+security, testing and troubleshooting summaries. Explicitly retain simulated
+Conversations, candidate-only persistence/actions, stale artifact limitations and
+unverified live variants. No product, policy, dependency or credential change.
+
+---
+
 ## 2026-10-11 — Accepted dependent-admission maintenance prepared for publication
 
 The owner now authorizes publication of the complete accepted governance scope,
