@@ -20,9 +20,15 @@ increment workflow, review, Definition of Done, and release boundaries.
 `AGENTS.md` is the concise safety entry point; the master prompt provides the
 detailed Codex rules and the required final-response recommendation format.
 
-## 2. Confirm the local application works
+## 2. Check the task and baseline before launching
 
-For a fresh checkout:
+Identify the checkout/ref and compare current main before assuming a worktree is
+the latest application. Preserve active candidates and user changes. The
+[capability matrix](../../ARCHITECTURE.md#current-and-future-capability-matrix)
+separates merged implementation from candidate acceptance.
+
+For a separately authorized native development task, the configured fresh-checkout
+procedure is:
 
 ```bash
 node --version
@@ -32,7 +38,15 @@ npm ci
 npm run tauri -- dev
 ```
 
-Use `Control-C` in the terminal to stop the development process.
+Use `Control-C` to stop only your development process. Browser-only `npm run dev`
+does not supply native IPC. A documentation task checks commands against
+configuration and uses documentation/repository checks; it does not need a native
+launch, provider request or full build. Provider login/refresh/Send is separate
+explicit owner activity described in the [setup guide](../provider-milestone.md#current-provider-guide--2026-10-12).
+
+Developer-installed ECC supplies coding-assistant skills and patterns. Cortexa's
+bots remain application-owned roles; using ECC during development does not embed
+its framework, plugins, tools or authority into the application.
 
 ## 3. Start a coding session
 

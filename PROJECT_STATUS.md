@@ -1,3 +1,41 @@
+## 2026-10-12 — Merged implementation documentation snapshot
+
+Documented remote source: `main`,
+`26447708934ef7f8118329d1b62977d7f14d45b6` (2026-10-12). The task-owned checkout
+is `/private/tmp/cortexa-documentation-audit-20261012`, detached at that SHA,
+with no local branch. Canonical main remains `a9f2e5e`; active candidates and
+existing changes are preserved. No main checkout reset, branch creation, commit,
+push, PR, merge, launch, provider request or build is part of this task.
+
+The maintained [capability matrix](ARCHITECTURE.md#current-and-future-capability-matrix)
+now distinguishes merged bot/provider/collaboration/Knowledge/diagnostic features
+from mock Conversations and unmerged saved-conversation/memory/isolated-action
+work. README is a concise entry point; provider/setup, architecture, requirements,
+security and troubleshooting prose follow code/configuration rather than old
+blanket mock-only claims. Retained QA/CI is source/build qualified; external
+provider-QA temporary artifacts are unavailable for revalidation here.
+
+Application, dependency and workflow files match `026586f`, whose retained
+all-job Actions evidence is recorded in the routing review. This does not assert
+current-SHA CI, live runner health or later governance test equivalence. Retained
+OpenAI/Codex native QA proves selected behavior on its recorded builds; it does
+not verify Anthropic/local variants, other routes or new candidates. Main still
+has volatile individual bot history, explicit manual notes and lexical Knowledge
+search. No merged action executor or production release is established.
+
+Quality review: **PASS WITH ADVISORIES**. All six required documentation checks
+passed with zero exit status; no conflicts or non-Markdown edits remain.
+
+Documentation-only acceptance uses `npm run docs:check`,
+`npm run repository:check`, `npm run security:scan`, `git diff --check`,
+`python3 -B .codex/hooks/session_end_gate.py` and focused reference/preservation
+checks. Actual results belong in the
+[audit review](docs/reviews/2026-10-12-documentation-implementation-audit-post-increment-review.md).
+Check the checkout-local completion/status/full Stop receipts before treating
+this documentation milestone as finalized; it does not complete product acceptance.
+
+---
+
 ## 2026-10-11 — Accepted dependent-admission maintenance prepared for publication
 
 The owner now authorizes publication of the complete accepted governance scope,

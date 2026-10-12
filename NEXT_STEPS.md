@@ -1,3 +1,38 @@
+## 2026-10-12 — Documentation audit follow-on only
+
+Documented remote source: `main`,
+`26447708934ef7f8118329d1b62977d7f14d45b6` (2026-10-12). The task-owned checkout
+is `/private/tmp/cortexa-documentation-audit-20261012`, detached at that SHA,
+with no local branch. Canonical main remains `a9f2e5e`; active candidates and
+existing changes are preserved. No main checkout reset, branch creation, commit,
+push, PR, merge, launch, provider request or build is part of this task.
+
+The maintained [capability matrix](ARCHITECTURE.md#current-and-future-capability-matrix)
+now distinguishes merged bot/provider/collaboration/Knowledge/diagnostic features
+from mock Conversations and unmerged saved-conversation/memory/isolated-action
+work. README is a concise entry point; provider/setup, architecture, requirements,
+security and troubleshooting prose follow code/configuration rather than old
+blanket mock-only claims. Retained QA/CI is source/build qualified; external
+provider-QA temporary artifacts are unavailable for revalidation here.
+
+Next proposed documentation task: read-only publication-readiness review of the
+[audit plan](docs/plans/2026-10-12-documentation-implementation-audit.md) and
+[report](docs/reviews/2026-10-12-documentation-implementation-audit-post-increment-review.md),
+including updated source binding and lifecycle receipts. It is Ready with
+advisories after this task's checks and valid finalization; publication still
+requires separate authority. Do not repeat completed work or start another
+product milestone. Existing candidate C7 and other live/manual acceptance gaps
+remain with their owning sessions, without changed roadmap order. The older
+instruction wording inconsistency needs separate policy scope, not edits here.
+
+Prompt 1
+
+```text
+Review the completed Cortexa documentation audit in /private/tmp/cortexa-documentation-audit-20261012, documented remote main 26447708934ef7f8118329d1b62977d7f14d45b6. Inspect current repository instructions, Git/main and the 2026-10-12 audit plan/report before editing. Preserve all existing user changes, active candidates and historical evidence; avoid unrelated changes and do not repeat completed auditing, builds or live QA. Assess only documentation publication readiness and the separately reported instruction-policy wording inconsistency. Verify documentation scope, current-source applicability, completion/status/full Stop and documentation/repository/security/whitespace checks. Report drift or ambiguous ownership as a blocker; propose any policy reconciliation separately. Do not modify AGENTS.md, skills, gate code, approval policy or product behavior; no credentials, provider requests, application launch, commits, pushes, PR or merge without separate explicit authority.
+```
+
+---
+
 ## 2026-10-11 — Accepted dependent-admission maintenance prepared for publication
 
 The owner now authorizes publication of the complete accepted governance scope,

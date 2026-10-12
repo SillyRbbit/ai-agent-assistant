@@ -5,6 +5,16 @@ Start with the [project overview](../README.md). Repository work follows
 [master prompt](governance/MASTER_PROMPT.md); this index changes neither their
 precedence nor approval boundaries.
 
+## Implementation and setup
+
+- [Capability/status matrix](../ARCHITECTURE.md#current-and-future-capability-matrix):
+  merged baseline, all bots/routes, data stores, candidate-only work and evidence.
+- [Provider setup](provider-milestone.md#current-provider-guide--2026-10-12):
+  authentication prerequisites, model/effort selection, Memory Off and stream limits.
+- [Testing evidence](../TESTING_GUIDE.md): automated/native/live distinctions and
+  source/build applicability.
+- [Troubleshooting](workflows/TROUBLESHOOTING.md): sanitized diagnosis and known limits.
+
 ## Current authority and state
 
 - [Project direction](PROJECT_DIRECTION.md): owner-approved present scope and

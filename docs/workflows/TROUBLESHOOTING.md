@@ -8,6 +8,32 @@ Use `.agents/skills/troubleshoot/SKILL.md` when repository skills are available.
 Otherwise use `prompts/increments/bug-fix.md`; use
 `prompts/workflows/remediation.md` instead for an advisory backlog.
 
+## Current application triage — 2026-10-12
+
+Use the [documented main baseline](../../ARCHITECTURE.md#current-and-future-capability-matrix)
+and [provider guide](../provider-milestone.md#current-provider-guide--2026-10-12)
+before diagnosing a different worktree/build as the same application.
+
+| Symptom                                            | Evidence-based next check                                                                                                                                                                         |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Browser view lacks native features                 | `npm run dev` is browser-only; normal native development uses `npm run tauri -- dev`. Do not launch solely for a docs audit.                                                                      |
+| Hosted connection blocked                          | Verify debug build, enable flag and private native credential/store setup; Save/discovery is not a successful live request.                                                                       |
+| Codex model/effort looks unsupported after restart | Refresh is explicit metadata access; saved effort may be unverified until discovery. The old version hint is not a compatibility guarantee.                                                       |
+| Codex fails before first response                  | Record sanitized setup/runtime category and exact installed version/build; managed-policy/configuration failure can precede transport. Never substitute an API key or personal assistant profile. |
+| `resource_limit`, partial or failed stream         | Inspect fixed Settings diagnostics; the 128-update journal can cap fragmented responses. Partial text is not completion; recovery needs explicit new Send.                                        |
+| New Send blocked after Stop                        | Native generation/cleanup may still own the session. UI terminal state alone does not prove transport cleanup; do not auto-resubmit.                                                              |
+| Knowledge source appears missing or historical     | Verify saved item/version/hash and selected passage; imports are snapshots, and historical links do not silently follow a changed title.                                                          |
+| Unsaved Knowledge edit disappears on Quit          | In-app navigation guard is not an app-wide native Quit guard; explicitly save before quitting.                                                                                                    |
+| Main versus development CI waits                   | Main Linux jobs select `cortexa-linux`; other refs select `cortexa-ci`. Runner labels do not provide failover or isolation. See [runner guide](../github/SELF_HOSTED_RUNNER.md).                  |
+
+Diagnostics contain bounded event/category metadata, not prompts, transcripts,
+credentials or raw upstream errors. Explicit export is sanitized; do not attach
+owner databases or auth files. Preserve historical failing receipts. External
+QA/build temporary paths may no longer exist: cite retained reports and label
+artifact verification unavailable rather than recreating evidence or claiming
+current success. Environment workarounds belong to their recorded builds; do
+not change global Xcode/Python/Cargo settings to make a documentation check pass.
+
 ## 1. Capture the failure exactly
 
 Record:

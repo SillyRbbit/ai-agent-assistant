@@ -1,3 +1,89 @@
+## Current provider guide — 2026-10-12
+
+This maintained guide describes merged `main` at
+`26447708934ef7f8118329d1b62977d7f14d45b6`, including provider publication
+`e0d0547` and compatibility/stream fixes `bbe7546`. The September milestone
+checkpoint below is retained history, not current setup or availability.
+See the [capability matrix](../ARCHITECTURE.md#current-and-future-capability-matrix)
+and [testing evidence](../TESTING_GUIDE.md) for acceptance limits.
+
+### Connections, authentication and model selection
+
+| Connection    | Native setup and behavior                                                                                                                    | Models / reasoning evidence                                                                                                                                     |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Simulation    | No account/network; deterministic native advice                                                                                              | `simulation`, Default effort                                                                                                                                    |
+| OpenAI API    | Debug build; `CORTEXA_OPENAI_DEMO=1`, private native-session `OPENAI_API_KEY`; API billing/access separate from ChatGPT                      | Closed saved models `gpt-5.6-luna`, `gpt-5.6-terra`, `gpt-5.6-sol`; declared effort selection, not a live entitlement guarantee                                 |
+| Anthropic API | Debug build; `CORTEXA_ANTHROPIC_DEMO=1`, private native-session `ANTHROPIC_API_KEY`; explicit model discovery/Send                           | Native documented/discovered metadata; supported effort validated before Send; None unsupported                                                                 |
+| LM Studio     | Owner-started loopback server and canonical endpoint, e.g. `http://127.0.0.1:1234/v1`; no install/load/start operation                       | Explicit refresh; exact discovered ID; Default effort only; local inference unproved                                                                            |
+| Ollama        | Owner-started loopback server, e.g. `http://127.0.0.1:11434/v1`; cloud-labelled models excluded; runtime cloud disabling remains owner setup | Explicit refresh; exact discovered ID; Default effort only; loopback does not prove no egress                                                                   |
+| Codex         | Debug build; `CORTEXA_CODEX_DEMO=1`, dedicated owner-authenticated `CORTEXA_CODEX_HOME`; optional absolute `CORTEXA_CODEX_EXECUTABLE`        | Runtime model/effort discovery; saved effort can display support unverified until Refresh; historical `0.159.0` hint is not a current-version support guarantee |
+
+Codex defaults to the installed executable at
+`/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex`. Authenticate the
+owner's dedicated store with the installed CLI's supported login procedure;
+Cortexa does not log in for the owner or accept credentials via the UI. The store
+must have no `config.toml` or `AGENTS.md`. Do not reuse the coding assistant's
+personal configuration or copy auth files into the repository. The retained A/B
+QA used an owner-approved file store and the actual installed binary; that
+artifact-specific success does not prove compatibility with every installed
+version or managed-policy environment.
+
+Optional local tokens are native environment inputs, never WebView or SQLite
+fields. Enable local authentication only when needed and bind the token to the
+same normalized endpoint using `CORTEXA_LM_STUDIO_TOKEN` with
+`CORTEXA_LM_STUDIO_TOKEN_ENDPOINT`, or `CORTEXA_OLLAMA_TOKEN` with
+`CORTEXA_OLLAMA_TOKEN_ENDPOINT`. Endpoint validation allows loopback only,
+normalizes `localhost`, and rejects embedded credentials, query/fragment,
+redirect/proxy substitution and noncanonical hosts. A loopback runtime can still
+have its own network behavior; selecting it is not proof of local inference.
+Private-note use with unknown locality needs explicit owner acknowledgement.
+
+All setup names above are checked against native source. This audit did not
+launch, log in, install a runtime, refresh models or send prompts. Supply secrets
+privately to the native process; never put actual values in commands shared in
+chat, source, screenshots, logs, instructions or notes. A standard launch starts
+Simulation without acquiring provider credentials.
+
+### Using Bots
+
+Select a bot, connection, exact model and supported effort; save its preferences,
+then start a fresh native conversation. Saving does not make a request. Start
+captures profile/revision; a later settings change invalidates the old context.
+Explicit disclosure/acknowledgement precedes Send. Refresh queries model/account
+metadata and is a separate network/runtime operation, not a generated reply.
+Discovery proves neither entitlement nor successful generation.
+
+Completed turns supply bounded follow-up context (four user turns, 16,384 history
+characters; message limit 4,096 characters). Individual history is volatile on
+main. Private notes are owner-written and bot-isolated; Memory Off retains the
+saved note but excludes it. Collaboration excludes notes regardless of profile.
+No automatic learning, cross-bot note sharing, tool execution or Knowledge RAG is
+performed. Identity/personality influences text, not authority.
+
+### Streaming and failure limits
+
+The native host limits each run to 60 seconds and 8,192 visible characters, with
+a 128-update journal. Highly fragmented replies can hit `resource_limit` before
+the visible-text cap. Partial output can be retained without claiming completion.
+Stop is terminal locally; late events are rejected and ownership cleanup gates
+another Send. Transport failure, malformed streams, account/model errors,
+incomplete output and cleanup failures have fixed sanitized errors. Recovery is
+an explicit new owner action; Cortexa does not automatically resubmit or fall
+back to Simulation/another provider. Codex internal retries and usage budgets
+remain runtime-controlled, and Stop cannot promise immediate remote termination.
+
+OpenAI/Codex native success, streaming, follow-up, Stop/recovery and research
+workflow evidence is retained for the tested builds in the
+[live-provider review](reviews/2026-10-06-live-provider-e2e-post-increment-review.md).
+Anthropic/local discovery and live operation, other collaboration routes and
+later candidate runtime changes are not established by that report. External QA
+temporary artifacts were unavailable in this audit; no new live verification is
+claimed. Runtime configuration denials are not complete OS containment proof.
+
+## Historical provider milestone checkpoints — preserved
+
+---
+
 # Provider connections milestone
 
 ## Current checkpoint — implemented and automatically verified; owner QA pending

@@ -1,3 +1,47 @@
+## 2026-10-12 — Current merged boundary and enforcement evidence
+
+Documented source: remote `main` at
+`26447708934ef7f8118329d1b62977d7f14d45b6`. Later private direct adapters,
+collaboration and Knowledge are implemented; older no-provider/no-product-memory
+statements below concern their original transport-free/fixture lane. See the
+[capability matrix](ARCHITECTURE.md#current-and-future-capability-matrix) for scope,
+source and evidence. This annotation changes no approval or security policy.
+
+Rust owns profile/revision validation, native request preparation, fixed routing,
+bounded stream state and credential acquisition. Bot text and version-1 handoffs
+are untrusted; schema-valid output does not prove factual correctness, executed
+tests or authorization. Merged main has no action executor: proposal text and
+mock approvals cannot execute commands or device effects. New isolated-action
+work belongs to an unmerged candidate and is not granted authority by this audit.
+
+OpenAI/Anthropic use native-session environment keys on gated debug paths. Codex
+uses an owner-selected installed executable and dedicated authenticated store;
+Cortexa does not acquire credentials through the WebView or SQLite. Loopback
+connections support endpoint-bound native tokens. Profiles, manual notes,
+collaboration records and Knowledge are owner content in plain local SQLite;
+this is not encrypted storage or a credential vault. Selected Knowledge can be
+sent to the explicitly configured workflow provider after acknowledgement.
+Memory Off excludes the stored note; collaboration excludes private notes.
+
+Tauri config limits WebView connections to local IPC (and Vite WebSocket in
+development), and the main-window capability lists `core:default`. These are
+configured controls, supported by repository checks, not proof of every native
+network path or OS boundary. Rust provider transport is outside browser CSP.
+Codex tool/plugin/hook denials, sanitized environment, child cleanup and narrow
+protocol are implemented; internal runtime retries, remote-abort timing, runtime
+updates and complete containment remain qualified. Loopback does not prove
+no-egress inference. Retained native QA applies to its exact installed runtime,
+source and artifact; no new launch or adversarial enforcement test ran here.
+
+Local diagnostics use fixed content-free categories, bounded rotation and
+explicit sanitized export. They do not replace an approval ledger or security
+audit. Privileged macOS permissions, product identity/gateway, release signing
+and notarization remain separate gated targets. D-127/D-128 advisories and
+historical failed evidence remain visible. Substantive older instruction wording
+is reported in the audit review rather than silently amended.
+
+---
+
 ## 2026-10-01 — Knowledge & Documents v1 acceptance in progress
 
 Knowledge inputs are untrusted. Native dialogs select one supported file or
@@ -815,9 +859,11 @@ succeeds. Its same-thread retained-run model is neither provider/CPU
 concurrency nor an app-global budget or session boundary. A successful terminal native or run-termination resolution
 cannot leave the initial turn without one typed legacy audit receipt. Agent
 governance reserves one audit slot before downstream mutation and records
-execution only as `NotAttempted`. There is no live provider transport,
-dispatcher, executor, durable or user-facing product memory, platform adapter,
-or durable audit. Current resolutions, memory, records, references, and receipts
+execution only as `NotAttempted`. This transport-free governance family has no
+live provider transport, dispatcher, executor, durable product memory, platform
+adapter or durable audit. The separately implemented private chat/Knowledge paths
+are described in the current annotation above. These governance resolutions,
+memory, records, references, and receipts
 are volatile and non-authorizing and must not be mistaken for an end-to-end
 security path.
 
