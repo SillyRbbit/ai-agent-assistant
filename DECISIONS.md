@@ -1,3 +1,20 @@
+## 2026-10-13 — Owner-authorized separate worktree archival procedure
+
+The owner authorizes documentation only: add a minimal separate completion-workflow
+procedure for task-owned worktree archival. Ordinary QA-build cleanup continues to
+protect worktrees. Completed acceptance/owner review, applicable separately approved
+publication/merge and passing post-merge checks, exact ownership, resolved dependencies,
+verified durable source/evidence/necessary ignored-file custody and explicit archival
+authorization are all required. Prefer supported managed recoverable archival;
+unsupported or uncertain custody means retain. Record preservation verification,
+recovery semantics and truthful measured reporting in an additive durable receipt.
+Current persistent-memory worktrees and required artifacts remain retained pending
+C7 and remaining closeout. No actual archival/removal, cleanup, signal, credentials,
+provider request, branch, commit, push or merge is authorized. Historical records stay.
+Canonical procedure: [END_SESSION](docs/workflows/END_SESSION.md#task-owned-worktree-archival).
+
+---
+
 ## 2026-10-13 — Owner-authorized task-owned QA-build cleanup workflow
 
 The owner authorizes a minimal documentation amendment to the existing completion

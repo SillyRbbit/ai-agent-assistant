@@ -1,3 +1,16 @@
+## 2026-10-13 — Worktree archival amendment follow-up
+
+Next bounded task: read-only owner review/publication-readiness assessment of the
+uncommitted documentation candidate using the exact prompt in
+[HANDOFF](HANDOFF.md#2026-10-13--separate-worktree-archival-workflow-amendment).
+Do not repeat implementation/builds or unchanged validation. Publication remains
+separately authorized; this amendment grants no artifact operations. Preserve
+persistent-memory worktrees/artifacts pending C7 and remaining closeout. Any later
+archival requires every [separate prerequisite](docs/workflows/END_SESSION.md#task-owned-worktree-archival),
+verified durable custody and explicit exact-worktree authorization. Roadmap unchanged.
+
+---
+
 ## 2026-10-13 — QA-build cleanup amendment follow-up
 
 Review this uncommitted documentation candidate before any separately authorized

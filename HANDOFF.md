@@ -1,3 +1,54 @@
+## 2026-10-13 — Separate worktree archival workflow amendment
+
+Task: worktree-archival-workflow; detached checkout
+`/Users/hdang/.codex/worktrees/worktree-archival-workflow/ai-agent-assistant`,
+base `6e663ce2114bd393d4340f540944ff77e3351cb9`. This new candidate is uncommitted
+and unpublished. The earlier QA-cleanup workflow is merged in that baseline
+([PR 146](https://github.com/SillyRbbit/ai-agent-assistant/pull/146)); its earlier
+unpublished entries below remain historical, not current publication status.
+
+The [separate archival procedure](docs/workflows/END_SESSION.md#task-owned-worktree-archival)
+requires completed acceptance and owner review, applicable separately authorized
+publication/merge and passing post-merge results, exact ownership, no dependencies,
+verified durable source/evidence/necessary ignored-file custody and explicit
+archival authorization. It prefers the supported recoverable manager and records
+preservation verification, snapshot recovery semantics and measured reporting.
+Ordinary QA cleanup still protects worktrees. No executor or gate change is added.
+See the [plan](docs/plans/2026-10-13-worktree-archival-workflow.md) and
+[final review](docs/reviews/2026-10-13-worktree-archival-workflow-post-increment-review.md).
+
+**Persistent-memory disposition: retain worktrees and artifacts.** C7 remains
+unverified in retained owning-session evidence and all remaining acceptance, owner
+review and closeout conditions have not been established as passed. Required
+publication/post-merge evidence is not established for that candidate. Reconcile
+fresh owning-session evidence before any future proposal; this documentation task
+does not revalidate or resolve those criteria. Keep its checkout, gate/admission,
+review build, manifests, failure records and recovery backups, including:
+`/Users/hdang/.codex/backups/cortexa-memory-evidence-recovery-20261012-69145daebc/review/Cortexa Memory QA.app`.
+No artifact custody or native acceptance is inferred from this recorded pointer.
+
+Archival/removal/cleanup performed: none; actual space recovered: 0 bytes.
+This candidate also remains retained pending owner review and any separately
+required publication/closeout; explicit archival authorization is absent.
+No processes signaled, providers contacted, credentials accessed or builds run.
+Source/configuration/instructions and other candidates remain unchanged; prior
+reports remain frozen. Baseline copies, hashes and validation/gate receipts are
+outside temporary directories at
+`/Users/hdang/.codex/visualizations/2026/10/13/01a13321-ac73-7a70-8c1c-ef542b1452cd/worktree-archival-workflow-evidence`.
+Validation: documentation, repository, security, whitespace and session checks
+passed on the implementation candidate; complete diff/preservation review found no
+blocking issue. Affected final checks run after these last documentation edits.
+The checkout-local final gate/status and complete-payload Stop receipts determine
+completion validity. No product/native test applies; no historical failure changes.
+
+Next prompt (read-only review):
+
+```text
+Review the worktree-archival-workflow documentation candidate in /Users/hdang/.codex/worktrees/worktree-archival-workflow/ai-agent-assistant. Inspect repository instructions, Git state, plan, complete diff, final review and retained evidence before any editing. Preserve existing user work and historical records; avoid unrelated changes and do not repeat completed implementation, unchanged validation or builds. Confirm conjunctive acceptance/owner-review/publication/post-merge/ownership/dependency/authorization gates, managed snapshot limitations, necessary ignored-file custody, preservation verification and recovery/reporting. Confirm ordinary QA cleanup still protects worktrees and persistent-memory worktrees/artifacts stay retained pending C7 and closeout. Verify retained hashes and current gate applicability; run only checks affected by changed inputs. Report findings and publication readiness. Stop on missing evidence or ambiguous ownership. No edits, actual archival/removal, artifact deletion, process signals, credentials, provider requests, commits, pushes or merges are authorized.
+```
+
+---
+
 ## 2026-10-13 — QA-build cleanup workflow amendment
 
 Task: qa-build-cleanup-workflow; detached worktree

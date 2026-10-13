@@ -1,3 +1,14 @@
+## 2026-10-13 — Task-owned worktree archival workflow
+
+Owner-selected documentation-only amendment:
+[plan](docs/plans/2026-10-13-worktree-archival-workflow.md).
+Add a separate conditional archival procedure through existing closeout; no actual
+archival/removal, product implementation or publication. Preserve the merged QA
+workflow, original candidate and historical evidence. Persistent-memory C7 and
+remaining closeout remain independent, incomplete and archival-blocking.
+
+---
+
 ## 2026-10-13 — Task-owned QA-build cleanup workflow
 
 Owner-selected documentation-only amendment:

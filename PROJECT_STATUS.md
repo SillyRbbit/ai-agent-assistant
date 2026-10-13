@@ -1,3 +1,16 @@
+## 2026-10-13 — Separate worktree archival documentation
+
+The uncommitted worktree-archival-workflow candidate adds a separate conditional
+closeout procedure, not archival automation or authority. The QA-build cleanup
+workflow is already merged at baseline `6e663ce`; older dated candidate entries
+remain historical. See the [plan](docs/plans/2026-10-13-worktree-archival-workflow.md)
+and [handoff](HANDOFF.md#2026-10-13--separate-worktree-archival-workflow-amendment).
+Ordinary QA cleanup protects worktrees. Persistent-memory worktrees, review build
+and required evidence remain retained pending unverified C7 and remaining closeout;
+no current product acceptance is inferred. No archival/removal or cleanup performed.
+
+---
+
 ## 2026-10-13 — Conditional QA-build cleanup documentation
 
 The task-owned qa-build-cleanup-workflow candidate extends the existing end-session

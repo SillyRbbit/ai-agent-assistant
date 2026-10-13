@@ -424,6 +424,12 @@ alone never authorizes deletion: preserve review builds, acceptance evidence and
 rollback artifacts until that procedure's prerequisites and cleanup authorization
 are satisfied. Publication and merge still require separate authorization.
 
+Worktrees remain protected from QA-build cleanup. Record their separate archival
+disposition under [Task-owned worktree archival](docs/workflows/END_SESSION.md#task-owned-worktree-archival);
+verified durable source/evidence and necessary ignored files, resolved dependencies
+and explicit archival authorization are required. Prefer managed recoverable archival;
+retain persistent-memory worktrees/artifacts pending C7 and remaining closeout.
+
 ## Session start and end
 
 At session start, follow `.agents/skills/session-start/SKILL.md`: read the
