@@ -1,3 +1,18 @@
+## 2026-10-13 — Owner-authorized task-owned QA-build cleanup workflow
+
+The owner authorizes a minimal documentation amendment to the existing completion
+workflow. Cleanup requires completed implementation/checks/native QA, required
+owner review, separately authorized required publication/merge, applicable passing
+post-merge verification and no active session/process/acceptance/rollback dependency.
+The canonical procedure is [END_SESSION](docs/workflows/END_SESSION.md#task-owned-qa-build-cleanup).
+Exact ownership, verified durable custody and explicit cleanup authority precede
+any removal. Protected source/worktrees/Git/data/credentials/history/evidence/backups
+remain. No commit/push/merge or current artifact deletion follows from this amendment.
+Current persistent-memory review build and required artifacts remain retained until
+C7 and remaining closeout requirements pass. Historical decisions/results remain.
+
+---
+
 ## 2026-10-11 — Supported D-134 publication-readiness admission
 
 The explicit owner publication authorization includes a separate bounded local

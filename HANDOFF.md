@@ -1,3 +1,49 @@
+## 2026-10-13 — QA-build cleanup workflow amendment
+
+Task: qa-build-cleanup-workflow; detached worktree
+`/Users/hdang/.codex/worktrees/qa-build-cleanup-workflow/ai-agent-assistant`,
+base `ef05c48`. This documentation candidate is uncommitted and unpublished.
+The existing [end-session workflow](docs/workflows/END_SESSION.md#task-owned-qa-build-cleanup)
+now requires explicit eligibility or retention, durable evidence, exact ownership,
+narrow authorized removal and measured preservation/recovery reporting. No deletion
+executor, gate/security change, process signal, provider call or build is introduced.
+See the [plan](docs/plans/2026-10-13-qa-build-cleanup-workflow.md) and [final review](docs/reviews/2026-10-13-qa-build-cleanup-workflow-post-increment-review.md).
+
+**Current persistent-memory cleanup: retain; not eligible.** C7 is unverified and
+remaining implementation/native acceptance/owner review/closeout dependencies have
+not all passed. Required publication/merge and applicable post-merge evidence are
+not established for that candidate. Do not infer eligibility from a prior test pass,
+idle session or this amendment. Keep the owning checkout/admission and required
+artifacts, including the recorded review app:
+`/Users/hdang/.codex/backups/cortexa-memory-evidence-recovery-20261012-69145daebc/review/Cortexa Memory QA.app`.
+Its enclosing recovery backup, retained manifests/results/failure records and later
+runtime/preflight evidence remain protected. The original temporary packages were
+reported unavailable during evidence recovery; this task does not recreate or
+claim their custody. No current native acceptance is inferred from a retained build.
+Reconcile fresh owning-session evidence before any future cleanup; no changes were
+made to its active worktree or gate. C7 is not passed to permit cleanup.
+
+Cleanup performed here: none. Removed paths: none. Actual space recovered: 0 bytes.
+No rebuild is needed for this prose-only amendment. For future QA cleanup, first
+preserve and verify that build's exact source/configuration and rebuild instructions;
+this handoff does not certify current artifact eligibility or revalidate a build.
+Original edited document snapshots/hashes and verification receipts are outside
+temporary directories at
+`/Users/hdang/.codex/visualizations/2026/10/13/01a13321-ac73-7a70-8c1c-ef542b1452cd/qa-cleanup-workflow-evidence`.
+
+Validation: docs:check, repository:check, security:scan, whitespace and session
+checks passed; complete diff/security/preservation review found no blocking issue.
+The checkout-local final gate/status receipt determines marker validity. No product
+tests/builds/native QA were required or rerun for this documentation change.
+
+Next prompt (review only):
+
+```text
+Review the qa-build-cleanup-workflow documentation candidate in /Users/hdang/.codex/worktrees/qa-build-cleanup-workflow/ai-agent-assistant. Inspect repository instructions, Git state, plan, complete diff and final review before editing. Preserve existing changes and historical evidence; avoid unrelated work and do not repeat completed implementation or builds. Confirm eligibility, durable custody, exact ownership, protected categories and deferred C7 retention cover the owner's requirements. Check the recorded documentation validation and current applicability; run only affected checks if inputs changed. Report publication readiness and any exact blocker. No artifact deletion, process signal, credentials, provider use, commit, push or merge is authorized. Stop on ambiguous ownership or missing required evidence; keep the persistent-memory review build and required artifacts.
+```
+
+---
+
 ## 2026-10-12 — Main documentation audit
 
 Documented remote source: `main`,

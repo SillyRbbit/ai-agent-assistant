@@ -1,3 +1,13 @@
+## 2026-10-13 — Task-owned QA-build cleanup workflow
+
+Owner-selected documentation-only amendment:
+[plan](docs/plans/2026-10-13-qa-build-cleanup-workflow.md).
+Integrate cleanup eligibility and retention into the existing completion workflow;
+no cleanup executor, current artifact deletion or publication. Memory C7 and its
+remaining closeout stay independent, incomplete and cleanup-blocking.
+
+---
+
 ## 2026-10-12 — Documentation implementation audit
 
 [Living plan](docs/plans/2026-10-12-documentation-implementation-audit.md) and

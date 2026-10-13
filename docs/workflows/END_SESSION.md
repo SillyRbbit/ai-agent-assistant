@@ -57,7 +57,102 @@ post-increment quality and marker closeout.
 10. Confirm no secrets, build output, personal data, or local logs were added.
 11. Run `$post-increment-gate`, create the consolidated report, and finalize the deterministic completion marker only when the result is `PASS` or `PASS WITH ADVISORIES`.
 12. Confirm `python3 .codex/hooks/post_increment_gate.py status` reports the active increment as complete and valid.
-13. Show the final Git status.
+13. Record the QA-build cleanup disposition using the procedure below. Cleanup may
+    remain deferred after implementation completion; a completion marker alone
+    does not authorize deletion or prove cleanup eligibility.
+14. Show the final Git status.
+
+## Task-owned QA-build cleanup
+
+This is a conditional completion/closeout step, not a deletion command or blanket
+cleanup authorization. It does not authorize a commit, push, PR, merge or release.
+Use existing task authorization only when it explicitly covers the identified
+cleanup; otherwise obtain authorization for the concrete inventory before removal.
+
+### Eligibility: every condition must be established
+
+- Required implementation, automated checks and native QA are complete and passed.
+- Required owner review is complete, with its approval retained.
+- Publication and merge are complete where required and separately authorized;
+  applicable post-merge verification passed. Record evidence or a justified
+  not-applicable disposition for conditional requirements; absence of publication
+  authorization is not a waiver of required publication.
+- No active session, process, pending acceptance or rollback requirement depends
+  on the artifacts. Check across tasks sharing the paths, not just this session.
+  An idle session or lack of a visible process alone does not establish this.
+
+Unknown, failed or pending conditions mean **retain**. Keep the review build while
+owner review or mandatory acceptance is pending. Never mark incomplete QA passed,
+rewrite historical failure, or waive rollback needs to make artifacts eligible.
+This step does not change existing implementation gates or grant successor authority.
+
+### Before removal
+
+1. Record each exact absolute artifact path, resolved location, type, logical and
+   allocated size, filesystem, owning task and ownership evidence. Identify shared
+   consumers, expected contents and the proposed retained/removed disposition.
+   A temporary location or filename prefix alone is not ownership proof. Do not
+   follow links into other trees; stop on unexpected links, shared content, changed
+   identity, unresolved attribution or evidence drift.
+2. Confirm source and necessary build configuration are durably preserved outside
+   temporary directories, including uncommitted source where needed. Retain the
+   exact revision/patch, dependency/lockfile and toolchain identities, sanitized
+   build configuration and rebuild/recovery instructions. Never copy credentials
+   or owner data into a cleanup evidence package. Rebuildability does not replace
+   required acceptance or rollback artifact custody.
+3. Preserve acceptance results, sanitized logs, manifests, hashes, approvals and
+   recovery instructions outside temporary directories and outside the deletion
+   inventory. Verify the durable copies against their recorded identities before
+   removing originals. Keep the evidence-to-source/build binding, original failures
+   and any missing-evidence qualifications; do not manufacture missing receipts.
+4. Confirm any signals target only task-owned processes using captured process
+   identity and current executable/start identity; recheck before signaling and
+   verify exit. Never use broad process-name matching, stale PIDs or unrelated
+   process termination. If another session still needs the process/artifact,
+   retain it. Record no signaling when none is needed.
+5. Recheck eligibility, ownership, preservation and cleanup authorization immediately
+   before removal. Retain a durable inventory/receipt and baseline disk measurements.
+   Stop the affected removal if any prerequisite changes or cannot be established.
+
+### Removal boundaries and reporting
+
+Eligible items may include task-owned disposable QA app bundles, isolated build
+output directories and temporary fixtures after all dependencies are resolved.
+Remove only the individually identified disposable items. A directory is eligible
+only when its complete contents and ownership have been checked; an allowlisted
+parent must not authorize removal of unexpected descendants or shared content.
+Blanket directory deletion and `git clean` are prohibited. Never run `cargo clean`
+against an active or shared target directory.
+
+Never remove source checkouts, linked worktrees, Git metadata, owner application
+data, credentials, historical failure records, required evidence or recovery
+backups. When protected and disposable content are mixed, retain the containing
+path unless an exact safe disposable subset is established. A backup directory
+containing a review app remains protected; do not infer it is disposable by name.
+
+After authorized removal, verify the exact removed paths are absent and retained
+source/configuration/evidence/recovery identities still match. Record every success,
+partial failure and retained item. Measure allocated artifact bytes before/after
+and available space on the same filesystem; report actual observed space recovery
+separately from logical sizes or estimates. Account for concurrent disk activity,
+APFS clones/snapshots or delayed reclamation; if attribution is uncertain, report
+that uncertainty instead of claiming an estimated total as recovered space.
+
+The durable cleanup receipt and handoff must identify:
+
+- Eligibility evidence, cleanup authorization, owner/task and exact inventory.
+- Removed paths, failures, actual measurements and retained paths with reasons.
+- Preserved source/configuration/evidence locations and hash verification results.
+- Exact rebuild commands, required nonsecret environment/toolchain/dependency
+  setup and recovery instructions; rebuilding does not recreate historical QA.
+- If cleanup is deferred: the exact pending condition, artifact dependencies,
+  review-build location and next decision/check. Record zero removal and zero
+  space recovered when no cleanup ran; no speculative cleanup schedule.
+
+Do not change frozen acceptance reports or completion fingerprints to record
+later cleanup. Use an additive durable cleanup receipt/handoff through the existing
+authorized documentation route. Required evidence must remain accessible after
+cleanup; a receipt referencing a deleted-only file is not preserved evidence.
 
 ## Gate or access blockers
 
