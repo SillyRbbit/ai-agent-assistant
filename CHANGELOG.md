@@ -1,3 +1,14 @@
+## 2026-10-13 — Separate worktree archival workflow (unpublished)
+
+Added a separate conditional closeout procedure with explicit archival authority,
+completed acceptance/review/publication gates, exact ownership, durable source/evidence
+and necessary ignored-file preservation, managed recovery limitations, verification
+and recovery/reporting. QA cleanup still protects worktrees. Persistent-memory
+worktrees/artifacts remain retained pending C7 and closeout. No archival/removal,
+product/gate change or publication performed by this task.
+
+---
+
 ## 2026-10-13 — QA-build cleanup workflow (unpublished)
 
 Added conditional cleanup/retention to the existing completion workflow: exact

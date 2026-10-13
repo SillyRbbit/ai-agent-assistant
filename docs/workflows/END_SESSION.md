@@ -60,7 +60,9 @@ post-increment quality and marker closeout.
 13. Record the QA-build cleanup disposition using the procedure below. Cleanup may
     remain deferred after implementation completion; a completion marker alone
     does not authorize deletion or prove cleanup eligibility.
-14. Show the final Git status.
+14. Record the separate worktree archival disposition below. Ordinary QA-build
+    cleanup always protects worktrees; completion is not archival authorization.
+15. Show the final Git status.
 
 ## Task-owned QA-build cleanup
 
@@ -153,6 +155,103 @@ Do not change frozen acceptance reports or completion fingerprints to record
 later cleanup. Use an additive durable cleanup receipt/handoff through the existing
 authorized documentation route. Required evidence must remain accessible after
 cleanup; a receipt referencing a deleted-only file is not preserved evidence.
+
+## Task-owned worktree archival
+
+This separate optional closeout procedure never follows automatically from QA-build
+cleanup, a completion marker, PR merge, session idleness or chat archival. Worktrees
+remain protected by ordinary QA-build cleanup. This procedure documents prerequisites;
+it does not itself authorize archival, removal, publication or process signals.
+
+### Eligibility and explicit authorization
+
+Establish every condition before proposing an exact worktree for archival:
+
+- All required implementation, automated checks and native/manual acceptance passed;
+  required owner review is complete and its approval is retained.
+- Required publication/merge was separately authorized and completed, and applicable
+  post-merge verification passed. Record evidence or a justified not-applicable
+  disposition for conditional requirements; missing authority never waives them.
+- Exact task ownership is established, including all contents and shared consumers.
+  No active session/task/process, pending acceptance or rollback requirement depends
+  on the checkout, its ignored files or artifacts. An idle session alone is insufficient.
+- Source, necessary build configuration and required evidence are durably preserved
+  and verified as below. Unknown, failed or pending conditions mean **retain**.
+- The owner explicitly authorizes archival of the identified worktree and its precise
+  disposition after reviewing the inventory, preservation and recovery record.
+  Task completion or authorization to delete QA builds does not provide this authority.
+
+**Persistent-memory worktrees and artifacts remain retained pending C7 and all
+remaining closeout requirements.** Keep the review build and recovery evidence;
+never mark incomplete QA passed or relabel historical failure to permit archival.
+
+### Before archival
+
+1. Record the exact absolute/resolved checkout path, owning task, Git common-directory
+   relationship, HEAD, branch or detached state, local changes, unpushed commits,
+   untracked and ignored inventory, logical/allocated sizes and filesystem. Use
+   task/session attachment and Git records together; names or location are not proof.
+   Check linked paths and all consumers without following links into other trees.
+   Stop on shared content, ambiguous ownership, unexpected links or identity drift.
+2. Prefer the supported managed recoverable archive. For Codex-managed worktrees,
+   inspect `list_artifacts` and use only the exact attached worktree `identityKey`
+   with `archive_worktree` after explicit authorization. The manager snapshots local
+   changes, unpushed commits and non-ignored untracked files before removing the
+   checkout. Necessary ignored files are **not** included automatically. Primary,
+   pinned or shared worktrees, initialized submodules and embedded Git repositories
+   are unsupported: retain them. A non-managed or unsupported checkout needs a
+   separately reviewed procedure; never fall back to forced removal, blanket deletion,
+   `git worktree remove`/`prune` or `git clean` under this procedure.
+3. Independently preserve exact source revision/history and any local/untracked
+   source, necessary nonsecret build configuration, lockfile/toolchain identities,
+   acceptance results, sanitized logs, approvals, manifests, hashes, historical
+   failures and recovery instructions outside this checkout and temporary directories.
+   Inventory necessary ignored files separately, including checkout-local gate state,
+   admission/closure receipts and required QA/recovery artifacts. Verify durable
+   copies against recorded hashes before action. Do not put credentials or owner
+   application data into Git snapshots or evidence packages; stop if such content
+   would be captured or protected custody cannot be established, without reading
+   secret values. Rebuildability does not replace historical evidence or backups.
+4. Retain a durable pre-archival inventory/receipt outside the checkout with source
+   and evidence bindings, manager recovery expectations, required ignored-file
+   copies, sizes, baseline disk measurements and exact recovery steps. Confirm
+   preserved source/configuration can reconstruct the task and retained evidence is
+   readable. Missing or inaccessible evidence is a blocker, not preservation proof.
+5. Recheck all prerequisites, current identities, dependencies and explicit archival
+   authorization immediately before the supported operation. No process termination
+   is implied; resolve process dependencies under separate applicable authorization.
+   Do not archive owner data, credentials, required evidence or recovery backups
+   whose verified durable custody would be lost, and never manually delete shared
+   Git metadata or source outside the specifically authorized managed checkout.
+
+### Preservation verification, recovery and reporting
+
+After an authorized managed operation, verify the exact checkout disposition and
+archived attachment, record the recovery snapshot identity/locator, and verify that
+preserved source/local/untracked identities, necessary ignored-file copies and
+required evidence remain accessible and match the inventory. A successful tool
+response alone is not preservation proof. Record partial or uncertain outcomes;
+inspect current attachment state before retrying, and stop without a deletion fallback.
+
+For Codex-managed recovery, record how to select the archived `identityKey` from
+`list_artifacts` and use `restore_worktree` under separate authorization. Restoration
+recreates the original path with detached HEAD; previously uncommitted changes are
+in the snapshot commit, not restored as staged/unstaged changes. Record original
+branch/index disposition and instructions to recover preserved necessary ignored
+files and rebuild from the bound source/configuration. Do not claim restoration
+was tested unless it actually was; restoration/testing is not authorized by archival.
+
+The durable receipt and additive handoff must report authorization/eligibility,
+exact archived or retained paths and reasons, snapshot locator, preserved source,
+evidence and ignored-file locations/hashes, verification results, failures and
+recovery/rebuild instructions. Measure allocated bytes and available space on the
+same filesystem before/after; report observed recovery separately from logical
+size or estimates, qualifying APFS snapshots/clones and concurrent activity.
+Do not rewrite frozen reports or completion fingerprints to record later archival;
+use the existing authorized additive documentation route. If deferred, record the
+exact pending condition and next decision/check, with zero archival/removal and
+zero space recovered when no action ran. Keep required evidence accessible;
+references to files available only inside a removed checkout do not preserve them.
 
 ## Gate or access blockers
 
