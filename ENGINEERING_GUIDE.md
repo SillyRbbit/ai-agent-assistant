@@ -417,6 +417,13 @@ increment completion and never creates a completion marker.
 Publication is a separate operation. A verified uncommitted increment is not
 published until its commit and remote state are confirmed.
 
+Task-owned QA-build cleanup is a conditional closeout step under
+[End a working session](docs/workflows/END_SESSION.md#task-owned-qa-build-cleanup).
+Record eligibility or the exact retention condition in the handoff. Completion
+alone never authorizes deletion: preserve review builds, acceptance evidence and
+rollback artifacts until that procedure's prerequisites and cleanup authorization
+are satisfied. Publication and merge still require separate authorization.
+
 ## Session start and end
 
 At session start, follow `.agents/skills/session-start/SKILL.md`: read the

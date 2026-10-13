@@ -1,3 +1,15 @@
+## 2026-10-13 — QA-build cleanup amendment follow-up
+
+Review this uncommitted documentation candidate before any separately authorized
+publication. The underlying roadmap is unchanged. Follow the exact review prompt
+in [HANDOFF](HANDOFF.md#2026-10-13--qa-build-cleanup-workflow-amendment).
+Do not run cleanup now: persistent-memory C7 and remaining closeout are pending;
+retain its review build, required evidence and recovery backups. Cleanup later
+requires every [eligibility condition](docs/workflows/END_SESSION.md#task-owned-qa-build-cleanup),
+verified durable custody and exact task-owned inventory/authorization.
+
+---
+
 ## 2026-10-12 — Documentation audit follow-on only
 
 Documented remote source: `main`,

@@ -1,3 +1,13 @@
+## 2026-10-13 — QA-build cleanup workflow (unpublished)
+
+Added conditional cleanup/retention to the existing completion workflow: exact
+ownership, durable source/configuration/evidence, protected artifacts, safe process
+identity, narrow authorized removal and measured recovery reporting. Persistent
+memory retains review artifacts pending C7 and closeout. No artifact deletion,
+product/gate change or publication performed.
+
+---
+
 ## 2026-10-12 — Documentation implementation audit
 
 Documentation-only: replace README's blanket mock/no-provider/no-persistence

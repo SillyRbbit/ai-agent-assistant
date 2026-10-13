@@ -1,3 +1,16 @@
+## 2026-10-13 — Conditional QA-build cleanup documentation
+
+The task-owned qa-build-cleanup-workflow candidate extends the existing end-session
+procedure with eligibility, durable custody, ownership and cleanup receipts. It does
+not implement deletion or grant publication authority. See the
+[plan](docs/plans/2026-10-13-qa-build-cleanup-workflow.md) and
+[handoff](HANDOFF.md#2026-10-13--qa-build-cleanup-workflow-amendment).
+Current persistent-memory cleanup remains deferred: C7 and remaining closeout
+requirements must pass; retain its review build and required artifacts. No artifacts
+removed, no space recovered, no new product/native verification claimed.
+
+---
+
 ## 2026-10-12 — Merged implementation documentation snapshot
 
 Documented remote source: `main`,
