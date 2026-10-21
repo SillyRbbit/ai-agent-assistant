@@ -12753,3 +12753,23 @@ worktree remains detached with attributed local changes. Do not begin a successo
 ```text
 Inspect the Local Tasks and Follow-ups checkout at /Users/hdang/.codex/worktrees/local-tasks-followups/ai-agent-assistant, its current instructions/admission, final review and sealed task evidence before editing. Preserve existing changes, passed acceptance and all retained resources; reuse completed verification. Review milestone-only Git integration readiness, attribution and the parallel RAG ownership/migration registry boundary. Do not repeat acceptance, share QA databases with older builds, modify RAG-owned code, delete resources, commit, push or merge without explicit owner authorization. Return the exact integration decision and any genuine unresolved prerequisite. Do not begin another milestone.
 ```
+
+## 2026-10-21 — Vitest audit security repair authorized
+
+The owner explicitly authorizes an isolated development-tool security repair from integrated Tasks main31b7148. Update only exact Vitest4.1.11 to4.1.12 and the necessary coherent lock graph for GHSA-qxg6-89mg-rqv8 and GHSA-xp26-3454-mjgp. Preserve PR152's historical passing checks, later main npm audit failure, Tasks/memory acceptance, original admission, backups and retained resources.
+
+Plan: [Vitest security repair](docs/plans/2026-10-21-vitest-audit-security-repair.md). Fresh codex/fix-vitest-audit worktree; readiness and schema-2 admission are prerequisites to dependency edits. Controlled public npm acquisition/installation, affected checks/full verification, additive documentation, scoped commit/push/PR and conditional squash merge are authorized. No generic audit fix, major upgrade, unrelated dependency, RAG/HP/gate implementation, image, native acceptance or model changes. The parallel CM/RAG maintenance keeps its own checkouts and gate ownership.
+
+Implementation and new audit acceptance are pending; no passing result is predeclared. Continue through routine in-scope repairs and required finalization autonomously. No successor milestone is selected.
+
+### 2026-10-21 Vitest 4.1.12 security repair — frozen local result
+
+Vitest and its seven matching development packages are 4.1.12; unrelated lock entries are unchanged. Fresh low-threshold npm audit reports zero vulnerabilities,44 frontend files/629 tests pass, and full npm run verify passes. Preserve PR152 acceptance and its later failed main audit separately. See [the security repair report](docs/reviews/2026-10-21-vitest-audit-security-repair-post-increment-review.md) and [plan](docs/plans/2026-10-21-vitest-audit-security-repair.md) for scope, failures, resources and publication prerequisites.
+
+This entry records the pre-publication local snapshot. Authorized Git integration remains conditional on final checks/review; its actual remote result is recorded in the external vitest-security-repair-20261021-01/FINAL-HANDOFF.md after publication. Retain all Tasks/memory/RAG work, resources, historical evidence and ledger89/96; no native acceptance, model request, deletion, HP work or successor.
+
+Resume prompt for a pre-publication interruption:
+
+```text
+Resume the owner-authorized Vitest 4.1.12 security repair in /Users/hdang/.codex/worktrees/fix-vitest-audit/ai-agent-assistant. Inspect current instructions/admission, the repair plan/report, and the external vitest-security-repair-20261021-01 FINAL-HANDOFF before acting. Preserve user changes, Tasks/memory acceptance, RAG ownership, failed receipts and resources. Reuse passing audit, frontend and full verification evidence; do not replay native acceptance or model requests. Continue exact scoped staging/commit/push/PR attachment, required CI/review, squash merge and remote tree/ancestry verification autonomously. Stop only at genuine access, ownership, verification, resource or scope boundaries; no force-push, HP work, protected cleanup, image utilities or successor. Do not repeat completed publication operations.
+```
