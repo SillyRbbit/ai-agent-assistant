@@ -6686,3 +6686,67 @@ The prior cleanup assessment is reused: sixteen archived originals were already
 retired after verified cloud recovery; six held archived bundles and the mounted
 image contents remain protected. No further eligible deletion was established.
 See the [publication plan](docs/plans/2026-10-21-persistent-memory-publication.md).
+
+## 2026-10-21 — Tasks preparation and verification corrections
+
+Initial repository readiness failed under Python3.9 because the checker uses
+`zip(strict=)`; the task-local existing Python3.12 route passed. Default Cargo
+cache lacked locked rustls-webpki0.103.16; exact retained public security-audit
+archives were checksum-checked and reused offline in a private cache. The cache
+was moved outside repository traversal after its third-party sources appeared in
+full frontend lint; no lint rule was changed. Explicit action labels, typed test
+mocks and asynchronous hydration corrected attributable frontend cases/lint.
+Task migration11 required the corresponding array length and affected expected
+migration lists to increase. Original failures and before-versions remain in the
+external local-tasks-followups-20261021-01 evidence. No download, installation,
+provider request, personal database access or historical failure promotion.
+
+## 2026-10-21 Local Tasks acceptance and closeout
+
+Local Tasks and Follow-ups is implemented and acceptance verified in the dedicated
+`local-tasks-followups` checkout at integrated PR151. Required `npm run verify`
+passed on the final source: 291 hook checks, 100 repository checks, 629 frontend
+tests across 44 files, 537 Rust library tests, integration contracts/smokes,
+strict lint/type/format checks and the native release build. Its bounded receipt
+records exit0 in620.012598417seconds. Subsequent changes are documentation only.
+
+A separately identified unsigned “Cortexa Tasks QA” build used fresh dedicated
+app data and no personal data or provider requests. Native computer control
+verified creation, edited notes, high priority, due date2026-11-05, completion,
+completed/open filtering, reopening, search, explicit deletion confirmation with
+Keep task, and persistence after a normal process quit/restart. Both launch
+waiters exited0 with no owned child group remaining. Permanent GUI deletion was
+not performed; actual deletion, stale revisions and migration/reopen behavior
+passed deterministic Rust and frontend tests. The synthetic task and a verified
+final database backup remain retained. No owner database was opened or upgraded.
+
+The original memory/C7 results, ledger89/96, retained mounted image, review builds,
+HP histories, raw indexes, admission and RAG-owned code remain unchanged. Tasks
+adds migration11; older builds with only migration10 must not share this upgraded
+QA database. Coordinate the migration registry and separate command-registration
+sections before integrating parallel RAG work. No current RAG acceptance is claimed.
+
+Review found no unresolved completion-blocking defect. Retained advisories are
+macOS-only live coverage, a release-tool Xcode-platforms warning despite successful
+build under the pinned explicit SDK, and shared-registry integration coordination.
+No global toolchain setting, permission or security protection was changed.
+
+All failed preparation/test receipts remain visible. A pre-restart backup attempt
+rejected whole-stat equality before copying; the differing field was not retained
+and its cause is unknown. After final normal exit, fresh descriptor-bound custody
+and explicit non-access-time checks produced a byte-verified backup of the exact
+owned QA database/WAL/SHM. No data deletion or irreversible action occurred.
+
+Task evidence, source/configuration bindings, failures and backup are retained in
+`/Users/hdang/.codex/visualizations/2026/09/21/01a0c184-189a-7b01-ae8f-07cfb1b83d96/local-tasks-followups-20261021-01`.
+The final report is
+[Local Tasks post-increment review](docs/reviews/2026-10-21-local-tasks-followups-post-increment-review.md).
+Normal schema2 finalization and an actual task-local complete-payload Stop are
+required; consult the current local marker and external final handoff for their
+actual outcome. Historical readiness evidence is unchanged.
+
+QA-build cleanup and worktree archival are deferred: retain the accepted Tasks QA
+bundle, default-release recovery executable, isolated dependencies, QA data, source
+and evidence. No deletion/archival was authorized, none ran and no physical disk
+recovery is claimed. No commit, push, merge or publication occurred. The dedicated
+worktree remains detached with attributed local changes. Do not begin a successor.

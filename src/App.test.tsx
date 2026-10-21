@@ -1240,7 +1240,9 @@ describe("App", () => {
     });
 
     expect(screen.getByRole("heading", { level: 1, name: "Tasks" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "No tasks yet" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "New task" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Save task" })).toBeDisabled();
+    expect(screen.getByText(/Browser preview does not persist tasks/)).toBeInTheDocument();
   });
 
   it("wires the explicit Command Center projection refresh through application services", async () => {
