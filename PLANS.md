@@ -6324,3 +6324,17 @@ bundle, default-release recovery executable, isolated dependencies, QA data, sou
 and evidence. No deletion/archival was authorized, none ran and no physical disk
 recovery is claimed. No commit, push, merge or publication occurred. The dedicated
 worktree remains detached with attributed local changes. Do not begin a successor.
+
+## 2026-10-21 — Vitest audit security repair authorized
+
+The owner explicitly authorizes an isolated development-tool security repair from integrated Tasks main31b7148. Update only exact Vitest4.1.11 to4.1.12 and the necessary coherent lock graph for GHSA-qxg6-89mg-rqv8 and GHSA-xp26-3454-mjgp. Preserve PR152's historical passing checks, later main npm audit failure, Tasks/memory acceptance, original admission, backups and retained resources.
+
+Plan: [Vitest security repair](docs/plans/2026-10-21-vitest-audit-security-repair.md). Fresh codex/fix-vitest-audit worktree; readiness and schema-2 admission are prerequisites to dependency edits. Controlled public npm acquisition/installation, affected checks/full verification, additive documentation, scoped commit/push/PR and conditional squash merge are authorized. No generic audit fix, major upgrade, unrelated dependency, RAG/HP/gate implementation, image, native acceptance or model changes. The parallel CM/RAG maintenance keeps its own checkouts and gate ownership.
+
+Implementation and new audit acceptance are pending; no passing result is predeclared. Continue through routine in-scope repairs and required finalization autonomously. No successor milestone is selected.
+
+### 2026-10-21 Vitest 4.1.12 security repair — frozen local result
+
+Vitest and its seven matching development packages are 4.1.12; unrelated lock entries are unchanged. Fresh low-threshold npm audit reports zero vulnerabilities,44 frontend files/629 tests pass, and full npm run verify passes. Preserve PR152 acceptance and its later failed main audit separately. See [the security repair report](docs/reviews/2026-10-21-vitest-audit-security-repair-post-increment-review.md) and [plan](docs/plans/2026-10-21-vitest-audit-security-repair.md) for scope, failures, resources and publication prerequisites.
+
+This entry records the pre-publication local snapshot. Authorized Git integration remains conditional on final checks/review; its actual remote result is recorded in the external vitest-security-repair-20261021-01/FINAL-HANDOFF.md after publication. Retain all Tasks/memory/RAG work, resources, historical evidence and ledger89/96; no native acceptance, model request, deletion, HP work or successor.
