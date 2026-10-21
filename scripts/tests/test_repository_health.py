@@ -154,6 +154,11 @@ def write_valid_ui_native_boundary(root: Path) -> None:
         (Path(__file__).resolve().parents[2] / direct_client).read_text(encoding="utf-8"),
         encoding="utf-8",
     )
+    history_client = "src/infrastructure/tauri/conversation-history-client.ts"
+    (root / history_client).write_text(
+        (Path(__file__).resolve().parents[2] / history_client).read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
     agent_client = "src/infrastructure/tauri/agent-chat-client.ts"
     (root / agent_client).write_text(
         (Path(__file__).resolve().parents[2] / agent_client).read_text(encoding="utf-8"),
@@ -233,6 +238,13 @@ def write_valid_ui_native_boundary(root: Path) -> None:
         "agent_chat_tauri::start_agent_conversation,\n"
         "agent_chat_tauri::send_agent_message,\n"
         "agent_chat_tauri::poll_agent_conversation,\n"
+        "agent_chat_tauri::list_saved_agent_conversations,\n"
+        "agent_chat_tauri::read_saved_agent_conversation,\n"
+        "agent_chat_tauri::open_saved_agent_conversation,\n"
+        "agent_chat_tauri::rename_saved_agent_conversation,\n"
+        "agent_chat_tauri::delete_saved_agent_conversation,\n"
+        "agent_chat_tauri::save_conversation_fact,\n"
+        "agent_chat_tauri::read_agent_note_provenance,\n"
         "agent_chat_tauri::cancel_agent_conversation\n"
         "])\n",
         encoding="utf-8",
@@ -314,6 +326,25 @@ class RepositoryHealthTests(unittest.TestCase):
             lib = root / "src-tauri/src/lib.rs"
             lib.write_text(lib.read_text(encoding="utf-8").replace(
                 "knowledge_tauri::import_knowledge,", "arbitrary::read,"), encoding="utf-8")
+            self.assertTrue(health.ui_native_boundary_findings(root))
+
+    def test_saved_conversation_boundary_remains_exact(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_ui_native_boundary(root)
+            client = root / "src/infrastructure/tauri/conversation-history-client.ts"
+            baseline = client.read_text(encoding="utf-8")
+            self.assertEqual(health.ui_native_boundary_findings(root), ())
+            for old, new in (
+                ('"save_conversation_fact"', '"execute_action"'),
+                ('{ conversationId, turnId, text, revision }', '{ conversationId, turnId, text, revision, authority: true }'),
+                ('{ request: { conversationId } }', '{ request: { conversationId, path: "/" } }'),
+                ('import { invoke }', 'import { invoke, transformCallback }'),
+            ):
+                with self.subTest(new=new):
+                    client.write_text(baseline.replace(old, new), encoding="utf-8")
+                    self.assertTrue(health.ui_native_boundary_findings(root))
+            client.write_text(baseline + '\ninvoke<unknown>("extra");\n', encoding="utf-8")
             self.assertTrue(health.ui_native_boundary_findings(root))
 
     def test_collaboration_exact_commands_and_payloads_remain_closed(self) -> None:

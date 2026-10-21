@@ -2,6 +2,7 @@ mod agent_preferences;
 mod collaboration;
 mod config;
 mod connection;
+pub(crate) mod conversations;
 mod error;
 mod knowledge;
 mod metadata;

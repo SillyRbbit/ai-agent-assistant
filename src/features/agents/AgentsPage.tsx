@@ -25,6 +25,7 @@ import {
   type AgentProfileInput,
 } from "../../infrastructure/tauri/agent-chat-client";
 import "./AgentsPage.css";
+import { SavedConversations, SavedTranscript, NoteHistory } from "./SavedConversations";
 
 function botName(profile: AgentProfile): string {
   return profile.identity.nickname || profile.displayName;
@@ -56,6 +57,7 @@ export function AgentsPage({ client = agentChatClient }: { readonly client?: Age
   const [loading, setLoading] = useState(true);
   const [conversation, setConversation] = useState<AgentChatSnapshot | null>(null);
   const [busy, setBusy] = useState(false);
+  const [memoryRefresh, setMemoryRefresh] = useState(0);
   const available = client.available();
   useEffect(() => {
     let active = true;
@@ -126,33 +128,53 @@ export function AgentsPage({ client = agentChatClient }: { readonly client?: Age
           </nav>
           <div className="agents-detail">
             {conversation === null ? (
-              <AgentSettings
-                key={`${selected.agentId}-${String(selected.revision)}`}
-                profile={selected}
-                client={client}
-                connections={connections}
-                cachedModels={catalogs.get(
-                  catalogKey(selected.connection, selected.endpoint, selected.localAuth),
-                )}
-                onCatalog={(connection, endpoint, localAuth, models) => {
-                  setCatalogs((previous) => {
-                    const next = new Map(previous);
-                    if (next.size >= 8) {
-                      const oldest = next.keys().next().value;
-                      if (oldest !== undefined) next.delete(oldest);
-                    }
-                    next.set(catalogKey(connection, endpoint, localAuth), models);
-                    return next;
-                  });
-                }}
-                onBusy={setBusy}
-                onSaved={(next) => {
-                  setProfiles((previous) =>
-                    previous.map((profile) => (profile.agentId === next.agentId ? next : profile)),
-                  );
-                }}
-                onConversation={setConversation}
-              />
+              <>
+                <SavedConversations
+                  key={`history-${selected.agentId}`}
+                  client={client}
+                  profile={selected}
+                  busy={busy}
+                  onOpen={setConversation}
+                  onDeleted={() => {
+                    setMemoryRefresh((value) => value + 1);
+                  }}
+                />
+                <NoteHistory
+                  key={`memory-${selected.agentId}`}
+                  refresh={memoryRefresh}
+                  client={client}
+                  profile={selected}
+                />
+                <AgentSettings
+                  key={`${selected.agentId}-${String(selected.revision)}`}
+                  profile={selected}
+                  client={client}
+                  connections={connections}
+                  cachedModels={catalogs.get(
+                    catalogKey(selected.connection, selected.endpoint, selected.localAuth),
+                  )}
+                  onCatalog={(connection, endpoint, localAuth, models) => {
+                    setCatalogs((previous) => {
+                      const next = new Map(previous);
+                      if (next.size >= 8) {
+                        const oldest = next.keys().next().value;
+                        if (oldest !== undefined) next.delete(oldest);
+                      }
+                      next.set(catalogKey(connection, endpoint, localAuth), models);
+                      return next;
+                    });
+                  }}
+                  onBusy={setBusy}
+                  onSaved={(next) => {
+                    setProfiles((previous) =>
+                      previous.map((profile) =>
+                        profile.agentId === next.agentId ? next : profile,
+                      ),
+                    );
+                  }}
+                  onConversation={setConversation}
+                />
+              </>
             ) : (
               <AgentConversation
                 key={conversation.conversationId}
@@ -163,6 +185,12 @@ export function AgentsPage({ client = agentChatClient }: { readonly client?: Age
                 onBusy={setBusy}
                 onExit={() => {
                   setConversation(null);
+                  void client
+                    .list()
+                    .then(setProfiles)
+                    .catch((e: unknown) => {
+                      setError(agentChatErrorMessage(e));
+                    });
                 }}
               />
             )}
@@ -313,7 +341,8 @@ function AgentSettings({
         <span className="agents-connection-label">{CONNECTION_LABELS[profile.connection]}</span>
       </header>
       <p className="agents-editing-note">
-        Saved settings apply to a new conversation. Selecting another bot discards unsaved edits.
+        Saved notes, instructions and personality apply to subsequent requests. Connection, model or
+        reasoning changes require a new conversation. Selecting another bot discards unsaved edits.
       </p>
       <fieldset disabled={pending}>
         <legend>Identity and personality</legend>
@@ -465,8 +494,8 @@ function AgentSettings({
         </button>
         <p>
           Reset changes only these five fields. Connection, model, owner instructions and private
-          notes are retained. Save to apply; an active conversation keeps its captured profile and
-          must be restarted after changes.
+          notes are retained. Save to apply to the next request; an already active request keeps its
+          captured profile.
         </p>
       </fieldset>
       <fieldset disabled={pending}>
@@ -726,7 +755,7 @@ function AgentSettings({
         <p>
           This note belongs only to {profile.displayName}. Notes are untrusted context, not
           automatic learning. Memory Off keeps the saved note locally but excludes it from requests.
-          Changes or deletion require a new conversation.
+          Changes or deletion apply to subsequent requests, including in existing conversations.
         </p>
         <p>
           Enabled notes are sent to the selected hosted service when you send a message. Local
@@ -881,8 +910,9 @@ function AgentConversation({
         next.model !== initial.model ||
         next.endpoint !== initial.endpoint ||
         next.effort !== initial.effort ||
-        next.memoryMode !== initial.memoryMode ||
-        next.settingsRevision !== initial.settingsRevision ||
+        (!client.persistence &&
+          (next.memoryMode !== initial.memoryMode ||
+            next.settingsRevision !== initial.settingsRevision)) ||
         (!fresh &&
           (next.sequence < previous.sequence ||
             !next.text.startsWith(previous.text) ||
@@ -899,7 +929,7 @@ function AgentConversation({
         setCleanupUnconfirmed(false);
       }
     },
-    [initial],
+    [initial, client.persistence],
   );
   const stop = useCallback(async () => {
     stopRequested.current = true;
@@ -954,10 +984,12 @@ function AgentConversation({
   const send = async () => {
     if (
       sendPending.current ||
-      !["idle", "completed"].includes(current.current.status) ||
+      !(
+        client.persistence ? ["idle", "completed", "stopped", "error"] : ["idle", "completed"]
+      ).includes(current.current.status) ||
       current.current.busy ||
       uncertainCleanup.current ||
-      history.length >= 3 ||
+      (!client.persistence && history.length >= 3) ||
       message.trim() === "" ||
       (initial.connection !== "simulation" && !acknowledged)
     )
@@ -1015,24 +1047,27 @@ function AgentConversation({
     !pending &&
     !snapshot.busy &&
     !cleanupUnconfirmed &&
-    ["idle", "completed"].includes(snapshot.status) &&
-    history.length < 3;
+    (client.persistence
+      ? ["idle", "completed", "stopped", "error"]
+      : ["idle", "completed"]
+    ).includes(snapshot.status) &&
+    (client.persistence !== undefined || history.length < 3);
   return (
     <section className="agents-conversation page-panel" aria-labelledby="agent-conversation-title">
       <h2 id="agent-conversation-title">Conversation · {displayName}</h2>
       <p>
         {CONNECTION_LABELS[initial.connection]} · {initial.endpoint} · {initial.model} · effort{" "}
         {initial.effort} ·{" "}
-        {initial.memoryMode === "off" ? "Memory Off" : "Own private note included"} · saved revision{" "}
-        {initial.settingsRevision}
+        {snapshot.memoryMode === "off" ? "Memory Off" : "Own private note included"} · saved
+        revision {snapshot.settingsRevision}
       </p>
       <p>
-        Up to four bounded turns using the saved settings above. Start a new conversation after
-        changing settings or notes. History is retained locally only for this native session; later
-        hosted turns include that conversation text. No tools or device actions are available.
+        Conversations and partial output are saved locally. Runtime or model changes require a new
+        conversation; latest saved notes and Memory Off apply to each subsequent request. Provider
+        context uses only bounded completed history. No tools or device actions are available.
       </p>
       <p>
-        Each message is limited to 4,096 characters. Provider requests have a 60-second deadline and
+        Each message is limited to 4,096 characters. Provider requests have a 60-second deadline and{" "}
         {initial.connection === "codex"
           ? "an 8,192-character visible output limit. Codex controls its token budget and internal transport retries; usage and retention follow its authenticated account."
           : "a 2,048-token output budget including reasoning."}{" "}
@@ -1135,16 +1170,23 @@ function AgentConversation({
             ? " · native generation owns this session"
             : " · no active native generation"}
       </p>
-      {history.map((turn, index) => (
-        <div className="agents-answer" key={index}>
-          <h3>
-            Completed turn {index + 1}
-            {initial.connection === "simulation" ? " · simulated" : ""}
-          </h3>
-          <p>You: {turn.message}</p>
-          <p>{turn.answer}</p>
-        </div>
-      ))}
+      <SavedTranscript
+        client={client}
+        initial={initial}
+        busy={pending || snapshot.busy}
+        refresh={snapshot.sequence}
+      />
+      {!client.persistence &&
+        history.map((turn, index) => (
+          <div className="agents-answer" key={index}>
+            <h3>
+              Completed turn {index + 1}
+              {initial.connection === "simulation" ? " · simulated" : ""}
+            </h3>
+            <p>You: {turn.message}</p>
+            <p>{turn.answer}</p>
+          </div>
+        ))}
       {sentMessage !== "" ? <p>You: {sentMessage}</p> : null}
       {snapshot.requestId ? (
         <p style={{ overflowWrap: "anywhere" }}>

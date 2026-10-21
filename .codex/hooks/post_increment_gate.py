@@ -339,7 +339,19 @@ def _closure():
     return lifecycle_closure
 
 
+def _dependent():
+    import lifecycle_dependent_admission
+    return lifecycle_dependent_admission
+
+
 def validate_state(state_value: dict[str, Any]) -> None:
+    if state_value.get("schema_version") == 5:
+        _dependent().shape(state_value)
+        legacy = dict(state_value)
+        legacy.pop("dependent_lineage")
+        legacy["schema_version"] = STATE_SCHEMA_VERSION
+        validate_state(legacy)
+        return
     if "closure_lineage" in state_value and "acceptance_lineage" in state_value:
         _fail("general closure and D-133 lineage cannot be combined")
     if state_value.get("schema_version") == 4:
@@ -519,14 +531,19 @@ def validate_increment_id(value: Any) -> str:
 
 def begin_gate(
     root: Path, increment_id: str, acceptance_request: str | None = None,
-    *, admission: str | None = None,
+    *, admission: str | None = None, dependent_request: str | None = None,
 ) -> None:
     increment_id = validate_increment_id(increment_id)
     if has_merge_conflicts(root):
         _fail("cannot begin an increment while merge conflicts exist")
     existing_state = read_state(root)
-    if admission is not None and acceptance_request is not None:
+    if sum(value is not None for value in (admission, acceptance_request, dependent_request)) > 1:
         _fail("choose one admission route")
+    if dependent_request is not None:
+        _dependent().begin(root, increment_id, dependent_request)
+        return
+    if existing_state is not None and "dependent_lineage" in existing_state:
+        _fail("dependent attempt cannot be replayed or automatically succeeded")
     if existing_state is not None and existing_state["status"] == "active" and admission is not None:
         _fail("cannot convert an active legacy increment to milestone admission")
     if acceptance_request is not None:
@@ -792,7 +809,11 @@ def _validate_report_evidence(
         "next_increment_readiness"
     ] != "Blocked":
         _fail("next-increment readiness contradicts a blocking finding")
-    blocking_milestone = _closure().milestone_report(root, increment_id, manifest)
+    current = read_state(root)
+    if current and "dependent_lineage" in current and current["increment_id"] == increment_id:
+        blocking_milestone = _dependent().milestone_report(root, increment_id, manifest)
+    else:
+        blocking_milestone = _closure().milestone_report(root, increment_id, manifest)
     if blocking_verification or blocking_manual or blocking_finding or blocking_milestone:
         computed_quality = "FAIL"
     else:
@@ -1094,6 +1115,8 @@ def finalize_gate(root: Path, increment_id: str, report_value: str) -> None:
         _fail("a terminally failed increment cannot be completed")
 
     _closure().validate_lineage(root, state_value)
+    if "dependent_lineage" in state_value:
+        _dependent().record(root, state_value)
     repository_changes = changed_paths(root)
     suspicious = suspicious_changed_paths(repository_changes)
     if suspicious:
@@ -1129,6 +1152,8 @@ def finalize_gate(root: Path, increment_id: str, report_value: str) -> None:
         completed_state["acceptance_lineage"] = state_value["acceptance_lineage"]
     if "closure_lineage" in state_value:
         completed_state["closure_lineage"] = state_value["closure_lineage"]
+    if "dependent_lineage" in state_value:
+        _dependent().carry(state_value, completed_state)
     write_state(root, completed_state)
 
 
@@ -1143,6 +1168,8 @@ def close_failed_gate(root: Path, increment_id: str, report_value: str) -> None:
         _fail("increment does not match close-failed request")
     if _closure().current_receipt(root) is not None:
         _fail("a closed failure is immutable and cannot be reclosed")
+    if state_value["status"] == "failed" and "dependent_lineage" in state_value:
+        _fail("dependent terminal failure is immutable; a new recovery decision is required")
     if state_value["status"] == "complete":
         _fail("a completed increment cannot be changed to failed")
     if (
@@ -1161,6 +1188,8 @@ def close_failed_gate(root: Path, increment_id: str, report_value: str) -> None:
         _fail("sealed failure history cannot be reclosed")
 
     _closure().validate_lineage(root, state_value)
+    if "dependent_lineage" in state_value:
+        _dependent().record(root, state_value)
     repository_changes = changed_paths(root)
     suspicious = suspicious_changed_paths(repository_changes)
     if suspicious:
@@ -1195,6 +1224,8 @@ def close_failed_gate(root: Path, increment_id: str, report_value: str) -> None:
         failed_state["acceptance_lineage"] = state_value["acceptance_lineage"]
     if "closure_lineage" in state_value:
         failed_state["closure_lineage"] = state_value["closure_lineage"]
+    if "dependent_lineage" in state_value:
+        _dependent().carry(state_value, failed_state)
     write_state(root, failed_state)
 
 
@@ -1214,7 +1245,15 @@ def _validate_terminal_evidence(root: Path, state_value: dict[str, Any]) -> bool
         return _validate_disposed_failed_state(root, state_value)
     try:
         validate_state(state_value)
+        if (state_value.get("status") == "complete"
+                and state_value.get("increment_id") == "persistent-memory-codex-continuation"):
+            import lifecycle_memory_publication as publication
+            if publication.present(root):
+                publication.validate(root, state_value)
+                return True
         _closure().validate_lineage(root, state_value)
+        if "dependent_lineage" in state_value:
+            _dependent().record(root, state_value)
         import lifecycle_acceptance as acceptance
         if "acceptance_lineage" in state_value:
             acceptance.validate_lineage(root, state_value)
@@ -1351,6 +1390,13 @@ def redacted_status(root: Path) -> dict[str, Any]:
                     status_value["workspace_valid"] = False
         else:
             status_value["valid"] = validate_completed_state(root, state_value)
+    if state_value.get("increment_id") == "persistent-memory-codex-continuation":
+        import lifecycle_memory_publication as publication
+        if publication.present(root):
+            try:
+                status_value["publication"] = publication.validate(root, state_value)
+            except GateError:
+                status_value["publication"] = {"current_publication_valid": False}
     import lifecycle_acceptance as acceptance
     if (root / acceptance.POINTER).exists():
         try:
@@ -1381,6 +1427,10 @@ def build_parser() -> argparse.ArgumentParser:
     admission_routes = begin_parser.add_mutually_exclusive_group()
     admission_routes.add_argument("--acceptance-request")
     admission_routes.add_argument("--admission")
+    admission_routes.add_argument("--dependent-request")
+    subparsers.add_parser("dependent-preservation")
+    publication_parser = subparsers.add_parser("seal-memory-publication")
+    publication_parser.add_argument("--request", required=True)
     closure_parser = subparsers.add_parser("close-without-completion")
     closure_parser.add_argument("--request", required=True)
     maintenance_parser = subparsers.add_parser("seal-acceptance-maintenance")
@@ -1417,7 +1467,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         root = repository_root(Path.cwd())
         if arguments.command == "begin":
-            begin_gate(root, arguments.increment, arguments.acceptance_request, admission=arguments.admission)
+            begin_gate(root, arguments.increment, arguments.acceptance_request, admission=arguments.admission, dependent_request=arguments.dependent_request)
             print(f"post-increment-gate: active increment {arguments.increment}")
         elif arguments.command == "finalize":
             finalize_gate(root, arguments.increment, arguments.report)
@@ -1441,6 +1491,16 @@ def main(argv: list[str] | None = None) -> int:
             import lifecycle_acceptance as acceptance
             acceptance.seal(root, arguments.request)
             print("post-increment-gate: maintenance sealed; acceptance not begun")
+        elif arguments.command == "dependent-preservation":
+            state_value = read_state(root)
+            if state_value is None or "dependent_lineage" not in state_value:
+                _fail("no admitted dependent attempt")
+            _dependent().record(root, state_value)
+            print("post-increment-gate: surviving evidence validated; historical custody remains qualified")
+        elif arguments.command == "seal-memory-publication":
+            import lifecycle_memory_publication as publication
+            publication.seal(root, arguments.request)
+            print("post-increment-gate: memory publication snapshot sealed")
         elif arguments.command == "status":
             json.dump(redacted_status(root), sys.stdout, sort_keys=True)
             sys.stdout.write("\n")

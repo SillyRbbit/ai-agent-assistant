@@ -2376,3 +2376,54 @@ boundary requires its own approved plan and verification.
 - `PROJECT_STATUS.md`
 - `docs/product/ARCHITECTURE_BASELINE.md`
 - `docs/branding/PRESENTATION_GUIDELINES.md`
+
+## 2026-10-11 — Persistent bot advice history and explicit private memory
+
+The persistent-conversations-bot-memory candidate extends the existing native SQLite
+storage owner with migration 10. Migrations 1–9 are unchanged. A bounded conversation
+record owns bot ID, runtime/model/effort/endpoint selection, title, timestamps and ordered
+user/assistant turns. Rust persists intent before generation, accepted partial text during
+streaming, and immutable terminal outcomes. Startup marks unfinished turns interrupted;
+it never replays a provider request or action. Selection and mutation share native generation
+ownership, so switching a bot/history while a request is active rejects.
+
+The selected stored history is independent of provider context. Rust selects at most the
+newest three fitting completed turns within 12,288 history characters, reserving 4,096 for
+the next message. The UI displays the included turn IDs and omitted count. Unfinished and
+older turns remain stored, never silently summarized. Runtime/model/effort changes require
+a new conversation; existing transcripts remain readable. No provider session ID is reused.
+
+Memory remains the existing private-note document per bot, with explicit add/edit/clear,
+creation/update metadata and last confirmed fact source. Saving a conversation fact requires
+an owner preview/confirmation, exact source excerpt validation and a current profile revision.
+There is no extraction service, competing store, RAG, vector index or learning call. Each
+new request reloads current notes/instructions/Memory Off. Collaboration continues excluding
+private notes. Both histories and notes remain untrusted context with empty runtime tools.
+
+Deleting a conversation retains separately saved notes and marks their source deleted.
+Clearing a note removes its provenance. Manual edits clear the last source association.
+Legacy note timestamps remain explicitly unknown. Deletion does not erase backups or
+provider retention, and manually typed secrets cannot be perfectly detected. Application
+credentials, transport envelopes and internal reasoning are not copied into these records.
+Native acceptance and final gate status are tracked in the active plan and handoff.
+
+## 2026-10-16 — Derived native runtime verified; live memory acceptance pending
+
+The sole new product delta is the existing closed Codex adapter. The exact derived binary hash admits its experimental immutable deny-all interface; an arbitrary0.162 alpha handshake does not. Before accepting a thread, native Rust requires its captured-policy acknowledgement, read-only/network-false sandbox, empty instruction/runtime roots and no fallback. The core/runtime tests separately prove empty core/hosted/MCP/model-forced Code Mode selection and disabled services. No model-to-device or WebView-to-device authority is added.
+
+Native rules are bounded in turn text because the derived thread requires empty base/developer instruction fields. A source-bound state reader validates known notification identity, preserves awaited response IDs and buffers bounded early turn frames. Unknown frames/server requests and unreviewed warnings are rejected. Legacy behavior remains on its reviewed version route. No new runtime/provider IPC, dependency, storage schema or generic executor was introduced.
+
+The owner-approved native-client method has now passed exact-source/schema/control prerequisites. It replaces only the additional whole-process audit sandbox; the nine historical failed initialization probes and their unknown causes remain unchanged. The trusted native client may use normal managed-policy/authentication/provider services and is not an OS-enforced same-user filesystem/network containment boundary. Actual empty tool selection and separately disabled startup retain their source-bound runtime tests; the fresh control captured the immutable deny-all acknowledgement. Flag acceptance or a model's claim is not the proof.
+
+The dedicated QA configuration remained unsupported by the finite classifier. The owner reviewed it locally and explicitly approved reversible parking despite that result. One metadata-only no-overwrite parking/restoration cycle passed; the same inode, ownership/mode/flags, birthtime and mtime were retained, with rename-induced ctime transitions recorded additively. No new content read, content hash, credential inspection or guard exemption occurred. The original file is restored. Both presence guards remain unchanged.
+C7 remains **unverified**. The owner has reconciled generation usage at63/76 with13 remaining and exclusive QA use. The subsequent guarded native launch outcome and its exact next prerequisite are recorded below. Existing control/schema allowances are exhausted; routine native per-Send initialization/auth/catalog calls remain separately covered by each authorized C7 request deadline.
+
+Keep deadline1792225696.220989, its600-second closeout reserve, actual remaining preparation/product/native phase allowances and every storage reservation without renewal. Retain PR146/148 worktrees/review builds/required artifacts; their later workflow amendments are not claimed present in this older checkout. Preserve the failed predecessor, active admission, raw index,44 retained copies, quarantines, disabled ECC hooks/MCP, advisories/native workaround and parked D-125/M1/M2. No HP/index/gate repair, installs/downloads, protected cleanup, publication or automatic successor is authorized. Do not finalize while required live acceptance remains open.
+
+### Subsequent native attempt and accounting — 2026-10-16
+
+The owner confirmed no intervening Cortexa QA generation since63, reconciling13 remaining requests under ceiling76. One initial owned native QA launch was consumed. Exact child PID67063, parent/kernel start/executable binding and the initial window ID4969 were recorded. The native session then reported `unknown_preparation_or_execution_failure`; its failing phase was not retained. Do not infer authentication, provider, window-change or product cause from this category. There was no UI interaction, model discovery refresh, turn dispatch or generation. The app was identity-bound reaped, its owned group was empty, and the same dedicated config inode was restored without content access. Both guards remain unchanged.
+
+The initial-launch allowance is consumed; the two acceptance restarts remain unconsumed and are not silently repurposed as startup retries. C7 is still unverified and ledger63/76 is unchanged. Before another native launch, propose one fixed-phase external recorder correction with source-bound tests and a finite replacement-initial-launch decision. Do not replay the failed launcher, rebuild the passing app, repeat runtime/control/schema checks or infer the unrecorded failure. Retain all earlier failures and their actual unknown attribution.
+
+Current durable evidence: `cortexa-memory-product-verification-20261016-01/native/{GENERATION-RECONCILIATION,EARLY-APP-IDENTITY,WINDOW,SESSION-RESULT,RESTORED}.json` under the existing durable task evidence root. The review app, derived runtime and detached product image remain retained. No completion, publication, HP/index/gate repair or protected cleanup follows.

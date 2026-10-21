@@ -4572,3 +4572,1523 @@ D-134 closeout: ordinary finalization and complete-payload Stop passed; status w
 complete/valid with PASS WITH ADVISORIES. The final documentation fingerprint and
 reviewed local commit are recorded in the external integration FINAL-HANDOFF.
 No publication occurred. Do not resume product or branding work from this record.
+
+## 2026-10-11 — Persistent conversations and per-bot memory
+
+Active owner-selected implementation plan:
+[persistent conversations and per-bot memory](docs/plans/2026-10-11-persistent-conversations-bot-memory.md).
+Independent schema-2 admission is in the task worktree; implementation is not completion.
+
+## 2026-10-11 — Persistent-memory closeout disposition
+
+The persistent-memory implementation has a truthful FAIL review because live Codex acceptance
+is blocked; it is not completed. Native Simulation and automated evidence are retained separately.
+Continue only through the supported admission/access route described in HANDOFF; no later
+milestone, governance port or publication is selected.
+
+## 2026-10-11 — Dependent admission and native UI checkpoint
+
+The separately verified `memory-dependent-admission` maintenance completed with
+complete/valid status and accepted full Stop in its independent managed checkout.
+The exact memory continuation was then admitted through existing schema5 dependent
+admission. Original FAIL, frozen32 candidate and all nine criteria/five carried
+obligations are retained; no acceptance was replaced or waived. The VPS route stays
+unchanged. No runtime/product source correction has been made in this continuation.
+
+A fresh isolated native bundle binds the retained current frontend and unchanged
+product source. Native Computer Use passed durable-memory/settings guidance and
+immediate deleted-source provenance: one new disposable Simulation conversation,
+one confirmed synthetic excerpt, deletion of that new source only, retained note
+and unchanged Memory Off. The source label updated without navigation or reload.
+Native saved settings loaded correctly; the fleeting loading state was not captured,
+so loading timing remains supported by the retained automated regression, not a
+claimed native timing observation. Earlier Simulation/backend evidence is reused.
+
+The QA app quit through Cmd-Q, retained child exit0 and independent BSD absence;
+all launcher/source/artifact bindings remained preserved. Both old and fresh review
+bundles are retained. One new local Simulation dispatch, zero provider generations;
+ledger63/76 unchanged, subject to concurrency reconciliation before future live work.
+
+C7 remains mandatory and blocked on a demonstrated restrictive macOS installed-binary
+audit environment. Earlier signal6/empty-stderr startup remains unexplained; it was
+not repeated. Static protocol review does not prove effective isolation, compatible
+runtime behavior or authentication. No sandbox weakening, credential access, catalog
+query, provider Send, installation or publication occurred. Crash-report correlation
+and Apple contact remain parked. The continuation remains active/incomplete; do not
+finalize or manufacture a passing report. All advisories, disabled ECC hooks/MCP,
+native workaround and D-125/M1/M2 remain.
+
+Evidence: `/private/tmp/cortexa-memory-admission-7e080j6n`, including
+`native/ui-acceptance.json`, `acceptance-checklist.json`, `native/artifact.json` and
+`native/launch-001/cleanup.json`. The consumed launcher must never be replayed.
+The next required owner action is to provide an isolated macOS ARM64 audit environment
+(or separately authorize its provisioning) with no owner/authenticated-home shares,
+no network and task-only writes. Verify its restrictive boundary before the exact
+binary schema/initialization audit. No new runtime installation, permission expansion
+or live request is authorized merely by this checkpoint.
+
+## 2026-10-16 — Derived native runtime verified; live memory acceptance pending
+
+The owner-approved native-client method has now passed exact-source/schema/control prerequisites. It replaces only the additional whole-process audit sandbox; the nine historical failed initialization probes and their unknown causes remain unchanged. The trusted native client may use normal managed-policy/authentication/provider services and is not an OS-enforced same-user filesystem/network containment boundary. Actual empty tool selection and separately disabled startup retain their source-bound runtime tests; the fresh control captured the immutable deny-all acknowledgement. Flag acceptance or a model's claim is not the proof.
+
+The dedicated QA configuration remained unsupported by the finite classifier. The owner reviewed it locally and explicitly approved reversible parking despite that result. One metadata-only no-overwrite parking/restoration cycle passed; the same inode, ownership/mode/flags, birthtime and mtime were retained, with rename-induced ctime transitions recorded additively. No new content read, content hash, credential inspection or guard exemption occurred. The original file is restored. Both presence guards remain unchanged.
+C7 remains **unverified**. The owner has reconciled generation usage at63/76 with13 remaining and exclusive QA use. The subsequent guarded native launch outcome and its exact next prerequisite are recorded below. Existing control/schema allowances are exhausted; routine native per-Send initialization/auth/catalog calls remain separately covered by each authorized C7 request deadline.
+
+Keep deadline1792225696.220989, its600-second closeout reserve, actual remaining preparation/product/native phase allowances and every storage reservation without renewal. Retain PR146/148 worktrees/review builds/required artifacts; their later workflow amendments are not claimed present in this older checkout. Preserve the failed predecessor, active admission, raw index,44 retained copies, quarantines, disabled ECC hooks/MCP, advisories/native workaround and parked D-125/M1/M2. No HP/index/gate repair, installs/downloads, protected cleanup, publication or automatic successor is authorized. Do not finalize while required live acceptance remains open.
+
+### Subsequent native attempt and accounting — 2026-10-16
+
+The owner confirmed no intervening Cortexa QA generation since63, reconciling13 remaining requests under ceiling76. One initial owned native QA launch was consumed. Exact child PID67063, parent/kernel start/executable binding and the initial window ID4969 were recorded. The native session then reported `unknown_preparation_or_execution_failure`; its failing phase was not retained. Do not infer authentication, provider, window-change or product cause from this category. There was no UI interaction, model discovery refresh, turn dispatch or generation. The app was identity-bound reaped, its owned group was empty, and the same dedicated config inode was restored without content access. Both guards remain unchanged.
+
+The initial-launch allowance is consumed; the two acceptance restarts remain unconsumed and are not silently repurposed as startup retries. C7 is still unverified and ledger63/76 is unchanged. Before another native launch, propose one fixed-phase external recorder correction with source-bound tests and a finite replacement-initial-launch decision. Do not replay the failed launcher, rebuild the passing app, repeat runtime/control/schema checks or infer the unrecorded failure. Retain all earlier failures and their actual unknown attribution.
+
+Current durable evidence: `cortexa-memory-product-verification-20261016-01/native/{GENERATION-RECONCILIATION,EARLY-APP-IDENTITY,WINDOW,SESSION-RESULT,RESTORED}.json` under the existing durable task evidence root. The review app, derived runtime and detached product image remain retained. No completion, publication, HP/index/gate repair or protected cleanup follows.
+
+## 2026-10-17 — Reviewed account schema; native catalog still pending
+
+The existing persistent-memory continuation remains active. Account-response schema validation and frontend legacy-guidance qualification are now automatically verified. The final native catalog case has no completed result; all live C7 cases remain pending. The next action is the finite proposal in the current durable closeout, with fresh launch/catalog accounting and existing generation limits. This checkpoint creates no successor milestone or completion marker.
+
+C7 and GPT-6 Headless remain **unverified**. Generation ledger63/76 is unchanged: zero dispatches in this continuation, with owner-confirmed exclusive QA and no intervening usage. All3 additional initial launches are consumed (6 cumulative); native catalog refreshes2/2 are consumed; both acceptance restarts remain unused. External schema/control allowances are exhausted. Deadline1792267347.836002 and its600second closeout reserve are unchanged. Retain all worktrees, review builds and required PR146/148 artifacts, disabled ECC hooks/MCP, advisories/native workaround and parked D-125/M1/M2. No HP/index/gate work or publication occurred.
+
+Durable current evidence: `cortexa-memory-catalog-closeout-20261017-01` under the established task visualization root. It binds the account-schema repair, guidance scope correction and current native-review packages. Historical results remain unchanged.
+
+## 2026-10-17 — Native catalog verified; first C7 request rejected
+
+The owner-approved catalog-phase continuation modified only the admitted Codex
+adapter and its synthetic tests. Existing content-free diagnostics now distinguish
+configuration, runtime startup, initialization, authenticated account validation,
+catalog parsing and owned cleanup. Strict derived-account parsing separates malformed
+protocol data from a schema-valid unauthenticated result. No raw protocol/account
+values, credentials, prompts or responses were added to diagnostics.
+
+Fresh 22 adapter cases and 734 backend tests passed (zero failures, one inherited
+ignored test), along with strict all-targets/all-features Clippy, formatting and the
+fresh isolated review build. Unchanged frontend/runtime/schema/control evidence was
+reused with bindings; no new aggregate full-verify pass is claimed. External reader,
+controller, custody and integration validation passed. Preparation failures and the
+interrupted prelaunch preparation remain recorded without promoting their results.
+
+The current native catalog completed in 17,959 ms: account validation was observed at
+17,942 ms, parsed catalog at 17,956 ms, and runtime exit/cleanup at 17,959 ms. The UI
+offered gpt-5.6-luna/low. This proves the current native catalog result, not the cause
+of earlier unrecorded loading failures or generation access for any model.
+
+One explicit C7 preference/context request was charged before Send. The saved
+synthetic Research bot profile used the selected model/effort and its own enabled
+private note. The request failed with malformed_stream after 17,557 ms; successful
+account validation was observed at 17,513 ms. Runtime exit/cleanup and ownership
+release were observed. No accepted first response or text event was observed. The
+UI retained Turn 1 as failed and showed zero completed turns included and one stored
+turn omitted from the next context. This is failure persistence evidence, not a
+passing preference/context or complete C7 result. The exact rejected frame/validator
+and whether a model turn began remain unknown. No unchanged retry was attempted.
+
+Generation ledger is now **64/76**, with one failed/unknown-start request counted and
+12 remaining. Prior owner reconciliation was63 with no concurrent usage and exclusive
+QA use; subsequent use must still be reconciled. Initial launches are7/8 consumed,
+catalog refreshes3/6 consumed, and both acceptance restarts remain unused. Two of the
+three remaining refreshes remain reserved for those restarts. The remaining initial
+launch is conditional on a distinct evidence-supported correction, not an unknown
+retry. External schema/control allowances remain exhausted. Deadline1792267347.836002
+and600-second closeout reserve are unchanged. Runtime compiler43200/43200 remains
+exhausted; product verification/build aggregate10800 remains controlling.
+
+The owned native app exited and its process group was empty. The identical dedicated
+QA configuration was restored by exclusive rename without content read or overwrite;
+the current restoration receipt is in the package's native-001/RESTORED.json. The
+product image detached without force. The current review executable SHA256 is
+f34bbd1d5014d5b83bf22a2f70b406fc59a3b836c1b42392a96c788d1e2d8ee2;
+it and its predecessor remain inside the retained product image, with the predecessor
+relocation recorded additively. Historical paths/receipts are not rewritten.
+
+Durable evidence: cortexa-memory-catalog-phases-20261017-01 under the established task
+visualization root. Its sealed final handoff, accounting, preservation and actual Stop
+receipt control closeout. C7 and GPT-6 Headless remain unverified; the memory increment
+stays active. Do not finalize or close-failed merely to satisfy Stop. The next bounded
+decision is fixed source/schema-bound rejection-site diagnostics and one justified
+native correction case under the remaining budgets, with any additional lifecycle
+explicitly authorized. Preserve strict parsing and all isolation safeguards; unknown
+frames must not be silently ignored. Retain PR146/148 resources, all historical failures,
+qualified continuity,44 retained copies, quarantines, disabled ECC hooks/MCP, native
+workaround, advisories and parked D-125/M1/M2. No HP/index/gate work or publication.
+
+## 2026-10-17 — Rejection-site preparation stopped at strict Clippy
+
+The owner authorized proposal82d75dc955e5752ac016848163fe48bd0af10dd5a12f00a0869b32e9e83f1eb9. Fresh one-file adapter instrumentation preserves existing parsing/error results and records only the first reviewed static rejection site. Required-field positions and fixed shape/type/binding predicates have source-bound labels; arbitrary frames/values remain suppressed. Four retained generated schemas were verified against their sealed manifest. No new schema/control invocation occurred.
+
+Fresh15 external privacy/binding/accounting/capacity/cleanup tests and9 corrected native launcher tests passed. One copied launcher-test counter expectation was initially wrong; the failed test/source and corrected passing version remain. The prepared launcher corrects cumulative initial-launch accounting to8 before any launch; it was not executed. Historical64 is not recharged and failed acceptance is not marked passed.
+
+Affected adapter tests25 and required backend tests737 passed, with0 failures and1 inherited ignored test. Rust formatting passed. Strict all-targets/all-features Clippy exited101; its retained source location3110:81 points to a newly introduced test-only panic! sentinel. Cargo.toml explicitly denies that macro. The raw diagnostic was discarded, so its unretained exact wording is not reconstructed. No lint suppression or source repair followed this required-check stop. The exact proposed correction uses a Cell flag and asserts the factory was not called while preserving the original error.
+
+The additional owned product-image lifecycle passed and detached without force. All owned compiler/check groups were empty; current and older review apps were preserved. No app build, launch, refresh, control, schema or generation was consumed. Dedicated QA configuration was neither read nor parked and remains at its last verified restoration metadata. Ledger64/76 is unchanged;12 remain, subject to reconciliation. Launches7/9 and catalogs3/7 remain, with both acceptance restarts unused and2 refreshes reserved. Product runtime compiler43200/43200 remains exhausted; actual product command time is recorded in the new ACCOUNTING.json under the unchanged10800-second cap.
+
+Durable evidence: cortexa-memory-rejection-sites-20261017-01 under the established task visualization root. Read its sealed handoff, failed Clippy receipt, preserved source and PROPOSAL.md. The proposal requests only the test-sentinel correction, affected regression/Clippy retry, one fresh lifecycle to replace the consumed detached lifecycle, and the remaining already-approved conditional build/native/C7 phases. Deadline1792267347.836002 and600-second reserve are unchanged. Do not replay consumed helpers or silently renew time.
+
+C7 and GPT-6 Headless remain unverified. The earlier live malformed_stream and its actual rejected frame remain unknown: this diagnostic has not run natively. Keep admission active and preserve failed predecessor, raw indexes, all historical receipts/qualified continuity,44 retained copies, worktrees/review builds and PR146/148 retention. No HP/index/gate work, downloads, installations, protected cleanup or publication. Actual final checks and memory Stop are recorded externally; do not finalize open acceptance merely to satisfy Stop.
+
+## 2026-10-17 — Test correction and native catalog verified; C7 Send pending
+
+The owner-authorized exact test-only sentinel correction replaces the prohibited panic macro with a Cell flag and preserves both the original-error and factory-not-called assertions. No production parser/security behavior changed. Its exact fresh regression passed1/1, strict all-targets/all-features Clippy with -D warnings passed, and formatting passed. The unaffected25 adapter/737 backend evidence is reused under the explicit test-only delta qualification; no new full-verify aggregate is claimed. Fresh external validation passed31 affected cases. The fresh isolated instrumented app build passed in9.248791916994378seconds, executable SHA256 e37b85e3a4b2e3bf40c0b163e8b4c4f361de65c2e191cf27a400fa22c6ae2caa. Prior review apps remain preserved by exclusive same-volume relocation; no protected cleanup occurred.
+
+Initial attempt8 launched successfully but the catalog observation caller failed with an unknown receipt before retaining a result. Subsequent source inspection and a credential-free synthetic call establish a concrete external wrapper defect: FunctionType omitted the original bound reader's two default arguments, so the launcher's three-argument call fails before the reader body. The actual unrecorded exception is not reconstructed. A fresh reader preserves those defaults and all original descriptor/path/device/volume, mode/owner/single-link, capture/privacy/replacement/timeout checks and the same strict reducer. Eight focused reader tests and9 fresh launcher cases passed. The old helper, failed attempt and actual receipts are retained. The corrected reader assessed the retained interrupted catalog log as incomplete, without an authentication or product-defect claim.
+
+The final existing conditional initial launch9 used that distinct source-supported helper correction. Native account validation, catalog parsing and owned runtime cleanup then completed in18035ms. The UI offered and selected gpt-5.6-luna/low. A disposable Research profile named Atlas, a synthetic enabled private note and an unsent preference prompt were prepared. The UI showed own private note included, revision1,0 completed context turns and0 omitted stored turns. No Send, generation charge, acceptance restart or control/schema invocation occurred. This proves the current native catalog result, not live generation, memory behavior or the cause of the older malformed_stream failure.
+
+Before generation, fresh confirmation of continued exclusive QA use and no other requests since64 was requested and remains pending. No new concurrent-usage certification is invented from process absence. The owned app was deliberately closed; both native groups are empty and the identical dedicated config inode was exclusively restored without content read/hash/copy or overwrite. The new product-image lifecycle passed and detached without force. C7 and GPT-6 Headless remain unverified; acceptance stays active, not complete or terminal-failed merely to satisfy Stop.
+
+Ledger remains64/76 with12 arithmetical requests remaining, subject to the pending reconciliation. Initial launches9/9 are consumed; catalogs5/7, with both remaining refreshes reserved for the2 unused acceptance restarts. One of2 previously approved app builds was consumed; the conditional repair build remains unused. External schema/control allowance0 and runtime compiler43200/43200 remain exhausted. Actual product commands total714.1809932938777/10800seconds, leaving10085.819006706122seconds before any later commands. GET839/acquisition queries836+original1 remain unchanged. Deadline1792267347.836002 and600-second closeout reserve were preserved without renewal.
+
+Durable evidence is the continuation-01 subdirectory of cortexa-memory-rejection-sites-20261017-01 under the established task visualization root, sharing the original16MiB packet reservation. Preserve all sealed parent files, source/locks, raw indexes, completed maintenance, failed predecessor/admission, historical failures/qualified continuity,44 copies/quarantines, worktrees/review builds under PR146/148, disabled ECC hooks/MCP, native workaround/advisories and parked D-125/M1/M2. No HP/index/gate changes, downloads, installations or publication occurred. Next prerequisite: reconcile actual generation usage; a new native session requires explicit finite launch/catalog and lifecycle authority because initial slots are exhausted. Reuse the passing build/tests/readers and do not repeat them or silently reset counters/deadlines. Final preservation/governance/Stop receipts in that subdirectory control closeout.
+
+## 2026-10-17 — Live C7 rejection localized; method attribution still unknown
+
+The owner approved the qualified six-hour continuation17f18d15f5f4a8c61cff6eaf74a6e2a79b56eba6041b200ddf8013767e47e460. A fresh single-use seal started at1792261095.9776142 and ends1792282695.9776142, with600seconds reserved for closeout. Earlier deadlines and consumption remain unchanged.448 retained essential evidence files,48 current source paths, raw indexes/HEADs and active admission verified unchanged.19 affected deadline/counter/launcher checks passed. Storage reservations and the original16MiB shared packet cap passed. One fresh lifecycle passed; all7 retained app entries matched their complete recorded identities and content/modes. No app or runtime rebuild, resolver, download, schema or external control was repeated.
+
+Initial native attempt10 launched the unchanged instrumented review app. Native account/catalog validation completed in17985ms with owned runtime exit/cleanup. The UI selected gpt-5.6-luna/low, saved the disposable Research/Atlas profile with its synthetic enabled private note and showed0 completed context turns included. Request65 was charged before Send. It failed with malformed_stream; no accepted first response/text was observed. The stored transcript retained Turn1 as failed, with0 completed turns included and1 stored turn omitted from the next context. This is failure persistence evidence, not passing preference/context or C7.
+
+The first fixed rejection is identifier_006 in DerivedState::stream: the generic turnId validator for every non-turn-start/completed notification after thread binding. It does not retain the actual method or whether turnId was missing/null/nonstring/empty/oversized/control-bearing. Exact-version generated schemas contain multiple notification shapes without turnId, including thread/settings/updated; source emits settings updates when thread settings change. That is a supported candidate, not identification of this actual frame. Other possibilities remain. No parser acceptance, benign-notification handling or authentication change was inferred. The cause of the earlier request64 remains historically unverified.
+
+The original rejection reader marked the trace incomplete because it expected StageFinished before RequestFinished. Current unchanged diagnostics::Observer::finish emits RequestFinished then StageFinished. A fresh external reader corrects only that source-proven completeness predicate, preserving strict schema and descriptor/path/device/volume/ownership/mode/link/capture/replacement/timeout checks and original defaults.8 focused order/privacy/capture tests passed. The complete stable post-exit trace confirms identifier_006 and malformed_stream, but still cannot identify the method. Old readers and original false-complete receipt remain unchanged. A proposed-only table freezes84 public schema methods and6 identifier-failure shapes,506 fixed labels including2 unknown fallbacks. It has not changed product code or run natively.
+
+Live work stopped on this genuine unknown attribution; no request66 or unchanged retry occurred. During deliberate guarded close after the acknowledged prepare_close request, the launcher reported an unknown primary outcome. Its exact rejecting close operation was not recorded; do not infer a race or runtime cause. Owned app reaping, group0 and identical dedicated configuration restoration were independently verified, and the exact image detached without force. Cleanup is proved separately from that unknown primary receipt. The unchanged current review executable remains e37b85e3a4b2e3bf40c0b163e8b4c4f361de65c2e191cf27a400fa22c6ae2caa, with all prior builds preserved.
+
+Ledger is65/76,11 remaining under the owner-confirmed exclusive window; every failure is counted. Initial launches10/11 consumed, catalogs6/9, both acceptance restarts unused with2 refreshes reserved. One conditional product build remains unused. Native aggregate551.890199040994/7200seconds is charged,6648.109800959006 remaining. Product714.1809932938777/10800seconds is unchanged; runtime compiler43200/43200 and external schema/control0 remain exhausted. GET839/acquisition queries836+original1 are unchanged. No budgets or histories were reset.
+
+The exact next decision is a bounded diagnostic-only method/shape amendment from the same rejected Value, then conditional minimum supported one-file repair and C7. Unknown method/shape must remain unknown and stop. The frozen proposal specifies finite additional build/initial/catalog/lifecycle authority, unchanged deadline/storage/usage limits, strict current bindings and fixed close-phase recording; it is not executed. A diagnostic request66 would leave exactly10 requests for all10 successful C7 cases, with no spare retry. Do not silently extend ceiling76 or treat failed65 as acceptance.
+
+Durable evidence: continuation-02 beneath cortexa-memory-rejection-sites-20261017-01 in the established task root. Keep C7/GPT-6 Headless unverified and admission active. Preserve all user changes, failed predecessor, raw indexes/completed maintenance, historical schemas/readers/receipts/qualified continuity,44 copies/quarantines, PR146/148 worktrees/review builds, disabled ECC hooks/MCP, native workaround/advisories and parked D-125/M1/M2. No source/lock/product/gate/index/HP changes, installs/downloads, protected cleanup or publication occurred. Final preservation, accounting, capacity, reviews and actual Stop receipts control closeout; do not finalize open acceptance merely to satisfy Stop.
+
+## 2026-10-17 — Diagnostic66 identifies a thread warning; semantic review remains blocked
+
+Owner-approved proposal4fccf38827cd01c4ad2c55da0c5c56be33fbf8770c71922a15fc8c0ef4d88336 was verified against the sealed predecessor.146 essential predecessor files and48 current source paths matched. The one-file Codex adapter amendment adds506 closed static method/turnId-shape labels from84 exact schema methods, selected from the same rejected Value. Parsing, response validation, first-error ownership and existing errors remain unchanged. All other product/runtime sources, indexes, admission and HP work remain preserved.
+
+Fresh27 adapter tests and739 backend tests passed with0 failures and1 inherited ignored opt-in test. Strict all-targets/all-features Clippy and Rust formatting passed.19 affected external checks,2 full mocked launcher cases and5 reader checks including all506 labels passed. Synthetic schema enum/const, fixed-text admission-output and resolved temporary-path assumptions were corrected; failed versions/receipts remain. These preparation fixes grant no relaxed production validation.
+
+The diagnostic app compiler exited0 in9.658301834017038seconds with group0. Its wrapper later rejected while the predecessor artifact receipt already occupied the exclusive new-receipt destination. The actual unretained exception is not reconstructed. Independent fresh artifact/source/toolchain/identity checks passed, and a separately named forward receipt records that result without rebuilding or overwriting the old receipt/failure. Current review executable SHA256acf850d37892879068a52e2e4229aca60f46c4b383392713798addb6f6f2c1b1 is retained in the owned product image; all earlier review apps remain preserved by same-volume relocation.
+
+Initial11 and catalog7 completed native account/catalog validation in18926ms. The native UI saved Research/Atlas, gpt-5.6-luna/low, synthetic owner preference and enabled private note at revision1; next context had0 completed/0 omitted turns. Diagnostic request66 was charged before Send. It failed with malformed_stream and retained Turn1 as failed, with0 completed/1 omitted for next context. This is failure persistence evidence, not passing C7. Actual remote generation start is not inferred.
+
+The complete source-bound rejection is stream_turn_id_064_missing: exact public method warning, no turnId, after matching threadId validation. Generated WarningNotification has message:string and optional nullable threadId; it defines no turnId. Multiple first-party core/extension warning producers exist. The message, semantic class and originating cause remain unknown; do not infer harmlessness or identify old requests64/65. thread/settings/updated was only an earlier candidate and was not this observed method. Unreviewed warnings remain fatal. No compatibility acceptance change, speculative repair, request67 or unchanged retry occurred.
+
+New fixed close-phase recording observed normal guarded close with no primary rejection. Owned app reaping/group0, identical config restoration without content read/copy/overwrite, all7 current review entries and no-force image detach passed. Historical unknown close outcomes remain unchanged.
+
+Ledger66/76 leaves exactly10 requests for all10 successful C7 cases, no correction reserve. Initial11/12 and catalog7/10 are consumed; both acceptance restarts and their2 refresh reservations remain unused. One conditional repair app build remains. Product835.6359776699101/10800seconds and native743.7469675409957/7200seconds are consumed. Runtime compiler43200/43200 and external schema/control0 remain exhausted; GET839/acquisition queries836+original1 are unchanged. Deadline1792282695.9776142 and600-second reserve remain controlling, without renewal.
+
+The next proposed owner decision is one bounded non-generating warning-control session, using exact-source fixed semantic labels and ephemeral no-turn thread/start, before any conditional strict repair or C7. It may not reproduce a turn-only warning; absence must remain unknown and stop without spending a generation. No additional generation ceiling is proposed. The new PROPOSAL.md is not executed. Reuse passed compiled/runtime/schema/UI evidence; preserve the exact warning boundary and all failed receipts.
+
+Durable evidence: continuation-03 beneath cortexa-memory-rejection-sites-20261017-01 in the established task visualization root. The shared16MiB packet reservation, all storage/floor/headroom limits and PR146/148 retention remain. Keep C7/GPT-6 Headless unverified and memory admission active; do not finalize or close-failed merely to satisfy Stop. Retain user changes, failed predecessor, completed index maintenance, historical inputs/readers/receipts/qualified continuity,44 copies/quarantines, review builds/worktrees, disabled ECC hooks/MCP, native workaround/advisories and parked D-125/M1/M2. No downloads, installations, HP/index/gate changes, protected cleanup, publication or successor milestone occurred. Final preservation/accounting/capacity/review/actual Stop receipts control closeout.
+
+## 2026-10-17 — No-turn warning diagnostic stops without reproduction
+
+Exact approved proposal232503b5628185e665c70cfe50be3de483cfebb9e24e7be45a02a7fe55fa525e and284 predecessor files verified. Fresh continuation-04 external helpers/tests preserve strict schema, thread, response, tool and privacy boundaries. Four exact public-source warning strings are diagnostic-only; none is benign.45 applicable helper checks passed with valid unchanged evidence reused:17 Python,16 reader,1 shared-deadline,6 observer-binding and5 namespace cases. Failed versions/receipts remain; no runtime operation was replayed. Preparation defects (module registration, two-child test fixtures, observer-held executable descriptor and occupied output namespace) were corrected externally with affected validation. The actual holder list and unretained exception causes were not reconstructed. An initial import traceback exposed task-helper paths before the reporter fix, not runtime or credential data.
+
+Exactly1 new non-generating control was consumed. The pinned derived runtime completed initialize, account/read(refreshToken=false), bounded complete model/list and ephemeral no-turn thread/start. Dedicated-QA credential presence, gpt-5.6-luna/low availability and deny-all acknowledgement passed. No turn/start, Send or generation occurred. The bounded observation ended warning_not_reproduced after13.047234334051609seconds including cleanup. Both owned children were reaped, both groups0, runtime exit0, reader ended by owned cleanup, stderr0/complete, executable bindings passed and the identical QA config was restored without content read/copy/overwrite. Current metadata matches the fresh restoration receipt; rename ctime qualification is unchanged. A closeout assertion wrongly compared pre-parking ctime; its correction is recorded separately without altering historical bindings.
+
+No benign warning semantics were established. Request66's message/producer/cause remains unknown; no historical warning is attributed from this negative observation. This does not prove a turn-only cause or absence of late warnings. The runner drained residual bytes during cleanup without classifying late frames; no late-stream acceptance claim is made. This stopped diagnostic does not prove live authentication, effective tool isolation or C7; existing immutable-tool/service proof is reused separately. No adapter repair, build, lifecycle, native launch, catalog refresh or C7 followed.
+
+Ledger66/76 is unchanged: all10 required successful C7 cases remain, with no diagnostic-generation reserve. The new warning-control allowance is1/1 consumed; historical control/schema consumption remains. Runtime compiler43200/43200, product835.6359776699101/10800 and native743.7469675409957/7200 remain unchanged. Initial11/12, catalog7/10, two unused acceptance restarts/reserved refreshes and one conditional repair app build remain. Deadline1792282695.9776142 and600-second reserve are unchanged. Shared parent16MiB and all storage/floor/headroom reservations remain controlling.
+
+Stop under the approved non-reproduction boundary. The smallest proposed next decision is preparation of a native turn-phase fixed-label warning diagnostic, with explicit instrumentation/build/launch and finite request authority; do not execute it. One extra diagnostic would require ceiling77 merely to preserve10 C7-success slots, without a retry reserve. Reconcile remaining build/launch/catalog/lifecycle/time/storage authority rather than silently reuse it twice. Do not repeat no-turn probes or ignore arbitrary warnings.
+
+Durable evidence/handoff: continuation-04 beneath cortexa-memory-rejection-sites-20261017-01 in the established task visualization root. Final checks/preservation/capacity/accounting/Stop/seals control closeout. C7/GPT-6 Headless remain unverified; memory stays active, with no finalize/close-failed merely to satisfy Stop. Preserve original docs as verified recoverable prefixes plus additive notes, all user changes, raw indexes, admission, historical failures/qualified continuity,44 retained copies/quarantines, PR146/148 worktrees/review builds/resources, disabled ECC hooks/MCP, native workaround/advisories and parked D-125/M1/M2. No HP/index/gate work, downloads, installs, protected cleanup, publication or successor milestone.
+
+## 2026-10-17 — Native warning observer verified; usage reconciliation pending
+
+The owner authorized the bounded native-warning/conditional-C7 package. A fresh seven-hour seal ends1792294453.58368, preserving all historical deadlines and600seconds for closeout. The generation ceiling is77 with actual ledger66 unchanged; diagnostic67 and10 C7 successes68–77 remain reserved, with no retry reserve. The shared evidence reservation changed only16MiB to24MiB; incremental8MiB includes documentation growth and retains1MiB for closeout. Fresh reservation arithmetic is44012728320 below44023414784 by10686464bytes, qualified by measured allocation and existing reservations, not a proven peak.
+
+Only codex_connection.rs and additive current documents changed in the repository. The derived-lane observer rejects duplicate keys, bounds complete protocol capture, distinguishes EOF from child exit, makes queue loss/truncation fatal and validates queued late frames before successful normal completion. Fixed warning classes and early/stream/shutdown phase labels disclose no message text; all four known signatures, unknown/malformed/oversized/unbound warnings remain fatal. No benign-warning repair or invented turnId. Primary returned failures survive cleanup; tail observations are separate. Request66's warning semantics remain historically unknown.
+
+32 adapter tests and744 backend tests passed;1 inherited opt-in test is ignored. Strict all-targets/all-features Clippy, Rust formatting, security and whitespace checks passed.22 fresh external cases passed, with45 applicable unchanged helper checks/runtime/schema/tool/service evidence reused under their original provenance. The first external suite loaded an older command-table module through inherited sys.path; the failed receipt/source remains. Fresh explicit local binding corrected that preparation defect before any build/mount. No historical result was reconstructed.
+
+The one approved QA app build passed, actual compiler exit0/group0; executable SHA25621428be0edbdca346efc15d2c4b187971c4ca7a6c796c83d8d47eb0eaa865b39. Current bundle identity/content/modes/attribute commitments and exact derived runtime/source/schema bindings verified. The preceding review app was preserved by verified exclusive same-volume relocation. No extra export, runtime rebuild, download or provider invocation occurred. Product commands charged125.42764399910811seconds, cumulative961.0636216690182/10800. Native remains743.7469675409957/7200. The app build allowance is consumed; initial11/12, catalog7/10 and2 acceptance restarts remain unchanged.
+
+The fresh owner usage/exclusivity question remains unanswered. No current certification was invented, no native launch/catalog/config parking or generation occurred, and diagnostic67/C7 were not started. All independent authorized implementation/build/verification preparation is complete. The one product-image lifecycle attached/verified and detached without force; no owned build groups remain. The exact dedicated QA configuration was not read, moved or changed. The ready review app remains inside the retained detached image.
+
+Next action: obtain current owner confirmation of ledger66/no intervening requests and exclusive QA availability; remeasure capacity/time, validate the sealed ready build/helpers and authorize one replacement attach/verification/no-force-detach lifecycle to access the retained app. No rebuild, schema/control replay or additional generation ceiling is needed. Continue the unused initial12/catalog8, diagnostic67 and conditional10-case C7 on the same build only if prerequisites pass. Keep deadline1792294453.58368 without renewal unless separately decided. Stop on unknown warning/evidence, exhausted limits, unsafe access, drift or unresolved cleanup.
+
+Durable evidence: continuation-05 under cortexa-memory-rejection-sites-20261017-01 in the established task visualization root. C7/GPT-6 Headless stay unverified; memory admission remains active, with no gate finalization or terminal failure merely to silence Stop. Preserve failed predecessor, raw indexes, historical receipts/qualified continuity,44 retained copies/quarantines, PR146/148 worktrees/review builds, disabled ECC hooks/MCP, advisories/native workaround and parked D-125/M1/M2. No HP/index/gate maintenance, installation, publication or protected cleanup. Final preservation/accounting/checks/Stop/seals control closeout.
+
+## 2026-10-18 — Storage amendment passed; reviewed warning repaired; C7 remains blocked
+
+Continuation-10's approved combined reserved-storage stop is now 44,040,192,000 bytes within the unchanged 44 GiB envelope. Current reservation is 44,029,505,536 bytes; final pre-documentation measurement found 88,473,600,000 available bytes. Existing reservations, 8 GiB floor, 64 MiB headroom, historical deadlines and raw bindings remain. Current deadline is 1792382736.802181 with a 600-second closeout reserve.
+
+Diagnostic 68 established the exact disabled-Code-Mode fail-closed warning. The one-file adapter repair accepts that exact source-reviewed notification only after authenticated, model-bound, strictly verified deny-all thread establishment, with matching thread, correct turn phase and once-only handling. Unknown/malformed/wrong-thread/duplicate/fallback warnings still fail. The pinned runtime's empty tool selection and separately verified disabled services are reused; no runtime rebuild, tool enablement or managed-policy suppression occurred.
+
+34 adapter tests passed. The complete backend run passed 746 tests with one inherited ignored test. An initial strict-Clippy failure was preserved; a boolean-short-circuit-equivalent correction passed the affected 34 tests, strict Clippy and formatting. Security and whitespace checks passed. Both permitted QA builds are consumed. The current review executable is 62e561cd004a42ae2b8111a709f3da284daf05505a61a5eb00d320537b5f8d6d, retained inside the exact detached product image; predecessor review bundles remain preserved.
+
+Diagnostic 69 authenticated, handled the exact reviewed warning, and displayed READY, but then rejected an unhandled stream frame at predicate_050. This is a reader/protocol rejection, not evidence of authentication failure. Its method/payload were not retained and remain unknown; no retrospective cause or benign classification is inferred. Protocol completion did not pass. C7 has not started and remains unverified, as does GPT-6 Headless compatibility.
+
+Generation accounting is 69/80, leaving 11 requests for a possible diagnostic and ten mandatory C7 successes. Current initial launches are 14/16, catalog refreshes 10/14 (two reserved for restarts), both acceptance restarts remain, and two of four new image lifecycles remain. Both additional non-generating controls remain. Product verification charged 1233.6893965010167/10800 seconds; native execution has 5876.421857376004 seconds remaining. Runtime compiler reservation remains exhausted. No historical consumption was reset.
+
+Both owned native apps exited, configuration restoration passed without overwrite or content reads, build groups were reaped, and both image lifecycles detached without force. Current source/raw-index/admission/HEAD preservation passed. The memory increment remains active; no gate finalization, HP repair or index maintenance is authorized merely to satisfy Stop. Retain all PR146/148 worktrees, review builds, quarantines, historical failures, qualified identity uncertainty, disabled ECC hooks/MCP, advisories/native workaround and parked D-125/M1/M2.
+
+Durable closeout: cortexa-memory-rejection-sites-20261017-01/continuation-13 in the established task visualization root. Its PROPOSAL.md requests one consolidated finite decision: two additional QA builds and ceiling 81, allowing fixed-label diagnostic 70, one source/schema-supported repair verified by diagnostic 71 if needed, then ten C7 cases through 81. Preserve the deadline and all other limits; no execution follows from the proposal. Reuse the 84-name source/schema notification inventory, completed verification and existing artifacts. Do not replay native diagnostic 69 or infer its unrecorded frame.
+
+## 2026-10-18 — persistent-memory protocol/C7 continuation14–16 (open)
+
+Source/schema-bound turn/moderationMetadata handling is implemented in the existing adapter with strict authenticated deny-all/exact-model/thread/turn/phase/schema checks; metadata remains opaque, discarded and without authority. 38 adapter tests and750 backend tests passed (one inherited ignored); strict Clippy/format/security passed. Both authorized QA builds are consumed. Current review executable c0700c07655ada6ead6e1ce8a60bbded302bda939c3c3a4836987921d80538cf is retained in the product image. Diagnostic71 completed; six native C7 cases passed: preference72/follow-up73/MemoryOff74/bot-isolation75/edit76/delete77. Restart persistence/history reopening passed without replay. Exact constructed-context evidence supports isolation; Research did not echo its own marker, an explicitly retained advisory rather than an inclusion claim.
+
+Attempt78 failed resource_limit before Stop was clicked;577 partial characters were stored failed and omitted from later context. It is not cancellation acceptance. Four live cases remain with ledger78/81 (three requests available). The monitor's historical fixed deadline-phase rejection remains category unknown. Owned apps exited and identical dedicated config restoration passed without content reads/overwrite. Two no-force image detaches exited16; cause unknown and image still mounted. All4 lifecycle allowances and16 initial launches are consumed; catalogs13/14, one acceptance restart remains. No further request or launch is authorized under continuation13.
+
+C7/GPT-6 Headless and milestone completion remain unverified. Preserve active admission, raw indexes, original failed predecessor, historical receipts/qualified continuity, all review bundles/worktrees under PR146/148, disabled ECC hooks/MCP, native workaround, advisories and parked D-125/M1/M2. HP/index/gates and unrelated work remain unchanged. Detailed receipts, remaining budgets, cleanup failure and one consolidated finite authorization proposal are in the durable continuation-16 FINAL-HANDOFF.md, ACCOUNTING.json, CLEANUP.json and PROPOSAL.md under cortexa-memory-rejection-sites-20261017-01. No automatic successor, publication or protected cleanup.
+
+## 2026-10-18 — persistent-memory continuation17: image cleanup blocked
+
+Owner-approved continuation16 amendment is current: ledger78/82 with four remaining live cases and no retry reserve; launch17/catalogs14–15/acceptance lifecycle5 remain unused. Sealed continuation14–16 evidence and current48-path preservation/admission/raw indexes passed. Fresh capacity reserved44,037,894,144bytes is below unchanged44,040,192,000 stop; shared48MiB/incremental32MiB evidence caps apply. No deadline reset.
+
+One approved no-force hdiutil detach diagnostic exited16 with complete145-byte/two-line stderr classified UNKNOWN. Exact-volume census saw only its own inspector; all owned children exited. Image remains mounted; no second detach is justified, no force/signals occurred, and prior unknown causes remain unknown. No native launch, config read/parking, build, schema/control/provider call or generation occurred.
+
+Independent external preparation passed56 synthetic cases:15 utility-reader,8 caller-integration,2 census-parser,21 readiness and10 remaining-ledger cases. Runtime-start readiness avoids waiting for first text; strict reader native-attempt bound increases only11→12 for existing8 plus4 authorized cases. Helpers remain unintegrated and prove no live acceptance. Six C7 cases stay reusable under original bindings; failed78 remains failed. C7/GPT-6 Headless remain unverified. Detailed continuation17 FINAL-HANDOFF/ACCOUNTING/PROPOSAL records one additional normal diskutil-eject decision; do not execute it automatically. Retain all PR146/148 resources, history, advisories, disabled ECC hooks/MCP, native workaround and parked work. HP/index/gates remain unchanged.
+
+## 2026-10-19 — Persistent-memory continuation18–19: mounted reuse approved; catalog observation expired
+
+The owner approved the existing verified-mounted-image C7 route after normal hdiutil/diskutil ejection failures. Both utility failures remain unreclassified; image ejection remains unresolved and blocks milestone completion. No new utility/lifecycle was dispatched by continuation19. The retained current review executable is c0700c07655ada6ead6e1ce8a60bbded302bda939c3c3a4836987921d80538cf; product/runtime/source/schema evidence is reused unchanged.
+
+Initial launch17 and catalog14 were consumed. Authentication and catalog parsing completed in bounded fixed-label records, but the launcher did not observe completion before its60-second catalog window expired. The primary overall_deadline is qualified by actual timings/source as catalog_observation_deadline, not absolute-window expiration or authentication failure. A late observation was not processed. No new generation was dispatched; ledger78/82 preserves four remaining cases79–82 with no reserve. Six prior C7 cases and restart persistence remain valid; failed78 remains failed, not cancellation. C7/GPT-6 Headless remain unverified.
+
+The owned app exited/group0, identical dedicated config restoration passed without contents read or overwrite, and current source/raw-index/HEAD/admission/review preservation passed. Native execution charged109.045912167001seconds; remaining4527.923306542004seconds. Initial17/17 is exhausted, catalog14/15 leaves one reserved for the last acceptance restart. Absolute deadline1792382736.802181 and600-second reserve remain unchanged. Image remains mounted; no overall cleanup pass or milestone completion is claimed.
+
+Fresh external preparation retains all failures. Six corrected synthetic readiness-wrapper cases passed after isolating the live stopped-session precondition; ten automatic scheduler cases passed, including six observations per60-second window, strict unknown rejection and no replay. Scheduler is not yet integrated/live-proven. Two closeout reader preparations selected a historical module through inherited sys.path; fresh exact-file loading corrected that attributable preparation defect without another live operation. Current product verification is reused, not repeated.
+
+Exact next decision is continuation19/PROPOSAL.md: one replacement initial launch18, one additional catalog refresh (15 startup/16 reserved restart),900seconds fresh external integration/preparation, no deadline or generation increase. Complete all preparation before launch and automatically observe catalog records under unchanged guards. No further ejection experiment, build, control/schema request, source/gate/index/HP edit, publication or protected cleanup. Retain PR146/148 worktrees/review builds/resources, historical uncertainty, disabled ECC hooks/MCP, native workaround, all advisories and parked D-125/M1/M2. Active admission and open C7 remain; never finalize or alter a gate just to satisfy Stop.
+
+## 2026-10-18 — Persistent-memory continuation20–21: catalog repair passed; cancellation79 not accepted
+
+The owner approved replacement launch18, one catalog allowance and900seconds external preparation under the unchanged deadline1792382736.802181. Fresh automatic observation binds a new catalog attempt/current log identity, rejects old/extra/failed records and preserves60seconds/six observations per refresh/12total. Affected scheduler, strict-reader, readiness, caller, privacy and preparation-phase tests passed. All offline integration preceded the live launch; no runtime/product rebuild or source change occurred.
+
+A default-context preparation stopped before any custody directory, configuration transition or app launch; its original primary remains unknown. Exact QA directory descriptor/volume/ownership/mode checks passed. A fresh phase-recorded namespace used the platform-reviewed host tool route for already-authorized parking and succeeded. This does not reconstruct or establish the old exception. The stopped helper's39.89905658299904seconds remain conservatively charged; no initial-launch slot was consumed by that preparation. Historical helpers and receipts remain unchanged.
+
+Initial launch18/catalog15 succeeded; automatic observation recorded a newly authenticated parsed catalog without a missed deadline. The existing conversation reopened without replay. Request79 was counted and sent. Its runtime-start relay succeeded, but Stop was not clicked before the short response completed. Protocol completion/cleanup passed with reviewed notifications only; stored status is completed. Cancellation acceptance FAILED, not model authentication or reader failure. Native runtime started at17028ms and exited at21749ms, a4721ms interval. C7 remains six accepted cases plus four unmet cases. Ledger79/82 leaves only three slots, so no further generation was sent. Failed78 remains failed and omitted; completed79 follows ordinary completed-history inclusion.
+
+The owned idle app quit; group0 and identical no-overwrite dedicated config restoration passed without content reads. Current source/raw-index/HEAD/admission and review-build preservation remain required by sealed final receipts. Image ejection remains unresolved; the mounted-review resource is retained and overall cleanup/milestone completion is not claimed. Native remaining4303.217062000006seconds, initial18/18 exhausted, catalogs15/16 with one reserved for the remaining acceptance restart. The absolute deadline and600-second closeout reserve did not renew. Product/runtime/compiler budgets and all storage caps remain unchanged.
+
+Independent preparation verified a supported asynchronous tool-cell relay fixture with exit0/group0. It removes the empty-shell-poll5-second retrieval floor; it does not prove a future cancellation result. Next proposal is one consolidated finite decision: replacement launch19, one catalog allowance (16startup/17restart),900seconds external preparation, generation ceiling83 solely to restore four required slots80–83, and the corresponding external reader native-attempt bound13 (reject14). No new product/runtime change, build, control/schema or lifecycle is proposed. The critical path must deliver readiness and click the already-observed enabled Stop without an intervening unrelated tool/UI observation. Use a bounded ordinary500-word synthetic response fixture; never assume it stays active or declare cancellation after completion.
+
+Detailed durable receipts, accounting, review, proposal and seals are in continuation21; failed prelaunch preparation is retained and separately sealed in continuation20. Preserve historical uncertainty, all failed receipts, PR146/148 worktrees/review resources, disabled ECC hooks/MCP, native workaround, advisories and parked D-125/M1/M2. C7/GPT-6 Headless stay unverified. No HP/index/gate work, download, install, publication, protected cleanup or successor milestone. Memory admission stays active and Stop blocks; no gate finalization merely to silence it.
+
+## 2026-10-18 — Persistent-memory continuation22: request80 failed; cancellation remains open
+
+The owner approved continuation21 proposal86cfa1a44c9c4106943c05e4eafd156d648096eda8d4025ee95e2d81ccd6f822: ceiling83, replacement initial19, catalog allowance17 and900seconds external preparation under unchanged deadline1792382736.802181. Fresh external ledger/ordinal/count13–14, observer, active-evidence and full-caller validation passed before launch. A stale caller-test expectation failed, was preserved, and its single affected bound case passed;15 unaffected caller cases were reused. Preparation namespace/source-location failures were retained. Product/runtime source, builds, schemas, indexes and gates were unchanged.
+
+Initial19/catalog16 succeeded. Request80 was charged once and dispatched using gpt-5.6-luna/low. The asynchronous relay reported current runtime-start ordinal10. The next native action attempted the observed Stop button; the resulting UI and stored turn were already failed/resource_limit, not cancelled. Do not assert that the Stop handler ran or that cancellation succeeded. The strict observation also records current rejection evidence, so protocol success is not claimed. Its exported rejection list includes historical traces without ordinal associations; do not attribute every historical label to80. No further live operation was attempted after this boundary.
+
+Deterministic context evidence records stored statuses completed/failed/completed/failed, selects completed turns1/3, and omits failed78/80. The constructed-context commitment is unchanged before/after80. This proves failed-turn exclusion under the bound construction, not cancellation acceptance or an actual provider-prompt receipt. Six earlier C7 cases remain accepted; active cancellation, cancellation recovery, active interruption and restart recovery remain unmet. Ledger80/83 leaves three slots for four required cases; initial19/19 is exhausted, catalog16/17 retains one reserved for the unused acceptance restart. Native remaining4106.101687542005seconds. No budget/deadline reset, request81, new control/schema, lifecycle or utility occurred.
+
+Offline source review establishes that UI streaming follows accepted ProviderEvent::Started, emitted only after Codex acknowledges turn/start. Submitting, enabled Stop and task ownership alone are insufficient. A single bounded Computer Use observation/action invocation could remove the external-relay round trip, but is an unvalidated proposed method, not a passing result. The resource-limit category does not identify its exact presentation bound; matching the existing128-update regression is not proof of this failure's cause. Current shutdown rejection attribution also needs a privacy-safe source-bound assessment before another paid attempt. No limits, parsing or unknown-warning rejection were weakened.
+
+The owned app quit normally, its group is gone, no exact review/runtime file holders were observed, and the identical dedicated config was restored without content read or overwrite. Current review full-manifest, mutable disposable-data custody and preserved source/index/HEAD/admission/gate checks are retained in continuation22. Image ejection remains unresolved; mounted image/review resources remain retained under PR146/148. Overall cleanup and milestone completion are not claimed. Required closeout may continue under the original deadline after the900-second preparation window, granting no new preparation/live execution. No HP/index/gate work, download, installation, protected cleanup, archival or publication occurred. C7/GPT-6 Headless remain unverified; historical uncertainty, disabled ECC hooks/MCP, native workaround, all advisories and parked work remain.
+
+## 2026-10-18 — Persistent-memory continuation23: offline request80 attribution and conditional repair package
+
+The owner approved only continuation22 proposaldf38dcc4b3de77703633a7399bcb54aa455e779175120a0457e4e2dffba5bf8c:900seconds external offline work under unchanged deadline1792382736.802181. All180 sealed continuation22 entries and current48-path source/index/HEAD/admission/gate preservation passed. No live request, app launch, catalog, build, lifecycle, utility, configuration read, source edit or HP/index/gate operation occurred.
+
+23 synthetic attribution cases and12 source-bound launcher-plan checks passed. One actual bound diagnostic child exited0/group0 after one current-log read, retaining only fixed labels/numeric evidence and a qualified current custody commitment from the same snapshot. The first parent helper failed on an undefined Python attribute before any child/read; its old consumption marker and failure remain, qualified as preparation only. A fresh tested literal-interpreter binding dispatched the sole read. An earlier test syntax typo was preserved and corrected in a fresh version. No consumed helper/read was replayed.
+
+Exact ordinal10 attribution records one successfully handled disabled-Code-Mode warning, ten notification_phase_shutdown failures, one known_notification_032 failure and one protocol_tail_rejected failure. known_notification_032 maps to item/agentMessage/delta. Credentials were observed; primary request80 remains failed/resource_limit. The recorded schema/thread/turn/item/content of that rejected frame and methods of the other shutdown markers remain unverified. Matching current bytes does not establish historical continuity or writer attribution. No warning or tail rejection was relabeled passing.
+
+Source review shows strict shutdown admits only reviewed benign notifications, whereas an acknowledged active turn can still have buffered streaming data. A minimal proposed one-file codex_connection.rs correction would distinguish validated local-abort drainage from successful strict completion, preserve primary failure, fully validate existing schema/thread/turn/tool/bounds and retain unknown/malformed warning rejection. It must not blindly discard frames, raise limits or claim the historical80 payload was safe. That product change is not authorized or implemented by this offline task.
+
+29 native-selector and12 restart-intent synthetic cases passed. They verify typed state-machine decisions, not real accessibility parsing, latency, window census integration or live cancellation. UI streaming is source-proven after turn/start acknowledgement; enabled Stop/Submitting/busy alone remain insufficient. The existing10-second pre-restart wait cannot span the observed approximately17-second startup. A75-second arm/10-second confirmation contract is prepared, not installed. Actual CUA snapshot reduction and host integration must be independently validated before any future paid Send.
+
+C7 remains six accepted cases and four pending: active cancellation, cancellation recovery, active interruption and restart recovery. Ledger80/83, initial19/19, catalogs16/17, one unused acceptance restart and native4106.1016875420055seconds are unchanged. Image ejection remains unresolved; exact restored dedicated configuration and all old review/worktree resources remain retained under PR146/148. No credential/configuration content or model text was retained. Disabled ECC hooks/MCP, advisories, native workaround, qualified continuity and parked D-125/M1/M2 remain.
+
+The durable continuation23 proposal requests one conditional consolidated decision for the one-file abort-tail repair/tests, external action/restart integration, one distinctly named new QA bundle preserving the old bundle inside the existing image reservation, affected strict checks, a fresh five-hour window, ceiling84 and replacement launch20/catalog18. These are proposed only; no deadline, storage cap or operation allowance was renewed here. It includes explicit gates before live C7 and preserves every unknown/security/cleanup/budget stop. No publication or image-ejection attempt is included. Do not execute it without owner approval. Current memory admission stays active; completion and Stop remain blocked while mandatory acceptance is open.
+
+## 2026-10-19 continuation24 — abort-tail repair verified; native evidence budget blocks continuation
+
+The approved one-file adapter now separates a locally aborted bound derived turn from strict successful completion. Abort draining validates exact authenticated gpt-5.6-luna/low deny-all thread/turn, closed schemas, bounded item lifecycle and capture before discarding text; unknown frames, tools, warnings, unbound or malformed data remain fatal. Successful completion retains strict tail validation. Historical request80 remains failed and its rejected payload/particular presentation limit remain unverified.
+
+48 focused adapter tests passed, all-target backend tests passed, strict Clippy and formatting passed. The first Clippy failure and equivalent conditional correction are preserved; both approved affected rechecks are consumed. Fresh build-caller checks passed. One distinct Cortexa Memory Abort QA.app built with exit0 and owned group0; executable SHA256815cecc0d8d8aa1f036d96ba5ec83c8f29677d097ad12e8f9d1d6c98245074f9. The old review app remains unchanged in place. No export, new lifecycle or native launch occurred.
+
+Remaining native integration and live acceptance are NOT verified. The reviewed phase recorder can retain up to8MiB, while the measured active evidence room after build was below213KiB before the1MiB closeout reserve; this capture bound is not an already approved storage reservation. A reference prior helper set plus short phase journal alone exceeded that room, though it is not a proven minimum for another implementation. No protected evidence was removed and no cap was increased to force a live run. Four C7 cases remain; ledger80/84, initial20/catalog17-18 and one acceptance restart are unconsumed. A fresh owner usage confirmation remains pending. The new review build and six original accepted C7 cases are retained under their actual provenance; C7 and GPT-6 Headless remain unverified.
+
+continuation24/PROPOSAL.md records one finite remaining-evidence/preparation amendment, without authorizing it. Preserve deadline1792394680.4647171, all historical consumption and image-ejection blocker. No HP/index/gate change, credential/configuration read, publication or cleanup/archival occurred. Retain PR146/148 artifacts, disabled ECC hooks/MCP, advisories, native workaround and parked D-125/M1/M2.
+
+## 2026-10-19 continuation24 final preservation qualification
+
+Final dedicated-QA config metadata comparison rejected a ctime_ns-only difference against the retained binding. All other recorded metadata fields match; contents were not read, and content equivalence, cause/writer and historical continuity remain unverified. CONFIG-METADATA-REJECTION.json preserves both actual compared entries; no rebinding, parking, client launch or request followed. Source/index/admission and both review-build checks passed separately. continuation24/PROPOSAL-02.md supersedes only the unexecuted evidence-only proposal by adding one exact owner-authorized forward metadata qualification request; it does not relabel this rejection as passed. C7 remains open, ledger80/84, image ejection unresolved.
+
+## 2026-10-19 continuation25 — qualified setup and native request81; C7 remains blocked
+
+The owner-approved exact proposal55bdce824d77d85438fb608daa3a4149bfe361a3d236cececb0893994934c1a2 was verified. All251 continuation24 sealed entries and current source/index/HEAD/admission/gate preservation passed. The12MiB evidence amendment was implemented and independently remeasured: reserved44,050,477,056bytes under stop44,052,774,912, with44GiB envelope,8GiB floor and64MiB headroom unchanged. The original overall deadline1792394680.4647171 was not renewed. Fresh1800-second preparation began1792382590.4907598.
+
+16 configuration metadata tests,24 protocol/accounting tests,10 host contracts,2 complete mocked close calls,3 complete mocked restart calls,6 split-confirmation caller cases and17 actual-grammar reducer/action cases passed. The actual owned idle AX tree was reduced before Send; public source ordering excludes transcript/model output from control parsing. Fixed-label abort-tail evidence remains distinct from strict successful completion. Fresh configuration current-input metadata qualification preserved the old ctime-only rejection and continuity/content/writer uncertainty; no configuration contents or credentials were read. The existing exclusive rename procedure parked/restored the same opaque file with intended ctime transitions and no overwrite.
+
+Initial20 and catalog17 succeeded using the retained Abort QA build and pinned derived runtime. Catalog authentication/model discovery passed for gpt-5.6-luna/low; this did not prove a generation or cancellation. Request81 was charged once. The one bounded CUA Send/observe/Stop invocation rejected with fixed timeout after4.3636seconds of reported tool time. Its retained last frame was submitting,busy=false,Stop enabled. No Stop action was reached, and completion or normal Quit is not cancellation acceptance. The old helper conflates clock and observation-count exhaustion; the exact branch/count was not retained and is not reconstructed. Current fixed native phases include provider_dispatch9865ms,runtime_started18864ms,credentials_available19260ms and first_response19308ms; no strict or abort-tail completion/terminal runtime proof is present. No protocol warning/rejection was observed in the parsed current attempt, but that is not a complete capture or protocol success.
+
+Normal owned app Quit was used only for cleanup. App root/group0 and identical opaque config restoration passed; final owned lsof inspection found no exact review/runtime file holders. Stored statuses after exit are completed/failed/completed/failed/running; source-bound construction selects turns1/3 and omits incomplete81, with unchanged constructed-context commitment. The running row is not cancelled/interrupted acceptance; any future startup reconciliation must be observed without replay. No database repair or manual status rewrite occurred.
+
+Ledger81/84 leaves3requests for4mandatory C7 cases. Six previous accepted cases remain; cancellation,recovery,interruption/restart recovery remain open. Initial20 is consumed,catalog17 consumed,18 reserved and one acceptance restart unused. Native remaining3761.6488737080026seconds; product/source/build/schema/control allowances unchanged. All historical failures remain. No rebuild, runtime/schema invocation, ejection attempt, HP/index/gate change, download, installation, protected cleanup or publication occurred. Image ejection remains unresolved and completion-blocking; retain all PR146/148 artifacts and both review builds.
+
+A fresh offline-only native_action_v3.mjs diagnostic wrapper distinguishes clock/count exhaustion, retains bounded observation/action flags, rejects reversed clocks and private unknown-error output, and passed8synthetic cases. Its limits stay64observations/60seconds and it was never used in81 or another live attempt. The smallest further paid allowance is ceiling85 with one replacement launch21/catalog19 and a separately explicit bounded observation amendment; continuation25/PROPOSAL.md is unexecuted. Preserve disabled ECC hooks/MCP,advisories,native workaround and parked D-125/M1/M2. C7/GPT-6 Headless remain unverified.
+
+## 2026-10-19 continuation26 — observer amendments verified; launch21 stopped before catalog refresh
+
+Owner-approved continuation25 proposala07042ec8bdc74e2f030739cc8735553c7969cc1ea84ceefc93b0bb756246464 and all163 sealed source entries verified. Memory admission stayed active. Fresh900-second preparation and ceiling85,initial21,catalog19 were recorded without resetting historical consumption or deadline1792394680.4647171. Current source48,raw indexes,HEADs,admission,gates,old/new review manifests and derived runtime were preserved. Independent capacity measured44,050,477,056reserved bytes below44,052,774,912stop; free85,606,400,000bytes, all reservations/floors/headroom retained.
+
+The fresh512-observation/60-second monotonic action wrapper and actual AX reducer/caller bindings passed affected boundary,clock,privacy,source,replay,protocol/accounting,closed host,complete close/restart and split-confirmation validation.84 primary affected synthetic cases passed, with source hashes and actual command exits retained. An unused imported old fixture module, an accidentally changed expected hash inside a fresh test fixture and a missing fresh receipt-name reference were corrected; failed helper versions/results remain. No source/product/runtime edit or rebuild occurred. The action implementation's public function bodies matched those loaded into Computer Use. These tests do not prove live cancellation, authentication or OS isolation.
+
+Launch21 consumed the sole replacement initial allowance and reached exact owned PID99387/window1169. Computer Use observed the normal workspace then Bots; no catalog refresh button or Send was clicked. The existing catalog IPC request1 was persisted, but no response or CATALOG18 charge receipt exists. The controller returned unknown_preparation_or_execution_failure with fixed_phase null after68.96772970899838seconds. The last phase entry is window_validate,sequence283; the actual exception and exact failing substep were not retained. This is an unknown external-controller failure, not established Codex authentication failure, harmless window behavior or a completed catalog. The stop condition was honored without retry, further control operation or paid dispatch.
+
+Owned root/group cleanup and identical no-overwrite opaque config restoration passed. Fresh owned exact-file lsof inspection found no holders of either review executable or the derived runtime, with inspector exit1/empty output/group0 independently verified. Config contents and credentials were never read. Both full review manifests remain unchanged in place. Fresh post-session task-data custody is retained. The previous incomplete81 row is now stored interrupted after startup, selected history remains completed turns1/3, and incomplete/failed turns are omitted. This is observed startup reconciliation without replay, not the new active-interruption C7 case. No database rewrite occurred.
+
+Ledger81/85 leaves four requests for four mandatory cases82–85 and no reserve; no generation was spent here. Six historical cases remain accepted, four remain open. Initial21/21 exhausted, catalog17/19 with18startup and19reserved restart, sole acceptance restart unused. Native remaining3692.6811439990042seconds, original compiler/build/schema/control/lifecycle/utility budgets unchanged. No extra permission,signal,ejection,download,install,HP/index/gate operation,protected cleanup,archive or publication occurred. Image ejection remains unresolved and independently completion-blocking. Retain PR146/148 resources,disabled ECC hooks/MCP,native workaround,advisories,historical uncertainty and parked D-125/M1/M2. C7/GPT-6 Headless remain unverified; memory Stop must block while acceptance is open.
+
+continuation26/PROPOSAL.md is one unexecuted finite decision: a source-bound fixed-label catalog/command recorder, one bounded offline current synthetic-log classification before any replacement launch, focused validation and conditional initial22 inside the unchanged absolute deadline. It preserves unknown rejection and makes no historical exception reconstruction. No successor or proposed operation is automatically authorized by this closeout.
+
+## 2026-10-19 continuation27 — current reader rejection classified; no native launch or generation
+
+Owner proposal0ffdd4100443e4c1939a8727824880d226835bbea35f041c5a13084032417758 and all143 continuation26 sealed entries verified. Memory admission remains active. Fresh900-second external preparation was sealed without renewing absolute deadline1792394680.4647171 or resetting consumption. Capacity remeasurement retained44,050,477,056reserved bytes below44,052,774,912stop,8GiB available floor,64MiB headroom and all existing resource reservations.
+
+Nineteen diagnostic privacy,identity,exact-root,source,malformed/partial,timeout,replacement/volume,replay and primary-rejection tests passed. The one authorized owned offline current-log read exited0/group0 and returned reader_rejected/unsupported_record at catalog_reduce,catalog_reader_v2.py:35. Its elapsed read was0.008586541000113357seconds. That predicate requires an allowed native event and non-null duration. The retained fixed result does not identify which conjunct failed or the exact row signature; no raw record,payload,stderr or credentials were retained. This is a current strict-reader rejection,not a reconstruction of launch21's discarded exception and not evidence of authentication failure.
+
+Reviewed current product source diagnostics.rs defines startup RequestInterrupted markers by cloning a retained pending record,changing event/outcome/error/severity/timestamp and deliberately setting duration to None; its existing test checks null duration and single interruption after reopen. This proves a concrete source/schema gap candidate in the external reader,not that the actual rejected row matches that producer. A narrow parser extension must fully validate the source-defined marker and its prior pending identity before accepting it. A new parser exception is explicitly outside the current proposal; no exception,launch or paid request was attempted.
+
+Independent authorized preparation completed fresh command-phase recording for decode/dispatch,catalog read/reduce/admission and response publication. Entry/completion/rejection and primary failures remain separate from cleanup. Nine recorder tests,five catalog integration tests,two complete close mocks and three complete restart mocks pass; the catalog-relevant class/function ASTs are identical between tested and final prepared controllers. Together with19 diagnostic tests,this is38 primary affected passing cases. Stale historical preparation timestamps in copied synthetic fixtures caused initial mock failures; fresh corrected fixtures passed and original failed versions/results remain. A dispatch wrapper initially replaced an existing close-phase rejection; its corrected prepared v3 rethrows the original phase failure,with affected close/restart checks passing. These tests establish external recorder behavior,not live authentication,protocol compatibility or C7.
+
+The sole diagnostic allowance is consumed1/1. Initial launch22 remains unused,initial21consumed; catalog17/19 with18startup and19reserved restart; sole acceptance restart unused. Ledger81/85 leaves exactly four mandatory successful C7 cases82–85 and no reserve. Native remaining3692.6811439990042seconds is unchanged. No app launch,catalog refresh,configuration content read/parking,model/control/schema request,generation,build,mount/ejection,HP/index/gate edit,download,install,publication or protected cleanup occurred. Current source/raw indexes/HEAD/admission/gates and config metadata against26's actual restoration verify. Previous owned-app cleanup and mutable fixture custody remain under their original provenance; no new app cleanup or historical continuity is invented.
+
+C7 remains six accepted/four pending. Image ejection remains independently unresolved and completion-blocking. Retain both review builds,all PR146/148 resources,historical failures,disabled ECC hooks/MCP,advisories,native workaround and parked D-125/M1/M2. The next unexecuted proposal binds only exact source-defined startup-interruption handling in fresh external readers,focused validation and one fresh offline acceptance read,then conditional existing launch22/C7. It also requests one explicit fresh three-hour window because a full900-second preparation plus30-second read,3692.6811439990042-second native reservation and600-second closeout cannot be guaranteed inside the expiring old window. This is a proposal only; no deadline has been renewed and no additional live allowance is requested.
+
+## 2026-10-19 continuation28 — startup reader repaired and verified; exact SHM custody mismatch blocks launch
+
+Owner-approved continuation27 proposalc75a6b4813979df1cf0185b4568884a1f7b46112b6e1a8117ccabc24c18bfe33 and all115 sealed entries verified. A new owner-authorized three-hour execution window began1792411719.333556 and ends1792422519.333556,with600-second closeout reserve; every older deadline/consumption record remains immutable. Fresh900-second preparation ends1792412619.333556. No live allowance or generation ceiling was increased.
+
+Fresh external readers now accept only the exact source-defined startup interruption tuple after unchanged header/schema checks and unique pending-membership/clone comparison using the producer's256-record selection. Missing,ambiguous,terminal,duplicate,reordered or changed predecessors/fields reject; arbitrary null durations and unknown protocol/trace warnings remain fatal. A marker attaches to its existing attempt,retains unknown duration and cannot supply cleanup,strict completion,abort-tail completion or a new paid dispatch. Product/runtime/gate source did not change.
+
+Twenty-one new marker cases,19 privacy/identity/capture/timeout/primary-rejection cases,24 protocol/accounting cases,10 host cases,two complete close mocks,three restart mocks,five catalog integrations and six split-confirmation cases passed. Six fresh fixture-witness cases also passed:96 primary affected cases total. Thirty-nine unchanged CUA observer/reducer/caller cases were reused only after exact source/body commitments matched. Two stale synthetic binding/recorder fixtures were corrected,with failures preserved. These tests do not prove live authentication or C7.
+
+The single authorized owned offline acceptance read exited0/group0 and passed the whole strict reader. It recognized exactly one source-matched startup marker,11 existing native attempts and six retained catalog groups; the original record_count208 summary is the reducer's ordinary-record metric,not an asserted total line count. No raw logs,payloads,configuration values or credentials were retained. Historical launch21's discarded exception is still not reconstructed. This current verified reader success does not count old81 reconciliation as the required new interruption case.
+
+Conditional native preflight passed current source/index/HEAD/admission/gate,existing image/review/runtime and opaque config metadata checks,then rejected the disposable fixture hash/stability predicate at preflight28_static.py:37. The original failing entry was not retained and is not reconstructed. A new independently labeled bounded comparison of the three exact QA files found database and WAL identity,size,hash and volume unchanged; only assistant-development.sqlite3-shm SHA256 differs. Its32768-byte size,owner/mode/single-link,inode/device and persistent-volume hash match the baseline,and current descriptor/path/volume stability passed. No exact-file holders were observed by an owned exit1/empty-output/group0 inspector. The old SHM hash is e80c4fa048c7d2b89c6c7b667a94299000d4ad9c7f16d32c9b075ec757fa10a1; fresh current hash104d03749a66c093390f2c97a595ed706212627030673391dae7c057249ec519. Cause,writer and historical byte continuity remain unverified. No rebinding,exemption,SQLite opening,copy,deletion or restoration followed this mismatch.
+
+Launch22 remains unused; initial21 consumed,catalog17/19 with18startup/19restart,sole acceptance restart unused,native3692.6811439990042seconds unchanged. Ledger81/85 leaves exactly four successful C7 cases and no reserve. The current-window owner usage/exclusive-QA question remains pending; no current attestation was fabricated and no generation was spent. Six historical C7 cases remain accepted,four open. Existing compiler/build/schema/control/lifecycle/utility budgets are unchanged. Configuration was not parked or read,and no app/native catalog/provider request was launched.
+
+Strict custody rejection is preserved. continuation28/PROPOSAL.md is one unexecuted narrow owner decision for exact current-SHM forward binding,with DB/WAL and all other checks still strict,plus900fresh preparation seconds inside the unchanged new deadline. It requires actual fresh current identity/hash validation and rejects any further difference. Preserve all old inputs/receipts; do not attribute the change to a prior reader from timing alone. After future native QA,perform final allowed SQLite observations before the final no-holder/custody hash capture,so no later reader invalidates a newly sealed fixture baseline. This changes closeout ordering only; it is not historical preservation proof.
+
+Retain both review builds,PR146/148 resources,historical failures,disabled ECC hooks/MCP,all advisories,native workaround and parked D-125/M1/M2. Image ejection remains independently unresolved and completion-blocking. No downloads,installs,builds,HP/index/gate work,protected cleanup,archival or publication occurred. C7/GPT-6 Headless remain unverified; memory admission stays active and Stop must block while mandatory acceptance remains open.
+
+## 2026-10-19 continuation29 — current-input preflight passed; request82 timed out before cancellation
+
+Owner-approved continuation28 proposal SHA256 d997f635acd98b786d4cdcf8c952d8dd916ea92bdc307f05465a1706062ac937 and all120 sealed entries verified. Ten fresh exact forward-input cases passed, six unchanged witness cases were reused by source hash, and fresh full-caller2/restart3 cases passed. Current three-file descriptor/path/device/volume validation passed against the exact approved current SHM snapshot; database/WAL remained strict. QUALIFIED-FORWARD-CUSTODY.json records current inputs only. Historical cause,writer and byte continuity remain unverified; no old failed custody result was promoted. The consumed passing continuation28 offline reader acceptance was reused,not replayed.
+
+The owner confirmed exclusive dedicated QA and no additional requests since81. Fresh preflight passed source48,index/HEAD/admission/gate,image/APFS,both review manifests,derived runtime,opaque config metadata,current fixture,capacity and usage checks. Initial launch22 was consumed and reached owned PID10660/original window1197. The exact opaque config was privately parked without reading contents. Catalog18 was charged and clicked once; bounded automatic observations verified authentication/catalog parsing and model gpt-5.6-luna/low. Catalog success is separate from turn acceptance.
+
+Request82 was charged before the sole native Send. The tested in-memory action completed370 fresh AX observations in21155.109291002154ms and rejected terminal_before_action: it never observed streaming,never clicked Stop and never attempted Quit. Native UI returned error/deadline and stored turn6 as failed. The strict current-attempt receipt is native ordinal12: request_started/configuration_validated,provider_dispatch at10785ms,runtime_started/exited/cleanup at21742ms,request_finished timed_out/timeout,ownership_released/ui_terminal_returned at21920ms. No current warning/rejection was observed; strict protocol completion and validated abort-tail completion are false. This does not prove authentication failure,provider fault,reader fault or the reason the deadline was reached. Do not infer sixty seconds elapsed from the deadline label; retained phase durations remain exactly as recorded. Source agent_chat_tauri.rs:443/460 supplies a60second outer timeout; the relationship to this retained timing needs assessment before any retry.
+
+Deterministic before/after context remains identical: selected completed turns1/3,constructed SHA256436f2b2817388dbfe8842bd6b78d632d16f53a9b9c92120ee64e27bfa2ffd570. Stored statuses are completed/failed/completed/failed/interrupted/failed; omitted count increased3to4. Old81 startup reconciliation and failed82 remain excluded. This is source-based construction evidence,not a provider-wire prompt receipt or model-answer inference. Cancellation did not pass. All four remaining C7 cases remain open; six historical cases retain their original evidence.
+
+Ledger82/85 leaves three requests for four required successes,with no retry reserve. Initial22/22 is exhausted; catalog18/19 and the sole acceptance restart remain recorded. No further Send,restart or catalog was attempted. Native elapsed328.91373187499994seconds was conservatively charged,leaving3363.7674121240043seconds. The overall deadline remains1792422519.333556 with600second reserve; preparation900seconds started1792412434.035232 and ends1792413334.035232. No allowance,deadline or historical consumption was reset. No compiler/build/schema/external-control/lifecycle/ejection operation occurred.
+
+Normal owned Quit under prepare_close exited the app. The controller independently recorded close_identity/identity_rejected rather than reporting a passing close sequence; the exact timing/cause is not established by that label. Its finally cleanup nevertheless verified owned root reaping/group0 and identical opaque config restoration by same inode with rename-qualified ctime,without contents read/copy/overwrite. A final owned exact-file lsof inspector returned exit1/empty output/group0 for both review executables,derived runtime and the three QA files. Both complete review manifests and current config descriptor/path/device/volume metadata passed. Preserve the failed close receipt independently of these cleanup postconditions.
+
+All allowed SQLite/context observations preceded final QA-DATA-CUSTODY.json. No SQLite was reopened afterward. Current post82 mutable fixture hashes are new custody evidence,not historical continuity or repaired old snapshots. Strict DB/WAL/SHM rules remain; do not substitute cached hashes or exempt SHM. Source/index/HEAD/admission/gates remain unchanged except seven additive current-state documentation entries under recoverable prefix chains. No credential/configuration contents,raw logs,raw errors or raw AX were retained.
+
+Next: an offline source/receipt assessment must resolve the timeout/timing evidence and close-identity rejection sufficiently to propose a supported conditional correction. No unchanged retry,request83,launch23,ceiling increase,build or ejection is authorized by this handoff. Any future live package needs explicit finite launch/request authority; minimum arithmetic would require ceiling86 merely to retain four success slots83–86,not a diagnostic or retry reserve. Actual evidence may justify a different bounded plan; do not increase automatically.
+
+Image ejection remains independently unresolved and completion-blocking. Retain both review builds,worktrees,required artifacts under PR146/148,historical failures,disabled ECC hooks/MCP,advisories,native workaround and parked D-125/M1/M2. No HP/index/gate work,downloads,installations,protected cleanup,archival or publication. C7/GPT-6 Headless remain unverified. Memory admission remains active; Stop must block while acceptance and image cleanup are unresolved.
+
+## 2026-10-19 continuation31 — adapter startup repair verified; mandatory monitor blocked
+
+The authorized one-file adapter correction moves both strict derived-artifact hash passes before host startup, then consumes a one-use descriptor lease and revalidates descriptor/path identity immediately before spawning. Replacement, mutation, links, metadata drift, missing/replayed leases and failure paths remain rejecting. Source SHA256: `70079e80ea3622d006d0caa276b58e30b9fcdbe9f52ffc98aedce3768ec568ae`. The earlier request82 cause remains unproved; no live success is inferred.
+
+Fresh evidence: 56 focused adapter tests, all-target Rust tests, strict all-feature Clippy and formatting passed. The mandatory npm verification attempt stopped after23.888712208994548 seconds with an unknown capture exception and an unrecorded-descendant cleanup rejection. No failing npm test was identified. Root was reaped; independent checks find zero recorded owned groups now. These observations do not erase the original cleanup failure. The explicit unknown/required-verification stop prevents a new review build, native launch or C7 requests.
+
+Durable records: `cortexa-memory-rejection-sites-20261017-01/continuation-31` beneath the established Codex evidence root. Both previous review builds and all protected indexes, gates, admission and historical evidence remain preserved. Additive owner confirmation records exclusive QA and no requests since82; ledger82/86 is unchanged. Initial23, catalogs19–20, sole restart and the one new review build remain unused. Product charged1766.63528712902 of18000 seconds; deadline1792443424.415104 and600-second closeout reserve remain. Image ejection and four C7 cases remain unresolved; milestone is open.
+
+Next action is approval of continuation31/PROPOSAL.md: fresh fixed-phase external monitor instrumentation, focused synthetic validation and exactly one additional mandatory npm verification attempt, followed only conditionally by existing build/native C7 authority. No failed controller replay, source/gate/index repair, HP work, protected cleanup or publication. Preserve PR146/148 retention, advisories, disabled ECC hooks/MCP, native workaround and parkedD125/M1/M2.
+
+## 2026-10-19 continuation32 — monitor rejection attributed; native acceptance remains blocked
+
+The approved fresh external monitor and complete caller were validated by23 and10 passing synthetic cases after attributable preparation corrections; failed helpers/results remain retained. The one additional mandatory npm verification attempt was consumed. Its actual first witness establishes entry_role/object_identity rejection of an executable outside the unchanged reviewed roots. The rejected child was never granted cleanup authority. Root was reaped and the runner reports group0; preserve the independent unrecorded-descendant cleanup rejection and outer unknown-exception category. No exact rejected executable path or failing npm test was retained. This does not attribute continuation31's historical cause.
+
+Read-only source/PATH analysis independently establishes that hook test fixture calls to bare git select Homebrew Git2.43.0, outside the existing guard. This proves a static tool-route conflict; it does not prove that Git was the observed rejected child. The next proposal is a task-private exact Apple Git route, supported first-party tool resolution, affected validation and one additional bounded mandatory verification, preserving all guards and the current deadline.
+
+Durable package: cortexa-memory-rejection-sites-20261017-01/continuation-32. Product charged1791.1802744630313/18000 seconds; ledger82/86 unchanged. No review build, native launch, generation, control/schema, config content, mount or ejection was dispatched. Initial23, catalogs19–20, sole restart and one Startup QA build remain conditional and unused. Mandatory verification, four C7 cases and image ejection remain open. Preserve all historical evidence, indexes/admission/gates, PR146/148 resources, advisories, disabled ECC hooks/MCP, native workaround and parkedD125/M1/M2. No milestone finalization or HP/index repair is authorized.
+
+## 2026-10-19 continuation33 — exact Apple Git route verified; process-snapshot boundary remains
+
+The build-only private Git route passed focused validation and the two single-use metadata operations: Apple Git2.54.0/build157. A receipt-parent preparation gap was corrected before either operation dispatched; preserve the original generic failed preparation without attributing its unrecorded cause. Argument preservation was independently checked with a synthetic shell fixture. Source-bound monitor evidence was reused unchanged. Product/runtime source, gates and indexes were untouched.
+
+The third mandatory npm verification attempt was consumed and stopped after387.82402887499484 seconds at executable_snapshot/child_identity. Exact reviewed source identifies proc_pidpath<=0 after an initial complete non-zombie process-info read. Why the path was unavailable remains unknown; no exit race is claimed. Captured Rust summaries have no failed tests, but required verification did not complete. Root was reaped/group0; retain the unrecorded-descendant cleanup rejection independently.
+
+Product charged2179.004303338026/18000 seconds; ledger82/86 unchanged. The one QA build, initial23, catalogs19–20 and sole restart remain unused/conditional. Continuation34 contains parked unchanged native helpers only, with no native execution or new allowance. No generation, configuration-content, schema/control, mount/ejection or provider operation occurred. Image cleanup and four C7 cases remain open.
+
+Durable package: cortexa-memory-rejection-sites-20261017-01/continuation-33. Its proposal requests only a strongly evidenced same-process zombie snapshot qualification, affected synthetic validation and one additional bounded mandatory verification. Missing or ambiguous second identity remains fatal; no child gains cleanup authority. Preserve all historical failures, original deadlines and PR146/148 resources. Do not alter HP/index/gates, publish, delete protected artifacts or finalize unfinished acceptance.
+
+## 2026-10-19 continuation35–36 — mandatory verification and new review build passed; C7 abort proof remains open
+
+The owner-authorized external snapshot correction excludes only a fully proven same-process zombie after one immediate second complete metadata read on the exact failed-path branch. PID/parent/kernel-start/UID/owned-PGID must remain identical; current UID501 and source-bound status5 are required. Missing, partial, changed, live or unknown proof rejects; no excluded process gains cleanup authority. Original cleanup and successful executable hashing remain unchanged. Source/SDK/ABI bindings and focused synthetic checks passed. Preparation namespace, path-import and recorder defects were corrected within scope with failures retained; no failed preparation was relabelled a command dispatch.
+
+The fourth cumulative mandatory npm verification completed exit0 in361.95549245800066 seconds with preserved inputs and owned group0. This run did not enter the new zombie branch; it does not explain the old failed process state. The sole separately named Cortexa Memory Startup QA bundle passed in11.849041249995935 seconds. Its executable SHA256 is6c91bb201e02576c4f8df8f7f599a1219fbf7dad76d912a9cac47c6f90258639. The Runtime/Abort QA builds and installed/derived runtime bindings remain preserved. No product source, gate or index was changed during this continuation.
+
+Native launch23 and catalog19 passed their current artifact, image, custody, process/window, dedicated authentication/catalog and gpt-5.6-luna/low prerequisites. The owner-confirmed exclusive/no-other-requests fact was reused within the same execution window. Request83 was charged and dispatched once. Automatic Computer Use observed streaming and clicked Stop; the UI became stopped with no active generation and the seventh stored turn is Cancelled. Deterministic context still selects completed turns1/3 and excludes the other five. However, current attempt13 has one normal strict tail and zero validated abort tails. This does not establish active-runtime cancellation. Exact timing/cause remains unverified; do not infer it from UI, storage, model answers or old rejections. No C7 cancellation acceptance was issued and no later request was sent.
+
+Ledger83/86 leaves only three slots for four unfinished cases: active cancellation, cancellation recovery, active interruption/restart and restart recovery. Initial23 is consumed; catalog20 and the sole acceptance restart remain reserved/unused. Product charged2552.8088370460226/18000 seconds; native remaining3042.070381707009 seconds. Deadline1792443424.415104, historical windows/consumption, all storage reservations and generation accounting remain unchanged. No schema/control, download, installed-runtime invocation, mount/ejection or extra compiler attempt occurred.
+
+The owned app quit normally, was reaped with group0, and the same dedicated configuration inode was restored without overwrite or content access. Exact-file no-holder checks passed. Current post83 DB/WAL/SHM custody was captured after all SQLite/context observations; do not reopen SQLite after that capture or reuse pre-reader SHM hashes as current inputs. All source/index/HEAD/admission/gates and earlier evidence remain protected; seven root documents receive only this recoverable additive entry. Durable evidence is continuation35 (verification/build/closeout) and continuation36 (native attempt/current custody) under cortexa-memory-rejection-sites-20261017-01.
+
+C7 and GPT-6 Headless remain unverified. Image ejection remains independently unresolved and completion-blocking. Stop generation because available slots cannot cover mandatory acceptance; do not weaken abort/protocol checks, retry request83, reuse the consumed initial launch or silently raise ceilings. The next decision is a bounded offline assessment of the non-abort cancellation boundary and one evidence-supported continuation proposal, including the minimum finite launch/catalog/build/request amendments if justified. At least ceiling87 would be needed for four fresh success slots from83, but no increase or live retry is authorized by this record.
+
+Preserve PR146/148 worktrees/review builds/required artifacts, every quarantine/cache/source/lock, qualified historical uncertainty, failed predecessor, disabled ECC hooks/MCP, advisories/native workaround and parkedD125/M1/M2. No HP/index/gate repair, protected cleanup/archival, publication or automatic successor. Do not finalize the incomplete memory milestone.
+
+## 2026-10-19 continuation37 — request-owned cancellation implemented; integration verification blocks C7
+
+The owner authorized a private request-owned cancellation correction in exactly
+`codex_connection.rs` and `agent_chat_tauri.rs`. Recoverable before-copies and
+additive source-phase hashes preserve the inherited candidate. The native chat
+session holds a cancellation handle bound to its exact presentation handle;
+owner Stop records intent before abort/join. A shared private state arbitrates
+pre-active cancellation, active owner cancellation, completion and rejection.
+Only the exact owner-stopping callback can carry local cancellation origin;
+generic InvalidRequest, protocol/provider/capture failures and cleanup failures
+retain strict rejection. Existing host completion-race assertions are preserved.
+Fixed labels distinguish eligibility and the winning decision, without raw
+frames, text, credentials or cross-clock timing inference. Request83's exact
+historical cause remains unknown; this is a forward correction.
+
+The first focused adapter command exited101:56 tests passed and the existing
+catalog-pagination fixture failed. The new classifier demonstration passed;
+the command as a whole did not. The final changed-source all-target command
+then passed all523 library tests and235 integration tests, before an integration
+summary reported6 failed,7 passed and1 inherited ignored test. Overall exit101
+remains Failed. The adapter-only sanitizer did not retain those six integration
+test identities or assertions, so their cause remains unknown. No historical raw
+output is reconstructed, no unchanged retry is made and no failure is waived.
+Library success does not establish full verification, live abort or C7 acceptance.
+
+Fresh external preparation preserved interpreter-binding, namespace-test and
+receipt-preparation failures. The qualified interpreter capacity check passed;
+seven unaffected mocked cases are reused, two affected namespace/command cases
+and six fresh controller cases passed. The sole formatter correction passed.
+All three dispatched command roots were reaped with owned group0. The final Rust formatting check passed without compilation. Strict Clippy,
+mandatory verification and the new review bundle remain unconsumed. Compilation and native execution stopped at the unresolved
+required integration failure. No native launch, configuration parking/content
+read, catalog, schema/control, generation, image utility or HP/index/gate change
+occurred. The Startup QA build is preserved and does not contain this correction.
+
+Ledger83/87 records the explicitly approved ceiling amendment, with no new
+generation. Current concurrent usage is not certified. Initial24, catalogs20–21
+and the sole acceptance restart remain unused; native remaining time is
+3042.070381707009 seconds. Before final closeout, product charged2665.733557295016/18000 seconds,
+including112.92472024899325 fresh command seconds. Final read-only check
+elapsed time is charged additively in continuation37/ACCOUNTING-FINAL.json. One of the two corrective
+command slots was used for the exact two-file formatter; one remains unused.
+The fresh six-hour seal expires1792455341.322311, preserving historical
+1792443424.415104 and all earlier deadlines separately. No accounting resets.
+
+The approved evidence reservations are80MiB shared/64MiB incremental, with
+baseline16683008 bytes, combined stop44073746432 and unchanged44GiB envelope.
+Full preflight reserved44071448576 bytes and measured85196800000 available;
+closeout must remeasure actual allocations. Keep8GiB available,64MiB headroom
+and1MiB closeout space. The mounted-image route and every protected artifact
+remain retained; ejection remains independently unresolved and completion-blocking.
+
+Durable evidence and source recovery are in
+`cortexa-memory-rejection-sites-20261017-01/continuation-37`. The next bounded
+step is a source-bound, privacy-safe integration-failure reader and explicit
+finite affected diagnostic before any repair or further compilation/C7. Preserve
+its unused allowances rather than replaying consumed commands. Keep the memory
+increment active/incomplete; do not finalize it or alter repository gates.
+Preserve PR146/148 retention, historical failures and uncertainty, quarantines,
+source/locks/index maintenance, disabled ECC hooks/MCP, advisories/native
+workaround and parkedD125/M1/M2. GPT-6 Headless and C7 remain unverified.
+
+The fresh source-bound integration reader passed8 focused privacy/binding/bounds
+cases and has not executed a diagnostic. Source comparison points to the Hermes
+transport fixture: it has14 tests and the repository's sole ignored Rust test,
+matching the failed summary. This is a source-based target attribution, not a
+reconstructed historical header or cause. Exact failed tests/assertions and the
+failure mechanism remain unknown. The tested reader and one bounded diagnostic
+proposal are retained for the next explicit decision.
+
+### 2026-10-19 — continuation43 eligibility instrumentation; required verification blocked
+
+Owner-approved V6 proposal43db1d6218d832a21d52628be3d89f1084a92bee084aea8e7096ba06bb8415eb
+was implemented only in src-tauri/src/codex_connection.rs. The existing seven
+abort-context predicates now provide fixed-label snapshots. Existing turn-response
+validation has fixed reasons and the same DirectError projection. Acceptance,
+eligibility, protocol/schema rejection and security boundaries remain strict.
+Recoverable original source and diagnostic/formatter patches are retained.
+
+Nine focused external controller tests passed. The pinned formatter and independent
+Rust formatting check passed. The adapter test command compiled but exited101:
+63 passed,4 failed. The new conjunction-equivalence and turn-reason/projection
+tests passed. The four source-bound failed tests are:
+
+- owned_callback_abort_requires_successful_finish_before_local_return
+- offline_catalog_pages_use_unique_rpc_ids_and_fail_closed_at_page_cap
+- owned_abort_drop_reaps_before_releasing_session_resources
+- owned_stop_never_clears_capture_or_lifecycle_rejection
+
+The sanitizer retained names/counts but no failure assertion/underlying error.
+Cause and repair remain unsupported; no historical output is reconstructed and
+no unchanged retry was made. All-target tests, strict Clippy, mandatory verify,
+Eligibility QA bundle, native diagnostic85 and C7 are blocked/not run. Existing
+Cancellation QA and earlier review artifacts remain retained. Completed fixtures,
+old failures and the request84 negative witness are not promoted.
+
+No new native launch, catalog, generation, configuration parking/read, SQLite
+access, image utility, runtime/control/schema, download, installation, publication,
+HP/index/gate operation or protected cleanup occurred. Every dispatched command
+root was reaped with owned group0. Ledger84/89 is unchanged in consumption;
+concurrent usage has not been newly certified. Initial27/catalog23–24 and the sole
+acceptance restart remain unused. Image ejection remains independently unresolved
+and milestone-completion-blocking; C7/GPT-6 Headless remain unverified.
+
+The new six-hour seal ends1792471117.1630678, with600-second closeout reserve;
+historical deadlines/consumption remain immutable. Product aggregate18000 and
+all approved storage limits remain unchanged after the explicit V6 amendments.
+Actual command charges, capacity, source/document recovery, preservation and
+sealed outcomes are in continuation43/closeout. One formatter corrective command
+was consumed; one affected corrective verification slot remains unused. No build,
+mandatory-verification or failed test slot is silently renewed.
+
+Next: approve the bounded source-bound four-fixture diagnostic in
+continuation43/closeout/PROPOSAL.md before any retry/repair. Preserve the exact
+failed run. Resume other existing authority only after required checks pass.
+Keep the memory milestone active/incomplete and retain PR146/148 artifacts,
+disabled ECC hooks/MCP, advisories/native workaround and parked D125/M1/M2.
+
+### Continuation43 final update — adapter/all-target pass; Clippy allowance boundary
+
+The earlier43 adapter failure and its unknown causes remain immutable. A fresh
+sanitizer had omitted retained fixed fixture-error categories; four affected
+synthetic reader cases passed after restoring that exact retained reducer. The
+second/final corrective command then passed all67 adapter tests. The unconsumed
+all-target command passed525 library tests and all integration summaries, with
+one inherited ignored test. Neither pass explains the earlier four failures.
+
+Strict all-target/all-feature Clippy subsequently exited101, preserving source
+locations5391/5392 and5442; raw lint text was not retained. Source review identified
+default-field reassignment and the repository-denied unwrap_err in the two new
+tests. Both were corrected test-locally: direct struct initialization and checked
+error propagation. All assertions and production bytes were preserved. Current
+source is bound by SOURCE-FORWARD-003.json. Tests, formatting and strict Clippy
+have not been rerun on that final test-only correction. Prior passing results
+retain their original source provenance; no failed result is promoted.
+
+Both allowed corrective commands are consumed (formatter and corrected-reader
+adapter verification). A further strict retry needs explicit finite command
+authority. Mandatory npm verification, the Eligibility QA build, launch27,
+catalogs23–24, diagnostic85 and C7 requests86–89 remain unconsumed and blocked.
+No configuration, SQLite, native client, provider, image utility or gate/HP/index
+operation occurred. All six dispatched command roots were reaped, group0. No
+new generations: recorded84/89; new-window concurrent usage remains uncertified.
+
+Known prior-plus-current product command charge3466.3785403824495/18000 seconds.
+Closeout documentation is accounted separately, conservatively, without calling
+an unmeasured interval exact elapsed time. Native2561.539710041011 seconds and
+deadline1792471117.1630678/600-second reserve remain unchanged. Root documents
+were appended only; compressed before-copies, both additive document manifests,
+all intermediate failures, source patches and final evidence are in43/closeout.
+The bounded next authorization is43/closeout/PROPOSAL.md. Do not replay old
+controllers, reset budgets or start acceptance before current verification passes.
+C7/GPT-6 Headless and independently blocking image ejection remain open.
+
+### 2026-10-20 — fresh43 window02: Clippy/format pass; adapter and preparation boundary
+
+The owner approved one fresh six-hour window sealed in43/execution-02:
+1792467492.374642 to1792489092.374642, preserving every historical deadline and
+consumed operation. Five affected external controller checks passed; strict
+source/admission/Git/index/gate preservation and fresh capacity passed. No earlier
+implementation, completed diagnostic or consumed native operation was replayed.
+
+Current-source adapter tests exited101:63 passed/four failed, fixed fixture error
+Busy. Source review identifies a shared eight-child registry limit competing with
+parallel independent test fixtures. This supports a test-fixture lifetime guard;
+it does not establish the failed run's registry state, scheduling or historical
+cause. All assertions and production admission must remain unchanged. No source
+correction was made. Independent current-source strict Clippy and formatting
+passed; all command roots were reaped and owned groups0. Earlier failures and
+passing all-target provenance remain immutable; full current acceptance is blocked.
+
+Preparation is exactly573440/573440 allocated; sufficient disk free space does
+not grant a larger suballocation. The current source compresses to34480 bytes,
+so a recoverable before-copy cannot fit. No corrective command, mandatory verify,
+Eligibility QA build, launch/catalog, generation, configuration/SQLite access,
+image utility, HP/index/gate/hook operation or protected cleanup was spent here.
+Recorded ledger84/89 and native2561.539710041011s remain; current exclusive usage
+is uncertified. Initial27/catalog23-24/sole restart are unconsumed. C7/GPT-6 Headless
+and independently blocking image ejection remain open; retain all PR146/148 assets.
+
+Sealed results, exact accounting, preservation and the single bounded amendment
+are in43/closeout/window02. PROPOSAL.md requests131072 additional preparation/
+evidence bytes beneath the unchanged global stop,1800 fresh preparation seconds
+within the current absolute window, test-local fixture isolation, the two unused
+corrective test slots and two post-edit Clippy/format slots. It does not grant
+itself authority, renew the deadline, reset consumption or increase generations.
+Do not replay the parallel failure unchanged or start C7 before all prerequisites.
+
+### 2026-10-20 — fixture03 Rust checks pass; mandatory verification fails unclassified
+
+Owner-approved window02/PROPOSAL.md6432ee62c23e3fa0cc4710db0733231e3a9a8c8655e2ba8c637ac2df6307ad4f
+was executed under unchanged deadline1792489092.374642. The new1800-second
+preparation seal and131072-byte amendment preserve all old consumption. A source
+callsite counter initially omitted the delegating helper; its failed preparation
+and the fresh one-predicate correction are retained. No compiler slot was spent
+by that preparation failure.
+
+Only the approved test-local Fixture holder/mutex/path helper and return types
+were changed in src-tauri/src/codex_connection.rs, plus its deterministic lifetime
+test. The guard remains through directory custody, with sessions dropping first.
+Production bytes and every pre-existing assertion/channel test are unchanged.
+Recoverable source.before.rs.xz, FIXTURE.patch and SOURCE-FORWARD-004.json bind
+current source0b6715cfb19da734e23d295ab1a8f99f7264f495569e57ef5e3527bb92cd8621.
+
+Corrective slots3/4 passed68 adapter tests and526 library tests/all integration
+summaries; one inherited ignored test remains. Fresh strict all-target/all-feature
+Clippy and formatting passed. Code review found no introduced test-delta issue.
+These results do not retrospectively explain the earlier Busy failures.
+
+The sole unconsumed mandatory npm verification was then dispatched and exited1.
+Its capture and owned cleanup completed, but the retained reducer supplies no
+failing phase/category. Raw output was discarded; do not reconstruct it or infer
+cause from byte counts/timing. No additional mandatory attempt is authorized.
+The Eligibility QA build and native C7 remain blocked. A fresh native helper was
+prepared; a syntax-only defect is retained in a compressed before-version and
+corrected. Its functional validation is not passing/admitted; it was never used
+against real logs, the QA database, configuration, native app or provider.
+
+All14 recorded command roots reaped/group0; no launch, catalog, generation,
+configuration read/parking, SQLite opening, image utility, HP/index/gate/hook work,
+protected cleanup or publication occurred. Ledger84/89 and native2561.539710041011s
+remain; new-window usage is uncertified. Initial27/catalog23-24/sole restart and
+sole QA build are unused. C7/GPT-6 Headless and independent image ejection stay
+open; retain PR146/148 resources, advisories and parked work.
+
+Complete additive evidence/accounting/preservation/cleanup is sealed in
+43/closeout/fixture03. Its proposed finite successor adds source-bound fixed-phase
+mandatory-verification diagnostics, bounded conditional repair/retry and receipt
+capacity, preserving product18000 and generation89. It is not an execution grant.
+Do not repeat the unclassified failure unchanged, increase limits silently or
+proceed to builds/native acceptance before mandatory verification actually passes.
+
+### 2026-10-20 — receipt06 preparation tested; dispatch blocked by evidence bounds
+
+The owner authorized the bounded reserved-receipt continuation in attachment
+08baeeba-2988-4dcd-9957-0bf1235edcaf, SHA256
+445e34a4f8a6948b0d7d629c2db66a07184928024e57453a8ee5f4cbe4e41329.
+A fresh five-hour seal preserves deadline1792540222.616457 and old consumption.
+The qualified starting product accounting is9387.397596385423/19800; its old
+unknown-run/documentation debits are not reconstructed actual elapsed times.
+
+Fresh external receipt/controller/native bindings were prepared. The first
+focused suite passed23/24; missing runner defaults were corrected with its failed
+version retained. Three affected runner cases then passed. Descriptor-relative
+exclusive creation was tightened; four affected cases passed, with20 unchanged
+cases reused. Current coverage is24 cases. Four pinned-Python process mocks
+passed reaping/group-zero assertions; no individual kernel receipt is claimed.
+All three validation runs and six mock-start reservations remain consumed.
+
+No product verification, QA build, native launch, configuration parking, SQLite
+observation, image utility or generation was dispatched. Retained before versions
+and a recipe charge20480/16384: the4096 overrun is preserved as failure. A fresh
+current binding payload measures10047/8192 bytes; no binding was admitted. The
+failed historical payload size is not reconstructed. Helper sources are65536/65536.
+Preparation charged760.465564250946 seconds;1039.534435749054 remain.
+
+Evidence and one exact proposed forward amendment are in continuation-43/closeout/
+receipt06. It needs separate authorization; do not borrow allowances, replay old
+operations or infer a successful unknown verification. Ledger84/89, sole remaining
+verification/build/native slots, strict acceptance, HP/index/gates, review builds,
+PR146/148 retention and all advisories/parked work remain unchanged. C7/GPT-6
+Headless and independently blocking image ejection remain open.
+
+### 2026-10-20 — receipt06a bindings passed; mandatory verification failed
+
+The owner-approved receipt06 proposal was applied through fresh external
+execution-06a helpers. Original failed versions, the4096-byte overrun and old
+unknown results remain unchanged. The latest sealed document append was verified
+against its original prefixes and included in the fresh preservation mapping.
+
+Twelve focused cases passed, then two affected replacement/commitment cases
+passed; unchanged prior helper/process evidence was reused. The compressed input
+binding is2612 bytes. Preparation cumulatively charged954.4338722229004 seconds,
+leaving845.5661277770996. The old600-second documentation reservation was debited
+once by owner authority; it is not claimed as measured elapsed time.
+
+The sole replacement mandatory command returned exit1. Complete terminal receipts
+show reaping, zero owned groups, no cleanup failure and passing preservation. Its
+last observed phase was test:frontend;18 stderr lines were unclassified. No raw
+output was retained, so the exact frontend failure is unknown. Do not infer its
+cause or repeat the consumed verification unchanged. The fresh controller elapsed
+charge is157.31384083401645 seconds; qualified product accounting before current
+documentation is10144.71143721944/19800.
+
+No QA build, native launch, catalog refresh, configuration parking, SQLite
+observation, image utility or generation was dispatched. The owner reconfirmed
+exclusive QA use and no requests since84; ledger84/89 remains unchanged. The sole
+QA build, initial27, catalogs23-24 and sole restart remain unused. C7/GPT-6 Headless
+and independent image ejection remain unverified.
+
+Durable closeout and one proposed diagnostic-only decision are in
+continuation-43/closeout/receipt06a. No further verification slot is granted.
+Preserve deadline1792540222.616457, all consumption, source/index/admission/gates,
+PR146/148 resources, advisories and parked work. No HP work or publication follows.
+
+### 2026-10-20 — receipt06b startup category established; assurance validation blocked
+
+The approved external diagnostic used installed Vitest4.1.11 source bindings.
+Three reader cases and12 instrumentation checks passed, including privacy, exact
+caller qualification and original-console delegation. The single frontend
+diagnostic exited1 with current startup category EPERM/open in the public
+dependency area. It did not establish the exact target/open flags or explain the
+historical frontend failure. Raw output and errors were not retained.
+
+The diagnostic was reaped with zero owned groups and passing preservation.
+Vite source documents temporary config-module writes beneath node_modules; this
+is a supported possible access mechanism, not proof of the discarded path.
+
+Preparation of an explicit approved host-context route reached a reused native
+assurance still expecting COMMANDS1572864 instead of authorized1835008. The second
+validation allowance is consumed; its original plan remains unvalidated. No
+mandatory retry, QA build, native launch, catalog, configuration parking, SQLite
+observation, image utility or generation followed. Ledger84/89 remains unchanged.
+
+Closeout and the proposed exact assurance correction/additional validation are in
+continuation-43/closeout/receipt06b. Preserve all passing evidence, rejected drafts,
+failed validations, source/index/admission/gates, deadline1792540222.616457 and
+consumption without reset. C7/GPT-6 Headless and independently blocking image
+ejection remain unverified; retain PR146/148 resources, advisories and parked work.
+
+### 2026-10-20 — receipt06c assurance correction did not complete validation
+
+The owner-approved additional validation applied the exact COMMANDS expectation
+correction in a fresh HOST-CONTEXT-PLAN-V2 record. That run remains consumed and
+failed; no required verification, QA build, native launch, catalog refresh or
+generation was dispatched. The original plans and prior failures are unchanged.
+
+The composite native assurance rejected again. Its RESERVED expectation remained
+44076851200 while the newly approved reservation is44076888064. The exact old
+constant and approved current value are retained. Other composite predicates
+were not individually recorded and are not inferred to have passed. This is an
+external preparation defect; it does not establish any product acceptance.
+
+The current frontend startup EPERM/open category remains established, while its
+exact target/flags and historical cause remain unknown. No diagnostic was replayed.
+The proposed successor derives strict fresh assurance expectations from the exact
+sealed approved caps, with fixed-field mismatch recording and bounded validation.
+It reallocates existing unused storage instead of increasing the combined
+reservation again. That proposal is not an execution grant.
+
+Sealed evidence and the proposed-only authorization object are in continuation-43/
+closeout/receipt06c. Preserve deadline1792540222.616457, ledger84/89, admission,
+raw indexes, all historical failures, review builds, protected artifacts and
+independent HP work. C7/GPT-6 Headless and image ejection remain open. Retain
+PR146/148 resources, disabled ECC hooks/MCP, advisories and parked work.
+
+### 2026-10-20 — receipt06d command passed; strict evidence remains rejected
+
+The consolidated owner-approved cap table passed 15 affected assurance checks.
+One new preparation integration error was corrected; its incomplete allocated
+record remains preserved. Validation attempt 2 passed without new process mocks.
+All historical failures and original bindings remain unchanged.
+
+The single authorized full verification was dispatched in the exact memory
+worktree under the platform-approved host context. Its actual command exit was 0,
+with complete capture, reaped root, zero owned groups and no recorded cleanup
+failure. Its full 21-phase graph was observed, including two Python summaries,
+28 Rust summaries, two frontend summaries and two frontend builds. Nevertheless,
+the strict reader classified 27 stdout and 11 stderr lines as unknown. The run
+therefore remains a consumed rejected acceptance attempt, not accepted mandatory
+verification. No raw command output was retained. No exact rejected line,
+template, historical cause or supported parser repair can be reconstructed
+from these numeric counts.
+
+The actual runner elapsed was 345.93659466700046 seconds; the encompassing
+controller STOP receipt charges 346.88872258301126 seconds. Qualified product
+charge before this closeout is 11273.536625552433 seconds of 20040.
+The parent closeout's 240-second conservative documentation disposition remains
+separate from actual elapsed measurements. Ledger84/89 is unchanged. No QA
+bundle build, native launch, catalog refresh or generation was dispatched.
+
+Independent source/index/admission/gate preservation passed. The original
+quarantines, cache inputs, prior review builds and mounted image remain retained.
+No image utility or private configuration-content access was used. Image
+ejection remains independently unresolved and milestone-completion-blocking;
+C7 and GPT-6 Headless remain unverified.
+
+Current receipts and the exact next decision are sealed in continuation-43/
+closeout/receipt06d. The smallest next step is a fresh bounded source-bound
+failed-line recorder and affected validation, followed only under new finite
+command/accounting authority by one replacement mandatory verification.
+Unknown output must remain rejected. Do not replay the consumed controller
+or infer any discarded output. Reuse passing cap, source and cleanup evidence.
+Preserve deadline1792540222.616457, all consumed allowances, raw indexes,
+admission, HP work, PR146/148 retention, disabled ECC hooks/MCP, advisories,
+native workaround and parked D-125/M1/M2. No publication or protected cleanup.
+
+### 2026-10-20 — receipt06e reader validated; pre-dispatch reserve blocked
+
+The owner-authorized fresh source reader corrects paired public source literals
+and static transitive Python test inheritance, preserving all strict unknown,
+phase, count and protocol rejection. It adds bounded same-snapshot fixed-label
+rejection witnesses without retaining raw output, output hashes, arbitrary paths,
+configuration values or credentials. These corrections do not reconstruct or
+explain the previous 27 stdout and 11 stderr rejections.
+
+All three additional focused validations are consumed. The first failed before
+its result was persisted; the second preserves the fixed test-import source
+location and unknown category. Fresh test preparation reused the already-bound
+reader instead of importing it again. The third passed all 12 affected cases.
+Existing descriptor, replacement, privacy, timeout and cleanup evidence was
+reused; no new process mocks or product tests ran.
+
+The single replacement mandatory command remains unconsumed. Its pre-dispatch
+controller returned storage_stop before creating its command namespace. A
+separate current capacity observation records closeout allocation1318912 and
+cap1343488, leaving24576 bytes while the unchanged future closeout assurance
+requires32768 bytes. The8192-byte current deficit is attributable to insufficient
+reservation arithmetic in the proposed package. This current observation is not
+a reconstructed snapshot of the earlier rejected invocation. No cap or assurance
+was silently changed and no protected artifact was removed.
+
+Independent preservation passed for all protected source, raw indexes, admission,
+gates and historical evidence. No replacement verification, QA build, native
+launch, catalog refresh or generation was dispatched; ledger84/89 is unchanged.
+Qualified product charge before this closeout is11513.536625552433 seconds of
+20460, including the prior240-second conservative documentation disposition.
+This closeout reserves120 seconds from the existing240-second documentation
+allowance; the remaining120 is proposed for eventual final closeout. These
+conservative reservations are not claimed as actual elapsed time.
+
+The fresh closeout uses only the remaining24576 bytes and preserves every failed
+helper/validation/version. The next proposed amendment must reserve both this
+safe closeout and the full32768-byte future execution closeout, plus fresh
+binding/validation space, without replay or a new command/model allowance.
+Current sealed findings and the proposed exact forward authority are in
+continuation-43/closeout/receipt06e. Reuse the prepared reader and passing cases.
+
+C7/GPT-6 Headless and independently blocking image ejection remain unverified.
+Preserve every historical deadline and consumption record, all review builds,
+quarantines/cache inputs, PR146/148 resources, HP work, disabled ECC hooks/MCP,
+advisories/native workaround and parked D-125/M1/M2. No image utility, private
+configuration-content read, protected cleanup or publication was performed.
+
+### 2026-10-20 — receipt06f replacement exited0; strict reader still rejected
+
+The corrected immutable reservation table and fresh forward bindings passed
+all13 focused comparisons. The new four-hour execution seal began at
+1792527981.862635, with deadline1792542381.862635 and600 seconds reserved for
+closeout. All earlier deadlines, failed pre-dispatch checks and consumption
+remain preserved. The12 source-reader cases were reused without replay.
+
+The authorized replacement mandatory verification was dispatched once. Its
+actual command exit was0, with complete capture, root reaping, zero owned groups
+and no cleanup failure. The runner measured352.9837135830021 seconds; the
+encompassing STOP receipt charges353.64345204099664 seconds. The strict reader
+still returned unknown:23 stdout and11 stderr rejections, despite the complete
+21-phase graph, two Python summaries,28 Rust summaries, two frontend summaries
+and two frontend builds. This remains rejected acceptance, not accepted mandatory
+verification or C7 evidence. No raw output was retained or reconstructed.
+
+The new current-attempt witness retains32 of34 rejected records and truthfully
+marks itself incomplete. Its retained rows identify five Vitest-case membership
+rejections, ten Rust-test-family rejections, eight Vite-build-family rejections,
+eight unclassified stderr rows and one Cargo-progress-family stderr row. The
+remaining two records were beyond its retention bound; their families and
+contents remain unknown. These labels do not establish harmlessness or exact
+templates, and are not proof about older discarded output.
+
+The one replacement verification slot is consumed. The sole QA bundle build,
+initial launch27, catalogs23–24, sole acceptance restart, diagnostic85 and
+C7 cases86–89 remain unconsumed. The owner freshly confirmed exclusive QA use
+and no requests since84 during this window. Ledger84/89 remains unchanged;
+no model request, native launch, catalog refresh or QA build was dispatched.
+
+Independent source/index/admission/gate preservation and owned cleanup passed.
+The next supported decision is an offline source-bound audit of the witnessed
+output families and a compact complete failure-witness design, with one focused
+synthetic validation. Do not repeat the command, replay a consumed diagnostic,
+reopen SQLite/configuration, infer missing strings or weaken unknown rejection.
+Any further mandatory verification requires explicit new finite command authority
+after the audit establishes a supported correction.
+
+Current receipts, accounting, cleanup, manifest and exact proposed offline
+authority are sealed in continuation-43/closeout/receipt06f. Preserve all historical
+bindings and uncertainty, review builds, quarantines/cache inputs, raw indexes,
+admission, independent HP work, PR146/148 retention, disabled ECC hooks/MCP,
+advisories/native workaround and parked D-125/M1/M2. C7/GPT-6 Headless and
+independently blocking image ejection remain unverified. No image utilities,
+private configuration-content reads, protected cleanup or publication occurred.
+
+### 2026-10-20 — receipt06g offline source audit and rejection-only witness
+
+The authorized audit read the actual32 retained records of34 rejections without
+reconstructing the missing two or any discarded output. It made no product
+verification, build, launch, request, SQLite/configuration read or image-utility
+invocation. Ledger84/89 and all consumed operations remain unchanged.
+
+Pinned Vite7.3.5 source formats sizes with Intl.NumberFormat using two decimal
+places and thousands grouping; the existing reader numeric grammar excludes
+commas. Pinned Vitest4.1.11 source expands parameterized titles using table values;
+the existing public literal-name catalog does not include those expanded names.
+A bound public two-value test demonstrates that membership gap. These are
+source-supported mechanisms, not identification of any discarded rejected line.
+
+The retained Rust libtest emitter includes a mode-bearing test-name form, but
+the retained excerpts do not prove the allowed mode set. Cargo shell evidence
+provides generic status/message emission without proving each dynamic message.
+Neither source proves the semantics of the unclassified stderr records or
+the two witness records beyond the old bound. Exact current-attempt attribution
+therefore remains unsupported; exit0 is not treated as acceptance or harmlessness.
+
+The source-binding preparation encountered object_identity before its plan was
+published. A separate current metadata observation found the public Python runner
+owned by root rather than the task-owned binder's expected owner. That file was
+not admitted and no binding rule was relaxed; this separate observation does not
+reconstruct the original failed comparison. All failed/partial preparation and
+the original source/witness versions remain preserved.
+
+A fresh rejection-only compact witness design passed29 affected synthetic checks.
+It fits128 bounded numeric/fixed-enum rows within8192 bytes, preserves primary
+rejection independently of recorder failure, rejects overflow, malformed shapes,
+unknown roles and replay, and never admits command output. Public source bindings
+were checked before/after; unchanged descriptor/process/protocol evidence was
+reused. The active reader and all output acceptance rules remain unchanged.
+
+Sealed findings and the exact next proposed decision are in continuation-43/
+closeout/receipt06g. A complete supported repair cannot be derived from the retained
+data. Any new forward command observation requires explicit finite diagnostic
+authority and must preserve unknown rejection; the audit does not authorize a
+verification retry or automatic build/C7 continuation.
+
+Preserve the current execution deadline1792542381.862635, all historical deadlines,
+product accounting, admission/raw indexes, HP work, all review builds, image,
+quarantines/cache inputs, PR146/148 resources, disabled ECC hooks/MCP, advisories/
+native workaround and parked D-125/M1/M2. C7/GPT-6 Headless and independently
+blocking image ejection remain unverified. No protected cleanup or publication.
+
+### 2026-10-20 — receipt06h controlled diagnostic complete; verification remains rejected
+
+The fresh external compact-witness integration passed17 affected synthetic
+checks, reusing unchanged evidence. The authorized new controlled diagnostic
+completed once with actual exit0, all21 phases, complete capture, root reaping,
+zero owned groups and no cleanup failure. Runner elapsed was345.86537404198316
+seconds; the encompassing STOP charge is346.59835379198194 seconds.
+
+The strict reader returned unknown with24 stdout and11 stderr rejections.
+All35 records were retained and the compact witness is complete. Every retained
+record reached the original comparator's final unmatched-line predicate at its
+bound public source line91. This is comparator attribution, not identification
+of the original emitted test, filename or template. No raw output was retained,
+discarded strings reconstructed, historical exit inferred or old result relabeled.
+
+The witness groups four Vitest-case, twelve Rust-test-family, eight Vite-build,
+eight unclassified stderr, two Cargo-progress and one Tauri-build rejections.
+Reviewed prefix/control flags and candidate-shape flags are limited observations,
+not semantic acceptance. Public Vite source independently demonstrates padded
+size-field spacing that the reader does not fully cover; it does not establish
+the precise cause of all current rejections. Other missing source semantics
+remain unverified. Exit0 alone does not pass mandatory verification.
+
+The exact public Python3.12.1 unittest runner source was admitted forward with
+strict descriptor/path/device/volume/parent, owner0, exact mode, single-link and
+content checks. No global owner exception, historical continuity claim, private
+configuration read or product change was introduced. Prior bindings stay immutable.
+
+The diagnostic slot is consumed. The sole QA build, native launch/catalog,
+acceptance restart and generation authority were not spent. Ledger84/89 is
+unchanged. The next decision is a bounded source-aware external reader/catalog
+correction with finite verification attempts and explicit time/storage amendments;
+it is proposed only. Unsupported dynamic names or unknown output must still stop.
+No automatic QA or C7 continuation is authorized by this diagnostic closeout.
+
+Independent preservation, accounting, documentation checks and owned cleanup are
+recorded in continuation-43/closeout/receipt06h. Preserve all prior receipts,
+source/index/admission/gate bindings, review builds, quarantines, HP work,
+PR146/148 retention, disabled ECC hooks/MCP, advisories/native workaround and
+parked D-125/M1/M2. C7/GPT-6 Headless and independently blocking image ejection
+remain unverified. No image utility, model request, protected cleanup or
+publication occurred.
+
+### 2026-10-20 — receipt06i preparation stopped at helper allocation boundary
+
+The owner-approved source-bound catalogue/reader preparation resumed from sealed
+receipt06h. Current Git/admission, historical lineage and retained inputs verified
+unchanged. Capacity and the unchanged execution deadline passed. The completed
+receipt06h diagnostic and its35-record witness were reused without replay.
+
+Preparation published fresh external DIAGNOSTIC-I helper versions, then encountered
+an unterminated string before import completed. Neither the optional TypeScript
+parser nor focused validation nor the new diagnostic was dispatched. The failed
+helper bytes and launcher are retained unchanged. A corrected in-memory serialization
+passed syntax compilation; it has not passed reader validation or been published.
+
+The failed helpers occupy12288 physical bytes. The fresh helper/test ceiling is
+16384 bytes, leaving4096. The corrected source compresses to5372 bytes and needs
+8192 physical bytes. Preserving all failed versions therefore requires a minimum
+4096-byte helper reservation increase before safe continuation. Do not hide helper
+bytes in another reservation, overwrite failed versions or treat free disk space
+as permission to exceed this subcap.
+
+The next proposed amendment is helper/test allocation16384→20480 bytes and the
+corresponding4096-byte preparation/aggregate reservation increase, with syntax
+validation before publication and literal-safe serializer substitution. No new
+diagnostic, parser, validation, generation, QA/native or build slot is needed.
+Use only remaining authorized preparation and the unchanged deadline, or stop for
+a separate finite time decision if the remaining reservations no longer fit.
+
+Fresh independent preservation/accounting and closeout are in continuation-43/
+closeout/receipt06i. Current diagnostic authority remains unused; ledger84/89 is
+unchanged. No product, lock, gate, index, HP, private configuration/SQLite, provider,
+image utility, protected cleanup or publication operation occurred. Prior unknown
+output remains rejected; current source/witness changes establish no acceptance.
+Keep C7/GPT-6 Headless and independently blocking image ejection unverified.
+Preserve all historical evidence, review builds, quarantines, PR146/148 retention,
+disabled ECC hooks/MCP, advisories/native workaround and parked D-125/M1/M2.
+
+### 2026-10-20 — receipt06j catalogue frozen; stale test assertion blocks diagnostic
+
+The approved packaging correction published one fresh checksum-bound compressed
+source, preserving both failed originals. Its exact source syntax passed before
+publication. Total failed/current helper allocation is20480 bytes within the
+amended subcap. Preparation-only caller failures were retained as fixed outcomes;
+the supported isolated bootstrap then completed without re-entering the retained
+dependency chain twice in the same process. This does not establish a historical
+cause for every earlier import rejection.
+
+The single optional TypeScript parser was consumed once, with actual exit0,
+complete capture, root reaping and zero owned groups. It statically froze83
+public-source catalogue rows. Twenty-nine unsupported static cases remain
+unexpanded/rejected; no project modules or arbitrary expressions were executed.
+The original/public-source metadata commitments verified before and after.
+
+Both focused validation slots are consumed. Their incomplete empty-object
+receipts remain unchanged. A source-bound fixed-label observation in the second
+run identified only check8 as false among17 predicates. The first failed case
+was not recorded and is not reconstructed. Current accounting independently
+observes12813.778431385412 seconds, matching the sealed starting charge. The
+helper's test assertion at public helper source line120 still compares against
+12693.778431385412. This stale test expectation is the exact supported correction;
+it is not a product-accounting failure or authority to change historical totals.
+
+The new receipt06i-diagnostic command remains unused. No product command, QA
+build, native launch/catalog, provider request or C7 generation was dispatched.
+Ledger84/89 is unchanged. Required validation has not passed, so the diagnostic
+cannot start. Preserve the completed receipt06h diagnostic without replay.
+
+The next proposed package is a fresh source-bound test-only caller correcting
+that one assertion and permitting one additional affected validation with
+independent fixed-label failure persistence. Preserve the tested parser/catalogue
+and all immutable helpers. Continue the existing unused diagnostic only if
+required validation, binding, capacity and deadline checks pass; no automatic
+QA/C7. Finite preparation/helper/validation/closeout amendments are explicit in
+continuation-43/closeout/receipt06j.
+
+Independent source/index/admission/gate/HP preservation, capacity, accounting,
+documentation and owned cleanup are sealed there. Keep the absolute deadline
+1792542381.862635 and historical consumption separate. C7/GPT-6 Headless and
+independently blocking image ejection remain unverified. No image utility,
+configuration/SQLite/credential read, protected cleanup or publication occurred.
+Retain review builds, quarantines, PR146/148 resources, disabled ECC hooks/MCP,
+advisories/native workaround and parked D-125/M1/M2.
+
+### 2026-10-20 — receipt06k corrected validation passed; new diagnostic exited1
+
+The source-bound external caller corrects only the unique stale charged-time test
+comparison and the explicitly authorized third-validation ceiling, with independent
+fixed-label failure persistence. All17 focused predicates passed; the failed
+original helpers, both empty validation receipts and the passed83-row static
+catalogue remain unchanged. No parser replay occurred.
+
+The single unused receipt06i-diagnostic command was then consumed once under the
+pinned, cleared, locked/offline controls. Its actual exit was1, not0. The runner
+measured164.03023679199396 seconds; the encompassing STOP charge is
+165.28358320900588 seconds. Complete capture, strict preservation, root reaping
+and zero owned groups passed with no cleanup failure.
+
+The last validated phase header was test:frontend, among13 observed headers.
+The complete current witness records18 rejected stderr lines and zero rejected
+stdout lines; no frontend summary/build or Rust summary was observed. One reviewed
+error-prefix flag was present, but none of the18 rows has a unique public-source
+field coordinate. This does not establish the error's meaning, product blame,
+environment cause or the exact command that first failed. Raw output was discarded
+and cannot be reconstructed. The earlier exit0 but rejected diagnostics remain
+their own unchanged results. Mandatory verification is still failed/unverified.
+
+No QA build, native launch/catalog, provider request or C7 generation followed.
+Ledger84/89 remains unchanged. The diagnostic allowance is consumed and no
+unchanged retry is authorized. The minimum next decision is a bounded, source-backed
+external failure classifier and one fresh targeted frontend-test diagnostic after
+its focused validation, preserving unknown/error rejection. Exact proposed authority,
+finite allowances and storage arithmetic are in continuation-43/closeout/receipt06k.
+
+Independent current preservation, capacity/accounting, documentation checks and
+owned cleanup are sealed there. Preserve deadline1792542381.862635 and every
+historical deadline/consumption record without resets. C7/GPT-6 Headless and
+independently blocking image ejection remain unverified. No product/lock/gate/index/
+HP changes, configuration/SQLite/credential reads, image utilities, protected
+cleanup or publication occurred. Retain review builds, quarantines, PR146/148
+resources, disabled ECC hooks/MCP, advisories/native workaround and parked work.
+
+### 2026-10-20 — receipt06l targeted failure localized; summary schema rejected
+
+The fresh source-bound external observer passed12 focused checks. Twelve exact
+public source roles and eight reviewed observation categories were bound to
+Vitest4.1.11, Vite7.3.5 and esbuild0.28.1. Unknown messages, invalid encoding,
+private/unmatched paths and incomplete retention remain rejected. Code-token
+roles identify declarations/handling, not root causes. The earlier17 predicates,
+parser and completed diagnostics were reused without replay.
+
+The one targeted test:frontend diagnostic was dispatched once. Its actual exit
+was1; runner elapsed1.511416499997722 seconds and encompassing STOP charge
+1.7093198749935254 seconds. Capture completed, the root was reaped and zero owned
+groups remained, with no runner/capture/cleanup failure. No product source or
+acceptance repair followed.
+
+The retained numeric witness is complete18/18 but semantics-incomplete. It records
+the exact Vite config-load failure and Vitest startup-error banners. Bound public
+frames include Vite config.js line35994, the await fsp.writeFile call that writes
+the bundled ESM config to a timestamped temporary file. The underlying exception
+message/code and actual selected temporary pathname were not retained; do not
+reconstruct them or infer permissions, product blame or historical causes.
+
+A separate source-supported harness defect stopped summary persistence: the new
+classifier result contains fields outside the unchanged receipt-store key schema.
+The rich witness and actual execution result were saved, but the normal summary,
+preservation-after and cleanup slots remain prepared. Preserve those states.
+Independent closeout preservation and cleanup evidence is recorded separately;
+do not rewrite prepared/failed slots as passed.
+
+This targeted invocation used the default sandbox context; the task's declared
+writable roots exclude the memory checkout. The expected write-capable task
+execution context therefore needs explicit qualification before any replacement.
+This context observation does not establish the discarded error code or prove
+the cause of this or an older failure. No permission, sandbox setting or source
+change is authorized by that observation.
+
+The minimum proposed correction is a legacy-schema-compatible external summary
+adapter tested through the actual receipt encoder, plus narrowly bound execution-
+context/write-namespace qualification and one new conditional targeted observation.
+No consumed command is replayed. Exact finite proposed authority is sealed in
+continuation-43/closeout/receipt06l. Mandatory verification and native C7 remain
+unverified; ledger84/89 is unchanged and image ejection remains independently open.
+
+Independent preservation, allocation/accounting and documentation checks are
+sealed there. Preserve deadline1792542381.862635, all histories, indexes/admission,
+HP work, failed helpers, review builds, quarantines, PR146/148 retention, disabled
+ECC hooks/MCP, advisories/native workaround and parked work. No configuration/
+SQLite/credential read, image utility, protected cleanup or publication occurred.
+
+### 2026-10-20 — receipt06m legacy adapter validated; replacement context remains blocked
+
+The fresh external negative-only summary adapter passed 19 focused checks through
+the actual retained receipt_store.encoded/safe implementation. Rich keys remain
+rejected; the bounded legacy projection retains classification unknown. Private,
+unsupported, incomplete and acceptance-promoting inputs reject. Independent
+execution, primary rejection, witness, summary and cleanup recorder failures were
+tested without dispatching a product child. The earlier 12 source-reader checks
+and consumed frontend diagnostic were reused without replay.
+
+Read-only descriptor/path/device/volume checks passed for the memory checkout,
+node_modules and its existing .vite-temp directory, all owned by uid501 with
+mode0755. No temporary content, private configuration, SQLite or credential was
+read. Raw volume identifiers were not disclosed.
+
+The current default sandbox writable roots exclude the memory checkout. This
+qualifies a current context mismatch only; the old exception code and cause remain
+unknown. Fresh complete activity evidence and a conservative temporary-write
+allocation/input-preservation plan remain unavailable. Do not dispatch a
+replacement until a supported, platform-reviewed context and exact temporary
+namespace custody are qualified. No write probe, permission change or replacement
+diagnostic was authorized or executed.
+
+Attributable preparation wrapper/interpreter/argument defects were corrected
+before the single focused validation; failed preparation observations are retained.
+All historical failed/prepared receipts remain unchanged. No product or live
+acceptance operation occurred. Ledger84/89, C7/GPT-6 Headless unverified and image
+ejection unresolved remain unchanged.
+
+Sealed findings, independent preservation/accounting and the exact unsupported
+boundary are in continuation-43/closeout/receipt06m. Preserve all historical
+deadlines, the current deadline1792542381.862635, raw indexes, admission/gates, HP
+work, quarantines, review builds, PR146/148 retention, disabled ECC hooks/MCP,
+advisories/native workaround and parked work. No automatic QA/C7 continuation,
+image utility, protected cleanup or publication follows.
+
+### 2026-10-20 — receipt06n observation reader validated; coverage remains unsupported
+
+The fresh external observer passed 47 synthetic cases in its single bounded
+validation. These cover source-bound capability formatting, strict NUL fields,
+privacy, exact public-tool ownership, replacement/device/volume rejection,
+replay, observer read-only descriptors, incomplete visibility, timeout and
+independent failure persistence. Synthetic qualified inactivity does not certify
+host visibility. The actual validation child exited zero, was reaped and left
+zero owned groups. The 19 legacy adapter checks were reused unchanged.
+
+The exact installed lsof binding and ten public source/tool inputs verified.
+The previously observed all-user listing capability and disabled inaccessible-
+device warnings were reused without another help invocation. The manual limits
+recursive selection by stat access and skips links/mounts; it describes partial
+information after kernel blocking. The SDK exact-path/volume lookup is not a
+documented recursive completeness certificate. No supported predicate presently
+certifies omitted-process/file visibility for this exact binary. Therefore the
+conditional activity query remains unconsumed. Silence, empty output or status
+alone must not become inactivity proof.
+
+Descriptor/path/device/volume metadata passed for the checkout, node_modules,
+empty .vite-temp, the existing Vitest results cache and the retained mounted tmp.
+The cache is 4316 logical bytes and 8192 allocated bytes; its contents were not
+read. Source audit identifies Vite temporary configuration plus adjacent fallback,
+Vitest results.json and module-copy descendants under the retained tmp. These
+require separately bounded preservation/backup, mutation, allocation and final
+verification authority before any replacement. No global mutable node_modules
+exception follows. Coverage/API writes/experimental caching remain disabled and
+CI snapshot updates restricted. Unexpected output namespaces reject.
+
+A preparation source-binding rejection was preserved: the task-owner-only binder
+rejected a public system document. Exact descriptor-bound public document reads
+replaced that call without changing the retained task binder. No activity scan,
+product diagnostic, generation, configuration-content or SQLite read occurred.
+The prior unknown causes and all historical failures remain unchanged.
+
+Findings, current metadata commitments, validation and the exact coverage gap
+are sealed in continuation-43/closeout/receipt06n. Ledger84/89, deadline
+1792542381.862635, C7/GPT-6 Headless unverified, image ejection unresolved,
+PR146/148 retention, disabled ECC hooks/MCP, advisories and parked work remain.
+No replacement diagnostic or automatic QA/C7 continuation is authorized by this
+result. Resolve the source-supported visibility predicate before requesting a
+replacement execution.
+
+## 2026-10-21 consolidated C7 acceptance — current additive record
+
+Evidence: `c7-consolidated-20261021-01` under the retained
+`cortexa-memory-rejection-sites-20261017-01` external package. Historical
+records and failed receipts remain unchanged. The source-bound View QA build
+adds strict support for the pinned runtime's `notLoaded`/`summary` turn views.
+Mandatory verification08 and build02 exited zero and have explicitly
+owner-approved qualified prerequisites; their eight/two unclassified product
+output events and original rejected receipts remain. They are not warning-free
+claims or native protocol acceptance.
+
+Request86 passed active Stop arbitration, validated abort tail, owned runtime
+cleanup, released ownership, Cancelled storage and deterministic context
+exclusion. Request87 passed subsequent completion and cancellation recovery.
+A source-backed external checker correction removes only the cancellation
+path's unsupported poll-event requirement; validation26 passed five focused
+cases. Earlier six memory criteria retain their original provenance and
+source-impact reuse qualification. No live request is replayed.
+
+Request88 was interrupted while streaming, but the external controller failed
+with an unknown category before recording restart exit or launching the
+restart. Exact owned cleanup and identical QA configuration restoration passed.
+Interruption persistence, no replay and restart recovery remain unverified.
+Normal Quit is distinct from request-owned Stop: no graceful abort or complete
+abort capture is claimed for request88. Its discarded failure details remain
+unknown. The confirmation caller also supplied `window_id` where the fixed
+schema requires `window`; this is a supported forward correction, not an
+explanation of the earlier unrecorded failure.
+
+Current usage is88/96, initial launches30/30, catalogs25/28, restarts1/3 and
+focused validations26/26. Product verification8/8 and QA builds2/2 are consumed.
+The native aggregate charged772.3380085829703 seconds of5400. All four native
+runs have zero owned groups and restored configuration; failed context-reader
+EOF receipts are retained. Final current QA hashes and recoverable compressed
+copies are captured without reopening SQLite. C7 remains open. Image ejection
+and administrative milestone finalization remain separately unresolved.
+
+Next work is the consolidated, bounded restart-controller/observation correction
+and explicit replacement-launch decision in
+`RESTART-C7-CONTINUATION-PROPOSAL.md` in that package. Reuse the View QA artifact,
+passed cancellation/recovery and earlier source-qualified evidence. No new
+product build or model-budget increase is proposed. Preserve original deadlines,
+all failures, raw indexes/admission, PR146/148 retention, disabled ECC hooks/MCP,
+advisories, native workaround and parked D-125/M1/M2. GPT-6 Headless remains
+unverified. No HP, gate/index, publication or image-utility action occurred.
+
+### 2026-10-21 C7 restart continuation: catalog deadline boundary
+
+The approved restart-controller amendment passed33 unique affected cases:24 unchanged passing cases from validation27 plus9 corrected forward-binding cases in validation28. The failed validation27 fixture is retained. Initial launch31 and catalog26 are consumed. Run05 recorded `deadline` at `catalog_tick`; its owned root was reaped, owned group was zero and the identical dedicated QA configuration was restored. No new generation occurred; ledger remains88/96. A later native UI refresh action was rejected as Computer Use not active; no refresh success or earlier cause is inferred. The context reader exited on actual EOF, with its failure preserved.
+
+Requests86/87 remain passed alongside six source-qualified historical cases. Request88 has a fresh prelaunch Running baseline but still lacks accepted poststartup Interrupted/no-replay proof; restart recovery remains unfinished. C7 is unverified. Image ejection remains independently unresolved and milestone-completion-blocking. The View QA build and product/runtime sources, raw indexes, admission, gates, HP work and previous evidence were preserved. Final QA custody and recoverable backups were captured without opening SQLite after the reader exited.
+
+Current evidence and the finite next decision are in `c7-consolidated-20261021-01/RESTART-FINAL-HANDOFF.md` and `CATALOG-HANDOFF-C7-CONTINUATION-PROPOSAL.md` beneath the retained memory rejection-sites package. The proposal is not execution authority until owner approval. It retains all historical consumption, deadlines, safeguards and qualifications; no additional model request or build is proposed.
+
+### 2026-10-21 — catalog handoff continuation stopped before refresh
+
+The owner-approved catalog handoff amendment ran validations29–30 successfully (24 changed-behavior cases plus4 integration cases). Reused product verification, View QA build and earlier passing C7 evidence were not repeated. Launch32 succeeded. The fresh external handoff returned ui_or_io_unknown before any catalog request write or click; its own durable result file is absent. The tool result is preserved additively, without reconstructing an exception or cause. Catalog remains26/28; no model request was spent, ledger88/96. Initial32/32 and validation30/30 are exhausted.
+
+The fresh prelaunch reader actually observed request88 stored Interrupted with matching retained payload/context hashes; full postlaunch persistence/no-replay and recovery acceptance remain incomplete. This is partial evidence, not C7 completion. The exact owned app closed normally, runtime groups were zero, the identical QA configuration was restored, and the reader finalized successfully after all SQL observations. Requests86/87 and six qualified historical cases remain passed. Image ejection remains independently unresolved.
+
+See c7-consolidated-20261021-01/CATALOG-FINAL-HANDOFF.md, its sealed accounting and CATALOG-NEXT-CONTINUATION-PROPOSAL.md for the exact next decision. Preserve all historical receipts and unknowns. No build, generation, image utility, HP/index/gate operation or publication occurred. The absolute deadline remains1792573687.4082391; it is not renewed.
+
+### 2026-10-20 — consolidated C7 continuation: native UI identity boundary
+
+The owner approved the consolidated eight-hour continuation,32MiB package reservation, initial-launch ceiling36, catalog ceiling34 and unchanged generation ceiling96. Prior consumption/deadlines remain preserved. Actual CUA integration demonstrated that the old handoff depended on an unavailable ambient process global. A fresh fixed-owner binding passed real CUA descriptor reads/exclusive writes,14 focused cases and2 fresh namespace/custody checks. The old failed helper/result was not relabelled or replayed. Production/runtime/dependency source and completed product verification/builds were unchanged.
+
+Initial33/catalog27 are consumed: the corrected file handoff and click call returned successfully, but no new catalog record appeared before the strict60-second deadline. Its actual deadline/catalog_tick failure is retained. Initial34 was then consumed for supported window-association diagnosis; no catalog or generation followed. Mac Computer Use rejected window-ID selection. Its visible UI showed default Simulation profiles, while the isolated QA reader actually observed the Headless Codex profile and stored Interrupted request88. Accessibility-index navigation and the visible screenshot also diverged; a coordinate action changed the visible page. These observations do not establish the same PID/window/dedicated-home association, a root cause, or ownership of any other visible client. The exact-bundle AppKit query returned no records even while a known controlled process was alive, so it is not an inactivity or complete-visibility certificate.
+
+No generation was dispatched: ledger88/96. Initial34/36, catalog27/34, restart1/3; current focused validations31–32 passed. Request88 still lacks complete accepted poststartup/no-replay/recovery proof; requests86/87 and six historical qualified C7 cases remain passed under their original provenance. Current authentication/model availability is not inferred. C7 remains unverified.
+
+Both controlled native roots were reaped, owned groups were zero, and the identical dedicated configuration was restored. Run08 retained its failed normal_wait result; the final context reader exited0 and sealed custody after all SQL observations. No SQLite reopening followed. Image/device/mount identity and capacity checks passed, but complete image-user absence could not be established across the unresolved UI context. No detach/eject was dispatched; image ejection remains unresolved. No uncontrolled app was terminated or claimed owned.
+
+Current evidence is in c7-consolidated-20261021-01/completion-02/FINAL-HANDOFF.md and its seal/accounting. Resume live acceptance only after a supported route establishes the exact controlled native window and QA home in the Computer Use context. Remaining finite authority is retained, not automatically renewed. Repository gates/indexes, HP work, PR146/148 artifacts, earlier review builds, disabled ECC hooks/MCP, advisories, GPT-6 Headless uncertainty and parked D-125/M1/M2 remain preserved. Administrative finalization cannot be claimed while C7/image cleanup or required gate operations remain open.
+
+### 2026-10-21 — C7 owner-operated namespace proof; catalog deadline remains blocked
+
+The owner confirmed exclusive QA use and no requests after88, then operated initial35 using the approved native route. A title-only challenge was observed in the exact disposable QA namespace: the saved12-turn conversation, complete conversation semantics, selected context and interrupted request88 payload remained unchanged. This independently links the owner action to the dedicated QA data; owner assurances alone were not treated as process/window or C7 proof.
+
+Focused validations33–35 passed (4,2,4 cases). The context reader rejected a supplied33-character nonce under its strict32-character predicate before advancing past command5. That actual failure and exit1 are preserved. A fresh tested reader handoff used the actual retained inventory and pending owner-identity transition; it did not reconstruct old snapshots or clear the failed receipt. The title/context observation passed.
+
+Catalog28 was armed, but no new complete catalog record appeared before the unchanged60-second guard. Its deadline/catalog_tick failure is retained; no authentication, model availability, child lineage or cause is inferred. The owner-operated route therefore remains only partially qualified. No generation was charged or replayed: ledger88/96, initial35/36, catalog28/34, restart1/3. Requests86/87 and earlier qualified cases retain their passing provenance. Request88 poststartup protocol/no-replay acceptance and request89 recovery remain open.
+
+The exact controlled app and children were reaped, the owned group was zero and the identical QA configuration was restored. The replacement reader was closed with its actual EOF failure preserved; a separate strict metadata/hash custody record was captured after all SQLite observations and owned cleanup, without reopening SQLite. Image ejection remains independently unresolved; no image utility was dispatched. No repository product/runtime source, gate, raw index, admission or HP work changed.
+
+Fresh sealed results are in c7-consolidated-20261021-01/owner-route-01. A further live attempt requires a supported owner-action handoff that fits the existing catalog deadline, current usage/capacity reconciliation and remaining authority; do not repeat blind app selection or this failed controller unchanged. C7 and milestone completion remain open.
+
+### 2026-10-21 — C7 catalog readiness prepared; automated native access unavailable
+
+The owner resumed existing C7 authority and confirmed exclusive QA use with no model requests after88. Fresh external helpers require a current exact-PID/window readiness intent before the unchanged60-second catalog timer can start. Two readiness cases passed in validation36; its receipt-type fixture failed and remains failed. A separate actual-module receipt test37 passed. Validation38 preserved its preparation-time cached-module assertion failure; fresh-process affected check39 passed. None of these tests grants native protocol or C7 acceptance. Existing product verification/build/schema and the earlier passed namespace challenge were reused.
+
+Existing external record names were already occupied; those historical records stayed unchanged and fresh names were used. The earlier preparation receipt remains unknown. Controller run10 then stopped during configuration preparation with its actual unknown failure preserved; no launch or request was charged. No historical error was reconstructed. A fresh fixed namespace and platform-reviewed task-scoped execution context were prepared. Run11 consumed initial36 and actually launched the retained View QA executable as PID27041/window4556. Its catalog timer stayed unarmed.
+
+The owner then requested computer operation for all UI tasks. Computer-control inventory reported the QA app; bundle-ID selection explicitly rejected ambiguity across retained builds. Exact bundle-path selection returned the QA title and a Conversations surface. The supported Bots action returned noWindowsAvailable, while the independent owned-process/window controller remained alive. This is an unresolved computer-control/identity prerequisite, not proved inactivity, authentication failure, a product defect or a historical cause. No catalog refresh, model Send or generation was dispatched. Blind selection and unsupported window targeting were not repeated.
+
+The exact owned app/group were cleaned up and the identical dedicated configuration restored. The normal-close wait retained its actual unknown failure; it was not relabelled passing. The current context reader finalized custody after all SQL observations, passed strict comparison and exited0. No SQLite reopening followed. Ledger88/96, initial36/36 exhausted, catalog28/34, restart1/3. Request88 startup/no-replay acceptance and recovery remain open. C7 and independently unresolved image ejection still block milestone completion. No image utility was dispatched.
+
+Current sealed evidence is in c7-consolidated-20261021-01/owner-ready-02. The remaining live path first needs supported computer-control association to the exact owned PID/window/artifact and QA namespace; another initial launch requires explicit finite authority because36/36 are consumed. Existing source, indexes/admission/gates, HP work, original reports, failed readers, historical uncertainty, PR146/148 retention, earlier builds, quarantines, disabled ECC hooks/MCP, advisories and parked work remain preserved.
+
+## 2026-10-21 — Persistent-memory C7 verified; image cleanup remains open
+
+C7 passes for the tested `gpt-5.6-luna` / `low` configuration. This is live
+acceptance for the retained qualified Memory View QA build, not a claim of
+GPT-6 compatibility or whole-milestone completion. The sealed acceptance record
+is `owner-association-execution-06/C7-FINAL-ACCEPTANCE.json` beneath the existing
+`cortexa-memory-rejection-sites-20261017-01/c7-consolidated-20261021-01` package.
+
+Retained memory cases 72–77 remain under their original artifact provenance and
+source-impact qualification; the research-canary response advisory remains.
+Cancellation 86 and recovery 87 are reused with their additive cleanup evidence.
+The current native window, owned runtime lineage and title challenge establish
+the exact disposable QA namespace. Request 88 is verified as interrupted after
+native Quit, preserved after restart and excluded from deterministic request
+context, with no automatic replay. Its older controller failure remains a
+failure; graceful protocol abort and remote cancellation are not inferred.
+Request 89 completed through strict protocol validation and stored recovery,
+with the interrupted turn excluded. No completed response is counted as an
+interruption or cancellation.
+
+The final native controller closed normally with no primary failure, reaped the
+owned root and all owned groups, and restored the identical dedicated QA
+configuration without overwrite. The context reader exited zero with all pipes
+closed; final custody was captured after all SQLite observations. Do not reopen
+that database under the completed session. Source, admission, raw indexes,
+protected records and earlier review builds were preserved. No product source
+edit, rebuild, image utility, publication or gate operation occurred here.
+
+Accounting is ledger 89/96, initial launches 39/40, catalogs 30/34 and restarts
+1/3. The approved deadline remains `1792616641.414326`, including the 1,800-second
+closeout reserve. Package capacity is 40 MiB with the 1 MiB closeout reservation;
+all aggregate limits, the 44 GiB envelope, free-space floor and headroom remain.
+Launch 38's unsupported external diagnostic-request field was rejected before
+any model request; its failure, cleanup and restoration are retained. The fresh
+client rejects that field before dispatch, and launch 39 completed acceptance.
+The final historical reader also explicitly handles the exact bot-isolation
+receipt variant and its referenced evidence; no historical receipt was changed.
+
+Image ejection remains independently unresolved and blocks milestone completion.
+No additional image-utility attempt is authorized. The next work is a bounded,
+evidence-supported cleanup decision, preserving all retained images, builds and
+receipts. Do not replay earlier failed ejection commands unchanged, use force,
+delete protected data, alter HP/index/gates, repeat passing C7 or start another
+milestone. Keep the full persistent-memory objective and standing autonomy across
+any cleanup continuation; a checkpoint is not completion.
+
+## 2026-10-21 — C7 retained; single normal image-cleanup attempt failed
+
+The owner authorized a fresh 90-minute cleanup window, with 600 seconds reserved
+for closeout, and one conditional normal ejection capped at 60 seconds. The
+accepted C7 result remains unchanged: `gpt-5.6-luna` / `low`, ledger 89/96,
+initial launches 39/40, catalogs 30/34 and restarts 1/3. No generation, build,
+application launch or finalized-QA-database reopening occurred in this cleanup.
+
+Current admission, the sealed C7 evidence, exact retained image/device/APFS mount
+and retained QA executable bindings passed. A bounded host-context observation
+reported no holders of the exact mount. It is not a certificate of complete
+host visibility or filesystem inactivity. Normal kernel busy checks were not
+bypassed, and no force, permission change or unrelated-process termination was
+used.
+
+The one normal `hdiutil detach` attempt consumed its allowance and returned exit 16. Capture was complete, but its output remained `unknown_or_nonzero`; no error
+cause is inferred. The owned utility child was reaped with its group empty.
+Post-attempt checks verified the same mounted image, device identities and QA
+executable. The image remains mounted and ejection remains unresolved. No retry
+or alternative utility follows under this exhausted one-attempt authority.
+
+A separate source-format assertion failed before dispatch, but the orchestration
+continued to the utility instead of stopping. This is a current sequencing error,
+not an explanation of the utility failure. Both failures are retained separately.
+Any future controller must enforce successful source validation before dispatch;
+the consumed attempt must never be replayed or relabelled as valid preparation.
+
+Evidence is in `image-cleanup-01` beneath the existing
+`cortexa-memory-rejection-sites-20261017-01/c7-consolidated-20261021-01` package.
+The cleanup window ends at `1792596578.979174`; historical deadlines and all
+consumption remain recorded. Existing aggregate storage caps, the 40 MiB package
+cap, 44 GiB envelope, available-space floor, headroom and closeout reserve remain.
+
+C7 is passed; whole-milestone completion remains blocked by image cleanup.
+The next owner decision is either a separately bounded, evidence-supported
+cleanup investigation or an explicit retained-resource disposition for this
+exact image. Retention would preserve the failed ejection result and remove
+only the requirement to eject before closure; it is not currently authorized.
+Preserve C7, the image, all builds, historical failures, backups, raw indexes,
+admission, HP work and parked advisories. Do not repeat acceptance, use force,
+delete protected artifacts, publish or start a successor milestone.
+
+## 2026-10-21 — Owner-approved QA image retention; C7 acceptance preserved
+
+The owner explicitly accepts retention of the exact current mounted QA image and all review builds. Successful ejection is superseded only as a prerequisite for this milestone's closure. Retention does not mean ejection succeeded, explain an unknown utility failure, authorize another utility attempt, or alter historical results. The failed normal-ejection attempts and the separately recorded source-preflight/dispatch sequencing failure remain unchanged and visible in their original packages.
+
+Read-only checks verified the retained image's current identity, size, ownership and volume, the bound device identities, exact APFS mount and current review executable. The image remains mounted. Preserve it and all builds, backups, quarantines and historical receipts; no deletion, force, permission change or image utility is authorized by this disposition.
+
+C7 remains passed for `gpt-5.6-luna` / `low`, with deterministic context, interruption/no-replay, cancellation/recovery and cleanup evidence bound by `owner-association-execution-06/C7-FINAL-ACCEPTANCE.json`. Ledger remains 89/96; initial launches 39/40, catalogs 30/34 and restarts 1/3. No requests, builds, acceptance replay, finalized QA database reopening or configuration-content inspection occurred. Existing identical configuration restoration and owned-process cleanup evidence is reused. GPT-6 Headless remains unverified; historical qualified product-output advisories remain, without weakening native protocol acceptance.
+
+Current disposition, preservation, review and accounting evidence is in `retention-closeout-01` beneath the existing `cortexa-memory-rejection-sites-20261017-01/c7-consolidated-20261021-01` package. The fresh documentation-only window ends at `1792595430.1662772`, with 600 seconds for sealing. Historical deadlines/consumption and all aggregate storage caps remain unchanged. Recoverable before-copies preserve each edited document's entire historical body; this section is additive.
+
+The image-retention decision is resolved and C7 requires no further live acceptance. Formal repository completion is not claimed: the actual memory increment remains active, and the final machine-manifest review/session/quality/gate workflow has not been completed. The owner's current no-gate-changes instruction keeps that state, raw indexes and admission intact. Historical FAIL/Blocked records above remain historical evidence, not a reclassification of current passed C7.
+
+The only remaining closure work is the formal memory-report and completion workflow, with explicit authority for its necessary state/marker writes. Carry forward this retention disposition, the passed C7 and all original failure history; reuse unchanged verification, preserve HP and parked work, and do not repeat product execution. After resolving that authority boundary and validating affected behavior, resume the standing end-to-end persistent-memory closeout autonomously. Do not stop at a diagnostic, review or checkpoint, and do not start a successor milestone.
+
+## 2026-10-21 — Formal finalization rejected by frozen cancellation-source binding
+
+C7 remains passed and the explicit retained-mounted-image disposition remains resolved. The owner authorized the existing final completion workflow, but its read-only admission validation rejected `closure: dependent protected implementation drift`. Current source-bound comparison identifies only `src-tauri/src/agent_chat_tauri.rs` after accounting for the existing sealed two-file maintenance exception. The original request protects hash `8883ebf8b4ee72d98c57ebea42090e1ece5341a64bea5534153aa6c8a92eb86b`; the accepted cancellation implementation has hash `d35474cd010c64215829858c7f3eb9d00b92595a6c21e8b4e1ca016658e38e56` and is outside the request's original allowed_paths. This is not a new product drift or failed C7 result.
+
+The existing reader supports only its exact prior index-maintenance exception, not a product-scope amendment. Current authority protects gate implementation and admission. No finalize, close-failed, marker, manual state rewrite, index change or HP operation was performed. The final evidence-backed machine review records formal FAIL/Blocked while preserving passed product acceptance and all historical report bodies. Ledger89/96 and all execution consumption remain unchanged; no product check, build, launch, request, image utility, private configuration read or finalized QA database access occurred.
+
+Evidence is sealed in `formal-finalization-01` beneath the current consolidated C7 package. The remaining decision is a minimal additive, source-bound memory admission amendment for this already-authorized cancellation file, including verified maintenance provenance for any validator/test changes and affected checks. Preserve the original admission and baseline; do not bypass other protected-input or scope checks. After resolving that boundary and validating affected behavior, resume the full persistent-memory finalization autonomously. Do not stop at repair, review or checkpoint; do not start a successor milestone.
+
+## 2026-10-21 — Persistent-memory acceptance and formal finalization record
+
+C7 is passed for the tested `gpt-5.6-luna` / `low` configuration. The owner-approved exact mounted QA image and all review builds remain retained; successful ejection is superseded only as a milestone-closure prerequisite. Failed ejection results and unknown historical causes remain unchanged. No acceptance request, build, launch, finalized QA database access or image utility was repeated. Ledger remains 89/96; initial launches39/40, catalogs30/34 and restarts1/3.
+
+The exact owner-approved memory-only cancellation amendment is now published and actual admission validation passes. It qualifies only the accepted `agent_chat_tauri.rs` bytes and carries the two changed admission reader/test files through original maintenance before-copies, fresh tests and review. The original admission, baseline, raw indexes, predecessor failure and unrelated gates remain unchanged. Fresh118 focused and263 complete hook tests pass. The current full documentation formatting/link check passes; formatting preserved all non-whitespace contents and frozen admission prefixes. Repository, security, whitespace and session checks pass. The failed synthetic readiness fixture and checker interpreter route remain recorded alongside their attributable corrections.
+
+The current final machine review is **PASS WITH ADVISORIES**, with all nine criteria verified. Formal completion is valid only when the existing memory gate reports `complete` and `valid: true`, and the full memory-specific Stop allows closure. The finalization operation and those actual results are sealed in `memory-admission-finalization-02` beneath the existing consolidated C7 evidence package; the final state/Stop records are authoritative. This document does not waive a missing or failed final gate.
+
+The owner-approved two-hour window and exact2MiB reservation increase preserve every historical deadline, consumed operation and failed receipt. The consolidated cap is42MiB; the44GiB envelope,8GiB floor, headroom and1MiB closeout reserve remain. Verified recoverable before-copies preserve the two code files and all nine extended current documents. Qualified prior verification/build output retains eight/two unknown events respectively; no fresh composite product verification or benign-warning claim is made. GPT-6 Headless remains unverified.
+
+No successor milestone is started. Preserve PR146/148 retention, parked D-125/M1/M2, disabled ECC hooks/MCP, the native workaround, retained artifacts and all unrelated HP/index work. No publication or protected cleanup is authorized. If a later owner requests a status review, inspect the sealed final handoff and actual gate status read-only; preserve current work and do not repeat completed C7, builds or verification. No additional implementation prompt is required once the final gate and Stop pass.
+
+## 2026-10-21 — Memory acceptance and separately bound Git publication
+
+The persistent-memory continuation passed C7 for `gpt-5.6-luna` / `low` and its
+formal complete/valid gate. Ledger89/96 remains unchanged. Historical acceptance,
+original admission/index snapshots, reports and failed receipts remain immutable.
+The exact mounted QA image and review builds remain retained by owner disposition.
+
+The owner separately authorized commit, push, PR review and squash merge, including
+narrow memory-specific publication maintenance. The publication route freezes the
+accepted snapshot and validates current maintenance, staged content, commit tree
+and explicit parent identities separately. Partial staging, unrelated changes,
+unsupported history, malformed evidence and replay reject. It adds no product,
+provider, build, permission or image-operation authority. Current publication
+receipts reside in `.codex/state/memory-publication`; they are local integrity
+records, not authentication. Remote outcomes must be observed before claiming merge.
+
+The prior cleanup assessment is reused: sixteen archived originals were already
+retired after verified cloud recovery; six held archived bundles and the mounted
+image contents remain protected. No further eligible deletion was established.
+See the [publication plan](docs/plans/2026-10-21-persistent-memory-publication.md).

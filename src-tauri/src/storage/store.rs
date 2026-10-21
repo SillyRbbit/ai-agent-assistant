@@ -1,4 +1,4 @@
-use std::sync::{Mutex, MutexGuard};
+use std::sync::{Arc, Mutex, MutexGuard};
 
 use crate::{
     agent::definition::AgentId,
@@ -37,9 +37,9 @@ impl StorageInitialization {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Storage {
-    connection: Mutex<DatabaseConnection>,
+    connection: Arc<Mutex<DatabaseConnection>>,
     location: DatabaseLocation,
     connection_settings: ConnectionSettings,
     startup_migration_report: MigrationReport,
@@ -100,9 +100,10 @@ impl Storage {
         let mut connection = DatabaseConnection::open(config)?;
         let startup_migration_report = connection.migrate()?;
         super::collaboration::interrupt(connection.raw())?;
+        super::conversations::interrupt(connection.raw())?;
         let connection_settings = connection.settings().clone();
         let storage = Self {
-            connection: Mutex::new(connection),
+            connection: Arc::new(Mutex::new(connection)),
             location,
             connection_settings,
             startup_migration_report,
@@ -202,7 +203,7 @@ mod tests {
         assert!(!first.was_already_initialized());
         assert_eq!(
             first.storage().startup_migration_report().applied_versions,
-            vec![1, 2, 3, 4, 5, 6, 7, 8, 9]
+            vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         );
 
         let first_record = first
@@ -225,7 +226,7 @@ mod tests {
                 .storage()
                 .startup_migration_report()
                 .already_applied_versions,
-            vec![1, 2, 3, 4, 5, 6, 7, 8, 9]
+            vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         );
         assert_eq!(
             second
