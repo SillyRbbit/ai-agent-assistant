@@ -1245,6 +1245,12 @@ def _validate_terminal_evidence(root: Path, state_value: dict[str, Any]) -> bool
         return _validate_disposed_failed_state(root, state_value)
     try:
         validate_state(state_value)
+        if (state_value.get("status") == "complete"
+                and state_value.get("increment_id") == "persistent-memory-codex-continuation"):
+            import lifecycle_memory_publication as publication
+            if publication.present(root):
+                publication.validate(root, state_value)
+                return True
         _closure().validate_lineage(root, state_value)
         if "dependent_lineage" in state_value:
             _dependent().record(root, state_value)
@@ -1384,6 +1390,13 @@ def redacted_status(root: Path) -> dict[str, Any]:
                     status_value["workspace_valid"] = False
         else:
             status_value["valid"] = validate_completed_state(root, state_value)
+    if state_value.get("increment_id") == "persistent-memory-codex-continuation":
+        import lifecycle_memory_publication as publication
+        if publication.present(root):
+            try:
+                status_value["publication"] = publication.validate(root, state_value)
+            except GateError:
+                status_value["publication"] = {"current_publication_valid": False}
     import lifecycle_acceptance as acceptance
     if (root / acceptance.POINTER).exists():
         try:
@@ -1416,6 +1429,8 @@ def build_parser() -> argparse.ArgumentParser:
     admission_routes.add_argument("--admission")
     admission_routes.add_argument("--dependent-request")
     subparsers.add_parser("dependent-preservation")
+    publication_parser = subparsers.add_parser("seal-memory-publication")
+    publication_parser.add_argument("--request", required=True)
     closure_parser = subparsers.add_parser("close-without-completion")
     closure_parser.add_argument("--request", required=True)
     maintenance_parser = subparsers.add_parser("seal-acceptance-maintenance")
@@ -1482,6 +1497,10 @@ def main(argv: list[str] | None = None) -> int:
                 _fail("no admitted dependent attempt")
             _dependent().record(root, state_value)
             print("post-increment-gate: surviving evidence validated; historical custody remains qualified")
+        elif arguments.command == "seal-memory-publication":
+            import lifecycle_memory_publication as publication
+            publication.seal(root, arguments.request)
+            print("post-increment-gate: memory publication snapshot sealed")
         elif arguments.command == "status":
             json.dump(redacted_status(root), sys.stdout, sort_keys=True)
             sys.stdout.write("\n")

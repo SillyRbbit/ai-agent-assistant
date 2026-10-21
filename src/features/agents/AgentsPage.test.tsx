@@ -885,3 +885,88 @@ describe("saved Codex effort before discovery", () => {
     expect(client.send).not.toHaveBeenCalled();
   });
 });
+
+it("clears the previous bot's saved list immediately while the next bot loads", async () => {
+  const client = harness();
+  const persistence = {
+    list: vi
+      .fn()
+      .mockResolvedValueOnce([
+        {
+          id: "saved-chat-1",
+          agentId: "personal-assistant",
+          title: "PRIVATE-SYNTHETIC-TITLE",
+          updatedAtMs: 1,
+          turns: 0,
+        },
+      ])
+      .mockImplementation(
+        () =>
+          new Promise(() => {
+            /* Deliberately keep the second bot list pending. */
+          }),
+      ),
+    provenance: vi.fn().mockResolvedValue(null),
+    read: vi.fn(),
+    open: vi.fn(),
+    rename: vi.fn(),
+    delete: vi.fn(),
+    fact: vi.fn(),
+  };
+  render(<AgentsPage client={{ ...client, persistence }} />);
+  await ready();
+  expect(
+    await screen.findByRole("button", { name: "PRIVATE-SYNTHETIC-TITLE · 0 turns" }),
+  ).toBeVisible();
+  fireEvent.click(screen.getByRole("button", { name: /Research Agent/ }));
+  expect(
+    screen.queryByRole("button", { name: "PRIVATE-SYNTHETIC-TITLE · 0 turns" }),
+  ).not.toBeInTheDocument();
+  expect(screen.getByText("Loading saved conversations…")).toBeVisible();
+  expect(screen.queryByText("No saved conversations yet.")).not.toBeInTheDocument();
+  expect(client.send).not.toHaveBeenCalled();
+});
+
+it("refreshes memory provenance immediately after deleting its source conversation", async () => {
+  const client = harness();
+  const provenance = {
+    agentId: "personal-assistant",
+    createdAtMs: 1,
+    updatedAtMs: 2,
+    sourceConversation: "saved-chat-1",
+    sourceDeleted: false,
+  };
+  const persistence = {
+    list: vi
+      .fn()
+      .mockResolvedValueOnce([
+        {
+          id: "saved-chat-1",
+          agentId: "personal-assistant",
+          title: "Synthetic source",
+          updatedAtMs: 2,
+          turns: 1,
+        },
+      ])
+      .mockResolvedValue([]),
+    provenance: vi
+      .fn()
+      .mockResolvedValueOnce(provenance)
+      .mockResolvedValue({ ...provenance, sourceDeleted: true }),
+    read: vi.fn(),
+    open: vi.fn(),
+    rename: vi.fn(),
+    delete: vi.fn().mockResolvedValue(undefined),
+    fact: vi.fn(),
+  };
+  render(<AgentsPage client={{ ...client, persistence }} />);
+  await ready();
+  await screen.findByText(/Last confirmed fact source: saved-chat-1\./);
+  fireEvent.click(await screen.findByRole("button", { name: "Manage Synthetic source" }));
+  fireEvent.click(screen.getByRole("checkbox", { name: /Delete local conversation history/ }));
+  fireEvent.click(screen.getByRole("button", { name: "Delete conversation" }));
+  expect(await screen.findByText(/saved-chat-1 \(conversation deleted\)/)).toBeVisible();
+  expect(persistence.delete).toHaveBeenCalledOnce();
+  expect(client.save).not.toHaveBeenCalled();
+  expect(client.send).not.toHaveBeenCalled();
+});

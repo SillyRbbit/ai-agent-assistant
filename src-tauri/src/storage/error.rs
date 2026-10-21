@@ -6,6 +6,8 @@ pub type StorageResult<T> = Result<T, StorageError>;
 
 #[derive(Debug, Error)]
 pub enum StorageError {
+    #[error("local conversation history could not be read safely")]
+    InvalidConversationHistory,
     #[error("local room history could not be read safely")]
     InvalidRoomHistory,
     #[error("database file path must not be empty")]

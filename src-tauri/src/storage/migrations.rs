@@ -100,7 +100,23 @@ CREATE TABLE knowledge_link_bindings (
 ) STRICT;
 "#;
 
-const MIGRATIONS: [MigrationDefinition; 9] = [
+const CREATE_AGENT_CONVERSATIONS_SQL: &str = r#"
+CREATE TABLE agent_conversations (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ content TEXT NOT NULL CHECK(length(content) <= 4000000)
+) STRICT;
+CREATE TABLE agent_note_provenance (
+ agent_id TEXT PRIMARY KEY REFERENCES agent_preferences(agent_id),
+ created_at_ms INTEGER NOT NULL,
+ updated_at_ms INTEGER NOT NULL,
+ source_conversation TEXT,
+ source_deleted INTEGER NOT NULL DEFAULT 0 CHECK(source_deleted IN (0,1))
+) STRICT;
+INSERT INTO agent_note_provenance(agent_id,created_at_ms,updated_at_ms)
+ SELECT agent_id,0,0 FROM agent_preferences WHERE note != '';
+"#;
+
+const MIGRATIONS: [MigrationDefinition; 10] = [
     MigrationDefinition {
         version: 1,
         name: "create_schema_migrations",
@@ -154,6 +170,12 @@ const MIGRATIONS: [MigrationDefinition; 9] = [
         name: "create_knowledge_link_bindings",
         checksum: "sha256:c796f64d02ca859cd737a0cf8f1eeb851b0cac82091d8fc03fefcbce29cbc193",
         sql: CREATE_KNOWLEDGE_LINK_BINDINGS_SQL,
+    },
+    MigrationDefinition {
+        version: 10,
+        name: "create_agent_conversations",
+        checksum: "sha256:93661ae5d6ea01405728e8964ad1d14bff2d81a36b514db94b4f690fee25726b",
+        sql: CREATE_AGENT_CONVERSATIONS_SQL,
     },
 ];
 
@@ -382,8 +404,8 @@ mod tests {
     use std::error::Error;
 
     use super::{
-        apply_migrations_with_clock, available_migrations, MigrationDefinition,
-        CREATE_AGENT_CONNECTION_SETTINGS_SQL, CREATE_AGENT_PREFERENCES_SQL,
+        apply_migrations_with_clock, available_migrations, list_applied_migrations,
+        MigrationDefinition, CREATE_AGENT_CONNECTION_SETTINGS_SQL, CREATE_AGENT_PREFERENCES_SQL,
         CREATE_APP_METADATA_SQL, CREATE_SCHEMA_MIGRATIONS_SQL, MIGRATIONS,
         UPGRADE_AGENT_PREFERENCE_MODELS_SQL,
     };
@@ -400,7 +422,7 @@ mod tests {
             .map(|migration| migration.version)
             .collect();
 
-        assert_eq!(versions, vec![1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        assert_eq!(versions, vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
         assert_eq!(MIGRATIONS[0].sql, CREATE_SCHEMA_MIGRATIONS_SQL);
         assert_eq!(MIGRATIONS[1].sql, CREATE_APP_METADATA_SQL);
         assert_eq!(MIGRATIONS[2].sql, CREATE_AGENT_PREFERENCES_SQL);
@@ -419,12 +441,12 @@ mod tests {
             Ok(1_700_000_000_001)
         })?;
 
-        assert_eq!(first.applied_versions, vec![1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        assert_eq!(first.applied_versions, vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
         assert!(first.already_applied_versions.is_empty());
         assert!(second.applied_versions.is_empty());
         assert_eq!(
             second.already_applied_versions,
-            vec![1, 2, 3, 4, 5, 6, 7, 8, 9]
+            vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         );
         assert!(connection.table_exists("schema_migrations")?);
         assert!(connection.table_exists("app_metadata")?);
@@ -433,7 +455,7 @@ mod tests {
 
         let applied = connection.applied_migrations()?;
         let versions: Vec<i64> = applied.iter().map(|migration| migration.version).collect();
-        assert_eq!(versions, vec![1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        assert_eq!(versions, vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
         assert!(applied
             .iter()
             .all(|migration| migration.applied_at_ms == 1_700_000_000_000));
@@ -452,7 +474,7 @@ mod tests {
             [original],
         )?;
         let result = apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS, || Ok(200))?;
-        assert_eq!(result.applied_versions, vec![9]);
+        assert_eq!(result.applied_versions, vec![9, 10]);
         assert_eq!(&connection.applied_migrations()?[..8], prior.as_slice());
         let after: String = connection.raw().query_row(
             "SELECT content FROM knowledge_items WHERE id=1",
@@ -475,7 +497,7 @@ mod tests {
         let applied = connection.applied_migrations()?;
 
         assert_eq!(upgrade.already_applied_versions, vec![1, 2]);
-        assert_eq!(upgrade.applied_versions, vec![3, 4, 5, 6, 7, 8, 9]);
+        assert_eq!(upgrade.applied_versions, vec![3, 4, 5, 6, 7, 8, 9, 10]);
         assert_eq!(&applied[..2], prior.as_slice());
         assert_eq!(applied[2].version, 3);
         assert_eq!(applied[2].applied_at_ms, 200);
@@ -516,7 +538,7 @@ mod tests {
 
         let report = apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS, || Ok(200))?;
 
-        assert_eq!(report.applied_versions, vec![4, 5, 6, 7, 8, 9]);
+        assert_eq!(report.applied_versions, vec![4, 5, 6, 7, 8, 9, 10]);
         assert_eq!(report.already_applied_versions, vec![1, 2, 3]);
         for (agent_id, revision) in [("research", 5_i64), ("coding", 10_i64)] {
             let row = connection.raw_mut().query_row(
@@ -585,7 +607,7 @@ mod tests {
             |row| row.get(0),
         )?;
         let upgrade = apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS, || Ok(200))?;
-        assert_eq!(upgrade.applied_versions, vec![5, 6, 7, 8, 9]);
+        assert_eq!(upgrade.applied_versions, vec![5, 6, 7, 8, 9, 10]);
         assert_eq!(upgrade.already_applied_versions, vec![1, 2, 3, 4]);
         assert_eq!(&connection.applied_migrations()?[..4], prior.as_slice());
         let after_schema: String = connection.raw_mut().query_row(
@@ -736,7 +758,7 @@ INSERT INTO missing_table (id) VALUES (1);
         )?;
         let history = connection.applied_migrations()?;
         let result = apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS, || Ok(200))?;
-        assert_eq!(result.applied_versions, vec![8, 9]);
+        assert_eq!(result.applied_versions, vec![8, 9, 10]);
         assert_eq!(&connection.applied_migrations()?[..7], history);
         let room: String = connection.raw_mut().query_row(
             "SELECT content FROM collaboration_rooms WHERE id=1",
@@ -765,7 +787,7 @@ INSERT INTO missing_table (id) VALUES (1);
         connection.raw_mut().execute("INSERT INTO agent_preferences VALUES ('research','openai_api','gpt-5.6-sol','high','custom','private_notes','retained note',7)", [])?;
         let history = connection.applied_migrations()?;
         let result = apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS, || Ok(200))?;
-        assert_eq!(result.applied_versions, vec![6, 7, 8, 9]);
+        assert_eq!(result.applied_versions, vec![6, 7, 8, 9, 10]);
         assert_eq!(&connection.applied_migrations()?[..5], history);
         let row: (String, String, String, i64) = connection.raw_mut().query_row("SELECT model, owner_instructions, note, revision FROM agent_preferences WHERE agent_id='research'", [], |r| Ok((r.get(0)?,r.get(1)?,r.get(2)?,r.get(3)?)))?;
         assert_eq!(
@@ -780,6 +802,30 @@ INSERT INTO missing_table (id) VALUES (1);
         let profile = crate::storage::agent_preferences::get(connection.raw_mut(), "research")?;
         assert!(profile.identity == crate::agent_preferences::BotIdentity::default());
         assert_eq!(profile.revision, 7);
+        Ok(())
+    }
+    #[test]
+    fn conversation_migration_preserves_v9_note_and_migration_history() -> Result<(), Box<dyn Error>>
+    {
+        let mut c = DatabaseConnection::open(&DatabaseConfig::in_memory())?;
+        apply_migrations_with_clock(c.raw_mut(), &MIGRATIONS[..9], || Ok(100))?;
+        c.raw().execute("INSERT INTO agent_preferences(agent_id,connection,model,effort,owner_instructions,memory_mode,note,revision) VALUES ('research','simulation','simulation','default','synthetic instructions','off','SYNTHETIC-LEGACY-NOTE',7)",[])?;
+        let before = list_applied_migrations(c.raw())?;
+        apply_migrations_with_clock(c.raw_mut(), &MIGRATIONS, || Ok(200))?;
+        let after = list_applied_migrations(c.raw())?;
+        assert_eq!(&after[..9], &before);
+        let row: (String, u64) = c.raw().query_row(
+            "SELECT note,revision FROM agent_preferences WHERE agent_id='research'",
+            [],
+            |r| Ok((r.get(0)?, r.get(1)?)),
+        )?;
+        assert_eq!(row, ("SYNTHETIC-LEGACY-NOTE".into(), 7));
+        let created: i64 = c.raw().query_row(
+            "SELECT created_at_ms FROM agent_note_provenance WHERE agent_id='research'",
+            [],
+            |r| r.get(0),
+        )?;
+        assert_eq!(created, 0); // unknown legacy date is not invented.
         Ok(())
     }
 }

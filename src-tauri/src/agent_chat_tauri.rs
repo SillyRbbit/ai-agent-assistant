@@ -28,12 +28,20 @@ pub(crate) struct AgentChatState(Arc<Mutex<Session>>);
 #[derive(Default)]
 struct Session {
     conversation: Option<BoundConversation>,
+    journal: Option<Storage>,
+    turn: Option<u64>,
+    omitted_turns: usize,
     catalogs: Vec<CatalogEntry>,
+    #[cfg(test)]
     next_id: u64,
     host: PersonalAssistantV0Host,
     handle: Option<PersonalAssistantV0PresentationHandle>,
     task: Option<JoinHandle<()>>,
     stopping: bool,
+    codex_cancel: Option<(
+        PersonalAssistantV0PresentationHandle,
+        codex_connection::CancellationHandle,
+    )>,
     error: Option<ChatError>,
     diagnostic: Option<crate::diagnostics::Observer>,
 }
@@ -41,6 +49,9 @@ struct Session {
 impl Drop for Session {
     fn drop(&mut self) {
         if let Some(task) = self.task.take() {
+            if let Some(cancellation) = self.owned_codex_cancellation() {
+                cancellation.request_drop();
+            }
             task.abort();
         }
     }
@@ -138,6 +149,41 @@ fn presentation_error(code: PersonalAssistantV0FailureCode) -> DirectError {
 }
 
 impl Session {
+    fn owned_codex_cancellation(&self) -> Option<&codex_connection::CancellationHandle> {
+        self.codex_cancel
+            .as_ref()
+            .and_then(|(owner, cancellation)| {
+                (self.handle.as_ref() == Some(owner)).then_some(cancellation)
+            })
+    }
+    fn checkpoint(
+        &mut self,
+        status: crate::storage::conversations::TurnStatus,
+    ) -> Result<(), ChatError> {
+        if let (Some(storage), Some(turn), Some(bound), Some(handle)) =
+            (&self.journal, self.turn, &self.conversation, &self.handle)
+        {
+            let snapshot = self
+                .host
+                .snapshot(handle)
+                .map_err(|_| ChatError::Internal)?;
+            storage.checkpoint_chat_turn(&bound.id, turn, snapshot.accepted_text(), status)?;
+            if status == crate::storage::conversations::TurnStatus::Failed {
+                use crate::storage::conversations::FailureReason;
+                let reason = match self.error {
+                    Some(ChatError::Provider(DirectError::Timeout)) => FailureReason::Timeout,
+                    Some(ChatError::Provider(DirectError::Limit)) | Some(ChatError::Limit) => {
+                        FailureReason::Limit
+                    }
+                    Some(ChatError::Internal) => FailureReason::Storage,
+                    _ => FailureReason::Provider,
+                };
+                storage.annotate_chat_failure(&bound.id, turn, reason)?;
+            }
+        }
+        Ok(())
+    }
+
     fn check_id(&self, id: &str) -> Result<(), ChatError> {
         if self.conversation.as_ref().is_some_and(|c| c.id == id) {
             Ok(())
@@ -196,6 +242,23 @@ impl Session {
             text = snapshot.accepted_text().to_owned();
             sequence = snapshot.sequence();
         }
+        if matches!(status, "completed" | "stopped" | "error") {
+            use crate::storage::conversations::TurnStatus;
+            let terminal = match status {
+                "completed" => TurnStatus::Completed,
+                "stopped" => TurnStatus::Cancelled,
+                _ => TurnStatus::Failed,
+            };
+            // Poll can observe a host deadline before the transport task settles.
+            // Persist that terminal outcome even when the task is aborted by polling.
+            if self.checkpoint(terminal).is_err() {
+                self.error = Some(ChatError::Internal);
+                status = "error";
+            }
+        }
+        if self.error == Some(ChatError::Internal) && status == "completed" {
+            status = "error";
+        }
         let bound = self
             .conversation
             .as_ref()
@@ -225,6 +288,7 @@ impl Session {
     }
 }
 
+#[cfg(test)]
 fn begin_conversation(
     state: &Arc<Mutex<Session>>,
     profile: AgentProfile,
@@ -236,6 +300,8 @@ fn begin_conversation(
     let next = session.next_id.checked_add(1).ok_or(ChatError::Limit)?;
     let bound = BoundConversation::new(format!("agent-chat-{next}"), profile)?;
     session.next_id = next;
+    session.journal = None;
+    session.turn = None;
     session.conversation = Some(bound);
     session.handle = None;
     session.error = None;
@@ -255,7 +321,22 @@ fn start_owned(
     if session.owned() {
         return Err(ChatError::Busy);
     }
-    if session.handle.is_some() && !matches!(session.snapshot()?.status, "idle" | "completed") {
+    if let Some(journal) = session.journal.clone() {
+        let saved = journal.conversation(&request.conversation_id)?;
+        let current = journal.agent_profile(&saved.agent_id)?;
+        if !saved.compatible(&current) {
+            return Err(ChatError::StaleContext);
+        }
+        let bound = session
+            .conversation
+            .as_mut()
+            .ok_or(ChatError::InvalidRequest)?;
+        // Latest explicit notes/Memory Off apply to the next request. Runtime stays pinned.
+        bound.profile = current;
+        session.omitted_turns = bound.restore_history(&saved);
+    } else if session.handle.is_some()
+        && !matches!(session.snapshot()?.status, "idle" | "completed")
+    {
         return Err(ChatError::InvalidRequest);
     }
     let bound = session
@@ -355,6 +436,9 @@ fn start_owned(
             return Err(error);
         }
     };
+    if let Some(journal) = &session.journal {
+        session.turn = Some(journal.begin_chat_turn(&request.conversation_id, &request.message)?);
+    }
     session.diagnostic = Some(observer);
     // Presentation ownership and transport cleanup must both finish before reuse.
     let start = session.host.start_direct().map_err(|_| {
@@ -362,6 +446,10 @@ fn start_owned(
         ChatError::Busy
     })?;
     let handle = start.presentation_handle().clone();
+    session.codex_cancel = match &adapter {
+        AdapterRequest::Codex { setup, .. } => Some((handle.clone(), setup.cancellation_handle())),
+        _ => None,
+    };
     session.handle = Some(handle.clone());
     session.error = None;
     session.task = Some(tokio::spawn(execute(
@@ -392,7 +480,13 @@ async fn execute(
         run_adapter_traced(adapter, observer, |event| {
             let state = state.upgrade().ok_or(DirectError::InvalidRequest)?;
             let mut session = state.lock().map_err(|_| DirectError::Internal)?;
-            if session.handle.as_ref() != Some(&handle) || session.stopping {
+            if session.handle.as_ref() != Some(&handle) {
+                return Err(DirectError::InvalidRequest);
+            }
+            if session.stopping {
+                if let Some(cancellation) = session.owned_codex_cancellation() {
+                    cancellation.stopping_callback();
+                }
                 return Err(DirectError::InvalidRequest);
             }
             if matches!(event, ProviderEvent::Completed) {
@@ -404,8 +498,17 @@ async fn execute(
                 .accept_direct(&handle, event)
                 .map_err(|_| DirectError::Protocol)?;
             if let PersonalAssistantV0Snapshot::Failed(failed) = &snapshot {
+                session.error = Some(ChatError::Provider(presentation_error(
+                    failed.failure().code(),
+                )));
+                session
+                    .checkpoint(crate::storage::conversations::TurnStatus::Failed)
+                    .map_err(|_| DirectError::Internal)?;
                 return Err(presentation_error(failed.failure().code()));
             }
+            session
+                .checkpoint(crate::storage::conversations::TurnStatus::Running)
+                .map_err(|_| DirectError::Internal)?;
             if snapshot.is_terminal() {
                 return Err(DirectError::Protocol);
             }
@@ -432,6 +535,7 @@ async fn execute(
         }
         match session.host.snapshot(&handle) {
             Ok(PersonalAssistantV0Snapshot::Failed(failed)) => {
+                let _ = session.checkpoint(crate::storage::conversations::TurnStatus::Failed);
                 diagnostic.finish(Err(presentation_error(failed.failure().code())));
                 return;
             }
@@ -469,6 +573,15 @@ async fn execute(
                     .fail_direct(&handle, PersonalAssistantV0FailureCode::ProviderUnavailable);
             }
         }
+        let status = if final_result.is_ok() {
+            crate::storage::conversations::TurnStatus::Completed
+        } else {
+            crate::storage::conversations::TurnStatus::Failed
+        };
+        if session.checkpoint(status).is_err() {
+            session.error = Some(ChatError::Internal);
+            final_result = Err(DirectError::Internal);
+        }
     };
     diagnostic.finish(final_result);
 }
@@ -479,6 +592,10 @@ async fn stop_owned(state: &Arc<Mutex<Session>>, id: &str) -> Result<ChatSnapsho
         session.check_id(id)?;
         if session.stopping {
             return session.snapshot();
+        }
+        // Record intent for this exact native request before aborting its task.
+        if let Some(cancellation) = session.owned_codex_cancellation() {
+            cancellation.request_stop();
         }
         // Close ingress first, but retain host ownership until the transport drops.
         session.stopping = true;
@@ -496,6 +613,22 @@ async fn stop_owned(state: &Arc<Mutex<Session>>, id: &str) -> Result<ChatSnapsho
             .map_err(|_| ChatError::Internal)?;
     }
     session.stopping = false;
+    if let Some(handle) = session.handle.clone() {
+        let status = match session
+            .host
+            .snapshot(&handle)
+            .map_err(|_| ChatError::Internal)?
+        {
+            PersonalAssistantV0Snapshot::Completed(_) => {
+                crate::storage::conversations::TurnStatus::Completed
+            }
+            PersonalAssistantV0Snapshot::Failed(_) => {
+                crate::storage::conversations::TurnStatus::Failed
+            }
+            _ => crate::storage::conversations::TurnStatus::Cancelled,
+        };
+        session.checkpoint(status)?;
+    }
     session.snapshot()
 }
 
@@ -685,7 +818,13 @@ pub(crate) fn start_agent_conversation(
     storage: tauri::State<'_, Storage>,
     state: tauri::State<'_, AgentChatState>,
 ) -> Result<ChatSnapshot, ChatError> {
-    begin_conversation(&state.0, storage.agent_profile(&request.agent_id)?)
+    let mut session = state.0.lock().map_err(|_| ChatError::Internal)?;
+    if session.owned() {
+        return Err(ChatError::Busy);
+    }
+    let profile = storage.agent_profile(&request.agent_id)?;
+    let saved = storage.create_conversation(&profile)?;
+    open_saved(&mut session, &storage, saved, profile)
 }
 #[tauri::command]
 pub(crate) async fn send_agent_message(
@@ -772,6 +911,140 @@ pub(crate) fn collaboration_adapter(
     })
 }
 
+fn open_saved(
+    session: &mut Session,
+    storage: &Storage,
+    saved: crate::storage::conversations::Conversation,
+    mut profile: AgentProfile,
+) -> Result<ChatSnapshot, ChatError> {
+    profile.connection = saved.connection;
+    profile.model = saved.model.clone();
+    profile.endpoint = saved.endpoint.clone();
+    profile.effort = saved.effort;
+    profile.local_auth = false;
+    profile.allow_unknown_locality_notes = false;
+    let mut bound = BoundConversation::new(saved.id.clone(), profile)?;
+    session.omitted_turns = bound.restore_history(&saved);
+    session.conversation = Some(bound);
+    session.handle = None;
+    session.task = None;
+    session.turn = None;
+    session.error = None;
+    session.diagnostic = None;
+    session.journal = Some(storage.clone());
+    session.snapshot()
+}
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub(crate) struct RenameRequest {
+    conversation_id: String,
+    title: String,
+}
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub(crate) struct FactRequest {
+    conversation_id: String,
+    turn_id: u64,
+    text: String,
+    revision: u64,
+}
+#[tauri::command]
+pub(crate) fn list_saved_agent_conversations(
+    request: AgentRequest,
+    storage: tauri::State<'_, Storage>,
+) -> Result<Vec<crate::storage::conversations::ConversationSummary>, ChatError> {
+    storage.conversations(&request.agent_id)
+}
+#[tauri::command]
+pub(crate) fn read_saved_agent_conversation(
+    request: ConversationRequest,
+    storage: tauri::State<'_, Storage>,
+) -> Result<SavedConversationView, ChatError> {
+    let conversation = storage.conversation(&request.conversation_id)?;
+    let context_turn_ids = crate::agent_chat::context_turn_ids(&conversation);
+    Ok(SavedConversationView {
+        conversation,
+        context_turn_ids,
+    })
+}
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct SavedConversationView {
+    #[serde(flatten)]
+    conversation: crate::storage::conversations::Conversation,
+    context_turn_ids: Vec<u64>,
+}
+
+#[tauri::command]
+pub(crate) fn open_saved_agent_conversation(
+    request: ConversationRequest,
+    storage: tauri::State<'_, Storage>,
+    state: tauri::State<'_, AgentChatState>,
+) -> Result<ChatSnapshot, ChatError> {
+    let mut session = state.0.lock().map_err(|_| ChatError::Internal)?;
+    if session.owned() {
+        return Err(ChatError::Busy);
+    }
+    let saved = storage.conversation(&request.conversation_id)?;
+    let profile = storage.agent_profile(&saved.agent_id)?;
+    open_saved(&mut session, &storage, saved, profile)
+}
+#[tauri::command]
+pub(crate) fn rename_saved_agent_conversation(
+    request: RenameRequest,
+    storage: tauri::State<'_, Storage>,
+    state: tauri::State<'_, AgentChatState>,
+) -> Result<(), ChatError> {
+    let session = state.0.lock().map_err(|_| ChatError::Internal)?;
+    if session.owned() {
+        return Err(ChatError::Busy);
+    }
+    storage.rename_conversation(&request.conversation_id, &request.title)
+}
+#[tauri::command]
+pub(crate) fn delete_saved_agent_conversation(
+    request: ConversationRequest,
+    storage: tauri::State<'_, Storage>,
+    state: tauri::State<'_, AgentChatState>,
+) -> Result<(), ChatError> {
+    let mut session = state.0.lock().map_err(|_| ChatError::Internal)?;
+    if session.owned() {
+        return Err(ChatError::Busy);
+    }
+    storage.delete_conversation(&request.conversation_id)?;
+    if session.check_id(&request.conversation_id).is_ok() {
+        session.conversation = None;
+        session.handle = None;
+        session.turn = None;
+        session.journal = None;
+    }
+    Ok(())
+}
+#[tauri::command]
+pub(crate) fn save_conversation_fact(
+    request: FactRequest,
+    storage: tauri::State<'_, Storage>,
+    state: tauri::State<'_, AgentChatState>,
+) -> Result<AgentProfile, ChatError> {
+    let session = state.0.lock().map_err(|_| ChatError::Internal)?;
+    if session.owned() {
+        return Err(ChatError::Busy);
+    }
+    storage.save_conversation_fact(
+        &request.conversation_id,
+        request.turn_id,
+        &request.text,
+        request.revision,
+    )
+}
+#[tauri::command]
+pub(crate) fn read_agent_note_provenance(
+    request: AgentRequest,
+    storage: tauri::State<'_, Storage>,
+) -> Result<Option<crate::storage::conversations::NoteProvenance>, ChatError> {
+    storage.note_provenance(&request.agent_id)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -792,8 +1065,11 @@ mod tests {
         state: &Arc<Mutex<Session>>,
         storage: &Storage,
     ) -> Result<(String, ControlledEvents), Box<dyn std::error::Error>> {
-        let initial = begin_conversation(state, storage.agent_profile("research")?)?;
+        let profile = storage.agent_profile("research")?;
+        let saved = storage.create_conversation(&profile)?;
         let mut session = state.lock().map_err(|_| "lock")?;
+        let initial = open_saved(&mut session, storage, saved, profile)?;
+        session.turn = Some(storage.begin_chat_turn(&initial.conversation_id, "synthetic")?);
         let handle = session.host.start_direct()?.presentation_handle().clone();
         session.handle = Some(handle.clone());
         let (send, receive) = tokio::sync::mpsc::channel(1);
@@ -840,6 +1116,26 @@ mod tests {
         Ok(())
     }
 
+    #[test]
+    fn codex_cancel_handle_is_bound_to_exact_presentation_and_absent_for_other_adapters(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let _serial = crate::personal_assistant_v0::tests::serial_guard()?;
+        let mut session = Session::default();
+        assert!(session.owned_codex_cancellation().is_none());
+        let first = session.host.start_direct()?.presentation_handle().clone();
+        session.handle = Some(first.clone());
+        session.codex_cancel = Some((
+            first.clone(),
+            codex_connection::CancellationHandle::default(),
+        ));
+        assert!(session.owned_codex_cancellation().is_some());
+        session.host.cancel(&first)?;
+        session.handle = Some(session.host.start_direct()?.presentation_handle().clone());
+        assert!(session.owned_codex_cancellation().is_none());
+        session.codex_cancel = None;
+        assert!(session.owned_codex_cancellation().is_none());
+        Ok(())
+    }
     #[test]
     fn controlled_stream_stop_completion_races_and_subsequent_send(
     ) -> Result<(), Box<dyn std::error::Error>> {
@@ -892,6 +1188,17 @@ mod tests {
                         assert_eq!(terminal.error, None);
                         assert!(!terminal.busy);
                     }
+                    let persisted = storage.conversation(&id)?;
+                    assert_eq!(persisted.turns.len(), 1);
+                    assert_eq!(persisted.turns[0].answer, "1\n2\n");
+                    assert!(
+                        persisted.turns[0].status
+                            == if phase == 2 {
+                                crate::storage::conversations::TurnStatus::Completed
+                            } else {
+                                crate::storage::conversations::TurnStatus::Cancelled
+                            }
+                    );
                     drop(GenerationLease::acquire()?);
                     // A separate fresh conversation succeeds after cancellation/completion.
                     let (next_id, events) = controlled_request(&state, storage)?;
@@ -1233,6 +1540,81 @@ mod tests {
             codex.is_some_and(|c| matches!(c.status, "blocked" | "owner_setup_required")
                 && c.message.contains("dedicated"))
         );
+    }
+    #[test]
+    fn poll_detected_failure_is_durable_before_aborted_transport_cleanup(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let _serial = crate::personal_assistant_v0::tests::serial_guard()?;
+        let storage = Storage::initialize(&DatabaseConfig::in_memory())?.into_storage();
+        tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()?
+            .block_on(async {
+                let state = Arc::new(Mutex::new(Session::default()));
+                let (id, events) = controlled_request(&state, &storage)?;
+                accepted_step(&events, ProviderEvent::Started("synthetic".into())).await?;
+                accepted_step(&events, ProviderEvent::Delta("retained partial".into())).await?;
+                {
+                    let mut session = state.lock().map_err(|_| "lock")?;
+                    let handle = session.handle.clone().ok_or("missing handle")?;
+                    session
+                        .host
+                        .fail_direct(&handle, PersonalAssistantV0FailureCode::DeadlineExceeded)?;
+                    assert_eq!(session.snapshot()?.status, "error");
+                }
+                let saved = storage.conversation(&id)?;
+                assert!(saved.turns[0].status == crate::storage::conversations::TurnStatus::Failed);
+                assert!(
+                    saved.turns[0].failure
+                        == Some(crate::storage::conversations::FailureReason::Timeout)
+                );
+                assert_eq!(saved.turns[0].answer, "retained partial");
+                drop(events);
+                stop_owned(&state, &id).await?;
+                assert!(
+                    storage.conversation(&id)?.turns[0].status
+                        == crate::storage::conversations::TurnStatus::Failed
+                );
+                start_owned(&state, &storage, send(&id), || Err(DirectError::MissingKey))?;
+                join_controlled(&state).await?;
+                assert_eq!(storage.conversation(&id)?.turns.len(), 2);
+                Ok::<(), Box<dyn std::error::Error>>(())
+            })?;
+        Ok(())
+    }
+
+    #[test]
+    fn durable_same_conversation_recovers_after_stop_without_replaying_partial(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let _serial = crate::personal_assistant_v0::tests::serial_guard()?;
+        let storage = Storage::initialize(&DatabaseConfig::in_memory())?.into_storage();
+        tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()?
+            .block_on(async {
+                let state = Arc::new(Mutex::new(Session::default()));
+                let (id, events) = controlled_request(&state, &storage)?;
+                accepted_step(&events, ProviderEvent::Started("synthetic".into())).await?;
+                accepted_step(&events, ProviderEvent::Delta("partial canary".into())).await?;
+                stop_owned(&state, &id).await?;
+                drop(events);
+                start_owned(&state, &storage, send(&id), || Err(DirectError::MissingKey))?;
+                join_controlled(&state).await?;
+                let saved = storage.conversation(&id)?;
+                assert_eq!(saved.turns.len(), 2);
+                assert!(
+                    saved.turns[0].status == crate::storage::conversations::TurnStatus::Cancelled
+                );
+                assert!(
+                    saved.turns[1].status == crate::storage::conversations::TurnStatus::Completed
+                );
+                assert_eq!(saved.turns[0].answer, "partial canary");
+                assert!(!state.lock().map_err(|_| "lock")?.snapshot()?.busy);
+                let mut bound = BoundConversation::new(id, storage.agent_profile("research")?)?;
+                assert_eq!(bound.restore_history(&saved), 1);
+                Ok::<(), Box<dyn std::error::Error>>(())
+            })?;
+        Ok(())
     }
 }
 

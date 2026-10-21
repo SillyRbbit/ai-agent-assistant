@@ -106,6 +106,13 @@ pub fn run() -> Result<(), AppError> {
             agent_chat_tauri::start_agent_conversation,
             agent_chat_tauri::send_agent_message,
             agent_chat_tauri::poll_agent_conversation,
+            agent_chat_tauri::list_saved_agent_conversations,
+            agent_chat_tauri::read_saved_agent_conversation,
+            agent_chat_tauri::open_saved_agent_conversation,
+            agent_chat_tauri::rename_saved_agent_conversation,
+            agent_chat_tauri::delete_saved_agent_conversation,
+            agent_chat_tauri::save_conversation_fact,
+            agent_chat_tauri::read_agent_note_provenance,
             agent_chat_tauri::cancel_agent_conversation
         ])
         .build(tauri::generate_context!())

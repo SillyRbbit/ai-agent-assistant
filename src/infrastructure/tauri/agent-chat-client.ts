@@ -1,3 +1,7 @@
+import {
+  conversationHistoryClient,
+  type ConversationHistoryClient,
+} from "./conversation-history-client";
 import { invoke, isTauri } from "@tauri-apps/api/core";
 import { directErrorMessage } from "./personal-assistant-direct-client";
 
@@ -301,7 +305,16 @@ export function parseAgentConnections(value: unknown): readonly AgentConnectionR
       !bounded(v["message"], 1024)
     )
       throw new Error("protocol");
-    return Object.freeze(v) as unknown as AgentConnectionReadiness;
+    // Presentation-only qualification of the frozen legacy guidance. Preserve
+    // native readiness and every setup restriction; version admission stays Rust-owned.
+    const message =
+      v["connection"] === "codex" && v["message"].startsWith("Requires Codex 0.159.0,")
+        ? v["message"].replace(
+            "Requires Codex 0.159.0,",
+            "Requires an explicitly reviewed Codex runtime,",
+          )
+        : v["message"];
+    return Object.freeze({ ...v, message }) as unknown as AgentConnectionReadiness;
   });
   if (new Set(result.map((entry) => entry.connection)).size !== CONNECTIONS.length)
     throw new Error("protocol");
@@ -391,7 +404,7 @@ export function agentChatErrorMessage(error: unknown): string {
     case "unavailable":
       return "Native agent conversations are unavailable in this session.";
     case "codex_setup":
-      return "Set up Codex 0.159.0 and a dedicated owner-authenticated home without config.toml or AGENTS.md. See the provider milestone guide.";
+      return "Set up an explicitly reviewed Codex runtime and a dedicated owner-authenticated home without config.toml or AGENTS.md. See the provider milestone guide.";
     case "codex_authentication":
       return "Sign in privately using the Codex CLI in the dedicated home, then refresh models.";
     case "codex_runtime":
@@ -405,6 +418,7 @@ export function agentChatErrorMessage(error: unknown): string {
   }
 }
 export interface AgentChatClient {
+  readonly persistence?: ConversationHistoryClient;
   readonly available: () => boolean;
   readonly list: () => Promise<readonly AgentProfile[]>;
   readonly connections: () => Promise<readonly AgentConnectionReadiness[]>;
@@ -437,6 +451,7 @@ function conversationFor(value: unknown, conversationId: string): AgentChatSnaps
   return snapshot;
 }
 export const agentChatClient: AgentChatClient = {
+  persistence: conversationHistoryClient,
   available: () => isTauri(),
   list: async () => parseAgentProfiles(await invoke<unknown>("list_agent_preferences")),
   connections: async () => parseAgentConnections(await invoke<unknown>("list_agent_connections")),

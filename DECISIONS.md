@@ -7295,3 +7295,47 @@ is imported. Local receipt hashes are integrity evidence, not authentication aga
 malicious same-user rewriting. This milestone begins with upstream's existing
 ordinary gate before the new implementation is installed; it remains legacy-admitted
 and must complete through that supported route. Future new milestones use schema 2.
+
+## 2026-10-11 — Owner-authorized memory dependent continuation
+
+The owner authorizes exact predecessor persistent-conversations-bot-memory into
+persistent-memory-codex-continuation after independently completed existing-validator
+maintenance. The fixed original FAIL/candidate and every remaining criterion stay
+required. No acceptance replacement, raw-state rewrite, self-admission or new
+publication authority. See the [continuation plan](docs/plans/2026-10-11-persistent-memory-codex-continuation.md).
+Final native UI is independently authorized; installed-runtime audit and live C7
+remain blocked on a verified restrictive execution environment. Ledger63/76; no
+new provider requests. All advisories, disabled ECC hooks/MCP and parked work remain.
+
+## 2026-10-12 — Metadata-only index blocker resolved
+
+Owner-authorized memory-only validator maintenance completed independently in the memory-admission-maintenance checkout: ordinary schema-2 admission,223 passing hook regressions (including78 dependent/index cases), required governance checks, complete/valid PASS WITH ADVISORIES and accepted full Stop. The ordinary controllers and VPS route remain unchanged. Preserved initial interpreter, readiness-inventory, synthetic-test and Stop-invocation failures have corrected passing receipts; none were rewritten.
+
+Only the existing dependent validator/test pair was installed after completion. The separate content-addressed memory-index maintenance reference binds its exact verified before/after bytes and completed report/manifest/Stop. Original admission, failed predecessor,32-path candidate, historical raw hashes and original50 state files remain unchanged. Product-scope accounting explicitly separates only the two verified maintenance files; no original binding is replaced or product authority widened.
+
+The real dependent-preservation command now exits0 with GIT_OPTIONAL_LOCKS=0. The live index remains90bd5acc81dfbfd29f20a56ea68d929b8cb8c1937dc065f1ac266504b5599fd8; original8072c0b5ece27cf8ff02c40af783ed5aa897d15b2eb808700a5e676317ddfd9a is retained. No index restore/staging occurred. The strict fallback accepts only cached stat metadata differences against the original verified SHA1 index-v2 snapshot. Ordered paths, OIDs, modes, stages, all flags, padding and supported TREE bytes remain exact; malformed/unsupported/semantic changes reject. Descriptor identity/read races and index locks reject. External inspection prevention does not control unrelated writers; historical writer attribution remains unknown and is not required for semantic equivalence.
+
+Durable maintenance evidence and recovery instructions: /Users/hdang/.codex/backups/cortexa-memory-index-maintenance-20261012-i290bxm9. External14 helper tests were reused after source binding verification; current source changes,44 retained copies and review build remain preserved. No runtime probe, generation, install, commit or publication. Ledger63/76; C7 unverified, all advisories, disabled ECC hooks/MCP, native workaround, D-125/M1/M2 and other parked work unchanged.
+
+This supersedes the earlier requirement to identify a writer and restore the index again; that historical record remains intact. The next separate task is runtime startup under existing restrictions and reconciled allowances. Do not replay consumed probes, infer live acceptance from admission validity, or finalize incomplete memory acceptance. Recovery must compare current hashes with the durable verified installation before any separately authorized change; never restore the live index to obtain a pass.
+
+## 2026-10-21 — Memory acceptance and separately bound Git publication
+
+The persistent-memory continuation passed C7 for `gpt-5.6-luna` / `low` and its
+formal complete/valid gate. Ledger89/96 remains unchanged. Historical acceptance,
+original admission/index snapshots, reports and failed receipts remain immutable.
+The exact mounted QA image and review builds remain retained by owner disposition.
+
+The owner separately authorized commit, push, PR review and squash merge, including
+narrow memory-specific publication maintenance. The publication route freezes the
+accepted snapshot and validates current maintenance, staged content, commit tree
+and explicit parent identities separately. Partial staging, unrelated changes,
+unsupported history, malformed evidence and replay reject. It adds no product,
+provider, build, permission or image-operation authority. Current publication
+receipts reside in `.codex/state/memory-publication`; they are local integrity
+records, not authentication. Remote outcomes must be observed before claiming merge.
+
+The prior cleanup assessment is reused: sixteen archived originals were already
+retired after verified cloud recovery; six held archived bundles and the mounted
+image contents remain protected. No further eligible deletion was established.
+See the [publication plan](docs/plans/2026-10-21-persistent-memory-publication.md).

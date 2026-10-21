@@ -165,6 +165,27 @@ describe("agent chat native boundary", () => {
     vi.mocked(invoke).mockResolvedValue({ ...idle, conversationId: "agent-chat-2" });
     await expect(agentChatClient.poll("agent-chat-1")).rejects.toThrow("protocol");
   });
+  it("qualifies only the known legacy Codex guidance without changing readiness", () => {
+    const message = "Requires Codex 0.159.0, dedicated home. No API fallback.";
+    for (const status of ["blocked", "owner_setup_required"] as const) {
+      const rows = connections.map((row) =>
+        row.connection === "codex" ? { ...row, status, message } : row,
+      );
+      const parsed = parseAgentConnections(rows);
+      const codex = parsed.find((row) => row.connection === "codex");
+      expect(codex?.status).toBe(status);
+      expect(codex?.message).toBe(
+        "Requires an explicitly reviewed Codex runtime, dedicated home. No API fallback.",
+      );
+      expect(parsed.filter((row) => row.connection !== "codex")).toEqual(
+        rows.filter((row) => row.connection !== "codex"),
+      );
+    }
+    const other = connections.map((row) =>
+      row.connection === "codex" ? { ...row, message: "Unreviewed setup restriction" } : row,
+    );
+    expect(parseAgentConnections(other)).toEqual(other);
+  });
   it("fails closed on unsupported Codex readiness and malformed connection data", () => {
     expect(parseAgentConnections(connections)).toHaveLength(6);
     for (const value of [

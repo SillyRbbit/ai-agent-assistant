@@ -135,12 +135,27 @@ fn update(
         return Err(PreferencesError::InvalidRequest);
     }
     AgentId::from_str(agent_id).map_err(|_| PreferencesError::InvalidRequest)?;
+    update_with_source(connection, agent_id, expected_revision, None, change)
+}
+
+pub(super) fn update_with_source(
+    connection: &Connection,
+    agent_id: &str,
+    expected_revision: u64,
+    source: Option<&str>,
+    change: impl FnOnce(AgentProfile) -> Result<AgentProfile, PreferencesError>,
+) -> Result<AgentProfile, PreferencesError> {
+    if expected_revision >= i64::MAX as u64 {
+        return Err(PreferencesError::InvalidRequest);
+    }
+    AgentId::from_str(agent_id).map_err(|_| PreferencesError::InvalidRequest)?;
     let transaction = Transaction::new_unchecked(connection, TransactionBehavior::Immediate)
         .map_err(|_| PreferencesError::Storage)?;
     let current = get(&transaction, agent_id)?;
     if current.revision != expected_revision {
         return Err(PreferencesError::StaleContext);
     }
+    let old_note = current.note.clone();
     let mut profile = change(current)?;
     profile.revision = expected_revision + 1;
     profile.validate()?;
@@ -217,6 +232,22 @@ fn update(
             params![profile.agent_id, identity_json],
         )
         .map_err(|_| PreferencesError::Storage)?;
+    if profile.note != old_note {
+        let now =
+            super::timestamp::current_unix_time_ms().map_err(|_| PreferencesError::Storage)?;
+        if profile.note.is_empty() {
+            transaction
+                .execute(
+                    "DELETE FROM agent_note_provenance WHERE agent_id=?1",
+                    [agent_id],
+                )
+                .map_err(|_| PreferencesError::Storage)?;
+        } else {
+            transaction.execute("INSERT INTO agent_note_provenance(agent_id,created_at_ms,updated_at_ms,source_conversation,source_deleted)
+                VALUES (?1,?2,?2,?3,0) ON CONFLICT(agent_id) DO UPDATE SET updated_at_ms=excluded.updated_at_ms,source_conversation=excluded.source_conversation,source_deleted=0",
+                params![agent_id,now,source]).map_err(|_|PreferencesError::Storage)?;
+        }
+    }
     transaction
         .commit()
         .map_err(|_| PreferencesError::Storage)?;

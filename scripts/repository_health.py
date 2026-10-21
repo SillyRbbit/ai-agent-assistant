@@ -95,6 +95,9 @@ EXPECTED_TAURI_IMPORTS = {
     'src/infrastructure/tauri/collaboration-client.ts': (
         'import { invoke, isTauri } from "@tauri-apps/api/core";',
     ),
+    "src/infrastructure/tauri/conversation-history-client.ts": (
+        'import { invoke } from "@tauri-apps/api/core";',
+    ),
     "src/infrastructure/tauri/agent-chat-client.ts": (
         'import { invoke, isTauri } from "@tauri-apps/api/core";',
     ),
@@ -116,6 +119,15 @@ EXPECTED_TAURI_IMPORTS = {
     ),
 }
 EXPECTED_TAURI_INVOKES = {
+    "src/infrastructure/tauri/conversation-history-client.ts": (
+        'invoke<unknown>("list_saved_agent_conversations", { request: { agentId } })',
+        'invoke<unknown>("read_saved_agent_conversation", { request: { conversationId } })',
+        'invoke<unknown>("open_saved_agent_conversation", { request: { conversationId } })',
+        'invoke<unknown>("rename_saved_agent_conversation", {\n        request: { conversationId, title },\n      })',
+        'invoke<unknown>("delete_saved_agent_conversation", {\n        request: { conversationId },\n      })',
+        'invoke<unknown>("save_conversation_fact", {\n        request: { conversationId, turnId, text, revision },\n      })',
+        'invoke<unknown>("read_agent_note_provenance", { request: { agentId } })',
+    ),
     "src/infrastructure/tauri/diagnostics-client.ts": (
         'invoke<unknown>("read_diagnostics")',
         'invoke<unknown>("export_diagnostics")',
@@ -316,6 +328,13 @@ EXPECTED_INVOKE_HANDLER = (
     "agent_chat_tauri::start_agent_conversation,"
     "agent_chat_tauri::send_agent_message,"
     "agent_chat_tauri::poll_agent_conversation,"
+    "agent_chat_tauri::list_saved_agent_conversations,"
+    "agent_chat_tauri::read_saved_agent_conversation,"
+    "agent_chat_tauri::open_saved_agent_conversation,"
+    "agent_chat_tauri::rename_saved_agent_conversation,"
+    "agent_chat_tauri::delete_saved_agent_conversation,"
+    "agent_chat_tauri::save_conversation_fact,"
+    "agent_chat_tauri::read_agent_note_provenance,"
     "agent_chat_tauri::cancel_agent_conversation"
     "])"
 )
