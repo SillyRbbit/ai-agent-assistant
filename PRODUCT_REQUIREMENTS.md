@@ -1,3 +1,12 @@
+## 2026-10-12 — Requirements applicability
+
+The [current implementation section](#current-implementation-and-verification-baseline--2026-10-12)
+supersedes undated blanket statements that all assistant transport/persistence
+is unavailable. Older gateway and sealed-fixture requirements retain their own
+scope; implemented private direct adapters do not satisfy those targets in full.
+
+---
+
 # Cortexa product requirements
 
 Status: Authoritative normalized product requirements
@@ -197,7 +206,7 @@ callback on `127.0.0.1` at `/oauth/callback`. D-064's Azure path remains
 historical configuration evidence only; D-066 supersedes it for a future
 synthetic demo and grants no provisioning or transport authority.
 
-FR-012 and live transport portions of FR-010 through FR-019A are planned; the
+For the original gateway lane, FR-012 and live transport portions of FR-010 through FR-019A remain planned; the
 transport-free request and validation contracts are current. No account,
 identity-provider, OAuth/OIDC, PKCE, token, gateway, or external-processing path
 is implemented. D-064 is a documentation contract, not product capability or
@@ -492,50 +501,40 @@ privileged adapter is enabled.
   reviewed commit and pass signing, notarization, installer, launch, and rollback
   gates when those systems are introduced.
 
-## Current verified baseline
+## Current implementation and verification baseline — 2026-10-12
 
-The repository currently provides:
+The documented source is remote `main` at
+`26447708934ef7f8118329d1b62977d7f14d45b6`. The maintained
+[capability matrix](ARCHITECTURE.md#current-and-future-capability-matrix) maps
+requirements to implementation and retained evidence. The product currently
+implements native configurable bot advice, fixed collaboration routes, saved
+profiles/manual notes, versioned Knowledge and local diagnostics. The separate
+Conversations workspace and several legacy demos remain simulations.
 
-- a runnable Cortexa Tauri application with macOS menu and window lifecycle;
-- a React workspace with deterministic in-memory assistant interactions;
-- narrow app-info IPC and closed native menu-route events;
-- SQLite migration and bootstrap metadata infrastructure;
-- transport-free gateway request, event, function-schema, policy, approval,
-  cancellation, and in-memory approval-audit primitives;
-- a Rust-internal workflow-local volatile memory and selected-document boundary,
-  including one deterministic Personal Assistant-to-Knowledge task, with no
-  persistence, IPC, provider, or user-facing consumer;
-- a sealed fixture-only Personal-to-Research-to-Knowledge-to-Personal workflow
-  with strict source provenance, typed partial results, child-first
-  cancellation, and content-free volatile workflow evidence. It has no generic
-  or direct consumer; only the fixed demo-host instance below is connected;
-- a manually stepped, process-local lifecycle owner for one fixed instance of
-  that sealed Research/Knowledge workflow, exposed only through four no-input
-  Tauri commands, one non-authoritative notification, and one prop-free visibly
-  simulated panel in the selected Command Center scenario; it retains a closed
-  bounded snapshot, private success/failure schedule, cancellation and late
-  event rejection, and fail-closed cleanup/replacement quarantine;
-- an unwired sealed fixture-only Personal-to-Coding-to-QA-to-Security-to-
-  Personal proposal workflow with strict evidence provenance, typed partial
-  results, closed capability denial, and no execution;
-- two unwired sealed fixture-only Personal-to-Cloud-or-Systems-to-QA-to-
-  Security-to-Personal proposal workflows with strict fixture provenance,
-  typed partial results, closed capability denial, and no I/O or execution;
-- one unwired strict Personal-to-Workflow-Automation-to-Personal proposal
-  lifecycle with five immutable templates, A-D-only take-once manual sealed
-  dispatch, proposal-only E, and no tool or approval execution;
-- one unwired fixture-only/no-I/O bounded-parallel selector with three sealed
-  same-thread event-multiplexed scenarios, explicit failure policy, stable
-  ordinal outcomes, truthful synthesis, and no provider/session/thread work;
-- one frontend-owned deterministic Command Center fixture projection with a
-  lazy route, exact architecture labels, structured alternative, and IPC-free
-  fixture controls. Its required real-browser/Tauri viewport/input/accessibility
-  matrix is complete and verified; the separately rendered read-only projection
-  and lifecycle panels do not populate or control that fixture projection;
-- no live model, gateway, tool execution, durable product persistence, integration,
-  privileged permission, or durable audit path.
+Later private direct-provider increments implement selected real text transport
+without completing the older authenticated-gateway requirements. Provider
+adapters, saved selections and automated tests are not universal entitlement or
+live acceptance. Retained OpenAI/Codex QA applies to specific builds and the
+research route. Other live variants and later candidate acceptance remain open.
 
-This baseline is an engineering proof, not the complete user-ready MVP.
+Individual bot conversations remain volatile on merged main. SQLite persists
+profiles/notes, collaboration rooms/runs, Knowledge versions and link bindings.
+Memory Off excludes the saved note without deleting it; collaboration excludes
+private notes. Search is lexical and sources are explicitly selected, without
+embedding retrieval, automatic RAG or autonomous learning. There is no merged
+executor for model-proposed actions, and no scheduler, working privileged
+integration, durable approval audit, signed distribution or production release.
+
+The earlier deterministic Command Center viewport/input/accessibility
+matrix is complete and verified for its recorded M5 snapshot; that historical
+result is not fresh acceptance of later graph changes or parked D-125/M1/M2.
+
+The Rust-internal runtime, sealed fixture workflows and transport-free governance
+contracts remain separately implemented foundations. They do not imply an
+external framework integration or device authority. Developer ECC installation
+is not a Cortexa capability. Future requirements below remain targets, not
+acceptance evidence; persistent-conversation and isolated-action candidates are
+excluded from this baseline.
 
 ## First usable v0 target
 

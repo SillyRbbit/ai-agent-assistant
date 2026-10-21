@@ -1,3 +1,163 @@
+## 2026-10-13 — Owner-authorized separate worktree archival procedure
+
+The owner authorizes documentation only: add a minimal separate completion-workflow
+procedure for task-owned worktree archival. Ordinary QA-build cleanup continues to
+protect worktrees. Completed acceptance/owner review, applicable separately approved
+publication/merge and passing post-merge checks, exact ownership, resolved dependencies,
+verified durable source/evidence/necessary ignored-file custody and explicit archival
+authorization are all required. Prefer supported managed recoverable archival;
+unsupported or uncertain custody means retain. Record preservation verification,
+recovery semantics and truthful measured reporting in an additive durable receipt.
+Current persistent-memory worktrees and required artifacts remain retained pending
+C7 and remaining closeout. No actual archival/removal, cleanup, signal, credentials,
+provider request, branch, commit, push or merge is authorized. Historical records stay.
+Canonical procedure: [END_SESSION](docs/workflows/END_SESSION.md#task-owned-worktree-archival).
+
+---
+
+## 2026-10-13 — Owner-authorized task-owned QA-build cleanup workflow
+
+The owner authorizes a minimal documentation amendment to the existing completion
+workflow. Cleanup requires completed implementation/checks/native QA, required
+owner review, separately authorized required publication/merge, applicable passing
+post-merge verification and no active session/process/acceptance/rollback dependency.
+The canonical procedure is [END_SESSION](docs/workflows/END_SESSION.md#task-owned-qa-build-cleanup).
+Exact ownership, verified durable custody and explicit cleanup authority precede
+any removal. Protected source/worktrees/Git/data/credentials/history/evidence/backups
+remain. No commit/push/merge or current artifact deletion follows from this amendment.
+Current persistent-memory review build and required artifacts remain retained until
+C7 and remaining closeout requirements pass. Historical decisions/results remain.
+
+---
+
+## 2026-10-11 — Supported D-134 publication-readiness admission
+
+The explicit owner publication authorization includes a separate bounded local
+publication-readiness objective, followed by commit/push/PR/conditional squash
+merge. The frozen maintenance closure is not replayed or rewritten. Its current
+workspace binding differs after the attributable portability/publication edits;
+the resulting Stop block is retained as a receipt, not mislabeled successful.
+
+Use existing general schema-2 admission only after current readiness checks pass
+and every original unresolved criterion has an independent relationship recorded.
+Publication readiness relies on the separately accepted maintenance and current
+source-bound passing checks, never the failed increment as completion evidence.
+Original bound-admission/history/obligation/authority/replay/compatibility defects
+are assessed against later passing maintenance and fresh hooks; the old verification,
+review, preservation and closeout claims remain historical FAIL. Publishing the
+current independently reviewed candidate neither completes that old attempt nor
+certifies missing historical custody. No new validator/exception or real admission
+is authorized. Preserve all raw historical states, reports and immutable receipts.
+
+## 2026-10-11 — Dependent-admission maintenance publication authorized
+
+The owner authorizes publication review, focused commits, one branch push/PR and
+squash merge only after applicable checks and reviews pass, without overriding
+branch protection. The accepted seventeen-path maintenance candidate and existing
+close-without-completion receipt are preserved in durable custody. Original FAIL,
+historical reports, unresolved criteria, missing custody qualifications and D-136
+remain unchanged. This extends publication of the completed maintenance; it is
+not ordinary begin, another milestone, global D-137 or real remediation authority.
+
+Publication review found one attributable portability defect: the new synthetic
+regression fixture selects macOS-only `/private/tmp`. Use Python's platform-neutral
+temporary directory, rerun affected hook checks and documentation/policy/security
+checks, and reuse unchanged application verification with provenance. Preserve
+the frozen maintenance report and earlier receipts; record the publication
+candidate separately. Real admission and execution approvals stay unset.
+
+## 2026-10-11 — Dependent-admission maintenance verification accepted
+
+The separately owner-authorized maintenance repairs the prospective report check
+without changing strict final-report validation. Fresh full verify-004 passes in
+a fresh Cargo target, with pinned installed dependencies copied from the retained
+routing candidate and process-local macOS strip overrides. No source dependency,
+lockfile, toolchain, independent-admission or D-133 behavior changed. The original
+preparation failure, failed implementation and rejected verification receipts remain.
+
+Maintenance acceptance is separate from original FAIL. Freeze the passing
+maintenance report and current inputs, then use existing close-without-completion
+and actual full Stop; their task-local receipts are the final authority for
+closeout, not this prospective statement. Preserve every original unresolved ID
+in the closure disposition and issue no original completion marker. Publication
+and real dependent admission/execution require separate owner authorization and
+fresh bindings. D-136 remains stale and unconsumed; unavailable historical
+custody remains unverified. No global D-137 or new recovery exception is adopted.
+
+## 2026-10-11 — Exact immutable-report formatting exclusion authorized
+
+The owner explicitly approves one exact-path addition to `.prettierignore`:
+`docs/reviews/2026-10-11-dependent-remediation-admission-post-increment-review.md`.
+Its narrow purpose is to preserve the original terminal FAIL report byte-for-byte
+at SHA-256 `ae24c998fdbf448669a1efe2630bddb8e6dcb9b3fa55f98ef99eff7a581848eb`
+while checking current candidate formatting. No other path is newly excluded.
+Strict report, history, scope and evidence validation remain unchanged.
+
+Resume the same owner-amended maintenance without ordinary begin. Preserve the
+previous failing maintenance report in the verified resume snapshot and retain
+all rejected receipts. Passing maintenance, existing closure and full Stop do not
+complete or relabel the original increment. Real admission/execution and
+publication remain unauthorized; D-136 stays unconsumed. This grants no generic
+formatting waiver, authority framework or infrastructure permission.
+
+## 2026-10-11 — Owner-authorized dependent-admission maintenance amendment
+
+The owner explicitly authorizes `dependent-remediation-admission-maintenance`
+without ordinary begin, solely to repair and validate the existing task-bound
+validator, its gate integration, regressions and necessary policy documentation.
+This prospective amendment does not use the unfinished validator to authorize
+itself and creates no general bootstrap route. Platform permissions remain controlling.
+
+Closeout requires a separately passing maintenance report, a valid receipt from
+existing `close-without-completion`, and successful full Stop. The original
+`dependent-remediation-admission` state/report remain FAIL byte-for-byte, without
+a completion marker. The historical fingerprint is not the repaired candidate.
+In-scope debugging and full verification when needed are authorized; publication,
+real dependent admission/execution, D-136 consumption and infrastructure are not.
+Real remediation approvals remain unset. All prior criteria and failures remain
+visible; this amendment grants no historical custody or absence-of-loss claim.
+
+## 2026-10-11 — Dependent admission implementation stopped on regression failure
+
+Supported D-134 admission of `dependent-remediation-admission` succeeded from the
+frozen schema-2 package. The original unapproved request remains unchanged at
+SHA-256 `1456ccaa4742fff4d2045219807a97021300a35013c8da4649cc72be87d8a085`;
+a separate approved request was used. The bounded validator, gate integration and
+synthetic regressions are partial, unaccepted work. Focused tests exited one:
+18 tests, 10 passed, seven errors and one failure. The admission validator calls
+`_safe_report_path`, which requires the prospective final report to exist. Eight
+tests stop at that boundary instead of reaching their intended assertions.
+
+Implementation and further checks stopped under the owner's explicit stop rule.
+No fixture repair or rerun occurred. Existing regressions, docs/repository/security
+checks, unchanged-stage coverage and completion are not established for this diff.
+The governance result is FAIL / Blocked, without a completion marker; do not reuse
+its original admission or infer permission for a retry. See the
+[failed review](docs/reviews/2026-10-11-dependent-remediation-admission-post-increment-review.md).
+Original dual-label FAIL, preparation-format failure, routing FAIL/rollback,
+snapshots, completed later remediation and unconsumed D-136 remain historical.
+Real remediation admission and execution remain unauthorized and unperformed;
+D-137 is not adopted globally. No compilation, publication, Actions or infrastructure
+operation occurred. A separate supported recovery assessment is the next action.
+
+## 2026-10-11 — Dependent-remediation governance readiness authority
+
+The owner separately authorized preparation for one bounded independent governance
+objective: an additive evidence-bound dependent-admission validator for the failed
+dual-label documentation task. This current step permits only planning/readiness,
+surviving-evidence snapshot and non-compilation checks. See the
+[plan](docs/plans/2026-10-11-dependent-remediation-admission.md) and
+[readiness](docs/reviews/2026-10-11-dependent-remediation-admission-readiness-post-increment-review.md).
+No capability is implemented or admitted. D-134 independent admission and D-133
+remain unchanged; no global D-137 adoption or bootstrap exception follows.
+The original FAIL/criterion/report/comparison remain immutable. Four verified
+transcript-held adoption records are retained contents; missing sealed packages,
+ignored-state custody and retired indices remain explicitly unavailable evidence.
+Intentional archival does not establish full preservation, permanent loss or loss acceptance.
+The earlier qualified preservation change applies only to a future separately
+authorized remediation. Governance admission and real admission/execution authority
+remain unset. Any additional acceptance change requires separate owner approval.
+
 ## 2026-10-10 — Bounded selective routing publication authority
 
 The owner authorizes one dependent publication-only export from completed

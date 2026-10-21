@@ -1,3 +1,14 @@
+## 2026-10-12 — Documented merged implementation baseline
+
+This audit documents remote `main` at `26447708934ef7f8118329d1b62977d7f14d45b6`.
+Use the maintained [capability matrix](#current-and-future-capability-matrix) for
+current behavior, roles, data stores and verification limits. Earlier dated
+candidate entries and sealed fixture designs remain historical evidence. Native
+bot chat, collaboration and Knowledge are merged; saved bot conversations and
+isolated-action candidates are not. Documentation changes add no product authority.
+
+---
+
 ## 2026-10-07 — Live-provider bounded acceptance closeout
 
 Quality review: **PASS WITH ADVISORIES** for the approved API/Codex
@@ -983,7 +994,8 @@ Last updated: 2026-09-03
 
 This document distinguishes four states:
 
-- **Current**: present in production source and covered by repository evidence.
+- **Current**: present in the documented source baseline; verification scope is
+  recorded separately and does not imply release readiness.
 - **Mocked**: present only as deterministic, non-authorizing test or UI behavior.
 - **Planned**: approved direction without a shipping implementation.
 - **Prohibited**: intentionally excluded by product or security policy.
@@ -996,17 +1008,19 @@ diagram proves implementation.
 
 ```mermaid
 flowchart LR
-    Human["Human user"] --> UI["React WebView\nCurrent mock workspace"]
-    UI -->|"narrow typed IPC"| Tauri["Tauri boundary"]
-    Tauri --> Core["Trusted Rust core"]
-    Core --> SQLite["SQLite bootstrap\nCurrent limited metadata"]
-    Core -. "planned authenticated HTTPS" .-> Gateway["Product gateway\nPlanned"]
-    Gateway -. "planned Responses API" .-> Model["Model provider\nUntrusted"]
-    Core -. "future restricted adapters" .-> OS["macOS resources"]
-    Model -. "proposal only" .-> Core
+    Human["Owner"] --> UI["React WebView"]
+    UI -->|"typed validated IPC"| Rust["Rust application owners"]
+    Rust --> SQLite["Local profiles, notes, rooms, Knowledge"]
+    Rust -->|"explicit bounded text requests"| Adapters["Native provider/runtime adapters"]
+    Adapters --> Model["Untrusted model/runtime output"]
+    Model --> Rust
+    Rust -->|"native owner selection"| Documents["Bounded Markdown/text snapshots"]
+    Rust -. "planned authenticated service" .-> Gateway["Product gateway"]
 ```
 
-There is no direct model-to-device or WebView-to-device execution path.
+The legacy Conversations workspace is a mock branch of the UI. The native bot
+chat/collaboration branch performs bounded text transport after owner setup and
+acknowledgement. Models and graph projections cannot execute device actions.
 
 ## Trust boundaries
 
@@ -1061,68 +1075,54 @@ current product topology is unchanged.
 
 ```mermaid
 flowchart TD
-    App["App.tsx"] --> State["Application reducer/context"]
-    App --> Pages["Command Center, Conversations, Tasks, Memory, Activity, Integrations, Permissions, Settings"]
-    App --> InfoClient["Typed get_app_info client"]
-    App --> DemoProjectionClient["Closed read-only demo projection client"]
-    Pages --> LifecyclePanel["Selected-scenario simulated lifecycle panel"]
-    LifecyclePanel --> LifecycleClient["Closed lifecycle client"]
-    LifecycleClient --> IPC
-    App --> MenuClient["Typed assistant-menu-route listener"]
-    InfoClient --> IPC["Tauri invoke boundary"]
-    DemoProjectionClient --> IPC
-    IPC --> Info["Rust app_info command"]
-    IPC --> DemoProjection["Rust synthetic demo projection command"]
-    Menu["macOS menu lifecycle"] --> MenuClient
-    Startup["Rust startup"] --> Storage["SQLite bootstrap"]
-    App --> Mock["Deterministic browser mock loop"]
+    App["App.tsx"] --> Pages["Bots, Collaboration, Knowledge, Command Center, Settings"]
+    App --> Mock["Conversations mock and Activity"]
+    Pages --> Clients["Typed Tauri clients"]
+    Clients --> IPC["Registered narrow Rust commands"]
+    IPC --> Chat["Native chat ownership"]
+    IPC --> Workflow["Fixed collaboration ownership"]
+    IPC --> Knowledge["Knowledge snapshots and source selection"]
+    IPC --> Diagnostics["Content-free diagnostics"]
+    Chat --> Dispatch["Shared native adapter dispatch"]
+    Workflow --> Dispatch
+    Workflow --> Storage["SQLite"]
+    Knowledge --> Storage
+    Profiles["Saved bot profiles and notes"] --> Storage
+    Profiles --> Chat
+    Profiles --> Workflow
+    Startup["Startup and native menu lifecycle"] --> Storage
+    Workflow --> Projection["Read-only operational graph snapshots"]
 ```
 
-The React mock loop and the transport-free Rust gateway turn are not wired to
-each other. A separate Rust-owned `ResearchKnowledgeDemoHost` manually drives
-one application-owned sealed D-086 fixture through `NativeAgentRuntime`; its
-narrow Tauri adapter reaches only the separately labelled lifecycle panel in
-the selected scenario. It has no edge to the fixture graph, Conversations,
-provider transport, tools, persistence, or device execution.
+The React mock loop and transport-free gateway turn remain separate. A narrow
+`ResearchKnowledgeDemoHost` still manually drives a sealed D-086 fixture through
+`NativeAgentRuntime`. That synthetic host does not gain provider/device authority
+because separate native chat and collaboration adapters are now implemented.
 
 ## React presentation layer
 
-**Current**:
+`src/App.tsx` composes typed services and routes. `src/application/` owns volatile
+mock/reducer state and cross-page navigation; `src/infrastructure/tauri/` narrows
+native DTOs before presentation. The app-info client runtime-narrows the app-info response
+from unknown to its exact bounded DTO. Bots captures saved preferences and displays
+bounded native conversation state. Collaboration creates rooms, previews fixed
+routes, requires acknowledgement and presents native snapshots/handoffs.
+Knowledge manages note/document versions, selected sources, links, properties,
+lexical search and explicit native import/export. Settings displays sanitized
+native diagnostics. Tasks and Integrations remain placeholders.
 
-- `src/App.tsx` composes the application shell and injects typed services.
-- `src/application/` owns reducer-based volatile state, conversations, mock run
-  lifecycle, provenance, mock results, and menu-route navigation.
-- `src/features/` renders conversations, mock approval, Activity, Tasks,
-  Permissions, Settings, placeholders for Memory and Integrations, and a lazy
-  deterministic Command Center projection.
-- `src/features/command-center/` owns closed fixture projection/validation,
-  seven scenarios, feature-local presentation state, graph/structured
-  alternatives, inspector, and bounded activity. Those fixture controls remain
-  IPC-free. Only the selected Research and Knowledge scenario may explicitly
-  refresh a separate read-only Rust synthetic projection, and it separately
-  mounts one prop-free simulated lifecycle panel. Neither native result
-  populates or controls the fixture graph. React Flow types stop at one adapter.
-- `src/infrastructure/tauri/` runtime-narrows the app-info response from
-  `unknown` to one exact bounded six-field DTO. It separately narrows the
-  synthetic demo-projection reply from `unknown` to one exact versioned DTO
-  with fixed scenario, provenance, three ready roles, and three
-  presentation-only outcomes. Rejected data maps to fixed application copy.
-  The menu-route event is also runtime narrowed. A separate lifecycle client
-  accepts only the exact content-free lifecycle DTO and journal grammar.
-  Explicit command responses are the sole presentation authority; malformed,
-  older, and same-revision events do not mutate state, while every parser-valid
-  newer notification requires explicit snapshot recovery. The client
-  is created and disposed only with the selected-scenario lifecycle panel.
-- Conversations, activity, approval state, tool results, and settings are not
-  persisted by the WebView.
+Command Center has an operational read-only projection of collaboration history,
+with room/run selection, stage topology, activity/inspector and room navigation.
+It also retains separate labelled deterministic demo/projection/lifecycle paths.
+React Flow types remain at presentation adapters. A graph edge or node does not
+select a runtime, execute a task or grant authority.
 
-**Mocked**: assistant streaming, context provenance, tool activity, approval,
-simulated tool results, final answers, Stop, Retry, Activity, and Command Center
-agent/task/workflow state are fixed local behaviors. They perform no model
-request, IPC agent request, or operating-system action. Command Center state is
-persistently labeled `DEMO MODE · SIMULATED AGENT DATA`. The separate Rust
-projection is also synthetic and descriptive; it does not start a run or prove
-that any displayed outcome occurred.
+The legacy Conversations workspace's streaming, provenance, tool activity,
+approval, result, Stop/Retry and Activity loop remain deterministic simulations.
+They are distinct from real native text chat in Bots. Profile/room/Knowledge
+persistence belongs to Rust/SQLite; neither mock state nor graph presentation
+establishes a durable transcript or task executor. Browser storage may retain UI
+preferences, without credential or native authority.
 
 **Prohibited**: authorization, policy override, generic database access, raw
 provider calls, arbitrary command selection, and operating-system execution in
@@ -1155,9 +1155,10 @@ the WebView.
 **Planned**: any future product command must be narrow, typed, locally
 validated, capability-scoped, and separately approved. A generic
 `execute_action`, SQL, shell, filesystem, provider, or tool-dispatch command is
-prohibited. No additional workflow/control IPC exists beyond the fixed
-simulated lifecycle adapter; no polling, provider, generic runtime-selectable,
-or general agent-control IPC exists.
+prohibited. Current registered commands also cover native profiles, chat start/send/poll/
+cancel, model discovery, fixed collaboration, Knowledge and diagnostics. These
+application-owned commands accept bounded settings/content, never arbitrary
+provider frames, secrets, executables, runtime selectors or generic execution.
 
 ## Trusted Rust core
 
@@ -1248,10 +1249,11 @@ audit, filesystem access, background work, or device effect.
 application-owned runtime foundation now exists in Rust. `AgentRuntime`
 constructs one bounded run from application-owned typed input. `RuntimeRun`
 exposes closed identity, status, bounded untrusted-event acceptance, typed
-failure, and exact idempotent cancellation. The repository still has no live
-general application-session runtime consumer, runtime selector, provider
-transport, live model, Hermes adapter, or OpenClaw adapter. The sealed
-Research -> Knowledge demo remains the sole Tauri/UI runtime consumer; the
+failure, and exact idempotent cancellation. This contract has no generic live
+application-session consumer or runtime selector, and no Hermes/OpenClaw adapter.
+Separate provider-chat adapters implement live text transport without making this
+contract caller-selectable. The sealed Research -> Knowledge demo remains its
+sole Tauri/UI runtime consumer; the
 Personal Assistant v0 host is a Rust-only no-input caller with no response
 ingress.
 
@@ -1516,16 +1518,18 @@ before content clone or mutation and never defaults to Personal Assistant.
 Persistence, data-bearing privileged actions, and device effects remain
 separately gated.
 
-The current baseline contains no generic or runtime-selectable multi-agent Tauri
-IPC, authoritative/live multi-agent React state, provider, live model, tool
-executor, platform adapter, durable audit, durable memory, or device action. A
+This Rust-internal governance foundation contains no generic or runtime-selectable
+multi-agent Tauri IPC, provider consumer, executor, durable audit or device action.
+The separate user-facing chat/collaboration/Knowledge branches do not make this
+foundation generically selectable. A
 separate frontend-only `command-center-demo-v1` fixture projection visualizes
 the architecture but is not wired to the Rust catalog, tasks, orchestrator,
 workflows, governance, or runtime. Those generic/catalog surfaces remain
 Rust-only and unwired. The sole narrow exception is the sealed no-input
 Research -> Knowledge demo lifecycle described above; it reaches only its
 separately labelled simulated panel and does not populate the fixture
-projection. The Tasks and Memory screens remain placeholders.
+projection. Tasks remains a placeholder; the Knowledge screen is now implemented
+through a separate bounded document/storage path.
 
 #### Volatile memory and approved-document Knowledge boundary
 
@@ -1912,9 +1916,13 @@ using a closed request and normalized response protocol. Identity-provider,
 cloud-hosting, and AI model-provider support are separate boundaries under
 D-060; approval of one does not approve another.
 
-**Current absence**: the legacy generic provider scaffold was deleted in
-Increment 4K. No HTTP client, provider SDK, gateway origin, model name,
-authentication, credential loader, or live Responses request exists.
+**Current**: the legacy generic provider scaffold remains deleted. Separate
+private native adapters use a Rust HTTP client for OpenAI/Anthropic and loopback
+servers, or the installed Codex app-server runtime. Credentials, model/effort
+validation, bounds and host ownership are application-controlled; see the
+[provider guide](docs/provider-milestone.md#current-provider-guide--2026-10-12).
+These private paths do not implement the authenticated product gateway or revive
+D-032's removed arbitrary-string interface.
 
 **Reserved post-v0 direction; not current capability**: D-119 accepts only a
 closed architecture direction for a future
@@ -2155,18 +2163,19 @@ receipt authorizes dispatch, execution, or provider continuation.
 
 ### Memory store
 
-**Mocked**: the React Memory page is a placeholder and conversation state is
-volatile.
+**Current, user-facing**: bot profiles have explicit persistent owner notes;
+Memory Off excludes a note from requests without deleting the saved value.
+The Knowledge page implements versioned notes/documents, lexical search and
+explicit workflow context. Collaboration excludes private notes. Individual
+bot conversation history is volatile on this baseline. See the
+[capability matrix](#current-and-future-capability-matrix) for limits/evidence.
 
-**Current, unwired and volatile**: D-085 adds a new bounded namespace-aware
-`MemoryStore` owned by one `AgentOrchestrator`, with explicit selected-record
-context, versioned application review, exact deletion, task cleanup, and atomic
-disable. It is not the deleted legacy scaffold and does not persist, cross a
-workflow, or satisfy user-facing product-memory requirements.
-
-**Current absence**: there is no durable product memory repository, SQLite
-product-data schema, encryption/key boundary, restart recovery, export, UI,
-cross-session selector, vector database, embedding service, or semantic index.
+**Current, separately unwired and volatile**: D-085's bounded namespace-aware
+`MemoryStore` belongs to one `AgentOrchestrator`, with selected-record context,
+versioned application review, exact deletion, task cleanup and atomic disable.
+It is distinct from user-facing notes/Knowledge and the deleted legacy scaffold.
+No encryption/key boundary, vector database, embedding service or semantic index
+is implemented. New persistent bot conversation/memory work is candidate-only.
 
 ### Platform adapters
 
@@ -2178,28 +2187,29 @@ or P2 signing-security role. Non-macOS menu lifecycle adapters are no-ops where
 required for compilation.
 
 **Current absence**: the legacy generic platform scaffold was deleted in
-Increment 4M. There are no calendar, reminders, contacts, file, clipboard,
+Increment 4M. There are no general calendar, reminders, contacts, filesystem, clipboard,
 notification, production secret-store, local-authentication, Accessibility,
 screen-capture, Apple Events, or microphone adapters. There is no generic
-`PlatformAdapter` or application-wide credential-store authority.
+`PlatformAdapter` or application-wide credential-store authority. Explicit native
+Knowledge import/export dialogs and the selected-snapshot reader are narrow
+implemented exceptions, not unrestricted filesystem adapters.
 
 ### SQLite storage
 
-**Current**:
+`storage` owns the private `rusqlite` connection with typed errors, enabled
+foreign keys, busy timeout and file-backed WAL. Ordered migrations 1–9 check
+immutable migration checksums and use transactions. Startup uses the app-local
+`assistant-development.sqlite3` file in both debug and release builds.
 
-- `storage` owns a private `rusqlite` connection with typed errors.
-- Every connection enables foreign keys and a busy timeout; file databases use
-  WAL.
-- Embedded ordered migrations create `schema_migrations` and `app_metadata` and
-  verify immutable checksums.
-- Multi-step migration writes use immediate transactions.
-- Startup persists only typed `app_initialized` bootstrap metadata in the debug
-  app-local database. Release startup currently uses in-memory storage.
-- No generic SQL or database IPC exists.
-
-**Current absence**: no conversation, task, memory, credential, token, approval,
-or audit product persistence exists. Database encryption and Keychain-held key
-material are required before sensitive persistence.
+Besides bootstrap metadata, persisted content includes bot profiles, connection
+settings, identity/manual notes, collaboration rooms/runs, Knowledge item/version
+records and link bindings. This is plain owner-content storage; no database
+credentials, tokens or generic SQL/DB IPC are exposed. Individual bot transcripts,
+task execution records and durable approval audit are not persisted on main.
+Encryption/key protection remains an unimplemented target, not current protection.
+The existing target requirement remains: Database encryption and Keychain-held key
+material are required before sensitive persistence. This audit does not assert
+that requirement is satisfied by the current plain private stores.
 
 ## macOS menu bar and window lifecycle
 
@@ -2222,35 +2232,116 @@ reviewed repository ICNS byte-for-byte.
 
 ## Current and future capability matrix
 
-| Capability                                    | State                           | Evidence or gate                                                 |
-| --------------------------------------------- | ------------------------------- | ---------------------------------------------------------------- |
-| React workspace and navigation                | Current                         | Frontend tests and application source                            |
-| Deterministic Command Center projection       | Current, validated fixture UI   | Frontend fixtures/tests plus passed browser/Tauri M5 matrix      |
-| Synthetic Rust demo projection                | Current, read-only/descriptive  | Exact no-argument command, closed DTO, and static F-12 guard     |
-| Synthetic Rust demo lifecycle                 | Current, sealed/manual UI       | Fixed no-input adapter and selected simulated panel only         |
-| Assistant interaction                         | Mocked                          | Deterministic in-memory driver only                              |
-| App info and menu routing                     | Current                         | Narrow Tauri command/event                                       |
-| SQLite bootstrap metadata                     | Current                         | Storage tests and startup integration                            |
-| Gateway request/protocol validation           | Current, transport-free         | Phase 4A and 4N-4P                                               |
-| Function schema and policy binding            | Current, non-authorizing        | Phase 4B-4C and 4Q-4R                                            |
-| Approval presentation/resolution/cancellation | Current, disconnected           | Phase 4D-4E and 4S-4U                                            |
-| Approval audit adapter                        | Current, bound and volatile     | Phase 4H and 4V                                                  |
-| Workflow-local volatile agent memory          | Current, Rust-internal          | D-085 contracts; no memory value/control crosses demo IPC        |
-| Selected UTF-8 text/Markdown document reading | Current, internal/read-only     | D-085 contracts; no path/content crosses demo IPC                |
-| Fixture-only Research/Knowledge workflow      | Current, sealed/demo-host-only  | D-086 contracts behind fixed no-input lifecycle host             |
-| Fixture-only engineering quality workflow     | Current, unwired and sealed     | D-087 proposal contracts; no repository access or execution      |
-| Fixture-only Cloud and Systems workflows      | Current, unwired and sealed     | D-088 separate no-I/O selectors; no live access or execution     |
-| Typed Workflow Automation proposals           | Current, unwired and sealed     | D-090 A-D manual fixture dispatch; E/tools/approvals inert       |
-| Native multi-agent acceptance suite           | Current, deterministic/unwired  | 303 library units + 207 selected contracts; no product effects   |
-| Personal Assistant v0 volatile session path   | Current, transport-free/unwired | V0-1 sealed request/Native branch plus V0-2 bounded session host |
-| Fixed local real-content-v2 evidence lane     | Assessed; operationally Blocked | D-121 rejects the frozen candidate; no runtime or source edge    |
-| Post-v0 selectable connection-profile catalog | Planned and Blocked             | D-119 direction only; ten blocked candidates and no handle       |
-| Live gateway and model-provider transport     | Planned                         | Blocked by auth, provider evidence, HTTPS, operations, and plan  |
-| Restricted tool execution                     | Planned                         | No dispatcher or executor exists                                 |
-| Product memory and task persistence           | Planned                         | Phase 8 direction only                                           |
-| Privileged macOS integrations                 | Planned or prohibited for MVP   | Separate permission and threat-model gates                       |
-| Generic shell or model-to-device execution    | Prohibited                      | `SECURITY.md`                                                    |
-| Signing, notarization, and production release | Planned                         | Phase 10 and `RELEASE_CHECKLIST.md`                              |
+Current snapshot: **2026-10-12**, remote `main`
+`26447708934ef7f8118329d1b62977d7f14d45b6`. This is the maintained capability
+reference. Earlier dated entries describe their recorded candidates and builds.
+Implemented means present in this source, not fully accepted or live verified.
+Report links below are retained evidence; their external temporary artifacts were
+unavailable during this audit, so no artifact revalidation is claimed.
+
+| Capability                                                               | Implementation on documented main                                                                                      | Verification and limits                                                                                                                           | Relevant source / evidence                                                                                                                                                                                  |
+| ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Native workspace and navigation                                          | Implemented; Bots, Collaboration, Knowledge, Command Center and Settings                                               | Automated coverage; native evidence is tied to older recorded builds                                                                              | [App](src/App.tsx), [navigation](src/application/navigation.ts), [UI review](docs/reviews/2026-10-05-ui-ux-redesign-post-increment-review.md)                                                               |
+| Nine bots and personality                                                | Implemented; immutable role IDs, saved nickname, description, avatar, color, tone, verbosity, owner instructions       | Offline persistence/isolation tests; selected-profile restart observed on QA builds                                                               | [definitions](src-tauri/src/agent/definition.rs), [preferences](src-tauri/src/agent_preferences.rs), [identity review](docs/reviews/2026-09-30-bot-identity-personality-post-increment-review.md)           |
+| Conductor and orchestration                                              | Conductor is application coordination presentation; Rust owns fixed routes                                             | Does not add a tenth independent bot, autonomous delegation or authority                                                                          | [Conductor UI](src/features/agents/ConductorIdentity.tsx), [routes](src-tauri/src/collaboration.rs)                                                                                                         |
+| Native bot chat                                                          | Implemented; captured profile/revision, bounded completed-turn context, acknowledged Send                              | Retained OpenAI/Codex live matrix; individual transcripts remain volatile                                                                         | [chat](src-tauri/src/agent_chat.rs), [IPC owner](src-tauri/src/agent_chat_tauri.rs), [live review](docs/reviews/2026-10-06-live-provider-e2e-post-increment-review.md)                                      |
+| Provider connections                                                     | Six adapters/options: Simulation, OpenAI, Anthropic, LM Studio, Ollama, Codex                                          | Adapter fixtures are not account access or live success; hosted paths debug-gated; local server locality unproved                                 | [dispatch](src-tauri/src/agent_adapter.rs), [setup and model rules](docs/provider-milestone.md#current-provider-guide--2026-10-12)                                                                          |
+| Streaming, Stop, errors and recovery                                     | Implemented bounds, cancellation, late-result rejection, sanitized errors; no application retry/fallback               | Native API/Codex partial/Stop/recovery recorded; backend races separately automated; 128-update journal can truncate fragmented answers           | [chat owner](src-tauri/src/agent_chat_tauri.rs), [session limits](src-tauri/src/personal_assistant_v0.rs), [live review](docs/reviews/2026-10-06-live-provider-e2e-post-increment-review.md)                |
+| Four collaboration routes                                                | Implemented; preview/acknowledgement, snapshots, sequential stages and strict version-1 JSON handoffs                  | Offline all-route coverage; research alone recorded live for OpenAI/Codex; schema validity is not factual correctness                             | [route/handoff contracts](src-tauri/src/collaboration.rs), [host](src-tauri/src/collaboration_tauri.rs), [acceptance review](docs/reviews/2026-09-30-bot-collaboration-acceptance-post-increment-review.md) |
+| Collaboration rooms and runs                                             | Implemented SQLite history/deletion; unfinished runs become interrupted on restart                                     | Persistent records do not imply background resumption or agent autonomy                                                                           | [room storage](src-tauri/src/storage/collaboration.rs), [startup](src-tauri/src/storage/store.rs)                                                                                                           |
+| Operational Command Center                                               | Implemented projection of room/run snapshots, stage edges, inspector and room navigation                               | Read-only graph; node/edge display never dispatches work                                                                                          | [projection](src/features/command-center/commandCenterProjection.ts), [page](src/features/command-center/OperationalCommandCenterPage.tsx)                                                                  |
+| Deterministic demos and Conversations workspace                          | Retained simulations, mock approvals/results, fixed Research/Knowledge demo host                                       | Separate fixture evidence; do not describe mock approval as executing an action                                                                   | [mock driver](src/application/mockRunDriver.ts), [demo host](src-tauri/src/research_knowledge_demo_lifecycle_tauri.rs)                                                                                      |
+| Per-bot private notes / Memory Off                                       | Implemented saved manual note and revision isolation; Off excludes note, preserves stored value                        | No automatic learning or cross-bot note sharing; collaboration clears notes                                                                       | [chat context](src-tauri/src/agent_chat.rs), [profile storage](src-tauri/src/storage/agent_preferences.rs)                                                                                                  |
+| Saved individual conversations / newer bot memory                        | **Not merged**; active persistent-memory candidate                                                                     | Required C7 runtime/native acceptance unresolved; not available on documented main                                                                | [candidate boundary](#candidate-only-work-and-policy-drift), baseline chat and migration sources                                                                                                            |
+| Knowledge documents and versions                                         | Implemented notes, selected `.md`/`.txt` snapshots, immutable versions, hash-bound passage provenance, explicit export | Retained native import/search/restart/export Simulation scenario; no watched vault, PDF ingestion or arbitrary filesystem access                  | [Knowledge IPC](src-tauri/src/knowledge_tauri.rs), [reader](src-tauri/src/documents.rs), [document review](docs/reviews/2026-10-01-knowledge-documents-post-increment-review.md)                            |
+| Knowledge links and properties                                           | Implemented `[[Title]]`/aliases, backlinks, neighborhood graph, historical link binding, bounded properties/templates  | Automated/browser evidence; full Obsidian/YAML compatibility and native Quit dirty guard not established                                          | [links](src-tauri/src/knowledge_links.rs), [properties](src/features/knowledge/knowledgeProperties.ts), [workspace review](docs/reviews/2026-10-01-connected-knowledge-workspace-post-increment-review.md)  |
+| Knowledge search and context                                             | Implemented lexical passage matching and explicit selected workflow sources                                            | No embeddings, vector index, semantic retrieval or automatic RAG; provenance identifies content, not truth                                        | [search](src-tauri/src/knowledge_tauri.rs), [source identity](src-tauri/src/knowledge.rs), [picker](src/features/knowledge/SourcePicker.tsx)                                                                |
+| SQLite and diagnostics                                                   | Implemented migrations 1–9, profiles/notes, rooms, Knowledge/link bindings; bounded content-free local logs/export     | Plain local storage, not encrypted memory or durable approval audit; no credential values in these stores                                         | [migrations](src-tauri/src/storage/migrations.rs), [diagnostics](src-tauri/src/diagnostics.rs), [startup](src-tauri/src/startup.rs)                                                                         |
+| Approved actions                                                         | Transport-free policy/approval/audit primitives; merged chat/collaboration output is advice/proposals                  | No merged action executor; mock approvals and validated proposals grant no execution                                                              | [policy](src-tauri/src/policy/engine.rs), [approval manager](src-tauri/src/approvals/manager.rs), [registered IPC](src-tauri/src/lib.rs)                                                                    |
+| Tasks / Integrations / Permissions                                       | Tasks and Integrations placeholders; fixed Permission Center                                                           | No scheduler, privileged access request or working external integration inferred                                                                  | [Tasks](src/features/tasks/TasksPage.tsx), [Permission Center](src/features/permissions/PermissionCenter.tsx), [App](src/App.tsx)                                                                           |
+| Native AgentRuntime and sealed fixture workflows                         | Implemented deterministic foundation and contract demos                                                                | Separate from provider-chat adapters; Hermes deferred, OpenClaw evaluation-only; ECC is developer tooling                                         | [native acceptance](docs/demos/NATIVE_MULTI_AGENT_ACCEPTANCE.md), [runtime](src-tauri/src/agent/runtime.rs)                                                                                                 |
+| GitHub Actions                                                           | Implemented risk-based application and documentation jobs, main-only VPS routing                                       | Retained all-job pass at `026586f`; identical application/config/workflow inputs on this baseline; no fresh runner health or current-SHA CI claim | [CI](.github/workflows/ci.yml), [Documentation](.github/workflows/documentation.yml), [routing review](docs/reviews/2026-10-10-main-linux-routing-documentation-closeout-post-increment-review.md)          |
+| Authenticated product gateway / privileged integrations / signed release | Planned/blocked; separate from current private direct adapters                                                         | No production readiness, cloud deployment, signing or notarization established                                                                    | [requirements](PRODUCT_REQUIREMENTS.md), [release checklist](RELEASE_CHECKLIST.md)                                                                                                                          |
+| Generic shell / model-to-device execution                                | Prohibited on merged main                                                                                              | Configured denials and tests are not proof of complete OS/runtime containment                                                                     | [security](SECURITY.md)                                                                                                                                                                                     |
+
+### Bot roles and application routes
+
+| Canonical ID           | Role                                                |
+| ---------------------- | --------------------------------------------------- |
+| `personal-assistant`   | Personal Assistant; request framing and synthesis   |
+| `research`             | Research; supplied-source analysis                  |
+| `coding`               | Coding; proposed solution and implementation advice |
+| `cloud-infrastructure` | Cloud Infrastructure; architecture assessment       |
+| `systems-operations`   | Systems Operations; operational assessment          |
+| `knowledge-document`   | Knowledge & Document; organizing supplied evidence  |
+| `qa-validation`        | QA & Validation; criteria and proposed checks       |
+| `security-risk`        | Security & Risk; advisory risks                     |
+| `workflow-automation`  | Workflow Automation; proposals and dependencies     |
+
+Editable names and personality do not change these role IDs, routing, permissions
+or authority. Animated mascots reflect UI state, not independent processes.
+Live collaboration uses these **application-owned sequential** routes:
+
+- Research: Personal → Research → Knowledge → Personal.
+- Engineering: Personal → Coding → QA → Security → Personal.
+- Operations: Personal → Cloud → Systems → Security → Personal.
+- Workflow proposal: Personal → Workflow Automation → QA → Personal.
+
+These routes differ from older Rust-internal sealed fixture selectors described
+below. Bot output cannot choose a child, route or tool. Collaboration caps ten
+rooms and four runs per room; inputs contain up to six sources. Native profile
+snapshots are captured at preparation. Acknowledgement does not approve an
+external action. Private notes are excluded; approved source snapshots and prior
+validated handoffs are untrusted context. Mixed Simulation/live routes fail
+readiness rather than silently substituting a simulated stage.
+
+### Local data and Knowledge boundaries
+
+Startup opens `assistant-development.sqlite3` under Tauri's app-local data
+folder in both debug and release modes, with WAL, foreign keys and checked
+migrations. Profiles, notes, collaboration records and Knowledge contain owner
+content; they are not encrypted or credential stores. The Unix directory is
+configured owner-only. Individual bot histories are native process memory;
+the old mock workspace uses volatile frontend state. UI layout preferences may
+use browser storage; neither is a native transcript persistence guarantee.
+
+Knowledge retains at most 200 items, eight versions per item, 16 KiB per text
+snapshot and 4 MiB total. Import is explicit native file selection on macOS;
+no arbitrary WebView path is accepted. Versions/passages carry item/version IDs
+and content hashes. Lexical search lowercases whitespace-separated terms and
+requires every term as a substring within a current-version passage, returning
+at most 50 matches. It does not rank by semantic similarity. The owner explicitly
+selects sources for collaboration; no automatic Knowledge injection into bot
+chat is implemented. Links refer to Knowledge titles, not web retrieval. Exports
+use native selection and exclusive creation; existing files are not overwritten.
+Save before quitting: the in-app unsaved navigation guard does not establish a
+native application-wide Quit guard.
+
+Diagnostics write bounded `diagnostics-*.jsonl` files under the app-local `logs`
+folder, with restricted permissions, rotation and explicit sanitized JSON export.
+The fixed event/category contract excludes prompts, responses, notes, credentials,
+paths and raw upstream errors. This is operational diagnosis, not a security audit
+or durable approval ledger. See [security](SECURITY.md) and
+[troubleshooting](docs/workflows/TROUBLESHOOTING.md).
+
+### Candidate-only work and policy drift
+
+The active `codex/persistent-bot-memory` worktree at base
+`ac04c6e53bc3349496eba44be93e933f05e1519c` has unmerged saved conversations,
+expanded memory and continuation/admission work. Its plan leaves required C7
+native/runtime acceptance unresolved. The active `codex/live-provider-qa`
+worktree at base `bc12776412c717613de1fdc42c38bf3312493726` also carries unmerged
+isolated-action and native-dialog work. PR #139's branch is not an ancestor of
+this documented main. Neither candidate's capabilities or gate state are
+transferred here; their owning sessions must reconcile acceptance/publication.
+
+The non-negotiable prose in `AGENTS.md` and planned direction in
+`docs/PROJECT_DIRECTION.md` still describe older no-provider/no-persistence and
+single-synthetic-host boundaries. Later accepted decisions and merged direct
+adapters/Knowledge create a substantive wording inconsistency. This audit does
+not amend instructions, skills or approval policy and grants no new authority;
+owner-selected policy reconciliation remains separate. D-125/M1/M2 and original
+FAIL evidence stay parked/preserved.
 
 ## Planned first usable v0 boundary
 

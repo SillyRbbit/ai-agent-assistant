@@ -1,3 +1,28 @@
+## 2026-10-12 — Development baseline clarification
+
+The documentation audit targets remote `main`
+`26447708934ef7f8118329d1b62977d7f14d45b6`. Product architecture and evidence are
+centralized in the [capability reference](ARCHITECTURE.md#current-and-future-capability-matrix).
+This annotation updates setup facts, not approval or lifecycle policy.
+
+`.node-version` pins Node 26.3.0; packageManager is npm 11.16.0, with accepted
+engine ranges in package.json. Rust 1.90.0 is pinned with Clippy/rustfmt.
+`npm ci` installs locked dependencies; `npm run tauri -- dev` runs Vite and native
+Tauri debug mode. `npm run dev` alone supplies no native IPC. `npm run build`
+builds/typechecks the frontend; `npm run tauri -- build --no-bundle` is a native
+release build, not an installer or live-provider acceptance. Hosted adapters are
+debug-gated. Do not describe a successful release build as enabling those paths.
+
+Retained target-Mac verification uses process-local Python 3.12, Xcode/SDK 27
+and Cargo build-override strip settings in recorded wrappers/configuration.
+Those are evidence-specific workarounds, not global installation instructions or
+changes to the pinned toolchain. Reuse the exact retained build procedure only
+when its environment/artifact bindings still apply; preserve failed attempts.
+For documentation work run the small required checks and inspect source scripts;
+do not launch or build the application solely to validate prose.
+
+---
+
 # Cortexa engineering guide
 
 Status: Authoritative engineering operating model
@@ -54,24 +79,24 @@ add a superseding decision or current-state update instead.
 
 ## Repository structure
 
-| Path               | Responsibility                                                                                 |
-| ------------------ | ---------------------------------------------------------------------------------------------- |
-| `src/`             | React presentation, volatile application state, and typed Tauri clients                        |
-| `src-tauri/src/`   | Trusted Rust core, Tauri startup, storage, menu lifecycle, and transport-free agent boundaries |
-| `src-tauri/tests/` | Public Rust integration and contract tests                                                     |
-| `.github/`         | Review ownership, issue/PR templates, dependency proposals, and read-only quality workflows    |
-| `.codex/hooks/`    | Shared safe repository inspection, completion guardrails, and tests; not a product boundary    |
-| `.agents/skills/`  | Repository-scoped assistant procedures                                                         |
-| `scripts/`         | Deterministic local verification and repository-health tooling                                 |
-| `assets/branding/` | Canonical Cortexa identity assets                                                              |
-| `docs/branding/`   | Brand and presentation standards                                                               |
-| `docs/product/`    | Inception requirements and target architecture sources                                         |
-| `docs/plans/`      | Proposed, ready, active, and completed bounded plans                                           |
-| `docs/increments/` | Increment completion and checkpoint records                                                    |
-| `docs/reviews/`    | Post-increment machine-readable and human-readable reviews                                     |
-| `docs/github/`     | Licensing status, label taxonomy, and milestone mapping                                        |
-| `docs/workflows/`  | Session and troubleshooting runbooks                                                           |
-| `prompts/`         | Categorized copy-paste increment, review, workflow, and authoring-template prompts             |
+| Path               | Responsibility                                                                                                                      |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `src/`             | React presentation, volatile chat/mock state, Knowledge/collaboration views, and typed Tauri clients                                |
+| `src-tauri/src/`   | Trusted Rust core, Tauri startup/storage, private provider adapters, bounded collaboration, Knowledge and transport-free governance |
+| `src-tauri/tests/` | Public Rust integration and contract tests                                                                                          |
+| `.github/`         | Review ownership, issue/PR templates, dependency proposals, and read-only quality workflows                                         |
+| `.codex/hooks/`    | Shared safe repository inspection, completion guardrails, and tests; not a product boundary                                         |
+| `.agents/skills/`  | Repository-scoped assistant procedures                                                                                              |
+| `scripts/`         | Deterministic local verification and repository-health tooling                                                                      |
+| `assets/branding/` | Canonical Cortexa identity assets                                                                                                   |
+| `docs/branding/`   | Brand and presentation standards                                                                                                    |
+| `docs/product/`    | Inception requirements and target architecture sources                                                                              |
+| `docs/plans/`      | Proposed, ready, active, and completed bounded plans                                                                                |
+| `docs/increments/` | Increment completion and checkpoint records                                                                                         |
+| `docs/reviews/`    | Post-increment machine-readable and human-readable reviews                                                                          |
+| `docs/github/`     | Licensing status, label taxonomy, and milestone mapping                                                                             |
+| `docs/workflows/`  | Session and troubleshooting runbooks                                                                                                |
+| `prompts/`         | Categorized copy-paste increment, review, workflow, and authoring-template prompts                                                  |
 
 Compatibility identifiers retain the historical `ai-agent-assistant` name.
 Human-facing product text uses `Cortexa`; see D-026.
@@ -392,6 +417,19 @@ increment completion and never creates a completion marker.
 Publication is a separate operation. A verified uncommitted increment is not
 published until its commit and remote state are confirmed.
 
+Task-owned QA-build cleanup is a conditional closeout step under
+[End a working session](docs/workflows/END_SESSION.md#task-owned-qa-build-cleanup).
+Record eligibility or the exact retention condition in the handoff. Completion
+alone never authorizes deletion: preserve review builds, acceptance evidence and
+rollback artifacts until that procedure's prerequisites and cleanup authorization
+are satisfied. Publication and merge still require separate authorization.
+
+Worktrees remain protected from QA-build cleanup. Record their separate archival
+disposition under [Task-owned worktree archival](docs/workflows/END_SESSION.md#task-owned-worktree-archival);
+verified durable source/evidence and necessary ignored files, resolved dependencies
+and explicit archival authorization are required. Prefer managed recoverable archival;
+retain persistent-memory worktrees/artifacts pending C7 and remaining closeout.
+
 ## Session start and end
 
 At session start, follow `.agents/skills/session-start/SKILL.md`: read the
@@ -502,3 +540,41 @@ See the [integration plan](docs/plans/2026-10-08-milestone-governance-upstream.m
 and D-134's qualified decision crosswalk. Platform and external access controls
 are never waived. Local receipt hashes preserve workflow integrity, not authenticity
 against a malicious same-user rewrite.
+
+## Task-bound dependent documentation admission
+
+The local additive implementation admits only the original dual-label
+`vps-dual-label-operating-mode` failure into one separately authorized
+`vps-dual-label-operating-mode-remediation` attempt. General D-134 independent
+admission and D-133 retain their original behavior. This is not global D-137.
+
+A request binds checkout, branch, HEAD, current index and workspace, immutable
+raw predecessor/report, historical inventory, original failed comparison,
+qualified archival provenance, explicit unavailable-custody inventory and
+verified surviving copies. Essential state/report/index copies are mandatory;
+retained references are not retained contents. Every unresolved obligation and
+original acceptance criterion carries forward. The single preservation criterion
+replacement requires its own owner decision; it never changes the original FAIL.
+Separate admission and execution authorizations bind the current decision bytes.
+Protected inputs, exact nine-document scope and no-destructive-path contract are
+validated at admission and again for report/finalization/Stop. Final reports still
+require strict existing regular-file validation; prospective admission alone may
+bind a safe absent report directly under docs/reviews.
+
+After separate real authorization, the supported interface is existing
+`begin --increment vps-dual-label-operating-mode-remediation --dependent-request <request>`.
+The read-only `dependent-preservation` command verifies admitted surviving
+bindings, not historical full custody. Schema 5 records only this dependent
+lineage. Content-addressed original bytes and an exclusively created consumed
+receipt reject tampering, replay and observed interruption. An interrupted
+publication may leave an orphan seal or consumed receipt; neither authorizes
+resume. Preserve it and obtain a new recovery decision. A failed dependent
+attempt stays terminal, with no completion marker or automatic successor.
+No executor, live remediation, arbitrary runner/input, authority authenticator,
+restoration, publication or infrastructure permission is introduced.
+
+For the separately owner-amended maintenance of this validator, do not use its
+unfinished route or ordinary begin. Freeze a passing maintenance report and use
+existing close-without-completion; preserve the live failed state byte-for-byte.
+Existing closure verification requirements remain unchanged, including full
+verify. Maintenance success and original increment FAIL are separate results.

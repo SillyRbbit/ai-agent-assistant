@@ -1,3 +1,164 @@
+## 2026-10-13 — Worktree archival amendment follow-up
+
+Next bounded task: read-only owner review/publication-readiness assessment of the
+uncommitted documentation candidate using the exact prompt in
+[HANDOFF](HANDOFF.md#2026-10-13--separate-worktree-archival-workflow-amendment).
+Do not repeat implementation/builds or unchanged validation. Publication remains
+separately authorized; this amendment grants no artifact operations. Preserve
+persistent-memory worktrees/artifacts pending C7 and remaining closeout. Any later
+archival requires every [separate prerequisite](docs/workflows/END_SESSION.md#task-owned-worktree-archival),
+verified durable custody and explicit exact-worktree authorization. Roadmap unchanged.
+
+---
+
+## 2026-10-13 — QA-build cleanup amendment follow-up
+
+Review this uncommitted documentation candidate before any separately authorized
+publication. The underlying roadmap is unchanged. Follow the exact review prompt
+in [HANDOFF](HANDOFF.md#2026-10-13--qa-build-cleanup-workflow-amendment).
+Do not run cleanup now: persistent-memory C7 and remaining closeout are pending;
+retain its review build, required evidence and recovery backups. Cleanup later
+requires every [eligibility condition](docs/workflows/END_SESSION.md#task-owned-qa-build-cleanup),
+verified durable custody and exact task-owned inventory/authorization.
+
+---
+
+## 2026-10-12 — Documentation audit follow-on only
+
+Documented remote source: `main`,
+`26447708934ef7f8118329d1b62977d7f14d45b6` (2026-10-12). The task-owned checkout
+is `/private/tmp/cortexa-documentation-audit-20261012`, detached at that SHA,
+with no local branch. Canonical main remains `a9f2e5e`; active candidates and
+existing changes are preserved. No main checkout reset, branch creation, commit,
+push, PR, merge, launch, provider request or build is part of this task.
+
+The maintained [capability matrix](ARCHITECTURE.md#current-and-future-capability-matrix)
+now distinguishes merged bot/provider/collaboration/Knowledge/diagnostic features
+from mock Conversations and unmerged saved-conversation/memory/isolated-action
+work. README is a concise entry point; provider/setup, architecture, requirements,
+security and troubleshooting prose follow code/configuration rather than old
+blanket mock-only claims. Retained QA/CI is source/build qualified; external
+provider-QA temporary artifacts are unavailable for revalidation here.
+
+Next proposed documentation task: read-only publication-readiness review of the
+[audit plan](docs/plans/2026-10-12-documentation-implementation-audit.md) and
+[report](docs/reviews/2026-10-12-documentation-implementation-audit-post-increment-review.md),
+including updated source binding and lifecycle receipts. It is Ready with
+advisories after this task's checks and valid finalization; publication still
+requires separate authority. Do not repeat completed work or start another
+product milestone. Existing candidate C7 and other live/manual acceptance gaps
+remain with their owning sessions, without changed roadmap order. The older
+instruction wording inconsistency needs separate policy scope, not edits here.
+
+Prompt 1
+
+```text
+Review the completed Cortexa documentation audit in /private/tmp/cortexa-documentation-audit-20261012, documented remote main 26447708934ef7f8118329d1b62977d7f14d45b6. Inspect current repository instructions, Git/main and the 2026-10-12 audit plan/report before editing. Preserve all existing user changes, active candidates and historical evidence; avoid unrelated changes and do not repeat completed auditing, builds or live QA. Assess only documentation publication readiness and the separately reported instruction-policy wording inconsistency. Verify documentation scope, current-source applicability, completion/status/full Stop and documentation/repository/security/whitespace checks. Report drift or ambiguous ownership as a blocker; propose any policy reconciliation separately. Do not modify AGENTS.md, skills, gate code, approval policy or product behavior; no credentials, provider requests, application launch, commits, pushes, PR or merge without separate explicit authority.
+```
+
+---
+
+## 2026-10-11 — Accepted dependent-admission maintenance prepared for publication
+
+The owner now authorizes publication of the complete accepted governance scope,
+with one PR and squash merge only after current applicable checks/reviews pass.
+Existing closeout-summary-002, valid close-without-completion and actual full Stop
+remain preserved in the maintenance state directory. The original increment is
+still terminal FAIL/Blocked without a completion marker; passing maintenance
+never replaces that history. D-136 is preserved and unconsumed. Missing historical
+sealed packages, ignored-state custody and retired indices remain unverified.
+
+Publication review corrected only the synthetic fixture's macOS-specific temporary
+directory to Python's platform-neutral default. Fresh 172 hook tests, including
+27 dependent cases and independent/D-133 regressions, pass. Unchanged application
+stages reuse source-bound verify-004; affected final docs/policy/security/whitespace
+and session checks must pass. The frozen maintenance report and original FAIL
+reports remain byte-identical. See [the additive publication review](docs/reviews/2026-10-11-dependent-remediation-admission-publication-review.md).
+
+The branch is `codex/governance/dependent-remediation-admission`, based on main
+`ac04c6e53bc3349496eba44be93e933f05e1519c`. Publication receipts, exact candidate,
+PR/merge identity and naturally triggered CI belong in
+`.codex/state/dependent-remediation-admission-publication-20261011-01`; do not infer
+integration from this preparation record. Original accepted candidate and raw
+index are retained at
+`/Users/hdang/.codex/backups/cortexa-dependent-maintenance-publication-20261011-31c697050ffe`.
+Real dependent-remediation admission/execution approvals remain unset; no later
+milestone is started. Persistent Conversations and Per-Bot Memory must inspect
+its own current plan/readiness and use verified integrated main, without adopting
+failed documentation criteria or importing unavailable historical custody.
+
+## 2026-10-11 — Maintenance resumes with exact preservation exclusion
+
+The owner authorized the single immutable original FAIL report exclusion from
+formatting. Its contents and SHA stay unchanged; no other exclusion or validator
+relaxation follows. The validator/gate/tests remain the already passing candidate.
+Fresh full `npm run verify` passed with matching installed dependencies and a
+fresh Cargo target. Required documentation/policy/security/whitespace/session
+checks passed. Local maintenance quality is PASS WITH ADVISORIES; closure is
+accepted only with the sealed existing-procedure receipt and full-Stop receipts
+under `.codex/state/dependent-remediation-admission-maintenance-20261011-01`.
+The report binds final documentation checks and unchanged-stage provenance. The previous blocked maintenance
+report and every failed receipt are retained in the verified resume snapshot.
+See [the separate maintenance review](docs/reviews/2026-10-11-dependent-remediation-admission-maintenance-post-increment-review.md) for current results.
+
+The existing close-without-completion procedure and full Stop are the approved
+closeout. No ordinary begin, original FAIL completion marker, real dependent
+attempt, publication, Actions or infrastructure operation is authorized. Historical
+custody qualifications, earlier failure/rollback records and unconsumed D-136
+remain unchanged. The entries below retain the earlier observed states.
+
+## 2026-10-11 — Task-bound dependent-admission maintenance
+
+The owner separately authorizes pre-admission maintenance of the failed
+`dependent-remediation-admission` implementation without ordinary begin. The
+prospective report check now permits an absent, correctly named final report;
+finalization still requires a regular existing report. Required raw state,
+report and current-index snapshot anchors, interruption and replay rejection
+remain fail-closed. Independent admission and D-133 stay separate; D-137 is not
+adopted globally. Fresh focused (27), hook (172) and repository (98) regressions pass. Repository,
+security, whitespace and session checks pass. Maintenance closeout is BLOCKED:
+full verify and docs:check reject one formatting escape in the immutable original
+FAIL report. No compilation occurred; closure and successful Stop are not claimed. See
+[the separate maintenance report](docs/reviews/2026-10-11-dependent-remediation-admission-maintenance-post-increment-review.md) for the final result and receipts.
+
+The original failed increment/report, preparation-format failure and earlier
+FAIL/rollback records remain unchanged. Historical fingerprint
+`c0267727928ee799f144305dd2f6ec27637a1f1d92a1badc2874b64b9db4e19d`
+is not the maintenance candidate. The verified recoverable snapshot is
+`/Users/hdang/.codex/backups/cortexa-dependent-maintenance-20261011-3022939808fc`.
+No completed historical comparison is repeated. Missing sealed packages, ignored
+custody and retired indices remain unavailable evidence, not proven loss or full
+preservation. D-136 remains preserved, stale and unconsumed.
+
+Real `vps-dual-label-operating-mode-remediation` admission and execution approvals
+remain unset. Current code is local and unpublished. Any publication or real
+attempt needs separate owner authority and fresh exact bindings. No Actions,
+PR139, runner, infrastructure or application changes occur here. The dated
+failure and preparation records below remain historical.
+
+## 2026-10-11 — Dependent admission implementation stopped on regression failure
+
+Supported D-134 admission of `dependent-remediation-admission` succeeded from the
+frozen schema-2 package. The original unapproved request remains unchanged at
+SHA-256 `1456ccaa4742fff4d2045219807a97021300a35013c8da4649cc72be87d8a085`;
+a separate approved request was used. The bounded validator, gate integration and
+synthetic regressions are partial, unaccepted work. Focused tests exited one:
+18 tests, 10 passed, seven errors and one failure. The admission validator calls
+`_safe_report_path`, which requires the prospective final report to exist. Eight
+tests stop at that boundary instead of reaching their intended assertions.
+
+Implementation and further checks stopped under the owner's explicit stop rule.
+No fixture repair or rerun occurred. Existing regressions, docs/repository/security
+checks, unchanged-stage coverage and completion are not established for this diff.
+The governance result is FAIL / Blocked, without a completion marker; do not reuse
+its original admission or infer permission for a retry. See the
+[failed review](docs/reviews/2026-10-11-dependent-remediation-admission-post-increment-review.md).
+Original dual-label FAIL, preparation-format failure, routing FAIL/rollback,
+snapshots, completed later remediation and unconsumed D-136 remain historical.
+Real remediation admission and execution remain unauthorized and unperformed;
+D-137 is not adopted globally. No compilation, publication, Actions or infrastructure
+operation occurred. A separate supported recovery assessment is the next action.
+
 ## 2026-10-10 — Main Linux routing acceptance reconciled
 
 Current evidence supersedes the pending publication/Actions statements below; their dated bodies remain verbatim. The distinct `main-linux-routing-local-remediation` successor completed locally with PASS WITH ADVISORIES, valid completion and full Stop. Its original predecessor remains terminal **FAIL / Blocked**, without a completion marker.

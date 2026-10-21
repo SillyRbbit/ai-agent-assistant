@@ -1,3 +1,47 @@
+## 2026-10-12 — Evidence applicability for the documentation baseline
+
+This audit documents remote `main` at
+`26447708934ef7f8118329d1b62977d7f14d45b6`; it runs only documentation,
+repository, security-pattern, whitespace and session checks. Setup/launch/build
+commands were checked against configuration, not executed here. No application,
+provider request, model discovery, runtime login or full build was performed.
+
+Reuse is bounded: `git diff 026586fdbaa415e16714ed37c109fe3ffc090bfe HEAD -- src
+src-tauri package.json package-lock.json .github/workflows` has no changes.
+Application/dependency/workflow inputs therefore match the retained all-job CI
+and Documentation acceptance at that SHA in the
+[routing review](docs/reviews/2026-10-10-main-linux-routing-documentation-closeout-post-increment-review.md).
+Later governance inputs differ, so this is not fresh current-SHA full verification
+or current runner health. Historical failed runs remain failed.
+
+The [live review](docs/reviews/2026-10-06-live-provider-e2e-post-increment-review.md)
+records installed-runtime/build-bound OpenAI/Codex native completion, streaming,
+follow-up, active Stop, recovery, profile restart/isolation and the research route.
+Its A/B repaired bundle is recorded under
+`/private/tmp/cortexa-codex-effort-bundle-o9c6phuu`; the external verification/QA
+roots and artifact were unavailable during this audit. The retained report is
+citable historical evidence, not a freshly validated artifact or blanket live
+acceptance of later builds. Completion-edge UI observations do not establish
+backend Stop ordering; automated race regressions are distinct.
+
+The [Knowledge document review](docs/reviews/2026-10-01-knowledge-documents-post-increment-review.md)
+records native selected-file import, search, Simulation workflow, references,
+draft, restart/export and navigation checks on its bound artifacts. The
+[connected workspace review](docs/reviews/2026-10-01-connected-knowledge-workspace-post-increment-review.md)
+adds automated/browser link/property/graph evidence and retains native Quit
+limitations. Neither proves live-provider RAG or complete Obsidian compatibility.
+
+Required candidate memory C7/native runtime acceptance remains unresolved in its
+owning worktree. Anthropic/local live operation, other live collaboration routes,
+production deployment/security containment and signing/notarization are not
+established by reused evidence. See the
+[current capability matrix](ARCHITECTURE.md#current-and-future-capability-matrix)
+and the [documentation audit review](docs/reviews/2026-10-12-documentation-implementation-audit-post-increment-review.md)
+for this task's fresh results and exclusions. Do not rerun builds or live QA
+solely to update documentation.
+
+---
+
 ## 2026-10-07 — Live-provider bounded acceptance closeout
 
 Quality review: **PASS WITH ADVISORIES** for the approved API/Codex

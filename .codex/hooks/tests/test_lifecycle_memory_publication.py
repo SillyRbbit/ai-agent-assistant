@@ -242,6 +242,20 @@ class MemoryPublicationTests(unittest.TestCase):
         with mock.patch.object(publication, 'MAX_BYTES', 10):
             with self.assertRaises(gate.GateError): publication.unpack(lzma.compress(b' ' * 11))
 
+    def test_public_tree_census_bounds_and_timeout(self):
+        entries = publication.tree_entries(self.root, self.head)
+        headers = b''.join((oid + ' blob ' + str(publication.MAX_BYTES + 1) + '\n').encode()
+                           for _, oid in entries.values())
+        response = subprocess.CompletedProcess(['git'], 0, stdout=headers, stderr=b'')
+        with mock.patch.object(publication, 'tree_entries', return_value=entries):
+            with mock.patch.object(publication.subprocess, 'run', return_value=response):
+                with self.assertRaisesRegex(gate.GateError, 'census bounds'):
+                    publication.verify_tree_contents(self.root, self.head, self.accepted['manifest'])
+            with mock.patch.object(publication.subprocess, 'run',
+                                   side_effect=subprocess.TimeoutExpired(['git'], 15)):
+                with self.assertRaisesRegex(gate.GateError, 'capture timeout'):
+                    publication.verify_tree_contents(self.root, self.head, self.accepted['manifest'])
+
     def test_wrong_root_or_branch_rejected(self):
         self.seal(); self.git('branch', '-m', 'wrong')
         with self.assertRaisesRegex(gate.GateError, 'checkout identity'): self.validate()

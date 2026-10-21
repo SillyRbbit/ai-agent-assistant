@@ -5,158 +5,95 @@
 
 <img src="assets/branding/logo-primary.png" alt="Cortexa approved circuit-brain logo and wordmark" width="240" />
 
-Cortexa is a local-first Tauri desktop application exploring a controlled
-executive-assistant workflow. The model is treated as an untrusted planner;
-deterministic Rust boundaries remain responsible for validation, policy,
-approval, eventual restricted execution, and audit.
+Cortexa is a private, local-first desktop assistant built with Tauri, React,
+TypeScript and Rust. It provides configurable bots, bounded text conversations,
+fixed collaboration workflows and a local Knowledge workspace. Models and the
+WebView are untrusted; Rust owns validation and application control.
 
-> **Pre-production status:** this repository is an engineering proof, not a
-> production-ready assistant. The current interaction is a deterministic local
-> mock. There is no live model, product gateway, tool executor, product-data
-> persistence, durable audit, signed installer, or production support promise.
+## What currently works
 
-## Current status
+Documentation baseline: GitHub `main` at
+`26447708934ef7f8118329d1b62977d7f14d45b6`, inspected on 2026-10-12.
 
-| State          | Repository evidence                                                                                                                                      |
-| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Available now  | Native Cortexa window and menu lifecycle, React workspace, typed app-info IPC, SQLite bootstrap metadata, strict transport-free Rust security primitives |
-| Mocked         | Assistant streaming, context provenance, approval, simulated tool result, final answer, Stop, Retry, and Activity                                        |
-| Planned        | Authenticated gateway, live Responses transport, product persistence, restricted tools, integrations, durable audit, signing, and notarization           |
-| Prohibited MVP | Generic shell, direct model-to-device execution, unrestricted filesystem or SQL, autonomous consequential external actions                               |
+- Nine bots with saved identity, personality, provider/model/reasoning settings
+  and explicit private notes. Conductor presents application coordination.
+- Native bot chat with Simulation, OpenAI API, Anthropic API, LM Studio,
+  Ollama and headless Codex adapters, subject to owner setup and runtime access.
+  Streaming, cancellation and sanitized errors are implemented.
+- Four fixed collaboration routes with validated handoffs, persisted rooms and
+  a read-only Command Center graph of recorded runs.
+- Knowledge notes and selected Markdown/text snapshots, versions, lexical passage
+  search, internal links/backlinks, properties and explicit workflow source selection.
+- SQLite-backed profiles, notes, rooms and Knowledge; local content-free diagnostics.
 
-Detailed evidence lives in [PROJECT_STATUS.md](PROJECT_STATUS.md). Milestone
-status and acceptance gates live in [ROADMAP.md](ROADMAP.md).
+The **Conversations** workspace still contains a deterministic mock interaction.
+Live bot chat is in **Bots**. Tasks and Integrations remain placeholders. The
+[capability and evidence matrix](ARCHITECTURE.md#current-and-future-capability-matrix)
+distinguishes merged features, simulations, candidate-only work and verification.
 
-## Architecture summary
+## Setup and launch
 
-```mermaid
-flowchart LR
-    Human["Human user"] --> WebView["React WebView\ncurrent mock workspace"]
-    WebView -->|"narrow typed IPC"| Rust["Trusted Rust core"]
-    Rust --> SQLite["SQLite bootstrap metadata"]
-    Rust -. "planned authenticated HTTPS" .-> Gateway["Product gateway"]
-    Gateway -. "planned Responses API" .-> Model["Untrusted model"]
-    Rust -. "future restricted adapters" .-> Device["Approved device resources"]
-```
-
-There is no direct model-to-device or generic WebView-to-device execution path.
-The React mock loop and transport-free Rust gateway turn are not wired together.
-See [ARCHITECTURE.md](ARCHITECTURE.md) for current trust boundaries and the
-current-versus-future capability matrix.
-
-## Security principles
-
-- Treat model output, gateway events, the WebView, files, websites, clipboard
-  content, connected-system data, and tool results as untrusted.
-- Keep production provider credentials out of the desktop application,
-  WebView, SQLite, logs, and audit records.
-- Validate tool identity, arguments, policy, approval state, replay,
-  cancellation, expiry, and limits in trusted Rust.
-- Keep approval decisions, policy outcomes, and audit receipts non-authorizing.
-- Fail closed on unknown tools, fields, states, identities, or evidence.
-- Request no privileged operating-system permission without a separately
-  approved threat model and user-initiated flow.
-
-Read [SECURITY.md](SECURITY.md) before reporting or changing a trust boundary.
-
-## Development prerequisites
-
-- macOS with Xcode command-line tools for native Tauri development
-- Node.js `26.3.0` and npm `11.16.0` preferred
-- Rust `1.90.0` with Clippy and rustfmt
-
-The repository also accepts the Node.js and npm ranges declared in
-[`package.json`](package.json).
-
-```bash
-xcode-select --install
-brew install rustup
-export PATH="$(brew --prefix rustup)/bin:$PATH"
-rustup toolchain install 1.90.0 --profile minimal --component clippy,rustfmt
-```
-
-Verify the active tools:
-
-```bash
-node --version
-npm --version
-cargo --version
-rustc --version
-```
-
-## Setup and run
+Native development targets macOS 14+; retained arm64 build evidence does not
+establish support for every Mac. Install Xcode command-line tools, Node.js
+`26.3.0`, npm `11.16.0` and Rust `1.90.0` with Clippy/rustfmt. Accepted Node/npm
+ranges are in [package.json](package.json); Rust is pinned in
+[rust-toolchain.toml](rust-toolchain.toml).
 
 ```bash
 npm ci
 npm run tauri -- dev
 ```
 
-Expected development result: a native window titled **Cortexa** opens and the
-Settings diagnostics report **Rust core connected**. This does not prove a live
-assistant or production release.
+This starts Vite and the native debug application. `npm run dev` alone starts the
+browser presentation and does not supply native IPC. Setup/launch commands were
+checked against configuration during this documentation audit, **not executed**.
+See the [provider setup guide](docs/provider-milestone.md#current-provider-guide--2026-10-12)
+before using a live connection. Hosted adapters require a debug build and private
+owner configuration; choosing or saving a profile is not proof of authentication.
 
-## Verification
+## Acceptance and limitations
 
-Run the complete local gate:
+This remains an unsigned personal development application. Retained source/build
+bound QA records OpenAI/Codex completion, streaming, Stop/recovery and the research
+route; other provider/route variants are not fully live verified. Those results
+apply to their recorded artifacts, not every later build. This audit ran no app,
+provider request or build. Details are in [TESTING_GUIDE.md](TESTING_GUIDE.md).
+
+Individual bot chat history is volatile on this baseline. Persistent conversations
+and newer per-bot memory are active, unmerged work. Memory Off excludes the saved
+note from chat context without deleting it. Collaboration excludes private notes.
+Knowledge search is lexical, not embedding-based RAG; selected content is sent
+only through the explicit workflow source boundary. Models cannot browse, run
+commands, edit files or execute their proposed actions on merged main.
+
+Review [SECURITY.md](SECURITY.md) for configured controls and known enforcement
+limits. No signed/notarized release, production support, product gateway,
+privileged integrations or general action executor is established.
+
+## Development and documentation
+
+For documentation-only edits:
 
 ```bash
-npm run verify
-```
-
-Useful focused commands:
-
-```bash
-npm run format:check
-npm run lint
-npm run typecheck
-npm run test:unit
-npm run test:integration
-npm run test:repository
 npm run docs:check
 npm run repository:check
-npm run build
+npm run security:scan
+git diff --check
 ```
 
-The repository defines read-only, risk-based [application
-CI](.github/workflows/ci.yml) and
-[documentation](.github/workflows/documentation.yml) workflows. Application CI
-classifies source changes into frontend, Rust, cross-cutting, and dependency
-audit jobs; documentation-only changes use the smaller documentation workflow.
-GitHub checks complement rather than replace the local final increment gate. A
-green development build is not a signed, notarized, or supported production
-release.
+Product changes use the applicable risk-based checks in
+[ENGINEERING_GUIDE.md](ENGINEERING_GUIDE.md) and [TESTING_GUIDE.md](TESTING_GUIDE.md);
+`npm run verify` is the full local gate. CI complements local acceptance. Linux
+jobs route main to `cortexa-linux` and development refs to `cortexa-ci`; target-Mac
+Rust retains its own route. See the [runner guide](docs/github/SELF_HOSTED_RUNNER.md).
 
-## Contributing and planning
+Start with the [documentation index](docs/README.md), [project status](PROJECT_STATUS.md),
+[handoff](HANDOFF.md), [next steps](NEXT_STEPS.md),
+[troubleshooting](docs/workflows/TROUBLESHOOTING.md), and
+[contributor guide](CONTRIBUTING.md). Developer-installed ECC assists repository
+work; it is not a Cortexa bot framework or application integration.
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening an issue or pull request.
-Current work is selected from [NEXT_STEPS.md](NEXT_STEPS.md), and durable
-engineering rules live in [ENGINEERING_GUIDE.md](ENGINEERING_GUIDE.md).
-
-Browse the [documentation index](docs/README.md) for guides, plans, decisions,
-architecture references, and historical evidence.
-
-Useful references:
-
-- [Product requirements](PRODUCT_REQUIREMENTS.md)
-- [Architecture](ARCHITECTURE.md)
-- [Roadmap](ROADMAP.md)
-- [Testing guide](TESTING_GUIDE.md)
-- [Security checklist](SECURITY_CHECKLIST.md)
-- [Release checklist](RELEASE_CHECKLIST.md)
-- [Brand guidelines](docs/branding/BRAND_GUIDELINES.md)
-- [GitHub labels](docs/github/LABELS.md)
-- [GitHub milestones](docs/github/MILESTONES.md)
-
-## Compatibility identifiers
-
-Human-facing product text uses `Cortexa`. The repository, npm package, Cargo
-package, executable, bundle identifier, database, IPC, and other compatibility
-identifiers intentionally retain the historical `ai-agent-assistant` naming.
-See D-026 in [DECISIONS.md](DECISIONS.md).
-
-## Licensing
-
-No open-source license has been selected or granted. Repository access does not
-itself grant permission to use, copy, modify, or distribute the contents. Read
-the current [licensing decision record](docs/github/LICENSING.md) before
-contributing or redistributing material.
+Compatibility identifiers retain `ai-agent-assistant` and
+`com.aiagentassistant.desktop`. No open-source license is granted; see the
+[licensing record](docs/github/LICENSING.md). Current branding is documented in
+[brand guidelines](docs/branding/BRAND_GUIDELINES.md).

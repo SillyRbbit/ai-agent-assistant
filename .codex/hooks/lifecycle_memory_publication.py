@@ -46,6 +46,7 @@ CHECK_ARGV = {
 }
 MAX_STEPS = 4
 MAX_BYTES = 4 * 1024 * 1024
+MAX_TREE_BYTES = 64 * 1024 * 1024
 require = closure.require
 
 
@@ -197,10 +198,10 @@ def verify_tree_contents(root: Path, commit: str, manifest: dict[str, Any]) -> N
                 and re.fullmatch(b'[0-9]{1,8}', fields[2]) is not None,
                 'publication object census identity')
         size = int(fields[2]); total += size + len(header) + 2
-        require(size <= MAX_BYTES and total <= 16 * 1024 * 1024, 'publication object census bounds')
+        require(size <= MAX_BYTES and total <= MAX_TREE_BYTES, 'publication object census bounds')
     result = batch('--batch')
     require(result.returncode == 0 and not result.stderr
-            and len(result.stdout) <= 16 * 1024 * 1024, 'publication bounded object capture')
+            and len(result.stdout) <= MAX_TREE_BYTES, 'publication bounded object capture')
     position = 0
     for name, oid in zip(names, oids):
         end = result.stdout.find(b'\n', position)

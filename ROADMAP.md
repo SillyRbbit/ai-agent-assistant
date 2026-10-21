@@ -1,3 +1,15 @@
+## 2026-10-12 — Capability evidence applicability
+
+The [current capability reference](ARCHITECTURE.md#current-and-future-capability-matrix)
+documents remote main `2644770` and supersedes blanket availability claims in
+older dated candidate notes below. Merged private providers/collaboration/Knowledge
+are implemented; candidate saved conversations/memory and isolated actions are
+not promoted. Recorded native/live/CI acceptance applies only to its source/build
+scope. This documentation audit neither marks the product complete nor changes
+milestone order, failed results or future implementation authority.
+
+---
+
 ## 2026-09-30 — Bot Collaboration local acceptance
 
 The owner-authorized `bot-collaboration` implementation is locally accepted in
