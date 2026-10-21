@@ -5957,3 +5957,84 @@ The prior cleanup assessment is reused: sixteen archived originals were already
 retired after verified cloud recovery; six held archived bundles and the mounted
 image contents remain protected. No further eligible deletion was established.
 See the [publication plan](docs/plans/2026-10-21-persistent-memory-publication.md).
+
+## 2026-10-21 — Local Tasks and Follow-ups implementation
+
+The owner-selected Tasks milestone is implemented in the dedicated
+`local-tasks-followups` worktree based on merged PR151. It is not committed or
+published. Four fixed native commands provide user-operated task listing, saving,
+completion/reopening and confirmed deletion through the existing app storage.
+Task-only migration11 preserves earlier migration definitions and stored content.
+Closed priority values, validated date-only due dates, 240-byte titles, 8,192-byte
+notes, 500 tasks and revision-checked mutations bound this local data surface.
+
+The Tasks page includes notes, due date and priority editing, status/priority/text
+filters, safe load/reload and mutation states, fixed error messages, exact-task
+deletion confirmation and late-response/store-ownership guards. Browser preview
+explicitly cannot persist tasks. Product tasks do not use agent-orchestration
+tasks, prompts, provider tools, RAG or background execution. No notifications or
+calendar integration are added.
+
+Focused frontend/boundary and storage checks have passed; required final full
+verification and formal milestone closeout remain pending. No native GUI or
+provider acceptance is claimed. Readiness checks preserved the initial Python
+version failure; the first frontend cases, cache-placement lint findings and
+migration-array compile error remain in the task evidence with their corrections.
+The existing qualified installed dependencies and public registry cache are
+reused without installation or downloads, in isolated task-owned copies.
+
+See the [Tasks plan](docs/plans/2026-10-21-local-tasks-followups.md). RAG owns
+Knowledge/retrieval; the owner approved only Tasks-specific declarations and
+registrations in the shared native entry point. Existing memory acceptance,
+retained images/builds, ledger89/96, HP work and parked histories remain unchanged.
+Fresh resources belong to this task alone; no memory reservation was reused.
+
+## 2026-10-21 Local Tasks acceptance and closeout
+
+Local Tasks and Follow-ups is implemented and acceptance verified in the dedicated
+`local-tasks-followups` checkout at integrated PR151. Required `npm run verify`
+passed on the final source: 291 hook checks, 100 repository checks, 629 frontend
+tests across 44 files, 537 Rust library tests, integration contracts/smokes,
+strict lint/type/format checks and the native release build. Its bounded receipt
+records exit0 in620.012598417seconds. Subsequent changes are documentation only.
+
+A separately identified unsigned “Cortexa Tasks QA” build used fresh dedicated
+app data and no personal data or provider requests. Native computer control
+verified creation, edited notes, high priority, due date2026-11-05, completion,
+completed/open filtering, reopening, search, explicit deletion confirmation with
+Keep task, and persistence after a normal process quit/restart. Both launch
+waiters exited0 with no owned child group remaining. Permanent GUI deletion was
+not performed; actual deletion, stale revisions and migration/reopen behavior
+passed deterministic Rust and frontend tests. The synthetic task and a verified
+final database backup remain retained. No owner database was opened or upgraded.
+
+The original memory/C7 results, ledger89/96, retained mounted image, review builds,
+HP histories, raw indexes, admission and RAG-owned code remain unchanged. Tasks
+adds migration11; older builds with only migration10 must not share this upgraded
+QA database. Coordinate the migration registry and separate command-registration
+sections before integrating parallel RAG work. No current RAG acceptance is claimed.
+
+Review found no unresolved completion-blocking defect. Retained advisories are
+macOS-only live coverage, a release-tool Xcode-platforms warning despite successful
+build under the pinned explicit SDK, and shared-registry integration coordination.
+No global toolchain setting, permission or security protection was changed.
+
+All failed preparation/test receipts remain visible. A pre-restart backup attempt
+rejected whole-stat equality before copying; the differing field was not retained
+and its cause is unknown. After final normal exit, fresh descriptor-bound custody
+and explicit non-access-time checks produced a byte-verified backup of the exact
+owned QA database/WAL/SHM. No data deletion or irreversible action occurred.
+
+Task evidence, source/configuration bindings, failures and backup are retained in
+`/Users/hdang/.codex/visualizations/2026/09/21/01a0c184-189a-7b01-ae8f-07cfb1b83d96/local-tasks-followups-20261021-01`.
+The final report is
+[Local Tasks post-increment review](docs/reviews/2026-10-21-local-tasks-followups-post-increment-review.md).
+Normal schema2 finalization and an actual task-local complete-payload Stop are
+required; consult the current local marker and external final handoff for their
+actual outcome. Historical readiness evidence is unchanged.
+
+QA-build cleanup and worktree archival are deferred: retain the accepted Tasks QA
+bundle, default-release recovery executable, isolated dependencies, QA data, source
+and evidence. No deletion/archival was authorized, none ran and no physical disk
+recovery is claimed. No commit, push, merge or publication occurred. The dedicated
+worktree remains detached with attributed local changes. Do not begin a successor.

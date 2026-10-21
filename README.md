@@ -27,7 +27,10 @@ Documentation baseline: GitHub `main` at
 - SQLite-backed profiles, notes, rooms and Knowledge; local content-free diagnostics.
 
 The **Conversations** workspace still contains a deterministic mock interaction.
-Live bot chat is in **Bots**. Tasks and Integrations remain placeholders. The
+Live bot chat is in **Bots**. **Tasks** supports user-operated local task creation,
+editing, completion/reopening, deletion, due dates, priority, notes and filtering.
+Tasks persist in the desktop app; browser preview cannot save them. Integrations
+remain placeholders. The
 [capability and evidence matrix](ARCHITECTURE.md#current-and-future-capability-matrix)
 distinguishes merged features, simulations, candidate-only work and verification.
 

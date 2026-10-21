@@ -7339,3 +7339,15 @@ The prior cleanup assessment is reused: sixteen archived originals were already
 retired after verified cloud recovery; six held archived bundles and the mounted
 image contents remain protected. No further eligible deletion was established.
 See the [publication plan](docs/plans/2026-10-21-persistent-memory-publication.md).
+
+## 2026-10-21 — Owner-selected Local Tasks and Follow-ups
+
+The owner authorizes user-operated local task CRUD, completion/reopening, due
+dates, priority, notes, filtering and restart persistence alongside RAG. See the
+[bounded Tasks plan](docs/plans/2026-10-21-local-tasks-followups.md). The dedicated
+worktree starts from merged PR151. Shared native registration ownership is split
+by explicit owner approval: only Tasks declarations/commands here; Knowledge and
+retrieval remain RAG-owned. Preserve memory acceptance and all historical evidence.
+Readiness/admission and implementation are pending; no completed capability or
+passing gate is claimed. No provider, scheduler, notification, external-calendar,
+RAG/context, installation, cleanup or publication authority follows.

@@ -39,7 +39,7 @@ impl MenuBarAction {
         match self {
             Self::ShowMainWindow => "Open Cortexa",
             Self::NewRequest => "New Request",
-            Self::TasksPlaceholder => "Tasks (Coming Soon)",
+            Self::TasksPlaceholder => "Tasks",
             Self::Quit => "Quit Cortexa",
         }
     }
@@ -87,7 +87,7 @@ mod tests {
             vec![
                 ("menu-bar-show-main-window", "Open Cortexa"),
                 ("menu-bar-new-request", "New Request"),
-                ("menu-bar-tasks-placeholder", "Tasks (Coming Soon)"),
+                ("menu-bar-tasks-placeholder", "Tasks"),
                 ("menu-bar-quit", "Quit Cortexa"),
             ]
         );

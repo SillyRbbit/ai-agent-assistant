@@ -86,6 +86,9 @@ DOCUMENTATION_TRUTH_MARKERS = (
     ),
 )
 EXPECTED_TAURI_IMPORTS = {
+    "src/infrastructure/tauri/local-tasks-client.ts": (
+        'import { invoke, isTauri } from "@tauri-apps/api/core";',
+    ),
     "src/infrastructure/tauri/diagnostics-client.ts": (
         'import { invoke, isTauri } from "@tauri-apps/api/core";',
     ),
@@ -127,6 +130,12 @@ EXPECTED_TAURI_INVOKES = {
         'invoke<unknown>("delete_saved_agent_conversation", {\n        request: { conversationId },\n      })',
         'invoke<unknown>("save_conversation_fact", {\n        request: { conversationId, turnId, text, revision },\n      })',
         'invoke<unknown>("read_agent_note_provenance", { request: { agentId } })',
+    ),
+    "src/infrastructure/tauri/local-tasks-client.ts": (
+        'invoke<unknown>("list_local_tasks")',
+        'invoke<unknown>("save_local_task", { request })',
+        'invoke<unknown>("set_local_task_completion", { request })',
+        'invoke<unknown>("remove_local_task", { request })',
     ),
     "src/infrastructure/tauri/diagnostics-client.ts": (
         'invoke<unknown>("read_diagnostics")',
@@ -294,6 +303,10 @@ EXPECTED_CAPABILITY_CONFIGURATION = {
 EXPECTED_INVOKE_HANDLER = (
     ".invoke_handler(tauri::generate_handler!["
     "app_info::get_app_info,"
+    "local_tasks_tauri::list_local_tasks,"
+    "local_tasks_tauri::save_local_task,"
+    "local_tasks_tauri::set_local_task_completion,"
+    "local_tasks_tauri::remove_local_task,"
     "diagnostics_tauri::read_diagnostics,"
     "diagnostics_tauri::export_diagnostics,"
     "knowledge_tauri::list_knowledge,"

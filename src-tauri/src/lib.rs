@@ -20,6 +20,8 @@ mod knowledge;
 mod knowledge_links;
 mod knowledge_tauri;
 mod local_models;
+mod local_tasks;
+mod local_tasks_tauri;
 pub mod memory;
 pub mod menu_bar;
 mod personal_assistant_direct;
@@ -72,6 +74,10 @@ pub fn run() -> Result<(), AppError> {
         .on_window_event(menu_bar::handle_window_event)
         .invoke_handler(tauri::generate_handler![
             app_info::get_app_info,
+            local_tasks_tauri::list_local_tasks,
+            local_tasks_tauri::save_local_task,
+            local_tasks_tauri::set_local_task_completion,
+            local_tasks_tauri::remove_local_task,
             diagnostics_tauri::read_diagnostics,
             diagnostics_tauri::export_diagnostics,
             knowledge_tauri::list_knowledge,

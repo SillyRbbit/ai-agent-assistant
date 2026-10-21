@@ -5,6 +5,7 @@ mod connection;
 pub(crate) mod conversations;
 mod error;
 mod knowledge;
+mod local_tasks;
 mod metadata;
 mod migrations;
 mod store;

@@ -116,7 +116,7 @@ INSERT INTO agent_note_provenance(agent_id,created_at_ms,updated_at_ms)
  SELECT agent_id,0,0 FROM agent_preferences WHERE note != '';
 "#;
 
-const MIGRATIONS: [MigrationDefinition; 10] = [
+const MIGRATIONS: [MigrationDefinition; 11] = [
     MigrationDefinition {
         version: 1,
         name: "create_schema_migrations",
@@ -176,6 +176,12 @@ const MIGRATIONS: [MigrationDefinition; 10] = [
         name: "create_agent_conversations",
         checksum: "sha256:93661ae5d6ea01405728e8964ad1d14bff2d81a36b514db94b4f690fee25726b",
         sql: CREATE_AGENT_CONVERSATIONS_SQL,
+    },
+    MigrationDefinition {
+        version: 11,
+        name: "create_local_tasks",
+        checksum: "sha256:139710264621dd0f3ca2242ad19d420ef695d5355b75d361bb8712637b28047b",
+        sql: super::local_tasks::CREATE_LOCAL_TASKS_SQL,
     },
 ];
 
@@ -400,6 +406,11 @@ fn migration_table_exists(connection: &Connection) -> StorageResult<bool> {
 }
 
 #[cfg(test)]
+pub(super) fn migrate_before_tasks_for_test(c: &mut Connection) -> StorageResult<MigrationReport> {
+    apply_migrations_with_clock(c, &MIGRATIONS[..10], current_unix_time_ms)
+}
+
+#[cfg(test)]
 mod tests {
     use std::error::Error;
 
@@ -422,7 +433,7 @@ mod tests {
             .map(|migration| migration.version)
             .collect();
 
-        assert_eq!(versions, vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        assert_eq!(versions, vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
         assert_eq!(MIGRATIONS[0].sql, CREATE_SCHEMA_MIGRATIONS_SQL);
         assert_eq!(MIGRATIONS[1].sql, CREATE_APP_METADATA_SQL);
         assert_eq!(MIGRATIONS[2].sql, CREATE_AGENT_PREFERENCES_SQL);
@@ -441,12 +452,15 @@ mod tests {
             Ok(1_700_000_000_001)
         })?;
 
-        assert_eq!(first.applied_versions, vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        assert_eq!(
+            first.applied_versions,
+            vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+        );
         assert!(first.already_applied_versions.is_empty());
         assert!(second.applied_versions.is_empty());
         assert_eq!(
             second.already_applied_versions,
-            vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+            vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
         );
         assert!(connection.table_exists("schema_migrations")?);
         assert!(connection.table_exists("app_metadata")?);
@@ -455,7 +469,7 @@ mod tests {
 
         let applied = connection.applied_migrations()?;
         let versions: Vec<i64> = applied.iter().map(|migration| migration.version).collect();
-        assert_eq!(versions, vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        assert_eq!(versions, vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
         assert!(applied
             .iter()
             .all(|migration| migration.applied_at_ms == 1_700_000_000_000));
@@ -474,7 +488,7 @@ mod tests {
             [original],
         )?;
         let result = apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS, || Ok(200))?;
-        assert_eq!(result.applied_versions, vec![9, 10]);
+        assert_eq!(result.applied_versions, vec![9, 10, 11]);
         assert_eq!(&connection.applied_migrations()?[..8], prior.as_slice());
         let after: String = connection.raw().query_row(
             "SELECT content FROM knowledge_items WHERE id=1",
@@ -497,7 +511,7 @@ mod tests {
         let applied = connection.applied_migrations()?;
 
         assert_eq!(upgrade.already_applied_versions, vec![1, 2]);
-        assert_eq!(upgrade.applied_versions, vec![3, 4, 5, 6, 7, 8, 9, 10]);
+        assert_eq!(upgrade.applied_versions, vec![3, 4, 5, 6, 7, 8, 9, 10, 11]);
         assert_eq!(&applied[..2], prior.as_slice());
         assert_eq!(applied[2].version, 3);
         assert_eq!(applied[2].applied_at_ms, 200);
@@ -538,7 +552,7 @@ mod tests {
 
         let report = apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS, || Ok(200))?;
 
-        assert_eq!(report.applied_versions, vec![4, 5, 6, 7, 8, 9, 10]);
+        assert_eq!(report.applied_versions, vec![4, 5, 6, 7, 8, 9, 10, 11]);
         assert_eq!(report.already_applied_versions, vec![1, 2, 3]);
         for (agent_id, revision) in [("research", 5_i64), ("coding", 10_i64)] {
             let row = connection.raw_mut().query_row(
@@ -607,7 +621,7 @@ mod tests {
             |row| row.get(0),
         )?;
         let upgrade = apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS, || Ok(200))?;
-        assert_eq!(upgrade.applied_versions, vec![5, 6, 7, 8, 9, 10]);
+        assert_eq!(upgrade.applied_versions, vec![5, 6, 7, 8, 9, 10, 11]);
         assert_eq!(upgrade.already_applied_versions, vec![1, 2, 3, 4]);
         assert_eq!(&connection.applied_migrations()?[..4], prior.as_slice());
         let after_schema: String = connection.raw_mut().query_row(
@@ -758,7 +772,7 @@ INSERT INTO missing_table (id) VALUES (1);
         )?;
         let history = connection.applied_migrations()?;
         let result = apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS, || Ok(200))?;
-        assert_eq!(result.applied_versions, vec![8, 9, 10]);
+        assert_eq!(result.applied_versions, vec![8, 9, 10, 11]);
         assert_eq!(&connection.applied_migrations()?[..7], history);
         let room: String = connection.raw_mut().query_row(
             "SELECT content FROM collaboration_rooms WHERE id=1",
@@ -787,7 +801,7 @@ INSERT INTO missing_table (id) VALUES (1);
         connection.raw_mut().execute("INSERT INTO agent_preferences VALUES ('research','openai_api','gpt-5.6-sol','high','custom','private_notes','retained note',7)", [])?;
         let history = connection.applied_migrations()?;
         let result = apply_migrations_with_clock(connection.raw_mut(), &MIGRATIONS, || Ok(200))?;
-        assert_eq!(result.applied_versions, vec![6, 7, 8, 9, 10]);
+        assert_eq!(result.applied_versions, vec![6, 7, 8, 9, 10, 11]);
         assert_eq!(&connection.applied_migrations()?[..5], history);
         let row: (String, String, String, i64) = connection.raw_mut().query_row("SELECT model, owner_instructions, note, revision FROM agent_preferences WHERE agent_id='research'", [], |r| Ok((r.get(0)?,r.get(1)?,r.get(2)?,r.get(3)?)))?;
         assert_eq!(

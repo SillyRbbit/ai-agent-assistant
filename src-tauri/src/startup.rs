@@ -116,7 +116,7 @@ mod tests {
         let summary = startup_summary(&initialization);
 
         assert!(summary.contains("mode=ephemeral-memory"));
-        assert!(summary.contains("applied_migrations=10"));
+        assert!(summary.contains("applied_migrations=11"));
         assert!(summary.contains("previously_initialized=false"));
         assert!(!summary.contains("sqlite"));
         Ok(())
