@@ -417,6 +417,9 @@ increment completion and never creates a completion marker.
 Publication is a separate operation. A verified uncommitted increment is not
 published until its commit and remote state are confirmed.
 
+An optional [read-only artifact inventory utility](docs/workflows/STORAGE_INVENTORY.md)
+supports explicit on-demand observation only; it grants no archive/removal authority.
+
 Task-owned QA-build cleanup is a conditional closeout step under
 [End a working session](docs/workflows/END_SESSION.md#task-owned-qa-build-cleanup).
 Record eligibility or the exact retention condition in the handoff. The same
