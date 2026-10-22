@@ -86,6 +86,9 @@ DOCUMENTATION_TRUTH_MARKERS = (
     ),
 )
 EXPECTED_TAURI_IMPORTS = {
+    "src/infrastructure/tauri/voice-client.ts": (
+        'import { invoke, isTauri } from "@tauri-apps/api/core";',
+    ),
     "src/infrastructure/tauri/local-tasks-client.ts": (
         'import { invoke, isTauri } from "@tauri-apps/api/core";',
     ),
@@ -122,6 +125,11 @@ EXPECTED_TAURI_IMPORTS = {
     ),
 }
 EXPECTED_TAURI_INVOKES = {
+    "src/infrastructure/tauri/voice-client.ts": (
+        'invoke<unknown>("start_voice", { request: { conversationId, operation } })',
+        'invoke<unknown>("poll_voice", {\n        request: { conversationId: previous.conversationId, sessionId: previous.sessionId },\n      })',
+        'invoke<unknown>("control_voice", {\n      request: { conversationId: previous.conversationId, sessionId: previous.sessionId, action },\n    })',
+    ),
     "src/infrastructure/tauri/conversation-history-client.ts": (
         'invoke<unknown>("list_saved_agent_conversations", { request: { agentId } })',
         'invoke<unknown>("read_saved_agent_conversation", { request: { conversationId } })',
@@ -303,6 +311,9 @@ EXPECTED_CAPABILITY_CONFIGURATION = {
 EXPECTED_INVOKE_HANDLER = (
     ".invoke_handler(tauri::generate_handler!["
     "app_info::get_app_info,"
+    "voice_tauri::start_voice,"
+    "voice_tauri::poll_voice,"
+    "voice_tauri::control_voice,"
     "local_tasks_tauri::list_local_tasks,"
     "local_tasks_tauri::save_local_task,"
     "local_tasks_tauri::set_local_task_completion,"

@@ -22,11 +22,12 @@ use crate::{
     anthropic, local_models,
 };
 
-#[derive(Default)]
+#[derive(Clone, Default)]
 pub(crate) struct AgentChatState(Arc<Mutex<Session>>);
 
 #[derive(Default)]
 struct Session {
+    voice_lease: Option<String>,
     conversation: Option<BoundConversation>,
     journal: Option<Storage>,
     turn: Option<u64>,
@@ -193,6 +194,9 @@ impl Session {
     }
 
     fn owned(&self) -> bool {
+        if self.voice_lease.is_some() {
+            return true;
+        }
         self.stopping || self.task.as_ref().is_some_and(|task| !task.is_finished())
     }
 
@@ -590,6 +594,9 @@ async fn stop_owned(state: &Arc<Mutex<Session>>, id: &str) -> Result<ChatSnapsho
     let task = {
         let mut session = state.lock().map_err(|_| ChatError::Internal)?;
         session.check_id(id)?;
+        if session.voice_lease.is_some() {
+            return Err(ChatError::Busy);
+        }
         if session.stopping {
             return session.snapshot();
         }
@@ -1688,4 +1695,136 @@ mod diagnostic_boundary_tests {
             })?;
         Ok(())
     }
+}
+
+// Voice may read current presentation only; it never constructs provider context.
+pub(crate) fn claim_voice(
+    state: &AgentChatState,
+    conversation_id: &str,
+    owner: &str,
+    speak: bool,
+) -> Result<Option<String>, crate::voice::VoiceError> {
+    use crate::voice::VoiceError;
+    let mut session = state.0.lock().map_err(|_| VoiceError::CleanupFailed)?;
+    session
+        .check_id(conversation_id)
+        .map_err(|_| VoiceError::StaleSession)?;
+    if session.owned() {
+        return Err(VoiceError::Busy);
+    }
+    let bound = session
+        .conversation
+        .as_ref()
+        .ok_or(VoiceError::StaleSession)?;
+    if bound.profile.agent_id != "personal-assistant" {
+        return Err(VoiceError::Unsupported);
+    }
+    let text = if speak {
+        let snapshot = session.snapshot().map_err(|_| VoiceError::Unavailable)?;
+        if snapshot.status != "completed"
+            || snapshot.text.is_empty()
+            || snapshot.text.chars().count() > 4096
+        {
+            return Err(VoiceError::Unavailable);
+        }
+        Some(snapshot.text)
+    } else {
+        None
+    };
+    session.voice_lease = Some(owner.to_owned());
+    Ok(text)
+}
+pub(crate) fn release_voice(state: &AgentChatState, owner: &str) {
+    if let Ok(mut session) = state.0.lock() {
+        if session.voice_lease.as_deref() == Some(owner) {
+            session.voice_lease = None;
+        }
+    }
+}
+
+#[cfg(test)]
+mod voice_ownership_tests {
+    use super::*;
+    use crate::voice::VoiceError;
+    #[test]
+    fn voice_owner_blocks_send_switch_and_wrong_release_then_recovers(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let _serial = crate::personal_assistant_v0::tests::serial_guard()?;
+        let initialized = Storage::initialize(&crate::storage::DatabaseConfig::in_memory())?;
+        let storage = initialized.storage();
+        let state = AgentChatState::default();
+        let initial = begin_conversation(&state.0, storage.agent_profile("personal-assistant")?)?;
+        assert_eq!(
+            claim_voice(&state, "wrong", "a", false),
+            Err(VoiceError::StaleSession)
+        );
+        assert_eq!(
+            claim_voice(&state, &initial.conversation_id, "a", true),
+            Err(VoiceError::Unavailable)
+        );
+        assert!(claim_voice(&state, &initial.conversation_id, "a", false).is_ok());
+        assert_eq!(
+            claim_voice(&state, &initial.conversation_id, "b", false),
+            Err(VoiceError::Busy)
+        );
+        let send = || SendRequest {
+            conversation_id: initial.conversation_id.clone(),
+            message: "Synthetic typed equivalent".into(),
+            acknowledgment: "simulation".into(),
+        };
+        assert!(matches!(
+            start_owned(&state.0, storage, send(), || Err(DirectError::MissingKey)),
+            Err(ChatError::Busy)
+        ));
+        assert!(matches!(
+            begin_conversation(&state.0, storage.agent_profile("research")?),
+            Err(ChatError::Busy)
+        ));
+        release_voice(&state, "stale");
+        assert!(state.0.lock().map_err(|_| "lock")?.owned());
+        tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()?
+            .block_on(async {
+                assert!(matches!(
+                    stop_owned(&state.0, &initial.conversation_id).await,
+                    Err(ChatError::Busy)
+                ));
+                release_voice(&state, "a");
+                let next = start_owned(&state.0, storage, send(), || Err(DirectError::MissingKey))?;
+                assert!(next.busy);
+                let task = state
+                    .0
+                    .lock()
+                    .map_err(|_| "lock")?
+                    .task
+                    .take()
+                    .ok_or("missing task")?;
+                task.await?;
+                assert_eq!(
+                    state.0.lock().map_err(|_| "lock")?.snapshot()?.status,
+                    "completed"
+                );
+                Ok::<(), Box<dyn std::error::Error>>(())
+            })?;
+        let other = begin_conversation(&state.0, storage.agent_profile("research")?)?;
+        assert_eq!(
+            claim_voice(&state, &other.conversation_id, "c", false),
+            Err(VoiceError::Unsupported)
+        );
+        Ok(())
+    }
+}
+
+pub(crate) fn validate_voice_scope(
+    state: &AgentChatState,
+    id: &str,
+) -> Result<(), crate::voice::VoiceError> {
+    let session = state
+        .0
+        .lock()
+        .map_err(|_| crate::voice::VoiceError::CleanupFailed)?;
+    session
+        .check_id(id)
+        .map_err(|_| crate::voice::VoiceError::StaleSession)
 }

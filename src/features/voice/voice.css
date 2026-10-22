@@ -1,0 +1,22 @@
+.voice-controls {
+  border: 1px solid var(--border-color, #536272);
+  border-radius: 12px;
+  padding: 12px;
+  margin-block: 12px;
+}
+.voice-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.voice-recording {
+  font-weight: 700;
+}
+.voice-review textarea {
+  display: block;
+  width: 100%;
+  min-height: 80px;
+}
+.voice-muted {
+  opacity: 0.8;
+}

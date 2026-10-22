@@ -38,3 +38,6 @@ __pycache__/
 .idea/
 .vscode/
 *.swp
+
+# Generated fixed native speech helper
+/src-tauri/voice-bin/

@@ -34,6 +34,8 @@ mod research_knowledge_demo_projection;
 mod startup;
 pub mod storage;
 pub mod tools;
+mod voice;
+mod voice_tauri;
 
 pub use app_info::{current_app_info, AppInfo};
 pub use error::AppError;
@@ -61,6 +63,7 @@ pub fn run() -> Result<(), AppError> {
     let app = tauri::Builder::default()
         .manage(personal_assistant_direct_tauri::DirectState::default())
         .manage(agent_chat_tauri::AgentChatState::default())
+        .manage(voice_tauri::VoiceState::default())
         .manage(collaboration_tauri::CollaborationState::default())
         .manage(
             research_knowledge_demo_lifecycle_tauri::ResearchKnowledgeDemoLifecycleTauriState::new(
@@ -71,9 +74,24 @@ pub fn run() -> Result<(), AppError> {
             menu_bar::initialize_tauri_app(app)?;
             Ok(())
         })
-        .on_window_event(menu_bar::handle_window_event)
+        .on_window_event(|window, event| {
+            use tauri::Manager;
+            if matches!(event, tauri::WindowEvent::Focused(false)) {
+                window.state::<voice_tauri::VoiceState>().abort_for_focus();
+            }
+            if matches!(
+                event,
+                tauri::WindowEvent::CloseRequested { .. } | tauri::WindowEvent::Destroyed
+            ) {
+                window.state::<voice_tauri::VoiceState>().abort();
+            }
+            menu_bar::handle_window_event(window, event);
+        })
         .invoke_handler(tauri::generate_handler![
             app_info::get_app_info,
+            voice_tauri::start_voice,
+            voice_tauri::poll_voice,
+            voice_tauri::control_voice,
             local_tasks_tauri::list_local_tasks,
             local_tasks_tauri::save_local_task,
             local_tasks_tauri::set_local_task_completion,
@@ -126,9 +144,12 @@ pub fn run() -> Result<(), AppError> {
 
     app.run(|app_handle, event| {
         if let tauri::RunEvent::ExitRequested { api, .. } = &event {
-            if !codex_connection::shutdown() {
+            use tauri::Manager;
+            if !app_handle.state::<voice_tauri::VoiceState>().shutdown()
+                || !codex_connection::shutdown()
+            {
                 api.prevent_exit();
-                eprintln!("Cortexa could not confirm Codex child cleanup; exit was cancelled.");
+                eprintln!("Cortexa could not confirm owned native cleanup; exit was cancelled.");
             }
         }
         if matches!(&event, tauri::RunEvent::Exit) {

@@ -44,6 +44,14 @@ class PostIncrementGateTests(unittest.TestCase):
         self._git("commit", "--quiet", "-m", "Create fixture")
         gate.begin_gate(self.root, "04g")
 
+    def test_voice_dispatch_is_exact_and_does_not_change_existing_routes(self) -> None:
+        import lifecycle_dependent_admission
+        import lifecycle_voice_publication
+        self.assertIs(gate._dependent(), lifecycle_dependent_admission)
+        self.assertIs(gate._dependent("unrelated"), lifecycle_dependent_admission)
+        self.assertIs(gate._dependent("persistent-memory-codex-continuation"), lifecycle_dependent_admission)
+        self.assertIs(gate._dependent(lifecycle_voice_publication.SUCCESSOR), lifecycle_voice_publication)
+
     def test_acceptance_schema_requires_exact_lineage(self) -> None:
         state = gate.read_state(self.root)
         state["schema_version"] = 4
