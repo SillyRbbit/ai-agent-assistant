@@ -12773,3 +12773,73 @@ Resume prompt for a pre-publication interruption:
 ```text
 Resume the owner-authorized Vitest 4.1.12 security repair in /Users/hdang/.codex/worktrees/fix-vitest-audit/ai-agent-assistant. Inspect current instructions/admission, the repair plan/report, and the external vitest-security-repair-20261021-01 FINAL-HANDOFF before acting. Preserve user changes, Tasks/memory acceptance, RAG ownership, failed receipts and resources. Reuse passing audit, frontend and full verification evidence; do not replay native acceptance or model requests. Continue exact scoped staging/commit/push/PR attachment, required CI/review, squash merge and remote tree/ancestry verification autonomously. Stop only at genuine access, ownership, verification, resource or scope boundaries; no force-push, HP work, protected cleanup, image utilities or successor. Do not repeat completed publication operations.
 ```
+
+---
+
+## 2026-10-21 — Private OneDrive QA-build closeout documentation
+
+The existing session-closeout procedure now documents agent-guided private
+OneDrive archival before explicitly authorized local removal: exact inventories
+and overriding local holds, archive identities/private availability, independent
+nonexecuting payload and recovery-record verification, unchanged-evidence reuse,
+fresh dependencies, per-path outcomes, safe partial completion and observed space.
+This is documentation only; implementation completion, archive verification and
+removal authority remain separate. No trigger, executor or artifact operation.
+Checkout: `/Users/hdang/.codex/worktrees/qa-onedrive-closeout/ai-agent-assistant`,
+detached at `28948239934b6589f4b4ab55882dd13b1578490a`; no branch ref change.
+The older dirty primary checkout and other task checkouts are untouched.
+Plan: [OneDrive closeout](docs/plans/2026-10-21-qa-onedrive-closeout.md).
+Review: [consolidated report](docs/reviews/2026-10-21-qa-onedrive-closeout-post-increment-review.md).
+Recoverable original documents, file inventories and check/gate receipts are at
+`/Users/hdang/.codex/visualizations/2026/10/21/01a16064-1596-7b52-bdcb-90c7155957dc/qa-onedrive-closeout-docs-20261021`.
+
+No uploads, downloads/restores, original/scratch deletion, signals, credentials or
+permissions changes, builds, hook changes, commits or publication ran. No QA build
+was produced by this documentation task; archival/removal is not applicable and no
+space recovery is claimed. This checkout remains retained: review/publication and
+explicit worktree archival authorization are absent. Active resource holds remain.
+
+Final verification and preservation results are recorded in the consolidated
+report; actual local gate/status/complete-payload Stop receipts control completion.
+The normal schema-2 admission freezes the readiness report; never edit that report
+or historical failures to record later results. No successor starts automatically.
+
+Exact next prompt (read-only review):
+
+```text
+Review the qa-onedrive-closeout documentation candidate at /Users/hdang/.codex/worktrees/qa-onedrive-closeout/ai-agent-assistant. Inspect repository instructions, Git state, plan, complete diff, frozen readiness report, final review and external check/preservation/gate receipts before editing. Preserve existing user changes and historical records; avoid unrelated modifications and do not repeat completed cleanup, unchanged validation or workflow amendments. Confirm one central agent-guided procedure covers exact inventories, overriding holds, private OneDrive identities, independent payload/recovery-record verification, fresh dependencies, per-path receipts and safe measured partial completion. Confirm completion grants no operation authority and hooks/executable inputs remain unchanged. Report findings and publication readiness only. No edits, uploads, downloads/restores, deletion, process signals, credentials/permissions changes, branch operations, commits, publication or automation activation. Stop affected review conclusions on missing evidence or ambiguous attribution.
+```
+
+---
+
+## 2026-10-21 — OneDrive closeout documentation publication preparation
+
+The reviewed qa-onedrive-closeout documentation delta is transferred onto verified
+main `f954b74c9122683133d5b028abdcae8f792e60ee` in a new detached preparation
+checkout. Tasks PR152 is merged as `31b7148`; main also includes PR153. The earlier
+cached-main publication concern is superseded by direct read-only GitHub evidence,
+without rewriting its history. No Tasks/source/dependency change is in this delta.
+Original workflow text is reused unchanged; only preparation/current-state records
+are added. No commit, push, PR, merge or artifact operation is authorized or run.
+Current checkout:
+`/Users/hdang/.codex/worktrees/qa-onedrive-publication-prep/ai-agent-assistant`.
+It is detached at verified main `f954b74`; the older dirty primary and all active
+task checkouts remain untouched. The original qa-onedrive-closeout candidate and
+its sealed evidence/checkout-local gate stay unchanged and retained. Its three
+dated plan/readiness/final reports are copied byte-identically as historical
+input snapshots; their inventories/fingerprints are not rebound to this checkout.
+The [preparation plan](docs/plans/2026-10-21-qa-onedrive-publication-prep.md) and
+[new review](docs/reviews/2026-10-21-qa-onedrive-publication-prep-post-increment-review.md)
+record current scope and validation. Actual final gate/status/Stop receipts control
+completion. No new acceptance, full build or artifact recovery is claimed.
+
+External preservation, remote observation, exact transfer and check/gate receipts:
+`/Users/hdang/.codex/visualizations/2026/10/21/01a16064-1596-7b52-bdcb-90c7155957dc/qa-onedrive-publication-prep-20261021`.
+No QA artifact was produced or removed; no space recovery is claimed. The original
+and new worktrees stay retained; neither is authorized for archival.
+
+Exact next prompt, only if the owner chooses publication:
+
+```text
+Publish only the reviewed qa-onedrive-closeout documentation and its publication-preparation records from /Users/hdang/.codex/worktrees/qa-onedrive-publication-prep/ai-agent-assistant. Inspect repository instructions, Git state, current remote main, complete documentation diff, preparation plan/report and sealed external check/preservation/gate receipts first. Preserve existing user changes, active tasks and all original frozen evidence; do not repeat workflow implementation, cleanup, native QA or unchanged checks. Verify the task-local gate is complete/valid and the proposed publication delta contains only the sixteen attributed documentation paths. This prompt authorizes a scoped codex/ branch, one documentation commit, push, PR attachment, applicable CI/review and conditional squash merge only after all checks pass; stop on base drift needing unsafe integration, scope/ownership ambiguity, missing evidence or failed required checks. Verify the final remote tree/diff and record actual results additively. No artifact upload/download/restore, deletion, process signals, credentials/permissions changes, automation activation or successor milestone.
+```

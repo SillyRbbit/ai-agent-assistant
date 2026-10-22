@@ -57,9 +57,9 @@ post-increment quality and marker closeout.
 10. Confirm no secrets, build output, personal data, or local logs were added.
 11. Run `$post-increment-gate`, create the consolidated report, and finalize the deterministic completion marker only when the result is `PASS` or `PASS WITH ADVISORIES`.
 12. Confirm `python3 .codex/hooks/post_increment_gate.py status` reports the active increment as complete and valid.
-13. Record the QA-build cleanup disposition using the procedure below. Cleanup may
-    remain deferred after implementation completion; a completion marker alone
-    does not authorize deletion or prove cleanup eligibility.
+13. Record the QA-build archival/cleanup disposition using the procedure below,
+    including exact retained paths and reasons. Implementation completion remains
+    separate; a completion marker never authorizes cloud transfer or removal.
 14. Record the separate worktree archival disposition below. Ordinary QA-build
     cleanup always protects worktrees; completion is not archival authorization.
 15. Show the final Git status.
@@ -68,8 +68,19 @@ post-increment quality and marker closeout.
 
 This is a conditional completion/closeout step, not a deletion command or blanket
 cleanup authorization. It does not authorize a commit, push, PR, merge or release.
-Use existing task authorization only when it explicitly covers the identified
-cleanup; otherwise obtain authorization for the concrete inventory before removal.
+The archive stage is agent-guided work in the owning task, not a completion-event
+executor, background schedule or standing permission. Session completion, idleness
+and chat archival trigger no transfer or removal. Existing hooks validate completion
+evidence only; they do not execute this procedure.
+
+Use existing authorization only when it explicitly covers the concrete operation.
+Bind archive creation/upload to the exact screened inventory and private destination;
+bind independent download/isolated restore to the named archive identities; bind
+local removal separately to the exact unchanged members and passing recovery proof.
+One owner instruction may cover all stages explicitly. Otherwise obtain the missing
+authority for the reviewable inventory before that stage. This documentation grants
+none of those operations, process signals, credentials or permission changes.
+Never delete cloud objects or convert them to online-only under this procedure.
 
 ### Eligibility: every condition must be established
 
@@ -87,12 +98,23 @@ Unknown, failed or pending conditions mean **retain**. Keep the review build whi
 owner review or mandatory acceptance is pending. Never mark incomplete QA passed,
 rewrite historical failure, or waive rollback needs to make artifacts eligible.
 This step does not change existing implementation gates or grant successor authority.
+Explicit local-retention instructions override optional flags, age, apparent
+redundancy and archive coverage. Release only exact owner-named resources through
+a separate recorded release; an earlier task-specific release is not general
+authority. Reconcile dated dispositions with fresh owning-task evidence without
+rewriting history or reintroducing already completed cleanup as pending work.
 
 ### Before removal
 
 1. Record each exact absolute artifact path, resolved location, type, logical and
    allocated size, filesystem, owning task and ownership evidence. Identify shared
-   consumers, expected contents and the proposed retained/removed disposition.
+   consumers, complete directory membership and the proposed retained/removed
+   disposition. Bind a versioned manifest and its SHA256 to each selected member:
+   original/resolved path, archive member mapping, kind, bytes, mode, content hash
+   for regular files, symlink target, device/inode, relevant timestamps and hardlink
+   group/link count. Record necessary directory metadata and permitted recovery
+   differences. Inventories are exact members, not globs or recursive parent grants.
+   Explicit exclusions and local holds always take precedence.
    A temporary location or filename prefix alone is not ownership proof. Do not
    follow links into other trees; stop on unexpected links, shared content, changed
    identity, unresolved attribution or evidence drift.
@@ -112,9 +134,90 @@ This step does not change existing implementation gates or grant successor autho
    verify exit. Never use broad process-name matching, stale PIDs or unrelated
    process termination. If another session still needs the process/artifact,
    retain it. Record no signaling when none is needed.
-5. Recheck eligibility, ownership, preservation and cleanup authorization immediately
-   before removal. Retain a durable inventory/receipt and baseline disk measurements.
-   Stop the affected removal if any prerequisite changes or cannot be established.
+5. Complete the private OneDrive archive and recovery checks below before removal.
+   Then refresh eligibility, authorization, full member identities and complete
+   membership, symlink/hardlink dependencies, mounts, registered worktrees and current
+   task/process/runner consumers across sharing tasks. A mounted or actively needed
+   item is retained; no unmount or signal is implied. A process snapshot alone is
+   not proof of nonuse. Retain the current inventory, dependency evidence and
+   same-filesystem baseline measurements. Stop affected members on new/unlisted
+   contents, drift, unexplained dependencies, inaccessible checks or platform denial.
+   Continue independent authorized safe candidates without widening their scope.
+
+### Private OneDrive archival and recovery proof
+
+Apply these checks within the existing before-removal procedure. Preserve the
+selected archive bytes and recovery evidence before approving any original's
+local retirement; rebuildability alone is not a replacement for historical QA.
+
+1. **Screen and identify.** Use only the owner-approved private OneDrive Personal
+   destination under `Cortexa-QA-Archive`, with a unique dated task folder. Record
+   exact task ownership, inventory/manifest version and hash, selected originals,
+   source revision or preserved dirty patch, lockfile/toolchain/configuration and
+   acceptance/provenance bindings. Confirm no credentials, authentication stores,
+   owner application databases or unapproved personal content enter the upload.
+   Keep sensitive inventories/locators in approved private task evidence outside
+   Git and outside all deletion/scratch inventories. Do not expose tokens, passwords
+   or authenticated download URLs. Existing encrypted recovery needs separately
+   retained key custody; this procedure neither acquires keys nor changes encryption.
+2. **Bind every archive.** Record its exact filename, byte count, SHA256, source
+   manifest hash, original-to-member mapping and declared recovery limitations.
+   Split parts must have complete, nonoverlapping coverage or explained verified
+   redundancy; no selected member may lack a covering archive. Confirm source
+   stability through archive preparation and preserve the original manifest. For
+   raw disk images, file-level selection does not preserve unused sectors, event
+   history or original volume identity. Do not remove an original image on that
+   basis without a separate exact release accepting the limitations. Record required
+   modes, links, directory metadata, extended attributes and signing/provenance
+   needs; retain originals when required recovery properties cannot be verified.
+3. **Verify private availability.** After an authorized upload, confirm the completed
+   object in the exact owner account/folder with supported authenticated cloud
+   evidence. Record object locator/version where available, expected size and the
+   observed private sharing state with time/method. Local sync presence, a request
+   log, filename, placeholder or completed upload alone is insufficient proof of
+   remote custody or recovery. Missing access or unknown privacy means retain;
+   never change account, sharing or permissions to bypass the check.
+4. **Independently download and restore.** Retrieve the actual cloud object through
+   an authenticated web download or supported cloud read into separately identified
+   task scratch. Do not substitute the upload/staging copy or a sync-cache read.
+   Require a completed download with exact byte count and SHA256. Inspect archive
+   members before extraction; reject absolute paths, traversal, duplicate/ambiguous
+   members, escaping links and unsupported entries. Extract only into a new isolated
+   directory, never over live source, Git, worktrees, targets or application data.
+   Compare every selected member against the frozen manifest for kind, bytes/hash,
+   mode, symlink target and each required metadata property. Record hardlink topology
+   and any approved equal-file restoration limits. Execute no restored program,
+   helper, hook, acceptance command or migration. Preserve added quarantine; no
+   security bypass or renewed executable compatibility/acceptance is implied.
+5. **Preserve recovery records too.** Keep source/configuration bindings, archive
+   index, manifests, coverage, approvals, original failures, sanitized acceptance
+   records, recovery instructions and limitations outside deletion scope. Verify
+   their durable copies. Preserve them in a separately identified recovery-record
+   archive with its own independent download/restore PASS receipt alongside every
+   payload receipt; an unchanged covering records archive may be reused under the
+   same identity/coverage rules. Check that all prerequisites needed for recovery are
+   accessible. Keep final verification receipts and seals external to the archives
+   they verify, with durable approved custody; do not create a self-verifying cycle.
+6. **Record proof and reuse safely.** Each PASS receipt binds archive filename,
+   bytes/hash, manifest hash, cloud observation, completed independent-download
+   identity, isolated restore location, compared member count/properties, result,
+   time/method, limitations and zero executed files. Bind receipt hashes in the
+   archive index. Reuse unchanged passing evidence only after confirming exact
+   identity, member coverage, record integrity and all qualifications; refresh
+   current private availability and local dependencies. If unchanged remote bytes
+   cannot be established from bound evidence/object version, obtain fresh authorized
+   verification or retain. A changed object, missing recovery proof or unexplained
+   discrepancy stops its affected candidates. Never
+   repeat a completed upload/download/restore merely because the task resumed.
+
+Keep headroom for archive staging, independent downloads and isolated restoration;
+choose bounded batches and record a task-specific free-space floor before any
+later execution. Insufficient capacity means defer, not premature original deletion.
+Any scratch retirement also needs explicit scope and passing preserved receipts;
+never infer that a temporary path is disposable. Cloud archives and their synced
+paths remain excluded from local removal to prevent cloud deletion through sync.
+The completed October 21 cleanup's helpers/allowlists and exact releases are frozen
+historical evidence, not reusable execution authority for new candidates.
 
 ### Removal boundaries and reporting
 
@@ -123,7 +226,9 @@ output directories and temporary fixtures after all dependencies are resolved.
 Remove only the individually identified disposable items. A directory is eligible
 only when its complete contents and ownership have been checked; an allowlisted
 parent must not authorize removal of unexpected descendants or shared content.
-Blanket directory deletion and `git clean` are prohibited. Never run `cargo clean`
+Use only verified exact members, then remove an explicitly authorized directory
+only when empty. Preserve unlisted members and target/evidence/reconciliation
+parents. Blanket directory deletion and `git clean` are prohibited. Never run `cargo clean`
 against an active or shared target directory.
 
 Never remove source checkouts, linked worktrees, Git metadata, owner application
@@ -143,13 +248,32 @@ that uncertainty instead of claiming an estimated total as recovered space.
 The durable cleanup receipt and handoff must identify:
 
 - Eligibility evidence, cleanup authorization, owner/task and exact inventory.
-- Removed paths, failures, actual measurements and retained paths with reasons.
+- A per-path receipt for every removal, skip, failure or uncertain result: action,
+  result/reason, owning task, authorization reference, inventory hash and expected
+  identity, covering archive and verification-receipt identities, time/method and
+  post-action observation. Directory receipts also bind complete checked membership.
+- Exact removed/retained paths, failures, preservation results and actual same-volume
+  before/after available space. Keep logical/allocated artifact sizes separate from
+  observed recovery; do not add APFS allocation estimates or promise attribution.
 - Preserved source/configuration/evidence locations and hash verification results.
 - Exact rebuild commands, required nonsecret environment/toolchain/dependency
   setup and recovery instructions; rebuilding does not recreate historical QA.
 - If cleanup is deferred: the exact pending condition, artifact dependencies,
   review-build location and next decision/check. Record zero removal and zero
   space recovered when no cleanup ran; no speculative cleanup schedule.
+
+On a partial or unknown result, append the receipt and inspect current per-path
+state before retrying; an absent original alone is not proof of successful removal
+or authorization. Keep prior failures immutable. Verify exclusions and exact cloud
+objects remain preserved. Complete independent authorized safe members only.
+
+Use the handoff to distinguish **retained** (exact hold/dependency), **archive
+pending**, **recovery verified**, **removal authorized**, **removed** and
+**deferred/partial** (exact reason and next decision/check). Recovery verified does
+not mean removal authorized. Implementation can remain complete while archival or
+cleanup is deferred. When no removal ran, report zero removed and no space recovery
+claim; do not schedule speculative cleanup. No executor, scheduler or completion
+trigger is implemented by documenting these dispositions.
 
 Do not change frozen acceptance reports or completion fingerprints to record
 later cleanup. Use an additive durable cleanup receipt/handoff through the existing

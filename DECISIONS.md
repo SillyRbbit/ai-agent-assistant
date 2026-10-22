@@ -7365,3 +7365,40 @@ Implementation and new audit acceptance are pending; no passing result is predec
 Vitest and its seven matching development packages are 4.1.12; unrelated lock entries are unchanged. Fresh low-threshold npm audit reports zero vulnerabilities,44 frontend files/629 tests pass, and full npm run verify passes. Preserve PR152 acceptance and its later failed main audit separately. See [the security repair report](docs/reviews/2026-10-21-vitest-audit-security-repair-post-increment-review.md) and [plan](docs/plans/2026-10-21-vitest-audit-security-repair.md) for scope, failures, resources and publication prerequisites.
 
 This entry records the pre-publication local snapshot. Authorized Git integration remains conditional on final checks/review; its actual remote result is recorded in the external vitest-security-repair-20261021-01/FINAL-HANDOFF.md after publication. Retain all Tasks/memory/RAG work, resources, historical evidence and ledger89/96; no native acceptance, model request, deletion, HP work or successor.
+
+---
+
+## 2026-10-21 — Private OneDrive QA-build closeout documentation
+
+The owner explicitly authorizes only this documentation extension. The canonical
+[END_SESSION procedure](docs/workflows/END_SESSION.md#task-owned-qa-build-cleanup)
+remains the single policy entry point. Exact operation authorization and platform
+access are required for upload, independent download/restore and local removal;
+one explicit instruction may cover multiple stages. Completion or an idle task
+grants none of them. Explicit local holds override optional flags and archive
+redundancy; prior exact releases do not generalize. No cloud deletion/eviction,
+credential/permission change, hook/executor, branch or publication authority follows.
+The existing session-closeout procedure now documents agent-guided private
+OneDrive archival before explicitly authorized local removal: exact inventories
+and overriding local holds, archive identities/private availability, independent
+nonexecuting payload and recovery-record verification, unchanged-evidence reuse,
+fresh dependencies, per-path outcomes, safe partial completion and observed space.
+This is documentation only; implementation completion, archive verification and
+removal authority remain separate. No trigger, executor or artifact operation.
+
+---
+
+## 2026-10-21 — OneDrive closeout documentation publication preparation
+
+The owner authorizes only documentation publication preparation: inspect current
+remote state read-only, use a suitable detached checkout, transfer only reviewed
+documentation, preserve original snapshots/receipts and run focused checks through
+the supported gate. No publication or artifact authority follows.
+
+The reviewed qa-onedrive-closeout documentation delta is transferred onto verified
+main `f954b74c9122683133d5b028abdcae8f792e60ee` in a new detached preparation
+checkout. Tasks PR152 is merged as `31b7148`; main also includes PR153. The earlier
+cached-main publication concern is superseded by direct read-only GitHub evidence,
+without rewriting its history. No Tasks/source/dependency change is in this delta.
+Original workflow text is reused unchanged; only preparation/current-state records
+are added. No commit, push, PR, merge or artifact operation is authorized or run.
