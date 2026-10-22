@@ -175,7 +175,8 @@ struct HelperIdentity {
     changed: (i64, i64),
 }
 #[cfg(not(target_os = "macos"))]
-type HelperIdentity = ();
+#[derive(PartialEq, Eq)]
+struct HelperIdentity;
 #[cfg(target_os = "macos")]
 impl HelperIdentity {
     fn read(m: &std::fs::Metadata) -> Self {
@@ -864,6 +865,14 @@ mod tests {
             })
             .is_err());
         Ok(())
+    }
+    #[cfg(not(target_os = "macos"))]
+    #[test]
+    fn non_mac_helper_stays_unsupported() {
+        assert!(matches!(
+            verify_helper(Path::new("not-a-helper")),
+            Err(VoiceError::Unsupported)
+        ));
     }
     #[test]
     fn ipc_unknown_fields_and_unknown_operations_reject() -> Result<(), String> {
