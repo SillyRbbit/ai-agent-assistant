@@ -419,9 +419,13 @@ published until its commit and remote state are confirmed.
 
 Task-owned QA-build cleanup is a conditional closeout step under
 [End a working session](docs/workflows/END_SESSION.md#task-owned-qa-build-cleanup).
-Record eligibility or the exact retention condition in the handoff. Completion
-alone never authorizes deletion: preserve review builds, acceptance evidence and
-rollback artifacts until that procedure's prerequisites and cleanup authorization
+Record eligibility or the exact retention condition in the handoff. The same
+procedure defines agent-guided private OneDrive archival, independently verified
+payload/recovery records and exact authorized local retirement; no automatic
+transfer/removal trigger is implemented. Cloud availability and recovery proof
+never override explicit local holds or substitute for removal authorization.
+Completion alone never authorizes deletion: preserve review builds, acceptance
+evidence and rollback artifacts until that procedure's prerequisites and cleanup authorization
 are satisfied. Publication and merge still require separate authorization.
 
 Worktrees remain protected from QA-build cleanup. Record their separate archival

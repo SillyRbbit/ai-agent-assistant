@@ -6338,3 +6338,31 @@ Implementation and new audit acceptance are pending; no passing result is predec
 Vitest and its seven matching development packages are 4.1.12; unrelated lock entries are unchanged. Fresh low-threshold npm audit reports zero vulnerabilities,44 frontend files/629 tests pass, and full npm run verify passes. Preserve PR152 acceptance and its later failed main audit separately. See [the security repair report](docs/reviews/2026-10-21-vitest-audit-security-repair-post-increment-review.md) and [plan](docs/plans/2026-10-21-vitest-audit-security-repair.md) for scope, failures, resources and publication prerequisites.
 
 This entry records the pre-publication local snapshot. Authorized Git integration remains conditional on final checks/review; its actual remote result is recorded in the external vitest-security-repair-20261021-01/FINAL-HANDOFF.md after publication. Retain all Tasks/memory/RAG work, resources, historical evidence and ledger89/96; no native acceptance, model request, deletion, HP work or successor.
+
+---
+
+## 2026-10-21 — Private OneDrive QA-build closeout documentation
+
+Owner-selected documentation objective:
+[Private OneDrive QA-build closeout](docs/plans/2026-10-21-qa-onedrive-closeout.md).
+Extend the existing procedure and entry points only; no separate cleanup framework,
+executor, hook, schedule or artifact operation. Ordinary schema-2 readiness/admission
+and documentation-tier completion checks apply. Historical failures and active
+product milestones remain in their owning records.
+
+---
+
+## 2026-10-21 — OneDrive closeout documentation publication preparation
+
+Preparation plan:
+[OneDrive documentation publication preparation](docs/plans/2026-10-21-qa-onedrive-publication-prep.md).
+Original qa-onedrive-closeout plan/reports are unchanged historical inputs; the
+new preparation review and gate bind this main-based workspace. Product roadmap
+and unfinished histories remain unchanged.
+The reviewed qa-onedrive-closeout documentation delta is transferred onto verified
+main `f954b74c9122683133d5b028abdcae8f792e60ee` in a new detached preparation
+checkout. Tasks PR152 is merged as `31b7148`; main also includes PR153. The earlier
+cached-main publication concern is superseded by direct read-only GitHub evidence,
+without rewriting its history. No Tasks/source/dependency change is in this delta.
+Original workflow text is reused unchanged; only preparation/current-state records
+are added. No commit, push, PR, merge or artifact operation is authorized or run.

@@ -12,7 +12,9 @@ description: End a Cortexa coding session by running final checks, reviewing cha
 5. Update `HANDOFF.md` and every affected project-memory file.
 6. Include an exact copy-paste resume prompt.
 7. Confirm no secrets, personal data, logs, or build artifacts were added.
-8. Report final Git status and the next recommended task.
+8. Record the QA-build archive/retention/removal disposition under END_SESSION, including exact holds, private OneDrive and independent recovery evidence when separately authorized, per-path outcomes and measured space. Keep implementation completion separate; this skill triggers no automatic transfer/removal.
+9. Record the separate worktree archival disposition; ordinary QA cleanup protects worktrees.
+10. Report final Git status and the next recommended task.
 
 A session is not complete when the code changed but the handoff is stale.
 
