@@ -1,3 +1,5 @@
+import { VoiceControls } from "../voice/VoiceControls";
+import { appendTranscript } from "../../application/voice";
 import { isNewBotSuccess } from "./botMotion";
 import { PageHeader } from "../shared/PageHeader";
 import { BotAvatar } from "./BotAppearance";
@@ -886,6 +888,7 @@ function AgentConversation({
   const [success, setSuccess] = useState(0);
   const [snapshot, setSnapshot] = useState(initial);
   const [message, setMessage] = useState("");
+  const [voiceBusy, setVoiceBusy] = useState(false);
   const [acknowledged, setAcknowledged] = useState(false);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
@@ -956,8 +959,8 @@ function AgentConversation({
     };
   }, [onBusy, stop]);
   useEffect(() => {
-    onBusy(pending || snapshot.busy || cleanupUnconfirmed);
-  }, [onBusy, pending, snapshot.busy, cleanupUnconfirmed]);
+    onBusy(pending || snapshot.busy || cleanupUnconfirmed || voiceBusy);
+  }, [onBusy, pending, snapshot.busy, cleanupUnconfirmed, voiceBusy]);
   useEffect(() => {
     if (!snapshot.busy || sendPending.current) return;
     let disposed = false;
@@ -983,6 +986,7 @@ function AgentConversation({
   const shouldStop = () => !mounted.current || stopRequested.current;
   const send = async () => {
     if (
+      voiceBusy ||
       sendPending.current ||
       !(
         client.persistence ? ["idle", "completed", "stopped", "error"] : ["idle", "completed"]
@@ -1044,6 +1048,7 @@ function AgentConversation({
     }
   };
   const canSend =
+    !voiceBusy &&
     !pending &&
     !snapshot.busy &&
     !cleanupUnconfirmed &&
@@ -1114,6 +1119,21 @@ function AgentConversation({
         greeting
         success={success}
       />
+      {initial.agentId === "personal-assistant" && (
+        <VoiceControls
+          conversationId={initial.conversationId}
+          disabled={pending || snapshot.busy || cleanupUnconfirmed}
+          canRead={snapshot.status === "completed" && snapshot.text.length <= 4096}
+          onBusy={setVoiceBusy}
+          onUseTranscript={(text) => {
+            const next = appendTranscript(message, text);
+            if (next === null) return false;
+            setMessage(next);
+            setAcknowledged(false);
+            return true;
+          }}
+        />
+      )}
       <label>
         Message
         <textarea
@@ -1156,7 +1176,7 @@ function AgentConversation({
         </button>
         <button
           type="button"
-          disabled={pending || snapshot.busy || cleanupUnconfirmed}
+          disabled={voiceBusy || pending || snapshot.busy || cleanupUnconfirmed}
           onClick={onExit}
         >
           Back to agent settings
@@ -1173,7 +1193,7 @@ function AgentConversation({
       <SavedTranscript
         client={client}
         initial={initial}
-        busy={pending || snapshot.busy}
+        busy={voiceBusy || pending || snapshot.busy}
         refresh={snapshot.sequence}
       />
       {!client.persistence &&

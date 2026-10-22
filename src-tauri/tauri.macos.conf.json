@@ -1,0 +1,10 @@
+{
+  "bundle": {
+    "macOS": {
+      "files": {
+        "Helpers/CortexaSpeechHelper": "voice-bin/CortexaSpeechHelper"
+      },
+      "entitlements": "voice/Entitlements.plist"
+    }
+  }
+}
