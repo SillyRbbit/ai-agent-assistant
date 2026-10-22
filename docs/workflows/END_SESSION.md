@@ -66,6 +66,11 @@ post-increment quality and marker closeout.
 
 ## Task-owned QA-build cleanup
 
+The optional [on-demand inventory checker](STORAGE_INVENTORY.md) observes only
+explicit paths and local receipt identities. It produces private retain/defer
+reports, grants no removal eligibility and is never run automatically by closeout.
+All prerequisites below still require fresh agent/owner review.
+
 This is a conditional completion/closeout step, not a deletion command or blanket
 cleanup authorization. It does not authorize a commit, push, PR, merge or release.
 The archive stage is agent-guided work in the owning task, not a completion-event
