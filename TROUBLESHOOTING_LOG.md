@@ -6759,6 +6759,84 @@ This entry records the pre-publication local snapshot. Authorized Git integratio
 
 The locked installation exited0 but its final npm-cache subcap rejected; retain that receipt. The cache suballocation was corrected within the fresh envelope, without replaying installation. A cache-copy guard stop and three interrupted full-verification attempts remain failures, separate from the final passing run. The first verification recorded incomplete allocation measurement without a differing-path witness; its cause is not reconstructed. The later physical-growth rejection remains preserved. The third evidence-cap rejection retained no same-snapshot numeric witness; no actual overrun is inferred from it. Evidence is now measured directly without subtracting separately measured mutable subtrees. The corrected controller records fixed measurement roles and permits at most three complete remeasurements only for missing-entry output in owned target/tmp. The final finite8,000,000,000-byte envelope remains within the original8GiB estimate, with the original physical baseline, free floor, headroom, concurrent RAG hold and elapsed consumption preserved. Node26 experimental localStorage warnings remain visible; no native protocol qualification follows.
 
+---
+
+## 2026-10-21 — On-demand read-only storage inventory
+
+The owner-selected first storage-maintenance milestone adds only
+`scripts/storage_inventory.py`, synthetic filesystem-boundary tests and scoped
+workflow/current-state documentation. It accepts explicit absolute candidate
+paths, inventories stable metadata/membership/hashes without following links,
+applies overriding holds and reports exact retain/defer reasons. Optional local
+payload/recovery-record receipts are hash/filename/size-bound observations only;
+private current cloud availability, source coverage and active consumers remain
+unverified. Every report has removal_eligible=false and grants no operation authority.
+No automatic session trigger, background scheduling or product executor exists.
+
+The detached checkout is
+`/Users/hdang/.codex/worktrees/storage-inventory-checker/ai-agent-assistant`, at
+4e3e94d with the same tree as published main f08f4ac. Older dirty main, active tasks,
+original documentation candidates, gates and frozen evidence remain protected.
+No artifact archival/removal, application launch, cloud operation, process signal,
+credential/permission change, branch operation, commit or publication occurred.
+No QA build was produced, no retained artifact was removed and no physical space
+recovery is claimed. This checkout and all task evidence remain retained.
+
+See the [utility guide](docs/workflows/STORAGE_INVENTORY.md),
+[approved plan](docs/plans/2026-10-21-storage-inventory-checker.md) and
+[review](docs/reviews/2026-10-21-storage-inventory-checker-post-increment-review.md).
+External baseline, private synthetic report, validation/reuse/preservation and
+actual final gate/Stop receipts are in the task's
+`storage-inventory-checker-20261021` visualization evidence directory. The new
+frozen readiness report is never updated to record later implementation results.
+
+Fresh final checker tests:37 pass on both Python3.9 and3.12. Full repository
+tests:137 pass on Python3.12; unchanged hook suite:291 pass. Formatting passes.
+Full product verification coverage reuses the sealed final Vitest security-repair
+exit0 with293 matching product inputs and a Markdown-only baseline delta. Fresh
+repository/tool/format/documentation/security/session checks cover affected inputs;
+this composite is not a newly executed npm run verify or native QA.
+
+An additional whole-repository Python3.9 diagnostic failed with170 subcase errors
+in unchanged repository_health.py:1094 (zip(strict=True), unavailable in3.9).
+Preserve exit1; do not claim whole-repository3.9 support. The checker itself passes
+its3.9 tests. Required repository completion uses3.12; no unrelated validator fix.
+The sandbox also denied a synthetic Unix-socket fixture in an early3.9 run; the
+normal authorized test context then passed. Preparation orchestration/import/path/
+criterion-ID rejections are external historical records, not passing evidence.
+
+---
+
+## 2026-10-21 — Storage inventory boundary correction
+
+The separately owner-authorized correction adds physical alias containment,
+conservative case/Unicode scope comparisons, complete held/sealed output
+exclusions and strict evidence-role typing. Recognized exclusions survive malformed
+roles; ambiguous/unreadable/noncanonical scopes stop report creation. Removal
+eligibility and operation authority remain false. No automatic cleanup is added.
+See the [correction plan](docs/plans/2026-10-21-storage-inventory-boundary-correction.md)
+and [new review](docs/reviews/2026-10-21-storage-inventory-boundary-correction-post-increment-review.md).
+Original first-milestone plan/reports and sealed evidence remain byte-identical;
+this correction supersedes current readiness without rewriting historical results.
+
+Fresh final verification:53 checker tests pass on both Python3.9 and3.12, and153
+repository tests pass on3.12. Unchanged291 hook tests and product/native/build stages
+are reused with verified sealed provenance; no new full verify or native QA run.
+Final documentation checks and the actual supported gate/status/Stop are recorded
+in the external storage-inventory-boundary-correction-20261021 evidence directory.
+No actual QA artifact was scanned, transferred, restored or removed; no signals,
+existing permission/credential changes, scheduling, automation, Git operations or
+publication occurred. No QA build or physical space reclaim is claimed. Keep this
+checkout and all original evidence retained; no successor starts automatically.
+
+The first correction iteration failed duplicate-path counting after deduplication
+and the old device-only fstat test stub. Both were corrected; the original failed
+exit and later source-bound passing receipts remain separate. Review also closed
+duplicate-key/unreadable-context and invalid-scope-shape cases that could hide
+restrictions. No historical result or frozen receipt was rewritten. The inherited
+whole-repository Python3.9 zip(strict=True) failure remains outside this correction;
+required repository completion uses3.12, while checker compatibility passes both.
+
 ## 2026-10-22 — Foreground voice development corrections
 
 Preserved uppercase-admission-label rejection, macOS27 audio-tap compiler rejections, frontend Stop polling race, strict TypeScript inference failure and React lint failures. Corrections use lowercase labels, SDK-declared availability/error forms, immediate Stop wake-up, explicit state access and conforming effects/types. The corrected focused checks pass; no historical result is promoted. Native availability, permission attribution and actual offline recognition remain unverified. See [voice plan](docs/plans/2026-10-22-foreground-push-to-talk-voice.md).

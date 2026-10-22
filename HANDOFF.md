@@ -12774,6 +12774,201 @@ Resume prompt for a pre-publication interruption:
 Resume the owner-authorized Vitest 4.1.12 security repair in /Users/hdang/.codex/worktrees/fix-vitest-audit/ai-agent-assistant. Inspect current instructions/admission, the repair plan/report, and the external vitest-security-repair-20261021-01 FINAL-HANDOFF before acting. Preserve user changes, Tasks/memory acceptance, RAG ownership, failed receipts and resources. Reuse passing audit, frontend and full verification evidence; do not replay native acceptance or model requests. Continue exact scoped staging/commit/push/PR attachment, required CI/review, squash merge and remote tree/ancestry verification autonomously. Stop only at genuine access, ownership, verification, resource or scope boundaries; no force-push, HP work, protected cleanup, image utilities or successor. Do not repeat completed publication operations.
 ```
 
+---
+
+## 2026-10-21 — Private OneDrive QA-build closeout documentation
+
+The existing session-closeout procedure now documents agent-guided private
+OneDrive archival before explicitly authorized local removal: exact inventories
+and overriding local holds, archive identities/private availability, independent
+nonexecuting payload and recovery-record verification, unchanged-evidence reuse,
+fresh dependencies, per-path outcomes, safe partial completion and observed space.
+This is documentation only; implementation completion, archive verification and
+removal authority remain separate. No trigger, executor or artifact operation.
+Checkout: `/Users/hdang/.codex/worktrees/qa-onedrive-closeout/ai-agent-assistant`,
+detached at `28948239934b6589f4b4ab55882dd13b1578490a`; no branch ref change.
+The older dirty primary checkout and other task checkouts are untouched.
+Plan: [OneDrive closeout](docs/plans/2026-10-21-qa-onedrive-closeout.md).
+Review: [consolidated report](docs/reviews/2026-10-21-qa-onedrive-closeout-post-increment-review.md).
+Recoverable original documents, file inventories and check/gate receipts are at
+`/Users/hdang/.codex/visualizations/2026/10/21/01a16064-1596-7b52-bdcb-90c7155957dc/qa-onedrive-closeout-docs-20261021`.
+
+No uploads, downloads/restores, original/scratch deletion, signals, credentials or
+permissions changes, builds, hook changes, commits or publication ran. No QA build
+was produced by this documentation task; archival/removal is not applicable and no
+space recovery is claimed. This checkout remains retained: review/publication and
+explicit worktree archival authorization are absent. Active resource holds remain.
+
+Final verification and preservation results are recorded in the consolidated
+report; actual local gate/status/complete-payload Stop receipts control completion.
+The normal schema-2 admission freezes the readiness report; never edit that report
+or historical failures to record later results. No successor starts automatically.
+
+Exact next prompt (read-only review):
+
+```text
+Review the qa-onedrive-closeout documentation candidate at /Users/hdang/.codex/worktrees/qa-onedrive-closeout/ai-agent-assistant. Inspect repository instructions, Git state, plan, complete diff, frozen readiness report, final review and external check/preservation/gate receipts before editing. Preserve existing user changes and historical records; avoid unrelated modifications and do not repeat completed cleanup, unchanged validation or workflow amendments. Confirm one central agent-guided procedure covers exact inventories, overriding holds, private OneDrive identities, independent payload/recovery-record verification, fresh dependencies, per-path receipts and safe measured partial completion. Confirm completion grants no operation authority and hooks/executable inputs remain unchanged. Report findings and publication readiness only. No edits, uploads, downloads/restores, deletion, process signals, credentials/permissions changes, branch operations, commits, publication or automation activation. Stop affected review conclusions on missing evidence or ambiguous attribution.
+```
+
+---
+
+## 2026-10-21 — OneDrive closeout documentation publication preparation
+
+The reviewed qa-onedrive-closeout documentation delta is transferred onto verified
+main `f954b74c9122683133d5b028abdcae8f792e60ee` in a new detached preparation
+checkout. Tasks PR152 is merged as `31b7148`; main also includes PR153. The earlier
+cached-main publication concern is superseded by direct read-only GitHub evidence,
+without rewriting its history. No Tasks/source/dependency change is in this delta.
+Original workflow text is reused unchanged; only preparation/current-state records
+are added. No commit, push, PR, merge or artifact operation is authorized or run.
+Current checkout:
+`/Users/hdang/.codex/worktrees/qa-onedrive-publication-prep/ai-agent-assistant`.
+It is detached at verified main `f954b74`; the older dirty primary and all active
+task checkouts remain untouched. The original qa-onedrive-closeout candidate and
+its sealed evidence/checkout-local gate stay unchanged and retained. Its three
+dated plan/readiness/final reports are copied byte-identically as historical
+input snapshots; their inventories/fingerprints are not rebound to this checkout.
+The [preparation plan](docs/plans/2026-10-21-qa-onedrive-publication-prep.md) and
+[new review](docs/reviews/2026-10-21-qa-onedrive-publication-prep-post-increment-review.md)
+record current scope and validation. Actual final gate/status/Stop receipts control
+completion. No new acceptance, full build or artifact recovery is claimed.
+
+External preservation, remote observation, exact transfer and check/gate receipts:
+`/Users/hdang/.codex/visualizations/2026/10/21/01a16064-1596-7b52-bdcb-90c7155957dc/qa-onedrive-publication-prep-20261021`.
+No QA artifact was produced or removed; no space recovery is claimed. The original
+and new worktrees stay retained; neither is authorized for archival.
+
+Exact next prompt, only if the owner chooses publication:
+
+```text
+Publish only the reviewed qa-onedrive-closeout documentation and its publication-preparation records from /Users/hdang/.codex/worktrees/qa-onedrive-publication-prep/ai-agent-assistant. Inspect repository instructions, Git state, current remote main, complete documentation diff, preparation plan/report and sealed external check/preservation/gate receipts first. Preserve existing user changes, active tasks and all original frozen evidence; do not repeat workflow implementation, cleanup, native QA or unchanged checks. Verify the task-local gate is complete/valid and the proposed publication delta contains only the sixteen attributed documentation paths. This prompt authorizes a scoped codex/ branch, one documentation commit, push, PR attachment, applicable CI/review and conditional squash merge only after all checks pass; stop on base drift needing unsafe integration, scope/ownership ambiguity, missing evidence or failed required checks. Verify the final remote tree/diff and record actual results additively. No artifact upload/download/restore, deletion, process signals, credentials/permissions changes, automation activation or successor milestone.
+```
+
+---
+
+## 2026-10-21 — On-demand read-only storage inventory
+
+The owner-selected first storage-maintenance milestone adds only
+`scripts/storage_inventory.py`, synthetic filesystem-boundary tests and scoped
+workflow/current-state documentation. It accepts explicit absolute candidate
+paths, inventories stable metadata/membership/hashes without following links,
+applies overriding holds and reports exact retain/defer reasons. Optional local
+payload/recovery-record receipts are hash/filename/size-bound observations only;
+private current cloud availability, source coverage and active consumers remain
+unverified. Every report has removal_eligible=false and grants no operation authority.
+No automatic session trigger, background scheduling or product executor exists.
+
+The detached checkout is
+`/Users/hdang/.codex/worktrees/storage-inventory-checker/ai-agent-assistant`, at
+4e3e94d with the same tree as published main f08f4ac. Older dirty main, active tasks,
+original documentation candidates, gates and frozen evidence remain protected.
+No artifact archival/removal, application launch, cloud operation, process signal,
+credential/permission change, branch operation, commit or publication occurred.
+No QA build was produced, no retained artifact was removed and no physical space
+recovery is claimed. This checkout and all task evidence remain retained.
+
+See the [utility guide](docs/workflows/STORAGE_INVENTORY.md),
+[approved plan](docs/plans/2026-10-21-storage-inventory-checker.md) and
+[review](docs/reviews/2026-10-21-storage-inventory-checker-post-increment-review.md).
+External baseline, private synthetic report, validation/reuse/preservation and
+actual final gate/Stop receipts are in the task's
+`storage-inventory-checker-20261021` visualization evidence directory. The new
+frozen readiness report is never updated to record later implementation results.
+
+Final results and the actual task-local complete/valid gate and complete-payload
+Stop control completion. The standalone checker has37 passing boundary tests on
+both interpreters; repository3.12 has137 passing tests and hooks291. The unrelated
+whole-repository3.9 diagnostic failure is preserved and qualified in the review.
+
+Exact proposed next prompt (read-only review; do not execute automatically):
+
+```text
+Review the bounded Cortexa storage inventory candidate in /Users/hdang/.codex/worktrees/storage-inventory-checker/ai-agent-assistant. Inspect instructions, Git state, approved plan, complete diff, frozen readiness/final reports and external storage-inventory-checker-20261021 evidence before editing. Preserve user changes, active tasks and historical evidence; avoid unrelated modifications and do not repeat completed cleanup, implementation or unchanged checks. First assess the inherited whole-repository Python3.9 zip(strict=True) failure and confirm the documented Python3.12 repository baseline and separately passing checker3.9 coverage; do not silently waive a required failure. Review no-follow traversal, protected holds, bounded/incomplete inventory, exact payload/recovery receipt identities, unknown dependencies and private exclusive output. Confirm no removal eligibility or execution authority and verify final gate/Stop evidence. Report findings and publication readiness only. No edits, artifact operations, deletion, signals, permissions/credentials changes, branch operations, commits, publication or automation. Stop affected conclusions on missing evidence, scope drift or ambiguous ownership.
+```
+
+---
+
+## 2026-10-21 — Storage inventory boundary correction
+
+The separately owner-authorized correction adds physical alias containment,
+conservative case/Unicode scope comparisons, complete held/sealed output
+exclusions and strict evidence-role typing. Recognized exclusions survive malformed
+roles; ambiguous/unreadable/noncanonical scopes stop report creation. Removal
+eligibility and operation authority remain false. No automatic cleanup is added.
+See the [correction plan](docs/plans/2026-10-21-storage-inventory-boundary-correction.md)
+and [new review](docs/reviews/2026-10-21-storage-inventory-boundary-correction-post-increment-review.md).
+Original first-milestone plan/reports and sealed evidence remain byte-identical;
+this correction supersedes current readiness without rewriting historical results.
+
+Fresh final verification:53 checker tests pass on both Python3.9 and3.12, and153
+repository tests pass on3.12. Unchanged291 hook tests and product/native/build stages
+are reused with verified sealed provenance; no new full verify or native QA run.
+Final documentation checks and the actual supported gate/status/Stop are recorded
+in the external storage-inventory-boundary-correction-20261021 evidence directory.
+No actual QA artifact was scanned, transferred, restored or removed; no signals,
+existing permission/credential changes, scheduling, automation, Git operations or
+publication occurred. No QA build or physical space reclaim is claimed. Keep this
+checkout and all original evidence retained; no successor starts automatically.
+
+Exact next prompt, only if the owner selects review:
+
+```text
+Review the corrected Cortexa storage-inventory candidate at /Users/hdang/.codex/worktrees/storage-inventory-checker/ai-agent-assistant. Inspect instructions, Git state, correction plan, complete diff, frozen correction readiness/final reports and sealed storage-inventory-boundary-correction-20261021 evidence. Preserve user changes, active tasks and all original first-milestone records; avoid unrelated modifications and do not repeat completed cleanup, implementation or unchanged validation. Verify physical/case/Unicode alias containment, held/sealed report exclusions, malformed-role deferral and safe stopping on ambiguous/unreadable/noncanonical scopes. Confirm53 checker tests on both interpreters,153 repository tests on3.12, qualified unchanged-stage reuse, false removal eligibility and actual complete/valid gate/Stop receipts. Keep the inherited repository3.9 failure qualified. Report findings and publication readiness only. No edits, artifact operations, signals, permissions/credentials changes, scheduling, automation, Git operations or publication. Stop affected conclusions on missing evidence, ambiguity or unsafe scope.
+```
+
+---
+
+## 2026-10-21 — Storage inventory publication preparation
+
+The reviewed20-path candidate is transferred onto actual main f08f4ac in a new
+detached managed checkout at /Users/hdang/.codex/worktrees/storage-inventory-publication-prep/ai-agent-assistant.
+Its base tree matches reviewed4e3e94d; squash ancestry is not confused with tree
+identity. Original source checkout, reports, gate and sealed evidence remain
+unchanged. Reviewed checker/tests and frozen reports are copied byte-identically;
+only preparation records and current-state suffixes are new.
+
+See the [preparation plan](docs/plans/2026-10-21-storage-inventory-publication-prep.md)
+and [new review](docs/reviews/2026-10-21-storage-inventory-publication-prep-post-increment-review.md).
+External storage-inventory-publication-prep-20261021 evidence binds current main,
+exact transfer, preservation, qualified reuse and fresh documentation/repository/
+security/whitespace/session checks.53 checker cases on each interpreter and153
+repository cases on3.12,291 hooks and product verification are inherited unchanged;
+no new tests/full verify/native build/QA run. Whole-repository3.9 zip(strict=True)
+failure remains qualified. Actual new gate/status/Stop receipts control completion.
+
+No artifact operation, signal, permission/credential change, automation, branch,
+commit or publication ran. No QA build or physical reclaim is claimed; all
+worktrees remain retained. Publication requires separate explicit owner authority,
+fresh remote-main/diff checks and applicable CI/review. No successor starts here.
+
+Exact next prompt, only if the owner selects publication:
+
+```text
+Publish the reviewed Cortexa storage-inventory candidate from /Users/hdang/.codex/worktrees/storage-inventory-publication-prep/ai-agent-assistant. Inspect repository instructions, Git state, current remote main, complete25-path diff, preparation plan/report and sealed source/correction/preparation evidence first. Preserve user changes, active tasks and all original reports/receipts. Do not repeat implementation, cleanup or unchanged validation. I authorize one scoped codex/ branch, one Conventional Commit, push, PR creation/attachment, applicable CI/review and conditional squash merge only after required checks pass. Verify complete/valid gate, exact reviewed source/test identities, safe current-main integration and final remote tree/diff; append actual outcomes. Keep inherited repository3.9 failure qualified. Stop on unsafe integration, ambiguous ownership, scope drift, missing evidence or failed required checks. No artifact operations, signals, permission/credential changes, automation or successor milestone.
+```
+
+## Observed admission sequencing correction
+
+The first begin rejected missing exact manual-review labels and left the gate
+inactive. An orchestration ordering error then transferred the sealed candidate
+and wrote initial preparation notes before admission. This is preserved as an
+ordering failure, not a passing ordinary admission or an implementation retry.
+Original admission request/exit and first frozen readiness remain unchanged.
+Use a separately frozen admission-readiness report for the now24-path snapshot;
+ordinary schema2 begin binds only subsequent final documentation/verification.
+The20 reviewed files were copied with exact sealed hashes; no new executable
+behavior was implemented. Original source/evidence/gate are untouched.
+This additive correction supersedes the planned before-transfer ordering only as
+a record of what actually occurred; it is no waiver or generic admission bypass.
+
+A second preparation preflight rejected a readiness filename/increment mismatch
+before begin. Its frozen admission-readiness report remains unchanged. A new
+current-readiness report has matching filename, manifest and request identities;
+it binds the full25-path input snapshot. Five preparation records now accompany
+the reviewed20 paths. Only final review documentation changes after supported
+admission; all transferred executable/history bytes are protected. Both rejection
+records remain failures, with no ordinary admission claimed before transfer.
+
 ## 2026-10-22 — Foreground push-to-talk voice authorized
 
 The owner authorizes one Mac-only en-US on-device voice milestone in a fresh worktree from integrated main f954b74. Explicit native permission, bounded foreground dictation, editable transcript review before existing Send, and optional installed-system-voice read-aloud. See [the voice plan](docs/plans/2026-10-22-foreground-push-to-talk-voice.md). Preserve accepted memory/Tasks, ledger89/96, RAG Knowledge/retrieval/context ownership, migration11, historical failures and retained resources.

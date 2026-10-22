@@ -1601,3 +1601,71 @@ A security fix is not complete until regression tests and the relevant threat-mo
 Production release additionally requires every applicable item in
 `RELEASE_CHECKLIST.md`, including signing, notarization, installer, secret,
 artifact, and rollback evidence.
+
+---
+
+## 2026-10-21 — On-demand read-only storage inventory
+
+The owner-selected first storage-maintenance milestone adds only
+`scripts/storage_inventory.py`, synthetic filesystem-boundary tests and scoped
+workflow/current-state documentation. It accepts explicit absolute candidate
+paths, inventories stable metadata/membership/hashes without following links,
+applies overriding holds and reports exact retain/defer reasons. Optional local
+payload/recovery-record receipts are hash/filename/size-bound observations only;
+private current cloud availability, source coverage and active consumers remain
+unverified. Every report has removal_eligible=false and grants no operation authority.
+No automatic session trigger, background scheduling or product executor exists.
+
+The detached checkout is
+`/Users/hdang/.codex/worktrees/storage-inventory-checker/ai-agent-assistant`, at
+4e3e94d with the same tree as published main f08f4ac. Older dirty main, active tasks,
+original documentation candidates, gates and frozen evidence remain protected.
+No artifact archival/removal, application launch, cloud operation, process signal,
+credential/permission change, branch operation, commit or publication occurred.
+No QA build was produced, no retained artifact was removed and no physical space
+recovery is claimed. This checkout and all task evidence remain retained.
+
+See the [utility guide](docs/workflows/STORAGE_INVENTORY.md),
+[approved plan](docs/plans/2026-10-21-storage-inventory-checker.md) and
+[review](docs/reviews/2026-10-21-storage-inventory-checker-post-increment-review.md).
+External baseline, private synthetic report, validation/reuse/preservation and
+actual final gate/Stop receipts are in the task's
+`storage-inventory-checker-20261021` visualization evidence directory. The new
+frozen readiness report is never updated to record later implementation results.
+
+The utility is repository maintenance, not product storage or an approved device
+action. Reads use no-follow descriptor traversal and bounded content hashing.
+Protected stores are not content inputs; no receipt body or owner assertion text
+is emitted. Private metadata reports require an owner-only parent outside inputs,
+checkouts and synced stores. Same-user mutation, offline evidence assertions,
+cooperative deadlines and time-of-check races remain qualified; no filesystem
+snapshot, OS sandbox, fresh consumer clearance or removal eligibility is claimed.
+
+---
+
+## 2026-10-21 — Storage inventory boundary correction
+
+The separately owner-authorized correction adds physical alias containment,
+conservative case/Unicode scope comparisons, complete held/sealed output
+exclusions and strict evidence-role typing. Recognized exclusions survive malformed
+roles; ambiguous/unreadable/noncanonical scopes stop report creation. Removal
+eligibility and operation authority remain false. No automatic cleanup is added.
+See the [correction plan](docs/plans/2026-10-21-storage-inventory-boundary-correction.md)
+and [new review](docs/reviews/2026-10-21-storage-inventory-boundary-correction-post-increment-review.md).
+Original first-milestone plan/reports and sealed evidence remain byte-identical;
+this correction supersedes current readiness without rewriting historical results.
+
+Fresh final verification:53 checker tests pass on both Python3.9 and3.12, and153
+repository tests pass on3.12. Unchanged291 hook tests and product/native/build stages
+are reused with verified sealed provenance; no new full verify or native QA run.
+Final documentation checks and the actual supported gate/status/Stop are recorded
+in the external storage-inventory-boundary-correction-20261021 evidence directory.
+No actual QA artifact was scanned, transferred, restored or removed; no signals,
+existing permission/credential changes, scheduling, automation, Git operations or
+publication occurred. No QA build or physical space reclaim is claimed. Keep this
+checkout and all original evidence retained; no successor starts automatically.
+
+Output checks and exclusive creation share one no-follow parent descriptor, with
+a fresh parent-identity comparison. Unknown scope refuses output rather than
+clearing exclusions. This remains point-in-time protection, not an atomic snapshot
+or defense against every malicious same-user rename after validation.
