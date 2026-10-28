@@ -8092,3 +8092,11 @@ inventory-test namespace, with exact ownership and resource safeguards. Validato
 and tests remain unchanged. Historical volume continuity and oldest cleanup stay
 Unverified; Step B stays Blocked and exec Deferred. Native app, accessibility,
 layout, bundle-size, live-data and hosted-authentication limitations remain.
+
+## 2026-10-28 owner-approved dashboard and current-main integration
+
+The owner approved minimum conflict repair for PR #158 in one fresh integration worktree/branch, preserving verified dashboard commit f857ca5d02fddba76ef9f009a707823ac1b64f2c and integrating voice main f3fb0fe128c445bf101057f2c868943cc74ecaa3 (tree 9a3481a17198615b34f0d9df3e092cf582d64cd3). Fresh focused/full integration verification and affected reruns after concrete in-scope fixes are authorized; old allowances/results remain unchanged. A non-force update to the existing PR and squash merge are conditional on verification and repository rules. No installation, native app launch, helper framework, unrelated feature or historical/validator weakening is authorized.
+
+The owner separately approved combined cap252706816 and original-growth cap111972352 bytes, transferring524288 bytes from captures to bindings (23658496 and5701632). Other component limits, closing reserve2097152, floor9194962944 and external reservations remain unchanged. Complete new source, dependencies, admission, logs and build allocation are counted. No cleanup or releases are inferred.
+
+The owner also approved only a task-bound packed-refs comparison amendment: preserve original/current raw records and require complete equality outside refs/codex/turn-diffs/\*\*, including peeled identities, stable no-follow reads and full accounting. The task never modifies packed-refs itself. Change origin and historical continuity remain Unverified. The owner confirmed common-store and exact inventory-test namespace quiet conditions. See the bounded integration plan; normal schema-2 admission remains required before implementation.
