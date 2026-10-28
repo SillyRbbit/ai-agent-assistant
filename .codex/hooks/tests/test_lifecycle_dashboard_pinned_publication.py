@@ -18,9 +18,9 @@ import post_increment_gate as g
 
 class PinnedPublicationTests(unittest.TestCase):
     def setUp(self):
-        self.tmp = tempfile.TemporaryDirectory(prefix="pinned-fixture-", dir=os.environ["TMPDIR"])
+        self.tmp = tempfile.TemporaryDirectory(prefix="pinned-fixture-", dir=os.environ.get("TMPDIR"))
         self.addCleanup(self.tmp.cleanup)
-        self.root = Path(self.tmp.name)
+        self.root = Path(self.tmp.name).resolve()
         self.home = self.root.parent / (self.root.name + "-home")
         # HOME stays inside the disposable fixture, excluded from Git inventory.
         self.home = self.root / ".git" / "private-home"
