@@ -13,18 +13,18 @@ Resolve actual conflicts in the eleven known overlapping files, preserving both 
 
 ## Components and invariants
 
-Retain dashboard and voice lifecycle selectors and command routing. Keep repository-health implementation/tests and Tauri invoke registration consistent. Preserve voice abort behavior during focus loss, close and shutdown. Unconflicted files from each verified commit must remain byte-identical. Original source/index/branch and accepted committed phase remain intact in the original checkout.
+Retain dashboard and voice lifecycle selectors and command routing. Keep repository-health implementation/tests and Tauri invoke registration consistent. Preserve voice abort behavior during focus loss, close and shutdown. Unconflicted product and historical files from each verified commit must remain byte-identical. The observed voice negative-test fixture receives only an explicit0644 baseline and baseline assertion so its existing0600 mode-drift rejection remains meaningful under private umask077. Original source/index/branch and accepted committed phase remain intact in the original checkout.
 
 ## Milestones and acceptance
 
 - [x] Exact main pin and complete local object closure acquired without ref or FETCH_HEAD updates.
 - [x] Fresh integration branch/worktree created at the original verified dashboard commit.
 - [x] Existing compatible graph copied; all 14231 qualified file hashes/modes verified without installation.
-- [ ] Preparation checks and schema-2 objective admission.
-- [ ] Conflict-only merge preserves both implementations and histories.
-- [ ] Fresh focused/full verification and final affected checks pass with actual terminal/wait/cleanup evidence.
-- [ ] Architecture/security/code-health/scope review and ordinary completion gate validate.
-- [ ] Normal integration commit, non-force PR update, repository-rule checks and approved squash merge are verified.
+- [x] Preparation checks and schema-2 objective admission.
+- [x] Conflict-only merge preserves both implementations and histories.
+- [x] Fresh focused/full verification passes with actual terminal/wait/cleanup evidence. Final documentation checks are recorded in the current review.
+- [x] Substantive architecture/security/code-health/scope review completed; normal finalization is the next gate operation.
+- [ ] Subsequent Git outcomes are recorded by private final custody and actual PR #158 state; this is the pre-publication source checkpoint.
 
 ## Verification and evidence
 
@@ -41,3 +41,7 @@ Prepared source/model and historical verification remain distinct from current i
 ## Risks, rollback and stop conditions
 
 Stop for unowned drift, unsafe resources, unsupported dependencies, scope expansion, mandatory policy rejection or unresolved cleanup. Keep partial effects and every historical failure. Both original commits and all original checkout state remain recoverable. Do not start another milestone after the approved merge. Preserve Step B Blocked, exec Deferred and all existing manual/native limitations.
+
+## Verified local checkpoint
+
+Fresh full npm verify passed on bd43527345dae14617c5c5827b0426c7a8d0ae67 with actual exit0/wait0 and complete cleanup; the source was unchanged through full closeout. The failed voice fixture case was corrected without relaxing production validation. Later edits are documentation only, checked separately. Original dashboard checkout/history and both feature implementations remain preserved. The final source review records all results. Complete only the already-approved conditional Git/PR finish; if actual PR state is merged, do not repeat it or start another milestone.

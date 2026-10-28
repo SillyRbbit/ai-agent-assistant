@@ -177,6 +177,11 @@ def write_valid_ui_native_boundary(root: Path) -> None:
         (Path(__file__).resolve().parents[2] / knowledge_client).read_text(encoding="utf-8"),
         encoding="utf-8",
     )
+    voice_client = "src/infrastructure/tauri/voice-client.ts"
+    (root / voice_client).write_text(
+        (Path(__file__).resolve().parents[2] / voice_client).read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
     tasks_client = "src/infrastructure/tauri/local-tasks-client.ts"
     (root / tasks_client).write_text(
         (Path(__file__).resolve().parents[2] / tasks_client).read_text(encoding="utf-8"),
@@ -214,6 +219,9 @@ def write_valid_ui_native_boundary(root: Path) -> None:
     lib.write_text(
         ".invoke_handler(tauri::generate_handler![\n"
         "app_info::get_app_info,\n"
+        "voice_tauri::start_voice,\n"
+        "voice_tauri::poll_voice,\n"
+        "voice_tauri::control_voice,\n"
         "local_tasks_tauri::list_local_tasks,\n"
         "local_tasks_tauri::save_local_task,\n"
         "local_tasks_tauri::set_local_task_completion,\n"
@@ -318,6 +326,35 @@ def write_valid_ui_native_boundary(root: Path) -> None:
 
 
 class RepositoryHealthTests(unittest.TestCase):
+    def test_voice_boundary_keeps_commands_payloads_and_registration_exact(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            write_valid_ui_native_boundary(root)
+            client=root / "src/infrastructure/tauri/voice-client.ts"
+            baseline=client.read_text(encoding="utf-8")
+            self.assertEqual(health.ui_native_boundary_findings(root), ())
+            for old,new in (
+                ('"start_voice"','"arbitrary_microphone"'),
+                ('{ conversationId, operation }','{ conversationId, operation, path: "x" }'),
+                ('{ invoke, isTauri }','{ invoke, isTauri, transformCallback }'),
+            ):
+                with self.subTest(new=new):
+                    self.assertIn(old,baseline)
+                    client.write_text(baseline.replace(old,new),encoding="utf-8")
+                    self.assertTrue(health.ui_native_boundary_findings(root))
+            client.write_text(baseline+'\ninvoke<unknown>("extra");\n',encoding="utf-8")
+            self.assertTrue(health.ui_native_boundary_findings(root))
+            client.write_text(baseline,encoding="utf-8")
+            lib=root / "src-tauri/src/lib.rs"
+            original=lib.read_text(encoding="utf-8")
+            for command in ['start_voice','poll_voice','control_voice']:
+                lib.write_text(original.replace('voice_tauri::'+command+',',''),encoding="utf-8")
+                self.assertTrue(health.ui_native_boundary_findings(root))
+            lib.write_text(original,encoding="utf-8")
+            rogue=root/'src/features/voice/rogue.ts';rogue.parent.mkdir(parents=True,exist_ok=True)
+            rogue.write_text('import { invoke } from "@tauri-apps/api/core";',encoding="utf-8")
+            self.assertTrue(health.ui_native_boundary_findings(root))
+
     def test_local_tasks_boundary_rejects_commands_paths_imports_and_missing_registration(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

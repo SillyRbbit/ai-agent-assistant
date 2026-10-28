@@ -339,7 +339,12 @@ def _closure():
     return lifecycle_closure
 
 
-def _dependent():
+def _dependent(increment_id: str | None = None):
+    # Only this separately owner-approved voice repair selects the new leaf.
+    # Existing dependent readers and all unrelated schemas remain unchanged.
+    if increment_id == "foreground-voice-publication-correction":
+        import lifecycle_voice_publication
+        return lifecycle_voice_publication
     import lifecycle_dependent_admission
     return lifecycle_dependent_admission
 
@@ -392,7 +397,7 @@ def validate_state(state_value: dict[str, Any]) -> None:
         validate_state(legacy)
         return
     if state_value.get("schema_version") == 5:
-        _dependent().shape(state_value)
+        _dependent(state_value.get("increment_id")).shape(state_value)
         legacy = dict(state_value)
         legacy.pop("dependent_lineage")
         legacy["schema_version"] = STATE_SCHEMA_VERSION
@@ -604,7 +609,7 @@ def begin_gate(
     if existing_state is not None and "dashboard_publication_lineage" in existing_state:
         _fail("dashboard attempt cannot be replayed or automatically succeeded")
     if dependent_request is not None:
-        _dependent().begin(root, increment_id, dependent_request)
+        _dependent(increment_id).begin(root, increment_id, dependent_request)
         return
     if existing_state is not None and "dependent_lineage" in existing_state:
         _fail("dependent attempt cannot be replayed or automatically succeeded")
@@ -887,7 +892,7 @@ def _validate_report_evidence(
             _fail("dashboard report path does not match the admitted contract")
         blocking_milestone = _dashboard().milestone_report(root, increment_id, manifest)
     elif current and "dependent_lineage" in current and current["increment_id"] == increment_id:
-        blocking_milestone = _dependent().milestone_report(root, increment_id, manifest)
+        blocking_milestone = _dependent(increment_id).milestone_report(root, increment_id, manifest)
     else:
         blocking_milestone = _closure().milestone_report(root, increment_id, manifest)
     if blocking_verification or blocking_manual or blocking_finding or blocking_milestone:
@@ -1198,7 +1203,7 @@ def finalize_gate(root: Path, increment_id: str, report_value: str) -> None:
     if "dashboard_publication_lineage" in state_value:
         _dashboard().record(root, state_value)
     if "dependent_lineage" in state_value:
-        _dependent().record(root, state_value)
+        _dependent(state_value.get("increment_id")).record(root, state_value)
     repository_changes = changed_paths(root)
     suspicious = suspicious_changed_paths(repository_changes)
     if suspicious:
@@ -1235,7 +1240,7 @@ def finalize_gate(root: Path, increment_id: str, report_value: str) -> None:
     if "closure_lineage" in state_value:
         completed_state["closure_lineage"] = state_value["closure_lineage"]
     if "dependent_lineage" in state_value:
-        _dependent().carry(state_value, completed_state)
+        _dependent(increment_id).carry(state_value, completed_state)
     _dashboard().carry(state_value, completed_state)
     _dashboard_verification().carry(state_value, completed_state)
     _dashboard_verification_repair().carry(state_value, completed_state)
@@ -1286,7 +1291,7 @@ def close_failed_gate(root: Path, increment_id: str, report_value: str) -> None:
     if "dashboard_publication_lineage" in state_value:
         _dashboard().record(root, state_value)
     if "dependent_lineage" in state_value:
-        _dependent().record(root, state_value)
+        _dependent(state_value.get("increment_id")).record(root, state_value)
     repository_changes = changed_paths(root)
     suspicious = suspicious_changed_paths(repository_changes)
     if suspicious:
@@ -1322,7 +1327,7 @@ def close_failed_gate(root: Path, increment_id: str, report_value: str) -> None:
     if "closure_lineage" in state_value:
         failed_state["closure_lineage"] = state_value["closure_lineage"]
     if "dependent_lineage" in state_value:
-        _dependent().carry(state_value, failed_state)
+        _dependent(increment_id).carry(state_value, failed_state)
     _dashboard().carry(state_value, failed_state)
     _dashboard_verification().carry(state_value, failed_state)
     _dashboard_verification_repair().carry(state_value, failed_state)
@@ -1376,7 +1381,7 @@ def _validate_terminal_evidence(root: Path, state_value: dict[str, Any]) -> bool
         if "dashboard_publication_lineage" in state_value:
             _dashboard().record(root, state_value)
         if "dependent_lineage" in state_value:
-            _dependent().record(root, state_value)
+            _dependent(state_value.get("increment_id")).record(root, state_value)
         import lifecycle_acceptance as acceptance
         if "acceptance_lineage" in state_value:
             acceptance.validate_lineage(root, state_value)
@@ -1638,7 +1643,7 @@ def main(argv: list[str] | None = None) -> int:
             state_value = read_state(root)
             if state_value is None or "dependent_lineage" not in state_value:
                 _fail("no admitted dependent attempt")
-            _dependent().record(root, state_value)
+            _dependent(state_value.get("increment_id")).record(root, state_value)
             print("post-increment-gate: surviving evidence validated; historical custody remains qualified")
         elif arguments.command == "seal-memory-publication":
             import lifecycle_memory_publication as publication

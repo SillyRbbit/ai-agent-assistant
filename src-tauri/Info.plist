@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+<key>NSMicrophoneUsageDescription</key><string>Record only while you explicitly use foreground dictation. Cortexa does not save audio.</string>
+<key>NSSpeechRecognitionUsageDescription</key><string>Convert foreground dictation to an editable draft using on-device recognition only.</string>
+</dict></plist>
