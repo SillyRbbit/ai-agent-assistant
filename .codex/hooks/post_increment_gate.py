@@ -344,7 +344,53 @@ def _dependent():
     return lifecycle_dependent_admission
 
 
+def _dashboard():
+    import lifecycle_dashboard_publication
+    return lifecycle_dashboard_publication
+
+
+def _dashboard_verification():
+    import lifecycle_dashboard_verification
+    return lifecycle_dashboard_verification
+
+
+def _dashboard_verification_repair():
+    import lifecycle_dashboard_verification_repair
+    return lifecycle_dashboard_verification_repair
+
+
+def _dashboard_pinned_publication():
+    import lifecycle_dashboard_pinned_publication
+    return lifecycle_dashboard_pinned_publication
+
+
+def _dashboard_publication_transition():
+    import lifecycle_dashboard_publication_transition
+    return lifecycle_dashboard_publication_transition
+
+
 def validate_state(state_value: dict[str, Any]) -> None:
+    if state_value.get("schema_version") == 8:
+        _dashboard_verification_repair().shape(state_value)
+        legacy = dict(state_value)
+        legacy.pop("dashboard_verification_repair_lineage")
+        legacy["schema_version"] = STATE_SCHEMA_VERSION
+        validate_state(legacy)
+        return
+    if state_value.get("schema_version") == 7:
+        _dashboard_verification().shape(state_value)
+        legacy = dict(state_value)
+        legacy.pop("dashboard_verification_lineage")
+        legacy["schema_version"] = STATE_SCHEMA_VERSION
+        validate_state(legacy)
+        return
+    if state_value.get("schema_version") == 6:
+        _dashboard().shape(state_value)
+        legacy = dict(state_value)
+        legacy.pop("dashboard_publication_lineage")
+        legacy["schema_version"] = STATE_SCHEMA_VERSION
+        validate_state(legacy)
+        return
     if state_value.get("schema_version") == 5:
         _dependent().shape(state_value)
         legacy = dict(state_value)
@@ -532,13 +578,31 @@ def validate_increment_id(value: Any) -> str:
 def begin_gate(
     root: Path, increment_id: str, acceptance_request: str | None = None,
     *, admission: str | None = None, dependent_request: str | None = None,
+    dashboard_publication_request: str | None = None,
+    dashboard_verification_request: str | None = None,
+    dashboard_verification_repair_request: str | None = None,
 ) -> None:
     increment_id = validate_increment_id(increment_id)
     if has_merge_conflicts(root):
         _fail("cannot begin an increment while merge conflicts exist")
     existing_state = read_state(root)
-    if sum(value is not None for value in (admission, acceptance_request, dependent_request)) > 1:
+    if sum(value is not None for value in (admission, acceptance_request, dependent_request, dashboard_publication_request, dashboard_verification_request, dashboard_verification_repair_request)) > 1:
         _fail("choose one admission route")
+    if dashboard_verification_repair_request is not None:
+        _dashboard_verification_repair().begin(root, increment_id, dashboard_verification_repair_request)
+        return
+    if existing_state is not None and "dashboard_verification_repair_lineage" in existing_state:
+        _fail("dashboard verification repair cannot be replayed or automatically succeeded")
+    if dashboard_verification_request is not None:
+        _dashboard_verification().begin(root, increment_id, dashboard_verification_request)
+        return
+    if existing_state is not None and "dashboard_verification_lineage" in existing_state:
+        _fail("dashboard verification cannot be replayed or automatically succeeded")
+    if dashboard_publication_request is not None:
+        _dashboard().begin(root, increment_id, dashboard_publication_request)
+        return
+    if existing_state is not None and "dashboard_publication_lineage" in existing_state:
+        _fail("dashboard attempt cannot be replayed or automatically succeeded")
     if dependent_request is not None:
         _dependent().begin(root, increment_id, dependent_request)
         return
@@ -810,7 +874,19 @@ def _validate_report_evidence(
     ] != "Blocked":
         _fail("next-increment readiness contradicts a blocking finding")
     current = read_state(root)
-    if current and "dependent_lineage" in current and current["increment_id"] == increment_id:
+    if current and "dashboard_verification_repair_lineage" in current and current["increment_id"] == increment_id:
+        if report_value != _dashboard_verification_repair().REPORT:
+            _fail("verification repair report path does not match the admitted contract")
+        blocking_milestone = _dashboard_verification_repair().milestone_report(root, increment_id, manifest)
+    elif current and "dashboard_verification_lineage" in current and current["increment_id"] == increment_id:
+        if report_value != _dashboard_verification().REPORT:
+            _fail("verification report path does not match the admitted contract")
+        blocking_milestone = _dashboard_verification().milestone_report(root, increment_id, manifest)
+    elif current and "dashboard_publication_lineage" in current and current["increment_id"] == increment_id:
+        if report_value != _dashboard().REPORT:
+            _fail("dashboard report path does not match the admitted contract")
+        blocking_milestone = _dashboard().milestone_report(root, increment_id, manifest)
+    elif current and "dependent_lineage" in current and current["increment_id"] == increment_id:
         blocking_milestone = _dependent().milestone_report(root, increment_id, manifest)
     else:
         blocking_milestone = _closure().milestone_report(root, increment_id, manifest)
@@ -1115,6 +1191,12 @@ def finalize_gate(root: Path, increment_id: str, report_value: str) -> None:
         _fail("a terminally failed increment cannot be completed")
 
     _closure().validate_lineage(root, state_value)
+    if "dashboard_verification_repair_lineage" in state_value:
+        _dashboard_verification_repair().record(root, state_value)
+    if "dashboard_verification_lineage" in state_value:
+        _dashboard_verification().record(root, state_value)
+    if "dashboard_publication_lineage" in state_value:
+        _dashboard().record(root, state_value)
     if "dependent_lineage" in state_value:
         _dependent().record(root, state_value)
     repository_changes = changed_paths(root)
@@ -1154,6 +1236,9 @@ def finalize_gate(root: Path, increment_id: str, report_value: str) -> None:
         completed_state["closure_lineage"] = state_value["closure_lineage"]
     if "dependent_lineage" in state_value:
         _dependent().carry(state_value, completed_state)
+    _dashboard().carry(state_value, completed_state)
+    _dashboard_verification().carry(state_value, completed_state)
+    _dashboard_verification_repair().carry(state_value, completed_state)
     write_state(root, completed_state)
 
 
@@ -1170,6 +1255,12 @@ def close_failed_gate(root: Path, increment_id: str, report_value: str) -> None:
         _fail("a closed failure is immutable and cannot be reclosed")
     if state_value["status"] == "failed" and "dependent_lineage" in state_value:
         _fail("dependent terminal failure is immutable; a new recovery decision is required")
+    if state_value["status"] == "failed" and "dashboard_publication_lineage" in state_value:
+        _fail("dashboard terminal failure is immutable; a new recovery decision is required")
+    if state_value["status"] == "failed" and "dashboard_verification_lineage" in state_value:
+        _fail("verification terminal failure is immutable; a new owner decision is required")
+    if state_value["status"] == "failed" and "dashboard_verification_repair_lineage" in state_value:
+        _fail("verification repair terminal failure is immutable; a new owner decision is required")
     if state_value["status"] == "complete":
         _fail("a completed increment cannot be changed to failed")
     if (
@@ -1188,6 +1279,12 @@ def close_failed_gate(root: Path, increment_id: str, report_value: str) -> None:
         _fail("sealed failure history cannot be reclosed")
 
     _closure().validate_lineage(root, state_value)
+    if "dashboard_verification_repair_lineage" in state_value:
+        _dashboard_verification_repair().record(root, state_value)
+    if "dashboard_verification_lineage" in state_value:
+        _dashboard_verification().record(root, state_value)
+    if "dashboard_publication_lineage" in state_value:
+        _dashboard().record(root, state_value)
     if "dependent_lineage" in state_value:
         _dependent().record(root, state_value)
     repository_changes = changed_paths(root)
@@ -1226,6 +1323,9 @@ def close_failed_gate(root: Path, increment_id: str, report_value: str) -> None:
         failed_state["closure_lineage"] = state_value["closure_lineage"]
     if "dependent_lineage" in state_value:
         _dependent().carry(state_value, failed_state)
+    _dashboard().carry(state_value, failed_state)
+    _dashboard_verification().carry(state_value, failed_state)
+    _dashboard_verification_repair().carry(state_value, failed_state)
     write_state(root, failed_state)
 
 
@@ -1251,7 +1351,30 @@ def _validate_terminal_evidence(root: Path, state_value: dict[str, Any]) -> bool
             if publication.present(root):
                 publication.validate(root, state_value)
                 return True
+        if (state_value.get("status") == "complete"
+                and state_value.get("increment_id") == _dashboard_verification_repair().SUCCESSOR
+                and _dashboard_pinned_publication().present(root)):
+            _dashboard_pinned_publication().validate(root, state_value)
+            return True
+        if (state_value.get("status") == "complete"
+                and state_value.get("increment_id") == _dashboard_verification_repair().SUCCESSOR
+                and _dashboard_publication_transition().present(root)):
+            _dashboard_publication_transition().validate(root, state_value)
+            return True
         _closure().validate_lineage(root, state_value)
+        if "dashboard_verification_repair_lineage" in state_value:
+            _dashboard_verification_repair().record(root, state_value)
+            terminal_report, _, _ = _validate_report_evidence(root, state_value["report_path"], state_value["increment_id"])
+            if terminal_report["quality_gate"] != state_value["quality_gate"]:
+                return False
+        if "dashboard_verification_lineage" in state_value:
+            _dashboard_verification().record(root, state_value)
+            # This new route also revalidates forward evidence at terminal Stop.
+            terminal_report, _, _ = _validate_report_evidence(root, state_value["report_path"], state_value["increment_id"])
+            if terminal_report["quality_gate"] != state_value["quality_gate"]:
+                return False
+        if "dashboard_publication_lineage" in state_value:
+            _dashboard().record(root, state_value)
         if "dependent_lineage" in state_value:
             _dependent().record(root, state_value)
         import lifecycle_acceptance as acceptance
@@ -1397,6 +1520,14 @@ def redacted_status(root: Path) -> dict[str, Any]:
                 status_value["publication"] = publication.validate(root, state_value)
             except GateError:
                 status_value["publication"] = {"current_publication_valid": False}
+    if (state_value.get("status") == "complete"
+            and state_value.get("increment_id") == _dashboard_verification_repair().SUCCESSOR
+            and (_dashboard_pinned_publication().present(root) or _dashboard_publication_transition().present(root))):
+        try:
+            route = _dashboard_pinned_publication() if _dashboard_pinned_publication().present(root) else _dashboard_publication_transition()
+            status_value["publication"] = route.validate(root, state_value)
+        except GateError:
+            status_value["publication"] = {"current_publication_valid": False}
     import lifecycle_acceptance as acceptance
     if (root / acceptance.POINTER).exists():
         try:
@@ -1428,6 +1559,9 @@ def build_parser() -> argparse.ArgumentParser:
     admission_routes.add_argument("--acceptance-request")
     admission_routes.add_argument("--admission")
     admission_routes.add_argument("--dependent-request")
+    admission_routes.add_argument("--dashboard-publication-request")
+    admission_routes.add_argument("--dashboard-verification-request")
+    admission_routes.add_argument("--dashboard-verification-repair-request")
     subparsers.add_parser("dependent-preservation")
     publication_parser = subparsers.add_parser("seal-memory-publication")
     publication_parser.add_argument("--request", required=True)
@@ -1435,6 +1569,10 @@ def build_parser() -> argparse.ArgumentParser:
     closure_parser.add_argument("--request", required=True)
     maintenance_parser = subparsers.add_parser("seal-acceptance-maintenance")
     maintenance_parser.add_argument("--request", required=True)
+    pinned_parser = subparsers.add_parser("seal-dashboard-pinned-publication")
+    pinned_parser.add_argument("--request", required=True)
+    dashboard_transition_parser = subparsers.add_parser("seal-dashboard-publication")
+    dashboard_transition_parser.add_argument("--request", required=True)
 
     finalize_parser = subparsers.add_parser(
         "finalize", help="validate a report and write the completion marker"
@@ -1467,7 +1605,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         root = repository_root(Path.cwd())
         if arguments.command == "begin":
-            begin_gate(root, arguments.increment, arguments.acceptance_request, admission=arguments.admission, dependent_request=arguments.dependent_request)
+            begin_gate(root, arguments.increment, arguments.acceptance_request, admission=arguments.admission, dependent_request=arguments.dependent_request, dashboard_publication_request=arguments.dashboard_publication_request, dashboard_verification_request=arguments.dashboard_verification_request, dashboard_verification_repair_request=arguments.dashboard_verification_repair_request)
             print(f"post-increment-gate: active increment {arguments.increment}")
         elif arguments.command == "finalize":
             finalize_gate(root, arguments.increment, arguments.report)
@@ -1491,6 +1629,11 @@ def main(argv: list[str] | None = None) -> int:
             import lifecycle_acceptance as acceptance
             acceptance.seal(root, arguments.request)
             print("post-increment-gate: maintenance sealed; acceptance not begun")
+        elif arguments.command == "seal-dashboard-pinned-publication":
+            _dashboard_pinned_publication().seal(root, arguments.request)
+        elif arguments.command == "seal-dashboard-publication":
+            _dashboard_publication_transition().seal(root, arguments.request)
+            print("post-increment-gate: fixed dashboard publication sealed; no Git operation performed")
         elif arguments.command == "dependent-preservation":
             state_value = read_state(root)
             if state_value is None or "dependent_lineage" not in state_value:

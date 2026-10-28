@@ -1,4 +1,55 @@
+## Fixed pinned dashboard publication maintenance
+
+The separately owner-approved pre-admission M objective implements only the
+`dashboard_pinned_publication_20261021_91ebfe85_v1` route and its focused tests,
+narrow dispatcher/status/Stop integration, reviewed thirteen-path reconciliation
+and exact published upstream inheritance. Original parent, upstream commit/tree,
+raw/canonical manifest identities, accepted lifecycle and historical failures stay
+fixed. Its namespace is `.codex/state/dashboard-pinned-publication-20261021-91ebfe85`.
+Only its exact `accepted-reference.json` is prepared during M. No real request,
+receipt, readiness report, gate transition, staging, ref change or publication is
+authorized. See the existing dashboard publication-transition plan and the current
+pinned-reconciliation design assessment. Historical acceptance is not current
+publication validity. Full compatibility and seven current proof commands need
+separate V authority and an exact offline dependency/resource decision.
+
 # Cortexa repository instructions
+
+## 2026-10-21 — Publication transition maintenance stopped
+
+The owner authorized only task-bound pre-admission transition maintenance in the
+[plan](docs/plans/2026-10-21-dashboard-publication-transition.md), without ordinary
+begin or any real publication seal. Accepted schema-8 state/report/index and all
+historical failures remain unchanged. The partial implementation is unverified:
+the first focused runner stopped on a platform process-metadata restriction, with
+owned-child cleanup unverified. Do not retry it, infer a passing test, seal a real
+transition, stage or publish. Resolve execution/cleanup authority first; preserve
+the [blocked assessment](docs/reviews/2026-10-21-dashboard-publication-transition-maintenance-post-increment-review.md).
+
+## 2026-10-21 — Verification admission maintenance authority
+
+The owner approves M only under the
+[verification maintenance plan](docs/plans/2026-10-21-dashboard-verification-admission-maintenance.md),
+without ordinary begin. Preserve schema-6 history and all original obligations;
+implement only the fixed verification successor and its attributed governance
+scope. Complete required evidence sets include previously passing checks.
+Preparation authority/readiness are frozen during successor execution.
+No real closure/admission, product changes or publication follows from M.
+
+## 2026-10-20 — Dashboard dependent-recovery maintenance
+
+The owner explicitly authorizes only the pre-admission governance maintenance in
+the [frozen design](docs/plans/2026-10-20-dashboard-dependent-recovery-maintenance.md).
+No ordinary begin is used for maintenance. The separate schema-6 dashboard route
+is fixed to usage-dashboard-publication-preparation and
+usage-dashboard-publication-recovery, the recorded checkout/branch/HEAD and
+immutable failure. It requires a separately approved, verified D-130 closure,
+fresh readiness and separate admission/execution authority before future use.
+All nine obligations and four original criteria remain required. Existing
+independent, VPS and D-133 routes are not widened. No real closure, admission,
+dashboard transfer, live access or publication is authorized in maintenance.
+The implementation report must distinguish reused full-verification stages from
+fresh checks; no new full-run exit may be invented. Stop on a genuine blocker.
 
 ## Purpose
 
@@ -286,3 +337,24 @@ pre-admission maintenance without begin. Only this operation closes through a
 separately passing maintenance report, existing close-without-completion receipt
 and full Stop. Original FAIL state/report and historical fingerprint remain
 immutable; no completion marker or generic bootstrap authority follows.
+
+## 2026-10-21 — Fixed verification report-binding repair
+
+The owner separately approves the bounded
+[binding continuation preparation](docs/plans/2026-10-21-dashboard-verification-binding-continuation.md)
+without ordinary begin. Preserve the original M FAIL report byte-identically.
+Only dashboard-verification-binding-continuation and its fixed dated report may
+provide future passing closure evidence. The separate preparation review cannot
+substitute for that report. Original failure and continuation evidence remain
+bound through admission, execution and terminal checks. No general route changes.
+This preparation grants no full/native build, real closure/admission or publication.
+
+## 2026-10-21 — Fixed dashboard V repair authority
+
+The owner separately approves the
+[fixed V repair maintenance](docs/plans/2026-10-21-dashboard-verification-repair-maintenance.md)
+without ordinary begin, then conditional own closure and one documentation-only
+repair successor. Schema 8 is task-bound, not general recovery. Preserve raw V
+failure/report and complete schema-6/7 ancestry, all four/nine/ten obligations
+and new unresolved V items. The exact immutable V report formatting exclusion
+does not waive validation. No product or publication authority follows.

@@ -1,3 +1,94 @@
+## 2026-10-21 — Publication transition maintenance: Blocked
+
+The [bounded plan](docs/plans/2026-10-21-dashboard-publication-transition.md)
+and [assessment](docs/reviews/2026-10-21-dashboard-publication-transition-maintenance-post-increment-review.md)
+record verified custody and partial fixed transition code. Synthetic acceptance,
+required affected checks and child cleanup are not established because the runner
+was stopped by platform metadata access. No real seal or lifecycle transition ran.
+Keep original acceptance and all earlier failure results unchanged.
+
+## 2026-10-20 — Recovery forward result: resource Blocked
+
+The accepted product/documentation delta is integrated and frontend/Rust tests and
+mock-browser checks pass. The native release build exceeded the original 4 GiB
+task budget; its separately recorded bounded 4.75 GiB continuation also stopped.
+All protected headroom and historical evidence remain. No additional compilation,
+cleanup, reservation release or gate bypass follows. Finish truthful failed
+acceptance/Stop and preserve the [recovery report](docs/reviews/2026-10-20-usage-dashboard-publication-recovery-post-increment-review.md),
+then stop for resource/continuation review. Current source and security fixes are
+retained; no accepted criterion is waived to declare the candidate verified.
+
+## 2026-10-20 — Continuous dashboard recovery execution checklist
+
+Current owner authority covers diagnosis/correction, supported closure and then
+conditional dependent admission/implementation through the existing frozen design.
+Preserve all predecessor reports and snapshots. First resolve the observed receipt
+write boundary without validator changes. Snapshot seven overlapping records,
+refresh affected checks and bind a fresh request; preserve the consumed request.
+Only verified closure and passing actual Stop permit fresh readiness/admission.
+Then transfer only accepted attributed product/documentation changes, preserve
+security fixes, and verify with bounded resources and existing dependencies.
+Track actual phase results in additive private evidence and new recovery records.
+No native launch, live access, installation, cleanup or Git publication. Any code
+correction first needs a concrete frozen design and focused evidence; none is
+currently indicated by the read-only diagnosis. Stop on unsafe or unsupported scope.
+
+## 2026-10-20 — Bounded closure preparation checklist
+
+Objective: conditional D-130 closure of failed publication preparation, not
+recovery admission. The owner accepted the [maintenance review](docs/reviews/2026-10-20-dashboard-dependent-recovery-maintenance-post-increment-review.md).
+Expected edits are additive entries in the seven current project-memory documents
+only; request, preservation, current checks and outcome receipts remain private.
+Do not alter the accepted report or add product/governance code. The unchanged
+report inventory remains valid; fresh closure checks are separately bound to the
+current workspace rather than represented as historical test executions.
+
+1. Verify original terminal and maintenance snapshots, actual index, frozen inputs
+   and accepted dashboard; snapshot seven overlaps before editing.
+2. Record owner retain/defer/no-restore instructions and all nine obligations,
+   preserving the four original criteria and all failed historical statuses.
+3. Run affected docs/repository/security/whitespace/session checks; bind reused
+   unchanged full-verification coverage and both substantive reviews additively.
+4. Validate current request/report/preservation without transitions. Only then
+   execute supported closure once; assess actual configured Stop and retain output.
+5. Stop with closure outcome and remaining separate recovery approval requirements.
+
+Risks: source/evidence drift, ownership ambiguity, incorrect snapshot generation,
+unverified checks or unsupported workflow stop execution. No restoration, cleanup,
+installation, native/live work or publication. Rollback is not automatic: retained
+snapshots support later owner-selected attributable restoration, never state reset.
+
+## 2026-10-20 — Bounded dashboard governance maintenance
+
+[Frozen design](docs/plans/2026-10-20-dashboard-dependent-recovery-maintenance.md)
+and [current review](docs/reviews/2026-10-20-dashboard-dependent-recovery-maintenance-post-increment-review.md).
+Maintenance authority excludes real closure/admission and dashboard product
+transfer. All original criteria and obligations carry forward. Existing failed
+plans and accepted documentation correction remain historical evidence, not
+new readiness or passing product acceptance.
+
+## 2026-10-20 — Publication preparation blocked
+
+The separate publication worktree starts from current published main faa9f936.
+Its original accepted mock dashboard is preserved in its source worktree.
+No product delta was transferred, no build or installation ran, and nothing
+was staged, committed, pushed, opened as a PR or merged.
+
+Early preparation checks passed. After adding sanitized decision lineage, the
+final docs:check and repository:check each exited1: six links reference dashboard
+documents not yet transferred. Security, whitespace and session checks passed.
+The assistant dispatched ordinary begin in the same orchestration call before
+evaluating those two final failures. Begin exited0, but that is not evidence of
+valid readiness. The frozen readiness report overstates the final-input result
+and must not be reused. No product implementation followed admission.
+
+The truthful result is FAIL / Blocked. The frozen decision/readiness/admission
+and both failed logs are preserved. Use supported terminal failure, never finalize
+or hand-edit live state. [Final report](docs/reviews/2026-10-20-usage-dashboard-publication-preparation-post-increment-review.md) records the exact scope and
+verification provenance. A separately owner-approved recovery must assess these
+related failures, preserve originals and use the supported correction/closure/
+readiness route; no automatic retry, bypass or successor is authorized.
+
 ## 2026-10-13 — Task-owned worktree archival workflow
 
 Owner-selected documentation-only amendment:
@@ -6468,3 +6559,100 @@ it binds the full25-path input snapshot. Five preparation records now accompany
 the reviewed20 paths. Only final review documentation changes after supported
 admission; all transferred executable/history bytes are protected. Both rejection
 records remain failures, with no ordinary admission claimed before transfer.
+
+## 2026-10-20 — Publication documentation correction
+
+The [bounded maintenance plan](docs/plans/2026-10-20-publication-documentation-correction.md)
+covers six sanitized derivatives, preservation and a non-executed closure draft.
+No ordinary admission, closure execution or product transfer. Current review and
+remaining full-verify/dependent-route blockers are in the
+[assessment](docs/reviews/2026-10-20-publication-documentation-correction-assessment.md).
+Historical plans, failure results and allowances remain unchanged.
+
+## 2026-10-20 — Admitted dashboard publication recovery
+
+The [bounded recovery plan](docs/plans/2026-10-20-usage-dashboard-publication-recovery.md)
+follows verified closure and fresh dashboard-specific admission. Accepted product
+bytes and explicitly sanitized derivatives are integrated; current verification
+and final criterion/obligation evidence remain required. No historic failure is
+promoted. Resource budget, no-installation boundary and separate governance/public
+disclosure/post-commit publication requirements remain controlling.
+
+## 2026-10-21 — M-only verification admission maintenance
+
+- [Dashboard verification admission maintenance](docs/plans/2026-10-21-dashboard-verification-admission-maintenance.md)
+  is the owner-approved pre-admission governance objective, without ordinary
+  begin. Preserve the accepted terminal preparation and all historical failures.
+  Implementation is limited to the separate module/test, dispatcher integration
+  and additive documentation. Synthetic/legacy and native stages passed;
+  full-command acceptance is Blocked after rejection of composite Passed
+  reporting. Safe full-run resource/cache readiness remains unverified.
+  No C closure, V admission or publication is approved.
+
+## 2026-10-21 — Fixed verification binding preparation
+
+- [Binding continuation preparation](docs/plans/2026-10-21-dashboard-verification-binding-continuation.md)
+  preserves the M FAIL report and reserves one distinct passing-forward review.
+  The narrow module/test repair passed 221 hook tests with legacy compatibility.
+  Full-run resources remain Blocked; the separate preparation assessment grants
+  no passing M, C closure, V admission or publication authority.
+
+## 2026-10-21 — Bounded C-only closure operation
+
+This owner-approved maintenance operation uses the existing
+[binding continuation plan](docs/plans/2026-10-21-dashboard-verification-binding-continuation.md)
+and supported D-130 closure; it is not ordinary begin or a new product increment.
+
+Objective: preserve the terminal failure and current accepted changes, record
+fresh retain/defer authority, and conditionally publish only the supported own
+closure receipt. Restore nothing. Repository attribution is limited to additive
+DECISIONS.md, HANDOFF.md, PROJECT_STATUS.md, NEXT_STEPS.md, PLANS.md, CHANGELOG.md
+and TROUBLESHOOTING_LOG.md; the ignored fresh request and external evidence are
+separate. The accepted continuation report remains byte-identical.
+
+Before edits, verify the complete original terminal backup, actual index,
+raw lifecycle/admission/consumed records and accepted passing-report seal; take
+a fresh current snapshot. Preserve exact four/nine/ten mappings. Reuse actual
+full exit-0 proof for unchanged implementation and run only affected small
+checks after documentation. Review current source, owner/request hashes,
+resources and all original obligations before one close-without-completion;
+record actual configured Stop. On drift or failed prerequisites, stop without
+closure, workaround or build. Preserve every outcome and partial artifact.
+
+No validator/product/dependency/security change, helper reuse, V admission,
+native app, live collection, cleanup, reservation change or Git publication.
+Rollback is not automatic and needs separate attributed owner authority. The
+external current snapshot is recoverable; historical receipts are never removed.
+
+## 2026-10-21 — Fixed V verification execution
+
+The [frozen verification plan](docs/plans/2026-10-21-usage-dashboard-publication-verification.md)
+and [readiness](docs/reviews/2026-10-21-usage-dashboard-publication-verification-readiness-post-increment-review.md)
+preceded fresh one-use admission. Execution is documentation/evidence only;
+preparation authority and all protected source remain frozen. The
+[final review](docs/reviews/2026-10-21-usage-dashboard-publication-verification-post-increment-review.md)
+and supported receipts retain actual outcomes. This entry grants no successor
+or publication authority. Original failed criteria and histories remain intact.
+
+## 2026-10-21 — V stopped before acceptance
+
+The frozen V plan remains unchanged. Its new final report truthfully records
+FAIL/Blocked after a required formatting check failure. No further execution
+checks, repair, build or test retry occurred. Read-only assessment of this newly
+failed successor's supported continuation route precedes further work.
+
+## 2026-10-21 — Fixed V repair maintenance selected
+
+The owner-selected
+[maintenance and conditional repair plan](docs/plans/2026-10-21-dashboard-verification-repair-maintenance.md)
+is related to the failed V and grants no publication. Historical plans/reports
+remain unchanged. Source/index/terminal custody is verified; synthetic viability
+and current verification must establish the route before real closure/admission.
+
+## 2026-10-21 — Fixed repair admitted
+
+The frozen [verification-repair plan](docs/plans/2026-10-21-usage-dashboard-publication-verification-repair.md)
+was admitted once after its own closure and fresh readiness. Its final report
+and actual configured Stop control local acceptance. All original criteria,
+obligations and historical failures remain separately preserved; publication
+and any later product work need separate authorization.

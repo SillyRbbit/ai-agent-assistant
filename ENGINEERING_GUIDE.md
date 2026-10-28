@@ -1,3 +1,34 @@
+## 2026-10-21 — Partial dashboard publication transition
+
+The [transition plan](docs/plans/2026-10-21-dashboard-publication-transition.md)
+records express pre-admission maintenance authority, not ordinary admission.
+The dedicated module proposes snapshot-bound prepared/staged/committed checks
+for the completed fixed dashboard only. It is not verified or enabled by this
+record. No real seal/store was created. The accepted state remains unchanged;
+current changed-workspace validity is not historical acceptance. Platform denial
+in the first synthetic runner leaves result and child cleanup unverified. Stop
+without bypass. No full verification allowance remains. Upstream reconciliation
+requires separate pinned scope; old routes and records remain controlling.
+
+## 2026-10-20 — Dashboard-specific dependent recovery
+
+The [frozen maintenance design](docs/plans/2026-10-20-dashboard-dependent-recovery-maintenance.md)
+adds a closed dashboard-publication route, not a general dependency override.
+Its distinct schema-6 state and exclusive receipt/pointer retain the original
+failed state, verified closure and original schema-2 contract. No criterion is
+replaced and no prior failure is promoted. Interrupted or consumed attempts
+cannot be automatically retried. Current maintenance has explicit authority
+without ordinary begin and grants no real closure or successor execution.
+
+Future use of `begin --dashboard-publication-request` needs its fixed successor,
+fresh owner-bound admission and execution decisions, verified passing maintenance
+closure, complete nine-obligation mapping, four unchanged criteria, protected
+history/security/governance and the accepted 21 product hashes. New failure is
+immutable; separate owner recovery is required. Existing independent, VPS and
+D-133 behavior remains unchanged. The route is bound to its current HEAD/index;
+it does not authorize a later commit or establish post-commit lifecycle validity.
+Any publication proposal must assess that separate boundary before staging.
+
 ## 2026-10-12 — Development baseline clarification
 
 The documentation audit targets remote `main`
@@ -585,3 +616,67 @@ unfinished route or ordinary begin. Freeze a passing maintenance report and use
 existing close-without-completion; preserve the live failed state byte-for-byte.
 Existing closure verification requirements remain unchanged, including full
 verify. Maintenance success and original increment FAIL are separate results.
+
+## 2026-10-21 — Fixed verification continuation maintenance
+
+The [maintenance plan](docs/plans/2026-10-21-dashboard-verification-admission-maintenance.md)
+adds a separate schema-7 route for the failed dashboard recovery's verification
+successor. M has explicit pre-admission authority without ordinary begin; real
+closure and admission remain separate. The implementation does not widen the
+independent, VPS, D-133 or original schema-6 dashboard route.
+
+Preparation creates the plan, DECISIONS authority and readiness before admission.
+The admitted successor can update only its final report and seven current-state
+documents. Plan/readiness/authority and every other baseline source remain frozen.
+All 21 product hashes are checked in active and terminal states. Both historical
+reports supply their complete required command/manual sets, including prior
+Passed checks. Nine original mappings and ten new entries remain separate.
+
+The proposed ordinary interface is `begin --dashboard-verification-request`.
+Its strict request binds its own new D-130 closure, archived schema-6 admission
+and decision, fresh authority/readiness, source and current index. It uses an
+exclusive new store; receipt/pointer/state interruption blocks replay. It has
+not been used against the real checkout. Synthetic coverage is distinct from
+real closure/admission acceptance. Consult the new maintenance report for results.
+
+Forward reports include a separate `dashboard-verification-evidence` comment
+block, keyed by required command/check. Each entry binds a private evidence path,
+SHA-256, boolean reuse classification and semantic review. Evidence records bind
+the name, actual status, input manifest, environment, result and scope review.
+Whole-workspace checks bind all current inputs except the self-referencing final
+report. Other inherited checks bind at least all product inputs and their
+reviewed relevant scope. Hashes establish custody, not that commands ran; named
+reviews must assess actual logs and composite provenance. Missing, mismatched,
+downgraded or unsupported evidence fails. No successful full-run exit is invented.
+
+Synthetic viability precedes resource/dependency readiness and full verification.
+Passing M coverage/review precedes separately approved C closure, then separately
+approved V preparation/admission. Existing full-verify closure requirements stay
+unchanged. Post-commit publication remains blocked; fixed HEAD/index is intentional.
+
+## 2026-10-21 — Additive passing verification report binding
+
+The [binding continuation plan](docs/plans/2026-10-21-dashboard-verification-binding-continuation.md)
+preserves the original M FAIL report and pins its exact SHA-256. One fixed future
+closure-verification identity is dashboard-verification-binding-continuation;
+its report is reserved until actual full passing verification and review exist.
+The current binding-preparation review has no closure role. History requires the
+original FAIL hash and an own D-130 closure naming only the fixed continuation.
+Admission binds both histories; baseline scope and repeated checks freeze them
+through execution and terminal validation. General closure/dispatcher and legacy
+routes remain unchanged. Current preparation may run focused/affected checks;
+full/native builds, C closure and V admission require later authority/readiness.
+
+## Fixed dashboard V repair workflow
+
+The [owner-approved fixed repair](docs/plans/2026-10-21-dashboard-verification-repair-maintenance.md)
+adds only `--dashboard-verification-repair-request` to ordinary begin for
+`usage-dashboard-publication-verification-repair`. Require its predecessor V's
+own D-130 closure and fixed passing maintenance report, exact archived
+schema-7 authority/baseline and complete schema-6 history, fresh current
+HEAD/index/fingerprint/DECISIONS/readiness and one-use receipt effects.
+Prepare and freeze the new plan/readiness/owner decision before admission.
+Execution protects these bindings and allows only seven current-state root
+documents plus its fixed report. Carry all required checks, including passing
+ones, with individually reviewed source/environment provenance. Original
+independent, VPS, D-133 and older dashboard behavior is unchanged.

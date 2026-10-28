@@ -1,0 +1,53 @@
+/* Native details retain keyboard and expanded-state semantics. */
+.usage-efficiency .usage-disclosure > summary,
+.account-capacity .usage-disclosure > summary {
+  position: relative;
+  box-sizing: border-box;
+  min-height: 36px;
+  padding: 10px 32px 10px 12px;
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-weight: 500;
+  line-height: 1.5;
+  list-style: none;
+  cursor: pointer;
+  transition:
+    background-color 140ms ease,
+    color 140ms ease;
+}
+.usage-efficiency .usage-disclosure > summary::-webkit-details-marker,
+.account-capacity .usage-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+.usage-disclosure > summary::after {
+  content: "";
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-65%) rotate(45deg);
+  transition: transform 140ms ease;
+}
+.usage-disclosure[open] > summary::after {
+  transform: translateY(-25%) rotate(225deg);
+}
+.usage-efficiency .usage-disclosure > summary:hover,
+.account-capacity .usage-disclosure > summary:hover {
+  color: var(--text);
+  background: var(--surface-muted);
+}
+.usage-efficiency .usage-disclosure > summary:focus-visible,
+.account-capacity .usage-disclosure > summary:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: -3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .usage-efficiency .usage-disclosure > summary,
+  .account-capacity .usage-disclosure > summary,
+  .usage-disclosure > summary::after {
+    transition: none;
+  }
+}

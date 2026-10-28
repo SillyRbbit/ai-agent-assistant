@@ -89,6 +89,9 @@ EXPECTED_TAURI_IMPORTS = {
     "src/infrastructure/tauri/local-tasks-client.ts": (
         'import { invoke, isTauri } from "@tauri-apps/api/core";',
     ),
+    "src/infrastructure/tauri/usage-efficiency-client.ts": (
+        'import { invoke, isTauri } from "@tauri-apps/api/core";',
+    ),
     "src/infrastructure/tauri/diagnostics-client.ts": (
         'import { invoke, isTauri } from "@tauri-apps/api/core";',
     ),
@@ -136,6 +139,9 @@ EXPECTED_TAURI_INVOKES = {
         'invoke<unknown>("save_local_task", { request })',
         'invoke<unknown>("set_local_task_completion", { request })',
         'invoke<unknown>("remove_local_task", { request })',
+    ),
+    "src/infrastructure/tauri/usage-efficiency-client.ts": (
+        'invoke<unknown>("get_usage_efficiency_demo_projection")',
     ),
     "src/infrastructure/tauri/diagnostics-client.ts": (
         'invoke<unknown>("read_diagnostics")',
@@ -307,6 +313,7 @@ EXPECTED_INVOKE_HANDLER = (
     "local_tasks_tauri::save_local_task,"
     "local_tasks_tauri::set_local_task_completion,"
     "local_tasks_tauri::remove_local_task,"
+    "usage_efficiency::get_usage_efficiency_demo_projection,"
     "diagnostics_tauri::read_diagnostics,"
     "diagnostics_tauri::export_diagnostics,"
     "knowledge_tauri::list_knowledge,"
