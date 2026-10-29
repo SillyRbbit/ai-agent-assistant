@@ -1,6 +1,8 @@
 import type { ActivityEvent } from "../../application/activity";
 import { PageState } from "../../components/PageState";
 import { PageHeader } from "../shared/PageHeader";
+import { UsageEfficiencyPanel } from "../usage-efficiency/UsageEfficiencyPanel";
+import { AccountCapacityPanel } from "../usage-efficiency/AccountCapacityPanel";
 
 interface ActivityPageProps {
   readonly events: readonly ActivityEvent[];
@@ -15,6 +17,10 @@ export function ActivityPage({ events }: ActivityPageProps) {
         headingId="activity-page-title"
         title="Activity"
       />
+
+      <UsageEfficiencyPanel />
+
+      <AccountCapacityPanel />
 
       <div className="page-panel activity-panel">
         {events.length === 0 ? (

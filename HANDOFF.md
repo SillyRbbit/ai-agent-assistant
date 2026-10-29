@@ -1,3 +1,409 @@
+## 2026-10-22 — Current pinned dashboard maintenance handoff
+
+Fixed U2 dashboard M/M-F is separately owner-authorized pre-admission
+maintenance, not ordinary lifecycle completion or publication. Published
+memory, Tasks, storage and security changes are inherited from the exact
+approved upstream. The new pinned route has its own historical reader and
+four-phase integrity contract; only its accepted reference is prepared.
+Historical FAIL/Blocked reports, four/nine/ten carry, actual index and
+accepted lifecycle remain protected. Narrow focused/affected checks are M
+evidence only. Full compatibility, current seven-proof V, offline graph
+readiness, real sealing and Git/publication require separate approval.
+Step B remains Blocked, exec Deferred and oldest cleanup Unverified.
+
+## 2026-10-21 — Bounded documentation/resource continuation
+
+The owner approved a documentation-only continuation and increased only this
+transition task's aggregate evidence cap to 150994944 bytes. The 2097152-byte
+execution reserve, protected floor of at least 9194962944 bytes and all external
+reservations remain unchanged. The stopped package, failed docs result, all old
+history, original manifests, actual index and accepted state remain preserved.
+
+Installed Prettier 3.8.4 identified exactly one extra trailing newline in the
+new boundary assessment. Only that byte was removed; every word/outcome remains.
+The assessment's historical Blocked record is not rewritten as passing. Current
+continuation acceptance is controlled by fresh sealed private final evidence
+issued after documentation freeze, not by the conditional records below.
+
+Five new child-free helper checks and the bounded in-memory formatting comparison
+passed, with verified cleanup and exact source/environment bindings. Reuse the
+28-case focused result and successful preflight; both allowances remain consumed.
+No new preflight/test/build/native QA, real gate/seal or Git operation is permitted.
+
+Preservation/scope and architecture/security/code-health reviews support only this
+exact documentation treatment. Five final affected checks must pass; their actual
+results and custody are recorded in publication-boundary-doc-continuation-01.
+Remaining complete hook/full verification, current readiness, upstream scope and
+Git/sealing/publication authority remain separately Blocked pending approval.
+
+Next review prompt:
+
+```text
+Review the bounded dashboard documentation/resource continuation in this
+codex/usage-dashboard-publication checkout, read-only. Inspect current instructions
+and the sealed publication-boundary-doc-continuation-01 evidence. Preserve all
+work/history/index/state and reuse passing checks and the 28-case result without
+reruns. Assess the exact one-byte formatting correction, additive documentation,
+resource amendment, cleanup and final custody. Distinguish local acceptance from
+publication readiness. No edits, tests/builds, gates/sealing, cleanup, live access
+or Git/publication changes. Stop with findings and the next bounded decision.
+```
+
+## 2026-10-21 — Boundary repair stopped before local acceptance
+
+The new preflight and 28-case focused suite passed once with verified cleanup.
+The final docs:check attempt did not pass: retained output flags formatting in
+the new boundary assessment, and aggregate evidence allocation reached the
+monitor's protected reserve. Primary outcome is resource RuntimeError with
+incomplete capture; actual cleanup wait is 1, root reaped and group absent.
+Do not relabel that interrupted result or retry its helper.
+
+No remaining repository/security/whitespace/session command was started after
+the resource stop. The absolute 128 MiB cap was not exceeded; the unchanged
+two-MiB execution reserve blocks more work. No evidence was deleted, cache cleaned,
+reservation changed or safeguard lowered. Only bounded final stopping custody is
+issued from the remaining absolute allocation. The private sealed Blocked result,
+not earlier conditional review text, controls the current state.
+
+Next prompt: Separately approve a bounded evidence-cap/resource disposition and
+documentation-only correction/fresh checks. Reuse the complete 28-case result;
+no further focused/full test is justified by documentation alone. Preserve every
+failed artifact and the actual index/state, inspect before editing and continue
+autonomously through remaining affected checks/reviews/custody without real gates,
+sealing, cleanup, credentials/live access or Git publication authority.
+
+## 2026-10-21 — Publication-boundary repair verified locally
+
+The owner authorized task-bound pre-admission maintenance, not ordinary begin or
+real sealing. The transition now distinguishes the unchanged issued raw manifest
+hash from the separately fixed canonical-object hash. Eight exact governance
+scope additions cover the recovered ignore delta, six frozen assessments and the
+new [boundary assessment](docs/reviews/2026-10-21-dashboard-publication-boundary-repair-assessment.md).
+Seven issued reports remain hash/mode-pinned; the four-entry ignore suffix and
+original prefix are fixed. Shared validators, dispatcher and product are unchanged.
+
+The new approved zero-work preflight and single complete focused invocation
+passed: 28 cases, exit/wait 0, verified owned-child cleanup and unchanged bindings.
+Both new actual allowances are consumed; none was retried. One private child-free
+self-matching assertion failed and is retained; its AST correction passed while
+four unchanged cases were reused. Final affected commands/custody are recorded
+after documentation freeze in private publication-boundary-repair-01 evidence.
+
+Next prompt: Review the bounded repair and sealed final evidence read-only.
+Reuse current results; do not rerun tests/builds or invoke real validation/sealing.
+Then assess complete hook/full-verification requirements, current readiness and
+upstream/Git authority separately. No full-run allowance, publication readiness,
+completion marker or real lifecycle transition is implied. Step B Blocked, exec
+Deferred, oldest cleanup Unverified and all native/live/hosting limits remain.
+
+## 2026-10-21 — Exact historical-formatting amendment
+
+The owner approved four literal presentation-only exclusions for unchanged,
+pinned historical reports and one newline-to-space correction in this task's
+troubleshooting overlap. Original ignore entries, report bytes/modes, failures,
+actual index/raw state and all production/test inputs remain protected. See the
+[assessment](docs/reviews/2026-10-21-dashboard-historical-formatting-recovery-assessment.md). Complete command outcomes and custody are issued after these
+documentation bytes are frozen in private `formatting-recovery-01` evidence;
+that passing sealed record, not this checkpoint, controls local acceptance.
+
+The passing 20-case focused suite is reused unchanged; no new test/preflight/full
+run or real gate is authorized. Publication remains separate: .prettierignore is
+outside the transition validator's current ALLOWED scope. Do not expand it or
+claim real sealing readiness. Next prompt: review the final bounded formatting
+amendment/evidence read-only and assess the remaining publication-scope boundary
+without rerunning unchanged checks, editing validators, staging or publishing.
+
+## 2026-10-21 — Diagnostic recovery: complete focused suite passed
+
+The captured single-case diagnostic established the post-flag raw-index assertion
+failure: Git invalidates derived TREE cache metadata when clearing a flag. The
+repair keeps initial byte equality and uses the unchanged strict parser for
+post-flag entry/flag restoration. Real checkout index custody stays byte-exact.
+The complete focused suite passed 20/20, exit/wait 0, with preserved bindings and
+verified cleanup. New monitoring/capture synthetics passed; all earlier failures
+remain. See the [assessment](docs/reviews/2026-10-21-dashboard-transition-diagnostic-recovery-assessment.md). Final affected-check outcomes and exact
+preservation inventory are recorded after documentation freeze in sealed private
+`diagnostic-recovery-01` evidence. No real gate/marker/publication is implied.
+
+Next prompt: Review this bounded local repair and its final sealed check results
+read-only before proposing any publication-transition validation or Git authority.
+Preserve all source/history/state/index and do not rerun unchanged checks. The
+full-verification allowance is consumed; publication, real sealing and Git writes
+remain separately unapproved. Do not start another increment automatically.
+
+## 2026-10-21 — Tracked fixture repair interrupted; new allowance consumed
+
+The separately approved tracked-file repair is implemented. Six new private
+synthetic checks and fresh preparation/preflight passed; 15 unchanged custody
+cases were reused with pinned source/report evidence. The focused invocation was
+interrupted when allocation sampling exhausted three passes during mutable
+fixture churn. Partial output also records a FAIL in the index-flag test; its
+traceback and the final suite summary were not captured. Do not infer its failing
+assertion or a completed suite. Owned-child cleanup is verified: TERM, wait -15,
+root reaped and group absent. Original state/index and historical evidence remain
+preserved. See the [current assessment](docs/reviews/2026-10-21-dashboard-transition-tracked-fixture-repair-assessment.md).
+
+Next prompt: Separately approve bounded diagnostic capture and safe monitoring
+preparation, then the necessary fresh actual-execution allowances. Preserve all
+failures and resume autonomously through remaining local acceptance, without
+production changes, scanner-policy weakening, real gates, cleanup or publication.
+Do not replay v8 or infer a replacement invocation from the prior grant.
+
+## 2026-10-21 — Typed accounting works; synthetic mock graph blocks acceptance
+
+The separate v6 correction preserved the exact immutable link without following
+it and completed one real aggregate accounting sample. Its synthetic command
+nevertheless exited 1: 10 cases passed, four errored because mock directory
+entries omit the scanner's required name field. The flat graph also needs faithful
+parent/path modeling. No retry or scanner repair followed; no binding preparation,
+preflight or focused invocation ran. See the additive
+[assessment](docs/reviews/2026-10-21-dashboard-transition-custody-accounting-assessment.md).
+
+Next prompt: Inspect instructions and current custody-accounting-01 evidence,
+preserve all work/history/state/index and repair only the new mock directory
+graph under separate owner authority in a new helper revision. Retain accounting,
+custody, issued-format and execution safeguards; use fresh one-use checks. Do not
+replay failed entrypoints, alter production/fixture code, clean up or publish.
+Stop on failure or scope expansion. No later execution follows without approval.
+
+## 2026-10-21 — Binding helper stopped at synthetic accounting boundary
+
+The separately approved helper-only representation is implemented; 14 new cases
+passed in captured output. The overall synthetic helper exited 1 when its retained
+monitor rejected a test symlink outside the validated mutable subtree. No result
+JSON, binding preparation, preflight or focused invocation followed. Preserve the
+helper and synthetic artifacts; no retry, cleanup or validator change occurred.
+See the additive [assessment](docs/reviews/2026-10-21-dashboard-transition-binding-repair-assessment.md).
+
+Next prompt: Assess the stopped binding-repair synthetic closeout read-only.
+Inspect instructions, the assessment, private binding-repair-01 evidence and v5/v3
+source. Preserve all work, failed helpers, symlink metadata, snapshots, state/index
+and allowances. Establish a supported fixture-custody/accounting continuation
+without following/removing retained links or bypassing aggregate accounting.
+No edits, helper/check reruns, process probes, cleanup, gates or publication.
+Stop with findings and exact separately required authority.
+
+## 2026-10-21 — Fixture repair implemented; binding preparation stopped
+
+The owner-approved fixture-only repair is implemented but not test-verified.
+The additive [assessment](docs/reviews/2026-10-21-dashboard-transition-fixture-repair-assessment.md)
+records preservation, eight passing new mocked entrypoint checks and a fresh
+binding-preparation exit 1 at the unchanged 65,536-byte record-size guard.
+No preflight or corrected transition suite ran; both allowances remain unconsumed.
+No retry or writer relaxation followed. Original accepted state/index and all
+historical failures stay unchanged. Oldest cleanup remains Unverified.
+
+Next prompt: Assess the stopped fixture-repair binding preparation read-only in
+the publication checkout. Inspect current instructions, the additive assessment
+and private fixture-repair-01 evidence. Preserve user work, snapshots, failed
+runner/attempt, hashes, index and allowances. Identify a complete bounded binding
+representation and exact separate correction/fresh-attempt authority. Do not edit,
+rerun helpers/checks, launch processes, transition gates, stage or publish. Stop
+on missing evidence or ambiguous ownership; do not omit protected input coverage.
+
+## 2026-10-21 — Publication transition maintenance stopped before viability
+
+Original local dashboard acceptance is preserved. Before edits, new verified
+custody captured 1,179 source entries/modes, 166 task lifecycle records and the
+actual index; its source fingerprint matches the accepted completion. The fixed
+transition module/test and narrow dispatcher integration are partial, unverified
+work, not a passing transition. The first focused runner exited 1 after its
+process-metadata command was denied. Test outcome and owned-child cleanup remain
+unverified. No helper retry, alternate context, real seal or admission followed.
+
+The [assessment](docs/reviews/2026-10-21-dashboard-publication-transition-maintenance-post-increment-review.md)
+records limitations and the prerequisite owner decision. The old completed raw
+state/index/report stay unchanged; do not replace them with a maintenance failure.
+The new maintenance has no ordinary gate or completion marker. Future work must
+first assess platform-approved process identity/cleanup and preserve this attempt.
+Do not replay the runner or infer another full-verification allowance.
+
+Next proposed task: read-only diagnosis of the stopped runner and supported
+cleanup/execution context, with no tests or process signaling until exact
+authority and identity are established. Preserve all other worktrees and budgets.
+
+## 2026-10-20 — Recovery verification blocked by protected disk envelope
+
+Supported original closure and fresh dashboard recovery admission succeeded.
+All accepted21 product hashes match and public-safe derivatives are prepared.
+Focused62/frontend663, hooks198, repository99, native library464 and integration
+contracts passed; current mock browser checks passed. The overall full verify
+was interrupted at the final native release build by the 4 GiB monitor. A bounded
+native-stage-only continuation with existing public Cargo sources also reached
+its revised 4.75 GiB limit. No native build success or publication readiness is
+claimed. Original failures and both interrupted build receipts remain retained.
+
+The last monitored minimum was 43,630,518,272 bytes against a protected floor of
+43,553,652,736 bytes. Further safe build headroom is insufficient. No artifacts
+were deleted and no reservation was released. Private continuation evidence,
+snapshots, publication inventory/provenance and the [recovery report](docs/reviews/2026-10-20-usage-dashboard-publication-recovery-post-increment-review.md)
+record actual acceptance and supported terminal/Stop outcomes after freeze.
+
+Next prompt:
+
+```text
+Review the blocked dashboard recovery and its disk envelope read-only in the
+existing codex/usage-dashboard-publication checkout. Inspect instructions, actual
+terminal receipts, recovery report and retained continuation evidence first.
+Preserve user work, original dashboard, failures, snapshots, bundles and allowances.
+Reconcile current allocations and active reservations without changing them;
+identify the smallest concrete space/reuse option and later supported continuation
+requirements. Do not repeat passing tests or native builds. No edits, gates,
+cleanup, reservation changes, live access, messages, staging or publication.
+Stop with evidence and the exact owner decision needed before more execution.
+```
+
+## 2026-10-20 — Continuous recovery; closure access diagnosis
+
+The owner authorizes continuous bounded diagnosis/correction, supported closure,
+then conditional dependent recovery and local publication preparation. The prior
+closure command exited2 with a redacted evidence error; actual Stop blocked and no
+receipt was issued. Read-only tracing now passes every inspected pre-write
+prerequisite, while the original execution context reports the receipt directory
+unwritable. No validator change is indicated. Use a fresh request and the normal
+platform permission review for the exact authorized write; preserve the failed
+attempt without replay. Underlying errno from that attempt remains unavailable.
+
+The continuation snapshot and additive private evidence are retained in
+cortexa-dashboard-continuation-20261020-01. Seven current-state documentation
+entries change before closure; accepted maintenance report and all code remain
+unchanged. Actual receipts establish outcomes. After verified closure only, freeze
+fresh task-bound readiness/admission before any dashboard transfer. The separate
+owner authorizations are recorded in DECISIONS. Stop for genuine blockers; no Git
+publication, native launch, live access, cleanup or automatic feature expansion.
+
+## 2026-10-20 — Owner-approved conditional closure handoff
+
+The owner accepted the [maintenance review](docs/reviews/2026-10-20-dashboard-dependent-recovery-maintenance-post-increment-review.md)
+and separately authorized conditional D-130 closure only. The frozen report and
+failure bytes remain unchanged. The current seven-document preparation retains
+the correction/governance work, defers all nine obligations and four unchanged
+criteria, and restores nothing. Current results are additive private evidence in
+the task-owned cortexa-dashboard-closure-20261020-01 package.
+
+This entry records authority and procedure, not an unobserved outcome. Closure is
+established only by the bound closure receipt and actual Stop evidence; consult
+those records before any successor. Retain both original terminal-failure and
+pre-maintenance snapshots plus the new overlapping-document/index snapshot.
+No recovery admission or publication follows automatically. Preserve the separate
+governance publication scope, fixed HEAD/index limitation and disclosure advisory.
+
+Proposed next prompt, only after reviewing successful closure evidence:
+
+```text
+Assess fresh dashboard recovery readiness read-only in the existing
+codex/usage-dashboard-publication worktree. Inspect current instructions, closure
+receipt, actual Stop evidence, accepted maintenance and source/security bindings.
+Preserve all user work, failures, snapshots, bundles and allowances; avoid unrelated
+changes and unchanged validation reruns. Confirm the nine obligations and four
+criteria, dependent route, ownership and remaining admission requirements. No
+edits, gates, tests/builds, live access, messages, cleanup or publication. Stop with
+readiness findings and the exact separate approval needed for recovery.
+```
+
+## 2026-10-20 — Dashboard dependent-recovery maintenance
+
+The owner accepted documentation correction and separately authorized the bounded
+[governance design](docs/plans/2026-10-20-dashboard-dependent-recovery-maintenance.md).
+Implementation is limited to the dashboard-specific lifecycle module, focused
+tests, dispatcher integration and additive governance records. No ordinary begin
+was called for maintenance. The original failed lifecycle and all frozen evidence
+remain unchanged; no closure, real recovery admission or product transfer occurred.
+
+The [maintenance review](docs/reviews/2026-10-20-dashboard-dependent-recovery-maintenance-post-increment-review.md)
+is the current acceptance source. Private receipts bind the recoverable snapshot,
+actual worktree index, original dashboard, synthetic checks and reused product
+verification. They are not public artifacts. All nine unresolved obligations and
+four original criteria still apply to recovery. Governance publication scope is
+separate from the 21-path dashboard product manifest. Do not commit before assessing
+the route's fixed HEAD/index boundary and obtaining separate publication authority.
+
+Next prompt (review only):
+
+```text
+Review dashboard-dependent-recovery-maintenance read-only in the existing
+codex/usage-dashboard-publication worktree of ai-agent-assistant.
+Inspect applicable instructions, changed evidence, the frozen maintenance design,
+final review and task-owned maintenance receipts. Preserve all user changes,
+original dashboard, accepted correction, immutable failures, snapshots and bundles.
+Assess task binding, all nine obligations/four criteria, interruption/replay,
+scope protection, unchanged independent/VPS/D-133 behavior and verification reuse.
+Report acceptance or the smallest correction and remaining closure/admission
+prerequisites. Reuse valid checks; no edits, validation reruns, gates, closure,
+admission, product transfer, live access, messages, cleanup or publication.
+Stop for the owner's decision.
+```
+
+## 2026-10-20 — Documentation correction; closure and publication still blocked
+
+The owner-authorized correction adds six sanitized historical summaries at the
+missing decision targets, with original hashes, truthful chronology and no product
+transfer. A verified terminal snapshot retains source, actual index, raw lifecycle
+and failed logs. The [assessment](docs/reviews/2026-10-20-publication-documentation-correction-assessment.md)
+maps all nine unresolved obligations and documents the sequencing correction.
+Actual final checks and preservation comparisons are bound in the private recovery
+FINAL-RESULTS receipt; no historical passing claim is reused for changed documents.
+
+Only documentation and a private non-authorizing closure draft change. No gate
+transition occurred. Full verify is Not run; closure has no execution approval or
+passing frozen report. Publication remains dependent and unsupported by ordinary
+independent admission. Preserve the original FAIL/Blocked and no completion marker.
+All bundles/worktrees/allowances remain; no cleanup or archival is authorized.
+
+### Next owner-review prompt
+
+```text
+Review publication-documentation-correction read-only in the existing
+codex/usage-dashboard-publication worktree. Inspect instructions, Git changes,
+the maintenance plan/assessment and private recovery FINAL-RESULTS evidence.
+Preserve original failed/frozen evidence, source candidate and all other work;
+avoid unrelated changes and repeating completed validation. Assess the six
+sanitized derivatives, complete nine-obligation mapping, snapshot/index custody
+and non-authorizing closure draft. Confirm full-verify and dependent-admission
+blockers remain. Recommend acceptance or the smallest correction. No edits,
+gates, tests/builds, launches, live access, messages, cleanup or publication.
+Stop for the owner's decision; do not begin closure or publication.
+```
+
+## 2026-10-20 — Publication preparation blocked
+
+The separate publication worktree starts from current published main faa9f936.
+Its original accepted mock dashboard is preserved in its source worktree.
+No product delta was transferred, no build or installation ran, and nothing
+was staged, committed, pushed, opened as a PR or merged.
+
+Early preparation checks passed. After adding sanitized decision lineage, the
+final docs:check and repository:check each exited1: six links reference dashboard
+documents not yet transferred. Security, whitespace and session checks passed.
+The assistant dispatched ordinary begin in the same orchestration call before
+evaluating those two final failures. Begin exited0, but that is not evidence of
+valid readiness. The frozen readiness report overstates the final-input result
+and must not be reused. No product implementation followed admission.
+
+The truthful result is FAIL / Blocked. The frozen decision/readiness/admission
+and both failed logs are preserved. Use supported terminal failure, never finalize
+or hand-edit live state. [Final report](docs/reviews/2026-10-20-usage-dashboard-publication-preparation-post-increment-review.md) records the exact scope and
+verification provenance. A separately owner-approved recovery must assess these
+related failures, preserve originals and use the supported correction/closure/
+readiness route; no automatic retry, bypass or successor is authorized.
+
+### Proposed next prompt
+
+```text
+Assess a supported recovery plan read-only for usage-dashboard-publication-preparation
+in the managed codex/usage-dashboard-publication worktree of ai-agent-assistant.
+Inspect current instructions, the failed final report, frozen readiness/admission
+records and private retained preparation evidence before proposing changes.
+Preserve the original accepted dashboard, all failed records, snapshots, other
+worktrees and allowances. Do not repeat validation.
+Explain the six unresolved preparation links and the admission sequencing error.
+Identify the smallest owner-approved documentation correction, preservation and
+D-130 closure/readiness route without modifying protected records, changing
+validators, replaying admission or claiming independence from this failure.
+No edits, gates, tests/builds, installation, staging, commits, pushes, PR, merge,
+native/live access, cleanup or messages. Stop with exact recovery approval needed.
+```
+
 ## 2026-10-13 — Separate worktree archival workflow amendment
 
 Task: worktree-archival-workflow; detached checkout
@@ -12969,6 +13375,323 @@ the reviewed20 paths. Only final review documentation changes after supported
 admission; all transferred executable/history bytes are protected. Both rejection
 records remain failures, with no ordinary admission claimed before transfer.
 
+## 2026-10-20 — Dashboard recovery admitted; integration candidate
+
+The fresh supported D-130 closure succeeded through normal platform permission
+review; configured Stop passed and original FAIL/Blocked remained intact. The
+dashboard-specific recovery was admitted only after final readiness checks passed.
+All 21 accepted product hashes now match the original candidate. Fifteen new
+public-safe documentation derivatives retain original source hashes; private
+originals and failed records remain unchanged. Current verification is in progress;
+the final [recovery report](docs/reviews/2026-10-20-usage-dashboard-publication-recovery-post-increment-review.md)
+will record actual outcomes. Do not infer completion from this progress entry.
+
+Resource preparation uses task-owned APFS clones of existing build/public registry
+caches, a 4 GiB additional budget and a protected allocation-aware floor. No
+installation is authorized. The first focused frontend invocation hit EPERM while
+Vite wrote its temporary configuration; retain that failure and use normal
+platform approval for the scoped validation writes. No product fix is indicated.
+Governance publication scope, public disclosure and post-commit workflow remain
+separate requirements. No staging, Git publication, native launch or live access.
+
+## 2026-10-21 — Verification admission maintenance; full-command acceptance blocked
+
+M only is owner-approved without ordinary begin. The
+[plan](docs/plans/2026-10-21-dashboard-verification-admission-maintenance.md)
+and fresh overlapping snapshot preserve the original candidate and both failures.
+The terminal preparation seal/addendum, 1,171 custody bindings and actual index
+were reverified. Exactly 14 maintenance paths are attributed separately from
+the existing 65-path candidate. No product transfer or real lifecycle transition.
+
+The fixed schema-7 module, dispatcher integration and synthetic regressions are
+implemented. Whole inherited required evidence sets and frozen preparation inputs
+are enforced. Review the new maintenance report and private evidence package
+`cortexa-dashboard-verification-maintenance-20261021-01` for actual check outcomes;
+implementation alone does not satisfy full verification or authorize C/V.
+
+Observed M result: 217 hook tests passed, including all 19 new cases and legacy
+compatibility. Offline no-bundle native build passed in 139 seconds using a
+separate copy of retained partial output and a fresh monitored 768 MiB envelope.
+Affected documentation/repository/security/whitespace/session checks passed;
+remaining unchanged stages have explicit composite provenance in the
+[maintenance review](docs/reviews/2026-10-21-dashboard-verification-admission-maintenance-post-increment-review.md).
+Old full/native exit -15 records remain failures. No new full-command exit 0 is
+claimed. Automatic approval review rejected recording composite coverage as a
+Passed required full-command row. M acceptance is FAIL/Blocked pending supported
+full-verification evidence. A fresh full invocation's safe resource envelope is
+unverified: retained debug and release caches bind different Cargo source homes.
+No broad retry, cache-path substitution or full run was started.
+
+Retain all bundles, failed/interrupted results and cache directories. The native
+stage maintained protected headroom; no reservation release, cleanup or
+installation occurred. Original FAIL/Blocked and no completion
+marker remain. Step B is blocked; exec deferred; hosted boundaries unresolved.
+
+Next prompt, only after reviewing the maintenance result:
+
+```text
+Review dashboard-verification-admission-maintenance in the existing publication
+worktree read-only. Inspect instructions, the new maintenance plan/report and
+retained evidence first. Preserve all source, failures, seals, bundles and other
+work; avoid unrelated changes and unchanged checks. Assess complete evidence
+inheritance, frozen preparation inputs, schema-6 custody, one-use schema-7
+behavior and the rejected composite-verification representation. Establish a
+safe bounded full-command/cache resource route before any build; debug/release
+source-home bindings differ. Preserve the new native exit 0. No edits, cleanup, gates,
+tests/builds, launches, live access, messages or publication. Stop with findings.
+```
+
+## 2026-10-21 — Binding repaired; full-run resource decision remains
+
+The owner approved bounded binding repair/resource preparation without ordinary
+begin. The [new plan](docs/plans/2026-10-21-dashboard-verification-binding-continuation.md)
+and [preparation review](docs/reviews/2026-10-21-dashboard-verification-binding-preparation-post-increment-review.md)
+supersede only the report-binding proposal above. Original M FAIL/report/seal and
+raw schema-6 failure/index remain unchanged. No real closure or admission exists.
+
+One fixed future dashboard-verification-binding-continuation report is reserved
+and absent. It may be created only after separately authorized passing full
+verification. Current preparation review cannot be used for closure. The original
+M FAIL digest is checked in history and included in fresh admission bindings;
+both reports remain protected during execution and terminal validation. The
+dispatcher, general closure, product and complete four/nine/ten contract are unchanged.
+
+Observed: 221 hook tests passed, including four new cases plus all legacy routes.
+Private evidence package: cortexa-dashboard-verification-binding-repair-20261021-01.
+Its BASELINE, frozen design, logs, resource proposal and final receipts retain
+exact scope/preservation and outcomes. Old native exit 0 is reused as historical
+evidence, not a full-run result for the changed governance source.
+
+Full-run resources remain Blocked. Free space was 44,646,400,000 bytes; only about
+1.02 GiB remains above the unchanged conservative threshold. Debug/release
+outputs have different source-home bindings and about 8.46 GiB logical content.
+The conservative proposal allows 20 GiB additional growth, requiring more than
+65,028,489,216 available bytes plus any newly established reservations. This is
+a monitored planning cap, not a proven minimum or guaranteed compiler peak.
+No authoritative reservation release was established; already allocated 12 GiB
+is not counted twice. No cleanup, cache clone, full/native build or install occurred.
+
+Next prompt:
+
+```text
+Review the fixed verification binding repair and resource preparation read-only
+in /Users/hdang/.codex/worktrees/usage-dashboard-publication/ai-agent-assistant.
+Inspect instructions, the new binding-continuation plan/preparation review and
+the retained binding-repair evidence before acting. Preserve all user work,
+original M FAIL/seals/raw history/index, bundles and allowances. Reuse the 221
+passing hook tests and final affected checks; do not rerun unchanged validation.
+Assess the fixed passing-report identity, historical hash and execution protection,
+and the conservative resource proposal. Resolve authoritative reservation
+accounting or a supported capacity option before proposing full verification.
+No edits, cleanup, reservation changes, gates, tests/builds, launches, credentials,
+live access, messages or publication. Stop with acceptance and the exact next decision.
+```
+
+## 2026-10-21 — Accepted full verification; C-only closure authority
+
+The owner accepted the
+[fixed passing continuation](docs/reviews/2026-10-21-dashboard-verification-binding-continuation-post-increment-review.md)
+after read-only review. One actual offline npm run verify exited 0 in 884.283
+seconds; source/index/original failures remained unchanged and owned cleanup
+passed. Six private-directory correction tests and final affected report checks
+passed. The failed preflight and rejected report draft remain. The consumed
+execution helper is not approved for reuse.
+
+The owner's separate C-only decision is recorded in DECISIONS.md. Retain all
+attributed changes, restore nothing, and defer original four criteria/nine
+obligations plus all ten newer unresolved entries unchanged. The original
+terminal-failure backup and a fresh current source/index/lifecycle snapshot
+are verified. Scope is additive current-state documentation and a fresh
+ignored closure request; no product, validator or historical-report edits.
+
+The task-owned cortexa-dashboard-verification-closure-20261021-01 package
+contains the exact mapping, current bindings, affected receipts and actual
+closure/Stop results when executed. The supported closure receipt is the source
+of truth for execution; do not infer closure from this authority entry. Even
+after closure, the failed increment remains FAIL/Blocked without its marker.
+
+V requires separate fresh owner/readiness preparation and task-bound admission
+only after verified C/Stop. All inherited evidence sets and four/nine/ten
+requirements remain; passing M is not V completion. Publication/post-commit
+handling, native/VoiceOver/layout limitations, blocked Step B, deferred exec
+and unresolved hosted boundaries remain separate.
+
+Next prompt, for a read-only closure review rather than automatic V:
+
+```text
+Review the C-only dashboard recovery closure in the existing publication
+worktree. Inspect current instructions and the sealed
+cortexa-dashboard-verification-closure-20261021-01 package. Preserve all source,
+failures, receipts, snapshots and bundles. Reuse validation; do not repeat tests
+or builds. Assess both preservation layers, exact four/nine/ten retain/defer
+mapping, fresh owner/request bindings, actual closure and configured Stop.
+No edits, transitions, launches, live access, cleanup, messages or publication.
+Report acceptance and the remaining separate V prerequisites, then stop.
+```
+
+## 2026-10-21 — Admitted dashboard verification successor
+
+V readiness and fresh owner/request bindings passed before one supported
+task-specific admission. The frozen plan/readiness/DECISIONS bytes, accepted21
+product hashes, actual index, HEAD, original reports and closure ancestry remain
+protected. The new evidence assessment carries every original four/nine/ten
+requirement and complete ten-command/thirty-manual-check set unchanged.
+
+The [V report](docs/reviews/2026-10-21-usage-dashboard-publication-verification-post-increment-review.md)
+records forward evidence, reuse provenance and limitations. Supported final
+state/marker and actual configured Stop receipts are authoritative for terminal
+acceptance; do not infer completion from an active-stage note. Private evidence
+is retained in cortexa-dashboard-verification-successor-20261021-01,
+continuation-03. Both earlier preparation attempts remain sealed and are not
+replayed. Existing native bundles and other work remain retained.
+
+Next publication remains Blocked: fixed HEAD/index require separately supported
+post-commit handling and explicit Git authority. No staging/commit/push/PR/merge
+follows V. Step B remains blocked, exec deferred and hosted boundaries unresolved.
+Native/VoiceOver, narrow-layout, bundle-size and live-data limits remain.
+
+Next prompt, only for owner review:
+
+```text
+Review usage-dashboard-publication-verification read-only in the existing
+publication worktree. Inspect current instructions, the frozen plan/readiness,
+final V report and continuation-03 evidence first. Preserve source, all failed
+histories, both preparation attempts, index, receipts, bundles and allowances.
+Reuse validation; do not repeat tests, builds or checks. Assess all four/nine/ten
+requirements, ten-command/thirty-manual-check provenance, supported admission,
+frozen preparation protection, finalization and actual configured Stop. Verify
+the separate post-commit blocker remains. No edits, gates, launches, live access,
+cleanup, messages, staging, commits or publication. Stop with acceptance findings.
+```
+
+## 2026-10-21 — V stopped on required documentation failure
+
+The first admitted execution docs:check exited 1: Prettier flagged the new V
+report. Its link stage and all four remaining execution checks did not run.
+The owner required stopping without repair/retry. The report draft and exact
+failed receipt are preserved in continuation-03. No completion may be claimed.
+The final FAIL report and supported terminal-failure/Stop receipts establish
+actual lifecycle disposition. Frozen readiness/authority and historical failures
+remain unchanged. Any further work requires review of this new failure and its
+own supported continuation/closure; old receipts cannot clear it.
+
+Next prompt: assess this V failure and preservation read-only, including the
+formatting log, final FAIL report, actual close-failed and Stop receipts. Do not
+run checks, repair files, retry admission, reuse old closure, or publish. Stop
+with the smallest supported recovery proposal and exact owner authority.
+
+## 2026-10-21 — Autonomous fixed V repair in progress
+
+The owner approved related pre-admission maintenance and its exact historical
+formatting exception, with conditional own closure and one-use repair admission.
+Complete terminal source/index/lifecycle custody is retained in the task-owned
+V repair evidence package. The previous V remains FAIL/Blocked without a marker.
+No product, native QA or publication changes are authorized. Continue the
+[fixed plan](docs/plans/2026-10-21-dashboard-verification-repair-maintenance.md);
+do not replay consumed helpers or use an earlier closure for this failure.
+
+## 2026-10-21 — Fixed repair verification observed
+
+The new actual offline full verification exited 0 in 1119.30 seconds. The
+complete system-Python synthetic suite passed 236 tests; full verification
+also passed its actual hook/repository/frontend/Rust stages and native
+no-bundle compilation. No native application or provider was launched.
+Owned full-run cleanup passed without signals. Freeze the new maintenance
+report only after final affected checks; then assess the supported own closure.
+The old V remains FAIL/Blocked and all product hashes remain unchanged.
+
+## 2026-10-21 — Fixed repair local acceptance handoff
+
+The own V closure and actual configured Stop passed, preserving its raw failure,
+report and actual index. Fresh plan/readiness/owner bindings then admitted
+`usage-dashboard-publication-verification-repair` exactly once. Only the seven
+current-state documents and its fixed final report are execution scope.
+The full command passed in 1119.30 seconds, with no retry or cleanup signals;
+all 236 synthetic lifecycle tests passed. Subsequent documentation-only changes
+use affected checks, not a second full invocation.
+
+The private task-owned V repair evidence package retains complete terminal
+custody, original four/nine/ten/thirty mappings, command/manual provenance,
+frozen preparation, own closure, admission, exact uncommitted publication
+inventory and final status/Stop receipts. Those actual receipts control
+completion; no historical failure is promoted. Bundles, other worktrees and
+all other allowances remain retained. No cleanup or archival is authorized.
+
+Next proposed prompt, not execution authority:
+
+```text
+Review the fixed usage-dashboard-publication-verification-repair locally,
+read-only. Inspect current instructions, its plan/final report and retained
+V repair evidence. Assess four/nine/ten/thirty preservation, ten-command and
+fifty-nine-manual provenance, exact uncommitted dashboard/governance inventory,
+finalization/Stop and unchanged product/index. Reuse validation; no edits,
+tests/builds, gates, live access, cleanup, messages or Git publication.
+Recommend acceptance or the smallest concrete repair, then stop.
+```
+
+## Pinned-publication M/M-F fixture continuation — current checkpoint
+
+The bounded fixture/custody continuation passed its new zero-work preflight and
+32-case focused suite, with exit/wait 0 and verified owned-child cleanup. Private
+`pinned-fixture-restoration-01` evidence retains the authority, complete bindings,
+backup verification, final affected-check results and preservation review.
+Historical volume continuity remains Unverified; the owner's finite comparison
+amendment makes no remount or historical-volume identity claim. Original reports,
+index/state, manifests, retained link and prior failures remain protected.
+
+See the current [pinned reconciliation assessment](docs/reviews/2026-10-21-dashboard-pinned-reconciliation-design-assessment.md)
+for scope and limitations. V, full-hook/full verification, current readiness, real
+sealing and Git/publication remain separate and unauthorized. Step B is Blocked,
+exec Deferred and oldest cleanup Unverified. No next increment starts here.
+
+## Pinned-publication documentation/resource recovery — current checkpoint
+
+The owner approved a fresh private 3 MiB temporary component within the unchanged
+176 MiB combined and original 32 MiB growth envelopes; no retained cache was
+removed or relabeled mutable. The exact transition-plan formatter correction moves
+two blank lines, preserving every word and total byte count. Historical reports,
+accepted lifecycle, original index, retained link and prior failures remain intact.
+
+The passing 32-case focused suite is reused with unchanged executable/test inputs;
+no new preflight, test, build or native QA is granted. The fresh private
+`pinned-documentation-recovery-01` final report holds the actual five affected-check
+outcomes, substantive reviews and current custody. A missing or nonpassing final
+report is not acceptance. The prior resource-stopped docs attempt stays consumed.
+
+This is bounded local maintenance, not V readiness, real gate completion, sealing
+or publication. Historical volume continuity and oldest cleanup remain Unverified;
+Step B is Blocked and exec Deferred. Existing native/VoiceOver, layout, bundle-size,
+coverage, billing and hosted-authentication limitations remain. Do not begin V
+or another increment automatically.
+
+## 2026-10-28 — Dashboard standard-tooling verification checkpoint
+
+The owner authorized the fixed pinned dashboard's standard-tooling completion.
+The unfinished private archive, supervisor and census mechanisms remain parked
+and preserved. Ordinary pinned npm provisioning replaces only this task's earlier
+no-redirect prefetch assurance; strict TLS, lockfile integrity, disabled install
+scripts, disabled staging audit and credential restrictions remain.
+
+The compatible Vitest 4.1.12 graph, SDK and complete offline Cargo metadata were
+qualified. The exact two approved dependency renames completed with platform
+exit 0; the old graph and original frontend output remain recoverably preserved.
+This entry records prerequisite completion and verification authority, and does
+not assert that the seven current proofs have passed.
+
+The seven exact proof vectors share one frozen input inventory excluding only
+`docs/reviews/2026-10-21-dashboard-pinned-publication-readiness-post-increment-review.md`.
+Final results, preservation reviews, limitations and any blocker belong to that
+fixed report and the private standard-completion evidence. No historical result
+is promoted, and no lifecycle marker, real request, seal or Git change is issued.
+
+The original parent and published upstream pin/tree remain unchanged. The owner
+approved finite no-follow allocation accounting for disposable test links, FIFOs
+and sockets only in the fixed build temporary root and the source-declared
+inventory-test namespace, with exact ownership and resource safeguards. Validators
+and tests remain unchanged. Historical volume continuity and oldest cleanup stay
+Unverified; Step B stays Blocked and exec Deferred. Native app, accessibility,
+layout, bundle-size, live-data and hosted-authentication limitations remain.
+
 ## 2026-10-22 — Foreground push-to-talk voice authorized
 
 The owner authorizes one Mac-only en-US on-device voice milestone in a fresh worktree from integrated main f954b74. Explicit native permission, bounded foreground dictation, editable transcript review before existing Send, and optional installed-system-voice read-aloud. See [the voice plan](docs/plans/2026-10-22-foreground-push-to-talk-voice.md). Preserve accepted memory/Tasks, ledger89/96, RAG Knowledge/retrieval/context ownership, migration11, historical failures and retained resources.
@@ -13074,3 +13797,31 @@ Original Mac acceptance,641 original evidence entries, accepted QA executable/he
 Retain all six QA/recovery bundles, finalized QA data, source/worktree, image, evidence, caches and backups. No request, microphone use, acceptance replay, separate QA build, installation, image operation, artifact cleanup or branch/worktree removal occurred. Ledger89/96 and historical deadlines/consumption remain. The unchanged8GiB envelope uses only the approved target/evidence2MiB reallocation; no reservation release or physical disk recovery is claimed.
 
 This closes the existing voice integration objective subject to its actual current-document gates and verified external publication record. No successor is selected. If interrupted, inspect that sealed record and current admission before editing; preserve current changes and history, verify only missing publication/finalization evidence and do not repeat completed verification or acceptance.
+
+## 2026-10-28 dashboard/current-main integration verification checkpoint
+
+The owner-approved isolated integration now combines the verified dashboard and main's foreground voice work. Minimum conflict resolutions retain both lifecycle dispatchers, both IPC command sets and voice focus/close/shutdown handling. Fresh focused results are 107 dispatcher,24 voice,131 dashboard lifecycle and65 repository-health cases. Full npm verify passed:447 hooks,155 repository tests,711 frontend cases across52 files, Rust library/contract suites and release build. One inherited ignored Rust case remains ignored. Full command exit 0/wait 0, complete 293496-byte capture, root reaped/group absent, no signals/errors.
+
+The only additional test repair makes the voice metadata-negative fixture start explicitly0644, asserts that baseline, then preserves its original 0600 rejection. The failed focused-01 and all historical evidence remain retained. Production validators and historical constants are unchanged.
+
+This is the pre-publication verification checkpoint. Finish only the already-approved normal integration commit, non-force PR #158 update and conditional squash merge after repository rules pass. Actual Git/remote outcomes belong to the subsequent private integration-15 custody record and PR state; this source checkpoint does not claim them early. If resuming, inspect those records and current PR state first; if merged, stop without replaying completed operations. Preserve the original f857ca5d02fddba76ef9f009a707823ac1b64f2c checkout/index/state and all other worktrees. Do not start another milestone.
+
+## 2026-10-28 dashboard CI portability verified checkpoint
+
+The approved disposable-fixture correction passed38 pinned-publication cases with TMPDIR present and447 hooks with TMPDIR absent, using TEMP in monitored build/tmp. Actual exits/waits are0 and cleanup completed. Only optional TMPDIR and canonical fixture-root selection changed; assertions, production validators, application and package/lock inputs remain unchanged. Prior passing full application verification remains bound to its original input tree and environment; no fresh application build is claimed. The earlier GitHub failure and all historical evidence remain preserved. Final affected checks and normal completion are recorded in the new dashboard-ci-tempdir review. Finish only the already-approved corrective PR #158 update and conditional squash merge after current CI/rules pass; subsequent actual outcomes live in private custody and GitHub. Do not repeat completed work or begin another milestone. Native/accessibility/live-provider limits, Step B Blocked, exec Deferred, oldest cleanup and historical volume continuity Unverified remain unchanged.
+
+## 2026-10-28 dashboard dependency-security verification candidate
+
+The owner-approved targeted update changed only Undici7.29.1 to7.30.1 and Zod4.4.3 to4.6.7 in package-lock.json. Root package.json and every other lock entry remain unchanged. Standard npm installed a fresh script-disabled graph with strict TLS/SRI and isolated public configuration. Complete file hashes and required platform payloads were qualified; newly issued permissions follow private umask077, preserving owner/execute bits. A preserved initial qualification rejection compared fresh0600 files to historical0644; identical bytes and an exact issued-mode regression resolved that preparation expectation without changing old readers or reinstalling. The original integration graph was preserved by rename, with complete content/child metadata digests unchanged. Fresh npm audit passed with zero vulnerabilities. Current generated build candidates are copied before the fresh full verification. All old CI failures/reports remain immutable; the new full result is pending at this source checkpoint. Finish only the approved verification/review, corrective commit/non-force PR158 update and conditional squash merge after current checks/rules pass. No later milestone or native app QA is authorized.
+
+## 2026-10-28 dashboard dependency-security local verification passed
+
+Fresh npm run verify passed on the patched Undici7.30.1/Zod4.6.7 graph:447 hooks,155 repository tests,711 frontend tests across52 files,559 Rust library cases per invocation plus the contract suites, and the frontend/native release build. The library suite is invoked twice by existing commands, not1118 distinct cases. One inherited ignored Rust case and the existing Vite chunk-size/Node experimental-storage warnings remain advisories. Actual full exit0/wait0, complete268359-byte capture and owned-group cleanup are retained in dependency-audit-fix-01/full-01. Fresh audit found zero vulnerabilities. Static installed graph hashes/modes stayed exact, preserved old-graph child metadata matches, and the original checkout/index/state remain unchanged. Final edits are current documentation only, checked separately. The new review records normal gate acceptance; subsequent corrective commit/non-force PR158 update and conditional squash merge are reported by private custody and actual GitHub state. Preserve every earlier failure and limitation; stop after verified merge without starting another milestone.
+
+## 2026-10-28 dashboard Tokio audit correction candidate
+
+The owner-approved narrow correction changes only the exact Tokio pin1.52.3 to1.53.3 and its Cargo.lock version/checksum; every other lock entry and dependency edge remains byte-identical. Standard Cargo fetched the missing public1.53.3 source, verified the lock/index SHA-256, and preserves the old cache/source and prior current output candidates. Fresh offline full verification is pending at this checkpoint. The npm lock/graph, SDK and toolchain are unchanged and their passing qualification is reused with recorded provenance; no npm install/activation or SDK run is repeated. Earlier local verification remains historical, and the CI Cargo-audit failure stays failed. The unchanged strict Rust audit gate and all current-head CI/rules must pass before the already-approved conditional squash merge. Private tokio-audit-fix-01 records exact source/environment/resources and actual waits/cleanup. Preserve all original checkouts/index/state/failures and existing native limitations; no later milestone.
+
+## 2026-10-28 dashboard Tokio correction local verification passed
+
+Fresh offline npm run verify passed with Tokio1.53.3 and the unchanged npm graph: hooks, repository/frontend/Rust suites and frontend/native release build completed with actual exit0/wait0 and complete owned-group cleanup. Full elapsed 674.625 seconds and complete 269061-byte capture are retained in tokio-audit-fix-01/full-01. The exact Cargo delta remains only the pin, lock version/checksum; all unrelated lock entries/edges and product/tests/validators/workflows stay unchanged. Final source changes are additive documentation, checked separately. The npm/SDK/activation evidence is unchanged and reused without installation or repetition. Native app/accessibility/live-provider QA and existing bundle/storage/ignored-test advisories remain. Local gate acceptance does not prove remote audit: the unchanged strict current-head Cargo audit and all CI/rules still must pass before conditional squash merge. Actual later Git/remote outcomes belong to private custody and PR158; if already merged, stop without replaying effects or selecting another milestone. Preserve all failures, original checkouts/index/state, graphs and history.

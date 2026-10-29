@@ -1,3 +1,20 @@
+## 2026-10-20 — Accepted mock Usage & Efficiency integration
+
+Activity includes a separate mock Usage & Efficiency panel. One fixed no-input
+Rust command validates/deduplicates synthetic leaves and returns a bounded
+numeric/categorical projection; the closed TypeScript client and React panel
+render six sample sources, fixed ranges, charts and daily details. This projection
+performs no account/provider/runtime lookup, clock access, persistence or content
+collection. It does not alter existing provider or Activity lifecycle behavior.
+
+Input/output totals count once; cached input and reasoning are included subsets.
+Zero, Missing, Unavailable and Unverified retain distinct meanings. Separate
+Account Capacity placeholders display only absent/illustrative states and remain
+independent of activity filters. See the [public-safe guide](docs/USAGE_EFFICIENCY_DEMO.md)
+and [recovery plan](docs/plans/2026-10-20-usage-dashboard-publication-recovery.md).
+Historical native evidence does not establish current native/VoiceOver or live
+coverage. No collection or publication authority follows from mock integration.
+
 ## 2026-10-12 — Documented merged implementation baseline
 
 This audit documents remote `main` at `26447708934ef7f8118329d1b62977d7f14d45b6`.
@@ -2599,3 +2616,33 @@ bundle, default-release recovery executable, isolated dependencies, QA data, sou
 and evidence. No deletion/archival was authorized, none ran and no physical disk
 recovery is claimed. No commit, push, merge or publication occurred. The dedicated
 worktree remains detached with attributed local changes. Do not begin a successor.
+
+## 2026-10-21 — Verification-only dashboard integration evidence
+
+The accepted mock-only Usage & Efficiency product bytes remain unchanged.
+The fixed verification successor assesses retained full/native-build and
+mock-browser evidence with current documentation checks; it adds no runtime,
+provider, collection, persistence, IPC or security-setting behavior. Numeric
+activity remains separate from account capacity, subscription quota and billing.
+The [V review](docs/reviews/2026-10-21-usage-dashboard-publication-verification-post-increment-review.md)
+and supported lifecycle receipts establish its actual terminal result.
+Historical failures are retained, not promoted. Native/VoiceOver, narrow-layout,
+bundle-size and live-data limitations remain. Post-commit publication handling
+and explicit Git authority are separate prerequisites, not V capabilities.
+
+## 2026-10-21 — Fixed V repair governance boundary
+
+The added schema-8 repair route is local workflow evidence only. It preserves
+archived schema-6/7 authority, validates a single fixed successor and freezes
+current preparation/product inputs. It adds no product capability, account
+access, token collection or provider connection. Local same-user receipts are
+integrity evidence, not authentication or an operating-system sandbox.
+
+## 2026-10-21 — Admitted fixed verification repair
+
+The supported schema-8 repair admission succeeded for documentation-only evidence
+work. All 21 accepted dashboard product hashes and dependency/security fixes
+remain unchanged. The exact historical formatting exclusion and governance
+route grant no runtime, provider, account-capacity or live collection capability.
+Local acceptance retains the native/VoiceOver, narrow-layout, bundle-size and
+hosted identity/alternate-ingress limitations.

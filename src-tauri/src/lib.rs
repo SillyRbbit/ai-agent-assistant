@@ -34,8 +34,13 @@ mod research_knowledge_demo_projection;
 mod startup;
 pub mod storage;
 pub mod tools;
+mod usage_efficiency;
 mod voice;
 mod voice_tauri;
+
+pub use usage_efficiency::{
+    current_usage_efficiency_demo_projection, UsageEfficiencyError, UsageEfficiencyProjection,
+};
 
 pub use app_info::{current_app_info, AppInfo};
 pub use error::AppError;
@@ -96,6 +101,7 @@ pub fn run() -> Result<(), AppError> {
             local_tasks_tauri::save_local_task,
             local_tasks_tauri::set_local_task_completion,
             local_tasks_tauri::remove_local_task,
+            usage_efficiency::get_usage_efficiency_demo_projection,
             diagnostics_tauri::read_diagnostics,
             diagnostics_tauri::export_diagnostics,
             knowledge_tauri::list_knowledge,

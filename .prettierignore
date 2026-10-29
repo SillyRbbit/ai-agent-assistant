@@ -10,3 +10,12 @@ src-tauri/gen/
 
 # Owner-authorized immutable historical FAIL; strict hash/report validation remains.
 docs/reviews/2026-10-11-dependent-remediation-admission-post-increment-review.md
+
+# Owner-authorized exact immutable V FAIL; strict historical hash validation remains.
+docs/reviews/2026-10-21-usage-dashboard-publication-verification-post-increment-review.md
+
+# Owner-authorized exact historical formatting exceptions; pinned raw hashes remain required.
+docs/reviews/2026-10-21-dashboard-publication-transition-maintenance-post-increment-review.md
+docs/reviews/2026-10-21-dashboard-transition-binding-repair-assessment.md
+docs/reviews/2026-10-21-dashboard-transition-custody-accounting-assessment.md
+docs/reviews/2026-10-21-dashboard-transition-fixture-repair-assessment.md

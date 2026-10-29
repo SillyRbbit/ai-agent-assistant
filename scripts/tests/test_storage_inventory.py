@@ -321,6 +321,8 @@ class StorageInventoryTests(unittest.TestCase):
     def test_report_refuses_shared_parent_links_input_overlap_and_checkout(self):
         shared = self.root / "shared"
         shared.mkdir(mode=0o755)
+        shared.chmod(0o755)  # Exercise a genuinely nonprivate parent under any umask.
+        self.assertEqual(stat.S_IMODE(shared.stat().st_mode), 0o755)
         link = self.root / "report-link"
         link.symlink_to(self.output, target_is_directory=True)
         checkout = self.root / "checkout"

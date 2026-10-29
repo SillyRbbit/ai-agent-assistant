@@ -30,6 +30,7 @@ class VoicePublicationTests(unittest.TestCase):
         self.git("checkout", "-qb", voice.BRANCH)
         self.put(".gitignore", b".codex/state/\n")
         self.put("DECISIONS.md", b"explicit fixture owner approval\n")
+        (self.root / "DECISIONS.md").chmod(0o644)
         self.put("protected.txt", b"immutable unrelated work\n")
         self.original = b'#[cfg(not(target_os = "macos"))]\ntype HelperIdentity = ();\n    #[test]\n    fn ipc_unknown_fields_and_unknown_operations_reject() {}\n'
         self.put(voice.PRODUCT, self.original)
@@ -193,6 +194,7 @@ class VoicePublicationTests(unittest.TestCase):
         with self.assertRaises(gate.GateError): voice.record(self.root, state)
 
     def test_metadata_change_rejected(self):
+        self.assertEqual((self.root / "DECISIONS.md").stat().st_mode & 0o777, 0o644)
         state = self.begin()
         (self.root/"DECISIONS.md").chmod(0o600)
         with self.assertRaises(gate.GateError): voice.record(self.root, state)

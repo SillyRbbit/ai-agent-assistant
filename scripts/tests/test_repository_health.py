@@ -138,6 +138,11 @@ def write_valid_ui_native_boundary(root: Path) -> None:
         'invoke<unknown>("get_research_knowledge_demo_projection");\n',
         encoding="utf-8",
     )
+    projection_client.with_name("usage-efficiency-client.ts").write_text(
+        'import { invoke, isTauri } from "@tauri-apps/api/core";\n'
+        'invoke<unknown>("get_usage_efficiency_demo_projection");\n',
+        encoding="utf-8",
+    )
     lifecycle_client.write_text(
         (
             Path(__file__).resolve().parents[2]
@@ -221,6 +226,7 @@ def write_valid_ui_native_boundary(root: Path) -> None:
         "local_tasks_tauri::save_local_task,\n"
         "local_tasks_tauri::set_local_task_completion,\n"
         "local_tasks_tauri::remove_local_task,\n"
+        "usage_efficiency::get_usage_efficiency_demo_projection,\n"
         "diagnostics_tauri::read_diagnostics,\n"
         "diagnostics_tauri::export_diagnostics,\n"
         "knowledge_tauri::list_knowledge,\n"
@@ -1231,6 +1237,22 @@ class RepositoryHealthTests(unittest.TestCase):
             findings = health.ui_native_boundary_findings(root)
 
             self.assertTrue(any("exact no-argument" in finding.detail for finding in findings))
+
+    def test_usage_demo_client_rejects_arguments_and_extra_commands(self) -> None:
+        for call in [
+            'invoke<unknown>("get_usage_efficiency_demo_projection", { source: "caller" });',
+            'invoke<unknown>("get_usage_efficiency_demo_projection"); invoke("other");',
+        ]:
+            with self.subTest(call=call), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                write_valid_ui_native_boundary(root)
+                client = root / "src/infrastructure/tauri/usage-efficiency-client.ts"
+                client.write_text(
+                    'import { invoke, isTauri } from "@tauri-apps/api/core";\n' + call,
+                    encoding="utf-8",
+                )
+                findings = health.ui_native_boundary_findings(root)
+                self.assertTrue(any("exact no-argument" in f.detail for f in findings))
 
     def test_ui_native_boundary_rejects_projection_command_arguments(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
